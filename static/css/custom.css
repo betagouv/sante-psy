@@ -13,6 +13,11 @@
 .bg-fond-alternatif {
   background-color: var(--g100);
 }
+
 .bg-blue-france {
   background-color: var(--bf500);
+  color: var(--w);
+}
+.bg-blue-france h2 {
+  color: var(--w);
 }
