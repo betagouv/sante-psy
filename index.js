@@ -1,3 +1,4 @@
+const bodyParser = require("body-parser")
 const express = require('express')
 const path = require('path')
 
@@ -12,8 +13,10 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
 app.use('/static', express.static('static'))
-// Hack for importing css from npm package
-app.use('/~', express.static(path.join(__dirname, 'node_modules')))
+app.use("/gouvfr", express.static(path.join(__dirname, "node_modules/@gouvfr/all/dist")))
+// For getting data from POST requests
+app.use(bodyParser.urlencoded({ extended: false }))
+
 // Populate some variables for all views
 app.use(function(req, res, next){
   res.locals.appName = appName
@@ -25,14 +28,6 @@ app.use(function(req, res, next){
 
 app.get('/', (req, res) => {
   res.render('landing')
-})
-
-app.get('/ressources', (req, res) => {
-  res.render('ressources')
-})
-
-app.get('/formulaire', (req, res) => {
-  res.render('form')
 })
 
 app.get('/mentions-legales', (req, res) => {
