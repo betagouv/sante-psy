@@ -1,86 +1,37 @@
 <%- include('partials/header') -%>
 <div class="rf-container">
-  <div class="rf-grid-row rf-grid-row--center rf-grid-row--middle">
-    <div id="hero-col-1" class="rf-col-lg-6 rf-col-xs-12 rf-p-4w">
+  <div class="rf-grid-row rf-grid-row--center rf-grid-row--middle rf-mt-3w">
+    <div id="hero-col-1" class="rf-col-md-6 rf-col-xs-12 rf-p-4w">
       <h2>Etudiants, parlez de vos difficultés</h2>
-      <div class="rf-pb-5w">
-        Pour que chaque étudiant puisse être aidé face à la crise, bénéficiez de trois séances
-        gratuites chez un psychologue. Rien à débourser.
-      </div>
+      <p>
+        Trois séances gratuites chez un psychologue, pour chaque étudiant, pour être aidé.e
+        face à la crise.
+      </p>
+      <p>
+        Rien à débourser.
+      </p>
     </div>
-    <div id="hero-col-2" class="rf-col-4">
+    <div id="hero-col-2" class="rf-col-md-6 rf-col-xs-12">
       <img
-        src="/static/images/seance_psy.png"
+        style="max-width: 100%;"
+        src="/static/images/seance_psy.jpg"
         alt="Séance chez un psychologue"
       />
+      <a class="rf-text--xs" href="https://www.freepik.com/vectors/medical">Image de pch.vector - www.freepik.com</a>
     </div>
   </div>
 </div>
 
-<%- include('partials/section',
-  {
-    section:
-      {
-        title: "Découvrez des exemples d'utilisation des composants",
-        parts: [
-          {
-            title: 'Une partie',
-            text: 'Des détails de cette partie, afin d\'expliquer mieux la partie',
-          },
-          {
-            title: 'Une autre partie',
-            text: 'Des détails de cette partie, afin d\'expliquer mieux la partie',
-          },
-          {
-            title: 'Une troisième partie',
-            text: 'Des détails de cette partie, afin d\'expliquer mieux la partie',
-          },
-        ],
-        cssClass: 'rf-bg--alt',
-      },
-  })
--%>
-
-<div class="rf-container rf-pb-6w rf-pt-2w">
-  <h2>Comment ça marche ?</h2>
-
-  <ul class="rf-accordion-group" id="rf-accordion-group-0">
-    <%- include('partials/accordion-item',
-      {
-        i: 0,
-        title: 'On peut afficher des accordéons',
-        content: 'Qui elit in aliqua exercitation. Sint exercitation incididunt duis eu mollit sunt id dolor ullamco excepteur adipisicing deserunt. Dolore mollit ullamco laboris nulla qui ad officia. Ad deserunt ex magna esse culpa ea occaecat sit tempor.'
-      })
-    -%>
-    <%- include('partials/accordion-item',
-      {
-        i: 1,
-        title: 'Qui se déroulent',
-        content: "Là, on explique la deuxième étape."
-      })
-    -%>
-    <%- include('partials/accordion-item',
-      {
-        i: 2,
-        title: 'Quand on clique dessus',
-        content: "Sans surprise, c'est ici la troisième étape. Qui elit in aliqua exercitation. Sint exercitation incididunt duis eu mollit sunt id dolor ullamco excepteur adipisicing deserunt. Dolore mollit ullamco laboris nulla qui ad officia. Ad deserunt ex magna esse culpa ea occaecat sit tempor."
-      })
-    -%>
-  </ul>
-</div>
-
-<div class="rf-container rf-pb-6w rf-pt-2w">
-  <h2>Changer de thème</h2>
-  <p>
-    Ca peut être utile pour l'eccessibilité ! Le js correspondant est dans /static/js/dark-mode-toggle-switch.js, n'oubliez pas de l'ajouter à la page avec un 	&lt;script&gt;.
-  </p>
-  <div class="rf-container rf-pb-6w rf-pt-2w">
-    <div class="rf-toggle rf-toggle--border-bottom">
-      <input type="checkbox" class="rf-toggle__input" id="rf-dark-mode-toggle-switch">
-      <label class="rf-toggle__label" for="rf-dark-mode-toggle-switch" data-rf-checked-label="Activé" data-rf-unchecked-label="Désactivé">Thème sombre</label>
-      <p class="rf-hint-text">Note : ce composant pour changer de thème n'est pas officiellement supporté par le DS, il est fait maison. A vos risques et périls.</p>
+<div class="rf-container-fluid rf-pb-3w rf-pt-2w">
+  <div class="rf-grid-row rf-grid-row--center rf-grid-row--middle">
+    <div class="rf-col-lg-6 rf-col-xs-12 rf-p-4w">
+      <h2>Je suis étudiant•e</h2>
+        <div class="rf-pb-5w">
+            En attendant que ce service d'assistance soit disponible, le site de soutien au étudiant est à disposition.
+        </div>
+        <button type="button"><a href="https://www.soutien-etudiant.info" target="_blank">Voir le site</a></button>
     </div>
   </div>
-
 </div>
+
 <%- include('partials/footer') -%>
