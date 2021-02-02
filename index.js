@@ -13,7 +13,7 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
 app.use('/static', express.static('static'))
-app.use("/gouvfr", express.static(path.join(__dirname, "node_modules/@gouvfr/all/dist")))
+app.use('/gouvfr', express.static(path.join(__dirname, 'node_modules/@gouvfr/all/dist')))
 // For getting data from POST requests
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 
 app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice', {
-    contactEmail: 'mon-produit@beta.gouv.fr',
+    contactEmail: 'cheque-psy@beta.gouv.fr',
   })
 })
 
