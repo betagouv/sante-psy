@@ -1,0 +1,9 @@
+.rf-centered {
+  text-align: center;
+}
+
+.rf-bg--alt, .rf-bg--alt h2 {
+  background-color: var(--bf500);
+  color: var(--g100);
+}
+
