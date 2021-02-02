@@ -5,6 +5,7 @@ const path = require('path')
 const appName = `Chèques d'Accompagnement Psychologique`
 const appDescription = 'Trois séances chez un psychologue pour les étudiants en détresse psychologique'
 const appRepo = 'https://github.com/betagouv/cheque-psy'
+const contactEmail = 'cheque-psy@beta.gouv.fr'
 const port = process.env.PORT || 8080
 
 const app = express()
@@ -23,6 +24,7 @@ app.use(function(req, res, next){
   res.locals.appDescription = appDescription
   res.locals.appRepo = appRepo
   res.locals.page = req.url
+  res.locals.contactEmail = contactEmail
   next()
 })
 
@@ -31,9 +33,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/mentions-legales', (req, res) => {
-  res.render('legalNotice', {
-    contactEmail: 'cheque-psy@beta.gouv.fr',
-  })
+  res.render('legalNotice')
 })
 
 module.exports = app.listen(port, () => {
