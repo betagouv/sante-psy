@@ -21,3 +21,7 @@
 .bg-blue-france h2 {
   color: var(--w);
 }
+
+.btn--secondary--temporary-fix {
+  border: 1px var(--bf500) solid;
+}
