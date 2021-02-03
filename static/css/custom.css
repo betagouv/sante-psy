@@ -18,8 +18,21 @@
   background-color: var(--bf500);
   color: var(--w);
 }
+
+.bg-blue-soft {
+  background-color: var(--bs300);
+}
+
 .bg-blue-france h2 {
   color: var(--w);
+}
+
+.text-blue-france {
+  color: var(--bf500);
+}
+
+.text-blue-soft {
+  color: var(--bs300);
 }
 
 .btn--secondary--temporary-fix {
