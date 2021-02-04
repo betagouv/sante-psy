@@ -5,7 +5,7 @@ const path = require('path')
 const appName = `Chèques d'Accompagnement Psychologique`
 const appDescription = 'Suivi psychologique pour les étudiants'
 const appRepo = 'https://github.com/betagouv/cheque-psy'
-const contactEmail = 'cheque-psy@beta.gouv.fr'
+const contactEmail = 'contact-cheques-psy@beta.gouv.fr'
 const port = process.env.PORT || 8080
 
 const app = express()
