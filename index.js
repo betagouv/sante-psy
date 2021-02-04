@@ -3,7 +3,7 @@ const express = require('express')
 const path = require('path')
 
 const appName = `Chèques d'Accompagnement Psychologique`
-const appDescription = 'Suivi psychologique pour les étudiants en détresse'
+const appDescription = 'Suivi psychologique pour les étudiants'
 const appRepo = 'https://github.com/betagouv/cheque-psy'
 const contactEmail = 'cheque-psy@beta.gouv.fr'
 const port = process.env.PORT || 8080
