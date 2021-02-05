@@ -1,7 +1,10 @@
-const bodyParser = require("body-parser")
+require('dotenv').config();
+
 const express = require('express')
 const path = require('path')
 const flash = require('connect-flash');
+const session = require('express-session');
+const config = require('./utils/config');
 
 const appName = `Chèques d'Accompagnement Psychologique`
 const appDescription = 'Suivi psychologique pour les étudiants'
@@ -9,21 +12,23 @@ const appRepo = 'https://github.com/betagouv/cheque-psy'
 const contactEmail = 'contact-cheques-psy@beta.gouv.fr'
 const port = process.env.PORT || 8080
 
-const psyLinstingController = require('./controllers/psyListingController');
-
 const app = express();
+const psyLinstingController = require('./controllers/psyListingController');
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use('/static', express.static('static'))
 app.use('/gouvfr', express.static(path.join(__dirname, 'node_modules/@gouvfr/all/dist')))
-// For getting data from POST requests
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(session({
+  secret: config.secret,
+  resave: false,
+  saveUninitialized: true
+}))
+app.use(session({ cookie: { maxAge: 300000, sameSite: 'lax' } })); // Only used for Flash not safe for others purposes
 app.use(flash());
 
-
 // Populate some variables for all views
-app.use(function(req, res, next){
+app.use(function populate(req, res, next){
   res.locals.appName = appName
   res.locals.appDescription = appDescription
   res.locals.appRepo = appRepo
@@ -32,13 +37,11 @@ app.use(function(req, res, next){
   next()
 })
 
-// app.get('/', (req, res) => {
-//   res.render('landing')
-// })
-
 app.get('/', (req, res) => {
-  res.render('psyListing', psyLinstingController.getPsychologist)
+  res.render('landing')
 })
+
+app.get('/consulter-les-psychologues', psyLinstingController.getPsychologist)
 
 app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice')
