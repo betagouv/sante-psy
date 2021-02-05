@@ -1,0 +1,39 @@
+<%- include('partials/header') -%>
+<div class="rf-container-fluid">
+    <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
+        <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
+            <h1>Liste des professionnels disponibles</h1>
+            <p>
+                Voici la liste des professionnels disponibles partenaire du dispositif d'accompagnement psychologique.
+            </p>
+
+            <table class="sortable">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Adresse</th>
+                        <th>Téléphone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- LOG -->
+
+                    <!-- FIN LOG -->
+                    <% psyList.forEach(function(psy) { %>
+                    <tr>
+                        <td><%= psy.name %></td>
+                        <td><%= psy.address %></td>
+                        <td><%= psy.name %></td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+
+            <!-- <iframe class="airtable-embed" src="https://airtable.com/embed/shrgj8GtfuwQe2kHl?backgroundColor=gray&viewControls=on" frameborder="0" onmousewheel="" width="100%" height="533" style="background: transparent; border: 1px solid #ccc;">
+            </iframe> -->
+        </div>
+    </div>
+</div>
+
+
+<%- include('partials/footer') -%>
