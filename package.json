@@ -19,8 +19,11 @@
   "homepage": "https://github.com/betagouv/cheque-psy#readme",
   "dependencies": {
     "@gouvfr/all": "^0.4.0",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-session": "^1.17.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
