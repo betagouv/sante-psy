@@ -34,6 +34,9 @@ app.use(function populate(req, res, next){
   res.locals.appRepo = appRepo
   res.locals.page = req.url
   res.locals.contactEmail = contactEmail
+  res.locals.errors = req.flash('error')
+  res.locals.infos = req.flash('info')
+  res.locals.successes = req.flash('success')
   next()
 })
 

@@ -4,26 +4,19 @@ module.exports.getPsychologist  = async function getPsychologist(req, res) {
   try {
     console.log(`req received : ${req}`);
 
-    // req.body.address
-    const address = "test"; // @TODO use me to filter address (or delete me :p)
 
     //@TODO query demarches simplifiées API
-    const psyList = await utils.getPsychologistList(address, true);
-
-    //@TODO fix me psychologist list received from the API: [object Object]
-    console.log(`psychologist list received from the API: ${psyList}`);
-
-    const title = 'La liste des psychologues qui sont là pour vous aider';
+    const psyList = await utils.getPsychologistList();
+    console.log("psyList", psyList);
     res.render('psyListing', {
-      title,
-      address, 
       psyList,
-      errors: req.flash('error'),
-      messages: req.flash('message'),
+      error: req.flash('error')
     });
   } catch (err) {
-    console.error(err);
-    req.flash('error', 'Erreur interne');
-    res.redirect('/');
+    console.error('getPsychologist', err);
+    res.render('psyListing', {
+      psyList: [],
+      error: err,
+    });
   }
 };

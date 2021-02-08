@@ -6,13 +6,17 @@
     <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
         <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
             <h1>Liste des psychologues disponibles</h1>
+            <% if (error) { %>
+                <%- include('partials/notificationError', {error: error}) -%>
+            <% } else { %>
             <p>
-                Voici la liste des partenaires du dispositif d'accompagnement.
+                Il y a actuellement <%- psyList.length %> partenaires du dispositif d'accompagnement.
             </p>
             <div>
                 <input id="filter-value" type="text" placeholder="Rechercher par adresse">
             </div>
             <div id="psy-table"></div>
+            <% } %>
         </div>
     </div>
 </div>
@@ -57,7 +61,7 @@
         addRowPos:"top",          //when adding a new row, add it to the top of the table
         history:true,             //allow undo and redo actions on the table
         pagination:"local",       //paginate the data
-        paginationSize:15,        //allow 15 rows per page of data
+        paginationSize:30,        //allow 15 rows per page of data
         movableColumns:true,      //allow column order to be changed
         resizableRows:true,       //allow row order to be changed
         initialSort:[             //set the initial sort order of the data

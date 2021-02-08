@@ -33,12 +33,35 @@ async function requestPsychologist() {
     }
   `;
 
-  console.log('GraphQL query:', query);
+  console.debug('GraphQL query sent:', query);
 
-  const psychologists = await graphQLClient.request(query)
-  console.log(JSON.stringify(psychologists, undefined, 2))
+  try {
+    const psychologists = await graphQLClient.request(query)
+    console.debug(JSON.stringify(psychologists, undefined, 2))
 
-  return psychologists;
+    return psychologists;
+  } catch (err) {
+    if(hasErrors(err)) {
+      throw 'Une erreur est survenue lors de la récupération des psychologues';
+    }   
+    return [];
+  }
 }
-  
+
+/**
+ * @param {response} response 
+ */
+function hasErrors(apiResponse) {
+  console.log('apiResponse', apiResponse);
+  if(apiResponse.response.errors.length > 0) {
+    apiResponse.response.errors.forEach(err => {
+      console.error('API has returned error', err); // server error logs
+    });
+
+    return true;
+  } else {
+    return false;
+  }
+}
+
 exports.requestPsychologist = requestPsychologist
