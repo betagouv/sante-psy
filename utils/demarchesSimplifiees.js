@@ -8,32 +8,44 @@ async function getPsychologistList(academy) {
   
 exports.getPsychologistList = getPsychologistList;
 
+function getName(demandeur) {
+  return demandeur.prenom + ' ' + demandeur.nom;
+}
+
+function getChampValue(champData, attributeName) {
+  return champData.find(champ => champ.label === attributeName).stringValue;
+}
+
 function parsePsychologist(apiResponse) {
-  console.debug("apiResponse", apiResponse.demarche.dossiers.nodes)
+  console.debug(`Parsing ${apiResponse.demarche.dossiers.nodes.length} psychologists from DS API`);
+  
   const dossiers = apiResponse.demarche.dossiers.nodes
 
   if(dossiers.length > 0) {
     const psychologists = dossiers.map(dossier => {
-
-      //@TODO improve me, how to get a specific attribute without using 'find'
-      const name = dossier.champs.find(champ => champ.label === 'Nouveau champ Texte').stringValue;
-      const address = dossier.champs.find(champ => champ.label === 'Adresse du cabinet').stringValue;
-      const academy = dossier.groupeInstructeur.label.stringValue;
-      const phone = dossier.champs.find(champ => champ.label === 'Nouveau champ Texte').stringValue;
-      const teleconsultation = dossier.champs.find(champ => champ.label === 'Proposez-vous de la téléconsultation ?').stringValue;
-      const website = dossier.champs.find(champ => champ.label === 'Site web professionnel (optionnel)').stringValue;
-      const email = dossier.champs.find(champ => champ.label === 'Email de contact').stringValue;
-      const training = dossier.champs.find(champ => champ.label === 'Formations et expériences').stringValue.split(', ');
-      const adeliNumber = dossier.champs.find(champ => champ.label === 'Numéro Adeli').stringValue;
-      const diploma = dossier.champs.find(champ => champ.label === 'Intitulé ou spécialité de votre master de psychologie').stringValue;
-      const dateDiploma = dossier.champs.find(champ => champ.label === 'Date d\'obtention de votre master').stringValue;
-      const profileDescription = dossier.champs.find(champ => champ.label === 'Paragraphe de présentation (optionnel)').stringValue;
+      const name = getName(dossier.demandeur);
+      const university = dossier.groupeInstructeur.label.stringValue;
+      const address = getChampValue(dossier.champs, 'Adresse du cabinet');
+      const phone =  getChampValue(dossier.champs, 'Téléphone du secrétariat');
+      const teleconsultation =  getChampValue(dossier.champs, 'Proposez-vous de la téléconsultation ?');
+      const website =  getChampValue(dossier.champs, 'Site web professionnel (optionnel)');
+      const email =  getChampValue(dossier.champs, 'Email de contact');
+      const training =  getChampValue(dossier.champs, 'Formations et expériences').split(', ');
+      const adeliNumber =  getChampValue(dossier.champs, 'Numéro Adeli');
+      const diploma =  getChampValue(dossier.champs, 'Intitulé ou spécialité de votre master de psychologie');
+      const dateDiploma =  getChampValue(dossier.champs, 'Date d\'obtention de votre master');
+      const profileDescription =  getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
       
-      const psy = { name, address, phone };
+      //@TODO which information to display ?
+      const psy = { 
+        name,
+        address,
+        phone 
+      };
       
       return psy;
     });
-    console.log("final parsed psychologists list", psychologists);
+
     return psychologists;
   } else {
     console.error('Aucun psychologiste trouvé.');
