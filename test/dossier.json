@@ -1,0 +1,52 @@
+{ 
+    "demarche": { "id": "UHJvY2VkdXJlLTM5NzQ3",
+        "dossiers": {
+            "nodes":  [
+                { "champs":
+                [   { 
+                        "id": "Q2hhbXAtMTYwMTE4Ng==",
+                        "label": "Nouveau champ Texte",
+                        "stringValue": "Nouveau champ Texte 1er Dossier" },
+                    { 
+                        "id": "Q2hhbXAtMTYwMzgwNQ==",
+                        "label": "Nouveau champ Texte",
+                        "stringValue": "Autre champ Texte 1er Dossier" 
+                    },
+                    { 
+                        "id": "Q2hhbXAtMTYxODcwMw==",
+                        "label": "Nouveau champ Texte",
+                        "stringValue": "" 
+                    },
+                    { 
+                        "id": "Q2hhbXAtMTYxODcwNg==",
+                        "label": "Nouveau champ Texte",
+                        "stringValue": ""
+                    }
+                ]
+                },
+                { "champs":
+                [ 
+                    { 
+                        "id": "Q2hhbXAtMTYwMTE4Ng==",
+                        "label": "Nouveau champ Texte",
+                        "stringValue": "Nouveau champ Texte 2ème Dossier" },
+                    { 
+                        "id": "Q2hhbXAtMTYwMzgwNQ==",
+                        "label": "Nouveau champ Texte",
+                        "stringValue": "Autre champ Texte 2ème Dossier" },
+                    { 
+                        "id": "Q2hhbXAtMTYxODcwMw==",
+                        "label": "Nouveau champ Texte",
+                        "stringValue": ""
+                    },
+                    { 
+                        "id": "Q2hhbXAtMTYxODcwNg==",
+                        "label": "Nouveau champ Texte",
+                        "stringValue": ""
+                    } 
+                ]
+                }
+            ]
+        } 
+  } 
+  }

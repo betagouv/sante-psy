@@ -15,12 +15,13 @@ const port = process.env.PORT || 8080
 
 const app = express()
 const landingController = require('./controllers/landingController');
+const psyLinstingController = require('./controllers/psyListingController');
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
-
 app.use('/static', express.static('static'))
 app.use('/gouvfr', express.static(path.join(__dirname, 'node_modules/@gouvfr/all/dist')))
+
 // For getting data from POST requests
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(session({
@@ -32,16 +33,21 @@ app.use(session({ cookie: { maxAge: 300000, sameSite: 'lax' } })); // Only used 
 app.use(flash());
 
 // Populate some variables for all views
-app.use(function(req, res, next){
+app.use(function populate(req, res, next){
   res.locals.appName = appName
   res.locals.appDescription = appDescription
   res.locals.appRepo = appRepo
   res.locals.page = req.url
   res.locals.contactEmail = contactEmail
+  res.locals.errors = req.flash('error')
+  res.locals.infos = req.flash('info')
+  res.locals.successes = req.flash('success')
   next()
 })
 
 app.get('/', landingController.getFormUrl)
+
+app.get('/consulter-les-psychologues', psyLinstingController.getPsychologist)
 
 app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice')
