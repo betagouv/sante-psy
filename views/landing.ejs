@@ -4,7 +4,7 @@
     <div id="hero-col-1" class="rf-col-md-4 rf-col-xs-10 rf-pr-6w">
       <h1>Étudiants, parlez de vos difficultés</h1>
       <p>
-        Bénéficiez de séances avec un psychologue pendant la crise sanitaire, sans avance de frais.
+        Pendant la crise sanitaire, bénéficiez de séances avec un psychologue gratuitement, sans avancer de frais.
       </p>
     </div>
     <div id="hero-col-2" class="rf-col-md-4 rf-col-xs-10">
@@ -50,11 +50,15 @@
   <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter bg-fond-alternatif">
     <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
       <h2>Je suis étudiant·e</h2>
-        <div class="rf-pb-5w">
-          Le parcours de soins est en cours de préparation. En attendant que ce service d'assistance soit disponible,
-          nous vous proposons d'autres solutions de soutien.
+        <div class="rf-pb-2w">
+          <p>
+            Le parcours de soins est en cours de préparation.
+          </p>
+          <p>
+            En attendant que ce service d'assistance soit disponible,
+            nous vous proposons d'autres solutions de soutien.
+          </p>
         </div>
-        <a class="rf-btn" href="/consulter-les-psychologues" target="_blank" rel="noopener noreferrer">Consulter les psychologues qui sont là pour vous aider</a>
         <a class="rf-btn" href="https://www.soutien-etudiant.info" target="_blank" rel="noopener noreferrer">Voir le site www.soutien-etudiant.info</a>
     </div>
   </div>
@@ -65,9 +69,18 @@
     <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
       <h2>Je suis psychologue</h2>
         <div class="rf-pb-5w">
-          Vous souhaitez participer au programme d'assistance psychologique aux étudiants ?
-          La démarche n'est pas encore finalisée, vous pourrez bientôt postuler sur ce site.
-        </div>
+          <p>
+            Vous souhaitez participer au programme d'assistance psychologique aux étudiants ? Merci !
+          </p>
+          <% if (formUrl) { %>
+            </div>
+            <a class="rf-btn" href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">Participer au programme</a>
+          <% } else { %>
+            <p>
+              La démarche n'est pas encore finalisée, vous pourrez bientôt postuler sur ce site.
+            </p>
+          </div>
+          <% } %>
     </div>
   </div>
 </div>
