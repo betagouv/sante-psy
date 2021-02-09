@@ -72,8 +72,15 @@
           <p>
             Vous souhaitez participer au programme d'assistance psychologique aux étudiants ? Merci !
           </p>
-        </div>
-        <a class="rf-btn" href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">Participer au programme</a>
+          <% if (formUrl) { %>
+            </div>
+            <a class="rf-btn" href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">Participer au programme</a>
+          <% } else { %>
+            <p>
+              La démarche n'est pas encore finalisée, vous pourrez bientôt postuler sur ce site.
+            </p>
+          </div>
+          <% } %>
     </div>
   </div>
 </div>
