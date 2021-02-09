@@ -12,20 +12,24 @@ const graphQLClient = new GraphQLClient(endpoint, {
 /**
  * @see https://demarches-simplifiees-graphql.netlify.app/demarche.doc.html
  */
-async function requestPsychologist() { 
+async function requestPsychologist(academy = '') { 
   const query = gql`
     {
       demarche (number: ${config.demarchesSimplifieesId}) {
         id
-        dossiers (state: en_construction
-          ) {
+        dossiers (state: en_construction) {
           nodes {
-              id
+              groupeInstructeur {
+                label
+              }
               state
               champs {
                 id
                 label
                 stringValue
+              }
+              usager {
+                email
               }
           }
         }
@@ -64,4 +68,4 @@ function hasErrors(apiResponse) {
   }
 }
 
-exports.requestPsychologist = requestPsychologist
+exports.requestPsychologist = requestPsychologist;
