@@ -30,7 +30,7 @@ app.use(function populate(req, res, next){
   next()
 })
 
-app.get('/', landingController.getFormUrl)
+app.get('/', landingController.getLanding)
 
 app.get('/consulter-les-psychologues', psyLinstingController.getPsychologist)
 
