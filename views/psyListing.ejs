@@ -1,0 +1,82 @@
+<%- include('partials/header') -%>
+<link href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator_modern.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6"></script>
+<div class="rf-container-fluid">
+    <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
+        <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
+            <h1>Liste des psychologues disponibles</h1>
+            <% if (errors.length) { %>
+                <% errors.forEach(function(error) { %>
+                  <%- include('partials/notificationError', {error: error}) -%>
+                <% }) %>
+            <% } else { %>
+            <p>
+                Il y a actuellement <%- psyList.length %> partenaires du dispositif d'accompagnement.
+            </p>
+            <div>
+                <input id="filter-value" type="text" placeholder="Rechercher par adresse">
+            </div>
+            <div id="psy-table"></div>
+            <% } %>
+        </div>
+    </div>
+</div>
+<script>
+    var valueEl = document.getElementById("filter-value");
+    // //Trigger setFilter function with correct parameters
+    function updateFilter(){
+        table.setFilter('address','like', valueEl.value);
+    }
+    valueEl.addEventListener("keyup", updateFilter);
+    const psyList = <%- JSON.stringify(psyList) %>
+    var table = new Tabulator("#psy-table", {
+        data: psyList, //assign data to table
+        langs:{ // http://tabulator.info/docs/4.2/localize#setup
+            "fr-fr":{ //French language definition
+                "columns":{
+                    "name":"Nom",
+                    "progress":"Progression",
+                    "gender":"Genre",
+                    "rating":"Évaluation",
+                    "col":"Couleur",
+                    "dob":"Date de Naissance",
+                },
+                "pagination":{
+                    "first":"Première",
+                    "first_title":"Première Page",
+                    "last":"Dernière",
+                    "last_title":"Dernière Page",
+                    "prev":"Précédent",
+                    "prev_title":"Page Précédente",
+                    "next":"Suivant",
+                    "next_title":"Page Suivante",
+                },
+                "headerFilters":{
+                "default":"Rechercher par adresse", //default header filter placeholder text
+                }
+            },
+        },
+        layout:"fitColumns",      //fit columns to width of table
+        responsiveLayout:"hide",  //hide columns that dont fit on the table
+        tooltips:true,            //show tool tips on cells
+        addRowPos:"top",          //when adding a new row, add it to the top of the table
+        history:true,             //allow undo and redo actions on the table
+        pagination:"local",       //paginate the data
+        paginationSize:30,        //allow 15 rows per page of data
+        movableColumns:true,      //allow column order to be changed
+        resizableRows:true,       //allow row order to be changed
+        initialSort:[             //set the initial sort order of the data
+            {column:"name", dir:"asc"},
+        ],
+        columns:[
+            {title:"Nom", field:"name", sorter:"string"},
+            {title:"Adresse", field:"address", sorter:"string"},
+            {title:"Téléphone", field:"phone", sorter:"string"},
+        ],
+        headerFilterPlaceholder:"Rechercher un psychologue" // http://tabulator.info/docs/4.2/filter#header
+    });
+    table.setLocale("fr-fr");
+</script>
+
+<%- include('partials/footer') -%>
