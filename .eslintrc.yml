@@ -21,7 +21,6 @@ rules:
   camelcase: "warn"
   no-param-reassign: "warn"
   func-names: "warn"
-  max-len: "warn"
   no-restricted-syntax: "warn"
   guard-for-in: "warn"
   eqeqeq: "warn"
