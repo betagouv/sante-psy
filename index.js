@@ -2,7 +2,7 @@ const bodyParser = require("body-parser")
 const express = require('express')
 const path = require('path')
 
-const appName = `Chèques d'Accompagnement Psychologique`
+const appName = `Santé Psy Étudiants`
 const appDescription = 'Suivi psychologique pour les étudiants'
 const appRepo = 'https://github.com/betagouv/cheque-psy'
 const contactEmail = 'contact-cheques-psy@beta.gouv.fr'
