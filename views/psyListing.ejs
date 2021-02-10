@@ -58,7 +58,7 @@
             },
         },
         layout:"fitColumns",      //fit columns to width of table
-        responsiveLayout:"hide",  //hide columns that dont fit on the table
+        responsiveLayout:"hide",  //hide columns that dont fit on the table //@TODO
         tooltips:true,            //show tool tips on cells
         addRowPos:"top",          //when adding a new row, add it to the top of the table
         history:true,             //allow undo and redo actions on the table
@@ -72,7 +72,10 @@
         columns:[
             {title:"Nom", field:"name", sorter:"string"},
             {title:"Adresse", field:"address", sorter:"string"},
+            {title:"Téléconsultation possible", field:"teleconsultation", sorter:"boolean"},
+            {title:"Site web", field:"website", sorter:"string"},
             {title:"Téléphone", field:"phone", sorter:"string"},
+            {title:"Email", field:"email", sorter:"string"},
         ],
         headerFilterPlaceholder:"Rechercher un psychologue" // http://tabulator.info/docs/4.2/filter#header
     });

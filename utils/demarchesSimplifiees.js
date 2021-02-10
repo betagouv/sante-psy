@@ -16,6 +16,14 @@ function getChampValue(champData, attributeName) {
   return champData.find(champ => champ.label === attributeName).stringValue;
 }
 
+/**
+ * transform string to boolean
+ * @param {*} inputString 'true' or 'false' 
+ */
+function parseTeleconsultation(inputString) {
+  return inputString === 'true';
+}
+
 function parsePsychologist(apiResponse) {
   console.debug(`Parsing ${apiResponse.demarche.dossiers.nodes.length} psychologists from DS API`);
   
@@ -27,20 +35,28 @@ function parsePsychologist(apiResponse) {
       const university = dossier.groupeInstructeur.label.stringValue;
       const address = getChampValue(dossier.champs, 'Adresse du cabinet');
       const phone =  getChampValue(dossier.champs, 'Téléphone du secrétariat');
-      const teleconsultation =  getChampValue(dossier.champs, 'Proposez-vous de la téléconsultation ?');
+      const teleconsultation = parseTeleconsultation(
+        getChampValue(dossier.champs, 'Proposez-vous de la téléconsultation ?')
+      );
       const website =  getChampValue(dossier.champs, 'Site web professionnel (optionnel)');
       const email =  getChampValue(dossier.champs, 'Email de contact');
+      const description =  getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
+
+
+      //@TODO remove unused variables ?
       const training =  getChampValue(dossier.champs, 'Formations et expériences').split(', ');
       const adeliNumber =  getChampValue(dossier.champs, 'Numéro Adeli');
       const diploma =  getChampValue(dossier.champs, 'Intitulé ou spécialité de votre master de psychologie');
       const dateDiploma =  getChampValue(dossier.champs, 'Date d\'obtention de votre master');
-      const profileDescription =  getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
       
-      //@TODO which information to display ?
       const psy = { 
         name,
         address,
-        phone 
+        phone,
+        website,
+        email,
+        teleconsultation,
+        description
       };
       
       return psy;
