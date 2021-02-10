@@ -5,9 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
+    "lint": "eslint . --fix",
+    "listMigrations": "knex migrate:list",
+    "migrate": "knex migrate:latest",
+    "makeMigration": "knex migrate:make",
+    "rollback": "knex migrate:rollback",
     "start": "node index.js",
-    "test": "mocha",
-    "lint": "eslint . --fix"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -25,7 +29,9 @@
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "graphql": "^15.5.0",
-    "graphql-request": "^3.4.0"
+    "graphql-request": "^3.4.0",
+    "knex": "^0.21.17",
+    "pg": "^8.5.1"
   },
   "devDependencies": {
     "chai": "^4.3.0",
