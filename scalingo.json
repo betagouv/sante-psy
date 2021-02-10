@@ -1,0 +1,12 @@
+{
+  "name": "santepsy",
+  "env": {
+    "HOSTNAME_WITH_PROTOCOL": {
+      "description": "Url with protocol, ex: https://my-scalingo-app-pr36.scalingo.io",
+      "generator": "url"
+    }
+  },
+  "scripts": {
+    "postdeploy": "npm run migrate"
+  }
+}
