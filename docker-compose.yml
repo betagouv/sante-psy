@@ -7,17 +7,17 @@ services:
       POSTGRES_PASSWORD: santepsy
     ports:
       - "5432:5432"
-#  web:
-#    build: .
-#    command: nodemon --inspect=0.0.0.0:9229 ./index.js
-#    links:
-#      - db
-#    env_file:
-#      - .env
-#    environment:
-#      DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
-#    ports:
-#      - "8080:8080"
-#      - "9229:9229"
-#    volumes:
-#      - .:/app
+  web:
+    build: .
+    command: nodemon --inspect=0.0.0.0:9229 ./index.js
+    links:
+      - db
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
+    ports:
+      - "8080:8080"
+      - "9229:9229"
+    volumes:
+      - .:/app
