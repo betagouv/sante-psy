@@ -69,7 +69,7 @@ function parsePsychologist(apiResponse) {
 
   if(dossiers.length > 0) {
     const psychologists = dossiers.map(dossier => {
-      parseDossierMetadata(dossier);
+      return parseDossierMetadata(dossier);
     });
 
     return psychologists;
