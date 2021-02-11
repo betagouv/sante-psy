@@ -17,7 +17,7 @@ async function requestPsychologist(academy = '') {
     {
       demarche (number: ${config.demarchesSimplifieesId}) {
         id
-        dossiers (state: en_construction) {
+        dossiers (state: accepte) {
           nodes {
               groupeInstructeur {
                 label
@@ -59,7 +59,6 @@ async function requestPsychologist(academy = '') {
  * @param {response} response 
  */
 function hasErrors(apiResponse) {
-  console.log('apiResponse', apiResponse);
   if(apiResponse.response.errors.length > 0) {
     apiResponse.response.errors.forEach(err => {
       console.error('API has returned error', err); // server error logs

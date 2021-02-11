@@ -27,7 +27,8 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "graphql": "^15.5.0",
-    "graphql-request": "^3.4.0"
+    "graphql-request": "^3.4.0",
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "chai": "^4.3.0",

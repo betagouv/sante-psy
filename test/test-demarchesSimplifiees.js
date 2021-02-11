@@ -42,7 +42,7 @@ describe('Demarches Simplifiess', () => {
   
   describe('getName', () => {
     it('should return First Name Last Name', async () => {
-      const apiResponse = { civilite: 'M', nom: 'Last', prenom: 'First' };
+      const apiResponse = { civilite: 'M', nom: 'last', prenom: 'fiRst' };
 
       const getName = demarchesSimplifiees.__get__('getName');
       const output = getName(apiResponse);
@@ -65,6 +65,29 @@ describe('Demarches Simplifiess', () => {
         {
           'id': 'Q2hhbXAtMTYzMDQxNw==',
           'label': label,
+          'stringValue': result
+        }
+      ];
+
+      const getChampValue = demarchesSimplifiees.__get__('getChampValue');
+      const output = getChampValue(apiResponse, label);
+
+      output.should.equal(result);
+    });
+
+    it('should return empty string for a field Champ that does not exist', async () => {
+      const result = '';
+      const label = 'Intitulé ou spécialité de votre master de psychologie';
+
+      const apiResponse = [
+        {
+          'id': 'Q2hhbXAtMTYzMDQxNg==',
+          'label': 'Votre carrière et vos qualifications',
+          'stringValue': ''
+        },
+        {
+          'id': 'Q2hhbXAtMTYzMDQxNw==',
+          'label': 'nothing',
           'stringValue': result
         }
       ];
