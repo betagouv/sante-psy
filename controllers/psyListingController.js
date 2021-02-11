@@ -6,7 +6,6 @@ module.exports.getPsychologist  = async function getPsychologist(req, res) {
 
     res.render('psyListing', {
       psyList,
-      errors: req.flash('error')
     });
   } catch (err) {
     console.error('getPsychologist', err);
