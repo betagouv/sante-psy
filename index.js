@@ -32,8 +32,6 @@ app.use(function populate(req, res, next){
 
 app.get('/', landingController.getLanding)
 
-app.get('/consulter-les-psychologues', psyLinstingController.getPsychologist)
-
 app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice')
 })
