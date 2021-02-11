@@ -1,7 +1,7 @@
 {
   "name": "sante-psy",
   "version": "1.0.0",
-  "description": "Suivi Psychologique pour les étudiants",
+  "description": "Accompagnement Psychologique pour les étudiants",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
