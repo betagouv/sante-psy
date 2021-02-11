@@ -9,7 +9,7 @@ services:
       - "5432:5432"
   web:
     build: .
-    command: nodemon --inspect=0.0.0.0:9229 ./index.js
+    command: bash -c "npm run migrate && nodemon --inspect=0.0.0.0:9229 ./index.js"
     links:
       - db
     env_file:

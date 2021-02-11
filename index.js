@@ -47,7 +47,7 @@ const db = require('./utils/db')
 console.log('got db', db)
 db.insertEmptyAppointment().then(() => {
   db.getAppointments().then((appointmentArray) => {
-    console.log(appointmentArray)
+    console.log('got appointments', appointmentArray)
   })
 })
 */
