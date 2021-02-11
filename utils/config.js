@@ -9,4 +9,5 @@ module.exports = {
   apiUrl: process.env.API_URL || 'https://www.demarches-simplifiees.fr/api/v2/graphql',
   demarchesSimplifieesId: process.env.DEMARCHES_SIMPLIFIEES_ID,
   demarchesSimplifieesUrl: process.env.DEMARCHES_SIMPLIFIEES_URL,
+  secret: process.env.SECRET
 };

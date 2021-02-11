@@ -2,6 +2,10 @@ require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
+const flash = require('connect-flash');
+const session = require('express-session');
+
+const config = require('./utils/config');
 
 const appName = `Santé Psy Étudiants`;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
@@ -13,12 +17,21 @@ const app = express();
 const landingController = require('./controllers/landingController');
 const psyListingController = require('./controllers/psyListingController');
 
+app.use(flash());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use('/static', express.static('static'));
 app.use('/gouvfr', express.static(
   path.join(__dirname, 'node_modules/@gouvfr/all/dist'))
 );
+
+app.use(session({
+  secret: config.secret,
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(flash());
 
 // Populate some variables for all views
 app.use(function populate(req, res, next){
@@ -27,6 +40,9 @@ app.use(function populate(req, res, next){
   res.locals.appRepo = appRepo;
   res.locals.page = req.url;
   res.locals.contactEmail = contactEmail;
+  res.locals.errors = req.flash('error');
+  res.locals.infos = req.flash('info');
+  res.locals.successes = req.flash('success');
   next();
 })
 
