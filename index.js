@@ -36,6 +36,10 @@ app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice')
 })
 
+app.get('/suivi', (req, res) => {
+  res.render('suivi')
+})
+
 module.exports = app.listen(port, () => {
   console.log(`${appName} listening at http://localhost:${port}`)
 })
