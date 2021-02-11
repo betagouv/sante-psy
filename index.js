@@ -5,7 +5,7 @@ const path = require('path')
 const config = require('./utils/config');
 
 const appName = `Santé Psy Étudiants`
-const appDescription = 'Suivi psychologique pour les étudiants'
+const appDescription = 'Accompagnement psychologique pour les étudiants'
 const appRepo = 'https://github.com/betagouv/sante-psy'
 const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr'
 const port = process.env.PORT || 8080
