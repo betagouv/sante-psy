@@ -1,5 +1,5 @@
-// TODO knex-client in a separate file is probably useless ?
-const knex = require("../knex-client")
+const knexConfig = require("../knexfile")
+const knex = require("knex")(knexConfig)
 
 module.exports.getAppointments = async () => {
   try {
