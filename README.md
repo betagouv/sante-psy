@@ -1,4 +1,4 @@
-# Santé Psy | https://sante-psy-etudiants.beta.gouv.fr/
+# Santé Psy | https://santepsyetudiants.beta.gouv.fr/
 
 ## Lancer en prod
 ```
