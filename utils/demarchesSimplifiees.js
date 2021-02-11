@@ -13,7 +13,13 @@ function getName(demandeur) {
 }
 
 function getChampValue(champData, attributeName) {
-  return champData.find(champ => champ.label === attributeName).stringValue;
+  const potentialStringValue = champData.find(champ => champ.label === attributeName);
+
+  if(potentialStringValue.stringValue === undefined) {
+    return "";
+  } else {
+    return potentialStringValue.stringValue;
+  }
 }
 
 /**
