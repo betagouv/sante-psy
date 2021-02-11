@@ -42,7 +42,7 @@ module.exports = app.listen(port, () => {
   console.log(`${appName} listening at http://localhost:${port}`)
 })
 
-/* Demo code for inserting and getting from db
+/* Demo code for inserting and getting from db. Uncomment for testing.
 const db = require('./utils/db')
 console.log('got db', db)
 db.insertEmptyAppointment().then(() => {
