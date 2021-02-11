@@ -7,10 +7,10 @@ const session = require('express-session');
 
 const config = require('./utils/config');
 
-const appName = `Chèques d'Accompagnement Psychologique`
-const appDescription = 'Suivi psychologique pour les étudiants'
-const appRepo = 'https://github.com/betagouv/cheque-psy'
-const contactEmail = 'contact-cheques-psy@beta.gouv.fr'
+const appName = `Santé Psy Étudiants`
+const appDescription = 'Accompagnement psychologique pour les étudiants'
+const appRepo = 'https://github.com/betagouv/sante-psy'
+const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr'
 const port = process.env.PORT || 8080
 
 const app = express()
@@ -47,8 +47,6 @@ app.use(function populate(req, res, next){
 })
 
 app.get('/', landingController.getLanding)
-
-app.get('/consulter-les-psychologues', psyLinstingController.getPsychologist)
 
 app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice')
