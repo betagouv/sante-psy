@@ -1,7 +1,7 @@
 {
-  "name": "cheque-psy",
+  "name": "sante-psy",
   "version": "1.0.0",
-  "description": "Chèques d'Accompagnement Psychologique pour les étudiants",
+  "description": "Accompagnement Psychologique pour les étudiants",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/betagouv/cheque-psy.git"
+    "url": "git+https://github.com/betagouv/sante-psy.git"
   },
   "author": "dev-transverse@beta.gouv.fr",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/betagouv/cheque-psy/issues"
+    "url": "https://github.com/betagouv/sante-psy/issues"
   },
-  "homepage": "https://github.com/betagouv/cheque-psy#readme",
+  "homepage": "https://github.com/betagouv/sante-psy#readme",
   "dependencies": {
     "@gouvfr/all": "^0.4.0",
     "dotenv": "^8.2.0",
