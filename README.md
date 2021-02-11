@@ -1,23 +1,19 @@
-# Chèques d'Accompagnement Psychologique
-Vous pouvez voir ce site en ligne là : < ? >
-
+# Santé Psy | https://sante-psy-etudiants.beta.gouv.fr/
 
 ## Lancer en prod
-
 ```
 npm start
 ```
 
 Ce repo contient tout ce qu'il faut pour tourner sur Scalingo. Il suffit de déployer la branche main sur votre instance Scalingo.
 
-
 ## Lancer ce site localement
 Vous devez avoir npm installé sur votre machine.
 
 ```
-git clone https://github.com/betagouv/cheque-psy
-cd cheque-psy
-cp .env.sample .env # replace API_TOKEN
+git clone https://github.com/betagouv/sante-psy
+cd sante-psy
+cp .env.sample .env # replace API_TOKEN from Demarches Simplifiees API
 npm install
 npm run dev
 # http://localhost:8080 is ready
