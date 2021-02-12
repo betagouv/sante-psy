@@ -1,11 +1,11 @@
 # Santé Psy | https://santepsyetudiants.beta.gouv.fr/
 
 ## Lancer en prod
+Ce repo contient tout ce qu'il faut pour tourner sur Scalingo. Il suffit de déployer la branche main sur votre instance Scalingo.
+
 ```
 npm start
 ```
-
-Ce repo contient tout ce qu'il faut pour tourner sur Scalingo. Il suffit de déployer la branche main sur votre instance Scalingo.
 
 ## Lancer ce site localement
 Vous devez avoir npm installé sur votre machine.
@@ -24,7 +24,8 @@ npm run dev
 npm test
 ```
 
-https://github.com/jhnns/rewire
+Tester les fonctions privées :
+* https://github.com/jhnns/rewire
 
 ### Lint 
 ```
