@@ -11,7 +11,6 @@ const appName = `Santé Psy Étudiants`;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
 const appRepo = 'https://github.com/betagouv/sante-psy';
 const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr';
-const port = process.env.PORT || 8080;
 
 const app = express();
 const landingController = require('./controllers/landingController');
@@ -64,6 +63,6 @@ app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
   res.render('données-personnelles-et-gestion-des-cookies')
 })
 
-module.exports = app.listen(port, () => {
-  console.log(`${appName} listening at http://localhost:${port}`);
+module.exports = app.listen(config.port, () => {
+  console.log(`${appName} listening at http://localhost:${config.port}`);
 })

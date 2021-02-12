@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const isSecure = (process.env.SECURE || 'true') === 'true';
 
 module.exports = {
