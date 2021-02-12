@@ -11,8 +11,19 @@ module.exports.newAppointment = async (req, res) => {
 }
 
 module.exports.createNewAppointment = async (req, res) => {
-  console.log('createNewAppointment', req.body)
-  const date = req.body.date
-  console.log('date', date, typeof date)
-  return res.redirect('/mes-rendez-vous')
+  const dateString = req.body.date
+
+  function parseDate(dateString) {
+    var m = dateString.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    return (m) ? new Date(m[3], m[2]-1, m[1]) : null;
+  }
+  const date = parseDate(dateString)
+
+  try {
+    await db.insertAppointment(date)
+    return res.redirect('/mes-rendez-vous')
+  } catch (err) {
+    req.flash('error', 'Erreur. Le rendez-vous n\'est pas créé. Vous pouvez réessayer.')
+    console.error('Erreur pour créer le rendez-vous', err)
+  }
 }
