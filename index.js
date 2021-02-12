@@ -16,8 +16,8 @@ const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr';
 
 const app = express();
 const landingController = require('./controllers/landingController');
-const myAppointmentsController =
-  require('./controllers/myAppointmentsController')
+const appointmentsController =
+  require('./controllers/appointmentsController')
 const psyListingController = require('./controllers/psyListingController');
 
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -59,9 +59,9 @@ if (config.featurePsyList) {
 }
 
 if (config.FEATURE_PSY_PAGES) {
-  app.get('/mes-rendez-vous', myAppointmentsController.myAppointments)
-  app.get('/nouveau-rendez-vous', myAppointmentsController.newAppointment)
-  app.post('/creer-nouveau-rendez-vous', myAppointmentsController.createNewAppointment)
+  app.get('/mes-rendez-vous', appointmentsController.myAppointments)
+  app.get('/nouveau-rendez-vous', appointmentsController.newAppointment)
+  app.post('/creer-nouveau-rendez-vous', appointmentsController.createNewAppointment)
 }
 
 app.get('/mentions-legales', (req, res) => {
