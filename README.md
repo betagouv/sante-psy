@@ -19,6 +19,9 @@ npm run dev
 # http://localhost:8080 is ready
 ```
 
+### Variables d'environnement
+Voir `.env.sample`
+
 ### Test
 ```
 npm test

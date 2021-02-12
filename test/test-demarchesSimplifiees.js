@@ -50,6 +50,47 @@ describe('Demarches Simplifiess', () => {
       output.should.equal('First Last');
     });
   }); 
+
+
+  describe('getHasNextPage', () => {
+    it('should return cursor string if there is more page to load', async () => {
+      const cursor = "MQ";
+      const apiResponse = {
+        "demarche": {
+          "dossiers": {
+            "pageInfo": {
+              "hasNextPage": true,
+              "endCursor": cursor
+            }
+          }
+        }
+      }
+
+      const getHasNextPage = demarchesSimplifiees.__get__('getHasNextPage');
+      const output = getHasNextPage(apiResponse);
+
+      output.should.equal(cursor);
+    });
+
+    it('should return empty string if there is no page to load', async () => {
+      const cursor = "MQ";
+      const apiResponse = {
+        "demarche": {
+          "dossiers": {
+            "pageInfo": {
+              "hasNextPage": false,
+              "endCursor": cursor
+            }
+          }
+        }
+      }
+
+      const getHasNextPage = demarchesSimplifiees.__get__('getHasNextPage');
+      const output = getHasNextPage(apiResponse);
+
+      output.should.equal('');
+    });
+  }); 
   
   describe('getChampValue', () => {
     it('should return stringValue for field Champ', async () => {
