@@ -36,6 +36,10 @@ app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice')
 })
 
+app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
+  res.render('données-personnelles-et-gestion-des-cookies')
+})
+
 module.exports = app.listen(port, () => {
   console.log(`${appName} listening at http://localhost:${port}`)
 })
