@@ -36,8 +36,8 @@ app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice')
 })
 
-app.get('/suivi', (req, res) => {
-  res.render('suivi')
+app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
+  res.render('données-personnelles-et-gestion-des-cookies')
 })
 
 module.exports = app.listen(port, () => {
