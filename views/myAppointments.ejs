@@ -5,8 +5,11 @@
     Mes rendez-vous
   </h1>
   <div>
+    <button class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouveau rendez-vous</button>
+  </div>
+  <div class="rf-my-5w">
     <% appointments.forEach(function(appointment) { %>
-      <li><%= appointment.date %></li>
+      <li><%= appointment.date %></li> <!-- TODO display dates in better format -->
     <% }) %>
   </div>
   <div>
