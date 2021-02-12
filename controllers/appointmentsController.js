@@ -11,7 +11,9 @@ module.exports.newAppointment = async (req, res) => {
 }
 
 module.exports.createNewAppointment = async (req, res) => {
+  // todo input validation, check if present, check if safe string
   const dateString = req.body.date
+  const patientName = req.body['patient-name']
 
   function parseDate(dateString) {
     var m = dateString.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
@@ -20,7 +22,7 @@ module.exports.createNewAppointment = async (req, res) => {
   const date = parseDate(dateString)
 
   try {
-    await db.insertAppointment(date)
+    await db.insertAppointment(date, patientName)
     req.flash('info', `Le rendez-vous du ${dateString} a bien été créé.`)
     return res.redirect('/mes-rendez-vous')
   } catch (err) {
