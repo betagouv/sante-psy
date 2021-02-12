@@ -3,7 +3,7 @@ const isSecure = (process.env.SECURE || 'true') === 'true';
 module.exports = {
   secure: isSecure,
   protocol: isSecure ? 'https' : 'http',
-  prod: (process.env.DEBUG_LOG || true) === 'false',
+  desactivateDebug: (process.env.DESACTIVATE_DEBUG_LOG || 'false') === 'true',
   host: process.env.HOSTNAME,
   port: process.env.PORT || 8100,
   apiToken: process.env.API_TOKEN,

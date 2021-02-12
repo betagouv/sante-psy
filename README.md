@@ -20,7 +20,7 @@ npm run dev
 ```
 
 ### Variables d'environnement
-Voir `.env.sample`
+Voir `.env.sample` pour la liste complète
 
 ### Test
 ```
