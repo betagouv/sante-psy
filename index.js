@@ -54,6 +54,7 @@ if (config.featurePsyList) {
 }
 
 app.get('/mes-rendez-vous', myAppointmentsController.myAppointments)
+app.get('/nouveau-rendez-vous', myAppointmentsController.newAppointment)
 
 app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice');

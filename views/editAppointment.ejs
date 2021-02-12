@@ -1,0 +1,48 @@
+<%- include('partials/header') -%>
+
+<div class="rf-container rf-mb-5w">
+  <h1 id="contactez-nous">
+    Nouveau rendez-vous
+  </h1>
+  <div class="rf-my-5w">
+    <form>
+      <!-- TODO proper datepicker -->
+      <div>
+        Date du rendez-vous
+        <div>
+          <label for="day">Jour</label>
+          <input type="number" id="day" name="day" min="1" max="31">
+        </div>
+        <div>
+          <label for="month">Mois</label>
+          <select id="month" name="month">
+            <option selected>janvier</option>
+            <option>février</option>
+            <option>mars</option>
+            <option>avril</option>
+            <option>mai</option>
+            <option>juin</option>
+            <option>juillet</option>
+            <option>août</option>
+            <option>septembre</option>
+            <option>octobre</option>
+            <option>novembre</option>
+            <option>decembre</option>
+          </select>
+        </div>
+        <div>
+          <label for="year">Année</label>
+          <input type="number" id="year" name="year" min="2021">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="rf-my-5w">
+    <button class="rf-btn rf-fi-add-line rf-btn--icon-left">Créer le rendez-vous</button>
+  </div>
+  <div>
+    Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
+  </div>
+</div>
+
+<%- include('partials/footer') -%>

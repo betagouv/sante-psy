@@ -5,3 +5,7 @@ module.exports.myAppointments = async (req, res) => {
 
   res.render('myAppointments', { appointments: appointments })
 }
+
+module.exports.newAppointment = async (req, res) => {
+  res.render('editAppointment')
+}
