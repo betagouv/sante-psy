@@ -11,9 +11,19 @@ module.exports.newAppointment = async (req, res) => {
 }
 
 module.exports.createNewAppointment = async (req, res) => {
-  // todo input validation, check if present, check if safe string
+  // todo input validation, check if safe string
   const dateString = req.body.date
-  const patientName = req.body['patient-name']
+  const patientName = req.body['patient-name'].trim()
+
+  if (!dateString || dateString.length === 0) {
+    req.flash('error', 'Vous devez spécifier une date pour le rendez-vous.')
+    return res.redirect('/nouveau-rendez-vous')
+  }
+
+  if (!patientName || patientName.length === 0) {
+    req.flash('error', 'Vous devez spécifier un nom de patient pour le rendez-vous.')
+    return res.redirect('/nouveau-rendez-vous')
+  }
 
   function parseDate(dateString) {
     var m = dateString.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
