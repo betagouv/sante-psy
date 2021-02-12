@@ -65,7 +65,7 @@
         ],
         columns:[
             {title:"Nom", field:"name", sorter:"string", responsive:0},
-            {title:"Adresse", field:"address", sorter:"string", responsive:0, formatter:"link", formatterParams:{labelField:"address",urlPrefix:"https://www.openstreetmap.org/search?query=",target:"_blank"}},
+            {title:"Adresse", field:"address", sorter:"string", maxWidth: 300, responsive:0, formatter:"link", formatterParams:{labelField:"address",urlPrefix:"https://www.openstreetmap.org/search?query=",target:"_blank"}},
             {title:"📞", field:"phone", sorter:"string", responsive:0, formatter: "link", formatterParams:{labelField:"phone",urlPrefix:"tel:"}},
             {title:"Site web", field:"website", sorter:"string", maxWidth:200, responsive:0, formatter:"link", formatterParams:{labelField:"website",urlPrefix:"//",target:"_blank"}},
             {title:"Email", field:"email", sorter:"string", responsive:0, formatter:"link", formatterParams:{labelField:"email",urlPrefix:"mailto://"}},

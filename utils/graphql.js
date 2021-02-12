@@ -17,7 +17,7 @@ async function requestPsychologist(academy = '') {
     {
       demarche (number: ${config.demarchesSimplifieesId}) {
         id
-        dossiers (state: accepte) {
+        dossiers (state: en_construction) {
           nodes {
               groupeInstructeur {
                 label
