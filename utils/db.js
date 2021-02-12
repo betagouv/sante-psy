@@ -16,7 +16,7 @@ const insertAppointment = async (date, patientName) => {
   try {
     return await knex("appointments").insert({
       date,
-      patientName, // todo remove default value
+      patientName,
     })
   } catch (err) {
     console.error("Erreur de sauvegarde du appointments", err)
