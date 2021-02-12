@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const bodyParser = require("body-parser")
+const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
 const flash = require('connect-flash');
