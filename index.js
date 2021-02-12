@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 
 const config = require('./utils/config');
+const format = require('./utils/format');
 
 const appName = `Santé Psy Étudiants`;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
@@ -49,6 +50,7 @@ app.use(function populate(req, res, next){
   res.locals.successes = req.flash('success');
   next();
 })
+app.locals.format = format
 
 app.get('/', landingController.getLanding);
 
