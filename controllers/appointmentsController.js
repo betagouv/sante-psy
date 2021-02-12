@@ -11,25 +11,20 @@ module.exports.newAppointment = async (req, res) => {
 }
 
 module.exports.createNewAppointment = async (req, res) => {
-  // todo input validation, check if safe string
   const dateString = req.body.date
-  const patientName = req.body['patient-name'].trim()
-
-  if (!dateString || dateString.length === 0) {
+  const isoDateString = req.body['iso-date']
+  const date = new Date(Date.parse(isoDateString))
+  if (!isoDateString || isoDateString.length === 0 || isNaN(date)) {
     req.flash('error', 'Vous devez spécifier une date pour le rendez-vous.')
     return res.redirect('/nouveau-rendez-vous')
   }
 
+  // todo input validation, check if safe string
+  const patientName = req.body['patient-name'].trim()
   if (!patientName || patientName.length === 0) {
     req.flash('error', 'Vous devez spécifier un nom de patient pour le rendez-vous.')
     return res.redirect('/nouveau-rendez-vous')
   }
-
-  function parseDate(dateString) {
-    var m = dateString.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-    return (m) ? new Date(m[3], m[2]-1, m[1]) : null;
-  }
-  const date = parseDate(dateString)
 
   try {
     await db.insertAppointment(date, patientName)

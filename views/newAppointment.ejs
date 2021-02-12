@@ -7,6 +7,9 @@
 <script>
   $( function() {
     $( "#date" ).datepicker($.datepicker.regional[ "fr" ] );
+    // Hidden field which uses a different format, which is easier to parse for the backend.
+    $( "#date" ).datepicker( "option", "altField", "#iso-date" );
+    $( "#date" ).datepicker( "option", "altFormat", "yy-mm-dd" );
   } );
 </script>
 <script src="/static/js/datepicker-fr.js"></script>
@@ -31,6 +34,7 @@
         <div class="rf-my-3w">
           <label class="rf-label" for="date">Date du rendez-vous</label>
           <input class="rf-input short-input" type="text" id="date" name="date" required>
+          <input type="text" id="iso-date" name="iso-date" required aria-hidden="true" hidden>
         </div>
         <div class="rf-my-3w">
           <label class="rf-label" for="patient-name">Nom du patient</label>
