@@ -4,6 +4,16 @@
   <h1 id="contactez-nous">
     Mes rendez-vous
   </h1>
+  <% if (errors.length) { %>
+    <% errors.forEach(function(error) { %>
+      <%- include('partials/notificationError', {error: error}) -%>
+    <% }) %>
+  <% } %>
+  <% if (infos.length) { %>
+    <% infos.forEach(function(info) { %>
+      <%- include('partials/notificationInfo', {info: info}) -%>
+    <% }) %>
+  <% } %>
   <div>
     <a href="/nouveau-rendez-vous" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouveau rendez-vous</a>
   </div>

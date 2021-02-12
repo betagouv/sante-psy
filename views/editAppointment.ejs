@@ -15,6 +15,16 @@
   <h1 id="contactez-nous">
     Nouveau rendez-vous
   </h1>
+  <% if (errors.length) { %>
+    <% errors.forEach(function(error) { %>
+      <%- include('partials/notificationError', {error: error}) -%>
+    <% }) %>
+  <% } %>
+  <% if (infos.length) { %>
+    <% infos.forEach(function(info) { %>
+      <%- include('partials/notificationInfo', {info: info}) -%>
+    <% }) %>
+  <% } %>
   <div class="rf-my-5w">
     <form action="/creer-nouveau-rendez-vous" method="POST">
       <div>
