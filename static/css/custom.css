@@ -38,3 +38,7 @@
 .btn--secondary--temporary-fix {
   border: 1px var(--bf500) solid;
 }
+
+.short-input {
+  max-width: 10rem;
+}

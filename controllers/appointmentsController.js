@@ -23,7 +23,7 @@ module.exports.createNewAppointment = async (req, res) => {
 
   try {
     await db.insertAppointment(date, patientName)
-    req.flash('info', `Le rendez-vous du ${dateString} a bien été créé.`)
+    req.flash('info', `Le rendez-vous du ${dateString} avec ${patientName} a bien été créé.`)
     return res.redirect('/mes-rendez-vous')
   } catch (err) {
     req.flash('error', 'Erreur. Le rendez-vous n\'est pas créé. Vous pouvez réessayer.')
