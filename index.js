@@ -52,6 +52,10 @@ if (config.featurePsyList) {
   app.get('/consulter-les-psychologues', psyListingController.getPsychologist);
 }
 
+app.get('/mes-rendez-vous', (req, res) => {
+  res.render('myAppointments')
+})
+
 app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice');
 })
