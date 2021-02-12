@@ -21,7 +21,7 @@ async function getPsychologistList(cursor, accumulator = []) {
   );
 
   // if we have a next page to query, use the next cursor and don't forget our saved accumulator to be passed on
-  if(nextCursor !== '') {
+  if( nextCursor ) {
     return getPsychologistList(nextCursor, nextAccumulator);
   } else {
     return nextAccumulator;
@@ -40,7 +40,7 @@ function getHasNextPage(apiResponse) {
   if( pageInfo.hasNextPage ) {
     return pageInfo.endCursor;
   } else {
-    return '';
+    return undefined;
   }
 }
 

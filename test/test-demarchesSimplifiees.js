@@ -1,6 +1,7 @@
 require('dotenv').config();
 const rewire = require('rewire');
 const should = require('chai').should();
+const assert = require('chai').assert;
 const nock = require('nock');
 const testDossiers = require('./dossier.json');
 
@@ -72,7 +73,7 @@ describe('Demarches Simplifiess', () => {
       output.should.equal(cursor);
     });
 
-    it('should return empty string if there is no page to load', async () => {
+    it('should return undefined if there is no page to load', async () => {
       const cursor = "MQ";
       const apiResponse = {
         "demarche": {
@@ -86,9 +87,8 @@ describe('Demarches Simplifiess', () => {
       }
 
       const getHasNextPage = demarchesSimplifiees.__get__('getHasNextPage');
-      const output = getHasNextPage(apiResponse);
 
-      output.should.equal('');
+      assert(getHasNextPage(apiResponse) === undefined);
     });
   }); 
   
