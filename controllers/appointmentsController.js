@@ -11,6 +11,7 @@ module.exports.newAppointment = async (req, res) => {
 }
 
 module.exports.createNewAppointment = async (req, res) => {
+  // todo unit tests for input validation
   const dateString = req.body.date
   const isoDateString = req.body['iso-date']
   const date = new Date(Date.parse(isoDateString))

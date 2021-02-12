@@ -1,3 +1,5 @@
+/* eslint-disable func-names */
+/* up and down are unnamed funcs, it's the generated knex format. */
 
 exports.up = function(knex) {
   // Create the new column with a default value

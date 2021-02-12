@@ -12,7 +12,7 @@ module.exports.getAppointments = async () => {
   }
 }
 
-const insertAppointment = async (date, patientName) => {
+module.exports.insertAppointment = async (date, patientName) => {
   try {
     return await knex("appointments").insert({
       date,
@@ -23,4 +23,3 @@ const insertAppointment = async (date, patientName) => {
     throw new Error("Erreur de sauvegarde du appointments")
   }
 }
-module.exports.insertAppointment = insertAppointment
