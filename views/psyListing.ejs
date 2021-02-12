@@ -5,7 +5,7 @@
 <div class="rf-container-fluid">
     <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
         <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
-            <h1>Liste des psychologues disponibles</h1>
+            <h1>Liste des psychologues partenaires</h1>
             <% if (errors.length) { %>
                 <% errors.forEach(function(error) { %>
                   <%- include('partials/notificationError', {error: error}) -%>
@@ -15,7 +15,7 @@
                 Il y a actuellement <%- psyList.length %> partenaires du dispositif d'accompagnement.
             </p>
             <div>
-                <input id="filter-value" type="text" placeholder="Rechercher par adresse">
+                <label for="filter-value">Rechercher par adresse : </label><input id="filter-value" type="text" placeholder="Amiens ou 80000">
             </div>
             <div id="psy-table"></div>
             <% } %>
@@ -34,14 +34,6 @@
         data: psyList, //assign data to table
         langs:{ // http://tabulator.info/docs/4.2/localize#setup
             "fr-fr":{ //French language definition
-                "columns":{
-                    "name":"Nom",
-                    "progress":"Progression",
-                    "gender":"Genre",
-                    "rating":"Évaluation",
-                    "col":"Couleur",
-                    "dob":"Date de Naissance",
-                },
                 "pagination":{
                     "first":"Première",
                     "first_title":"Première Page",
@@ -57,24 +49,29 @@
                 }
             },
         },
-        layout:"fitColumns",      //fit columns to width of table
-        responsiveLayout:"hide",  //hide columns that dont fit on the table
+        tooltipsHeader:true,
+        layout:"fitData",      //fit columns to width of table
+        responsiveLayout:"hide",  //hide columns that dont fit on the table //@TODO
         tooltips:true,            //show tool tips on cells
         addRowPos:"top",          //when adding a new row, add it to the top of the table
         history:true,             //allow undo and redo actions on the table
         pagination:"local",       //paginate the data
-        paginationSize:30,        //allow 15 rows per page of data
-        movableColumns:true,      //allow column order to be changed
-        resizableRows:true,       //allow row order to be changed
+        paginationSize:10,        //allow XX rows per page of data
+        movableColumns:false,      //allow column order to be changed
+        resizableRows:false,       //allow row order to be changed
+        resizableColumns:false,
         initialSort:[             //set the initial sort order of the data
             {column:"name", dir:"asc"},
         ],
         columns:[
-            {title:"Nom", field:"name", sorter:"string"},
-            {title:"Adresse", field:"address", sorter:"string"},
-            {title:"Téléphone", field:"phone", sorter:"string"},
+            {title:"Nom", field:"name", sorter:"string", responsive:0},
+            {title:"Adresse", field:"address", sorter:"string", maxWidth: 300, responsive:0, formatter:"link", formatterParams:{labelField:"address",urlPrefix:"https://www.openstreetmap.org/search?query=",target:"_blank"}},
+            {title:"📞", field:"phone", sorter:"string", responsive:0, formatter: "link", formatterParams:{labelField:"phone",urlPrefix:"tel:"}},
+            {title:"Site web", field:"website", sorter:"string", maxWidth:200, responsive:0, formatter:"link", formatterParams:{labelField:"website",urlPrefix:"//",target:"_blank"}},
+            {title:"Email", field:"email", sorter:"string", responsive:0, formatter:"link", formatterParams:{labelField:"email",urlPrefix:"mailto://"}},
+            {title:"Téléconsultation", field:"teleconsultation", responsive:0,sorter:"string", hozAlign:"center",tooltip: "Est ce que le psychologue accepte la téléconsultation ?", formatter:"tickCross"},
         ],
-        headerFilterPlaceholder:"Rechercher un psychologue" // http://tabulator.info/docs/4.2/filter#header
+        headerFilterPlaceholder:"Rechercher un psychologue" // http://tabulator.info/docs/4.9/filter#header
     });
     table.setLocale("fr-fr");
 </script>

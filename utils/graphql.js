@@ -28,8 +28,12 @@ async function requestPsychologist(academy = '') {
                 label
                 stringValue
               }
-              usager {
-                email
+              demandeur {
+                ... on PersonnePhysique {
+                  civilite
+                  nom
+                  prenom
+                }
               }
           }
         }
@@ -40,8 +44,7 @@ async function requestPsychologist(academy = '') {
   console.debug('GraphQL query sent:', query);
 
   try {
-    const psychologists = await graphQLClient.request(query)
-    console.debug(JSON.stringify(psychologists, undefined, 2))
+    const psychologists = await graphQLClient.request(query);
 
     return psychologists;
   } catch (err) {
@@ -56,7 +59,6 @@ async function requestPsychologist(academy = '') {
  * @param {response} response 
  */
 function hasErrors(apiResponse) {
-  console.log('apiResponse', apiResponse);
   if(apiResponse.response.errors.length > 0) {
     apiResponse.response.errors.forEach(err => {
       console.error('API has returned error', err); // server error logs
