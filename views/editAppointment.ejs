@@ -16,19 +16,19 @@
     Nouveau rendez-vous
   </h1>
   <div class="rf-my-5w">
-    <form>
+    <form action="/creer-nouveau-rendez-vous" method="POST">
       <div>
         <div>
           <label for="date">Date du rendez-vous</label>
         </div>
         <div>
-          <input type="text" id="date">
+          <input type="text" id="date" name="date">
         </div>
       </div>
+      <div class="rf-my-5w">
+        <button type="submit" class="rf-btn rf-fi-add-line rf-btn--icon-left">Créer le rendez-vous</button>
+      </div>
     </form>
-  </div>
-  <div class="rf-my-5w">
-    <button class="rf-btn rf-fi-add-line rf-btn--icon-left">Créer le rendez-vous</button>
   </div>
   <div>
     Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.

@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const bodyParser = require("body-parser")
 const express = require('express');
 const path = require('path');
 const flash = require('connect-flash');
@@ -17,6 +18,8 @@ const landingController = require('./controllers/landingController');
 const myAppointmentsController =
   require('./controllers/myAppointmentsController')
 const psyListingController = require('./controllers/psyListingController');
+
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(flash());
 app.set('view engine', 'ejs');
@@ -55,6 +58,7 @@ if (config.featurePsyList) {
 
 app.get('/mes-rendez-vous', myAppointmentsController.myAppointments)
 app.get('/nouveau-rendez-vous', myAppointmentsController.newAppointment)
+app.post('/creer-nouveau-rendez-vous', myAppointmentsController.createNewAppointment)
 
 app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice');
