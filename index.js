@@ -15,6 +15,8 @@ const port = process.env.PORT || 8080;
 
 const app = express();
 const landingController = require('./controllers/landingController');
+const myAppointmentsController =
+  require('./controllers/myAppointmentsController')
 const psyListingController = require('./controllers/psyListingController');
 
 app.use(flash());
@@ -52,9 +54,7 @@ if (config.featurePsyList) {
   app.get('/consulter-les-psychologues', psyListingController.getPsychologist);
 }
 
-app.get('/mes-rendez-vous', (req, res) => {
-  res.render('myAppointments')
-})
+app.get('/mes-rendez-vous', myAppointmentsController.myAppointments)
 
 app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice');
