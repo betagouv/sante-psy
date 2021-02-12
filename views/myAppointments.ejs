@@ -5,6 +5,11 @@
     Mes rendez-vous
   </h1>
   <div>
+    <% appointments.forEach(function(appointment) { %>
+      <li><%= appointment.date %></li>
+    <% }) %>
+  </div>
+  <div>
     Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
   </div>
 </div>
