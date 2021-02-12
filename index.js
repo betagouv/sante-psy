@@ -58,9 +58,11 @@ if (config.featurePsyList) {
   app.get('/consulter-les-psychologues', psyListingController.getPsychologist);
 }
 
-app.get('/mes-rendez-vous', myAppointmentsController.myAppointments)
-app.get('/nouveau-rendez-vous', myAppointmentsController.newAppointment)
-app.post('/creer-nouveau-rendez-vous', myAppointmentsController.createNewAppointment)
+if (config.FEATURE_PSY_PAGES) {
+  app.get('/mes-rendez-vous', myAppointmentsController.myAppointments)
+  app.get('/nouveau-rendez-vous', myAppointmentsController.newAppointment)
+  app.post('/creer-nouveau-rendez-vous', myAppointmentsController.createNewAppointment)
+}
 
 app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice');
