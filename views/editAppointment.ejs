@@ -1,38 +1,28 @@
 <%- include('partials/header') -%>
 
+<!-- TODO serve jquery from local -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  $( function() {
+    $( "#date" ).datepicker($.datepicker.regional[ "fr" ] );
+  } );
+</script>
+<script src="/static/js/datepicker-fr.js"></script>
+
 <div class="rf-container rf-mb-5w">
   <h1 id="contactez-nous">
     Nouveau rendez-vous
   </h1>
   <div class="rf-my-5w">
     <form>
-      <!-- TODO proper datepicker -->
       <div>
-        Date du rendez-vous
         <div>
-          <label for="day">Jour</label>
-          <input type="number" id="day" name="day" min="1" max="31">
+          <label for="date">Date du rendez-vous</label>
         </div>
         <div>
-          <label for="month">Mois</label>
-          <select id="month" name="month">
-            <option selected>janvier</option>
-            <option>février</option>
-            <option>mars</option>
-            <option>avril</option>
-            <option>mai</option>
-            <option>juin</option>
-            <option>juillet</option>
-            <option>août</option>
-            <option>septembre</option>
-            <option>octobre</option>
-            <option>novembre</option>
-            <option>decembre</option>
-          </select>
-        </div>
-        <div>
-          <label for="year">Année</label>
-          <input type="number" id="year" name="year" min="2021">
+          <input type="text" id="date">
         </div>
       </div>
     </form>
