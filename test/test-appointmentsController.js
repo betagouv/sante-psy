@@ -1,6 +1,7 @@
 /* eslint-disable func-names */
 const app = require('../index')
 const chai = require('chai')
+console.log('test-appointmentsController loading db')
 const db = require('../utils/db')
 const sinon = require('sinon')
 
@@ -65,6 +66,26 @@ describe('appointmentsController', function() {
       .end((err, res) => {
         res.should.redirectTo('/mes-seances')
         sinon.assert.called(insertAppointmentStub)
+        done()
+      })
+  })
+})
+
+describe('appointmentsController db test', function() {
+  it.only('should create appointment', function(done) {
+    const config = require('../utils/config')
+    console.log('config before test', config)
+    chai.request(app)
+      .post('/creer-nouveau-rendez-vous')
+      .redirects(0) // block redirects, we don't want to test them
+      .type('form')
+      .send({
+        'patient-name': 'Georges Perec',
+        date: '09/02/2021',
+        'iso-date': '2021-02-09',
+      })
+      .end((err, res) => {
+        res.should.redirectTo('/mes-rendez-vous')
         done()
       })
   })

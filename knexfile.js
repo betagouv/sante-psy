@@ -9,4 +9,5 @@ const knexConfig = {
   }
 }
 
+console.log('got knexConfig', knexConfig)
 module.exports = knexConfig
