@@ -18,7 +18,8 @@ const landingController = require('./controllers/landingController');
 const psyListingController = require('./controllers/psyListingController');
 
 // Desactivate debug log for production as they are a bit too verbose
-if( config.desactivateDebug ) {
+if( !config.activateDebug ) {
+  console.log("console.debug is not active - thanks to ACTIVATE_DEBUG_LOG env variable");
   console.debug = function desactivateDebug() {};
 }
 

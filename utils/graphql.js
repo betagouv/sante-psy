@@ -14,7 +14,7 @@ const graphQLClient = new GraphQLClient(endpoint, {
  * @see https://demarches-simplifiees-graphql.netlify.app/pageinfo.doc.html
  * @param {*} cursor : String
  */
-function wherePaginateAfter(cursor) {
+function getWhereConditionAfterCursor(cursor) {
   if( cursor ) {
     return `, after: "${cursor}"`;
   } else {
@@ -34,7 +34,7 @@ function wherePaginateAfter(cursor) {
  * @see https://demarches-simplifiees-graphql.netlify.app/demarche.doc.html
  */
 async function requestPsychologist(afterCursor) {
-  const paginationCondition = wherePaginateAfter(afterCursor);
+  const paginationCondition = getWhereConditionAfterCursor(afterCursor);
   const query = gql`
     {
       demarche (number: ${config.demarchesSimplifieesId}) {
