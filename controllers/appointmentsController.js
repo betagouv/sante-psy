@@ -1,4 +1,5 @@
 const db = require('../utils/db')
+const format = require('../utils/format')
 
 module.exports.myAppointments = async (req, res) => {
   const appointments = await db.getAppointments()
@@ -12,7 +13,6 @@ module.exports.newAppointment = async (req, res) => {
 
 module.exports.createNewAppointment = async (req, res) => {
   // todo unit tests for input validation
-  const dateString = req.body.date
   const isoDateString = req.body['iso-date']
   const date = new Date(Date.parse(isoDateString))
   if (!isoDateString || isoDateString.length === 0 || isNaN(date)) {
@@ -29,7 +29,7 @@ module.exports.createNewAppointment = async (req, res) => {
 
   try {
     await db.insertAppointment(date, patientName)
-    req.flash('info', `Le rendez-vous du ${dateString} avec ${patientName} a bien été créé.`)
+    req.flash('info', `Le rendez-vous du ${format.formatShortFrenchDate(date)} avec ${patientName} a bien été créé.`)
     return res.redirect('/mes-rendez-vous')
   } catch (err) {
     req.flash('error', 'Erreur. Le rendez-vous n\'est pas créé. Vous pouvez réessayer.')
