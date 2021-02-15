@@ -32,7 +32,7 @@ module.exports.createNewAppointment = async (req, res) => {
     req.flash('info', `La séance du ${format.formatFrenchDate(date)} avec ${patientName} a bien été créé.`)
     return res.redirect('/mes-seances')
   } catch (err) {
-    req.flash('error', 'Erreur. La séance n\'est pas créée. Vous pouvez réessayer.')
+    req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez vous réessayer ?')
     console.error('Erreur pour créer la séance', err)
     return res.redirect('/nouvelle-seance')
   }
