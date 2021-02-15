@@ -59,9 +59,9 @@ if (config.featurePsyList) {
 }
 
 if (config.FEATURE_PSY_PAGES) {
-  app.get('/mes-rendez-vous', appointmentsController.myAppointments)
-  app.get('/nouveau-rendez-vous', appointmentsController.newAppointment)
-  app.post('/creer-nouveau-rendez-vous', appointmentsController.createNewAppointment)
+  app.get('/mes-seances', appointmentsController.myAppointments)
+  app.get('/nouvelle-seance', appointmentsController.newAppointment)
+  app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)
 }
 
 app.get('/mentions-legales', (req, res) => {

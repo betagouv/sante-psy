@@ -16,7 +16,7 @@
 
 <div class="rf-container rf-mb-5w">
   <h1 id="contactez-nous">
-    Nouveau rendez-vous
+    Nouvelle séance
   </h1>
   <% if (errors.length) { %>
     <% errors.forEach(function(error) { %>
@@ -29,10 +29,10 @@
     <% }) %>
   <% } %>
   <div class="rf-my-5w">
-    <form action="/creer-nouveau-rendez-vous" method="POST">
+    <form action="/creer-nouvelle-seance" method="POST">
       <div>
         <div class="rf-my-3w">
-          <label class="rf-label" for="date">Date du rendez-vous</label>
+          <label class="rf-label" for="date">Date de la séance</label>
           <input class="rf-input short-input" type="text" id="date" name="date" required>
           <input type="text" id="iso-date" name="iso-date" required aria-hidden="true" hidden>
         </div>
@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="rf-my-5w">
-        <button type="submit" class="rf-btn rf-fi-add-line rf-btn--icon-left">Créer le rendez-vous</button>
+        <button type="submit" class="rf-btn rf-fi-add-line rf-btn--icon-left">Créer la séance</button>
       </div>
     </form>
   </div>
