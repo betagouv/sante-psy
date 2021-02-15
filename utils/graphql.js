@@ -25,11 +25,11 @@ function wherePaginateAfter(cursor) {
 /**
  * # Arguments pour dossiers
     # after: Returns the elements in the list that come after the
-    # specified cursor. (endCursor). Is a String so we should use quotes
+    # specified cursor. (endCursor). est un String, utilisez les guillemets
     # order: L’ordre des dossiers.
     # createdSince: Dossiers déposés depuis la date.
     # updatedSince: Dossiers mis à jour depuis la date.
-    # state: Dossiers avec statut. is not a string, we should not use quotes
+    # state: Dossiers avec statut. n'est pas un String, ne pas utilez de guillemets
     # archived: Si présent, permet de filtrer les dossiers archivés 
  * @see https://demarches-simplifiees-graphql.netlify.app/demarche.doc.html
  */
