@@ -1,21 +1,26 @@
 require('dotenv').config();
 
+const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
 const flash = require('connect-flash');
 const session = require('express-session');
 
 const config = require('./utils/config');
+const format = require('./utils/format');
 
 const appName = `Santé Psy Étudiants`;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
 const appRepo = 'https://github.com/betagouv/sante-psy';
 const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr';
-const port = process.env.PORT || 8080;
 
 const app = express();
 const landingController = require('./controllers/landingController');
+const appointmentsController =
+  require('./controllers/appointmentsController')
 const psyListingController = require('./controllers/psyListingController');
+
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(flash());
 app.set('view engine', 'ejs');
@@ -45,11 +50,18 @@ app.use(function populate(req, res, next){
   res.locals.successes = req.flash('success');
   next();
 })
+app.locals.format = format
 
 app.get('/', landingController.getLanding);
 
 if (config.featurePsyList) {
   app.get('/consulter-les-psychologues', psyListingController.getPsychologist);
+}
+
+if (config.featurePsyPages) {
+  app.get('/mes-seances', appointmentsController.myAppointments)
+  app.get('/nouvelle-seance', appointmentsController.newAppointment)
+  app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)
 }
 
 app.get('/mentions-legales', (req, res) => {
@@ -60,6 +72,6 @@ app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
   res.render('données-personnelles-et-gestion-des-cookies')
 })
 
-module.exports = app.listen(port, () => {
-  console.log(`${appName} listening at http://localhost:${port}`);
+module.exports = app.listen(config.port, () => {
+  console.log(`${appName} listening at http://localhost:${config.port}`);
 })

@@ -1,0 +1,54 @@
+<%- include('partials/header') -%>
+
+<!-- TODO serve jquery from local -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  $( function() {
+    $( "#date" ).datepicker($.datepicker.regional[ "fr" ] );
+    // Hidden field which uses a different format, which is easier to parse for the backend.
+    $( "#date" ).datepicker( "option", "altField", "#iso-date" );
+    $( "#date" ).datepicker( "option", "altFormat", "yy-mm-dd" );
+  } );
+</script>
+<script src="/static/js/datepicker-fr.js"></script>
+
+<div class="rf-container rf-mb-5w">
+  <h1 id="contactez-nous">
+    Nouvelle séance
+  </h1>
+  <% if (errors.length) { %>
+    <% errors.forEach(function(error) { %>
+      <%- include('partials/notificationError', {error: error}) -%>
+    <% }) %>
+  <% } %>
+  <% if (infos.length) { %>
+    <% infos.forEach(function(info) { %>
+      <%- include('partials/notificationInfo', {info: info}) -%>
+    <% }) %>
+  <% } %>
+  <div class="rf-my-5w">
+    <form action="/creer-nouvelle-seance" method="POST">
+      <div>
+        <div class="rf-my-3w">
+          <label class="rf-label" for="date">Date de la séance</label>
+          <input class="rf-input short-input" type="text" id="date" name="date" required autocomplete="off">
+          <input type="text" id="iso-date" name="iso-date" required aria-hidden="true" hidden autocomplete="off">
+        </div>
+        <div class="rf-my-3w">
+          <label class="rf-label" for="patient-name">Nom du patient</label>
+          <input class="rf-input" type="text" id="patient-name" name="patient-name" required>
+        </div>
+      </div>
+      <div class="rf-my-5w">
+        <button type="submit" class="rf-btn rf-fi-add-line rf-btn--icon-left">Créer la séance</button>
+      </div>
+    </form>
+  </div>
+  <div>
+    Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
+  </div>
+</div>
+
+<%- include('partials/footer') -%>

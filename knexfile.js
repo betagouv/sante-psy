@@ -1,6 +1,6 @@
 const config = require('./utils/config')
 
-module.exports = {
+const knexConfig = {
   client: "pg",
   connection: config.databaseUrl,
   acquireConnectionTimeout: 10000,
@@ -8,3 +8,5 @@ module.exports = {
     tableName: "knex_migrations"
   }
 }
+
+module.exports = knexConfig
