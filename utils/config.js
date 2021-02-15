@@ -14,4 +14,5 @@ module.exports = {
   demarchesSimplifieesUrl: process.env.DEMARCHES_SIMPLIFIEES_URL,
   secret: process.env.SECRET,
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
+  featureImportData: process.env.FEATURE_IMPORT_DATA || false,
 };

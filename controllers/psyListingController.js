@@ -2,7 +2,7 @@ const utils = require('../utils/demarchesSimplifiees');
 
 module.exports.getPsychologist  = async function getPsychologist(req, res) {
   try {
-    const psyList = await utils.getPsychologistList();
+    const psyList = await utils.getPsychologistList().psychologists;
 
     res.render('psyListing', {
       psyList,

@@ -18,6 +18,17 @@ npm install
 npm run dev
 # http://localhost:8080 is ready
 ```
+### Lancer les CRONs localement
+
+Pour améliorer afficher une liste de psychologues, nous importons les données venant de l'API demarches simplifiées dans la base de données Postgresql à l'aide d'un cron. Cela nous permet un meilleur taux de réponses et une maitrise en cas de pic de traffic.
+
+```bash
+docker-compose up -d
+docker ps
+docker exec -ti container_name bash
+> node ./cron_jobs/cron.js
+...
+```
 
 ### Variables d'environnement
 Voir `.env.sample` pour la liste complète

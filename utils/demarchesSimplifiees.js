@@ -24,18 +24,29 @@ async function getAllPsychologistList(cursor, accumulator = []) {
   if( nextCursor ) {
     return getAllPsychologistList(nextCursor, nextAccumulator);
   } else {
-    return nextAccumulator;
+    return {
+      psychologists : nextAccumulator,
+      lastCursor: cursor
+    };
   }
 }
 
-async function getPsychologistList() {
-  const time = `displaying all psychologists from DS (query id #${Math.random().toString()})`;
+/**
+ * 
+ * @return {
+      psychologists : psychologist List,
+      lastCursor: last cursor from DS API
+    }
+ */
+async function getPsychologistList(cursor) {
+  const time = `getting all psychologists from DS (query id #${Math.random().toString()})`;
   console.time(time);
-  const psychologists = await getAllPsychologistList();
+  const psychologists = await getAllPsychologistList(cursor);
   console.timeEnd(time);
 
   return psychologists;
 }
+
 exports.getPsychologistList = getPsychologistList;
 
 /**
