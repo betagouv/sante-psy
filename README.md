@@ -32,6 +32,15 @@ Tester les fonctions privées :
 npm run lint
 ```
 
+## Pre-commit pre-push
+Pre commit va lancer le linter, pre push lancera les tests
+* https: //github.com/typicode/husky/tree/master#install
+
+
+Si vous rencontez des problèmes avec les git hooks
+* `git rev-parse --git-path hooks` # should be .git/hooks if not run
+* `git config core.hooksPath .git/hooks/`
+
 ### Données
 API de demarches simplifiées :
 * https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/graphql

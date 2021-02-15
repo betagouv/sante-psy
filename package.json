@@ -13,6 +13,12 @@
     "start": "node index.js",
     "test": "mocha"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm test"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/betagouv/sante-psy.git"
@@ -40,6 +46,7 @@
     "chai": "^4.3.0",
     "eslint": "^7.19.0",
     "eslint-plugin-node": "^11.1.0",
+    "husky": "^4.3.8",
     "mocha": "^8.2.1",
     "nock": "^13.0.7",
     "nodemon": "^2.0.7",
