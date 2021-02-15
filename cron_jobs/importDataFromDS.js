@@ -12,7 +12,7 @@ const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
  */
 async function getLatestCursorSaved() {
   try {
-    await knex("appointments").select()
+    await knex("ds_api_cursor").select()
         .orderBy("date", "desc")
 
     //get last cursor saved
@@ -33,7 +33,7 @@ async function saveLatestCursorSaved() {
   try {
     const now = Date.now()
 
-    const updateQuery = await knex("ds_cursor")
+    const updateQuery = await knex("ds_api_cursor")
         .where("cursor", "cursor")
         .update({ "updated_at": now});
 
@@ -50,7 +50,7 @@ async function saveLatestCursorSaved() {
  */
 async function savePsychologistInPG(psyList) {
   const chunkSize = 1000
-  const batchInsert = await knex("psychologist")
+  const batchInsert = await knex("psychologists")
   .batchInsert(psyList, chunkSize);
 
   console.log(`Batch insert of ${psyList.length} psychologists into PG done`);
@@ -58,14 +58,15 @@ async function savePsychologistInPG(psyList) {
 
 module.exports.importDataFromDSToPG = async () => {
   try {
-    const latestCursorInPG = getLatestCursorSaved();
-
+    console.log("Starting importDataFromDSToPG...");
+    const latestCursorInPG = await getLatestCursorSaved();
+    console.log("Latest cursor", latestCursorInPG);
     //@TODO case where the last page is already saved ?
-    const { psychologists, latestCursorInDS } = demarchesSimplifiees.getPsychologistList(latestCursorInPG);
+    const { psychologists, latestCursorInDS } = await demarchesSimplifiees.getPsychologistList(latestCursorInPG);
 
     if(psychologists.length > 0) {
-      savePsychologistInPG(psychologists);
-      saveLatestCursorSaved(latestCursorInDS);
+      await savePsychologistInPG(psychologists);
+      await saveLatestCursorSaved(latestCursorInDS);
     } else {
       console.log("No psychologists to save");
     }

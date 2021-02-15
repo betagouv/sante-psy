@@ -67,7 +67,7 @@ function getName(demandeur) {
   return _.capitalize(demandeur.prenom) + ' ' + _.capitalize(demandeur.nom);
 }
 
-function getChampValue(champData, attributeName) {
+function getChampValue(champData, attributeName, stringValue = true) {
   const potentialStringValue = champData.find(champ => champ.label === attributeName);
 
   if(typeof potentialStringValue === 'undefined') {
@@ -75,7 +75,11 @@ function getChampValue(champData, attributeName) {
 
     return "";
   } else {
-    return potentialStringValue.stringValue;
+    if(stringValue) {
+      return potentialStringValue.stringValue;
+    } else {
+      return potentialStringValue.value;
+    }
   }
 }
 
@@ -87,10 +91,22 @@ function parseTeleconsultation(inputString) {
   return inputString === 'true';
 }
 
+/**
+ * transform string "speciality1, speciality2" to array ["speciality1", "speciality2"]
+ */
+function parseTraining(inputString) {
+  if(inputString.includes(',')) {
+    return inputString.split(', ');
+  } else {
+    return [inputString];
+  }
+}
+
 function parseDossierMetadata(dossier) {
   const name = getName(dossier.demandeur);
-  const university = dossier.groupeInstructeur.label.stringValue;
+  const region = dossier.groupeInstructeur.label; // Normandie
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
+  const county = getChampValue(dossier.champs, 'Votre département', false); // "14 - Calvados"
   const phone =  getChampValue(dossier.champs, 'Téléphone du secrétariat');
   const teleconsultation = parseTeleconsultation(
     getChampValue(dossier.champs, 'Proposez-vous de la téléconsultation ?')
@@ -98,15 +114,25 @@ function parseDossierMetadata(dossier) {
   const website =  getChampValue(dossier.champs, 'Site web professionnel (optionnel)');
   const email =  getChampValue(dossier.champs, 'Email de contact');
   const description =  getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
+  const training = parseTraining(
+    getChampValue(dossier.champs, 'Formations et expériences')
+  );
+  const adeliNumber = getChampValue(dossier.champs, 'Numéro Adeli')
+  const diploma = getChampValue(dossier.champs, 'Intitulé ou spécialité de votre master de psychologie')
 
   const psy = {
     name,
     address,
+    region,
+    county,
     phone,
     website,
     email,
     teleconsultation,
-    description
+    description,
+    training,
+    adeliNumber,
+    diploma
   };
 
   return psy;

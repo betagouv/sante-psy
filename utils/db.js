@@ -23,3 +23,15 @@ module.exports.insertAppointment = async (date, patientName) => {
     throw new Error("Erreur de sauvegarde du appointments")
   }
 }
+
+
+module.exports.getPsychologists = async () => {
+  try {
+    const psychologists = await knex("psychologists").select()
+        .orderBy("created_at", "desc")
+    return psychologists
+  } catch (err) {
+    console.error(`Impossible de récupérer les psychologistes`, err)
+    throw new Error(`Impossible de récupérer les psychologistes`)
+  }
+}

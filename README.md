@@ -24,9 +24,9 @@ Pour améliorer afficher une liste de psychologues, nous importons les données 
 
 ```bash
 docker-compose up -d
-docker ps
-docker exec -ti container_name bash
-> node ./cron_jobs/cron.js
+docker ps # get container name
+docker exec -ti sante-psy_web_1 bash
+> node cron_jobs/cron.js
 ...
 ```
 

@@ -1,13 +1,13 @@
 const cron = require('cron');
-const importDataFromDSToPG = require("./importDataFromDS")
+const { importDataFromDSToPG } = require("./importDataFromDS")
 const config = require('../utils/config');
 
 const jobs = [ {
-  cronTime: "*/30 * * * *", // https://crontab.guru/every-30-minutes
+  cronTime: "* * * * *", // https://crontab.guru/every-30-minutes - "*/30 * * * *"
   onTick: importDataFromDSToPG,
   start: true,
   timeZone: "Europe/Paris",
-  isActive: config.featureImportData,
+  isActive: true, //config.featureImportData,
   name: "Import data from DS API to PG",
 }
 ]
@@ -15,7 +15,7 @@ const jobs = [ {
 let activeJobs = 0
 for (const job of jobs) {
   if (job.isActive) {
-    console.log(`🚀 The job "${job.name}" is ON`)
+    console.log(`🚀 The job "${job.name}" is ON ${job.cronTime}`)
     new cron.CronJob(job)
     activeJobs++
   } else {

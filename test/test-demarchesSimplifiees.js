@@ -19,21 +19,51 @@ describe('Demarches Simplifiess', () => {
       const result = [
         {
           name:'First Last',
+          adeliNumber: "829302942",
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
+          diploma: "Psychologie clinique de la santé",
           phone: '0468396600',
           email: 'psychologue.test@apas82.mssante.fr',
           website: 'apas82.mssante.fr',
           teleconsultation: true,
-          description: description
+          description: description,
+          training: [
+            "Connaissance et pratique des outils diagnostic psychologique",
+            "Connaissance des troubles psychopathologiques du jeune adulte : dépressions",
+            "risques suicidaires",
+            "addictions",
+            "comportements à risque",
+            "troubles alimentaires",
+            "décompensation schizophrénique",
+            "psychoses émergeantes ainsi qu’une pratique de leur repérage",
+            "Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)",
+          ],
+          county: "14 - Calvados",
+          region: "Normandie",
         },
         {
           name: 'Personne 2ème',
+          adeliNumber: "829302942",
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           phone: '0468396600',
+          diploma: "Psychologie clinique de la santé",
           email: 'psychologue.test@apas82.mssante.fr',
           website: 'apas82.mssante.fr',
           teleconsultation: false,
-          description: description
+          description: description,
+          training: [
+            "Connaissance et pratique des outils diagnostic psychologique",
+            "Connaissance des troubles psychopathologiques du jeune adulte : dépressions",
+            "risques suicidaires",
+            "addictions",
+            "comportements à risque",
+            "troubles alimentaires",
+            "décompensation schizophrénique",
+            "psychoses émergeantes ainsi qu’une pratique de leur repérage",
+            "Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)",
+          ],
+          county: "14 - Calvados",
+          region: "Normandie",
         }
       ];
 
@@ -49,6 +79,27 @@ describe('Demarches Simplifiess', () => {
       const output = getName(apiResponse);
 
       output.should.equal('First Last');
+    });
+
+  });
+
+  describe('parseTraining', () => {
+    it('should return an array of a string if only one element', async () => {
+      const apiResponse = "training1"
+
+      const parseTraining = demarchesSimplifiees.__get__('parseTraining');
+      const output = parseTraining(apiResponse);
+
+      output.should.eql([apiResponse]);
+    });
+
+    it('should return an array of several strings if multiples specialities/Trainings', async () => {
+      const apiResponse = "training1, training2"
+
+      const parseTraining = demarchesSimplifiees.__get__('parseTraining');
+      const output = parseTraining(apiResponse);
+
+      output.should.eql(["training1", "training2"]);
     });
 
   });
@@ -136,6 +187,29 @@ describe('Demarches Simplifiess', () => {
 
       const getChampValue = demarchesSimplifiees.__get__('getChampValue');
       const output = getChampValue(apiResponse, label);
+
+      output.should.equal(result);
+    });
+
+    it('should return "value" when stringValue is set to false', async () => {
+      const result = 'Psychologie clinique de la santé';
+      const label = 'Intitulé ou spécialité de votre master de psychologie';
+
+      const apiResponse = [
+        {
+          'id': 'Q2hhbXAtMTYzMDQxNg==',
+          'label': 'Votre carrière et vos qualifications',
+          'stringValue': ''
+        },
+        {
+          'id': 'Q2hhbXAtMTYzMDQxNw==',
+          'label': label,
+          'value': result
+        }
+      ];
+
+      const getChampValue = demarchesSimplifiees.__get__('getChampValue');
+      const output = getChampValue(apiResponse, label, false);
 
       output.should.equal(result);
     });
