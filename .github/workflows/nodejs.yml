@@ -24,3 +24,4 @@ jobs:
         CI: true
         DEMARCHES_SIMPLIFIEES_ID: 1
         API_TOKEN: "token"
+        SECRET: "verysecret"
