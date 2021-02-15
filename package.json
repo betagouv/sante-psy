@@ -8,8 +8,10 @@
     "lint": "eslint . --fix",
     "listMigrations": "knex migrate:list",
     "migrate": "knex migrate:latest",
+    "migrate-one": "knex migrate:up",
     "makeMigration": "knex migrate:make",
     "rollback": "knex migrate:rollback",
+    "rollback-one": "knex migrate:down",
     "start": "node index.js",
     "test": "mocha",
     "postinstall": "husky install",
@@ -34,6 +36,7 @@
   "homepage": "https://github.com/betagouv/sante-psy#readme",
   "dependencies": {
     "@gouvfr/all": "^0.4.0",
+    "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
@@ -41,12 +44,14 @@
     "express-session": "^1.17.1",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
+    "intl": "^1.2.5",
     "knex": "^0.21.17",
     "lodash": "^4.17.20",
     "pg": "^8.5.1"
   },
   "devDependencies": {
     "chai": "^4.3.0",
+    "chai-http": "^4.3.0",
     "eslint": "^7.19.0",
     "eslint-plugin-node": "^11.1.0",
     "husky": "^5.0.9",
@@ -54,6 +59,7 @@
     "nock": "^13.0.7",
     "nodemon": "^2.0.7",
     "pinst": "^2.1.4",
-    "rewire": "^5.0.0"
+    "rewire": "^5.0.0",
+    "sinon": "^9.2.4"
   }
 }
