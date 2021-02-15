@@ -8,7 +8,7 @@ const _ = require('lodash');
  * if we have more than 100 elements in DS, we have to use pagination (cursor)
  * cursor : String - next page to query the API
  */
-async function getPsychologistList(cursor, accumulator = []) {
+async function getAllPsychologistList(cursor, accumulator = []) {
   // get data from DS API
   const apiResponse = await graphql.requestPsychologist(cursor);
 
@@ -22,10 +22,19 @@ async function getPsychologistList(cursor, accumulator = []) {
 
   // if we have a next page to query, use the next cursor and don't forget our saved accumulator to be passed on
   if( nextCursor ) {
-    return getPsychologistList(nextCursor, nextAccumulator);
+    return getAllPsychologistList(nextCursor, nextAccumulator);
   } else {
     return nextAccumulator;
   }
+}
+
+async function getPsychologistList() {
+  const time = `displaying all psychologists from DS (query id #${Math.random().toString()})`;
+  console.time(time);
+  const psychologists = await getAllPsychologistList();
+  console.timeEnd(time);
+
+  return psychologists;
 }
 
 exports.getPsychologistList = getPsychologistList;
