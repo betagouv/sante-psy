@@ -28,21 +28,21 @@ describe('GraphQL Handler', () => {
     });
   });
 
-  describe('wherePaginateAfter', () => {
+  describe('getWhereConditionAfterCursor', () => {
     it('should return the graphql condition with after as an argument', async () => {
       const after = "MzA2"
       const result = `, after: "${after}"`;
-      const wherePaginateAfter = graphql.__get__('wherePaginateAfter');
+      const getWhereConditionAfterCursor = graphql.__get__('getWhereConditionAfterCursor');
 
-      wherePaginateAfter(after).should.equal(result);
+      getWhereConditionAfterCursor(after).should.equal(result);
     });
 
 
     it('should return an empty string if undefined', async () => {
       const after = ""
-      const wherePaginateAfter = graphql.__get__('wherePaginateAfter');
+      const getWhereConditionAfterCursor = graphql.__get__('getWhereConditionAfterCursor');
 
-      wherePaginateAfter(undefined).should.equal('');
+      getWhereConditionAfterCursor(undefined).should.equal('');
     });
   });
 });

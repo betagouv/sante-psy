@@ -1,11 +1,13 @@
+require('dotenv').config();
+
 const isSecure = (process.env.SECURE || 'true') === 'true';
 
 module.exports = {
   secure: isSecure,
   protocol: isSecure ? 'https' : 'http',
-  desactivateDebug: (process.env.DESACTIVATE_DEBUG_LOG || 'false') === 'true',
+  activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
   host: process.env.HOSTNAME,
-  port: process.env.PORT || 8100,
+  port: process.env.PORT || 8080,
   apiToken: process.env.API_TOKEN,
   apiUrl: process.env.API_URL ||
     'https://www.demarches-simplifiees.fr/api/v2/graphql',
@@ -15,4 +17,5 @@ module.exports = {
   secret: process.env.SECRET,
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
+  featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
 };

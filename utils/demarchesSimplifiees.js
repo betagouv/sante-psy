@@ -9,18 +9,14 @@ const _ = require('lodash');
  * cursor : String - next page to query the API
  */
 async function getAllPsychologistList(cursor, accumulator = []) {
-  // get data from DS API
   const apiResponse = await graphql.requestPsychologist(cursor);
 
-  // do we have a next page to query ?
-  const nextCursor = getHasNextPage(apiResponse);
+  const nextCursor = getNextCursor(apiResponse);
 
-  // let's save what the API returned us in an array
   const nextAccumulator = accumulator.concat(
     parsePsychologist(apiResponse)
   );
 
-  // if we have a next page to query, use the next cursor and don't forget our saved accumulator to be passed on
   if( nextCursor ) {
     return getAllPsychologistList(nextCursor, nextAccumulator);
   } else {
@@ -54,7 +50,7 @@ exports.getPsychologistList = getPsychologistList;
  * hasNextPage: boolean
  * endCursor : string
  */
-function getHasNextPage(apiResponse) {
+function getNextCursor(apiResponse) {
   const pageInfo = apiResponse.demarche.dossiers.pageInfo;
   if( pageInfo.hasNextPage ) {
     return pageInfo.endCursor;

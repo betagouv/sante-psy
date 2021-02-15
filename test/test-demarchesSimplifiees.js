@@ -54,7 +54,7 @@ describe('Demarches Simplifiess', () => {
   });
 
 
-  describe('getHasNextPage', () => {
+  describe('getNextCursor', () => {
     it('should return cursor string if there is more page to load', async () => {
       const cursor = "MQ";
       const apiResponse = {
@@ -68,8 +68,8 @@ describe('Demarches Simplifiess', () => {
         }
       }
 
-      const getHasNextPage = demarchesSimplifiees.__get__('getHasNextPage');
-      const output = getHasNextPage(apiResponse);
+      const getNextCursor = demarchesSimplifiees.__get__('getNextCursor');
+      const output = getNextCursor(apiResponse);
 
       output.should.equal(cursor);
     });
@@ -87,9 +87,9 @@ describe('Demarches Simplifiess', () => {
         }
       }
 
-      const getHasNextPage = demarchesSimplifiees.__get__('getHasNextPage');
+      const getNextCursor = demarchesSimplifiees.__get__('getNextCursor');
 
-      assert(getHasNextPage(apiResponse) === undefined);
+      assert(getNextCursor(apiResponse) === undefined);
     });
   });
 
