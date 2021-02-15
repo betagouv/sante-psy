@@ -15,11 +15,11 @@ describe('GraphQL Handler', () => {
         ]
       }
       };
-            
+
       const hasErrors = graphql.__get__('hasErrors');
       hasErrors(errorResponse).should.be.true;
-    });  
-    
+    });
+
     it('should return false if there are no errors', async () => {
       const errorResponse =  {"response":{"data":null,"errors":[]}};
 

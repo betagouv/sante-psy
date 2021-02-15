@@ -1,7 +1,6 @@
 require('dotenv').config();
 const rewire = require('rewire');
 const should = require('chai').should();
-const assert = require('chai').assert;
 const nock = require('nock');
 const testDossiers = require('./dossier.json');
 
@@ -17,7 +16,7 @@ describe('Demarches Simplifiess', () => {
       // eslint-disable-next-line max-len
       const description = "Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker."
       const result = [
-        { 
+        {
           name:'First Last',
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           phone: '0468396600',
@@ -26,7 +25,7 @@ describe('Demarches Simplifiess', () => {
           teleconsultation: true,
           description: description
         },
-        { 
+        {
           name: 'Personne 2ème',
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           phone: '0468396600',
@@ -40,7 +39,7 @@ describe('Demarches Simplifiess', () => {
       output.should.eql(result);
     });
   });
-  
+
   describe('getName', () => {
     it('should return First Name Last Name', async () => {
       const apiResponse = { civilite: 'M', nom: 'last', prenom: 'fiRst' };
@@ -50,48 +49,8 @@ describe('Demarches Simplifiess', () => {
 
       output.should.equal('First Last');
     });
-  }); 
+  });
 
-
-  describe('getHasNextPage', () => {
-    it('should return cursor string if there is more page to load', async () => {
-      const cursor = "MQ";
-      const apiResponse = {
-        "demarche": {
-          "dossiers": {
-            "pageInfo": {
-              "hasNextPage": true,
-              "endCursor": cursor
-            }
-          }
-        }
-      }
-
-      const getHasNextPage = demarchesSimplifiees.__get__('getHasNextPage');
-      const output = getHasNextPage(apiResponse);
-
-      output.should.equal(cursor);
-    });
-
-    it('should return undefined if there is no page to load', async () => {
-      const cursor = "MQ";
-      const apiResponse = {
-        "demarche": {
-          "dossiers": {
-            "pageInfo": {
-              "hasNextPage": false,
-              "endCursor": cursor
-            }
-          }
-        }
-      }
-
-      const getHasNextPage = demarchesSimplifiees.__get__('getHasNextPage');
-
-      assert(getHasNextPage(apiResponse) === undefined);
-    });
-  }); 
-  
   describe('getChampValue', () => {
     it('should return stringValue for field Champ', async () => {
       const result = 'Psychologie clinique de la santé';

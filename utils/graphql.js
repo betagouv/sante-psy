@@ -12,7 +12,7 @@ const graphQLClient = new GraphQLClient(endpoint, {
 /**
  * @see https://demarches-simplifiees-graphql.netlify.app/demarche.doc.html
  */
-async function requestPsychologist(academy = '') { 
+async function requestPsychologist(academy = '') {
   const query = gql`
     {
       demarche (number: ${config.demarchesSimplifieesId}) {
@@ -50,7 +50,7 @@ async function requestPsychologist(academy = '') {
   } catch (err) {
     if(hasErrors(err)) {
       throw 'Une erreur est survenue lors de la récupération des psychologues';
-    }   
+    }
     return [];
   }
 }

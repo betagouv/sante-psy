@@ -33,13 +33,14 @@ npm run lint
 ```
 
 ## Pre-commit pre-push
-Pre commit va lancer le linter, pre push lancera les tests
-* https: //github.com/typicode/husky/tree/master#install
+* Un commit va lancer le linter
+* Un push lancera les tests
 
+En savoir plus : https: //github.com/typicode/husky/tree/master#install
 
 Si vous rencontez des problèmes avec les git hooks
-* `git rev-parse --git-path hooks` # should be .git/hooks if not run
-* `git config core.hooksPath .git/hooks/`
+* S'assurer que le dossier des hooks soit `.git/hooks` : `git rev-parse --git-path hooks`
+* Sinon utilisez cette commande `git config core.hooksPath .git/hooks/`
 
 ### Données
 API de demarches simplifiées :
