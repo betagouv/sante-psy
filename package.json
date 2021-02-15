@@ -11,7 +11,10 @@
     "makeMigration": "knex migrate:make",
     "rollback": "knex migrate:rollback",
     "start": "node index.js",
-    "test": "mocha"
+    "test": "mocha",
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "husky": {
     "hooks": {
@@ -46,10 +49,11 @@
     "chai": "^4.3.0",
     "eslint": "^7.19.0",
     "eslint-plugin-node": "^11.1.0",
-    "husky": "^4.3.8",
+    "husky": "^5.0.9",
     "mocha": "^8.2.1",
     "nock": "^13.0.7",
     "nodemon": "^2.0.7",
+    "pinst": "^2.1.4",
     "rewire": "^5.0.0"
   }
 }
