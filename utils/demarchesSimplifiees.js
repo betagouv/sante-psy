@@ -36,7 +36,6 @@ async function getPsychologistList() {
 
   return psychologists;
 }
-
 exports.getPsychologistList = getPsychologistList;
 
 /**
@@ -92,7 +91,7 @@ function parseDossierMetadata(dossier) {
   const website =  getChampValue(dossier.champs, 'Site web professionnel (optionnel)');
   const email =  getChampValue(dossier.champs, 'Email de contact');
   const description =  getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
-  
+
   const psy = {
     name,
     address,
@@ -102,13 +101,13 @@ function parseDossierMetadata(dossier) {
     teleconsultation,
     description
   };
-  
+
   return psy;
 }
 
 function parsePsychologist(apiResponse) {
   console.debug(`Parsing ${apiResponse.demarche.dossiers.nodes.length} psychologists from DS API`);
-  
+
   const dossiers = apiResponse.demarche.dossiers.nodes
 
   if(dossiers.length > 0) {

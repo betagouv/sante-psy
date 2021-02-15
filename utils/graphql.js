@@ -35,7 +35,6 @@ function wherePaginateAfter(cursor) {
  */
 async function requestPsychologist(afterCursor) { 
   const paginationCondition = wherePaginateAfter(afterCursor);
-
   const query = gql`
     {
       demarche (number: ${config.demarchesSimplifieesId}) {
@@ -77,7 +76,7 @@ async function requestPsychologist(afterCursor) {
   } catch (err) {
     if(hasErrors(err)) {
       throw 'Une erreur est survenue lors de la récupération des psychologues';
-    }   
+    }
     return [];
   }
 }
