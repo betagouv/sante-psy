@@ -51,7 +51,7 @@ describe('Demarches Simplifiess', () => {
       output.should.equal('First Last');
     });
 
-  }); 
+  });
 
 
   describe('getHasNextPage', () => {

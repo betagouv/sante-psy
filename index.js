@@ -19,7 +19,7 @@ const psyListingController = require('./controllers/psyListingController');
 
 // Desactivate debug log for production as they are a bit too verbose
 if( config.desactivateDebug ) {
-  console.debug = function() {};
+  console.debug = function desactivateDebug() {};
 }
 
 app.use(flash());

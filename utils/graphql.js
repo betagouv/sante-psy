@@ -33,7 +33,7 @@ function wherePaginateAfter(cursor) {
     # archived: Si présent, permet de filtrer les dossiers archivés 
  * @see https://demarches-simplifiees-graphql.netlify.app/demarche.doc.html
  */
-async function requestPsychologist(afterCursor) { 
+async function requestPsychologist(afterCursor) {
   const paginationCondition = wherePaginateAfter(afterCursor);
   const query = gql`
     {
