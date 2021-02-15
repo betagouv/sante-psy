@@ -58,7 +58,7 @@ if (config.featurePsyList) {
   app.get('/consulter-les-psychologues', psyListingController.getPsychologist);
 }
 
-if (config.FEATURE_PSY_PAGES) {
+if (config.featurePsyPages) {
   app.get('/mes-seances', appointmentsController.myAppointments)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)
