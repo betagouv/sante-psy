@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "chai": "^4.3.0",
+    "cron": "^1.8.2",
     "eslint": "^7.19.0",
     "eslint-plugin-node": "^11.1.0",
     "husky": "^5.0.9",
