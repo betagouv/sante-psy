@@ -69,24 +69,3 @@ describe('appointmentsController', function() {
       })
   })
 })
-
-describe('appointmentsController with DB', function() {
-  it.only('should create appointment', function(done) {
-    chai.request(app)
-      .post('/creer-nouveau-rendez-vous')
-      .redirects(0) // block redirects, we don't want to test them
-      .type('form')
-      .send({
-        'patient-name': 'Georges Perec',
-        date: '09/02/2021',
-        'iso-date': '2021-02-09',
-      })
-      .end(async (err, res) => {
-        res.should.redirectTo('/mes-rendez-vous')
-        const appointments = await db.getAppointments()
-        console.log('appointments', appointments)
-        console.log('length', appointments.length)
-        done()
-      })
-  })
-})
