@@ -1,5 +1,6 @@
 // Note : this migration can only run successfully on an empty DB.
 // (We don't need to support full DB because there is no data in prod.)
+// todo : condense these migrations into 1 ? 
 exports.up = function(knex) {
   return knex.schema
     .createTable('patients', (table) => {

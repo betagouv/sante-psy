@@ -21,7 +21,7 @@ module.exports.createNewAppointment = async (req, res) => {
     return res.redirect('/nouvelle-seance')
   }
 
-  // todo input validation, check if safe string
+  // Todo : test case where patient id does not exist
   const patientId = req.body['patientId']
   if (!patientId || patientId === 0) {
     req.flash('error', 'Vous devez spécifier un nom de patient pour la séance.')
