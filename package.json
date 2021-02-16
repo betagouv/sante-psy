@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
+    "devKnex": "DEBUG=knex:query nodemon index.js",
     "lint": "eslint . --fix",
     "listMigrations": "knex migrate:list",
     "migrate": "knex migrate:latest",

@@ -8,16 +8,19 @@ npm start
 ```
 
 ## Lancer ce site localement
-Vous devez avoir npm installé sur votre machine.
+Vous devez avoir npm et docker compose installés sur votre machine.
 
 ```
 git clone https://github.com/betagouv/sante-psy
 cd sante-psy
 cp .env.sample .env # replace API_TOKEN from Demarches Simplifiees API
-npm install
-npm run dev
+docker-compose up
 # http://localhost:8080 is ready
 ```
+
+Pour controler visuellement la base de données, nous conseillons :
+* https://dbeaver.io/download/
+
 ### Lancer les CRONs localement
 
 Pour améliorer afficher une liste de psychologues, nous importons les données venant de l'API demarches simplifiées dans la base de données Postgresql à l'aide d'un cron. Cela nous permet un meilleur taux de réponses et une maitrise en cas de pic de traffic.
