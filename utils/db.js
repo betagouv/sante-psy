@@ -18,7 +18,7 @@ module.exports.insertAppointment = async (date, patientId) => {
     return await knex("appointments").insert({
       date,
       patientId: patientId,
-    })
+    }).returning("*")
   } catch (err) {
     console.error("Erreur de sauvegarde du appointments", err)
     throw new Error("Erreur de sauvegarde du appointments")
@@ -29,7 +29,6 @@ module.exports.getPatients = async () => {
   try {
     const patientArray = await knex("patients").select()
         .orderBy("lastName")
-    console.log(patientArray)
     return patientArray
   } catch (err) {
     console.error(`Impossible de récupérer les patients`, err)

@@ -4,13 +4,11 @@ const format = require('../utils/format')
 
 module.exports.myAppointments = async (req, res) => {
   const appointments = await db.getAppointments()
-
   res.render('myAppointments', { appointments: appointments })
 }
 
 module.exports.newAppointment = async (req, res) => {
   const patients = await db.getPatients()
-  console.log(patients)
   res.render('newAppointment', {patients: patients})
 }
 
@@ -32,9 +30,8 @@ module.exports.createNewAppointment = async (req, res) => {
 
   const date = new Date(Date.parse(isoDateString))
   try {
-    const createdAppointment = await db.insertAppointment(date, patientId)
-    console.log('createdAppointment', createdAppointment)
-    req.flash('info', `La séance du ${format.formatFrenchDate(date)} avec truc a changer a bien été créé.`)
+    await db.insertAppointment(date, patientId)
+    req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créé.`)
     return res.redirect('/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez vous réessayer ?')
