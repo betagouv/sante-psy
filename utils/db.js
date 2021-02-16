@@ -3,9 +3,8 @@ const knex = require("knex")(knexConfig)
 
 module.exports.getAppointments = async () => {
   try {
-    // todo : look at join or innerjoin to get patient object (and not just id)
-    // http://knexjs.org/#Builder-innerJoin
-    const appointmentArray = await knex("appointments").select()
+    const appointmentArray = await knex.from('patients')
+        .innerJoin('appointments', 'patients.id', 'appointments.patientId')
         .orderBy("date", "desc")
     return appointmentArray
   } catch (err) {
@@ -14,11 +13,11 @@ module.exports.getAppointments = async () => {
   }
 }
 
-module.exports.insertAppointment = async (date, patientName) => {
+module.exports.insertAppointment = async (date, patientId) => {
   try {
     return await knex("appointments").insert({
       date,
-      patientId: 2,
+      patientId: patientId,
     })
   } catch (err) {
     console.error("Erreur de sauvegarde du appointments", err)
@@ -30,6 +29,7 @@ module.exports.getPatients = async () => {
   try {
     const patientArray = await knex("patients").select()
         .orderBy("lastName")
+    console.log(patientArray)
     return patientArray
   } catch (err) {
     console.error(`Impossible de récupérer les patients`, err)
@@ -37,7 +37,7 @@ module.exports.getPatients = async () => {
   }
 }
 
-const insertPatient = async (firstNames, lastName, studentNumber, ) => {
+const insertPatient = async (firstNames, lastName, studentNumber) => {
   try {
     return await knex("patients").insert({
       firstNames,
@@ -49,12 +49,4 @@ const insertPatient = async (firstNames, lastName, studentNumber, ) => {
     throw new Error("Erreur de sauvegarde du patient")
   }
 }
-module.exports.inserPatient = insertPatient
-
-//insertPatient('Emeline', 'M', 1238763438276)
-// dans terminal : node db.js
-
-
-// node 
-// const db = require('./utils/db')
-// db.insertPatient('Emeline', 'M', 1238763438276)
+module.exports.insertPatient = insertPatient

@@ -36,10 +36,15 @@
           <input class="rf-input short-input" type="text" id="date" name="date" required autocomplete="off">
           <input type="text" id="iso-date" name="iso-date" required aria-hidden="true" hidden autocomplete="off">
         </div>
-        <div class="rf-my-3w">
-          <label class="rf-label" for="patient-name">Nom du patient</label>
-          <input class="rf-input" type="text" id="patient-name" name="patient-name" required>
-        </div>
+        <div class="rf-select-group">
+          <label class="rf-label" for="patients">Patient</label>
+          <select class="rf-select" id="patients" name="patientId" required>
+              <option value="" selected disabled hidden>- Select -</option>
+              <% patients.forEach(function(patient) { %>
+                <option value="<%= patient.id %>"><%= patient.firstNames %> <%= patient.lastName %></option>
+              <% }) %>
+          </select>
+      </div>
       </div>
       <div class="rf-my-5w">
         <button type="submit" class="rf-btn rf-fi-add-line rf-btn--icon-left">Créer la séance</button>
