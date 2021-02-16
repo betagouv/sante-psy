@@ -1,27 +1,30 @@
 /* eslint-disable func-names */
 exports.up = function(knex) {
-  return knex.schema
-    .createTable('universities', (table) => {
-      table.increments('id').primary() // todo uuid ?
-      table.string('name', 255).notNullable()
-      table.timestamps() //updated_at / created_at
-    }).then(function() {
-      return knex.schema.createTable('patients', (table) => {
-        table.increments('id').primary() // todo uuid ?
-        table.string('firstNames', 255).notNullable()
-        table.string('lastName', 255).notNullable()
-        table.string('INE', 11)
-        table.string('otherStudentNumber', 255) // if INE cannot be found
+  // Add extention for handling uuids to postgres
+  return knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";').then(function() {
+    return knex.schema
+      .createTable('universities', (table) => {
+        table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
+        table.string('name', 255).notNullable()
         table.timestamps() //updated_at / created_at
-
-        // Note : students may not have a university. Ex: BTS students
-        table.integer('universityId').unsigned()
-        table.foreign('universityId').references('id').inTable('universities')
       })
-    }).then(function() {
-      return knex.schema
+  }).then(function() {
+    return knex.schema.createTable('patients', (table) => {
+      table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
+      table.string('firstNames', 255).notNullable()
+      table.string('lastName', 255).notNullable()
+      table.string('INE', 11)
+      table.string('otherStudentNumber', 255) // if INE cannot be found
+      table.timestamps() //updated_at / created_at
+
+      // Note : students may not have a university. Ex: BTS students
+      table.uuid('universityId')
+      table.foreign('universityId').references('id').inTable('universities')
+    })
+  }).then(function() {
+    return knex.schema
         .createTable('psychologists', (table) => {
-          table.increments('id').primary() // todo uuid ?
+          table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
           table.string('adeli').notNullable()
           table.string('firstNames', 255).notNullable()
           table.string('lastName', 255).notNullable()
@@ -38,26 +41,24 @@ exports.up = function(knex) {
           table.string('university')
           table.timestamps() //updated_at / created_at
 
-          table.integer('universityId').unsigned() // todo notNullable once we have universities
+          table.uuid('universityId') // todo notNullable once we have universities
           table.foreign('universityId').references('id').inTable('universities')
-
-          table.timestamps() //updated_at / created_at
         })
-    }).then(function() {
-      return knex.schema
+  }).then(function() {
+    return knex.schema
         .createTable('appointments', (table) => {
-          table.increments('id').primary() // todo uuid ?
+          table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
 
-          table.integer('patientId').unsigned().notNullable()
+          table.uuid('patientId').notNullable()
           table.foreign('patientId').references('id').inTable('patients')
 
-          table.integer('psychologistId').unsigned()  // todo notNullable once we have psy accounts
+          table.uuid('psychologistId').unsigned()  // todo notNullable once we have psy accounts
           table.foreign('psychologistId').references('id').inTable('psychologists')
 
           table.datetime('date').notNullable().defaultTo(knex.fn.now())
           table.timestamps() //updated_at / created_at
         });
-    });
+  });
   // todo : a doctor writes an "orientation" of the patient to a psychologist. Upload it, and optionally store
   // doctor's name. Also count the appointments done per orientation (3).
   // todo : accountant at university will need a user account. Create a separate user table ?
@@ -73,5 +74,7 @@ exports.down = function(knex) {
       return knex.schema.dropTable('patients')
     }).then(function() {
       return knex.schema.dropTable('universities')
-    });
+    }).then(function() {
+      return knex.raw('DROP EXTENSION IF EXISTS "uuid-ossp";')
+    })
 };
