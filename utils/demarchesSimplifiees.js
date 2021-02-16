@@ -93,18 +93,19 @@ function parseTeleconsultation(inputString) {
 
 /**
  * transform string "speciality1, speciality2" to array ["speciality1", "speciality2"]
+ * as a JSON to store it inside PG
  */
 function parseTraining(inputString) {
   if(inputString.includes(',')) {
-    return inputString.split(', ');
+    return JSON.stringify(inputString.split(', '));
   } else {
-    return [inputString];
+    return JSON.stringify([inputString]);
   }
 }
 
 function parseDossierMetadata(dossier) {
   const name = getName(dossier.demandeur);
-  const region = dossier.groupeInstructeur.label; // Normandie
+  const region = dossier.groupeInstructeur.label; // @TODO fix me 
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
   const county = getChampValue(dossier.champs, 'Votre département', false); // "14 - Calvados"
   const phone =  getChampValue(dossier.champs, 'Téléphone du secrétariat');
@@ -117,8 +118,9 @@ function parseDossierMetadata(dossier) {
   const training = parseTraining(
     getChampValue(dossier.champs, 'Formations et expériences')
   );
-  const adeliNumber = getChampValue(dossier.champs, 'Numéro Adeli')
+  const adeli = getChampValue(dossier.champs, 'Numéro Adeli')
   const diploma = getChampValue(dossier.champs, 'Intitulé ou spécialité de votre master de psychologie')
+  const languages = getChampValue(dossier.champs, 'Langues parlées (optionnel)', false);
 
   const psy = {
     name,
@@ -131,8 +133,9 @@ function parseDossierMetadata(dossier) {
     teleconsultation,
     description,
     training,
-    adeliNumber,
-    diploma
+    adeli,
+    diploma,
+    languages
   };
 
   return psy;

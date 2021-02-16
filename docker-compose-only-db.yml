@@ -7,10 +7,9 @@ services:
       POSTGRES_PASSWORD: santepsy
     ports:
       - "5432:5432"
-
   web:
     build: .
-    command: bash -c "npm run migrate && nodemon --inspect=0.0.0.0:9229 ./index.js"
+    command: bash -c "sleep 3; npm run migrate && nodemon --inspect=0.0.0.0:9229 ./index.js"
     env_file:
       - .env
     environment:
@@ -20,7 +19,5 @@ services:
       - "9229:9229"
     volumes:
       - .:/app
-    depends_on: # https://docs.docker.com/compose/startup-order/
+    depends_on:
       - db
-    restart: # https://docs.docker.com/compose/compose-file/compose-file-v3/#restart
-      always # trick to be sure our app is always up, even when it has started before PG 

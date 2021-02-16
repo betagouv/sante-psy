@@ -40,6 +40,11 @@
               "stringValue": "Connaissance et pratique des outils diagnostic psychologique, Connaissance des troubles psychopathologiques du jeune adulte : dépressions, risques suicidaires, addictions, comportements à risque, troubles alimentaires, décompensation schizophrénique, psychoses émergeantes ainsi qu’une pratique de leur repérage, Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"
             },
             {
+              "id": "Q2hhbXAtMTY2MDM0Nw==",
+              "label": "Langues parlées (optionnel)",
+              "value": "Français ,Anglais, et Espagnol"
+            },
+            {
               "id": "Q2hhbXAtMTYyNzk0NA==",
               "label": "Informations pour l'annuaire",
               "stringValue": ""
@@ -101,6 +106,11 @@
               "id": "Q2hhbXAtMTY1OTUxMw==",
               "label": "Votre département",
               "value": "14 - Calvados"
+            },
+            {
+              "id": "Q2hhbXAtMTY2MDM0Nw==",
+              "label": "Langues parlées (optionnel)",
+              "value": "Français ,Anglais, et Espagnol"
             },
             {
               "id": "Q2hhbXAtMTYzMDQxNg==",

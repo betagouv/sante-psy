@@ -19,7 +19,7 @@ describe('Demarches Simplifiess', () => {
       const result = [
         {
           name:'First Last',
-          adeliNumber: "829302942",
+          adeli: "829302942",
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           diploma: "Psychologie clinique de la santé",
           phone: '0468396600',
@@ -27,23 +27,14 @@ describe('Demarches Simplifiess', () => {
           website: 'apas82.mssante.fr',
           teleconsultation: true,
           description: description,
-          training: [
-            "Connaissance et pratique des outils diagnostic psychologique",
-            "Connaissance des troubles psychopathologiques du jeune adulte : dépressions",
-            "risques suicidaires",
-            "addictions",
-            "comportements à risque",
-            "troubles alimentaires",
-            "décompensation schizophrénique",
-            "psychoses émergeantes ainsi qu’une pratique de leur repérage",
-            "Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)",
-          ],
+          training: "[\"Connaissance et pratique des outils diagnostic psychologique\",\"Connaissance des troubles psychopathologiques du jeune adulte : dépressions\",\"risques suicidaires\",\"addictions\",\"comportements à risque\",\"troubles alimentaires\",\"décompensation schizophrénique\",\"psychoses émergeantes ainsi qu’une pratique de leur repérage\",\"Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)\"]",
           county: "14 - Calvados",
           region: "Normandie",
+          languages: "Français ,Anglais, et Espagnol"
         },
         {
           name: 'Personne 2ème',
-          adeliNumber: "829302942",
+          adeli: "829302942",
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           phone: '0468396600',
           diploma: "Psychologie clinique de la santé",
@@ -51,19 +42,10 @@ describe('Demarches Simplifiess', () => {
           website: 'apas82.mssante.fr',
           teleconsultation: false,
           description: description,
-          training: [
-            "Connaissance et pratique des outils diagnostic psychologique",
-            "Connaissance des troubles psychopathologiques du jeune adulte : dépressions",
-            "risques suicidaires",
-            "addictions",
-            "comportements à risque",
-            "troubles alimentaires",
-            "décompensation schizophrénique",
-            "psychoses émergeantes ainsi qu’une pratique de leur repérage",
-            "Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)",
-          ],
+          training: "[\"Connaissance et pratique des outils diagnostic psychologique\",\"Connaissance des troubles psychopathologiques du jeune adulte : dépressions\",\"risques suicidaires\",\"addictions\",\"comportements à risque\",\"troubles alimentaires\",\"décompensation schizophrénique\",\"psychoses émergeantes ainsi qu’une pratique de leur repérage\",\"Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)\"]",
           county: "14 - Calvados",
           region: "Normandie",
+          languages: "Français ,Anglais, et Espagnol"
         }
       ];
 
@@ -85,12 +67,12 @@ describe('Demarches Simplifiess', () => {
 
   describe('parseTraining', () => {
     it('should return an array of a string if only one element', async () => {
-      const apiResponse = "training1"
+      const apiResponse = "training1";
 
       const parseTraining = demarchesSimplifiees.__get__('parseTraining');
       const output = parseTraining(apiResponse);
 
-      output.should.eql([apiResponse]);
+      output.should.equal(JSON.stringify([apiResponse]));
     });
 
     it('should return an array of several strings if multiples specialities/Trainings', async () => {
@@ -99,7 +81,7 @@ describe('Demarches Simplifiess', () => {
       const parseTraining = demarchesSimplifiees.__get__('parseTraining');
       const output = parseTraining(apiResponse);
 
-      output.should.eql(["training1", "training2"]);
+      output.should.equal(JSON.stringify(["training1", "training2"]));
     });
 
   });

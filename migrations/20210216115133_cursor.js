@@ -6,8 +6,9 @@ exports.up = function(knex) {
   // Set the column to notNullable now that all rows have values.
   return knex.schema.createTable(dsApiCursor, (table) => {
     table.increments();
-    table.text('cursor').primary()
-    table.timestamps(); //updated_at / created_at
+    table.text('cursor');
+    table.timestamp('created_at').defaultTo(knex.fn.now());
+    table.timestamp('updated_at');
   });
 };
 

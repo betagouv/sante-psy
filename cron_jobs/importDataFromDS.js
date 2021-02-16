@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const config = require('../utils/config');
+const date = require('../utils/date');
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
@@ -12,50 +13,68 @@ const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
  */
 async function getLatestCursorSaved() {
   try {
-    await knex("ds_api_cursor").select()
-        .orderBy("date", "desc")
-
     //get last cursor saved
-    const lastCursor = await knex("ds_cursor")
-    .select('updated_at')
-    .where("cursor", "cursor");
+    const lastCursor = await knex("ds_api_cursor").first();
 
-    console.debug(`got the latest cursor saved in PG ${lastCursor}`);
-
-    return lastCursor;
+    console.debug(`got the latest cursor saved in PG ${JSON.stringify(lastCursor)}`);
+    if( lastCursor ) {
+      return lastCursor.cursor;
+    } else {
+      return undefined;
+    }
   } catch (err) {
-    console.error(`Impossible de récupèrer le dernier cursor de l'api DS`, err)
-    throw new Error(`Impossible de récupèrer le dernier cursor de l'api DS`)
+    console.error(`Impossible de récupèrer le dernier cursor de l'api DS, le cron ne va pas utilser de cursor`, err)
+
+    return undefined; //not a blocking error
   }
 }
 
-async function saveLatestCursorSaved() {
+async function saveLatestCursorSaved(cursor) {
   try {
-    const now = Date.now()
+    const now = date.getDateNowPG();
 
-    const updateQuery = await knex("ds_api_cursor")
-        .where("cursor", "cursor")
-        .update({ "updated_at": now});
+    const alreadySavedCursor = await getLatestCursorSaved();
+    if( alreadySavedCursor ) {
+      console.debug(`Updating the cursor ${cursor} in PG`);
+      return await knex("ds_api_cursor")
+      .where("id", 1)
+      .update({
+        "cursor": cursor,
+        "updated_at": now
+      });
+    } else { // no cursor already saved, we are going to create one entry
+      console.debug(`Saving a new cursor ${cursor} to PG`);
 
-    console.debug(`latest cursor saved in PG ${updateQuery}`);
+      return await knex("ds_api_cursor").insert({
+        "cursor": cursor,
+        "updated_at": now
+      });
+    }
   } catch (err) {
-    console.error(`Impossible de sauvegarder le dernier cursor de l'api DS`, err)
+    console.error(`Impossible de sauvegarder le dernier cursor ${cursor} de l'api DS`, err)
     throw new Error(`Impossible de sauvegarder le dernier cursor de l'api DS`)
   }
 }
 
 /**
  * http://knexjs.org/#Utility-BatchInsert
+ * It's primarily designed to be used when you have thousands of rows to insert into a table.
  * @param {*} psy 
  */
 async function savePsychologistInPG(psyList) {
   const chunkSize = 1000
-  const batchInsert = await knex("psychologists")
-  .batchInsert(psyList, chunkSize);
+  console.log(`Batch insert of ${psyList.length} psychologists into PG....`);
+  const batchInsert = await knex.batchInsert("psychologists", psyList, chunkSize);
+  console.log(`Batch insert into PG : done`);
 
-  console.log(`Batch insert of ${psyList.length} psychologists into PG done`);
+  return batchInsert;
 }
 
+/**
+ * @TODO Some data can be modified after been loaded inside PG
+ * We need to re import them all from time to time
+ * 
+ */
 module.exports.importDataFromDSToPG = async () => {
   try {
     console.log("Starting importDataFromDSToPG...");
@@ -71,6 +90,6 @@ module.exports.importDataFromDSToPG = async () => {
       console.log("No psychologists to save");
     }
   } catch (err) {
-    console.error("Could import DS API data to PG", err)
+    console.error("ERROR: Could not import DS API data to PG", err)
   }
 }
