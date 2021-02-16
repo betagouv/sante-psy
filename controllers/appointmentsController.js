@@ -9,7 +9,9 @@ module.exports.myAppointments = async (req, res) => {
 }
 
 module.exports.newAppointment = async (req, res) => {
-  res.render('newAppointment')
+  const patients = await db.getPatients()
+  console.log(patients)
+  res.render('newAppointment', {patients: patients})
 }
 
 module.exports.createNewAppointment = async (req, res) => {
@@ -22,16 +24,17 @@ module.exports.createNewAppointment = async (req, res) => {
   }
 
   // todo input validation, check if safe string
-  const patientName = req.body['patient-name'].trim()
-  if (!patientName || patientName.length === 0) {
+  const patientId = req.body['patientId']
+  if (!patientId || patientId === 0) {
     req.flash('error', 'Vous devez spécifier un nom de patient pour la séance.')
     return res.redirect('/nouvelle-seance')
   }
 
   const date = new Date(Date.parse(isoDateString))
   try {
-    await db.insertAppointment(date, patientName)
-    req.flash('info', `La séance du ${format.formatFrenchDate(date)} avec ${patientName} a bien été créé.`)
+    const createdAppointment = await db.insertAppointment(date, patientId)
+    console.log('createdAppointment', createdAppointment)
+    req.flash('info', `La séance du ${format.formatFrenchDate(date)} avec truc a changer a bien été créé.`)
     return res.redirect('/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez vous réessayer ?')

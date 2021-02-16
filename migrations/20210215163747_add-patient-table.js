@@ -13,12 +13,14 @@ exports.up = function(knex) {
         table.integer('patientId').unsigned().notNullable()
         table.foreign('patientId').references('id').inTable('patients');
         table.dropColumn('patientName');
+        table.increments('id').primary() // todo uuid ?
       });
     });
 };
 
 exports.down = function(knex) {
   return knex.schema.table('appointments', function (table) {
+    table.dropColumn('id');
     table.dropColumn('patientId');
   }).then(() => {
     return knex.schema.dropTable('patients');
