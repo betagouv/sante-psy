@@ -58,7 +58,11 @@ exports.up = function(knex) {
           table.timestamps() //updated_at / created_at
         });
     });
-  // todo : user account for accountant at university. Create a separate user table ?
+  // todo : a doctor writes an "orientation" of the patient to a psychologist. Upload it, and optionally store
+  // doctor's name. Also count the appointments done per orientation (3).
+  // todo : accountant at university will need a user account. Create a separate user table ?
+  // Some universities have SSU, so they will have an accountant account, others do not.
+  // todo : doctor accounts, to follow the medical file of the patients.
 };
 
 exports.down = function(knex) {
