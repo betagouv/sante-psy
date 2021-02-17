@@ -112,7 +112,7 @@ function getDossierNumber(number) {
 function parseDossierMetadata(dossier) {
   const name = getName(dossier.demandeur);
   const dossierNumber = getDossierNumber(dossier.number);
-  const region = dossier.groupeInstructeur.label; // @TODO fix me 
+  const region = dossier.groupeInstructeur.label;
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
   const departement = getChampValue(dossier.champs, 'Votre département', false); // "14 - Calvados"
   const phone =  getChampValue(dossier.champs, 'Téléphone du secrétariat');
