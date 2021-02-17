@@ -6,31 +6,35 @@ exports.up = function(knex) {
       .createTable('universities', (table) => {
         table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
         table.string('name', 255).notNullable()
-        table.timestamps() //updated_at / created_at
+
+        table.timestamp('createdAt').defaultTo(knex.fn.now())
+        table.timestamp('updatedAt')
       })
   }).then(function() {
     return knex.schema.createTable('patients', (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
-      table.string('firstNames', 255).notNullable()
-      table.string('lastName', 255).notNullable()
+      table.text('firstNames').notNullable()
+      table.text('lastName').notNullable()
       table.string('INE', 11)
       table.string('otherStudentNumber', 255) // if INE cannot be found
-      table.timestamps() //updated_at / created_at
 
       // Note : students may not have a university. Ex: BTS students
       table.uuid('universityId')
       table.foreign('universityId').references('id').inTable('universities')
+
+      table.timestamp('createdAt').defaultTo(knex.fn.now())
+      table.timestamp('updatedAt')
     })
   }).then(function() {
     return knex.schema
         .createTable('psychologists', (table) => {
-          table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
-          table.string('adeli').notNullable()
-          table.string('firstNames', 255).notNullable()
-          table.string('lastName', 255).notNullable()
-          table.text('email') // todo will this be a login ?
-          table.string('address')
-          table.string('county')
+          table.string('id').primary() // todo : id generated from DS
+          table.string('adeli').notNullable() // all therapists should be registered and have a number
+          table.text('firstNames').notNullable()
+          table.text('lastName').notNullable()
+          table.text('email').notNullable() // this will be the login for the user
+          table.text('address')
+          table.string('departement')
           table.string('region')
           table.string('phone')
           table.string('website')
@@ -39,10 +43,12 @@ exports.up = function(knex) {
           table.json('training') // Formations et expériences
           table.string('diploma')
           table.string('university')
-          table.timestamps() //updated_at / created_at
 
-          table.uuid('universityId') // todo notNullable once we have universities
-          table.foreign('universityId').references('id').inTable('universities')
+          table.uuid('payingUniversityId')
+          table.foreign('payingUniversityId').references('id').inTable('universities')
+
+          table.timestamp('createdAt').defaultTo(knex.fn.now())
+          table.timestamp('updatedAt')
         })
   }).then(function() {
     return knex.schema
@@ -52,11 +58,13 @@ exports.up = function(knex) {
           table.uuid('patientId').notNullable()
           table.foreign('patientId').references('id').inTable('patients')
 
-          table.uuid('psychologistId').unsigned()  // todo notNullable once we have psy accounts
+          table.string('psychologistId')  // todo notNullable once we have psy accounts
           table.foreign('psychologistId').references('id').inTable('psychologists')
 
-          table.datetime('date').notNullable().defaultTo(knex.fn.now())
-          table.timestamps() //updated_at / created_at
+          table.datetime('appointmentDate').notNullable().defaultTo(knex.fn.now())
+
+          table.timestamp('createdAt').defaultTo(knex.fn.now())
+          table.timestamp('updatedAt')
         });
   });
   // todo : a doctor writes an "orientation" of the patient to a psychologist. Upload it, and optionally store
