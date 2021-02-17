@@ -1,0 +1,21 @@
+<%- include('partials/header') -%>
+
+<div class="rf-container-fluid">
+    <div class="rf-mx-12w ">
+        <div class="rf-grid-row rf-grid-row--left">
+            <div class="rf-col rf-col-xs-10 rf-py-4w">
+                <h1>Tableau de bord</h1>
+                <p>Voici toutes les informations relatives à vos séances et vos patients.</p>
+            </div>
+        </div>
+        <div class="rf-grid-row rf-grid-row--left rf-grid-row--gutter">
+            <%- include('myAppointments') -%>
+            <%- include('myPatients') -%>
+        </div>
+        <div class="rf-grid-row rf-grid-row--right rf-my-4w">
+            Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') -%>

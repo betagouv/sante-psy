@@ -1,6 +1,6 @@
 <div class="rf-col-lg-4 rf-col-xs-10 rf-mr-9w">
   <h2>
-    Mes séances
+    Mes patients
   </h2>
   <% if (errors.length) { %>
     <% errors.forEach(function(error) { %>
@@ -14,13 +14,13 @@
   <% } %>
   <div class="rf-my-5w rf-pb-2w">
     <ul>
-    <% appointments.forEach(function(appointment) { %>
-      <li><%= format.formatFrenchDate(appointment.date) %> avec <%= appointment.firstNames %> <%= appointment.lastName %></li>
+    <% patients.forEach(function(patient) { %>
+      <li><%= patient.lastName %> <%= patient.firstNames %></li>
     <% }) %>
   </ul>
   </div>
   <div>
-    <a href="/nouvelle-seance" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouvelle séance</a>
+    <a href="/nouveau-patient" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouveau patient</a>
   </div>
 </div>
 
