@@ -15,7 +15,12 @@
                 Il y a actuellement <%- psyList.length %> partenaires du dispositif d'accompagnement.
             </p>
             <div>
-                <label for="filter-value">Rechercher par adresse : </label><input id="filter-value" type="text" placeholder="Amiens ou 80000">
+                <label for="filter-value">Rechercher par nom : </label>
+                <input id="name-filter-value" type="text" placeholder="Delgado">
+            </div>
+            <div>
+                <label for="filter-value">Rechercher par adresse : </label>
+                <input id="address-filter-value" type="text" placeholder="Amiens ou 80000">
             </div>
             <div id="psy-table"></div>
             <% } %>
@@ -23,13 +28,18 @@
     </div>
 </div>
 <script>
-    var valueEl = document.getElementById("filter-value");
-    // //Trigger setFilter function with correct parameters
-    function updateFilter(){
-        table.setFilter('address','like', valueEl.value);
-    }
-    valueEl.addEventListener("keyup", updateFilter);
-    const psyList = <%- JSON.stringify(psyList) %>
+    var setupFilter = function(fieldName) {
+        var filterEl = document.getElementById(fieldName + "-filter-value");
+        // Trigger setFilter function with correct parameters
+        function updateFilter(){
+            table.setFilter(fieldName,'like', filterEl.value);
+        }
+        filterEl.addEventListener("keyup", updateFilter);
+    };
+    setupFilter("address");
+    setupFilter("name");
+
+    const psyList = <%- JSON.stringify(psyList) %>;
     var table = new Tabulator("#psy-table", {
         data: psyList, //assign data to table
         langs:{ // http://tabulator.info/docs/4.2/localize#setup
