@@ -29,8 +29,7 @@ module.exports.createNewPatient = async (req, res) => {
   try {
     await db.insertPatient(firstNames, lastName, studentNumber)
     req.flash('info', `Le patient ${firstNames} ${lastName} a bien été créé.`)
-    // todo redirect to /mes-patients (or /mes-seances if the patient list is there)
-    return res.redirect('/nouveau-patient')
+    return res.redirect('/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'a pas été créé. Pourriez-vous réessayer ?')
     console.error('Erreur pour créer le patient', err)
