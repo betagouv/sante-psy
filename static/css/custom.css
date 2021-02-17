@@ -9,6 +9,9 @@
   background-color: var(--bf500);
   color: var(--g100);
 }
+.rf-bg--alt .rf-btn--secondary {
+  background-color: var(--w);
+}
 
 .bg-fond-alternatif {
   background-color: var(--g100);
