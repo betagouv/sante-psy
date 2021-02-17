@@ -5,7 +5,11 @@
         </h3>
         <div class="rf-accordion__body" id="rf-accordion-group-<%= i %>-body-<%= i %>">
             <div class="rf-accordion__inner">
-                <%= content %>
+                <p><%= content %></p>
+                <% if (locals.cta) { %>
+                    <!-- CTA contains HTML tags -->
+                    <p><%- locals.cta %></p>
+                <% } %>
             </div>
         </div>
     </section>
