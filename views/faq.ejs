@@ -1,0 +1,68 @@
+<%- include('partials/header') -%>
+
+<div class="rf-container rf-mb-5w">
+
+  <div class="rf-grid-row rf-grid-row--gutters rf-b__two-col">
+    <nav class="rf-col-xs-12 rf-col-md-3 rf-sidemenu rf-sidemenu--sticky" aria-label="Menu latéral">
+      <div class="rf-sidemenu__inner">
+            <button class="rf-sidemenu__btn" aria-controls="rf-sidemenu-wrapper" aria-expanded="true" hidden="">En savoir plus</button>
+            <div class="rf-collapse" id="rf-sidemenu-wrapper" style="--collapse:-196px;">
+                <ul class="rf-sidemenu__list">
+                    <li class="rf-sidemenu__item">
+                        <a class="rf-sidemenu__link" href="#etudiant" target="_self">Étudiant·es</a>
+                    </li>
+                    <li class="rf-sidemenu__item">
+                        <a class="rf-sidemenu__link" href="#psy" target="_self">Psychologues</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="rf-container rf-col-xs-12 rf-col-md-9">
+      <h1 id="etudiant">Je suis étudiant·e</h1>
+
+      <ul class="rf-accordions-group">
+        <%- include('partials/accordion-item',
+        {
+          i: 'e0',
+          title: 'À combien de séances ai-je le droit ?',
+          content: 'Vous avez le droit à 3 séances remboursées. Votre médecin peut ensuite reconduire le dispositif autant de fois que nécessaire.'
+        })
+        -%>
+
+        <%- include('partials/accordion-item',
+        {
+          i: 'e1',
+          title: 'Combien ça coûte ?',
+          content: 'Chaque séance chez le ou la psychologue est remboursée. Seule la consultation chez votre médecin est payante.'
+        })
+        -%>
+      </ul>
+
+      <h1 id="psy">Je suis psychologue</h1>
+
+      <ul class="rf-accordions-group">
+        <%- include('partials/accordion-item',
+        {
+          i: 'p0',
+          title: 'Puis-je participer au dispositif de soutien ?',
+          content: 'Oui, si vous êtes psychologue diplômé, et que vous exercez depuis au moins 3 ans, en remplissant ce formulaire.'
+        })
+        -%>
+
+        <%- include('partials/accordion-item',
+        {
+          i: 'p1',
+          title: 'Combien serais-je payé ?',
+          content: 'Les séances vous seront remboursées à hauteur de 30 euros.'
+        })
+        -%>
+      </ul>
+
+    </div>
+  </div>
+
+</div>
+
+<%- include('partials/footer') -%>

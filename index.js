@@ -70,6 +70,10 @@ if (config.featurePsyPages) {
   app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)
 }
 
+app.get('/faq', (req, res) => {
+  res.render('faq');
+})
+
 app.get('/mentions-legales', (req, res) => {
   res.render('legalNotice');
 })
