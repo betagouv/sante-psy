@@ -3,6 +3,7 @@ const rewire = require('rewire');
 const should = require('chai').should();
 const assert = require('chai').assert;
 const nock = require('nock');
+const config = require('../utils/config');
 const testDossiers = require('./dossier.json');
 const date = require('../utils/date');
 
@@ -21,7 +22,7 @@ describe('Demarches Simplifiess', () => {
       const description = "Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker."
       const result = [
         {
-          dossierNumber:1,
+          dossierNumber: config.demarchesSimplifieesId + "-" + 1,
           name:'First Last',
           adeli: "829302942",
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
@@ -38,7 +39,7 @@ describe('Demarches Simplifiess', () => {
           languages: "Français ,Anglais, et Espagnol",
         },
         {
-          dossierNumber:2,
+          dossierNumber: config.demarchesSimplifieesId + "-" + 2,
           name: 'Personne 2ème',
           adeli: "829302942",
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
@@ -69,7 +70,17 @@ describe('Demarches Simplifiess', () => {
 
       output.should.equal('First Last');
     });
+  });
 
+  describe('getDossierNumber', () => {
+    it('should return First Name Last Name', async () => {
+      const dossierNumber = 1
+
+      const getDossierNumber = demarchesSimplifiees.__get__('getDossierNumber');
+      const output = getDossierNumber(dossierNumber);
+
+      output.should.equal(config.demarchesSimplifieesId + "-" + dossierNumber);
+    });
   });
 
   describe('parseTraining', () => {

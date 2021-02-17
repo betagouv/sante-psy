@@ -1,6 +1,7 @@
 const graphql = require('../utils/graphql');
 const date = require('../utils/date');
 const _ = require('lodash');
+const config = require('./config');
 
 /**
  * get all psychologist from DS API
@@ -104,9 +105,13 @@ function parseTraining(inputString) {
   }
 }
 
+function getDossierNumber(number) {
+  return config.demarchesSimplifieesId + "-" + number;
+}
+
 function parseDossierMetadata(dossier) {
   const name = getName(dossier.demandeur);
-  const dossierNumber = dossier.number;
+  const dossierNumber = getDossierNumber(dossier.number);
   const region = dossier.groupeInstructeur.label; // @TODO fix me 
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
   const departement = getChampValue(dossier.champs, 'Votre département', false); // "14 - Calvados"
