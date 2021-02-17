@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 /**
  * get all psychologist from DS API
- * 
+ *
  * DS API return 100 elements maximum
  * if we have more than 100 elements in DS, we have to use pagination (cursor)
  * cursor : String - next page to query the API
@@ -50,10 +50,10 @@ function getNextCursor(apiResponse) {
 
 /**
  * Converts the first character of first name and last name to upper case and the remaining to lower case.
- * @param {*} demandeur 
+ * @param {*} demandeur
  */
 function getName(demandeur) {
-  return _.capitalize(demandeur.prenom) + ' ' + _.capitalize(demandeur.nom);
+  return _.capitalize(demandeur.nom.trim()) + ' ' + _.capitalize(demandeur.prenom.trim());
 }
 
 function getChampValue(champData, attributeName) {
@@ -70,7 +70,7 @@ function getChampValue(champData, attributeName) {
 
 /**
  * transform string to boolean
- * @param {*} inputString 'true' or 'false' 
+ * @param {*} inputString 'true' or 'false'
  */
 function parseTeleconsultation(inputString) {
   return inputString === 'true';
