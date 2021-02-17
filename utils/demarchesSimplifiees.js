@@ -106,6 +106,7 @@ function parseTraining(inputString) {
 
 function parseDossierMetadata(dossier) {
   const name = getName(dossier.demandeur);
+  const dossierNumber = dossier.number;
   const region = dossier.groupeInstructeur.label; // @TODO fix me 
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
   const departement = getChampValue(dossier.champs, 'Votre département', false); // "14 - Calvados"
@@ -117,7 +118,7 @@ function parseDossierMetadata(dossier) {
   const email =  getChampValue(dossier.champs, 'Email de contact');
   const description =  getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
 
-  //@TODO comma separated values not reliable
+  // @TODO comma separated values not reliable
   const training = parseTraining(
     getChampValue(dossier.champs, 'Formations et expériences')
   );
@@ -126,6 +127,7 @@ function parseDossierMetadata(dossier) {
   const languages = getChampValue(dossier.champs, 'Langues parlées (optionnel)', false);
 
   const psy = {
+    dossierNumber,
     name,
     address,
     region,

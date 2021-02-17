@@ -6,8 +6,8 @@ exports.up = function (knex) {
 
   return knex.schema
     .createTable(db.psychologists, (table) => {
-      // email must be used as primary when updating all psychologists from DS to not have duplicate
-      table.text('email').primary();
+      table.integer('dossierNumber').primary(); // to avoid duplicate when doing upsert
+      table.text('email');
       table.text('name').notNullable()
       table.text('address'),
       table.text('departement'),

@@ -32,8 +32,7 @@ module.exports.insertAppointment = async (date, patientName) => {
 module.exports.getPsychologists = async () => {
   try {
     const psychologists = await knex(module.exports.psychologists)
-        .select()
-        .orderBy("created_at", "desc");
+        .select();
 
     return psychologists;
   } catch (err) {

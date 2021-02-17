@@ -37,6 +37,13 @@ describe('Import Data from DS to PG', () => {
       assert(output, undefined);
     });
 
+    it('should return undefined if we do not want to use the cursor', async () => {
+      const getLatestCursorSaved = importDataFromDS.__get__('getLatestCursorSaved');
+      const output = await getLatestCursorSaved(false);
+
+      assert(output, undefined);
+    });
+
     it('should return the latest cursor saved', async () => {
       const saveLatestCursorSaved = importDataFromDS.__get__('saveLatestCursorSaved');
       const latestCursor = await saveLatestCursorSaved("test");

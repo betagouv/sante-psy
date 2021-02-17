@@ -4,6 +4,7 @@
     "dossiers": {
       "nodes": [
         {
+          "number": 1,
           "groupeInstructeur": {
             "label": "Normandie"
           },
@@ -97,6 +98,7 @@
           }
         },
         {
+          "number": 2,
           "groupeInstructeur": {
             "label": "Normandie"
           },
