@@ -1,6 +1,7 @@
 require('dotenv').config();
 const rewire = require('rewire');
 const should = require('chai').should();
+const assert = require('chai').assert;
 const nock = require('nock');
 const testDossiers = require('./dossier.json');
 
@@ -48,6 +49,47 @@ describe('Demarches Simplifiess', () => {
       const output = getName(apiResponse);
 
       output.should.equal('First Last');
+    });
+
+  });
+
+
+  describe('getNextCursor', () => {
+    it('should return cursor string if there is more page to load', async () => {
+      const cursor = "MQ";
+      const apiResponse = {
+        "demarche": {
+          "dossiers": {
+            "pageInfo": {
+              "hasNextPage": true,
+              "endCursor": cursor
+            }
+          }
+        }
+      }
+
+      const getNextCursor = demarchesSimplifiees.__get__('getNextCursor');
+      const output = getNextCursor(apiResponse);
+
+      output.should.equal(cursor);
+    });
+
+    it('should return undefined if there is no page to load', async () => {
+      const cursor = "MQ";
+      const apiResponse = {
+        "demarche": {
+          "dossiers": {
+            "pageInfo": {
+              "hasNextPage": false,
+              "endCursor": cursor
+            }
+          }
+        }
+      }
+
+      const getNextCursor = demarchesSimplifiees.__get__('getNextCursor');
+
+      assert(getNextCursor(apiResponse) === undefined);
     });
   });
 

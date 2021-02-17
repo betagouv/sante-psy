@@ -10,14 +10,40 @@ const graphQLClient = new GraphQLClient(endpoint, {
 });
 
 /**
+ * get the GraphQL where condition to get another page of information
+ * @see https://demarches-simplifiees-graphql.netlify.app/pageinfo.doc.html
+ * @param {*} cursor : String
+ */
+function getWhereConditionAfterCursor(cursor) {
+  if( cursor ) {
+    return `, after: "${cursor}"`;
+  } else {
+    return '';
+  }
+}
+
+/**
+ * # Arguments pour dossiers
+    # after: Returns the elements in the list that come after the
+    # specified cursor. (endCursor). est un String, utilisez les guillemets
+    # order: L’ordre des dossiers.
+    # createdSince: Dossiers déposés depuis la date.
+    # updatedSince: Dossiers mis à jour depuis la date.
+    # state: Dossiers avec statut. n'est pas un String, ne pas utilez de guillemets
+    # archived: Si présent, permet de filtrer les dossiers archivés 
  * @see https://demarches-simplifiees-graphql.netlify.app/demarche.doc.html
  */
-async function requestPsychologist(academy = '') {
+async function requestPsychologist(afterCursor) {
+  const paginationCondition = getWhereConditionAfterCursor(afterCursor);
   const query = gql`
     {
       demarche (number: ${config.demarchesSimplifieesId}) {
         id
-        dossiers (state: en_construction) {
+        dossiers (state: en_construction, archived: false ${paginationCondition}) {
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
           nodes {
               groupeInstructeur {
                 label
