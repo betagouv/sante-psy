@@ -18,7 +18,7 @@ describe('Demarches Simplifiess', () => {
       const description = "Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker."
       const result = [
         {
-          name:'First Last',
+          name:'Last First',
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           phone: '0468396600',
           email: 'psychologue.test@apas82.mssante.fr',
@@ -27,7 +27,7 @@ describe('Demarches Simplifiess', () => {
           description: description
         },
         {
-          name: 'Personne 2ème',
+          name: '2ème Personne',
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           phone: '0468396600',
           email: 'psychologue.test@apas82.mssante.fr',
@@ -42,13 +42,13 @@ describe('Demarches Simplifiess', () => {
   });
 
   describe('getName', () => {
-    it('should return First Name Last Name', async () => {
+    it('should return Last Name First Name', async () => {
       const apiResponse = { civilite: 'M', nom: 'last', prenom: 'fiRst' };
 
       const getName = demarchesSimplifiees.__get__('getName');
       const output = getName(apiResponse);
 
-      output.should.equal('First Last');
+      output.should.equal('Last First');
     });
 
   });
