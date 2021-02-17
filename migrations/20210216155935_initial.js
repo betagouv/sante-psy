@@ -20,7 +20,6 @@ exports.up = function(knex) {
 
       // Note : students may not have a university. Ex: BTS students
       table.uuid('universityId')
-      table.foreign('universityId').references('id').inTable('universities')
 
       table.timestamp('createdAt').defaultTo(knex.fn.now())
       table.timestamp('updatedAt')
@@ -45,7 +44,6 @@ exports.up = function(knex) {
           table.string('university')
 
           table.uuid('payingUniversityId')
-          table.foreign('payingUniversityId').references('id').inTable('universities')
 
           table.timestamp('createdAt').defaultTo(knex.fn.now())
           table.timestamp('updatedAt')
@@ -56,10 +54,7 @@ exports.up = function(knex) {
           table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
 
           table.uuid('patientId').notNullable()
-          table.foreign('patientId').references('id').inTable('patients')
-
           table.string('psychologistId')  // todo notNullable once we have psy accounts
-          table.foreign('psychologistId').references('id').inTable('psychologists')
 
           table.datetime('appointmentDate').notNullable().defaultTo(knex.fn.now())
 
