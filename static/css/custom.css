@@ -42,3 +42,6 @@
 .short-input {
   max-width: 10rem;
 }
+.midlength-input {
+  max-width: 25rem;
+}
