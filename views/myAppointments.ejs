@@ -1,7 +1,16 @@
 <%- include('partials/header') -%>
-
 <div class="rf-container rf-mb-5w">
-  <h1 id="contactez-nous">
+  <%- include('partials/ariane',
+    {
+      items: [
+          {
+            label: 'Mes séances',
+            url: '/mes-seances'
+          },
+      ],
+    })
+  -%>
+  <h1>
     Mes séances
   </h1>
   <% if (errors.length) { %>

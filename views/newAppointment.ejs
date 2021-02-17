@@ -15,6 +15,19 @@
 <script src="/static/js/datepicker-fr.js"></script>
 
 <div class="rf-container rf-mb-5w">
+  <%- include('partials/ariane',
+  {
+    items: [
+        {
+          label: 'Mes séances',
+          url: '/mes-seances'
+        },
+        {
+          label: 'Nouvelle séance',
+        },
+    ],
+  })
+  -%>
   <h1>
     Nouvelle séance
   </h1>
