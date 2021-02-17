@@ -1,16 +1,16 @@
 /* eslint-disable func-names */
-const psychologistsTable = "psychologists";
+const db = require("../utils/db")
 
 exports.up = function (knex) {
-  console.log(`Creating ${psychologistsTable} table`);
+  console.log(`Creating ${db.psychologists} table`);
 
   return knex.schema
-    .createTable(psychologistsTable, (table) => {
-      table.increments('id').primary();
-      table.text('email');
+    .createTable(db.psychologists, (table) => {
+      // email must be used as primary when updating all psychologists from DS to not have duplicate
+      table.text('email').primary();
       table.text('name').notNullable()
       table.text('address'),
-      table.text('county'),
+      table.text('departement'),
       table.text('region'),
       table.text('phone'),
       table.text('website'),
@@ -20,11 +20,11 @@ exports.up = function (knex) {
       table.json('training'); // Formations et expériences
       table.text('diploma');
       table.text('languages');
-      table.timestamp('created_at').defaultTo(knex.fn.now());
-      table.timestamp('updated_at');
+      table.timestamp('createdAt').defaultTo(knex.fn.now());
+      table.timestamp('updatedAt');
     });
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTable(psychologistsTable);
+  return knex.schema.dropTable(db.psychologists);
 };

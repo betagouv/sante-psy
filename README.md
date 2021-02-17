@@ -25,7 +25,9 @@ Pour controler visuellement la base de données, nous conseillons :
 
 ```
 docker-compose rm -f # removes already existing containers https://docs.docker.com/compose/reference/rm/
-docker-compose up    
+docker-compose up
+> (...) 
+Santé Psy Étudiants listening at http://localhost:8080   
 ```
 ### Lancer les CRONs localement
 Pour améliorer afficher une liste de psychologues, nous importons les données venant de l'API demarches simplifiées (DS) dans la base de données Postgresql à l'aide d'un cron. Cela nous permet un meilleur taux de réponses et une maitrise en cas de pic de traffic.
@@ -39,6 +41,16 @@ API de demarches simplifiées :
 * Documentation : https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/graphql
 * Schema: https://demarches-simplifiees-graphql.netlify.app/query.doc.html
 
+### Test
+Pour utiliser le container Postgresql 
+```
+docker exec -ti sante-psy_web_1 bash -c "npm test"
+```
+
+```
+npm test
+```
+
 #### Test du cron
 ```bash
 docker-compose up -d
@@ -47,19 +59,6 @@ docker exec -ti sante-psy_web_1 bash -c "node cron_jobs/cron.js"
 > 🚀 The job "Import data from DS API to PG" is ON * * * * *
 Started 1 cron jobs
 (...)
-```
-
-### Variables d'environnement
-Voir `.env.sample` pour la liste complète
-
-### Test
-Pour utiliser le container PG 
-```
-docker exec -ti sante-psy_web_1 bash -c "npm test"
-```
-
-```
-npm test
 ```
 
 Tester les fonctions privées :
@@ -79,6 +78,10 @@ En savoir plus : https: //github.com/typicode/husky/tree/master#install
 Si vous rencontez des problèmes avec les git hooks
 * S'assurer que le dossier des hooks soit `.git/hooks` : `git rev-parse --git-path hooks`
 * Sinon utilisez cette commande `git config core.hooksPath .git/hooks/`
+
+
+### Variables d'environnement
+Voir `.env.sample` pour la liste complète
 
 ### Libraries
 * https://github.com/prisma-labs/graphql-request

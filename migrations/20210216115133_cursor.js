@@ -1,17 +1,17 @@
 /* eslint-disable func-names */
-const dsApiCursor = "ds_api_cursor";
+const db = require("../utils/db")
 
 exports.up = function(knex) {
-  console.log(`Creating ${dsApiCursor} table`);
+  console.log(`Creating ${db.ds_api_cursor} table`);
   // Set the column to notNullable now that all rows have values.
-  return knex.schema.createTable(dsApiCursor, (table) => {
-    table.increments();
+  return knex.schema.createTable(db.ds_api_cursor, (table) => {
+    table.integer('id').defaultTo(1).primary //unique
     table.text('cursor');
-    table.timestamp('created_at').defaultTo(knex.fn.now());
-    table.timestamp('updated_at');
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt');
   });
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTable(dsApiCursor);
+  return knex.schema.dropTable(db.ds_api_cursor);
 };

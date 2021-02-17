@@ -1,4 +1,5 @@
 const graphql = require('../utils/graphql');
+const date = require('../utils/date');
 const _ = require('lodash');
 
 /**
@@ -107,7 +108,7 @@ function parseDossierMetadata(dossier) {
   const name = getName(dossier.demandeur);
   const region = dossier.groupeInstructeur.label; // @TODO fix me 
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
-  const county = getChampValue(dossier.champs, 'Votre département', false); // "14 - Calvados"
+  const departement = getChampValue(dossier.champs, 'Votre département', false); // "14 - Calvados"
   const phone =  getChampValue(dossier.champs, 'Téléphone du secrétariat');
   const teleconsultation = parseTeleconsultation(
     getChampValue(dossier.champs, 'Proposez-vous de la téléconsultation ?')
@@ -115,6 +116,8 @@ function parseDossierMetadata(dossier) {
   const website =  getChampValue(dossier.champs, 'Site web professionnel (optionnel)');
   const email =  getChampValue(dossier.champs, 'Email de contact');
   const description =  getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
+
+  //@TODO comma separated values not reliable
   const training = parseTraining(
     getChampValue(dossier.champs, 'Formations et expériences')
   );
@@ -126,7 +129,7 @@ function parseDossierMetadata(dossier) {
     name,
     address,
     region,
-    county,
+    departement,
     phone,
     website,
     email,
@@ -135,7 +138,7 @@ function parseDossierMetadata(dossier) {
     training,
     adeli,
     diploma,
-    languages
+    languages,
   };
 
   return psy;
@@ -148,6 +151,8 @@ function parsePsychologist(apiResponse) {
 
   if(dossiers.length > 0) {
     const psychologists = dossiers.map(dossier => {
+      console.debug("Parsing a dossier", dossier);
+
       return parseDossierMetadata(dossier);
     });
 

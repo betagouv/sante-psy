@@ -4,6 +4,7 @@ const should = require('chai').should();
 const assert = require('chai').assert;
 const nock = require('nock');
 const testDossiers = require('./dossier.json');
+const date = require('../utils/date');
 
 const demarchesSimplifiees = rewire('../utils/demarchesSimplifiees.js');
 
@@ -11,6 +12,8 @@ describe('Demarches Simplifiess', () => {
   describe('parsePsychologist', () => {
     it('should return an array of psychologists from a JSON', async () => {
       const apiResponse = testDossiers
+
+      const now = date.getDateNowPG();
 
       const parsePsychologist = demarchesSimplifiees.__get__('parsePsychologist');
       const output = parsePsychologist(apiResponse)
@@ -27,10 +30,11 @@ describe('Demarches Simplifiess', () => {
           website: 'apas82.mssante.fr',
           teleconsultation: true,
           description: description,
+          // eslint-disable-next-line max-len
           training: "[\"Connaissance et pratique des outils diagnostic psychologique\",\"Connaissance des troubles psychopathologiques du jeune adulte : dépressions\",\"risques suicidaires\",\"addictions\",\"comportements à risque\",\"troubles alimentaires\",\"décompensation schizophrénique\",\"psychoses émergeantes ainsi qu’une pratique de leur repérage\",\"Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)\"]",
-          county: "14 - Calvados",
+          departement: "14 - Calvados",
           region: "Normandie",
-          languages: "Français ,Anglais, et Espagnol"
+          languages: "Français ,Anglais, et Espagnol",
         },
         {
           name: 'Personne 2ème',
@@ -42,10 +46,11 @@ describe('Demarches Simplifiess', () => {
           website: 'apas82.mssante.fr',
           teleconsultation: false,
           description: description,
+          // eslint-disable-next-line max-len
           training: "[\"Connaissance et pratique des outils diagnostic psychologique\",\"Connaissance des troubles psychopathologiques du jeune adulte : dépressions\",\"risques suicidaires\",\"addictions\",\"comportements à risque\",\"troubles alimentaires\",\"décompensation schizophrénique\",\"psychoses émergeantes ainsi qu’une pratique de leur repérage\",\"Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)\"]",
-          county: "14 - Calvados",
+          departement: "14 - Calvados",
           region: "Normandie",
-          languages: "Français ,Anglais, et Espagnol"
+          languages: "Français ,Anglais, et Espagnol",
         }
       ];
 

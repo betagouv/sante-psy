@@ -4,6 +4,8 @@ const config = require('../utils/config');
 const date = require('../utils/date');
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
+const db = require("../utils/db")
+
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 
 /**
@@ -14,7 +16,9 @@ const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 async function getLatestCursorSaved() {
   try {
     //get last cursor saved
-    const lastCursor = await knex("ds_api_cursor").first();
+    const lastCursor = await knex(db.ds_api_cursor)
+    .where("id", 1)
+    .first();
 
     console.debug(`got the latest cursor saved in PG ${JSON.stringify(lastCursor)}`);
     if( lastCursor ) {
@@ -29,23 +33,32 @@ async function getLatestCursorSaved() {
   }
 }
 
+async function getNumberOfPsychologists() {
+  return await knex(db.psychologists)
+  .count('email')
+  .first();
+}
+
 async function saveLatestCursorSaved(cursor) {
   try {
     const now = date.getDateNowPG();
 
     const alreadySavedCursor = await getLatestCursorSaved();
+
     if( alreadySavedCursor ) {
-      console.debug(`Updating the cursor ${cursor} in PG`);
-      return await knex("ds_api_cursor")
+      console.log(`Updating the cursor ${cursor} in PG`);
+
+      return await knex(db.ds_api_cursor)
       .where("id", 1)
       .update({
         "cursor": cursor,
         "updated_at": now
       });
     } else { // no cursor already saved, we are going to create one entry
-      console.debug(`Saving a new cursor ${cursor} to PG`);
+      console.log(`Saving a new cursor ${cursor} to PG`);
 
-      return await knex("ds_api_cursor").insert({
+      return await knex(db.ds_api_cursor).insert({
+        "id" : 1,
         "cursor": cursor,
         "updated_at": now
       });
@@ -57,17 +70,46 @@ async function saveLatestCursorSaved(cursor) {
 }
 
 /**
- * http://knexjs.org/#Utility-BatchInsert
- * It's primarily designed to be used when you have thousands of rows to insert into a table.
+ * Perform a UPSERT with https://knexjs.org/#Builder-merge
+ * It's primarily designed to be used when you have thousands of rows to insert/update   into a table.
+ * Modifies an insert query, to turn it into an 'upsert' operation. Uses ON DUPLICATE KEY UPDATE in MySQL,
+ * and adds an ON CONFLICT (columns) DO UPDATE clause to the insert statement in PostgreSQL and SQLite.
  * @param {*} psy 
  */
 async function savePsychologistInPG(psyList) {
-  const chunkSize = 1000
-  console.log(`Batch insert of ${psyList.length} psychologists into PG....`);
-  const batchInsert = await knex.batchInsert("psychologists", psyList, chunkSize);
-  console.log(`Batch insert into PG : done`);
+  console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
+  const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
 
-  return batchInsert;
+  const upsertArray = psyList.map( psy => {
+    //@TODO use DS API's id instead of email
+    const upsertingKey = 'email';
+
+    return knex(db.psychologists)
+    .insert(psy)
+    .onConflict(upsertingKey)
+    .merge({ // update every field and add updatedAt
+      name : psy.name,
+      address: psy.address,
+      region: psy.region,
+      departement: psy.departement,
+      phone: psy.phone,
+      website: psy.website,
+      email: psy.email,
+      teleconsultation: psy.teleconsultation,
+      description: psy.description,
+      training: psy.training,
+      adeli: psy.adeli,
+      diploma: psy.diploma,
+      languages: psy.languages,
+      updatedAt: updatedAt
+    });
+  });
+
+  const query = await Promise.all(upsertArray);
+
+  console.log(`UPSERT into PG : done`);
+
+  return query;
 }
 
 /**
@@ -79,13 +121,16 @@ module.exports.importDataFromDSToPG = async () => {
   try {
     console.log("Starting importDataFromDSToPG...");
     const latestCursorInPG = await getLatestCursorSaved();
-    console.log("Latest cursor", latestCursorInPG);
-    //@TODO case where the last page is already saved ?
-    const { psychologists, latestCursorInDS } = await demarchesSimplifiees.getPsychologistList(latestCursorInPG);
 
-    if(psychologists.length > 0) {
-      await savePsychologistInPG(psychologists);
-      await saveLatestCursorSaved(latestCursorInDS);
+    console.debug("Latest cursor", latestCursorInPG);
+    const dsAPIData = await demarchesSimplifiees.getPsychologistList(latestCursorInPG);
+
+    if(dsAPIData.psychologists.length > 0) {
+      await savePsychologistInPG(dsAPIData.psychologists);
+      await saveLatestCursorSaved(dsAPIData.lastCursor);
+
+      const numberOfPsychologists = getNumberOfPsychologists();
+      console.log(`importDataFromDSToPG done: ${JSON.stringify(numberOfPsychologists)} psychologists inside PG`);
     } else {
       console.log("No psychologists to save");
     }

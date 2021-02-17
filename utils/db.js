@@ -1,9 +1,13 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 
+module.exports.psychologists = "psychologists";
+module.exports.appointments =  "appointments";
+module.exports.ds_api_cursor = "ds_api_cursor";
+
 module.exports.getAppointments = async () => {
   try {
-    const appointmentArray = await knex("appointments").select()
+    const appointmentArray = await knex(module.exports.appointments).select()
         .orderBy("date", "desc")
     return appointmentArray
   } catch (err) {
@@ -14,7 +18,7 @@ module.exports.getAppointments = async () => {
 
 module.exports.insertAppointment = async (date, patientName) => {
   try {
-    return await knex("appointments").insert({
+    return await knex(module.exports.appointments).insert({
       date,
       patientName,
     })
@@ -27,7 +31,7 @@ module.exports.insertAppointment = async (date, patientName) => {
 
 module.exports.getPsychologists = async () => {
   try {
-    const psychologists = await knex("psychologists")
+    const psychologists = await knex(module.exports.psychologists)
         .select()
         .orderBy("created_at", "desc");
 
