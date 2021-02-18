@@ -2,11 +2,11 @@ const db = require('../utils/db')
 
 module.exports.myPatients = async (req, res) => {
   const patients = await db.getPatients()
-  res.render('myPatients', { patients: patients})
+  res.render('myPatients', { patients: patients, pageTitle: 'Mes patients'})
 }
 
 module.exports.newPatient = async (req, res) => {
-  res.render('newPatient')
+  res.render('newPatient', { pageTitle: 'Nouveau patient' })
 }
 
 module.exports.createNewPatient = async (req, res) => {
