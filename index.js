@@ -17,7 +17,8 @@ const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr';
 const app = express();
 const landingController = require('./controllers/landingController');
 const appointmentsController =
-  require('./controllers/appointmentsController')
+  require('./controllers/appointmentsController');
+const patientsController = require('./controllers/patientsController');
 const psyListingController = require('./controllers/psyListingController');
 
 // Desactivate debug log for production as they are a bit too verbose
@@ -68,6 +69,8 @@ if (config.featurePsyPages) {
   app.get('/mes-seances', appointmentsController.myAppointments)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)
+  app.get('/nouveau-patient', patientsController.newPatient)
+  app.post('/creer-nouveau-patient', patientsController.createNewPatient)
 }
 
 app.get('/mentions-legales', (req, res) => {

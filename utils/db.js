@@ -4,11 +4,13 @@ const knex = require("knex")(knexConfig)
 module.exports.psychologists = "psychologists";
 module.exports.appointments =  "appointments";
 module.exports.ds_api_cursor = "ds_api_cursor";
+module.exports.patients = "patients";
 
 module.exports.getAppointments = async () => {
   try {
-    const appointmentArray = await knex(module.exports.appointments).select()
-        .orderBy("date", "desc")
+    const appointmentArray = await knex.from(module.exports.patients)
+        .innerJoin('appointments', 'patients.id', 'appointments.patientId')
+        .orderBy("appointmentDate", "desc")
     return appointmentArray
   } catch (err) {
     console.error(`Impossible de récupérer les appointments`, err)
@@ -16,18 +18,17 @@ module.exports.getAppointments = async () => {
   }
 }
 
-module.exports.insertAppointment = async (date, patientName) => {
+module.exports.insertAppointment = async (appointmentDate, patientId) => {
   try {
     return await knex(module.exports.appointments).insert({
-      date,
-      patientName,
-    })
+      appointmentDate,
+      patientId: patientId,
+    }).returning("*")
   } catch (err) {
     console.error("Erreur de sauvegarde du appointments", err)
     throw new Error("Erreur de sauvegarde du appointments")
   }
 }
-
 
 module.exports.getPsychologists = async () => {
   try {
@@ -40,3 +41,28 @@ module.exports.getPsychologists = async () => {
     throw new Error(`Impossible de récupérer les psychologistes`)
   }
 }
+
+module.exports.getPatients = async () => {
+  try {
+    const patientArray = await knex(module.exports.patients).select()
+        .orderBy("lastName")
+    return patientArray
+  } catch (err) {
+    console.error(`Impossible de récupérer les patients`, err)
+    throw new Error(`Impossible de récupérer les patients`)
+  }
+}
+
+const insertPatient = async (firstNames, lastName, studentNumber) => {
+  try {
+    return await knex(module.exports.patients).insert({
+      firstNames,
+      lastName,
+      INE: studentNumber,
+    })
+  } catch (err) {
+    console.error("Erreur de sauvegarde du patient", err)
+    throw new Error("Erreur de sauvegarde du patient")
+  }
+}
+module.exports.insertPatient = insertPatient

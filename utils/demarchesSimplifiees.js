@@ -30,22 +30,14 @@ async function getAllPsychologistList(cursor, accumulator = []) {
   }
 }
 
-/**
- * 
- * @return {
-      psychologists : psychologist List,
-      lastCursor: last cursor from DS API
-    }
- */
-async function getPsychologistList(cursor) {
-  const time = `getting all psychologists from DS (query id #${Math.random().toString()})`;
+async function getPsychologistList() {
+  const time = `displaying all psychologists from DS (query id #${Math.random().toString()})`;
   console.time(time);
-  const psychologists = await getAllPsychologistList(cursor);
+  const psychologists = await getAllPsychologistList();
   console.timeEnd(time);
 
   return psychologists;
 }
-
 exports.getPsychologistList = getPsychologistList;
 
 /**

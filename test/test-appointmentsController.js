@@ -24,7 +24,7 @@ describe('appointmentsController', function() {
       .redirects(0) // block redirects, we don't want to test them
       .type('form')
       .send({
-        'patient-name': 'Georges Perec',
+        'patientId': 1,
         date: '09/02/2021',
         'iso-date': '2021-02-09',
       })
@@ -41,7 +41,7 @@ describe('appointmentsController', function() {
       .redirects(0) // block redirects, we don't want to test them
       .type('form')
       .send({
-        'patient-name': 'Georges Perec',
+        'patientId': 1,
         date: '09/02/2021',
         'iso-date': '2021-02-09kk',
       })
@@ -58,7 +58,7 @@ describe('appointmentsController', function() {
       .redirects(0) // block redirects, we don't want to test them
       .type('form')
       .send({
-        'patient-name': 'Georges Perec',
+        'patientId': 1,
         date: '12/02/2021 kfjhksdhf',
         'iso-date': '2021-02-09',
       })
