@@ -66,8 +66,11 @@ Started 1 cron jobs
 (...)
 ```
 
-Tester les fonctions privées :
-* https://github.com/jhnns/rewire
+
+#### Test sur la CI
+Sur la CI de github (.github/workflows/nodejs.yml) on utilise docker-compose avec l'option `--abort-on-container-exit` pour lancer les tests dans le container de l'application et finir le container de PG une fois que les tests ont été exécutés.
+> Stops all containers if any container was stopped. Incompatible with --detach.
+
 
 ### Lint 
 ```
@@ -90,3 +93,5 @@ Voir `.env.sample` pour la liste complète
 ### Libraries
 * https://github.com/prisma-labs/graphql-request
 * <table> http://tabulator.info/
+Tester les fonctions privées :
+* https://github.com/jhnns/rewire
