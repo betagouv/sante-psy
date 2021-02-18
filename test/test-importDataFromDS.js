@@ -17,17 +17,17 @@ describe('Import Data from DS to PG', () => {
   async function cleanDataCursor() {
     try {
       const ifExist = await knex(db.ds_api_cursor)
-      .where('id', 1)
-      .first();
-
-      if( ifExist ) {
-        await knex(db.ds_api_cursor)
         .where('id', 1)
-        .del();
+        .first();
+
+      if (ifExist) {
+        await knex(db.ds_api_cursor)
+          .where('id', 1)
+          .del();
       } else {
         undefined;
       }
-    } catch(err){
+    } catch (err) {
       console.log(err);
     }
   }
@@ -35,32 +35,32 @@ describe('Import Data from DS to PG', () => {
   async function cleanDataPsychologist() {
     try {
       const ifExist = await knex(db.psychologists)
-      .where('dossierNumber', dossierNumber)
-      .first();
-
-      if( ifExist ) {
-        const clean = await knex(db.psychologists)
         .where('dossierNumber', dossierNumber)
-        .del();
+        .first();
+
+      if (ifExist) {
+        const clean = await knex(db.psychologists)
+          .where('dossierNumber', dossierNumber)
+          .del();
         console.log("cleaned");
 
         return clean;
       }
-    } catch(err){
+    } catch (err) {
       console.log(err);
     }
   }
 
   async function testDataPsychologistsExist() {
     const exist = await knex(db.psychologists)
-    .where('dossierNumber', dossierNumber)
-    .first();
+      .where('dossierNumber', dossierNumber)
+      .first();
 
-    return (exist !== undefined);
+    return exist;
   }
 
   //Clean up all data
-  beforeEach( async function before() {
+  beforeEach(async function before() {
     await cleanDataCursor();
     await cleanDataPsychologist();
   })
@@ -94,12 +94,12 @@ describe('Import Data from DS to PG', () => {
   });
 
   describe('savePsychologistInPG', () => {
-    it('should insert one psychologist in PG', async () => {
+    it('should INsert one psychologist in PG', async () => {
       const psyList = [
         {
           dossierNumber: dossierNumber,
-          firstNames:'First second',
-          lastName:'Last',
+          firstNames: 'First second',
+          lastName: 'Last',
           adeli: "829302942",
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           diploma: "Psychologie clinique de la santé",
@@ -118,8 +118,42 @@ describe('Import Data from DS to PG', () => {
       const savePsychologistInPG = importDataFromDS.__get__('savePsychologistInPG');
       await savePsychologistInPG(psyList);
 
-      const exist = await testDataPsychologistsExist();
+      const psy = await testDataPsychologistsExist();
+      const exist = (psy !== undefined)
       exist.should.be.equal(true);
+    });
+
+    it('should UPsert one psychologist in PG', async () => {
+      const psyList = [
+        {
+          dossierNumber: dossierNumber,
+          firstNames: 'First second',
+          lastName: 'Last',
+          adeli: "829302942",
+          address: 'SSR CL AL SOLA 66110 MONTBOLO',
+          diploma: "Psychologie clinique de la santé",
+          phone: '0468396600',
+          email: 'psychologue.test@apas82.mssante.fr',
+          website: 'apas82.mssante.fr',
+          teleconsultation: true,
+          description: "description",
+          // eslint-disable-next-line max-len
+          training: "[\"Connaissance et pratique des outils diagnostic psychologique\",\"Connaissance des troubles psychopathologiques du jeune adulte : dépressions\",\"risques suicidaires\",\"addictions\",\"comportements à risque\",\"troubles alimentaires\",\"décompensation schizophrénique\",\"psychoses émergeantes ainsi qu’une pratique de leur repérage\",\"Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)\"]",
+          departement: "14 - Calvados",
+          region: "Normandie",
+          languages: "Français ,Anglais, et Espagnol"
+        }];
+
+      const savePsychologistInPG = importDataFromDS.__get__('savePsychologistInPG');
+      //doing a classic insert
+      await savePsychologistInPG(psyList);
+      const psyInsert = await testDataPsychologistsExist();
+      assert.isNull(psyInsert.updatedAt);
+
+      // we do it twice in a row to UPsert it (field updatedAt will change)
+      await savePsychologistInPG(psyList);
+      const psyUpsert = await testDataPsychologistsExist();
+      assert.isNotNull(psyUpsert.updatedAt);
     });
   });
 });
