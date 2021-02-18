@@ -15,16 +15,20 @@ describe('Import Data from DS to PG', () => {
   const dossierNumber = getUuidDossierNumber(1);
 
   async function cleanDataCursor() {
-    const ifExist = await knex(db.ds_api_cursor)
-    .where('id', 1)
-    .first();
-
-    if( ifExist ) {
-      await knex(db.ds_api_cursor)
+    try {
+      const ifExist = await knex(db.ds_api_cursor)
       .where('id', 1)
-      .del();
-    } else {
-      undefined;
+      .first();
+
+      if( ifExist ) {
+        await knex(db.ds_api_cursor)
+        .where('id', 1)
+        .del();
+      } else {
+        undefined;
+      }
+    } catch(err){
+      console.log(err);
     }
   }
 
@@ -34,7 +38,6 @@ describe('Import Data from DS to PG', () => {
     .first();
 
     if( ifExist ) {
-      console.log("cleanDataPsychologist");
       const clean = await knex(db.psychologists)
       .where('dossierNumber', dossierNumber)
       .del();
@@ -48,8 +51,6 @@ describe('Import Data from DS to PG', () => {
     const exist = await knex(db.psychologists)
     .where('dossierNumber', dossierNumber)
     .first();
-
-    console.log("Test data psychologists exist ? ", exist !== undefined);
 
     return (exist !== undefined);
   }
