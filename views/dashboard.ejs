@@ -8,6 +8,16 @@
                 <p>Voici toutes les informations relatives à vos séances et vos patients.</p>
             </div>
         </div>
+        <% if (errors.length) { %>
+            <% errors.forEach(function(error) { %>
+              <%- include('partials/notificationError', {error: error}) -%>
+            <% }) %>
+          <% } %>
+          <% if (infos.length) { %>
+            <% infos.forEach(function(info) { %>
+              <%- include('partials/notificationInfo', {info: info}) -%>
+            <% }) %>
+        <% } %>
         <div class="rf-grid-row rf-grid-row--left rf-grid-row--gutter">
             <%- include('myAppointments') -%>
             <%- include('myPatients') -%>
