@@ -2,6 +2,7 @@ const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 
 module.exports.psychologists = "psychologists";
+module.exports.universities = "universities";
 module.exports.appointments =  "appointments";
 // eslint-disable-next-line camelcase
 module.exports.ds_api_cursor = "ds_api_cursor";
