@@ -14,7 +14,7 @@
     "rollback": "knex migrate:rollback",
     "rollback-one": "knex migrate:down",
     "start": "node index.js",
-    "test": "mocha",
+    "test": "mocha --exit",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
   },
