@@ -2,8 +2,18 @@
 
 <div class="rf-container-fluid">
     <div class="rf-mx-12w ">
-        <div class="rf-grid-row rf-grid-row--left">
-            <div class="rf-col rf-col-xs-10 rf-py-4w">
+      <%- include('partials/ariane',
+      {
+        items: [
+          {
+            label: 'Mes séances',
+            url: '/mes-seances'
+          },
+        ],
+      })
+      -%>
+          <div class="rf-grid-row rf-grid-row--left">
+            <div class="rf-col rf-col-xs-10">
                 <h1>Déclarer mes séances</h1>
                 <p>Voici toutes les informations relatives à vos séances et vos patients.</p>
             </div>
