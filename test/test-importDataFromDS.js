@@ -63,7 +63,6 @@ describe('Import Data from DS to PG', () => {
   beforeEach( async function before() {
     await cleanDataCursor();
     await cleanDataPsychologist();
-    await testDataPsychologistsExist();
   })
 
   describe('getLatestCursorSaved', () => {
