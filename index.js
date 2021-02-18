@@ -75,11 +75,15 @@ if (config.featurePsyPages) {
 }
 
 app.get('/mentions-legales', (req, res) => {
-  res.render('legalNotice');
+  res.render('legalNotice', {
+    pageTitle: "Mentions Légales",
+  });
 })
 
 app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
-  res.render('données-personnelles-et-gestion-des-cookies')
+  res.render('données-personnelles-et-gestion-des-cookies', {
+    pageTitle: "Données personnelles",
+  })
 })
 
 module.exports = app.listen(config.port, () => {

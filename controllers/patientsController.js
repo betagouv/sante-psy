@@ -1,7 +1,7 @@
 const db = require('../utils/db')
 
 module.exports.newPatient = async (req, res) => {
-  res.render('newPatient')
+  res.render('newPatient', { pageTitle: 'Nouveau patient' })
 }
 
 module.exports.createNewPatient = async (req, res) => {

@@ -4,7 +4,7 @@ const format = require('../utils/format')
 
 module.exports.newAppointment = async (req, res) => {
   const patients = await db.getPatients()
-  res.render('newAppointment', {patients: patients})
+  res.render('newAppointment', {patients: patients, pageTitle: "Nouvelle séance"})
 }
 
 module.exports.createNewAppointment = async (req, res) => {
