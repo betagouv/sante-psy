@@ -37,7 +37,6 @@ npm run lint
 
 ## Pre-commit pre-push
 * Un commit va lancer le linter
-* Un push lancera les tests
 
 En savoir plus : https: //github.com/typicode/husky/tree/master#install
 

@@ -2,14 +2,9 @@ const dateUtils = require('../utils/date')
 const db = require('../utils/db')
 const format = require('../utils/format')
 
-module.exports.myAppointments = async (req, res) => {
-  const appointments = await db.getAppointments()
-  res.render('myAppointments', { appointments: appointments })
-}
-
 module.exports.newAppointment = async (req, res) => {
   const patients = await db.getPatients()
-  res.render('newAppointment', {patients: patients})
+  res.render('newAppointment', {patients: patients, pageTitle: "Nouvelle séance"})
 }
 
 module.exports.createNewAppointment = async (req, res) => {
