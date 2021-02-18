@@ -14,10 +14,10 @@
   <% } %>
   <div class="rf-my-5w rf-pb-2w">
     <ul>
-    <% appointments.forEach(function(appointment) { %>
-      <li><%= format.formatFrenchDate(appointment.appointmentDate) %> avec <%= appointment.firstNames %> <%= appointment.lastName %></li>
-    <% }) %>
-  </ul>
+      <% appointments.forEach(function(appointment) { %>
+        <li><%= format.formatFrenchDate(appointment.appointmentDate) %> avec <%= appointment.firstNames %> <%= appointment.lastName %></li>
+      <% }) %>
+    </ul>
   </div>
   <div>
     <a href="/nouvelle-seance" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouvelle séance</a>
