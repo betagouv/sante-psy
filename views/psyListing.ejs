@@ -14,8 +14,13 @@
             <p>
                 Il y a actuellement <%- psyList.length %> partenaires du dispositif d'accompagnement.
             </p>
-            <div>
-                <label for="filter-value">Rechercher par adresse : </label><input id="filter-value" type="text" placeholder="Amiens ou 80000">
+            <div class="rf-input-group">
+                <label class="rf-label" for="name-filter-value">Rechercher par nom : </label>
+                <input class="rf-input midlength-input" id="name-filter-value" type="text" placeholder="Delgado">
+            </div>
+            <div class="rf-input-group">
+                <label class="rf-label" for="address-filter-value">Rechercher par adresse : </label>
+                <input class="rf-input midlength-input" id="address-filter-value" type="text" placeholder="Amiens ou 80000">
             </div>
             <div id="psy-table"></div>
             <% } %>
@@ -30,12 +35,16 @@
     <%= JSON.stringify(psyList) %>
 </div>
 <script>
-    var valueEl = document.getElementById("filter-value");
-    // Trigger setFilter function with correct parameters
-    function updateFilter(){
-        table.setFilter('address','like', valueEl.value);
-    }
-    valueEl.addEventListener("keyup", updateFilter);
+    var setupFilter = function(fieldName) {
+        var filterEl = document.getElementById(fieldName + "-filter-value");
+        // Trigger setFilter function with correct parameters
+        function updateFilter(){
+            table.setFilter(fieldName,'like', filterEl.value);
+        }
+        filterEl.addEventListener("keyup", updateFilter);
+    };
+    setupFilter("address");
+    setupFilter("name");
 
     var psyListElement = document.getElementById("psy-list");
     var psyList = JSON.parse(psyListElement.textContent);
