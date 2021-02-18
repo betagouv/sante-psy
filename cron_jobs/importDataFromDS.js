@@ -8,31 +8,36 @@ const db = require("../utils/db")
 
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 
+async function getCursorFromDB() {
+  try {
+    const lastCursor =  await knex(db.ds_api_cursor)
+    .where("id", 1)
+    .first();
+
+    console.debug(`getLatestCursorSaved: Got the latest cursor saved in PG ${JSON.stringify(lastCursor)}`);
+    if( lastCursor ) {
+      return lastCursor.cursor;
+    } else {
+      return undefined;
+    }
+  } catch (err) {
+    console.error(`Impossible de récupèrer le dernier cursor de l'api DS, le cron ne va pas utilser de cursor`, err)
+
+    return undefined; //not a blocking error
+  }
+}
+
 /**
  * l'API DS nous retourne 100 éléments à chaque appel, et nous indique la page où l'on se trouve
  * en stockant la dernière page lue (cursor), on limite le nombre d'appel à l'API en ne lisant que
  * les pages necessaires
  */
-async function getLatestCursorSaved(useSavedCursor) {
+async function getLatestCursorSaved(useSavedCursor = true) {
   if(useSavedCursor) {
-    try {
-      //get last cursor saved
-      const lastCursor = await knex(db.ds_api_cursor)
-      .where("id", 1)
-      .first();
-
-      console.debug(`got the latest cursor saved in PG ${JSON.stringify(lastCursor)}`);
-      if( lastCursor ) {
-        return lastCursor.cursor;
-      } else {
-        return undefined;
-      }
-    } catch (err) {
-      console.error(`Impossible de récupèrer le dernier cursor de l'api DS, le cron ne va pas utilser de cursor`, err)
-
-      return undefined; //not a blocking error
-    }
+    return await getCursorFromDB();
   } else {
+    console.log(`Not using cursor saved inside PG due to parameter ${useSavedCursor}`);
+
     return undefined;
   }
 }
@@ -43,15 +48,14 @@ async function getLatestCursorSaved(useSavedCursor) {
  */
 async function getNumberOfPsychologists() {
   return await knex(db.psychologists)
-  .count('')
-  .first();
+  .count('dossierNumber');
 }
 
 async function saveLatestCursorSaved(cursor) {
   try {
     const now = date.getDateNowPG();
 
-    const alreadySavedCursor = await getLatestCursorSaved();
+    const alreadySavedCursor = await getCursorFromDB();
 
     if( alreadySavedCursor ) {
       console.log(`Updating the cursor ${cursor} in PG`);
@@ -95,7 +99,8 @@ async function savePsychologistInPG(psyList) {
     .insert(psy)
     .onConflict(upsertingKey)
     .merge({ // update every field and add updatedAt
-      name : psy.name,
+      firstNames : psy.firstNames,
+      lastName : psy.lastName,
       address: psy.address,
       region: psy.region,
       departement: psy.departement,
@@ -130,7 +135,6 @@ module.exports.importDataFromDSToPG = async function importDataFromDSToPG (useSa
     console.log("Starting importDataFromDSToPG...");
     const latestCursorInPG = await getLatestCursorSaved(useSavedCursor);
 
-    console.debug("Latest cursor", latestCursorInPG);
     const dsAPIData = await demarchesSimplifiees.getPsychologistList(latestCursorInPG);
 
     if(dsAPIData.psychologists.length > 0) {

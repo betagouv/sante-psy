@@ -47,6 +47,7 @@ exports.up = function(knex) {
           table.string('website')
           table.boolean('teleconsultation')
           table.text('description')
+          table.text('languages')
           table.json('training') // Formations et expériences
           table.string('diploma')
           table.string('university')

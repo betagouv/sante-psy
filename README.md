@@ -44,11 +44,16 @@ API de demarches simplifiées :
 ### Test
 Pour utiliser le container Postgresql 
 ```
-docker exec -ti sante-psy_web_1 bash -c "npm test"
+# Start DB and build SQL tables
+docker-compose -f docker-compose-only-db.yml up
+
+# start tests
+npm test
 ```
 
+#### Tester uniquement un test
 ```
-npm test
+npm test -- --grep "should call batchInsert on PG"
 ```
 
 #### Test du cron

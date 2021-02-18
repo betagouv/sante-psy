@@ -1,15 +1,11 @@
 const graphql = require('../utils/graphql');
-const date = require('../utils/date');
 const uuid = require('../utils/uuid');
-const _ = require('lodash');
 const config = require('./config');
 
 /**
- * get all psychologist from DS API
- * 
- * DS API return 100 elements maximum
- * if we have more than 100 elements in DS, we have to use pagination (cursor)
- * cursor : String - next page to query the API
+ * helper function called by getPsychologistList
+ * @param {*} cursor 
+ * @param {*} accumulator 
  */
 async function getAllPsychologistList(cursor, accumulator = []) {
   const apiResponse = await graphql.requestPsychologist(cursor);
@@ -30,10 +26,18 @@ async function getAllPsychologistList(cursor, accumulator = []) {
   }
 }
 
-async function getPsychologistList() {
+/**
+ * get all psychologist from DS API
+ * 
+ * DS API return 100 elements maximum
+ * if we have more than 100 elements in DS, we have to use pagination (cursor)
+ * cursor : String - next page to query the API
+ */
+async function getPsychologistList(cursor) {
   const time = `displaying all psychologists from DS (query id #${Math.random().toString()})`;
+
   console.time(time);
-  const psychologists = await getAllPsychologistList();
+  const psychologists = await getAllPsychologistList(cursor);
   console.timeEnd(time);
 
   return psychologists;

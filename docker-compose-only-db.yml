@@ -1,3 +1,4 @@
+# Only start PG and build SQL tables
 version: '3'
 services:
   db:
@@ -9,7 +10,7 @@ services:
       - "5432:5432"
   web:
     build: .
-    command: bash -c "sleep 3; npm run migrate && nodemon --inspect=0.0.0.0:9229 ./index.js"
+    command: bash -c "sleep 3; npm run migrate"
     env_file:
       - .env
     environment:
