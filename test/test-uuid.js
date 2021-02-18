@@ -1,4 +1,3 @@
-const should = require('chai').should();
 const uuid = require('../utils/uuid');
 
 describe('uuid', () => {

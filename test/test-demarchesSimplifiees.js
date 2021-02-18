@@ -1,11 +1,7 @@
 require('dotenv').config();
 const rewire = require('rewire');
-const should = require('chai').should();
 const assert = require('chai').assert;
-const nock = require('nock');
-const config = require('../utils/config');
 const testDossiers = require('./dossier.json');
-const date = require('../utils/date');
 
 const demarchesSimplifiees = rewire('../utils/demarchesSimplifiees.js');
 
@@ -15,8 +11,6 @@ describe('Demarches Simplifiess', () => {
       const apiResponse = testDossiers
 
       const getUuidDossierNumber = demarchesSimplifiees.__get__('getUuidDossierNumber');
-
-      const now = date.getDateNowPG();
 
       const parsePsychologist = demarchesSimplifiees.__get__('parsePsychologist');
       const output = parsePsychologist(apiResponse)

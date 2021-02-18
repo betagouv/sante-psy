@@ -7,7 +7,7 @@ const jobs = [ {
   onTick: importDataFromDSToPG,
   start: true,
   timeZone: "Europe/Paris",
-  isActive: true, //config.featureImportData,
+  isActive: config.featureImportData,
   name: "Import data from DS API to PG",
 }
 ]

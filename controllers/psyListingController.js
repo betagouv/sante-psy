@@ -1,4 +1,3 @@
-const utils = require('../utils/demarchesSimplifiees');
 const db = require('../utils/db')
 
 module.exports.getPsychologist  = async function getPsychologist(req, res) {

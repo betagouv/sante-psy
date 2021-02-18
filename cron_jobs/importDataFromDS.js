@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-const config = require('../utils/config');
 const date = require('../utils/date');
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);

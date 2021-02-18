@@ -1,6 +1,4 @@
 const assert = require('chai').assert;
-const chai = require('chai');
-chai.should();
 require('dotenv').config();
 const rewire = require('rewire');
 const db = require("../utils/db");
@@ -57,7 +55,7 @@ describe('Import Data from DS to PG', () => {
   }
 
   //Clean up all data
-  beforeEach( async function() {
+  beforeEach( async function before() {
     await cleanDataCursor();
     await cleanDataPsychologist();
     await testDataPsychologistsExist();
@@ -82,7 +80,7 @@ describe('Import Data from DS to PG', () => {
 
     it('should return the latest cursor saved', async () => {
       const saveLatestCursorSaved = importDataFromDS.__get__('saveLatestCursorSaved');
-      const latestCursor = await saveLatestCursorSaved("test");
+      await saveLatestCursorSaved("test");
 
       const getLatestCursorSaved = importDataFromDS.__get__('getLatestCursorSaved');
       const output = await getLatestCursorSaved();

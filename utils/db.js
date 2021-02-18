@@ -3,6 +3,7 @@ const knex = require("knex")(knexConfig)
 
 module.exports.psychologists = "psychologists";
 module.exports.appointments =  "appointments";
+// eslint-disable-next-line camelcase
 module.exports.ds_api_cursor = "ds_api_cursor";
 module.exports.patients = "patients";
 
