@@ -8,6 +8,11 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
+    services:
+      # Label used to access the service container
+      redis:
+        # Docker Hub image
+        image: redis    
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -15,9 +20,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: cp .env.sample .env
-    - run: docker-compose -f docker-compose-only-db.yml up -d
-    - run: npm install
-    - run: npm test
+    - run: docker-compose -f docker-compose-only-db.yml up --abort-on-container-exit;
       env:
         SECRET: "verysecret"
         FEATURE_PSY_PAGES: "true"
