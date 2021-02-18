@@ -12,7 +12,7 @@ services:
     build: .
     command: bash -c "sleep 3; npm run migrate"
     env_file:
-      - .env
+      - .env.sample
     environment:
       DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
     ports:
