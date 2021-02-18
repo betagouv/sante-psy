@@ -2,6 +2,8 @@ require('dotenv').config();
 const rewire = require('rewire');
 const assert = require('chai').assert;
 const testDossiers = require('./dossier.json');
+const uuid = require('../utils/uuid');
+const config = require('../utils/config');
 
 const demarchesSimplifiees = rewire('../utils/demarchesSimplifiees.js');
 
@@ -104,9 +106,9 @@ describe('Demarches Simplifiess', () => {
 
       const getUuidDossierNumber = demarchesSimplifiees.__get__('getUuidDossierNumber');
       const output = getUuidDossierNumber(dossierNumber);
-      console.log("output", output);
+      const result = uuid.generateUuidFromString(config.demarchesSimplifieesId + '-' + dossierNumber);
 
-      output.should.equal('ca22ee9d-6a92-5064-b5d0-d14dc0df9880');
+      output.should.equal(result);
     });
   });
 
