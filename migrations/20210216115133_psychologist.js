@@ -6,7 +6,7 @@ exports.up = function (knex) {
 
   return knex.schema
     .createTable(db.psychologists, (table) => {
-      table.integer('dossierNumber').primary(); // to avoid duplicate when doing upsert
+      table.uuid('dossierNumber').primary(); // to avoid duplicate when doing upsert
       table.text('email');
       table.text('name').notNullable()
       table.text('address'),
