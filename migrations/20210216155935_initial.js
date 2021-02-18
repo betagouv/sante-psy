@@ -1,9 +1,13 @@
 /* eslint-disable func-names */
+const db = require("../utils/db")
+
 exports.up = function(knex) {
   // Add extention for handling uuids to postgres
   return knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";').then(function() {
+    console.log(`Creating ${db.universities} table`);
+
     return knex.schema
-      .createTable('universities', (table) => {
+      .createTable(db.universities, (table) => {
         table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
         table.string('name', 255).notNullable()
 
@@ -11,7 +15,9 @@ exports.up = function(knex) {
         table.timestamp('updatedAt')
       })
   }).then(function() {
-    return knex.schema.createTable('patients', (table) => {
+    console.log(`Creating ${db.patients} table`);
+
+    return knex.schema.createTable(db.patients, (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
       table.text('firstNames').notNullable()
       table.text('lastName').notNullable()
@@ -25,9 +31,11 @@ exports.up = function(knex) {
       table.timestamp('updatedAt')
     })
   }).then(function() {
+    console.log(`Creating ${db.psychologists} table`);
+
     return knex.schema
-        .createTable('psychologists', (table) => {
-          table.string('id').primary() // todo : id generated from DS
+        .createTable(db.psychologists, (table) => {
+          table.uuid('dossierNumber').primary(); // to avoid duplicate when doing upsert
           table.string('adeli').notNullable() // all therapists should be registered and have a number
           table.text('firstNames').notNullable()
           table.text('lastName').notNullable()
@@ -49,8 +57,10 @@ exports.up = function(knex) {
           table.timestamp('updatedAt')
         })
   }).then(function() {
+    console.log(`Creating ${db.appointments} table`);
+
     return knex.schema
-        .createTable('appointments', (table) => {
+        .createTable(db.appointments, (table) => {
           table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
 
           table.uuid('patientId').notNullable()
@@ -70,13 +80,13 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTable('appointments')
+  return knex.schema.dropTable(db.appointments)
     .then(function() {
-      return knex.schema.dropTable('psychologists')
+      return knex.schema.dropTable(db.psychologists)
     }).then(function() {
-      return knex.schema.dropTable('patients')
+      return knex.schema.dropTable(db.patients)
     }).then(function() {
-      return knex.schema.dropTable('universities')
+      return knex.schema.dropTable(db.universities)
     }).then(function() {
       return knex.raw('DROP EXTENSION IF EXISTS "uuid-ossp";')
     })

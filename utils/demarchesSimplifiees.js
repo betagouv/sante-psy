@@ -54,14 +54,6 @@ function getNextCursor(apiResponse) {
   }
 }
 
-/**
- * Converts the first character of first name and last name to upper case and the remaining to lower case.
- * @param {*} demandeur 
- */
-function getName(demandeur) {
-  return _.capitalize(demandeur.prenom) + ' ' + _.capitalize(demandeur.nom);
-}
-
 function getChampValue(champData, attributeName, stringValue = true) {
   const potentialStringValue = champData.find(champ => champ.label === attributeName);
 
@@ -99,11 +91,12 @@ function parseTraining(inputString) {
 }
 
 function getUuidDossierNumber(number) {
-  return uuid.generateUuidFromString(config.demarchesSimplifieesId + "-" + number);
+  return uuid.generateUuidFromString(config.demarchesSimplifieesId + '-' + number);
 }
 
 function parseDossierMetadata(dossier) {
-  const name = getName(dossier.demandeur);
+  const lastName = dossier.demandeur.nom;
+  const firstNames = dossier.demandeur.prenom;
   const dossierNumber = getUuidDossierNumber(dossier.number);
   const region = dossier.groupeInstructeur.label;
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
@@ -126,7 +119,8 @@ function parseDossierMetadata(dossier) {
 
   const psy = {
     dossierNumber,
-    name,
+    lastName,
+    firstNames,
     address,
     region,
     departement,

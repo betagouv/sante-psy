@@ -25,7 +25,8 @@ describe('Demarches Simplifiess', () => {
       const result = [
         {
           dossierNumber: getUuidDossierNumber(1),
-          name: 'First Last',
+          lastName: 'Last',
+          firstNames: 'First',
           adeli: "829302942",
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           diploma: "Psychologie clinique de la santé",
@@ -42,7 +43,8 @@ describe('Demarches Simplifiess', () => {
         },
         {
           dossierNumber: getUuidDossierNumber(2),
-          name: 'Personne 2ème',
+          lastName: '2ème',
+          firstNames: 'Personne',
           adeli: "829302942",
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           phone: '0468396600',
@@ -62,19 +64,6 @@ describe('Demarches Simplifiess', () => {
       output.should.eql(result);
     });
   });
-
-  describe('getName', () => {
-    it('should return First Name Last Name', async () => {
-      const apiResponse = { civilite: 'M', nom: 'last', prenom: 'fiRst' };
-
-      const getName = demarchesSimplifiees.__get__('getName');
-      const output = getName(apiResponse);
-
-      output.should.equal('First Last');
-    });
-
-  });
-
 
   describe('getNextCursor', () => {
     it('should return cursor string if there is more page to load', async () => {
@@ -116,13 +105,14 @@ describe('Demarches Simplifiess', () => {
   });
 
   describe('getUuidDossierNumber', () => {
-    it('should return First Name Last Name', async () => {
-      const dossierNumber = 1
+    it('should return a uuid based on the given id', async () => {
+      const dossierNumber = 1;
 
       const getUuidDossierNumber = demarchesSimplifiees.__get__('getUuidDossierNumber');
       const output = getUuidDossierNumber(dossierNumber);
+      console.log("output", output);
 
-      output.should.equal("ca22ee9d-6a92-5064-b5d0-d14dc0df9880");
+      output.should.equal('ca22ee9d-6a92-5064-b5d0-d14dc0df9880');
     });
   });
 
