@@ -16,6 +16,7 @@ const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr';
 
 const app = express();
 const landingController = require('./controllers/landingController');
+const dashboardController = require('./controllers/dashboardController');
 const appointmentsController =
   require('./controllers/appointmentsController');
 const patientsController = require('./controllers/patientsController');
@@ -66,7 +67,7 @@ if (config.featurePsyList) {
 }
 
 if (config.featurePsyPages) {
-  app.get('/mes-seances', appointmentsController.myAppointments)
+  app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)
   app.get('/nouveau-patient', patientsController.newPatient)
