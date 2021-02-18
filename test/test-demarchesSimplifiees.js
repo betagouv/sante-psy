@@ -14,6 +14,8 @@ describe('Demarches Simplifiess', () => {
     it('should return an array of psychologists from a JSON', async () => {
       const apiResponse = testDossiers
 
+      const getUuidDossierNumber = demarchesSimplifiees.__get__('getUuidDossierNumber');
+
       const now = date.getDateNowPG();
 
       const parsePsychologist = demarchesSimplifiees.__get__('parsePsychologist');
@@ -22,8 +24,8 @@ describe('Demarches Simplifiess', () => {
       const description = "Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker."
       const result = [
         {
-          dossierNumber: config.demarchesSimplifieesId + "-" + 1,
-          name:'First Last',
+          dossierNumber: getUuidDossierNumber(1),
+          name: 'First Last',
           adeli: "829302942",
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           diploma: "Psychologie clinique de la santé",
@@ -39,7 +41,7 @@ describe('Demarches Simplifiess', () => {
           languages: "Français ,Anglais, et Espagnol",
         },
         {
-          dossierNumber: config.demarchesSimplifieesId + "-" + 2,
+          dossierNumber: getUuidDossierNumber(2),
           name: 'Personne 2ème',
           adeli: "829302942",
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
@@ -72,14 +74,14 @@ describe('Demarches Simplifiess', () => {
     });
   });
 
-  describe('getDossierNumber', () => {
+  describe('getUuidDossierNumber', () => {
     it('should return First Name Last Name', async () => {
       const dossierNumber = 1
 
-      const getDossierNumber = demarchesSimplifiees.__get__('getDossierNumber');
-      const output = getDossierNumber(dossierNumber);
+      const getUuidDossierNumber = demarchesSimplifiees.__get__('getUuidDossierNumber');
+      const output = getUuidDossierNumber(dossierNumber);
 
-      output.should.equal(config.demarchesSimplifieesId + "-" + dossierNumber);
+      output.should.equal("ca22ee9d-6a92-5064-b5d0-d14dc0df9880");
     });
   });
 

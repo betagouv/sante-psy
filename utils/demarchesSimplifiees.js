@@ -1,5 +1,6 @@
 const graphql = require('../utils/graphql');
 const date = require('../utils/date');
+const uuid = require('../utils/uuid');
 const _ = require('lodash');
 const config = require('./config');
 
@@ -105,13 +106,13 @@ function parseTraining(inputString) {
   }
 }
 
-function getDossierNumber(number) {
-  return config.demarchesSimplifieesId + "-" + number;
+function getUuidDossierNumber(number) {
+  return uuid.generateUuidFromString(config.demarchesSimplifieesId + "-" + number);
 }
 
 function parseDossierMetadata(dossier) {
   const name = getName(dossier.demandeur);
-  const dossierNumber = getDossierNumber(dossier.number);
+  const dossierNumber = getUuidDossierNumber(dossier.number);
   const region = dossier.groupeInstructeur.label;
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
   const departement = getChampValue(dossier.champs, 'Votre département', false); // "14 - Calvados"
@@ -158,7 +159,7 @@ function parsePsychologist(apiResponse) {
 
   if(dossiers.length > 0) {
     const psychologists = dossiers.map(dossier => {
-      console.debug("Parsing a dossier", dossier);
+      // console.debug("Parsing a dossier", dossier);
 
       return parseDossierMetadata(dossier);
     });
