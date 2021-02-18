@@ -29,7 +29,7 @@ describe('appointmentsController', function() {
         'iso-date': '2021-02-09',
       })
       .end((err, res) => {
-        res.should.redirectTo('/mes-seances')
+        res.should.redirectTo('/tableau-de-bord')
         sinon.assert.called(insertAppointmentStub)
         done()
       })
@@ -63,7 +63,7 @@ describe('appointmentsController', function() {
         'iso-date': '2021-02-09',
       })
       .end((err, res) => {
-        res.should.redirectTo('/mes-seances')
+        res.should.redirectTo('/tableau-de-bord')
         sinon.assert.called(insertAppointmentStub)
         done()
       })
