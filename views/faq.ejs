@@ -23,19 +23,19 @@
       <h1 id="etudiant">Je suis étudiant·e</h1>
 
       <ul class="rf-accordion-group">
-        <%- include('partials/accordion-item',
+        <%- include('partials/faq-item',
         {
-          i: 'e0',
-          title: 'À combien de séances ai-je le droit ?',
-          content: 'Vous avez le droit à 3 séances remboursées. Votre médecin peut ensuite reconduire le dispositif autant de fois que nécessaire.'
+          id: 'e0',
+          question: 'À combien de séances ai-je le droit ?',
+          response: 'Vous avez le droit à 3 séances remboursées. Votre médecin peut ensuite reconduire le dispositif autant de fois que nécessaire.'
         })
         -%>
 
-        <%- include('partials/accordion-item',
+        <%- include('partials/faq-item',
         {
-          i: 'e1',
-          title: 'Combien ça coûte ?',
-          content: 'Chaque séance chez le ou la psychologue est remboursée. Seule la consultation chez votre médecin est payante.'
+          id: 'e1',
+          question: 'Combien ça coûte ?',
+          response: 'Chaque séance chez le ou la psychologue est remboursée. Seule la consultation chez votre médecin est payante.'
         })
         -%>
       </ul>
@@ -43,20 +43,19 @@
       <h1 id="psy">Je suis psychologue</h1>
 
       <ul class="rf-accordion-group">
-        <%- include('partials/accordion-item',
+        <%- include('partials/faq-item',
         {
-          i: 'p0',
-          title: 'Puis-je participer au dispositif de soutien ?',
-          content: 'Oui, si vous êtes psychologue diplômé, et que vous exercez depuis au moins 3 ans.',
-          'cta': '<a class="rf-btn" href="" target="_blank" rel="noopener noreferrer">Participer au dispositif</a>'
+          id: 'p0',
+          question: 'Puis-je participer au dispositif de soutien ?',
+          response: 'Oui, si vous êtes psychologue diplômé, et que vous exercez depuis au moins 3 ans. <a href="" target="_blank" rel="noopener noreferrer">Participer au dispositif</a>'
         })
         -%>
 
-        <%- include('partials/accordion-item',
+        <%- include('partials/faq-item',
         {
-          i: 'p1',
-          title: 'Combien serais-je payé ?',
-          content: 'Les séances vous seront remboursées à hauteur de 30 euros.'
+          id: 'p1',
+          question: 'Combien serais-je payé ?',
+          response: 'Les séances vous seront remboursées à hauteur de 30 euros.'
         })
         -%>
       </ul>
