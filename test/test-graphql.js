@@ -27,4 +27,22 @@ describe('GraphQL Handler', () => {
       hasErrors(errorResponse).should.be.false;
     });
   });
+
+  describe('getWhereConditionAfterCursor', () => {
+    it('should return the graphql condition with after as an argument', async () => {
+      const after = "MzA2"
+      const result = `, after: "${after}"`;
+      const getWhereConditionAfterCursor = graphql.__get__('getWhereConditionAfterCursor');
+
+      getWhereConditionAfterCursor(after).should.equal(result);
+    });
+
+
+    it('should return an empty string if undefined', async () => {
+      const after = ""
+      const getWhereConditionAfterCursor = graphql.__get__('getWhereConditionAfterCursor');
+
+      getWhereConditionAfterCursor(undefined).should.equal('');
+    });
+  });
 });

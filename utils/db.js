@@ -5,8 +5,7 @@ module.exports.getAppointments = async () => {
   try {
     const appointmentArray = await knex.from('patients')
         .innerJoin('appointments', 'patients.id', 'appointments.patientId')
-        .orderBy("date", "desc")
-    // todo objects contain "id" and "patientId", return only "patientId", it's redundant.
+        .orderBy("appointmentDate", "desc")
     return appointmentArray
   } catch (err) {
     console.error(`Impossible de récupérer les appointments`, err)
@@ -14,10 +13,10 @@ module.exports.getAppointments = async () => {
   }
 }
 
-module.exports.insertAppointment = async (date, patientId) => {
+module.exports.insertAppointment = async (appointmentDate, patientId) => {
   try {
     return await knex("appointments").insert({
-      date,
+      appointmentDate,
       patientId: patientId,
     }).returning("*")
   } catch (err) {

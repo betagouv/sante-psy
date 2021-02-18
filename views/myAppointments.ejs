@@ -15,7 +15,7 @@
   <div class="rf-my-5w rf-pb-2w">
     <ul>
     <% appointments.forEach(function(appointment) { %>
-      <li><%= format.formatFrenchDate(appointment.date) %> avec <%= appointment.firstNames %> <%= appointment.lastName %></li>
+      <li><%= format.formatFrenchDate(appointment.appointmentDate) %> avec <%= appointment.firstNames %> <%= appointment.lastName %></li>
     <% }) %>
   </ul>
   </div>
