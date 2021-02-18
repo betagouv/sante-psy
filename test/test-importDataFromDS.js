@@ -33,17 +33,21 @@ describe('Import Data from DS to PG', () => {
   }
 
   async function cleanDataPsychologist() {
-    const ifExist = await knex(db.psychologists)
-    .where('dossierNumber', dossierNumber)
-    .first();
-
-    if( ifExist ) {
-      const clean = await knex(db.psychologists)
+    try {
+      const ifExist = await knex(db.psychologists)
       .where('dossierNumber', dossierNumber)
-      .del();
-      console.log("cleaned");
+      .first();
 
-      return clean;
+      if( ifExist ) {
+        const clean = await knex(db.psychologists)
+        .where('dossierNumber', dossierNumber)
+        .del();
+        console.log("cleaned");
+
+        return clean;
+      }
+    } catch(err){
+      console.log(err);
     }
   }
 
