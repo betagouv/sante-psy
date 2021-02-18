@@ -12,6 +12,7 @@ module.exports.dashboard = async function dashboard(req, res) {
       patients: patients
     });
   } catch (err) {
+    req.flash('error', 'Impossible de charger les séances et les patients. Réessayez ultérieurement.')
     console.error('dashboard', err);
     res.render('dashboard', {
       appointments: [],
