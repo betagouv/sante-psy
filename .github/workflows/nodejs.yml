@@ -14,7 +14,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: docker-compose -f docker-compose-only-db.yml up
+    - run: docker-compose -f docker-compose-only-db.yml up -d
     - run: npm install
     - run: npm test
       env:
