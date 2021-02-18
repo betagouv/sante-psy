@@ -16,6 +16,7 @@ const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr';
 
 const app = express();
 const landingController = require('./controllers/landingController');
+const dashboardController = require('./controllers/dashboardController');
 const appointmentsController =
   require('./controllers/appointmentsController');
 const patientsController = require('./controllers/patientsController');
@@ -66,7 +67,7 @@ if (config.featurePsyList) {
 }
 
 if (config.featurePsyPages) {
-  app.get('/mes-seances', appointmentsController.myAppointments)
+  app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)
   app.get('/nouveau-patient', patientsController.newPatient)
@@ -74,11 +75,15 @@ if (config.featurePsyPages) {
 }
 
 app.get('/mentions-legales', (req, res) => {
-  res.render('legalNotice');
+  res.render('legalNotice', {
+    pageTitle: "Mentions Légales",
+  });
 })
 
 app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
-  res.render('données-personnelles-et-gestion-des-cookies')
+  res.render('données-personnelles-et-gestion-des-cookies', {
+    pageTitle: "Données personnelles",
+  })
 })
 
 module.exports = app.listen(config.port, () => {

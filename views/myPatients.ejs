@@ -1,0 +1,16 @@
+<div class="rf-col-lg-4 rf-col-xs-10 rf-mr-9w">
+  <h2>
+    Mes patients
+  </h2>
+  <div class="rf-my-5w rf-pb-2w">
+    <ul>
+    <% patients.forEach(function(patient) { %>
+      <li><%= patient.lastName %> <%= patient.firstNames %></li>
+    <% }) %>
+  </ul>
+  </div>
+  <div>
+    <a href="/nouveau-patient" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouveau patient</a>
+  </div>
+</div>
+
