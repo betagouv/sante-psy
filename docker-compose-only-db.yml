@@ -10,7 +10,7 @@ services:
       - "5432:5432"
   web:
     build: .
-    command: bash -c "sleep 3; npm install; npm run migrate; sleep 3; npm test;"
+    command: bash -c "sleep 3; npm run migrate; sleep 3; npm test;"
     env_file:
       - .env
     environment:
