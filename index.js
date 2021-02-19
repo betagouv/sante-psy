@@ -106,7 +106,7 @@ app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
   })
 })
 
-app.get('*', function(req, res){
+app.get('*', function redirect404(req, res){
   res.locals.errors = "Cette page n'existe pas.";
   res.redirect('/');
 });
