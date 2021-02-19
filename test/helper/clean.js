@@ -7,12 +7,12 @@ const demarchesSimplifiees = rewire('../../utils/demarchesSimplifiees');
 
 
 
-module.exports.testDossierNumber = function () {
+module.exports.testDossierNumber = function getTestDossierNumber() {
   const getUuidDossierNumber = demarchesSimplifiees.__get__('getUuidDossierNumber');
   return getUuidDossierNumber(1);
 }
 
-module.exports.psyList = function () {
+module.exports.psyList = function getPsyList() {
   return [
     {
       dossierNumber: module.exports.testDossierNumber(),
