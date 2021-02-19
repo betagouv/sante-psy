@@ -12,16 +12,14 @@
         ],
       })
       -%>
-          <div class="rf-grid-row rf-grid-row--left">
-            <div class="rf-col rf-col-xs-12 rf-mb-5w">
-                <h1>Déclarer mes séances</h1>
-                <div>
-                  Merci de participer au dispositif Santé Psy Etudiants!
-                </div>
-                <div>
-                  Afin que nous puissions vous rembourser les séances réalisées, nous vous proposons de nous les
-                  indiquer sur ce site.
-                </div>
+        <div class="rf-mb-5w">
+            <h1>Déclarer mes séances</h1>
+            <div>
+              Merci de participer au dispositif Santé Psy Etudiants!
+            </div>
+            <div>
+              Afin que nous puissions vous rembourser les séances réalisées, nous vous proposons de nous les
+              indiquer sur ce site.
             </div>
         </div>
         <% if (errors.length) { %>
@@ -38,7 +36,7 @@
             <%- include('myAppointments') -%>
             <%- include('myPatients') -%>
         </div>
-        <div class="rf-grid-row rf-grid-row--right rf-my-4w">
+        <div class="rf-my-4w">
             Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
         </div>
     </div>
