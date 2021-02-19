@@ -1,45 +1,43 @@
 <%- include('partials/header') -%>
 
-<div class="rf-container">
-    <div>
-      <%- include('partials/ariane',
+<div class="rf-container rf-mb-5w">
+  <%- include('partials/ariane',
+  {
+    items: [
       {
-        items: [
-          {
-            label: 'Déclarer mes séances',
-            url: '/mes-seances'
-          },
-        ],
-      })
-      -%>
-        <div class="rf-mb-5w">
-            <h1>Déclarer mes séances</h1>
-            <div>
-              Merci de participer au dispositif Santé Psy Etudiants!
-            </div>
-            <div>
-              Afin que nous puissions vous rembourser les séances réalisées, nous vous proposons de nous les
-              indiquer sur ce site.
-            </div>
-        </div>
-        <% if (errors.length) { %>
-            <% errors.forEach(function(error) { %>
-              <%- include('partials/notificationError', {error: error}) -%>
-            <% }) %>
-          <% } %>
-          <% if (infos.length) { %>
-            <% infos.forEach(function(info) { %>
-              <%- include('partials/notificationInfo', {info: info}) -%>
-            <% }) %>
-        <% } %>
-        <div class="rf-grid-row rf-grid-row--left rf-grid-row--gutter">
-            <%- include('myAppointments') -%>
-            <%- include('myPatients') -%>
-        </div>
-        <div class="rf-my-4w">
-            Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
-        </div>
+        label: 'Déclarer mes séances',
+        url: '/mes-seances'
+      },
+    ],
+  })
+  -%>
+  <h1>Déclarer mes séances</h1>
+  <div class="rf-mb-5w">
+    <div>
+      Merci de participer au dispositif Santé Psy Etudiants!
     </div>
+    <div>
+      Afin que nous puissions vous rembourser les séances réalisées, nous vous proposons de nous les
+      indiquer sur ce site.
+    </div>
+  </div>
+  <% if (errors.length) { %>
+    <% errors.forEach(function(error) { %>
+      <%- include('partials/notificationError', {error: error}) -%>
+    <% }) %>
+  <% } %>
+  <% if (infos.length) { %>
+    <% infos.forEach(function(info) { %>
+      <%- include('partials/notificationInfo', {info: info}) -%>
+    <% }) %>
+  <% } %>
+  <div class="rf-grid-row rf-grid-row--left rf-grid-row--gutter">
+    <%- include('myAppointments') -%>
+    <%- include('myPatients') -%>
+  </div>
+  <div class="rf-my-4w">
+    Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
+  </div>
 </div>
 
 <%- include('partials/footer') -%>
