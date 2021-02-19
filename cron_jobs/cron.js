@@ -3,12 +3,19 @@ const { importDataFromDSToPG } = require("./importDataFromDS")
 const config = require('../utils/config');
 
 const jobs = [ {
-  cronTime: "* * * * *", // https://crontab.guru/every-30-minutes - "*/30 * * * *"
-  onTick: importDataFromDSToPG,
+  cronTime: "*/5 * * * *", // https://crontab.guru/every-5-minutes
+  onTick: importDataFromDSToPG(false),
   start: true,
   timeZone: "Europe/Paris",
   isActive: config.featureImportData,
-  name: "Import data from DS API to PG",
+  name: "Import only the latest data from DS API to PG",
+},{
+  cronTime: "10 */2 * * *", // At minute 10 past every 2nd hour.
+  onTick: importDataFromDSToPG(true),
+  start: true,
+  timeZone: "Europe/Paris",
+  isActive: config.featureImportData,
+  name: "Import ALL data from DS API to PG",
 }
 ]
 

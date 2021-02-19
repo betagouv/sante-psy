@@ -30,12 +30,13 @@ async function getCursorFromDB() {
  * l'API DS nous retourne 100 éléments à chaque appel, et nous indique la page où l'on se trouve
  * en stockant la dernière page lue (cursor), on limite le nombre d'appel à l'API en ne lisant que
  * les pages necessaires
+ * @param updateEverything : boolean, if true do not use latest cursor 
  */
-async function getLatestCursorSaved(useSavedCursor = true) {
-  if(useSavedCursor) {
+async function getLatestCursorSaved(updateEverything = false) {
+  if( !updateEverything ) {
     return await getCursorFromDB();
   } else {
-    console.log(`Not using cursor saved inside PG due to parameter ${useSavedCursor}`);
+    console.log(`Not using cursor saved inside PG due to parameter ${updateEverything}`);
 
     return undefined;
   }
@@ -50,30 +51,32 @@ async function getNumberOfPsychologists() {
   .count('dossierNumber');
 }
 
+
 async function saveLatestCursorSaved(cursor) {
   try {
     const now = date.getDateNowPG();
 
     const alreadySavedCursor = await getCursorFromDB();
+    return await knex.transaction( function(trx) { // add transaction in case 2 cron jobs modify this cursor
+      if( alreadySavedCursor ) {
+        console.log(`Updating the cursor ${cursor} in PG`);
 
-    if( alreadySavedCursor ) {
-      console.log(`Updating the cursor ${cursor} in PG`);
+        return trx.into(db.ds_api_cursor)
+        .where("id", 1)
+        .update({
+          "cursor": cursor,
+          "updatedAt": now
+        });
+      } else { // no cursor already saved, we are going to create one entry
+        console.log(`Saving a new cursor ${cursor} to PG`);
 
-      return await knex(db.ds_api_cursor)
-      .where("id", 1)
-      .update({
-        "cursor": cursor,
-        "updatedAt": now
-      });
-    } else { // no cursor already saved, we are going to create one entry
-      console.log(`Saving a new cursor ${cursor} to PG`);
-
-      return await knex(db.ds_api_cursor).insert({
-        "id" : 1,
-        "cursor": cursor,
-        "updatedAt": now
-      });
-    }
+        return trx.into(db.ds_api_cursor).insert({
+          "id" : 1,
+          "cursor": cursor,
+          "updatedAt": now
+        });
+      }
+    });
   } catch (err) {
     console.error(`Impossible de sauvegarder le dernier cursor ${cursor} de l'api DS`, err)
     throw new Error(`Impossible de sauvegarder le dernier cursor de l'api DS`)
@@ -124,15 +127,13 @@ async function savePsychologistInPG(psyList) {
 }
 
 /**
- * @TODO Some data can be modified after been loaded inside PG
- * We need to re import them all from time to time
- * 
- * --> use a boolean to not use the cursor twice a day for example
+ * Some data can be modified after been loaded inside PG
+ * We need to re import them all from time to time using boolean @param updateEverything
  */
-module.exports.importDataFromDSToPG = async function importDataFromDSToPG (useSavedCursor = true) {
+module.exports.importDataFromDSToPG = async function importDataFromDSToPG (updateEverything = false) {
   try {
     console.log("Starting importDataFromDSToPG...");
-    const latestCursorInPG = await getLatestCursorSaved(useSavedCursor);
+    const latestCursorInPG = await getLatestCursorSaved(updateEverything);
 
     const dsAPIData = await demarchesSimplifiees.getPsychologistList(latestCursorInPG);
 
