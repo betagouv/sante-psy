@@ -4,3 +4,7 @@ module.exports.isValidDate = (isoDateString) => {
   }
   return !isNaN(new Date(Date.parse(isoDateString)))
 }
+
+module.exports.getDateNowPG = () => {
+  return new Date().toISOString();
+}

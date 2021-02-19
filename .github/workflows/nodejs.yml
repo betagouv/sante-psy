@@ -4,24 +4,21 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [12.x]
-
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - run: cp .env.sample .env
     - run: npm install
-    - run: npm test
+    - run: docker-compose -f docker-compose-for-ci-github.yml up --abort-on-container-exit;
       env:
-        SECRET: "verysecret"
-        FEATURE_PSY_PAGES: "true"
+        NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
     - run: npm run lint
       env:
         CI: true

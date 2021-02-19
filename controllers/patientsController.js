@@ -1,4 +1,4 @@
-const db = require('../utils/db')
+const dbPatient = require('../db/patients')
 
 module.exports.newPatient = async (req, res) => {
   res.render('newPatient', { pageTitle: 'Nouveau patient' })
@@ -22,7 +22,7 @@ module.exports.createNewPatient = async (req, res) => {
   const studentNumber = req.body['studentnumber']
 
   try {
-    await db.insertPatient(firstNames, lastName, studentNumber)
+    await dbPatient.insertPatient(firstNames, lastName, studentNumber)
     req.flash('info', `Le patient ${firstNames} ${lastName} a bien été créé.`)
     return res.redirect('/mes-seances')
   } catch (err) {

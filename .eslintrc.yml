@@ -16,7 +16,7 @@ rules:
   no-trailing-spaces: ["error", { "ignoreComments": true }]
   max-len: ["error", { "code": 120 }]
   no-underscore-dangle: "off"
-  no-unused-vars: "off"
+  no-unused-vars: "warn"
   no-inner-declarations: "off"
   no-console: "off"
   camelcase: "warn"

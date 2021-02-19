@@ -1,14 +1,14 @@
 /* eslint-disable func-names */
 const app = require('../index')
 const chai = require('chai')
-const db = require('../utils/db')
+const dbAppointments = require('../db/appointments')
 const sinon = require('sinon')
 
 describe('appointmentsController', function() {
   let insertAppointmentStub
 
   beforeEach(function(done) {
-    insertAppointmentStub = sinon.stub(db, 'insertAppointment')
+    insertAppointmentStub = sinon.stub(dbAppointments, 'insertAppointment')
       .returns(Promise.resolve())
     done()
   })

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
+    "devKnex": "DEBUG=knex:query nodemon index.js",
     "lint": "eslint . --fix",
     "listMigrations": "knex migrate:list",
     "migrate": "knex migrate:latest",
@@ -13,16 +14,9 @@
     "rollback": "knex migrate:rollback",
     "rollback-one": "knex migrate:down",
     "start": "node index.js",
-    "test": "mocha",
-    "postinstall": "husky install",
+    "test": "mocha --exit",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "npm test"
-    }
   },
   "repository": {
     "type": "git",
@@ -38,6 +32,7 @@
     "@gouvfr/all": "^0.4.0",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
+    "cron": "^1.8.2",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
@@ -47,7 +42,8 @@
     "intl": "^1.2.5",
     "knex": "^0.21.17",
     "lodash": "^4.17.20",
-    "pg": "^8.5.1"
+    "pg": "^8.5.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "chai": "^4.3.0",
