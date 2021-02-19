@@ -50,7 +50,7 @@ API de demarches simplifiées :
 
 Pour mettre à jour toutes les données venant de DS vers PG, un cron est lancé à interval régulier (voir la page containers de Scalingo) :
 ```
-node cron_jobs/cron.js
+node ./cron_jobs/cron.js
 ```
 
 ### Test
@@ -73,7 +73,7 @@ npm test -- --grep "should call batchInsert on PG"
 ```bash
 docker-compose up -d
 docker ps # get container name
-docker exec -ti sante-psy_web_1 bash -c "node cron_jobs/cron.js"
+docker exec -ti sante-psy_web_1 bash -c "node ./cron_jobs/cron.js"
 > 🚀 The job "Import data from DS API to PG" is ON * * * * *
 Started 1 cron jobs
 (...)
