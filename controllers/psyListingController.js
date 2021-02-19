@@ -9,7 +9,7 @@ module.exports.getPsychologist  = async function getPsychologist(req, res) {
       errors: req.flash('error')
     });
   } catch (err) {
-    req.flash('error', 'Impossible de récupérer les psychologistes. Réessayez ultérieurement.')
+    req.flash('error', 'Impossible de récupérer les psychologues. Réessayez ultérieurement.')
     console.error('getPsychologist', err);
     res.render('psyListing', {
       psyList: [],
