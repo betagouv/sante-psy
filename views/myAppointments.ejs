@@ -6,11 +6,15 @@
     <a href="/nouvelle-seance" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouvelle séance</a>
   </div>
   <div>
-    <ul class="rf-list">
-      <% appointments.forEach(function(appointment) { %>
-        <li><%= format.formatFrenchDate(appointment.appointmentDate) %> avec <%= appointment.firstNames %> <%= appointment.lastName %></li>
-      <% }) %>
-    </ul>
+    <% if (appointments.length) { %>
+      <ul class="rf-list">
+        <% appointments.forEach(function(appointment) { %>
+          <li><%= format.formatFrenchDate(appointment.appointmentDate) %> avec <%= appointment.firstNames %> <%= appointment.lastName %></li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      Vous n'avez pas encore déclaré de séances.
+    <% } %>
   </div>
 </div>
 

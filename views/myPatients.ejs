@@ -6,11 +6,15 @@
     <a href="/nouveau-patient" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouveau patient</a>
   </div>
   <div>
-    <ul class="rf-list">
-    <% patients.forEach(function(patient) { %>
-      <li><%= patient.lastName %> <%= patient.firstNames %></li>
-    <% }) %>
-  </ul>
+    <% if (patients.length) { %>
+      <ul class="rf-list">
+        <% patients.forEach(function(patient) { %>
+          <li><%= patient.lastName %> <%= patient.firstNames %></li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      Vous n'avez pas encore déclaré de patients.
+    <% } %>
   </div>
 </div>
 
