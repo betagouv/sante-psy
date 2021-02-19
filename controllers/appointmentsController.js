@@ -1,9 +1,10 @@
 const dateUtils = require('../utils/date')
-const db = require('../utils/db')
+const dbAppointments = require('../db/appointments')
+const dbPatient = require('../db/patients')
 const format = require('../utils/format')
 
 module.exports.newAppointment = async (req, res) => {
-  const patients = await db.getPatients()
+  const patients = await dbPatient.getPatients()
   res.render('newAppointment', {patients: patients, pageTitle: "Nouvelle séance"})
 }
 
@@ -25,7 +26,7 @@ module.exports.createNewAppointment = async (req, res) => {
 
   const date = new Date(Date.parse(isoDateString))
   try {
-    await db.insertAppointment(date, patientId)
+    await dbAppointments.insertAppointment(date, patientId)
     req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créé.`)
     return res.redirect('/mes-seances')
   } catch (err) {
@@ -41,7 +42,7 @@ module.exports.deleteAppointment = async (req, res) => {
   const appointmentId = req.body['appointmentId']
 
   try {
-    await db.deleteAppointment(appointmentId)
+    await dbAppointments.deleteAppointment(appointmentId)
     req.flash('info', `La séance a bien été supprimée.`)
   } catch (err) {
     req.flash('error', 'Erreur. La séance n\'est pas supprimée. Pourriez-vous réessayer ?')
