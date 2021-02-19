@@ -3,7 +3,7 @@
 ## Lancer en prod
 Ce repo contient tout ce qu'il faut pour tourner sur Scalingo. Il suffit de déployer la branche main sur votre instance Scalingo.
 
-Le deploiement sur scalingo se base sur le fichier `Procfile`
+Le deploiement sur scalingo se base sur le fichier [`Procfile`](https://doc.scalingo.com/platform/app/procfile)
 ```
 npm start
 ```
