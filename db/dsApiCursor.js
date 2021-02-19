@@ -44,6 +44,7 @@ module.exports.saveLatestCursor = async function saveLatestCursor(cursor) {
     const now = date.getDateNowPG();
 
     const alreadySavedCursor = await this.getCursorFromDB();
+    // eslint-disable-next-line func-names
     return await knex.transaction( function(trx) { // add transaction in case 2 cron jobs modify this cursor
       if( alreadySavedCursor ) {
         console.log(`Updating the cursor ${cursor} in PG`);

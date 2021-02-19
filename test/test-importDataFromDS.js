@@ -1,5 +1,4 @@
 require('dotenv').config();
-const rewire = require('rewire');
 
 
 describe('Import Data from DS to PG', () => {

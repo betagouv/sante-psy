@@ -1,6 +1,5 @@
 const assert = require('chai').assert;
 require('dotenv').config();
-const rewire = require('rewire');
 const dbDsApiCursor = require('../db/dsApiCursor')
 const clean = require('./helper/clean');
 
