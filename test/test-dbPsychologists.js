@@ -4,7 +4,6 @@ const rewire = require('rewire');
 const dbPsychologists = require('../db/psychologists')
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
-const demarchesSimplifiees = rewire('../utils/demarchesSimplifiees.js');
 const clean = require('./helper/clean');
 
 describe('DB Psychologists', () => {
