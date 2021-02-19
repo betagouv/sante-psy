@@ -3,13 +3,14 @@ require('dotenv').config();
 const date = require('../utils/date');
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
-const db = require("../utils/db")
+const dbDsApiCursor = require("../db/dsApiCursor")
+const dbPsychologists = require("../db/psychologists")
 
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 
 async function getCursorFromDB() {
   try {
-    const lastCursor =  await knex(db.dsApiCursor)
+    const lastCursor =  await knex(dbDsApiCursor.dsApiCursorTable)
     .where("id", 1)
     .first();
 
@@ -47,7 +48,7 @@ async function getLatestCursorSaved(updateEverything = false) {
  * 
  */
 async function getNumberOfPsychologists() {
-  return await knex(db.psychologists)
+  return await knex(dbPsychologists.psychologistsTable)
   .count('dossierNumber');
 }
 
@@ -61,7 +62,7 @@ async function saveLatestCursorSaved(cursor) {
       if( alreadySavedCursor ) {
         console.log(`Updating the cursor ${cursor} in PG`);
 
-        return trx.into(db.dsApiCursor)
+        return trx.into(dbDsApiCursor.dsApiCursorTable)
         .where("id", 1)
         .update({
           "cursor": cursor,
@@ -70,7 +71,7 @@ async function saveLatestCursorSaved(cursor) {
       } else { // no cursor already saved, we are going to create one entry
         console.log(`Saving a new cursor ${cursor} to PG`);
 
-        return trx.into(db.dsApiCursor).insert({
+        return trx.into(dbDsApiCursor.dsApiCursorTable).insert({
           "id" : 1,
           "cursor": cursor,
           "updatedAt": now
@@ -94,7 +95,7 @@ async function savePsychologistInPG(psyList) {
   const upsertArray = psyList.map( psy => {
     const upsertingKey = 'dossierNumber';
 
-    return knex(db.psychologists)
+    return knex(dbPsychologists.psychologistsTable)
     .insert(psy)
     .onConflict(upsertingKey)
     .merge({ // update every field and add updatedAt

@@ -1,7 +1,8 @@
 const assert = require('chai').assert;
 require('dotenv').config();
 const rewire = require('rewire');
-const db = require("../utils/db");
+const dbPsychologists = require('../db/psychologists')
+const dbDsApiCursor = require('../db/dsApiCursor')
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
 const importDataFromDS = rewire('../cron_jobs/importDataFromDS.js');
@@ -16,12 +17,12 @@ describe('Import Data from DS to PG', () => {
 
   async function cleanDataCursor() {
     try {
-      const ifExist = await knex(db.dsApiCursor)
+      const ifExist = await knex(dbDsApiCursor.dsApiCursorTable)
         .where('id', 1)
         .first();
 
       if (ifExist) {
-        await knex(db.dsApiCursor)
+        await knex(dbDsApiCursor.dsApiCursorTable)
           .where('id', 1)
           .del();
       } else {
@@ -34,12 +35,12 @@ describe('Import Data from DS to PG', () => {
 
   async function cleanDataPsychologist() {
     try {
-      const ifExist = await knex(db.psychologists)
+      const ifExist = await knex(dbPsychologists.psychologistsTable)
         .where('dossierNumber', dossierNumber)
         .first();
 
       if (ifExist) {
-        const clean = await knex(db.psychologists)
+        const clean = await knex(dbPsychologists.psychologistsTable)
           .where('dossierNumber', dossierNumber)
           .del();
         console.log("cleaned");
@@ -52,7 +53,7 @@ describe('Import Data from DS to PG', () => {
   }
 
   async function testDataPsychologistsExist() {
-    const exist = await knex(db.psychologists)
+    const exist = await knex(dbPsychologists.psychologistsTable)
       .where('dossierNumber', dossierNumber)
       .first();
 
