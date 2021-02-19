@@ -45,3 +45,11 @@
 .midlength-input {
   max-width: 25rem;
 }
+
+.appointment-list {
+  list-style-type: none;
+  padding-inline-start: 0px;
+}
+.appointment-list li{
+  margin-bottom: 1.5rem; /* rf-mb-3w */
+}
