@@ -1,16 +1,16 @@
-<div class="rf-col-lg-4 rf-col-xs-10 rf-mr-9w">
-  <h2>
+<div class="rf-col-lg-6 rf-col-xs-12 rf-pr-3w rf-pb-5w">
+  <h2 class="rf-mb-4w">
     Mes séances
   </h2>
-  <div class="rf-my-5w rf-pb-2w">
-    <ul>
+  <div class="rf-mb-2w">
+    <a href="/nouvelle-seance" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouvelle séance</a>
+  </div>
+  <div>
+    <ul class="rf-list">
       <% appointments.forEach(function(appointment) { %>
         <li><%= format.formatFrenchDate(appointment.appointmentDate) %> avec <%= appointment.firstNames %> <%= appointment.lastName %></li>
       <% }) %>
     </ul>
-  </div>
-  <div>
-    <a href="/nouvelle-seance" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouvelle séance</a>
   </div>
 </div>
 
