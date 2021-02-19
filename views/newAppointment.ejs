@@ -52,10 +52,10 @@
 
         <div class="rf-select-group">
           <label class="rf-label" for="patients" aria-describedby="patients-help">Patient</label>
-          <p class="rf-hint-text" id="patients-help">
+          <div class="rf-hint-text" id="patients-help">
             Votre patient n'est pas dans la liste ?
             <a href="/nouveau-patient">Ajoutez un nouveau patient</a>
-          </p>
+          </div>
           <select class="rf-select" id="patients" name="patientId" required>
               <option value="" selected disabled hidden>- Select -</option>
               <% patients.forEach(function(patient) { %>
