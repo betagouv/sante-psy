@@ -35,6 +35,29 @@
           response: 'Chaque séance chez le ou la psychologue est remboursée. Seule la consultation chez votre médecin est payante.'
         })
         -%>
+
+        <%- include('partials/faq-item',
+        {
+          id: 'e2',
+          question: 'Je suis déjà suivi·e par un·e psy, puis-je bénéficier du dispositif ?',
+          response: 'Vous pouvez bénéficier du dispositif en passant au préalable par un médecin qui pourra initier la prise en charge par Santé Psy Étudiant.'
+        })
+        -%>
+
+        <%- include('partials/faq-item',
+        {
+          id: 'e3',
+          question: 'Pourquoi voir un·e psy ?',
+          response: 'Un·e psychologue peut vous aider à soulager une souffrance psychique :<ul><li>mal-être</li><li>idées noires</li><li>troubles compulsifs alimentaires (TCA)</li><li>troubles obsessionnels compulsif (TOC)</li><li>dépression</li><li>anxiété</li><li>insomnies</li><li>…</li></ul>'})
+        -%>
+
+        <%- include('partials/faq-item',
+        {
+          id: 'e4',
+          question: 'Comment trouver un·e médecin ?',
+          response: 'Vous pouvez vous renseigner auprès de votre établissement pour obtenir les coordonnées de votre Service de Santé Universitaire (SSU). Si vous n’avez pas accès à un SSU, vous pouvez vous rendre chez un médecin généraliste.'})
+        -%>
+
       </ul>
 
       <h1 id="psy">Je suis psychologue</h1>
@@ -55,6 +78,15 @@
           response: 'Les séances vous seront remboursées à hauteur de 30 euros.'
         })
         -%>
+
+        <%- include('partials/faq-item',
+        {
+          id: 'p2',
+          question: 'Les étudiant·es peuvent-ils directement venir me voir ?',
+          response: 'Les étudiants doivent consulter un médecin du service santé universitaire ou un médecin généraliste afin d’être orienté vers la démarche.'
+        })
+        -%>
+
       </ul>
 
     </div>
