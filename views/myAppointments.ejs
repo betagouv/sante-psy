@@ -9,7 +9,24 @@
     <% if (appointments.length) { %>
       <ul class="rf-list">
         <% appointments.forEach(function(appointment) { %>
-          <li><%= format.formatFrenchDate(appointment.appointmentDate) %> avec <%= appointment.firstNames %> <%= appointment.lastName %></li>
+          <li>
+            <div>
+              <div>
+                <%= format.formatFrenchDate(appointment.appointmentDate) %>
+              </div>
+              <div>
+                avec <%= appointment.firstNames %> <%= appointment.lastName %>
+              </div>
+              <div>
+                <form action="/supprimer-seance" method="POST">
+                  <input hidden name="appointmentId" value="<%= appointment.id %>" />
+                  <button type="submit" class="rf-btn rf-btn--secondary rf-fi-close-line rf-btn--icon-left">
+                    Supprimer
+                  </button>
+                </form>
+            </div>
+            </div>
+          </li>
         <% }) %>
       </ul>
     <% } else { %>

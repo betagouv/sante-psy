@@ -34,3 +34,10 @@ module.exports.createNewAppointment = async (req, res) => {
     return res.redirect('/nouvelle-seance')
   }
 }
+
+// todo this should be a DELETE, no ?
+module.exports.deleteAppointment = async (req, res) => {
+  // todo think about validation
+  const appointmentId = req.body['appointmentId']
+  console.log(appointmentId)
+}
