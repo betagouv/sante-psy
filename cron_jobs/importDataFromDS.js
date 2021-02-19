@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const dbDsApiCursor = require("../db/dsApiCursor")
+const dbsApiCursor = require("../db/dsApiCursor")
 const dbPsychologists = require("../db/psychologists")
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 
@@ -11,15 +11,15 @@ const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 module.exports.importDataFromDSToPG = async function importDataFromDSToPG (updateEverything = false) {
   try {
     console.log("Starting importDataFromDSToPG...");
-    const latestCursorInPG = await dbDsApiCursor.getLatestCursorSaved(updateEverything);
+    const latestCursorInPG = await dbsApiCursor.getLatestCursorSaved(updateEverything);
 
     const dsAPIData = await demarchesSimplifiees.getPsychologistList(latestCursorInPG);
 
     if(dsAPIData.psychologists.length > 0) {
       await dbPsychologists.savePsychologistInPG(dsAPIData.psychologists);
-      await dbDsApiCursor.saveLatestCursor(dsAPIData.lastCursor);
+      await dbsApiCursor.saveLatestCursor(dsAPIData.lastCursor);
 
-      const numberOfPsychologists = dbPsychologists.getNumberOfPsychologists();
+      const numberOfPsychologists = await dbPsychologists.getNumberOfPsychologists();
       console.log(`importDataFromDSToPG done: ${JSON.stringify(numberOfPsychologists)} psychologists inside PG`);
     } else {
       console.warn("No psychologists to save");
