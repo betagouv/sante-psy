@@ -17,6 +17,6 @@ module.exports = {
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
-  namespaceUuid: process.env.NAMESPACE_UUID, // used to generate uuid 
+  namespaceUuid: process.env.UUID_NAMESPACE, // used to generate uuid 
   secret: process.env.SECRET,
 };
