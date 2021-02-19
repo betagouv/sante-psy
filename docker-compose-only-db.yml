@@ -14,7 +14,6 @@ services:
     env_file:
       - .env
     environment:
-      NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
       DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
     ports:
       - "8080:8080"

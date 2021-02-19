@@ -62,8 +62,6 @@ app.use(function populate(req, res, next){
 })
 app.locals.format = format
 
-
-
 // prevent abuse
 const rateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minute window

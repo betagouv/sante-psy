@@ -1,16 +1,20 @@
-<div class="rf-col-lg-4 rf-col-xs-10 rf-mr-9w">
-  <h2>
+<div class="rf-col-lg-6 rf-col-xs-12 rf-pb-5w">
+  <h2 class="rf-mb-4w">
     Mes patients
   </h2>
-  <div class="rf-my-5w rf-pb-2w">
-    <ul>
-    <% patients.forEach(function(patient) { %>
-      <li><%= patient.lastName %> <%= patient.firstNames %></li>
-    <% }) %>
-  </ul>
+  <div class="rf-mb-2w">
+    <a href="/nouveau-patient" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouveau patient</a>
   </div>
   <div>
-    <a href="/nouveau-patient" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouveau patient</a>
+    <% if (patients.length) { %>
+      <ul class="rf-list">
+        <% patients.forEach(function(patient) { %>
+          <li><%= patient.lastName %> <%= patient.firstNames %></li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      Vous n'avez pas encore déclaré de patients.
+    <% } %>
   </div>
 </div>
 

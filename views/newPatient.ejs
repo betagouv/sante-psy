@@ -7,9 +7,30 @@
 <script src="/static/js/datepicker-fr.js"></script>
 
 <div class="rf-container rf-mb-5w">
+  <%- include('partials/ariane',
+  {
+    items: [
+        {
+          label: 'Déclarer mes séances',
+          url: '/mes-seances'
+        },
+        {
+          label: 'Nouveau patient',
+        },
+    ],
+  })
+  -%>
   <h1>
     Nouveau patient
   </h1>
+  <div class="rf-mb-5w">
+    <div>
+      Déclarez un.e étudiant.e comme étant patient.e du dispositif Santé Psy Etudiants.
+    </div>
+    <div>
+      Vous pourrez ensuite déclarer les séances réalisées avec ce.tte patient.e.
+    </div>
+  </div>
   <% if (errors.length) { %>
     <% errors.forEach(function(error) { %>
       <%- include('partials/notificationError', {error: error}) -%>

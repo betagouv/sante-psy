@@ -8,11 +8,6 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
-    services:
-      # Label used to access the service container
-      redis:
-        # Docker Hub image
-        image: redis    
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -24,8 +19,6 @@ jobs:
     - run: docker-compose -f docker-compose-for-ci-github.yml up --abort-on-container-exit;
       env:
         NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
-        SECRET: "verysecret"
-        FEATURE_PSY_PAGES: "true"
     - run: npm run lint
       env:
         CI: true

@@ -34,7 +34,7 @@ async function getAllPsychologistList(cursor, accumulator = []) {
  * cursor : String - next page to query the API
  */
 async function getPsychologistList(cursor) {
-  const time = `displaying all psychologists from DS (query id #${Math.random().toString()})`;
+  const time = `Fetching all psychologists from DS (query id #${Math.random().toString()})`;
 
   console.time(time);
   const psychologists = await getAllPsychologistList(cursor);
