@@ -8,7 +8,6 @@ Le deploiement sur scalingo se base sur le fichier [`Procfile`](https://doc.scal
 npm start
 ```
 
-
 ## Lancer ce site localement
 Vous devez avoir npm et docker compose installés sur votre machine.
 

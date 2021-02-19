@@ -9,7 +9,7 @@ const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 
 async function getCursorFromDB() {
   try {
-    const lastCursor =  await knex(db.ds_api_cursor)
+    const lastCursor =  await knex(db.dsApiCursor)
     .where("id", 1)
     .first();
 
@@ -61,7 +61,7 @@ async function saveLatestCursorSaved(cursor) {
       if( alreadySavedCursor ) {
         console.log(`Updating the cursor ${cursor} in PG`);
 
-        return trx.into(db.ds_api_cursor)
+        return trx.into(db.dsApiCursor)
         .where("id", 1)
         .update({
           "cursor": cursor,
@@ -70,7 +70,7 @@ async function saveLatestCursorSaved(cursor) {
       } else { // no cursor already saved, we are going to create one entry
         console.log(`Saving a new cursor ${cursor} to PG`);
 
-        return trx.into(db.ds_api_cursor).insert({
+        return trx.into(db.dsApiCursor).insert({
           "id" : 1,
           "cursor": cursor,
           "updatedAt": now
@@ -85,9 +85,6 @@ async function saveLatestCursorSaved(cursor) {
 
 /**
  * Perform a UPSERT with https://knexjs.org/#Builder-merge
- * It's primarily designed to be used when you have thousands of rows to insert/update   into a table.
- * Modifies an insert query, to turn it into an 'upsert' operation. Uses ON DUPLICATE KEY UPDATE in MySQL,
- * and adds an ON CONFLICT (columns) DO UPDATE clause to the insert statement in PostgreSQL and SQLite.
  * @param {*} psy 
  */
 async function savePsychologistInPG(psyList) {

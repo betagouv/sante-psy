@@ -4,8 +4,7 @@ const knex = require("knex")(knexConfig)
 module.exports.psychologists = "psychologists";
 module.exports.universities = "universities";
 module.exports.appointments =  "appointments";
-// eslint-disable-next-line camelcase
-module.exports.ds_api_cursor = "ds_api_cursor";
+module.exports.dsApiCursor = "ds_api_cursor";
 module.exports.patients = "patients";
 
 module.exports.getAppointments = async () => {

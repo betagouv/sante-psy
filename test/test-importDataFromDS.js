@@ -16,12 +16,12 @@ describe('Import Data from DS to PG', () => {
 
   async function cleanDataCursor() {
     try {
-      const ifExist = await knex(db.ds_api_cursor)
+      const ifExist = await knex(db.dsApiCursor)
         .where('id', 1)
         .first();
 
       if (ifExist) {
-        await knex(db.ds_api_cursor)
+        await knex(db.dsApiCursor)
           .where('id', 1)
           .del();
       } else {
