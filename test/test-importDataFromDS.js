@@ -11,7 +11,7 @@ describe('Import Data from DS to PG', () => {
     // eslint-disable-next-line max-len
     const cursor = '{"id":1,"cursor":"test","createdAt":"2021-02-19T13:16:45.382Z","updatedAt":"2021-02-19T13:16:45.380Z"}';
     const dsApiData = {
-      psychologists: clean.psyList,
+      psychologists: clean.psyList(),
       cursor: "test"
     }
     let getLatestCursorSavedStub = sinon.stub(dbDsApiCursor, 'getLatestCursorSaved')
