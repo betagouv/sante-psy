@@ -40,4 +40,11 @@ module.exports.deleteAppointment = async (req, res) => {
   // todo think about validation
   const appointmentId = req.body['appointmentId']
   console.log(appointmentId)
+  await db.deleteAppointment(appointmentId)
+
+  // todo deal with errors
+  // todo display success
+
+  // reload page
+  res.redirect('/mes-seances')
 }

@@ -25,6 +25,17 @@ module.exports.insertAppointment = async (appointmentDate, patientId) => {
   }
 }
 
+module.exports.deleteAppointment = async (appointmentId) => {
+  try {
+    return await knex("appointments")
+      .where("id", appointmentId)
+      .del()
+  } catch (err) {
+    console.error("Erreur de suppression du appointments", err)
+    throw new Error("Erreur de suppression du appointments")
+  }
+}
+
 module.exports.getPatients = async () => {
   try {
     const patientArray = await knex("patients").select()
