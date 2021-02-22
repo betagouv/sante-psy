@@ -87,6 +87,11 @@ app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
   })
 })
 
+app.get('*', function redirect404(req, res){
+  req.flash('error', "Cette page n'existe pas.")
+  res.redirect('/');
+});
+
 module.exports = app.listen(config.port, () => {
   console.log(`${appName} listening at http://localhost:${config.port}`);
 })
