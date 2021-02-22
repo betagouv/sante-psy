@@ -4,6 +4,8 @@ const dbPatient = require('./patients')
 
 module.exports.appointmentsTable =  "appointments";
 
+// todo: bug : if appointment has a patientId that does not match a patient object in the db,
+// this function returns empty.
 module.exports.getAppointments = async () => {
   try {
     const appointmentArray = await knex.from(dbPatient.patientTable)
@@ -18,10 +20,11 @@ module.exports.getAppointments = async () => {
 
 module.exports.insertAppointment = async (appointmentDate, patientId) => {
   try {
-    return await knex(module.exports.appointmentsTable).insert({
+    const insertedArray = await knex(module.exports.appointmentsTable).insert({
       appointmentDate,
       patientId: patientId,
     }).returning("*")
+    return insertedArray[0]
   } catch (err) {
     console.error("Erreur de sauvegarde du appointments", err)
     throw new Error("Erreur de sauvegarde du appointments")

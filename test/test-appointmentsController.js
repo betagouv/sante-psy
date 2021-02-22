@@ -1,8 +1,11 @@
 /* eslint-disable func-names */
 const app = require('../index')
 const chai = require('chai')
+const clean = require('./helper/clean')
 const dbAppointments = require('../db/appointments')
+const dbPatients = require('../db/patients')
 const sinon = require('sinon')
+const { expect } = require('chai')
 
 describe('appointmentsController', function() {
   describe('create appointment', function() {
@@ -72,32 +75,39 @@ describe('appointmentsController', function() {
   })
 
   describe('delete appointment', function() {
-    let deleteAppointmentStub
-
-    beforeEach(function(done) {
-      deleteAppointmentStub = sinon.stub(dbAppointments, 'deleteAppointment')
-        .returns(Promise.resolve())
+    beforeEach(async function(done) {
       done()
     })
 
-    afterEach(function(done) {
-      deleteAppointmentStub.restore()
-      done()
+    afterEach(async function() {
+      await clean.cleanAllPatients()
+      await clean.cleanAllAppointments()
+      return Promise.resolve()
     })
 
-    it('should delete appointment', function(done) {
-      chai.request(app)
-      .post('/supprimer-seance')
-      .redirects(0) // block redirects, we don't want to test them
-      .type('form')
-      .send({
-        'appointmentId': 1,
-      })
-      .end((err, res) => {
-        res.should.redirectTo('/mes-seances')
-        sinon.assert.called(deleteAppointmentStub)
-        done()
-      })
+    it('should delete appointment', async function() {
+      // Insert an appointment and a patient
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901')
+      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id)
+      // Check appointment is inserted
+      const appointmentArray = await dbAppointments.getAppointments()
+      expect(appointmentArray).to.have.length(1)
+
+      return chai.request(app)
+        .post('/supprimer-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'appointmentId': appointment.id,
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
+          const appointmentArray = await dbAppointments.getAppointments()
+          expect(appointmentArray).to.have.length(0)
+
+          return Promise.resolve()
+        })
     })
   })
 })
