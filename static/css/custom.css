@@ -5,6 +5,10 @@
   text-align: right;
 }
 
+.rf-grid-row--space-between {
+  justify-content: space-between;
+}
+
 .rf-bg--alt, .rf-bg--alt h2 {
   background-color: var(--bf500);
   color: var(--g100);
@@ -44,4 +48,12 @@
 }
 .midlength-input {
   max-width: 25rem;
+}
+
+.appointment-list {
+  list-style-type: none;
+  padding-inline-start: 0px;
+}
+.appointment-list li{
+  margin-bottom: 1.5rem; /* rf-mb-3w */
 }
