@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const bodyParser = require('body-parser');
 const express = require('express');
+const expressSanitizer = require('express-sanitizer');
 const path = require('path');
 const flash = require('connect-flash');
 const session = require('express-session');
@@ -17,10 +18,11 @@ const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr';
 const app = express();
 const landingController = require('./controllers/landingController');
 const dashboardController = require('./controllers/dashboardController');
-const appointmentsController =
-  require('./controllers/appointmentsController');
+const appointmentsController = require('./controllers/appointmentsController');
 const patientsController = require('./controllers/patientsController');
 const psyListingController = require('./controllers/psyListingController');
+const loginController = require('./controllers/loginController');
+const logoutController = require('./controllers/logoutController');
 
 // Desactivate debug log for production as they are a bit too verbose
 if( !config.activateDebug ) {
@@ -46,6 +48,9 @@ app.use(session({
 
 app.use(flash());
 
+// Mount express-sanitizer middleware here
+app.use(expressSanitizer());
+
 // Populate some variables for all views
 app.use(function populate(req, res, next){
   res.locals.appName = appName;
@@ -67,6 +72,10 @@ if (config.featurePsyList) {
 }
 
 if (config.featurePsyPages) {
+  app.get('/login', loginController.getLogin);
+  app.post('/login', loginController.postLogin);
+  app.get('/logout', logoutController.getLogout);
+
   app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)

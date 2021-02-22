@@ -8,6 +8,7 @@ module.exports = {
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
   host: process.env.HOSTNAME,
   port: process.env.PORT || 8080,
+  contactEmail: process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr',
   apiToken: process.env.API_TOKEN,
   apiUrl: process.env.API_URL ||
     'https://www.demarches-simplifiees.fr/api/v2/graphql',
