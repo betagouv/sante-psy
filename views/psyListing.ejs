@@ -34,6 +34,13 @@
         </div>
     </div>
 </div>
+<!-- Import data as recommended by OWASP :
+    https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html#html-entity-encoding
+-->
+<div id="psy-list" style="display: none;">
+    <!-- First HTML-escape the json -->
+    <%= JSON.stringify(psyList) %>
+</div>
 <script>
     var setupFilter = function(fieldName) {
         var filterEl = document.getElementById(fieldName + "-filter-value");
@@ -46,7 +53,9 @@
     setupFilter("address");
     setupFilter("lastName");
 
-    const psyList = <%- JSON.stringify(psyList) %>;
+    var psyListElement = document.getElementById("psy-list");
+    var psyList = JSON.parse(psyListElement.textContent);
+
     var table = new Tabulator("#psy-table", {
         data: psyList, //assign data to table
         langs:{ // http://tabulator.info/docs/4.2/localize#setup
