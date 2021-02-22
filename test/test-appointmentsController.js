@@ -5,67 +5,99 @@ const dbAppointments = require('../db/appointments')
 const sinon = require('sinon')
 
 describe('appointmentsController', function() {
-  let insertAppointmentStub
+  describe('create appointment', function() {
+    let insertAppointmentStub
 
-  beforeEach(function(done) {
-    insertAppointmentStub = sinon.stub(dbAppointments, 'insertAppointment')
-      .returns(Promise.resolve())
-    done()
+    beforeEach(function(done) {
+      insertAppointmentStub = sinon.stub(dbAppointments, 'insertAppointment')
+        .returns(Promise.resolve())
+      done()
+    })
+
+    afterEach(function(done) {
+      insertAppointmentStub.restore()
+      done()
+    })
+
+    it('should create appointment', function(done) {
+      chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': 1,
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .end((err, res) => {
+          res.should.redirectTo('/mes-seances')
+          sinon.assert.called(insertAppointmentStub)
+          done()
+        })
+    })
+
+    it('should refuse invalid date', function(done) {
+      chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': 1,
+          date: '09/02/2021',
+          'iso-date': '2021-02-09kk',
+        })
+        .end((err, res) => {
+          res.should.redirectTo('/nouvelle-seance')
+          sinon.assert.notCalled(insertAppointmentStub)
+          done()
+        })
+    })
+
+    it('should ignore the date input and use the iso-date', function(done) {
+      chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': 1,
+          date: '12/02/2021 kfjhksdhf',
+          'iso-date': '2021-02-09',
+        })
+        .end((err, res) => {
+          res.should.redirectTo('/mes-seances')
+          sinon.assert.called(insertAppointmentStub)
+          done()
+        })
+    })
   })
 
-  afterEach(function(done) {
-    insertAppointmentStub.restore()
-    done()
-  })
+  describe('delete appointment', function() {
+    let deleteAppointmentStub
 
-  it('should create appointment', function(done) {
-    chai.request(app)
-      .post('/creer-nouvelle-seance')
+    beforeEach(function(done) {
+      deleteAppointmentStub = sinon.stub(dbAppointments, 'deleteAppointment')
+        .returns(Promise.resolve())
+      done()
+    })
+
+    afterEach(function(done) {
+      deleteAppointmentStub.restore()
+      done()
+    })
+
+    it('should delete appointment', function(done) {
+      chai.request(app)
+      .post('/supprimer-seance')
       .redirects(0) // block redirects, we don't want to test them
       .type('form')
       .send({
-        'patientId': 1,
-        date: '09/02/2021',
-        'iso-date': '2021-02-09',
+        'appointmentId': 1,
       })
       .end((err, res) => {
         res.should.redirectTo('/mes-seances')
-        sinon.assert.called(insertAppointmentStub)
+        sinon.assert.called(deleteAppointmentStub)
         done()
       })
-  })
-
-  it('should refuse invalid date', function(done) {
-    chai.request(app)
-      .post('/creer-nouvelle-seance')
-      .redirects(0) // block redirects, we don't want to test them
-      .type('form')
-      .send({
-        'patientId': 1,
-        date: '09/02/2021',
-        'iso-date': '2021-02-09kk',
-      })
-      .end((err, res) => {
-        res.should.redirectTo('/nouvelle-seance')
-        sinon.assert.notCalled(insertAppointmentStub)
-        done()
-      })
-  })
-
-  it('should ignore the date input and use the iso-date', function(done) {
-    chai.request(app)
-      .post('/creer-nouvelle-seance')
-      .redirects(0) // block redirects, we don't want to test them
-      .type('form')
-      .send({
-        'patientId': 1,
-        date: '12/02/2021 kfjhksdhf',
-        'iso-date': '2021-02-09',
-      })
-      .end((err, res) => {
-        res.should.redirectTo('/mes-seances')
-        sinon.assert.called(insertAppointmentStub)
-        done()
-      })
+    })
   })
 })
