@@ -6,17 +6,24 @@
     <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
         <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
             <h1>Liste des psychologues partenaires</h1>
+              <% if (infos.length) { %>
+                <% infos.forEach(function(info) { %>
+                  <%- include('partials/notificationInfo', {info: info}) -%>
+                <% }) %>
+            <% }  %>
+
             <% if (errors.length) { %>
                 <% errors.forEach(function(error) { %>
                   <%- include('partials/notificationError', {error: error}) -%>
                 <% }) %>
-            <% } else { %>
+            <% } %>
+            <% if (psyList.length > 0) { %>
             <p>
                 Il y a actuellement <%- psyList.length %> partenaires du dispositif d'accompagnement.
             </p>
             <div class="rf-input-group">
-                <label class="rf-label" for="name-filter-value">Rechercher par nom : </label>
-                <input class="rf-input midlength-input" id="name-filter-value" type="text" placeholder="Delgado">
+                <label class="rf-label" for="lastName-filter-value">Rechercher par nom : </label>
+                <input class="rf-input midlength-input" id="lastName-filter-value" type="text" placeholder="Delgado">
             </div>
             <div class="rf-input-group">
                 <label class="rf-label" for="address-filter-value">Rechercher par adresse : </label>
@@ -37,7 +44,7 @@
         filterEl.addEventListener("keyup", updateFilter);
     };
     setupFilter("address");
-    setupFilter("name");
+    setupFilter("lastName");
 
     const psyList = <%- JSON.stringify(psyList) %>;
     var table = new Tabulator("#psy-table", {
@@ -71,10 +78,11 @@
         resizableRows:false,       //allow row order to be changed
         resizableColumns:false,
         initialSort:[             //set the initial sort order of the data
-            {column:"name", dir:"asc"},
+            {column:"lastName", dir:"asc"},
         ],
         columns:[
-            {title:"Nom", field:"name", sorter:"string", responsive:0},
+            {title:"Nom", field:"lastName", sorter:"string", responsive:0},
+            {title:"Prénom(s)", field:"firstNames", sorter:"string", responsive:0},
             {title:"Adresse", field:"address", sorter:"string", maxWidth: 300, responsive:0, formatter:"link", formatterParams:{labelField:"address",urlPrefix:"https://www.openstreetmap.org/search?query=",target:"_blank"}},
             {title:"📞", field:"phone", sorter:"string", responsive:0, formatter: "link", formatterParams:{labelField:"phone",urlPrefix:"tel:"}},
             {title:"Site web", field:"website", sorter:"string", maxWidth:200, responsive:0, formatter:"link", formatterParams:{labelField:"website",urlPrefix:"//",target:"_blank"}},

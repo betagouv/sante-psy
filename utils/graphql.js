@@ -45,6 +45,7 @@ async function requestPsychologist(afterCursor) {
             endCursor
           }
           nodes {
+              number
               groupeInstructeur {
                 label
               }

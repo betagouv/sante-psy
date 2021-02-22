@@ -1,9 +1,10 @@
 const { result } = require('lodash')
-const db = require('../utils/db')
+const dbAppointments = require('../db/appointments')
+const dbPatient = require('../db/patients')
 
 module.exports.dashboard = async function dashboard(req, res) {
   try {
-    const results = await Promise.all([db.getPatients(), db.getAppointments()])
+    const results = await Promise.all([dbPatient.getPatients(), dbAppointments.getAppointments()])
     const patients = results[0]
     const appointments = results[1]
 

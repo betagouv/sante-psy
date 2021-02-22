@@ -1,9 +1,16 @@
 /* eslint-disable func-names */
+const dbAppointments = require('../db/appointments')
+const dbPatient = require('../db/patients')
+const dbPsychologists = require("../db/psychologists")
+const dbUniversities = require("../db/universities")
+
 exports.up = function(knex) {
   // Add extention for handling uuids to postgres
   return knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";').then(function() {
+    console.log(`Creating ${dbUniversities.universitiesTable} table`);
+
     return knex.schema
-      .createTable('universities', (table) => {
+      .createTable(dbUniversities.universitiesTable, (table) => {
         table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
         table.string('name', 255).notNullable()
 
@@ -11,7 +18,9 @@ exports.up = function(knex) {
         table.timestamp('updatedAt')
       })
   }).then(function() {
-    return knex.schema.createTable('patients', (table) => {
+    console.log(`Creating ${dbPatient.patientTable} table`);
+
+    return knex.schema.createTable(dbPatient.patientTable, (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
       table.text('firstNames').notNullable()
       table.text('lastName').notNullable()
@@ -25,9 +34,11 @@ exports.up = function(knex) {
       table.timestamp('updatedAt')
     })
   }).then(function() {
+    console.log(`Creating ${dbPsychologists.psychologistsTable} table`);
+
     return knex.schema
-        .createTable('psychologists', (table) => {
-          table.string('id').primary() // todo : id generated from DS
+        .createTable(dbPsychologists.psychologistsTable, (table) => {
+          table.uuid('dossierNumber').primary(); // to avoid duplicate when doing upsert
           table.string('adeli').notNullable() // all therapists should be registered and have a number
           table.text('firstNames').notNullable()
           table.text('lastName').notNullable()
@@ -39,6 +50,7 @@ exports.up = function(knex) {
           table.string('website')
           table.boolean('teleconsultation')
           table.text('description')
+          table.text('languages')
           table.json('training') // Formations et expériences
           table.string('diploma')
           table.string('university')
@@ -49,8 +61,10 @@ exports.up = function(knex) {
           table.timestamp('updatedAt')
         })
   }).then(function() {
+    console.log(`Creating ${dbAppointments.appointmentsTable} table`);
+
     return knex.schema
-        .createTable('appointments', (table) => {
+        .createTable(dbAppointments.appointmentsTable, (table) => {
           table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
 
           table.uuid('patientId').notNullable()
@@ -70,13 +84,13 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTable('appointments')
+  return knex.schema.dropTable(dbAppointments.appointmentsTable)
     .then(function() {
-      return knex.schema.dropTable('psychologists')
+      return knex.schema.dropTable(dbPsychologists.psychologistsTable)
     }).then(function() {
-      return knex.schema.dropTable('patients')
+      return knex.schema.dropTable(dbPatient.patientTable)
     }).then(function() {
-      return knex.schema.dropTable('universities')
+      return knex.schema.dropTable(dbUniversities.universitiesTable)
     }).then(function() {
       return knex.raw('DROP EXTENSION IF EXISTS "uuid-ossp";')
     })
