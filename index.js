@@ -72,9 +72,9 @@ if (config.featurePsyList) {
 }
 
 if (config.featurePsyPages) {
-  app.get('/login', loginController.getLogin);
-  app.post('/login', loginController.postLogin);
-  app.get('/logout', logoutController.getLogout);
+  app.get('psychologue/login', loginController.getLogin);
+  app.post('psychologue/login', loginController.postLogin);
+  app.get('psychologue/logout', logoutController.getLogout);
 
   app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)

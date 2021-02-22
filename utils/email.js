@@ -26,7 +26,6 @@ module.exports.sendMail = async function sendMail(toEmail, subject, html, extraP
     html,
     text: html.replace(/<(?:.|\n)*?>/gm, ''),
     headers: { 'X-Mailjet-TrackOpen': '0', 'X-Mailjet-TrackClick': '0' },
-    ...extraParams,
   };
 
   return new Promise((resolve, reject) => {

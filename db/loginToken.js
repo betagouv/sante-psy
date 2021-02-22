@@ -21,7 +21,7 @@ module.exports.insert = async ( token, email, expiresAt) => {
       token,
       email,
       expiresAt
-    }).returning("*")
+    });
   } catch (err) {
     console.error(`Erreur de sauvegarde du token : ${err}`);
     throw new Error('Erreur de sauvegarde du token');

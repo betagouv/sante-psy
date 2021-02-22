@@ -57,4 +57,18 @@ describe('DB Psychologists', () => {
       shouldBeOne.should.be.equal('1');
     });
   });
+
+  describe("getPsychologistByEmail", () => {
+    it("should return a psy if we enter a known email", async () => {
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = await dbPsychologists.getPsychologistByEmail(psyList[0].email);
+      psy.email.should.be.equal(psyList[0].email);
+    });
+
+    it("should return undefined if we enter a unknown email", async () => {
+      const unknownPsy = await dbPsychologists.getPsychologistByEmail("unknown@unknown.org")
+
+      assert(undefined === unknownPsy);
+    });
+  });
 });
