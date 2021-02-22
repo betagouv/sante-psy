@@ -16,11 +16,12 @@ module.exports.getPatients = async () => {
 
 const insertPatient = async (firstNames, lastName, studentNumber) => {
   try {
-    return await knex(module.exports.patientsTable).insert({
+    const patientsArray = await knex(module.exports.patientTable).insert({
       firstNames,
       lastName,
       INE: studentNumber,
-    })
+    }).returning('*')
+    return patientsArray[0]
   } catch (err) {
     console.error("Erreur de sauvegarde du patient", err)
     throw new Error("Erreur de sauvegarde du patient")

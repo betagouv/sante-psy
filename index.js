@@ -70,6 +70,7 @@ if (config.featurePsyPages) {
   app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)
+  app.post('/supprimer-seance', appointmentsController.deleteAppointment)
   app.get('/nouveau-patient', patientsController.newPatient)
   app.post('/creer-nouveau-patient', patientsController.createNewPatient)
 }
