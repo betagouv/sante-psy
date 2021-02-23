@@ -43,11 +43,24 @@ module.exports.createNewAppointment = async (req, res) => {
   }
 }
 
+module.exports.deleteAppointmentValidators = [
+  check('appointmentId')
+    .isUUID()
+    .withMessage('Vous devez spécifier une séance à supprimer.'),
+]
+
 // We use a POST rather than a DELETE because method=DELETE in the form seems to send a GET. (???)
 module.exports.deleteAppointment = async (req, res) => {
-  // todo think about validation
-  const appointmentId = req.body['appointmentId']
+  const errors = validationResult(req);
+  console.log('errors', errors.array())
+  if (!errors.isEmpty()) {
+    errors.array().forEach(error => {
+      req.flash('error', error.msg)
+    })
+    return res.redirect('/mes-seances')
+  }
 
+  const appointmentId = req.body['appointmentId']
   try {
     await dbAppointments.deleteAppointment(appointmentId)
     req.flash('info', `La séance a bien été supprimée.`)

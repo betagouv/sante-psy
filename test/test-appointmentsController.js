@@ -136,13 +136,19 @@ describe('appointmentsController', function() {
       return Promise.resolve()
     })
 
-    it('should delete appointment', async function() {
+    const makeAppointment = async () => {
       // Insert an appointment and a patient
       const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901')
       const appointment = await dbAppointments.insertAppointment(new Date(), patient.id)
       // Check appointment is inserted
       const appointmentArray = await dbAppointments.getAppointments()
       expect(appointmentArray).to.have.length(1)
+
+      return appointment
+    }
+
+    it('should delete appointment', async function() {
+      const appointment = await makeAppointment()
 
       return chai.request(app)
         .post('/supprimer-seance')
@@ -156,6 +162,26 @@ describe('appointmentsController', function() {
 
           const appointmentArray = await dbAppointments.getAppointments()
           expect(appointmentArray).to.have.length(0)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should refuse invalid patientId', async function() {
+      const appointment = await makeAppointment()
+
+      return chai.request(app)
+        .post('/supprimer-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'appointmentId': appointment.id + '4',
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
+          const appointmentArray = await dbAppointments.getAppointments()
+          expect(appointmentArray).to.have.length(1)
 
           return Promise.resolve()
         })

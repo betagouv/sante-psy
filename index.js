@@ -92,7 +92,9 @@ if (config.featurePsyPages) {
   app.post('/creer-nouvelle-seance',
     ...appointmentsController.createNewAppointmentValidators,
     appointmentsController.createNewAppointment)
-  app.post('/supprimer-seance', appointmentsController.deleteAppointment)
+  app.post('/supprimer-seance',
+    appointmentsController.deleteAppointmentValidators,
+    appointmentsController.deleteAppointment)
   app.get('/nouveau-patient', patientsController.newPatient)
   app.post('/creer-nouveau-patient', patientsController.createNewPatient)
 }
