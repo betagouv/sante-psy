@@ -91,7 +91,9 @@ if (config.featurePsyPages) {
   app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/creer-nouvelle-seance',
-    body('iso-date').isDate(), // todo try with date format ? Maybe get rid of iso-date ?
+    // todo : there is a format option, which would allow using "date" rather than iso-date.
+    // Make it work to simplify the html.
+    body('iso-date').isDate(),
     body('patientId').isUUID(),
     appointmentsController.createNewAppointment)
   app.post('/supprimer-seance', appointmentsController.deleteAppointment)
