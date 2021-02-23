@@ -4,7 +4,6 @@ const chai = require('chai')
 const sinon = require('sinon')
 const clean = require('./helper/clean')
 const dbPatients = require('../db/patients')
-const { expect } = require('chai')
 
 describe('patientsController', function() {
   describe('create patient', function() {
