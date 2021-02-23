@@ -1,14 +1,21 @@
 /* eslint-disable func-names */
 const app = require('../index')
 const chai = require('chai')
+const sinon = require('sinon')
 const clean = require('./helper/clean')
 const dbPatients = require('../db/patients')
 const { expect } = require('chai')
 
 describe('patientsController', function() {
   describe('create patient', function() {
-
+    let insertPatientStub;
     beforeEach(async function(done) {
+      insertPatientStub = sinon.stub(dbPatients, 'insertPatient')
+        .returns(Promise.resolve([ {
+          'firstNames': 'prenom',
+          'lastName': 'nom',
+          'INE': 'studentNumber'}
+        ]))
       done()
     })
 
@@ -17,12 +24,13 @@ describe('patientsController', function() {
       return Promise.resolve()
     })
 
-    it('should create patient', async function() {
+    //@TODO fix me
+    it('should create patient', function(done) {
       const prenoms = 'Prénom'
       const nom = 'Nom'
       const studentNumber = '1234567'
-      console.log('TATATATAT')
-      return chai.request(app)
+
+      chai.request(app)
         .post('/creer-nouveau-patient')
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
@@ -31,14 +39,11 @@ describe('patientsController', function() {
           'lastName': nom,
           'INE': studentNumber,
         })
-        .then(async (res) => {
-          console.log("ICICICI")
-          res.should.redirectTo('/mes-seances')
+        .end((err, res) => {
+          sinon.assert.called(insertPatientStub)
+          res.should.redirectTo('/mes-seances');
 
-          const patientArray = await dbPatients.getPatients()
-          expect(patientArray).to.have.length(0)
-
-          return Promise.resolve()
+          done();
         })
     })
   })

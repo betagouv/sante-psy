@@ -5,24 +5,32 @@ module.exports.newPatient = async (req, res) => {
 }
 
 module.exports.createNewPatient = async (req, res) => {
+  console.debug("createNewPatient - req.body", req.body);
   // todo input validation, protection against injections
-  const firstNames = req.body['firstnames'].trim()
+  const firstNames = req.body['firstNames'].trim()
   if (!firstNames || firstNames.length === 0) {
+    console.error("Invalide firstNames", firstNames);
     req.flash('error', 'Vous devez spécifier le.s prénom.s du patient.')
     return res.redirect('/nouveau-patient')
   }
 
-  const lastName = req.body['lastname'].trim()
+  const lastName = req.body['lastName'].trim()
   if (!lastName || lastName.length === 0) {
+    console.error("Invalide lastName", lastName);
     req.flash('error', 'Vous devez spécifier le nom du patient.')
     return res.redirect('/nouveau-patient')
   }
 
-  // Todo test empty studentNumber
-  const studentNumber = req.body['studentnumber']
+  const studentNumber = req.body['INE']
+  if (!studentNumber || studentNumber.length === 0) {
+    console.error("Invalide studentNumber", studentNumber);
+    req.flash('error', 'Vous devez spécifier l\'INE.')
+    return res.redirect('/nouveau-patient')
+  }
 
   try {
     await dbPatient.insertPatient(firstNames, lastName, studentNumber)
+    console.log("new patient created");
     req.flash('info', `Le patient ${firstNames} ${lastName} a bien été créé.`)
     return res.redirect('/mes-seances')
   } catch (err) {
