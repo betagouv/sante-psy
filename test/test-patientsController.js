@@ -33,9 +33,9 @@ describe('patientsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'firstNames': prenoms,
-          'lastName': nom,
-          'INE': INE,
+          'firstnames': prenoms,
+          'lastname': nom,
+          'ine': INE,
         })
         .end((err, res) => {
           sinon.assert.called(insertPatientStub)
