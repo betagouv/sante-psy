@@ -28,7 +28,7 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': 1,
+          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
           'iso-date': '2021-02-09',
         })
@@ -39,13 +39,47 @@ describe('appointmentsController', function() {
         })
     })
 
+    it('should refuse invalid patientId', function(done) {
+      chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': 'not-a-uuid',
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .end((err, res) => {
+          res.should.redirectTo('/nouvelle-seance')
+          sinon.assert.notCalled(insertAppointmentStub)
+          done()
+        })
+    })
+
+    it('should refuse empty patientId', function(done) {
+      chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          // no patientId
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .end((err, res) => {
+          res.should.redirectTo('/nouvelle-seance')
+          sinon.assert.notCalled(insertAppointmentStub)
+          done()
+        })
+    })
+
     it('should refuse invalid date', function(done) {
       chai.request(app)
         .post('/creer-nouvelle-seance')
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': 1,
+          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
           'iso-date': '2021-02-09kk',
         })
@@ -62,7 +96,7 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': 1,
+          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '12/02/2021 kfjhksdhf',
           'iso-date': '2021-02-09',
         })

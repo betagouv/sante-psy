@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
+const { body } = require('express-validator');
 
 const config = require('./utils/config');
 const format = require('./utils/format');
@@ -89,7 +90,10 @@ if (config.featurePsyList) {
 if (config.featurePsyPages) {
   app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
-  app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)
+  app.post('/creer-nouvelle-seance',
+    body('iso-date').isDate(), // todo try with date format ? Maybe get rid of iso-date ?
+    body('patientId').isUUID(),
+    appointmentsController.createNewAppointment)
   app.post('/supprimer-seance', appointmentsController.deleteAppointment)
   app.get('/nouveau-patient', patientsController.newPatient)
   app.post('/creer-nouveau-patient', patientsController.createNewPatient)
