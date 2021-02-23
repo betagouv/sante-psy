@@ -45,25 +45,52 @@ describe('patientsController', function() {
         })
     })
 
-    it('should refuse empty firstnames', function(done) {
-      const nom = 'Nom'
-      const INE = '1234567'
-
+    const shouldFailCreatePatientInputValidation = (done, postData) => {
       chai.request(app)
         .post('/creer-nouveau-patient')
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
-        .send({
-          // no firstnames
-          'lastname': nom,
-          'ine': INE,
-        })
+        .send(postData)
         .end((err, res) => {
           sinon.assert.notCalled(insertPatientStub)
           res.should.redirectTo('/nouveau-patient');
 
           done();
         })
+    }
+
+    it('should refuse empty firstnames', function(done) {
+      shouldFailCreatePatientInputValidation(done, {
+        // no firstnames
+        'lastname': 'Nom',
+        'ine': '1234567',
+      })
     })
+
+    it('should refuse empty lastname', function(done) {
+      shouldFailCreatePatientInputValidation(done, {
+        'firstnames': 'Blou Blou',
+        // no lastname
+        'ine': '1234567',
+      })
+    })
+
+    it('should refuse whitespace firstnames', function(done) {
+      shouldFailCreatePatientInputValidation(done, {
+        'firstnames': '   ',
+        'lastname': 'Nom',
+        'ine': '1234567',
+      })
+    })
+
+    it('should refuse whitespace lastname', function(done) {
+      shouldFailCreatePatientInputValidation(done, {
+        'firstnames': 'Blou Blou',
+        'lastname': '   ',
+        'ine': '1234567',
+      })
+    })
+
+    // todo test HTML escaping.
   })
 })
