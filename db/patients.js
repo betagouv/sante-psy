@@ -20,8 +20,7 @@ const insertPatient = async (firstNames, lastName, INE) => {
       firstNames,
       lastName,
       INE,
-    });
-
+    }).returning("*");
     return patientsArray[0];
   } catch (err) {
     console.error("Erreur de sauvegarde du patient", err)
