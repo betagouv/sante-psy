@@ -167,7 +167,7 @@ describe('appointmentsController', function() {
         })
     })
 
-    it('should refuse invalid patientId', async function() {
+    it('should refuse invalid appointmentId', async function() {
       const appointment = await makeAppointment()
 
       return chai.request(app)
@@ -176,6 +176,26 @@ describe('appointmentsController', function() {
         .type('form')
         .send({
           'appointmentId': appointment.id + '4',
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
+          const appointmentArray = await dbAppointments.getAppointments()
+          expect(appointmentArray).to.have.length(1)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should refuse empty appointmentId', async function() {
+      await makeAppointment()
+
+      return chai.request(app)
+        .post('/supprimer-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          // no appointmentId
         })
         .then(async (res) => {
           res.should.redirectTo('/mes-seances')
