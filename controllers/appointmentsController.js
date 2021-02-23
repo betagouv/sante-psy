@@ -1,4 +1,4 @@
-const dateUtils = require('../utils/date')
+const { check } = require('express-validator');
 const dbAppointments = require('../db/appointments')
 const dbPatient = require('../db/patients')
 const format = require('../utils/format')
@@ -8,6 +8,17 @@ module.exports.newAppointment = async (req, res) => {
   const patients = await dbPatient.getPatients()
   res.render('newAppointment', {patients: patients, pageTitle: "Nouvelle séance"})
 }
+
+module.exports.createNewAppointmentValidators = [
+  // todo : there is a format option, which would allow using "date" rather than iso-date.
+  // Make it work to simplify the html.
+  check('iso-date')
+    .isDate()
+    .withMessage('Vous devez spécifier une date pour la séance.'),
+  check('patientId')
+    .isUUID()
+    .withMessage('Vous devez spécifier un patient pour la séance.'),
+]
 
 module.exports.createNewAppointment = async (req, res) => {
   // todo unit tests for input validation
