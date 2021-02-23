@@ -1,4 +1,5 @@
 const assert = require('chai').assert;
+const expect = require('chai').expect;
 require('dotenv').config();
 const dbPatients = require('../db/patients')
 const knexConfig = require("../knexfile");
@@ -10,7 +11,7 @@ describe('DB Patients', () => {
   const lastName = "Bond"
   const studentNumber = "12345678901"
 
-  async function testDataPatientsExist() {
+  async function testDataPatientsExist(lastName) {
     console.log("lastName", lastName);
 
     const exist = await knex(dbPatients.patientsTable)
@@ -29,23 +30,25 @@ describe('DB Patients', () => {
     it('should INsert one patient in PG', async () => {
       await dbPatients.insertPatient(firstNames, lastName, studentNumber);
 
-      const patient = await testDataPatientsExist();
+      const patient = await testDataPatientsExist(lastName);
       const exist = (patient !== undefined)
       exist.should.be.equal(true);
     });
 
     it('should refuse INsert INE with more than 11 characters in PG', async () => {
-      await dbPatients.insertPatient(firstNames, lastName, "1111111111111111");
-
-      const patient = await testDataPatientsExist();
-      const exist = (patient !== undefined)
-      exist.should.be.equal(false);
+      try {
+        await dbPatients.insertPatient(firstNames, lastName, "111111111111");
+        assert(false === true); // should throw an error
+      } catch( error ) {
+        console.error("error", error);
+        expect(error).to.be.an('Error');
+      }
     });
 
     it('should refuse INsert with only 2 params in PG', async () => {
       await dbPatients.insertPatient(firstNames, studentNumber);
 
-      const patient = await testDataPatientsExist();
+      const patient = await testDataPatientsExist(lastName);
       const exist = (patient !== undefined)
       exist.should.be.equal(false);
     });
