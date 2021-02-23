@@ -1,72 +1,45 @@
 /* eslint-disable func-names */
 const app = require('../index')
 const chai = require('chai')
-const db = require('../utils/db')
-const sinon = require('sinon')
+const clean = require('./helper/clean')
+const dbPatients = require('../db/patients')
+const { expect } = require('chai')
 
 describe('patientsController', function() {
-  let insertPatientStub
+  describe('create patient', function() {
 
-  beforeEach(function(done) {
-    insertPatientStub = sinon.stub(db, 'insertPatient')
-      .returns(Promise.resolve())
-    done()
-  })
+    beforeEach(async function(done) {
+      done()
+    })
 
-  afterEach(function(done) {
-    insertPatientStub.restore()
-    done()
-  })
+    afterEach(async function() {
+      await clean.cleanAllPatients()
+      return Promise.resolve()
+    })
 
-  it('should create patient', function(done) {
-    chai.request(app)
-      .post('/creer-nouveau-patient')
-      .redirects(0) // block redirects, we don't want to test them
-      .type('form')
-      .send({
-        "firstNames": 'Prenoms',
-        "lastName": 'Nom',
-        "INE": '12345',
-      })
-      .end((err, res) => {
-        console.log(err)
-        res.should.redirectTo('/mes-seances')
-        sinon.assert.called(insertPatientStub)
-        done()
-      }).catch(done)
-  })
+    it('should create patient', async function() {
+      const prenoms = 'Prénom'
+      const nom = 'Nom'
+      const studentNumber = '1234567'
+      console.log('TATATATAT')
+      return chai.request(app)
+        .post('/creer-nouveau-patient')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'firstNames': prenoms,
+          'lastName': nom,
+          'INE': studentNumber,
+        })
+        .then(async (res) => {
+          console.log("ICICICI")
+          res.should.redirectTo('/mes-seances')
 
-  it('should refuse invalid firstname', function(done) {
-    chai.request(app)
-      .post('/creer-nouveau-patient')
-      .redirects(0) // block redirects, we don't want to test them
-      .type('form')
-      .send({
-        'firstNames': undefined,
-        'lastName': 'Nom',
-        'INE': '12345',
-      })
-      .end((err, res) => {
-        res.should.redirectTo('/nouveau-patient')
-        sinon.assert.notCalled(insertPatientStub)
-        done()
-      })
-  })
+          const patientArray = await dbPatients.getPatients()
+          expect(patientArray).to.have.length(0)
 
-  it('should refuse number type not string', function(done) {
-    chai.request(app)
-      .post('/creer-nouveau-patient')
-      .redirects(0) // block redirects, we don't want to test them
-      .type('form')
-      .send({
-        'firstNames': 'Prenoms',
-        'lastName': 'Nom',
-        'INE': 12345,
-      })
-      .end((err, res) => {
-        res.should.redirectTo('/mes-seances')
-        sinon.assert.called(insertPatientStub)
-        done()
-      })
+          return Promise.resolve()
+        })
+    })
   })
 })
