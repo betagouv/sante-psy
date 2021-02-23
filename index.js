@@ -69,25 +69,13 @@ app.use(function populate(req, res, next){
 })
 app.locals.format = format
 
-// Save a token in cookie that expire after 2 hours if user is logged
-app.use((req, res, next) => {
-  if (!req.query.token) return next();
-  const token = req.sanitize(req.query.token);
-  const dbToken = dbLoginToken.getTokenInfoByToken(token);
-
-  if( dbToken !== undefined ) {
-    res.cookie('token', cookie.getJwtTokenForUser(dbToken.email));
-    return res.redirect(req.path);
-  } else {
-    next
-  }
-});
-
 app.use(
   expressJWT({
     secret: config.secret,
     algorithms: ['HS256'],
-    getToken: function fromHeaderOrQuerystring (req) {
+    getToken: function fromHeaderOrQuerystring (req) { //@TODO fix me
+      console.log(" req.cookies",  req.cookies);
+      console.log(" req.user",  req.user);
       if( req.cookies !== undefined ) {
         return req.cookies.token;
       } else {
@@ -114,7 +102,7 @@ app.use((err, req, res, next) => {
         'error',
         "Vous n'êtes pas identifié pour accéder à cette page (ou votre accès n'est plus valide)",
       );
-
+      console.debug("No token - redirect to login");
       return res.redirect(`/psychologue/login`);
     }
   }

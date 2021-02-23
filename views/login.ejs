@@ -9,7 +9,7 @@
 
       <div class="panel margin-top-m">
         <h4>Me connecter</h4>
-        <% if (error.length) { %>
+        <% if (errors.length) { %>
           <% errors.forEach(function(error) { %>
             <%- include('partials/notificationError', {error: error}) -%>
           <% }) %>

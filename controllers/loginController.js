@@ -2,20 +2,35 @@ const crypto = require('crypto');
 const dbPsychologists = require('../db/psychologists');
 const dbLoginToken = require('../db/loginToken');
 const date = require('../utils/date');
+const cookie = require('../utils/cookie');
 const emailUtils = require('../utils/email');
 const ejs = require('ejs');
 const config = require('../utils/config');
 
-function renderLogin(req, res, params) {
+async function renderLogin(req, res, params) {
   // init params
   params.currentUser = undefined;
   params.nextPage = '/psychologue/mes-seances';
 
+
+  params.formUrl = config.demarchesSimplifieesUrl
+  params.contactEmail = res.locals.contactEmail;
+
+  // Save a token in cookie that expire after 2 hours if user is logged
+  if (req.query.token) {
+    const token = req.sanitize(req.query.token);
+    const dbToken = await dbLoginToken.getTokenInfoByToken(token);
+
+    if( dbToken !== undefined ) {
+      console.log(`Authentification success for ${dbToken.email}`)
+      res.cookie('token', cookie.getJwtTokenForUser(dbToken.email));
+      req.flash('message', `Vous êtes authentifié comme ${dbToken.email}`);
+      //return res.redirect(req.path);
+    }
+  }
   // enrich params
   params.errors = req.flash('error');
   params.messages = req.flash('message');
-  params.formUrl = config.demarchesSimplifieesUrl
-  params.contactEmail = res.locals.contactEmail;
   // render
   return res.render('login', params);
 }
@@ -63,8 +78,12 @@ module.exports.getLogin = async function getLogin(req, res) {
 
 //@TODO test in local - we certainly have to use http
 function generateLoginUrl(host) {
-  const secretariatUrl = `https://${host}`;
-  return secretariatUrl + '/psychologue/mes-seances';
+  const secretariatUrl = '/psychologue/login'
+  if( host.includes("localhost") ) {
+    return `http://${host}` + secretariatUrl;
+  } else {
+    return `https://${host}` + secretariatUrl;
+  }
 }
 
 /**
