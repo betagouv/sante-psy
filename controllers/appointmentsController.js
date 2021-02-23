@@ -21,7 +21,6 @@ module.exports.createNewAppointmentValidators = [
 ]
 
 module.exports.createNewAppointment = async (req, res) => {
-  // todo unit tests for input validation
   // Todo : test case where patient id does not exist
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
