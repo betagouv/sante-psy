@@ -15,12 +15,7 @@ module.exports.createNewAppointment = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     errors.array().forEach(error => {
-      if (error.param === 'iso-date') {
-        req.flash('error', 'Vous devez spécifier une date pour la séance.')
-      }
-      if (error.param === 'patientId') {
-        req.flash('error', 'Vous devez spécifier un patient pour la séance.')
-      }
+      req.flash('error', error.msg)
     })
     return res.redirect('/nouvelle-seance')
   }

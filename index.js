@@ -7,7 +7,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
-const { body } = require('express-validator');
+const { check } = require('express-validator');
 
 const config = require('./utils/config');
 const format = require('./utils/format');
@@ -93,8 +93,12 @@ if (config.featurePsyPages) {
   app.post('/creer-nouvelle-seance',
     // todo : there is a format option, which would allow using "date" rather than iso-date.
     // Make it work to simplify the html.
-    body('iso-date').isDate(),
-    body('patientId').isUUID(),
+    check('iso-date')
+      .isDate()
+      .withMessage('Vous devez spécifier une date pour la séance.'),
+    check('patientId')
+      .isUUID()
+      .withMessage('Vous devez spécifier un patient pour la séance.'),
     appointmentsController.createNewAppointment)
   app.post('/supprimer-seance', appointmentsController.deleteAppointment)
   app.get('/nouveau-patient', patientsController.newPatient)
