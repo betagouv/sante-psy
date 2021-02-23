@@ -1,6 +1,6 @@
 /* eslint-disable func-names */
 const dbAppointments = require('../db/appointments')
-const dbPatient = require('../db/patients')
+const dbPatients = require('../db/patients')
 const dbPsychologists = require("../db/psychologists")
 const dbUniversities = require("../db/universities")
 
@@ -18,9 +18,9 @@ exports.up = function(knex) {
         table.timestamp('updatedAt')
       })
   }).then(function() {
-    console.log(`Creating ${dbPatient.patientTable} table`);
+    console.log(`Creating ${dbPatients.patientsTable} table`);
 
-    return knex.schema.createTable(dbPatient.patientTable, (table) => {
+    return knex.schema.createTable(dbPatients.patientsTable, (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
       table.text('firstNames').notNullable()
       table.text('lastName').notNullable()
@@ -88,7 +88,7 @@ exports.down = function(knex) {
     .then(function() {
       return knex.schema.dropTable(dbPsychologists.psychologistsTable)
     }).then(function() {
-      return knex.schema.dropTable(dbPatient.patientTable)
+      return knex.schema.dropTable(dbPatients.patientsTable)
     }).then(function() {
       return knex.schema.dropTable(dbUniversities.universitiesTable)
     }).then(function() {
