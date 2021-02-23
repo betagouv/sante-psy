@@ -1,23 +1,32 @@
+const { check } = require('express-validator');
 const dbPatient = require('../db/patients')
+const { validationResult } = require('express-validator');
 
 module.exports.newPatient = async (req, res) => {
   res.render('newPatient', { pageTitle: 'Nouveau patient' })
 }
 
+module.exports.createNewPatientValidators = [
+  check('firstnames')
+    .trim().not().isEmpty().escape()
+    .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
+  check('lastname')
+    .trim().not().isEmpty().escape()
+    .withMessage('Vous devez spécifier le nom du patient.'),
+]
+
 module.exports.createNewPatient = async (req, res) => {
-  // todo input validation, protection against injections
-  const firstNames = req.body['firstnames'].trim()
-  if (!firstNames || firstNames.length === 0) {
-    req.flash('error', 'Vous devez spécifier le.s prénom.s du patient.')
+  // todo protection against injections
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    errors.array().forEach(error => {
+      req.flash('error', error.msg)
+    })
     return res.redirect('/nouveau-patient')
   }
 
-  const lastName = req.body['lastname'].trim()
-  if (!lastName || lastName.length === 0) {
-    req.flash('error', 'Vous devez spécifier le nom du patient.')
-    return res.redirect('/nouveau-patient')
-  }
-
+  const firstNames = req.body['firstnames']
+  const lastName = req.body['lastname']
   // Todo test empty studentNumber
   const studentNumber = req.body['studentnumber']
 
