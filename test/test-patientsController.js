@@ -26,7 +26,7 @@ describe('patientsController', function() {
     it('should create patient', function(done) {
       const prenoms = 'Prénom'
       const nom = 'Nom'
-      const studentNumber = '1234567'
+      const INE = '1234567'
 
       chai.request(app)
         .post('/creer-nouveau-patient')
@@ -35,7 +35,7 @@ describe('patientsController', function() {
         .send({
           'firstNames': prenoms,
           'lastName': nom,
-          'INE': studentNumber,
+          'INE': INE,
         })
         .end((err, res) => {
           sinon.assert.called(insertPatientStub)

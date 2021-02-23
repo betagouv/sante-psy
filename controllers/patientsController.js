@@ -21,15 +21,15 @@ module.exports.createNewPatient = async (req, res) => {
     return res.redirect('/nouveau-patient')
   }
 
-  const studentNumber = req.body['INE']
-  if (!studentNumber || studentNumber.length === 0) {
-    console.error("Invalide studentNumber", studentNumber);
+  const INE = req.body['INE']
+  if (!INE || INE.length === 0) {
+    console.error("Invalide INE", INE);
     req.flash('error', 'Vous devez spécifier l\'INE.')
     return res.redirect('/nouveau-patient')
   }
 
   try {
-    await dbPatient.insertPatient(firstNames, lastName, studentNumber)
+    await dbPatient.insertPatient(firstNames, lastName, INE)
     console.log("new patient created");
     req.flash('info', `Le patient ${firstNames} ${lastName} a bien été créé.`)
     return res.redirect('/mes-seances')
