@@ -7,6 +7,7 @@ const mailTransport = nodemailer.createTransport({
   host: process.env.MAIL_SERVICE ? null : process.env.MAIL_HOST,
   port: process.env.MAIL_SERVICE ? null : parseInt(process.env.MAIL_PORT || '25', 10),
   ignoreTLS: process.env.MAIL_SERVICE ? null : process.env.MAIL_IGNORE_TLS === 'true',
+  secure: process.env.SECURE === "true",
   auth: {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS,
@@ -14,11 +15,7 @@ const mailTransport = nodemailer.createTransport({
 });
 
 
-module.exports.isValidEmail = (email) => {
-  return email === undefined || !/^[a-z0-9_-]+\.[a-z0-9_-]+$/.test(email)
-}
-
-module.exports.sendMail = async function sendMail(toEmail, subject, html, extraParams = {}) {
+module.exports.sendMail = async function sendMail(toEmail, subject, html) {
   const mail = {
     to: toEmail,
     from: `Santé Psy Étudiants <${config.contactEmail}>`,

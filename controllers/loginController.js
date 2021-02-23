@@ -9,7 +9,7 @@ const config = require('../utils/config');
 function renderLogin(req, res, params) {
   // init params
   params.currentUser = undefined;
-  params.nextParam = req.query.next ? `?next=${req.query.next}` : '';
+  params.nextPage = '/psychologue/mes-seances';
 
   // enrich params
   params.errors = req.flash('error');
@@ -29,7 +29,7 @@ async function sendLoginEmail(email, loginUrl, token) {
 
   if (!user) { //@TODO isValidUser(user)
     throw new Error(
-      `Avez-vous une rempli la démarche pour devenir partenaire présente sur l'acceuil du site ?`,
+      `Avez-vous une rempli la démarche pour devenir partenaire présente sur l'accueil du site ?`,
     );
   }
 
@@ -73,8 +73,8 @@ function generateLoginUrl(host) {
 module.exports.postLogin = async function postLogin(req, res) {
   const email = req.sanitize(req.body.email);
 
-  //@TODO check if email exists
-  if( !emailUtils.isValidEmail(email)  ) {
+  //@TODO check if email exists (express-validator)
+  if( !email  ) {
     req.flash('error', "Désolé, l'email renseigné n'a pas le bon format.");
     return res.redirect(`psychologue/login`);
   }
@@ -89,6 +89,8 @@ module.exports.postLogin = async function postLogin(req, res) {
     if( emailExist ) {
       await sendLoginEmail(email, loginUrl, token);
       await saveToken(email, token);
+    } else {
+      console.warn(`Email inconnu qui essaye d'accéder au service ${email} - il est peut être en attente de validation`)
     }
 
     return renderLogin(req, res, {
@@ -97,8 +99,7 @@ module.exports.postLogin = async function postLogin(req, res) {
     });
   } catch (err) {
     console.error(err);
-
-    req.flash('error', err.message);
+    req.flash('error', "Erreur de l'authentification. Nos services ont été alertés.");
     return res.redirect(`/login`);
   }
 };

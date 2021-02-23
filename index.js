@@ -6,9 +6,13 @@ const expressSanitizer = require('express-sanitizer');
 const path = require('path');
 const flash = require('connect-flash');
 const session = require('express-session');
+const expressJWT = require('express-jwt');
 
 const config = require('./utils/config');
 const format = require('./utils/format');
+const cookie = require('./utils/cookie');
+
+const dbLoginToken = require('./db/loginToken');
 
 const appName = `Santé Psy Étudiants`;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
@@ -65,6 +69,58 @@ app.use(function populate(req, res, next){
 })
 app.locals.format = format
 
+// Save a token in cookie that expire after 2 hours if user is logged
+app.use((req, res, next) => {
+  if (!req.query.token) return next();
+  const token = req.sanitize(req.query.token);
+  const dbToken = dbLoginToken.getTokenInfoByToken(token);
+
+  if( dbToken !== undefined ) {
+    res.cookie('token', cookie.getJwtTokenForUser(dbToken.email));
+    return res.redirect(req.path);
+  } else {
+    next
+  }
+});
+
+app.use(
+  expressJWT({
+    secret: config.secret,
+    algorithms: ['HS256'],
+    getToken: function fromHeaderOrQuerystring (req) {
+      if( req.cookies !== undefined ) {
+        return req.cookies.token;
+      } else {
+        return null;
+      }
+    }
+  }).unless({
+    path: [
+      '/',
+      '/psychologue/login',
+      '/consulter-les-psychologues',
+      '/mentions-legales',
+      '/donnees-personnelles-et-gestion-des-cookies',
+      '/faq',
+    ],
+  }),
+);
+
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    // redirect to login and keep the requested url in the '?next=' query param
+    if (req.method === 'GET') {
+      req.flash(
+        'error',
+        "Vous n'êtes pas identifié pour accéder à cette page (ou votre accès n'est plus valide)",
+      );
+
+      return res.redirect(`/psychologue/login`);
+    }
+  }
+  return next(err);
+});
+
 app.get('/', landingController.getLanding);
 
 if (config.featurePsyList) {
@@ -72,9 +128,9 @@ if (config.featurePsyList) {
 }
 
 if (config.featurePsyPages) {
-  app.get('psychologue/login', loginController.getLogin);
-  app.post('psychologue/login', loginController.postLogin);
-  app.get('psychologue/logout', logoutController.getLogout);
+  app.get('/psychologue/login', loginController.getLogin);
+  app.post('/psychologue/login', loginController.postLogin);
+  app.get('/psychologue/logout', logoutController.getLogout);
 
   app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
