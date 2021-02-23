@@ -23,7 +23,6 @@ describe('patientsController', function() {
       return Promise.resolve()
     })
 
-    //@TODO fix me
     it('should create patient', function(done) {
       const prenoms = 'Prénom'
       const nom = 'Nom'
