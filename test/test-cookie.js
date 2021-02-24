@@ -3,19 +3,23 @@ const cookie = require('../utils/cookie');
 describe('cookie', () => {
   describe('getJwtTokenForUser', () => {
     it('should return a json web token', () => {
-      const result = cookie.getJwtTokenForUser('test');
-      console.log("result", result);
-      result.length.should.be.equal(148);
+      const email = 'myEmail'
+      const psychologistData = {'email': 'stuff'}
+      const token = cookie.getJwtTokenForUser(email, psychologistData);
+
+      token.length.should.be.equal(201);
     });
   });
 
   describe('verifyJwt', () => {
     it('should return a json web token', () => {
       const email = 'myEmail'
-      const token = cookie.getJwtTokenForUser(email);
+      const psychologistData = {'email': 'stuff'}
+      const token = cookie.getJwtTokenForUser(email, psychologistData);
       const result = cookie.verifyJwt(token);
 
-      result.should.be.equal(email);
+      result.email.should.be.equal(email);
+      result.psychologistData.should.be.eql(psychologistData);
     });
 
     it('should return false ', () => {

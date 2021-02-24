@@ -7,34 +7,6 @@ const emailUtils = require('../utils/email');
 const ejs = require('ejs');
 const config = require('../utils/config');
 
-async function renderLogin(req, res, params) {
-  // init params
-  params.currentUser = undefined;
-  params.nextPage = '/psychologue/mes-seances';
-
-
-  params.formUrl = config.demarchesSimplifieesUrl
-  params.contactEmail = res.locals.contactEmail;
-
-  // Save a token in cookie that expire after 2 hours if user is logged
-  if (req.query.token) {
-    const token = req.sanitize(req.query.token);
-    const dbToken = await dbLoginToken.getTokenInfoByToken(token);
-
-    if( dbToken !== undefined ) {
-      console.log(`Authentification success for ${dbToken.email}`)
-      res.cookie('token', cookie.getJwtTokenForUser(dbToken.email));
-      req.flash('message', `Vous êtes authentifié comme ${dbToken.email}`);
-      //return res.redirect(req.path);
-    }
-  }
-  // enrich params
-  params.errors = req.flash('error');
-  params.messages = req.flash('message');
-  // render
-  return res.render('login', params);
-}
-
 function generateToken() {
   return crypto.randomBytes(256).toString('base64');
 }
@@ -73,10 +45,45 @@ async function saveToken(email, token) {
 }
 
 module.exports.getLogin = async function getLogin(req, res) {
-  renderLogin(req, res, {});
+  // init params
+  let currentUserEmail = undefined;
+  const nextPage = '/mes-seances';
+
+  const formUrl = config.demarchesSimplifieesUrl
+  const contactEmail = res.locals.contactEmail;
+
+  // get saved email if token still valid
+  const currentPsy = cookie.verifyJwt(req.cookies.token);
+  if( currentPsy ) {
+    console.log("currentPsy", currentPsy);
+    currentUserEmail = currentPsy.email;
+  }
+
+  // Save a token in cookie that expire after 2 hours if user is logged
+  if (req.query.token) {
+    const token = req.sanitize(req.query.token);
+    const dbToken = await dbLoginToken.getTokenInfoByToken(token);
+
+    if( dbToken !== undefined ) {
+      currentUserEmail = dbToken.email;
+      const psychologistData = await dbPsychologists.getPsychologistByEmail(currentUserEmail);
+
+      res.cookie('token', cookie.getJwtTokenForUser(dbToken.email, psychologistData));
+      console.debug(`Authentification success for ${dbToken.email}`)
+      req.flash('info', `Vous êtes authentifié comme ${dbToken.email}`);
+
+      return res.redirect(nextPage);
+    }
+  }
+  // render
+  return res.render('login', {
+    currentUserEmail,
+    formUrl,
+    contactEmail
+  });
 };
 
-//@TODO test in local - we certainly have to use http
+//@TODO refactor me ?
 function generateLoginUrl(host) {
   const secretariatUrl = '/psychologue/login'
   if( host.includes("localhost") ) {
@@ -99,26 +106,32 @@ module.exports.postLogin = async function postLogin(req, res) {
   }
 
   try {
-    const token = generateToken(req.get('host'));
-
+    const token = generateToken();
     const loginUrl = generateLoginUrl(req.get('host'));
-
+    const formUrl = config.demarchesSimplifieesUrl
+    const contactEmail = res.locals.contactEmail;
+    let currentUserEmail = undefined;
     const emailExist = await dbPsychologists.getPsychologistByEmail(email);
 
     if( emailExist ) {
       await sendLoginEmail(email, loginUrl, token);
       await saveToken(email, token);
     } else {
-      console.warn(`Email inconnu qui essaye d'accéder au service ${email} - il est peut être en attente de validation`)
+      console.warn(`Email inconnu qui essaye d'accéder au service - ${email} -\
+      il est peut être en attente de validation`);
     }
 
-    return renderLogin(req, res, {
-      messages: req.flash('message', `Un lien de connexion a été envoyé à l'adresse ${email}\
-       si elle est connue de nos services. Le lien est valable une heure.`),
+    req.flash('info', `Un lien de connexion a été envoyé à l'adresse ${email}\
+       si elle est connue de nos services.\nLe lien est valable une heure.`);
+
+    res.render('login', {
+      currentUserEmail,
+      formUrl,
+      contactEmail
     });
   } catch (err) {
     console.error(err);
-    req.flash('error', "Erreur de l'authentification. Nos services ont été alertés.");
+    req.flash('error', "Erreur dans l'authentification. Nos services ont été alertés et vont règler ça au plus vite.");
     return res.redirect(`/login`);
   }
 };

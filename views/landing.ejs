@@ -7,6 +7,11 @@
           <%- include('partials/notificationError', {error: error}) -%>
         <% }) %>
       <% } %>
+      <% if (infos.length) { %>
+        <% infos.forEach(function(info) { %>
+          <%- include('partials/notificationInfo', {info: info}) -%>
+        <% }) %>
+      <% } %>
     </div>
   </div>
   <div class="rf-grid-row rf-grid-row--center rf-grid-row--middle rf-mt-3w rf-pb-4w">
@@ -94,6 +99,9 @@
               Vous êtes prêts à commencer ?
             </p>
             <a class="rf-btn rf-btn--alt" href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">Participer au dispositif</a>
+
+            <p>Vous avez déjà reçu la validation suite à la démarche ?</p>
+            <a class="rf-btn rf-btn--alt" href="/psychologue/login">Connectez vous pour enregistrer vos séances</a>
           <% } else { %>
             <p>
               La démarche n'est pas encore finalisée, vous pourrez bientôt postuler sur ce site.

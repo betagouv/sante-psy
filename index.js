@@ -9,13 +9,10 @@ const session = require('express-session');
 const expressJWT = require('express-jwt');
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
-
+const cookieParser = require('cookie-parser');
 
 const config = require('./utils/config');
 const format = require('./utils/format');
-const cookie = require('./utils/cookie');
-
-const dbLoginToken = require('./db/loginToken');
 
 const appName = `Santé Psy Étudiants`;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
@@ -40,6 +37,7 @@ if( !config.activateDebug ) {
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(flash());
+app.use(cookieParser(config.secret));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use('/static', express.static('static'));
@@ -58,27 +56,11 @@ app.use(flash());
 // Mount express-sanitizer middleware here
 app.use(expressSanitizer());
 
-// Populate some variables for all views
-app.use(function populate(req, res, next){
-  res.locals.appName = appName;
-  res.locals.appDescription = appDescription;
-  res.locals.appRepo = appRepo;
-  res.locals.page = req.url;
-  res.locals.contactEmail = contactEmail;
-  res.locals.errors = req.flash('error');
-  res.locals.infos = req.flash('info');
-  res.locals.successes = req.flash('success');
-  next();
-})
-app.locals.format = format
-
 app.use(
   expressJWT({
     secret: config.secret,
     algorithms: ['HS256'],
-    getToken: function fromHeaderOrQuerystring (req) { //@TODO fix me
-      console.log(" req.cookies",  req.cookies);
-      console.log(" req.user",  req.user);
+    getToken: function fromHeaderOrQuerystring (req) {
       if( req.cookies !== undefined ) {
         return req.cookies.token;
       } else {
@@ -97,21 +79,38 @@ app.use(
   }),
 );
 
+// Populate some variables for all views
+app.use(function populate(req, res, next){
+  res.locals.appName = appName;
+  res.locals.appDescription = appDescription;
+  res.locals.appRepo = appRepo;
+  res.locals.page = req.url;
+  res.locals.contactEmail = contactEmail;
+  res.locals.errors = req.flash('error');
+  res.locals.infos = req.flash('info');
+  res.locals.successes = req.flash('success');
+  next();
+})
+
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     // redirect to login and keep the requested url in the '?next=' query param
     if (req.method === 'GET') {
       req.flash(
         'error',
-        "Vous n'êtes pas identifié pour accéder à cette page (ou votre accès n'est plus valide)",
+        "Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
+         - la connexion est valide durant 2 heures",
       );
       console.debug("No token - redirect to login");
       return res.redirect(`/psychologue/login`);
     }
   }
+
   return next(err);
 });
 
+
+app.locals.format = format
 // prevent abuse
 const rateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minute window
@@ -138,9 +137,20 @@ if (config.featurePsyList) {
 
 if (config.featurePsyPages) {
   app.get('/psychologue/login', loginController.getLogin);
-  app.post('/psychologue/login', loginController.postLogin);
+  // prevent abuse for some rules
+  const speedLimiterLogin = slowDown({
+    windowMs: 5 * 60 * 1000, // 5 minutes
+    delayAfter: 10, // allow X requests per 5 minutes, then...
+    delayMs: 500 // begin adding 500ms of delay per request above 100:
+    // request # 101 is delayed by  500ms
+    // request # 102 is delayed by 1000ms
+    // request # 103 is delayed by 1500ms
+    // etc.
+  });
+  app.post('/psychologue/login', speedLimiterLogin, loginController.postLogin);
   app.get('/psychologue/logout', logoutController.getLogout);
 
+  //@TODO ajouter `/psychologue/`
   app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)

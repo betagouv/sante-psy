@@ -1,4 +1,3 @@
-const { result } = require('lodash')
 const dbAppointments = require('../db/appointments')
 const dbPatient = require('../db/patients')
 
