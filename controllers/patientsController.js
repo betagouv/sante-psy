@@ -29,10 +29,10 @@ module.exports.createNewPatient = async (req, res) => {
   const firstNames = req.body['firstnames']
   const lastName = req.body['lastname']
   // Todo test empty studentNumber
-  const studentNumber = req.body['studentnumber']
+  const INE = req.body['ine']
 
   try {
-    await dbPatient.insertPatient(firstNames, lastName, studentNumber)
+    await dbPatient.insertPatient(firstNames, lastName, INE)
     req.flash('info', `Le patient ${firstNames} ${lastName} a bien été créé.`)
     return res.redirect('/mes-seances')
   } catch (err) {

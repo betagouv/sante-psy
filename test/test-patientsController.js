@@ -1,8 +1,8 @@
 /* eslint-disable func-names */
 const app = require('../index')
 const chai = require('chai')
-const sinon = require('sinon')
 const dbPatients = require('../db/patients')
+const sinon = require('sinon')
 
 describe('patientsController', function() {
   describe('create patient', function() {
@@ -11,9 +11,9 @@ describe('patientsController', function() {
     beforeEach(async function() {
       insertPatientStub = sinon.stub(dbPatients, 'insertPatient')
         .returns(Promise.resolve([ {
-          'firstNames': 'prenom',
-          'lastName': 'nom',
-          'INE': 'studentNumber'}
+          'firstnames': 'prenom',
+          'lastname': 'nom',
+          'ine': 'studentNumber'}
         ]))
       return Promise.resolve()
     })
@@ -35,7 +35,7 @@ describe('patientsController', function() {
         .send({
           'firstnames': prenoms,
           'lastname': nom,
-          'studentnumber': INE,
+          'ine': INE,
         })
         .end((err, res) => {
           sinon.assert.called(insertPatientStub)
