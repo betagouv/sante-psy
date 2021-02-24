@@ -30,8 +30,24 @@ module.exports.createNewAppointment = async (req, res) => {
     req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créé.`)
     return res.redirect('/mes-seances')
   } catch (err) {
-    req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez vous réessayer ?')
+    req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?')
     console.error('Erreur pour créer la séance', err)
     return res.redirect('/nouvelle-seance')
   }
+}
+
+// We use a POST rather than a DELETE because method=DELETE in the form seems to send a GET. (???)
+module.exports.deleteAppointment = async (req, res) => {
+  // todo think about validation
+  const appointmentId = req.body['appointmentId']
+
+  try {
+    await dbAppointments.deleteAppointment(appointmentId)
+    req.flash('info', `La séance a bien été supprimée.`)
+  } catch (err) {
+    req.flash('error', 'Erreur. La séance n\'est pas supprimée. Pourriez-vous réessayer ?')
+    console.error('Erreur pour supprimer la séance', err)
+  }
+
+  return res.redirect('/mes-seances')
 }

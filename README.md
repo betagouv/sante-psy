@@ -1,5 +1,5 @@
 # Santé Psy | https://santepsyetudiants.beta.gouv.fr/
-
+CI branche `main` :  ![image](https://github.com/betagouv/sante-psy/workflows/Node.js%20CI/badge.svg)
 ## Lancer en prod
 Ce repo contient tout ce qu'il faut pour tourner sur Scalingo. Il suffit de déployer la branche main sur votre instance Scalingo.
 

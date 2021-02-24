@@ -79,3 +79,11 @@ module.exports.cleanDataPsychologist = async function cleanDataPsychologist(doss
     console.log(err);
   }
 }
+
+module.exports.cleanAllPatients = function() {
+  return knex('patients').select('*').delete()
+}
+
+module.exports.cleanAllAppointments = function() {
+  return knex('appointments').select('*').delete()
+}
