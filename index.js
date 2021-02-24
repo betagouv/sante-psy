@@ -93,6 +93,8 @@ if (config.featurePsyPages) {
   app.post('/supprimer-seance', appointmentsController.deleteAppointment)
   app.get('/nouveau-patient', patientsController.newPatient)
   app.post('/creer-nouveau-patient', patientsController.createNewPatient)
+  app.post('/modifier-patient-page', patientsController.editPatientPage)
+  app.post('/modifier-patient', patientsController.editPatient)
 }
 
 app.get('/mentions-legales', (req, res) => {

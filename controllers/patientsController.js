@@ -4,6 +4,38 @@ module.exports.newPatient = async (req, res) => {
   res.render('newPatient', { pageTitle: 'Nouveau patient' })
 }
 
+module.exports.editPatient = async (req, res) => {
+  const patientId = req.body['patientid']
+  const patientFirstNames = req.body['firstnames']
+  const patientLastName = req.body['lastname']
+  const patientINE = req.body['ine']
+
+  try {
+    await dbPatient.updatePatient(patientId, patientFirstNames, patientLastName, patientINE)
+    req.flash('info', `Le patient a bien été modifié.`)
+  } catch (err) {
+    req.flash('error', 'Erreur. Le patient n\'est pas modifié. Pourriez-vous réessayer ?')
+    console.error('Erreur pour modifier le patient', err)
+  }
+  return res.redirect('/mes-seances')
+}
+
+module.exports.editPatientPage = async (req, res) => {
+  const patientId = req.body['patientid']
+
+  try {
+    const patient = await dbPatient.getPatientById(patientId)
+    console.log(`${patient}`)
+    res.render('editPatientPage', {
+      pageTitle: 'Modifier un patient',
+      patient: patient
+    })
+  } catch (err) {
+    req.flash('error', 'Erreur. test ICI')
+    console.error('Erreur. test ICI', err)
+  }
+}
+
 module.exports.createNewPatient = async (req, res) => {
   console.debug("createNewPatient - req.body", req.body);
   // todo input validation, protection against injections
@@ -23,8 +55,8 @@ module.exports.createNewPatient = async (req, res) => {
 
   const INE = req.body['ine']
   if (!INE || INE.length === 0) {
-    console.error("Invalide INE");
-    req.flash('error', 'Vous devez spécifier l\'INE.')
+    console.error("INE is empty");
+    req.flash('info', 'Vous pourrez remplir le numero INE plus tard.')
     return res.redirect('/nouveau-patient')
   }
 
