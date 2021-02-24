@@ -11,9 +11,9 @@ describe('patientsController', function() {
     beforeEach(async function(done) {
       insertPatientStub = sinon.stub(dbPatients, 'insertPatient')
         .returns(Promise.resolve([ {
-          'firstNames': 'prenom',
-          'lastName': 'nom',
-          'INE': 'studentNumber'}
+          'firstnames': 'prenom',
+          'lastname': 'nom',
+          'ine': 'studentNumber'}
         ]))
       done()
     })
