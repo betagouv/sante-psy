@@ -30,13 +30,13 @@ docker-compose down # ou docker-compose rm -f # removes already existing contain
 
 # Les recréer
 docker-compose up
-> (...) 
+> (...)
 web_1  | Creating ds_api_cursor table
 web_1  | Creating universities table
 web_1  | Creating patients table
 web_1  | Creating psychologists table
 web_1  | Creating appointments table
-Santé Psy Étudiants listening at http://localhost:8080   
+Santé Psy Étudiants listening at http://localhost:8080
 ```
 
 ### Les données
@@ -57,7 +57,7 @@ node ./cron_jobs/cron.js
 ```
 
 ### Test
-Pour utiliser le container Postgresql 
+Pour utiliser le container Postgresql
 ```
 # Start DB and build SQL tables
 docker-compose -f docker-compose-only-db.yml up
@@ -88,7 +88,7 @@ Sur la CI de github (.github/workflows/nodejs.yml) on utilise docker-compose ave
 > Stops all containers if any container was stopped. Incompatible with --detach.
 
 
-### Lint 
+### Lint
 ```
 npm run lint
 ```
