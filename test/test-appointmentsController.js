@@ -88,8 +88,6 @@ describe('appointmentsController', function() {
     it('should delete appointment', async function() {
       // Insert an appointment and a patient
       const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901')
-      const allpatient = await dbPatients.getPatients()
-      console.log(`PATIENT: ${allpatient[0].lastName}, ${allpatient[0].id}`)
       const appointment = await dbAppointments.insertAppointment(new Date(), patient.id)
       // Check appointment is inserted
       console.log(`APPT: ${appointment.patientId}`)

@@ -12,13 +12,14 @@ describe('DB Patients', () => {
   const studentNumber = "12345678901"
 
   async function testDataPatientsExist(lastName) {
-    console.log("lastName", lastName);
 
     const exist = await knex(dbPatients.patientsTable)
       .where('lastName', lastName)
       .first();
-
-    return exist;
+    if(exist) {
+      return true
+    }
+    return false;
   }
 
   //Clean up all data
@@ -28,28 +29,26 @@ describe('DB Patients', () => {
 
   describe('insertPatientInPG', () => {
     it('should INsert one patient in PG', async () => {
+
       await dbPatients.insertPatient(firstNames, lastName, studentNumber);
 
-      const patient = await testDataPatientsExist(lastName);
-      const exist = (patient !== undefined)
+      const exist = await testDataPatientsExist(lastName);
       exist.should.be.equal(true);
     });
 
     it('should refuse INsert INE with more than 11 characters in PG', async () => {
       try {
         await dbPatients.insertPatient(firstNames, lastName, "111111111111");
-        assert(false === true); // should throw an error
+        assert.fail("insert patient should have failed");
       } catch( error ) {
-        console.error("error", error);
         expect(error).to.be.an('Error');
       }
     });
 
-    it('should refuse INsert with only 2 params in PG', async () => {
+    it('should refuse INsert without mandatory params in PG', async () => {
       await dbPatients.insertPatient(firstNames, studentNumber);
 
-      const patient = await testDataPatientsExist(lastName);
-      const exist = (patient !== undefined)
+      const exist = await testDataPatientsExist(lastName);
       exist.should.be.equal(false);
     });
   });

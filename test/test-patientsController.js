@@ -19,7 +19,7 @@ describe('patientsController', function() {
     })
 
     afterEach(async function() {
-      await clean.cleanAllPatients()
+      insertPatientStub.restore()
       return Promise.resolve()
     })
 
