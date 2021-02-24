@@ -14,6 +14,7 @@ module.exports.createNewPatientValidators = [
   check('lastname')
     .trim().not().isEmpty()
     .withMessage('Vous devez spécifier le nom du patient.'),
+  // todo validate INE : can be either empty, or 11 alpahnumeric chars
 ]
 
 module.exports.createNewPatient = async (req, res) => {
