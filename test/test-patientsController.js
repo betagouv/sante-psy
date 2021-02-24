@@ -91,32 +91,5 @@ describe('patientsController', function() {
         'ine': '1234567',
       })
     })
-
-    // todo : apostrophes display escaped in interface
-    it('should escape HTML in first and last names', function(done) {
-      const prenoms = 'Prénom <script>evil</script>'
-      const escapedPrenoms = 'Prénom &lt;script&gt;evil&lt;&#x2F;script&gt;'
-      const nom = 'Nom<bold>hello</'
-      const escapedNom = 'Nom&lt;bold&gt;hello&lt;&#x2F;'
-      const INE = '1234567'
-
-      chai.request(app)
-        .post('/creer-nouveau-patient')
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          'firstnames': prenoms,
-          'lastname': nom,
-          'studentnumber': INE,
-        })
-        .end((err, res) => {
-          sinon.assert.called(insertPatientStub)
-          sinon.assert.calledWith(insertPatientStub, escapedPrenoms, escapedNom, INE);
-
-          res.should.redirectTo('/mes-seances');
-
-          done();
-        })
-    })
   })
 })

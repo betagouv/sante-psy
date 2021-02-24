@@ -7,11 +7,12 @@ module.exports.newPatient = async (req, res) => {
 }
 
 module.exports.createNewPatientValidators = [
+  // todo : do we html-escape here ? We already escape in templates.
   check('firstnames')
-    .trim().not().isEmpty().escape()
+    .trim().not().isEmpty()
     .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
   check('lastname')
-    .trim().not().isEmpty().escape()
+    .trim().not().isEmpty()
     .withMessage('Vous devez spécifier le nom du patient.'),
 ]
 
