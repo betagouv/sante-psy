@@ -90,7 +90,9 @@ describe('appointmentsController', function() {
       const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901')
       const appointment = await dbAppointments.insertAppointment(new Date(), patient.id)
       // Check appointment is inserted
+      console.log(`APPT: ${appointment.patientId}`)
       const appointmentArray = await dbAppointments.getAppointments()
+      console.log("GET APPOINTMENT DONE")
       expect(appointmentArray).to.have.length(1)
 
       return chai.request(app)
