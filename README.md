@@ -56,6 +56,16 @@ Pour mettre à jour toutes les données venant de DS vers PG, un cron est lancé
 node ./cron_jobs/cron.js
 ```
 
+#### Accès à postgres
+Avec [le scalingo CLI](https://doc.scalingo.com/cli) et le nom de l'app sur scalingo
+```
+scalingo -a APP_NAME pgsql-console
+```
+On peut insérer des données comme ceci :
+```
+INSERT INTO psychologists VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'prenom.nom@beta.gouv.fr','prenom.nom@beta.gouv.fr','prenom.nom@beta.gouv.fr','prenom.nom@beta.gouv.fr','paul.nom@beta.gouv.fr');
+```
+
 ### Test
 Pour utiliser le container Postgresql 
 ```
