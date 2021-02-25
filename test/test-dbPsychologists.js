@@ -50,7 +50,7 @@ describe('DB Psychologists', () => {
   describe("getNumberOfPsychologists", () => {
     it("should return the number of elements in the psychologists table", async () => {
       const shouldBeZero = await dbPsychologists.getNumberOfPsychologists();
-      shouldBeZero[0].count.should.be.equal('0');
+      assert(shouldBeZero.length === 0);
 
       await dbPsychologists.savePsychologistInPG(psyList);
       const shouldBeOne = await dbPsychologists.getNumberOfPsychologists();
