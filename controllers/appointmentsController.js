@@ -45,7 +45,8 @@ module.exports.deleteAppointment = async (req, res) => {
   const appointmentId = req.body['appointmentId']
 
   try {
-    await dbAppointments.deleteAppointment(appointmentId)
+    const psychologistId = cookie.getCurrentPsyId(req)
+    await dbAppointments.deleteAppointment(appointmentId, psychologistId)
     req.flash('info', `La séance a bien été supprimée.`)
   } catch (err) {
     req.flash('error', 'Erreur. La séance n\'est pas supprimée. Pourriez-vous réessayer ?')

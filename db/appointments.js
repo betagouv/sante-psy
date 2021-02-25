@@ -36,11 +36,20 @@ module.exports.insertAppointment = async (appointmentDate, patientId, psychologi
   }
 }
 
-module.exports.deleteAppointment = async (appointmentId) => {
+module.exports.deleteAppointment = async (appointmentId, psychologistId) => {
   try {
-    return await knex("appointments")
-      .where("id", appointmentId)
+    const deletedAppointments = await knex("appointments")
+      .where({
+        id: appointmentId,
+        psychologistId: psychologistId
+      })
       .del()
+      .returning('*')
+    if (deletedAppointments.length === 0) {
+      console.error("Appointment not deleted : does not exist or is not allowed")
+      throw new Error("Appointment not deleted : does not exist or is not allowed")
+    }
+    return deletedAppointments
   } catch (err) {
     console.error("Erreur de suppression du appointments", err)
     throw new Error("Erreur de suppression du appointments")

@@ -25,7 +25,7 @@ describe('appointmentsController', function() {
 
     it('should create appointment', function(done) {
       const psy = {
-        id: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       }
       chai.request(app)
@@ -47,7 +47,7 @@ describe('appointmentsController', function() {
 
     it('should refuse invalid date', function(done) {
       const psy = {
-        id: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       }
       chai.request(app)
@@ -69,7 +69,7 @@ describe('appointmentsController', function() {
 
     it('should ignore the date input and use the iso-date', function(done) {
       const psy = {
-        id: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       }
       chai.request(app)
@@ -103,15 +103,15 @@ describe('appointmentsController', function() {
 
     it('should delete appointment', async function() {
       const psy = {
-        id: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       }
 
       // Insert an appointment and a patient
       const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901')
-      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psy.id)
+      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psy.dossierNumber)
       // Check appointment is inserted
-      const appointmentArray = await dbAppointments.getAppointments(psy.id)
+      const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
       expect(appointmentArray).to.have.length(1)
 
       return chai.request(app)
@@ -125,7 +125,7 @@ describe('appointmentsController', function() {
         .then(async (res) => {
           res.should.redirectTo('/mes-seances')
 
-          const appointmentArray = await dbAppointments.getAppointments(psy.id)
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
           expect(appointmentArray).to.have.length(0)
 
           return Promise.resolve()
