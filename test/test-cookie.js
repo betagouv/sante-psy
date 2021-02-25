@@ -1,25 +1,35 @@
-const cookie = require('../utils/cookie');
+const rewire = require('rewire');
+const cookie = rewire('../utils/cookie');
 
 describe('cookie', () => {
+  describe('getSessionDuration', () => {
+    it('should return a duration with format X hours', () => {
+      const getSessionDuration = cookie.__get__('getSessionDuration');
+
+      getSessionDuration().should.equal('2 hours');
+    });
+  });
+
+  
   describe('getJwtTokenForUser', () => {
     it('should return a json web token', () => {
       const email = 'myEmail'
-      const psychologistData = {'email': 'stuff'}
-      const token = cookie.getJwtTokenForUser(email, psychologistData);
+      const psychologist = {'email': 'stuff'}
+      const token = cookie.getJwtTokenForUser(email, psychologist);
 
-      token.length.should.be.equal(201);
+      token.length.should.be.equal(196);
     });
   });
 
   describe('verifyJwt', () => {
     it('should return a json web token', () => {
       const email = 'myEmail'
-      const psychologistData = {'email': 'stuff'}
-      const token = cookie.getJwtTokenForUser(email, psychologistData);
+      const psychologist = {'email': 'stuff'}
+      const token = cookie.getJwtTokenForUser(email, psychologist);
       const result = cookie.verifyJwt(token);
 
       result.email.should.be.equal(email);
-      result.psychologistData.should.be.eql(psychologistData);
+      result.psychologist.should.be.eql(psychologist);
     });
 
     it('should return false ', () => {

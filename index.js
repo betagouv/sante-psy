@@ -14,7 +14,7 @@ const cookieParser = require('cookie-parser');
 const config = require('./utils/config');
 const format = require('./utils/format');
 
-const appName = `Santé Psy Étudiants`;
+const appName = config.appName;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
 const appRepo = 'https://github.com/betagouv/sante-psy';
 const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr';
@@ -56,6 +56,20 @@ app.use(flash());
 // Mount express-sanitizer middleware here
 app.use(expressSanitizer());
 
+
+// Populate some variables for all views
+app.use(function populate(req, res, next){
+  res.locals.appName = appName;
+  res.locals.appDescription = appDescription;
+  res.locals.appRepo = appRepo;
+  res.locals.page = req.url;
+  res.locals.contactEmail = contactEmail;
+  res.locals.errors = req.flash('error');
+  res.locals.infos = req.flash('info');
+  res.locals.successes = req.flash('success');
+  next();
+})
+
 app.use(
   expressJWT({
     secret: config.secret,
@@ -79,27 +93,14 @@ app.use(
   }),
 );
 
-// Populate some variables for all views
-app.use(function populate(req, res, next){
-  res.locals.appName = appName;
-  res.locals.appDescription = appDescription;
-  res.locals.appRepo = appRepo;
-  res.locals.page = req.url;
-  res.locals.contactEmail = contactEmail;
-  res.locals.errors = req.flash('error');
-  res.locals.infos = req.flash('info');
-  res.locals.successes = req.flash('success');
-  next();
-})
-
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     // redirect to login and keep the requested url in the '?next=' query param
     if (req.method === 'GET') {
       req.flash(
         'error',
-        "Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
-         - la connexion est valide durant 2 heures",
+        `Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
+         - la connexion est valide durant ${config.sessionDurationHours} heures`,
       );
       console.debug("No token - redirect to login");
       return res.redirect(`/psychologue/login`);
@@ -142,10 +143,6 @@ if (config.featurePsyPages) {
     windowMs: 5 * 60 * 1000, // 5 minutes
     delayAfter: 10, // allow X requests per 5 minutes, then...
     delayMs: 500 // begin adding 500ms of delay per request above 100:
-    // request # 101 is delayed by  500ms
-    // request # 102 is delayed by 1000ms
-    // request # 103 is delayed by 1500ms
-    // etc.
   });
   app.post('/psychologue/login', speedLimiterLogin, loginController.postLogin);
   app.get('/psychologue/logout', logoutController.getLogout);

@@ -6,16 +6,22 @@ const config = require('../utils/config');
  * @param {*} id
  * @see https://www.ionos.fr/digitalguide/sites-internet/developpement-web/json-web-token-jwt/ 
  */
-module.exports.getJwtTokenForUser = function getJwtTokenForUser(email, psychologistData) {
+module.exports.getJwtTokenForUser = function getJwtTokenForUser(email, psychologist) {
+  const duration = getSessionDuration();
+
   return jwt.sign(
     {
       email : email,
-      psychologistData : psychologistData,
+      psychologist : psychologist,
     },
     config.secret,
-    { expiresIn: '2 hours' }
+    { expiresIn: duration }
   );
 };
+
+function getSessionDuration() {
+  return config.sessionDurationHours + ' hours'
+}
 
 /**
  * if valid token will return psychologist data

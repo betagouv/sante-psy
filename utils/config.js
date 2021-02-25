@@ -3,6 +3,7 @@ require('dotenv').config();
 const isSecure = (process.env.SECURE || 'true') === 'true';
 
 module.exports = {
+  appName: `Santé Psy Étudiants`,
   secure: isSecure,
   protocol: isSecure ? 'https' : 'http',
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
@@ -20,4 +21,16 @@ module.exports = {
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
   uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid 
   secret: process.env.SECRET,
+  sessionDurationHours: process.env.SESSION_DURATION_HOURS || '2', // duration in hours
+  //mail
+  hostnameWithProtocol: process.env.HOSTNAME_WITH_PROTOCOL || 'http://localhost:8080',
+  mailDebug: process.env.MAIL_DEBUG === 'true',
+  mailService: process.env.MAIL_SERVICE ? process.env.MAIL_SERVICE : null,
+  mailHost: process.env.MAIL_SERVICE ? null : process.env.MAIL_HOST,
+  mailPort: process.env.MAIL_SERVICE ? null : parseInt(process.env.MAIL_PORT || '25', 10),
+  ignoreTLS: process.env.MAIL_SERVICE ? null : process.env.MAIL_IGNORE_TLS === 'true',
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
+  },
 };

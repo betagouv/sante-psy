@@ -4,19 +4,7 @@ const knex = require("knex")(knexConfig)
 
 module.exports.loginTokenTable =  "login_token";
 
-module.exports.getTokenByEmail = async function getTokenByEmail(email) {
-  try {
-    const token = await knex(module.exports.loginTokenTable)
-        .where('email', email).first()
-
-    return token;
-  } catch (err) {
-    console.error(`Impossible de récupérer le token`, err)
-    throw new Error(`Une erreur est survenue.`)
-  }
-}
-
-module.exports.getTokenInfoByToken = async function getTokenInfoByToken(token) {
+module.exports.getByToken = async function getByToken(token) {
   try {
     const result = await knex(module.exports.loginTokenTable)
     .where('token', token )

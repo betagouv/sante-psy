@@ -2,18 +2,18 @@
 const rewire = require('rewire');
 const sinon = require('sinon');
 const chai = require('chai');
-const crypto = require('crypto');
 const app = require('../index')
 const loginController = rewire('../controllers/loginController');
 const dbLoginToken = require('../db/loginToken');
 const dbPsychologists = require('../db/psychologists');
 const emailUtils = require('../utils/email');
+const cookie = require('../utils/cookie');
 
 describe('loginController', function() {
   describe('generateLoginUrl', () => {
     it('should create a login url to send in a email', function() {
       const generateLoginUrl = loginController.__get__('generateLoginUrl');
-      const output = generateLoginUrl("localhost:8080");
+      const output = generateLoginUrl();
 
       output.should.equal("http://localhost:8080/psychologue/login");
     })
@@ -36,22 +36,14 @@ describe('loginController', function() {
   })
 
   describe('login page', () => {
-    const token = crypto.randomBytes(256).toString('base64');
+    const token = cookie.getJwtTokenForUser("email");
     const email = "myemail@org.org";
-    let getTokenInfoByTokenStub;
+    let getByTokenStub;
     let insertTokenStub;
     let getPsychologistByEmailStub;
     let sendMailStub;
 
     beforeEach(function(done) {
-      getTokenInfoByTokenStub = sinon.stub(dbLoginToken, 'getTokenInfoByToken')
-        .returns(Promise.resolve(
-          {
-            token: token,
-            email : email
-          }
-        ));
-
       insertTokenStub = sinon.stub(dbLoginToken, 'insert')
         .returns(Promise.resolve());
 
@@ -67,7 +59,7 @@ describe('loginController', function() {
     })
 
     afterEach(function(done) {
-      getTokenInfoByTokenStub.restore();
+      getByTokenStub.restore();
       insertTokenStub.restore();
       getPsychologistByEmailStub.restore();
       sendMailStub.restore();
@@ -76,14 +68,37 @@ describe('loginController', function() {
 
     describe('getLogin', () => {
       it('should log someone in', function(done) {
+        getByTokenStub = sinon.stub(dbLoginToken, 'getByToken')
+        .returns(Promise.resolve(
+          {
+            token: token,
+            email : email
+          }
+        ));
+
         chai.request(app)
         .get(`/psychologue/login?token=${encodeURIComponent(token)}`)
         .redirects(0)
         .end((err, res) => {
-          sinon.assert.called(getTokenInfoByTokenStub)
+          sinon.assert.called(getByTokenStub)
           sinon.assert.called(getPsychologistByEmailStub)
           res.should.have.cookie('token');
           res.should.redirectTo('/mes-seances')
+          done();
+        })
+      });
+
+      it('should NOT log someone in', function(done) {
+        getByTokenStub = sinon.stub(dbLoginToken, 'getByToken')
+        .returns(Promise.resolve());
+
+        chai.request(app)
+        .get(`/psychologue/login?token=${encodeURIComponent("pizza_for_token")}`)
+        .redirects(0)
+        .end((err, res) => {
+          sinon.assert.called(getByTokenStub)
+          sinon.assert.notCalled(getPsychologistByEmailStub)
+          res.should.not.have.cookie('token');
           done();
         })
       });

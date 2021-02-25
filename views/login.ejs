@@ -8,11 +8,7 @@
       </h1>
 
       <div class="panel margin-top-m">
-        <% if(currentUserEmail) { %>
-          <h3>Me reconnecter en tant que <%- currentUserEmail %></h3>
-        <% } else { %>
         <h3>Me connecter</h3>
-        <% } %>
         <% if (errors.length) { %>
           <% errors.forEach(function(error) { %>
             <%- include('partials/notificationError', {error: error}) -%>
@@ -23,10 +19,10 @@
             <%- include('partials/notificationInfo', {info: info}) -%>
           <% }) %>
         <% } %>
-        <p>Vous recevevrez un lien de connexion par email qui vous permettra d'être connecté pendant 2 heures</p>
-        <form action="/psychologue/login" method="POST" id="login_form" onsubmit="event.submitter && (event.submitter.disabled = true);">
+        <p>Vous recevevrez un lien de connexion par email qui vous permettra d'être connecté pendant <%= sessionDurationHours %> heures</p>
+        <form action="/psychologue/login" method="POST" id="login_form">
         <label for="email">Adresse email :</label>
-        <input type="email" name="email" id="email" value="<%- currentUserEmail %>" />
+        <input type="email" name="email" id="email" value="" />
         <button class="button" id="primary_email_button">Recevoir le lien de connexion</button>
         <span>Ce lien sera valable 1h.</span>
         </form>
