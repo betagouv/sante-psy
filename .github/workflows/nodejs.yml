@@ -15,9 +15,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: cp .env.sample .env
-    - run: mkdir .nyc_output
-    - run: mkdir coverage
     - run: npm install
+    - run: npm run coverage --silent
     - run: docker-compose -f docker-compose-for-ci-github.yml up --abort-on-container-exit;
       env:
         NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
