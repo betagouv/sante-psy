@@ -2,7 +2,7 @@ const { check } = require('express-validator');
 const dbAppointments = require('../db/appointments')
 const dbPatient = require('../db/patients')
 const format = require('../utils/format')
-const { validationResult } = require('express-validator');
+const validation = require('../utils/validation')
 
 module.exports.newAppointment = async (req, res) => {
   const patients = await dbPatient.getPatients()
@@ -22,11 +22,7 @@ module.exports.createNewAppointmentValidators = [
 
 module.exports.createNewAppointment = async (req, res) => {
   // Todo : test case where patient id does not exist
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    errors.array().forEach(error => {
-      req.flash('error', error.msg)
-    })
+  if (!validation.checkErrors(req)) {
     return res.redirect('/nouvelle-seance')
   }
 
@@ -51,11 +47,7 @@ module.exports.deleteAppointmentValidators = [
 
 // We use a POST rather than a DELETE because method=DELETE in the form seems to send a GET. (???)
 module.exports.deleteAppointment = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    errors.array().forEach(error => {
-      req.flash('error', error.msg)
-    })
+  if (!validation.checkErrors(req)) {
     return res.redirect('/mes-seances')
   }
 

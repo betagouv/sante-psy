@@ -1,6 +1,6 @@
 const { check } = require('express-validator');
 const dbPatient = require('../db/patients')
-const { validationResult } = require('express-validator');
+const validation = require('../utils/validation')
 
 module.exports.newPatient = async (req, res) => {
   res.render('newPatient', { pageTitle: 'Nouveau patient' })
@@ -19,11 +19,7 @@ module.exports.createNewPatientValidators = [
 
 module.exports.createNewPatient = async (req, res) => {
   // todo protection against injections
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    errors.array().forEach(error => {
-      req.flash('error', error.msg)
-    })
+  if (!validation.checkErrors(req)) {
     return res.redirect('/nouveau-patient')
   }
 
