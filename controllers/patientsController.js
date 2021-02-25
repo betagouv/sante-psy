@@ -1,32 +1,32 @@
+const { check } = require('express-validator');
 const dbPatient = require('../db/patients')
+const validation = require('../utils/validation')
 
 module.exports.newPatient = async (req, res) => {
   res.render('newPatient', { pageTitle: 'Nouveau patient' })
 }
 
+module.exports.createNewPatientValidators = [
+  // todo : do we html-escape here ? We already escape in templates.
+  check('firstnames')
+    .trim().not().isEmpty()
+    .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
+  check('lastname')
+    .trim().not().isEmpty()
+    .withMessage('Vous devez spécifier le nom du patient.'),
+  // todo validate INE : can be either empty, or 11 alpahnumeric chars
+]
+
 module.exports.createNewPatient = async (req, res) => {
-  console.debug("createNewPatient - req.body", req.body);
-  // todo input validation, protection against injections
-  const firstNames = req.body['firstnames'].trim()
-  if (!firstNames || firstNames.length === 0) {
-    console.error("Invalide firstNames");
-    req.flash('error', 'Vous devez spécifier le.s prénom.s du patient.')
+  // todo protection against injections
+  if (!validation.checkErrors(req)) {
     return res.redirect('/nouveau-patient')
   }
 
-  const lastName = req.body['lastname'].trim()
-  if (!lastName || lastName.length === 0) {
-    console.error("Invalide lastName");
-    req.flash('error', 'Vous devez spécifier le nom du patient.')
-    return res.redirect('/nouveau-patient')
-  }
-
+  const firstNames = req.body['firstnames']
+  const lastName = req.body['lastname']
+  // Todo test empty studentNumber
   const INE = req.body['ine']
-  if (!INE || INE.length === 0) {
-    console.error("Invalide INE");
-    req.flash('error', 'Vous devez spécifier l\'INE.')
-    return res.redirect('/nouveau-patient')
-  }
 
   try {
     await dbPatient.insertPatient(firstNames, lastName, INE)
