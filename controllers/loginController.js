@@ -22,6 +22,7 @@ async function sendLoginEmail(email, loginUrl, token) {
 
   const html = await ejs.renderFile('./views/emails/login.ejs', {
     loginUrlWithToken: `${loginUrl}?token=${encodeURIComponent(token)}`,
+    appName: config.appName,
   });
 
   try {
