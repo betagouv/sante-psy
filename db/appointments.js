@@ -8,9 +8,9 @@ module.exports.appointmentsTable =  "appointments";
 // this function returns empty.
 module.exports.getAppointments = async () => {
   try {
-    const appointmentArray = await knex.from(dbPatient.patientTable)
-        .innerJoin('appointments', 'patients.id', 'appointments.patientId')
-    .orderBy("appointmentDate", "desc")
+    const appointmentArray = await knex.from(dbPatient.patientsTable)
+      .innerJoin('appointments', 'patients.id', 'appointments.patientId')
+      .orderBy("appointmentDate", "desc")
     return appointmentArray
   } catch (err) {
     console.error(`Impossible de récupérer les appointments`, err)

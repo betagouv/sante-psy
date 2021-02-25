@@ -30,13 +30,47 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': 1,
+          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
           'iso-date': '2021-02-09',
         })
         .end((err, res) => {
           res.should.redirectTo('/mes-seances')
           sinon.assert.called(insertAppointmentStub)
+          done()
+        })
+    })
+
+    it('should refuse invalid patientId', function(done) {
+      chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': 'not-a-uuid',
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .end((err, res) => {
+          res.should.redirectTo('/nouvelle-seance')
+          sinon.assert.notCalled(insertAppointmentStub)
+          done()
+        })
+    })
+
+    it('should refuse empty patientId', function(done) {
+      chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          // no patientId
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .end((err, res) => {
+          res.should.redirectTo('/nouvelle-seance')
+          sinon.assert.notCalled(insertAppointmentStub)
           done()
         })
     })
@@ -48,9 +82,26 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': 1,
+          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
           'iso-date': '2021-02-09kk',
+        })
+        .end((err, res) => {
+          res.should.redirectTo('/nouvelle-seance')
+          sinon.assert.notCalled(insertAppointmentStub)
+          done()
+        })
+    })
+
+    it('should refuse empty date', function(done) {
+      chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
+          date: '09/02/2021',
+          // not iso-date
         })
         .end((err, res) => {
           res.should.redirectTo('/nouvelle-seance')
@@ -66,7 +117,7 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': 1,
+          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '12/02/2021 kfjhksdhf',
           'iso-date': '2021-02-09',
         })
@@ -89,13 +140,21 @@ describe('appointmentsController', function() {
       return Promise.resolve()
     })
 
-    it('should delete appointment', async function() {
+    const makeAppointment = async () => {
       // Insert an appointment and a patient
       const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901')
       const appointment = await dbAppointments.insertAppointment(new Date(), patient.id)
       // Check appointment is inserted
+      console.log(`APPT: ${appointment.patientId}`)
       const appointmentArray = await dbAppointments.getAppointments()
+      console.log("GET APPOINTMENT DONE")
       expect(appointmentArray).to.have.length(1)
+
+      return appointment
+    }
+
+    it('should delete appointment', async function() {
+      const appointment = await makeAppointment()
 
       return chai.request(app)
         .post('/supprimer-seance')
@@ -110,6 +169,46 @@ describe('appointmentsController', function() {
 
           const appointmentArray = await dbAppointments.getAppointments()
           expect(appointmentArray).to.have.length(0)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should refuse invalid appointmentId', async function() {
+      const appointment = await makeAppointment()
+
+      return chai.request(app)
+        .post('/supprimer-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'appointmentId': appointment.id + '4',
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
+          const appointmentArray = await dbAppointments.getAppointments()
+          expect(appointmentArray).to.have.length(1)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should refuse empty appointmentId', async function() {
+      await makeAppointment()
+
+      return chai.request(app)
+        .post('/supprimer-seance')
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          // no appointmentId
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
+          const appointmentArray = await dbAppointments.getAppointments()
+          expect(appointmentArray).to.have.length(1)
 
           return Promise.resolve()
         })

@@ -42,6 +42,7 @@
     "express-sanitizer": "^1.0.5",
     "express-session": "^1.17.1",
     "express-slow-down": "^1.4.0",
+    "express-validator": "^6.10.0",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
     "intl": "^1.2.5",
