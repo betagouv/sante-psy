@@ -2,15 +2,19 @@ const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const dbPatient = require('./patients')
 
-module.exports.appointmentsTable =  "appointments";
+const appointmentsTable = "appointments"
+module.exports.appointmentsTable = appointmentsTable;
 
 // todo: bug : if appointment has a patientId that does not match a patient object in the db,
 // this function returns empty.
-module.exports.getAppointments = async () => {
+module.exports.getAppointments = async (psychologistId) => {
   try {
     const appointmentArray = await knex.from(dbPatient.patientTable)
-        .innerJoin('appointments', 'patients.id', 'appointments.patientId')
-    .orderBy("appointmentDate", "desc")
+      // todo where psychologistId = current psy
+      .innerJoin('appointments', 'patients.id', 'appointments.patientId')
+      .where('psychologistId', psychologistId)
+      .orderBy("appointmentDate", "desc")
+    console.log('appointmentArray', appointmentArray)
     return appointmentArray
   } catch (err) {
     console.error(`Impossible de récupérer les appointments`, err)

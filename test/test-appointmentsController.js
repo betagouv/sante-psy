@@ -102,17 +102,18 @@ describe('appointmentsController', function() {
     })
 
     it('should delete appointment', async function() {
-      // Insert an appointment and a patient
-      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901')
-      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id)
-      // Check appointment is inserted
-      const appointmentArray = await dbAppointments.getAppointments()
-      expect(appointmentArray).to.have.length(1)
-
       const psy = {
         id: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       }
+
+      // Insert an appointment and a patient
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901')
+      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psy.id)
+      // Check appointment is inserted
+      const appointmentArray = await dbAppointments.getAppointments(psy.id)
+      expect(appointmentArray).to.have.length(1)
+
       return chai.request(app)
         .post('/supprimer-seance')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
@@ -124,7 +125,7 @@ describe('appointmentsController', function() {
         .then(async (res) => {
           res.should.redirectTo('/mes-seances')
 
-          const appointmentArray = await dbAppointments.getAppointments()
+          const appointmentArray = await dbAppointments.getAppointments(psy.id)
           expect(appointmentArray).to.have.length(0)
 
           return Promise.resolve()
