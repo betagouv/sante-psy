@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "coverage": "nyc --reporter html --reporter text npm run test",
+    "coverageCI": "nyc --reporter=text-summary npm run test",
     "dev": "nodemon index.js",
     "devKnex": "DEBUG=knex:query nodemon index.js",
     "lint": "eslint . --fix",
