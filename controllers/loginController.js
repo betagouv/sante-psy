@@ -37,7 +37,7 @@ async function saveToken(email, token) {
     const expiredAt = date.getDatePlusOneHour();
     await dbLoginToken.insert(token,email, expiredAt);
 
-    console.log(`Login token créé pour ${email}`);
+    console.log(`Login token créé`);
   } catch (err) {
     console.error(`Erreur de sauvegarde du token : ${err}`);
     throw new Error('Erreur de sauvegarde du token');
@@ -108,13 +108,10 @@ module.exports.postLogin = async function postLogin(req, res) {
 
     //@TODO fix me - infos not being displayed on first time
     req.flash('info',
-     `Un lien de connexion a été envoyé à l'adresse ${email} si elle est connue de nos services.\nLe lien est valable une heure.`);
+      `Un lien de connexion a été envoyé à l'adresse ${email}\
+       si elle est connue de nos services.\nLe lien est valable une heure.`);
 
-    res.render('login', {
-      formUrl,
-      sessionDurationHours,
-      contactEmail
-    });
+    return res.redirect(`/psychologue/login`);
   } catch (err) {
     console.error(err);
     req.flash('error', "Erreur dans l'authentification. Nos services ont été alertés et vont règler ça au plus vite.");
