@@ -18,9 +18,10 @@ module.exports.getAppointments = async () => {
   }
 }
 
-module.exports.insertAppointment = async (appointmentDate, patientId) => {
+module.exports.insertAppointment = async (appointmentDate, patientId, psychologistId) => {
   try {
     const insertedArray = await knex(module.exports.appointmentsTable).insert({
+      psychologistId,
       appointmentDate,
       patientId: patientId,
     }).returning("*")

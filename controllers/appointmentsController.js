@@ -1,3 +1,4 @@
+const cookie = require('../utils/cookie')
 const dateUtils = require('../utils/date')
 const dbAppointments = require('../db/appointments')
 const dbPatient = require('../db/patients')
@@ -25,8 +26,10 @@ module.exports.createNewAppointment = async (req, res) => {
   }
 
   const date = new Date(Date.parse(isoDateString))
+
+  const psyId = cookie.getCurrentPsyId(req)
   try {
-    await dbAppointments.insertAppointment(date, patientId)
+    await dbAppointments.insertAppointment(date, patientId, psyId)
     req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créé.`)
     return res.redirect('/mes-seances')
   } catch (err) {

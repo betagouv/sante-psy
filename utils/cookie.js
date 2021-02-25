@@ -4,7 +4,7 @@ const config = require('../utils/config');
  * get a json web token to store psychologist data
  * token = encodeBase64(header) + '.' + encodeBase64(payload) + '.' + encodeBase64(signature)
  * @param {*} id
- * @see https://www.ionos.fr/digitalguide/sites-internet/developpement-web/json-web-token-jwt/ 
+ * @see https://www.ionos.fr/digitalguide/sites-internet/developpement-web/json-web-token-jwt/
  */
 module.exports.getJwtTokenForUser = function getJwtTokenForUser(email, psychologist) {
   const duration = getSessionDuration();
@@ -25,9 +25,9 @@ function getSessionDuration() {
 
 /**
  * if valid token will return psychologist data
- * @param {*} token 
+ * @param {*} token
  */
-module.exports.verifyJwt = function verifyJwt(token) {
+const verifyJwt = function verifyJwt(token) {
   try {
     const verified = jwt.verify(token, config.secret);
     return verified;
@@ -35,4 +35,17 @@ module.exports.verifyJwt = function verifyJwt(token) {
     console.debug("invalid token");
     return false;
   }
+}
+module.exports.verifyJwt = verifyJwt
+
+/**
+ *  Get currently logged in psy's id
+ */
+module.exports.getCurrentPsyId = (req) => {
+  // todo what happens when no cookie/token/uuid ?
+  const jwtToken = req.cookies.token
+  const tokenData = verifyJwt(jwtToken)
+  const psyUuid = tokenData.psychologist.dossierNumber
+  console.log('psyUuid', psyUuid)
+  return psyUuid
 }
