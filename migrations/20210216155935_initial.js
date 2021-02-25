@@ -68,7 +68,7 @@ exports.up = function(knex) {
           table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
 
           table.uuid('patientId').notNullable()
-          table.string('psychologistId')  // todo notNullable once we have psy accounts
+          table.string('psychologistId')
 
           table.datetime('appointmentDate').notNullable().defaultTo(knex.fn.now())
 
