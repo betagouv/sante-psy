@@ -20,13 +20,13 @@ module.exports.editPatient = async (req, res) => {
   return res.redirect('/mes-seances')
 }
 
-module.exports.editPatientPage = async (req, res) => {
+module.exports.getEditPatient = async (req, res) => {
   const patientId = req.body['patientid']
 
   try {
     const patient = await dbPatient.getPatientById(patientId)
     console.log(`${patient}`)
-    res.render('editPatientPage', {
+    res.render('editPatient', {
       pageTitle: 'Modifier un patient',
       patient: patient
     })
@@ -57,7 +57,6 @@ module.exports.createNewPatient = async (req, res) => {
   if (!INE || INE.length === 0) {
     console.error("INE is empty");
     req.flash('info', 'Vous pourrez remplir le numero INE plus tard.')
-    return res.redirect('/nouveau-patient')
   }
 
   try {

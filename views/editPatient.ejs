@@ -39,18 +39,16 @@
     <% }) %>
   <% } %>
   <div class="rf-my-5w">
-    <form action="/modifier-patient" method="POST">
+    <form action="/api/modifier-patient" method="POST">
       <div>
         <div class="rf-my-3w">
           <!--todo : little red star for required fields -->
-          <label class="rf-label" for="firstnames"><%= patient.firstNames %></label>
-          <p class="rf-hint-text" id="text-input-hint-desc-hint">Entrez le.s nouveau.x prénomn.s</p>
-          <input class="rf-input midlength-input" defaultValue="<%= patient.firstnames %>" type="text" id="firstnames" name="firstnames">
+          <label class="rf-label" for="firstnames">Prénoms</label>
+          <input class="rf-input midlength-input" value="<%= patient.firstNames %>" type="text" id="firstnames" name="firstnames">
         </div>
         <div class="rf-my-3w">
-          <label class="rf-label" for="lastname"><%= patient.lastName %></label>
-          <p class="rf-hint-text" id="text-input-hint-desc-hint">Entrez le nouveau nom</p>
-          <input class="rf-input midlength-input" defaultValue="<%= patient.lastName %>"  type="text" id="lastname" name="lastname">
+          <label class="rf-label" for="lastname">Nom</label>
+          <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname">
         </div>
         <div class="rf-my-3w">
           <!-- todo : JS validation for 11 digit number -->
@@ -59,8 +57,7 @@
             <% } else { %>
               <label class="rf-label" for="ine">Numéro INE de l'étudiant (11 caractères)</label>
             <% } %>
-          <p class="rf-hint-text" id="text-input-hint-desc-hint">Entrez le nouveau numéro</p>
-          <input class="rf-input short-input" defaultValue="<%= patient.INE %>" type="text" id="ine" name="ine">
+          <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine">
         </div>
       </div>
       <div class="rf-my-5w">
