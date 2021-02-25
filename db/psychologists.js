@@ -63,10 +63,6 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
   return query;
 }
 
-/**
- * @TODO fix me 
- * 
- */
 module.exports.getNumberOfPsychologists = async function getNumberOfPsychologists() {
   const query = await knex(module.exports.psychologistsTable)
   .select('archived', 'state')

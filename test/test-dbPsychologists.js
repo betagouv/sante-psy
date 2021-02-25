@@ -61,18 +61,18 @@ describe('DB Psychologists', () => {
   });
 
   describe("getPsychologists", () => {
-    it("should return not archived and accepte psychologists", async () => {
-      let archivedPsy = psyList[0];
+    it("should only return not archived and accepte psychologists", async () => {
+      let archivedPsy = Object.assign({}, psyList[0]);
       archivedPsy.archived = true;
-      let constructionPsy = psyList[0];
+      archivedPsy.dossierNumber = "34e6352f-bdd0-48ce-83de-8de71cad295b";
+      let constructionPsy = Object.assign({}, psyList[0]);
       constructionPsy.state = "en_construction";
+      constructionPsy.dossierNumber = "a2e447cd-2d57-4f83-8884-ab05a2633644";
 
-      await dbPsychologists.savePsychologistInPG(psyList);
-      await dbPsychologists.savePsychologistInPG(constructionPsy);
-      await dbPsychologists.savePsychologistInPG(archivedPsy);
+      await dbPsychologists.savePsychologistInPG([psyList[0], archivedPsy, constructionPsy]);
 
       const shouldBeOne = await dbPsychologists.getPsychologists();
-      shouldBeOne.should.be.equal('1');
+      shouldBeOne.length.should.be.equal(1);
       shouldBeOne[0].state = 'accepte';
       shouldBeOne[0].archived = false;
     });
