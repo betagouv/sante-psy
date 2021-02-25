@@ -45,7 +45,9 @@ module.exports.getCurrentPsyId = (req) => {
   // todo what happens when no cookie/token/uuid ?
   const jwtToken = req.cookies.token
   const tokenData = verifyJwt(jwtToken)
+  if (!tokenData.psychologist) {
+    throw new Error('JWT token has no psychologist associated')
+  }
   const psyUuid = tokenData.psychologist.dossierNumber
-  console.log('psyUuid', psyUuid)
   return psyUuid
 }

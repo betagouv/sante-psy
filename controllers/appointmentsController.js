@@ -27,8 +27,8 @@ module.exports.createNewAppointment = async (req, res) => {
 
   const date = new Date(Date.parse(isoDateString))
 
-  const psyId = cookie.getCurrentPsyId(req)
   try {
+    const psyId = cookie.getCurrentPsyId(req)
     await dbAppointments.insertAppointment(date, patientId, psyId)
     req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créé.`)
     return res.redirect('/mes-seances')

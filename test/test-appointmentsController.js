@@ -24,9 +24,13 @@ describe('appointmentsController', function() {
     })
 
     it('should create appointment', function(done) {
+      const psy = {
+        id: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
       chai.request(app)
         .post('/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -42,9 +46,13 @@ describe('appointmentsController', function() {
     })
 
     it('should refuse invalid date', function(done) {
+      const psy = {
+        id: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
       chai.request(app)
         .post('/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -60,9 +68,13 @@ describe('appointmentsController', function() {
     })
 
     it('should ignore the date input and use the iso-date', function(done) {
+      const psy = {
+        id: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
       chai.request(app)
         .post('/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -97,9 +109,13 @@ describe('appointmentsController', function() {
       const appointmentArray = await dbAppointments.getAppointments()
       expect(appointmentArray).to.have.length(1)
 
+      const psy = {
+        id: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
       return chai.request(app)
         .post('/supprimer-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
