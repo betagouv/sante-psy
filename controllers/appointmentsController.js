@@ -52,7 +52,6 @@ module.exports.deleteAppointmentValidators = [
 // We use a POST rather than a DELETE because method=DELETE in the form seems to send a GET. (???)
 module.exports.deleteAppointment = async (req, res) => {
   const errors = validationResult(req);
-  console.log('errors', errors.array())
   if (!errors.isEmpty()) {
     errors.array().forEach(error => {
       req.flash('error', error.msg)
