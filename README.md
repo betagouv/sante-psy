@@ -87,6 +87,13 @@ Started 1 cron jobs
 Sur la CI de github (.github/workflows/nodejs.yml) on utilise docker-compose avec l'option `--abort-on-container-exit` pour lancer les tests dans le container de l'application et finir le container de PG une fois que les tests ont été exécutés.
 > Stops all containers if any container was stopped. Incompatible with --detach.
 
+#### Code coverage
+```
+npm run coverage
+```
+
+Ensuite, visiter avec votre navigateur pour visualiser le dossier `./coverage` :
+*  $REPO_PATH/sante-psy/coverage/index.html
 
 ### Lint 
 ```
