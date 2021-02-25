@@ -30,7 +30,7 @@ describe('GraphQL Handler', () => {
   describe('getWhereConditionAfterCursor', () => {
     it('should return the graphql condition with after as an argument', async () => {
       const after = "MzA2"
-      const result = `, after: "${after}"`;
+      const result = `(after: "${after}")`;
       const getWhereConditionAfterCursor = graphql.__get__('getWhereConditionAfterCursor');
 
       getWhereConditionAfterCursor(after).should.equal(result);

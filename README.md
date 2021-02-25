@@ -24,6 +24,12 @@ Pour controler visuellement la base de données, nous conseillons :
 
 ### Pour tester les évolutions de base de données
 
+#### Créer un fichier de migration
+```
+npm run makeMigration migration-name
+```
+
+#### Executer les migrations
 ```
 # Supprimer les tables existantes
 docker-compose down # ou docker-compose rm -f # removes already existing containers https://docs.docker.com/compose/reference/rm/

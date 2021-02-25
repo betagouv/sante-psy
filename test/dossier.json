@@ -4,11 +4,12 @@
     "dossiers": {
       "nodes": [
         {
+          "archived": false,
           "number": 1,
           "groupeInstructeur": {
             "label": "Normandie"
           },
-          "state": "en_construction",
+          "state": "accepte",
           "champs": [
             {
               "id": "Q2hhbXAtMTY1OTUxMw==",
@@ -98,11 +99,12 @@
           }
         },
         {
+          "archived": false,
           "number": 2,
           "groupeInstructeur": {
             "label": "Normandie"
           },
-          "state": "en_construction",
+          "state": "accepte",
           "champs": [
             {
               "id": "Q2hhbXAtMTY1OTUxMw==",
