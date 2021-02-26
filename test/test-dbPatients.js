@@ -23,13 +23,12 @@ describe('DB Patients', () => {
   }
 
   //Clean up all data
-  beforeEach(async function before() {
+  afterEach(async function before() {
     await clean.cleanDataPatient(lastName);
   })
 
   describe('insertPatientInPG', () => {
     it('should INsert one patient in PG', async () => {
-
       await dbPatients.insertPatient(firstNames, lastName, studentNumber);
 
       const exist = await testDataPatientsExist(lastName);
@@ -50,6 +49,26 @@ describe('DB Patients', () => {
 
       const exist = await testDataPatientsExist(lastName);
       exist.should.be.equal(false);
+    });
+  });
+
+  describe('updatePatientInPG', () => {
+    it('should Update one patient in PG', async () => {
+      await dbPatients.insertPatient(firstNames, lastName, studentNumber);
+
+      const newLastName = "NewName"
+      const patients = await dbPatients.getPatients()
+      const oldPatient = patients[0]
+      console.log(oldPatient.id)
+
+      await dbPatients.updatePatient(
+        oldPatient.id,
+        oldPatient.firstNames,
+        newLastName,
+        oldPatient.studentNumber
+      )
+      const newPatient = await dbPatients.getPatientById(oldPatient.id)
+      expect(newPatient.lastName).equal(newLastName)
     });
   });
 });
