@@ -3,9 +3,10 @@ const knex = require("knex")(knexConfig)
 
 module.exports.patientTable = "patients";
 
-module.exports.getPatients = async () => {
+module.exports.getPatients = async (psychologistId) => {
   try {
-    const patientArray = await knex(module.exports.patientTable).select()
+    const patientArray = await knex(module.exports.patientTable)
+        .where("psychologistId", psychologistId)
         .orderBy("lastName")
     return patientArray
   } catch (err) {

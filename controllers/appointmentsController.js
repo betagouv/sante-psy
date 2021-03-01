@@ -5,8 +5,15 @@ const dbPatient = require('../db/patients')
 const format = require('../utils/format')
 
 module.exports.newAppointment = async (req, res) => {
-  const patients = await dbPatient.getPatients()
-  res.render('newAppointment', {patients: patients, pageTitle: "Nouvelle séance"})
+  try {
+    const psychologistId = cookie.getCurrentPsyId(req)
+    const patients = await dbPatient.getPatients(psychologistId)
+    res.render('newAppointment', {patients: patients, pageTitle: "Nouvelle séance"})
+  } catch (err) {
+    req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?')
+    console.error('Erreur pour créer la séance', err)
+    return res.redirect('/mes-seances')
+  }
 }
 
 module.exports.createNewAppointment = async (req, res) => {

@@ -5,7 +5,10 @@ const dbPatient = require('../db/patients')
 module.exports.dashboard = async function dashboard(req, res) {
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    const results = await Promise.all([dbPatient.getPatients(), dbAppointments.getAppointments(psychologistId)])
+    const results = await Promise.all([
+      dbPatient.getPatients(psychologistId),
+      dbAppointments.getAppointments(psychologistId),
+    ])
     const patients = results[0]
     const appointments = results[1]
 
