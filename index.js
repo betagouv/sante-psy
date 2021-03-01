@@ -95,7 +95,7 @@ app.use(
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     // redirect to login and keep the requested url in the '?next=' query param
-    if (req.method === 'GET') {
+    if (req.method === 'GET' && req.originalUrl.includes("/psychologue")) {
       req.flash(
         'error',
         `Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
@@ -103,6 +103,9 @@ app.use((err, req, res, next) => {
       );
       console.debug("No token - redirect to login");
       return res.redirect(`/psychologue/login`);
+    } else {
+      req.flash('error', "Cette page n'existe pas.")
+      return res.redirect(`/`);
     }
   }
 
@@ -175,11 +178,6 @@ app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
     pageTitle: "Données personnelles",
   })
 })
-
-app.get('*', function redirect404(req, res){
-  req.flash('error', "Cette page n'existe pas.")
-  res.redirect('/');
-});
 
 module.exports = app.listen(config.port, () => {
   console.log(`${appName} listening at http://localhost:${config.port}`);
