@@ -26,7 +26,6 @@ const appointmentsController = require('./controllers/appointmentsController');
 const patientsController = require('./controllers/patientsController');
 const psyListingController = require('./controllers/psyListingController');
 const loginController = require('./controllers/loginController');
-const logoutController = require('./controllers/logoutController');
 
 // Desactivate debug log for production as they are a bit too verbose
 if( !config.activateDebug ) {
@@ -145,15 +144,21 @@ if (config.featurePsyPages) {
     delayMs: 500 // begin adding 500ms of delay per request above 100:
   });
   app.post('/psychologue/login', speedLimiterLogin, loginController.postLogin);
-  app.get('/psychologue/logout', logoutController.getLogout);
+  app.get('/psychologue/logout', loginController.getLogout);
 
   //@TODO ajouter `/psychologue/`
   app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
-  app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)
-  app.post('/supprimer-seance', appointmentsController.deleteAppointment)
+  app.post('/creer-nouvelle-seance',
+    ...appointmentsController.createNewAppointmentValidators,
+    appointmentsController.createNewAppointment)
+  app.post('/supprimer-seance',
+    appointmentsController.deleteAppointmentValidators,
+    appointmentsController.deleteAppointment)
   app.get('/nouveau-patient', patientsController.newPatient)
-  app.post('/creer-nouveau-patient', patientsController.createNewPatient)
+  app.post('/creer-nouveau-patient',
+    patientsController.createNewPatientValidators,
+    patientsController.createNewPatient)
 }
 
 app.get('/mentions-legales', (req, res) => {

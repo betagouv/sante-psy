@@ -1,6 +1,7 @@
 const knexConfig = require("../../knexfile");
 const knex = require("knex")(knexConfig);
 const dbPsychologists = require('../../db/psychologists')
+const dbPatients = require('../../db/patients')
 const dbDsApiCursor = require('../../db/dsApiCursor')
 const dbLoginToken = require('../../db/loginToken')
 const rewire = require("rewire");
@@ -70,6 +71,26 @@ module.exports.cleanDataPsychologist = async function cleanDataPsychologist(doss
     if (ifExist) {
       const clean = await knex(dbPsychologists.psychologistsTable)
         .where('dossierNumber', dossierNumber)
+        .del();
+      console.log("cleaned");
+
+      return clean;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
+module.exports.cleanDataPatient = async function cleanDataPatient(lastName) {
+  try {
+    const ifExist = await knex(dbPatients.patientsTable)
+    .where('lastName',lastName)
+    .first();
+
+    if (ifExist) {
+      const clean = await knex(dbPatients.patientsTable)
+        .where('lastName',lastName)
         .del();
       console.log("cleaned");
 

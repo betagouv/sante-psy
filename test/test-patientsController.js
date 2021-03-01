@@ -2,9 +2,10 @@
 const app = require('../index')
 const chai = require('chai')
 const clean = require('./helper/clean')
-const dbPatients = require('../db/patients')
 const cookie = require('../utils/cookie')
+const dbPatients = require('../db/patients')
 const { expect } = require('chai')
+const sinon = require('sinon')
 
 describe('patientsController', function() {
   describe('create patient', function() {
@@ -70,5 +71,71 @@ describe('patientsController', function() {
 
         return Promise.resolve()
       })
+  })
+
+  describe('create patient input validation', function() {
+    let insertPatientStub;
+
+    beforeEach(async function() {
+      insertPatientStub = sinon.stub(dbPatients, 'insertPatient')
+        .returns(Promise.resolve([ {
+          'firstnames': 'prenom',
+          'lastname': 'nom',
+          'ine': 'studentNumber'}
+        ]))
+      return Promise.resolve()
+    })
+
+    afterEach(async function() {
+      insertPatientStub.restore()
+      return Promise.resolve()
+    })
+
+    const shouldFailCreatePatientInputValidation = (done, postData) => {
+      chai.request(app)
+        .post('/creer-nouveau-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send(postData)
+        .end((err, res) => {
+          sinon.assert.notCalled(insertPatientStub)
+          res.should.redirectTo('/nouveau-patient');
+
+          done();
+        })
+    }
+
+    it('should refuse empty firstnames', function(done) {
+      shouldFailCreatePatientInputValidation(done, {
+        // no firstnames
+        'lastname': 'Nom',
+        'ine': '1234567',
+      })
+    })
+
+    it('should refuse empty lastname', function(done) {
+      shouldFailCreatePatientInputValidation(done, {
+        'firstnames': 'Blou Blou',
+        // no lastname
+        'ine': '1234567',
+      })
+    })
+
+    it('should refuse whitespace firstnames', function(done) {
+      shouldFailCreatePatientInputValidation(done, {
+        'firstnames': '   ',
+        'lastname': 'Nom',
+        'ine': '1234567',
+      })
+    })
+
+    it('should refuse whitespace lastname', function(done) {
+      shouldFailCreatePatientInputValidation(done, {
+        'firstnames': 'Blou Blou',
+        'lastname': '   ',
+        'ine': '1234567',
+      })
+    })
   })
 })

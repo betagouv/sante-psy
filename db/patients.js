@@ -1,11 +1,11 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 
-module.exports.patientTable = "patients";
+module.exports.patientsTable = "patients";
 
 module.exports.getPatients = async (psychologistId) => {
   try {
-    const patientArray = await knex(module.exports.patientTable)
+    const patientArray = await knex(module.exports.patientsTable)
         .where("psychologistId", psychologistId)
         .orderBy("lastName")
     return patientArray
@@ -15,12 +15,12 @@ module.exports.getPatients = async (psychologistId) => {
   }
 }
 
-const insertPatient = async (firstNames, lastName, studentNumber, psychologistId) => {
+const insertPatient = async (firstNames, lastName, INE, psychologistId) => {
   try {
-    const patientsArray = await knex(module.exports.patientTable).insert({
+    const patientsArray = await knex(module.exports.patientsTable).insert({
       firstNames,
       lastName,
-      INE: studentNumber,
+      INE,
       psychologistId,
     }).returning('*')
     return patientsArray[0]

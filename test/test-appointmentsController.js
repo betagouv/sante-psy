@@ -116,6 +116,42 @@ describe('appointmentsController', function() {
       done()
     })
 
+    it('should refuse invalid patientId', function(done) {
+      chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': 'not-a-uuid',
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .end((err, res) => {
+          res.should.redirectTo('/nouvelle-seance')
+          sinon.assert.notCalled(insertAppointmentStub)
+          done()
+        })
+    })
+
+    it('should refuse empty patientId', function(done) {
+      chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          // no patientId
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .end((err, res) => {
+          res.should.redirectTo('/nouvelle-seance')
+          sinon.assert.notCalled(insertAppointmentStub)
+          done()
+        })
+    })
+
     it('should refuse invalid date', function(done) {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
@@ -127,9 +163,27 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': 1,
+          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
           'iso-date': '2021-02-09kk',
+        })
+        .end((err, res) => {
+          res.should.redirectTo('/nouvelle-seance')
+          sinon.assert.notCalled(insertAppointmentStub)
+          done()
+        })
+    })
+
+    it('should refuse empty date', function(done) {
+      chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
+          date: '09/02/2021',
+          // not iso-date
         })
         .end((err, res) => {
           res.should.redirectTo('/nouvelle-seance')
@@ -149,7 +203,7 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': 1,
+          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '12/02/2021 kfjhksdhf',
           'iso-date': '2021-02-09',
         })
@@ -172,18 +226,23 @@ describe('appointmentsController', function() {
       return Promise.resolve()
     })
 
+    const makeAppointment = async (psychologistId) => {
+      // Insert an appointment and a patient
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId)
+      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psychologistId)
+      // Check appointment is inserted
+      const appointmentArray = await dbAppointments.getAppointments(psychologistId)
+      expect(appointmentArray).to.have.length(1)
+      return appointment
+    }
+
     it('should delete appointment', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       }
 
-      // Insert an appointment and a patient
-      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
-      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psy.dossierNumber)
-      // Check appointment is inserted
-      const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
-      expect(appointmentArray).to.have.length(1)
+      const appointment = await makeAppointment(psy.dossierNumber)
 
       return chai.request(app)
         .post('/supprimer-seance')
@@ -209,13 +268,7 @@ describe('appointmentsController', function() {
         email: 'valid@valid.org',
       }
       const anotherPsyId = 'ccb6f32b-8c55-4322-8ecc-556e6900b4ea'
-
-      // Insert an appointment and a patient
-      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', anotherPsyId)
-      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, anotherPsyId)
-      // Check appointment is inserted
-      const appointmentArray = await dbAppointments.getAppointments(anotherPsyId)
-      expect(appointmentArray).to.have.length(1)
+      const appointment = await makeAppointment(anotherPsyId)
 
       return chai.request(app)
         .post('/supprimer-seance')
@@ -227,9 +280,34 @@ describe('appointmentsController', function() {
         })
         .then(async (res) => {
           res.should.redirectTo('/mes-seances')
-
           // Appointment is not deleted
           const appointmentArray = await dbAppointments.getAppointments(anotherPsyId)
+          expect(appointmentArray).to.have.length(1)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should refuse invalid appointmentId', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const appointment = await makeAppointment(psy.dossierNumber)
+
+      return chai.request(app)
+        .post('/supprimer-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'appointmentId': appointment.id + '4',
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
+          // Appointment is not deleted
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
           expect(appointmentArray).to.have.length(1)
 
           return Promise.resolve()
@@ -241,13 +319,7 @@ describe('appointmentsController', function() {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       }
-
-      // Insert an appointment and a patient
-      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
-      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psy.dossierNumber)
-      // Check appointment is inserted
-      const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
-      expect(appointmentArray).to.have.length(1)
+      const appointment = await makeAppointment(psy.dossierNumber)
 
       return chai.request(app)
         .post('/supprimer-seance')
@@ -261,6 +333,31 @@ describe('appointmentsController', function() {
           expect(res.status).to.equal(401)
 
           // Appointment is not deleted
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
+          expect(appointmentArray).to.have.length(1)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should refuse empty appointmentId', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      await makeAppointment(psy.dossierNumber)
+
+      return chai.request(app)
+        .post('/supprimer-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          // no appointmentId
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
           expect(appointmentArray).to.have.length(1)
 

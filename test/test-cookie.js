@@ -10,7 +10,6 @@ describe('cookie', () => {
     });
   });
 
-  
   describe('getJwtTokenForUser', () => {
     it('should return a json web token', () => {
       const email = 'myEmail'
