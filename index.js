@@ -89,12 +89,19 @@ if (config.featurePsyList) {
 if (config.featurePsyPages) {
   app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
-  app.post('/creer-nouvelle-seance', appointmentsController.createNewAppointment)
-  app.post('/supprimer-seance', appointmentsController.deleteAppointment)
+  app.post('/creer-nouvelle-seance',
+    ...appointmentsController.createNewAppointmentValidators,
+    appointmentsController.createNewAppointment)
+  app.post('/supprimer-seance',
+    appointmentsController.deleteAppointmentValidators,
+    appointmentsController.deleteAppointment)
   app.get('/nouveau-patient', patientsController.newPatient)
-  app.post('/creer-nouveau-patient', patientsController.createNewPatient)
+  app.post('/creer-nouveau-patient',
+    patientsController.createNewPatientValidators,
+    patientsController.createNewPatient)
   app.post('/modifier-patient', patientsController.getEditPatient)
   app.post('/api/modifier-patient', patientsController.editPatient)
+  
 }
 
 app.get('/mentions-legales', (req, res) => {
