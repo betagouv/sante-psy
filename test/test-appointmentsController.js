@@ -108,7 +108,7 @@ describe('appointmentsController', function() {
       }
 
       // Insert an appointment and a patient
-      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901')
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
       const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psy.dossierNumber)
       // Check appointment is inserted
       const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
