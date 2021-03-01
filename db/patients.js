@@ -43,14 +43,13 @@ module.exports.insertPatient = async (firstNames, lastName, INE) => {
 
 module.exports.updatePatient = async (id, firstNames, lastName, INE) => {
   try {
-    const updateResult = await knex(module.exports.patientsTable)
+    await knex(module.exports.patientsTable)
       .where("id", id)
       .update({
         firstNames,
         lastName,
         INE
       })
-    console.log(`RESULT: ${updateResult}`)
   } catch (err) {
     console.error("Erreur de modification du patient", err)
     throw new Error("Erreur de modification du patient")
