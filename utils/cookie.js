@@ -42,7 +42,7 @@ module.exports.verifyJwt = verifyJwt
  *  Get currently logged in psy's id
  */
 module.exports.getCurrentPsyId = (req) => {
-  // todo what happens when no cookie/token/uuid ?
+  // todo(estellecomment) what happens when no cookie/token/uuid ?
   const jwtToken = req.cookies.token
   const tokenData = verifyJwt(jwtToken)
   if (!tokenData.psychologist) {
