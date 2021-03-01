@@ -1,4 +1,3 @@
-// todo(estellecomment) test that only my own patients and appointments are displayed.
 /* eslint-disable func-names */
 const app = require('../index')
 const chai = require('chai')
