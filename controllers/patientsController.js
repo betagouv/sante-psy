@@ -23,10 +23,10 @@ module.exports.createNewPatient = async (req, res) => {
     return res.redirect('/nouveau-patient')
   }
 
-  const firstNames = req.body['firstnames']
-  const lastName = req.body['lastname']
+  const firstNames = req.sanitize(req.body['firstnames'])
+  const lastName = req.sanitize(req.body['lastname'])
   // Todo test empty studentNumber
-  const INE = req.body['ine']
+  const INE = req.sanitize(req.body['ine'])
 
   try {
     await dbPatient.insertPatient(firstNames, lastName, INE)

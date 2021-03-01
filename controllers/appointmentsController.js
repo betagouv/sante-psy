@@ -26,8 +26,8 @@ module.exports.createNewAppointment = async (req, res) => {
     return res.redirect('/nouvelle-seance')
   }
 
-  const date = new Date(Date.parse(req.body['iso-date']))
-  const patientId = req.body['patientId']
+  const date = new Date(Date.parse(req.sanitize(req.body['iso-date'])))
+  const patientId = req.sanitize(req.body['patientId'])
   try {
     await dbAppointments.insertAppointment(date, patientId)
     req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créée.`)
@@ -51,7 +51,7 @@ module.exports.deleteAppointment = async (req, res) => {
     return res.redirect('/mes-seances')
   }
 
-  const appointmentId = req.body['appointmentId']
+  const appointmentId = req.sanitize(req.body['appointmentId'])
   try {
     await dbAppointments.deleteAppointment(appointmentId)
     req.flash('info', `La séance a bien été supprimée.`)
