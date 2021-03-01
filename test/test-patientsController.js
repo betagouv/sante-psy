@@ -189,5 +189,40 @@ describe('patientsController', function() {
           return Promise.resolve()
         })
     })
+
+    it('should not update patient if it is not mine', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const anotherPsyId = '495614e8-89af-4406-ba02-9fc038b991f9'
+      const patient = await makePatient(anotherPsyId)
+
+      return chai.request(app)
+        .post('/api/modifier-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          patientid: patient.id,
+          lastname: 'Lovelacekkk',
+          firstnames: 'Adakkk',
+          ine: '111',
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
+          // Patient was not updated
+          const patientsArray = await dbPatients.getPatients(anotherPsyId)
+          expect(patientsArray).to.have.length(1)
+          expect(patientsArray[0].psychologistId).to.equal(anotherPsyId)
+          expect(patientsArray[0].lastName).to.equal(patient.lastName)
+          expect(patientsArray[0].firstNames).to.equal(patient.firstNames)
+          expect(patientsArray[0].INE).to.equal(patient.INE)
+
+          return Promise.resolve()
+        })
+    })
+
   })
 })
