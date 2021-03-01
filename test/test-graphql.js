@@ -1,12 +1,10 @@
 require('dotenv').config();
 const rewire = require('rewire');
-const should = require('chai').should();
 
 const graphql = rewire('../utils/graphql.js');
 
 describe('GraphQL Handler', () => {
   describe('hasErrors', () => {
-    //@TODO testUsers should match API's schema
     it('should return true if API has returned an error', async () => {
       const errorResponse = {"response":
       {"data":null,
@@ -39,7 +37,6 @@ describe('GraphQL Handler', () => {
 
 
     it('should return an empty string if undefined', async () => {
-      const after = ""
       const getWhereConditionAfterCursor = graphql.__get__('getWhereConditionAfterCursor');
 
       getWhereConditionAfterCursor(undefined).should.equal('');

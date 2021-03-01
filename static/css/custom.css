@@ -5,14 +5,6 @@
   text-align: right;
 }
 
-.rf-bg--alt, .rf-bg--alt h2 {
-  background-color: var(--bf500);
-  color: var(--g100);
-}
-.rf-bg--alt .rf-btn--secondary {
-  background-color: var(--w);
-}
-
 .bg-fond-alternatif {
   background-color: var(--g100);
 }
@@ -25,17 +17,22 @@
 .bg-blue-soft {
   background-color: var(--bs300);
 }
-
-.bg-blue-france h2 {
-  color: var(--w);
+.rf-grid-row--space-between {
+  justify-content: space-between;
 }
 
-.text-blue-france {
-  color: var(--bf500);
+/* Style should match etudiants.gouv.fr.
+   Note : not tested on dark theme. */
+.rf-bg--alt, .rf-bg--alt h2 {
+  background-color: #fff9c0;
+}
+.rf-btn--alt, a.rf-btn--alt {
+  background-color: #fff06d;
+  color: var(--g700);
 }
 
-.text-blue-soft {
-  color: var(--bs300);
+.bg-fond-alternatif {
+  background-color: var(--g100);
 }
 
 .btn--secondary--temporary-fix {
@@ -44,4 +41,15 @@
 
 .short-input {
   max-width: 10rem;
+}
+.midlength-input {
+  max-width: 25rem;
+}
+
+.appointment-list {
+  list-style-type: none;
+  padding-inline-start: 0px;
+}
+.appointment-list li{
+  margin-bottom: 1.5rem; /* rf-mb-3w */
 }

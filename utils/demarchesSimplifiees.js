@@ -1,12 +1,11 @@
 const graphql = require('../utils/graphql');
-const _ = require('lodash');
+const uuid = require('../utils/uuid');
+const config = require('./config');
 
 /**
- * get all psychologist from DS API
- * 
- * DS API return 100 elements maximum
- * if we have more than 100 elements in DS, we have to use pagination (cursor)
- * cursor : String - next page to query the API
+ * helper function called by getPsychologistList
+ * @param {*} cursor 
+ * @param {*} accumulator 
  */
 async function getAllPsychologistList(cursor, accumulator = []) {
   const apiResponse = await graphql.requestPsychologist(cursor);
@@ -20,14 +19,25 @@ async function getAllPsychologistList(cursor, accumulator = []) {
   if( nextCursor ) {
     return getAllPsychologistList(nextCursor, nextAccumulator);
   } else {
-    return nextAccumulator;
+    return {
+      psychologists : nextAccumulator,
+      lastCursor: cursor
+    };
   }
 }
 
-async function getPsychologistList() {
-  const time = `displaying all psychologists from DS (query id #${Math.random().toString()})`;
+/**
+ * get all psychologist from DS API
+ * 
+ * DS API return 100 elements maximum
+ * if we have more than 100 elements in DS, we have to use pagination (cursor)
+ * cursor : String - next page to query the API
+ */
+async function getPsychologistList(cursor) {
+  const time = `Fetching all psychologists from DS (query id #${Math.random().toString()})`;
+
   console.time(time);
-  const psychologists = await getAllPsychologistList();
+  const psychologists = await getAllPsychologistList(cursor);
   console.timeEnd(time);
 
   return psychologists;
@@ -48,15 +58,7 @@ function getNextCursor(apiResponse) {
   }
 }
 
-/**
- * Converts the first character of first name and last name to upper case and the remaining to lower case.
- * @param {*} demandeur 
- */
-function getName(demandeur) {
-  return _.capitalize(demandeur.prenom) + ' ' + _.capitalize(demandeur.nom);
-}
-
-function getChampValue(champData, attributeName) {
+function getChampValue(champData, attributeName, stringValue = true) {
   const potentialStringValue = champData.find(champ => champ.label === attributeName);
 
   if(typeof potentialStringValue === 'undefined') {
@@ -64,7 +66,11 @@ function getChampValue(champData, attributeName) {
 
     return "";
   } else {
-    return potentialStringValue.stringValue;
+    if(stringValue) {
+      return potentialStringValue.stringValue;
+    } else {
+      return potentialStringValue.value;
+    }
   }
 }
 
@@ -76,10 +82,29 @@ function parseTeleconsultation(inputString) {
   return inputString === 'true';
 }
 
+/**
+ * transform string "speciality1, speciality2" to array ["speciality1", "speciality2"]
+ * as a JSON to store it inside PG
+ */
+function parseTraining(inputString) {
+  if(inputString.includes(',')) {
+    return JSON.stringify(inputString.split(', '));
+  } else {
+    return JSON.stringify([inputString]);
+  }
+}
+
+function getUuidDossierNumber(number) {
+  return uuid.generateUuidFromString(config.demarchesSimplifieesId + '-' + number);
+}
+
 function parseDossierMetadata(dossier) {
-  const name = getName(dossier.demandeur);
-  const university = dossier.groupeInstructeur.label.stringValue;
+  const lastName = dossier.demandeur.nom;
+  const firstNames = dossier.demandeur.prenom;
+  const dossierNumber = getUuidDossierNumber(dossier.number);
+  const region = dossier.groupeInstructeur.label;
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
+  const departement = getChampValue(dossier.champs, 'Votre département', false); // "14 - Calvados"
   const phone =  getChampValue(dossier.champs, 'Téléphone du secrétariat');
   const teleconsultation = parseTeleconsultation(
     getChampValue(dossier.champs, 'Proposez-vous de la téléconsultation ?')
@@ -88,14 +113,30 @@ function parseDossierMetadata(dossier) {
   const email =  getChampValue(dossier.champs, 'Email de contact');
   const description =  getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
 
+  // @TODO comma separated values not reliable
+  const training = parseTraining(
+    getChampValue(dossier.champs, 'Formations et expériences')
+  );
+  const adeli = getChampValue(dossier.champs, 'Numéro Adeli')
+  const diploma = getChampValue(dossier.champs, 'Intitulé ou spécialité de votre master de psychologie')
+  const languages = getChampValue(dossier.champs, 'Langues parlées (optionnel)', false);
+
   const psy = {
-    name,
+    dossierNumber,
+    lastName,
+    firstNames,
     address,
+    region,
+    departement,
     phone,
     website,
     email,
     teleconsultation,
-    description
+    description,
+    training,
+    adeli,
+    diploma,
+    languages,
   };
 
   return psy;
@@ -108,6 +149,8 @@ function parsePsychologist(apiResponse) {
 
   if(dossiers.length > 0) {
     const psychologists = dossiers.map(dossier => {
+      // console.debug("Parsing a dossier", dossier);
+
       return parseDossierMetadata(dossier);
     });
 

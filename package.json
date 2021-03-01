@@ -4,7 +4,9 @@
   "description": "Accompagnement Psychologique pour les étudiants",
   "main": "index.js",
   "scripts": {
+    "coverage": "nyc --reporter html --reporter text npm run test",
     "dev": "nodemon index.js",
+    "devKnex": "DEBUG=knex:query nodemon index.js",
     "lint": "eslint . --fix",
     "listMigrations": "knex migrate:list",
     "migrate": "knex migrate:latest",
@@ -13,16 +15,9 @@
     "rollback": "knex migrate:rollback",
     "rollback-one": "knex migrate:down",
     "start": "node index.js",
-    "test": "mocha",
-    "postinstall": "husky install",
+    "test": "mocha --exit",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "npm test"
-    }
   },
   "repository": {
     "type": "git",
@@ -38,16 +33,26 @@
     "@gouvfr/all": "^0.4.0",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.5",
+    "cron": "^1.8.2",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "express-rate-limit": "^5.2.6",
+    "express-sanitizer": "^1.0.5",
     "express-session": "^1.17.1",
+    "express-slow-down": "^1.4.0",
+    "express-validator": "^6.10.0",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
     "intl": "^1.2.5",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.17",
     "lodash": "^4.17.20",
-    "pg": "^8.5.1"
+    "nodemailer": "^6.4.18",
+    "pg": "^8.5.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "chai": "^4.3.0",
@@ -58,6 +63,7 @@
     "mocha": "^8.2.1",
     "nock": "^13.0.7",
     "nodemon": "^2.0.7",
+    "nyc": "^15.1.0",
     "pinst": "^2.1.4",
     "rewire": "^5.0.0",
     "sinon": "^9.2.4"

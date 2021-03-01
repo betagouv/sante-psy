@@ -6,30 +6,56 @@
     <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
         <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
             <h1>Liste des psychologues partenaires</h1>
+              <% if (infos.length) { %>
+                <% infos.forEach(function(info) { %>
+                  <%- include('partials/notificationInfo', {info: info}) -%>
+                <% }) %>
+            <% }  %>
+
             <% if (errors.length) { %>
                 <% errors.forEach(function(error) { %>
                   <%- include('partials/notificationError', {error: error}) -%>
                 <% }) %>
-            <% } else { %>
+            <% } %>
+            <% if (psyList.length > 0) { %>
             <p>
-                Il y a actuellement <%- psyList.length %> partenaires du dispositif d'accompagnement.
+                Il y a actuellement <%= psyList.length %> partenaires du dispositif d'accompagnement.
             </p>
-            <div>
-                <label for="filter-value">Rechercher par adresse : </label><input id="filter-value" type="text" placeholder="Amiens ou 80000">
+            <div class="rf-input-group">
+                <label class="rf-label" for="lastName-filter-value">Rechercher par nom : </label>
+                <input class="rf-input midlength-input" id="lastName-filter-value" type="text" placeholder="Delgado">
+            </div>
+            <div class="rf-input-group">
+                <label class="rf-label" for="address-filter-value">Rechercher par adresse : </label>
+                <input class="rf-input midlength-input" id="address-filter-value" type="text" placeholder="Amiens ou 80000">
             </div>
             <div id="psy-table"></div>
             <% } %>
         </div>
     </div>
 </div>
+<!-- Import data as recommended by OWASP :
+    https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html#html-entity-encoding
+-->
+<div id="psy-list" style="display: none;">
+    <!-- First HTML-escape the json -->
+    <%= JSON.stringify(psyList) %>
+</div>
 <script>
-    var valueEl = document.getElementById("filter-value");
-    // //Trigger setFilter function with correct parameters
-    function updateFilter(){
-        table.setFilter('address','like', valueEl.value);
-    }
-    valueEl.addEventListener("keyup", updateFilter);
-    const psyList = <%- JSON.stringify(psyList) %>
+    var setupFilter = function(fieldName) {
+        var filterEl = document.getElementById(fieldName + "-filter-value");
+        // Trigger setFilter function with correct parameters
+        function updateFilter(){
+            table.setFilter(fieldName,'like', filterEl.value);
+        }
+        filterEl.addEventListener("keyup", updateFilter);
+    };
+    setupFilter("address");
+    setupFilter("lastName");
+
+    var psyListElement = document.getElementById("psy-list");
+    var psyList = JSON.parse(psyListElement.textContent);
+
     var table = new Tabulator("#psy-table", {
         data: psyList, //assign data to table
         langs:{ // http://tabulator.info/docs/4.2/localize#setup
@@ -61,10 +87,11 @@
         resizableRows:false,       //allow row order to be changed
         resizableColumns:false,
         initialSort:[             //set the initial sort order of the data
-            {column:"name", dir:"asc"},
+            {column:"lastName", dir:"asc"},
         ],
         columns:[
-            {title:"Nom", field:"name", sorter:"string", responsive:0},
+            {title:"Nom", field:"lastName", sorter:"string", responsive:0},
+            {title:"Prénom(s)", field:"firstNames", sorter:"string", responsive:0},
             {title:"Adresse", field:"address", sorter:"string", maxWidth: 300, responsive:0, formatter:"link", formatterParams:{labelField:"address",urlPrefix:"https://www.openstreetmap.org/search?query=",target:"_blank"}},
             {title:"📞", field:"phone", sorter:"string", responsive:0, formatter: "link", formatterParams:{labelField:"phone",urlPrefix:"tel:"}},
             {title:"Site web", field:"website", sorter:"string", maxWidth:200, responsive:0, formatter:"link", formatterParams:{labelField:"website",urlPrefix:"//",target:"_blank"}},

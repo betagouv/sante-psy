@@ -39,12 +39,13 @@ async function requestPsychologist(afterCursor) {
     {
       demarche (number: ${config.demarchesSimplifieesId}) {
         id
-        dossiers (state: en_construction, archived: false ${paginationCondition}) {
+        dossiers (state: accepte, archived: false ${paginationCondition}) {
           pageInfo {
             hasNextPage
             endCursor
           }
           nodes {
+              number
               groupeInstructeur {
                 label
               }

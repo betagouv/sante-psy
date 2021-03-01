@@ -1,41 +1,64 @@
-const dateUtils = require('../utils/date')
-const db = require('../utils/db')
+const { check } = require('express-validator');
+const dbAppointments = require('../db/appointments')
+const dbPatient = require('../db/patients')
 const format = require('../utils/format')
-
-module.exports.myAppointments = async (req, res) => {
-  const appointments = await db.getAppointments()
-
-  res.render('myAppointments', { appointments: appointments })
-}
+const validation = require('../utils/validation')
 
 module.exports.newAppointment = async (req, res) => {
-  res.render('newAppointment')
+  const patients = await dbPatient.getPatients()
+  res.render('newAppointment', {patients: patients, pageTitle: "Nouvelle séance"})
 }
 
+module.exports.createNewAppointmentValidators = [
+  // todo : there is a format option, which would allow using "date" rather than iso-date.
+  // Make it work to simplify the html.
+  check('iso-date')
+    .isDate()
+    .withMessage('Vous devez spécifier une date pour la séance.'),
+  check('patientId')
+    .isUUID()
+    .withMessage('Vous devez spécifier un patient pour la séance.'),
+]
+
 module.exports.createNewAppointment = async (req, res) => {
-  // todo unit tests for input validation
-  const isoDateString = req.body['iso-date']
-
-  if (!dateUtils.isValidDate(isoDateString)) {
-    req.flash('error', 'Vous devez spécifier une date pour la séance.')
+  // Todo : test case where patient id does not exist
+  if (!validation.checkErrors(req)) {
     return res.redirect('/nouvelle-seance')
   }
 
-  // todo input validation, check if safe string
-  const patientName = req.body['patient-name'].trim()
-  if (!patientName || patientName.length === 0) {
-    req.flash('error', 'Vous devez spécifier un nom de patient pour la séance.')
-    return res.redirect('/nouvelle-seance')
-  }
-
-  const date = new Date(Date.parse(isoDateString))
+  const date = new Date(Date.parse(req.body['iso-date']))
+  const patientId = req.body['patientId']
   try {
-    await db.insertAppointment(date, patientName)
-    req.flash('info', `La séance du ${format.formatFrenchDate(date)} avec ${patientName} a bien été créé.`)
+    await dbAppointments.insertAppointment(date, patientId)
+    req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créée.`)
     return res.redirect('/mes-seances')
   } catch (err) {
-    req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez vous réessayer ?')
+    req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?')
     console.error('Erreur pour créer la séance', err)
     return res.redirect('/nouvelle-seance')
   }
+}
+
+module.exports.deleteAppointmentValidators = [
+  check('appointmentId')
+    .isUUID()
+    .withMessage('Vous devez spécifier une séance à supprimer.'),
+]
+
+// We use a POST rather than a DELETE because method=DELETE in the form seems to send a GET. (???)
+module.exports.deleteAppointment = async (req, res) => {
+  if (!validation.checkErrors(req)) {
+    return res.redirect('/mes-seances')
+  }
+
+  const appointmentId = req.body['appointmentId']
+  try {
+    await dbAppointments.deleteAppointment(appointmentId)
+    req.flash('info', `La séance a bien été supprimée.`)
+  } catch (err) {
+    req.flash('error', 'Erreur. La séance n\'est pas supprimée. Pourriez-vous réessayer ?')
+    console.error('Erreur pour supprimer la séance', err)
+  }
+
+  return res.redirect('/mes-seances')
 }

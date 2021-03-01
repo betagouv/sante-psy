@@ -1,30 +1,39 @@
-<%- include('partials/header') -%>
-
-<div class="rf-container rf-mb-5w">
-  <h1 id="contactez-nous">
+<div class="rf-col-xs-12 rf-col-sm-12 rf-col-md-12 rf-col-lg-6 rf-col-xl-6 rf-pr-6w rf-pb-5w">
+  <h2 class="rf-mb-4w">
     Mes séances
-  </h1>
-  <% if (errors.length) { %>
-    <% errors.forEach(function(error) { %>
-      <%- include('partials/notificationError', {error: error}) -%>
-    <% }) %>
-  <% } %>
-  <% if (infos.length) { %>
-    <% infos.forEach(function(info) { %>
-      <%- include('partials/notificationInfo', {info: info}) -%>
-    <% }) %>
-  <% } %>
-  <div>
+  </h2>
+  <div class="rf-mb-2w">
     <a href="/nouvelle-seance" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouvelle séance</a>
   </div>
-  <div class="rf-my-5w">
-    <% appointments.forEach(function(appointment) { %>
-      <li><%= format.formatFrenchDate(appointment.date) %> avec <%= appointment.patientName %></li>
-    <% }) %>
-  </div>
   <div>
-    Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
+    <% if (appointments.length) { %>
+      <ul class="appointment-list">
+        <% appointments.forEach(function(appointment) { %>
+          <li>
+            <div class="rf-grid-row rf-grid-row--gutters rf-grid-row--space-between">
+              <div class="rf-col-xs-12 rf-col-sm-6 rf-col-md-6 rf-col-lg-6 rf-col-xl-6">
+                <div>
+                  <%= format.formatFrenchDate(appointment.appointmentDate) %>
+                </div>
+                <div>
+                  avec <%= appointment.firstNames %> <%= appointment.lastName %>
+                </div>
+              </div>
+              <div class="rf-col-xs-12 rf-col-sm-6 rf-col-md-6 rf-col-lg-6 rf-col-xl-6 rf-text-right">
+                <form action="/supprimer-seance" method="POST">
+                  <input hidden name="appointmentId" value="<%= appointment.id %>" />
+                  <button type="submit" class="rf-btn rf-btn--secondary rf-btn--sm rf-fi-close-line rf-btn--icon-left">
+                    Supprimer
+                  </button>
+                </form>
+            </div>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      Vous n'avez pas encore déclaré de séances.
+    <% } %>
   </div>
 </div>
 
-<%- include('partials/footer') -%>

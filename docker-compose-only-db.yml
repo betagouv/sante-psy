@@ -1,0 +1,32 @@
+# Only start PG, build SQL tables and run tests
+version: '3'
+services:
+  db:
+    image: postgres:12.5
+    environment:
+      POSTGRES_USER: santepsy
+      POSTGRES_PASSWORD: santepsy
+    ports:
+      - "5432:5432"
+  maildev:
+    image: maildev/maildev
+    environment:
+      MAILDEV_INCOMING_USER: mailuser
+      MAILDEV_INCOMING_PASS: mailpassword
+    ports:
+      - "1080:80"
+      - "1025:25"
+  web:
+    build: .
+    command: bash -c "sleep 3; npm run migrate;"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
+    ports:
+      - "8080:8080"
+      - "9229:9229"
+    volumes:
+      - .:/app
+    depends_on:
+      - db

@@ -1,0 +1,56 @@
+<%- include('partials/header') -%>
+
+<div class="rf-container rf-mb-5w">
+  <%- include('partials/ariane',
+  {
+    items: [
+      {
+        label: 'Déclarer mes séances',
+        url: '/mes-seances'
+      },
+    ],
+  })
+  -%>
+  <h1>Déclarer mes séances</h1>
+  <div class="rf-mb-5w">
+    <div>
+      Merci de participer au dispositif Santé Psy Etudiants!
+    </div>
+    <div>
+      Afin que nous puissions vous rembourser les séances réalisées, nous vous proposons de nous les
+      indiquer sur ce site.
+    </div>
+  </div>
+  <% if (errors.length) { %>
+    <% errors.forEach(function(error) { %>
+      <%- include('partials/notificationError', {error: error}) -%>
+    <% }) %>
+  <% } %>
+  <% if (infos.length) { %>
+    <% infos.forEach(function(info) { %>
+      <%- include('partials/notificationInfo', {info: info}) -%>
+    <% }) %>
+  <% } %>
+  <div class="rf-grid-row rf-grid-row--left rf-grid-row--gutters">
+    <%- include('myAppointments') -%>
+    <%- include('myPatients') -%>
+  </div>
+  <div>
+    <h2>
+      Comment mes séances seront-elles remboursées ?
+    </h2>
+    <div>
+      Lors de votre inscription au dispositif, vous avez signé une convention avec une université, et lui avez
+      transmis vos coordonnées bancaires (si ce n'est pas le cas n'hésitez pas à les recontacter).
+    </div>
+    <div class="rf-mt-2w">
+      À la fin de chaque mois, un email sera envoyé à l'université et à vous, contenant la liste des consultations
+      réalisées. L'université se chargera du remboursement, dans les 30 jours après cet email.
+    </div>
+  </div>
+  <div class="rf-my-4w">
+    Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
+  </div>
+</div>
+
+<%- include('partials/footer') -%>
