@@ -25,7 +25,7 @@ module.exports.getEditPatient = async (req, res) => {
 
   try {
     const patient = await dbPatient.getPatientById(patientId)
-    console.log(`${patient}`)
+    console.debug(`Rendering getEditPatient for ${patientId}`)
     res.render('editPatient', {
       pageTitle: 'Modifier un patient',
       patient: patient
