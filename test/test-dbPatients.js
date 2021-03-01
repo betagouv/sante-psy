@@ -68,9 +68,10 @@ describe('DB Patients', () => {
         oldPatient.id,
         oldPatient.firstNames,
         newLastName,
-        oldPatient.studentNumber
+        oldPatient.studentNumber,
+        psychologistId,
       )
-      const newPatient = await dbPatients.getPatientById(oldPatient.id)
+      const newPatient = await dbPatients.getPatientById(oldPatient.id, psychologistId)
       expect(newPatient.lastName).equal(newLastName)
     });
   });

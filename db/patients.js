@@ -3,10 +3,11 @@ const knex = require("knex")(knexConfig)
 
 module.exports.patientsTable = "patients";
 
-module.exports.getPatientById = async (patientId) => {
+module.exports.getPatientById = async (patientId, psychologistId) => {
   try {
     const patient =  await knex(module.exports.patientsTable)
       .where("id", patientId)
+      .where("psychologistId", psychologistId)
       .first();
 
     return patient;
@@ -43,10 +44,11 @@ module.exports.insertPatient = async (firstNames, lastName, INE, psychologistId)
   }
 }
 
-module.exports.updatePatient = async (id, firstNames, lastName, INE) => {
+module.exports.updatePatient = async (id, firstNames, lastName, INE, psychologistId) => {
   try {
     await knex(module.exports.patientsTable)
       .where("id", id)
+      .where("psychologistId", psychologistId)
       .update({
         firstNames,
         lastName,
