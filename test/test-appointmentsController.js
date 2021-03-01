@@ -48,6 +48,34 @@ describe('appointmentsController', function() {
         })
     })
 
+    it('should not create appointment if user not logged in', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
+
+      return chai.request(app)
+        .post('/creer-nouvelle-seance')
+        // no auth cookie
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': patient.id,
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .then(async (res) => {
+          expect(res.status).to.equal(401)
+
+          // Appointment not created
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
+          expect(appointmentArray).to.have.length(0)
+
+          return Promise.resolve()
+        })
+    })
+
     it('should only display my patients in dropdown when creating appointment', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
