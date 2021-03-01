@@ -44,6 +44,7 @@ describe('appointmentsController', function() {
     it('should refuse invalid patientId', function(done) {
       chai.request(app)
         .post('/creer-nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -61,6 +62,7 @@ describe('appointmentsController', function() {
     it('should refuse empty patientId', function(done) {
       chai.request(app)
         .post('/creer-nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -96,6 +98,7 @@ describe('appointmentsController', function() {
     it('should refuse empty date', function(done) {
       chai.request(app)
         .post('/creer-nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -179,6 +182,7 @@ describe('appointmentsController', function() {
 
       return chai.request(app)
         .post('/supprimer-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -199,6 +203,7 @@ describe('appointmentsController', function() {
 
       return chai.request(app)
         .post('/supprimer-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({

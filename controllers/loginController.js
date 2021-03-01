@@ -12,20 +12,11 @@ function generateToken() {
 }
 
 async function sendLoginEmail(email, loginUrl, token) {
-  const user = await dbPsychologists.getPsychologistByEmail(email);
-
-  if (!user) { //@TODO isValidUser(user)
-    throw new Error(
-      `Avez-vous une rempli la démarche pour devenir partenaire présente sur l'accueil du site ?`,
-    );
-  }
-
-  const html = await ejs.renderFile('./views/emails/login.ejs', {
-    loginUrlWithToken: `${loginUrl}?token=${encodeURIComponent(token)}`,
-    appName: config.appName,
-  });
-
   try {
+    const html = await ejs.renderFile('./views/emails/login.ejs', {
+      loginUrlWithToken: `${loginUrl}?token=${encodeURIComponent(token)}`,
+      appName: config.appName,
+    });
     await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
   } catch (err) {
     console.error(err);
@@ -64,6 +55,8 @@ module.exports.getLogin = async function getLogin(req, res) {
       req.flash('info', `Vous êtes authentifié.e comme ${dbToken.email}`);
 
       return res.redirect(nextPage);
+    } else {
+      req.flash('error', 'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.');
     }
   }
 
@@ -92,9 +85,6 @@ module.exports.postLogin = async function postLogin(req, res) {
   }
 
   try {
-    const formUrl = config.demarchesSimplifieesUrl;
-    const sessionDurationHours = config.sessionDurationHours;
-    const contactEmail = res.locals.contactEmail;
     const emailExist = await dbPsychologists.getPsychologistByEmail(email);
 
     if( emailExist ) {
@@ -103,11 +93,10 @@ module.exports.postLogin = async function postLogin(req, res) {
       await sendLoginEmail(email, loginUrl, token);
       await saveToken(email, token);
     } else {
-      // eslint-disable-next-line max-len
-      console.warn(`Email inconnu qui essaye d'accéder au service - ${email} - il est peut être en attente de validation`);
+      console.warn(`Email inconnu qui essaye d'accéder au service - ${email} -\
+      il est peut être en attente de validation`);
     }
 
-    //@TODO fix me - infos not being displayed on first time
     req.flash('info',
       `Un lien de connexion a été envoyé à l'adresse ${email}\
        si elle est connue de nos services.\nLe lien est valable une heure.`);
@@ -118,4 +107,9 @@ module.exports.postLogin = async function postLogin(req, res) {
     req.flash('error', "Erreur dans l'authentification. Nos services ont été alertés et vont règler ça au plus vite.");
     return res.redirect(`/login`);
   }
+};
+
+module.exports.getLogout = function getLogout (req, res) {
+  req.flash('info', `Vous êtes déconnecté.`);
+  res.clearCookie('token').redirect('/');
 };

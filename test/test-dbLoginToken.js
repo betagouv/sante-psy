@@ -1,4 +1,3 @@
-const assert = require('chai').assert;
 require('dotenv').config();
 const dbToginToken = require('../db/loginToken')
 const date = require('../utils/date')

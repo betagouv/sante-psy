@@ -2,6 +2,7 @@
 const app = require('../index')
 const chai = require('chai')
 const dbPatients = require('../db/patients')
+const cookie = require('../utils/cookie')
 const sinon = require('sinon')
 
 describe('patientsController', function() {
@@ -30,6 +31,7 @@ describe('patientsController', function() {
 
       chai.request(app)
         .post('/creer-nouveau-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -49,6 +51,7 @@ describe('patientsController', function() {
     const shouldFailCreatePatientInputValidation = (done, postData) => {
       chai.request(app)
         .post('/creer-nouveau-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
