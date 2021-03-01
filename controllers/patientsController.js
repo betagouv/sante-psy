@@ -31,8 +31,8 @@ module.exports.getEditPatient = async (req, res) => {
       patient: patient
     })
   } catch (err) {
-    req.flash('error', 'Erreur. test ICI')
-    console.error('Erreur. test ICI', err)
+    req.flash('error', 'Erreur lors de la sauvegarde.')
+    console.error('Error getEditPatient', err)
   }
 }
 
