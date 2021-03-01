@@ -1,0 +1,71 @@
+<%- include('partials/header') -%>
+
+<!-- TODO serve jquery from local -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="/static/js/datepicker-fr.js"></script>
+
+<div class="rf-container rf-mb-5w">
+  <%- include('partials/ariane',
+  {
+    items: [
+        {
+          label: 'Déclarer mes séances',
+          url: '/mes-seances'
+        },
+        {
+          label: 'modifier patient',
+        },
+    ],
+  })
+  -%>
+  <h1>
+    Modifier un patient
+  </h1>
+  <div class="rf-mb-5w">
+    <div>
+      Modifiez les informations de l'étudiant.e.
+    </div>
+  </div>
+  <% if (errors.length) { %>
+    <% errors.forEach(function(error) { %>
+      <%- include('partials/notificationError', {error: error}) -%>
+    <% }) %>
+  <% } %>
+  <% if (infos.length) { %>
+    <% infos.forEach(function(info) { %>
+      <%- include('partials/notificationInfo', {info: info}) -%>
+    <% }) %>
+  <% } %>
+  <div class="rf-my-5w">
+    <form action="/api/modifier-patient" method="POST">
+      <div>
+        <div class="rf-my-3w">
+          <!--todo : little red star for required fields -->
+          <label class="rf-label" for="firstnames">Prénoms</label>
+          <input class="rf-input midlength-input" value="<%= patient.firstNames %>" type="text" id="firstnames" name="firstnames">
+        </div>
+        <div class="rf-my-3w">
+          <label class="rf-label" for="lastname">Nom</label>
+          <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname">
+        </div>
+        <div class="rf-my-3w">
+          <!-- todo : JS validation for 11 digit number -->
+          <label class="rf-label" for="ine">Numéro INE de l'étudiant (11 caractères)</label>
+          <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine">
+        </div>
+      </div>
+      <div class="rf-my-5w">
+        <input hidden name="patientid" value="<%= patient.id %>" />
+        <button type="submit" class="rf-btn rf-fi-check-line rf-btn--icon-left">Valider les modifications</button>
+      </div>
+    </form>
+  </div>
+  <div>
+    Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
+  </div>
+</div>
+</br>
+
+<%- include('partials/footer') -%>
