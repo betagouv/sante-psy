@@ -42,6 +42,7 @@ describe('appointmentsController', function() {
 
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
           expect(appointmentArray).to.have.length(1)
+          expect(appointmentArray[0].psychologistId).to.equal(psy.dossierNumber)
 
           return Promise.resolve()
         })
@@ -201,6 +202,38 @@ describe('appointmentsController', function() {
 
           // Appointment is not deleted
           const appointmentArray = await dbAppointments.getAppointments(anotherPsyId)
+          expect(appointmentArray).to.have.length(1)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should not delete appointment if user not logged in', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+
+      // Insert an appointment and a patient
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
+      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psy.dossierNumber)
+      // Check appointment is inserted
+      const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
+      expect(appointmentArray).to.have.length(1)
+
+      return chai.request(app)
+        .post('/supprimer-seance')
+        // no auth cookie
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'appointmentId': appointment.id,
+        })
+        .then(async (res) => {
+          expect(res.status).to.equal(401)
+
+          // Appointment is not deleted
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
           expect(appointmentArray).to.have.length(1)
 
           return Promise.resolve()
