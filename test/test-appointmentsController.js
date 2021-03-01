@@ -46,6 +46,31 @@ describe('appointmentsController', function() {
           return Promise.resolve()
         })
     })
+
+    it('should only display my patients in dropdown when creating appointment', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d'
+      const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
+      const patientForAnotherPsy = await dbPatients.insertPatient('Stevie', 'Wonder', '34567890123', anotherPsyId)
+
+      return chai.request(app)
+        .get('/nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .then(async (res) => {
+          // My patients are present
+          chai.assert.include(res.text, myPatient.firstNames)
+          chai.assert.include(res.text, myPatient.lastName)
+
+          // Other psy's patients are not listed
+          chai.assert.notInclude(res.text, patientForAnotherPsy.firstNames)
+          chai.assert.notInclude(res.text, patientForAnotherPsy.lastName)
+          return Promise.resolve()
+        })
+    })
   })
 
   describe('create appointment - input validation', function() {
