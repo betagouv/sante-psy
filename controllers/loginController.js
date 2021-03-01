@@ -27,7 +27,7 @@ async function sendLoginEmail(email, loginUrl, token) {
 async function saveToken(email, token) {
   try {
     const expiredAt = date.getDatePlusOneHour();
-    await dbLoginToken.insert(token,email, expiredAt);
+    await dbLoginToken.insert(token, email, expiredAt);
 
     console.log(`Login token créé`);
   } catch (err) {
