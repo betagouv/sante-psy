@@ -30,7 +30,7 @@ module.exports.createNewAppointment = async (req, res) => {
   const patientId = req.body['patientId']
   try {
     await dbAppointments.insertAppointment(date, patientId)
-    req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créé.`)
+    req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créée.`)
     return res.redirect('/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?')
