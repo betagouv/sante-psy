@@ -23,7 +23,7 @@ module.exports.createNewAppointmentValidators = [
 module.exports.createNewAppointment = async (req, res) => {
   // Todo : test case where patient id does not exist
   if (!validation.checkErrors(req)) {
-    return res.redirect('/nouvelle-seance')
+    return res.redirect('/psychologue/nouvelle-seance')
   }
 
   const date = new Date(Date.parse(req.body['iso-date']))
@@ -31,11 +31,11 @@ module.exports.createNewAppointment = async (req, res) => {
   try {
     await dbAppointments.insertAppointment(date, patientId)
     req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créée.`)
-    return res.redirect('/mes-seances')
+    return res.redirect('/psychologue/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?')
     console.error('Erreur pour créer la séance', err)
-    return res.redirect('/nouvelle-seance')
+    return res.redirect('/psychologue/nouvelle-seance')
   }
 }
 
@@ -48,7 +48,7 @@ module.exports.deleteAppointmentValidators = [
 // We use a POST rather than a DELETE because method=DELETE in the form seems to send a GET. (???)
 module.exports.deleteAppointment = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.redirect('/mes-seances')
+    return res.redirect('/psychologue/mes-seances')
   }
 
   const appointmentId = req.body['appointmentId']
@@ -60,5 +60,5 @@ module.exports.deleteAppointment = async (req, res) => {
     console.error('Erreur pour supprimer la séance', err)
   }
 
-  return res.redirect('/mes-seances')
+  return res.redirect('/psychologue/mes-seances')
 }

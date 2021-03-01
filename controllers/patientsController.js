@@ -19,7 +19,7 @@ module.exports.editPatient = async (req, res) => {
     req.flash('error', 'Erreur. Le patient n\'est pas modifié. Pourriez-vous réessayer ?')
     console.error('Erreur pour modifier le patient', err)
   }
-  return res.redirect('/mes-seances')
+  return res.redirect('/psychologue/mes-seances')
 }
 
 module.exports.getEditPatient = async (req, res) => {
@@ -42,7 +42,7 @@ module.exports.createNewPatient = async (req, res) => {
   console.debug("createNewPatient - req.body", req.body);
 
   if (!validation.checkErrors(req)) {
-    return res.redirect('/nouveau-patient')
+    return res.redirect('/psychologue/nouveau-patient')
   }
 
   // todo input validation, protection against injections
@@ -50,14 +50,14 @@ module.exports.createNewPatient = async (req, res) => {
   if (!firstNames || firstNames.length === 0) {
     console.error("Invalide firstNames");
     req.flash('error', 'Vous devez spécifier le.s prénom.s du patient.')
-    return res.redirect('/nouveau-patient')
+    return res.redirect('/psychologue/nouveau-patient')
   }
 
   const lastName = req.body['lastname'].trim()
   if (!lastName || lastName.length === 0) {
     console.error("Invalide lastName");
     req.flash('error', 'Vous devez spécifier le nom du patient.')
-    return res.redirect('/nouveau-patient')
+    return res.redirect('/psychologue/nouveau-patient')
   }
 
   const INE = req.body['ine']
@@ -69,11 +69,11 @@ module.exports.createNewPatient = async (req, res) => {
   try {
     await dbPatient.insertPatient(firstNames, lastName, INE)
     req.flash('info', `Le patient ${firstNames} ${lastName} a bien été créé.`)
-    return res.redirect('/mes-seances')
+    return res.redirect('/psychologue/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'a pas été créé. Pourriez-vous réessayer ?')
     console.error('Erreur pour créer le patient', err)
-    return res.redirect('/nouveau-patient')
+    return res.redirect('/psychologue/nouveau-patient')
   }
 }
 
