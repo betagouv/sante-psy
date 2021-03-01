@@ -44,33 +44,33 @@ describe('patientsController', function() {
           return Promise.resolve()
         })
     })
-  })
 
-  it('should not create patient if user is not logged in', async function() {
-    const psy = {
-      dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-      email: 'valid@valid.org',
-    }
+    it('should not create patient if user is not logged in', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
 
-    return chai.request(app)
-      .post('/creer-nouveau-patient')
-      // no auth cookie
-      .redirects(0) // block redirects, we don't want to test them
-      .type('form')
-      .send({
-        lastname: 'Lovelace',
-        firstnames: 'Ada',
-        ine: '12345678901',
-      })
-      .then(async (res) => {
-        expect(res.status).to.equal(401)
+      return chai.request(app)
+        .post('/creer-nouveau-patient')
+        // no auth cookie
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          lastname: 'Lovelace',
+          firstnames: 'Ada',
+          ine: '12345678901',
+        })
+        .then(async (res) => {
+          expect(res.status).to.equal(401)
 
-        // Patient not created
-        const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
-        expect(patientsArray).to.have.length(0)
+          // Patient not created
+          const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
+          expect(patientsArray).to.have.length(0)
 
-        return Promise.resolve()
-      })
+          return Promise.resolve()
+        })
+    })
   })
 
   describe('create patient input validation', function() {
