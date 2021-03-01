@@ -5,13 +5,11 @@ module.exports.patientsTable = "patients";
 
 module.exports.getPatientById = async (patientId) => {
   try {
-    const patientArray =  await knex("patients")
+    const patient =  await knex(module.exports.patientsTable)
       .where("id", patientId)
-      .returning('*')
-
-    console.log(`${patientArray}`)
-    console.log(`${patientArray[0].lastName}`)
-    return patientArray[0]
+      .first();
+      
+    return patient;
   } catch (err) {
     console.error("Erreur de récupération du patient", err)
     throw new Error("Erreur de récupération du patient")
