@@ -173,5 +173,38 @@ describe('appointmentsController', function() {
           return Promise.resolve()
         })
     })
+
+    it('should not delete appointment if it is not mine', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const anotherPsyId = 'ccb6f32b-8c55-4322-8ecc-556e6900b4ea'
+
+      // Insert an appointment and a patient
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', anotherPsyId)
+      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, anotherPsyId)
+      // Check appointment is inserted
+      const appointmentArray = await dbAppointments.getAppointments(anotherPsyId)
+      expect(appointmentArray).to.have.length(1)
+
+      return chai.request(app)
+        .post('/supprimer-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'appointmentId': appointment.id,
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
+          // Appointment is not deleted
+          const appointmentArray = await dbAppointments.getAppointments(anotherPsyId)
+          expect(appointmentArray).to.have.length(1)
+
+          return Promise.resolve()
+        })
+    })
   })
 })
