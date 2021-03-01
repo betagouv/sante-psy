@@ -224,5 +224,38 @@ describe('patientsController', function() {
         })
     })
 
+    it('should not update patient if user is not logged in', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const patient = await makePatient(psy.dossierNumber)
+
+      return chai.request(app)
+        .post('/api/modifier-patient')
+        // no auth cookie
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          patientid: patient.id,
+          lastname: 'Lovelacekkk',
+          firstnames: 'Adakkk',
+          ine: '111',
+        })
+        .then(async (res) => {
+          expect(res.status).to.equal(401)
+
+          // Patient was not updated
+          const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
+          expect(patientsArray).to.have.length(1)
+          expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber)
+          expect(patientsArray[0].lastName).to.equal(patient.lastName)
+          expect(patientsArray[0].firstNames).to.equal(patient.firstNames)
+          expect(patientsArray[0].INE).to.equal(patient.INE)
+
+          return Promise.resolve()
+        })
+    })
+
   })
 })
