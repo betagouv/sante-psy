@@ -107,6 +107,9 @@ app.use((err, req, res, next) => {
       req.flash('error', "Cette page n'existe pas.")
       return res.redirect(`/`);
     }
+  } else if( req.cookies === undefined ) {
+    req.flash('error', "Cette page n'existe pas.")
+    res.redirect('/');
   }
 
   return next(err);
@@ -164,7 +167,6 @@ if (config.featurePsyPages) {
     patientsController.createNewPatient)
   app.post('/modifier-patient', patientsController.getEditPatient)
   app.post('/api/modifier-patient', patientsController.editPatient)
-  
 }
 
 app.get('/mentions-legales', (req, res) => {
@@ -178,6 +180,16 @@ app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
     pageTitle: "Données personnelles",
   })
 })
+
+app.get('*', function redirect404(req, res){
+  if( req.cookies === undefined ) {
+    req.flash('error', "Cette page n'existe pas.")
+    res.redirect('/');
+  } else {
+    req.flash('error', "Cette page n'existe pas.")
+    return res.redirect(`/psychologue/mes-seances`);
+  }
+});
 
 module.exports = app.listen(config.port, () => {
   console.log(`${appName} listening at http://localhost:${config.port}`);
