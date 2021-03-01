@@ -3,6 +3,7 @@ const knex = require("knex")(knexConfig);
 const dbPsychologists = require('../../db/psychologists')
 const dbPatients = require('../../db/patients')
 const dbDsApiCursor = require('../../db/dsApiCursor')
+const dbLoginToken = require('../../db/loginToken')
 const rewire = require("rewire");
 const demarchesSimplifiees = rewire('../../utils/demarchesSimplifiees');
 
@@ -48,6 +49,14 @@ module.exports.cleanDataCursor = async function cleanDataCursor() {
     } else {
       undefined;
     }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+module.exports.cleanDataToken = async function cleanDataToken() {
+  try {
+    return knex(dbLoginToken.loginTokenTable).select('*').delete()
   } catch (err) {
     console.log(err);
   }

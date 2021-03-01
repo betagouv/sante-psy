@@ -56,12 +56,16 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
   return query;
 }
 
-/**
- * @TODO fix me 
- * 
- */
 module.exports.getNumberOfPsychologists = async function getNumberOfPsychologists() {
   const query = await knex(module.exports.psychologistsTable).count('dossierNumber').first();
 
   return query.count;
 }
+
+
+module.exports.getPsychologistByEmail = async function getPsychologistByEmail(email) {
+  return await knex(module.exports.psychologistsTable)
+  .where('email', email)
+  .first();
+}
+
