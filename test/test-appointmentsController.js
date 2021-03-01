@@ -10,6 +10,45 @@ const { expect } = require('chai')
 
 describe('appointmentsController', function() {
   describe('create appointment', function() {
+    beforeEach(async function(done) {
+      done()
+    })
+
+    afterEach(async function() {
+      await clean.cleanAllPatients()
+      await clean.cleanAllAppointments()
+      return Promise.resolve()
+    })
+
+    it('should create appointment', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
+
+      return chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': patient.id,
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
+          expect(appointmentArray).to.have.length(1)
+
+          return Promise.resolve()
+        })
+    })
+  })
+
+  describe('create appointment - input validation', function() {
     let insertAppointmentStub
 
     beforeEach(function(done) {
@@ -21,28 +60,6 @@ describe('appointmentsController', function() {
     afterEach(function(done) {
       insertAppointmentStub.restore()
       done()
-    })
-
-    it('should create appointment', function(done) {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
-      }
-      chai.request(app)
-        .post('/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          'patientId': 1,
-          date: '09/02/2021',
-          'iso-date': '2021-02-09',
-        })
-        .end((err, res) => {
-          res.should.redirectTo('/mes-seances')
-          sinon.assert.called(insertAppointmentStub)
-          done()
-        })
     })
 
     it('should refuse invalid date', function(done) {
