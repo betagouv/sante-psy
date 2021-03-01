@@ -10,8 +10,8 @@ module.exports.appointmentsTable = appointmentsTable;
 module.exports.getAppointments = async (psychologistId) => {
   try {
     const appointmentArray = await knex.from(dbPatient.patientsTable)
-      .innerJoin('appointments', 'patients.id', 'appointments.patientId')
-      .where('appointments.psychologistId', psychologistId)
+      .innerJoin(`${appointmentsTable}`, `${dbPatient.patientsTable}.id`, `${appointmentsTable}.patientId`)
+      .where(`${appointmentsTable}.psychologistId`, psychologistId)
       .orderBy("appointmentDate", "desc")
     return appointmentArray
   } catch (err) {
