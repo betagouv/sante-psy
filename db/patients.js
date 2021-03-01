@@ -8,7 +8,7 @@ module.exports.getPatientById = async (patientId) => {
     const patient =  await knex(module.exports.patientsTable)
       .where("id", patientId)
       .first();
-      
+
     return patient;
   } catch (err) {
     console.error("Erreur de récupération du patient", err)

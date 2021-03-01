@@ -52,11 +52,7 @@
         </div>
         <div class="rf-my-3w">
           <!-- todo : JS validation for 11 digit number -->
-            <% if (patient.INE.length) { %>
-              <label class="rf-label" for="ine"><%= patient.INE %></label>
-            <% } else { %>
-              <label class="rf-label" for="ine">Numéro INE de l'étudiant (11 caractères)</label>
-            <% } %>
+          <label class="rf-label" for="ine">Numéro INE de l'étudiant (11 caractères)</label>
           <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine">
         </div>
       </div>
