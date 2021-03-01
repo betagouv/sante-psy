@@ -67,7 +67,6 @@ module.exports.getLogin = async function getLogin(req, res) {
   });
 };
 
-//@TODO refactor me ?
 function generateLoginUrl() {
   return config.hostnameWithProtocol + '/psychologue/login';
 }

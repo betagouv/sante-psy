@@ -5,7 +5,6 @@ const graphql = rewire('../utils/graphql.js');
 
 describe('GraphQL Handler', () => {
   describe('hasErrors', () => {
-    //@TODO testUsers should match API's schema
     it('should return true if API has returned an error', async () => {
       const errorResponse = {"response":
       {"data":null,
