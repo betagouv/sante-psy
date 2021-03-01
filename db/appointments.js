@@ -10,11 +10,9 @@ module.exports.appointmentsTable = appointmentsTable;
 module.exports.getAppointments = async (psychologistId) => {
   try {
     const appointmentArray = await knex.from(dbPatient.patientTable)
-      // todo where psychologistId = current psy
       .innerJoin('appointments', 'patients.id', 'appointments.patientId')
-      .where('psychologistId', psychologistId)
+      .where('appointments.psychologistId', psychologistId)
       .orderBy("appointmentDate", "desc")
-    console.log('appointmentArray', appointmentArray)
     return appointmentArray
   } catch (err) {
     console.error(`Impossible de récupérer les appointments`, err)

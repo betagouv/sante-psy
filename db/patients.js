@@ -14,12 +14,13 @@ module.exports.getPatients = async () => {
   }
 }
 
-const insertPatient = async (firstNames, lastName, studentNumber) => {
+const insertPatient = async (firstNames, lastName, studentNumber, psychologistId) => {
   try {
     const patientsArray = await knex(module.exports.patientTable).insert({
       firstNames,
       lastName,
       INE: studentNumber,
+      psychologistId,
     }).returning('*')
     return patientsArray[0]
   } catch (err) {

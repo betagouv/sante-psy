@@ -1,3 +1,4 @@
+const cookie = require('../utils/cookie')
 const dbPatient = require('../db/patients')
 
 module.exports.newPatient = async (req, res) => {
@@ -22,7 +23,8 @@ module.exports.createNewPatient = async (req, res) => {
   const studentNumber = req.body['studentnumber']
 
   try {
-    await dbPatient.insertPatient(firstNames, lastName, studentNumber)
+    const psychologistId = cookie.getCurrentPsyId(req)
+    await dbPatient.insertPatient(firstNames, lastName, studentNumber, psychologistId)
     req.flash('info', `Le patient ${firstNames} ${lastName} a bien été créé.`)
     return res.redirect('/mes-seances')
   } catch (err) {
