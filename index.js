@@ -159,6 +159,9 @@ if (config.featurePsyPages) {
   app.post('/creer-nouveau-patient',
     patientsController.createNewPatientValidators,
     patientsController.createNewPatient)
+  app.post('/modifier-patient', patientsController.getEditPatient)
+  app.post('/api/modifier-patient', patientsController.editPatient)
+  
 }
 
 app.get('/mentions-legales', (req, res) => {

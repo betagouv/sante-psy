@@ -3,6 +3,19 @@ const knex = require("knex")(knexConfig)
 
 module.exports.patientsTable = "patients";
 
+module.exports.getPatientById = async (patientId) => {
+  try {
+    const patient =  await knex(module.exports.patientsTable)
+      .where("id", patientId)
+      .first();
+
+    return patient;
+  } catch (err) {
+    console.error("Erreur de récupération du patient", err)
+    throw new Error("Erreur de récupération du patient")
+  }
+}
+
 module.exports.getPatients = async () => {
   try {
     const patientArray = await knex(module.exports.patientsTable).select()
@@ -14,7 +27,7 @@ module.exports.getPatients = async () => {
   }
 }
 
-const insertPatient = async (firstNames, lastName, INE) => {
+module.exports.insertPatient = async (firstNames, lastName, INE) => {
   try {
     const patientsArray = await knex(module.exports.patientsTable).insert({
       firstNames,
@@ -27,4 +40,18 @@ const insertPatient = async (firstNames, lastName, INE) => {
     throw new Error("Erreur de sauvegarde du patient")
   }
 }
-module.exports.insertPatient = insertPatient
+
+module.exports.updatePatient = async (id, firstNames, lastName, INE) => {
+  try {
+    await knex(module.exports.patientsTable)
+      .where("id", id)
+      .update({
+        firstNames,
+        lastName,
+        INE
+      })
+  } catch (err) {
+    console.error("Erreur de modification du patient", err)
+    throw new Error("Erreur de modification du patient")
+  }
+}
