@@ -59,7 +59,6 @@ describe('DB Patients', () => {
       const newLastName = "NewName"
       const patients = await dbPatients.getPatients()
       const oldPatient = patients[0]
-      console.log(oldPatient.id)
 
       await dbPatients.updatePatient(
         oldPatient.id,
