@@ -138,4 +138,56 @@ describe('patientsController', function() {
       })
     })
   })
+
+  describe('update patient', function() {
+    beforeEach(async function(done) {
+      done()
+    })
+
+    afterEach(async function() {
+      await clean.cleanAllPatients()
+      return Promise.resolve()
+    })
+
+    const makePatient = async (psychologistId) => {
+      // Insert an appointment and a patient
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId)
+      // Check patient is inserted
+      const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
+      chai.assert(!!createdPatient)
+      return patient
+    }
+
+    it('should update patient', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const patient = await makePatient(psy.dossierNumber)
+
+      return chai.request(app)
+        .post('/api/modifier-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          patientid: patient.id,
+          lastname: 'Lovelacekkk',
+          firstnames: 'Adakkk',
+          ine: '111',
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
+          const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
+          expect(patientsArray).to.have.length(1)
+          expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber)
+          expect(patientsArray[0].lastName).to.equal('Lovelacekkk')
+          expect(patientsArray[0].firstNames).to.equal('Adakkk')
+          expect(patientsArray[0].INE).to.equal('111')
+
+          return Promise.resolve()
+        })
+    })
+  })
 })
