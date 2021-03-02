@@ -21,7 +21,7 @@ describe('patientsController', function() {
     it('should create patient', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
 
       return chai.request(app)
@@ -48,7 +48,7 @@ describe('patientsController', function() {
     it('should not create patient if user is not logged in', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
 
       return chai.request(app)
@@ -94,7 +94,7 @@ describe('patientsController', function() {
     const shouldFailCreatePatientInputValidation = (done, postData) => {
       chai.request(app)
         .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
@@ -161,7 +161,7 @@ describe('patientsController', function() {
     it('should update patient', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const patient = await makePatient(psy.dossierNumber)
 
@@ -193,7 +193,7 @@ describe('patientsController', function() {
     it('should not update patient if it is not mine', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = '495614e8-89af-4406-ba02-9fc038b991f9'
       const patient = await makePatient(anotherPsyId)
@@ -227,7 +227,7 @@ describe('patientsController', function() {
     it('should not update patient if user is not logged in', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const patient = await makePatient(psy.dossierNumber)
 

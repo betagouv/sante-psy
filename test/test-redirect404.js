@@ -6,7 +6,7 @@ const cookie = require('../utils/cookie')
 describe('Redirect if unknown page - 404', function() {
   const psy = {
     dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-    email: 'valid@valid.org',
+    email: 'prenom.nom@beta.gouv.fr',
   };
 
   it('should redirect to index if unknown page and not loggued', async function() {

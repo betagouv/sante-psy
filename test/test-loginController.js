@@ -37,7 +37,7 @@ describe('loginController', function() {
 
   describe('login page', () => {
     const token = cookie.getJwtTokenForUser("email");
-    const email = "myemail@org.org";
+    const email = "prenom.nom@beta.gouv.fr";
     let getByTokenStub;
     let insertTokenStub;
     let deleteTokenStub;
@@ -116,7 +116,7 @@ describe('loginController', function() {
         .post('/psychologue/login')
         .type('form')
         .send({
-          'email': 'known@email.org',
+          'email': 'prenom.nom@beta.gouv.fr',
         })
         .end((err, res) => {
           sinon.assert.called(getPsychologistByEmailStub);

@@ -53,7 +53,7 @@ module.exports.getLogin = async function getLogin(req, res) {
         const psychologistData = await dbPsychologists.getPsychologistByEmail(dbToken.email);
         res.cookie('token', cookie.getJwtTokenForUser(dbToken.email, psychologistData));
         await dbLoginToken.delete(token);
-        req.flash('info', `Vous êtes authentifié.e comme ${dbToken.email}`);
+        req.flash('info', `Vous êtes authentifié comme ${dbToken.email}`);
 
         return res.redirect(nextPage);
       } else {

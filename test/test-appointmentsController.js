@@ -23,7 +23,7 @@ describe('appointmentsController', function() {
     it('should create appointment', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
 
@@ -51,7 +51,7 @@ describe('appointmentsController', function() {
     it('should not create appointment if user not logged in', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
 
@@ -79,7 +79,7 @@ describe('appointmentsController', function() {
     it('should only display my patients in dropdown when creating appointment', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d'
       const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
@@ -119,7 +119,7 @@ describe('appointmentsController', function() {
     it('should refuse invalid patientId', function(done) {
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -137,7 +137,7 @@ describe('appointmentsController', function() {
     it('should refuse empty patientId', function(done) {
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -155,7 +155,7 @@ describe('appointmentsController', function() {
     it('should refuse invalid date', function(done) {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
@@ -177,7 +177,7 @@ describe('appointmentsController', function() {
     it('should refuse empty date', function(done) {
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -195,7 +195,7 @@ describe('appointmentsController', function() {
     it('should ignore the date input and use the iso-date', function(done) {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
@@ -239,7 +239,7 @@ describe('appointmentsController', function() {
     it('should delete appointment', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
 
       const appointment = await makeAppointment(psy.dossierNumber)
@@ -265,7 +265,7 @@ describe('appointmentsController', function() {
     it('should not delete appointment if it is not mine', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = 'ccb6f32b-8c55-4322-8ecc-556e6900b4ea'
       const appointment = await makeAppointment(anotherPsyId)
@@ -291,7 +291,7 @@ describe('appointmentsController', function() {
     it('should refuse invalid appointmentId', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const appointment = await makeAppointment(psy.dossierNumber)
 
@@ -317,7 +317,7 @@ describe('appointmentsController', function() {
     it('should not delete appointment if user not logged in', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const appointment = await makeAppointment(psy.dossierNumber)
 
@@ -343,7 +343,7 @@ describe('appointmentsController', function() {
     it('should refuse empty appointmentId', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       await makeAppointment(psy.dossierNumber)
 
