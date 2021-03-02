@@ -66,7 +66,7 @@ describe('appointmentsController', function() {
           'iso-date': '2021-02-09',
         })
         .then(async (res) => {
-          expect(res.status).to.equal(401)
+          res.should.redirectTo('/psychologue/login')
 
           // Appointment not created
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
@@ -330,7 +330,7 @@ describe('appointmentsController', function() {
           'appointmentId': appointment.id,
         })
         .then(async (res) => {
-          expect(res.status).to.equal(401)
+          res.should.redirectTo('/psychologue/login')
 
           // Appointment is not deleted
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
