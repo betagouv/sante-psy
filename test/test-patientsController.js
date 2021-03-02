@@ -305,7 +305,7 @@ describe('patientsController', function() {
           patientid: patient.id,
           lastname: 'Lovelacekkk',
           firstnames: 'Adakkk',
-          ine: '111',
+          ine: '111222333rr',
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -315,7 +315,7 @@ describe('patientsController', function() {
           expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber)
           expect(patientsArray[0].lastName).to.equal('Lovelacekkk')
           expect(patientsArray[0].firstNames).to.equal('Adakkk')
-          expect(patientsArray[0].INE).to.equal('111')
+          expect(patientsArray[0].INE).to.equal('111222333rr')
 
           return Promise.resolve()
         })
@@ -338,7 +338,7 @@ describe('patientsController', function() {
           patientid: patient.id,
           lastname: 'Lovelacekkk',
           firstnames: 'Adakkk',
-          ine: '111',
+          ine: '111222333SS',
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')

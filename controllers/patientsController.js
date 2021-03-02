@@ -28,7 +28,7 @@ const patientValidators = [
       check('ine').trim().isEmpty(),
       check('ine')
         .trim().isAlphanumeric()
-        .isLength({min:0, max:11})
+        .isLength({min:11, max:11})
         .customSanitizer((value, { req }) => {
           return req.sanitize(value)
         })
