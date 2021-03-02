@@ -22,7 +22,7 @@ describe('dashboardController', function() {
     it('should display only my patients in dashboard', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d'
       const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
@@ -47,7 +47,7 @@ describe('dashboardController', function() {
     it('should display only my appointments in dashboard', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d'
       const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
