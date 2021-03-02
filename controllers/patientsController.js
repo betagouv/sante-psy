@@ -1,5 +1,5 @@
 const cookie = require('../utils/cookie')
-const { check } = require('express-validator');
+const { check, oneOf } = require('express-validator');
 const dbPatient = require('../db/patients')
 const validation = require('../utils/validation')
 
@@ -46,9 +46,24 @@ module.exports.getEditPatient = async (req, res) => {
   }
 }
 
-module.exports.createNewPatient = async (req, res) => {
-  console.debug("createNewPatient - req.body", req.body);
+module.exports.createNewPatientValidators = [
+  // todo : do we html-escape here ? We already escape in templates.
+  check('firstnames')
+    .trim().not().isEmpty()
+    .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
+  check('lastname')
+    .trim().not().isEmpty()
+    .withMessage('Vous devez spécifier le nom du patient.'),
+  oneOf(
+    [
+      check('ine').trim().isEmpty(),
+      check('ine').trim().isAlphanumeric().isLength(11)
+    ],
+    `Le numéro INE doit faire 11 caractères (chiffres ou lettres).
+    Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`)
+]
 
+module.exports.createNewPatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
     return res.redirect('/psychologue/nouveau-patient')
   }
@@ -70,14 +85,17 @@ module.exports.createNewPatient = async (req, res) => {
 
   const INE = req.sanitize(req.body['ine'])
   if (!INE || INE.length === 0) {
-    console.error("INE is empty");
-    req.flash('info', 'Vous pourrez remplir le numero INE plus tard.')
+    console.log("INE is empty");
   }
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     await dbPatient.insertPatient(firstNames, lastName, INE, psychologistId)
-    req.flash('info', `Le patient ${firstNames} ${lastName} a bien été créé.`)
+    let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
+    if (!INE || INE.length === 0) {
+      infoMessage += ' Vous pourrez renseigner son numero INE plus tard.'
+    }
+    req.flash('info', infoMessage)
     return res.redirect('/psychologue/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'a pas été créé. Pourriez-vous réessayer ?')
@@ -86,14 +104,4 @@ module.exports.createNewPatient = async (req, res) => {
   }
 }
 
-module.exports.createNewPatientValidators = [
-  // todo : do we html-escape here ? We already escape in templates.
-  check('firstnames')
-    .trim().not().isEmpty()
-    .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
-  check('lastname')
-    .trim().not().isEmpty()
-    .withMessage('Vous devez spécifier le nom du patient.'),
-  // todo validate INE : can be either empty, or 11 alpahnumeric chars
-]
 
