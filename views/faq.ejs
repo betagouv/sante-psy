@@ -1,6 +1,19 @@
 <%- include('partials/header') -%>
 
 <div class="rf-container rf-mb-5w">
+  <%- include('partials/ariane',
+  {
+    items: [
+      {
+        label: 'Accueil',
+        url: '/'
+      },
+      {
+        label: 'Foire aux questions'
+      }
+    ],
+  })
+  -%>
 
   <div class="rf-grid-row rf-grid-row--gutters rf-b__two-col">
     <nav class="rf-col-xs-12 rf-col-md-3 rf-sidemenu rf-sidemenu--sticky" aria-label="Menu latéral">
