@@ -7,6 +7,15 @@ const dbPatients = require('../db/patients')
 const { expect } = require('chai')
 const sinon = require('sinon')
 
+const makePatient = async (psychologistId) => {
+  // Insert an appointment and a patient
+  const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId)
+  // Check patient is inserted
+  const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
+  chai.assert(!!createdPatient)
+  return patient
+}
+
 describe('patientsController', function() {
   describe('create patient', function() {
     beforeEach(async function(done) {
@@ -195,6 +204,31 @@ describe('patientsController', function() {
     })
   })
 
+  describe('display update patient form', function() {
+    it('should display form for my patient', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const myPatient = await makePatient(psy.dossierNumber)
+
+      return chai.request(app)
+        .get('/psychologue/modifier-patient?patientid=' + myPatient.id)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .then(async (res) => {
+          expect(res.status).to.equal(200)
+
+          // The page displays myPatient
+          chai.assert.include(res.text, myPatient.firstNames)
+          chai.assert.include(res.text, myPatient.lastName)
+          chai.assert.include(res.text, myPatient.id)
+
+          return Promise.resolve()
+        })
+    })
+  })
+
   describe('update patient', function() {
     beforeEach(async function(done) {
       done()
@@ -204,15 +238,6 @@ describe('patientsController', function() {
       await clean.cleanAllPatients()
       return Promise.resolve()
     })
-
-    const makePatient = async (psychologistId) => {
-      // Insert an appointment and a patient
-      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId)
-      // Check patient is inserted
-      const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
-      chai.assert(!!createdPatient)
-      return patient
-    }
 
     it('should update patient', async function() {
       const psy = {
