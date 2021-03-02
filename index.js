@@ -152,11 +152,10 @@ if (config.featurePsyPages) {
   app.post('/psychologue/login', speedLimiterLogin, loginController.postLogin);
   app.get('/psychologue/logout', loginController.getLogout);
 
-  //@TODO ajouter `/psychologue/`
   app.get('/psychologue/mes-seances', dashboardController.dashboard)
   app.get('/psychologue/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/psychologue/creer-nouvelle-seance',
-    ...appointmentsController.createNewAppointmentValidators,
+    appointmentsController.createNewAppointmentValidators,
     appointmentsController.createNewAppointment)
   app.post('/psychologue/api/supprimer-seance',
     appointmentsController.deleteAppointmentValidators,
@@ -165,8 +164,12 @@ if (config.featurePsyPages) {
   app.post('/psychologue/api/creer-nouveau-patient',
     patientsController.createNewPatientValidators,
     patientsController.createNewPatient)
-  app.post('/psychologue/modifier-patient', patientsController.getEditPatient)
-  app.post('/psychologue/api/modifier-patient', patientsController.editPatient)
+  app.get('/psychologue/modifier-patient',
+    patientsController.getEditPatientValidators,
+    patientsController.getEditPatient)
+  app.post('/psychologue/api/modifier-patient',
+    patientsController.editPatientValidators,
+    patientsController.editPatient)
 }
 
 app.get('/mentions-legales', (req, res) => {
