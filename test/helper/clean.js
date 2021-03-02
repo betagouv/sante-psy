@@ -20,6 +20,8 @@ module.exports.psyList = function getPsyList() {
       dossierNumber: module.exports.testDossierNumber(),
       firstNames: 'First second',
       lastName: 'Last',
+      archived : false,
+      state : 'accepte',
       adeli: "829302942",
       address: 'SSR CL AL SOLA 66110 MONTBOLO',
       diploma: "Psychologie clinique de la santé",
