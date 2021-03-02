@@ -7,7 +7,9 @@ module.exports.psychologistsTable =  "psychologists";
 module.exports.getPsychologists = async () => {
   try {
     const psychologists = await knex(module.exports.psychologistsTable)
-        .select();
+        .select()
+        .whereNot('archived', true)
+        .where('state', 'accepte');
 
     return psychologists;
   } catch (err) {
@@ -26,27 +28,32 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
 
   const upsertArray = psyList.map( psy => {
     const upsertingKey = 'dossierNumber';
-
-    return knex(module.exports.psychologistsTable)
-    .insert(psy)
-    .onConflict(upsertingKey)
-    .merge({ // update every field and add updatedAt
-      firstNames : psy.firstNames,
-      lastName : psy.lastName,
-      address: psy.address,
-      region: psy.region,
-      departement: psy.departement,
-      phone: psy.phone,
-      website: psy.website,
-      email: psy.email,
-      teleconsultation: psy.teleconsultation,
-      description: psy.description,
-      training: psy.training,
-      adeli: psy.adeli,
-      diploma: psy.diploma,
-      languages: psy.languages,
-      updatedAt: updatedAt
-    });
+    try {
+      return knex(module.exports.psychologistsTable)
+      .insert(psy)
+      .onConflict(upsertingKey)
+      .merge({ // update every field and add updatedAt
+        firstNames : psy.firstNames,
+        lastName : psy.lastName,
+        archived : psy.archived,
+        state : psy.state,
+        address: psy.address,
+        region: psy.region,
+        departement: psy.departement,
+        phone: psy.phone,
+        website: psy.website,
+        email: psy.email,
+        teleconsultation: psy.teleconsultation,
+        description: psy.description,
+        training: psy.training,
+        adeli: psy.adeli,
+        diploma: psy.diploma,
+        languages: psy.languages,
+        updatedAt: updatedAt
+      });
+    } catch (err) {
+      console.error(`Error to insert ${psy}`, err);
+    }
   });
 
   const query = await Promise.all(upsertArray);
@@ -57,9 +64,12 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
 }
 
 module.exports.getNumberOfPsychologists = async function getNumberOfPsychologists() {
-  const query = await knex(module.exports.psychologistsTable).count('dossierNumber').first();
+  const query = await knex(module.exports.psychologistsTable)
+  .select('archived', 'state')
+  .count('*')
+  .groupBy('archived', 'state');
 
-  return query.count;
+  return query;
 }
 
 

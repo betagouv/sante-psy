@@ -38,7 +38,7 @@ async function saveToken(email, token) {
 
 module.exports.getLogin = async function getLogin(req, res) {
   // init params
-  const nextPage = '/mes-seances';
+  const nextPage = '/psychologue/mes-seances';
 
   const sessionDurationHours = config.sessionDurationHours;
   const formUrl = config.demarchesSimplifieesUrl;
@@ -104,7 +104,7 @@ module.exports.postLogin = async function postLogin(req, res) {
   } catch (err) {
     console.error(err);
     req.flash('error', "Erreur dans l'authentification. Nos services ont été alertés et vont règler ça au plus vite.");
-    return res.redirect(`/login`);
+    return res.redirect(`/psychologue/login`);
   }
 };
 
