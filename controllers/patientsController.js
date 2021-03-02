@@ -12,15 +12,26 @@ const patientValidators = [
   // todo : do we html-escape here ? We already escape in templates.
   check('firstnames')
     .trim().not().isEmpty()
+    .customSanitizer((value, { req }) => {
+      return req.sanitize(value)
+    })
     .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
   check('lastname')
     .trim().not().isEmpty()
+    .customSanitizer((value, { req }) => {
+      return req.sanitize(value)
+    })
     .withMessage('Vous devez spécifier le nom du patient.'),
   oneOf(
     [
       // Two valid possibilities : ine is empty, or ine is valid format.
       check('ine').trim().isEmpty(),
-      check('ine').trim().isAlphanumeric().isLength({min:0, max:11})
+      check('ine')
+        .trim().isAlphanumeric()
+        .isLength({min:0, max:11})
+        .customSanitizer((value, { req }) => {
+          return req.sanitize(value)
+        })
     ],
     `Le numéro INE doit faire 11 caractères (chiffres ou lettres).
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`)
@@ -40,10 +51,10 @@ module.exports.editPatient = async (req, res) => {
     return res.redirect('/psychologue/modifier-patient')
   }
 
-  const patientId = req.sanitize(req.body['patientid'])
-  const patientFirstNames = req.sanitize(req.body['firstnames'])
-  const patientLastName = req.sanitize(req.body['lastname'])
-  const patientINE = req.sanitize(req.body['ine'])
+  const patientId = req.body['patientid']
+  const patientFirstNames = req.body['firstnames']
+  const patientLastName = req.body['lastname']
+  const patientINE = req.body['ine']
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
@@ -70,7 +81,7 @@ module.exports.getEditPatient = async (req, res) => {
   }
 
   // Get patientId from query params, this is a GET request
-  const patientId = req.sanitize(req.query['patientid'])
+  const patientId = req.query['patientid']
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
@@ -98,9 +109,9 @@ module.exports.createNewPatient = async (req, res) => {
     return res.redirect('/psychologue/nouveau-patient')
   }
 
-  const firstNames = req.sanitize(req.body['firstnames']).trim()
-  const lastName = req.sanitize(req.body['lastname']).trim()
-  const INE = req.sanitize(req.body['ine'])
+  const firstNames = req.body['firstnames']
+  const lastName = req.body['lastname']
+  const INE = req.body['ine']
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
