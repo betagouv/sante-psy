@@ -26,7 +26,7 @@ module.exports.psyList = function getPsyList() {
       address: 'SSR CL AL SOLA 66110 MONTBOLO',
       diploma: "Psychologie clinique de la santé",
       phone: '0468396600',
-      email: 'psychologue.test@apas82.mssante.fr',
+      email: 'psychologue.test@beta.gouv.fr',
       website: 'apas82.mssante.fr',
       teleconsultation: true,
       description: "description",
