@@ -20,7 +20,7 @@
     items: [
         {
           label: 'Déclarer mes séances',
-          url: '/mes-seances'
+          url: '/psychologue/mes-seances'
         },
         {
           label: 'Nouvelle séance',
@@ -45,7 +45,7 @@
     <% }) %>
   <% } %>
   <div class="rf-my-5w">
-    <form action="/creer-nouvelle-seance" method="POST">
+    <form action="/psychologue/creer-nouvelle-seance" method="POST">
       <div>
         <div class="rf-my-3w">
           <label class="rf-label" for="date">Date de la séance</label>
@@ -57,7 +57,7 @@
           <label class="rf-label" for="patients" aria-describedby="patients-help">Patient</label>
           <div class="rf-hint-text" id="patients-help">
             Votre patient n'est pas dans la liste ?
-            <a href="/nouveau-patient">Ajoutez un nouveau patient</a>
+            <a href="/psychologue/nouveau-patient">Ajoutez un nouveau patient</a>
           </div>
           <select class="rf-select" id="patients" name="patientId" required>
               <option value="" selected disabled hidden>- Select -</option>

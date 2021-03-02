@@ -1,3 +1,4 @@
+const cookie = require('../utils/cookie')
 const { check } = require('express-validator');
 const dbPatient = require('../db/patients')
 const validation = require('../utils/validation')
@@ -13,20 +14,26 @@ module.exports.editPatient = async (req, res) => {
   const patientINE = req.body['ine']
 
   try {
-    await dbPatient.updatePatient(patientId, patientFirstNames, patientLastName, patientINE)
+    const psychologistId = cookie.getCurrentPsyId(req)
+    await dbPatient.updatePatient(patientId, patientFirstNames, patientLastName, patientINE, psychologistId)
     req.flash('info', `Le patient a bien été modifié.`)
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'est pas modifié. Pourriez-vous réessayer ?')
     console.error('Erreur pour modifier le patient', err)
   }
-  return res.redirect('/mes-seances')
+  return res.redirect('/psychologue/mes-seances')
 }
 
 module.exports.getEditPatient = async (req, res) => {
   const patientId = req.body['patientid']
 
   try {
-    const patient = await dbPatient.getPatientById(patientId)
+    const psychologistId = cookie.getCurrentPsyId(req)
+    const patient = await dbPatient.getPatientById(patientId, psychologistId)
+    if (!patient) {
+      req.flash('error', 'Ce patient n\'existe pas. Vous ne pouvez pas le modifier.')
+      return res.redirect('/psychologue/mes-seances')
+    }
     console.debug(`Rendering getEditPatient for ${patientId}`)
     res.render('editPatient', {
       pageTitle: 'Modifier un patient',
@@ -35,6 +42,7 @@ module.exports.getEditPatient = async (req, res) => {
   } catch (err) {
     req.flash('error', 'Erreur lors de la sauvegarde.')
     console.error('Error getEditPatient', err)
+    return res.redirect('/psychologue/mes-seances')
   }
 }
 
@@ -42,38 +50,39 @@ module.exports.createNewPatient = async (req, res) => {
   console.debug("createNewPatient - req.body", req.body);
 
   if (!validation.checkErrors(req)) {
-    return res.redirect('/nouveau-patient')
+    return res.redirect('/psychologue/nouveau-patient')
   }
 
   // todo input validation, protection against injections
-  const firstNames = req.body['firstnames'].trim()
+  const firstNames = req.sanitize(req.body['firstnames']).trim()
   if (!firstNames || firstNames.length === 0) {
     console.error("Invalide firstNames");
     req.flash('error', 'Vous devez spécifier le.s prénom.s du patient.')
-    return res.redirect('/nouveau-patient')
+    return res.redirect('/psychologue/nouveau-patient')
   }
 
-  const lastName = req.body['lastname'].trim()
+  const lastName = req.sanitize(req.body['lastname']).trim()
   if (!lastName || lastName.length === 0) {
     console.error("Invalide lastName");
     req.flash('error', 'Vous devez spécifier le nom du patient.')
-    return res.redirect('/nouveau-patient')
+    return res.redirect('/psychologue/nouveau-patient')
   }
 
-  const INE = req.body['ine']
+  const INE = req.sanitize(req.body['ine'])
   if (!INE || INE.length === 0) {
     console.error("INE is empty");
     req.flash('info', 'Vous pourrez remplir le numero INE plus tard.')
   }
 
   try {
-    await dbPatient.insertPatient(firstNames, lastName, INE)
+    const psychologistId = cookie.getCurrentPsyId(req)
+    await dbPatient.insertPatient(firstNames, lastName, INE, psychologistId)
     req.flash('info', `Le patient ${firstNames} ${lastName} a bien été créé.`)
-    return res.redirect('/mes-seances')
+    return res.redirect('/psychologue/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'a pas été créé. Pourriez-vous réessayer ?')
     console.error('Erreur pour créer le patient', err)
-    return res.redirect('/nouveau-patient')
+    return res.redirect('/psychologue/nouveau-patient')
   }
 }
 

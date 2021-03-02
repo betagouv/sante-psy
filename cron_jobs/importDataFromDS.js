@@ -20,7 +20,7 @@ module.exports.importDataFromDSToPG = async function importDataFromDSToPG (updat
       await dbsApiCursor.saveLatestCursor(dsAPIData.lastCursor);
 
       const numberOfPsychologists = await dbPsychologists.getNumberOfPsychologists();
-      console.log(`importDataFromDSToPG done: ${JSON.stringify(numberOfPsychologists)} psychologists inside PG`);
+      console.log(`importDataFromDSToPG done - psychologists inside PG :`, numberOfPsychologists);
     } else {
       console.warn("No psychologists to save");
     }
