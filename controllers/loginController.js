@@ -37,7 +37,6 @@ async function saveToken(email, token) {
 }
 
 module.exports.getLogin = async function getLogin(req, res) {
-  // init params
   const nextPage = '/psychologue/mes-seances';
 
   const sessionDurationHours = config.sessionDurationHours;
@@ -45,20 +44,25 @@ module.exports.getLogin = async function getLogin(req, res) {
   const contactEmail = res.locals.contactEmail;
 
   // Save a token in cookie that expire after config.sessionDurationHours hours if user is logged
-  if ( req.query.token ) {
-    const token = req.sanitize(req.query.token);
-    const dbToken = await dbLoginToken.getByToken(token);
+  try {
+    if ( req.query.token ) {
+      const token = req.sanitize(req.query.token);
+      const dbToken = await dbLoginToken.getByToken(token);
 
-    if( dbToken !== undefined ) {
-      const psychologistData = await dbPsychologists.getPsychologistByEmail(dbToken.email);
-      res.cookie('token', cookie.getJwtTokenForUser(dbToken.email, psychologistData));
-      await dbLoginToken.delete(token);
-      req.flash('info', `Vous êtes authentifié.e comme ${dbToken.email}`);
+      if( dbToken !== undefined ) {
+        const psychologistData = await dbPsychologists.getPsychologistByEmail(dbToken.email);
+        res.cookie('token', cookie.getJwtTokenForUser(dbToken.email, psychologistData));
+        await dbLoginToken.delete(token);
+        req.flash('info', `Vous êtes authentifié.e comme ${dbToken.email}`);
 
-      return res.redirect(nextPage);
-    } else {
-      req.flash('error', 'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.');
+        return res.redirect(nextPage);
+      } else {
+        req.flash('error', 'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.');
+      }
     }
+  } catch (err) {
+    console.error(err);
+    req.flash('error', "Erreur dans l'authentification. Nos services ont été alertés et vont régler ça au plus vite.");
   }
 
   res.render('login', {
