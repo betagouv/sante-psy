@@ -95,7 +95,7 @@ app.use(
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     const psychologueWorkspaceRegexp = new RegExp(/\/psychologue\//, 'g');
-    if (req.method === 'GET' && psychologueWorkspaceRegexp.test(req.originalUrl)) {
+    if (psychologueWorkspaceRegexp.test(req.originalUrl)) {
       req.flash(
         'error',
         `Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
