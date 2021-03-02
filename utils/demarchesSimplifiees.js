@@ -99,6 +99,8 @@ function getUuidDossierNumber(number) {
 }
 
 function parseDossierMetadata(dossier) {
+  const state = dossier.state;
+  const archived = dossier.archived;
   const lastName = dossier.demandeur.nom;
   const firstNames = dossier.demandeur.prenom;
   const dossierNumber = getUuidDossierNumber(dossier.number);
@@ -123,6 +125,8 @@ function parseDossierMetadata(dossier) {
 
   const psy = {
     dossierNumber,
+    state,
+    archived,
     lastName,
     firstNames,
     address,

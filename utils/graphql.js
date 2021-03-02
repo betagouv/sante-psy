@@ -16,7 +16,7 @@ const graphQLClient = new GraphQLClient(endpoint, {
  */
 function getWhereConditionAfterCursor(cursor) {
   if( cursor ) {
-    return `, after: "${cursor}"`;
+    return `(after: "${cursor}")`;
   } else {
     return '';
   }
@@ -39,12 +39,13 @@ async function requestPsychologist(afterCursor) {
     {
       demarche (number: ${config.demarchesSimplifieesId}) {
         id
-        dossiers (state: accepte, archived: false ${paginationCondition}) {
+        dossiers ${paginationCondition} {
           pageInfo {
             hasNextPage
             endCursor
           }
           nodes {
+              archived
               number
               groupeInstructeur {
                 label

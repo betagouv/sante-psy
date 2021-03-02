@@ -50,11 +50,31 @@ describe('DB Psychologists', () => {
   describe("getNumberOfPsychologists", () => {
     it("should return the number of elements in the psychologists table", async () => {
       const shouldBeZero = await dbPsychologists.getNumberOfPsychologists();
-      shouldBeZero.should.be.equal('0');
+      assert(shouldBeZero.length === 0);
 
       await dbPsychologists.savePsychologistInPG(psyList);
       const shouldBeOne = await dbPsychologists.getNumberOfPsychologists();
-      shouldBeOne.should.be.equal('1');
+      shouldBeOne[0].count.should.be.equal('1');
+      shouldBeOne[0].archived.should.be.equal(psyList[0].archived);
+      shouldBeOne[0].state.should.be.equal(psyList[0].state);
+    });
+  });
+
+  describe("getPsychologists", () => {
+    it("should only return not archived and accepte psychologists", async () => {
+      let archivedPsy = Object.assign({}, psyList[0]);
+      archivedPsy.archived = true;
+      archivedPsy.dossierNumber = "34e6352f-bdd0-48ce-83de-8de71cad295b";
+      let constructionPsy = Object.assign({}, psyList[0]);
+      constructionPsy.state = "en_construction";
+      constructionPsy.dossierNumber = "a2e447cd-2d57-4f83-8884-ab05a2633644";
+
+      await dbPsychologists.savePsychologistInPG([psyList[0], archivedPsy, constructionPsy]);
+
+      const shouldBeOne = await dbPsychologists.getPsychologists();
+      shouldBeOne.length.should.be.equal(1);
+      shouldBeOne[0].state = 'accepte';
+      shouldBeOne[0].archived = false;
     });
   });
 
