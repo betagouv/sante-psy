@@ -161,7 +161,9 @@ if (config.featurePsyPages) {
   app.get('/psychologue/modifier-patient',
     patientsController.getEditPatientValidators,
     patientsController.getEditPatient)
-  app.post('/psychologue/api/modifier-patient', patientsController.editPatient)
+  app.post('/psychologue/api/modifier-patient',
+    patientsController.editPatientValidators,
+    patientsController.editPatient)
 }
 
 app.get('/mentions-legales', (req, res) => {

@@ -389,4 +389,148 @@ describe('patientsController', function() {
     })
 
   })
+
+  describe('update patient input validation', function() {
+    let updatePatientStub;
+
+    beforeEach(async function() {
+      updatePatientStub = sinon.stub(dbPatients, 'updatePatient')
+      return Promise.resolve()
+    })
+
+    afterEach(async function() {
+      updatePatientStub.restore()
+      return Promise.resolve()
+    })
+
+    const shouldFailUpdatePatientInputValidation = (done, postData) => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+
+      chai.request(app)
+        .post('/psychologue/api/modifier-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send(postData)
+        .end((err, res) => {
+          sinon.assert.notCalled(updatePatientStub)
+          res.should.redirectTo('/psychologue/modifier-patient');
+
+          done();
+        })
+    }
+
+    it('should refuse empty firstnames', function(done) {
+      shouldFailUpdatePatientInputValidation(done, {
+        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        // no firstnames
+        'lastname': 'Nom',
+        'ine': '1234567890A',
+      })
+    })
+
+    it('should refuse empty lastname', function(done) {
+      shouldFailUpdatePatientInputValidation(done, {
+        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'firstnames': 'Blou Blou',
+        // no lastname
+        'ine': '1234567890A',
+      })
+    })
+
+    it('should refuse whitespace firstnames', function(done) {
+      shouldFailUpdatePatientInputValidation(done, {
+        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'firstnames': '   ',
+        'lastname': 'Nom',
+        'ine': '1234567890A',
+      })
+    })
+
+    it('should refuse whitespace lastname', function(done) {
+      shouldFailUpdatePatientInputValidation(done, {
+        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'firstnames': 'Blou Blou',
+        'lastname': '   ',
+        'ine': '1234567890A',
+      })
+    })
+
+    it('should refuse ine with length not 11 chars', function(done) {
+      shouldFailUpdatePatientInputValidation(done, {
+        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890AA',
+      })
+    })
+
+    it('should refuse ine with non-aphanumeric chars', function(done) {
+      shouldFailUpdatePatientInputValidation(done, {
+        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890à',
+      })
+    })
+
+    it('should refuse if no patientid', function(done) {
+      shouldFailUpdatePatientInputValidation(done, {
+        'patientid': '',
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890à',
+      })
+    })
+
+    it('should refuse if patientid is not valid uuid', function(done) {
+      shouldFailUpdatePatientInputValidation(done, {
+        'patientid': 'not-a-valid-uuid',
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890à',
+      })
+    })
+
+    const shouldPassUpdatePatientInputValidation = (done, postData) => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+
+      chai.request(app)
+        .post('/psychologue/api/modifier-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send(postData)
+        .end((err, res) => {
+          sinon.assert.called(updatePatientStub)
+          res.should.redirectTo('/psychologue/mes-seances');
+          done();
+        })
+    }
+
+    it('should pass validation when all fields are correct', function(done) {
+      shouldPassUpdatePatientInputValidation(done, {
+        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890A',
+      })
+    })
+
+    it('should pass validation when INE is missing', function(done) {
+      shouldPassUpdatePatientInputValidation(done, {
+        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '',
+      })
+    })
+  })
+
 })

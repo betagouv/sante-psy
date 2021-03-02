@@ -7,21 +7,54 @@ module.exports.newPatient = async (req, res) => {
   res.render('newPatient', { pageTitle: 'Nouveau patient' })
 }
 
+// Validators we reuse for editPatient and createPatient
+const patientValidators = [
+  // todo : do we html-escape here ? We already escape in templates.
+  check('firstnames')
+    .trim().not().isEmpty()
+    .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
+  check('lastname')
+    .trim().not().isEmpty()
+    .withMessage('Vous devez spécifier le nom du patient.'),
+  oneOf(
+    [
+      // Two valid possibilities : ine is empty, or ine is valid format.
+      check('ine').trim().isEmpty(),
+      check('ine').trim().isAlphanumeric().isLength({min:0, max:11})
+    ],
+    `Le numéro INE doit faire 11 caractères (chiffres ou lettres).
+    Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`)
+]
+
+module.exports.editPatientValidators = [
+  // todo : do we html-escape here ? We already escape in templates.
+  check('patientid')
+    .trim().not().isEmpty()
+    .isUUID()
+    .withMessage(`Ce patient n'existe pas.`),
+  ...patientValidators
+]
+
 module.exports.editPatient = async (req, res) => {
-  const patientId = req.body['patientid']
-  const patientFirstNames = req.body['firstnames']
-  const patientLastName = req.body['lastname']
-  const patientINE = req.body['ine']
+  if (!validation.checkErrors(req)) {
+    return res.redirect('/psychologue/modifier-patient')
+  }
+
+  const patientId = req.sanitize(req.body['patientid'])
+  const patientFirstNames = req.sanitize(req.body['firstnames'])
+  const patientLastName = req.sanitize(req.body['lastname'])
+  const patientINE = req.sanitize(req.body['ine'])
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     await dbPatient.updatePatient(patientId, patientFirstNames, patientLastName, patientINE, psychologistId)
     req.flash('info', `Le patient a bien été modifié.`)
+    return res.redirect('/psychologue/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'est pas modifié. Pourriez-vous réessayer ?')
     console.error('Erreur pour modifier le patient', err)
+    return res.redirect('/psychologue/modifier-patient')
   }
-  return res.redirect('/psychologue/mes-seances')
 }
 
 module.exports.getEditPatientValidators = [
@@ -58,23 +91,7 @@ module.exports.getEditPatient = async (req, res) => {
   }
 }
 
-module.exports.createNewPatientValidators = [
-  // todo : do we html-escape here ? We already escape in templates.
-  check('firstnames')
-    .trim().not().isEmpty()
-    .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
-  check('lastname')
-    .trim().not().isEmpty()
-    .withMessage('Vous devez spécifier le nom du patient.'),
-  oneOf(
-    [
-      // Two valid possibilities : ine is empty, or ine is valid format.
-      check('ine').trim().isEmpty(),
-      check('ine').trim().isAlphanumeric().isLength({min:0, max:11})
-    ],
-    `Le numéro INE doit faire 11 caractères (chiffres ou lettres).
-    Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`)
-]
+module.exports.createNewPatientValidators = patientValidators
 
 module.exports.createNewPatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
