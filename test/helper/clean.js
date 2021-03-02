@@ -66,18 +66,7 @@ module.exports.cleanDataToken = async function cleanDataToken() {
 
 module.exports.cleanDataPsychologist = async function cleanDataPsychologist(dossierNumber) {
   try {
-    const ifExist = await knex(dbPsychologists.psychologistsTable)
-    .where('dossierNumber', dossierNumber)
-    .first();
-
-    if (ifExist) {
-      const clean = await knex(dbPsychologists.psychologistsTable)
-        .where('dossierNumber', dossierNumber)
-        .del();
-      console.log("cleaned");
-
-      return clean;
-    }
+    return knex(dbPsychologists.psychologistsTable).select('*').delete()
   } catch (err) {
     console.log(err);
   }

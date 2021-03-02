@@ -25,7 +25,7 @@ describe('patientsController', function() {
       }
 
       return chai.request(app)
-        .post('/creer-nouveau-patient')
+        .post('/psychologue/api/creer-nouveau-patient')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
@@ -35,7 +35,7 @@ describe('patientsController', function() {
           ine: '12345678901',
         })
         .then(async (res) => {
-          res.should.redirectTo('/mes-seances')
+          res.should.redirectTo('/psychologue/mes-seances')
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
           expect(patientsArray).to.have.length(1)
@@ -52,7 +52,7 @@ describe('patientsController', function() {
       }
 
       return chai.request(app)
-        .post('/creer-nouveau-patient')
+        .post('/psychologue/api/creer-nouveau-patient')
         // no auth cookie
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
@@ -93,14 +93,14 @@ describe('patientsController', function() {
 
     const shouldFailCreatePatientInputValidation = (done, postData) => {
       chai.request(app)
-        .post('/creer-nouveau-patient')
+        .post('/psychologue/api/creer-nouveau-patient')
         .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
         .end((err, res) => {
           sinon.assert.notCalled(insertPatientStub)
-          res.should.redirectTo('/nouveau-patient');
+          res.should.redirectTo('/psychologue/nouveau-patient');
 
           done();
         })
@@ -166,7 +166,7 @@ describe('patientsController', function() {
       const patient = await makePatient(psy.dossierNumber)
 
       return chai.request(app)
-        .post('/api/modifier-patient')
+        .post('/psychologue/api/modifier-patient')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
@@ -177,7 +177,7 @@ describe('patientsController', function() {
           ine: '111',
         })
         .then(async (res) => {
-          res.should.redirectTo('/mes-seances')
+          res.should.redirectTo('/psychologue/mes-seances')
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
           expect(patientsArray).to.have.length(1)
@@ -199,7 +199,7 @@ describe('patientsController', function() {
       const patient = await makePatient(anotherPsyId)
 
       return chai.request(app)
-        .post('/api/modifier-patient')
+        .post('/psychologue/api/modifier-patient')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
@@ -210,7 +210,7 @@ describe('patientsController', function() {
           ine: '111',
         })
         .then(async (res) => {
-          res.should.redirectTo('/mes-seances')
+          res.should.redirectTo('/psychologue/mes-seances')
 
           // Patient was not updated
           const patientsArray = await dbPatients.getPatients(anotherPsyId)
@@ -232,7 +232,7 @@ describe('patientsController', function() {
       const patient = await makePatient(psy.dossierNumber)
 
       return chai.request(app)
-        .post('/api/modifier-patient')
+        .post('/psychologue/api/modifier-patient')
         // no auth cookie
         .redirects(0) // block redirects, we don't want to test them
         .type('form')

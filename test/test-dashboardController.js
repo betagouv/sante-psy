@@ -29,7 +29,7 @@ describe('dashboardController', function() {
       const patientForAnotherPsy = await dbPatients.insertPatient('Stevie', 'Wonder', '34567890123', anotherPsyId)
 
       return chai.request(app)
-        .get('/mes-seances')
+        .get('/psychologue/mes-seances')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
@@ -58,7 +58,7 @@ describe('dashboardController', function() {
         await dbAppointments.insertAppointment(new Date('2021-12-12'), patientForAnotherPsy.id, anotherPsyId)
 
       return chai.request(app)
-        .get('/mes-seances')
+        .get('/psychologue/mes-seances')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {

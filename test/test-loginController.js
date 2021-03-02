@@ -83,7 +83,7 @@ describe('loginController', function() {
           sinon.assert.called(getByTokenStub)
           sinon.assert.called(getPsychologistByEmailStub)
           res.should.have.cookie('token');
-          res.should.redirectTo('/mes-seances')
+          res.should.redirectTo('/psychologue/mes-seances')
           done();
         })
       });
