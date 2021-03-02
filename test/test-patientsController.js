@@ -260,6 +260,23 @@ describe('patientsController', function() {
           return Promise.resolve()
         })
     })
+
+    it('should not display form if uuid is not valid', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+
+      return chai.request(app)
+        .get('/psychologue/modifier-patient?patientid=' + 'not-a-valid-uuid')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .then(async (res) => {
+          res.should.redirectTo('/psychologue/mes-seances')
+
+          return Promise.resolve()
+        })
+    })
   })
 
   describe('update patient', function() {

@@ -1,5 +1,5 @@
 const cookie = require('../utils/cookie')
-const { check, oneOf } = require('express-validator');
+const { check, query, oneOf } = require('express-validator');
 const dbPatient = require('../db/patients')
 const validation = require('../utils/validation')
 
@@ -24,9 +24,20 @@ module.exports.editPatient = async (req, res) => {
   return res.redirect('/psychologue/mes-seances')
 }
 
+module.exports.getEditPatientValidators = [
+  query('patientid')
+    .trim().not().isEmpty()
+    .isUUID()
+    .withMessage(`Ce patient n'existe pas.`),
+]
+
 module.exports.getEditPatient = async (req, res) => {
+  if (!validation.checkErrors(req)) {
+    return res.redirect('/psychologue/mes-seances')
+  }
+
   // Get patientId from query params, this is a GET request
-  const patientId = req.query['patientid']
+  const patientId = req.sanitize(req.query['patientid'])
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
