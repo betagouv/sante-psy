@@ -2,14 +2,16 @@ const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const dbPatient = require('./patients')
 
-module.exports.appointmentsTable =  "appointments";
+const appointmentsTable = "appointments"
+module.exports.appointmentsTable = appointmentsTable;
 
 // todo: bug : if appointment has a patientId that does not match a patient object in the db,
 // this function returns empty.
-module.exports.getAppointments = async () => {
+module.exports.getAppointments = async (psychologistId) => {
   try {
     const appointmentArray = await knex.from(dbPatient.patientsTable)
-      .innerJoin('appointments', 'patients.id', 'appointments.patientId')
+      .innerJoin(`${appointmentsTable}`, `${dbPatient.patientsTable}.id`, `${appointmentsTable}.patientId`)
+      .where(`${appointmentsTable}.psychologistId`, psychologistId)
       .orderBy("appointmentDate", "desc")
     return appointmentArray
   } catch (err) {
@@ -18,9 +20,10 @@ module.exports.getAppointments = async () => {
   }
 }
 
-module.exports.insertAppointment = async (appointmentDate, patientId) => {
+module.exports.insertAppointment = async (appointmentDate, patientId, psychologistId) => {
   try {
     const insertedArray = await knex(module.exports.appointmentsTable).insert({
+      psychologistId,
       appointmentDate,
       patientId: patientId,
     }).returning("*")
@@ -31,11 +34,20 @@ module.exports.insertAppointment = async (appointmentDate, patientId) => {
   }
 }
 
-module.exports.deleteAppointment = async (appointmentId) => {
+module.exports.deleteAppointment = async (appointmentId, psychologistId) => {
   try {
-    return await knex("appointments")
-      .where("id", appointmentId)
+    const deletedAppointments = await knex("appointments")
+      .where({
+        id: appointmentId,
+        psychologistId: psychologistId
+      })
       .del()
+      .returning('*')
+    if (deletedAppointments.length === 0) {
+      console.error("Appointment not deleted : does not exist or is not allowed")
+      throw new Error("Appointment not deleted : does not exist or is not allowed")
+    }
+    return deletedAppointments
   } catch (err) {
     console.error("Erreur de suppression du appointments", err)
     throw new Error("Erreur de suppression du appointments")

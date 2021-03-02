@@ -10,6 +10,99 @@ const { expect } = require('chai')
 
 describe('appointmentsController', function() {
   describe('create appointment', function() {
+    beforeEach(async function(done) {
+      done()
+    })
+
+    afterEach(async function() {
+      await clean.cleanAllPatients()
+      await clean.cleanAllAppointments()
+      return Promise.resolve()
+    })
+
+    it('should create appointment', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
+
+      return chai.request(app)
+        .post('/creer-nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': patient.id,
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
+          expect(appointmentArray).to.have.length(1)
+          expect(appointmentArray[0].psychologistId).to.equal(psy.dossierNumber)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should not create appointment if user not logged in', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
+
+      return chai.request(app)
+        .post('/creer-nouvelle-seance')
+        // no auth cookie
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': patient.id,
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .then(async (res) => {
+          expect(res.status).to.equal(401)
+
+          // Appointment not created
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
+          expect(appointmentArray).to.have.length(0)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should only display my patients in dropdown when creating appointment', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d'
+      const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
+      const patientForAnotherPsy = await dbPatients.insertPatient('Stevie', 'Wonder', '34567890123', anotherPsyId)
+
+      return chai.request(app)
+        .get('/nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .then(async (res) => {
+          // My patients are present
+          chai.assert.include(res.text, myPatient.firstNames)
+          chai.assert.include(res.text, myPatient.lastName)
+
+          // Other psy's patients are not listed
+          chai.assert.notInclude(res.text, patientForAnotherPsy.firstNames)
+          chai.assert.notInclude(res.text, patientForAnotherPsy.lastName)
+          return Promise.resolve()
+        })
+    })
+  })
+
+  describe('create appointment - input validation', function() {
     let insertAppointmentStub
 
     beforeEach(function(done) {
@@ -21,24 +114,6 @@ describe('appointmentsController', function() {
     afterEach(function(done) {
       insertAppointmentStub.restore()
       done()
-    })
-
-    it('should create appointment', function(done) {
-      chai.request(app)
-        .post('/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
-          date: '09/02/2021',
-          'iso-date': '2021-02-09',
-        })
-        .end((err, res) => {
-          res.should.redirectTo('/mes-seances')
-          sinon.assert.called(insertAppointmentStub)
-          done()
-        })
     })
 
     it('should refuse invalid patientId', function(done) {
@@ -78,9 +153,13 @@ describe('appointmentsController', function() {
     })
 
     it('should refuse invalid date', function(done) {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
       chai.request(app)
         .post('/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -114,9 +193,13 @@ describe('appointmentsController', function() {
     })
 
     it('should ignore the date input and use the iso-date', function(done) {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
       chai.request(app)
         .post('/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -143,25 +226,27 @@ describe('appointmentsController', function() {
       return Promise.resolve()
     })
 
-    const makeAppointment = async () => {
+    const makeAppointment = async (psychologistId) => {
       // Insert an appointment and a patient
-      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901')
-      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id)
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId)
+      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psychologistId)
       // Check appointment is inserted
-      console.log(`APPT: ${appointment.patientId}`)
-      const appointmentArray = await dbAppointments.getAppointments()
-      console.log("GET APPOINTMENT DONE")
+      const appointmentArray = await dbAppointments.getAppointments(psychologistId)
       expect(appointmentArray).to.have.length(1)
-
       return appointment
     }
 
     it('should delete appointment', async function() {
-      const appointment = await makeAppointment()
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+
+      const appointment = await makeAppointment(psy.dossierNumber)
 
       return chai.request(app)
         .post('/supprimer-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -170,19 +255,49 @@ describe('appointmentsController', function() {
         .then(async (res) => {
           res.should.redirectTo('/mes-seances')
 
-          const appointmentArray = await dbAppointments.getAppointments()
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
           expect(appointmentArray).to.have.length(0)
 
           return Promise.resolve()
         })
     })
 
-    it('should refuse invalid appointmentId', async function() {
-      const appointment = await makeAppointment()
+    it('should not delete appointment if it is not mine', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const anotherPsyId = 'ccb6f32b-8c55-4322-8ecc-556e6900b4ea'
+      const appointment = await makeAppointment(anotherPsyId)
 
       return chai.request(app)
         .post('/supprimer-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'appointmentId': appointment.id,
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/mes-seances')
+          // Appointment is not deleted
+          const appointmentArray = await dbAppointments.getAppointments(anotherPsyId)
+          expect(appointmentArray).to.have.length(1)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should refuse invalid appointmentId', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const appointment = await makeAppointment(psy.dossierNumber)
+
+      return chai.request(app)
+        .post('/supprimer-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -191,7 +306,34 @@ describe('appointmentsController', function() {
         .then(async (res) => {
           res.should.redirectTo('/mes-seances')
 
-          const appointmentArray = await dbAppointments.getAppointments()
+          // Appointment is not deleted
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
+          expect(appointmentArray).to.have.length(1)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should not delete appointment if user not logged in', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const appointment = await makeAppointment(psy.dossierNumber)
+
+      return chai.request(app)
+        .post('/supprimer-seance')
+        // no auth cookie
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'appointmentId': appointment.id,
+        })
+        .then(async (res) => {
+          expect(res.status).to.equal(401)
+
+          // Appointment is not deleted
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
           expect(appointmentArray).to.have.length(1)
 
           return Promise.resolve()
@@ -199,11 +341,15 @@ describe('appointmentsController', function() {
     })
 
     it('should refuse empty appointmentId', async function() {
-      await makeAppointment()
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      await makeAppointment(psy.dossierNumber)
 
       return chai.request(app)
         .post('/supprimer-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -212,7 +358,7 @@ describe('appointmentsController', function() {
         .then(async (res) => {
           res.should.redirectTo('/mes-seances')
 
-          const appointmentArray = await dbAppointments.getAppointments()
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
           expect(appointmentArray).to.have.length(1)
 
           return Promise.resolve()
