@@ -34,8 +34,8 @@ module.exports.createNewAppointment = async (req, res) => {
     return res.redirect('/psychologue/nouvelle-seance')
   }
 
-  const date = new Date(Date.parse(req.body['iso-date']))
-  const patientId = req.body['patientId']
+  const date = new Date(Date.parse(req.sanitize(req.body['iso-date'])))
+  const patientId = req.sanitize(req.body['patientId'])
   try {
     const psyId = cookie.getCurrentPsyId(req)
     await dbAppointments.insertAppointment(date, patientId, psyId)
@@ -60,7 +60,7 @@ module.exports.deleteAppointment = async (req, res) => {
     return res.redirect('/psychologue/mes-seances')
   }
 
-  const appointmentId = req.body['appointmentId']
+  const appointmentId = req.sanitize(req.body['appointmentId'])
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     await dbAppointments.deleteAppointment(appointmentId, psychologistId)

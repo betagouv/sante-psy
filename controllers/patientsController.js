@@ -53,22 +53,22 @@ module.exports.createNewPatient = async (req, res) => {
     return res.redirect('/psychologue/nouveau-patient')
   }
 
-  // todo : this validation should already be covered by the validators
-  const firstNames = req.body['firstnames'].trim()
+  // todo input validation, protection against injections
+  const firstNames = req.sanitize(req.body['firstnames']).trim()
   if (!firstNames || firstNames.length === 0) {
     console.error("Invalide firstNames");
     req.flash('error', 'Vous devez spécifier le.s prénom.s du patient.')
     return res.redirect('/psychologue/nouveau-patient')
   }
 
-  const lastName = req.body['lastname'].trim()
+  const lastName = req.sanitize(req.body['lastname']).trim()
   if (!lastName || lastName.length === 0) {
     console.error("Invalide lastName");
     req.flash('error', 'Vous devez spécifier le nom du patient.')
     return res.redirect('/psychologue/nouveau-patient')
   }
 
-  const INE = req.body['ine']
+  const INE = req.sanitize(req.body['ine'])
   if (!INE || INE.length === 0) {
     console.error("INE is empty");
     req.flash('info', 'Vous pourrez remplir le numero INE plus tard.')
