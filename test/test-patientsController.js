@@ -166,14 +166,14 @@ describe('patientsController', function() {
       }
 
       chai.request(app)
-        .post('/creer-nouveau-patient')
+        .post('/psychologue/api/creer-nouveau-patient')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
         .end((err, res) => {
           sinon.assert.called(insertPatientStub)
-          res.should.redirectTo('/mes-seances');
+          res.should.redirectTo('/psychologue/mes-seances');
           done();
         })
     }

@@ -25,7 +25,8 @@ module.exports.editPatient = async (req, res) => {
 }
 
 module.exports.getEditPatient = async (req, res) => {
-  const patientId = req.body['patientid']
+  // Get patientId from query params, this is a GET request
+  const patientId = req.query['patientid']
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
