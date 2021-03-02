@@ -92,9 +92,14 @@ describe('patientsController', function() {
     })
 
     const shouldFailCreatePatientInputValidation = (done, postData) => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+
       chai.request(app)
         .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
@@ -110,7 +115,7 @@ describe('patientsController', function() {
       shouldFailCreatePatientInputValidation(done, {
         // no firstnames
         'lastname': 'Nom',
-        'ine': '1234567',
+        'ine': '1234567890A',
       })
     })
 
@@ -118,7 +123,7 @@ describe('patientsController', function() {
       shouldFailCreatePatientInputValidation(done, {
         'firstnames': 'Blou Blou',
         // no lastname
-        'ine': '1234567',
+        'ine': '1234567890A',
       })
     })
 
@@ -126,7 +131,7 @@ describe('patientsController', function() {
       shouldFailCreatePatientInputValidation(done, {
         'firstnames': '   ',
         'lastname': 'Nom',
-        'ine': '1234567',
+        'ine': '1234567890A',
       })
     })
 
@@ -134,7 +139,58 @@ describe('patientsController', function() {
       shouldFailCreatePatientInputValidation(done, {
         'firstnames': 'Blou Blou',
         'lastname': '   ',
-        'ine': '1234567',
+        'ine': '1234567890A',
+      })
+    })
+
+    it('should refuse ine with length not 11 chars', function(done) {
+      shouldFailCreatePatientInputValidation(done, {
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890AA',
+      })
+    })
+
+    it('should refuse ine with non-aphanumeric chars', function(done) {
+      shouldFailCreatePatientInputValidation(done, {
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890à',
+      })
+    })
+
+    const shouldPassCreatePatientInputValidation = (done, postData) => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+
+      chai.request(app)
+        .post('/creer-nouveau-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send(postData)
+        .end((err, res) => {
+          sinon.assert.called(insertPatientStub)
+          res.should.redirectTo('/mes-seances');
+          done();
+        })
+    }
+
+    it('should pass validation when all fields are correct', function(done) {
+      shouldPassCreatePatientInputValidation(done, {
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890A',
+      })
+    })
+
+    it('should pass validation when INE is missing', function(done) {
+      shouldPassCreatePatientInputValidation(done, {
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '',
       })
     })
   })

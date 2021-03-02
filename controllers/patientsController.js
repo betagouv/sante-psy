@@ -56,6 +56,7 @@ module.exports.createNewPatientValidators = [
     .withMessage('Vous devez spécifier le nom du patient.'),
   oneOf(
     [
+      // Two valid possibilities : ine is empty, or ine is valid format.
       check('ine').trim().isEmpty(),
       check('ine').trim().isAlphanumeric().isLength(11)
     ],
@@ -68,25 +69,9 @@ module.exports.createNewPatient = async (req, res) => {
     return res.redirect('/psychologue/nouveau-patient')
   }
 
-  // todo input validation, protection against injections
   const firstNames = req.sanitize(req.body['firstnames']).trim()
-  if (!firstNames || firstNames.length === 0) {
-    console.error("Invalide firstNames");
-    req.flash('error', 'Vous devez spécifier le.s prénom.s du patient.')
-    return res.redirect('/psychologue/nouveau-patient')
-  }
-
   const lastName = req.sanitize(req.body['lastname']).trim()
-  if (!lastName || lastName.length === 0) {
-    console.error("Invalide lastName");
-    req.flash('error', 'Vous devez spécifier le nom du patient.')
-    return res.redirect('/psychologue/nouveau-patient')
-  }
-
   const INE = req.sanitize(req.body['ine'])
-  if (!INE || INE.length === 0) {
-    console.log("INE is empty");
-  }
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
