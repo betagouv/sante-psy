@@ -62,7 +62,7 @@ module.exports.getLogin = async function getLogin(req, res) {
     }
   } catch (err) {
     console.error(err);
-    req.flash('error', "Erreur dans l'authentification. Nos services ont été alertés et vont régler ça au plus vite.");
+    req.flash('error', "Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.");
   }
 
   res.render('login', {
