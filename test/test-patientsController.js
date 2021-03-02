@@ -62,7 +62,7 @@ describe('patientsController', function() {
           ine: '12345678901',
         })
         .then(async (res) => {
-          expect(res.status).to.equal(401)
+          res.should.redirectTo('/psychologue/login')
 
           // Patient not created
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
@@ -243,7 +243,7 @@ describe('patientsController', function() {
           ine: '111',
         })
         .then(async (res) => {
-          expect(res.status).to.equal(401)
+          res.should.redirectTo('/psychologue/login')
 
           // Patient was not updated
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
