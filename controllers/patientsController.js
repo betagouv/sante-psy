@@ -58,7 +58,7 @@ module.exports.createNewPatientValidators = [
     [
       // Two valid possibilities : ine is empty, or ine is valid format.
       check('ine').trim().isEmpty(),
-      check('ine').trim().isAlphanumeric().isLength(11)
+      check('ine').trim().isAlphanumeric().isLength({min:0, max:11})
     ],
     `Le numéro INE doit faire 11 caractères (chiffres ou lettres).
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`)
