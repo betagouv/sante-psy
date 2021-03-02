@@ -403,7 +403,7 @@ describe('patientsController', function() {
       return Promise.resolve()
     })
 
-    const shouldFailUpdatePatientInputValidation = (done, postData) => {
+    const shouldFailUpdatePatientInputValidation = (done, postData, expectedRedirectUrl) => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
@@ -417,64 +417,76 @@ describe('patientsController', function() {
         .send(postData)
         .end((err, res) => {
           sinon.assert.notCalled(updatePatientStub)
-          res.should.redirectTo('/psychologue/modifier-patient');
+          res.should.redirectTo(expectedRedirectUrl);
 
           done();
         })
     }
 
     it('should refuse empty firstnames', function(done) {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdatePatientInputValidation(done, {
-        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'patientid': patientId,
         // no firstnames
         'lastname': 'Nom',
         'ine': '1234567890A',
-      })
+      },
+      '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
     it('should refuse empty lastname', function(done) {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdatePatientInputValidation(done, {
-        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'patientid': patientId,
         'firstnames': 'Blou Blou',
         // no lastname
         'ine': '1234567890A',
-      })
+      },
+      '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
     it('should refuse whitespace firstnames', function(done) {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdatePatientInputValidation(done, {
-        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'patientid': patientId,
         'firstnames': '   ',
         'lastname': 'Nom',
         'ine': '1234567890A',
-      })
+      },
+      '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
     it('should refuse whitespace lastname', function(done) {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdatePatientInputValidation(done, {
-        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'patientid': patientId,
         'firstnames': 'Blou Blou',
         'lastname': '   ',
         'ine': '1234567890A',
-      })
+      },
+      '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
     it('should refuse ine with length not 11 chars', function(done) {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdatePatientInputValidation(done, {
-        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'patientid': patientId,
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890AA',
-      })
+      },
+      '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
     it('should refuse ine with non-aphanumeric chars', function(done) {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdatePatientInputValidation(done, {
-        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'patientid': patientId,
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
-      })
+      },
+      '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
     it('should refuse if no patientid', function(done) {
@@ -483,7 +495,8 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
-      })
+      },
+      '/psychologue/mes-seances')
     })
 
     it('should refuse if patientid is not valid uuid', function(done) {
@@ -492,7 +505,8 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
-      })
+      },
+      '/psychologue/mes-seances')
     })
 
     const shouldPassUpdatePatientInputValidation = (done, postData) => {

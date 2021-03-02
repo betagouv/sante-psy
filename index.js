@@ -149,7 +149,7 @@ if (config.featurePsyPages) {
   app.get('/psychologue/mes-seances', dashboardController.dashboard)
   app.get('/psychologue/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/psychologue/creer-nouvelle-seance',
-    ...appointmentsController.createNewAppointmentValidators,
+    appointmentsController.createNewAppointmentValidators,
     appointmentsController.createNewAppointment)
   app.post('/psychologue/api/supprimer-seance',
     appointmentsController.deleteAppointmentValidators,

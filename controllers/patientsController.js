@@ -48,7 +48,12 @@ module.exports.editPatientValidators = [
 
 module.exports.editPatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/modifier-patient')
+    const hasPatientIdError = validation.hasErrorsForField(req, 'patientid')
+    if (hasPatientIdError) {
+      // Do not use the value of patientid in url ! It is not safe since it did not pass validation.
+      return res.redirect('/psychologue/mes-seances')
+    }
+    return res.redirect('/psychologue/modifier-patient?patientid=' + req.body['patientid'])
   }
 
   const patientId = req.body['patientid']
