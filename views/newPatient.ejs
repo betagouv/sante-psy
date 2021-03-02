@@ -1,4 +1,4 @@
-<%- include('partials/header') -%>
+<%- include('partials/header', { pageSubtitle: 'Espace Psychologues', home: '/psychologue/mes-seances'}) -%>
 
 <!-- TODO serve jquery from local -->
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -43,19 +43,25 @@
   <% } %>
   <div class="rf-my-5w">
     <form action="/psychologue/api/creer-nouveau-patient" method="POST">
-      <div>
+      <div class="rf-text--sm">
+        Les champs avec une astérique (<span class="red-text">*</span>) sont obligatoires.
+      </div>
+        <div>
         <div class="rf-my-3w">
           <!--todo : little red star for required fields -->
-          <label class="rf-label" for="firstnames">Prénoms</label>
+          <label class="rf-label" for="firstnames">Prénoms <span class="red-text">*</span></label>
           <input class="rf-input midlength-input" type="text" id="firstnames" name="firstnames" required>
         </div>
         <div class="rf-my-3w">
-          <label class="rf-label" for="lastname">Nom</label>
+          <label class="rf-label" for="lastname">Nom <span class="red-text">*</span></label>
           <input class="rf-input midlength-input" type="text" id="lastname" name="lastname" required>
         </div>
         <div class="rf-my-3w">
           <!-- todo : JS validation for 11 digit number -->
-          <label class="rf-label" for="ine">Numéro INE de l'étudiant (11 caractères)</label>
+          <label class="rf-label" for="ine" aria-describedby="ine-help">Numéro INE de l'étudiant</label>
+          <div class="rf-hint-text" id="ine-help">
+            Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant.
+          </div>
           <input class="rf-input short-input" type="text" id="ine" name="ine">
         </div>
       </div>
