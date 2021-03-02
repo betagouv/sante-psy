@@ -4,7 +4,23 @@ const dbPatient = require('../db/patients')
 const validation = require('../utils/validation')
 
 module.exports.newPatient = async (req, res) => {
-  res.render('newPatient', { pageTitle: 'Nouveau patient' })
+  res.render('editPatient', {
+    pageTitle: 'Nouveau patient',
+    pageIntroText: `Déclarez un étudiant comme étant patient du dispositif Santé Psy Etudiants.
+      Vous pourrez ensuite déclarer les séances réalisées avec ce patient.`,
+    form: {
+      method: 'POST',
+      action: '/psychologue/api/creer-nouveau-patient',
+      submitButtonText: 'Ajouter le patient',
+      submitButtonIcon: 'rf-fi-add-line',
+    },
+    patient: {
+      firstNames: '',
+      lastName: '',
+      INE: '',
+      id: '',
+    }
+  })
 }
 
 // Validators we reuse for editPatient and createPatient
@@ -98,6 +114,13 @@ module.exports.getEditPatient = async (req, res) => {
     console.debug(`Rendering getEditPatient for ${patientId}`)
     res.render('editPatient', {
       pageTitle: 'Modifier un patient',
+      pageIntroText: `Modifiez les informations de l'étudiant.`,
+      form: {
+        method: 'POST',
+        action: '/psychologue/api/modifier-patient',
+        submitButtonText: 'Valider les modifications',
+        submitButtonIcon: 'rf-fi-check-line',
+      },
       patient: patient
     })
   } catch (err) {

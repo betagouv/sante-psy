@@ -15,17 +15,17 @@
           url: '/psychologue/mes-seances'
         },
         {
-          label: 'modifier patient',
+          label: pageTitle,
         },
     ],
   })
   -%>
   <h1>
-    Modifier un patient
+    <%= pageTitle %>
   </h1>
   <div class="rf-mb-5w">
     <div>
-      Modifiez les informations de l'étudiant.e.
+      <%= pageIntroText %>
     </div>
   </div>
   <% if (errors.length) { %>
@@ -39,26 +39,31 @@
     <% }) %>
   <% } %>
   <div class="rf-my-5w">
-    <form action="/psychologue/api/modifier-patient" method="POST">
+    <form action="<%= form.action %>" method="<%= form.method %>">
+      <div class="rf-text--sm">
+        Les champs avec une astérique (<span class="red-text">*</span>) sont obligatoires.
+      </div>
       <div>
         <div class="rf-my-3w">
-          <!--todo : little red star for required fields -->
-          <label class="rf-label" for="firstnames">Prénoms</label>
+          <label class="rf-label" for="firstnames">Prénoms <span class="red-text">*</span></label>
           <input class="rf-input midlength-input" value="<%= patient.firstNames %>" type="text" id="firstnames" name="firstnames">
         </div>
         <div class="rf-my-3w">
-          <label class="rf-label" for="lastname">Nom</label>
+          <label class="rf-label" for="lastname">Nom <span class="red-text">*</span></label>
           <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname">
         </div>
         <div class="rf-my-3w">
           <!-- todo : JS validation for 11 digit number -->
-          <label class="rf-label" for="ine">Numéro INE de l'étudiant (11 caractères)</label>
+          <label class="rf-label" for="ine" aria-describedby="ine-help">Numéro INE de l'étudiant</label>
+          <div class="rf-hint-text" id="ine-help">
+            Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant.
+          </div>
           <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine">
         </div>
       </div>
       <div class="rf-my-5w">
         <input hidden name="patientid" value="<%= patient.id %>" />
-        <button type="submit" class="rf-btn rf-fi-check-line rf-btn--icon-left">Valider les modifications</button>
+        <button type="submit" class="rf-btn rf-btn--icon-left <%= form.submitButtonIcon %>"><%= form.submitButtonText %></button>
       </div>
     </form>
   </div>
