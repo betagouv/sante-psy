@@ -205,6 +205,15 @@ describe('patientsController', function() {
   })
 
   describe('display update patient form', function() {
+    beforeEach(async function(done) {
+      done()
+    })
+
+    afterEach(async function() {
+      await clean.cleanAllPatients()
+      return Promise.resolve()
+    })
+
     it('should display form for my patient', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
@@ -223,6 +232,30 @@ describe('patientsController', function() {
           chai.assert.include(res.text, myPatient.firstNames)
           chai.assert.include(res.text, myPatient.lastName)
           chai.assert.include(res.text, myPatient.id)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should not display form if it is not my patient', async function() {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const anotherPsyId = 'e43b8668-621d-40a7-86e0-c563b6b05509'
+      const notMyPatient = await makePatient(anotherPsyId)
+
+      return chai.request(app)
+        .get('/psychologue/modifier-patient?patientid=' + notMyPatient.id)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .then(async (res) => {
+          res.should.redirectTo('/psychologue/mes-seances')
+
+          // The page does not display patient
+          chai.assert.notInclude(res.text, notMyPatient.firstNames)
+          chai.assert.notInclude(res.text, notMyPatient.lastName)
+          chai.assert.notInclude(res.text, notMyPatient.id)
 
           return Promise.resolve()
         })
