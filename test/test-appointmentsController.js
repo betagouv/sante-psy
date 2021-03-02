@@ -245,7 +245,7 @@ describe('appointmentsController', function() {
       const appointment = await makeAppointment(psy.dossierNumber)
 
       return chai.request(app)
-        .post('/psychologue/supprimer-seance')
+        .post('/psychologue/api/supprimer-seance')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
@@ -271,7 +271,7 @@ describe('appointmentsController', function() {
       const appointment = await makeAppointment(anotherPsyId)
 
       return chai.request(app)
-        .post('/psychologue/supprimer-seance')
+        .post('/psychologue/api/supprimer-seance')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
@@ -296,7 +296,7 @@ describe('appointmentsController', function() {
       const appointment = await makeAppointment(psy.dossierNumber)
 
       return chai.request(app)
-        .post('/psychologue/supprimer-seance')
+        .post('/psychologue/api/supprimer-seance')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
@@ -322,7 +322,7 @@ describe('appointmentsController', function() {
       const appointment = await makeAppointment(psy.dossierNumber)
 
       return chai.request(app)
-        .post('/psychologue/supprimer-seance')
+        .post('/psychologue/api/supprimer-seance')
         // no auth cookie
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
@@ -348,7 +348,7 @@ describe('appointmentsController', function() {
       await makeAppointment(psy.dossierNumber)
 
       return chai.request(app)
-        .post('/psychologue/supprimer-seance')
+        .post('/psychologue/api/supprimer-seance')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')

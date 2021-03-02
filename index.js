@@ -152,14 +152,14 @@ if (config.featurePsyPages) {
   app.post('/psychologue/creer-nouvelle-seance',
     ...appointmentsController.createNewAppointmentValidators,
     appointmentsController.createNewAppointment)
-  app.post('/psychologue/supprimer-seance',
+  app.post('/psychologue/api/supprimer-seance',
     appointmentsController.deleteAppointmentValidators,
     appointmentsController.deleteAppointment)
   app.get('/psychologue/nouveau-patient', patientsController.newPatient)
-  app.post('/psychologue/creer-nouveau-patient',
+  app.post('/psychologue/api/creer-nouveau-patient',
     patientsController.createNewPatientValidators,
     patientsController.createNewPatient)
-  app.post('/psychologue/modifier-patient', patientsController.getEditPatient)
+  app.post('/psychologue/api/modifier-patient', patientsController.getEditPatient)
   app.post('/psychologue/api/modifier-patient', patientsController.editPatient)
 }
 

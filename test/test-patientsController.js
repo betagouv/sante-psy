@@ -25,7 +25,7 @@ describe('patientsController', function() {
       }
 
       return chai.request(app)
-        .post('/psychologue/creer-nouveau-patient')
+        .post('/psychologue/api/creer-nouveau-patient')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
@@ -52,7 +52,7 @@ describe('patientsController', function() {
       }
 
       return chai.request(app)
-        .post('/psychologue/creer-nouveau-patient')
+        .post('/psychologue/api/creer-nouveau-patient')
         // no auth cookie
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
@@ -93,7 +93,7 @@ describe('patientsController', function() {
 
     const shouldFailCreatePatientInputValidation = (done, postData) => {
       chai.request(app)
-        .post('/psychologue/creer-nouveau-patient')
+        .post('/psychologue/api/creer-nouveau-patient')
         .set('Cookie', `token=${cookie.getJwtTokenForUser('valid@valid.org')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
