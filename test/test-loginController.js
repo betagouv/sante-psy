@@ -40,11 +40,14 @@ describe('loginController', function() {
     const email = "myemail@org.org";
     let getByTokenStub;
     let insertTokenStub;
+    let deleteTokenStub;
     let getPsychologistByEmailStub;
     let sendMailStub;
 
     beforeEach(function(done) {
       insertTokenStub = sinon.stub(dbLoginToken, 'insert')
+        .returns(Promise.resolve());
+      deleteTokenStub = sinon.stub(dbLoginToken, 'delete')
         .returns(Promise.resolve());
 
       getPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getPsychologistByEmail')
@@ -61,6 +64,7 @@ describe('loginController', function() {
     afterEach(function(done) {
       getByTokenStub.restore();
       insertTokenStub.restore();
+      deleteTokenStub.restore();
       getPsychologistByEmailStub.restore();
       sendMailStub.restore();
       done();
@@ -81,6 +85,7 @@ describe('loginController', function() {
         .redirects(0)
         .end((err, res) => {
           sinon.assert.called(getByTokenStub)
+          sinon.assert.called(deleteTokenStub)
           sinon.assert.called(getPsychologistByEmailStub)
           res.should.have.cookie('token');
           res.should.redirectTo('/psychologue/mes-seances')
@@ -97,6 +102,7 @@ describe('loginController', function() {
         .redirects(0)
         .end((err, res) => {
           sinon.assert.called(getByTokenStub)
+          sinon.assert.notCalled(deleteTokenStub)
           sinon.assert.notCalled(getPsychologistByEmailStub)
           res.should.not.have.cookie('token');
           done();
