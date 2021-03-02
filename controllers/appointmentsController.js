@@ -1,3 +1,4 @@
+const cookie = require('../utils/cookie')
 const { check } = require('express-validator');
 const dbAppointments = require('../db/appointments')
 const dbPatient = require('../db/patients')
@@ -5,8 +6,15 @@ const format = require('../utils/format')
 const validation = require('../utils/validation')
 
 module.exports.newAppointment = async (req, res) => {
-  const patients = await dbPatient.getPatients()
-  res.render('newAppointment', {patients: patients, pageTitle: "Nouvelle séance"})
+  try {
+    const psychologistId = cookie.getCurrentPsyId(req)
+    const patients = await dbPatient.getPatients(psychologistId)
+    res.render('newAppointment', {patients: patients, pageTitle: "Nouvelle séance"})
+  } catch (err) {
+    req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?')
+    console.error('Erreur pour créer la séance', err)
+    return res.redirect('/mes-seances')
+  }
 }
 
 module.exports.createNewAppointmentValidators = [
@@ -29,7 +37,8 @@ module.exports.createNewAppointment = async (req, res) => {
   const date = new Date(Date.parse(req.body['iso-date']))
   const patientId = req.body['patientId']
   try {
-    await dbAppointments.insertAppointment(date, patientId)
+    const psyId = cookie.getCurrentPsyId(req)
+    await dbAppointments.insertAppointment(date, patientId, psyId)
     req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créé.`)
     return res.redirect('/mes-seances')
   } catch (err) {
@@ -53,7 +62,8 @@ module.exports.deleteAppointment = async (req, res) => {
 
   const appointmentId = req.body['appointmentId']
   try {
-    await dbAppointments.deleteAppointment(appointmentId)
+    const psychologistId = cookie.getCurrentPsyId(req)
+    await dbAppointments.deleteAppointment(appointmentId, psychologistId)
     req.flash('info', `La séance a bien été supprimée.`)
   } catch (err) {
     req.flash('error', 'Erreur. La séance n\'est pas supprimée. Pourriez-vous réessayer ?')

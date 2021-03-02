@@ -71,3 +71,11 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
 
   return query;
 }
+
+
+module.exports.getPsychologistByEmail = async function getPsychologistByEmail(email) {
+  return await knex(module.exports.psychologistsTable)
+  .where('email', email)
+  .first();
+}
+

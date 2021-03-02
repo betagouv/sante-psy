@@ -8,6 +8,14 @@ services:
       POSTGRES_PASSWORD: santepsy
     ports:
       - "5432:5432"
+  maildev:
+    image: maildev/maildev
+    environment:
+      MAILDEV_INCOMING_USER: mailuser
+      MAILDEV_INCOMING_PASS: mailpassword
+    ports:
+      - "1080:80"
+      - "1025:25"
   web:
     build: .
     command: bash -c "sleep 3; npm run migrate;"

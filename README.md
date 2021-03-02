@@ -62,6 +62,16 @@ Pour mettre à jour toutes les données venant de DS vers PG, un cron est lancé
 node ./cron_jobs/cron.js
 ```
 
+#### Accès à postgres
+Avec [le scalingo CLI](https://doc.scalingo.com/cli) et le nom de l'app sur scalingo
+```
+scalingo -a APP_NAME pgsql-console
+```
+On peut insérer des données comme ceci :
+```
+INSERT INTO psychologists VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'prenom.nom@beta.gouv.fr','prenom.nom@beta.gouv.fr','prenom.nom@beta.gouv.fr','prenom.nom@beta.gouv.fr','paul.nom@beta.gouv.fr');
+```
+
 ### Test
 Pour utiliser le container Postgresql 
 ```
@@ -93,6 +103,23 @@ Started 1 cron jobs
 Sur la CI de github (.github/workflows/nodejs.yml) on utilise docker-compose avec l'option `--abort-on-container-exit` pour lancer les tests dans le container de l'application et finir le container de PG une fois que les tests ont été exécutés.
 > Stops all containers if any container was stopped. Incompatible with --detach.
 
+#### Code coverage
+```
+npm run coverage
+```
+
+Ensuite, visiter avec votre navigateur pour visualiser le dossier `./coverage` :
+*  $REPO_PATH/sante-psy/coverage/index.html
+
+### Les emails - serveur SMTP Maildev
+[Maildev](http://maildev.github.io/maildev/) est un serveur SMTP avec une interface web conçus pour le développement et les tests.
+
+Sans docker: Une fois installé et lancé, il suffit de mettre la variable d'environnement MAIL_SERVICE à maildev pour l'utiliser. MAIL_USER et MAIL_PASS ne sont pas nécessaires.
+
+Avec docker: ne pas préciser de MAIL_SERVICE, les bonnes variables d'environnement sont déjà précisées dans le docker-compose
+
+Tous les emails envoyés par le code seront visibles depuis l'interface web de Maildev :
+* http://localhost:1080/
 
 ### Lint 
 ```

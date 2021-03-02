@@ -2,16 +2,19 @@ require('dotenv').config();
 
 const bodyParser = require('body-parser');
 const express = require('express');
+const expressSanitizer = require('express-sanitizer');
 const path = require('path');
 const flash = require('connect-flash');
 const session = require('express-session');
+const expressJWT = require('express-jwt');
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
+const cookieParser = require('cookie-parser');
 
 const config = require('./utils/config');
 const format = require('./utils/format');
 
-const appName = `Santé Psy Étudiants`;
+const appName = config.appName;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
 const appRepo = 'https://github.com/betagouv/sante-psy';
 const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr';
@@ -19,10 +22,10 @@ const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr';
 const app = express();
 const landingController = require('./controllers/landingController');
 const dashboardController = require('./controllers/dashboardController');
-const appointmentsController =
-  require('./controllers/appointmentsController');
+const appointmentsController = require('./controllers/appointmentsController');
 const patientsController = require('./controllers/patientsController');
 const psyListingController = require('./controllers/psyListingController');
+const loginController = require('./controllers/loginController');
 
 // Desactivate debug log for production as they are a bit too verbose
 if( !config.activateDebug ) {
@@ -33,6 +36,7 @@ if( !config.activateDebug ) {
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(flash());
+app.use(cookieParser(config.secret));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use('/static', express.static('static'));
@@ -48,6 +52,10 @@ app.use(session({
 
 app.use(flash());
 
+// Mount express-sanitizer middleware here
+app.use(expressSanitizer());
+
+
 // Populate some variables for all views
 app.use(function populate(req, res, next){
   res.locals.appName = appName;
@@ -60,8 +68,49 @@ app.use(function populate(req, res, next){
   res.locals.successes = req.flash('success');
   next();
 })
-app.locals.format = format
 
+app.use(
+  expressJWT({
+    secret: config.secret,
+    algorithms: ['HS256'],
+    getToken: function fromHeaderOrQuerystring (req) {
+      if( req.cookies !== undefined ) {
+        return req.cookies.token;
+      } else {
+        return null;
+      }
+    }
+  }).unless({
+    path: [
+      '/',
+      '/psychologue/login',
+      '/consulter-les-psychologues',
+      '/mentions-legales',
+      '/donnees-personnelles-et-gestion-des-cookies',
+      '/faq',
+    ],
+  }),
+);
+
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    // redirect to login and keep the requested url in the '?next=' query param
+    if (req.method === 'GET') {
+      req.flash(
+        'error',
+        `Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
+         - la connexion est valide durant ${config.sessionDurationHours} heures`,
+      );
+      console.debug("No token - redirect to login");
+      return res.redirect(`/psychologue/login`);
+    }
+  }
+
+  return next(err);
+});
+
+
+app.locals.format = format
 // prevent abuse
 const rateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minute window
@@ -87,6 +136,17 @@ if (config.featurePsyList) {
 }
 
 if (config.featurePsyPages) {
+  app.get('/psychologue/login', loginController.getLogin);
+  // prevent abuse for some rules
+  const speedLimiterLogin = slowDown({
+    windowMs: 5 * 60 * 1000, // 5 minutes
+    delayAfter: 10, // allow X requests per 5 minutes, then...
+    delayMs: 500 // begin adding 500ms of delay per request above 100:
+  });
+  app.post('/psychologue/login', speedLimiterLogin, loginController.postLogin);
+  app.get('/psychologue/logout', loginController.getLogout);
+
+  //@TODO ajouter `/psychologue/`
   app.get('/mes-seances', dashboardController.dashboard)
   app.get('/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/creer-nouvelle-seance',
@@ -99,6 +159,8 @@ if (config.featurePsyPages) {
   app.post('/creer-nouveau-patient',
     patientsController.createNewPatientValidators,
     patientsController.createNewPatient)
+  app.post('/modifier-patient', patientsController.getEditPatient)
+  app.post('/api/modifier-patient', patientsController.editPatient)
 }
 
 app.get('/mentions-legales', (req, res) => {

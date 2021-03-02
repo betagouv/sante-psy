@@ -1,0 +1,45 @@
+<%- include('partials/header'); -%>
+
+<div class="rf-container-fluid">
+  <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
+    <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
+      <h1>
+        Espace Psychologues
+      </h1>
+
+      <div class="panel margin-top-m">
+        <h3>Me connecter</h3>
+        <% if (errors.length) { %>
+          <% errors.forEach(function(error) { %>
+            <%- include('partials/notificationError', {error: error}) -%>
+          <% }) %>
+        <% } %>
+        <% if (infos.length) { %>
+          <% infos.forEach(function(info) { %>
+            <%- include('partials/notificationInfo', {info: info}) -%>
+          <% }) %>
+        <% } %>
+        <p>Vous recevevrez un lien de connexion par email qui vous permettra d'être connecté pendant <%= sessionDurationHours %> heures</p>
+        <form action="/psychologue/login" method="POST" id="login_form">
+        <label for="email">Adresse email :</label>
+        <input type="email" name="email" id="email" value="" />
+        <button class="button" id="primary_email_button">Recevoir le lien de connexion</button>
+        <span>Ce lien sera valable 1h.</span>
+        </form>
+      </div>
+
+        <div class="panel border-left-primary">
+          <h3>⚠️&nbsp;Problème d'accès ?</h3>
+          <p>
+              Etes-vous bien enregistré via <a href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">le formulaire d'inscription</a> ?
+              Il se peut que votre compte ne soit pas encore validé.
+          </p>
+          <p>
+              Si vous avez besoin d'aide, vous pouvez toujours envoyer un email à <%- contactEmail %></a>.
+          </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer'); -%>
