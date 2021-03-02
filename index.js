@@ -94,8 +94,8 @@ app.use(
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
-    // redirect to login and keep the requested url in the '?next=' query param
-    if (req.method === 'GET' && req.originalUrl.includes("/psychologue")) {
+    const psychologueWorkspaceRegexp = new RegExp(/\/psychologue\//, 'g');
+    if (req.method === 'GET' && psychologueWorkspaceRegexp.test(req.originalUrl)) {
       req.flash(
         'error',
         `Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
