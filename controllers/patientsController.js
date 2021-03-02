@@ -9,7 +9,6 @@ module.exports.newPatient = async (req, res) => {
 
 // Validators we reuse for editPatient and createPatient
 const patientValidators = [
-  // todo : do we html-escape here ? We already escape in templates.
   check('firstnames')
     .trim().not().isEmpty()
     .customSanitizer((value, { req }) => {

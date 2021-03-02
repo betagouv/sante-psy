@@ -110,12 +110,29 @@ describe('loginController', function() {
         .post('/psychologue/login')
         .type('form')
         .send({
-          'email': 'known@email.org',
+          'email': 'prenom.nom@beta.gouv.fr',
         })
         .end((err, res) => {
           sinon.assert.called(getPsychologistByEmailStub);
           sinon.assert.called(sendMailStub);
           sinon.assert.called(insertTokenStub);
+          done();
+        })
+      });
+
+      it('should say that email is invalid', function(done) {
+        chai.request(app)
+        .post('/psychologue/login')
+        .type('form')
+        .send({
+          'email': 'fake_it',
+        })
+        .redirects(0)
+        .end((err, res) => {
+          sinon.assert.notCalled(getPsychologistByEmailStub);
+          sinon.assert.notCalled(sendMailStub);
+          sinon.assert.notCalled(insertTokenStub);
+          res.should.redirectTo('/psychologue/login');
           done();
         })
       });
