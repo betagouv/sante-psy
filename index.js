@@ -43,7 +43,7 @@ app.use('/static', express.static('static'));
 app.use('/gouvfr', express.static(
   path.join(__dirname, 'node_modules/@gouvfr/all/dist'))
 );
-app.use('/jquery', express.static(
+app.use('/static/js/jquery', express.static(
   path.join(__dirname, 'node_modules/jquery/dist'))
 );
 
