@@ -47,6 +47,7 @@
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
     "intl": "^1.2.5",
+    "jquery": "^3.6.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.17",
     "lodash": "^4.17.20",
