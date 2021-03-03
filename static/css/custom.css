@@ -53,3 +53,7 @@
 .appointment-list li{
   margin-bottom: 1.5rem; /* rf-mb-3w */
 }
+
+.red-text {
+  color: var(--error);
+}

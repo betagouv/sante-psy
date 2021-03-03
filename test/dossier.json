@@ -4,11 +4,12 @@
     "dossiers": {
       "nodes": [
         {
+          "archived": false,
           "number": 1,
           "groupeInstructeur": {
             "label": "Normandie"
           },
-          "state": "en_construction",
+          "state": "accepte",
           "champs": [
             {
               "id": "Q2hhbXAtMTY1OTUxMw==",
@@ -68,7 +69,7 @@
             {
               "id": "Q2hhbXAtMTYwMTE4Ng==",
               "label": "Email de contact",
-              "stringValue": "psychologue.test@apas82.mssante.fr"
+              "stringValue": "psychologue.test@beta.gouv.fr"
             },
             {
               "id": "Q2hhbXAtMTYzOTUyNA==",
@@ -98,11 +99,12 @@
           }
         },
         {
+          "archived": false,
           "number": 2,
           "groupeInstructeur": {
             "label": "Normandie"
           },
-          "state": "en_construction",
+          "state": "accepte",
           "champs": [
             {
               "id": "Q2hhbXAtMTY1OTUxMw==",
@@ -162,7 +164,7 @@
             {
               "id": "Q2hhbXAtMTYwMTE4Ng==",
               "label": "Email de contact",
-              "stringValue": "psychologue.test@apas82.mssante.fr"
+              "stringValue": "psychologue.test@beta.gouv.fr"
             },
             {
               "id": "Q2hhbXAtMTYzOTUyNA==",

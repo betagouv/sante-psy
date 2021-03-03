@@ -1,4 +1,6 @@
 const crypto = require('crypto');
+const { check } = require('express-validator');
+const validation = require('../utils/validation')
 const dbPsychologists = require('../db/psychologists');
 const dbLoginToken = require('../db/loginToken');
 const date = require('../utils/date');
@@ -6,6 +8,13 @@ const cookie = require('../utils/cookie');
 const emailUtils = require('../utils/email');
 const ejs = require('ejs');
 const config = require('../utils/config');
+
+module.exports.emailValidators = [
+  check('email')
+    .isEmail()
+    .normalizeEmail() //sanitize input
+    .withMessage('Vous devez spécifier un email valide.'),
+]
 
 function generateToken() {
   return crypto.randomBytes(256).toString('base64');
@@ -37,27 +46,32 @@ async function saveToken(email, token) {
 }
 
 module.exports.getLogin = async function getLogin(req, res) {
-  // init params
-  const nextPage = '/mes-seances';
+  const nextPage = '/psychologue/mes-seances';
 
   const sessionDurationHours = config.sessionDurationHours;
   const formUrl = config.demarchesSimplifieesUrl;
   const contactEmail = res.locals.contactEmail;
 
   // Save a token in cookie that expire after config.sessionDurationHours hours if user is logged
-  if ( req.query.token ) {
-    const token = req.sanitize(req.query.token);
-    const dbToken = await dbLoginToken.getByToken(token);
+  try {
+    if ( req.query.token ) {
+      const token = req.sanitize(req.query.token);
+      const dbToken = await dbLoginToken.getByToken(token);
 
-    if( dbToken !== undefined ) {
-      const psychologistData = await dbPsychologists.getPsychologistByEmail(dbToken.email);
-      res.cookie('token', cookie.getJwtTokenForUser(dbToken.email, psychologistData));
-      req.flash('info', `Vous êtes authentifié.e comme ${dbToken.email}`);
+      if( dbToken !== undefined ) {
+        const psychologistData = await dbPsychologists.getPsychologistByEmail(dbToken.email);
+        res.cookie('token', cookie.getJwtTokenForUser(dbToken.email, psychologistData));
+        await dbLoginToken.delete(token);
+        req.flash('info', `Vous êtes authentifié comme ${dbToken.email}`);
 
-      return res.redirect(nextPage);
-    } else {
-      req.flash('error', 'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.');
+        return res.redirect(nextPage);
+      } else {
+        req.flash('error', 'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.');
+      }
     }
+  } catch (err) {
+    console.error(err);
+    req.flash('error', "Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.");
   }
 
   res.render('login', {
@@ -75,13 +89,10 @@ function generateLoginUrl() {
  * Send a email with a login link if the email is already registered
  */
 module.exports.postLogin = async function postLogin(req, res) {
-  const email = req.sanitize(req.body.email);
-
-  //@TODO check if email exists (express-validator)
-  if( !email  ) {
-    req.flash('error', "Désolé, l'email renseigné n'a pas le bon format.");
-    return res.redirect(`/psychologue/login`);
+  if (!validation.checkErrors(req)) {
+    return res.redirect('/psychologue/login');
   }
+  const email = req.body.email;
 
   try {
     const emailExist = await dbPsychologists.getPsychologistByEmail(email);
@@ -104,7 +115,7 @@ module.exports.postLogin = async function postLogin(req, res) {
   } catch (err) {
     console.error(err);
     req.flash('error', "Erreur dans l'authentification. Nos services ont été alertés et vont règler ça au plus vite.");
-    return res.redirect(`/login`);
+    return res.redirect(`/psychologue/login`);
   }
 };
 

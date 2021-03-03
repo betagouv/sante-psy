@@ -41,8 +41,14 @@ app.use(cookieParser(config.secret));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use('/static', express.static('static'));
-app.use('/gouvfr', express.static(
+app.use('/static/gouvfr', express.static(
   path.join(__dirname, 'node_modules/@gouvfr/all/dist'))
+);
+app.use('/static/jquery', express.static(
+  path.join(__dirname, 'node_modules/jquery/dist'))
+);
+app.use('/static/tabulator-tables', express.static(
+  path.join(__dirname, 'node_modules/tabulator-tables/dist'))
 );
 
 app.use(session({
@@ -95,8 +101,8 @@ app.use(
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
-    // redirect to login and keep the requested url in the '?next=' query param
-    if (req.method === 'GET') {
+    const psychologueWorkspaceRegexp = new RegExp(/\/psychologue\//, 'g');
+    if (psychologueWorkspaceRegexp.test(req.originalUrl)) {
       req.flash(
         'error',
         `Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
@@ -104,7 +110,13 @@ app.use((err, req, res, next) => {
       );
       console.debug("No token - redirect to login");
       return res.redirect(`/psychologue/login`);
+    } else {
+      req.flash('error', "Cette page n'existe pas.")
+      return res.redirect(`/`);
     }
+  } else if( req.cookies === undefined ) {
+    req.flash('error', "Cette page n'existe pas.")
+    res.redirect('/');
   }
 
   return next(err);
@@ -144,24 +156,30 @@ if (config.featurePsyPages) {
     delayAfter: 10, // allow X requests per 5 minutes, then...
     delayMs: 500 // begin adding 500ms of delay per request above 100:
   });
-  app.post('/psychologue/login', speedLimiterLogin, loginController.postLogin);
+  app.post('/psychologue/login',
+    speedLimiterLogin,
+    loginController.emailValidators,
+    loginController.postLogin);
   app.get('/psychologue/logout', loginController.getLogout);
 
-  //@TODO ajouter `/psychologue/`
-  app.get('/mes-seances', dashboardController.dashboard)
-  app.get('/nouvelle-seance', appointmentsController.newAppointment)
-  app.post('/creer-nouvelle-seance',
-    ...appointmentsController.createNewAppointmentValidators,
+  app.get('/psychologue/mes-seances', dashboardController.dashboard)
+  app.get('/psychologue/nouvelle-seance', appointmentsController.newAppointment)
+  app.post('/psychologue/creer-nouvelle-seance',
+    appointmentsController.createNewAppointmentValidators,
     appointmentsController.createNewAppointment)
-  app.post('/supprimer-seance',
+  app.post('/psychologue/api/supprimer-seance',
     appointmentsController.deleteAppointmentValidators,
     appointmentsController.deleteAppointment)
-  app.get('/nouveau-patient', patientsController.newPatient)
-  app.post('/creer-nouveau-patient',
+  app.get('/psychologue/nouveau-patient', patientsController.newPatient)
+  app.post('/psychologue/api/creer-nouveau-patient',
     patientsController.createNewPatientValidators,
     patientsController.createNewPatient)
-  app.post('/modifier-patient', patientsController.getEditPatient)
-  app.post('/api/modifier-patient', patientsController.editPatient)
+  app.get('/psychologue/modifier-patient',
+    patientsController.getEditPatientValidators,
+    patientsController.getEditPatient)
+  app.post('/psychologue/api/modifier-patient',
+    patientsController.editPatientValidators,
+    patientsController.editPatient)
 }
 
 app.get('/faq', faqController.getFaq);
@@ -179,8 +197,13 @@ app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
 })
 
 app.get('*', function redirect404(req, res){
-  req.flash('error', "Cette page n'existe pas.")
-  res.redirect('/');
+  if( req.cookies === undefined ) {
+    req.flash('error', "Cette page n'existe pas.")
+    res.redirect('/');
+  } else {
+    req.flash('error', "Cette page n'existe pas.")
+    return res.redirect(`/psychologue/mes-seances`);
+  }
 });
 
 module.exports = app.listen(config.port, () => {
