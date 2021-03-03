@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const expressSanitizer = require('express-sanitizer');
 const path = require('path');
+const helmet = require('helmet')
 const flash = require('connect-flash');
 const session = require('express-session');
 const expressJWT = require('express-jwt');
@@ -36,6 +37,7 @@ if( !config.activateDebug ) {
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(flash());
+app.use(helmet());
 app.use(cookieParser(config.secret));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
