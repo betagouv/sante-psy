@@ -43,6 +43,7 @@ exports.up = function(knex) {
           table.text('firstNames').notNullable()
           table.text('lastName').notNullable()
           table.text('email').notNullable() // this will be the login for the user
+          // Il pourra peut être y avoir un email de contact et un email de login différent pour un psychologue mais on peut choisir de simplifier en effet
           table.text('address')
           table.string('departement')
           table.string('region')
@@ -55,7 +56,7 @@ exports.up = function(knex) {
           table.string('diploma')
           table.string('university')
 
-          table.uuid('payingUniversityId')
+          table.uuid('payingUniversityId') // Vous avez des codes standards d'université ? comme UAI ?
 
           table.timestamp('createdAt').defaultTo(knex.fn.now())
           table.timestamp('updatedAt')

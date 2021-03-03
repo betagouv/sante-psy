@@ -12,7 +12,7 @@ module.exports.getJwtTokenForUser = function getJwtTokenForUser(email, psycholog
   return jwt.sign(
     {
       email : email,
-      psychologist : psychologist,
+      psychologist : psychologist, // Julien: Vous stockez toutes les data du psychologue ici, visible dans le cookie
     },
     config.secret,
     { expiresIn: duration }

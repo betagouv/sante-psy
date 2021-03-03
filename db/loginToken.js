@@ -1,3 +1,5 @@
+// Il faudrait qu'on fasse une librairie de ça un de ces 4 (ou utiliser une librairie)
+ 
 const knexConfig = require("../knexfile")
 const date = require("../utils/date")
 const knex = require("knex")(knexConfig)

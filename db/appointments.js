@@ -40,8 +40,11 @@ module.exports.deleteAppointment = async (appointmentId, psychologistId) => {
       .where({
         id: appointmentId,
         psychologistId: psychologistId
-      })
-      .del()
+      })       
+      .del() // Julien : ça peut être intéressant de ne pas supprimer en base et de garder une trace de tout
+             // Pourquoi : si vous avez besoins de voir si un psychologue fraud ou en cas d'erreur
+             // Comment: utiliser un flag de suppression
+             // Note : vous pouvez faire une suppression compléte X mois après l'activation du flag
       .returning('*')
     if (deletedAppointments.length === 0) {
       console.error("Appointment not deleted : does not exist or is not allowed")

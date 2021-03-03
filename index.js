@@ -33,6 +33,7 @@ if( !config.activateDebug ) {
   console.debug = function desactivateDebug() {};
 }
 
+// Julien : bodyParser est marqué comme déprécié
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(flash());
@@ -107,7 +108,7 @@ app.use((err, req, res, next) => {
         `Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
          - la connexion est valide durant ${config.sessionDurationHours} heures`,
       );
-      console.debug("No token - redirect to login");
+      console.debug("No token - redirect to login"); // Julien : ça manque de détail pour faire de l'audit en cas de soucis
       return res.redirect(`/psychologue/login`);
     } else {
       req.flash('error', "Cette page n'existe pas.")

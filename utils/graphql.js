@@ -1,3 +1,8 @@
+// En général dans les utils, j'essaye de faire des trucs agnostics du métier et qui pourrait se réutiliser dans d'autres projets. 
+// C'est mon opinion.
+// Ici on fait clairement du GraphQL lié à l'api démarche simplifié, ce n'est pas signifié dans le nom du fichier.
+// C'est du coup ambigu avec le fichier demarchesSimplifiees.js
+// Alternative : Vous pourriez faire un fichier graphQL démarche simplifié agnostic de la démarche
 const { gql , GraphQLClient} = require('graphql-request');
 const config = require('../utils/config');
 

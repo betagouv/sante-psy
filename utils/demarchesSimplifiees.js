@@ -1,4 +1,5 @@
-const graphql = require('../utils/graphql');
+// En général dans les utils, j'essaye de faire des trucs agnostics du métier et qui pourrait se réutiliser dans d'autres projets. 
+// C'est mon opinion.const graphql = require('../utils/graphql');
 const uuid = require('../utils/uuid');
 const config = require('./config');
 

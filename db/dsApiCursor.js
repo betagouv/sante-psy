@@ -1,15 +1,19 @@
+// C'est assez osbcure ce que fait ce fichier en premier lecture, j'ai du m'y prendre à plusieurs fois
+
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
 const date = require("../utils/date");
 
 module.exports.dsApiCursorTable = "ds_api_cursor";
 
+// Julien ce n'est pas claire pourquoi il y getCursorFromDB et getLatestCursorSaved, la fonction getCursorFromDB n'est pas utilisé en dehors du fichier, elle est privé ?
 module.exports.getCursorFromDB = async function getCursorFromDB() {
   try {
     const lastCursor =  await knex(module.exports.dsApiCursorTable)
     .where("id", 1)
     .first();
 
+    // Julien : Le debug semble incorrect la fonction s'appelle "getCursorFromDB" et non getLatestCursorSaved
     console.debug(`getLatestCursorSaved: Got the latest cursor saved in PG ${JSON.stringify(lastCursor)}`);
     if( lastCursor ) {
       return lastCursor.cursor;
@@ -22,6 +26,7 @@ module.exports.getCursorFromDB = async function getCursorFromDB() {
     return undefined; //not a blocking error
   }
 }
+
 
 /**
  * l'API DS nous retourne 100 éléments à chaque appel, et nous indique la page où l'on se trouve

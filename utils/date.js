@@ -5,6 +5,7 @@ module.exports.isValidDate = (isoDateString) => {
   return !isNaN(new Date(Date.parse(isoDateString)))
 }
 
+// Julien : pourquoi il y a "PG" dans le nom ?
 module.exports.getDateNowPG = () => {
   return new Date().toISOString();
 }

@@ -1,4 +1,5 @@
 // TODO : this is copied from audioconf. Make it a separate package to reuse ?
+// Julien : good idea
 
 // eslint-disable-next-line no-global-assign
 Intl = require('intl') // Use a polyfill for when node doesn't have locales installed

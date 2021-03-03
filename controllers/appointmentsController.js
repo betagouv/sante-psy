@@ -55,6 +55,7 @@ module.exports.deleteAppointmentValidators = [
 ]
 
 // We use a POST rather than a DELETE because method=DELETE in the form seems to send a GET. (???)
+// Julien : Oui, DELETE c'est plutôt pour des API Rest, sinon ça ne passe pas pour certains navigateurs ou proxy
 module.exports.deleteAppointment = async (req, res) => {
   if (!validation.checkErrors(req)) {
     return res.redirect('/psychologue/mes-seances')

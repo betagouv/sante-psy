@@ -60,6 +60,9 @@ module.exports.getLogin = async function getLogin(req, res) {
 
       if( dbToken !== undefined ) {
         const psychologistData = await dbPsychologists.getPsychologistByEmail(dbToken.email);
+        // !!WARNING!! Julien  stocker en cookie par défaut tous les données du psychologue
+        // Ces infos sont visible dans le cookie en clair, vous ne pouvez plus stocker de secret concernant le psy en base en faisant ça.
+        // Solution : ne stocker que l'ID du psy
         res.cookie('token', cookie.getJwtTokenForUser(dbToken.email, psychologistData));
         await dbLoginToken.delete(token);
         req.flash('info', `Vous êtes authentifié comme ${dbToken.email}`);

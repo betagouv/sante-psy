@@ -22,6 +22,8 @@ module.exports.getPsychologists = async () => {
  * Perform a UPSERT with https://knexjs.org/#Builder-merge
  * @param {*} psy 
  */
+// Il n'y a peut être pas besoins de mettre "inPG",
+// ça fait une convention différente et la connaissance de la base de donnée n'est pas censé être connu du reste de l'application (separation of concern : https://en.wikipedia.org/wiki/Separation_of_concerns)
 module.exports.savePsychologistInPG = async function savePsychologistInPG(psyList) {
   console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
   const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
@@ -76,6 +78,6 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
 module.exports.getPsychologistByEmail = async function getPsychologistByEmail(email) {
   return await knex(module.exports.psychologistsTable)
   .where('email', email)
-  .first();
+  .first(); // Nice to have : Il devrait y avoir une erreur s'il y en a plusieurs pour voir les effets de board, ici c'est une erreur silencieuse
 }
 

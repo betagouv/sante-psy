@@ -1,3 +1,6 @@
+// En général dans les utils, j'essaye de faire des trucs agnostics du métier et qui pourrait se réutiliser dans d'autres projets. 
+// C'est mon opinion.
+// J'aurais plutôt mis se fichier à la racine
 require('dotenv').config();
 
 const isSecure = (process.env.SECURE || 'true') === 'true';

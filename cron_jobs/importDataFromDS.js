@@ -8,6 +8,7 @@ const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
  * Some data can be modified after been loaded inside PG
  * We need to re import them all from time to time using boolean @param updateEverything
  */
+// J'aurais mi ToDB, la cron n'est pas censé savoir comment les fonctions de DB stock les données (separation of concern)
 module.exports.importDataFromDSToPG = async function importDataFromDSToPG (updateEverything = false) {
   try {
     console.log("Starting importDataFromDSToPG...");
