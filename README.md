@@ -144,3 +144,4 @@ Voir `.env.sample` pour la liste complète
 * <table> http://tabulator.info/
 Tester les fonctions privées :
 * https://github.com/jhnns/rewire
+* CSRF tokens : https://github.com/pillarjs/understanding-csrf#csrf-tokens

@@ -8,8 +8,12 @@ const dbLoginToken = require('../db/loginToken');
 const dbPsychologists = require('../db/psychologists');
 const emailUtils = require('../utils/email');
 const cookie = require('../utils/cookie');
+const testUtils = require('./helper/utils');
 
-describe('loginController', function() {
+describe('loginController', async function() {
+  let _csrf;
+  let cookies;
+
   describe('generateLoginUrl', () => {
     it('should create a login url to send in a email', function() {
       const generateLoginUrl = loginController.__get__('generateLoginUrl');
@@ -38,39 +42,28 @@ describe('loginController', function() {
   describe('login page', () => {
     const token = cookie.getJwtTokenForUser("email");
     const email = "prenom.nom@beta.gouv.fr";
-    let getByTokenStub;
-    let insertTokenStub;
-    let deleteTokenStub;
-    let getPsychologistByEmailStub;
-    let sendMailStub;
-
-    beforeEach(function(done) {
-      insertTokenStub = sinon.stub(dbLoginToken, 'insert')
-        .returns(Promise.resolve());
-      deleteTokenStub = sinon.stub(dbLoginToken, 'delete')
-        .returns(Promise.resolve());
-
-      getPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getPsychologistByEmail')
-        .returns(Promise.resolve({
-          email: email
-        }));
-
-      sendMailStub = sinon.stub(emailUtils, 'sendMail')
-        .returns(Promise.resolve());
-
-      done()
-    })
-
-    afterEach(function(done) {
-      getByTokenStub.restore();
-      insertTokenStub.restore();
-      deleteTokenStub.restore();
-      getPsychologistByEmailStub.restore();
-      sendMailStub.restore();
-      done();
-    })
 
     describe('getLogin', () => {
+      let getByTokenStub;
+      let deleteTokenStub;
+      let getPsychologistByEmailStub;
+      beforeEach(async function() {
+        deleteTokenStub = sinon.stub(dbLoginToken, 'delete')
+          .returns(Promise.resolve());
+
+        getPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getPsychologistByEmail')
+          .returns(Promise.resolve({
+            email: email
+          }));
+      })
+
+      afterEach(function(done) {
+        getByTokenStub.restore();
+        deleteTokenStub.restore();
+        getPsychologistByEmailStub.restore();
+        done();
+      })
+
       it('should log someone in', function(done) {
         getByTokenStub = sinon.stub(dbLoginToken, 'getByToken')
         .returns(Promise.resolve(
@@ -111,36 +104,77 @@ describe('loginController', function() {
     });
 
     describe('postLogin', () => {
+      let insertTokenStub;
+      let getPsychologistByEmailStub;
+      let sendMailStub;
+
+      beforeEach(async function() {
+        insertTokenStub = sinon.stub(dbLoginToken, 'insert')
+          .returns(Promise.resolve());
+
+        getPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getPsychologistByEmail')
+          .returns(Promise.resolve({
+            email: email
+          }));
+
+        sendMailStub = sinon.stub(emailUtils, 'sendMail')
+          .returns(Promise.resolve());
+      })
+
+      afterEach(function(done) {
+        insertTokenStub.restore();
+        getPsychologistByEmailStub.restore();
+        sendMailStub.restore();
+        done();
+      })
+
       it('send a login email', function(done) {
         chai.request(app)
-        .post('/psychologue/login')
-        .type('form')
-        .send({
-          'email': 'prenom.nom@beta.gouv.fr',
-        })
-        .end((err, res) => {
-          sinon.assert.called(getPsychologistByEmailStub);
-          sinon.assert.called(sendMailStub);
-          sinon.assert.called(insertTokenStub);
-          done();
-        })
+        .get(`/psychologue/login`)
+        .end(function(err, res){
+          _csrf = testUtils.getCsrfTokenHtml(res);
+          cookies = testUtils.getCsrfTokenCookie(res);
+          chai.request(app)
+          .post('/psychologue/login')
+          .type('form')
+          .set('cookie',cookies)
+          .send({
+            'email': 'prenom.nom@beta.gouv.fr',
+            '_csrf': _csrf,
+          })
+          .end((err, res) => {
+            sinon.assert.called(getPsychologistByEmailStub);
+            sinon.assert.called(sendMailStub);
+            sinon.assert.called(insertTokenStub);
+            done();
+          })
+        });
       });
 
       it('should say that email is invalid', function(done) {
         chai.request(app)
-        .post('/psychologue/login')
-        .type('form')
-        .send({
-          'email': 'fake_it',
-        })
-        .redirects(0)
-        .end((err, res) => {
-          sinon.assert.notCalled(getPsychologistByEmailStub);
-          sinon.assert.notCalled(sendMailStub);
-          sinon.assert.notCalled(insertTokenStub);
-          res.should.redirectTo('/psychologue/login');
-          done();
-        })
+        .get(`/psychologue/login`)
+        .end(function(err, res){
+          _csrf = testUtils.getCsrfTokenHtml(res);
+          cookies = testUtils.getCsrfTokenCookie(res);
+
+          chai.request(app)
+          .post('/psychologue/login')
+          .type('form')
+          .set('cookie',cookies)
+          .send({
+            'email': 'fake_it',
+            '_csrf': _csrf,
+          })
+          .redirects(0)
+          .end((err, res) => {
+            sinon.assert.notCalled(getPsychologistByEmailStub);
+            sinon.assert.notCalled(sendMailStub);
+            sinon.assert.notCalled(insertTokenStub);
+            res.should.redirectTo('/psychologue/login');
+            done();
+          })
+        });
       });
     });
   });

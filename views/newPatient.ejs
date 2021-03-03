@@ -43,7 +43,7 @@
   <% } %>
   <div class="rf-my-5w">
     <form action="/psychologue/api/creer-nouveau-patient" method="POST">
-      <input type="hidden" name="_csrf" value="">
+      <input type="hidden" <input type="hidden" name="_csrf" value="<%= _csrf  %>">>
       <div class="rf-text--sm">
         Les champs avec une astérique (<span class="red-text">*</span>) sont obligatoires.
       </div>

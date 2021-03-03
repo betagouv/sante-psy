@@ -34,7 +34,6 @@ if( !config.activateDebug ) {
   console.debug = function desactivateDebug() {};
 }
 
-app.use(csrf({ cookie: true }));
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(flash());
@@ -54,6 +53,7 @@ app.use(session({
 
 app.use(flash());
 
+app.use(csrf({ cookie: true }));
 // Mount express-sanitizer middleware here
 app.use(expressSanitizer());
 
@@ -65,6 +65,7 @@ app.use(function populate(req, res, next){
   res.locals.appRepo = appRepo;
   res.locals.page = req.url;
   res.locals.contactEmail = contactEmail;
+  res.locals._csrf = req.csrfToken();
   res.locals.errors = req.flash('error');
   res.locals.infos = req.flash('info');
   res.locals.successes = req.flash('success');
@@ -106,12 +107,17 @@ app.use((err, req, res, next) => {
       console.debug("No token - redirect to login");
       return res.redirect(`/psychologue/login`);
     } else {
-      req.flash('error', "Cette page n'existe pas.")
+      req.flash('error', "Cette page n'existe pas.");
       return res.redirect(`/`);
     }
   } else if( req.cookies === undefined ) {
-    req.flash('error', "Cette page n'existe pas.")
+    req.flash('error', "Cette page n'existe pas.");
     res.redirect('/');
+  } else if (err !== 'EBADCSRFTOKEN') { // handle CSRF token errors here
+    console.warn(`CSRF token errors detected ${req.csrfToken()} but have ${res.req.body._csrf}`);
+    res.status(403);
+    req.flash('error', "Il semblerait que vous n'êtes pas à l'origine de cette opération, vous avez été redirigé.")
+    return res.redirect(`/`);
   }
 
   return next(err);

@@ -15,7 +15,7 @@
             </div>
             <div class="rf-col-xs-12 rf-col-sm-6 rf-col-md-6 rf-col-lg-6 rf-col-xl-6 rf-text-right">
               <form action="/psychologue/modifier-patient" method="GET">
-                <input type="hidden" name="_csrf" value="">
+                <input type="hidden" <input type="hidden" name="_csrf" value="<%= _csrf  %>">>
                 <input hidden name="patientid" value="<%= patient.id %>" />
                 <button type="submit" class="rf-btn rf-btn--secondary rf-btn--sm rf-fi-edit-line rf-btn--icon-left">
                   Modifier
