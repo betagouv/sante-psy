@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('../utils/config');
 
-module.exports.headers = {
+const headers = {
   // secure: if true, send cookie over https only.
   // We use false when the server is not https (like localhost) otherwise we break sessions.
   secure: config.isSecure,
@@ -10,6 +10,15 @@ module.exports.headers = {
   // sameSite : browser only sends the cookie to the site it came from (our site!)
   sameSite: 'Strict',
 }
+module.exports.headers = headers
+
+module.exports.createAndSetJwtCookie = (res, email, psychologistData) => {
+  res.cookie('token', getJwtTokenForUser(email, psychologistData), headers);
+}
+
+module.exports.clearJwtCookie = (res) => {
+  res.clearCookie('token')
+}
 
 /**
  * get a json web token to store psychologist data
@@ -17,7 +26,7 @@ module.exports.headers = {
  * @param {*} id
  * @see https://www.ionos.fr/digitalguide/sites-internet/developpement-web/json-web-token-jwt/
  */
-module.exports.getJwtTokenForUser = function getJwtTokenForUser(email, psychologist) {
+const getJwtTokenForUser = function getJwtTokenForUser(email, psychologist) {
   const duration = getSessionDuration();
 
   return jwt.sign(
@@ -29,6 +38,7 @@ module.exports.getJwtTokenForUser = function getJwtTokenForUser(email, psycholog
     { expiresIn: duration }
   );
 };
+module.exports.getJwtTokenForUser = getJwtTokenForUser
 
 function getSessionDuration() {
   return config.sessionDurationHours + ' hours'
