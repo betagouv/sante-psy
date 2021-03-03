@@ -1,9 +1,12 @@
 <%- include('partials/header', { pageSubtitle: 'Espace Psychologues', home: '/psychologue/mes-seances'}) -%>
 
 <!-- Javascript for the datepicker -->
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="/static/jquery/jquery.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<!-- Jquery-ui is downloaded from https://jqueryui.com/download/#! (no npm package)-->
+<link rel="stylesheet" href="/static/jquery-ui-1.12.1/jquery-ui.min.css">
+<script src="/static/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+
 <script>
   $( function() {
     $( "#date" ).datepicker($.datepicker.regional[ "fr" ] );
