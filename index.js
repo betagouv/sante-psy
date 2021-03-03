@@ -40,8 +40,14 @@ app.use(cookieParser(config.secret));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use('/static', express.static('static'));
-app.use('/gouvfr', express.static(
+app.use('/static/gouvfr', express.static(
   path.join(__dirname, 'node_modules/@gouvfr/all/dist'))
+);
+app.use('/static/jquery', express.static(
+  path.join(__dirname, 'node_modules/jquery/dist'))
+);
+app.use('/static/tabulator-tables', express.static(
+  path.join(__dirname, 'node_modules/tabulator-tables/dist'))
 );
 
 app.use(session({
