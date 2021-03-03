@@ -1,5 +1,16 @@
 const jwt = require('jsonwebtoken');
 const config = require('../utils/config');
+
+module.exports.headers = {
+  // secure: if true, send cookie over https only.
+  // We use false when the server is not https (like localhost) otherwise we break sessions.
+  secure: config.isSecure,
+  // httpOnly: the browser cannot read the cookie, only send it to the server.
+  httpOnly: true,
+  // sameSite : browser only sends the cookie to the site it came from (our site!)
+  sameSite: 'Strict',
+}
+
 /**
  * get a json web token to store psychologist data
  * token = encodeBase64(header) + '.' + encodeBase64(payload) + '.' + encodeBase64(signature)

@@ -12,6 +12,7 @@ const slowDown = require("express-slow-down");
 const cookieParser = require('cookie-parser');
 
 const config = require('./utils/config');
+const cookie = require('./utils/cookie')
 const format = require('./utils/format');
 
 const appName = config.appName;
@@ -51,10 +52,14 @@ app.use('/static/tabulator-tables', express.static(
   path.join(__dirname, 'node_modules/tabulator-tables/dist'))
 );
 
+// This session cookie (connect.sid) is only used for displaying the flash messages.
+// The other session cookie (token) contains the authenticated user session.
 app.use(session({
   secret: config.secret,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  // We use the same headers for flash cookie as for token cookie.
+  cookie: cookie.headers,
 }));
 
 app.use(flash());
