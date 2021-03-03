@@ -34,10 +34,20 @@ if( !config.activateDebug ) {
   console.debug = function desactivateDebug() {};
 }
 
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "font-src": ["'self'"],
+      "img-src": ["'self'"],
+      "style-src": ["'self'"],
+    },
+  })
+);
+
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(flash());
-app.use(helmet());
 app.use(cookieParser(config.secret));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
