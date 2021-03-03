@@ -1,4 +1,6 @@
 const crypto = require('crypto');
+const { check } = require('express-validator');
+const validation = require('../utils/validation')
 const dbPsychologists = require('../db/psychologists');
 const dbLoginToken = require('../db/loginToken');
 const date = require('../utils/date');
@@ -6,6 +8,13 @@ const cookie = require('../utils/cookie');
 const emailUtils = require('../utils/email');
 const ejs = require('ejs');
 const config = require('../utils/config');
+
+module.exports.emailValidators = [
+  check('email')
+    .isEmail()
+    .normalizeEmail() //sanitize input
+    .withMessage('Vous devez spécifier un email valide.'),
+]
 
 function generateToken() {
   return crypto.randomBytes(256).toString('base64');
@@ -80,13 +89,10 @@ function generateLoginUrl() {
  * Send a email with a login link if the email is already registered
  */
 module.exports.postLogin = async function postLogin(req, res) {
-  const email = req.sanitize(req.body.email);
-
-  //@TODO check if email exists (express-validator)
-  if( !email  ) {
-    req.flash('error', "Désolé, l'email renseigné n'a pas le bon format.");
-    return res.redirect(`/psychologue/login`);
+  if (!validation.checkErrors(req)) {
+    return res.redirect('/psychologue/login');
   }
+  const email = req.body.email;
 
   try {
     const emailExist = await dbPsychologists.getPsychologistByEmail(email);

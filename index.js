@@ -149,7 +149,10 @@ if (config.featurePsyPages) {
     delayAfter: 10, // allow X requests per 5 minutes, then...
     delayMs: 500 // begin adding 500ms of delay per request above 100:
   });
-  app.post('/psychologue/login', speedLimiterLogin, loginController.postLogin);
+  app.post('/psychologue/login',
+    speedLimiterLogin,
+    loginController.emailValidators,
+    loginController.postLogin);
   app.get('/psychologue/logout', loginController.getLogout);
 
   app.get('/psychologue/mes-seances', dashboardController.dashboard)
