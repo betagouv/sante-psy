@@ -6,6 +6,7 @@ const cookie = require('../utils/cookie')
 const dbPatients = require('../db/patients')
 const { expect } = require('chai')
 const sinon = require('sinon')
+const testUtils = require('./helper/utils');
 
 const makePatient = async (psychologistId) => {
   // Insert an appointment and a patient
@@ -33,12 +34,20 @@ describe('patientsController', function() {
         email: 'prenom.nom@beta.gouv.fr',
       }
 
-      return chai.request(app)
+      chai.request(app)
+        .get(`/psychologue/creer-nouveau-patient`)
+        .end(function(err, res){
+          const  _csrf = testUtils.getCsrfTokenHtml(res);
+          const cookies = testUtils.getCsrfTokenCookie(res);
+          cookies.push(`token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+
+          return chai.request(app)
         .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', cookies)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
+          '_csrf': _csrf,
           lastname: 'Lovelace',
           firstnames: 'Ada',
           ine: '12345678901',
@@ -52,6 +61,7 @@ describe('patientsController', function() {
 
           return Promise.resolve()
         })
+        })
     })
 
     it('should not create patient if user is not logged in', async function() {
@@ -60,12 +70,20 @@ describe('patientsController', function() {
         email: 'prenom.nom@beta.gouv.fr',
       }
 
-      return chai.request(app)
+      chai.request(app)
+        .get(`/psychologue/creer-nouveau-patient`)
+        .end(function(err, res){
+          const  _csrf = testUtils.getCsrfTokenHtml(res);
+          const cookies = testUtils.getCsrfTokenCookie(res);
+          cookies.push(`token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+
+          return chai.request(app)
         .post('/psychologue/api/creer-nouveau-patient')
         // no auth cookie
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
+          '_csrf': _csrf,
           lastname: 'Lovelace',
           firstnames: 'Ada',
           ine: '12345678901',
@@ -78,6 +96,7 @@ describe('patientsController', function() {
           expect(patientsArray).to.have.length(0)
 
           return Promise.resolve()
+        })
         })
     })
   })
@@ -107,8 +126,15 @@ describe('patientsController', function() {
       }
 
       chai.request(app)
+        .get(`/psychologue/creer-nouveau-patient`)
+        .end(function(err, res){
+          const  _csrf = testUtils.getCsrfTokenHtml(res);
+          const cookies = testUtils.getCsrfTokenCookie(res);
+          cookies.push(`token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+          postData._csrf = _csrf
+          chai.request(app)
         .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', cookies)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
@@ -117,6 +143,7 @@ describe('patientsController', function() {
           res.should.redirectTo('/psychologue/nouveau-patient');
 
           done();
+        })
         })
     }
 
@@ -175,8 +202,15 @@ describe('patientsController', function() {
       }
 
       chai.request(app)
+        .get(`/psychologue/creer-nouveau-patient`)
+        .end(function(err, res){
+          const  _csrf = testUtils.getCsrfTokenHtml(res);
+          const cookies = testUtils.getCsrfTokenCookie(res);
+          cookies.push(`token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+          postData._csrf = _csrf
+          chai.request(app)
         .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', cookies)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
@@ -184,6 +218,7 @@ describe('patientsController', function() {
           sinon.assert.called(insertPatientStub)
           res.should.redirectTo('/psychologue/mes-seances');
           done();
+        })
         })
     }
 
@@ -240,7 +275,7 @@ describe('patientsController', function() {
     it('should not display form if it is not my patient', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = 'e43b8668-621d-40a7-86e0-c563b6b05509'
       const notMyPatient = await makePatient(anotherPsyId)
@@ -264,7 +299,7 @@ describe('patientsController', function() {
     it('should not display form if uuid is not valid', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'valid@valid.org',
+        email: 'prenom.nom@beta.gouv.fr',
       }
 
       return chai.request(app)
@@ -296,29 +331,37 @@ describe('patientsController', function() {
       }
       const patient = await makePatient(psy.dossierNumber)
 
-      return chai.request(app)
-        .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          patientid: patient.id,
-          lastname: 'Lovelacekkk',
-          firstnames: 'Adakkk',
-          ine: '111222333rr',
-        })
-        .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances')
+      chai.request(app)
+        .get(`/psychologue/modifier-patient`)
+        .end(function(err, res){
+          const  _csrf = testUtils.getCsrfTokenHtml(res);
+          const cookies = testUtils.getCsrfTokenCookie(res);
+          cookies.push(`token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+          return chai.request(app)
+          .post('/psychologue/api/modifier-patient')
+          .set('Cookie', cookies)
+          .redirects(0) // block redirects, we don't want to test them
+          .type('form')
+          .send({
+            '_csrf': _csrf,
+            patientid: patient.id,
+            lastname: 'Lovelacekkk',
+            firstnames: 'Adakkk',
+            ine: '111222333rr',
+          })
+          .then(async (res) => {
+            res.should.redirectTo('/psychologue/mes-seances')
 
-          const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
-          expect(patientsArray).to.have.length(1)
-          expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber)
-          expect(patientsArray[0].lastName).to.equal('Lovelacekkk')
-          expect(patientsArray[0].firstNames).to.equal('Adakkk')
-          expect(patientsArray[0].INE).to.equal('111222333rr')
+            const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
+            expect(patientsArray).to.have.length(1)
+            expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber)
+            expect(patientsArray[0].lastName).to.equal('Lovelacekkk')
+            expect(patientsArray[0].firstNames).to.equal('Adakkk')
+            expect(patientsArray[0].INE).to.equal('111222333rr')
 
-          return Promise.resolve()
-        })
+            return Promise.resolve()
+          });
+        });
     })
 
     it('should not update patient if it is not mine', async function() {
@@ -329,29 +372,39 @@ describe('patientsController', function() {
       const anotherPsyId = '495614e8-89af-4406-ba02-9fc038b991f9'
       const patient = await makePatient(anotherPsyId)
 
-      return chai.request(app)
-        .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          patientid: patient.id,
-          lastname: 'Lovelacekkk',
-          firstnames: 'Adakkk',
-          ine: '111222333SS',
-        })
-        .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances')
+      chai.request(app)
+        .get(`/psychologue/modifier-patient`)
+        .end(function(err, res){
+          const  _csrf = testUtils.getCsrfTokenHtml(res);
+          const cookies = testUtils.getCsrfTokenCookie(res);
 
-          // Patient was not updated
-          const patientsArray = await dbPatients.getPatients(anotherPsyId)
-          expect(patientsArray).to.have.length(1)
-          expect(patientsArray[0].psychologistId).to.equal(anotherPsyId)
-          expect(patientsArray[0].lastName).to.equal(patient.lastName)
-          expect(patientsArray[0].firstNames).to.equal(patient.firstNames)
-          expect(patientsArray[0].INE).to.equal(patient.INE)
+          cookies.push(`token=${cookie.getJwtTokenForUser(psy.email, psy)}`);
 
-          return Promise.resolve()
+          return chai.request(app)
+          .post('/psychologue/api/modifier-patient')
+          .set('Cookie', cookies)
+          .redirects(0) // block redirects, we don't want to test them
+          .type('form')
+          .send({
+            '_csrf': _csrf,
+            patientid: patient.id,
+            lastname: 'Lovelacekkk',
+            firstnames: 'Adakkk',
+            ine: '111222333SS',
+          })
+          .then(async (res) => {
+            res.should.redirectTo('/psychologue/mes-seances')
+
+            // Patient was not updated
+            const patientsArray = await dbPatients.getPatients(anotherPsyId)
+            expect(patientsArray).to.have.length(1)
+            expect(patientsArray[0].psychologistId).to.equal(anotherPsyId)
+            expect(patientsArray[0].lastName).to.equal(patient.lastName)
+            expect(patientsArray[0].firstNames).to.equal(patient.firstNames)
+            expect(patientsArray[0].INE).to.equal(patient.INE)
+
+            return Promise.resolve({})
+          })
         })
     })
 
@@ -362,12 +415,20 @@ describe('patientsController', function() {
       }
       const patient = await makePatient(psy.dossierNumber)
 
-      return chai.request(app)
+      chai.request(app)
+      .get(`/psychologue/modifier-patient`)
+      .end(function(err, res){
+        const  _csrf = testUtils.getCsrfTokenHtml(res.req);
+        const cookies = testUtils.getCsrfTokenCookie(res);
+
+        return chai.request(app)
         .post('/psychologue/api/modifier-patient')
         // no auth cookie
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
+        .set('Cookie', cookies)
         .send({
+          '_csrf': _csrf,
           patientid: patient.id,
           lastname: 'Lovelacekkk',
           firstnames: 'Adakkk',
@@ -386,8 +447,8 @@ describe('patientsController', function() {
 
           return Promise.resolve()
         })
+      })
     })
-
   })
 
   describe('update patient input validation', function() {
@@ -410,8 +471,16 @@ describe('patientsController', function() {
       }
 
       chai.request(app)
+      .get(`/psychologue/modifier-patient`)
+      .end(function(err, res){
+        const  _csrf = testUtils.getCsrfTokenHtml(res);
+        const cookies = testUtils.getCsrfTokenCookie(res);
+        cookies.push(`token=${cookie.getJwtTokenForUser(psy.email, psy)}`);
+
+        postData._csrf = _csrf
+        chai.request(app)
         .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', cookies)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
@@ -421,6 +490,7 @@ describe('patientsController', function() {
 
           done();
         })
+      })
     }
 
     it('should refuse empty firstnames', function(done) {
@@ -516,15 +586,24 @@ describe('patientsController', function() {
       }
 
       chai.request(app)
-        .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send(postData)
-        .end((err, res) => {
-          sinon.assert.called(updatePatientStub)
-          res.should.redirectTo('/psychologue/mes-seances');
-          done();
+        .get(`/psychologue/modifier-patient`)
+        .end(function(err, res){
+          const  _csrf = testUtils.getCsrfTokenHtml(res);
+          const cookies = testUtils.getCsrfTokenCookie(res);
+          cookies.push(`token=${cookie.getJwtTokenForUser(psy.email, psy)}`);
+          postData._csrf = _csrf;
+
+          chai.request(app)
+          .post('/psychologue/api/modifier-patient')
+          .set('Cookie', cookies)
+          .redirects(0) // block redirects, we don't want to test them
+          .type('form')
+          .send(postData)
+          .end((err, res) => {
+            sinon.assert.called(updatePatientStub)
+            res.should.redirectTo('/psychologue/mes-seances');
+            done();
+          })
         })
     }
 
