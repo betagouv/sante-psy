@@ -15,17 +15,20 @@
           url: '/psychologue/mes-seances'
         },
         {
-          label: pageTitle,
+          label: 'Nouveau patient',
         },
     ],
   })
   -%>
   <h1>
-    <%= pageTitle %>
+    Nouveau patient
   </h1>
   <div class="rf-mb-5w">
     <div>
-      <%= pageIntroText %>
+      Déclarez un.e étudiant.e comme étant patient.e du dispositif Santé Psy Etudiants.
+    </div>
+    <div>
+      Vous pourrez ensuite déclarer les séances réalisées avec ce.tte patient.e.
     </div>
   </div>
   <% if (errors.length) { %>
@@ -39,19 +42,20 @@
     <% }) %>
   <% } %>
   <div class="rf-my-5w">
-    <form action="<%= form.action %>" method="<%= form.method %>">
+    <form action="/psychologue/api/creer-nouveau-patient" method="POST">
+      <input type="hidden" name="_csrf" value="">
       <div class="rf-text--sm">
         Les champs avec une astérique (<span class="red-text">*</span>) sont obligatoires.
       </div>
-      <input type="hidden" name="_csrf" value="">
-      <div>
+        <div>
         <div class="rf-my-3w">
+          <!--todo : little red star for required fields -->
           <label class="rf-label" for="firstnames">Prénoms <span class="red-text">*</span></label>
-          <input class="rf-input midlength-input" value="<%= patient.firstNames %>" type="text" id="firstnames" name="firstnames">
+          <input class="rf-input midlength-input" type="text" id="firstnames" name="firstnames" required>
         </div>
         <div class="rf-my-3w">
           <label class="rf-label" for="lastname">Nom <span class="red-text">*</span></label>
-          <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname">
+          <input class="rf-input midlength-input" type="text" id="lastname" name="lastname" required>
         </div>
         <div class="rf-my-3w">
           <!-- todo : JS validation for 11 digit number -->
@@ -59,12 +63,11 @@
           <div class="rf-hint-text" id="ine-help">
             Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant.
           </div>
-          <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine">
+          <input class="rf-input short-input" type="text" id="ine" name="ine">
         </div>
       </div>
       <div class="rf-my-5w">
-        <input hidden name="patientid" value="<%= patient.id %>" />
-        <button type="submit" class="rf-btn rf-btn--icon-left <%= form.submitButtonIcon %>"><%= form.submitButtonText %></button>
+        <button type="submit" class="rf-btn rf-fi-add-line rf-btn--icon-left">Ajouter le patient</button>
       </div>
     </form>
   </div>
@@ -72,6 +75,5 @@
     Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
   </div>
 </div>
-</br>
 
 <%- include('partials/footer') -%>

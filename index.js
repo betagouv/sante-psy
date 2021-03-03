@@ -10,6 +10,7 @@ const expressJWT = require('express-jwt');
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
 const cookieParser = require('cookie-parser');
+const csrf = require('csurf');
 
 const config = require('./utils/config');
 const format = require('./utils/format');
@@ -33,6 +34,7 @@ if( !config.activateDebug ) {
   console.debug = function desactivateDebug() {};
 }
 
+app.use(csrf({ cookie: true }));
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(flash());
