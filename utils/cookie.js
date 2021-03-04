@@ -4,7 +4,7 @@ const config = require('../utils/config');
 const headers = {
   // secure: if true, send cookie over https only.
   // We use false when the server is not https (like localhost) otherwise we break sessions.
-  secure: config.isSecure,
+  secure: false, // todo check that secure breaks redirects config.isSecure,
   // httpOnly: the browser cannot read the cookie, only send it to the server.
   httpOnly: true,
   // sameSite : browser only sends the cookie to the site it came from (our site!)
