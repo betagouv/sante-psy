@@ -82,9 +82,9 @@ describe('DB Psychologists', () => {
   describe("getPsychologistByEmail", () => {
     it("should return a psy if we enter a known login email", async () => {
       await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getPsychologistByEmail(psyList[0].emailLogin);
+      const psy = await dbPsychologists.getPsychologistByEmail(psyList[0].personalEmail);
       psy.email.should.be.equal(psyList[0].email);
-      psy.emailLogin.should.be.equal(psyList[0].emailLogin);
+      psy.personalEmail.should.be.equal(psyList[0].personalEmail);
     });
 
     it("should return undefined if we enter a unknown email", async () => {
@@ -102,14 +102,14 @@ describe('DB Psychologists', () => {
     it("should return undefined if known email but not accepte state and not archived", async () => {
       psyList[0].state = 'en_construction';
       await dbPsychologists.savePsychologistInPG(psyList);
-      const unknownPsy = await dbPsychologists.getPsychologistByEmail(psyList[0].emailLogin);
+      const unknownPsy = await dbPsychologists.getPsychologistByEmail(psyList[0].personalEmail);
       assert(undefined === unknownPsy);
     });
 
     it("should return undefined if known email, accepte state but archived is true", async () => {
       psyList[0].archived = true;
       await dbPsychologists.savePsychologistInPG(psyList);
-      const unknownPsy = await dbPsychologists.getPsychologistByEmail(psyList[0].emailLogin);
+      const unknownPsy = await dbPsychologists.getPsychologistByEmail(psyList[0].personalEmail);
       assert(undefined === unknownPsy);
     });
   });
