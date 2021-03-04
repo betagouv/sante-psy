@@ -81,7 +81,6 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
 module.exports.getPsychologistByEmail = async function getPsychologistByEmail(email) {
   return await knex(module.exports.psychologistsTable)
   .where('personalEmail', email)
-  .whereNot('archived', true)
   .where('state', 'accepte')
   .first();
 }
