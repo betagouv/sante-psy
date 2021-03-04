@@ -59,6 +59,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   // We use the same headers for flash cookie as for token cookie.
+  // (But we could use lower security, this cookie just displays error/success messages.)
   cookie: cookie.headers,
 }));
 
