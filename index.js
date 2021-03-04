@@ -35,7 +35,14 @@ if( !config.activateDebug ) {
   console.debug = function desactivateDebug() {};
 }
 
-app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "script-src": ["'self'", "https://stats.data.gouv.fr/"],
+    },
+  })
+);
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
