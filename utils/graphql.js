@@ -31,6 +31,8 @@ function getWhereConditionAfterCursor(cursor) {
     # updatedSince: Dossiers mis à jour depuis la date.
     # state: Dossiers avec statut. n'est pas un String, ne pas utilez de guillemets
     # archived: Si présent, permet de filtrer les dossiers archivés 
+     
+    mandatory field "usager.email" is used as the login email
  * @see https://demarches-simplifiees-graphql.netlify.app/demarche.doc.html
  */
 async function requestPsychologist(afterCursor) {
@@ -55,6 +57,9 @@ async function requestPsychologist(afterCursor) {
                 id
                 label
                 stringValue
+              }
+              usager {
+                email
               }
               demandeur {
                 ... on PersonnePhysique {
