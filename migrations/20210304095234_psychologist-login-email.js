@@ -1,4 +1,5 @@
 
+/* eslint-disable func-names */
 const dbPsychologists = require('../db/psychologists')
 
 exports.up = function (knex) {
