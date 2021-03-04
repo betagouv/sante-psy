@@ -59,7 +59,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   // We use the same headers for flash cookie as for token cookie.
-  cookie: cookie.headers,
+//  cookie: cookie.headers,
 }));
 
 app.use(flash());
