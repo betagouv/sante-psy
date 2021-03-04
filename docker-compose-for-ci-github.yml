@@ -16,6 +16,7 @@ services:
     environment:
       NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
       DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
+      USE_CSRF: 'false'  # CSRF tests are time consuming for not much value so we desactivate them here
     ports:
       - "8080:8080"
       - "9229:9229"
