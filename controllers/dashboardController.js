@@ -3,7 +3,6 @@ const dbAppointments = require('../db/appointments')
 const dbPatient = require('../db/patients')
 
 module.exports.dashboard = async function dashboard(req, res) {
-  console.log('dahsboardController')
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     const results = await Promise.all([

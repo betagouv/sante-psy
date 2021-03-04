@@ -87,7 +87,6 @@ app.use(
     algorithms: ['HS256'],
     getToken: function fromHeaderOrQuerystring (req) {
       if( req.cookies !== undefined ) {
-        console.log('got cookies in request', req.cookies)
         return req.cookies.token;
       } else {
         return null;
@@ -106,7 +105,6 @@ app.use(
 );
 
 app.use((err, req, res, next) => {
-  console.log('generic error handler : ', err)
   if (err.name === 'UnauthorizedError') {
     const psychologueWorkspaceRegexp = new RegExp(/\/psychologue\//, 'g');
     if (psychologueWorkspaceRegexp.test(req.originalUrl)) {

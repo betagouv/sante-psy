@@ -60,16 +60,11 @@ module.exports.getLogin = async function getLogin(req, res) {
 
       if( dbToken !== undefined ) {
         const psychologistData = await dbPsychologists.getPsychologistByEmail(dbToken.email);
-        console.log('psychologistData', psychologistData)
         cookie.createAndSetJwtCookie(res, dbToken.email, psychologistData)
-        console.log('cookie set')
         await dbLoginToken.delete(token);
-        console.log('token deleted')
         req.flash('info', `Vous êtes authentifié comme ${dbToken.email}`);
-        console.log('redirecting to', nextPage)
         return res.redirect(nextPage);
       } else {
-        console.log('Could not get token.')
         req.flash('error', 'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.');
       }
     }
