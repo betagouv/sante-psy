@@ -22,8 +22,9 @@ module.exports = {
   uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid 
   secret: process.env.SECRET,
   sessionDurationHours: process.env.SESSION_DURATION_HOURS || '2', // duration in hours
-  //mail
   hostnameWithProtocol: process.env.HOSTNAME_WITH_PROTOCOL || 'http://localhost:8080',
+  useCSRF: (process.env.USE_CSRF || 'true') === 'true',
+  //mail
   mailDebug: process.env.MAIL_DEBUG === 'true',
   mailService: process.env.MAIL_SERVICE ? process.env.MAIL_SERVICE : null,
   mailHost: process.env.MAIL_SERVICE ? null : process.env.MAIL_HOST,

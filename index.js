@@ -53,19 +53,28 @@ app.use(session({
 
 app.use(flash());
 
-app.use(csrf({ cookie: true }));
+if (config.useCSRF) {
+  console.log("Using CSRF protection");
+  app.use(csrf({ cookie: true }));
+} else {
+  console.log('NOT using CSRF protection due to env variable USE_CSRF - should only be used for test');
+}
 // Mount express-sanitizer middleware here
 app.use(expressSanitizer());
 
 
 // Populate some variables for all views
 app.use(function populate(req, res, next){
+  if (config.useCSRF) {
+    res.locals._csrf = req.csrfToken();
+  } else {
+    res.locals._csrf = '';
+  }
   res.locals.appName = appName;
   res.locals.appDescription = appDescription;
   res.locals.appRepo = appRepo;
   res.locals.page = req.url;
   res.locals.contactEmail = contactEmail;
-  res.locals._csrf = req.csrfToken();
   res.locals.errors = req.flash('error');
   res.locals.infos = req.flash('info');
   res.locals.successes = req.flash('success');
