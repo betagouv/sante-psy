@@ -7,16 +7,8 @@
 <link rel="stylesheet" href="/static/jquery-ui-1.12.1/jquery-ui.min.css">
 <script src="/static/jquery-ui-1.12.1/jquery-ui.min.js"></script>
 
-<script>
-  $( function() {
-    $( "#date" ).datepicker($.datepicker.regional[ "fr" ] );
-    // Hidden field which uses a different format, which is easier to parse for the backend.
-    $( "#date" ).datepicker( "option", "altField", "#iso-date" );
-    $( "#date" ).datepicker( "option", "altFormat", "yy-mm-dd" );
-  } );
-</script>
 <script src="/static/js/datepicker-fr.js"></script>
-<!-- end Javascript for the datepicker -->
+
 
 <div class="rf-container rf-mb-5w">
   <%- include('partials/ariane',

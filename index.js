@@ -35,16 +35,7 @@ if( !config.activateDebug ) {
   console.debug = function desactivateDebug() {};
 }
 
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      "font-src": ["'self'"],
-      "img-src": ["'self'"],
-      "style-src": ["'self'"],
-    },
-  })
-);
+app.use(helmet());
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
