@@ -17,7 +17,7 @@ jobs:
     - run: cp .env.sample .env
     - run: npm install
     - run: docker-compose -f docker-compose-for-ci-github.yml up --abort-on-container-exit;
-    - run: docker-compose -f docker-compose-for-ci-github.yml up --abort-on-container-exit;
+    - run: docker-compose -f docker-compose-for-ci-github-csrf.yml up --abort-on-container-exit;
       env:
         NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
     - run: npm run lint
