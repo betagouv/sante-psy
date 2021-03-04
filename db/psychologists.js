@@ -43,6 +43,7 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
         phone: psy.phone,
         website: psy.website,
         email: psy.email,
+        emailLogin: psy.emailLogin,
         teleconsultation: psy.teleconsultation,
         description: psy.description,
         training: psy.training,
@@ -73,9 +74,15 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
 }
 
 
+/**
+ * Only return accepted psychologist
+ * @param {*} email 
+ */
 module.exports.getPsychologistByEmail = async function getPsychologistByEmail(email) {
   return await knex(module.exports.psychologistsTable)
-  .where('email', email)
+  .where('emailLogin', email)
+  .whereNot('archived', true)
+  .where('state', 'accepte')
   .first();
 }
 

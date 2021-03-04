@@ -7,7 +7,7 @@ const clean = require('./helper/clean');
 
 describe('DB Psychologists', () => {
   const dossierNumber = clean.testDossierNumber();
-  const psyList = clean.psyList();
+  let psyList;
 
   async function testDataPsychologistsExist() {
     console.log("dossierNumber", dossierNumber);
@@ -21,6 +21,7 @@ describe('DB Psychologists', () => {
 
   //Clean up all data
   beforeEach(async function before() {
+    psyList = clean.psyList();
     await clean.cleanDataCursor();
     await clean.cleanDataPsychologist(dossierNumber);
   })
@@ -79,15 +80,36 @@ describe('DB Psychologists', () => {
   });
 
   describe("getPsychologistByEmail", () => {
-    it("should return a psy if we enter a known email", async () => {
+    it("should return a psy if we enter a known login email", async () => {
       await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getPsychologistByEmail(psyList[0].email);
+      const psy = await dbPsychologists.getPsychologistByEmail(psyList[0].emailLogin);
       psy.email.should.be.equal(psyList[0].email);
+      psy.emailLogin.should.be.equal(psyList[0].emailLogin);
     });
 
     it("should return undefined if we enter a unknown email", async () => {
       const unknownPsy = await dbPsychologists.getPsychologistByEmail("unknown@unknown.org")
 
+      assert(undefined === unknownPsy);
+    });
+
+    it("should return undefined if we dont use the login email", async () => {
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const unknownPsy = await dbPsychologists.getPsychologistByEmail(psyList[0].email);
+      assert(undefined === unknownPsy);
+    });
+
+    it("should return undefined if known email but not accepte state and not archived", async () => {
+      psyList[0].state = 'en_construction';
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const unknownPsy = await dbPsychologists.getPsychologistByEmail(psyList[0].emailLogin);
+      assert(undefined === unknownPsy);
+    });
+
+    it("should return undefined if known email, accepte state but archived is true", async () => {
+      psyList[0].archived = true;
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const unknownPsy = await dbPsychologists.getPsychologistByEmail(psyList[0].emailLogin);
       assert(undefined === unknownPsy);
     });
   });

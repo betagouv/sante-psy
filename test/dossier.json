@@ -96,6 +96,9 @@
             "civilite": "M",
             "nom": "Last",
             "prenom": "First"
+          },
+          "usager": {
+            "email": "loginEmail@beta.gouv.fr"
           }
         },
         {
@@ -119,10 +122,7 @@
             {
               "id": "Q2hhbXAtMTYzMDQxNg==",
               "label": "Votre carrière et vos qualifications",
-              "stringValue": ""
-            },
-            {
-              "id": "Q2hhbXAtMTYzMDQxNw==",
+              "stringValue": "",
               "label": "Intitulé ou spécialité de votre master de psychologie",
               "stringValue": "Psychologie clinique de la santé"
             },
@@ -142,7 +142,6 @@
               "stringValue": "Connaissance et pratique des outils diagnostic psychologique, Connaissance des troubles psychopathologiques du jeune adulte : dépressions, risques suicidaires, addictions, comportements à risque, troubles alimentaires, décompensation schizophrénique, psychoses émergeantes ainsi qu’une pratique de leur repérage, Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"
             },
             {
-              "id": "Q2hhbXAtMTYyNzk0NA==",
               "label": "Informations pour l'annuaire",
               "stringValue": ""
             },
@@ -191,6 +190,9 @@
             "civilite": "M",
             "nom": "2ème",
             "prenom": "Personne"
+          },
+          "usager": {
+            "email": "loginEmail2@beta.gouv.fr"
           }
         }
       ]
