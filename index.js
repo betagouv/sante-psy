@@ -40,6 +40,7 @@ app.use(
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
       "script-src": ["'self'", "https://stats.data.gouv.fr/"],
+      "img-src": ["'self'", "https://stats.data.gouv.fr/"]
     },
   })
 );
