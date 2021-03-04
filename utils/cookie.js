@@ -8,7 +8,7 @@ const headers = {
   // httpOnly: the browser cannot read the cookie, only send it to the server.
   httpOnly: true,
   // sameSite : browser only sends the cookie to the site it came from (our site!)
-  sameSite: 'Strict',
+  sameSite: 'Lax',
 }
 module.exports.headers = headers
 
