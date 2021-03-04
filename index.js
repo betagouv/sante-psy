@@ -59,15 +59,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   // We use the same headers for flash cookie as for token cookie.
-  cookie: {
-    // secure: if true, send cookie over https only.
-    // We use false when the server is not https (like localhost) otherwise we break sessions.
-//    secure: config.isSecure, // todo breaks flash messages ??
-    // httpOnly: the browser cannot read the cookie, only send it to the server.
-    httpOnly: true,
-    // sameSite : browser only sends the cookie to the site it came from (our site!)
-    sameSite: 'Lax',
-  },
+  cookie: cookie.headers,
 }));
 
 app.use(flash());

@@ -4,10 +4,15 @@ const config = require('../utils/config');
 const headers = {
   // secure: if true, send cookie over https only.
   // We use false when the server is not https (like localhost) otherwise we break sessions.
-  secure: false, // todo check that secure breaks redirects config.isSecure,
+  secure: config.isSecure,
   // httpOnly: the browser cannot read the cookie, only send it to the server.
   httpOnly: true,
   // sameSite : browser only sends the cookie to the site it came from (our site!)
+  // We use "Lax" because "Strict" breaks the login process : when you login
+  // by clicking the magic link from gmail, orange mail, or other mail website with specific
+  // referer-policy, the token is not passed correctly to the server (I think it is passed in
+  // the original request, but not in the redirect request to the home page.)
+  // Same problem can happen with CSRF cookie.
   sameSite: 'Lax',
 }
 module.exports.headers = headers
