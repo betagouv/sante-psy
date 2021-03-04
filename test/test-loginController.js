@@ -11,6 +11,9 @@ const cookie = require('../utils/cookie');
 const testUtils = require('./helper/utils');
 
 describe('loginController', async function() {
+  let _csrf;
+  let cookies;
+
   describe('generateLoginUrl', () => {
     it('should create a login url to send in a email', function() {
       const generateLoginUrl = loginController.__get__('generateLoginUrl');
@@ -129,8 +132,8 @@ describe('loginController', async function() {
         chai.request(app)
         .get(`/psychologue/login`)
         .end(function(err, res){
-          const _csrf = testUtils.getCsrfTokenHtml(res);
-          const cookies = testUtils.getCsrfTokenCookie(res);
+          _csrf = testUtils.getCsrfTokenHtml(res);
+          cookies = testUtils.getCsrfTokenCookie(res);
           chai.request(app)
           .post('/psychologue/login')
           .type('form')
@@ -152,8 +155,8 @@ describe('loginController', async function() {
         chai.request(app)
         .get(`/psychologue/login`)
         .end(function(err, res){
-          const _csrf = testUtils.getCsrfTokenHtml(res);
-          const cookies = testUtils.getCsrfTokenCookie(res);
+          _csrf = testUtils.getCsrfTokenHtml(res);
+          cookies = testUtils.getCsrfTokenCookie(res);
 
           chai.request(app)
           .post('/psychologue/login')
