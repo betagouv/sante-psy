@@ -5,6 +5,18 @@
   text-align: right;
 }
 
+.bg-fond-alternatif {
+  background-color: var(--g100);
+}
+
+.bg-blue-france {
+  background-color: var(--bf500);
+  color: var(--w);
+}
+
+.bg-blue-soft {
+  background-color: var(--bs300);
+}
 .rf-grid-row--space-between {
   justify-content: space-between;
 }

@@ -103,6 +103,7 @@ function parseDossierMetadata(dossier) {
   const archived = dossier.archived;
   const lastName = dossier.demandeur.nom;
   const firstNames = dossier.demandeur.prenom;
+  const personalEmail = dossier.usager.email;
   const dossierNumber = getUuidDossierNumber(dossier.number);
   const region = dossier.groupeInstructeur.label;
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
@@ -135,6 +136,7 @@ function parseDossierMetadata(dossier) {
     phone,
     website,
     email,
+    personalEmail,
     teleconsultation,
     description,
     training,

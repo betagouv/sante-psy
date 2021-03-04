@@ -29,9 +29,6 @@
           alt="Séance chez un psychologue"
         />
       </div>
-      <div class="rf-text-right">
-        <a class="rf-text--xs" href="https://www.freepik.com/vectors/medical">Image de pch.vector - www.freepik.com</a>
-      </div>
     </div>
   </div>
 </div>
@@ -59,6 +56,9 @@
        },
    })
  -%>
+ <div class="rf-centered rf-p-5v rf-bg--alt">
+   <a class="rf-btn rf-btn--secondary" href="/faq">En savoir plus</a>
+</div>
 
 <div class="rf-container-fluid">
   <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter bg-fond-alternatif">
@@ -72,6 +72,10 @@
           <% if (featurePsyList) { %>
             <a class="rf-btn rf-btn--alt" href="/consulter-les-psychologues">Voir la liste des psychologues conventionnés avec lesquels prendre rendez-vous</a>
           <% } %>
+          
+          <p>
+            <a class="rf-btn rf-btn--alt" href="/faq#etudiant">En savoir plus</a>
+          </p>
           <p>
             Nous vous suggérons aussi ce site de conseils :
           </p>
@@ -99,6 +103,9 @@
               Vous êtes prêts à commencer ?
             </p>
             <a class="rf-btn rf-btn--alt" href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">Participer au dispositif</a>
+            <p>
+              <a class="rf-btn rf-btn--alt" href="/faq#psy">En savoir plus</a>
+            </p>
             <% if (featurePsyPages) { %>
               <p>Vous avez déjà reçu la validation suite à la démarche ?</p>
               <a class="rf-btn rf-btn--alt" href="/psychologue/login">Connectez vous pour déclarer vos séances</a>
