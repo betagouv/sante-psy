@@ -47,7 +47,7 @@ describe('appointmentsController', function() {
           })
           .then(async (res) => {
             console.log("lol")
-            
+
             const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
             console.log("appointmentArray", appointmentArray)
             res.should.redirectTo('/psychologue/mes-seances')

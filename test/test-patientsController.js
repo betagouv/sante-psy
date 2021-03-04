@@ -54,7 +54,7 @@ describe('patientsController', function() {
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
-          
+
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
           console.log("patientsArray", patientsArray)
           patientsArray.length.should.equal(1)
