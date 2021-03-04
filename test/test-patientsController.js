@@ -54,11 +54,12 @@ describe('patientsController', function() {
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
-
+          
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
-          expect(patientsArray).to.have.length(1)
+          console.log("patientsArray", patientsArray)
+          patientsArray.length.should.equal(1)
           expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber)
-
+          console.log("should appear", patientsArray);
           return Promise.resolve()
         })
         })
