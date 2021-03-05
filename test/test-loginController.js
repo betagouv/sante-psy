@@ -8,6 +8,7 @@ const dbLoginToken = require('../db/loginToken');
 const dbPsychologists = require('../db/psychologists');
 const emailUtils = require('../utils/email');
 const cookie = require('../utils/cookie');
+const config = require('../utils/config');
 const testUtils = require('./helper/utils');
 
 describe('loginController', async function() {
@@ -146,6 +147,35 @@ describe('loginController', async function() {
             sinon.assert.called(getPsychologistByEmailStub);
             sinon.assert.called(sendMailStub);
             sinon.assert.called(insertTokenStub);
+            done();
+          })
+        });
+      });
+
+      it('should refuse login if csrf token is invalid', function(done) {
+        chai.request(app)
+        .get(`/psychologue/login`)
+        .end(function(err, res){
+          _csrf = testUtils.getCsrfTokenHtml(res);
+          cookies = testUtils.getCsrfTokenCookie(res);
+          chai.request(app)
+          .post('/psychologue/login')
+          .type('form')
+          .set('cookie',cookies)
+          .send({
+            'email': 'prenom.nom@beta.gouv.fr',
+            '_csrf': 'fake_token__csrf',
+          })
+          .end((err, res) => {
+            if( config.useCSRF ) {
+              sinon.assert.notCalled(getPsychologistByEmailStub);
+              sinon.assert.notCalled(sendMailStub);
+              sinon.assert.notCalled(insertTokenStub);
+            } else {
+              sinon.assert.called(getPsychologistByEmailStub);
+              sinon.assert.called(sendMailStub);
+              sinon.assert.called(insertTokenStub);
+            }
             done();
           })
         });
