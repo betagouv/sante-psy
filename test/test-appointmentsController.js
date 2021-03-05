@@ -7,7 +7,6 @@ const dbPatients = require('../db/patients')
 const sinon = require('sinon')
 const cookie = require('../utils/cookie')
 const { expect } = require('chai')
-const testUtils = require('./helper/utils');
 
 describe('appointmentsController', function() {
   describe('create appointment', function() {
@@ -28,33 +27,25 @@ describe('appointmentsController', function() {
       }
       const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
 
-      chai.request(app)
-      .get(`/psychologue/creer-nouveau-patient`)
-      .then(function(err, res){
-        const  _csrf = testUtils.getCsrfTokenHtml(res);
-        const cookies = testUtils.getCsrfTokenCookie(res);
-        cookies.push(`token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
-        return chai.request(app)
-          .post('/psychologue/creer-nouvelle-seance')
-          .set('Cookie', cookies)
-          .redirects(0) // block redirects, we don't want to test them
-          .type('form')
-          .send({
-            '_csrf' : _csrf,
-            'patientId': patient.id,
-            date: '09/02/2021',
-            'iso-date': '2021-02-09',
-          })
-          .then(async (res) => {
+      return chai.request(app)
+        .post('/psychologue/creer-nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': patient.id,
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/psychologue/mes-seances')
 
-            const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
-            console.log("appointmentArray", appointmentArray)
-            res.should.redirectTo('/psychologue/mes-seances')
-            expect(appointmentArray).to.have.length(1)
-            expect(appointmentArray[0].psychologistId).to.equal(psy.dossierNumber)
-            return Promise.resolve()
-          })
-      })
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
+          expect(appointmentArray).to.have.length(1)
+          expect(appointmentArray[0].psychologistId).to.equal(psy.dossierNumber)
+
+          return Promise.resolve()
+        })
     })
 
     it('should not create appointment if user not logged in', async function() {
