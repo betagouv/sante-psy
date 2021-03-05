@@ -46,7 +46,6 @@ describe('appointmentsController', function() {
             'iso-date': '2021-02-09',
           })
           .then(async (res) => {
-            console.log("lol")
 
             const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
             console.log("appointmentArray", appointmentArray)
