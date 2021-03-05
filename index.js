@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const expressSanitizer = require('express-sanitizer');
 const path = require('path');
+const helmet = require('helmet')
 const flash = require('connect-flash');
 const session = require('express-session');
 const expressJWT = require('express-jwt');
@@ -13,6 +14,7 @@ const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
 
 const config = require('./utils/config');
+const cookie = require('./utils/cookie')
 const format = require('./utils/format');
 
 const appName = config.appName;
@@ -35,6 +37,16 @@ if( !config.activateDebug ) {
   console.debug = function desactivateDebug() {};
 }
 
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "script-src": ["'self'", "https://stats.data.gouv.fr/"],
+      "img-src": ["'self'", "https://stats.data.gouv.fr/", "data:"]
+    },
+  })
+);
+
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(flash());
@@ -52,10 +64,15 @@ app.use('/static/tabulator-tables', express.static(
   path.join(__dirname, 'node_modules/tabulator-tables/dist'))
 );
 
+// This session cookie (connect.sid) is only used for displaying the flash messages.
+// The other session cookie (token) contains the authenticated user session.
 app.use(session({
   secret: config.secret,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  // We use the same headers for flash cookie as for token cookie.
+  // (But we could use lower security, this cookie just displays error/success messages.)
+  cookie: cookie.headers,
 }));
 
 app.use(flash());
