@@ -28,3 +28,14 @@ module.exports.importDataFromDSToPG = async function importDataFromDSToPG (updat
     console.error("ERROR: Could not import DS API data to PG", err)
   }
 }
+
+// One person should not have multiple dossiers in "acepte" status, notify the team.
+module.exports.countAcceptedPsychologistsByPersonalEmail = async () => {
+  const count = await dbPsychologists.countPsychologistsByPersonalEmail()
+  count.forEach(statsPoint => {
+    if (statsPoint.count > 1) {
+      console.log(statsPoint)
+      // todo email us
+    }
+  })
+}
