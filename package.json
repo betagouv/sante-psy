@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Accompagnement Psychologique pour les étudiants",
   "main": "index.js",
+  "engines": {
+    "node": ">=14.16.0"
+  },
   "scripts": {
     "coverage": "nyc --reporter html --reporter text npm run test",
     "dev": "nodemon index.js",
