@@ -130,10 +130,10 @@ app.use((err, req, res, next) => {
     req.flash('error', "Cette page n'existe pas.");
     res.redirect('/');
   } else if (err !== 'EBADCSRFTOKEN') { // handle CSRF token errors here
-    console.warn(`CSRF token errors detected ${req.csrfToken()} but have ${res.req.body._csrf}`);
+    console.warn(`CSRF token errors detected ${req.csrfToken()} but have ${res.req.body._csrf} in form data`);
     res.status(403);
     req.flash('error', "Il semblerait que vous n'êtes pas à l'origine de cette opération, vous avez été redirigé.")
-    return res.redirect(`/`);
+    return res.redirect(`/psychologue/mes-seances`);
   }
 
   return next(err);
