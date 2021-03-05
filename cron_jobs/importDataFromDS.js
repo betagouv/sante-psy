@@ -3,6 +3,9 @@ require('dotenv').config();
 const dbsApiCursor = require("../db/dsApiCursor")
 const dbPsychologists = require("../db/psychologists")
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
+const config = require('../utils/config')
+const ejs = require('ejs');
+const emailUtils = require('../utils/email');
 
 /**
  * Some data can be modified after been loaded inside PG
@@ -30,12 +33,28 @@ module.exports.importDataFromDSToPG = async function importDataFromDSToPG (updat
 }
 
 // One person should not have multiple dossiers in "acepte" status, notify the team.
-module.exports.countAcceptedPsychologistsByPersonalEmail = async () => {
-  const count = await dbPsychologists.countPsychologistsByPersonalEmail()
-  count.forEach(statsPoint => {
+module.exports.checkForMultipleAcceptedDossiers = async () => {
+  const count = await dbPsychologists.countAcceptedPsychologistsByPersonalEmail()
+  const badPsychologists = count.filter(statsPoint => {
     if (statsPoint.count > 1) {
       console.log(statsPoint)
-      // todo email us
+      return true
     }
   })
+  if (badPsychologists.length > 0) {
+    console.log('Detected psychologists with multiple accepted dossiers!', badPsychologists)
+    await sendAlertEmail(badPsychologists)
+  }
+}
+
+const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
+  try {
+    const html = await ejs.renderFile('./views/emails/multipleAcceptedAlert.ejs', {
+      badPsychologists
+    });
+    await emailUtils.sendMail(config.teamEmail, `Dossiers multiples détéctés !`, html);
+    console.log('Email sent.')
+  } catch (err) {
+    console.error("Erreur d'envoi de mail, le mail d'alerte n'est pas envoyé.", err);
+  }
 }
