@@ -132,7 +132,7 @@ app.use((err, req, res, next) => {
   } else if (err !== 'EBADCSRFTOKEN') { // handle CSRF token errors here
     console.warn(`CSRF token errors detected ${req.csrfToken()} but have ${res.req.body._csrf} in form data`);
     res.status(403);
-    req.flash('error', "Il semblerait que vous n'êtes pas à l'origine de cette opération, vous avez été redirigé.")
+    req.flash('error', "Une erreur est survenue, pouvez-vous réssayer ?");
     return res.redirect(`/psychologue/mes-seances`);
   }
 
