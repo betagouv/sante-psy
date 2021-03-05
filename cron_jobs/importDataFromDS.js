@@ -30,10 +30,12 @@ module.exports.importDataFromDSToPG = async function importDataFromDSToPG (updat
   } catch (err) {
     console.error("ERROR: Could not import DS API data to PG", err)
   }
+
+  await checkForMultipleAcceptedDossiers()
 }
 
 // One person should not have multiple dossiers in "acepte" status, notify the team.
-module.exports.checkForMultipleAcceptedDossiers = async () => {
+const checkForMultipleAcceptedDossiers = async () => {
   const count = await dbPsychologists.countAcceptedPsychologistsByPersonalEmail()
   const badPsychologists = count.filter(statsPoint => {
     if (statsPoint.count > 1) {
