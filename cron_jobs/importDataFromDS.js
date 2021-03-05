@@ -48,6 +48,7 @@ const checkForMultipleAcceptedDossiers = async () => {
     await sendAlertEmail(badPsychologists)
   }
 }
+module.exports.checkForMultipleAcceptedDossiers = checkForMultipleAcceptedDossiers
 
 const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
   try {
