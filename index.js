@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const expressSanitizer = require('express-sanitizer');
 const path = require('path');
+const helmet = require('helmet')
 const flash = require('connect-flash');
 const session = require('express-session');
 const expressJWT = require('express-jwt');
@@ -34,6 +35,16 @@ if( !config.activateDebug ) {
   console.log("console.debug is not active - thanks to ACTIVATE_DEBUG_LOG env variable");
   console.debug = function desactivateDebug() {};
 }
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "script-src": ["'self'", "https://stats.data.gouv.fr/"],
+      "img-src": ["'self'", "https://stats.data.gouv.fr/", "data:"]
+    },
+  })
+);
 
 app.use(bodyParser.urlencoded({ extended: true }))
 

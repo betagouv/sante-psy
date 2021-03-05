@@ -6,6 +6,9 @@
   },
   "description": "Accompagnement Psychologique pour les étudiants",
   "main": "index.js",
+  "engines": {
+    "node": ">=14.16.0"
+  },
   "scripts": {
     "coverage": "nyc --reporter html --reporter text npm run test",
     "dev": "nodemon index.js",
@@ -49,6 +52,7 @@
     "express-validator": "^6.10.0",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
+    "helmet": "^4.4.1",
     "intl": "^1.2.5",
     "jquery": "^3.6.0",
     "jsonwebtoken": "^8.5.1",
