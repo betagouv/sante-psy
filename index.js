@@ -11,6 +11,7 @@ const expressJWT = require('express-jwt');
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
 const cookieParser = require('cookie-parser');
+const csrf = require('csurf');
 
 const config = require('./utils/config');
 const cookie = require('./utils/cookie')
@@ -76,12 +77,23 @@ app.use(session({
 
 app.use(flash());
 
+if (config.useCSRF) {
+  console.log("Using CSRF protection");
+  app.use(csrf({ cookie: true }));
+} else {
+  console.log('NOT using CSRF protection due to env variable USE_CSRF - should only be used for test');
+}
 // Mount express-sanitizer middleware here
 app.use(expressSanitizer());
 
 
 // Populate some variables for all views
 app.use(function populate(req, res, next){
+  if (config.useCSRF) {
+    res.locals._csrf = req.csrfToken();
+  } else {
+    res.locals._csrf = '';
+  }
   res.locals.appName = appName;
   res.locals.appDescription = appDescription;
   res.locals.appRepo = appRepo;
@@ -128,12 +140,17 @@ app.use((err, req, res, next) => {
       console.debug("No token - redirect to login");
       return res.redirect(`/psychologue/login`);
     } else {
-      req.flash('error', "Cette page n'existe pas.")
+      req.flash('error', "Cette page n'existe pas.");
       return res.redirect(`/`);
     }
   } else if( req.cookies === undefined ) {
-    req.flash('error', "Cette page n'existe pas.")
+    req.flash('error', "Cette page n'existe pas.");
     res.redirect('/');
+  } else if (err !== 'EBADCSRFTOKEN') { // handle CSRF token errors here
+    console.warn(`CSRF token errors detected ${req.csrfToken()} but have ${res.req.body._csrf} in form data`);
+    res.status(403);
+    req.flash('error', "Une erreur est survenue, pouvez-vous réssayer ?");
+    return res.redirect(`/psychologue/mes-seances`);
   }
 
   return next(err);

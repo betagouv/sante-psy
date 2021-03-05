@@ -10,13 +10,13 @@ services:
       - "5432:5432"
   web:
     build: .
-    command: bash -c "sleep 3; npm run migrate; sleep 3; npm test;"
+    command: bash -c "pwd; sleep 3; npm run migrate; sleep 3; npm test -- --grep 'loginController'"
     env_file:
       - .env
     environment:
       NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
       DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
-      USE_CSRF: 'false'  # CSRF tests are time consuming for not much value so we desactivate them here
+      USE_CSRF: 'true' # use to test CSRF only for the loginController
     ports:
       - "8080:8080"
       - "9229:9229"

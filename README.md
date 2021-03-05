@@ -69,7 +69,9 @@ scalingo -a APP_NAME pgsql-console
 ```
 On peut insérer des données comme ceci :
 ```
-INSERT INTO psychologists VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'prenom.nom@beta.gouv.fr','prenom.nom@beta.gouv.fr','prenom.nom@beta.gouv.fr','prenom.nom@beta.gouv.fr','paul.nom@beta.gouv.fr');
+INSERT INTO public.psychologists
+("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, teleconsultation, description, languages, training, diploma, university, "payingUniversityId", "createdAt", "updatedAt", archived, state, "personalEmail")
+VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli', 'firstname', 'lastname', 'publicemail@beta.gouv.fr', '', '', '', '', '', false, 'accfzfz', '', '[]', '', '', null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'private.email@beta.gouv.fr');
 ```
 
 ### Test
@@ -144,3 +146,4 @@ Voir `.env.sample` pour la liste complète
 * <table> http://tabulator.info/
 Tester les fonctions privées :
 * https://github.com/jhnns/rewire
+* CSRF tokens : https://github.com/pillarjs/understanding-csrf#csrf-tokens

@@ -43,6 +43,7 @@
   <% } %>
   <div class="rf-my-5w">
     <form action="/psychologue/creer-nouvelle-seance" method="POST">
+      <input type="hidden" <input type="hidden" name="_csrf" value="<%= _csrf  %>">>
       <div>
         <div class="rf-my-3w">
           <label class="rf-label" for="date">Date de la séance</label>
