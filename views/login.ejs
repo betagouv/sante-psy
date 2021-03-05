@@ -21,6 +21,7 @@
         <% } %>
         <p>Vous recevevrez un lien de connexion par email qui vous permettra d'être connecté pendant <%= sessionDurationHours %> heures</p>
         <form action="/psychologue/login" method="POST" id="login_form">
+        <input type="hidden" name="_csrf" value="<%= _csrf  %>">
         <label for="email">Adresse email :</label>
         <input type="email" name="email" id="email" value="" />
         <button class="button" id="primary_email_button">Recevoir le lien de connexion</button>

@@ -47,9 +47,8 @@ describe('patientsController', function() {
           res.should.redirectTo('/psychologue/mes-seances')
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
-          expect(patientsArray).to.have.length(1)
+          patientsArray.length.should.equal(1)
           expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber)
-
           return Promise.resolve()
         })
     })

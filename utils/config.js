@@ -1,13 +1,11 @@
 require('dotenv').config();
 
-const isSecure = (process.env.SECURE || 'true') === 'true';
+const hostnameWithProtocol = process.env.HOSTNAME_WITH_PROTOCOL || 'http://localhost:8080'
+const protocol = new URL(hostnameWithProtocol).protocol
 
 module.exports = {
   appName: `Santé Psy Étudiants`,
-  secure: isSecure,
-  protocol: isSecure ? 'https' : 'http',
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
-  host: process.env.HOSTNAME,
   port: process.env.PORT || 8080,
   contactEmail: process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr',
   apiToken: process.env.API_TOKEN,
@@ -19,11 +17,14 @@ module.exports = {
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
-  uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid 
+  uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid
   secret: process.env.SECRET,
   sessionDurationHours: process.env.SESSION_DURATION_HOURS || '2', // duration in hours
+  useCSRF: (process.env.USE_CSRF || 'true') === 'true',
   //mail
-  hostnameWithProtocol: process.env.HOSTNAME_WITH_PROTOCOL || 'http://localhost:8080',
+  hostnameWithProtocol: hostnameWithProtocol,
+  protocol: protocol,
+  isSecure: protocol === 'https:',
   mailDebug: process.env.MAIL_DEBUG === 'true',
   mailService: process.env.MAIL_SERVICE ? process.env.MAIL_SERVICE : null,
   mailHost: process.env.MAIL_SERVICE ? null : process.env.MAIL_HOST,

@@ -1,6 +1,9 @@
 {
   "name": "sante-psy",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=14.16.0"
+  },
   "description": "Accompagnement Psychologique pour les étudiants",
   "main": "index.js",
   "scripts": {
@@ -35,6 +38,7 @@
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
     "cron": "^1.8.2",
+    "csurf": "^1.11.0",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
@@ -46,6 +50,7 @@
     "express-validator": "^6.10.0",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
+    "helmet": "^4.4.1",
     "intl": "^1.2.5",
     "jquery": "^3.6.0",
     "jsonwebtoken": "^8.5.1",
