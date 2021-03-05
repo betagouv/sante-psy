@@ -60,10 +60,9 @@ module.exports.getLogin = async function getLogin(req, res) {
 
       if( dbToken !== undefined ) {
         const psychologistData = await dbPsychologists.getPsychologistByEmail(dbToken.email);
-        res.cookie('token', cookie.getJwtTokenForUser(dbToken.email, psychologistData));
+        cookie.createAndSetJwtCookie(res, dbToken.email, psychologistData)
         await dbLoginToken.delete(token);
         req.flash('info', `Vous êtes authentifié comme ${dbToken.email}`);
-
         return res.redirect(nextPage);
       } else {
         req.flash('error', 'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.');
@@ -120,6 +119,7 @@ module.exports.postLogin = async function postLogin(req, res) {
 };
 
 module.exports.getLogout = function getLogout (req, res) {
+  cookie.clearJwtCookie(res)
   req.flash('info', `Vous êtes déconnecté.`);
-  res.clearCookie('token').redirect('/');
+  res.redirect('/psychologue/login');
 };
