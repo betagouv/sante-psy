@@ -23,7 +23,7 @@ describe('DB Psychologists', () => {
   beforeEach(async function before() {
     psyList = clean.psyList();
     await clean.cleanDataCursor();
-    await clean.cleanDataPsychologist(dossierNumber);
+    await clean.cleanAllPsychologists();
   })
 
   describe('savePsychologistInPG', () => {
