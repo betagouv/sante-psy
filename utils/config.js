@@ -4,7 +4,7 @@ const hostnameWithProtocol = process.env.HOSTNAME_WITH_PROTOCOL || 'http://local
 const protocol = new URL(hostnameWithProtocol).protocol
 
 module.exports = {
-  appName: `Santé Psy Étudiants`,
+  appName: `Santé Psy Étudiant`,
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
   port: process.env.PORT || 8080,
   contactEmail: process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr',
