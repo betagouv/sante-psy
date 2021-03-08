@@ -42,9 +42,6 @@ var table = new Tabulator("#psy-table", {
   movableColumns:false,        //allow column order to be changed
   resizableRows:false,          //allow row order to be changed
   resizableColumns:false,
-  initialSort:[             //set the initial sort order of the data
-    {column:"lastName", dir:"asc"},
-  ],
   columns:[
     {title:"Nom", field:"lastName", sorter:"string", responsive:0},
     {title:"Prénom(s)", field:"firstNames", sorter:"string", responsive:0},
@@ -57,8 +54,3 @@ var table = new Tabulator("#psy-table", {
   headerFilterPlaceholder:"Rechercher un psychologue" // http://tabulator.info/docs/4.9/filter#header
 });
 table.setLocale("fr-fr");
-
-
-INSERT INTO public.psychologists
-("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, teleconsultation, description, languages, training, diploma, university, "payingUniversityId", "createdAt", "updatedAt", archived, state, "personalEmail")
-VALUES('77356eb0-349b-4980-899f-bad2ce87e2f1', 'adeli', 'firstname', 'lastname', 'publicemail@beta.gouv.fr', '', '', '', '', '', false, 'accfzfz', '', '[]', '', '', null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'paul.leclercq@beta.gouv.fr');

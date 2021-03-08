@@ -9,7 +9,8 @@ module.exports.getPsychologists = async () => {
     const psychologists = await knex(module.exports.psychologistsTable)
         .select()
         .whereNot('archived', true)
-        .where('state', 'accepte');
+        .where('state', 'accepte')
+        .orderByRaw("RANDOM ()");
 
     return psychologists;
   } catch (err) {
