@@ -107,7 +107,7 @@ function parseDossierMetadata(dossier) {
   const dossierNumber = getUuidDossierNumber(dossier.number);
   const region = dossier.groupeInstructeur.label;
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
-  const departement = getChampValue(dossier.champs, 'Votre département', false); // "14 - Calvados"
+  const departement = getChampValue(dossier.champs, 'Votre département'); // "14 - Calvados"
   const phone =  getChampValue(dossier.champs, 'Téléphone du secrétariat');
   const teleconsultation = parseTeleconsultation(
     getChampValue(dossier.champs, 'Proposez-vous de la téléconsultation ?')
