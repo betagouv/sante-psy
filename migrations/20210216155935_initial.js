@@ -24,8 +24,11 @@ exports.up = function(knex) {
       table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
       table.text('firstNames').notNullable()
       table.text('lastName').notNullable()
+      table.string('institutionName')
       table.string('INE', 11)
       table.string('otherStudentNumber', 255) // if INE cannot be found
+      table.boolean('hasJustification')
+      table.boolean('hasPrescription')
 
       // Note : students may not have a university. Ex: BTS students
       table.uuid('universityId')

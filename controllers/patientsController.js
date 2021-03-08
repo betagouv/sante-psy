@@ -17,7 +17,10 @@ module.exports.newPatient = async (req, res) => {
     patient: {
       firstNames: '',
       lastName: '',
+      institutionName: '',
       INE: '',
+      hasJustification: false,
+      hasPrescription: false,
       id: '',
     }
   })
@@ -75,11 +78,23 @@ module.exports.editPatient = async (req, res) => {
   const patientId = req.body['patientid']
   const patientFirstNames = req.body['firstnames']
   const patientLastName = req.body['lastname']
+  const patientInstitutionName = req.body['institution']
   const patientINE = req.body['ine']
+  const patientHasJustification = req.body['justification']
+  const patientHasPrescription = req.body['prescription']
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    await dbPatient.updatePatient(patientId, patientFirstNames, patientLastName, patientINE, psychologistId)
+    await dbPatient.updatePatient(
+      patientId,
+      patientFirstNames,
+      patientLastName,
+      patientInstitutionName,
+      patientINE,
+      patientHasJustification,
+      patientHasPrescription,
+      psychologistId
+    )
     req.flash('info', `Le patient a bien été modifié.`)
     return res.redirect('/psychologue/mes-seances')
   } catch (err) {

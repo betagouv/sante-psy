@@ -48,12 +48,24 @@
           <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname">
         </div>
         <div class="rf-my-3w">
+          <label class="rf-label" for="institution">Établissement de l'étudiant</label>
+          <input class="rf-input midlength-input" value="<%= patient.institution %>"  type="text" id="institution" name="institution">
+        </div>
+        <div class="rf-my-3w">
           <!-- todo : JS validation for 11 digit number -->
           <label class="rf-label" for="ine" aria-describedby="ine-help">Numéro INE de l'étudiant</label>
           <div class="rf-hint-text" id="ine-help">
             Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant.
           </div>
           <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine">
+        </div>
+        <div class="rf-my-3w rf-checkbox-group">
+          <input type="checkbox" id="justification" name="justification">
+          <label class="rf-label" for="justification">l'étudiant a justifié son statut</label>
+        </div>
+        <div class="rf-my-3w rf-checkbox-group">
+          <input type="checkbox" id="prescription" name="prescription">
+          <label class="rf-label" for="prescription">l'étudiant a présenté l'ordonnance</label>
         </div>
       </div>
       <div class="rf-my-5w">
