@@ -18,16 +18,11 @@ module.exports.getPsychologists = async () => {
       'phone',
       'website',
       'teleconsultation',
-      'description',
-      'languages',
-      'training',
-      'diploma',
-      'university')
+      'description')
         .select()
         .from(module.exports.psychologistsTable)
         .whereNot('archived', true)
         .where('state', 'accepte');
-
     return psychologists;
   } catch (err) {
     console.error(`Impossible de récupérer les psychologistes`, err)
