@@ -20,7 +20,7 @@ module.exports.getPsychologists = async () => {
 
 /**
  * Perform a UPSERT with https://knexjs.org/#Builder-merge
- * @param {*} psy 
+ * @param {*} psy
  */
 module.exports.savePsychologistInPG = async function savePsychologistInPG(psyList) {
   console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
@@ -76,12 +76,20 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
 
 /**
  * Only return accepted psychologist
- * @param {*} email 
+ * @param {*} email
  */
 module.exports.getPsychologistByEmail = async function getPsychologistByEmail(email) {
   return await knex(module.exports.psychologistsTable)
   .where('personalEmail', email)
   .where('state', 'accepte')
   .first();
+}
+
+module.exports.countAcceptedPsychologistsByPersonalEmail = async () => {
+  return await knex(module.exports.psychologistsTable)
+    .select('personalEmail', 'state')
+    .where('state', 'accepte')
+    .count('*')
+    .groupBy('personalEmail', 'state');
 }
 

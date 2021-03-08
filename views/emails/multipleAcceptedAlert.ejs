@@ -1,0 +1,49 @@
+<style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+</style>
+
+<p>Bonjour, ceci est un mail automatique ! 👋 🤖</p>
+
+<p>
+  Le serveur a détecté que <bold>des candidats ont de multiples dossiers acceptés dans Démarches Simplifiées</bold>.
+  Normalement, un candidat ne devrait avoir qu'un seul dossier accepté, même s'il y a eu plusieurs candidatures.
+</p>
+<p>
+  <% if (locals.hostnameWithProtocol) { %>
+    Serveur concerné : <%= hostnameWithProtocol %>
+    <% if (hostnameWithProtocol.startsWith('https://santepsy.etudiant.gouv.fr')) { %>
+      (la prod !)
+    <% } else { %>
+      (pas la prod)
+    <% } %>
+  <% } %>
+</p>
+
+<p>
+  Ces candidats sont :
+</p>
+
+<table>
+  <tr>
+    <th>Email</th>
+    <th>Nombre de dossiers acceptés</th>
+  </tr>
+  <% badPsychologists.forEach(function(badPsychologist) { %>
+    <tr>
+      <td><%= badPsychologist.personalEmail %></td>
+      <td><%= badPsychologist.count %></td>
+    </tr>
+  <% }) %>
+</table>
+
+<p>Le serveur Santé Psy Étudiants 🤖</p>

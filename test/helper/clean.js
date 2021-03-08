@@ -65,7 +65,7 @@ module.exports.cleanDataToken = async function cleanDataToken() {
   }
 }
 
-module.exports.cleanDataPsychologist = async function cleanDataPsychologist(dossierNumber) {
+module.exports.cleanAllPsychologists = async function cleanAllPsychologists() {
   try {
     return knex(dbPsychologists.psychologistsTable).select('*').delete()
   } catch (err) {

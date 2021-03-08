@@ -7,6 +7,7 @@ module.exports = {
   appName: `Santé Psy Étudiant`,
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
   port: process.env.PORT || 8080,
+  teamEmail: process.env.TEAM_EMAIL || 'equipe-santepsyetudiants@beta.gouv.fr',
   contactEmail: process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr',
   apiToken: process.env.API_TOKEN,
   apiUrl: process.env.API_URL ||
