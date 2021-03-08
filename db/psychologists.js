@@ -4,13 +4,29 @@ const date = require("../utils/date")
 
 module.exports.psychologistsTable =  "psychologists";
 
+
 module.exports.getPsychologists = async () => {
   try {
-    const psychologists = await knex(module.exports.psychologistsTable)
+    const psychologists = knex.column(
+      knex.raw('UPPER("lastName") as "lastName"'), // force to use quote other
+      'adeli',
+      'firstNames',
+      'email',
+      'address',
+      'departement',
+      'region',
+      'phone',
+      'website',
+      'teleconsultation',
+      'description',
+      'languages',
+      'training',
+      'diploma',
+      'university')
         .select()
+        .from(module.exports.psychologistsTable)
         .whereNot('archived', true)
-        .where('state', 'accepte')
-        .orderByRaw("RANDOM ()");
+        .where('state', 'accepte');
 
     return psychologists;
   } catch (err) {

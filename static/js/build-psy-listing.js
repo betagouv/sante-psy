@@ -42,6 +42,9 @@ var table = new Tabulator("#psy-table", {
   movableColumns:false,        //allow column order to be changed
   resizableRows:false,          //allow row order to be changed
   resizableColumns:false,
+  initialSort:[             //set the initial sort order of the data
+    {column:"lastName", dir:"asc"},
+  ],
   columns:[
     {title:"Nom", field:"lastName", sorter:"string", responsive:0},
     {title:"Prénom(s)", field:"firstNames", sorter:"string", responsive:0},
