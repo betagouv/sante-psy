@@ -39,7 +39,6 @@ const checkForMultipleAcceptedDossiers = async () => {
   const count = await dbPsychologists.countAcceptedPsychologistsByPersonalEmail()
   const badPsychologists = count.filter(statsPoint => {
     if (statsPoint.count > 1) {
-      console.log(statsPoint)
       return true
     }
   })
