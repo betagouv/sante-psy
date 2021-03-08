@@ -53,7 +53,8 @@ module.exports.checkForMultipleAcceptedDossiers = checkForMultipleAcceptedDossie
 const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
   try {
     const html = await ejs.renderFile('./views/emails/multipleAcceptedAlert.ejs', {
-      badPsychologists
+      badPsychologists,
+      hostnameWithProtocol: config.hostnameWithProtocol,
     });
     await emailUtils.sendMail(config.teamEmail, `Dossiers multiples détéctés !`, html);
     console.log('Email sent.')

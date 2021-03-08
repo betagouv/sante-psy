@@ -15,10 +15,18 @@
 <p>Bonjour, ceci est un mail automatique ! 👋 🤖</p>
 
 <p>
-  Le serveur a détecté que des candidats avaient de multiples dossiers acceptés dans Démarches Simplifiées.
+  Le serveur a détecté que <bold>des candidats ont de multiples dossiers acceptés dans Démarches Simplifiées</bold>.
+  Normalement, un candidat ne devrait avoir qu'un seul dossier accepté, même s'il y a eu plusieurs candidatures.
 </p>
 <p>
-  Normalement, un candidat ne devrait avoir qu'un seul dossier accepté, même s'il y a eu plusieurs candidatures.
+  <% if (locals.hostnameWithProtocol) { %>
+    Serveur concerné : <%= hostnameWithProtocol %>
+    <% if (hostnameWithProtocol.startsWith('https://santepsy.etudiant.gouv.fr')) { %>
+      (la prod !)
+    <% } else { %>
+      (pas la prod)
+    <% } %>
+  <% } %>
 </p>
 
 <p>
