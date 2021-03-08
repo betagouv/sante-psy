@@ -4,7 +4,7 @@
 <div class="rf-container-fluid">
     <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
         <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
-            <h1>Liste des psychologues partenaires</h1>
+            <h1>Trouver un psychologue</h1>
               <% if (infos.length) { %>
                 <% infos.forEach(function(info) { %>
                   <%- include('partials/notificationInfo', {info: info}) -%>
@@ -25,7 +25,7 @@
                 <input class="rf-input midlength-input" id="lastName-filter-value" type="text" placeholder="Delgado">
             </div>
             <div class="rf-input-group">
-                <label class="rf-label" for="address-filter-value">Rechercher par adresse : </label>
+                <label class="rf-label" for="address-filter-value">Rechercher votre ville ou code postal : </label>
                 <input class="rf-input midlength-input" id="address-filter-value" type="text" placeholder="Amiens ou 80000">
             </div>
             <div id="psy-table"></div>
@@ -41,5 +41,4 @@
     <%= JSON.stringify(psyList) %>
 </div>
 <script src="/static/js/build-psy-listing.js"></script>
-
 <%- include('partials/footer') -%>

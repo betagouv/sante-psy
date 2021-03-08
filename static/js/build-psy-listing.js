@@ -2,7 +2,7 @@ var setupFilter = function(fieldName) {
   var filterEl = document.getElementById(fieldName + "-filter-value");
   // Trigger setFilter function with correct parameters
   function updateFilter(){
-      table.setFilter(fieldName,'like', filterEl.value);
+    table.setFilter(fieldName,'like', filterEl.value);
   }
   filterEl.addEventListener("keyup", updateFilter);
 };
@@ -15,44 +15,44 @@ var psyList = JSON.parse(psyListElement.textContent);
 var table = new Tabulator("#psy-table", {
   data: psyList, //assign data to table
   langs:{ // http://tabulator.info/docs/4.2/localize#setup
-      "fr-fr":{ //French language definition
-          "pagination":{
-              "first":"Première",
-              "first_title":"Première Page",
-              "last":"Dernière",
-              "last_title":"Dernière Page",
-              "prev":"Précédent",
-              "prev_title":"Page Précédente",
-              "next":"Suivant",
-              "next_title":"Page Suivante",
-          },
-          "headerFilters":{
-          "default":"Rechercher par adresse", //default header filter placeholder text
-          }
+    "fr-fr":{ //French language definition
+      "pagination":{
+        "first":"Première",
+        "first_title":"Première Page",
+        "last":"Dernière",
+        "last_title":"Dernière Page",
+        "prev":"Précédent",
+        "prev_title":"Page Précédente",
+        "next":"Suivant",
+        "next_title":"Page Suivante",
       },
+      "headerFilters":{
+      "default":"Rechercher par adresse", //default header filter placeholder text
+      }
+    },
   },
   tooltipsHeader:true,
-  layout:"fitData",      //fit columns to width of table
+  layout:"fitData",       //fit columns to width of table
   responsiveLayout:"hide",  //hide columns that dont fit on the table //@TODO
   tooltips:true,            //show tool tips on cells
-  addRowPos:"top",          //when adding a new row, add it to the top of the table
-  history:true,             //allow undo and redo actions on the table
-  pagination:"local",       //paginate the data
+  addRowPos:"top",           //when adding a new row, add it to the top of the table
+  history:true,              //allow undo and redo actions on the table
+  pagination:"local",         //paginate the data
   paginationSize:10,        //allow XX rows per page of data
-  movableColumns:false,      //allow column order to be changed
-  resizableRows:false,       //allow row order to be changed
+  movableColumns:false,        //allow column order to be changed
+  resizableRows:false,          //allow row order to be changed
   resizableColumns:false,
   initialSort:[             //set the initial sort order of the data
-      {column:"lastName", dir:"asc"},
+    {column:"lastName", dir:"asc"},
   ],
   columns:[
-      {title:"Nom", field:"lastName", sorter:"string", responsive:0},
-      {title:"Prénom(s)", field:"firstNames", sorter:"string", responsive:0},
-      {title:"Adresse", field:"address", sorter:"string", maxWidth: 300, responsive:0, formatter:"link", formatterParams:{labelField:"address",urlPrefix:"https://www.openstreetmap.org/search?query=",target:"_blank"}},
-      {title:"📞", field:"phone", sorter:"string", responsive:0, formatter: "link", formatterParams:{labelField:"phone",urlPrefix:"tel:"}},
-      {title:"Site web", field:"website", sorter:"string", maxWidth:200, responsive:0, formatter:"link", formatterParams:{labelField:"website",urlPrefix:"//",target:"_blank"}},
-      {title:"Email", field:"email", sorter:"string", responsive:0, formatter:"link", formatterParams:{labelField:"email",urlPrefix:"mailto://"}},
-      {title:"Téléconsultation", field:"teleconsultation", responsive:0,sorter:"string", hozAlign:"center",tooltip: "Est ce que le psychologue accepte la téléconsultation ?", formatter:"tickCross"},
+    {title:"Nom", field:"lastName", sorter:"string", responsive:0},
+    {title:"Prénom(s)", field:"firstNames", sorter:"string", responsive:0},
+    {title:"Adresse", field:"address", sorter:"string", maxWidth: 300, responsive:0, formatter:"link", formatterParams:{labelField:"address",urlPrefix:"https://www.openstreetmap.org/search?query=",target:"_blank"}},
+    {title:"📞", field:"phone", sorter:"string", responsive:0, formatter: "link", formatterParams:{labelField:"phone",urlPrefix:"tel:"}},
+    {title:"Email", field:"email", sorter:"string", responsive:0, formatter:"link", formatterParams:{labelField:"email",urlPrefix:"mailto://"}},
+    {title:"Téléconsultation", field:"teleconsultation",  headerTooltip: "Téléconsultation", responsive:0,sorter:"string", hozAlign:"center",tooltip: "Est ce que le psychologue accepte la téléconsultation ?", formatter:"tickCross"},
+    {title:"Site web", field:"website", sorter:"string", maxWidth:200, responsive:0, formatter:"link", formatterParams:{labelField:"website",urlPrefix:"//",target:"_blank"}},
   ],
   headerFilterPlaceholder:"Rechercher un psychologue" // http://tabulator.info/docs/4.9/filter#header
 });

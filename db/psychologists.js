@@ -4,13 +4,25 @@ const date = require("../utils/date")
 
 module.exports.psychologistsTable =  "psychologists";
 
+
 module.exports.getPsychologists = async () => {
   try {
-    const psychologists = await knex(module.exports.psychologistsTable)
+    const psychologists = knex.column(
+      knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
+      'adeli',
+      'firstNames',
+      'email',
+      'address',
+      'departement',
+      'region',
+      'phone',
+      'website',
+      'teleconsultation',
+      'description')
         .select()
+        .from(module.exports.psychologistsTable)
         .whereNot('archived', true)
         .where('state', 'accepte');
-
     return psychologists;
   } catch (err) {
     console.error(`Impossible de récupérer les psychologistes`, err)
