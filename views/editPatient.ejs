@@ -49,7 +49,7 @@
         </div>
         <div class="rf-my-3w">
           <label class="rf-label" for="institution">Établissement de l'étudiant</label>
-          <input class="rf-input midlength-input" value="<%= patient.institution %>"  type="text" id="institution" name="institution">
+          <input class="rf-input midlength-input" value="<%= patient.institutionName %>"  type="text" id="institution" name="institution">
         </div>
         <div class="rf-my-3w">
           <!-- todo : JS validation for 11 digit number -->
@@ -60,11 +60,11 @@
           <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine">
         </div>
         <div class="rf-my-3w rf-checkbox-group">
-          <input type="checkbox" id="justification" name="justification">
+          <input type="checkbox" id="justification" name="justification" value="<%= patient.hasJustification %>" <% if(patient.hasJustification){ %> checked="checked" <% } %> >
           <label class="rf-label" for="justification">l'étudiant a justifié son statut</label>
         </div>
         <div class="rf-my-3w rf-checkbox-group">
-          <input type="checkbox" id="prescription" name="prescription">
+          <input type="checkbox" id="prescription" name="prescription" value="<%= patient.hasPrescription %>" <% if(patient.hasPrescription){ %> checked="checked" <% } %> >
           <label class="rf-label" for="prescription">l'étudiant a présenté l'ordonnance</label>
         </div>
       </div>

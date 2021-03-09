@@ -94,8 +94,10 @@ module.exports.editPatient = async (req, res) => {
   const patientLastName = req.body['lastname']
   const patientINE = req.body['ine']
   const patientInstitutionName = req.body['institution']
-  const patientHasJustification = req.body['justification']
-  const patientHasPrescription = req.body['prescription']
+  // Force to boolean beacause checkbox value send undifined when it's not checked
+  const patientHasJustification = Boolean(req.body['justification'])
+  const patientHasPrescription = Boolean(req.body['prescription'])
+
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
@@ -170,8 +172,9 @@ module.exports.createNewPatient = async (req, res) => {
   const lastName = req.body['lastname']
   const INE = req.body['ine']
   const institutionName = req.body['institution']
-  const justification = req.body['justification']
-  const prescription = req.body['prescription']
+  // Force to boolean beacause checkbox value send undifined when it's not checked
+  const justification = Boolean(req.body['justification'])
+  const prescription = Boolean(req.body['prescription'])
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
