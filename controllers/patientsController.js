@@ -78,8 +78,8 @@ module.exports.editPatient = async (req, res) => {
   const patientId = req.body['patientid']
   const patientFirstNames = req.body['firstnames']
   const patientLastName = req.body['lastname']
-  const patientInstitutionName = req.body['institution']
   const patientINE = req.body['ine']
+  const patientInstitutionName = req.body['institution']
   const patientHasJustification = req.body['justification']
   const patientHasPrescription = req.body['prescription']
 
@@ -89,8 +89,8 @@ module.exports.editPatient = async (req, res) => {
       patientId,
       patientFirstNames,
       patientLastName,
-      patientInstitutionName,
       patientINE,
+      patientInstitutionName,
       patientHasJustification,
       patientHasPrescription,
       psychologistId
@@ -155,10 +155,20 @@ module.exports.createNewPatient = async (req, res) => {
   const firstNames = req.body['firstnames']
   const lastName = req.body['lastname']
   const INE = req.body['ine']
+  const institutionName = req.body['institution']
+  const justification = req.body['justification']
+  const prescription = req.body['prescription']
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    await dbPatient.insertPatient(firstNames, lastName, INE, psychologistId)
+    await dbPatient.insertPatient(
+      firstNames,
+      lastName,
+      INE,
+      institutionName,
+      justification,
+      prescription,
+      psychologistId)
     let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
     if (!INE || INE.length === 0) {
       infoMessage += ' Vous pourrez renseigner son numero INE plus tard.'

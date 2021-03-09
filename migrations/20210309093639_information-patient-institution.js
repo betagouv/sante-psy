@@ -3,7 +3,7 @@ const dbPatients = require('../db/patients')
 
 exports.up = function(knex) {
   return knex.schema.table(dbPatients.patientsTable, function (table) {
-    table.string('institutionName');
+    table.text('institutionName');
     table.boolean('hasJustification');
     table.boolean('hasPrescription');
   })
