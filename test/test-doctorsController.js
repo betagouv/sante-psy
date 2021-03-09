@@ -7,8 +7,16 @@ const dbDoctors = require('../db/doctors')
 const { expect } = require('chai')
 const sinon = require('sinon')
 
+const psychologistId = "34e6352f-bdd0-48ce-83de-8de71cad295b";
+const firstNames = "Sigmund"
+const lastName = "Freud"
+const address = "7 Rue Rose"
+const city = "Bordeaux"
+const postalCode = "33300"
+const phone = "0600000000"
+
 const makeDoctor = async (psychologistId) => {
-  const doctor = await dbDoctors.insertDoctor('Ada', 'Lovelace', '12345678901', psychologistId)
+  const doctor = await dbDoctors.insertDoctor(psychologistId, firstNames, lastName,address,city, postalCode, phone)
   // Check doctor is inserted
   const createdDoctor = await dbDoctors.getDoctorById(doctor.id, psychologistId)
   chai.assert(!!createdDoctor)
@@ -22,7 +30,7 @@ describe('doctorsController', function() {
     })
 
     afterEach(async function() {
-      await clean.cleanAllDoctors()
+      await clean.cleanDataDoctors()
       return Promise.resolve()
     })
 
@@ -38,12 +46,12 @@ describe('doctorsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          lastname: 'Lovelace',
-          firstnames: 'Ada',
-          phone: '12345678901',
+          lastname: lastName,
+          firstnames: firstNames,
+          phone: phone,
           address: '6 rue du four',
           city: 'Amiens',
-          postalCode: '80000',
+          postalcode: '80000',
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -67,12 +75,12 @@ describe('doctorsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          lastname: 'Lovelace',
-          firstnames: 'Ada',
-          phone: '12345678901',
+          lastname: lastName,
+          firstnames: firstNames,
+          phone: phone,
           address: '6 rue du four',
           city: 'Amiens',
-          postalCode: '80000',
+          postalcode: '80000',
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -96,7 +104,7 @@ describe('doctorsController', function() {
           'lastname': 'nom',
           'address': '6 rue du four',
           'city': 'Amiens',
-          'postalCode': '80000'
+          'postalcode': '80000'
         }
         ]))
       return Promise.resolve()
@@ -131,9 +139,10 @@ describe('doctorsController', function() {
       shouldFailCreateDoctorInputValidation(done, {
         // no firstnames
         'lastname': 'Nom',
+        'phone': '0600000000',
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': '80000'
+        'postalcode': '80000'
       })
     })
 
@@ -143,7 +152,7 @@ describe('doctorsController', function() {
         'firstnames': 'prénom',
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': '80000'
+        'postalcode': '80000'
       })
     })
 
@@ -151,9 +160,10 @@ describe('doctorsController', function() {
       shouldFailCreateDoctorInputValidation(done, {
         'firstnames': '   ',
         'lastname': 'Nom',
+        'phone': '0600000000',
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': '80000'
+        'postalcode': '80000'
       })
     })
 
@@ -163,7 +173,7 @@ describe('doctorsController', function() {
         'lastname': '   ',
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': '80000'
+        'postalcode': '80000'
       })
     })
 
@@ -171,6 +181,7 @@ describe('doctorsController', function() {
       shouldFailCreateDoctorInputValidation(done, {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
+        'phone': '0600000000',
         'address': '6 rue du four',
         'city': 'Amiens',
         'postalCode': '800009'
@@ -181,6 +192,7 @@ describe('doctorsController', function() {
       shouldFailCreateDoctorInputValidation(done, {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
+        'phone': '0600000000',
         'address': '6 rue du four',
         'city': 'Amiens',
         'postalCode': 'ààààà',
@@ -210,19 +222,21 @@ describe('doctorsController', function() {
       shouldPassCreateDoctorInputValidation(done, {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
+        'phone': '0600000000',
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': '80000'
+        'postalcode': '80000'
       })
     })
 
-    it('should pass validation when INE is missing', function(done) {
+    it('should pass validation when address is missing', function(done) {
       shouldPassCreateDoctorInputValidation(done, {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
-        'address': '6 rue du four',
+        'phone': '0600000000',
+        'address': '',
         'city': 'Amiens',
-        'postalCode': '',
+        'postalcode': '80000',
       })
     })
   })
@@ -233,7 +247,7 @@ describe('doctorsController', function() {
     })
 
     afterEach(async function() {
-      await clean.cleanAllDoctors()
+      await clean.cleanDataDoctors()
       return Promise.resolve()
     })
 
@@ -308,7 +322,7 @@ describe('doctorsController', function() {
     })
 
     afterEach(async function() {
-      await clean.cleanAllDoctors()
+      await clean.cleanDataDoctors()
       return Promise.resolve()
     })
 
@@ -330,7 +344,7 @@ describe('doctorsController', function() {
           firstnames: 'Adakkk',
           address: '6 rue du four',
           city: 'Amiens',
-          postalCode:updatedPostalCode,
+          postalcode: updatedPostalCode,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -365,7 +379,7 @@ describe('doctorsController', function() {
           firstnames: 'Adakkk',
           address: '6 rue du four',
           city: 'Amiens',
-          postalCode: updatedPostalCode,
+          postalcode: updatedPostalCode,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -411,7 +425,7 @@ describe('doctorsController', function() {
           expect(doctorsArray[0].psychologistId).to.equal(psy.dossierNumber)
           expect(doctorsArray[0].lastName).to.equal(doctor.lastName)
           expect(doctorsArray[0].firstNames).to.equal(doctor.firstNames)
-          expect(doctorsArray[0].INE).to.equal(doctor.INE)
+          expect(doctorsArray[0].postalCode).to.equal(doctor.postalCode)
 
           return Promise.resolve()
         })
@@ -458,9 +472,10 @@ describe('doctorsController', function() {
         'doctorid': doctorId,
         // no firstnames
         'lastname': 'Nom',
+        'phone': '0600000000',
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': '80000'
+        'postalcode': '80000'
       },
       '/psychologue/modifier-medecin?doctorid=' + doctorId)
     })
@@ -473,7 +488,7 @@ describe('doctorsController', function() {
         // no lastname
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': '80000'
+        'postalcode': '80000'
       },
       '/psychologue/modifier-medecin?doctorid=' + doctorId)
     })
@@ -484,9 +499,10 @@ describe('doctorsController', function() {
         'doctorid': doctorId,
         'firstnames': '   ',
         'lastname': 'Nom',
+        'phone': '0600000000',
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': '80000'
+        'postalcode': '80000'
       },
       '/psychologue/modifier-medecin?doctorid=' + doctorId)
     })
@@ -499,7 +515,7 @@ describe('doctorsController', function() {
         'lastname': '   ',
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': '80000'
+        'postalcode': '80000'
       },
       '/psychologue/modifier-medecin?doctorid=' + doctorId)
     })
@@ -510,6 +526,7 @@ describe('doctorsController', function() {
         'doctorid': doctorId,
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
+        'phone': '0600000000',
         'ine': '1234567890AA',
       },
       '/psychologue/modifier-medecin?doctorid=' + doctorId)
@@ -521,6 +538,7 @@ describe('doctorsController', function() {
         'doctorid': doctorId,
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
+        'phone': '0600000000',
         'ine': '1234567890à',
       },
       '/psychologue/modifier-medecin?doctorid=' + doctorId)
@@ -531,17 +549,21 @@ describe('doctorsController', function() {
         'doctorid': '',
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
+        'phone': '0600000000',
         'ine': '1234567890à',
       },
       '/psychologue/mes-seances')
     })
 
-    it('should refuse if doctorid is not valid uuid', function(done) {
+    it('should refuse if doctorid is not valid postal code', function(done) {
       shouldFailUpdateDoctorInputValidation(done, {
         'doctorid': 'not-a-valid-uuid',
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
-        'ine': '1234567890à',
+        'phone': '0600000000',
+        'address': '6 rue du four',
+        'city': 'Amiens',
+        'postalcode': 'xxxxxx'
       },
       '/psychologue/mes-seances')
     })
@@ -570,20 +592,10 @@ describe('doctorsController', function() {
         'doctorid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
+        'phone': '0600000000',
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': '80000'
-      })
-    })
-
-    it('should pass validation when postalCode is missing', function(done) {
-      shouldPassUpdateDoctorInputValidation(done, {
-        'doctorid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
-        'firstnames': 'Blou Blou',
-        'lastname': 'Nom',
-        'address': '6 rue du four',
-        'city': 'Amiens',
-        'postalCode': ''
+        'postalcode': '80000'
       })
     })
   })

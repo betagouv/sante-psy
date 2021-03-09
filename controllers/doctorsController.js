@@ -168,6 +168,8 @@ module.exports.createNewDoctor = async (req, res) => {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
+    console.debug(`Creating a new doctor for psy ${psychologistId}`);
+
     await dbDoctors.insertDoctor(psychologistId, firstNames, lastName, address, city, postalCode, phone)
     let infoMessage = `Le médecin ${firstNames} ${lastName} a bien été créé.`
     req.flash('info', infoMessage)
