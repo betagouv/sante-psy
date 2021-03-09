@@ -84,6 +84,12 @@ docker-compose -f docker-compose-only-db.yml up
 npm test
 ```
 
+#### lancer les tests sans le CSRF
+Configurer la variable d'environnement USE_CSRF à "false"
+```
+USE_CSRF="false"
+```
+
 #### Tester uniquement un test
 ```
 npm test -- --grep "should call batchInsert on PG"
