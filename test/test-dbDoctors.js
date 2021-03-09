@@ -9,7 +9,9 @@ const clean = require('./helper/clean');
 describe('DB Doctors', () => {
   const firstNames = "Sigmund"
   const lastName = "Freud"
-  const address = "7 Rue Rose 33300 Bordeaux"
+  const address = "7 Rue Rose"
+  const city = "Bordeaux"
+  const postalCode = "33300"
   const phone = "0600000000"
 
   async function testDataDoctorsExist(lastName) {
@@ -30,7 +32,7 @@ describe('DB Doctors', () => {
 
   describe('insertDoctor', () => {
     it('should INsert one patient in PG', async () => {
-      await dbDoctors.insertDoctor(firstNames, lastName, address, phone);
+      await dbDoctors.insertDoctor(firstNames, lastName, address, city, postalCode, phone);
 
       const exist = await testDataDoctorsExist(lastName);
       exist.should.be.equal(true);
@@ -39,7 +41,7 @@ describe('DB Doctors', () => {
 
   describe('updateDoctor', () => {
     it('should Update one doctor in PG', async () => {
-      await dbDoctors.insertDoctor(firstNames, lastName, address, phone);
+      await dbDoctors.insertDoctor(firstNames, lastName, address, city, postalCode, phone);
 
       const newLastName = "NewName"
       const doctors = await dbDoctors.getDoctors()
@@ -49,7 +51,10 @@ describe('DB Doctors', () => {
         oldDoctor.id,
         oldDoctor.firstNames,
         newLastName,
-        oldDoctor.address, phone,
+        oldDoctor.address,
+        city,
+        postalCode,
+        phone,
       )
       const newDoctor = await dbDoctors.getDoctorById(oldDoctor.id)
       expect(newDoctor.lastName).equal(newLastName)

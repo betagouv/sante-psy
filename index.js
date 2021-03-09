@@ -30,6 +30,7 @@ const patientsController = require('./controllers/patientsController');
 const psyListingController = require('./controllers/psyListingController');
 const loginController = require('./controllers/loginController');
 const faqController = require('./controllers/faqController');
+const doctorsController = require('./controllers/doctorsController');
 
 // Desactivate debug log for production as they are a bit too verbose
 if( !config.activateDebug ) {
@@ -211,6 +212,17 @@ if (config.featurePsyPages) {
   app.post('/psychologue/api/modifier-patient',
     patientsController.editPatientValidators,
     patientsController.editPatient)
+
+  app.get('/psychologue/nouveau-medecin', doctorsController.newDoctor)
+  app.post('/psychologue/api/creer-nouveau-medecin',
+    doctorsController.createNewDoctorValidators,
+    doctorsController.createNewDoctor)
+  app.get('/psychologue/modifier-medecin',
+    doctorsController.getEditDoctorValidators,
+    doctorsController.getEditDoctor)
+  app.post('/psychologue/api/modifier-medecin',
+    doctorsController.editDoctorValidators,
+    doctorsController.editDoctor)
 }
 
 app.get('/faq', faqController.getFaq);

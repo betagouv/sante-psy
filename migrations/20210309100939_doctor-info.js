@@ -9,7 +9,10 @@ exports.up = function (knex) {
       table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'))
       table.text('firstNames').notNullable()
       table.text('lastName').notNullable()
+      table.uuid('psychologistId').notNullable();
       table.text('address')
+      table.text('city')
+      table.text('postalCode')
       table.string('phone')
       table.timestamp('createdAt').defaultTo(knex.fn.now())
       table.timestamp('updatedAt')

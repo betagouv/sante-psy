@@ -10,6 +10,7 @@
         },
         {
           label: pageTitle,
+          url: '/psychologue/nouveau-medecin'
         },
     ],
   })
@@ -37,39 +38,36 @@
       <div class="rf-text--sm">
         Les champs avec une astérique (<span class="red-text">*</span>) sont obligatoires.
       </div>
-      <input type="hidden" name="_csrf" value="<%= _csrf  %>">
+      <input type="hidden" name="_csrf" value="<%= _csrf %>">
       <div>
         <div class="rf-my-3w">
           <label class="rf-label" for="firstnames">Prénoms <span class="red-text">*</span></label>
-          <input class="rf-input midlength-input" value="<%= patient.firstNames %>" type="text" id="firstnames" name="firstnames">
+          <input class="rf-input midlength-input" value="<%= doctor.firstNames %>" type="text" id="firstnames" name="firstnames" required>
         </div>
         <div class="rf-my-3w">
           <label class="rf-label" for="lastname">Nom <span class="red-text">*</span></label>
-          <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname">
+          <input class="rf-input midlength-input" value="<%= doctor.lastName %>"  type="text" id="lastname" name="lastname" required>
         </div>
         <div class="rf-my-3w">
-          <!-- todo : JS validation for 11 digit number -->
-          <label class="rf-label" for="ine" aria-describedby="ine-help">Numéro INE de l'étudiant</label>
-          <div class="rf-hint-text" id="ine-help">
-            Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant.
-          </div>
-          <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine">
+          <label class="rf-label" for="address">Rue</label>
+          <input class="rf-input midlength-input" value="<%= doctor.address %>"  type="text" id="address" name="address">
         </div>
         <div class="rf-my-3w">
-          <label class="rf-label" for="doctorid" aria-describedby="doctorid-help">Médecin de l'étudiant</label>
-          <div class="rf-hint-text" id="doctorid-help">
-            Le médecin du patient n'est pas dans la liste ?
-            <a href="/psychologue/nouveau-medecin">Ajoutez un nouveau médecin</a>
-          </div>
-          <select class="js-example-basic-multiple" name="doctorid">
-            <% doctors.forEach(function(doctor) { %>
-              <option value="<%= doctor.id %>"><%= doctor.firstNames %> <%= doctor.lastName %> (<%= doctor.city %>)</option>
-            <% }) %>  
-          </select>
+          <label class="rf-label" for="city">Ville <span class="red-text">*</span></label>
+          <input class="rf-input midlength-input" value="<%= doctor.city %>"  type="text" id="city" name="city" required>
+        </div>
+        <div class="rf-my-3w">
+          <label class="rf-label" for="postalcode">Code postal <span class="red-text">*</span></label>
+          <input class="rf-input midlength-input" value="<%= doctor.postalCode %>"  type="text" id="postalcode" name="postalcode"
+          maxlength="5" size="5" required>
+        </div>
+        <div class="rf-my-3w">
+          <label class="rf-label" for="phone">Téléphone</label>
+          <input class="rf-input midlength-input" value="<%= doctor.phone %>"  type="phone" id="phone" name="phone">
         </div>
       </div>
       <div class="rf-my-5w">
-        <input hidden name="patientid" value="<%= patient.id %>" />
+        <input hidden name="doctorid" value="<%= doctor.id %>" />
         <button type="submit" class="rf-btn rf-btn--icon-left <%= form.submitButtonIcon %>"><%= form.submitButtonText %></button>
       </div>
     </form>

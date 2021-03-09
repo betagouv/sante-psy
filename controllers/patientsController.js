@@ -1,9 +1,13 @@
 const cookie = require('../utils/cookie')
 const { check, query, oneOf } = require('express-validator');
 const dbPatient = require('../db/patients')
+const dbDoctors = require('../db/doctors')
 const validation = require('../utils/validation')
 
 module.exports.newPatient = async (req, res) => {
+  const doctors = await dbDoctors.getDoctors();
+
+  console.log("doctors", doctors)
   res.render('editPatient', {
     pageTitle: 'Nouveau patient',
     pageIntroText: `Déclarez un étudiant comme étant patient du dispositif Santé Psy Etudiants.
@@ -19,7 +23,8 @@ module.exports.newPatient = async (req, res) => {
       lastName: '',
       INE: '',
       id: '',
-    }
+    },
+    doctors : doctors
   })
 }
 
@@ -38,6 +43,12 @@ const patientValidators = [
       return req.sanitize(value)
     })
     .withMessage('Vous devez spécifier le nom du patient.'),
+  check('doctorid')
+    .trim().not().isEmpty()
+    .customSanitizer((value, { req }) => {
+      return req.sanitize(value)
+    })
+    .withMessage('Vous devez spécifier le médecin.'),
   oneOf(
     [
       // Two valid possibilities : ine is empty, or ine is valid format.
@@ -62,6 +73,17 @@ module.exports.editPatientValidators = [
   ...patientValidators
 ]
 
+async function checkDoctorIdExist(doctorId, psychologistId) {
+  const doctor = await dbDoctors.getDoctorById(doctorId, psychologistId);
+
+  if( doctor ) {
+    return true;
+  } else {
+    console.error(`Doctor ID ${doctorId} does not exists`);
+    false;
+  }
+}
+
 module.exports.editPatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
     const hasPatientIdError = validation.hasErrorsForField(req, 'patientid')
@@ -76,11 +98,17 @@ module.exports.editPatient = async (req, res) => {
   const patientFirstNames = req.body['firstnames']
   const patientLastName = req.body['lastname']
   const patientINE = req.body['ine']
+  const doctorId = req.body['doctorid']
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    await dbPatient.updatePatient(patientId, patientFirstNames, patientLastName, patientINE, psychologistId)
-    req.flash('info', `Le patient a bien été modifié.`)
+    if( checkDoctorIdExist(doctorId, psychologistId) ) {
+      await dbPatient.updatePatient(patientId, patientFirstNames, patientLastName, patientINE, psychologistId, doctorId)
+      req.flash('info', `Le patient a bien été modifié.`)
+    } else {
+      req.flash('error', "Erreur. Le medecin n'est pas connu de nos services.")
+      return res.redirect('/psychologue/modifier-patient')
+    }
     return res.redirect('/psychologue/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'est pas modifié. Pourriez-vous réessayer ?')
@@ -107,6 +135,7 @@ module.exports.getEditPatient = async (req, res) => {
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     const patient = await dbPatient.getPatientById(patientId, psychologistId)
+    const doctors = await dbDoctors.getDoctors();
     if (!patient) {
       req.flash('error', 'Ce patient n\'existe pas. Vous ne pouvez pas le modifier.')
       return res.redirect('/psychologue/mes-seances')
@@ -121,7 +150,8 @@ module.exports.getEditPatient = async (req, res) => {
         submitButtonText: 'Valider les modifications',
         submitButtonIcon: 'rf-fi-check-line',
       },
-      patient: patient
+      patient: patient,
+      doctors : doctors
     })
   } catch (err) {
     req.flash('error', 'Erreur lors de la sauvegarde.')
@@ -139,16 +169,21 @@ module.exports.createNewPatient = async (req, res) => {
 
   const firstNames = req.body['firstnames']
   const lastName = req.body['lastname']
+  const doctorId = req.body['doctorid']
   const INE = req.body['ine']
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    await dbPatient.insertPatient(firstNames, lastName, INE, psychologistId)
-    let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
-    if (!INE || INE.length === 0) {
-      infoMessage += ' Vous pourrez renseigner son numero INE plus tard.'
+    if( checkDoctorIdExist(doctorId, psychologistId) ) {
+      await dbPatient.insertPatient(firstNames, lastName, INE, psychologistId, doctorId)
+      let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
+      if (!INE || INE.length === 0) {
+        infoMessage += ' Vous pourrez renseigner son numero INE plus tard.'
+      }
+      req.flash('info', infoMessage)
+    } else {
+      req.flash('error', "Erreur. Le medecin n'est pas connu de nos services.")
     }
-    req.flash('info', infoMessage)
     return res.redirect('/psychologue/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'a pas été créé. Pourriez-vous réessayer ?')

@@ -1,0 +1,32 @@
+<div class="rf-col-xs-12 rf-col-sm-12 rf-col-md-12 rf-col-lg-6 rf-col-xl-6 rf-pb-5w">
+  <h2 class="rf-mb-4w">
+    Les médecins que j'ai déclarés
+  </h2>
+  <div class="rf-mb-2w">
+    <a href="/psychologue/nouveau-medecin" class="rf-btn rf-fi-add-line rf-btn--icon-left">Nouveau médecin</a>
+  </div>
+  <div>
+    <% if (doctors.length) { %>
+      <ul class="rf-list">
+        <% doctors.forEach(function(doctor) { %>
+          <div class="rf-grid-row">
+            <div class="rf-col-xs-12 rf-col-sm-6 rf-col-md-6 rf-col-lg-6 rf-col-xl-6">
+              <li><%= doctor.lastName %> <%= doctor.firstNames %> (<%= doctor.city %>)</li>
+            </div>
+            <div class="rf-col-xs-12 rf-col-sm-6 rf-col-md-6 rf-col-lg-6 rf-col-xl-6 rf-text-right">
+              <form action="/psychologue/modifier-medecin" method="GET">
+                <input type="hidden" name="_csrf" value="<%= _csrf  %>">
+                <input hidden name="doctorid" value="<%= doctor.id %>" />
+                <button type="submit" class="rf-btn rf-btn--secondary rf-btn--sm rf-fi-edit-line rf-btn--icon-left">
+                  Modifier
+                </button>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      Vous n'avez pas declarer de médecin. Vous pourrez toujours utiliser les médécins déclarés par d'autres psychologues si vos patients partagent les mêmes médecins.
+    <% } %>
+  </div>
+</div>
