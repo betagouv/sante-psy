@@ -53,7 +53,7 @@ module.exports.insertDoctor = async (psychologistId, firstNames, lastName, addre
       firstNames,
       lastName,
       address,
-      capitalizedCity,
+      city: capitalizedCity,
       postalCode,
       phone,
     }).returning('*')

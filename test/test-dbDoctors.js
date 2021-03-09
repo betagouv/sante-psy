@@ -7,6 +7,7 @@ const knex = require("knex")(knexConfig);
 const clean = require('./helper/clean');
 
 describe('DB Doctors', () => {
+  const psychologistId = "34e6352f-bdd0-48ce-83de-8de71cad295b";
   const firstNames = "Sigmund"
   const lastName = "Freud"
   const address = "7 Rue Rose"
@@ -32,7 +33,7 @@ describe('DB Doctors', () => {
 
   describe('insertDoctor', () => {
     it('should INsert one patient in PG', async () => {
-      await dbDoctors.insertDoctor(firstNames, lastName, address, city, postalCode, phone);
+      await dbDoctors.insertDoctor(psychologistId, firstNames, lastName, address, city, postalCode, phone);
 
       const exist = await testDataDoctorsExist(lastName);
       exist.should.be.equal(true);
@@ -41,7 +42,7 @@ describe('DB Doctors', () => {
 
   describe('updateDoctor', () => {
     it('should Update one doctor in PG', async () => {
-      await dbDoctors.insertDoctor(firstNames, lastName, address, city, postalCode, phone);
+      await dbDoctors.insertDoctor(psychologistId, firstNames, lastName, address, city, postalCode, phone);
 
       const newLastName = "NewName"
       const doctors = await dbDoctors.getDoctors()
@@ -49,6 +50,7 @@ describe('DB Doctors', () => {
 
       await dbDoctors.updateDoctor(
         oldDoctor.id,
+        oldDoctor.psychologistId,
         oldDoctor.firstNames,
         newLastName,
         oldDoctor.address,
@@ -56,7 +58,7 @@ describe('DB Doctors', () => {
         postalCode,
         phone,
       )
-      const newDoctor = await dbDoctors.getDoctorById(oldDoctor.id)
+      const newDoctor = await dbDoctors.getDoctorById(oldDoctor.id, psychologistId)
       expect(newDoctor.lastName).equal(newLastName)
     });
   });
