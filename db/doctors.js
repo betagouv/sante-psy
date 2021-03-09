@@ -32,6 +32,17 @@ module.exports.getDoctors = async () => {
   }
 }
 
+module.exports.checkDoctorIdExist = async function checkDoctorIdExist(doctorId, psychologistId) {
+  const doctor = await this.getDoctorById(doctorId, psychologistId);
+
+  if( doctor ) {
+    return true;
+  } else {
+    console.error(`Doctor ID ${doctorId} does not exists for psy ID ${psychologistId}`);
+    return false;
+  }
+}
+
 module.exports.getDoctorsByPsychologist = async (psychologistId) => {
   try {
     const doctorArray = await knex(doctorsTable)

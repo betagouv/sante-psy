@@ -7,7 +7,6 @@ const validation = require('../utils/validation')
 module.exports.newPatient = async (req, res) => {
   const doctors = await dbDoctors.getDoctors();
 
-  console.log("doctors", doctors)
   res.render('editPatient', {
     pageTitle: 'Nouveau patient',
     pageIntroText: `Déclarez un étudiant comme étant patient du dispositif Santé Psy Etudiants.
@@ -73,16 +72,7 @@ module.exports.editPatientValidators = [
   ...patientValidators
 ]
 
-async function checkDoctorIdExist(doctorId, psychologistId) {
-  const doctor = await dbDoctors.getDoctorById(doctorId, psychologistId);
 
-  if( doctor ) {
-    return true;
-  } else {
-    console.error(`Doctor ID ${doctorId} does not exists`);
-    false;
-  }
-}
 
 module.exports.editPatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
@@ -102,7 +92,7 @@ module.exports.editPatient = async (req, res) => {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    if( checkDoctorIdExist(doctorId, psychologistId) ) {
+    if( dbDoctors.checkDoctorIdExist(doctorId, psychologistId) ) {
       await dbPatient.updatePatient(patientId, patientFirstNames, patientLastName, patientINE, psychologistId, doctorId)
       req.flash('info', `Le patient a bien été modifié.`)
     } else {
@@ -174,7 +164,7 @@ module.exports.createNewPatient = async (req, res) => {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    if( checkDoctorIdExist(doctorId, psychologistId) ) {
+    if( dbDoctors.checkDoctorIdExist(doctorId, psychologistId) ) {
       await dbPatient.insertPatient(firstNames, lastName, INE, psychologistId, doctorId)
       let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
       if (!INE || INE.length === 0) {

@@ -385,11 +385,12 @@ describe('doctorsController', function() {
           res.should.redirectTo('/psychologue/mes-seances')
 
           // Doctor was not updated
-          const doctorsArray = await dbDoctors.getDoctorsByPsychologist(anotherPsyId)
+          const doctors = await dbDoctors.getDoctors()
+          console.log("doctors", doctors)
+          const doctorsArray = await dbDoctors.getDoctorsByPsychologist(doctor.psychologistId)
+          console.log("doctorsArray", doctorsArray)
           expect(doctorsArray).to.have.length(1)
           expect(doctorsArray[0].psychologistId).to.equal(anotherPsyId)
-          expect(doctorsArray[0].lastName).to.equal(doctor.lastName)
-          expect(doctorsArray[0].firstNames).to.equal(doctor.firstNames)
           expect(doctorsArray[0].postalCode).to.equal(doctor.postalCode)
 
           return Promise.resolve()

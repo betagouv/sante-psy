@@ -93,17 +93,23 @@ module.exports.editDoctor = async (req, res) => {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    await dbDoctors.updateDoctor(doctorId,
-      psychologistId,
-      doctorFirstNames,
-      doctorLastName,
-      doctorAddress,
-      doctorCity,
-      doctorPostalCode,
-      doctorPhone)
+    if( dbDoctors.checkDoctorIdExist(doctorId, psychologistId) ) {
+      await dbDoctors.updateDoctor(doctorId,
+        psychologistId,
+        doctorFirstNames,
+        doctorLastName,
+        doctorAddress,
+        doctorCity,
+        doctorPostalCode,
+        doctorPhone)
 
-    req.flash('info', `Le médecin a bien été modifié.`)
-    return res.redirect('/psychologue/mes-seances')
+      req.flash('info', `Le médecin a bien été modifié.`)
+      return res.redirect('/psychologue/mes-seances')
+    } else {
+      console.debug(`not updating doctor id ${doctorId} because not owned by ${psychologistId}`)
+      req.flash('error', "Erreur. Le medecin n'est pas connu de nos services.")
+      return res.redirect('/psychologue/modifier-medecin')
+    }
   } catch (err) {
     req.flash('error', 'Erreur. Le médecin n\'est pas modifié. Pourriez-vous réessayer ?')
     console.error('Erreur pour modifier le medecin', err)

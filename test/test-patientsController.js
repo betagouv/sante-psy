@@ -7,9 +7,11 @@ const dbPatients = require('../db/patients')
 const { expect } = require('chai')
 const sinon = require('sinon')
 
+const doctorId = '9a42d12f-8328-4545-8da3-11250f876146'
+
 const makePatient = async (psychologistId) => {
   // Insert an appointment and a patient
-  const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId)
+  const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId, doctorId)
   // Check patient is inserted
   const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
   chai.assert(!!createdPatient)
@@ -42,6 +44,7 @@ describe('patientsController', function() {
           lastname: 'Lovelace',
           firstnames: 'Ada',
           ine: '12345678901',
+          doctorid: doctorId,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -68,6 +71,7 @@ describe('patientsController', function() {
           lastname: 'Lovelace',
           firstnames: 'Ada',
           ine: '12345678901',
+          doctorid: doctorId,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -89,7 +93,9 @@ describe('patientsController', function() {
         .returns(Promise.resolve([ {
           'firstnames': 'prenom',
           'lastname': 'nom',
-          'ine': 'studentNumber'}
+          'ine': 'studentNumber',
+          'doctorid': doctorId,
+        }
         ]))
       return Promise.resolve()
     })
@@ -124,6 +130,7 @@ describe('patientsController', function() {
         // no firstnames
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'doctorid': doctorId,
       })
     })
 
@@ -132,6 +139,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         // no lastname
         'ine': '1234567890A',
+        'doctorid': doctorId,
       })
     })
 
@@ -140,6 +148,7 @@ describe('patientsController', function() {
         'firstnames': '   ',
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'doctorid': doctorId,
       })
     })
 
@@ -148,6 +157,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': '   ',
         'ine': '1234567890A',
+        'doctorid': doctorId,
       })
     })
 
@@ -156,6 +166,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890AA',
+        'doctorid': doctorId,
       })
     })
 
@@ -164,6 +175,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
+        'doctorid': doctorId,
       })
     })
 
@@ -191,6 +203,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'doctorid': doctorId,
       })
     })
 
@@ -199,6 +212,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '',
+        'doctorid': doctorId,
       })
     })
   })
@@ -305,6 +319,7 @@ describe('patientsController', function() {
           lastname: 'Lovelacekkk',
           firstnames: 'Adakkk',
           ine: '111222333rr',
+          doctorid: doctorId,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -338,6 +353,7 @@ describe('patientsController', function() {
           lastname: 'Lovelacekkk',
           firstnames: 'Adakkk',
           ine: '111222333SS',
+          doctorid: doctorId,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -429,6 +445,7 @@ describe('patientsController', function() {
         // no firstnames
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'doctorid': doctorId,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -440,6 +457,31 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         // no lastname
         'ine': '1234567890A',
+        'doctorid': doctorId,
+      },
+      '/psychologue/modifier-patient?patientid=' + patientId)
+    })
+
+    it('should refuse empty doctorid', function(done) {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
+      shouldFailUpdatePatientInputValidation(done, {
+        'patientid': patientId,
+        'firstnames': 'Blou Blou',
+        // no lastname
+        'ine': '1234567890A',
+        'doctorid': '',
+      },
+      '/psychologue/modifier-patient?patientid=' + patientId)
+    })
+
+    it('should refuse invalid doctorid', function(done) {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
+      shouldFailUpdatePatientInputValidation(done, {
+        'patientid': patientId,
+        'firstnames': 'Blou Blou',
+        // no lastname
+        'ine': '1234567890A',
+        'doctorid': 'pizza-id',
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -451,6 +493,7 @@ describe('patientsController', function() {
         'firstnames': '   ',
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'doctorid': doctorId,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -462,6 +505,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': '   ',
         'ine': '1234567890A',
+        'doctorid': doctorId,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -473,6 +517,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890AA',
+        'doctorid': doctorId,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -484,6 +529,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
+        'doctorid': doctorId,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -494,6 +540,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
+        'doctorid': doctorId,
       },
       '/psychologue/mes-seances')
     })
@@ -504,6 +551,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
+        'doctorid': doctorId,
       },
       '/psychologue/mes-seances')
     })
@@ -533,6 +581,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'doctorid': doctorId,
       })
     })
 
@@ -542,6 +591,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '',
+        'doctorid': doctorId,
       })
     })
   })
