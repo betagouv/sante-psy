@@ -8,6 +8,7 @@ var setupFilter = function(fieldName) {
 };
 setupFilter("address");
 setupFilter("lastName");
+setupFilter("departement");
 
 var psyListElement = document.getElementById("psy-list");
 var psyList = JSON.parse(psyListElement.textContent);
@@ -48,6 +49,7 @@ var table = new Tabulator("#psy-table", {
   columns:[
     {title:"Nom", field:"lastName", sorter:"string", responsive:0},
     {title:"Prénom(s)", field:"firstNames", sorter:"string", responsive:0},
+    {title:"Département", field:"departement", sorter:"string", maxWidth: 300, responsive:0, formatter:"text"},
     {title:"Adresse", field:"address", sorter:"string", maxWidth: 300, responsive:0, formatter:"link", formatterParams:{labelField:"address",urlPrefix:"https://www.openstreetmap.org/search?query=",target:"_blank"}},
     {title:"📞", field:"phone", sorter:"string", responsive:0, formatter: "link", formatterParams:{labelField:"phone",urlPrefix:"tel:"}},
     {title:"Email", field:"email", sorter:"string", responsive:0, formatter:"link", formatterParams:{labelField:"email",urlPrefix:"mailto://"}},
