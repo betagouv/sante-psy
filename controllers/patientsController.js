@@ -17,8 +17,8 @@ module.exports.newPatient = async (req, res) => {
     patient: {
       firstNames: '',
       lastName: '',
-      institutionName: '',
       INE: '',
+      institutionName: '',
       hasJustification: false,
       hasPrescription: false,
       id: '',
