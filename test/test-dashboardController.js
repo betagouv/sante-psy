@@ -25,8 +25,22 @@ describe('dashboardController', function() {
         email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d'
-      const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
-      const patientForAnotherPsy = await dbPatients.insertPatient('Stevie', 'Wonder', '34567890123', anotherPsyId)
+      const myPatient = await dbPatients.insertPatient(
+        'Ada',
+        'Lovelace',
+        '12345678901',
+        '42',
+        false,
+        false,
+        psy.dossierNumber)
+      const patientForAnotherPsy = await dbPatients.insertPatient(
+        'Stevie',
+        'Wonder',
+        '34567890123',
+        'Universal',
+        false,
+        true,
+        anotherPsyId)
 
       return chai.request(app)
         .get('/psychologue/mes-seances')
@@ -50,8 +64,22 @@ describe('dashboardController', function() {
         email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d'
-      const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
-      const patientForAnotherPsy = await dbPatients.insertPatient('Stevie', 'Wonder', '34567890123', anotherPsyId)
+      const myPatient = await dbPatients.insertPatient(
+        'Ada',
+        'Lovelace',
+        '12345678901',
+        '42',
+        false,
+        false,
+        psy.dossierNumber)
+      const patientForAnotherPsy = await dbPatients.insertPatient(
+        'Stevie',
+        'Wonder',
+        '34567890123',
+        'Universal',
+        false,
+        true,
+        anotherPsyId)
       const myAppointment =
         await dbAppointments.insertAppointment(new Date('2021-03-01'), myPatient.id, psy.dossierNumber)
       const appointmentForAnotherPsy =

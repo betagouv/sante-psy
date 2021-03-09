@@ -9,7 +9,14 @@ const sinon = require('sinon')
 
 const makePatient = async (psychologistId) => {
   // Insert an appointment and a patient
-  const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', '42', false, false, psychologistId)
+  const patient = await dbPatients.insertPatient(
+    'Ada',
+    'Lovelace',
+    '12345678901',
+    '42',
+    false,
+    false,
+    psychologistId)
   // Check patient is inserted
   const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
   chai.assert(!!createdPatient)
