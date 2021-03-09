@@ -29,13 +29,14 @@ module.exports.getPatients = async (psychologistId) => {
   }
 }
 
-module.exports.insertPatient = async (firstNames, lastName, INE, psychologistId) => {
+module.exports.insertPatient = async (firstNames, lastName, INE, psychologistId, doctorId) => {
   try {
     const patientsArray = await knex(module.exports.patientsTable).insert({
       firstNames,
       lastName,
       INE,
       psychologistId,
+      doctorId,
     }).returning('*')
     return patientsArray[0]
   } catch (err) {
@@ -44,7 +45,7 @@ module.exports.insertPatient = async (firstNames, lastName, INE, psychologistId)
   }
 }
 
-module.exports.updatePatient = async (id, firstNames, lastName, INE, psychologistId) => {
+module.exports.updatePatient = async (id, firstNames, lastName, INE, psychologistId, doctorId) => {
   try {
     await knex(module.exports.patientsTable)
       .where("id", id)
@@ -52,7 +53,8 @@ module.exports.updatePatient = async (id, firstNames, lastName, INE, psychologis
       .update({
         firstNames,
         lastName,
-        INE
+        INE,
+        doctorId
       })
   } catch (err) {
     console.error("Erreur de modification du patient", err)

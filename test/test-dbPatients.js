@@ -10,7 +10,7 @@ describe('DB Patients', () => {
   const firstNames = "James E."
   const lastName = "Bond"
   const studentNumber = "12345678901"
-
+  const doctorId = '340a2085-6d32-44db-8fe6-979c7339fd47'
   async function testDataPatientsExist(lastName) {
 
     const exist = await knex(dbPatients.patientsTable)
@@ -30,7 +30,7 @@ describe('DB Patients', () => {
   describe('insertPatientInPG', () => {
     it('should INsert one patient in PG', async () => {
       const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47'
-      await dbPatients.insertPatient(firstNames, lastName, studentNumber, psychologistId);
+      await dbPatients.insertPatient(firstNames, lastName, studentNumber, psychologistId, doctorId);
 
       const exist = await testDataPatientsExist(lastName);
       exist.should.be.equal(true);
@@ -39,7 +39,7 @@ describe('DB Patients', () => {
     it('should refuse INsert INE with more than 11 characters in PG', async () => {
       const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47'
       try {
-        await dbPatients.insertPatient(firstNames, lastName, "111111111111", psychologistId);
+        await dbPatients.insertPatient(firstNames, lastName, "111111111111", psychologistId, doctorId);
         assert.fail("insert patient should have failed");
       } catch( error ) {
         expect(error).to.be.an('Error');
@@ -58,7 +58,7 @@ describe('DB Patients', () => {
   describe('updatePatientInPG', () => {
     it('should Update one patient in PG', async () => {
       const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47'
-      await dbPatients.insertPatient(firstNames, lastName, studentNumber, psychologistId);
+      await dbPatients.insertPatient(firstNames, lastName, studentNumber, psychologistId, doctorId);
 
       const newLastName = "NewName"
       const patients = await dbPatients.getPatients(psychologistId)
@@ -70,9 +70,15 @@ describe('DB Patients', () => {
         newLastName,
         oldPatient.studentNumber,
         psychologistId,
+        doctorId,
       )
-      const newPatient = await dbPatients.getPatientById(oldPatient.id, psychologistId)
-      expect(newPatient.lastName).equal(newLastName)
+      const updatedPatient = await dbPatients.getPatientById(oldPatient.id, psychologistId)
+      console.log("updatedPatient", updatedPatient)
+      expect(updatedPatient.lastName).equal(newLastName)
+      expect(updatedPatient.firstNames).equal(firstNames)
+      expect(updatedPatient.INE).equal(studentNumber)
+      expect(updatedPatient.psychologistId).equal(psychologistId)
+      expect(updatedPatient.doctorId).equal(doctorId)
     });
   });
 });

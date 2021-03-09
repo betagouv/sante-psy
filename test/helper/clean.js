@@ -4,6 +4,7 @@ const dbPsychologists = require('../../db/psychologists')
 const dbPatients = require('../../db/patients')
 const dbDsApiCursor = require('../../db/dsApiCursor')
 const dbLoginToken = require('../../db/loginToken')
+const dbDoctors = require('../../db/doctors')
 const rewire = require("rewire");
 const demarchesSimplifiees = rewire('../../utils/demarchesSimplifiees');
 
@@ -99,4 +100,8 @@ module.exports.cleanAllPatients = function() {
 
 module.exports.cleanAllAppointments = function() {
   return knex('appointments').select('*').delete()
+}
+
+module.exports.cleanDataDoctors = function() {
+  return knex(dbDoctors.doctorsTable).select('*').delete()
 }
