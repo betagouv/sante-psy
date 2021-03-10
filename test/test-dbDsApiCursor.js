@@ -9,7 +9,6 @@ const clean = require('./helper/clean');
 describe('DB Ds Api Cursor', () => {
   //Clean up all data
   beforeEach(async function before() {
-    console.log("cleaning cursor")
     await clean.cleanDataCursor();
   })
 
