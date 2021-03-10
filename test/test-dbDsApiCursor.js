@@ -6,11 +6,12 @@ const clean = require('./helper/clean');
 describe('DB Ds Api Cursor', () => {
   //Clean up all data
   beforeEach(async function before() {
+    console.log("cleaning cursor")
     await clean.cleanDataCursor();
   })
 
   describe('getLatestCursorSaved', () => {
-    it('should return undefined if there is not', async () => {
+    it('should return undefined if there is no cursor saved', async () => {
       const output = await dbDsApiCursor.getLatestCursorSaved();
 
       assert(output === undefined);
@@ -24,7 +25,6 @@ describe('DB Ds Api Cursor', () => {
 
     it('should return the latest cursor saved', async () => {
       await dbDsApiCursor.saveLatestCursor("test");
-
       const output = await dbDsApiCursor.getLatestCursorSaved();
       assert(output, "test");
     });

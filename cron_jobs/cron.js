@@ -19,7 +19,7 @@ const jobs = [{
   name: "Import ALL data from DS API to PG",
 },
 {
-  cronTime: "0 9 * * MON", // every monday at 9am
+  cronTime: "0 9 * * 1-5", // every weekday at 9am
   onTick: cronDemarchesSimplifiees.checkForMultipleAcceptedDossiers,
   start: true,
   timeZone: "Europe/Paris",

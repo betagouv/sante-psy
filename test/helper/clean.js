@@ -40,54 +40,16 @@ module.exports.psyList = function getPsyList() {
 }
 
 module.exports.cleanDataCursor = async function cleanDataCursor() {
-  try {
-    const ifExist = await knex(dbDsApiCursor.dsApiCursorTable)
-        .where('id', 1)
-        .first();
-
-    if (ifExist) {
-      await knex(dbDsApiCursor.dsApiCursorTable)
-          .where('id', 1)
-          .del();
-    } else {
-      undefined;
-    }
-  } catch (err) {
-    console.log(err);
-  }
+  return knex(dbDsApiCursor.dsApiCursorTable).select('*').delete();
 }
 
 module.exports.cleanDataToken = async function cleanDataToken() {
-  try {
-    return knex(dbLoginToken.loginTokenTable).select('*').delete()
-  } catch (err) {
-    console.log(err);
-  }
+  return knex(dbLoginToken.loginTokenTable).select('*').delete();
 }
 
 module.exports.cleanAllPsychologists = async function cleanAllPsychologists() {
   try {
     return knex(dbPsychologists.psychologistsTable).select('*').delete()
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-
-module.exports.cleanDataPatient = async function cleanDataPatient(lastName) {
-  try {
-    const ifExist = await knex(dbPatients.patientsTable)
-    .where('lastName',lastName)
-    .first();
-
-    if (ifExist) {
-      const clean = await knex(dbPatients.patientsTable)
-        .where('lastName',lastName)
-        .del();
-      console.log("cleaned");
-
-      return clean;
-    }
   } catch (err) {
     console.log(err);
   }

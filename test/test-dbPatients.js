@@ -24,7 +24,7 @@ describe('DB Patients', () => {
 
   //Clean up all data
   afterEach(async function before() {
-    await clean.cleanDataPatient(lastName);
+    await clean.cleanAllPatients(lastName);
   })
 
   describe('insertPatientInPG', () => {
