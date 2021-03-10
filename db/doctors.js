@@ -101,7 +101,7 @@ module.exports.insertDoctor = async (psychologistId, firstNames, lastName, addre
   }
 }
 
-module.exports.updateDoctor = async function updateDoctor (id, psychologistId, firstNames, lastName, 
+module.exports.updateDoctor = async function updateDoctor (id, psychologistId, firstNames, lastName,
   address, city, postalCode, phone) {
 
   try {
