@@ -55,19 +55,11 @@ const patientValidators = [
     `Le numéro INE doit faire 11 caractères (chiffres ou lettres).
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
   ),
-  oneOf(
-    [
-      // Two valid possibilities : institutionName is empty, or institutionName is valid format.
-      check('institutionName').trim().isEmpty(),
-      check('institutionName')
-        .trim()
-        .isLength({min:11, max:11})
-        .customSanitizer((value, { req }) => {
-          return req.sanitize(value)
-        })
-    ],
-    `Si vous n'avez pas encore le nom de l'établissement, ce n'est pas grave, vous pourrez y revenir plus tard.`
-  )
+  check('institution')
+    .trim()
+    .customSanitizer((value, { req }) => {
+      return req.sanitize(value)
+    }),
 ]
 
 module.exports.editPatientValidators = [

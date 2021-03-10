@@ -254,6 +254,46 @@ describe('patientsController', function() {
         'hasprescription': false
       })
     })
+
+    it('should sanitize string fields', function(done) {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const postData = {
+        'firstnames': 'Blou Blou<div>',
+        'lastname': 'Nom</',
+        'ine': '',
+        'institution': 'stuff<script>evil</script>',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined
+      }
+
+      chai.request(app)
+        .post('/psychologue/api/creer-nouveau-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send(postData)
+        .end((err, res) => {
+          sinon.assert.called(insertPatientStub)
+          const expected = [
+            'Blou Blou<div></div>', // sanitized
+            'Nom&lt;/', // sanitized
+            sinon.match.string,
+            'stuff', // sanitized
+            false,
+            false,
+            sinon.match.string,
+          ]
+
+          sinon.assert.calledWith(insertPatientStub, ...expected)
+
+          res.should.redirectTo('/psychologue/mes-seances');
+          done();
+        })
+
+    })
   })
 
   describe('display update patient form', function() {
