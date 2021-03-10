@@ -27,16 +27,11 @@ describe('DB Ds Api Cursor', () => {
 
     it('should return the latest cursor saved', async () => {
       const myCursor = "test"
-      await knex(dbDsApiCursor.dsApiCursorTable)
-      .insert({
-        "id" : 1,
-        "cursor": myCursor,
-        "updatedAt": date.getDateNowPG()
-      }).returning('*');
+      await dbDsApiCursor.saveLatestCursor(myCursor);
 
       const output = await dbDsApiCursor.getLatestCursorSaved();
 
-      assert(output, myCursor);
+      assert(output === myCursor);
     });
   });
 });

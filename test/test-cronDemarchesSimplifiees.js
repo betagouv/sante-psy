@@ -15,12 +15,14 @@ describe('Import Data from DS to PG', () => {
   let getPsychologistListStub
   let savePsychologistInPGStub
   let getNumberOfPsychologistsStub
+  let saveLatestCursorStub
 
   afterEach(async () => {
     getLatestCursorSavedStub.restore()
     getPsychologistListStub.restore()
     savePsychologistInPGStub.restore()
     getNumberOfPsychologistsStub.restore()
+    saveLatestCursorStub.restore()
     return Promise.resolve()
   })
 
@@ -41,7 +43,7 @@ describe('Import Data from DS to PG', () => {
       .returns(Promise.resolve());
     getNumberOfPsychologistsStub = sinon.stub(dbPsychologists, 'getNumberOfPsychologists')
       .returns(Promise.resolve([{count:1}]));
-    let saveLatestCursorStub = sinon.stub(dbDsApiCursor, 'saveLatestCursor')
+    saveLatestCursorStub = sinon.stub(dbDsApiCursor, 'saveLatestCursor')
     .returns(Promise.resolve());
 
     await importDataFromDSToPG();
