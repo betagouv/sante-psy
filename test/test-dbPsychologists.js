@@ -22,7 +22,6 @@ describe('DB Psychologists', () => {
   //Clean up all data
   beforeEach(async function before() {
     psyList = clean.psyList();
-    await clean.cleanDataCursor();
     await clean.cleanAllPsychologists();
   })
 

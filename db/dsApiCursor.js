@@ -31,7 +31,7 @@ module.exports.getCursorFromDB = async function getCursorFromDB() {
  */
 module.exports.getLatestCursorSaved = async function getLatestCursorSaved(updateEverything = false) {
   if( !updateEverything ) {
-    return await this.getCursorFromDB();
+    return await module.exports.getCursorFromDB();
   } else {
     console.log(`Not using cursor saved inside PG due to parameter ${updateEverything}`);
 
@@ -43,7 +43,7 @@ module.exports.saveLatestCursor = async function saveLatestCursor(cursor) {
   try {
     const now = date.getDateNowPG();
 
-    const alreadySavedCursor = await this.getCursorFromDB();
+    const alreadySavedCursor = await module.exports.getCursorFromDB();
     // eslint-disable-next-line func-names
     return await knex.transaction( function(trx) { // add transaction in case 2 cron jobs modify this cursor
       if( alreadySavedCursor ) {

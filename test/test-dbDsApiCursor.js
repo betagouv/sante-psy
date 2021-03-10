@@ -1,6 +1,9 @@
 const assert = require('chai').assert;
 require('dotenv').config();
+const knexConfig = require("../knexfile");
+const knex = require("knex")(knexConfig);
 const dbDsApiCursor = require('../db/dsApiCursor')
+const date = require('../utils/date');
 const clean = require('./helper/clean');
 
 describe('DB Ds Api Cursor', () => {
@@ -10,7 +13,7 @@ describe('DB Ds Api Cursor', () => {
   })
 
   describe('getLatestCursorSaved', () => {
-    it('should return undefined if there is not', async () => {
+    it('should return undefined if there is no cursor saved', async () => {
       const output = await dbDsApiCursor.getLatestCursorSaved();
 
       assert(output === undefined);
@@ -23,11 +26,12 @@ describe('DB Ds Api Cursor', () => {
     });
 
     it('should return the latest cursor saved', async () => {
-      await dbDsApiCursor.saveLatestCursor("test");
+      const myCursor = "test"
+      await dbDsApiCursor.saveLatestCursor(myCursor);
 
       const output = await dbDsApiCursor.getLatestCursorSaved();
 
-      assert(output, "test");
+      assert(output === myCursor);
     });
   });
 });
