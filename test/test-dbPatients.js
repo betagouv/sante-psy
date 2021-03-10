@@ -7,9 +7,12 @@ const knex = require("knex")(knexConfig);
 const clean = require('./helper/clean');
 
 describe('DB Patients', () => {
-  const firstNames = "James E."
-  const lastName = "Bond"
+  const firstNames = "Harry James"
+  const lastName = "Potter"
   const studentNumber = "12345678901"
+  const institutionName = "Pouldard"
+  const isStudentStatusVerified = false
+  const hasPrescription = false
 
   async function testDataPatientsExist(lastName) {
 
@@ -30,7 +33,15 @@ describe('DB Patients', () => {
   describe('insertPatientInPG', () => {
     it('should INsert one patient in PG', async () => {
       const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47'
-      await dbPatients.insertPatient(firstNames, lastName, studentNumber, psychologistId);
+      await dbPatients.insertPatient(
+        firstNames,
+        lastName,
+        studentNumber,
+        institutionName,
+        isStudentStatusVerified,
+        hasPrescription,
+        psychologistId
+      );
 
       const exist = await testDataPatientsExist(lastName);
       exist.should.be.equal(true);
@@ -39,7 +50,15 @@ describe('DB Patients', () => {
     it('should refuse INsert INE with more than 11 characters in PG', async () => {
       const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47'
       try {
-        await dbPatients.insertPatient(firstNames, lastName, "111111111111", psychologistId);
+        await dbPatients.insertPatient(
+          firstNames,
+          lastName,
+          "11111111111111111",
+          institutionName,
+          isStudentStatusVerified,
+          hasPrescription,
+          psychologistId
+        );
         assert.fail("insert patient should have failed");
       } catch( error ) {
         expect(error).to.be.an('Error');
@@ -58,7 +77,15 @@ describe('DB Patients', () => {
   describe('updatePatientInPG', () => {
     it('should Update one patient in PG', async () => {
       const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47'
-      await dbPatients.insertPatient(firstNames, lastName, studentNumber, psychologistId);
+      await dbPatients.insertPatient(
+        firstNames,
+        lastName,
+        studentNumber,
+        institutionName,
+        isStudentStatusVerified,
+        hasPrescription,
+        psychologistId
+      );
 
       const newLastName = "NewName"
       const patients = await dbPatients.getPatients(psychologistId)
@@ -69,6 +96,9 @@ describe('DB Patients', () => {
         oldPatient.firstNames,
         newLastName,
         oldPatient.studentNumber,
+        oldPatient.institutionName,
+        oldPatient.isStudentStatusVerified,
+        oldPatient.hasPrescription,
         psychologistId,
       )
       const newPatient = await dbPatients.getPatientById(oldPatient.id, psychologistId)

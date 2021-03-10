@@ -9,7 +9,14 @@ const sinon = require('sinon')
 
 const makePatient = async (psychologistId) => {
   // Insert an appointment and a patient
-  const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId)
+  const patient = await dbPatients.insertPatient(
+    'Ada',
+    'Lovelace',
+    '12345678901',
+    '42',
+    false,
+    false,
+    psychologistId)
   // Check patient is inserted
   const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
   chai.assert(!!createdPatient)
@@ -42,11 +49,16 @@ describe('patientsController', function() {
           lastname: 'Lovelace',
           firstnames: 'Ada',
           ine: '12345678901',
+          institution: 'test',
+          isstudentstatusverified: undefined,
+          hasprescription: undefined,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
+          console.log(patientsArray)
+
           patientsArray.length.should.equal(1)
           expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber)
           return Promise.resolve()
@@ -68,6 +80,9 @@ describe('patientsController', function() {
           lastname: 'Lovelace',
           firstnames: 'Ada',
           ine: '12345678901',
+          institution: '42',
+          isstudentstatusverified: undefined,
+          hasprescription: undefined
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -89,7 +104,10 @@ describe('patientsController', function() {
         .returns(Promise.resolve([ {
           'firstnames': 'prenom',
           'lastname': 'nom',
-          'ine': 'studentNumber'}
+          'ine': 'studentNumber',
+          'institution': '42',
+          'isStudentStatusVerified': false,
+          'hasPrescription': false}
         ]))
       return Promise.resolve()
     })
@@ -124,6 +142,9 @@ describe('patientsController', function() {
         // no firstnames
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -132,6 +153,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         // no lastname
         'ine': '1234567890A',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -140,6 +164,9 @@ describe('patientsController', function() {
         'firstnames': '   ',
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -148,6 +175,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': '   ',
         'ine': '1234567890A',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -156,6 +186,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890AA',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -164,6 +197,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -191,6 +227,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -199,7 +238,61 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
+    })
+
+    it('should pass validation when institution is missing', function(done) {
+      shouldPassCreatePatientInputValidation(done, {
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '',
+        'institution': '',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
+      })
+    })
+
+    it('should sanitize string fields', function(done) {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      }
+      const postData = {
+        'firstnames': 'Blou Blou<div>',
+        'lastname': 'Nom</',
+        'ine': '',
+        'institution': 'stuff<script>evil</script>',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined
+      }
+
+      chai.request(app)
+        .post('/psychologue/api/creer-nouveau-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send(postData)
+        .end((err, res) => {
+          sinon.assert.called(insertPatientStub)
+          const expected = [
+            'Blou Blou<div></div>', // sanitized
+            'Nom&lt;/', // sanitized
+            sinon.match.string,
+            'stuff', // sanitized
+            false,
+            false,
+            sinon.match.string,
+          ]
+
+          sinon.assert.calledWith(insertPatientStub, ...expected)
+
+          res.should.redirectTo('/psychologue/mes-seances');
+          done();
+        })
+
     })
   })
 
@@ -231,6 +324,7 @@ describe('patientsController', function() {
           chai.assert.include(res.text, myPatient.firstNames)
           chai.assert.include(res.text, myPatient.lastName)
           chai.assert.include(res.text, myPatient.id)
+          chai.assert.include(res.text, myPatient.institutionName)
 
           return Promise.resolve()
         })
@@ -255,6 +349,7 @@ describe('patientsController', function() {
           chai.assert.notInclude(res.text, notMyPatient.firstNames)
           chai.assert.notInclude(res.text, notMyPatient.lastName)
           chai.assert.notInclude(res.text, notMyPatient.id)
+          chai.assert.notInclude(res.text, notMyPatient.institution)
 
           return Promise.resolve()
         })
@@ -305,6 +400,9 @@ describe('patientsController', function() {
           lastname: 'Lovelacekkk',
           firstnames: 'Adakkk',
           ine: '111222333rr',
+          institution: 'polytech',
+          isstudentstatusverified: 'isstudentstatusverified',
+          hasprescription: 'hasprescription',
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -315,6 +413,9 @@ describe('patientsController', function() {
           expect(patientsArray[0].lastName).to.equal('Lovelacekkk')
           expect(patientsArray[0].firstNames).to.equal('Adakkk')
           expect(patientsArray[0].INE).to.equal('111222333rr')
+          expect(patientsArray[0].institutionName).to.equal('polytech')
+          expect(patientsArray[0].isStudentStatusVerified).to.equal(true)
+          expect(patientsArray[0].hasPrescription).to.equal(true)
 
           return Promise.resolve()
         })
@@ -338,6 +439,9 @@ describe('patientsController', function() {
           lastname: 'Lovelacekkk',
           firstnames: 'Adakkk',
           ine: '111222333SS',
+          institution: 'Grande ecole',
+          isstudentstatusverified: 'isstudentstatusverified',
+          hasprescription: 'hasprescription',
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -349,6 +453,9 @@ describe('patientsController', function() {
           expect(patientsArray[0].lastName).to.equal(patient.lastName)
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames)
           expect(patientsArray[0].INE).to.equal(patient.INE)
+          expect(patientsArray[0].institution).to.equal(patient.institution)
+          expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified)
+          expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription)
 
           return Promise.resolve()
         })
@@ -371,6 +478,9 @@ describe('patientsController', function() {
           lastname: 'Lovelacekkk',
           firstnames: 'Adakkk',
           ine: '111',
+          institution: 'Petite ecole',
+          isstudentstatusverified: 'isstudentstatusverified',
+          hasprescription: 'hasprescription',
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -382,6 +492,9 @@ describe('patientsController', function() {
           expect(patientsArray[0].lastName).to.equal(patient.lastName)
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames)
           expect(patientsArray[0].INE).to.equal(patient.INE)
+          expect(patientsArray[0].institution).to.equal(patient.institution)
+          expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified)
+          expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription)
 
           return Promise.resolve()
         })
@@ -429,6 +542,9 @@ describe('patientsController', function() {
         // no firstnames
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -440,6 +556,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         // no lastname
         'ine': '1234567890A',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -451,6 +570,9 @@ describe('patientsController', function() {
         'firstnames': '   ',
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -462,6 +584,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': '   ',
         'ine': '1234567890A',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -473,6 +598,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890AA',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -484,6 +612,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -494,6 +625,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/mes-seances')
     })
@@ -504,6 +638,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/mes-seances')
     })
@@ -533,6 +670,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890A',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -542,6 +682,9 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
   })

@@ -29,12 +29,22 @@ module.exports.getPatients = async (psychologistId) => {
   }
 }
 
-module.exports.insertPatient = async (firstNames, lastName, INE, psychologistId) => {
+module.exports.insertPatient = async (
+  firstNames,
+  lastName,
+  INE,
+  institutionName,
+  isStudentStatusVerified,
+  hasPrescription,
+  psychologistId) => {
   try {
     const patientsArray = await knex(module.exports.patientsTable).insert({
       firstNames,
       lastName,
       INE,
+      institutionName,
+      isStudentStatusVerified,
+      hasPrescription,
       psychologistId,
     }).returning('*')
     return patientsArray[0]
@@ -44,7 +54,8 @@ module.exports.insertPatient = async (firstNames, lastName, INE, psychologistId)
   }
 }
 
-module.exports.updatePatient = async (id, firstNames, lastName, INE, psychologistId) => {
+module.exports.updatePatient = async (
+  id, firstNames, lastName, INE, institutionName, isStudentStatusVerified, hasPrescription, psychologistId) => {
   try {
     await knex(module.exports.patientsTable)
       .where("id", id)
@@ -52,7 +63,11 @@ module.exports.updatePatient = async (id, firstNames, lastName, INE, psychologis
       .update({
         firstNames,
         lastName,
-        INE
+        INE,
+        institutionName,
+        isStudentStatusVerified,
+        hasPrescription,
+        psychologistId,
       })
   } catch (err) {
     console.error("Erreur de modification du patient", err)

@@ -18,6 +18,9 @@ module.exports.newPatient = async (req, res) => {
       firstNames: '',
       lastName: '',
       INE: '',
+      institutionName: '',
+      isStudentStatusVerified: false,
+      hasPrescription: false,
       id: '',
     }
   })
@@ -50,7 +53,13 @@ const patientValidators = [
         })
     ],
     `Le numéro INE doit faire 11 caractères (chiffres ou lettres).
-    Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`)
+    Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
+  ),
+  check('institution')
+    .trim()
+    .customSanitizer((value, { req }) => {
+      return req.sanitize(value)
+    }),
 ]
 
 module.exports.editPatientValidators = [
@@ -76,16 +85,34 @@ module.exports.editPatient = async (req, res) => {
   const patientFirstNames = req.body['firstnames']
   const patientLastName = req.body['lastname']
   const patientINE = req.body['ine']
+  const patientInstitutionName = req.body['institution']
+  // Force to boolean beacause checkbox value send undefined when it's not checked
+  const patientIsStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
+  const patientHasPrescription = Boolean(req.body['hasprescription'])
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    await dbPatient.updatePatient(patientId, patientFirstNames, patientLastName, patientINE, psychologistId)
-    req.flash('info', `Le patient a bien été modifié.`)
+    await dbPatient.updatePatient(
+      patientId,
+      patientFirstNames,
+      patientLastName,
+      patientINE,
+      patientInstitutionName,
+      patientIsStudentStatusVerified,
+      patientHasPrescription,
+      psychologistId
+    )
+    let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`
+    if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified ) {
+      infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
+        ' en cliquant le bouton "Modifier" du patient.'
+    }
+    req.flash('info', infoMessage)
     return res.redirect('/psychologue/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'est pas modifié. Pourriez-vous réessayer ?')
     console.error('Erreur pour modifier le patient', err)
-    return res.redirect('/psychologue/modifier-patient')
+    return res.redirect('/psychologue/mes-seances')
   }
 }
 
@@ -140,13 +167,25 @@ module.exports.createNewPatient = async (req, res) => {
   const firstNames = req.body['firstnames']
   const lastName = req.body['lastname']
   const INE = req.body['ine']
+  const institutionName = req.body['institution']
+  // Force to boolean beacause checkbox value send undefined when it's not checked
+  const isStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
+  const hasPrescription = Boolean(req.body['hasprescription'])
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    await dbPatient.insertPatient(firstNames, lastName, INE, psychologistId)
+    await dbPatient.insertPatient(
+      firstNames,
+      lastName,
+      INE,
+      institutionName,
+      isStudentStatusVerified,
+      hasPrescription,
+      psychologistId)
     let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
-    if (!INE || INE.length === 0) {
-      infoMessage += ' Vous pourrez renseigner son numero INE plus tard.'
+    if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified ) {
+      infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
+        ' en cliquant le bouton "Modifier" du patient.'
     }
     req.flash('info', infoMessage)
     return res.redirect('/psychologue/mes-seances')

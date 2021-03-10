@@ -37,6 +37,9 @@
       <div class="rf-text--sm">
         Les champs avec une astérique (<span class="red-text">*</span>) sont obligatoires.
       </div>
+      <div class="rf-text--sm">
+        S'il vous manque des champs non-obligatoires, vous pourrez y revenir plus tard.
+      </div>
       <input type="hidden" name="_csrf" value="<%= _csrf  %>">
       <div>
         <div class="rf-my-3w">
@@ -48,12 +51,36 @@
           <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname">
         </div>
         <div class="rf-my-3w">
+          <label class="rf-label" for="institution" aria-describedby="institution-help">Établissement scolaire de l'étudiant</label>
+          <div class="rf-hint-text" id="institution-help">
+            Exemple : Université de Rennes ou ENSAE
+          </div>
+          <input class="rf-input midlength-input" value="<%= patient.institutionName %>"  type="text" id="institution" name="institution">
+        </div>
+        <div class="rf-my-3w">
           <!-- todo : JS validation for 11 digit number -->
           <label class="rf-label" for="ine" aria-describedby="ine-help">Numéro INE de l'étudiant</label>
           <div class="rf-hint-text" id="ine-help">
             Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant.
           </div>
           <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine">
+        </div>
+        <div class="rf-my-3w rf-checkbox-group">
+          <input type="checkbox" id="isstudentstatusverified" name="isstudentstatusverified" value="isstudentstatusverified" <% if(patient.isStudentStatusVerified){ %> checked="checked" <% } %> >
+          <label class="rf-label" for="isstudentstatusverified">
+            J'ai vérifié le statut étudiant de ce patient
+            <span class="rf-hint-text">J'ai vu sa carte d'étudiant ou un autre justificatif</span>
+          </label>
+        </div>
+        <div class="rf-my-3w rf-checkbox-group">
+          <input type="checkbox" id="hasprescription" name="hasprescription" value="hasprescription" <% if(patient.hasPrescription){ %> checked="checked" <% } %> >
+          <label class="rf-label" for="hasprescription">
+            J'ai vérifié que les séances ont bien été prescrites par un médecin ou un Service de Santé Universitaire
+            <span class="rf-hint-text">L'étudiant m'a présenté une lettre ou ordonnance médicale</span>
+          </label>
+        </div>
+        <div class="rf-text--sm">
+          À venir bientôt sur cette page : renseigner les coordonnées du médecin ou Service de Santé Universitaire qui a orienté ce patient.
         </div>
       </div>
       <div class="rf-my-5w">
