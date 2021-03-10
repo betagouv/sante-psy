@@ -1,21 +1,30 @@
 const cron = require('cron');
-const { importDataFromDSToPG } = require("./importDataFromDS")
+const cronDemarchesSimplifiees  = require("./cronDemarchesSimplifiees")
 const config = require('../utils/config');
 
-const jobs = [ {
-  cronTime: "*/5 * * * *", // https://crontab.guru/every-5-minutes
-  onTick: importDataFromDSToPG(false),
+const jobs = [{
+  cronTime: "*/5 * * * *", // every 5 minutes
+  onTick: cronDemarchesSimplifiees.importLatestDataFromDSToPG,
   start: true,
   timeZone: "Europe/Paris",
   isActive: config.featureImportData,
-  name: "Import only the latest data from DS API to PG",
-},{
-  cronTime: "10 */2 * * *", // At minute 10 past every 2nd hour.
-  onTick: importDataFromDSToPG(true),
+  name: "Import latest data from DS API to PG",
+},
+{
+  cronTime: "0 */3 * * *", // every 3 hours
+  onTick: cronDemarchesSimplifiees.importEveryDataFromDSToPG,
   start: true,
   timeZone: "Europe/Paris",
   isActive: config.featureImportData,
   name: "Import ALL data from DS API to PG",
+},
+{
+  cronTime: "0 9 * * MON", // every monday at 9am
+  onTick: cronDemarchesSimplifiees.checkForMultipleAcceptedDossiers,
+  start: true,
+  timeZone: "Europe/Paris",
+  isActive: config.featureImportData,
+  name: "checkForMultipleAcceptedDossiers",
 }
 ]
 

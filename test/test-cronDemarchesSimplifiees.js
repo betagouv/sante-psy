@@ -5,7 +5,8 @@ const dbDsApiCursor = require('../db/dsApiCursor')
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 const emailUtils = require('../utils/email');
 const { expect } = require('chai')
-const importDataFromDS = require('../cron_jobs/importDataFromDS');
+const rewire = require('rewire')
+const cronDemarchesSimplifiees = rewire('../cron_jobs/cronDemarchesSimplifiees');
 const clean = require("./helper/clean");
 const sinon = require('sinon');
 
@@ -24,6 +25,8 @@ describe('Import Data from DS to PG', () => {
   })
 
   it('should get a cursor, then all psychologist from DS API, then save cursor and psylist', async () => {
+    const importDataFromDSToPG = cronDemarchesSimplifiees.__get__('importDataFromDSToPG');
+
     // eslint-disable-next-line max-len
     const cursor = '{"id":1,"cursor":"test","createdAt":"2021-02-19T13:16:45.382Z","updatedAt":"2021-02-19T13:16:45.380Z"}';
     const dsApiData = {
@@ -41,7 +44,7 @@ describe('Import Data from DS to PG', () => {
     let saveLatestCursorStub = sinon.stub(dbDsApiCursor, 'saveLatestCursor')
     .returns(Promise.resolve());
 
-    await importDataFromDS.importDataFromDSToPG()
+    await importDataFromDSToPG(false);
 
     sinon.assert.called(getLatestCursorSavedStub);
     sinon.assert.called(getPsychologistListStub);
@@ -78,7 +81,7 @@ describe('checkForMultipleAcceptedDossiers', () => {
     const psyArray = await dbPsychologists.getPsychologists()
     expect(psyArray).to.have.length(2)
 
-    await importDataFromDS.checkForMultipleAcceptedDossiers()
+    await cronDemarchesSimplifiees.checkForMultipleAcceptedDossiers()
 
     sinon.assert.called(sendMailStub)
     sinon.assert.calledWith(sendMailStub,

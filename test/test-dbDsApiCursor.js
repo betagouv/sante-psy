@@ -26,7 +26,6 @@ describe('DB Ds Api Cursor', () => {
       await dbDsApiCursor.saveLatestCursor("test");
 
       const output = await dbDsApiCursor.getLatestCursorSaved();
-
       assert(output, "test");
     });
   });
