@@ -4,8 +4,8 @@ const dbPatients = require('../db/patients')
 exports.up = function(knex) {
   return knex.schema.table(dbPatients.patientsTable, function (table) {
     table.text('institutionName');
-    table.boolean('isStudentStatusVerified');
-    table.boolean('hasPrescription');
+    table.boolean('isStudentStatusVerified').defaultTo(false);
+    table.boolean('hasPrescription').defaultTo(false);
   })
 };
 
