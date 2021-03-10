@@ -86,7 +86,7 @@ module.exports.editPatient = async (req, res) => {
   const patientLastName = req.body['lastname']
   const patientINE = req.body['ine']
   const patientInstitutionName = req.body['institution']
-  // Force to boolean beacause checkbox value send undifined when it's not checked
+  // Force to boolean beacause checkbox value send undefined when it's not checked
   const patientIsStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
   const patientHasPrescription = Boolean(req.body['hasprescription'])
 
@@ -103,7 +103,6 @@ module.exports.editPatient = async (req, res) => {
       psychologistId
     )
     let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`
-    console.log('fields', patientINE, patientInstitutionName, patientHasPrescription, patientIsStudentStatusVerified)
     if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified ) {
       infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
         ' en cliquant le bouton "Modifier" du patient.'
@@ -113,7 +112,7 @@ module.exports.editPatient = async (req, res) => {
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'est pas modifié. Pourriez-vous réessayer ?')
     console.error('Erreur pour modifier le patient', err)
-    return res.redirect('/psychologue/modifier-patient')
+    return res.redirect('/psychologue/mes-seances')
   }
 }
 
@@ -169,7 +168,7 @@ module.exports.createNewPatient = async (req, res) => {
   const lastName = req.body['lastname']
   const INE = req.body['ine']
   const institutionName = req.body['institution']
-  // Force to boolean beacause checkbox value send undifined when it's not checked
+  // Force to boolean beacause checkbox value send undefined when it's not checked
   const isStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
   const hasPrescription = Boolean(req.body['hasprescription'])
 
@@ -184,7 +183,6 @@ module.exports.createNewPatient = async (req, res) => {
       hasPrescription,
       psychologistId)
     let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
-    console.log('fields', INE, institutionName, hasPrescription, isStudentStatusVerified)
     if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified ) {
       infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
         ' en cliquant le bouton "Modifier" du patient.'
