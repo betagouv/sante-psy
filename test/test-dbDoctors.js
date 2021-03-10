@@ -54,7 +54,7 @@ describe('DB Doctors', () => {
       )
 
       const updatedDoctor = await dbDoctors.getDoctorByIdAndPsyId(d.id, d.psychologistId)
-      console.log("updatedDoctor",updatedDoctor)
+      console.log("updatedDoctor ",updatedDoctor)
       expect(updatedDoctor.lastName).equal(newLastName)
     });
   });

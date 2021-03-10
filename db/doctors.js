@@ -83,7 +83,7 @@ module.exports.getDoctorsByPsychologist = async (psychologistId) => {
 
 module.exports.insertDoctor = async (psychologistId, firstNames, lastName, address, city, postalCode, phone) => {
   try {
-    console.log("insert doctor", lastName)
+    console.log("Creating one doctor in city", city)
     const capitalizedCity = _.capitalize(city)
     const doctorsArray = await knex(doctorsTable).insert({
       psychologistId,
@@ -101,10 +101,16 @@ module.exports.insertDoctor = async (psychologistId, firstNames, lastName, addre
   }
 }
 
-module.exports.updateDoctor = async function updateDoctor (id, psychologistId, firstNames, lastName,
+module.exports.updateDoctor = async function updateDoctor (id, psychologistId, firstNames, lastName, 
   address, city, postalCode, phone) {
 
   try {
+    // @TODO not called at everytime in test, why?, await pb ?
+    console.log("called updateDoctor")
+    console.log("called updateDoctor")
+    console.log("called updateDoctor")
+    console.log("called updateDoctor")
+    console.log("called updateDoctor")
     const now = date.getDateNowPG();
 
     return await knex(doctorsTable)

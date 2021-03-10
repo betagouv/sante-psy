@@ -164,6 +164,7 @@ module.exports.createNewPatient = async (req, res) => {
   const INE = req.body['ine']
 
   try {
+    console.log(`creating a new patient (${INE}) with doctor id ${doctorId}`)
     const psychologistId = cookie.getCurrentPsyId(req)
     const existDoctor = await dbDoctors.checkDoctorIdExist(doctorId)
     if( existDoctor ) {

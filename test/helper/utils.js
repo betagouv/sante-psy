@@ -21,9 +21,7 @@ module.exports.makeDoctor = async function makeDoctor(psychologistId) {
     const phone = "0600000000"
     const doctor = await dbDoctors.insertDoctor(psychologistId, firstNames, lastName,address,city, postalCode, phone)
     // Check doctor is inserted
-    console.log("doctor doctor", doctor)
     const createdDoctor = await dbDoctors.getDoctorByIdAndPsyId(doctor.id, doctor.psychologistId)
-    console.log("createdDoctor", createdDoctor)
     chai.assert(!!createdDoctor)
     return doctor
   } catch (err) {

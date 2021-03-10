@@ -8,14 +8,12 @@ const cookie = require('../utils/cookie')
 const dbPatients = require('../db/patients')
 const testUtils = require('./helper/utils')
 
-describe('patientsController', async function() {
-  console.log("patientsController test running")
+describe('patientsController', function() {
+  console.log("patientsController test running - using grep, that's weird, no?")
   const dossierNumber = '9a42d12f-8328-4545-8da3-11250f876146'
-  console.log("patientsController test running dossierNumber", dossierNumber)
-  const doctor = await testUtils.makeDoctor(dossierNumber)
-  //@TODO not displayed, why?
-  console.log("patientsController test running", doctor)
-  describe('create patient', function() {
+
+  describe('create patient', async function() {
+    const doctor = await testUtils.makeDoctor(dossierNumber)
     beforeEach(async function(done) {
       done()
     })
@@ -81,7 +79,8 @@ describe('patientsController', async function() {
     })
   })
 
-  describe('create patient input validation', function() {
+  describe('create patient input validation', async function() {
+    const doctor = await testUtils.makeDoctor(dossierNumber)
     let insertPatientStub;
 
     beforeEach(async function() {
@@ -97,7 +96,9 @@ describe('patientsController', async function() {
     })
 
     afterEach(async function() {
-      insertPatientStub.restore()
+      if(insertPatientStub) {
+        insertPatientStub.restore()
+      }
       return Promise.resolve()
     })
 
@@ -213,7 +214,8 @@ describe('patientsController', async function() {
     })
   })
 
-  describe('display update patient form', function() {
+  describe('display update patient form', async function() {
+    const doctor = await testUtils.makeDoctor(dossierNumber)
     beforeEach(async function(done) {
       done()
     })
@@ -288,7 +290,8 @@ describe('patientsController', async function() {
     })
   })
 
-  describe('update patient', function() {
+  describe('update patient', async function() {
+    const doctor = await testUtils.makeDoctor(dossierNumber)
     beforeEach(async function(done) {
       done()
     })
@@ -304,7 +307,6 @@ describe('patientsController', async function() {
         email: 'prenom.nom@beta.gouv.fr',
       }
       const patient = await testUtils.makePatient(psy.dossierNumber, doctor.id)
-
       return chai.request(app)
         .post('/psychologue/api/modifier-patient')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
@@ -402,7 +404,8 @@ describe('patientsController', async function() {
 
   })
 
-  describe('update patient input validation', function() {
+  describe('update patient input validation', async function() {
+    const doctor = await testUtils.makeDoctor(dossierNumber)
     let updatePatientStub;
 
     beforeEach(async function() {
@@ -411,7 +414,9 @@ describe('patientsController', async function() {
     })
 
     afterEach(async function() {
-      updatePatientStub.restore()
+      if(updatePatientStub) {
+        updatePatientStub.restore()
+      }
       return Promise.resolve()
     })
 
