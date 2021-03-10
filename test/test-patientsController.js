@@ -1,24 +1,20 @@
 /* eslint-disable func-names */
 const app = require('../index')
 const chai = require('chai')
+const { expect } = require('chai')
+const sinon = require('sinon')
 const clean = require('./helper/clean')
 const cookie = require('../utils/cookie')
 const dbPatients = require('../db/patients')
-const { expect } = require('chai')
-const sinon = require('sinon')
+const testUtils = require('./helper/utils')
 
-const doctorId = '9a42d12f-8328-4545-8da3-11250f876146'
-
-const makePatient = async (psychologistId) => {
-  // Insert an appointment and a patient
-  const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId, doctorId)
-  // Check patient is inserted
-  const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
-  chai.assert(!!createdPatient)
-  return patient
-}
-
-describe('patientsController', function() {
+describe('patientsController', async function() {
+  console.log("patientsController test running")
+  const dossierNumber = '9a42d12f-8328-4545-8da3-11250f876146'
+  console.log("patientsController test running dossierNumber", dossierNumber)
+  const doctor = await testUtils.makeDoctor(dossierNumber)
+  //@TODO not displayed, why?
+  console.log("patientsController test running", doctor)
   describe('create patient', function() {
     beforeEach(async function(done) {
       done()
@@ -31,7 +27,7 @@ describe('patientsController', function() {
 
     it('should create patient', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
 
@@ -44,7 +40,7 @@ describe('patientsController', function() {
           lastname: 'Lovelace',
           firstnames: 'Ada',
           ine: '12345678901',
-          doctorid: doctorId,
+          doctorid: doctor.id,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -58,7 +54,7 @@ describe('patientsController', function() {
 
     it('should not create patient if user is not logged in', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
 
@@ -71,7 +67,7 @@ describe('patientsController', function() {
           lastname: 'Lovelace',
           firstnames: 'Ada',
           ine: '12345678901',
-          doctorid: doctorId,
+          doctorid: doctor.id,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -94,7 +90,7 @@ describe('patientsController', function() {
           'firstnames': 'prenom',
           'lastname': 'nom',
           'ine': 'studentNumber',
-          'doctorid': doctorId,
+          'doctorid': doctor.id,
         }
         ]))
       return Promise.resolve()
@@ -107,7 +103,7 @@ describe('patientsController', function() {
 
     const shouldFailCreatePatientInputValidation = (done, postData) => {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
 
@@ -130,7 +126,7 @@ describe('patientsController', function() {
         // no firstnames
         'lastname': 'Nom',
         'ine': '1234567890A',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       })
     })
 
@@ -139,7 +135,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         // no lastname
         'ine': '1234567890A',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       })
     })
 
@@ -148,7 +144,7 @@ describe('patientsController', function() {
         'firstnames': '   ',
         'lastname': 'Nom',
         'ine': '1234567890A',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       })
     })
 
@@ -157,7 +153,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': '   ',
         'ine': '1234567890A',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       })
     })
 
@@ -166,7 +162,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890AA',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       })
     })
 
@@ -175,13 +171,13 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       })
     })
 
     const shouldPassCreatePatientInputValidation = (done, postData) => {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'valid@valid.org',
       }
 
@@ -203,7 +199,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890A',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       })
     })
 
@@ -212,7 +208,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       })
     })
   })
@@ -229,10 +225,10 @@ describe('patientsController', function() {
 
     it('should display form for my patient', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'valid@valid.org',
       }
-      const myPatient = await makePatient(psy.dossierNumber)
+      const myPatient = await testUtils.makePatient(psy.dossierNumber)
 
       return chai.request(app)
         .get('/psychologue/modifier-patient?patientid=' + myPatient.id)
@@ -252,11 +248,11 @@ describe('patientsController', function() {
 
     it('should not display form if it is not my patient', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'valid@valid.org',
       }
       const anotherPsyId = 'e43b8668-621d-40a7-86e0-c563b6b05509'
-      const notMyPatient = await makePatient(anotherPsyId)
+      const notMyPatient = await testUtils.makePatient(anotherPsyId)
 
       return chai.request(app)
         .get('/psychologue/modifier-patient?patientid=' + notMyPatient.id)
@@ -276,7 +272,7 @@ describe('patientsController', function() {
 
     it('should not display form if uuid is not valid', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'valid@valid.org',
       }
 
@@ -304,10 +300,10 @@ describe('patientsController', function() {
 
     it('should update patient', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
-      const patient = await makePatient(psy.dossierNumber)
+      const patient = await testUtils.makePatient(psy.dossierNumber)
 
       return chai.request(app)
         .post('/psychologue/api/modifier-patient')
@@ -319,7 +315,7 @@ describe('patientsController', function() {
           lastname: 'Lovelacekkk',
           firstnames: 'Adakkk',
           ine: '111222333rr',
-          doctorid: doctorId,
+          doctorid: doctor.id,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -337,11 +333,11 @@ describe('patientsController', function() {
 
     it('should not update patient if it is not mine', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = '495614e8-89af-4406-ba02-9fc038b991f9'
-      const patient = await makePatient(anotherPsyId)
+      const patient = await testUtils.makePatient(anotherPsyId)
 
       return chai.request(app)
         .post('/psychologue/api/modifier-patient')
@@ -353,7 +349,7 @@ describe('patientsController', function() {
           lastname: 'Lovelacekkk',
           firstnames: 'Adakkk',
           ine: '111222333SS',
-          doctorid: doctorId,
+          doctorid: doctor.id,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -372,10 +368,10 @@ describe('patientsController', function() {
 
     it('should not update patient if user is not logged in', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
-      const patient = await makePatient(psy.dossierNumber)
+      const patient = await testUtils.makePatient(psy.dossierNumber)
 
       return chai.request(app)
         .post('/psychologue/api/modifier-patient')
@@ -387,6 +383,7 @@ describe('patientsController', function() {
           lastname: 'Lovelacekkk',
           firstnames: 'Adakkk',
           ine: '111',
+          doctorid: doctor.id,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -420,7 +417,7 @@ describe('patientsController', function() {
 
     const shouldFailUpdatePatientInputValidation = (done, postData, expectedRedirectUrl) => {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'valid@valid.org',
       }
 
@@ -445,7 +442,7 @@ describe('patientsController', function() {
         // no firstnames
         'lastname': 'Nom',
         'ine': '1234567890A',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -457,12 +454,12 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         // no lastname
         'ine': '1234567890A',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
-    it('should refuse empty doctorid', function(done) {
+    it('should refuse empty doctor.id', function(done) {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdatePatientInputValidation(done, {
         'patientid': patientId,
@@ -474,7 +471,7 @@ describe('patientsController', function() {
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
-    it('should refuse invalid doctorid', function(done) {
+    it('should refuse invalid doctor.id', function(done) {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdatePatientInputValidation(done, {
         'patientid': patientId,
@@ -493,7 +490,7 @@ describe('patientsController', function() {
         'firstnames': '   ',
         'lastname': 'Nom',
         'ine': '1234567890A',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -505,7 +502,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': '   ',
         'ine': '1234567890A',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -517,7 +514,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890AA',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -529,7 +526,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -540,7 +537,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       },
       '/psychologue/mes-seances')
     })
@@ -551,14 +548,14 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890à',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       },
       '/psychologue/mes-seances')
     })
 
     const shouldPassUpdatePatientInputValidation = (done, postData) => {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'valid@valid.org',
       }
 
@@ -581,7 +578,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '1234567890A',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       })
     })
 
@@ -591,7 +588,7 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '',
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
       })
     })
   })

@@ -73,7 +73,7 @@ describe('DB Patients', () => {
         doctorId,
       )
       const updatedPatient = await dbPatients.getPatientById(oldPatient.id, psychologistId)
-      console.log("updatedPatient", updatedPatient)
+
       expect(updatedPatient.lastName).equal(newLastName)
       expect(updatedPatient.firstNames).equal(firstNames)
       expect(updatedPatient.INE).equal(studentNumber)

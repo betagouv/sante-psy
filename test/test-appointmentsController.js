@@ -2,13 +2,17 @@
 const app = require('../index')
 const chai = require('chai')
 const clean = require('./helper/clean')
+const testUtils = require('./helper/utils')
 const dbAppointments = require('../db/appointments')
 const dbPatients = require('../db/patients')
 const sinon = require('sinon')
 const cookie = require('../utils/cookie')
 const { expect } = require('chai')
 
-describe('appointmentsController', function() {
+describe('appointmentsController', async function() {
+  const dossierNumber = '9a42d12f-8328-4545-8da3-11250f876146'
+  const doctor = await testUtils.makeDoctor(dossierNumber)
+  const doctorId = doctor.id
   describe('create appointment', function() {
     beforeEach(async function(done) {
       done()
@@ -17,15 +21,16 @@ describe('appointmentsController', function() {
     afterEach(async function() {
       await clean.cleanAllPatients()
       await clean.cleanAllAppointments()
+      await clean.cleanDataDoctors()
       return Promise.resolve()
     })
 
     it('should create appointment', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
-      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber, doctorId)
 
       return chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
@@ -50,10 +55,10 @@ describe('appointmentsController', function() {
 
     it('should not create appointment if user not logged in', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
-      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber, doctorId)
 
       return chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
@@ -78,12 +83,14 @@ describe('appointmentsController', function() {
 
     it('should only display my patients in dropdown when creating appointment', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d'
-      const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
-      const patientForAnotherPsy = await dbPatients.insertPatient('Stevie', 'Wonder', '34567890123', anotherPsyId)
+      const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber, doctorId)
+      const patientForAnotherPsy = await dbPatients.insertPatient('Stevie', 'Wonder', '34567890123',
+        anotherPsyId,
+        doctorId)
 
       return chai.request(app)
         .get('/psychologue/nouvelle-seance')
@@ -154,7 +161,7 @@ describe('appointmentsController', function() {
 
     it('should refuse invalid date', function(done) {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
       chai.request(app)
@@ -194,7 +201,7 @@ describe('appointmentsController', function() {
 
     it('should ignore the date input and use the iso-date', function(done) {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
       chai.request(app)
@@ -228,7 +235,7 @@ describe('appointmentsController', function() {
 
     const makeAppointment = async (psychologistId) => {
       // Insert an appointment and a patient
-      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId)
+      const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId,doctorId)
       const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psychologistId)
       // Check appointment is inserted
       const appointmentArray = await dbAppointments.getAppointments(psychologistId)
@@ -238,7 +245,7 @@ describe('appointmentsController', function() {
 
     it('should delete appointment', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
 
@@ -264,7 +271,7 @@ describe('appointmentsController', function() {
 
     it('should not delete appointment if it is not mine', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = 'ccb6f32b-8c55-4322-8ecc-556e6900b4ea'
@@ -290,7 +297,7 @@ describe('appointmentsController', function() {
 
     it('should refuse invalid appointmentId', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
       const appointment = await makeAppointment(psy.dossierNumber)
@@ -316,7 +323,7 @@ describe('appointmentsController', function() {
 
     it('should not delete appointment if user not logged in', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
       const appointment = await makeAppointment(psy.dossierNumber)
@@ -342,7 +349,7 @@ describe('appointmentsController', function() {
 
     it('should refuse empty appointmentId', async function() {
       const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
       await makeAppointment(psy.dossierNumber)

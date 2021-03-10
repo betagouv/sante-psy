@@ -92,7 +92,8 @@ module.exports.editPatient = async (req, res) => {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    if( dbDoctors.checkDoctorIdExist(doctorId, psychologistId) ) {
+    const existDoctor = await dbDoctors.checkDoctorIdExist(doctorId)
+    if( existDoctor ) {
       await dbPatient.updatePatient(patientId, patientFirstNames, patientLastName, patientINE, psychologistId, doctorId)
       req.flash('info', `Le patient a bien été modifié.`)
     } else {
@@ -164,7 +165,8 @@ module.exports.createNewPatient = async (req, res) => {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    if( dbDoctors.checkDoctorIdExist(doctorId, psychologistId) ) {
+    const existDoctor = await dbDoctors.checkDoctorIdExist(doctorId)
+    if( existDoctor ) {
       await dbPatient.insertPatient(firstNames, lastName, INE, psychologistId, doctorId)
       let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
       if (!INE || INE.length === 0) {

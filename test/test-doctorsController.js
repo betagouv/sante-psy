@@ -2,12 +2,12 @@
 const app = require('../index')
 const chai = require('chai')
 const clean = require('./helper/clean')
+const testUtils = require('./helper/utils')
 const cookie = require('../utils/cookie')
 const dbDoctors = require('../db/doctors')
 const { expect } = require('chai')
 const sinon = require('sinon')
 
-const psychologistId = "34e6352f-bdd0-48ce-83de-8de71cad295b";
 const firstNames = "Sigmund"
 const lastName = "Freud"
 const address = "7 Rue Rose"
@@ -15,15 +15,11 @@ const city = "Bordeaux"
 const postalCode = "33300"
 const phone = "0600000000"
 
-const makeDoctor = async (psychologistId) => {
-  const doctor = await dbDoctors.insertDoctor(psychologistId, firstNames, lastName,address,city, postalCode, phone)
-  // Check doctor is inserted
-  const createdDoctor = await dbDoctors.getDoctorById(doctor.id, psychologistId)
-  chai.assert(!!createdDoctor)
-  return doctor
-}
-
 describe('doctorsController', function() {
+  const psy = {
+    dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+    email: 'prenom.nom@beta.gouv.fr',
+  }
   describe('create doctor', function() {
     beforeEach(async function(done) {
       done()
@@ -35,10 +31,6 @@ describe('doctorsController', function() {
     })
 
     it('should create doctor', async function() {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      }
 
       return chai.request(app)
         .post('/psychologue/api/creer-nouveau-medecin')
@@ -64,10 +56,6 @@ describe('doctorsController', function() {
     })
 
     it('should not create doctor if user is not logged in', async function() {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      }
 
       return chai.request(app)
         .post('/psychologue/api/creer-nouveau-medecin')
@@ -116,10 +104,6 @@ describe('doctorsController', function() {
     })
 
     const shouldFailCreateDoctorInputValidation = (done, postData) => {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      }
 
       chai.request(app)
         .post('/psychologue/api/creer-nouveau-medecin')
@@ -184,7 +168,7 @@ describe('doctorsController', function() {
         'phone': '0600000000',
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': '800009'
+        'postalcode': '800009'
       })
     })
 
@@ -195,7 +179,7 @@ describe('doctorsController', function() {
         'phone': '0600000000',
         'address': '6 rue du four',
         'city': 'Amiens',
-        'postalCode': 'ààààà',
+        'postalcode': 'ààààà',
       })
     })
 
@@ -256,7 +240,8 @@ describe('doctorsController', function() {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       }
-      const myDoctor = await makeDoctor(psy.dossierNumber)
+      const myDoctor = await testUtils.makeDoctor(psy.dossierNumber, firstNames, lastName,address,city,
+        postalCode, phone)
 
       return chai.request(app)
         .get('/psychologue/modifier-medecin?doctorid=' + myDoctor.id)
@@ -280,7 +265,7 @@ describe('doctorsController', function() {
         email: 'valid@valid.org',
       }
       const anotherPsyId = 'e43b8668-621d-40a7-86e0-c563b6b05509'
-      const notMyDoctor = await makeDoctor(anotherPsyId)
+      const notMyDoctor = await testUtils.makeDoctor(anotherPsyId, firstNames, lastName,address,city, postalCode, phone)
 
       return chai.request(app)
         .get('/psychologue/modifier-medecin?doctorid=' + notMyDoctor.id)
@@ -327,11 +312,7 @@ describe('doctorsController', function() {
     })
 
     it('should update doctor', async function() {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      }
-      const doctor = await makeDoctor(psy.dossierNumber)
+      const doctor = await testUtils.makeDoctor(psy.dossierNumber, firstNames, lastName,address,city, postalCode, phone)
       const updatedPostalCode = '30000'
       return chai.request(app)
         .post('/psychologue/api/modifier-medecin')
@@ -361,12 +342,8 @@ describe('doctorsController', function() {
     })
 
     it('should not update doctor if it is not mine', async function() {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      }
       const anotherPsyId = '495614e8-89af-4406-ba02-9fc038b991f9'
-      const doctor = await makeDoctor(anotherPsyId)
+      const doctor = await testUtils.makeDoctor(anotherPsyId, firstNames, lastName,address,city, postalCode, phone)
       const updatedPostalCode = '30000'
       return chai.request(app)
         .post('/psychologue/api/modifier-medecin')
@@ -382,13 +359,10 @@ describe('doctorsController', function() {
           postalcode: updatedPostalCode,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances')
+          res.should.redirectTo('/psychologue/modifier-medecin')
 
           // Doctor was not updated
-          const doctors = await dbDoctors.getDoctors()
-          console.log("doctors", doctors)
           const doctorsArray = await dbDoctors.getDoctorsByPsychologist(doctor.psychologistId)
-          console.log("doctorsArray", doctorsArray)
           expect(doctorsArray).to.have.length(1)
           expect(doctorsArray[0].psychologistId).to.equal(anotherPsyId)
           expect(doctorsArray[0].postalCode).to.equal(doctor.postalCode)
@@ -398,11 +372,7 @@ describe('doctorsController', function() {
     })
 
     it('should not update doctor if user is not logged in', async function() {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      }
-      const doctor = await makeDoctor(psy.dossierNumber)
+      const doctor = await testUtils.makeDoctor(psy.dossierNumber, firstNames, lastName,address,city, postalCode, phone)
 
       return chai.request(app)
         .post('/psychologue/api/modifier-medecin')
@@ -434,8 +404,9 @@ describe('doctorsController', function() {
 
   })
 
-  describe('update doctor input validation', function() {
+  describe('update doctor input validation', async function() {
     let updateDoctorStub;
+    const doctor = await testUtils.makeDoctor(psy.dossierNumber);
 
     beforeEach(async function() {
       updateDoctorStub = sinon.stub(dbDoctors, 'updateDoctor')
@@ -443,7 +414,9 @@ describe('doctorsController', function() {
     })
 
     afterEach(async function() {
-      updateDoctorStub.restore()
+      if(updateDoctorStub) {
+        updateDoctorStub.restore()
+      }
       return Promise.resolve()
     })
 
@@ -468,9 +441,8 @@ describe('doctorsController', function() {
     }
 
     it('should refuse empty firstnames', function(done) {
-      const doctorId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdateDoctorInputValidation(done, {
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
         // no firstnames
         'lastname': 'Nom',
         'phone': '0600000000',
@@ -478,26 +450,24 @@ describe('doctorsController', function() {
         'city': 'Amiens',
         'postalcode': '80000'
       },
-      '/psychologue/modifier-medecin?doctorid=' + doctorId)
+      '/psychologue/modifier-medecin?doctorid=' + doctor.id)
     })
 
     it('should refuse empty lastname', function(done) {
-      const doctorId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdateDoctorInputValidation(done, {
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
         'firstnames': 'Blou Blou',
         // no lastname
         'address': '6 rue du four',
         'city': 'Amiens',
         'postalcode': '80000'
       },
-      '/psychologue/modifier-medecin?doctorid=' + doctorId)
+      '/psychologue/modifier-medecin?doctorid=' + doctor.id)
     })
 
     it('should refuse whitespace firstnames', function(done) {
-      const doctorId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdateDoctorInputValidation(done, {
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
         'firstnames': '   ',
         'lastname': 'Nom',
         'phone': '0600000000',
@@ -505,44 +475,41 @@ describe('doctorsController', function() {
         'city': 'Amiens',
         'postalcode': '80000'
       },
-      '/psychologue/modifier-medecin?doctorid=' + doctorId)
+      '/psychologue/modifier-medecin?doctorid=' + doctor.id)
     })
 
     it('should refuse whitespace lastname', function(done) {
-      const doctorId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdateDoctorInputValidation(done, {
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
         'firstnames': 'Blou Blou',
         'lastname': '   ',
         'address': '6 rue du four',
         'city': 'Amiens',
         'postalcode': '80000'
       },
-      '/psychologue/modifier-medecin?doctorid=' + doctorId)
+      '/psychologue/modifier-medecin?doctorid=' + doctor.id)
     })
 
     it('should refuse ine with length not 11 chars', function(done) {
-      const doctorId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdateDoctorInputValidation(done, {
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'phone': '0600000000',
         'ine': '1234567890AA',
       },
-      '/psychologue/modifier-medecin?doctorid=' + doctorId)
+      '/psychologue/modifier-medecin?doctorid=' + doctor.id)
     })
 
     it('should refuse ine with non-aphanumeric chars', function(done) {
-      const doctorId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdateDoctorInputValidation(done, {
-        'doctorid': doctorId,
+        'doctorid': doctor.id,
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'phone': '0600000000',
         'ine': '1234567890à',
       },
-      '/psychologue/modifier-medecin?doctorid=' + doctorId)
+      '/psychologue/modifier-medecin?doctorid=' + doctor.id)
     })
 
     it('should refuse if no doctorid', function(done) {
@@ -590,7 +557,7 @@ describe('doctorsController', function() {
 
     it('should pass validation when all fields are correct', function(done) {
       shouldPassUpdateDoctorInputValidation(done, {
-        'doctorid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'doctorid': doctor.id,
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'phone': '0600000000',

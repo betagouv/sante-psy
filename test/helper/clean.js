@@ -103,5 +103,6 @@ module.exports.cleanAllAppointments = function() {
 }
 
 module.exports.cleanDataDoctors = function() {
+  console.debug("cleanDataDoctors")
   return knex(dbDoctors.doctorsTable).select('*').delete()
 }

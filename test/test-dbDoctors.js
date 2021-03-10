@@ -7,59 +7,55 @@ const knex = require("knex")(knexConfig);
 const clean = require('./helper/clean');
 
 describe('DB Doctors', () => {
-  const psychologistId = "34e6352f-bdd0-48ce-83de-8de71cad295b";
+  const psychologistId = "30e6352f-bdd0-48ce-83de-8de71cad295b";
   const firstNames = "Sigmund"
   const lastName = "Freud"
   const address = "7 Rue Rose"
-  const city = "Bordeaux"
+  const city = "bordeaux"
   const postalCode = "33300"
   const phone = "0600000000"
 
-  async function testDataDoctorsExist(lastName) {
-
-    const exist = await knex(dbDoctors.doctorsTable)
-      .where('lastName', lastName)
-      .first();
-    if(exist) {
-      return true;
-    }
-    return false;
-  }
-
-  //Clean up all data
-  afterEach(async function before() {
-    await clean.cleanDataDoctors(lastName);
+  beforeEach(async function before() {
+    await clean.cleanDataDoctors();
   })
 
   describe('insertDoctor', () => {
-    it('should INsert one patient in PG', async () => {
-      await dbDoctors.insertDoctor(psychologistId, firstNames, lastName, address, city, postalCode, phone);
+    it('should INsert one patient', async () => {
+      const d = await dbDoctors.insertDoctor(psychologistId, firstNames, lastName, address, city, postalCode, phone);
 
-      const exist = await testDataDoctorsExist(lastName);
-      exist.should.be.equal(true);
+      const exist = await dbDoctors.getDoctorById(d.id)
+      exist.firstNames.should.be.equal(firstNames);
+      exist.lastName.should.be.equal(lastName);
+      exist.address.should.be.equal(address);
+      exist.city.should.be.equal("Bordeaux");
+      exist.postalCode.should.be.equal(postalCode);
+      exist.phone.should.be.equal(phone);
     });
   });
 
   describe('updateDoctor', () => {
-    it('should Update one doctor in PG', async () => {
-      await dbDoctors.insertDoctor(psychologistId, firstNames, lastName, address, city, postalCode, phone);
+    it('should Update one doctor', async () => {
+      const d =  await dbDoctors.insertDoctor(psychologistId, firstNames, lastName, address, city, postalCode, phone);
+      const newLastName = "NewName";
 
-      const newLastName = "NewName"
-      const doctors = await dbDoctors.getDoctors()
-      const oldDoctor = doctors[0]
+      const beforeDoctor = await dbDoctors.getDoctorByIdAndPsyId(d.id, d.psychologistId)
+      console.log("beforeDoctor",beforeDoctor)
+      expect(beforeDoctor.lastName).equal(lastName)
 
       await dbDoctors.updateDoctor(
-        oldDoctor.id,
-        oldDoctor.psychologistId,
-        oldDoctor.firstNames,
+        d.id,
+        d.psychologistId,
+        d.firstNames,
         newLastName,
-        oldDoctor.address,
-        city,
-        postalCode,
-        phone,
+        d.address,
+        d.city,
+        d.postalCode,
+        d.phone,
       )
-      const newDoctor = await dbDoctors.getDoctorById(oldDoctor.id, psychologistId)
-      expect(newDoctor.lastName).equal(newLastName)
+
+      const updatedDoctor = await dbDoctors.getDoctorByIdAndPsyId(d.id, d.psychologistId)
+      console.log("updatedDoctor",updatedDoctor)
+      expect(updatedDoctor.lastName).equal(newLastName)
     });
   });
 });

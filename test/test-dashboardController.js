@@ -2,13 +2,17 @@
 const app = require('../index')
 const chai = require('chai')
 const clean = require('./helper/clean')
+const testUtils = require('./helper/utils')
 const cookie = require('../utils/cookie')
 const dbAppointments = require('../db/appointments')
 const dbPatients = require('../db/patients')
 const format = require('../utils/format')
 
-describe('dashboardController', function() {
-  describe('display dashaboard', function() {
+describe('dashboardController', async function() {
+  const dossierNumber = '9a42d12f-8328-4545-8da3-11250f876146'
+  const doctor = await testUtils.makeDoctor(dossierNumber)
+  const doctorId = doctor.id
+  describe('display dashboard', function() {
     beforeEach(async function(done) {
       done()
     })
@@ -25,8 +29,8 @@ describe('dashboardController', function() {
         email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d'
-      const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
-      const patientForAnotherPsy = await dbPatients.insertPatient('Stevie', 'Wonder', '34567890123', anotherPsyId)
+      const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber, doctorId)
+      const patientForAnotherPsy = await dbPatients.insertPatient('Stevie','Wonder','34567890123',anotherPsyId,doctorId)
 
       return chai.request(app)
         .get('/psychologue/mes-seances')
@@ -50,8 +54,8 @@ describe('dashboardController', function() {
         email: 'prenom.nom@beta.gouv.fr',
       }
       const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d'
-      const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber)
-      const patientForAnotherPsy = await dbPatients.insertPatient('Stevie', 'Wonder', '34567890123', anotherPsyId)
+      const myPatient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psy.dossierNumber, doctorId)
+      const patientForAnotherPsy = await dbPatients.insertPatient('Stevie','Wonder','34567890123',anotherPsyId,doctorId)
       const myAppointment =
         await dbAppointments.insertAppointment(new Date('2021-03-01'), myPatient.id, psy.dossierNumber)
       const appointmentForAnotherPsy =
