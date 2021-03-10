@@ -50,8 +50,8 @@ describe('patientsController', function() {
           firstnames: 'Ada',
           ine: '12345678901',
           institution: 'test',
-          isstudentstatusverified: false,
-          hasprescription: false,
+          isstudentstatusverified: undefined,
+          hasprescription: undefined,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -81,8 +81,8 @@ describe('patientsController', function() {
           firstnames: 'Ada',
           ine: '12345678901',
           institution: '42',
-          isstudentstatusverified: false,
-          hasprescription: false
+          isstudentstatusverified: undefined,
+          hasprescription: undefined
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -106,8 +106,8 @@ describe('patientsController', function() {
           'lastname': 'nom',
           'ine': 'studentNumber',
           'institution': '42',
-          'isstudentstatusverified': false,
-          'hasprescription': false}
+          'isStudentStatusVerified': false,
+          'hasPrescription': false}
         ]))
       return Promise.resolve()
     })
@@ -143,8 +143,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -154,8 +154,8 @@ describe('patientsController', function() {
         // no lastname
         'ine': '1234567890A',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -165,8 +165,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -176,8 +176,8 @@ describe('patientsController', function() {
         'lastname': '   ',
         'ine': '1234567890A',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -187,8 +187,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890AA',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -198,8 +198,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890à',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -228,8 +228,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -239,8 +239,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -250,8 +250,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '',
         'institution': '',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -401,8 +401,8 @@ describe('patientsController', function() {
           firstnames: 'Adakkk',
           ine: '111222333rr',
           institution: 'polytech',
-          isstudentstatusverified: true,
-          hasprescription: true
+          isstudentstatusverified: 'isstudentstatusverified',
+          hasprescription: 'hasprescription',
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -440,8 +440,8 @@ describe('patientsController', function() {
           firstnames: 'Adakkk',
           ine: '111222333SS',
           institution: 'Grande ecole',
-          isstudentstatusverified: true,
-          hasprescription: true
+          isstudentstatusverified: 'isstudentstatusverified',
+          hasprescription: 'hasprescription',
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -454,8 +454,8 @@ describe('patientsController', function() {
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames)
           expect(patientsArray[0].INE).to.equal(patient.INE)
           expect(patientsArray[0].institution).to.equal(patient.institution)
-          expect(patientsArray[0].isstudentstatusverified).to.equal(patient.isstudentstatusverified)
-          expect(patientsArray[0].hasprescription).to.equal(patient.hasprescription)
+          expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified)
+          expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription)
 
           return Promise.resolve()
         })
@@ -479,8 +479,8 @@ describe('patientsController', function() {
           firstnames: 'Adakkk',
           ine: '111',
           institution: 'Petite ecole',
-          isstudentstatusverified: true,
-          hasprescription: false
+          isstudentstatusverified: 'isstudentstatusverified',
+          hasprescription: 'hasprescription',
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -493,8 +493,8 @@ describe('patientsController', function() {
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames)
           expect(patientsArray[0].INE).to.equal(patient.INE)
           expect(patientsArray[0].institution).to.equal(patient.institution)
-          expect(patientsArray[0].isstudentstatusverified).to.equal(patient.isstudentstatusverified)
-          expect(patientsArray[0].hasprescription).to.equal(patient.hasprescription)
+          expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified)
+          expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription)
 
           return Promise.resolve()
         })
@@ -543,8 +543,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -557,8 +557,8 @@ describe('patientsController', function() {
         // no lastname
         'ine': '1234567890A',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -571,8 +571,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -585,8 +585,8 @@ describe('patientsController', function() {
         'lastname': '   ',
         'ine': '1234567890A',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -599,8 +599,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890AA',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -613,8 +613,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890à',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -626,8 +626,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890à',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/mes-seances')
     })
@@ -639,8 +639,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890à',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       },
       '/psychologue/mes-seances')
     })
@@ -671,8 +671,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
 
@@ -683,8 +683,8 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '',
         'institution': '42',
-        'isstudentstatusverified': false,
-        'hasprescription': false
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
       })
     })
   })
