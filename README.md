@@ -36,13 +36,13 @@ docker-compose down # ou docker-compose rm -f # removes already existing contain
 
 # Les recréer
 docker-compose up
-> (...) 
+> (...)
 web_1  | Creating ds_api_cursor table
 web_1  | Creating universities table
 web_1  | Creating patients table
 web_1  | Creating psychologists table
 web_1  | Creating appointments table
-Santé Psy Étudiants listening at http://localhost:8080   
+Santé Psy Étudiants listening at http://localhost:8080
 ```
 
 ### Les données
@@ -74,8 +74,21 @@ INSERT INTO public.psychologists
 VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli', 'firstname', 'lastname', 'publicemail@beta.gouv.fr', '', '', '', '', '', false, 'accfzfz', '', '[]', '', '', null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'private.email@beta.gouv.fr');
 ```
 
+Autre solution : utiliser le code Node au lieu de SQL.
+```
+scalingo -a APP_NAME run node
+```
+Puis une fois la console node ouverte :
+```
+const dbPsychologists = require('./db/psychologists')
+
+let psy = { 'dossierNumber': '77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli': 123, firstNames: 'Stevie', 'lastName': 'Wonder', 'email': 'meetwithstevie@wonder.com', archived: true, state: 'accepte', personalEmail: 'stevie@wonder.com'}
+
+dbPsychologists.savePsychologistInPG([psy])
+```
+
 ### Test
-Pour utiliser le container Postgresql 
+Pour utiliser le container Postgresql
 ```
 # Start DB and build SQL tables
 docker-compose -f docker-compose-only-db.yml up
@@ -129,7 +142,7 @@ Avec docker: ne pas préciser de MAIL_SERVICE, les bonnes variables d'environnem
 Tous les emails envoyés par le code seront visibles depuis l'interface web de Maildev :
 * http://localhost:1080/
 
-### Lint 
+### Lint
 ```
 npm run lint
 ```
