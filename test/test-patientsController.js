@@ -51,7 +51,7 @@ describe('patientsController', function() {
           ine: '12345678901',
           institution: 'test',
           isstudentstatusverified: false,
-          prescription: false,
+          hasprescription: false,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -82,7 +82,7 @@ describe('patientsController', function() {
           ine: '12345678901',
           institution: '42',
           isstudentstatusverified: false,
-          prescription: false
+          hasprescription: false
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -107,7 +107,7 @@ describe('patientsController', function() {
           'ine': 'studentNumber',
           'institution': '42',
           'isstudentstatusverified': false,
-          'prescription': false}
+          'hasprescription': false}
         ]))
       return Promise.resolve()
     })
@@ -144,7 +144,7 @@ describe('patientsController', function() {
         'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       })
     })
 
@@ -155,7 +155,7 @@ describe('patientsController', function() {
         'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       })
     })
 
@@ -166,7 +166,7 @@ describe('patientsController', function() {
         'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       })
     })
 
@@ -177,7 +177,7 @@ describe('patientsController', function() {
         'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       })
     })
 
@@ -188,7 +188,7 @@ describe('patientsController', function() {
         'ine': '1234567890AA',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       })
     })
 
@@ -199,7 +199,7 @@ describe('patientsController', function() {
         'ine': '1234567890à',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       })
     })
 
@@ -229,7 +229,7 @@ describe('patientsController', function() {
         'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       })
     })
 
@@ -240,7 +240,7 @@ describe('patientsController', function() {
         'ine': '',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       })
     })
 
@@ -251,7 +251,7 @@ describe('patientsController', function() {
         'ine': '',
         'institution': '',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       })
     })
   })
@@ -362,7 +362,7 @@ describe('patientsController', function() {
           ine: '111222333rr',
           institution: 'polytech',
           isstudentstatusverified: true,
-          prescription: true
+          hasprescription: true
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -401,7 +401,7 @@ describe('patientsController', function() {
           ine: '111222333SS',
           institution: 'Grande ecole',
           isstudentstatusverified: true,
-          prescription: true
+          hasprescription: true
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -415,7 +415,7 @@ describe('patientsController', function() {
           expect(patientsArray[0].INE).to.equal(patient.INE)
           expect(patientsArray[0].institution).to.equal(patient.institution)
           expect(patientsArray[0].isstudentstatusverified).to.equal(patient.isstudentstatusverified)
-          expect(patientsArray[0].prescription).to.equal(patient.prescription)
+          expect(patientsArray[0].hasprescription).to.equal(patient.hasprescription)
 
           return Promise.resolve()
         })
@@ -440,7 +440,7 @@ describe('patientsController', function() {
           ine: '111',
           institution: 'Petite ecole',
           isstudentstatusverified: true,
-          prescription: false
+          hasprescription: false
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -454,7 +454,7 @@ describe('patientsController', function() {
           expect(patientsArray[0].INE).to.equal(patient.INE)
           expect(patientsArray[0].institution).to.equal(patient.institution)
           expect(patientsArray[0].isstudentstatusverified).to.equal(patient.isstudentstatusverified)
-          expect(patientsArray[0].prescription).to.equal(patient.prescription)
+          expect(patientsArray[0].hasprescription).to.equal(patient.hasprescription)
 
           return Promise.resolve()
         })
@@ -504,7 +504,7 @@ describe('patientsController', function() {
         'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -518,7 +518,7 @@ describe('patientsController', function() {
         'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -532,7 +532,7 @@ describe('patientsController', function() {
         'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -546,7 +546,7 @@ describe('patientsController', function() {
         'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -560,7 +560,7 @@ describe('patientsController', function() {
         'ine': '1234567890AA',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -574,7 +574,7 @@ describe('patientsController', function() {
         'ine': '1234567890à',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -587,7 +587,7 @@ describe('patientsController', function() {
         'ine': '1234567890à',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       },
       '/psychologue/mes-seances')
     })
@@ -600,7 +600,7 @@ describe('patientsController', function() {
         'ine': '1234567890à',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       },
       '/psychologue/mes-seances')
     })
@@ -632,7 +632,7 @@ describe('patientsController', function() {
         'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       })
     })
 
@@ -644,7 +644,7 @@ describe('patientsController', function() {
         'ine': '',
         'institution': '42',
         'isstudentstatusverified': false,
-        'prescription': false
+        'hasprescription': false
       })
     })
   })
