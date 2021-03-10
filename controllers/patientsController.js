@@ -90,7 +90,6 @@ module.exports.editPatient = async (req, res) => {
   const patientIsStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
   const patientHasPrescription = Boolean(req.body['hasprescription'])
 
-
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     await dbPatient.updatePatient(
@@ -166,7 +165,7 @@ module.exports.createNewPatient = async (req, res) => {
   const institutionName = req.body['institution']
   // Force to boolean beacause checkbox value send undifined when it's not checked
   const isStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
-  const hasprescription = Boolean(req.body['hasprescription'])
+  const hasPrescription = Boolean(req.body['hasprescription'])
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
@@ -176,7 +175,7 @@ module.exports.createNewPatient = async (req, res) => {
       INE,
       institutionName,
       isStudentStatusVerified,
-      hasprescription,
+      hasPrescription,
       psychologistId)
     let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
     if (!INE || INE.length === 0) {
