@@ -48,7 +48,10 @@
           <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname">
         </div>
         <div class="rf-my-3w">
-          <label class="rf-label" for="institution">Établissement de l'étudiant</label>
+          <label class="rf-label" for="institution" aria-describedby="institution-help">Établissement scolaire de l'étudiant</label>
+          <div class="rf-hint-text" id="institution-help">
+            Exemple : Université de Rennes ou ENSAE
+          </div>
           <input class="rf-input midlength-input" value="<%= patient.institutionName %>"  type="text" id="institution" name="institution">
         </div>
         <div class="rf-my-3w">
