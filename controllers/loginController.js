@@ -60,7 +60,7 @@ module.exports.getLogin = async function getLogin(req, res) {
 
       if( dbToken !== undefined ) {
         const psychologistData = await dbPsychologists.getPsychologistByEmail(dbToken.email);
-        cookie.createAndSetJwtCookie(res, dbToken.email, psychologistData)
+        cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber)
         await dbLoginToken.delete(token);
         req.flash('info', `Vous êtes authentifié comme ${dbToken.email}`);
         return res.redirect(nextPage);

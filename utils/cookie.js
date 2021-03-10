@@ -17,8 +17,8 @@ const headers = {
 }
 module.exports.headers = headers
 
-module.exports.createAndSetJwtCookie = (res, email, psychologistData) => {
-  res.cookie('token', getJwtTokenForUser(email, psychologistData), headers);
+module.exports.createAndSetJwtCookie = (res, psychologistId) => {
+  res.cookie('token', getJwtTokenForUser(psychologistId), headers);
 }
 
 module.exports.clearJwtCookie = (res) => {
@@ -31,19 +31,17 @@ module.exports.clearJwtCookie = (res) => {
  * @param {*} id
  * @see https://www.ionos.fr/digitalguide/sites-internet/developpement-web/json-web-token-jwt/
  */
-const getJwtTokenForUser = function getJwtTokenForUser(email, psychologist) {
+const getJwtTokenForUser = function getJwtTokenForUser(psychologistId) {
   const duration = getSessionDuration();
 
   return jwt.sign(
     {
-      email : email,
-      psychologist : psychologist,
+      uuid : psychologistId,
     },
     config.secret,
     { expiresIn: duration }
   );
 };
-module.exports.getJwtTokenForUser = getJwtTokenForUser
 
 function getSessionDuration() {
   return config.sessionDurationHours + ' hours'
@@ -62,7 +60,6 @@ const verifyJwt = function verifyJwt(token) {
     return false;
   }
 }
-module.exports.verifyJwt = verifyJwt
 
 /**
  *  Get currently logged in psy's id
@@ -73,6 +70,6 @@ module.exports.getCurrentPsyId = (req) => {
   if (!tokenData) {
     throw new Error('JWT token invalid')
   }
-  const psyUuid = tokenData.psychologist.dossierNumber
+  const psyUuid = tokenData.uuid
   return psyUuid
 }
