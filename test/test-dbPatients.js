@@ -19,7 +19,6 @@ describe('DB Patients', () => {
     const exist = await knex(dbPatients.patientsTable)
       .where('lastName', lastName)
       .first();
-    console.log(exist)
     if(exist) {
       return true
     }
