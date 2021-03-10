@@ -35,7 +35,7 @@ module.exports.makePatient = async (psychologistId, doctorId) => {
   // Insert an appointment and a patient
   const patient = await dbPatients.insertPatient('Ada', 'Lovelace', '12345678901', psychologistId, doctorId)
   // Check patient is inserted
-  const createdPatient = await doctorId.getPatientById(patient.id, psychologistId)
+  const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
   chai.assert(!!createdPatient)
   return patient
 }

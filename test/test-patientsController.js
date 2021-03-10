@@ -228,7 +228,7 @@ describe('patientsController', async function() {
         dossierNumber: dossierNumber,
         email: 'valid@valid.org',
       }
-      const myPatient = await testUtils.makePatient(psy.dossierNumber)
+      const myPatient = await testUtils.makePatient(psy.dossierNumber, doctor.id)
 
       return chai.request(app)
         .get('/psychologue/modifier-patient?patientid=' + myPatient.id)
@@ -303,7 +303,7 @@ describe('patientsController', async function() {
         dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
-      const patient = await testUtils.makePatient(psy.dossierNumber)
+      const patient = await testUtils.makePatient(psy.dossierNumber, doctor.id)
 
       return chai.request(app)
         .post('/psychologue/api/modifier-patient')
@@ -371,7 +371,7 @@ describe('patientsController', async function() {
         dossierNumber: dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
       }
-      const patient = await testUtils.makePatient(psy.dossierNumber)
+      const patient = await testUtils.makePatient(psy.dossierNumber, doctor.id)
 
       return chai.request(app)
         .post('/psychologue/api/modifier-patient')
