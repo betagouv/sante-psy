@@ -44,7 +44,7 @@ describe('Import Data from DS to PG', () => {
     let saveLatestCursorStub = sinon.stub(dbDsApiCursor, 'saveLatestCursor')
     .returns(Promise.resolve());
 
-    await importDataFromDSToPG(false);
+    await importDataFromDSToPG();
 
     sinon.assert.called(getLatestCursorSavedStub);
     sinon.assert.called(getPsychologistListStub);
