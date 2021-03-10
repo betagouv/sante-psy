@@ -60,11 +60,11 @@
           <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine">
         </div>
         <div class="rf-my-3w rf-checkbox-group">
-          <input type="checkbox" id="isstudentstatusverified" name="isstudentstatusverified" value="<%= patient.isStudentStatusVerified %>" <% if(patient.isStudentStatusVerified){ %> checked="checked" <% } %> >
+          <input type="checkbox" id="isstudentstatusverified" name="isstudentstatusverified" value="isstudentstatusverified" <% if(patient.isStudentStatusVerified){ %> checked="checked" <% } %> >
           <label class="rf-label" for="isstudentstatusverified">l'étudiant a justifié son statut</label>
         </div>
         <div class="rf-my-3w rf-checkbox-group">
-          <input type="checkbox" id="prescription" name="prescription" value="<%= patient.hasPrescription %>" <% if(patient.hasPrescription){ %> checked="checked" <% } %> >
+          <input type="checkbox" id="prescription" name="prescription" value="hasprescription" <% if(patient.hasPrescription){ %> checked="checked" <% } %> >
           <label class="rf-label" for="prescription">l'étudiant a présenté l'ordonnance</label>
         </div>
       </div>
