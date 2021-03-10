@@ -19,7 +19,7 @@ module.exports.newPatient = async (req, res) => {
       lastName: '',
       INE: '',
       institutionName: '',
-      hasJustification: false,
+      isStudentStatusVerified: false,
       hasPrescription: false,
       id: '',
     }
@@ -95,7 +95,7 @@ module.exports.editPatient = async (req, res) => {
   const patientINE = req.body['ine']
   const patientInstitutionName = req.body['institution']
   // Force to boolean beacause checkbox value send undifined when it's not checked
-  const patientHasJustification = Boolean(req.body['justification'])
+  const patientIsStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
   const patientHasPrescription = Boolean(req.body['prescription'])
 
 
@@ -107,7 +107,7 @@ module.exports.editPatient = async (req, res) => {
       patientLastName,
       patientINE,
       patientInstitutionName,
-      patientHasJustification,
+      patientIsStudentStatusVerified,
       patientHasPrescription,
       psychologistId
     )
@@ -173,7 +173,7 @@ module.exports.createNewPatient = async (req, res) => {
   const INE = req.body['ine']
   const institutionName = req.body['institution']
   // Force to boolean beacause checkbox value send undifined when it's not checked
-  const justification = Boolean(req.body['justification'])
+  const isStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
   const prescription = Boolean(req.body['prescription'])
 
   try {
@@ -183,7 +183,7 @@ module.exports.createNewPatient = async (req, res) => {
       lastName,
       INE,
       institutionName,
-      justification,
+      isStudentStatusVerified,
       prescription,
       psychologistId)
     let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`

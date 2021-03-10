@@ -50,7 +50,7 @@ describe('patientsController', function() {
           firstnames: 'Ada',
           ine: '12345678901',
           institution: 'test',
-          justification: false,
+          isstudentstatusverified: false,
           prescription: false,
         })
         .then(async (res) => {
@@ -81,7 +81,7 @@ describe('patientsController', function() {
           firstnames: 'Ada',
           ine: '12345678901',
           institution: '42',
-          justification: false,
+          isstudentstatusverified: false,
           prescription: false
         })
         .then(async (res) => {
@@ -106,7 +106,7 @@ describe('patientsController', function() {
           'lastname': 'nom',
           'ine': 'studentNumber',
           'institution': '42',
-          'justification': false,
+          'isstudentstatusverified': false,
           'prescription': false}
         ]))
       return Promise.resolve()
@@ -143,7 +143,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       })
     })
@@ -154,7 +154,7 @@ describe('patientsController', function() {
         // no lastname
         'ine': '1234567890A',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       })
     })
@@ -165,7 +165,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       })
     })
@@ -176,7 +176,7 @@ describe('patientsController', function() {
         'lastname': '   ',
         'ine': '1234567890A',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       })
     })
@@ -187,7 +187,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890AA',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       })
     })
@@ -198,7 +198,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890à',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       })
     })
@@ -228,7 +228,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       })
     })
@@ -239,7 +239,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       })
     })
@@ -250,7 +250,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '',
         'institution': '',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       })
     })
@@ -361,7 +361,7 @@ describe('patientsController', function() {
           firstnames: 'Adakkk',
           ine: '111222333rr',
           institution: 'polytech',
-          justification: true,
+          isstudentstatusverified: true,
           prescription: true
         })
         .then(async (res) => {
@@ -374,7 +374,7 @@ describe('patientsController', function() {
           expect(patientsArray[0].firstNames).to.equal('Adakkk')
           expect(patientsArray[0].INE).to.equal('111222333rr')
           expect(patientsArray[0].institutionName).to.equal('polytech')
-          expect(patientsArray[0].hasJustification).to.equal(true)
+          expect(patientsArray[0].isStudentStatusVerified).to.equal(true)
           expect(patientsArray[0].hasPrescription).to.equal(true)
 
           return Promise.resolve()
@@ -400,7 +400,7 @@ describe('patientsController', function() {
           firstnames: 'Adakkk',
           ine: '111222333SS',
           institution: 'Grande ecole',
-          justification: true,
+          isstudentstatusverified: true,
           prescription: true
         })
         .then(async (res) => {
@@ -414,7 +414,7 @@ describe('patientsController', function() {
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames)
           expect(patientsArray[0].INE).to.equal(patient.INE)
           expect(patientsArray[0].institution).to.equal(patient.institution)
-          expect(patientsArray[0].justification).to.equal(patient.justification)
+          expect(patientsArray[0].isstudentstatusverified).to.equal(patient.isstudentstatusverified)
           expect(patientsArray[0].prescription).to.equal(patient.prescription)
 
           return Promise.resolve()
@@ -439,7 +439,7 @@ describe('patientsController', function() {
           firstnames: 'Adakkk',
           ine: '111',
           institution: 'Petite ecole',
-          justification: true,
+          isstudentstatusverified: true,
           prescription: false
         })
         .then(async (res) => {
@@ -453,7 +453,7 @@ describe('patientsController', function() {
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames)
           expect(patientsArray[0].INE).to.equal(patient.INE)
           expect(patientsArray[0].institution).to.equal(patient.institution)
-          expect(patientsArray[0].justification).to.equal(patient.justification)
+          expect(patientsArray[0].isstudentstatusverified).to.equal(patient.isstudentstatusverified)
           expect(patientsArray[0].prescription).to.equal(patient.prescription)
 
           return Promise.resolve()
@@ -503,7 +503,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
@@ -517,7 +517,7 @@ describe('patientsController', function() {
         // no lastname
         'ine': '1234567890A',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
@@ -531,7 +531,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
@@ -545,7 +545,7 @@ describe('patientsController', function() {
         'lastname': '   ',
         'ine': '1234567890A',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
@@ -559,7 +559,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890AA',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
@@ -573,7 +573,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890à',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
@@ -586,7 +586,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890à',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       },
       '/psychologue/mes-seances')
@@ -599,7 +599,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890à',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       },
       '/psychologue/mes-seances')
@@ -631,7 +631,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '1234567890A',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       })
     })
@@ -643,7 +643,7 @@ describe('patientsController', function() {
         'lastname': 'Nom',
         'ine': '',
         'institution': '42',
-        'justification': false,
+        'isstudentstatusverified': false,
         'prescription': false
       })
     })

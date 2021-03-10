@@ -4,7 +4,7 @@ const dbPatients = require('../db/patients')
 exports.up = function(knex) {
   return knex.schema.table(dbPatients.patientsTable, function (table) {
     table.text('institutionName');
-    table.boolean('hasJustification');
+    table.boolean('isStudentStatusVerified');
     table.boolean('hasPrescription');
   })
 };
@@ -12,7 +12,7 @@ exports.up = function(knex) {
 exports.down = function(knex) {
   return knex.schema.table(dbPatients.patientsTable, function (table) {
     table.dropColumn('institutionName');
-    table.dropColumn('hasJustification');
+    table.dropColumn('isStudentStatusVerified');
     table.dropColumn('hasPrescription');
   })
 };

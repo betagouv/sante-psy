@@ -11,7 +11,7 @@ describe('DB Patients', () => {
   const lastName = "Potter"
   const studentNumber = "12345678901"
   const institutionName = "Pouldard"
-  const hasJustification = false
+  const isStudentStatusVerified = false
   const hasPrescription = false
 
   async function testDataPatientsExist(lastName) {
@@ -39,7 +39,7 @@ describe('DB Patients', () => {
         lastName,
         studentNumber,
         institutionName,
-        hasJustification,
+        isStudentStatusVerified,
         hasPrescription,
         psychologistId
       );
@@ -56,7 +56,7 @@ describe('DB Patients', () => {
           lastName,
           "11111111111111111",
           institutionName,
-          hasJustification,
+          isStudentStatusVerified,
           hasPrescription,
           psychologistId
         );
@@ -83,7 +83,7 @@ describe('DB Patients', () => {
         lastName,
         studentNumber,
         institutionName,
-        hasJustification,
+        isStudentStatusVerified,
         hasPrescription,
         psychologistId
       );
@@ -98,7 +98,7 @@ describe('DB Patients', () => {
         newLastName,
         oldPatient.studentNumber,
         oldPatient.institutionName,
-        oldPatient.hasJustification,
+        oldPatient.isStudentStatusVerified,
         oldPatient.hasPrescription,
         psychologistId,
       )

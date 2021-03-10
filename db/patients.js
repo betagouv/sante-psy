@@ -34,7 +34,7 @@ module.exports.insertPatient = async (
   lastName,
   INE,
   institutionName,
-  hasJustification,
+  isStudentStatusVerified,
   hasPrescription,
   psychologistId) => {
   try {
@@ -43,7 +43,7 @@ module.exports.insertPatient = async (
       lastName,
       INE,
       institutionName,
-      hasJustification,
+      isStudentStatusVerified,
       hasPrescription,
       psychologistId,
     }).returning('*')
@@ -55,7 +55,7 @@ module.exports.insertPatient = async (
 }
 
 module.exports.updatePatient = async (
-  id, firstNames, lastName, INE, institutionName, hasJustification, hasPrescription, psychologistId) => {
+  id, firstNames, lastName, INE, institutionName, isStudentStatusVerified, hasPrescription, psychologistId) => {
   try {
     await knex(module.exports.patientsTable)
       .where("id", id)
@@ -65,7 +65,7 @@ module.exports.updatePatient = async (
         lastName,
         INE,
         institutionName,
-        hasJustification,
+        isStudentStatusVerified,
         hasPrescription,
         psychologistId,
       })
