@@ -102,7 +102,13 @@ module.exports.editPatient = async (req, res) => {
       patientHasPrescription,
       psychologistId
     )
-    req.flash('info', `Le patient a bien été modifié.`)
+    let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`
+    console.log('fields', patientINE, patientInstitutionName, patientHasPrescription, patientIsStudentStatusVerified)
+    if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified ) {
+      infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
+        ' en cliquant le bouton "Modifier" du patient.'
+    }
+    req.flash('info', infoMessage)
     return res.redirect('/psychologue/mes-seances')
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'est pas modifié. Pourriez-vous réessayer ?')
@@ -178,8 +184,10 @@ module.exports.createNewPatient = async (req, res) => {
       hasPrescription,
       psychologistId)
     let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
-    if (!INE || INE.length === 0) {
-      infoMessage += ' Vous pourrez renseigner son numero INE plus tard.'
+    console.log('fields', INE, institutionName, hasPrescription, isStudentStatusVerified)
+    if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified ) {
+      infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
+        ' en cliquant le bouton "Modifier" du patient.'
     }
     req.flash('info', infoMessage)
     return res.redirect('/psychologue/mes-seances')
