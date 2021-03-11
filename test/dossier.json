@@ -44,7 +44,7 @@
             {
               "id": "Q2hhbXAtMTY2MDM0Nw==",
               "label": "Langues parlées (optionnel)",
-              "value": "Français ,Anglais, et Espagnol"
+              "stringValue": "Français ,Anglais, et Espagnol"
             },
             {
               "id": "Q2hhbXAtMTYyNzk0NA==",
@@ -117,7 +117,7 @@
             {
               "id": "Q2hhbXAtMTY2MDM0Nw==",
               "label": "Langues parlées (optionnel)",
-              "value": "Français ,Anglais, et Espagnol"
+              "stringValue": "Français ,Anglais, et Espagnol"
             },
             {
               "id": "Q2hhbXAtMTYzMDQxNg==",

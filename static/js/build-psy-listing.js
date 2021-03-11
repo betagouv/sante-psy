@@ -62,6 +62,7 @@ var table = new Tabulator("#psy-table", {
     {title:"📞", field:"phone", sorter:"string", responsive:0, formatter: "link", formatterParams:{labelField:"phone",urlPrefix:"tel:"}},
     {title:"Email", field:"email", sorter:"string", responsive:0, formatter:"link", formatterParams:{labelField:"email",urlPrefix:"mailto://"}},
     {title:"Téléconsultation", field:"teleconsultation",  headerTooltip: "Téléconsultation", responsive:0,sorter:"string", hozAlign:"center",tooltip: "Est ce que le psychologue accepte la téléconsultation ?", formatter:"tickCross"},
+    {title:"Langues parlées", field:"languages", responsive:0,sorter:"string", hozAlign:"center", formatter:"textarea"},
     {title:"Site web", field:"website", sorter:"string", maxWidth:200, responsive:0, formatter:"link", formatterParams:{labelField:"website",target:"_blank", url: addPrefixToUrl}},
   ],
   headerFilterPlaceholder:"Rechercher un psychologue" // http://tabulator.info/docs/4.9/filter#header

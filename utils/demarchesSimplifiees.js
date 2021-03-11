@@ -4,8 +4,8 @@ const config = require('./config');
 
 /**
  * helper function called by getPsychologistList
- * @param {*} cursor 
- * @param {*} accumulator 
+ * @param {*} cursor
+ * @param {*} accumulator
  */
 async function getAllPsychologistList(cursor, accumulator = []) {
   const apiResponse = await graphql.requestPsychologist(cursor);
@@ -28,7 +28,7 @@ async function getAllPsychologistList(cursor, accumulator = []) {
 
 /**
  * get all psychologist from DS API
- * 
+ *
  * DS API return 100 elements maximum
  * if we have more than 100 elements in DS, we have to use pagination (cursor)
  * cursor : String - next page to query the API
@@ -76,7 +76,7 @@ function getChampValue(champData, attributeName, stringValue = true) {
 
 /**
  * transform string to boolean
- * @param {*} inputString 'true' or 'false' 
+ * @param {*} inputString 'true' or 'false'
  */
 function parseTeleconsultation(inputString) {
   return inputString === 'true';
@@ -122,7 +122,7 @@ function parseDossierMetadata(dossier) {
   );
   const adeli = getChampValue(dossier.champs, 'Numéro Adeli')
   const diploma = getChampValue(dossier.champs, 'Intitulé ou spécialité de votre master de psychologie')
-  const languages = getChampValue(dossier.champs, 'Langues parlées (optionnel)', false);
+  const languages = getChampValue(dossier.champs, 'Langues parlées (optionnel)');
 
   const psy = {
     dossierNumber,
