@@ -32,7 +32,11 @@ describe('dashboardController', function() {
         '42',
         false,
         false,
-        psy.dossierNumber)
+        psy.dossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        '05 00 00 00 00',
+      )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
         'Wonder',
@@ -40,7 +44,11 @@ describe('dashboardController', function() {
         'Universal',
         false,
         true,
-        anotherPsyId)
+        anotherPsyId,
+        'Dr Docteur',
+        'adresse du docteur',
+        '05 00 00 00 00',
+      )
 
       return chai.request(app)
         .get('/psychologue/mes-seances')
@@ -71,7 +79,11 @@ describe('dashboardController', function() {
         '42',
         false,
         false,
-        psy.dossierNumber)
+        psy.dossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        '05 00 00 00 00',
+      )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
         'Wonder',
@@ -79,7 +91,11 @@ describe('dashboardController', function() {
         'Universal',
         false,
         true,
-        anotherPsyId)
+        anotherPsyId,
+        'Dr Docteur',
+        'adresse du docteur',
+        '05 00 00 00 00',
+      )
       const myAppointment =
         await dbAppointments.insertAppointment(new Date('2021-03-01'), myPatient.id, psy.dossierNumber)
       const appointmentForAnotherPsy =

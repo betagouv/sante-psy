@@ -7,6 +7,10 @@ const dbPatients = require('../db/patients')
 const { expect } = require('chai')
 const sinon = require('sinon')
 
+const doctorName = "doctorName"
+const doctorAddress = "doctorAddress"
+const doctorPhone = "0600000000"
+
 const makePatient = async (psychologistId) => {
   // Insert an appointment and a patient
   const patient = await dbPatients.insertPatient(
@@ -16,7 +20,11 @@ const makePatient = async (psychologistId) => {
     '42',
     false,
     false,
-    psychologistId)
+    psychologistId,
+    doctorName,
+    doctorAddress,
+    doctorPhone
+  )
   // Check patient is inserted
   const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
   chai.assert(!!createdPatient)
@@ -52,6 +60,9 @@ describe('patientsController', function() {
           institution: 'test',
           isstudentstatusverified: undefined,
           hasprescription: undefined,
+          doctorname: doctorName,
+          doctoraddress :doctorAddress,
+          doctorphone: doctorPhone,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -82,7 +93,10 @@ describe('patientsController', function() {
           ine: '12345678901',
           institution: '42',
           isstudentstatusverified: undefined,
-          hasprescription: undefined
+          hasprescription: undefined,
+          doctorname: doctorName,
+          doctoraddress :doctorAddress,
+          doctorphone: doctorPhone,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -107,7 +121,11 @@ describe('patientsController', function() {
           'ine': 'studentNumber',
           'institution': '42',
           'isStudentStatusVerified': false,
-          'hasPrescription': false}
+          'hasPrescription': false,
+          'doctorname': doctorName,
+          'doctoraddress' :doctorAddress,
+          'doctorphone': doctorPhone,
+        }
         ]))
       return Promise.resolve()
     })
@@ -145,6 +163,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       })
     })
 
@@ -156,6 +177,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       })
     })
 
@@ -167,6 +191,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       })
     })
 
@@ -178,6 +205,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       })
     })
 
@@ -189,6 +219,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       })
     })
 
@@ -200,6 +233,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       })
     })
 
@@ -230,6 +266,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       })
     })
 
@@ -241,6 +280,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       })
     })
 
@@ -252,6 +294,9 @@ describe('patientsController', function() {
         'institution': '',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       })
     })
 
@@ -266,7 +311,10 @@ describe('patientsController', function() {
         'ine': '',
         'institution': 'stuff<script>evil</script>',
         'isstudentstatusverified': undefined,
-        'hasprescription': undefined
+        'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       }
 
       chai.request(app)
@@ -325,6 +373,9 @@ describe('patientsController', function() {
           chai.assert.include(res.text, myPatient.lastName)
           chai.assert.include(res.text, myPatient.id)
           chai.assert.include(res.text, myPatient.institutionName)
+          chai.assert.include(res.text, myPatient.doctorName)
+          chai.assert.include(res.text, myPatient.doctorAddress)
+          chai.assert.include(res.text, myPatient.doctorPhone)
 
           return Promise.resolve()
         })
@@ -403,6 +454,7 @@ describe('patientsController', function() {
           institution: 'polytech',
           isstudentstatusverified: 'isstudentstatusverified',
           hasprescription: 'hasprescription',
+          doctorname: doctorName,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -442,6 +494,9 @@ describe('patientsController', function() {
           institution: 'Grande ecole',
           isstudentstatusverified: 'isstudentstatusverified',
           hasprescription: 'hasprescription',
+          'doctorname': doctorName,
+          'doctoraddress' :doctorAddress,
+          'doctorphone': doctorPhone,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -481,6 +536,7 @@ describe('patientsController', function() {
           institution: 'Petite ecole',
           isstudentstatusverified: 'isstudentstatusverified',
           hasprescription: 'hasprescription',
+          doctorphone: doctorPhone,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -545,6 +601,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -559,6 +618,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -573,6 +635,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -587,6 +652,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -601,6 +669,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -615,6 +686,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -628,6 +702,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       },
       '/psychologue/mes-seances')
     })
@@ -641,6 +718,9 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       },
       '/psychologue/mes-seances')
     })
@@ -673,10 +753,28 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       })
     })
 
     it('should pass validation when INE is missing', function(done) {
+      shouldPassUpdatePatientInputValidation(done, {
+        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
+      })
+    })
+
+    it('should pass validation if doctor name, phone and address are missing', function(done) {
       shouldPassUpdatePatientInputValidation(done, {
         'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
         'firstnames': 'Blou Blou',
