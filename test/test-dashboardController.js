@@ -35,7 +35,8 @@ describe('dashboardController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00')
+        '05 00 00 00 00',
+      )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
         'Wonder',
@@ -46,7 +47,7 @@ describe('dashboardController', function() {
         anotherPsyId,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00'
+        '05 00 00 00 00',
       )
 
       return chai.request(app)
@@ -81,7 +82,8 @@ describe('dashboardController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00')
+        '05 00 00 00 00',
+      )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
         'Wonder',
@@ -92,7 +94,8 @@ describe('dashboardController', function() {
         anotherPsyId,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00')
+        '05 00 00 00 00',
+      )
       const myAppointment =
         await dbAppointments.insertAppointment(new Date('2021-03-01'), myPatient.id, psy.dossierNumber)
       const appointmentForAnotherPsy =

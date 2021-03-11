@@ -725,22 +725,6 @@ describe('patientsController', function() {
       '/psychologue/mes-seances')
     })
 
-    it('should refuse if doctorName is missing', function(done) {
-      shouldFailUpdatePatientInputValidation(done, {
-        'patientid': 'not-a-valid-uuid',
-        'firstnames': 'Blou Blou',
-        'lastname': 'Nom',
-        'ine': '1234567890à',
-        'institution': '42',
-        'isstudentstatusverified': undefined,
-        'hasprescription': undefined,
-        'doctorname': '',
-        'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
-      },
-      '/psychologue/mes-seances')
-    })
-
     const shouldPassUpdatePatientInputValidation = (done, postData) => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
@@ -790,7 +774,7 @@ describe('patientsController', function() {
       })
     })
 
-    it('should pass validation if doctor phone and address are missing', function(done) {
+    it('should pass validation if doctor name, phone and address are missing', function(done) {
       shouldPassUpdatePatientInputValidation(done, {
         'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
         'firstnames': 'Blou Blou',
@@ -799,7 +783,6 @@ describe('patientsController', function() {
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
-        'doctorname': doctorName,
       })
     })
   })

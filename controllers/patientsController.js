@@ -44,12 +44,6 @@ const patientValidators = [
       return req.sanitize(value)
     })
     .withMessage('Vous devez spécifier le nom du patient.'),
-  check('doctorname')
-    .trim().not().isEmpty()
-    .customSanitizer((value, { req }) => {
-      return req.sanitize(value)
-    })
-    .withMessage('Vous devez spécifier le nom du médecin.'),
   oneOf(
     [
       // Two valid possibilities : ine is empty, or ine is valid format.
@@ -75,6 +69,11 @@ const patientValidators = [
       return req.sanitize(value)
     }),
   check('doctorphone')
+    .trim()
+    .customSanitizer((value, { req }) => {
+      return req.sanitize(value)
+    }),
+  check('doctorname')
     .trim()
     .customSanitizer((value, { req }) => {
       return req.sanitize(value)
@@ -128,7 +127,8 @@ module.exports.editPatient = async (req, res) => {
       doctorPhone,
     )
     let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`
-    if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified ) {
+    if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified ||
+      !doctorAddress || !doctorPhone) {
       infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
         ' en cliquant le bouton "Modifier" du patient.'
     }
@@ -214,7 +214,7 @@ module.exports.createNewPatient = async (req, res) => {
       doctorPhone,
     )
     let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
-    if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified ) {
+    if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress || !doctorPhone ) {
       infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
         ' en cliquant le bouton "Modifier" du patient.'
     }

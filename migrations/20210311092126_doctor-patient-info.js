@@ -3,7 +3,7 @@ const dbPatients = require('../db/patients')
 
 exports.up = function(knex) {
   return knex.schema.table(dbPatients.patientsTable, function (table) {
-    table.text('doctorName').notNullable()
+    table.text('doctorName')
     table.text('doctorAddress')
     table.string('doctorPhone')
   })
