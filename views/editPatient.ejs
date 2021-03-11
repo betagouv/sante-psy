@@ -44,11 +44,11 @@
       <div>
         <div class="rf-my-3w">
           <label class="rf-label" for="firstnames">Prénoms <span class="red-text">*</span></label>
-          <input class="rf-input midlength-input" value="<%= patient.firstNames %>" type="text" id="firstnames" name="firstnames">
+          <input class="rf-input midlength-input" value="<%= patient.firstNames %>" type="text" id="firstnames" name="firstnames" required>
         </div>
         <div class="rf-my-3w">
           <label class="rf-label" for="lastname">Nom <span class="red-text">*</span></label>
-          <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname">
+          <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname" required>
         </div>
         <div class="rf-my-3w">
           <label class="rf-label" for="institution" aria-describedby="institution-help">Établissement scolaire de l'étudiant</label>
@@ -63,7 +63,7 @@
           <div class="rf-hint-text" id="ine-help">
             Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant.
           </div>
-          <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine">
+          <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine" maxlength="11" size="11">
         </div>
         <div class="rf-my-3w rf-checkbox-group">
           <input type="checkbox" id="isstudentstatusverified" name="isstudentstatusverified" value="isstudentstatusverified" <% if(patient.isStudentStatusVerified){ %> checked="checked" <% } %> >
