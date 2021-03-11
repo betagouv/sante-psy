@@ -41,6 +41,12 @@ const patientValidators = [
       return req.sanitize(value)
     })
     .withMessage('Vous devez spécifier le nom du patient.'),
+  check('doctorname')
+    .trim().not().isEmpty()
+    .customSanitizer((value, { req }) => {
+      return req.sanitize(value)
+    })
+    .withMessage('Vous devez spécifier le nom du médecin.'),
   oneOf(
     [
       // Two valid possibilities : ine is empty, or ine is valid format.
@@ -54,6 +60,32 @@ const patientValidators = [
     ],
     `Le numéro INE doit faire 11 caractères (chiffres ou lettres).
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
+  ),
+  oneOf(
+    [
+      // Two valid possibilities : ine is empty, or ine is valid format.
+      check('doctoraddress').trim().isEmpty(),
+      check('doctoraddress')
+        .trim().not().isEmpty()
+        .customSanitizer((value, { req }) => {
+          return req.sanitize(value)
+        })
+    ],
+    `L'adresse du médecin n'est pas valide.
+     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
+  ),
+  oneOf(
+    [
+      // Two valid possibilities : ine is empty, or ine is valid format.
+      check('doctorphone').trim().isEmpty(),
+      check('doctorphone')
+        .trim().not().isEmpty()
+        .customSanitizer((value, { req }) => {
+          return req.sanitize(value)
+        })
+    ],
+    `Le téléphone du médecin n'est pas valide.
+     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
   ),
   check('institution')
     .trim()
@@ -86,6 +118,9 @@ module.exports.editPatient = async (req, res) => {
   const patientLastName = req.body['lastname']
   const patientINE = req.body['ine']
   const patientInstitutionName = req.body['institution']
+  const doctorName = req.body['doctorname']
+  const doctorAddress = req.body['doctoraddress']
+  const doctorPhone = req.body['doctorphone']
   // Force to boolean beacause checkbox value send undefined when it's not checked
   const patientIsStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
   const patientHasPrescription = Boolean(req.body['hasprescription'])
@@ -100,7 +135,10 @@ module.exports.editPatient = async (req, res) => {
       patientInstitutionName,
       patientIsStudentStatusVerified,
       patientHasPrescription,
-      psychologistId
+      psychologistId,
+      doctorName,
+      doctorAddress,
+      doctorPhone,
     )
     let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`
     if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified ) {
@@ -168,6 +206,9 @@ module.exports.createNewPatient = async (req, res) => {
   const lastName = req.body['lastname']
   const INE = req.body['ine']
   const institutionName = req.body['institution']
+  const doctorName = req.body['doctorname']
+  const doctorAddress = req.body['doctoraddress']
+  const doctorPhone = req.body['doctorphone']
   // Force to boolean beacause checkbox value send undefined when it's not checked
   const isStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
   const hasPrescription = Boolean(req.body['hasprescription'])
@@ -181,7 +222,11 @@ module.exports.createNewPatient = async (req, res) => {
       institutionName,
       isStudentStatusVerified,
       hasPrescription,
-      psychologistId)
+      psychologistId,
+      doctorName,
+      doctorAddress,
+      doctorPhone,
+    )
     let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
     if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified ) {
       infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +

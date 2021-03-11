@@ -13,6 +13,9 @@ describe('DB Patients', () => {
   const institutionName = "Pouldard"
   const isStudentStatusVerified = false
   const hasPrescription = false
+  const doctorName = "doctorName"
+  const doctorAddress = "doctorAddress"
+  const doctorPhone = "0600000000"
 
   async function testDataPatientsExist(lastName) {
 
@@ -40,7 +43,10 @@ describe('DB Patients', () => {
         institutionName,
         isStudentStatusVerified,
         hasPrescription,
-        psychologistId
+        psychologistId,
+        doctorName,
+        doctorAddress,
+        doctorPhone,
       );
 
       const exist = await testDataPatientsExist(lastName);
@@ -57,7 +63,10 @@ describe('DB Patients', () => {
           institutionName,
           isStudentStatusVerified,
           hasPrescription,
-          psychologistId
+          psychologistId,
+          doctorName,
+          doctorAddress,
+          doctorPhone,
         );
         assert.fail("insert patient should have failed");
       } catch( error ) {
@@ -84,7 +93,10 @@ describe('DB Patients', () => {
         institutionName,
         isStudentStatusVerified,
         hasPrescription,
-        psychologistId
+        psychologistId,
+        doctorName,
+        doctorAddress,
+        doctorPhone,
       );
 
       const newLastName = "NewName"
@@ -100,6 +112,9 @@ describe('DB Patients', () => {
         oldPatient.isStudentStatusVerified,
         oldPatient.hasPrescription,
         psychologistId,
+        doctorName,
+        doctorAddress,
+        doctorPhone,
       )
       const newPatient = await dbPatients.getPatientById(oldPatient.id, psychologistId)
       expect(newPatient.lastName).equal(newLastName)
