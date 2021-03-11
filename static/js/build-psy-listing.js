@@ -1,8 +1,8 @@
 function findFilterForField(fieldName) {
   var filters = table.getFilters();
-  for (var i = 0; i < filter.length; i ++) {
+  for (var i = 0; i < filters.length; i ++) {
     if (filters[i].field === fieldName) {
-      return filter;
+      return filters[i];
     }
   }
   return undefined;
