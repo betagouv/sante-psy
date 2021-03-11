@@ -14,6 +14,7 @@ const jobs = [{
   cronTime: "0 */3 * * *", // every 3 hours
   onTick: cronDemarchesSimplifiees.importEveryDataFromDSToPG,
   start: true,
+  runOnInit: true,
   timeZone: "Europe/Paris",
   isActive: config.featureImportData,
   name: "Import ALL data from DS API to PG",
