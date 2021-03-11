@@ -13,6 +13,14 @@ setupFilter("departement");
 var psyListElement = document.getElementById("psy-list");
 var psyList = JSON.parse(psyListElement.textContent);
 
+var addPrefixToUrl = (urlCell) => {
+  const url = urlCell.getValue()
+  if (!url.startsWith('http')) {
+    return '//' + url
+  }
+  return url
+}
+
 var table = new Tabulator("#psy-table", {
   data: psyList, //assign data to table
   langs:{ // http://tabulator.info/docs/4.2/localize#setup
@@ -55,7 +63,7 @@ var table = new Tabulator("#psy-table", {
     {title:"Email", field:"email", sorter:"string", responsive:0, formatter:"link", formatterParams:{labelField:"email",urlPrefix:"mailto://"}},
     {title:"Téléconsultation", field:"teleconsultation",  headerTooltip: "Téléconsultation", responsive:0,sorter:"string", hozAlign:"center",tooltip: "Est ce que le psychologue accepte la téléconsultation ?", formatter:"tickCross"},
     {title:"Langues parlées", field:"languages", responsive:0,sorter:"string", hozAlign:"center", formatter:"textarea"},
-    {title:"Site web", field:"website", sorter:"string", maxWidth:200, responsive:0, formatter:"link", formatterParams:{labelField:"website",target:"_blank"}},
+    {title:"Site web", field:"website", sorter:"string", maxWidth:200, responsive:0, formatter:"link", formatterParams:{labelField:"website",target:"_blank", url: addPrefixToUrl}},
   ],
   headerFilterPlaceholder:"Rechercher un psychologue" // http://tabulator.info/docs/4.9/filter#header
 });
