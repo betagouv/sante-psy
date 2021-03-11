@@ -1,22 +1,24 @@
 function findFilterForField(fieldName) {
-  // todo no fancy JS
-  var filters = table.getFilters()
-  return filters.find(filter => {
-    return filter.field === fieldName
-  })
+  var filters = table.getFilters();
+  for (var i = 0; i < filter.length; i ++) {
+    if (filters[i].field === fieldName) {
+      return filter;
+    }
+  }
+  return undefined;
 }
 
 function upsertFilterForField(fieldName, newValue) {
-  var filter = findFilterForField(fieldName)
+  var filter = findFilterForField(fieldName);
 
   if (!filter) {
     // New filter : this is the first input into search field by user
-    table.addFilter(fieldName, 'like', newValue)
-    return
+    table.addFilter(fieldName, 'like', newValue);
+    return;
   }
   // Existing filter : update it
-  table.removeFilter(fieldName, 'like', filter.value)
-  table.addFilter(fieldName, 'like', newValue)
+  table.removeFilter(fieldName, 'like', filter.value);
+  table.addFilter(fieldName, 'like', newValue);
 }
 
 var setupFilter = function(fieldName) {
