@@ -22,6 +22,9 @@ module.exports.newPatient = async (req, res) => {
       isStudentStatusVerified: false,
       hasPrescription: false,
       id: '',
+      doctorName: '',
+      doctorAddress: '',
+      doctorPhone: '',
     }
   })
 }
@@ -61,33 +64,17 @@ const patientValidators = [
     `Le numéro INE doit faire 11 caractères (chiffres ou lettres).
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
   ),
-  oneOf(
-    [
-      // Two valid possibilities : ine is empty, or ine is valid format.
-      check('doctoraddress').trim().isEmpty(),
-      check('doctoraddress')
-        .trim().not().isEmpty()
-        .customSanitizer((value, { req }) => {
-          return req.sanitize(value)
-        })
-    ],
-    `L'adresse du médecin n'est pas valide.
-     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
-  ),
-  oneOf(
-    [
-      // Two valid possibilities : ine is empty, or ine is valid format.
-      check('doctorphone').trim().isEmpty(),
-      check('doctorphone')
-        .trim().not().isEmpty()
-        .customSanitizer((value, { req }) => {
-          return req.sanitize(value)
-        })
-    ],
-    `Le téléphone du médecin n'est pas valide.
-     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
-  ),
   check('institution')
+    .trim()
+    .customSanitizer((value, { req }) => {
+      return req.sanitize(value)
+    }),
+  check('doctoraddress')
+    .trim()
+    .customSanitizer((value, { req }) => {
+      return req.sanitize(value)
+    }),
+  check('doctorphone')
     .trim()
     .customSanitizer((value, { req }) => {
       return req.sanitize(value)
@@ -201,7 +188,6 @@ module.exports.createNewPatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
     return res.redirect('/psychologue/nouveau-patient')
   }
-
   const firstNames = req.body['firstnames']
   const lastName = req.body['lastname']
   const INE = req.body['ine']
