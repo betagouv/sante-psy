@@ -7,6 +7,10 @@ const dbPatients = require('../db/patients')
 const { expect } = require('chai')
 const sinon = require('sinon')
 
+const doctorName = "doctorName"
+const doctorAddress = "doctorAddress"
+const doctorPhone = "0600000000"
+
 const makePatient = async (psychologistId) => {
   // Insert an appointment and a patient
   const patient = await dbPatients.insertPatient(
@@ -16,7 +20,11 @@ const makePatient = async (psychologistId) => {
     '42',
     false,
     false,
-    psychologistId)
+    psychologistId,
+    doctorName,
+    doctorAddress,
+    doctorPhone
+  )
   // Check patient is inserted
   const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
   chai.assert(!!createdPatient)
@@ -24,9 +32,6 @@ const makePatient = async (psychologistId) => {
 }
 
 describe('patientsController', function() {
-  const doctorName = "doctorName"
-  const doctorAddress = "doctorAddress"
-  const doctorPhone = "0600000000"
   describe('create patient', function() {
     beforeEach(async function(done) {
       done()
@@ -306,11 +311,11 @@ describe('patientsController', function() {
         'ine': '',
         'institution': 'stuff<script>evil</script>',
         'isstudentstatusverified': undefined,
-        'hasprescription': undefined
+        'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'doctorphone': doctorPhone,
       }
-      const doctorName = "doctorName"
-      const doctorAddress = "doctorAddress"
-      const doctorPhone = "0600000000"
 
       chai.request(app)
         .post('/psychologue/api/creer-nouveau-patient')
@@ -368,6 +373,9 @@ describe('patientsController', function() {
           chai.assert.include(res.text, myPatient.lastName)
           chai.assert.include(res.text, myPatient.id)
           chai.assert.include(res.text, myPatient.institutionName)
+          chai.assert.include(res.text, myPatient.doctorName)
+          chai.assert.include(res.text, myPatient.doctorAddress)
+          chai.assert.include(res.text, myPatient.doctorPhone)
 
           return Promise.resolve()
         })
@@ -486,7 +494,9 @@ describe('patientsController', function() {
           institution: 'Grande ecole',
           isstudentstatusverified: 'isstudentstatusverified',
           hasprescription: 'hasprescription',
-          doctoraddress :doctorAddress,
+          'doctorname': doctorName,
+          'doctoraddress' :doctorAddress,
+          'doctorphone': doctorPhone,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
