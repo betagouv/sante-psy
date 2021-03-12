@@ -9,7 +9,7 @@ const uuid = require('../../utils/uuid');
 
 
 
-module.exports.testDossierNumber = function getTestDossierNumber(random) {
+module.exports.testDossierNumber = function getTestDossierNumber(random = Math.random().toString()) {
   return uuid.generateUuidFromString(random);
 }
 

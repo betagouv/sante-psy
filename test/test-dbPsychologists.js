@@ -7,12 +7,9 @@ const knex = require("knex")(knexConfig);
 const clean = require('./helper/clean');
 
 describe('DB Psychologists', () => {
-  const dossierNumber = clean.testDossierNumber();
-  let psyList;
+  let psyList = clean.psyList();
 
-  async function testDataPsychologistsExist() {
-    console.log("dossierNumber", dossierNumber);
-
+  async function testDataPsychologistsExist(dossierNumber) {
     const exist = await knex(dbPsychologists.psychologistsTable)
       .where('dossierNumber', dossierNumber)
       .first();
@@ -22,7 +19,6 @@ describe('DB Psychologists', () => {
 
   //Clean up all data
   beforeEach(async function before() {
-    psyList = clean.psyList();
     await clean.cleanAllPsychologists();
   })
 
@@ -30,7 +26,7 @@ describe('DB Psychologists', () => {
     it('should INsert one psychologist in PG', async () => {
       await dbPsychologists.savePsychologistInPG(psyList);
 
-      const psy = await testDataPsychologistsExist();
+      const psy = await testDataPsychologistsExist(psyList[0].dossierNumber);
       const exist = (psy !== undefined)
       exist.should.be.equal(true);
     });
@@ -38,12 +34,12 @@ describe('DB Psychologists', () => {
     it('should UPsert one psychologist in PG', async () => {
       //doing a classic insert
       await dbPsychologists.savePsychologistInPG(psyList);
-      const psyInsert = await testDataPsychologistsExist();
+      const psyInsert = await testDataPsychologistsExist(psyList[0].dossierNumber);
       assert.isNull(psyInsert.updatedAt);
 
       // we do it twice in a row to UPsert it (field updatedAt will change)
       await dbPsychologists.savePsychologistInPG(psyList);
-      const psyUpsert = await testDataPsychologistsExist();
+      const psyUpsert = await testDataPsychologistsExist(psyList[0].dossierNumber);
       assert.isNotNull(psyUpsert.updatedAt);
     });
   });
