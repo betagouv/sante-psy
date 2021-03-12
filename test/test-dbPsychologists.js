@@ -137,7 +137,7 @@ describe('DB Psychologists', () => {
       psy.personalEmail.should.be.equal(psyList[0].personalEmail);
     });
 
-    it("should return a psy if we enter a known login email in construction or instruction", async () => {
+    it("should return a psy if we enter a known login email en_instruction", async () => {
       psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.en_instruction;
       await dbPsychologists.savePsychologistInPG(psyList);
       const psy = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psyList[0].personalEmail);
