@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const graphql = require('../utils/graphql');
 const uuid = require('../utils/uuid');
 const config = require('./config');

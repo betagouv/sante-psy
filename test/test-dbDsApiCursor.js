@@ -1,9 +1,6 @@
 const assert = require('chai').assert;
 require('dotenv').config();
-const knexConfig = require("../knexfile");
-const knex = require("knex")(knexConfig);
 const dbDsApiCursor = require('../db/dsApiCursor')
-const date = require('../utils/date');
 const clean = require('./helper/clean');
 
 describe('DB Ds Api Cursor', () => {
