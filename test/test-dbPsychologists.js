@@ -107,7 +107,7 @@ describe('DB Psychologists', () => {
       const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
       assert(undefined === unknownPsy);
     });
-    it("should return undefined if known email but not accepte state", async () => {
+    it("should return undefined if known email but en_construction state", async () => {
       psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.en_construction;
       await dbPsychologists.savePsychologistInPG(psyList);
       const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
