@@ -1,6 +1,7 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const date = require("../utils/date")
+const demarchesSimplifiees = require("../utils/demarchesSimplifiees")
 
 module.exports.psychologistsTable =  "psychologists";
 
@@ -23,7 +24,7 @@ module.exports.getPsychologists = async () => {
         .select()
         .from(module.exports.psychologistsTable)
         .whereNot('archived', true)
-        .where('state', 'accepte');
+        .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte);
     return psychologists;
   } catch (err) {
     console.error(`Impossible de récupérer les psychologistes`, err)
@@ -91,17 +92,31 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
  * Only return accepted psychologist
  * @param {*} email
  */
-module.exports.getPsychologistByEmail = async function getPsychologistByEmail(email) {
+module.exports.getAcceptedPsychologistByEmail = async function getAcceptedPsychologistByEmail(email) {
   return await knex(module.exports.psychologistsTable)
-  .where('personalEmail', email)
-  .where('state', 'accepte')
+  .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
+  .andWhere('personalEmail', email)
+  .first()
+}
+
+/**
+ * used to send email to not yet accepted users, instead of nothing
+ * it can be tricky if there are multiple dossiers for the same personal emails
+ */
+module.exports.getNotYetAcceptedPsychologistByEmail = async function getNotYetAcceptedPsychologistByEmail(email) {
+  return await knex(module.exports.psychologistsTable)
+  .where(function groupWhereOrTogether() {
+    this.where('state', demarchesSimplifiees.DOSSIER_STATE.en_construction)
+      .orWhere('state', demarchesSimplifiees.DOSSIER_STATE.en_instruction)
+  })
+  .andWhere('personalEmail', email)
   .first();
 }
 
 module.exports.countAcceptedPsychologistsByPersonalEmail = async () => {
   return await knex(module.exports.psychologistsTable)
     .select('personalEmail', 'state')
-    .where('state', 'accepte')
+    .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
     .count('*')
     .groupBy('personalEmail', 'state');
 }

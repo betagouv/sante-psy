@@ -81,21 +81,22 @@ describe('loginController', async function() {
     describe('getLogin', () => {
       let getByTokenStub;
       let deleteTokenStub;
-      let getPsychologistByEmailStub;
+      let getAcceptedPsychologistByEmailStub;
       beforeEach(async function() {
         deleteTokenStub = sinon.stub(dbLoginToken, 'delete')
           .returns(Promise.resolve());
 
-        getPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getPsychologistByEmail')
+        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
           .returns(Promise.resolve({
-            email: email
+            email: email,
+            state: 'accepte',
           }));
       })
 
       afterEach(function(done) {
         getByTokenStub.restore();
         deleteTokenStub.restore();
-        getPsychologistByEmailStub.restore();
+        getAcceptedPsychologistByEmailStub.restore();
         done();
       })
 
@@ -114,7 +115,7 @@ describe('loginController', async function() {
         .end((err, res) => {
           sinon.assert.called(getByTokenStub)
           sinon.assert.called(deleteTokenStub)
-          sinon.assert.called(getPsychologistByEmailStub)
+          sinon.assert.called(getAcceptedPsychologistByEmailStub)
           res.should.have.cookie('token');
           res.should.redirectTo('/psychologue/mes-seances')
           done();
@@ -131,7 +132,7 @@ describe('loginController', async function() {
         .end((err, res) => {
           sinon.assert.called(getByTokenStub)
           sinon.assert.notCalled(deleteTokenStub)
-          sinon.assert.notCalled(getPsychologistByEmailStub)
+          sinon.assert.notCalled(getAcceptedPsychologistByEmailStub)
           res.should.not.have.cookie('token');
           done();
         })
@@ -140,17 +141,13 @@ describe('loginController', async function() {
 
     describe('postLogin', () => {
       let insertTokenStub;
-      let getPsychologistByEmailStub;
+      let getAcceptedPsychologistByEmailStub;
+      let getNotYetAcceptedPsychologistStub;
       let sendMailStub;
 
       beforeEach(async function() {
         insertTokenStub = sinon.stub(dbLoginToken, 'insert')
           .returns(Promise.resolve());
-
-        getPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getPsychologistByEmail')
-          .returns(Promise.resolve({
-            email: email
-          }));
 
         sendMailStub = sinon.stub(emailUtils, 'sendMail')
           .returns(Promise.resolve());
@@ -158,12 +155,21 @@ describe('loginController', async function() {
 
       afterEach(function(done) {
         insertTokenStub.restore();
-        getPsychologistByEmailStub.restore();
+        getAcceptedPsychologistByEmailStub.restore();
         sendMailStub.restore();
+        if( getNotYetAcceptedPsychologistStub ) {
+          getNotYetAcceptedPsychologistStub.restore();
+        }
         done();
       })
 
       it('send a login email', function(done) {
+        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+        .returns(Promise.resolve({
+          email: email,
+          state: 'accepte',
+        }));
+
         chai.request(app)
         .get(`/psychologue/login`)
         .end(function(err, res){
@@ -178,7 +184,7 @@ describe('loginController', async function() {
             '_csrf': _csrf,
           })
           .end((err, res) => {
-            sinon.assert.called(getPsychologistByEmailStub);
+            sinon.assert.called(getAcceptedPsychologistByEmailStub);
             sinon.assert.called(sendMailStub);
             sinon.assert.called(insertTokenStub);
             done();
@@ -186,7 +192,76 @@ describe('loginController', async function() {
         });
       });
 
+      it('send a not accepted yet email', function(done) {
+        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+        .returns(Promise.resolve(undefined));
+
+        getNotYetAcceptedPsychologistStub = sinon.stub(dbPsychologists, 'getNotYetAcceptedPsychologistByEmail')
+        .returns(Promise.resolve({
+          email: email,
+          state: 'en_construction',
+        }));
+
+        chai.request(app)
+        .get(`/psychologue/login`)
+        .end(function(err, res){
+          _csrf = testUtils.getCsrfTokenHtml(res);
+          cookies = testUtils.getCsrfTokenCookie(res);
+          chai.request(app)
+          .post('/psychologue/login')
+          .type('form')
+          .set('cookie',cookies)
+          .send({
+            'email': 'prenom.nom@beta.gouv.fr',
+            '_csrf': _csrf,
+          })
+          .end((err, res) => {
+            sinon.assert.called(getAcceptedPsychologistByEmailStub);
+            sinon.assert.called(getNotYetAcceptedPsychologistStub);
+            sinon.assert.called(sendMailStub);
+            sinon.assert.notCalled(insertTokenStub);
+            done();
+          })
+        });
+      });
+
+      it('send no email if unknowned email or refuse or sans suite', function(done) {
+        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+        .returns(Promise.resolve(undefined));
+
+        getNotYetAcceptedPsychologistStub = sinon.stub(dbPsychologists, 'getNotYetAcceptedPsychologistByEmail')
+        .returns(Promise.resolve());
+
+        chai.request(app)
+        .get(`/psychologue/login`)
+        .end(function(err, res){
+          _csrf = testUtils.getCsrfTokenHtml(res);
+          cookies = testUtils.getCsrfTokenCookie(res);
+          chai.request(app)
+          .post('/psychologue/login')
+          .type('form')
+          .set('cookie',cookies)
+          .send({
+            'email': 'prenom.nom@beta.gouv.fr',
+            '_csrf': _csrf,
+          })
+          .end((err, res) => {
+            sinon.assert.called(getAcceptedPsychologistByEmailStub);
+            sinon.assert.called(getNotYetAcceptedPsychologistStub);
+            sinon.assert.notCalled(sendMailStub);
+            sinon.assert.notCalled(insertTokenStub);
+            done();
+          })
+        });
+      });
+
       it('should refuse login if csrf token is invalid', function(done) {
+        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+        .returns(Promise.resolve({
+          email: email,
+          state: 'accepte',
+        }));
+
         chai.request(app)
         .get(`/psychologue/login`)
         .end(function(err, res){
@@ -202,11 +277,11 @@ describe('loginController', async function() {
           })
           .end((err, res) => {
             if( config.useCSRF ) {
-              sinon.assert.notCalled(getPsychologistByEmailStub);
+              sinon.assert.notCalled(getAcceptedPsychologistByEmailStub);
               sinon.assert.notCalled(sendMailStub);
               sinon.assert.notCalled(insertTokenStub);
             } else {
-              sinon.assert.called(getPsychologistByEmailStub);
+              sinon.assert.called(getAcceptedPsychologistByEmailStub);
               sinon.assert.called(sendMailStub);
               sinon.assert.called(insertTokenStub);
             }
@@ -216,6 +291,12 @@ describe('loginController', async function() {
       });
 
       it('should say that email is invalid', function(done) {
+        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+        .returns(Promise.resolve({
+          email: email,
+          state: 'accepte',
+        }));
+
         chai.request(app)
         .get(`/psychologue/login`)
         .end(function(err, res){
@@ -232,7 +313,7 @@ describe('loginController', async function() {
           })
           .redirects(0)
           .end((err, res) => {
-            sinon.assert.notCalled(getPsychologistByEmailStub);
+            sinon.assert.notCalled(getAcceptedPsychologistByEmailStub);
             sinon.assert.notCalled(sendMailStub);
             sinon.assert.notCalled(insertTokenStub);
             res.should.redirectTo('/psychologue/login');

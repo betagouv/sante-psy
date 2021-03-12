@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const { check } = require('express-validator');
 const validation = require('../utils/validation')
+const demarchesSimplifiees = require('../utils/demarchesSimplifiees')
 const dbPsychologists = require('../db/psychologists');
 const dbLoginToken = require('../db/loginToken');
 const date = require('../utils/date');
@@ -8,6 +9,7 @@ const cookie = require('../utils/cookie');
 const emailUtils = require('../utils/email');
 const ejs = require('ejs');
 const config = require('../utils/config');
+const { demarchesSimplifieesId } = require('../utils/config');
 
 module.exports.emailValidators = [
   check('email')
@@ -36,10 +38,21 @@ async function getEmailContent(loginUrl, token, isAcceptedEmail) {
   }
 }
 
-async function sendLoginEmail(email, loginUrl, token, isAcceptedEmail = false) {
-
+async function sendLoginEmail(email, loginUrl, token) {
   try {
+    const isAcceptedEmail = true;
     const html = await getEmailContent(loginUrl, token, isAcceptedEmail);
+    await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
+  } catch (err) {
+    console.error(err);
+    throw new Error("Erreur d'envoi de mail");
+  }
+}
+
+async function sendNotYetAcceptedEmail(email, loginUrl, token) {
+  try {
+    const isNotYetAcceptedEmail = false;
+    const html = await getEmailContent(loginUrl, token, isNotYetAcceptedEmail);
     await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
   } catch (err) {
     console.error(err);
@@ -73,7 +86,7 @@ module.exports.getLogin = async function getLogin(req, res) {
       const dbToken = await dbLoginToken.getByToken(token);
 
       if( dbToken !== undefined ) {
-        const psychologistData = await dbPsychologists.getPsychologistByEmail(dbToken.email);
+        const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
         cookie.createAndSetJwtCookie(res, dbToken.email, psychologistData)
         await dbLoginToken.delete(token);
         req.flash('info', `Vous êtes authentifié comme ${dbToken.email}`);
@@ -98,6 +111,7 @@ function generateLoginUrl() {
   return config.hostnameWithProtocol + '/psychologue/login';
 }
 
+
 /**
  * Send a email with a login link if the email is already registered
  */
@@ -108,16 +122,19 @@ module.exports.postLogin = async function postLogin(req, res) {
   const email = req.body.email;
 
   try {
-    const emailExist = await dbPsychologists.getPsychologistByEmail(email);
-
-    if( emailExist ) {
+    const acceptedEmailExist = await dbPsychologists.getAcceptedPsychologistByEmail(email);
+    if( acceptedEmailExist ) {
       const token = generateToken();
       const loginUrl = generateLoginUrl();
       await sendLoginEmail(email, loginUrl, token);
       await saveToken(email, token);
     } else {
-      console.warn(`Email inconnu qui essaye d'accéder au service - ${email} -\
-      il est peut être en attente de validation`);
+      const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(email);
+      if( notYetAcceptedEmailExist ) {
+        await sendNotYetAcceptedEmail(email);
+      } else {
+        console.warn(`Email inconnu - ou sans suite ou refusé - qui essaye d'accéder au service - ${email}`);
+      }
     }
 
     req.flash('info',
