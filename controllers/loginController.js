@@ -12,7 +12,6 @@ const config = require('../utils/config');
 module.exports.emailValidators = [
   check('email')
     .isEmail()
-    .normalizeEmail() //sanitize input
     .withMessage('Vous devez spécifier un email valide.'),
 ]
 
@@ -92,15 +91,21 @@ module.exports.postLogin = async function postLogin(req, res) {
     return res.redirect('/psychologue/login');
   }
   const email = req.body.email;
+  console.log('email', email)
 
   try {
     const emailExist = await dbPsychologists.getPsychologistByEmail(email);
+//    console.log('emailExist', emailExist)
 
     if( emailExist ) {
       const token = generateToken();
+//      console.log('token', token)
       const loginUrl = generateLoginUrl();
+ //     console.log('loginUrl', loginUrl)
       await sendLoginEmail(email, loginUrl, token);
+   //   console.log('sent mail')
       await saveToken(email, token);
+     // console.log('token saved')
     } else {
       console.warn(`Email inconnu qui essaye d'accéder au service - ${email} -\
       il est peut être en attente de validation`);
