@@ -26,8 +26,8 @@ module.exports.psyListFromDS = function psyListFromDS() {
       address: 'SSR CL AL SOLA 66110 MONTBOLO',
       diploma: "Psychologie clinique de la santé",
       phone: '0468396600',
-      email: 'psychologue.test@beta.gouv.fr',
-      personalEmail: 'loginemail@beta.gouv.fr',
+      email: 'psychologue.TEST@beta.gouv.fr', // emails can have uppercase in DS
+      personalEmail: 'loginEmail@beta.gouv.fr', // emails can have uppercase in DS
       website: 'apas82.mssante.fr',
       teleconsultation: true,
       description: "description",
