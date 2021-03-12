@@ -114,7 +114,7 @@ function parseDossierMetadata(dossier) {
   const archived = dossier.archived;
   const lastName = dossier.demandeur.nom;
   const firstNames = dossier.demandeur.prenom;
-  const personalEmail = dossier.usager.email;
+  const personalEmail = dossier.usager.email.toLowerCase(); // DS login emails should already be lowercase
   const dossierNumber = getUuidDossierNumber(dossier.number);
   const region = dossier.groupeInstructeur.label;
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
@@ -124,7 +124,7 @@ function parseDossierMetadata(dossier) {
     getChampValue(dossier.champs, 'Proposez-vous de la téléconsultation ?')
   );
   const website =  getChampValue(dossier.champs, 'Site web professionnel (optionnel)');
-  const email =  getChampValue(dossier.champs, 'Email de contact');
+  const email =  getChampValue(dossier.champs, 'Email de contact').toLowerCase();
   const description =  getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
 
   // @TODO comma separated values not reliable
