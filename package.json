@@ -11,6 +11,7 @@
     "dev": "nodemon index.js",
     "devKnex": "DEBUG=knex:query nodemon index.js",
     "lint": "eslint . --fix",
+    "seed": "knex seed:run",
     "listMigrations": "knex migrate:list",
     "migrate": "knex migrate:latest",
     "migrate-one": "knex migrate:up",
