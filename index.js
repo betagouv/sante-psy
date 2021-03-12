@@ -14,7 +14,6 @@ const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
 
 const config = require('./utils/config');
-const cookie = require('./utils/cookie')
 const format = require('./utils/format');
 
 const appName = config.appName;

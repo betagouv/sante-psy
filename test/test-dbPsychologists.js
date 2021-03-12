@@ -1,6 +1,7 @@
 const assert = require('chai').assert;
 require('dotenv').config();
 const dbPsychologists = require('../db/psychologists')
+const demarchesSimplifiees = require('../utils/demarchesSimplifiees')
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
 const clean = require('./helper/clean');
@@ -80,31 +81,75 @@ describe('DB Psychologists', () => {
     });
   });
 
-  describe("getPsychologistByEmail", () => {
+  describe("getAcceptedPsychologistByEmail", () => {
     it("should return a psy if we enter a known login email", async () => {
       await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getPsychologistByEmail(psyList[0].personalEmail);
+      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
       psy.email.should.be.equal(psyList[0].email);
       psy.personalEmail.should.be.equal(psyList[0].personalEmail);
     });
 
     it("should return undefined if we enter a unknown email", async () => {
-      const unknownPsy = await dbPsychologists.getPsychologistByEmail("unknown@unknown.org")
+      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail("unknown@unknown.org")
 
       assert(undefined === unknownPsy);
     });
 
     it("should return undefined if we dont use 'personalEmail' but 'email' as the login", async () => {
       await dbPsychologists.savePsychologistInPG(psyList);
-      const unknownPsy = await dbPsychologists.getPsychologistByEmail(psyList[0].email);
+      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].email);
       assert(undefined === unknownPsy);
     });
 
     it("should return undefined if known email but not accepte state", async () => {
-      psyList[0].state = 'en_construction';
+      psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.sans_suite;
       await dbPsychologists.savePsychologistInPG(psyList);
-      const unknownPsy = await dbPsychologists.getPsychologistByEmail(psyList[0].personalEmail);
+      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
       assert(undefined === unknownPsy);
+    });
+    it("should return undefined if known email but en_construction state", async () => {
+      psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.en_construction;
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      assert(undefined === unknownPsy);
+    });
+    it("should return undefined if known email but en_instruction state", async () => {
+      psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.en_instruction;
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      assert(undefined === unknownPsy);
+    });
+
+    it("should return undefined if known email but refusé state", async () => {
+      psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.refuse;
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      assert(undefined === unknownPsy);
+    });
+  });
+
+  describe("getNotYetAcceptedPsychologistByEmail", () => {
+    it("should return a psy if we enter a known login email en_construction", async () => {
+      psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.en_construction;
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      psy.email.should.be.equal(psyList[0].email);
+      psy.personalEmail.should.be.equal(psyList[0].personalEmail);
+    });
+
+    it("should return a psy if we enter a known login email en_instruction", async () => {
+      psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.en_instruction;
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      psy.email.should.be.equal(psyList[0].email);
+      psy.personalEmail.should.be.equal(psyList[0].personalEmail);
+    });
+
+    it("should return undefined if we enter a known login email accepted", async () => {
+      psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.accepte;
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      assert(undefined === psy);
     });
   });
 });

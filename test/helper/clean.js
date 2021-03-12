@@ -55,10 +55,10 @@ module.exports.cleanAllPsychologists = async function cleanAllPsychologists() {
   }
 }
 
-module.exports.cleanAllPatients = function() {
-  return knex('patients').select('*').delete()
+module.exports.cleanAllPatients = function cleanAllPatients() {
+  return knex(dbPatients.patientsTable).select('*').delete()
 }
 
-module.exports.cleanAllAppointments = function() {
+module.exports.cleanAllAppointments = function cleanAllAppointments() {
   return knex('appointments').select('*').delete()
 }

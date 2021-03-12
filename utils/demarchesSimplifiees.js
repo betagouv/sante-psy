@@ -1,6 +1,17 @@
+/* eslint-disable camelcase */
 const graphql = require('../utils/graphql');
 const uuid = require('../utils/uuid');
 const config = require('./config');
+
+//@see https://demarches-simplifiees-graphql.netlify.app/dossierstate.doc.html
+// eslint-disable-next-line no-unused-vars
+exports.DOSSIER_STATE = {
+  en_construction: 'en_construction',
+  en_instruction: 'en_instruction',
+  accepte: 'accepte',
+  refuse: 'refuse',
+  sans_suite: 'sans_suite',
+};
 
 /**
  * helper function called by getPsychologistList

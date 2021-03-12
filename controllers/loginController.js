@@ -28,7 +28,19 @@ async function sendLoginEmail(email, loginUrl, token) {
     await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
   } catch (err) {
     console.error(err);
-    throw new Error("Erreur d'envoi de mail");
+    throw new Error("Erreur d'envoi de mail - sendLoginEmail");
+  }
+}
+
+async function sendNotYetAcceptedEmail(email) {
+  try {
+    const html = await ejs.renderFile('./views/emails/loginNotAcceptedYet.ejs', {
+      appName: config.appName,
+    });
+    await emailUtils.sendMail(email, `C'est trop tôt pour vous connecter à ${config.appName}`, html);
+  } catch (err) {
+    console.error(err);
+    throw new Error("Erreur d'envoi de mail - sendNotYetAcceptedEmail");
   }
 }
 
@@ -58,7 +70,7 @@ module.exports.getLogin = async function getLogin(req, res) {
       const dbToken = await dbLoginToken.getByToken(token);
 
       if( dbToken !== undefined ) {
-        const psychologistData = await dbPsychologists.getPsychologistByEmail(dbToken.email);
+        const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
         cookie.createAndSetJwtCookie(res, dbToken.email, psychologistData)
         await dbLoginToken.delete(token);
         req.flash('info', `Vous êtes authentifié comme ${dbToken.email}`);
@@ -83,6 +95,7 @@ function generateLoginUrl() {
   return config.hostnameWithProtocol + '/psychologue/login';
 }
 
+
 /**
  * Send a email with a login link if the email is already registered
  */
@@ -93,16 +106,19 @@ module.exports.postLogin = async function postLogin(req, res) {
   const email = req.body.email;
 
   try {
-    const emailExist = await dbPsychologists.getPsychologistByEmail(email);
-
-    if( emailExist ) {
+    const acceptedEmailExist = await dbPsychologists.getAcceptedPsychologistByEmail(email);
+    if( acceptedEmailExist ) {
       const token = generateToken();
       const loginUrl = generateLoginUrl();
       await sendLoginEmail(email, loginUrl, token);
       await saveToken(email, token);
     } else {
-      console.warn(`Email inconnu qui essaye d'accéder au service - ${email} -\
-      il est peut être en attente de validation`);
+      const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(email);
+      if( notYetAcceptedEmailExist ) {
+        await sendNotYetAcceptedEmail(email);
+      } else {
+        console.warn(`Email inconnu - ou sans suite ou refusé - qui essaye d'accéder au service - ${email}`);
+      }
     }
 
     req.flash('info',
