@@ -129,6 +129,17 @@ describe('loginController', async function() {
         done();
       })
 
+      const getCsrfTokens = async () => {
+        return chai.request(app)
+          .get(`/psychologue/login`)
+          .then(function(res){
+            return {
+              _csrf : testUtils.getCsrfTokenHtml(res),
+              cookies : testUtils.getCsrfTokenCookie(res),
+            }
+          })
+      }
+
       it('send a login email', function(done) {
         getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
         .returns(Promise.resolve({
@@ -288,7 +299,7 @@ describe('loginController', async function() {
         });
       });
 
-      it('should lowercase email from POST request', function(done) {
+      it('should lowercase email from POST request', async function() {
         const emailWithUppercase = 'Prenom.NOM@beta.gouv.fr'
 
         getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
@@ -297,27 +308,22 @@ describe('loginController', async function() {
           state: 'accepte',
         }));
 
-        chai.request(app)
-        .get(`/psychologue/login`)
-        .end(function(err, res){
-          _csrf = testUtils.getCsrfTokenHtml(res);
-          cookies = testUtils.getCsrfTokenCookie(res);
-          chai.request(app)
+        const csrf = await getCsrfTokens()
+
+        return chai.request(app)
           .post('/psychologue/login')
           .type('form')
-          .set('cookie',cookies)
+          .set('cookie', csrf.cookies)
           .send({
             'email': emailWithUppercase,
-            '_csrf': _csrf,
+            '_csrf': csrf._csrf,
           })
-          .end((err, res) => {
+          .then((res) => {
             sinon.assert.called(getAcceptedPsychologistByEmailStub);
             sinon.assert.calledWith(
               getAcceptedPsychologistByEmailStub,
               'prenom.nom@beta.gouv.fr'); // lowercased email
-            done();
           })
-        });
       });
 
     });
