@@ -67,18 +67,31 @@
       <h2>Je suis étudiant, étudiante</h2>
         <div class="rf-pb-2w">
           <p>
-            Le parcours de soins est en cours de préparation.
-            Si vous souhaitez obtenir un accompagnement psychologique, vous pouvez prendre contact avec votre médecin généraliste ou votre Service de Santé Universitaire.
+            Tous les étudiants du supérieur sont éligibles (universités, écoles publiques et privées, BTS, ...), de toutes les nationalités.
           </p>
-          <% if (featurePsyList) { %>
-            <a class="rf-btn rf-btn--alt" href="/consulter-les-psychologues">Voir la liste des psychologues conventionnés avec lesquels prendre rendez-vous</a>
-          <% } %>
-          
+          <p>
+            Pour commencer le parcours de soins,
+            si vous connaissez votre Service de Santé Universitaire, contactez les.
+            Sinon, vous pouvez également contacter votre médecin traitant ou un médecin généraliste.
+          </p>
           <p>
             <a class="rf-btn rf-btn--alt" href="/faq#etudiant">En savoir plus</a>
           </p>
+        </div>
+          <% if (featurePsyList) { %>
+            <div class="rf-pb-2w">
+              <p>
+                Lorsque votre médecin (universitaire ou généraliste) vous aura orienté vers des séances de psychologue,
+                vous pouvez choisir parmi les psychologues partenaires.
+              </p>
+              <p>
+                <a class="rf-btn rf-btn--alt" href="/consulter-les-psychologues">Trouver un psychologue</a>
+              </p>
+            </div>
+          <% } %>
+        <div>
           <p>
-            Nous vous suggérons aussi ce site de conseils :
+            Nous vous suggérons aussi ce site de conseils pour gérer ses difficultés pendant cette période de crise :
           </p>
           <a class="rf-btn rf-btn--alt" href="https://www.soutien-etudiant.info" target="_blank" rel="noopener noreferrer">Voir le site www.soutien-etudiant.info</a>
         </div>
