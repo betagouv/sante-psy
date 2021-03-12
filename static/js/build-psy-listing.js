@@ -1,8 +1,31 @@
+function findFilterForField(fieldName) {
+  var filters = table.getFilters();
+  for (var i = 0; i < filters.length; i ++) {
+    if (filters[i].field === fieldName) {
+      return filters[i];
+    }
+  }
+  return undefined;
+}
+
+function upsertFilterForField(fieldName, newValue) {
+  var filter = findFilterForField(fieldName);
+
+  if (!filter) {
+    // New filter : this is the first input into search field by user
+    table.addFilter(fieldName, 'like', newValue);
+    return;
+  }
+  // Existing filter : update it
+  table.removeFilter(fieldName, 'like', filter.value);
+  table.addFilter(fieldName, 'like', newValue);
+}
+
 var setupFilter = function(fieldName) {
   var filterEl = document.getElementById(fieldName + "-filter-value");
   // Trigger setFilter function with correct parameters
   function updateFilter(){
-    table.setFilter(fieldName,'like', filterEl.value);
+    upsertFilterForField(fieldName, filterEl.value);
   }
   filterEl.addEventListener("keyup", updateFilter);
 };
