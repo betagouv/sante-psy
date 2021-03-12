@@ -38,7 +38,7 @@ async function sendNotYetAcceptedEmail(email) {
     const html = await ejs.renderFile('./views/emails/loginNotAcceptedYet.ejs', {
       appName: config.appName,
     });
-    await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
+    await emailUtils.sendMail(email, `C'est trop tôt pour vous connecter à ${config.appName}`, html);
   } catch (err) {
     console.error(err);
     throw new Error("Erreur d'envoi de mail - sendNotYetAcceptedEmail");
