@@ -120,7 +120,7 @@ describe('DB Psychologists', () => {
       assert(undefined === unknownPsy);
     });
 
-    it("should return undefined if known email but not accepte state", async () => {
+    it("should return undefined if known email but refusé state", async () => {
       psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.refuse;
       await dbPsychologists.savePsychologistInPG(psyList);
       const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
