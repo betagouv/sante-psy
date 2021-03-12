@@ -16,7 +16,12 @@ git clone https://github.com/betagouv/sante-psy
 cd sante-psy
 cp .env.sample .env # replace API_TOKEN from Demarches Simplifiees API
 docker-compose up
-# http://localhost:8080 is ready
+# http://localhost:8080 is ready with some test data to plat with
+# to access psy workspace with toy data use this email login@beta.gouv.fr
+# to access psy workspace without data use this email empty@beta.gouv.fr
+# all available emails are listed here /test/seed/fake_data.js
+# http://localhost:8080/psychologue/login 
+# login emails are received here : http://localhost:1080/
 ```
 
 Pour controler visuellement la base de données, nous conseillons :
@@ -27,6 +32,13 @@ Pour controler visuellement la base de données, nous conseillons :
 #### Créer un fichier de migration
 ```
 npm run makeMigration migration-name
+```
+#### Importer des fausses données
+Voir le fichier dans `test/seed/fake_data.js` qui va créer quelues psy, patients, et séances.
+
+Pour l'executer: 
+```
+npm run seed
 ```
 
 #### Executer les migrations
