@@ -20,12 +20,26 @@ function generateToken() {
   return crypto.randomBytes(256).toString('base64');
 }
 
-async function sendLoginEmail(email, loginUrl, token) {
-  try {
-    const html = await ejs.renderFile('./views/emails/login.ejs', {
+async function getEmailContent(loginUrl, token, isAcceptedEmail) {
+  const acceptedEmail = './views/emails/login.ejs'
+  const notAcceptedYetEmail = './views/emails/loginNotAcceptedYet.ejs'
+
+  if( isAcceptedEmail ) {
+    return await ejs.renderFile(acceptedEmail, {
       loginUrlWithToken: `${loginUrl}?token=${encodeURIComponent(token)}`,
       appName: config.appName,
     });
+  } else {
+    return await ejs.renderFile(notAcceptedYetEmail, {
+      appName: config.appName,
+    });
+  }
+}
+
+async function sendLoginEmail(email, loginUrl, token, isAcceptedEmail = false) {
+
+  try {
+    const html = await getEmailContent(loginUrl, token, isAcceptedEmail);
     await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
   } catch (err) {
     console.error(err);
