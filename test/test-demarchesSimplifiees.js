@@ -29,8 +29,8 @@ describe('Demarches Simplifiess', () => {
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           diploma: "Psychologie clinique de la santé",
           phone: '0468396600',
-          email: 'psychologue.test@beta.gouv.fr',
-          personalEmail: 'loginEmail@beta.gouv.fr',
+          email: 'psychologue.test@beta.gouv.fr', // email should be lowercased
+          personalEmail: 'loginemail@beta.gouv.fr', // personalEmail should be lowercased
           website: 'apas82.mssante.fr',
           teleconsultation: true,
           description: description,
@@ -51,7 +51,7 @@ describe('Demarches Simplifiess', () => {
           phone: '0468396600',
           diploma: "Psychologie clinique de la santé",
           email: 'psychologue.test@beta.gouv.fr',
-          personalEmail: 'loginEmail2@beta.gouv.fr',
+          personalEmail: 'loginemail2@beta.gouv.fr',
           website: 'apas82.mssante.fr',
           teleconsultation: false,
           description: description,

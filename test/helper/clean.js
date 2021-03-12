@@ -27,7 +27,7 @@ module.exports.psyList = function getPsyList() {
       diploma: "Psychologie clinique de la santé",
       phone: '0468396600',
       email: 'psychologue.test@beta.gouv.fr',
-      personalEmail: 'loginEmail@beta.gouv.fr',
+      personalEmail: 'loginemail@beta.gouv.fr',
       website: 'apas82.mssante.fr',
       teleconsultation: true,
       description: "description",

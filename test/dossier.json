@@ -69,7 +69,7 @@
             {
               "id": "Q2hhbXAtMTYwMTE4Ng==",
               "label": "Email de contact",
-              "stringValue": "psychologue.test@beta.gouv.fr"
+              "stringValue": "psychologue.TEST@beta.gouv.fr"
             },
             {
               "id": "Q2hhbXAtMTYzOTUyNA==",
@@ -196,7 +196,7 @@
             "prenom": "Personne"
           },
           "usager": {
-            "email": "loginEmail2@beta.gouv.fr"
+            "email": "loginemail2@beta.gouv.fr"
           }
         }
       ]
