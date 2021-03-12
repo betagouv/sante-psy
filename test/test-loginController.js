@@ -287,6 +287,39 @@ describe('loginController', async function() {
           })
         });
       });
+
+      it('should lowercase email from POST request', function(done) {
+        const emailWithUppercase = 'Prenom.NOM@beta.gouv.fr'
+
+        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+        .returns(Promise.resolve({
+          email: email,
+          state: 'accepte',
+        }));
+
+        chai.request(app)
+        .get(`/psychologue/login`)
+        .end(function(err, res){
+          _csrf = testUtils.getCsrfTokenHtml(res);
+          cookies = testUtils.getCsrfTokenCookie(res);
+          chai.request(app)
+          .post('/psychologue/login')
+          .type('form')
+          .set('cookie',cookies)
+          .send({
+            'email': emailWithUppercase,
+            '_csrf': _csrf,
+          })
+          .end((err, res) => {
+            sinon.assert.called(getAcceptedPsychologistByEmailStub);
+            sinon.assert.calledWith(
+              getAcceptedPsychologistByEmailStub,
+              'prenom.nom@beta.gouv.fr'); // lowercased email
+            done();
+          })
+        });
+      });
+
     });
   });
 })
