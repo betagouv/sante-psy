@@ -129,7 +129,7 @@ describe('DB Psychologists', () => {
   });
 
   describe("getNotYetAcceptedPsychologistByEmail", () => {
-    it("should return a psy if we enter a known login email in construction or instruction", async () => {
+    it("should return a psy if we enter a known login email en_construction", async () => {
       psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.en_construction;
       await dbPsychologists.savePsychologistInPG(psyList);
       const psy = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psyList[0].personalEmail);
