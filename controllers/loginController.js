@@ -1,7 +1,6 @@
 const crypto = require('crypto');
 const { check } = require('express-validator');
 const validation = require('../utils/validation')
-const demarchesSimplifiees = require('../utils/demarchesSimplifiees')
 const dbPsychologists = require('../db/psychologists');
 const dbLoginToken = require('../db/loginToken');
 const date = require('../utils/date');
@@ -9,7 +8,6 @@ const cookie = require('../utils/cookie');
 const emailUtils = require('../utils/email');
 const ejs = require('ejs');
 const config = require('../utils/config');
-const { demarchesSimplifieesId } = require('../utils/config');
 
 module.exports.emailValidators = [
   check('email')
@@ -22,41 +20,28 @@ function generateToken() {
   return crypto.randomBytes(256).toString('base64');
 }
 
-async function getEmailContent(loginUrl, token, isAcceptedEmail) {
-  const acceptedEmail = './views/emails/login.ejs'
-  const notAcceptedYetEmail = './views/emails/loginNotAcceptedYet.ejs'
-
-  if( isAcceptedEmail ) {
-    return await ejs.renderFile(acceptedEmail, {
+async function sendLoginEmail(email, loginUrl, token) {
+  try {
+    const html = await ejs.renderFile('./views/emails/login.ejs', {
       loginUrlWithToken: `${loginUrl}?token=${encodeURIComponent(token)}`,
       appName: config.appName,
     });
-  } else {
-    return await ejs.renderFile(notAcceptedYetEmail, {
+    await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
+  } catch (err) {
+    console.error(err);
+    throw new Error("Erreur d'envoi de mail - sendLoginEmail");
+  }
+}
+
+async function sendNotYetAcceptedEmail(email) {
+  try {
+    const html = await ejs.renderFile('./views/emails/loginNotAcceptedYet.ejs', {
       appName: config.appName,
     });
-  }
-}
-
-async function sendLoginEmail(email, loginUrl, token) {
-  try {
-    const isAcceptedEmail = true;
-    const html = await getEmailContent(loginUrl, token, isAcceptedEmail);
     await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
   } catch (err) {
     console.error(err);
-    throw new Error("Erreur d'envoi de mail");
-  }
-}
-
-async function sendNotYetAcceptedEmail(email, loginUrl, token) {
-  try {
-    const isNotYetAcceptedEmail = false;
-    const html = await getEmailContent(loginUrl, token, isNotYetAcceptedEmail);
-    await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
-  } catch (err) {
-    console.error(err);
-    throw new Error("Erreur d'envoi de mail");
+    throw new Error("Erreur d'envoi de mail - sendNotYetAcceptedEmail");
   }
 }
 

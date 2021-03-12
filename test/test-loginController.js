@@ -24,40 +24,6 @@ describe('loginController', async function() {
     })
   })
 
-  describe('getEmailContent', () => {
-    it('should send not accepted yet email, if email is not yet accepted ', async function() {
-      const isAcceptedEmail = false
-      const loginUrl = "test"
-      const token = "my_fabulous_token"
-      const getEmailContent =  loginController.__get__('getEmailContent');
-      const output = await getEmailContent(loginUrl, token, isAcceptedEmail);
-
-      //not accepted email
-      const test = output.indexOf(
-        "Cependant votre compte n'a pas encore validé sur Demarches Simplifiées par notre équipe"
-      )
-
-      test.should.not.equal(-1);
-      output.indexOf(token).should.equal(-1); // no token inside email
-    })
-
-    it('should send a login link, if email is accepted ', async function() {
-      const isAcceptedEmail = true
-      const loginUrl = "test"
-      const token = "my_fabulous_token"
-      const getEmailContent =  loginController.__get__('getEmailContent');
-      const output = await getEmailContent(loginUrl, token, isAcceptedEmail);
-
-      // accepted email
-      const test = output.indexOf(
-        "Me connecter"
-      )
-      test.should.not.equal(-1);
-
-      output.indexOf(token).should.not.equal(-1); // token inside email
-    })
-  })
-
   describe('generateToken', () => {
     it('should generate a token', function() {
       const generateToken = loginController.__get__('generateToken');
