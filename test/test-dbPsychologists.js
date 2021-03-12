@@ -5,9 +5,10 @@ const demarchesSimplifiees = require('../utils/demarchesSimplifiees')
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
 const clean = require('./helper/clean');
+const testUtils = require('./helper/utils')
 
 describe('DB Psychologists', () => {
-  const dossierNumber = clean.testDossierNumber();
+  const dossierNumber = testUtils.testDossierNumber();
   let psyList;
 
   async function testDataPsychologistsExist() {
@@ -21,7 +22,7 @@ describe('DB Psychologists', () => {
   }
 
   beforeEach(async function before() {
-    psyList = clean.psyList();
+    psyList = testUtils.psyListFromDS();
   })
 
   afterEach(async function before() {

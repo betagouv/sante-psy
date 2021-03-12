@@ -9,6 +9,7 @@ const rewire = require('rewire')
 const cronDemarchesSimplifiees = rewire('../cron_jobs/cronDemarchesSimplifiees');
 const clean = require("./helper/clean");
 const sinon = require('sinon');
+const testUtils = require('./helper/utils')
 
 describe('Import Data from DS to PG', () => {
   let getLatestCursorSavedStub
@@ -32,7 +33,7 @@ describe('Import Data from DS to PG', () => {
     // eslint-disable-next-line max-len
     const cursor = '{"id":1,"cursor":"test","createdAt":"2021-02-19T13:16:45.382Z","updatedAt":"2021-02-19T13:16:45.380Z"}';
     const dsApiData = {
-      psychologists: clean.psyList(),
+      psychologists: testUtils.psyListFromDS(),
       cursor: "test"
     }
     getLatestCursorSavedStub = sinon.stub(dbDsApiCursor, 'getLatestCursorSaved')
@@ -73,7 +74,7 @@ describe('checkForMultipleAcceptedDossiers', () => {
 
   it('should notify if two accepted dossiers for the same person', async () => {
     // insert 2 psychologists, same data except uuid, with accepte state
-    const psyList = clean.psyList()
+    const psyList = testUtils.psyListFromDS()
     psyList[0].state = 'accepte'
     psyList[0].dossierNumber = '27172a9b-5081-4502-9022-b17510ba40a1'
     await dbPsychologists.savePsychologistInPG(psyList)
