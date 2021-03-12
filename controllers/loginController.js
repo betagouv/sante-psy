@@ -12,7 +12,6 @@ const config = require('../utils/config');
 module.exports.emailValidators = [
   check('email')
     .isEmail()
-    .normalizeEmail() //sanitize input
     .withMessage('Vous devez spécifier un email valide.'),
 ]
 
