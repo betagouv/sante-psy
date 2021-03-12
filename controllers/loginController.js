@@ -12,6 +12,7 @@ const config = require('../utils/config');
 module.exports.emailValidators = [
   check('email')
     .isEmail()
+    .toLowerCase()
     .withMessage('Vous devez spécifier un email valide.'),
 ]
 
