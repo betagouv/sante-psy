@@ -1,5 +1,6 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
+const date = require("../utils/date");
 
 module.exports.patientsTable = "patients";
 
@@ -78,6 +79,7 @@ module.exports.updatePatient = async (
         doctorName,
         doctorAddress,
         doctorPhone,
+        updatedAt: date.getDateNowPG()
       })
   } catch (err) {
     console.error("Erreur de modification du patient", err)
