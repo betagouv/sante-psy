@@ -52,7 +52,7 @@ describe('dashboardController', function() {
 
       return chai.request(app)
         .get('/psychologue/mes-seances')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
           // My patients are present
@@ -103,7 +103,7 @@ describe('dashboardController', function() {
 
       return chai.request(app)
         .get('/psychologue/mes-seances')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
           // My appointments are present

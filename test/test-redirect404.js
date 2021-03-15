@@ -31,7 +31,7 @@ describe('Redirect if unknown page - 404', function() {
   it('should redirect to mes seances page if unknown page but loggued', async function() {
     return chai.request(app)
         .get('/psychologue/unknown-pizza')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0)
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances');
@@ -41,7 +41,7 @@ describe('Redirect if unknown page - 404', function() {
   it('should redirect to mes seances page if unknown page without /psychologue/ but loggued', async function() {
     return chai.request(app)
         .get('/unknown-pizza')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0)
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances');

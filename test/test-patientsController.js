@@ -50,7 +50,7 @@ describe('patientsController', function() {
 
       return chai.request(app)
         .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -143,7 +143,7 @@ describe('patientsController', function() {
 
       chai.request(app)
         .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
@@ -247,7 +247,7 @@ describe('patientsController', function() {
 
       chai.request(app)
         .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
@@ -319,7 +319,7 @@ describe('patientsController', function() {
 
       chai.request(app)
         .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
@@ -363,7 +363,7 @@ describe('patientsController', function() {
 
       return chai.request(app)
         .get('/psychologue/modifier-patient?patientid=' + myPatient.id)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
           expect(res.status).to.equal(200)
@@ -391,7 +391,7 @@ describe('patientsController', function() {
 
       return chai.request(app)
         .get('/psychologue/modifier-patient?patientid=' + notMyPatient.id)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -414,7 +414,7 @@ describe('patientsController', function() {
 
       return chai.request(app)
         .get('/psychologue/modifier-patient?patientid=' + 'not-a-valid-uuid')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -443,7 +443,7 @@ describe('patientsController', function() {
 
       return chai.request(app)
         .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -483,7 +483,7 @@ describe('patientsController', function() {
 
       return chai.request(app)
         .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
@@ -579,7 +579,7 @@ describe('patientsController', function() {
 
       chai.request(app)
         .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)
@@ -733,7 +733,7 @@ describe('patientsController', function() {
 
       chai.request(app)
         .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send(postData)

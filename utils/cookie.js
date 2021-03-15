@@ -70,9 +70,10 @@ module.exports.verifyJwt = verifyJwt
 module.exports.getCurrentPsyId = (req) => {
   const jwtToken = req.cookies.token
   const tokenData = verifyJwt(jwtToken)
+
   if (!tokenData) {
     throw new Error('JWT token invalid')
   }
-  const psyUuid = tokenData.psychologist.dossierNumber
+  const psyUuid = tokenData.psychologist;
   return psyUuid
 }
