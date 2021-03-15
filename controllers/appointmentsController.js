@@ -39,6 +39,7 @@ module.exports.createNewAppointment = async (req, res) => {
   try {
     const psyId = cookie.getCurrentPsyId(req)
     await dbAppointments.insertAppointment(date, patientId, psyId)
+    console.log(`Appointment created for patient id ${patientId} by psy id ${psyId}`)
     req.flash('info', `La séance du ${format.formatFrenchDate(date)} a bien été créée.`)
     return res.redirect('/psychologue/mes-seances')
   } catch (err) {
@@ -64,6 +65,7 @@ module.exports.deleteAppointment = async (req, res) => {
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     await dbAppointments.deleteAppointment(appointmentId, psychologistId)
+    console.log(`Appointment deleted ${appointmentId} by psy id ${psychologistId}`)
     req.flash('info', `La séance a bien été supprimée.`)
   } catch (err) {
     req.flash('error', 'Erreur. La séance n\'est pas supprimée. Pourriez-vous réessayer ?')

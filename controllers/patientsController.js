@@ -132,6 +132,7 @@ module.exports.editPatient = async (req, res) => {
       infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
         ' en cliquant le bouton "Modifier" du patient.'
     }
+    console.log(`Patient ${patientId} updated by psy id ${psychologistId}`)
     req.flash('info', infoMessage)
     return res.redirect('/psychologue/mes-seances')
   } catch (err) {
@@ -218,6 +219,7 @@ module.exports.createNewPatient = async (req, res) => {
       infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
         ' en cliquant le bouton "Modifier" du patient.'
     }
+    console.log(`Patient created by psy id ${psychologistId}`)
     req.flash('info', infoMessage)
     return res.redirect('/psychologue/mes-seances')
   } catch (err) {
