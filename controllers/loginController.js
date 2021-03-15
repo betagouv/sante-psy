@@ -112,18 +112,18 @@ module.exports.postLogin = async function postLogin(req, res) {
       const loginUrl = generateLoginUrl();
       await sendLoginEmail(email, loginUrl, token);
       await saveToken(email, token);
+      req.flash('info',`Un lien de connexion a été envoyé à l'adresse ${email}. Le lien est valable une heure.`);
     } else {
       const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(email);
       if( notYetAcceptedEmailExist ) {
         await sendNotYetAcceptedEmail(email);
+        req.flash('info',`Votre compte n'est pas encore validé par nos services, veuillez rééssayer plus tard.`);
       } else {
+        req.flash('error',`L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`);
         console.warn(`Email inconnu - ou sans suite ou refusé - qui essaye d'accéder au service - ${email}`);
       }
     }
 
-    req.flash('info',
-      `Un lien de connexion a été envoyé à l'adresse ${email}\
-       si elle est connue de nos services.\nLe lien est valable une heure.`);
 
     return res.redirect(`/psychologue/login`);
   } catch (err) {
