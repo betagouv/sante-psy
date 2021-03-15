@@ -30,8 +30,8 @@ describe('Demarches Simplifiess', () => {
           diploma: "Psychologie clinique de la santé",
           phone: '0468396600',
           email: 'psychologue.test@beta.gouv.fr',
-          personalEmail: 'loginEmail@beta.gouv.fr',
-          website: 'apas82.mssante.fr',
+          personalEmail: 'loginemail@beta.gouv.fr',
+          website: 'beta.gouv.fr',
           teleconsultation: true,
           description: description,
           // eslint-disable-next-line max-len
@@ -52,7 +52,7 @@ describe('Demarches Simplifiess', () => {
           diploma: "Psychologie clinique de la santé",
           email: 'psychologue.test@beta.gouv.fr',
           personalEmail: 'loginEmail2@beta.gouv.fr',
-          website: 'apas82.mssante.fr',
+          website: 'beta.gouv.fr',
           teleconsultation: false,
           description: description,
           // eslint-disable-next-line max-len

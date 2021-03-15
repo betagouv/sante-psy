@@ -17,7 +17,7 @@ services:
       - "1025:25"
   web:
     build: .
-    command: bash -c "sleep 3; npm run migrate && nodemon --inspect=0.0.0.0:9229 ./index.js"
+    command: bash -c "sleep 3; npm run migrate ; npm run seed && nodemon --inspect=0.0.0.0:9229 ./index.js"
     env_file:
       - .env
     environment:

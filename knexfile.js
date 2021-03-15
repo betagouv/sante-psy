@@ -6,6 +6,9 @@ const knexConfig = {
   acquireConnectionTimeout: 10000,
   migrations: {
     tableName: "knex_migrations"
+  },
+  seeds: {
+    directory: './test/seed'
   }
 }
 

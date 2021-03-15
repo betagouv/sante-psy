@@ -79,7 +79,7 @@
             {
               "id": "Q2hhbXAtMTYzOTQwMQ==",
               "label": "Site web professionnel (optionnel)",
-              "stringValue": "apas82.mssante.fr"
+              "stringValue": "beta.gouv.fr"
             },
             {
               "id": "Q2hhbXAtMTYzMDU3Nw==",
@@ -98,7 +98,7 @@
             "prenom": "First"
           },
           "usager": {
-            "email": "loginEmail@beta.gouv.fr"
+            "email": "loginemail@beta.gouv.fr"
           }
         },
         {
@@ -177,7 +177,7 @@
             {
               "id": "Q2hhbXAtMTYzOTQwMQ==",
               "label": "Site web professionnel (optionnel)",
-              "stringValue": "apas82.mssante.fr"
+              "stringValue": "beta.gouv.fr"
             },
             {
               "id": "Q2hhbXAtMTYzMDU3Nw==",

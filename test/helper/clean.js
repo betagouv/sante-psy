@@ -4,39 +4,78 @@ const dbPsychologists = require('../../db/psychologists')
 const dbPatients = require('../../db/patients')
 const dbDsApiCursor = require('../../db/dsApiCursor')
 const dbLoginToken = require('../../db/loginToken')
-const rewire = require("rewire");
-const demarchesSimplifiees = rewire('../../utils/demarchesSimplifiees');
+const date = require('../../utils/date');
+const uuid = require('../../utils/uuid');
 
 
 
-module.exports.testDossierNumber = function getTestDossierNumber() {
-  const getUuidDossierNumber = demarchesSimplifiees.__get__('getUuidDossierNumber');
-  return getUuidDossierNumber(1);
+module.exports.testDossierNumber = function getTestDossierNumber(random = Math.random().toString()) {
+  return uuid.generateUuidFromString(random);
 }
 
-module.exports.psyList = function getPsyList() {
+module.exports.getRandomInt = function getRandomInt() {
+  const min = Math.ceil(1);
+  const max = Math.floor(99);
+  return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
+
+module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.gouv.fr',
+  state = 'accepte', archived = false) {
+  const dossierNumber = module.exports.testDossierNumber(Math.random().toString())
+  return {
+    dossierNumber: dossierNumber,
+    firstNames: `${module.exports.getRandomInt()}First`,
+    lastName: `${module.exports.getRandomInt()}Last`,
+    archived : archived,
+    state : state,
+    adeli: `${module.exports.getRandomInt()}829302942`,
+    address: `${module.exports.getRandomInt()} SOLA 66110 MONTBOLO`,
+    diploma: "Psychologie clinique de la santé",
+    phone: '0468396600',
+    email: `${module.exports.getRandomInt()}@beta.gouv.fr`,
+    personalEmail: personalEmail,
+    website: `${module.exports.getRandomInt()}beta.gouv.fr`,
+    teleconsultation: Math.random() < 0.5,
+    description: "description",
+    // eslint-disable-next-line max-len
+    training: "[\"Connaissance et pratique des outils diagnostic psychologique\",\"Connaissance des troubles psychopathologiques du jeune adulte : dépressions\",\"risques suicidaires\",\"addictions\",\"comportements à risque\",\"troubles alimentaires\",\"décompensation schizophrénique\",\"psychoses émergeantes ainsi qu’une pratique de leur repérage\",\"Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)\"]",
+    departement: `${module.exports.getRandomInt()} - Calvados`,
+    region: "Normandie",
+    languages: "Français ,Anglais, et Espagnol"
+  };
+}
+
+module.exports.getOnePatient = function getOnePatient(psychologistId) {
+  return {
+    id: module.exports.testDossierNumber(Math.random().toString()),
+    firstNames:`${module.exports.getRandomInt()}First`,
+    lastName:`${module.exports.getRandomInt()}Last`,
+    INE:"11111111111",
+    institutionName:`${module.exports.getRandomInt()} university`,
+    isStudentStatusVerified:true,
+    hasPrescription:true,
+    psychologistId:psychologistId,
+    doctorName:"doctorName",
+    doctorAddress:"doctorAddress",
+    doctorPhone:"doctorPhone",
+  };
+}
+
+module.exports.getOneAppointment = function getOneAppointment(patientId, psychologistId) {
+  const now = date.getDateNowPG();
+  return {
+    id: module.exports.testDossierNumber(Math.random().toString()),
+    psychologistId: psychologistId,
+    appointmentDate: now,
+    patientId: patientId,
+  };
+}
+
+module.exports.psyList = function getPsyList(personalEmail = 'loginemail@beta.gouv.fr',
+  state = 'accepte', archived = false) {
   return [
-    {
-      dossierNumber: module.exports.testDossierNumber(),
-      firstNames: 'First second',
-      lastName: 'Last',
-      archived : false,
-      state : 'accepte',
-      adeli: "829302942",
-      address: 'SSR CL AL SOLA 66110 MONTBOLO',
-      diploma: "Psychologie clinique de la santé",
-      phone: '0468396600',
-      email: 'psychologue.test@beta.gouv.fr',
-      personalEmail: 'loginEmail@beta.gouv.fr',
-      website: 'apas82.mssante.fr',
-      teleconsultation: true,
-      description: "description",
-      // eslint-disable-next-line max-len
-      training: "[\"Connaissance et pratique des outils diagnostic psychologique\",\"Connaissance des troubles psychopathologiques du jeune adulte : dépressions\",\"risques suicidaires\",\"addictions\",\"comportements à risque\",\"troubles alimentaires\",\"décompensation schizophrénique\",\"psychoses émergeantes ainsi qu’une pratique de leur repérage\",\"Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)\"]",
-      departement: "14 - Calvados",
-      region: "Normandie",
-      languages: "Français ,Anglais, et Espagnol"
-    }];
+    module.exports.getOnePsy(personalEmail, state, archived)
+  ];
 }
 
 module.exports.cleanDataCursor = async function cleanDataCursor() {
