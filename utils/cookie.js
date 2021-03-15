@@ -73,6 +73,6 @@ module.exports.getCurrentPsyId = (req) => {
   if (!tokenData) {
     throw new Error('JWT token invalid')
   }
-  const psyUuid = tokenData.psychologist.dossierNumber
+  const psyUuid = tokenData.psychologist;
   return psyUuid
 }
