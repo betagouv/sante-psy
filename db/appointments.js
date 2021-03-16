@@ -48,6 +48,8 @@ module.exports.deleteAppointment = async (appointmentId, psychologistId) => {
         updatedAt: date.getDateNowPG()
       })
 
+    console.log(`Appointment id ${appointmentId} deleted by psy id ${psychologistId}`);
+
     return deletedAppointments
   } catch (err) {
     console.error("Erreur de suppression du appointments", err)
