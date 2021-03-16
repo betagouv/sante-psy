@@ -20,6 +20,7 @@ module.exports = {
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
   uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid
   secret: process.env.SECRET,
+  secretLogs: process.env.SECRET_LOGS,
   sessionDurationHours: process.env.SESSION_DURATION_HOURS || '2', // duration in hours
   useCSRF: (process.env.USE_CSRF || 'true') === 'true',
   //mail
