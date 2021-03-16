@@ -5,6 +5,7 @@ const dbPsychologists = require('../db/psychologists');
 const dbLoginToken = require('../db/loginToken');
 const date = require('../utils/date');
 const cookie = require('../utils/cookie');
+const logs = require('../utils/logs');
 const emailUtils = require('../utils/email');
 const ejs = require('ejs');
 const config = require('../utils/config');
@@ -26,6 +27,7 @@ async function sendLoginEmail(email, loginUrl, token) {
       appName: config.appName,
     });
     await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
+    console.log(`Login email sent for ${logs.hashForLogs(email)}`);
   } catch (err) {
     console.error(err);
     throw new Error("Erreur d'envoi de mail - sendLoginEmail");
@@ -38,6 +40,7 @@ async function sendNotYetAcceptedEmail(email) {
       appName: config.appName,
     });
     await emailUtils.sendMail(email, `C'est trop tôt pour vous connecter à ${config.appName}`, html);
+    console.log(`Not yet accepted email sent for ${logs.hashForLogs(email)}`);
   } catch (err) {
     console.error(err);
     throw new Error("Erreur d'envoi de mail - sendNotYetAcceptedEmail");
@@ -49,7 +52,7 @@ async function saveToken(email, token) {
     const expiredAt = date.getDatePlusOneHour();
     await dbLoginToken.insert(token, email, expiredAt);
 
-    console.log(`Login token créé`);
+    console.log(`Login token created for ${logs.hashForLogs(email)}`);
   } catch (err) {
     console.error(`Erreur de sauvegarde du token : ${err}`);
     throw new Error('Erreur de sauvegarde du token');
@@ -74,8 +77,10 @@ module.exports.getLogin = async function getLogin(req, res) {
         cookie.createAndSetJwtCookie(res, dbToken.email, psychologistData.dossierNumber);
         await dbLoginToken.delete(token);
         req.flash('info', `Vous êtes authentifié comme ${dbToken.email}`);
+        console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`)
         return res.redirect(nextPage);
       } else {
+        console.log(`Invalid or expired token received : ${token.substring(0 ,5)}...`);
         req.flash('error', 'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.');
       }
     }
@@ -105,6 +110,7 @@ module.exports.postLogin = async function postLogin(req, res) {
   }
   const email = req.body.email;
 
+  console.log(`User with ${logs.hashForLogs(email)} asked for a login link`)
   try {
     const acceptedEmailExist = await dbPsychologists.getAcceptedPsychologistByEmail(email);
     if( acceptedEmailExist ) {
