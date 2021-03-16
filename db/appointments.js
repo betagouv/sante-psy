@@ -1,6 +1,7 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const dbPatient = require('./patients')
+const date = require("../utils/date");
 
 const appointmentsTable = "appointments"
 module.exports.appointmentsTable = appointmentsTable;
@@ -12,6 +13,7 @@ module.exports.getAppointments = async (psychologistId) => {
     const appointmentArray = await knex.from(dbPatient.patientsTable)
       .innerJoin(`${appointmentsTable}`, `${dbPatient.patientsTable}.id`, `${appointmentsTable}.patientId`)
       .where(`${appointmentsTable}.psychologistId`, psychologistId)
+      .whereNot(`${appointmentsTable}.deleted`, true)
       .orderBy("appointmentDate", "desc")
     return appointmentArray
   } catch (err) {
@@ -22,7 +24,7 @@ module.exports.getAppointments = async (psychologistId) => {
 
 module.exports.insertAppointment = async (appointmentDate, patientId, psychologistId) => {
   try {
-    const insertedArray = await knex(module.exports.appointmentsTable).insert({
+    const insertedArray = await knex(appointmentsTable).insert({
       psychologistId,
       appointmentDate,
       patientId: patientId,
@@ -36,17 +38,18 @@ module.exports.insertAppointment = async (appointmentDate, patientId, psychologi
 
 module.exports.deleteAppointment = async (appointmentId, psychologistId) => {
   try {
-    const deletedAppointments = await knex("appointments")
+    const deletedAppointments = await knex(appointmentsTable)
       .where({
         id: appointmentId,
         psychologistId: psychologistId
       })
-      .del()
-      .returning('*')
-    if (deletedAppointments.length === 0) {
-      console.error("Appointment not deleted : does not exist or is not allowed")
-      throw new Error("Appointment not deleted : does not exist or is not allowed")
-    }
+      .update({
+        deleted: true,
+        updatedAt: date.getDateNowPG()
+      })
+
+    console.log(`Appointment id ${appointmentId} deleted by psy id ${psychologistId}`);
+
     return deletedAppointments
   } catch (err) {
     console.error("Erreur de suppression du appointments", err)

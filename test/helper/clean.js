@@ -2,6 +2,7 @@ const knexConfig = require("../../knexfile");
 const knex = require("knex")(knexConfig);
 const dbPsychologists = require('../../db/psychologists')
 const dbPatients = require('../../db/patients')
+const dbAppointments = require('../../db/appointments')
 const dbDsApiCursor = require('../../db/dsApiCursor')
 const dbLoginToken = require('../../db/loginToken')
 const date = require('../../utils/date');
@@ -80,6 +81,10 @@ module.exports.psyList = function getPsyList(personalEmail = 'loginemail@beta.go
 
 module.exports.cleanDataCursor = async function cleanDataCursor() {
   return knex(dbDsApiCursor.dsApiCursorTable).select('*').delete();
+}
+
+module.exports.cleanDataAppointments = async function cleanDataAppointments() {
+  return knex(dbAppointments.appointmentsTable).select('*').delete();
 }
 
 module.exports.cleanDataToken = async function cleanDataToken() {
