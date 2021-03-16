@@ -9,9 +9,10 @@ const clean = require('../helper/clean');
 exports.seed = function(knex) {
   const psyList = [
     clean.getOnePsy('login@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, false),
-    clean.getOnePsy('estelle@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, false),
-    clean.getOnePsy('emeline@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, false),
-    clean.getOnePsy('paul@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, false),
+    clean.getOnePsy('estelle.comment@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, false),
+    clean.getOnePsy('emeline.merliere@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, false),
+    clean.getOnePsy('paul.leclercq@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, false),
+    clean.getOnePsy('julien.dauphant@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, false),
     clean.getOnePsy(`${clean.getRandomInt()}@beta.gouv.fr`, demarchesSimplifiees.DOSSIER_STATE.accepte, false),
     clean.getOnePsy(`${clean.getRandomInt()}@beta.gouv.fr`, demarchesSimplifiees.DOSSIER_STATE.accepte, false),
     clean.getOnePsy(`${clean.getRandomInt()}@beta.gouv.fr`, demarchesSimplifiees.DOSSIER_STATE.accepte, false),
