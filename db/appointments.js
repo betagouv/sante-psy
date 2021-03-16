@@ -48,10 +48,6 @@ module.exports.deleteAppointment = async (appointmentId, psychologistId) => {
         updatedAt: date.getDateNowPG()
       })
 
-    if (deletedAppointments[0].deleted === false) {
-      console.error("Appointment not deleted : does not exist or is not allowed")
-      throw new Error("Appointment not deleted : does not exist or is not allowed")
-    }
     return deletedAppointments
   } catch (err) {
     console.error("Erreur de suppression du appointments", err)
