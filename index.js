@@ -11,6 +11,7 @@ const expressJWT = require('express-jwt');
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
 const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const csrf = require('csurf');
 
 const config = require('./utils/config');
@@ -65,10 +66,11 @@ app.use('/static/tabulator-tables', express.static(
 
 // This session cookie (connect.sid) is only used for displaying the flash messages.
 // The other session cookie (token) contains the authenticated user session.
-app.use(session({
+app.use(cookieSession({
   secret: config.secret,
   resave: false,
   saveUninitialized: true,
+  maxAge: parseInt(config.sessionDurationHours) * 60 * 60 * 1000
 }));
 
 app.use(flash());
