@@ -126,7 +126,8 @@ module.exports.postLogin = async function postLogin(req, res) {
         req.flash('info',`Votre compte n'est pas encore validé par nos services, veuillez rééssayer plus tard.`);
       } else {
         req.flash('error',`L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`);
-        console.warn(`Email inconnu - ou sans suite ou refusé - qui essaye d'accéder au service - ${email}`);
+        console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : \
+         ${logs.hashForLogs(email)}`);
       }
     }
 
