@@ -3,6 +3,12 @@ require('dotenv').config();
 const hostnameWithProtocol = process.env.HOSTNAME_WITH_PROTOCOL || 'http://localhost:8080'
 const protocol = new URL(hostnameWithProtocol).protocol
 
+const secret = process.env.SECRET
+const secretLogs = process.env.SECRET_LOGS
+if(!secret || !secretLogs) {
+  console.error('Mandatory configurations SECRET or SECRET_LOG is/are missing')
+}
+
 module.exports = {
   appName: `Santé Psy Étudiant`,
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
@@ -19,8 +25,8 @@ module.exports = {
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
   uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid
-  secret: process.env.SECRET,
-  secretLogs: process.env.SECRET_LOGS,
+  secret: secret,
+  secretLogs: secretLogs,
   sessionDurationHours: process.env.SESSION_DURATION_HOURS || '2', // duration in hours
   useCSRF: (process.env.USE_CSRF || 'true') === 'true',
   //mail
