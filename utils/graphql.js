@@ -81,25 +81,23 @@ async function requestPsychologist(afterCursor) {
 
     return psychologists;
   } catch (err) {
-    if(hasErrors(err)) {
-      throw 'Une erreur est survenue lors de la récupération des psychologues';
-    }
-    return [];
+    console.error('API has returned error', err);
+    logErrorsFromDS(err);
+    throw 'Error from DS API';
   }
 }
 
 /**
- * @param {response} response 
+ * log errors from DS
+ * @param {*} apiResponse 
  */
-function hasErrors(apiResponse) {
-  if(apiResponse.response.errors.length > 0) {
-    apiResponse.response.errors.forEach(err => {
-      console.error('API has returned error', err); // server error logs
-    });
-
-    return true;
-  } else {
-    return false;
+function logErrorsFromDS(apiResponse) {
+  if(apiResponse.response) {
+    if(apiResponse.response.errors.length > 0) {
+      apiResponse.response.errors.forEach(err => {
+        console.error('Error details', err);
+      });
+    }
   }
 }
 
