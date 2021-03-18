@@ -19,10 +19,6 @@ module.exports.initCaptureConsole = function init() {
   });
 }
 
-/**
- * 
- * @param {*} app 
- */
 module.exports.initCaptureConsoleWithHandler = function initCaptureConsoleWithHandler(app) {
   if( config.sentryDNS ) {
     this.init(config.sentryDNS);
