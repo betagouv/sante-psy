@@ -59,6 +59,48 @@ describe('appointmentsController', function() {
         })
     })
 
+    it('should not create appointment if patient id is not linked to psy id', async function() {
+      const dossierNumber = '9a42d12f-8328-4545-8da3-11250f876146'
+      const anotherDossierNumber = '8a42d12f-8328-4545-8da3-11250f876146'
+      const psy = {
+        dossierNumber: dossierNumber,
+        email: 'prenom.nom@beta.gouv.fr',
+      }
+
+      const patient = await dbPatients.insertPatient(
+        'Ada',
+        'Lovelace',
+        '12345678901',
+        '42',
+        false,
+        false,
+        anotherDossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        '05 00 00 00 00',
+      )
+
+      return chai.request(app)
+        .post('/psychologue/creer-nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': patient.id,
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/psychologue/mes-seances')
+
+          // was not created because patient id is not linked to psy id
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
+          expect(appointmentArray).to.have.length(0)
+
+          return Promise.resolve()
+        })
+    })
+
     it('should not create appointment if user not logged in', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
