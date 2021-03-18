@@ -6,7 +6,6 @@ const expressSanitizer = require('express-sanitizer');
 const path = require('path');
 const helmet = require('helmet')
 const flash = require('connect-flash');
-const session = require('express-session');
 const expressJWT = require('express-jwt');
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
@@ -16,6 +15,7 @@ const csrf = require('csurf');
 
 const config = require('./utils/config');
 const format = require('./utils/format');
+const sentry = require('./utils/sentry');
 
 const appName = config.appName;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
@@ -135,7 +135,7 @@ app.use((err, req, res, next) => {
         `Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
          - la connexion est valide durant ${config.sessionDurationHours} heures`,
       );
-      console.debug("No token - redirect to login");
+      console.log("No token - redirect to login");
       return res.redirect(`/psychologue/login`);
     } else {
       req.flash('error', "Cette page n'existe pas.");
@@ -237,6 +237,9 @@ app.get('*', function redirect404(req, res){
     return res.redirect(`/psychologue/mes-seances`);
   }
 });
+
+
+sentry.initCaptureConsoleWithHandler(app);
 
 module.exports = app.listen(config.port, () => {
   console.log(`${appName} listening at http://localhost:${config.port}`);
