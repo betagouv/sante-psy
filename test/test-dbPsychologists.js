@@ -1,6 +1,7 @@
 const assert = require('chai').assert;
+const rewire = require('rewire');
 require('dotenv').config();
-const dbPsychologists = require('../db/psychologists')
+const dbPsychologists = rewire('../db/psychologists')
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees')
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
@@ -54,6 +55,29 @@ describe('DB Psychologists', () => {
       shouldBeOne[0].count.should.be.equal('1');
       shouldBeOne[0].archived.should.be.equal(psyList[0].archived);
       shouldBeOne[0].state.should.be.equal(psyList[0].state);
+    });
+  });
+
+  describe("addFrenchLanguageIfMissing", () => {
+    const addFrenchLanguageIfMissing = dbPsychologists.__get__('addFrenchLanguageIfMissing');
+    it("should add french if missing with one language", async () => {
+      addFrenchLanguageIfMissing("espagnol").should.equal('Français, espagnol');
+    });
+
+    it("should add french if nothing there", async () => {
+      addFrenchLanguageIfMissing("").should.equal('Français');
+    });
+
+    it("should add french if empty spaces for languages", async () => {
+      addFrenchLanguageIfMissing("    ").should.equal('Français');
+    });
+
+    it("should not add french if already there", async () => {
+      addFrenchLanguageIfMissing('français, italien').should.equal('français, italien');
+    });
+
+    it("should not add french (capitalized) if already there", async () => {
+      addFrenchLanguageIfMissing('Français et espagnol').should.equal('Français et espagnol');
     });
   });
 
