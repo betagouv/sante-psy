@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const expressSanitizer = require('express-sanitizer');
 const path = require('path');
-const helmet = require('helmet')
+
 const flash = require('connect-flash');
 const session = require('express-session');
 const expressJWT = require('express-jwt');
@@ -13,9 +13,9 @@ const slowDown = require("express-slow-down");
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const csrf = require('csurf');
-
 const config = require('./utils/config');
 const format = require('./utils/format');
+const cspConfig = require('./utils/csp-config');
 
 const appName = config.appName;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
@@ -37,15 +37,7 @@ if( !config.activateDebug ) {
   console.debug = function desactivateDebug() {};
 }
 
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      "script-src": ["'self'", "https://stats.data.gouv.fr/"],
-      "img-src": ["'self'", "https://stats.data.gouv.fr/", "data:"]
-    },
-  })
-);
+app.use(cspConfig);
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
