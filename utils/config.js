@@ -21,6 +21,7 @@ module.exports = {
   databaseUrl: process.env.DATABASE_URL,
   demarchesSimplifieesId: process.env.DEMARCHES_SIMPLIFIEES_ID,
   demarchesSimplifieesUrl: process.env.DEMARCHES_SIMPLIFIEES_URL,
+  sentryDNS: process.env.SENTRY_DNS || false,
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
