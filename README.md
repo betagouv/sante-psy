@@ -42,7 +42,7 @@ Pour l'executer:
 
 
 #### Executer les migrations
-```bash
+```dockerfile
 # Supprimer les tables existantes
 docker-compose down # ou docker-compose rm -f # removes already existing containers https://docs.docker.com/compose/reference/rm/
 
