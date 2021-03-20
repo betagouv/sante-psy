@@ -36,12 +36,12 @@ Pour controler visuellement la base de données, nous conseillons :
 #### Importer des fausses données
 Voir le fichier dans `test/seed/fake_data.js` qui va créer quelues psy, patients, et séances.
 
-Pour l'executer: 
+Pour l'exécuter: 
 
     $ npm run seed
 
 
-#### Executer les migrations
+#### Exécuter les migrations
 ```dockerfile
 # Supprimer les tables existantes
 docker-compose down # ou docker-compose rm -f # removes already existing containers https://docs.docker.com/compose/reference/rm/
