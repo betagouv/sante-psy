@@ -94,15 +94,7 @@ Puis une fois la console node ouverte :
 ```js
 const dbPsychologists = require('./db/psychologists')
 
-let psy = { 'dossierNumber': '77356ab0-349b-4980-899f-bad2ce87e2f1',
-    'adeli': 123,
-    firstNames: 'Stevie',
-    'lastName': 'Wonder',
-    'email': 'meetwithstevie@wonder.com',
-    archived: true,
-    state: 'accepte',
-    personalEmail: 'stevie@wonder.com'
-}
+let psy = { 'dossierNumber': '77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli': 123, firstNames: 'Stevie', 'lastName': 'Wonder', 'email': 'meetwithstevie@wonder.com', archived: true, state: 'accepte', personalEmail: 'stevie@wonder.com'}
 
 dbPsychologists.savePsychologistInPG([psy])
 ```
