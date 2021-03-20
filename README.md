@@ -44,7 +44,8 @@ Pour l'exécuter:
 #### Exécuter les migrations
 ```dockerfile
 # Supprimer les tables existantes
-docker-compose down # ou docker-compose rm -f # removes already existing containers https://docs.docker.com/compose/reference/rm/
+docker-compose down 
+# ou docker-compose rm -f # removes already existing containers https://docs.docker.com/compose/reference/rm/
 
 # Les recréer
 docker-compose up
@@ -58,14 +59,14 @@ Santé Psy Étudiants listening at http://localhost:8080
 ```
 
 ### Les données
-Pour afficher une liste de psychologues, nous importons les données venant de l'API demarches simplifiées (DS) dans la base de données Postgresql à l'aide d'un cron. Cela nous permet un meilleur taux de réponses et une maitrise en cas de pic de traffic.
+Pour afficher une liste de psychologues, nous importons les données venant de l'API démarches simplifiées (DS) dans la base de données Postgresql à l'aide d'un cron. Cela nous permet un meilleur taux de réponses et une maitrise en cas de pic de traffic.
 
 
 L'API DS est appellée à intervalle regulier à l'aide d'un CRON pour mettre à jour la table PG `psychologists` et on stockera le dernier `cursor` qui correspond à la dernière page requête de l'API dans la table PG `ds_api_cursor` pour ne rappeller que les pages necessaires et limiter le nombre d'appel à l'API DS, ceci est fait à l'aide d'un cron.
 
 Cependant, certaines données dans DS vont être modifiées au fil du temps, et il nous est donc obligatoire de mettre à jour toutes les données, dans ce cas là nous n'utilisons pas le `cursor` de l'API à l'aide d'un 2ème CRON moins fréquent.
 
-API de demarches simplifiées :
+API de démarches simplifiées :
 * Documentation : https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/graphql
 * Schema: https://demarches-simplifiees-graphql.netlify.app/query.doc.html
 
