@@ -7,7 +7,7 @@ const config = require('./config');
  * 
  * @see https://sentry.io/betagouv-f7/sante-psy-prod/getting-started/node-express/
  */
-module.exports.initCaptureConsole = function init() {
+module.exports.initCaptureConsole = function initCaptureConsole() {
   const logLevel =  ['error'];
   console.log(`Initializing Sentry for log level "${logLevel}" and config: ${config.sentryDNS}`);
   Sentry.init({
@@ -21,7 +21,7 @@ module.exports.initCaptureConsole = function init() {
 
 module.exports.initCaptureConsoleWithHandler = function initCaptureConsoleWithHandler(app) {
   if( config.sentryDNS ) {
-    this.init(config.sentryDNS);
+    this.initCaptureConsole(config.sentryDNS);
 
     // RequestHandler creates a separate execution context using domains, so that every
     // transaction/span/breadcrumb is attached to its own Hub instance
