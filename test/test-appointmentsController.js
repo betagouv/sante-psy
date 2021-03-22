@@ -10,13 +10,13 @@ const { expect } = require('chai')
 
 describe('appointmentsController', function() {
   describe('create appointment', function() {
-    beforeEach(async function(done) {
-      done()
+    beforeEach(async function() {
+      await clean.cleanAllPatients()
+      await clean.cleanAllAppointments()
+      return Promise.resolve()
     })
 
     afterEach(async function() {
-      await clean.cleanAllPatients()
-      await clean.cleanAllAppointments()
       return Promise.resolve()
     })
 
@@ -54,6 +54,48 @@ describe('appointmentsController', function() {
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
           expect(appointmentArray).to.have.length(1)
           expect(appointmentArray[0].psychologistId).to.equal(psy.dossierNumber)
+
+          return Promise.resolve()
+        })
+    })
+
+    it('should not create appointment if patient id is not linked to psy id', async function() {
+      const dossierNumber = '9a42d12f-8328-4545-8da3-11250f876146'
+      const anotherDossierNumber = '8a42d12f-8328-4545-8da3-11250f876146'
+      const psy = {
+        dossierNumber: dossierNumber,
+        email: 'prenom.nom@beta.gouv.fr',
+      }
+
+      const patient = await dbPatients.insertPatient(
+        'Ada',
+        'Lovelace',
+        '12345678901',
+        '42',
+        false,
+        false,
+        anotherDossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        '05 00 00 00 00',
+      )
+
+      return chai.request(app)
+        .post('/psychologue/creer-nouvelle-seance')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          'patientId': patient.id,
+          date: '09/02/2021',
+          'iso-date': '2021-02-09',
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/psychologue/mes-seances')
+
+          // was not created because patient id is not linked to psy id
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
+          expect(appointmentArray).to.have.length(0)
 
           return Promise.resolve()
         })
@@ -149,10 +191,12 @@ describe('appointmentsController', function() {
   describe('create appointment - input validation', function() {
     let insertAppointmentStub
 
-    beforeEach(function(done) {
+    beforeEach(async function() {
+      await clean.cleanAllPatients();
       insertAppointmentStub = sinon.stub(dbAppointments, 'insertAppointment')
         .returns(Promise.resolve())
-      done()
+
+      return Promise.resolve()
     })
 
     afterEach(function(done) {
@@ -236,37 +280,49 @@ describe('appointmentsController', function() {
         })
     })
 
-    it('should ignore the date input and use the iso-date', function(done) {
+    it('should ignore the date input and use the iso-date', async function() {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
       }
+      const myPatient = await dbPatients.insertPatient(
+        'Ada',
+        'Lovelace',
+        '12345678901',
+        '42',
+        false,
+        false,
+        psy.dossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        '05 00 00 00 00',
+      )
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
+          'patientId': myPatient.id,
           date: '12/02/2021 kfjhksdhf',
           'iso-date': '2021-02-09',
         })
-        .end((err, res) => {
+        .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
           sinon.assert.called(insertAppointmentStub)
-          done()
+          return Promise.resolve()
         })
     })
   })
 
   describe('delete appointment', function() {
-    beforeEach(async function(done) {
-      done()
+    beforeEach(async function() {
+      await clean.cleanAllPatients()
+      await clean.cleanAllAppointments()
+      return Promise.resolve()
     })
 
     afterEach(async function() {
-      await clean.cleanAllPatients()
-      await clean.cleanAllAppointments()
       return Promise.resolve()
     })
 
