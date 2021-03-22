@@ -33,7 +33,7 @@ module.exports.getPsychologists = async () => {
 }
 
 function addFrenchLanguageIfMissing(languages) {
-  const frenchRegexp = new RegExp(/français/, 'g');
+  const frenchRegexp = new RegExp(/fran[çc]ais/, 'g');
   const french = 'Français'
   if (!frenchRegexp.test(languages.toLowerCase())) {
     if(languages.trim().length === 0) {
