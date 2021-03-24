@@ -208,6 +208,7 @@ if (config.featurePsyPages) {
     patientsController.editPatientValidators,
     patientsController.editPatient)
 
+  console.log('config.featureReimbursementPage', config.featureReimbursementPage)
   if (config.featureReimbursementPage) {
     app.get('/psychologue/mes-remboursements', reimbursementController.reimbursement)
   }
