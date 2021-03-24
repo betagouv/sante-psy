@@ -6,7 +6,11 @@ module.exports.reimbursement = async function reimbursement(req, res) {
   let universityList = []
   try {
     universityList = await dbUniversities.getUniversities()
-    universityList.sort((a, b) => a < b)
+    universityList.sort((a, b) => {
+      if(a.name < b.name) { return -1; }
+      if(a.name > b.name) { return 1; }
+      return 0;
+    })
     // Todo if no universities, don't display the form at all ?
   } catch (err) {
     // todo do something
