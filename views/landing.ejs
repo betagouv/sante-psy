@@ -112,21 +112,21 @@
             Une université vous contactera ensuite pour établir une convention.
             Cette convention garantira le remboursement de l'ensemble des consultations que vous réaliserez dans le cadre de ce dispositif.
           </p>
+          <p>
+            <a class="rf-btn rf-btn--secondary" href="/faq#psy">
+              Consulter la foire aux questions
+            </a>
+          </p>
           <% if (formUrl) { %>
-            <h3>
-              Vous êtes prêts à commencer ?
-            </h3>
-            <a class="rf-btn rf-btn" href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">
+            <p>
+              Vous voulez devenir psychologue partenaire du dispositif ?
+            </p>
+            <a class="rf-btn rf-btn--alt" href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">
               Commencer mon inscription
             </a>
-            <p>
-              <a class="rf-btn rf-btn--alt" href="/faq#psy">
-                Consulter la foire aux questions
-              </a>
-            </p>
             <% if (featurePsyPages) { %>
-              <p>Votre dossier a été validé et vous recevez vos premiers patients ? </p>
-              <a class="rf-btn rf-btn" href="/psychologue/login">Déclarer mes séances</a>
+              <p>Vous avez déjà reçu la validation suite à la démarche ?</p>
+              <a class="rf-btn rf-btn--alt" href="/psychologue/login">Déclarer mes séances</a>
             <% } %>
           <% } else { %>
             <p>
