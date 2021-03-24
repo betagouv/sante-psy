@@ -9,13 +9,6 @@ if(!secret || !secretLogs) {
   console.error('Mandatory configurations SECRET or SECRET_LOG is/are missing')
 }
 
-console.log('process.env.FEATURE_REIMBURSEMENT_PAGE',
-  process.env.FEATURE_REIMBURSEMENT_PAGE,
-  typeof process.env.FEATURE_REIMBURSEMENT_PAGE,
-  process.env.FEATURE_REIMBURSEMENT_PAGE === 'true',
-  process.env.FEATURE_REIMBURSEMENT_PAGE === '"true"',
-  process.env.FEATURE_REIMBURSEMENT_PAGE === "'true'")
-
 module.exports = {
   appName: `Santé Psy Étudiant`,
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
