@@ -32,6 +32,20 @@ module.exports.getPsychologists = async () => {
   }
 }
 
+function addFrenchLanguageIfMissing(languages) {
+  const frenchRegexp = new RegExp(/fran[çc]ais/, 'g');
+  const french = 'Français'
+  if (!frenchRegexp.test(languages.toLowerCase())) {
+    if(languages.trim().length === 0) {
+      return french;
+    } else {
+      return french + ", " + languages;
+    }
+  } else {
+    return languages;
+  }
+}
+
 /**
  * Perform a UPSERT with https://knexjs.org/#Builder-merge
  * @param {*} psy
@@ -42,6 +56,8 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
 
   const upsertArray = psyList.map( psy => {
     const upsertingKey = 'dossierNumber';
+
+    psy.languages = addFrenchLanguageIfMissing(psy.languages);
     try {
       return knex(module.exports.psychologistsTable)
       .insert(psy)
@@ -63,7 +79,7 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
         training: psy.training,
         adeli: psy.adeli,
         diploma: psy.diploma,
-        languages: psy.languages,
+        languages: addFrenchLanguageIfMissing(psy.languages),
         updatedAt: updatedAt
       });
     } catch (err) {

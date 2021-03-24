@@ -4,18 +4,19 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const expressSanitizer = require('express-sanitizer');
 const path = require('path');
-const helmet = require('helmet')
+
 const flash = require('connect-flash');
-const session = require('express-session');
 const expressJWT = require('express-jwt');
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const csrf = require('csurf');
-
 const config = require('./utils/config');
 const format = require('./utils/format');
+const cspConfig = require('./utils/csp-config');
+const sentry = require('./utils/sentry');
+
 
 const appName = config.appName;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
@@ -37,15 +38,7 @@ if( !config.activateDebug ) {
   console.debug = function desactivateDebug() {};
 }
 
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      "script-src": ["'self'", "https://stats.data.gouv.fr/"],
-      "img-src": ["'self'", "https://stats.data.gouv.fr/", "data:"]
-    },
-  })
-);
+app.use(cspConfig);
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -118,6 +111,7 @@ app.use(
     path: [
       '/',
       '/psychologue/login',
+      '/trouver-un-psychologue',
       '/consulter-les-psychologues',
       '/mentions-legales',
       '/donnees-personnelles-et-gestion-des-cookies',
@@ -135,7 +129,7 @@ app.use((err, req, res, next) => {
         `Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
          - la connexion est valide durant ${config.sessionDurationHours} heures`,
       );
-      console.debug("No token - redirect to login");
+      console.log("No token - redirect to login");
       return res.redirect(`/psychologue/login`);
     } else {
       req.flash('error', "Cette page n'existe pas.");
@@ -177,6 +171,7 @@ if (config.featurePsyList) {
     // request # 103 is delayed by 1500ms
     // etc.
   });
+  app.get('/trouver-un-psychologue', speedLimiter, psyListingController.getPsychologist);
   app.get('/consulter-les-psychologues', speedLimiter, psyListingController.getPsychologist);
 }
 
@@ -237,6 +232,9 @@ app.get('*', function redirect404(req, res){
     return res.redirect(`/psychologue/mes-seances`);
   }
 });
+
+
+sentry.initCaptureConsoleWithHandler(app);
 
 module.exports = app.listen(config.port, () => {
   console.log(`${appName} listening at http://localhost:${config.port}`);

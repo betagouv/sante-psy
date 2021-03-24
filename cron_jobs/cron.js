@@ -1,6 +1,9 @@
 const cron = require('cron');
 const cronDemarchesSimplifiees  = require("./cronDemarchesSimplifiees")
 const config = require('../utils/config');
+const sentry = require('../utils/sentry');
+
+sentry.initCaptureConsole();
 
 const jobs = [{
   cronTime: "*/5 * * * *", // every 5 minutes

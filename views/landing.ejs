@@ -17,9 +17,9 @@
   <div class="rf-grid-row rf-grid-row--center rf-grid-row--middle rf-mt-3w rf-pb-4w">
     <div id="hero-col-1" class="rf-col-md-4 rf-col-xs-10 rf-pr-6w">
       <h1>Étudiants, parlez de vos difficultés</h1>
-      <p>
-        Pendant la crise sanitaire, bénéficiez de séances avec un psychologue gratuitement, sans avancer de frais.
-      </p>
+      <div class="rf-text--lg">
+        Consultez un psychologue gratuitement
+      </div>
     </div>
     <div id="hero-col-2" class="rf-col-md-4 rf-col-xs-10">
       <div>
@@ -58,13 +58,13 @@
    })
  -%>
  <div class="rf-centered rf-p-5v rf-bg--alt">
-   <a class="rf-btn rf-btn--secondary" href="/faq">En savoir plus</a>
+   <a class="rf-btn rf-btn--secondary" href="/faq">Consulter la Foire Aux Questions</a>
 </div>
 
 <div class="rf-container-fluid">
   <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter bg-fond-alternatif">
     <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
-      <h2>Je suis étudiant, étudiante</h2>
+      <h2 id="je-suis-etudiant">Je suis étudiant, étudiante</h2>
         <div class="rf-pb-2w">
           <p>
             Tous les étudiants du supérieur sont éligibles (universités, écoles publiques et privées, BTS, ...), de toutes les nationalités.
@@ -74,27 +74,28 @@
             si vous connaissez votre Service de Santé Universitaire, contactez les.
             Sinon, vous pouvez également contacter votre médecin traitant ou un médecin généraliste.
           </p>
-          <p>
-            <a class="rf-btn rf-btn--alt" href="/faq#etudiant">En savoir plus</a>
-          </p>
-        </div>
           <% if (featurePsyList) { %>
-            <div class="rf-pb-2w">
               <p>
                 Lorsque votre médecin (universitaire ou généraliste) vous aura orienté vers des séances de psychologue,
-                vous pouvez choisir parmi les psychologues partenaires.
+                vous pouvez choisir parmi les psychologues partenaires :
               </p>
               <p>
-                <a class="rf-btn rf-btn--alt" href="/consulter-les-psychologues">Trouver un psychologue</a>
+                <a class="rf-btn rf-btn--lg rf-btn--alt" href="/trouver-un-psychologue">Trouver un psychologue</a>
               </p>
-            </div>
           <% } %>
-        <div>
+          <p>
+            Des questions, des doutes sur le dispositif ?
+          </p>
+          <p>
+            <a class="rf-btn rf-btn--secondary" href="/faq#etudiant">Consulter la Foire Aux Questions</a>
+          </p>
           <p>
             Nous vous suggérons aussi ce site de conseils pour gérer ses difficultés pendant cette période de crise :
           </p>
-          <a class="rf-btn rf-btn--alt" href="https://www.soutien-etudiant.info" target="_blank" rel="noopener noreferrer">Voir le site www.soutien-etudiant.info</a>
-        </div>
+          <a class="rf-btn rf-btn--secondary" href="https://www.soutien-etudiant.info" target="_blank" rel="noopener noreferrer">
+            Voir le site www.soutien-etudiant.info
+          </a>
+       </div>
     </div>
   </div>
 </div>
@@ -102,7 +103,7 @@
 <div class="rf-container-fluid">
   <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
     <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
-      <h2>Je suis psychologue</h2>
+      <h2 id="je-suis-psychologue">Je suis psychologue</h2>
         <div class="rf-pb-5w">
           <p>
             Vous souhaitez participer au programme d'accompagnement psychologique des étudiants ? Merci !
@@ -112,17 +113,21 @@
             Une université vous contactera ensuite pour établir une convention.
             Cette convention garantira le remboursement de l'ensemble des consultations que vous réaliserez dans le cadre de ce dispositif.
           </p>
+          <p>
+            <a class="rf-btn rf-btn--secondary" href="/faq#psy">
+              Consulter la Foire Aux Questions
+            </a>
+          </p>
           <% if (formUrl) { %>
             <p>
-              Vous êtes prêts à commencer ?
+              Vous voulez devenir psychologue partenaire du dispositif ?
             </p>
-            <a class="rf-btn rf-btn--alt" href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">Participer au dispositif</a>
-            <p>
-              <a class="rf-btn rf-btn--alt" href="/faq#psy">En savoir plus</a>
-            </p>
+            <a class="rf-btn rf-btn--alt" href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">
+              Commencer mon inscription
+            </a>
             <% if (featurePsyPages) { %>
               <p>Vous avez déjà reçu la validation suite à la démarche ?</p>
-              <a class="rf-btn rf-btn--alt" href="/psychologue/login">Connectez vous pour déclarer vos séances</a>
+              <a class="rf-btn rf-btn--alt" href="/psychologue/login">Déclarer mes séances</a>
             <% } %>
           <% } else { %>
             <p>
