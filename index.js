@@ -111,6 +111,7 @@ app.use(
     path: [
       '/',
       '/psychologue/login',
+      '/trouver-un-psychologue',
       '/consulter-les-psychologues',
       '/mentions-legales',
       '/donnees-personnelles-et-gestion-des-cookies',
@@ -170,6 +171,7 @@ if (config.featurePsyList) {
     // request # 103 is delayed by 1500ms
     // etc.
   });
+  app.get('/trouver-un-psychologue', speedLimiter, psyListingController.getPsychologist);
   app.get('/consulter-les-psychologues', speedLimiter, psyListingController.getPsychologist);
 }
 
