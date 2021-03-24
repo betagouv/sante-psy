@@ -31,6 +31,7 @@ const patientsController = require('./controllers/patientsController');
 const psyListingController = require('./controllers/psyListingController');
 const loginController = require('./controllers/loginController');
 const faqController = require('./controllers/faqController');
+const reimbursementController = require('./controllers/reimbursementController');
 
 // Desactivate debug log for production as they are a bit too verbose
 if( !config.activateDebug ) {
@@ -208,7 +209,7 @@ if (config.featurePsyPages) {
     patientsController.editPatient)
 
   if (config.featureReimbursementPage) {
-    app.get('/psychologue/mes-remboursements', dashboardController.reimbursement)
+    app.get('/psychologue/mes-remboursements', reimbursementController.reimbursement)
   }
 }
 

@@ -25,7 +25,3 @@ module.exports.dashboard = async function dashboard(req, res) {
     });
   }
 }
-
-module.exports.reimbursement = async function reimbursement(req, res) {
-  res.render('reimbursement');
-}
