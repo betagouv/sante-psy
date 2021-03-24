@@ -1,4 +1,7 @@
+const cookie = require('../utils/cookie')
+const dbPsychologists = require('../db/psychologists')
 const dbUniversities = require('../db/universities')
+const { update } = require('lodash')
 
 module.exports.reimbursement = async function reimbursement(req, res) {
   let universityList = []
@@ -13,14 +16,23 @@ module.exports.reimbursement = async function reimbursement(req, res) {
 }
 
 // todo validators
-module.exports.updatePayingUniversity = (req, res) => {
+module.exports.updatePayingUniversity = async (req, res) => {
   // todo validation
 
-  const university = req.body['university']
+  const universityId = req.body['university']
 
-  // todo save value
+  try {
+    const psychologistId = cookie.getCurrentPsyId(req)
+    const updated = await dbPsychologists.updatePayingUniversity(psychologistId, universityId)
+    console.log('updated', updated)
 
-  // todo specific info message for this partial ?
-  req.flash('info', `C'est noté ! Vous avez conventionné avec ${university}.`) // todo use name not id
-  return res.redirect('/psychologue/mes-remboursements')
+    // todo specific info message for this partial ?
+    req.flash('info', `C'est noté ! Vous avez conventionné avec ${universityId}.`) // todo use name not id
+
+    return res.redirect('/psychologue/mes-remboursements')
+  } catch (err) {
+    console.error(`Could not update paying university for psy.`, err)
+    req.flash('error', `Erreur pendant l'enregistrement. Vous pouvez réessayer.`)
+    return res.redirect('/psychologue/mes-remboursements')
+  }
 }

@@ -137,3 +137,13 @@ module.exports.countAcceptedPsychologistsByPersonalEmail = async () => {
     .groupBy('personalEmail', 'state');
 }
 
+module.exports.updatePayingUniversity = async (psychologistId, payingUniversityId) => {
+  return await knex(module.exports.psychologistsTable)
+    .where({
+      dossierNumber: psychologistId,
+    })
+    .update({
+      payingUniversityId,
+      updatedAt: date.getDateNowPG()
+    })
+}
