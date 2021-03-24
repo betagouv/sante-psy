@@ -64,7 +64,7 @@
 <div class="rf-container-fluid">
   <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter bg-fond-alternatif">
     <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
-      <h2>Je suis étudiant, étudiante</h2>
+      <h2 id="je-suis-etudiant">Je suis étudiant, étudiante</h2>
         <div class="rf-pb-2w">
           <p>
             Tous les étudiants du supérieur sont éligibles (universités, écoles publiques et privées, BTS, ...), de toutes les nationalités.
@@ -102,7 +102,7 @@
 <div class="rf-container-fluid">
   <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
     <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
-      <h2>Je suis psychologue</h2>
+      <h2 id="je-suis-psychologue">Je suis psychologue</h2>
         <div class="rf-pb-5w">
           <p>
             Vous souhaitez participer au programme d'accompagnement psychologique des étudiants ? Merci !
@@ -112,17 +112,21 @@
             Une université vous contactera ensuite pour établir une convention.
             Cette convention garantira le remboursement de l'ensemble des consultations que vous réaliserez dans le cadre de ce dispositif.
           </p>
+          <p>
+            <a class="rf-btn rf-btn--secondary" href="/faq#psy">
+              Consulter la foire aux questions
+            </a>
+          </p>
           <% if (formUrl) { %>
             <p>
-              Vous êtes prêts à commencer ?
+              Vous voulez devenir psychologue partenaire du dispositif ?
             </p>
-            <a class="rf-btn rf-btn--alt" href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">Participer au dispositif</a>
-            <p>
-              <a class="rf-btn rf-btn--alt" href="/faq#psy">En savoir plus</a>
-            </p>
+            <a class="rf-btn rf-btn--alt" href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">
+              Commencer mon inscription
+            </a>
             <% if (featurePsyPages) { %>
               <p>Vous avez déjà reçu la validation suite à la démarche ?</p>
-              <a class="rf-btn rf-btn--alt" href="/psychologue/login">Connectez vous pour déclarer vos séances</a>
+              <a class="rf-btn rf-btn--alt" href="/psychologue/login">Déclarer mes séances</a>
             <% } %>
           <% } else { %>
             <p>
