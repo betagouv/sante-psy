@@ -1,0 +1,37 @@
+<%- include('partials/header', { pageSubtitle: 'Espace Psychologues', home: '/psychologue/mes-seances'}) -%>
+
+<div class="rf-container rf-mb-5w">
+  <%- include('partials/ariane',
+  {
+    items: [
+      {
+        label: 'Remboursement de mes séances',
+        url: '/psychologue/mes-remboursements'
+      },
+    ],
+  })
+  -%>
+  <h1>Remboursement de mes séances</h1>
+  <div class="rf-mb-5w">
+    <div>
+      Merci de participer au dispositif Santé Psy Etudiants!
+    </div>
+  </div>
+  <% if (errors.length) { %>
+    <% errors.forEach(function(error) { %>
+      <%- include('partials/notificationError', {error: error}) -%>
+    <% }) %>
+  <% } %>
+  <% if (infos.length) { %>
+    <% infos.forEach(function(info) { %>
+      <%- include('partials/notificationInfo', {info: info}) -%>
+    <% }) %>
+  <% } %>
+  <div class="rf-grid-row rf-grid-row--left rf-grid-row--gutters">
+  </div>
+  <div class="rf-my-4w">
+    Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
+  </div>
+</div>
+
+<%- include('partials/footer') -%>

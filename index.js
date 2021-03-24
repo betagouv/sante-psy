@@ -31,6 +31,7 @@ const patientsController = require('./controllers/patientsController');
 const psyListingController = require('./controllers/psyListingController');
 const loginController = require('./controllers/loginController');
 const faqController = require('./controllers/faqController');
+const reimbursementController = require('./controllers/reimbursementController');
 
 // Desactivate debug log for production as they are a bit too verbose
 if( !config.activateDebug ) {
@@ -93,6 +94,7 @@ app.use(function populate(req, res, next){
   res.locals.errors = req.flash('error');
   res.locals.infos = req.flash('info');
   res.locals.successes = req.flash('success');
+  res.locals.featureReimbursementPage = config.featureReimbursementPage;
   next();
 })
 
@@ -207,6 +209,10 @@ if (config.featurePsyPages) {
   app.post('/psychologue/api/modifier-patient',
     patientsController.editPatientValidators,
     patientsController.editPatient)
+
+  if (config.featureReimbursementPage) {
+    app.get('/psychologue/mes-remboursements', reimbursementController.reimbursement)
+  }
 }
 
 app.get('/faq', faqController.getFaq);
