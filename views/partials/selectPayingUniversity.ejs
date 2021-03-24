@@ -1,26 +1,50 @@
 <div>
   <h3>Ma convention</h3>
-  <div>
-    L'université avec laquelle vous signez la convention est celle qui va vous rembourser vos séances.
-  </div>
-  <div>
-    L'appartenance de l'étudiant n'a pas d'importance : votre université de conventionnement rembourse pour tous les étudiants.
-  </div>
-  <form action="/psychologue/renseigner-universite-de-convention" method="POST">
-    <input type="hidden" name="_csrf" value="<%= _csrf  %>">
-    Université actuelle : <%= currentUniversity.name %>
-    <div class="rf-select-group">
-      <label class="rf-label" for="university">Quelle université vous a contacté pour signer la convention ?</label>
-      <select class="rf-select" id="university" name="university" required>
-        <option value="" selected disabled hidden>- Cliquez pour choisir -</option>
-        <option value="none">Aucune pour le moment</option>
-        <% universities.forEach(function(university) { %>
-          <option value="<%= university.id %>"><%= university.name %></option>
-        <% }) %>
-      </select>
+  <div class="rf-mb-3w">
+    <div>
+      L'université avec laquelle vous signez la convention est celle qui va vous rembourser vos séances.
     </div>
-    <div class="rf-my-5w">
-      <button type="submit" class="rf-btn rf-fi-check-line rf-btn--icon-left">Valider</button>
+    <div>
+      L'appartenance de l'étudiant n'a pas d'importance : votre université de conventionnement rembourse pour tous les étudiants.
     </div>
-  </form>
+  </div>
+  <div id="current-university" <% if (showForm) { %> hidden <% } %>>
+    <div class="rf-grid-row"> <!-- rf-grid-row interfere avec hidden, on les met sur des elements séparés. -->
+      <div class="rf-mr-3w">
+        Université actuelle : <%= currentUniversity.name %>
+      </div>
+      <div>
+        <button id="change-current-university-button" class="rf-btn rf-fi-edit-line rf-btn--icon-left">
+          Modifier
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="change-current-university-form" <% if (!showForm) { %> hidden <% } %>>
+    <form action="/psychologue/renseigner-universite-de-convention" method="POST">
+      <input type="hidden" name="_csrf" value="<%= _csrf  %>">
+      <div class="rf-select-group">
+        <label class="rf-label" for="university">Quelle université vous a contacté pour signer la convention ?</label>
+        <select class="rf-select" id="university" name="university" required>
+          <% if (!currentUniversity) { %>
+            <option value="" selected disabled hidden>- Cliquez pour choisir -</option>
+          <% } %>
+          <% universities.forEach(function(university) { %>
+            <option
+              value="<%= university.id %>"
+              <% if (university.id === currentUniversity.id) { %> selected <% } %>
+            >
+              <%= university.name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="rf-my-5w">
+        <button type="submit" class="rf-btn rf-fi-check-line rf-btn--icon-left">Valider</button>
+      </div>
+    </form>
+  </div>
 </div>
+
+<script src="/static/js/selectPayingUniversity.js"></script>

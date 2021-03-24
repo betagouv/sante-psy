@@ -6,6 +6,7 @@ module.exports.reimbursement = async function reimbursement(req, res) {
   let universityList = []
   try {
     universityList = await dbUniversities.getUniversities()
+    universityList.sort((a, b) => a < b)
     // Todo if no universities, don't display the form at all ?
   } catch (err) {
     // todo do something
@@ -19,6 +20,7 @@ module.exports.reimbursement = async function reimbursement(req, res) {
       pageTitle: 'Remboursement',
       universities: universityList,
       currentUniversity: payingUniversity,
+      showForm: payingUniversity === undefined,
     });
   } catch (err) {
     // todo do something
