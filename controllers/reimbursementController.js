@@ -1,7 +1,6 @@
 const cookie = require('../utils/cookie')
 const dbPsychologists = require('../db/psychologists')
 const dbUniversities = require('../db/universities')
-const { update } = require('lodash')
 
 module.exports.reimbursement = async function reimbursement(req, res) {
   let universityList = []
