@@ -1,0 +1,25 @@
+<div>
+  <h3>Ma convention</h3>
+  <div>
+    L'université avec laquelle vous signez la convention est celle qui va vous rembourser vos séances.
+  </div>
+  <div>
+    L'appartenance de l'étudiant n'a pas d'importance : votre université de conventionnement rembourse pour tous les étudiants.
+  </div>
+  <form action="/psychologue/renseigner-universite-de-convention" method="POST">
+    <input type="hidden" name="_csrf" value="<%= _csrf  %>">
+    <div class="rf-select-group">
+      <label class="rf-label" for="university">Quelle université vous a contacté pour signer la convention ?</label>
+      <select class="rf-select" id="university" name="university" required>
+        <option value="" selected disabled hidden>- Cliquez pour choisir -</option>
+        <option value="none">Aucune pour le moment</option>
+        <% universities.forEach(function(university) { %>
+          <option value="<%= university.id %>"><%= university.name %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="rf-my-5w">
+      <button type="submit" class="rf-btn rf-fi-check-line rf-btn--icon-left">Valider</button>
+    </div>
+  </form>
+</div>
