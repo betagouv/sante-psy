@@ -138,21 +138,24 @@ module.exports.countAcceptedPsychologistsByPersonalEmail = async () => {
     .groupBy('personalEmail', 'state');
 }
 
-module.exports.updatePayingUniversity = async (psychologistId, payingUniversityId) => {
+module.exports.updateConventionInfo = async (psychologistId, payingUniversityId, isConventionSigned) => {
   return await knex(module.exports.psychologistsTable)
     .where({
       dossierNumber: psychologistId,
     })
     .update({
       payingUniversityId,
+      isConventionSigned,
       updatedAt: date.getDateNowPG()
     })
 }
 
-module.exports.getPayingUniversity = async (psychologistId) => {
+module.exports.getConventionInfo = async (psychologistId) => {
   const psyTable = module.exports.psychologistsTable
   const psyArray = await knex.from(psyTable)
-    .select(`${universitiesTable}.name`, `${universitiesTable}.id`)
+    .select(`${universitiesTable}.name as universityName`,
+      `${universitiesTable}.id as universityId`,
+      `${psyTable}.isConventionSigned`)
     .innerJoin(universitiesTable, `${psyTable}.payingUniversityId`, `${universitiesTable}.id`)
     .where(`${psyTable}.dossierNumber`, psychologistId)
   return psyArray[0]

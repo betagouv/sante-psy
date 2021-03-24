@@ -9,8 +9,16 @@
     </div>
   </div>
   <div id="current-university" <% if (showForm) { %> hidden <% } %>>
+    <div>
+      Université actuelle : <%= currentConvention.universityName %>
+    </div>
     <div class="rf-mb-2w">
-      Université actuelle : <%= currentUniversity.name %>
+      La convention
+      <% if (currentConvention.isConventionSigned) { %>
+        est signée.
+      <% } else { %>
+        n'est pas encore signée.
+      <% } %>
     </div>
     <button id="change-current-university-button" class="rf-btn rf-fi-edit-line rf-btn--icon-left">
       Modifier
@@ -20,21 +28,42 @@
   <div id="change-current-university-form" <% if (!showForm) { %> hidden <% } %>>
     <form action="/psychologue/renseigner-universite-de-convention" method="POST">
       <input type="hidden" name="_csrf" value="<%= _csrf  %>">
+
       <div class="rf-select-group">
         <label class="rf-label" for="university">Quelle université vous a contacté pour signer la convention ?</label>
         <select class="rf-select" id="university" name="university" required>
-          <% if (!currentUniversity.id) { %>
+          <% if (!currentConvention.universityid) { %>
             <option value="" selected disabled hidden>- Cliquez pour choisir -</option>
           <% } %>
           <% universities.forEach(function(university) { %>
             <option
               value="<%= university.id %>"
-              <% if (university.id === currentUniversity.id) { %> selected <% } %>
+              <% if (university.id === currentConvention.universityId) { %> selected <% } %>
             >
               <%= university.name %>
             </option>
           <% }) %>
         </select>
+      </div>
+
+      <div class="rf-form-group">
+        <fieldset class="rf-fieldset">
+          <legend class="rf-fieldset__legend">Avez-vous déjà signé la convention ?</legend>
+          <div class="rf-fieldset__content">
+            <div class="rf-radio-group">
+              <input type="radio" id="signed-yes" name="signed" value="yes"
+                <% if (currentConvention.isConventionSigned) { %> checked <% } %>
+              >
+              <label class="rf-label" for="signed-yes">Oui</label>
+            </div>
+            <div class="rf-radio-group">
+              <input type="radio" id="signed-no" name="signed" value="no"
+                <% if (!currentConvention.isConventionSigned) { %> checked <% } %>
+              >
+              <label class="rf-label" for="signed-no">Non, pas encore</label>
+            </div>
+          </div>
+        </fieldset>
       </div>
       <div class="rf-my-5w">
         <button type="submit" class="rf-btn rf-fi-check-line rf-btn--icon-left">Valider</button>
