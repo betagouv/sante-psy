@@ -9,16 +9,12 @@
     </div>
   </div>
   <div id="current-university" <% if (showForm) { %> hidden <% } %>>
-    <div class="rf-grid-row"> <!-- rf-grid-row interfere avec hidden, on les met sur des elements séparés. -->
-      <div class="rf-mr-3w">
-        Université actuelle : <%= currentUniversity.name %>
-      </div>
-      <div>
-        <button id="change-current-university-button" class="rf-btn rf-fi-edit-line rf-btn--icon-left">
-          Modifier
-        </button>
-      </div>
+    <div class="rf-mb-2w">
+      Université actuelle : <%= currentUniversity.name %>
     </div>
+    <button id="change-current-university-button" class="rf-btn rf-fi-edit-line rf-btn--icon-left">
+      Modifier
+    </button>
   </div>
 
   <div id="change-current-university-form" <% if (!showForm) { %> hidden <% } %>>
