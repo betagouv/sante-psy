@@ -93,6 +93,7 @@ app.use(function populate(req, res, next){
   res.locals.errors = req.flash('error');
   res.locals.infos = req.flash('info');
   res.locals.successes = req.flash('success');
+  res.locals.featureReimbursementPage = config.featureReimbursementPage;
   next();
 })
 
@@ -188,7 +189,6 @@ if (config.featurePsyPages) {
   app.get('/psychologue/logout', loginController.getLogout);
 
   app.get('/psychologue/mes-seances', dashboardController.dashboard)
-  app.get('/psychologue/mes-remboursements', dashboardController.reimbursement)
   app.get('/psychologue/nouvelle-seance', appointmentsController.newAppointment)
   app.post('/psychologue/creer-nouvelle-seance',
     appointmentsController.createNewAppointmentValidators,
@@ -206,6 +206,10 @@ if (config.featurePsyPages) {
   app.post('/psychologue/api/modifier-patient',
     patientsController.editPatientValidators,
     patientsController.editPatient)
+
+  if (config.featureReimbursementPage) {
+    app.get('/psychologue/mes-remboursements', dashboardController.reimbursement)
+  }
 }
 
 app.get('/faq', faqController.getFaq);
