@@ -9,9 +9,25 @@ module.exports.reimbursement = async function reimbursement(req, res) {
     // Todo if no universities, don't display the form at all ?
   } catch (err) {
     // todo do something
+    console.log(err)
   }
 
-  res.render('reimbursement', { pageTitle: 'Remboursement', universities: universityList});
+  try {
+    const psychologistId = cookie.getCurrentPsyId(req)
+    console.log('current psy', psychologistId)
+    // todo should this be in dbUniversities ?
+    const payingUniversity = await dbPsychologists.getPayingUniversity(psychologistId)
+    console.log('payingUniversity', payingUniversity)
+    res.render('reimbursement', {
+      pageTitle: 'Remboursement',
+      universities: universityList,
+      currentUniversity: payingUniversity,
+    });
+  } catch (err) {
+    // todo do something
+    console.error(err)
+    res.render('reimbursement', { pageTitle: 'Remboursement', universities: universityList});
+  }
 }
 
 // todo validators

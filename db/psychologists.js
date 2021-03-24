@@ -1,7 +1,8 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const date = require("../utils/date")
-const demarchesSimplifiees = require("../utils/demarchesSimplifiees")
+const demarchesSimplifiees = require("../utils/demarchesSimplifiees");
+const { universitiesTable } = require("./universities");
 
 module.exports.psychologistsTable =  "psychologists";
 
@@ -146,4 +147,13 @@ module.exports.updatePayingUniversity = async (psychologistId, payingUniversityI
       payingUniversityId,
       updatedAt: date.getDateNowPG()
     })
+}
+
+module.exports.getPayingUniversity = async (psychologistId) => {
+  const psyTable = module.exports.psychologistsTable
+  const psyArray = await knex.from(psyTable)
+    .select(`${universitiesTable}.name`, `${universitiesTable}.id`)
+    .innerJoin(universitiesTable, `${psyTable}.payingUniversityId`, `${universitiesTable}.id`)
+    .where(`${psyTable}.dossierNumber`, psychologistId)
+  return psyArray[0]
 }

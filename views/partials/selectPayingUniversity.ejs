@@ -8,6 +8,7 @@
   </div>
   <form action="/psychologue/renseigner-universite-de-convention" method="POST">
     <input type="hidden" name="_csrf" value="<%= _csrf  %>">
+    Université actuelle : <%= currentUniversity.name %>
     <div class="rf-select-group">
       <label class="rf-label" for="university">Quelle université vous a contacté pour signer la convention ?</label>
       <select class="rf-select" id="university" name="university" required>
