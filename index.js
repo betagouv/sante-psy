@@ -212,6 +212,9 @@ if (config.featurePsyPages) {
 
   if (config.featureReimbursementPage) {
     app.get('/psychologue/mes-remboursements', reimbursementController.reimbursement)
+    app.post('/psychologue/renseigner-universite-de-convention',
+      reimbursementController.updatePayingUniversity
+    )
   }
 }
 
