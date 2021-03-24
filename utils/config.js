@@ -9,7 +9,12 @@ if(!secret || !secretLogs) {
   console.error('Mandatory configurations SECRET or SECRET_LOG is/are missing')
 }
 
-console.log('process.env.FEATURE_REIMBURSEMENT_PAGE', process.env.FEATURE_REIMBURSEMENT_PAGE)
+console.log('process.env.FEATURE_REIMBURSEMENT_PAGE',
+  process.env.FEATURE_REIMBURSEMENT_PAGE,
+  typeof process.env.FEATURE_REIMBURSEMENT_PAGE,
+  process.env.FEATURE_REIMBURSEMENT_PAGE === 'true',
+  process.env.FEATURE_REIMBURSEMENT_PAGE === '"true"',
+  process.env.FEATURE_REIMBURSEMENT_PAGE === "'true'")
 
 module.exports = {
   appName: `Santé Psy Étudiant`,
@@ -27,7 +32,7 @@ module.exports = {
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
-  featureReimbursementPage: process.env.FEATURE_REIMBURSEMENT_PAGE === 'true',
+  featureReimbursementPage: (process.env.FEATURE_REIMBURSEMENT_PAGE === 'true') || false,
   uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid
   secret: secret,
   secretLogs: secretLogs,
