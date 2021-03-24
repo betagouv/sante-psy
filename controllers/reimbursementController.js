@@ -14,10 +14,7 @@ module.exports.reimbursement = async function reimbursement(req, res) {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    console.log('current psy', psychologistId)
-    // todo should this be in dbUniversities ?
     const payingUniversity = await dbPsychologists.getPayingUniversity(psychologistId)
-    console.log('payingUniversity', payingUniversity)
     res.render('reimbursement', {
       pageTitle: 'Remboursement',
       universities: universityList,
