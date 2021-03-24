@@ -25,7 +25,7 @@ module.exports = {
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
-  featureReimbursementPage: process.env.FEATURE_REIMBURSEMENT_PAGE === 'true' || false,
+  featureReimbursementPage: process.env.FEATURE_REIMBURSEMENT_PAGE === 'true',
   uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid
   secret: secret,
   secretLogs: secretLogs,
