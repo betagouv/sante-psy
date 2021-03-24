@@ -27,7 +27,7 @@
       <div class="rf-select-group">
         <label class="rf-label" for="university">Quelle université vous a contacté pour signer la convention ?</label>
         <select class="rf-select" id="university" name="university" required>
-          <% if (!currentUniversity) { %>
+          <% if (!currentUniversity.id) { %>
             <option value="" selected disabled hidden>- Cliquez pour choisir -</option>
           <% } %>
           <% universities.forEach(function(university) { %>
