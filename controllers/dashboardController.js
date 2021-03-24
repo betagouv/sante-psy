@@ -4,7 +4,7 @@ const dbPatient = require('../db/patients')
 
 function hasFolderCompleted(patient) {
   return (patient.INE !== '') && patient.hasPrescription && patient.isStudentStatusVerified &&
-  patient.institutionName && (patient.doctorName !== null) && (patient.institutionName !== null)
+  (patient.doctorName !== null) && (patient.institutionName !== null)
 }
 
 module.exports.dashboard = async function dashboard(req, res) {

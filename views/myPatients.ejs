@@ -14,7 +14,14 @@
               <li>
                 <%= patient.lastName %> <%= patient.firstNames %>
                 <% if (!patient.hasFolderCompleted) { %>
-                  <span class="rf-tag rf-tag--sm">Information(s) manquante(s)</span>
+                  <span class="rf-tag bg-orange-warning  rf-fi-alert-line rf-tag--icon-left rf-tag--sm"
+                  title="Le numéro INE, l'orientation du medecin, le nom du medecin, ou l'université du patient sont manquants">
+                    Information(s) manquante(s)
+                  </span>
+                <% } else { %>
+                  <span class="rf-tag bg-green-success rf-fi-check-line rf-tag--icon-left rf-tag--sm">
+                    Dossier complet
+                  </span>
                 <% } %>
               </li>
             </div>
@@ -23,7 +30,11 @@
                 <input type="hidden" name="_csrf" value="<%= _csrf  %>">
                 <input hidden name="patientid" value="<%= patient.id %>" />
                 <button type="submit" class="rf-btn rf-btn--secondary rf-btn--sm rf-fi-edit-line rf-btn--icon-left">
-                  Modifier
+                  <% if (!patient.hasFolderCompleted) { %>
+                    Compléter
+                  <% } else { %>
+                    Modifier
+                  <% } %>
                 </button>
               </form>
             </div>
