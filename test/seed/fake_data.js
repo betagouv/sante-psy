@@ -3,6 +3,7 @@
 const dbPsychologists = require("../../db/psychologists")
 const dbPatients = require("../../db/patients")
 const dbAppointments = require("../../db/appointments")
+const dbUniversities = require("../../db/universities")
 const demarchesSimplifiees = require("../../utils/demarchesSimplifiees")
 const clean = require('../helper/clean');
 
@@ -54,5 +55,17 @@ exports.seed = async function(knex) {
   });
 
   await knex(dbAppointments.appointmentsTable).insert(appointmentList)
-  console.log(`insert ${appointmentList.length} fake data to appointmentsTable`);
+  console.log(`inserted ${appointmentList.length} fake data to appointmentsTable`);
+
+  // A few universities
+  const universitiesList = [
+    { name: '--- Aucune pour le moment' },
+    { name: 'Clermont-Ferrand' },
+    { name: 'Grenoble' },
+    { name: 'Aix-Marseille' },
+    { name: 'Créteil Paris Est' },
+  ]
+
+  await knex(dbUniversities.universitiesTable).insert(universitiesList)
+  console.log(`inserted ${universitiesList.length} fake data to universitiesTable`);
 };
