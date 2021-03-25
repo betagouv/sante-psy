@@ -1,0 +1,28 @@
+<div>
+  <h2>
+    Comment mes séances seront-elles remboursées ?
+  </h2>
+  <div>
+    Lors de votre inscription au dispositif, vous avez signé une convention avec une université, et lui avez
+    transmis vos coordonnées bancaires (si ce n'est pas le cas n'hésitez pas à les recontacter).
+  </div>
+  <div class="rf-mt-2w">
+    À la fin de chaque mois, un email sera envoyé à l'université et à vous, contenant la liste des consultations
+    réalisées. L'université se chargera du remboursement, dans les 30 jours après cet email.
+  </div>
+  <% if (billingByMonth.length) { %>
+    <ul class="rf-list">
+      <% billingByMonth.forEach(function(billing) { %>
+        <div class="rf-grid-row rf-grid-row--gutters rf-grid-row--space-between">
+          <div class="rf-col-xs-12 rf-col-sm-6 rf-col-md-6 rf-col-lg-6 rf-col-xl-6">
+            <li><%= billing.monthYear %> : <%= billing.totalAppointments %> séances pour <%= billing.totalPatient %> patients</li>
+          </div>
+        </div>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>
+      Vous n'avez pas encore déclaré de séances, vous retrouverez ici votre récapitulatif de séances dans le but de créer vous même votre facture
+    </p>
+  <% } %>
+</div>

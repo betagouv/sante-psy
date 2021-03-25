@@ -22,6 +22,54 @@ module.exports.getAppointments = async (psychologistId) => {
   }
 }
 
+/**
+ * use raw to be able to extract year and month from timestamp, couldn't find it on knex doc
+ */
+module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
+  try {
+    const query = await knex.raw(`
+      SELECT count, year, month
+      FROM (
+        SELECT COUNT(*) AS count, "psychologistId"
+          ,EXTRACT(YEAR from "appointmentDate") AS year, EXTRACT(MONTH from "appointmentDate") AS month 
+        FROM ${appointmentsTable}
+        WHERE "psychologistId" = '${psychologistId}'
+        GROUP BY "psychologistId", 3, 4
+        ORDER BY year, month ASC
+      ) hide_ids_table_alias
+      `);
+
+    return query.rows;
+  } catch (err) {
+    console.error(`Impossible de récupérer les appointments`, err)
+    throw new Error(`Impossible de récupérer les appointments`)
+  }
+}
+
+/**
+ * use raw to be able to extract year and month from timestamp, couldn't find it on knex doc
+ */
+module.exports.getCountPatientsByYearMonth = async (psychologistId) => {
+  try {
+    const query = await knex.raw(`
+      SELECT count, year, month
+      FROM (
+        SELECT COUNT(*) AS count, "patientId"
+          ,EXTRACT(YEAR from "appointmentDate") AS year, EXTRACT(MONTH from "appointmentDate") AS month 
+        FROM ${appointmentsTable}
+        WHERE "psychologistId" = '${psychologistId}'
+        GROUP BY "patientId", 3, 4
+        ORDER BY year, month ASC
+      ) hide_ids_table_alias
+      `);
+
+    return query.rows;
+  } catch (err) {
+    console.error(`Impossible de récupérer les appointments`, err)
+    throw new Error(`Impossible de récupérer les appointments`)
+  }
+}
+
 module.exports.insertAppointment = async (appointmentDate, patientId, psychologistId) => {
   try {
     const insertedArray = await knex(appointmentsTable).insert({
