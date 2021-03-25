@@ -34,9 +34,9 @@ module.exports.reimbursement = async function reimbursement(req, res) {
       showForm: conventionInfo === undefined,
     });
   } catch (err) {
-    // todo do something
-    console.error(err)
-    res.render('reimbursement', { pageTitle: 'Remboursement', universities: universityList});
+    console.error(`Could not fetch currentPsy or conventionInfo`, err)
+    req.flash('error', `La page Remboursement n'arrive pas à s'afficher.`)
+    return res.redirect('/psychologue/mes-seances')
   }
 }
 
