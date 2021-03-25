@@ -6,7 +6,7 @@ const dbAppointments = require("../../db/appointments")
 const demarchesSimplifiees = require("../../utils/demarchesSimplifiees")
 const clean = require('../helper/clean');
 
-exports.seed = function(knex) {
+exports.seed = async function(knex) {
   const psyList = [
     clean.getOnePsy('login@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, false),
     clean.getOnePsy('estelle.comment@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, false),
@@ -25,34 +25,34 @@ exports.seed = function(knex) {
     clean.getOnePsy('refuse@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.refuse, false),
   ];
 
-  return knex(dbPsychologists.psychologistsTable).insert(psyList).then(() => {
-    console.log(`insert ${psyList.length} fake data to psychologistsTable`);
-    // 4 patients by psy except 'empty@beta.gouv.fr'
-    const patientList = psyList.filter( psy => psy.personalEmail !== 'empty@beta.gouv.fr')
-    .flatMap(function (psy) {
-      return [
-        clean.getOnePatient(psy.dossierNumber),
-        clean.getOnePatient(psy.dossierNumber),
-        clean.getOnePatient(psy.dossierNumber),
-        clean.getOnePatient(psy.dossierNumber),
-      ]
-    });
-    return knex(dbPatients.patientsTable).insert(patientList).then(() => {
-      console.log(`insert ${patientList.length} fake data to patientsTable`);
-      // 5 appointments by patients
-      const appointmentList = patientList.flatMap(function (patient) {
-        return [
-          clean.getOneAppointment(patient.id, patient.psychologistId),
-          clean.getOneAppointment(patient.id, patient.psychologistId),
-          clean.getOneAppointment(patient.id, patient.psychologistId),
-          clean.getOneAppointment(patient.id, patient.psychologistId),
-          clean.getOneAppointment(patient.id, patient.psychologistId),
-        ]
-      });
+  await knex(dbPsychologists.psychologistsTable).insert(psyList)
+  console.log(`inserted ${psyList.length} fake data to psychologistsTable`);
 
-      return knex(dbAppointments.appointmentsTable).insert(appointmentList).then(() => {
-        console.log(`insert ${appointmentList.length} fake data to appointmentsTable`);
-      });
-    });
+  // 4 patients by psy except 'empty@beta.gouv.fr'
+  const patientList = psyList.filter( psy => psy.personalEmail !== 'empty@beta.gouv.fr')
+  .flatMap(function (psy) {
+    return [
+      clean.getOnePatient(psy.dossierNumber),
+      clean.getOnePatient(psy.dossierNumber),
+      clean.getOnePatient(psy.dossierNumber),
+      clean.getOnePatient(psy.dossierNumber),
+    ]
   });
+
+  await knex(dbPatients.patientsTable).insert(patientList)
+  console.log(`inserted ${patientList.length} fake data to patientsTable`);
+
+  // 5 appointments by patients
+  const appointmentList = patientList.flatMap(function (patient) {
+    return [
+      clean.getOneAppointment(patient.id, patient.psychologistId),
+      clean.getOneAppointment(patient.id, patient.psychologistId),
+      clean.getOneAppointment(patient.id, patient.psychologistId),
+      clean.getOneAppointment(patient.id, patient.psychologistId),
+      clean.getOneAppointment(patient.id, patient.psychologistId),
+    ]
+  });
+
+  await knex(dbAppointments.appointmentsTable).insert(appointmentList)
+  console.log(`insert ${appointmentList.length} fake data to appointmentsTable`);
 };
