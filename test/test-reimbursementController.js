@@ -86,5 +86,11 @@ describe('reimbursementController', () => {
       })
     })
 
+    it('should not update if universityId is not a uuid', async () => {
+      await runFailingValidationTest({
+        signed: 'yes',
+        university: 'not a uuid',
+      })
+    })
   })
 })
