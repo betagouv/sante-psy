@@ -23,10 +23,9 @@ module.exports.reimbursement = async function reimbursement(req, res) {
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     const conventionInfo = await dbPsychologists.getConventionInfo(psychologistId)
-    let currentConvention = conventionInfo
-    if (conventionInfo === undefined) {
-      currentConvention = {universityId: undefined, universityName: undefined, isConventionSigned: false}
-    }
+    const currentConvention = conventionInfo === undefined ?
+      {universityId: undefined, universityName: undefined, isConventionSigned: false} :
+      conventionInfo
     res.render('reimbursement', {
       pageTitle: 'Remboursement',
       universities: universityList,
@@ -46,7 +45,6 @@ module.exports.updateConventionInfo = async (req, res) => {
 
   const universityId = req.body['university']
   const isConventionSigned = req.body.signed === 'yes'
-  // todo error if no radio is checked ?
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
