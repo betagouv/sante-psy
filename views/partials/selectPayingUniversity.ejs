@@ -30,7 +30,10 @@
       <input type="hidden" name="_csrf" value="<%= _csrf  %>">
 
       <div class="rf-select-group">
-        <label class="rf-label" for="university">Quelle université vous a contacté pour signer la convention ?</label>
+        <label class="rf-label" for="university">
+          Quelle université vous a contacté pour signer la convention ?
+          <span class="red-text">*</span>
+        </label>
         <select class="rf-select" id="university" name="university" required>
           <% if (!currentConvention.universityid) { %>
             <option value="" selected disabled hidden>- Cliquez pour choisir -</option>
@@ -48,16 +51,19 @@
 
       <div class="rf-form-group">
         <fieldset class="rf-fieldset">
-          <legend class="rf-fieldset__legend">Avez-vous déjà signé la convention ?</legend>
+          <legend class="rf-fieldset__legend">
+            Avez-vous déjà signé la convention ?
+            <span class="red-text">*</span>
+          </legend>
           <div class="rf-fieldset__content">
             <div class="rf-radio-group">
-              <input type="radio" id="signed-yes" name="signed" value="yes"
+              <input type="radio" id="signed-yes" name="signed" value="yes" required
                 <% if (currentConvention.isConventionSigned) { %> checked <% } %>
               >
               <label class="rf-label" for="signed-yes">Oui</label>
             </div>
             <div class="rf-radio-group">
-              <input type="radio" id="signed-no" name="signed" value="no"
+              <input type="radio" id="signed-no" name="signed" value="no" required
                 <% if (!currentConvention.isConventionSigned) { %> checked <% } %>
               >
               <label class="rf-label" for="signed-no">Non, pas encore</label>
