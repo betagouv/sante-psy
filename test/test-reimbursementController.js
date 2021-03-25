@@ -44,7 +44,7 @@ describe('reimbursementController', () => {
         })
     })
 
-    it.only('should not update if signed is missing', async () => {
+    it('should not update if signed is missing', async () => {
       const psyEmail = 'login@beta.gouv.fr'
       await dbPsychologists.savePsychologistInPG([clean.getOnePsy(psyEmail, 'accepte', false)])
       const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail)
@@ -60,6 +60,31 @@ describe('reimbursementController', () => {
         .send({
           // signed: missing
           university: university.id,
+        })
+        .then(async () => {
+          const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail)
+          console.log('updatedPsy', updatedPsy)
+          chai.expect(updatedPsy.isConventionSigned).not.to.exist
+          chai.expect(updatedPsy.payingUniversityId).not.to.exist
+        })
+    })
+
+    it('should not update if universityId is missing', async () => {
+      const psyEmail = 'login@beta.gouv.fr'
+      await dbPsychologists.savePsychologistInPG([clean.getOnePsy(psyEmail, 'accepte', false)])
+      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail)
+      // Check that the fields we are testing are unset before test
+      chai.expect(psy.isConventionSigned).not.to.exist
+      chai.expect(psy.payingUniversityId).not.to.exist
+
+      return chai.request(app)
+        .post('/psychologue/api/renseigner-convention')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          signed: 'yes',
+          // university: missing
         })
         .then(async () => {
           const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail)
