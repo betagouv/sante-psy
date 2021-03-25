@@ -48,11 +48,9 @@ module.exports.updateConventionInfo = async (req, res) => {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    const updated = await dbPsychologists.updateConventionInfo(psychologistId, universityId, isConventionSigned)
+    await dbPsychologists.updateConventionInfo(psychologistId, universityId, isConventionSigned)
 
-    // todo specific info message for this partial ?
-    req.flash('info', `C'est noté ! Vous avez conventionné avec ${universityId}.`) // todo use name not id
-
+    req.flash('info', `Vos informations de conventionnement sont bien enregistrées.`)
     return res.redirect('/psychologue/mes-remboursements')
   } catch (err) {
     console.error(`Could not update paying university for psy.`, err)
