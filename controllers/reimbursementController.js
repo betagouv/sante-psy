@@ -1,6 +1,8 @@
+const { check } = require('express-validator');
 const cookie = require('../utils/cookie')
 const dbPsychologists = require('../db/psychologists')
 const dbUniversities = require('../db/universities')
+const validation = require('../utils/validation')
 
 module.exports.reimbursement = async function reimbursement(req, res) {
   let universityList = []
@@ -39,9 +41,22 @@ module.exports.reimbursement = async function reimbursement(req, res) {
   }
 }
 
-// todo validators
+module.exports.updateConventionInfoValidators = [
+  check('university')
+    .isUUID()
+    .withMessage('Vous devez choisir une université.'),
+  check('signed')
+    .customSanitizer((value, { req }) => {
+      return req.sanitize(value)
+    })
+    .isIn(['yes', 'no'])
+    .withMessage('Vous devez spécifier si la convention est signée ou non.'),
+]
+
 module.exports.updateConventionInfo = async (req, res) => {
-  // todo validation
+  if (!validation.checkErrors(req)) {
+    return res.redirect('/psychologue/mes-remboursements')
+  }
 
   const universityId = req.body['university']
   const isConventionSigned = req.body.signed === 'yes'
