@@ -10,14 +10,14 @@
   </div>
   <div id="current-university" <% if (showForm) { %> hidden <% } %>>
     <div>
-      Université actuelle : <%= currentConvention.universityName %>
+      Vous êtes rattaché à l'université de <b><%= currentConvention.universityName %></b>.
     </div>
     <div class="rf-mb-2w">
       La convention
       <% if (currentConvention.isConventionSigned) { %>
-        est signée.
+        est <b>signée</b>.
       <% } else { %>
-        n'est pas encore signée.
+        n'est <b>pas encore signée</b>.
       <% } %>
     </div>
     <button id="change-current-university-button" class="rf-btn rf-fi-edit-line rf-btn--icon-left">
