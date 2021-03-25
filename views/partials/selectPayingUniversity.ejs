@@ -26,7 +26,10 @@
   </div>
 
   <div id="change-current-university-form" <% if (!showForm) { %> hidden <% } %>>
-    <form action="/psychologue/api/renseigner-convention" method="POST">
+      <% if (!currentConvention.universityid) { %>
+        <h4>Modifier le statut de ma convention</h4>
+      <% } %>
+      <form action="/psychologue/api/renseigner-convention" method="POST">
       <input type="hidden" name="_csrf" value="<%= _csrf  %>">
 
       <div class="rf-select-group">
@@ -72,7 +75,7 @@
         </fieldset>
       </div>
       <div class="rf-my-5w">
-        <button type="submit" class="rf-btn rf-fi-check-line rf-btn--icon-left">Valider</button>
+        <button type="submit" class="rf-btn rf-fi-check-line rf-btn--icon-left">Enregistrer</button>
       </div>
     </form>
   </div>
