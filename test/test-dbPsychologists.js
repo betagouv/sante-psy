@@ -4,6 +4,7 @@ require('dotenv').config();
 const dbPsychologists = rewire('../db/psychologists')
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees')
 const expect = require('chai').expect;
+const fail = require('chai').fail;
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
 const clean = require('./helper/clean');
@@ -200,5 +201,20 @@ describe('DB Psychologists', () => {
       expect(updatedPsy.payingUniversityId).to.equal(univUUID)
     })
 
+    it('should not update conventionInfo if psychologistId is unknown', async () => {
+      const univUUID = '736bd860-3928-457e-9f40-3f367c36be30'
+      const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0675'
+
+      try {
+        await dbPsychologists.updateConventionInfo(
+          unknownPsyId,
+          univUUID,
+          true, // isConventionSigned
+        )
+        fail('updateConventionInfo should have thrown error')
+      } catch (err) {
+        // pass
+      }
+    })
   })
 });
