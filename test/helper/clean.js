@@ -106,3 +106,7 @@ module.exports.cleanAllPatients = function cleanAllPatients() {
 module.exports.cleanAllAppointments = function cleanAllAppointments() {
   return knex('appointments').select('*').delete()
 }
+
+module.exports.cleanAllUniversities = function cleanAllUniversities() {
+  return knex('universities').select('*').delete()
+}

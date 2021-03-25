@@ -1,7 +1,8 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const date = require("../utils/date")
-const demarchesSimplifiees = require("../utils/demarchesSimplifiees")
+const demarchesSimplifiees = require("../utils/demarchesSimplifiees");
+const { universitiesTable } = require("./universities");
 
 module.exports.psychologistsTable =  "psychologists";
 
@@ -137,3 +138,29 @@ module.exports.countAcceptedPsychologistsByPersonalEmail = async () => {
     .groupBy('personalEmail', 'state');
 }
 
+module.exports.updateConventionInfo = async (psychologistId, payingUniversityId, isConventionSigned) => {
+  const updated = await knex(module.exports.psychologistsTable)
+    .where({
+      dossierNumber: psychologistId,
+    })
+    .update({
+      payingUniversityId,
+      isConventionSigned,
+      updatedAt: date.getDateNowPG()
+    })
+  if (!updated) {
+    throw new Error('No psychologist found for this id')
+  }
+  return updated
+}
+
+module.exports.getConventionInfo = async (psychologistId) => {
+  const psyTable = module.exports.psychologistsTable
+  const psyArray = await knex.from(psyTable)
+    .select(`${universitiesTable}.name as universityName`,
+      `${universitiesTable}.id as universityId`,
+      `${psyTable}.isConventionSigned`)
+    .innerJoin(universitiesTable, `${psyTable}.payingUniversityId`, `${universitiesTable}.id`)
+    .where(`${psyTable}.dossierNumber`, psychologistId)
+  return psyArray[0]
+}
