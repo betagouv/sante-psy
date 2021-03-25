@@ -139,7 +139,7 @@ module.exports.countAcceptedPsychologistsByPersonalEmail = async () => {
 }
 
 module.exports.updateConventionInfo = async (psychologistId, payingUniversityId, isConventionSigned) => {
-  return await knex(module.exports.psychologistsTable)
+  const updated = await knex(module.exports.psychologistsTable)
     .where({
       dossierNumber: psychologistId,
     })
@@ -148,6 +148,10 @@ module.exports.updateConventionInfo = async (psychologistId, payingUniversityId,
       isConventionSigned,
       updatedAt: date.getDateNowPG()
     })
+  if (!updated) {
+    throw new Error('No psychologist found for this id')
+  }
+  return updated
 }
 
 module.exports.getConventionInfo = async (psychologistId) => {
