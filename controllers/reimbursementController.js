@@ -6,15 +6,18 @@ module.exports.reimbursement = async function reimbursement(req, res) {
   let universityList = []
   try {
     universityList = await dbUniversities.getUniversities()
+    if (!universityList || universityList.length === 0) {
+      throw new Error('No universities in db')
+    }
     universityList.sort((a, b) => {
       if(a.name < b.name) { return -1; }
       if(a.name > b.name) { return 1; }
       return 0;
     })
-    // Todo if no universities, don't display the form at all ?
   } catch (err) {
-    // todo do something
-    console.log(err)
+    console.error(`Could not fetch universities`, err)
+    req.flash('error', `La page Remboursement n'arrive pas à s'afficher.`)
+    return res.redirect('/psychologue/mes-seances')
   }
 
   try {
