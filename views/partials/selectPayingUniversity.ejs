@@ -26,7 +26,7 @@
   </div>
 
   <div id="change-current-university-form" <% if (!showForm) { %> hidden <% } %>>
-    <form action="/psychologue/renseigner-universite-de-convention" method="POST">
+    <form action="/psychologue/api/renseigner-convention" method="POST">
       <input type="hidden" name="_csrf" value="<%= _csrf  %>">
 
       <div class="rf-select-group">
