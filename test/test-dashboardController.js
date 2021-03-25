@@ -44,14 +44,23 @@ describe('dashboardController', function() {
           doctorPhone : ""
         }
         hasFolderCompleted(patient).should.equal(false);
-        patient.doctorName=null
+        patient.doctorName=null;
         patient.hasPrescription=true;
         hasFolderCompleted(patient).should.equal(false);
-        patient.doctorName='doctorName'
+        patient.doctorName='doctorName';
         patient.isStudentStatusVerified=false;
         hasFolderCompleted(patient).should.equal(false);
         patient.isStudentStatusVerified=true;
-        patient.INE=''
+        patient.INE='';
+        hasFolderCompleted(patient).should.equal(false);
+        patient.INE='INE';
+        patient.doctorName="    ", // trim should work
+        hasFolderCompleted(patient).should.equal(false);
+        patient.doctorName="doctorName", // trim should work
+        patient.institutionName='    ';
+        hasFolderCompleted(patient).should.equal(false);
+        patient.doctorName="", // trim should work
+        patient.institutionName='institutionName';
         hasFolderCompleted(patient).should.equal(false);
       });
   });

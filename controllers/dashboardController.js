@@ -3,8 +3,17 @@ const dbAppointments = require('../db/appointments')
 const dbPatient = require('../db/patients')
 
 function hasFolderCompleted(patient) {
-  return (patient.INE !== '') && patient.hasPrescription && patient.isStudentStatusVerified &&
-  (patient.doctorName !== null) && (patient.institutionName !== null)
+  let notEmptyDoctorName = true;
+  let notEmptyInstitutionName = true;
+  if(patient.doctorName) {
+    notEmptyDoctorName = !(!patient.doctorName.trim())
+  }
+  if(patient.institutionName) {
+    notEmptyInstitutionName = !(!patient.institutionName.trim())
+  }
+
+  return !!(patient.INE) && patient.hasPrescription && patient.isStudentStatusVerified &&
+  !!(patient.doctorName) && !!(patient.institutionName) && notEmptyDoctorName && notEmptyInstitutionName;
 }
 
 module.exports.dashboard = async function dashboard(req, res) {
