@@ -42,13 +42,12 @@ module.exports.reimbursement = async function reimbursement(req, res) {
 }
 
 module.exports.updateConventionInfoValidators = [
+  // Note : no sanitizing because isUUID will not allow strange html anyway.
   check('university')
     .isUUID()
     .withMessage('Vous devez choisir une université.'),
+  // Note : no sanitizing because only 2 possible values, so will not allow strange html anyway.
   check('signed')
-    .customSanitizer((value, { req }) => {
-      return req.sanitize(value)
-    })
     .isIn(['yes', 'no'])
     .withMessage('Vous devez spécifier si la convention est signée ou non.'),
 ]

@@ -44,7 +44,7 @@ describe('reimbursementController', () => {
         })
     })
 
-    const runFailingValidationTest = async (payload) => {
+    const failValidation = async (payload) => {
       const psyEmail = 'login@beta.gouv.fr'
       await dbPsychologists.savePsychologistInPG([clean.getOnePsy(psyEmail, 'accepte', false)])
       const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail)
@@ -66,28 +66,28 @@ describe('reimbursementController', () => {
     }
 
     it('should not update if signed is missing', async () => {
-      await runFailingValidationTest({
+      await failValidation({
         // signed: missing
         university: university.id,
       })
     })
 
     it('should not update if universityId is missing', async () => {
-      await runFailingValidationTest({
+      await failValidation({
         signed: 'yes',
         // university: missing
       })
     })
 
     it('should not update if signed is not "yes" or "no"', async () => {
-      await runFailingValidationTest({
+      await failValidation({
         signed: 'yes maybe',
         university: university.id,
       })
     })
 
     it('should not update if universityId is not a uuid', async () => {
-      await runFailingValidationTest({
+      await failValidation({
         signed: 'yes',
         university: 'not a uuid',
       })
