@@ -3,6 +3,7 @@ const rewire = require('rewire');
 require('dotenv').config();
 const dbPsychologists = rewire('../db/psychologists')
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees')
+const expect = require('chai').expect;
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
 const clean = require('./helper/clean');
@@ -176,4 +177,29 @@ describe('DB Psychologists', () => {
       assert(undefined === psy);
     });
   });
+
+  describe('updateConventionInfo', () => {
+    it('should update conventionInfo', async () => {
+      const univUUID = '736bd860-3928-457e-9f40-3f367c36be30'
+      const psy = psyList[0]
+      psy.state = demarchesSimplifiees.DOSSIER_STATE.accepte;
+      await dbPsychologists.savePsychologistInPG([psy]);
+      const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      // Check that fields are not set pre-test
+      expect(savedPsy.isConventionSigned).not.to.exist
+      expect(savedPsy.payingUniversityId).not.to.exist
+
+      await dbPsychologists.updateConventionInfo(
+        savedPsy.dossierNumber,
+        univUUID,
+        true, // isConventionSigned
+      )
+
+      const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+
+      expect(updatedPsy.isConventionSigned).to.equal(true)
+      expect(updatedPsy.payingUniversityId).to.equal(univUUID)
+    })
+
+  })
 });
