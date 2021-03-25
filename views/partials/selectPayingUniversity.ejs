@@ -9,8 +9,9 @@
     </div>
   </div>
   <div id="current-university" <% if (showForm) { %> hidden <% } %>>
+    <div><b>Statut de ma convention :</b></div>
     <div>
-      Vous êtes rattaché à l'université de <b><%= currentConvention.universityName %></b>.
+      Je suis rattaché à l'université de <b><%= currentConvention.universityName %></b>.
     </div>
     <div class="rf-mb-2w">
       La convention
@@ -21,12 +22,12 @@
       <% } %>
     </div>
     <button id="change-current-university-button" class="rf-btn rf-fi-edit-line rf-btn--icon-left">
-      Modifier
+      Modifier le statut
     </button>
   </div>
 
   <div id="change-current-university-form" <% if (!showForm) { %> hidden <% } %>>
-      <% if (!currentConvention.universityid) { %>
+      <% if (currentConvention.universityId) { %>
         <h4>Modifier le statut de ma convention</h4>
       <% } %>
       <form action="/psychologue/api/renseigner-convention" method="POST">
