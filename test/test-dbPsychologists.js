@@ -19,8 +19,7 @@ describe('DB Psychologists', () => {
     return exist;
   }
 
-  //Clean up all data
-  beforeEach(async function before() {
+  afterEach(async function before() {
     await clean.cleanAllPsychologists();
   })
 
