@@ -27,8 +27,9 @@
       <%- include('partials/notificationInfo', {info: info}) -%>
     <% }) %>
   <% } %>
-  <div class="rf-grid-row rf-grid-row--left rf-grid-row--gutters">
-  </div>
+
+  <%- include('partials/selectPayingUniversity') -%>
+
   <div class="rf-my-4w">
     Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
   </div>

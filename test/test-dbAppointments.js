@@ -92,16 +92,16 @@ describe('DB Appointments', () => {
       const output = await dbAppointments.getCountAppointmentsByYearMonth(psy.dossierNumber);
 
       assert(output.length === 4); // 4 months
-      assert(output[0].count === '4');
+      assert(output[0].countAppointments === '4');
       assert(output[0].year === 2021);
       assert(output[0].month === 3);
-      assert(output[1].count === '1');
+      assert(output[1].countAppointments === '1');
       assert(output[1].year === 2021);
       assert(output[1].month === 4);
-      assert(output[2].count === '1');
+      assert(output[2].countAppointments === '1');
       assert(output[2].year === 2021);
       assert(output[2].month === 6);
-      assert(output[3].count === '1');
+      assert(output[3].countAppointments === '1');
       assert(output[3].year === 2021);
       assert(output[3].month === 7);
     });
@@ -135,16 +135,16 @@ describe('DB Appointments', () => {
       const output = await dbAppointments.getCountPatientsByYearMonth(psy.dossierNumber);
 
       assert(output.length === 4); // 4 months
-      assert(output[0].count === '3');
+      assert(output[0].countPatients === '3');
       assert(output[0].year === 2021);
       assert(output[0].month === 3);
-      assert(output[1].count === '1');
+      assert(output[1].countPatients === '1');
       assert(output[1].year === 2021);
       assert(output[1].month === 4);
-      assert(output[2].count === '1');
+      assert(output[2].countPatients === '1');
       assert(output[2].year === 2021);
       assert(output[2].month === 6);
-      assert(output[3].count === '1');
+      assert(output[3].countPatients === '1');
       assert(output[3].year === 2021);
       assert(output[3].month === 7);
     });
