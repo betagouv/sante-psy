@@ -1,10 +1,10 @@
 const dbAppointments = require('../db/appointments')
 const { check } = require('express-validator');
 const cookie = require('../utils/cookie')
+const date = require('../utils/date')
 const dbPsychologists = require('../db/psychologists')
 const dbUniversities = require('../db/universities')
 const validation = require('../utils/validation')
-const _ = require('lodash')
 
 module.exports.reimbursement = async function reimbursement(req, res) {
   let universityList = []
@@ -30,11 +30,15 @@ module.exports.reimbursement = async function reimbursement(req, res) {
     const currentConvention = conventionInfo === undefined ?
       {universityId: undefined, universityName: undefined, isConventionSigned: false} :
       conventionInfo
+
+    const totalAppointmentsAndPatientByPsy = await getTotalAppointmentsAndPatientByPsy(req);
+
     res.render('reimbursement', {
       pageTitle: 'Remboursement',
       universities: universityList,
       currentConvention: currentConvention,
       showForm: conventionInfo === undefined,
+      total: totalAppointmentsAndPatientByPsy,
     });
   } catch (err) {
     console.error(`Could not fetch currentPsy or conventionInfo`, err)
@@ -43,36 +47,26 @@ module.exports.reimbursement = async function reimbursement(req, res) {
   }
 }
 
-function sameYearMonth(arrayVal, othVal) {
-  if(arrayVal.month === othVal.month && arrayVal.year === othVal.year) {
+function mergeTotalPatientAppointments(totalAppointments, totalPatients) {
+  return totalPatients.map ( totalPatient => {
+    const appointForMonthYear = totalAppointments.filter(totalAppointment => {
+      return (totalAppointment.year === totalPatient.year) && (totalAppointment.month === totalPatient.month);
+    })[0];
+
     return {
-      month: arrayVal.month,
-      year: arrayVal.year,
-      countPatients: arrayVal.countPatients,
-      countAppointments: othVal.countAppointments,
+      year: totalPatient.year,
+      month: date.getFrenchMonthName(totalPatient.month),
+      countPatients: totalPatient.countPatients,
+      countAppointments: appointForMonthYear.countAppointments,
     }
-  }
+  })
 }
-module.exports.billing = async function billing(req, res) {
-  try {
-    const psychologistId = req.sanitize(cookie.getCurrentPsyId(req))
-    const totalAppointments = await dbAppointments.getCountAppointmentsByYearMonth(psychologistId);
-    const totalPatients = await dbAppointments.getCountPatientsByYearMonth(psychologistId);
 
-    const total = _.unionWith(totalPatients, totalAppointments, sameYearMonth);
-    console.log("total", total);
-    //@TODO merge totalAppointments and totalPatients
-
-    res.render('billing', {
-      total: total
-    });
-  } catch (err) {
-    req.flash('error', 'Impossible de charger les séances et les patients. Réessayez ultérieurement.')
-    console.error('billing', err);
-    res.render('billing', {
-      total: []
-    });
-  }
+async function getTotalAppointmentsAndPatientByPsy (req) {
+  const psychologistId = req.sanitize(cookie.getCurrentPsyId(req))
+  const totalAppointments = await dbAppointments.getCountAppointmentsByYearMonth(psychologistId);
+  const totalPatients = await dbAppointments.getCountPatientsByYearMonth(psychologistId);
+  return mergeTotalPatientAppointments(totalAppointments, totalPatients);
 }
 
 module.exports.updateConventionInfoValidators = [

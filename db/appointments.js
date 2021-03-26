@@ -28,9 +28,9 @@ module.exports.getAppointments = async (psychologistId) => {
 module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
   try {
     const query = await knex.raw(`
-      SELECT countAppointments, year, month
+      SELECT CAST("countAppointments" AS INTEGER), year, month
       FROM (
-        SELECT COUNT(*) AS countAppointments, "psychologistId"
+        SELECT COUNT(*) AS "countAppointments", "psychologistId"
           ,EXTRACT(YEAR from "appointmentDate") AS year, EXTRACT(MONTH from "appointmentDate") AS month 
         FROM ${appointmentsTable}
         WHERE "psychologistId" = '${psychologistId}'
@@ -52,13 +52,13 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
 module.exports.getCountPatientsByYearMonth = async (psychologistId) => {
   try {
     const query = await knex.raw(`
-      SELECT countPatients, year, month
+      SELECT CAST("countPatients" AS INTEGER), year, month
       FROM (
-        SELECT COUNT(*) AS countPatients, "patientId"
+        SELECT COUNT(DISTINCT "patientId") AS "countPatients"
           ,EXTRACT(YEAR from "appointmentDate") AS year, EXTRACT(MONTH from "appointmentDate") AS month 
         FROM ${appointmentsTable}
         WHERE "psychologistId" = '${psychologistId}'
-        GROUP BY "patientId", 3, 4
+        GROUP BY 2, 3
         ORDER BY year, month ASC
       ) hide_ids_table_alias
       `);

@@ -49,8 +49,10 @@ exports.seed = async function(knex) {
       clean.getOneAppointment(patient.id, patient.psychologistId),
       clean.getOneAppointment(patient.id, patient.psychologistId),
       clean.getOneAppointment(patient.id, patient.psychologistId),
-      clean.getOneAppointment(patient.id, patient.psychologistId),
-      clean.getOneAppointment(patient.id, patient.psychologistId),
+      clean.getOneAppointment(patient.id, patient.psychologistId, 4),
+      clean.getOneAppointment(patient.id, patient.psychologistId, 5),
+      clean.getOneAppointment(patient.id, patient.psychologistId, 6),
+      clean.getOneAppointment(patient.id, patient.psychologistId, 10),
     ]
   });
 

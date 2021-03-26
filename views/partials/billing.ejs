@@ -1,0 +1,53 @@
+<div>
+  <h2>Facturation</h2>
+  <h3>
+    Comment mes séances seront-elles remboursées ?
+  </h3>
+  <div>
+    Lors de votre inscription au dispositif, vous avez signé une convention avec une université, et lui avez
+    transmis vos coordonnées bancaires (si ce n'est pas le cas n'hésitez pas à les recontacter).
+  </div>
+  <div class="rf-mt-2w">
+    <p>
+      À la fin de chaque mois, vous devez envoyer un email à l'université de conventionnement, contenant un récapitulatif des consultations
+      réalisées. L'université se chargera du remboursement, dans les 30 jours après cet email.
+    </p>
+    <p>
+      Besoin de plus d'informations ?
+    </p>
+    <p>
+      <a class="rf-btn rf-btn--secondary rf-mt-2w" href="/faq#remboursement">
+        Consulter la Foire Aux Questions
+      </a>
+    </p>
+  </div>
+  
+  <h3>Les élements à apparaitre sur votre facturation</h3>
+  <% if (total.length) { %>
+    <ul class="rf-list">
+      <% total.forEach(function(totalByMonth) { %>
+        <div class="rf-grid-row rf-grid-row--gutters rf-grid-row--space-between">
+          <li>
+            <strong><%= totalByMonth.month %> <%= totalByMonth.year %> :</strong> <%= totalByMonth.countAppointments %> séances pour <%= totalByMonth.countPatients %> patients
+          </li>
+        </div>
+      <% }) %>
+    </ul>
+    
+    <h3>
+      Aide pour la facturation
+    </h3>
+    <p>
+      Un doute sur le modèle de votre facture ? Vous pouvez prendre exemple sur ce modèle qui contient tous les éléments requis pour votre remboursement :
+    </p>
+    <p>
+      <a class="rf-btn rf-btn--secondary rf-mt-2w" href="/static/documents/modele-facturation-sante-psy-etudiant.pdf">
+        Voir le modèle de facturation
+      </a>
+    </p>
+  <% } else { %>
+    <p>
+      Vous n'avez pas encore déclaré de séances, vous retrouverez ici votre récapitulatif de séances dans le but de créer vous même votre facture
+    </p>
+  <% } %>
+</div>
