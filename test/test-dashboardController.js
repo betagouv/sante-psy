@@ -22,8 +22,7 @@ describe('dashboardController', function() {
         hasPrescription : true,
         psychologistId : "psychologistId",
         doctorName : "doctorName",
-        doctorAddress : "",
-        doctorPhone : ""
+        doctorAddress : "30000 Nîmes"
       }
 
       hasFolderCompleted(patient).should.equal(true);
@@ -40,8 +39,7 @@ describe('dashboardController', function() {
           hasPrescription : false,
           psychologistId : "psychologistId",
           doctorName : "doctorName",
-          doctorAddress : "",
-          doctorPhone : ""
+          doctorAddress : "30000 Nîmes",
         }
         hasFolderCompleted(patient).should.equal(false);
         patient.doctorName=null;
@@ -59,8 +57,13 @@ describe('dashboardController', function() {
         patient.doctorName="doctorName", // trim should work
         patient.institutionName='    ';
         hasFolderCompleted(patient).should.equal(false);
-        patient.doctorName="", // trim should work
+        patient.doctorName="", 
         patient.institutionName='institutionName';
+        hasFolderCompleted(patient).should.equal(false);
+        patient.doctorName="doctorName",
+        patient.doctorAddress='';
+        hasFolderCompleted(patient).should.equal(false);
+        patient.doctorAddress='    ';
         hasFolderCompleted(patient).should.equal(false);
       });
   });

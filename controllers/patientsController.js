@@ -24,7 +24,6 @@ module.exports.newPatient = async (req, res) => {
       id: '',
       doctorName: '',
       doctorAddress: '',
-      doctorPhone: '',
     }
   })
 }
@@ -68,11 +67,6 @@ const patientValidators = [
     .customSanitizer((value, { req }) => {
       return req.sanitize(value)
     }),
-  check('doctorphone')
-    .trim()
-    .customSanitizer((value, { req }) => {
-      return req.sanitize(value)
-    }),
   check('doctorname')
     .trim()
     .customSanitizer((value, { req }) => {
@@ -106,7 +100,6 @@ module.exports.editPatient = async (req, res) => {
   const patientInstitutionName = req.body['institution']
   const doctorName = req.body['doctorname']
   const doctorAddress = req.body['doctoraddress']
-  const doctorPhone = req.body['doctorphone']
   // Force to boolean beacause checkbox value send undefined when it's not checked
   const patientIsStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
   const patientHasPrescription = Boolean(req.body['hasprescription'])
@@ -124,11 +117,10 @@ module.exports.editPatient = async (req, res) => {
       psychologistId,
       doctorName,
       doctorAddress,
-      doctorPhone,
     )
     let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`
     if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified ||
-      !doctorAddress || !doctorPhone) {
+      !doctorAddress) {
       infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
         ' en cliquant le bouton "Modifier" du patient.'
     }
@@ -195,7 +187,6 @@ module.exports.createNewPatient = async (req, res) => {
   const institutionName = req.body['institution']
   const doctorName = req.body['doctorname']
   const doctorAddress = req.body['doctoraddress']
-  const doctorPhone = req.body['doctorphone']
   // Force to boolean beacause checkbox value send undefined when it's not checked
   const isStudentStatusVerified = Boolean(req.body['isstudentstatusverified'])
   const hasPrescription = Boolean(req.body['hasprescription'])
@@ -212,10 +203,9 @@ module.exports.createNewPatient = async (req, res) => {
       psychologistId,
       doctorName,
       doctorAddress,
-      doctorPhone,
     )
     let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
-    if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress || !doctorPhone ) {
+    if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress ) {
       infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
         ' en cliquant le bouton "Modifier" du patient.'
     }

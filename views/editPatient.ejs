@@ -38,9 +38,6 @@
         Les champs avec une astérique (<span class="red-text">*</span>) sont obligatoires.
       </div>
       <div class="rf-text--sm">
-        Les champs avec une astérique (*) sont nécessaires pour avoir un dossier complet.
-      </div>
-      <div class="rf-text--sm">
         S'il vous manque des champs non-obligatoires, vous pourrez y revenir plus tard pour compléter le dossier.
       </div>
       <input type="hidden" name="_csrf" value="<%= _csrf  %>">
@@ -71,20 +68,20 @@
         <div class="rf-my-3w rf-checkbox-group">
           <input type="checkbox" id="isstudentstatusverified" name="isstudentstatusverified" value="isstudentstatusverified" <% if(patient.isStudentStatusVerified){ %> checked="checked" <% } %> >
           <label class="rf-label" for="isstudentstatusverified">
-            J'ai vérifié le statut étudiant de ce patient *
+            J'ai vérifié le statut étudiant de ce patient
             <span class="rf-hint-text">J'ai vu sa carte d'étudiant ou un autre justificatif</span>
           </label>
         </div>
         <div class="rf-my-3w rf-checkbox-group">
           <input type="checkbox" id="hasprescription" name="hasprescription" value="hasprescription" <% if(patient.hasPrescription){ %> checked="checked" <% } %> >
           <label class="rf-label" for="hasprescription">
-            J'ai vérifié que les séances ont bien été prescrites par un médecin ou un Service de Santé Universitaire *
+            J'ai vérifié que les séances ont bien été prescrites par un médecin ou un Service de Santé Universitaire
             <span class="rf-hint-text">L'étudiant m'a présenté une lettre ou ordonnance médicale</span>
           </label>
         </div>
         <div class="rf-my-3w">
           <label class="rf-label" for="doctorname" aria-describedby="doctorname-help">
-            Médecin ou Service de Santé Universitaire qui a orienté ce patient *
+            Médecin ou Service de Santé Universitaire qui a orienté ce patient
           </label>
           <div class="rf-hint-text" id="doctorname-help">
             Exemple : Annie Benahmou ou SSU Rennes 1
@@ -93,21 +90,12 @@
         </div>
         <div class="rf-my-3w">
           <label class="rf-label" for="doctoraddress" aria-describedby="doctoraddress-help">
-            Adresse du médecin ou Service de Santé Universitaire
+            Ville et/ou code postal du médecin ou Service de Santé Universitaire
           </label>
           <div class="rf-hint-text" id="doctoraddress-help">
-            Exemple : 13 Rue Voltaire, 97400 Saint-Denis
+            Exemple : 97400 Saint-Denis
           </div>
           <input class="rf-input midlength-input" value="<%= patient.doctorAddress %>"  type="text" id="doctoraddress" name="doctoraddress">
-        </div>
-        <div class="rf-my-3w">
-          <label class="rf-label" for="doctorphone" aria-describedby="doctorphone-help">
-            Téléphone du médecin ou Service de Santé Universitaire
-          </label>
-          <div class="rf-hint-text" id="doctorphone-help">
-            Exemple : 05 00 00 00 00
-          </div>
-          <input class="rf-input midlength-input" value="<%= patient.doctorPhone %>"  type="tel" id="doctorphone" name="doctorphone">
         </div>
       </div>
       <div class="rf-my-5w">

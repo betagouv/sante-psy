@@ -62,7 +62,6 @@ describe('patientsController', function() {
           hasprescription: undefined,
           doctorname: doctorName,
           doctoraddress :doctorAddress,
-          doctorphone: doctorPhone,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -96,7 +95,6 @@ describe('patientsController', function() {
           hasprescription: undefined,
           doctorname: doctorName,
           doctoraddress :doctorAddress,
-          doctorphone: doctorPhone,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -124,7 +122,6 @@ describe('patientsController', function() {
           'hasPrescription': false,
           'doctorname': doctorName,
           'doctoraddress' :doctorAddress,
-          'doctorphone': doctorPhone,
         }
         ]))
       return Promise.resolve()
@@ -165,7 +162,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       })
     })
 
@@ -179,7 +175,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       })
     })
 
@@ -193,7 +188,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       })
     })
 
@@ -207,7 +201,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       })
     })
 
@@ -221,7 +214,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       })
     })
 
@@ -235,7 +227,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       })
     })
 
@@ -268,7 +259,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       })
     })
 
@@ -282,7 +272,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       })
     })
 
@@ -296,7 +285,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       })
     })
 
@@ -314,7 +302,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       }
 
       chai.request(app)
@@ -375,7 +362,6 @@ describe('patientsController', function() {
           chai.assert.include(res.text, myPatient.institutionName)
           chai.assert.include(res.text, myPatient.doctorName)
           chai.assert.include(res.text, myPatient.doctorAddress)
-          chai.assert.include(res.text, myPatient.doctorPhone)
 
           return Promise.resolve()
         })
@@ -496,7 +482,6 @@ describe('patientsController', function() {
           hasprescription: 'hasprescription',
           'doctorname': doctorName,
           'doctoraddress' :doctorAddress,
-          'doctorphone': doctorPhone,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -536,7 +521,6 @@ describe('patientsController', function() {
           institution: 'Petite ecole',
           isstudentstatusverified: 'isstudentstatusverified',
           hasprescription: 'hasprescription',
-          doctorphone: doctorPhone,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -603,7 +587,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -620,7 +603,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -637,7 +619,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -654,7 +635,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -671,7 +651,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -688,7 +667,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -704,7 +682,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       },
       '/psychologue/mes-seances')
     })
@@ -720,7 +697,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       },
       '/psychologue/mes-seances')
     })
@@ -755,7 +731,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       })
     })
 
@@ -770,7 +745,6 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
-        'doctorphone': doctorPhone,
       })
     })
 
