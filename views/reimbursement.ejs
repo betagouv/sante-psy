@@ -1,4 +1,4 @@
-<%- include('partials/header', { pageSubtitle: 'Espace Psychologues', home: '/psychologue/mes-seances'}) -%>
+<%- include('partials/header', { isInPsychologistPages: true }) -%>
 
 <div class="rf-container rf-mb-5w">
   <%- include('partials/ariane',
@@ -14,7 +14,7 @@
   <h1>Remboursement de mes séances</h1>
   <div class="rf-mb-5w">
     <div>
-      Merci de participer au dispositif Santé Psy Etudiants!
+      Merci de participer au dispositif Santé Psy Etudiants !
     </div>
   </div>
   <% if (errors.length) { %>
