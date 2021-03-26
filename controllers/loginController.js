@@ -17,7 +17,7 @@ module.exports.emailValidators = [
 ]
 
 function generateToken() {
-  return crypto.randomBytes(256).toString('base64');
+  return crypto.randomBytes(26).toString('hex');
 }
 
 async function sendLoginEmail(email, loginUrl, token) {
