@@ -24,7 +24,12 @@ module.exports.getAppointments = async (psychologistId) => {
 
 /**
  * use raw to be able to extract year and month from timestamp, couldn't find it on knex doc
- * returns : {countAppointments, year, month}
+ * Note : january = 1, february = 2, etc
+ * Example output :
+ * [
+ *  {countAppointments: 3, year: 2021, month: 3, psychologistId: '112323232-33434-3434'},
+ *  {countAppointments: 2, year: 2021, month: 4, psychologistId: '112323232-33434-3434'},
+ * ]
  */
 module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
   try {
@@ -51,7 +56,6 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
 
 /**
  * use raw to be able to extract year and month from timestamp, couldn't find it on knex doc
- * returns : [{countPatients, year, month}]
  * Note : january = 1, february = 2, etc
  * Example output :
  * [
