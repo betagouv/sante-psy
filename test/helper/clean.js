@@ -62,12 +62,12 @@ module.exports.getOnePatient = function getOnePatient(psychologistId, doctorName
   };
 }
 
-module.exports.getOneAppointment = function getOneAppointment(patientId, psychologistId) {
-  const now = date.getDateNowPG();
+module.exports.getOneAppointment = function getOneAppointment(patientId, psychologistId, month = 3) {
+  const myDate = new Date(2021, month, 10).toISOString();
   return {
     id: module.exports.testDossierNumber(Math.random().toString()),
     psychologistId: psychologistId,
-    appointmentDate: now,
+    appointmentDate: myDate,
     patientId: patientId,
   };
 }

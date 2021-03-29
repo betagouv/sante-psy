@@ -1,0 +1,73 @@
+<div>
+  <h2>Facturation</h2>
+  <h3>
+    Comment mes séances seront-elles remboursées ?
+  </h3>
+  <div>
+    Lors de votre inscription au dispositif, vous avez signé une convention avec une université, et lui avez
+    transmis vos coordonnées bancaires (si ce n'est pas le cas n'hésitez pas à les recontacter).
+  </div>
+  <div class="rf-mt-2w">
+    <p>
+      À la fin de chaque mois, vous devez envoyer un email à l'université de conventionnement, contenant un récapitulatif des consultations
+      réalisées. L'université se chargera du remboursement, dans les 30 jours après cet email.
+    </p>
+    <p>
+      Besoin de plus d'informations ?
+    </p>
+    <p>
+      <a class="rf-btn rf-btn--secondary rf-mt-2w" href="/faq#remboursement">
+        Consulter la Foire Aux Questions
+      </a>
+    </p>
+  </div>
+  
+  <h3>Les élements à apparaître sur votre facturation</h3>
+  <% if (total.length) { %>
+    <p>
+      Le nom des patients est couvert par le secret médical, ne le communiquez pas sur la facture. Le nombre de patients suffit.
+    </p>
+    <div class="rf-table">
+      <table>
+          <caption>Tableau récapitulatif par mois</caption>
+          <thead>
+              <tr>
+                  <td scope="col">Mois</th>
+                  <th scope="col">Nombre de séances</th>
+                  <th scope="col">Nombre de patients</th>
+              </tr>
+          </thead>
+          <tbody>
+            <% total.forEach(function(totalByMonth) { %>
+              <tr>
+                  <td><%= totalByMonth.month %> <%= totalByMonth.year %></td>
+                  <td><%= totalByMonth.countAppointments %></td>
+                  <td><%= totalByMonth.countPatients %></td>
+              </tr>
+          <% }) %>
+          </tbody>
+      </table>
+    </div>
+    <h3>
+      Aide pour la facturation
+    </h3>
+    <p>
+      Un doute sur le modèle de votre facture ? Vous pouvez prendre exemple sur ce modèle qui contient tous les éléments requis pour votre remboursement :
+    </p>
+    <p>
+      <a class="rf-btn rf-btn--secondary rf-mt-2w" href="/static/documents/modele-facturation-sante-psy-etudiant.pdf">
+        <span class="rf-fi-file-download-line" aria-hidden="true"></span> .pdf
+      </a>
+      <a class="rf-btn rf-btn--secondary rf-mt-2w" href="/static/documents/modele-facturation-sante-psy-etudiant.docx">
+        <span class="rf-fi-file-download-line" aria-hidden="true"></span> Microsoft Word .docx
+      </a>
+      <a class="rf-btn rf-btn--secondary rf-mt-2w" href="/static/documents/modele-facturation-sante-psy-etudiant.odt">
+        <span class="rf-fi-file-download-line" aria-hidden="true"></span> Libre Office .odt
+      </a>
+    </p>
+  <% } else { %>
+    <p>
+      Vous n'avez pas encore déclaré de séances, vous retrouverez ici votre récapitulatif de séances dans le but de créer vous même votre facture
+    </p>
+  <% } %>
+</div>

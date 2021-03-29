@@ -22,6 +22,59 @@ module.exports.getAppointments = async (psychologistId) => {
   }
 }
 
+/**
+ * Note : january = 1, february = 2, etc
+ * Example output :
+ * [
+ *  {countAppointments: 3, year: 2021, month: 3, psychologistId: '112323232-33434-3434'},
+ *  {countAppointments: 2, year: 2021, month: 4, psychologistId: '112323232-33434-3434'},
+ * ]
+ */
+module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
+  try {
+    const query = await knex(appointmentsTable)
+      .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
+        , "psychologistId"
+        , EXTRACT(YEAR from "appointmentDate") AS year
+        , EXTRACT(MONTH from "appointmentDate") AS month`))
+      .where("psychologistId", psychologistId)
+      .groupByRaw(`"psychologistId"
+        , EXTRACT(YEAR from "appointmentDate")
+        , EXTRACT(MONTH from "appointmentDate")`)
+      .orderBy([{ column: 'year', order: 'asc'}, { column: 'month', order: 'asc' }])
+
+    return query;
+  } catch (err) {
+    console.error(`Impossible de récupérer les appointments`, err)
+    throw new Error(`Impossible de récupérer les appointments`)
+  }
+}
+
+/**
+ * Note : january = 1, february = 2, etc
+ * Example output :
+ * [
+ *  {countPatients: 3, year: 2021, month: 3},
+ *  {countPatients: 2, year: 2021, month: 4},
+ * ]
+ */
+module.exports.getCountPatientsByYearMonth = async (psychologistId) => {
+  try {
+    const query = await knex(appointmentsTable)
+      .select(knex.raw(`CAST(COUNT(DISTINCT "patientId") AS INTEGER) AS "countPatients"
+        , EXTRACT(YEAR from "appointmentDate") AS year
+        , EXTRACT(MONTH from "appointmentDate") AS month`))
+      .where("psychologistId", psychologistId)
+      .groupByRaw(`EXTRACT(YEAR from "appointmentDate")
+        , EXTRACT(MONTH from "appointmentDate")`)
+      .orderBy([{ column: 'year', order: 'asc'}, { column: 'month', order: 'asc' }])
+    return query;
+  } catch (err) {
+    console.error(`Impossible de récupérer les appointments`, err)
+    throw new Error(`Impossible de récupérer les appointments`)
+  }
+}
+
 module.exports.insertAppointment = async (appointmentDate, patientId, psychologistId) => {
   try {
     const insertedArray = await knex(appointmentsTable).insert({

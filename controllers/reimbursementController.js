@@ -1,5 +1,7 @@
+const dbAppointments = require('../db/appointments')
 const { check } = require('express-validator');
 const cookie = require('../utils/cookie')
+const date = require('../utils/date')
 const dbPsychologists = require('../db/psychologists')
 const dbUniversities = require('../db/universities')
 const validation = require('../utils/validation')
@@ -27,17 +29,43 @@ module.exports.reimbursement = async function reimbursement(req, res) {
     const currentConvention = conventionInfo === undefined ?
       {universityId: undefined, universityName: undefined, isConventionSigned: false} :
       conventionInfo
+
+    const totalAppointmentsAndPatientByPsy = await getTotalAppointmentsAndPatientByPsy(req);
+
     res.render('reimbursement', {
       pageTitle: 'Remboursement',
       universities: universityList,
       currentConvention: currentConvention,
       showForm: conventionInfo === undefined,
+      total: totalAppointmentsAndPatientByPsy,
     });
   } catch (err) {
     console.error(`Could not fetch currentPsy or conventionInfo`, err)
     req.flash('error', `La page Remboursement n'arrive pas à s'afficher.`)
     return res.redirect('/psychologue/mes-seances')
   }
+}
+
+function mergeTotalPatientAppointments(totalAppointments, totalPatients) {
+  return totalPatients.map ( totalPatient => {
+    const appointForMonthYear = totalAppointments.filter(totalAppointment => {
+      return (totalAppointment.year === totalPatient.year) && (totalAppointment.month === totalPatient.month);
+    })[0];
+
+    return {
+      year: totalPatient.year,
+      month: date.getFrenchMonthName(totalPatient.month),
+      countPatients: totalPatient.countPatients,
+      countAppointments: appointForMonthYear.countAppointments,
+    }
+  })
+}
+
+async function getTotalAppointmentsAndPatientByPsy (req) {
+  const psychologistId = req.sanitize(cookie.getCurrentPsyId(req))
+  const totalAppointments = await dbAppointments.getCountAppointmentsByYearMonth(psychologistId);
+  const totalPatients = await dbAppointments.getCountPatientsByYearMonth(psychologistId);
+  return mergeTotalPatientAppointments(totalAppointments, totalPatients);
 }
 
 module.exports.updateConventionInfoValidators = [
