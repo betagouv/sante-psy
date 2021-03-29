@@ -1,13 +1,72 @@
 /* eslint-disable func-names */
 const app = require('../index')
 const chai = require('chai')
+const rewire = require('rewire')
 const clean = require('./helper/clean')
 const cookie = require('../utils/cookie')
+const dashboardController = rewire('../controllers/dashboardController')
 const dbAppointments = require('../db/appointments')
 const dbPatients = require('../db/patients')
 const format = require('../utils/format')
 
 describe('dashboardController', function() {
+  describe('hasFolderCompleted', function() {
+    const hasFolderCompleted = dashboardController.__get__('hasFolderCompleted');
+    it('should return true if patient has all needed info', function() {
+      const patient =  {
+        firstNames : "firstNames",
+        lastName : "lastName",
+        INE : "INE",
+        institutionName : "institutionName",
+        isStudentStatusVerified : true,
+        hasPrescription : true,
+        psychologistId : "psychologistId",
+        doctorName : "doctorName",
+        doctorAddress : "30000 Nîmes"
+      }
+
+      hasFolderCompleted(patient).should.equal(true);
+    });
+
+    it('should return false if patient does not have all needed info (ine, prescription, student status, doctor name)',
+      function() {
+        let patient =  {
+          firstNames : "firstNames",
+          lastName : "lastName",
+          INE : "INE",
+          institutionName : "institutionName",
+          isStudentStatusVerified : true,
+          hasPrescription : false,
+          psychologistId : "psychologistId",
+          doctorName : "doctorName",
+          doctorAddress : "30000 Nîmes",
+        }
+        hasFolderCompleted(patient).should.equal(false);
+        patient.doctorName=null;
+        patient.hasPrescription=true;
+        hasFolderCompleted(patient).should.equal(false);
+        patient.doctorName='doctorName';
+        patient.isStudentStatusVerified=false;
+        hasFolderCompleted(patient).should.equal(false);
+        patient.isStudentStatusVerified=true;
+        patient.INE='';
+        hasFolderCompleted(patient).should.equal(false);
+        patient.INE='INE';
+        patient.doctorName="    ", // trim should work
+        hasFolderCompleted(patient).should.equal(false);
+        patient.doctorName="doctorName", // trim should work
+        patient.institutionName='    ';
+        hasFolderCompleted(patient).should.equal(false);
+        patient.doctorName="", 
+        patient.institutionName='institutionName';
+        hasFolderCompleted(patient).should.equal(false);
+        patient.doctorName="doctorName",
+        patient.doctorAddress='';
+        hasFolderCompleted(patient).should.equal(false);
+        patient.doctorAddress='    ';
+        hasFolderCompleted(patient).should.equal(false);
+      });
+  });
   describe('display dashaboard', function() {
     beforeEach(async function(done) {
       done()

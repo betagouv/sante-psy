@@ -46,7 +46,7 @@ module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.g
   };
 }
 
-module.exports.getOnePatient = function getOnePatient(psychologistId) {
+module.exports.getOnePatient = function getOnePatient(psychologistId, doctorName = "doctorName") {
   return {
     id: module.exports.testDossierNumber(Math.random().toString()),
     firstNames:`${module.exports.getRandomInt()}First`,
@@ -56,7 +56,7 @@ module.exports.getOnePatient = function getOnePatient(psychologistId) {
     isStudentStatusVerified:true,
     hasPrescription:true,
     psychologistId:psychologistId,
-    doctorName:"doctorName",
+    doctorName: doctorName,
     doctorAddress:"doctorAddress",
     doctorPhone:"doctorPhone",
   };

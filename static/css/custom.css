@@ -14,6 +14,14 @@
   color: var(--w);
 }
 
+.bg-success {
+  background-color: var(--gs300);
+}
+
+.bg-orange-warning {
+  background-color: var(--od300);
+}
+
 .bg-blue-soft {
   background-color: var(--bs300);
 }
@@ -57,3 +65,4 @@
 .red-text {
   color: var(--error);
 }
+
