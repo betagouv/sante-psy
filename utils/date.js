@@ -43,7 +43,7 @@ module.exports.getFrenchMonthName = (monthNumber) => {
   case 11:
     return 'novembre';
   case 12:
-    return 'decembre';
+    return 'décembre';
   default:
     console.error("invalid month", monthNumber);
     return 'Erreur';
