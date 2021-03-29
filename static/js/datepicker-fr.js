@@ -29,7 +29,7 @@
           weekHeader: "Sem.",
           dateFormat: "dd/mm/yy",
           minDate: new Date('2021/03/01'),
-          maxDate: new Date('2021/12/31'),
+          maxDate: new Date('2022/12/31'),
           firstDay: 1,
           isRTL: false,
           showMonthAfterYear: false,
