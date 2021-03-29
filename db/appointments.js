@@ -51,7 +51,6 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
 }
 
 /**
- * use raw to be able to extract year and month from timestamp, couldn't find it on knex doc
  * Note : january = 1, february = 2, etc
  * Example output :
  * [
@@ -61,18 +60,15 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
  */
 module.exports.getCountPatientsByYearMonth = async (psychologistId) => {
   try {
-    const query = await knex.raw(`
-        SELECT CAST(COUNT(DISTINCT "patientId") AS INTEGER) AS "countPatients"
-          , EXTRACT(YEAR from "appointmentDate") AS year
-          , EXTRACT(MONTH from "appointmentDate") AS month
-        FROM ${appointmentsTable}
-        WHERE "psychologistId" = '${psychologistId}'
-        GROUP BY EXTRACT(YEAR from "appointmentDate"), EXTRACT(MONTH from "appointmentDate")
-        ORDER BY year, month ASC
-        ;
-      `);
-
-    return query.rows;
+    const query = await knex(appointmentsTable)
+      .select(knex.raw(`CAST(COUNT(DISTINCT "patientId") AS INTEGER) AS "countPatients"
+        , EXTRACT(YEAR from "appointmentDate") AS year
+        , EXTRACT(MONTH from "appointmentDate") AS month`))
+      .where("psychologistId", psychologistId)
+      .groupByRaw(`EXTRACT(YEAR from "appointmentDate")
+        , EXTRACT(MONTH from "appointmentDate")`)
+      .orderBy([{ column: 'year', order: 'asc'}, { column: 'month', order: 'asc' }])
+    return query;
   } catch (err) {
     console.error(`Impossible de récupérer les appointments`, err)
     throw new Error(`Impossible de récupérer les appointments`)

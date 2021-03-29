@@ -26,7 +26,7 @@ describe('date', () => {
       const novembre = date.getFrenchMonthName(11)
       novembre.should.be.equal("novembre");
       const decembre = date.getFrenchMonthName(12)
-      decembre.should.be.equal("decembre");
+      decembre.should.be.equal("décembre");
       const error = date.getFrenchMonthName(13)
       error.should.be.equal("Erreur");
     });
