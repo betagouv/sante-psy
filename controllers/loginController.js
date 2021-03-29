@@ -28,6 +28,7 @@ async function sendLoginEmail(email, loginUrl, token) {
     const html = await ejs.renderFile('./views/emails/login.ejs', {
       loginUrlWithToken: `${loginUrl}?token=${encodeURIComponent(token)}`,
       appName: config.appName,
+      loginUrl: loginUrl,
     });
     await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
     console.log(`Login email sent for ${logs.hashForLogs(email)}`);
