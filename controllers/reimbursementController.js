@@ -8,10 +8,6 @@ module.exports.reimbursement = async function reimbursement(req, res) {
   let universityList = []
   try {
     universityList = await dbUniversities.getUniversities()
-    if (!universityList || universityList.length === 0) {
-      req.flash('error', `Les universités n'ont pas pu être récupérées. Veuillez réessayer plus tard.`)
-      console.error('No universities in db');
-    }
 
     // used to place "-- nothing yet" in first position
     universityList.sort((a, b) => {
