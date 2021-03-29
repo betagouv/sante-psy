@@ -24,19 +24,22 @@ module.exports.getAppointments = async (psychologistId) => {
 
 /**
  * use raw to be able to extract year and month from timestamp, couldn't find it on knex doc
+ * returns : {countAppointments, year, month}
  */
 module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
   try {
     const query = await knex.raw(`
-      SELECT CAST("countAppointments" AS INTEGER), year, month
-      FROM (
-        SELECT COUNT(*) AS "countAppointments", "psychologistId"
-          ,EXTRACT(YEAR from "appointmentDate") AS year, EXTRACT(MONTH from "appointmentDate") AS month 
-        FROM ${appointmentsTable}
-        WHERE "psychologistId" = '${psychologistId}'
-        GROUP BY "psychologistId", 3, 4
-        ORDER BY year, month ASC
-      ) hide_ids_table_alias
+      SELECT CAST(COUNT(*) AS INTEGER) AS "countAppointments"
+        , "psychologistId"
+        , EXTRACT(YEAR from "appointmentDate") AS year
+        , EXTRACT(MONTH from "appointmentDate") AS month
+      FROM ${appointmentsTable}
+      WHERE "psychologistId" = '${psychologistId}'
+      GROUP BY "psychologistId"
+        , EXTRACT(YEAR from "appointmentDate")
+        , EXTRACT(MONTH from "appointmentDate")
+      ORDER BY year, month ASC
+      ;
       `);
 
     return query.rows;
@@ -48,19 +51,25 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
 
 /**
  * use raw to be able to extract year and month from timestamp, couldn't find it on knex doc
+ * returns : [{countPatients, year, month}]
+ * Note : january = 1, february = 2, etc
+ * Example output :
+ * [
+ *  {countPatients: 3, year: 2021, month: 3},
+ *  {countPatients: 2, year: 2021, month: 4},
+ * ]
  */
 module.exports.getCountPatientsByYearMonth = async (psychologistId) => {
   try {
     const query = await knex.raw(`
-      SELECT CAST("countPatients" AS INTEGER), year, month
-      FROM (
-        SELECT COUNT(DISTINCT "patientId") AS "countPatients"
-          ,EXTRACT(YEAR from "appointmentDate") AS year, EXTRACT(MONTH from "appointmentDate") AS month 
+        SELECT CAST(COUNT(DISTINCT "patientId") AS INTEGER) AS "countPatients"
+          , EXTRACT(YEAR from "appointmentDate") AS year
+          , EXTRACT(MONTH from "appointmentDate") AS month
         FROM ${appointmentsTable}
         WHERE "psychologistId" = '${psychologistId}'
-        GROUP BY 2, 3
+        GROUP BY EXTRACT(YEAR from "appointmentDate"), EXTRACT(MONTH from "appointmentDate")
         ORDER BY year, month ASC
-      ) hide_ids_table_alias
+        ;
       `);
 
     return query.rows;

@@ -137,12 +137,16 @@ describe('DB Appointments', () => {
         patientToInsert.doctorAddress,
         patientToInsert.doctorPhone,
       )
+      // 4 appointments in march with 2 patients
       await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
       await dbAppointments.insertAppointment(new Date('2021-03-02'), patient.id, psy.dossierNumber)
       await dbAppointments.insertAppointment(new Date('2021-03-03'), patient.id, psy.dossierNumber)
       await dbAppointments.insertAppointment(new Date('2021-03-03'), patient2.id, psy.dossierNumber)
+      // one in april
       await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)
+      // one in june
       await dbAppointments.insertAppointment(new Date('2021-06-03'), patient.id, psy.dossierNumber)
+      // one in july
       await dbAppointments.insertAppointment(new Date('2021-07-03'), patient.id, psy.dossierNumber)
 
       const output = await dbAppointments.getCountPatientsByYearMonth(psy.dossierNumber);
