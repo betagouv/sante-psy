@@ -8,7 +8,10 @@
       Elle remboursera pour tous les étudiants, qu'ils appartiennent à cette université ou une autre.
     </div>
   </div>
-  <% if (!!universities && universities.length > 0) { %> <!-- Only display current convention if there are universities -->
+  <% if (!universities || universities.length === 0) { %>
+    <!-- Only display current convention if there are universities -->
+    A venir bientôt : dites-nous où vous en êtes du conventionnement pour que nous puissions vous aider au besoin.
+  <% } else { %>
     <div id="current-university" <% if (showForm) { %> hidden <% } %>>
       <div><b>Statut de ma convention :</b></div>
       <div>
