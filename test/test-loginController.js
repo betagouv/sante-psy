@@ -28,7 +28,7 @@ describe('loginController', async function() {
     it('should generate a token', function() {
       const generateToken = loginController.__get__('generateToken');
       const output = generateToken("localhost:8080");
-      output.length.should.equal(344);
+      output.length.should.equal(128);
     })
 
     it('should generate a different token everytime the function is called', function() {
