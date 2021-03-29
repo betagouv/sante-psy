@@ -7,6 +7,17 @@
   </div>
   <div>
     <% if (patients.length) { %>
+      <% if (!hasAllPatientsWithCompletedFolders) { %>
+        <div class="rf-callout">
+          <p class="rf-callout__text">
+           Certains de vos patients n'ont pas leur dossier complet - le numéro INE, l'orientation du medecin, le nom du medecin, sa ville,
+           ou l'université du patient sont manquants.
+           <strong>
+             Ceci est obligatoire pour facturer les séances du patient.
+           </strong>
+          </p>
+        </div>
+      <% } %>
       <ul class="rf-list">
         <% patients.forEach(function(patient) { %>
           <div class="rf-grid-row rf-grid-row--gutters rf-grid-row--space-between">

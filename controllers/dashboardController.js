@@ -23,6 +23,7 @@ function hasFolderCompleted(patient) {
 
 module.exports.dashboard = async function dashboard(req, res) {
   try {
+    let hasAllPatientsWithCompletedFolders = true;
     const psychologistId = cookie.getCurrentPsyId(req)
     const results = await Promise.all([
       dbPatient.getPatients(psychologistId),
@@ -33,12 +34,16 @@ module.exports.dashboard = async function dashboard(req, res) {
 
     const patientsWithFolderStatus = patients.map ( patient => {
       patient.hasFolderCompleted = hasFolderCompleted(patient)
+      if(!patient.hasFolderCompleted) {
+        hasAllPatientsWithCompletedFolders = false;
+      }
       return patient;
     });
 
     res.render('dashboard', {
       appointments: appointments,
-      patients: patientsWithFolderStatus
+      patients: patientsWithFolderStatus,
+      hasAllPatientsWithCompletedFolders: hasAllPatientsWithCompletedFolders,
     });
   } catch (err) {
     req.flash('error', 'Impossible de charger les séances et les patients. Réessayez ultérieurement.')
