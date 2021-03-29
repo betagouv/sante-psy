@@ -24,15 +24,27 @@
   
   <h3>Les élements à apparaître sur votre facturation</h3>
   <% if (total.length) { %>
-    <ul class="rf-list">
-      <% total.forEach(function(totalByMonth) { %>
-        <div class="rf-grid-row rf-grid-row--gutters rf-grid-row--space-between">
-          <li>
-            <strong><%= totalByMonth.month %> <%= totalByMonth.year %> :</strong> <%= totalByMonth.countAppointments %> séances pour <%= totalByMonth.countPatients %> patients
-          </li>
-        </div>
-      <% }) %>
-    </ul>
+    <div class="rf-table">
+      <table>
+          <caption>Tableau récapitulatif par mois</caption>
+          <thead>
+              <tr>
+                  <td scope="col">Mois</th>
+                  <th scope="col">Nombre de séances</th>
+                  <th scope="col">Nombre de patients</th>
+              </tr>
+          </thead>
+          <tbody>
+            <% total.forEach(function(totalByMonth) { %>
+              <tr>
+                  <td><%= totalByMonth.month %> <%= totalByMonth.year %></td>
+                  <td><%= totalByMonth.countAppointments %></td>
+                  <td><%= totalByMonth.countPatients %></td>
+              </tr>
+          <% }) %>
+          </tbody>
+      </table>
+    </div>
     
     <h3>
       Aide pour la facturation
