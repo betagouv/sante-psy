@@ -9,8 +9,11 @@ module.exports.reimbursement = async function reimbursement(req, res) {
   try {
     universityList = await dbUniversities.getUniversities()
     if (!universityList || universityList.length === 0) {
-      throw new Error('No universities in db')
+      req.flash('error', `Les universités n'ont pas pu être récupérées. Veuillez réessayer plus tard.`)
+      console.error('No universities in db');
     }
+
+    // used to place "-- nothing yet" in first position
     universityList.sort((a, b) => {
       if(a.name < b.name) { return -1; }
       if(a.name > b.name) { return 1; }
