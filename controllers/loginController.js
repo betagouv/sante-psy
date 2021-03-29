@@ -16,8 +16,11 @@ module.exports.emailValidators = [
     .withMessage('Vous devez spécifier un email valide.'),
 ]
 
+/**
+ * @see https://www.ssi.gouv.fr/administration/precautions-elementaires/calculer-la-force-dun-mot-de-passe/
+ */
 function generateToken() {
-  return crypto.randomBytes(26).toString('hex');
+  return crypto.randomBytes(64).toString('hex');
 }
 
 async function sendLoginEmail(email, loginUrl, token) {
