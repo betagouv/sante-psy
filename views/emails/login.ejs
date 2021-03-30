@@ -2,7 +2,9 @@
 
 <p>
   Vous avez demandé un lien de connexion à la plateforme <%= appName %>.
-  Pour vous authentifier, vous devez cliquer sur le bouton ci-dessous dans l'heure qui suit la réception de ce message.
+</p>
+<p>
+  Pour vous authentifier, cliquez sur le bouton ci-dessous dans <strong>l'heure qui suit</strong> la réception de ce message - ce bouton n'est utilisable qu'une seule fois.
 </p>
 
 <p>
@@ -11,7 +13,19 @@
   </a>
 </p>
 
-<p>Ou utiliser ce lien :<br /><a href="<%= loginUrlWithToken %>"><%= loginUrlWithToken %></a></p>
+<br/>
+
+<p>
+  Ca n'a pas marché pas en cliquant sur le bouton ?
+ <p>
+   <a title="Redemander un lien de connexion en cas de problème" href="<%= loginUrl %>">Redemander un lien de connexion ici</a> et au lieu de cliquer sur le bouton, essayez de copier ce lien et le coller dans votre navigateur :
+ </p>
+</p>
+<p>
+  <%= loginUrlWithToken %>
+</p>
+
+<br/>
 
 <p>En cas de problème avec votre compte, n'hésitez pas à répondre à ce mail</p>
 
