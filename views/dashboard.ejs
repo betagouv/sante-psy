@@ -35,23 +35,25 @@
     <%- include('myAppointments') -%>
     <%- include('myPatients') -%>
   </div>
-  <div>
-    <h2>
-      Comment mes séances seront-elles remboursées ?
-    </h2>
+  <% if (!locals.featureReimbursementPage) { %>
     <div>
-      A la suite de votre inscription au dispositif, une université partenaire va vous contacter afin d'établir une convention.
-      C'est cette université qui réalisera le remboursement des séances faites dans le cadre de ce dispositif, pour les étudiants que vous aurez accompagnés,
-      quelque soit leur lieu de scolarité, le statut de leur école / université ou bien encore leur lieu de résidence.
+      <h2>
+        Comment mes séances seront-elles remboursées ?
+      </h2>
+      <div>
+        A la suite de votre inscription au dispositif, une université partenaire va vous contacter afin d'établir une convention.
+        C'est cette université qui réalisera le remboursement des séances faites dans le cadre de ce dispositif, pour les étudiants que vous aurez accompagnés,
+        quelque soit leur lieu de scolarité, le statut de leur école / université ou bien encore leur lieu de résidence.
+      </div>
+      <div class="rf-mt-2w">
+        A la fin de chaque mois, vous pouvez réaliser une facture et l'envoyer à l'université avec laquelle vous avez conventionné.
+        Nous vous proposerons un modèle de facture sur votre espace prochainement.
+      </div>
+      <div class="rf-mt-2w">
+        Dans les 30 jours après la réception de cette facture, l'université effectuera le remboursement des séances que vous avez réalisées et déclarées.
+      </div>
     </div>
-    <div class="rf-mt-2w">
-      A la fin de chaque mois, vous pouvez réaliser une facture et l'envoyer à l'université avec laquelle vous avez conventionné.
-      Nous vous proposerons un modèle de facture sur votre espace prochainement.
-    </div>
-    <div class="rf-mt-2w">
-      Dans les 30 jours après la réception de cette facture, l'université effectuera le remboursement des séances que vous avez réalisées et déclarées.
-    </div>
-  </div>
+  <% } %>
   <div class="rf-my-4w">
     Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
   </div>
