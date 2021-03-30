@@ -53,13 +53,15 @@ const universities = [
   "Antilles - Pôle Guadeloupe",
 ]
 
-universities.forEach(async university => {
-  try {
-    await dbUniversities.insertUniversity(university)
-    console.log('inserted', university)
-  } catch (err) {
-    console.error('Could not insert', university, err)
+const runInsert = async () => {
+  for (const university of universities) {
+    try {
+      await dbUniversities.insertUniversity(university)
+      console.log('inserted', university)
+    } catch (err) {
+      console.error('Could not insert', university, err)
+    }
   }
-})
+}
 
-return 0
+return runInsert()
