@@ -1,3 +1,5 @@
+const dbUniversities = require('../db/universities')
+
 const universities = [
   "--- Aucune pour le moment",
   "Strasbourg (UNISTRA)",
@@ -50,8 +52,6 @@ const universities = [
   "Antilles - Pôle Martinique",
   "Antilles - Pôle Guadeloupe",
 ]
-
-const dbUniversities = require('./universities')
 
 universities.forEach(async university => {
   try {
