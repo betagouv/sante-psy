@@ -35,7 +35,7 @@
     <%- include('myAppointments') -%>
     <%- include('myPatients') -%>
   </div>
-  <% if (!locals.featureReimbursementPage && locals.isInPsychologistPages) { %>
+  <% if (!locals.featureReimbursementPage) { %>
     <div>
       <h2>
         Comment mes séances seront-elles remboursées ?
