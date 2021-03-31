@@ -21,7 +21,6 @@ const sentry = require('./utils/sentry');
 const appName = config.appName;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
 const appRepo = 'https://github.com/betagouv/sante-psy';
-const contactEmail = 'contact-santepsyetudiants@beta.gouv.fr';
 
 const app = express();
 const landingController = require('./controllers/landingController');
@@ -90,7 +89,7 @@ app.use(function populate(req, res, next){
   res.locals.appDescription = appDescription;
   res.locals.appRepo = appRepo;
   res.locals.page = req.url;
-  res.locals.contactEmail = contactEmail;
+  res.locals.contactEmail = config.contactEmail;
   res.locals.errors = req.flash('error');
   res.locals.infos = req.flash('info');
   res.locals.successes = req.flash('success');
