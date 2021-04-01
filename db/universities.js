@@ -1,6 +1,7 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
-const dbPsychologists = require('./psychologists')
+// const dbPsychologists = require('./psychologists')
+const dbPsychologists = 'psychologists';
 
 const universitiesTable = "universities";
 module.exports.universitiesTable =  universitiesTable;
@@ -19,15 +20,15 @@ module.exports.getUniversities = async () => {
 module.exports.getUniversitiesWithPsy = async () => {
   try {
     const universitiesWithPsy = await knex.from(universitiesTable)
-      .innerJoin(`${dbPsychologists.psychologistsTable}`,
+      .innerJoin(`${dbPsychologists}`,
         `${universitiesTable}.id`,
-        `${dbPsychologists.psychologistsTable}.payingUniversityId`
+        `${dbPsychologists}.payingUniversityId`
       )
       .select(`${universitiesTable}.id AS universityId`,
-        `${dbPsychologists.psychologistsTable}.firstNames`,
-        `${dbPsychologists.psychologistsTable}.lastName`,
-        `${dbPsychologists.psychologistsTable}.dossierNumber AS psyId`,
-        `${dbPsychologists.psychologistsTable}.personalEmail`)
+        `${dbPsychologists}.firstNames`,
+        `${dbPsychologists}.lastName`,
+        `${dbPsychologists}.dossierNumber AS psyId`,
+        `${dbPsychologists}.personalEmail`)
     return universitiesWithPsy
   } catch (err) {
     console.error(`Impossible de récupérer les psychologues`, err)
