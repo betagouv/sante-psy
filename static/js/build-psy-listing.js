@@ -70,7 +70,7 @@ var table = new Tabulator("#psy-table", {
   addRowPos:"top",           //when adding a new row, add it to the top of the table
   history:true,              //allow undo and redo actions on the table
   pagination:"local",         //paginate the data
-  paginationSize:10,        //allow XX rows per page of data
+  paginationSize:20,        //allow XX rows per page of data
   movableColumns:false,        //allow column order to be changed
   resizableRows:false,          //allow row order to be changed
   resizableColumns:false,
