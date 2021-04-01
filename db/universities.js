@@ -1,16 +1,37 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
+const dbPsychologists = require('./psychologists')
 
-module.exports.universitiesTable =  "universities";
+const universitiesTable = "universities";
+module.exports.universitiesTable =  universitiesTable;
 
 module.exports.getUniversities = async () => {
   try {
     return knex.select('id', 'name')
-        .from(module.exports.universitiesTable)
+        .from(universitiesTable)
         .orderBy("name")
   } catch (err) {
     console.error(`Impossible de récupérer les universités`, err)
     throw new Error(`Impossible de récupérer les universités`)
+  }
+}
+
+module.exports.getUniversitiesWithPsy = async () => {
+  try {
+    const universitiesWithPsy = await knex.from(universitiesTable)
+      .innerJoin(`${dbPsychologists.psychologistsTable}`,
+        `${universitiesTable}.id`,
+        `${dbPsychologists.psychologistsTable}.payingUniversityId`
+      )
+      .select(`${universitiesTable}.id AS universityId`,
+        `${dbPsychologists.psychologistsTable}.firstNames`,
+        `${dbPsychologists.psychologistsTable}.lastName`,
+        `${dbPsychologists.psychologistsTable}.dossierNumber AS psyId`,
+        `${dbPsychologists.psychologistsTable}.personalEmail`)
+    return universitiesWithPsy
+  } catch (err) {
+    console.error(`Impossible de récupérer les psychologues`, err)
+    throw new Error(`Impossible de récupérer les psychologues`)
   }
 }
 

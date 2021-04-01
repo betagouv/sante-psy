@@ -104,6 +104,16 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
   return query;
 }
 
+/**
+ * Get psychologist by payment id, used to send email to universities for the payment.
+ * @param {*} payingUniversityId
+ */
+module.exports.getPsyByPayingUniversityId = async function getPsyByPayingUniversityId(payingUniversityId) {
+  return await knex(module.exports.psychologistsTable)
+  .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
+  .andWhere('payingUniversityId', payingUniversityId)
+  .first()
+}
 
 /**
  * Only return accepted psychologist
