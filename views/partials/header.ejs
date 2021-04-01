@@ -62,6 +62,17 @@
               <%= appDescription %>
             </p>
           </div>
+          <% if (locals.featureReimbursementPage && locals.isInPsychologistPages) { %>
+          <div class="rf-header__tools">
+            <div class="rf-shortcuts">
+                <ul class="rf-shortcuts__list">
+                    <li class="rf-shortcuts__item">
+                      <a class="rf-link" href="/psychologue/logout" target="_self">Déconnexion</a>
+                    </li>
+                </ul>
+            </div>
+          </div>
+        <% } %>
         </div>
       </div>
     </div>
@@ -75,9 +86,6 @@
             </li>
             <li class="rf-nav__item <% if (page === '/psychologue/mes-remboursements') { %> rf-nav__item--active <% } %>">
               <a class="rf-link" href="/psychologue/mes-remboursements" target="_self">Remboursement de mes séances</a>
-            </li>
-            <li class="rf-nav__item">
-              <a class="rf-link" href="/psychologue/logout" target="_self">Déconnexion</a>
             </li>
           </ul>
         </nav>
