@@ -1,6 +1,7 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const dbPatient = require('./patients')
+const dbPsychologists = require('./psychologists')
 const date = require("../utils/date");
 
 const appointmentsTable = "appointments"
@@ -44,6 +45,36 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
       .orderBy([{ column: 'year', order: 'asc'}, { column: 'month', order: 'asc' }])
 
     return query;
+  } catch (err) {
+    console.error(`Impossible de récupérer les appointments`, err)
+    throw new Error(`Impossible de récupérer les appointments`)
+  }
+}
+
+/**
+ * Note : january = 1, february = 2, etc
+ * Example output :
+ * [
+ *  {countAppointments: 3, psychologistId: '112323232-33434-3434',  universityId: '15555523232-33434-3434'},
+ *  {countAppointments: 2, psychologistId: '112323232-33434-3434, universityId: '15555523232-33434-3434''},
+ * ]
+ */
+module.exports.getCountAppointmentsByYearMonthForUniversity = async (year, month) => {
+  try {
+    const query = await knex(appointmentsTable)
+      .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
+        , ${appointmentsTable}."psychologistId"
+        , ${dbPsychologists.psychologistsTable}."payingUniversityId" AS universityId
+        `))
+        .whereRaw(`EXTRACT(YEAR from ${appointmentsTable}."appointmentDate") = ${year}`)
+        .andWhereRaw(`EXTRACT(MONTH from ${appointmentsTable}."appointmentDate") = ${month}`)
+        .innerJoin(`${dbPsychologists.psychologistsTable}`,
+          `${appointmentsTable}.psychologistId`,
+          `${dbPsychologists.psychologistsTable}.dossierNumber`)
+      .groupBy(`${appointmentsTable}.psychologistId`)
+      .groupBy(`${dbPsychologists.psychologistsTable}.payingUniversityId`)
+
+    return  query;
   } catch (err) {
     console.error(`Impossible de récupérer les appointments`, err)
     throw new Error(`Impossible de récupérer les appointments`)

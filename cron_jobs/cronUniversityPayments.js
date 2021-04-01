@@ -6,30 +6,19 @@ const dbAppointments = require("../db/appointments")
 
 const getpsychologistsForEachUniversity = async () =>  {
   try {
-    const lastMonth = date.getLastMonth()
+    // const lastMonth = date.getLastMonth()
+    // const year = date.getCurrentYear() //@TODO think about january where we need last year
+    const lastMonth = 4
+    const year = "2021"
     console.log(`last month: ${lastMonth}`)
-    const universities2 = await dbUniversities.getUniversitiesWithPsy()
-    const testUniversities = universities2.map(async university => {
-      const allAppointmentById = await dbAppointments.getCountAppointmentsByYearMonth(university.psyId)
-      if (allAppointmentById.length) {
-        const hasAppointmentInMonth = allAppointmentById.find(appointment => appointment.month === lastMonth)
-        return {
-          ...university,
-          countAppointments: hasAppointmentInMonth.countAppointments
-        }
-      } else {
-        // psy sans consultation sur ce mois
-        // console.log(university.psyId)
-        return
-      }
-    })
-    // console.log(testUniversities)
-    return testUniversities
+
+    const allAppointmentById = await dbAppointments.getCountAppointmentsByYearMonthForUniversity(year, lastMonth)
+    console.log("allAppointmentById", allAppointmentById);
+
+    return allAppointmentById
   } catch (err) {
     console.error("ERROR: Could not get universities informations", err)
   }
 }
 console.log(getpsychologistsForEachUniversity())
-
-
-module.exports.getpsychologistsForEachUniversity = getpsychologistsForEachUniversity;
+module.exports.getpsychologistsForEachUniversity = getpsychologistsForEachUniversity
