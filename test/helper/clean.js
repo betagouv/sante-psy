@@ -21,7 +21,7 @@ module.exports.getRandomInt = function getRandomInt() {
 }
 
 module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.gouv.fr',
-  state = 'accepte', archived = false) {
+  state = 'accepte', archived = false, uniId) {
   const dossierNumber = module.exports.testDossierNumber(Math.random().toString())
   return {
     dossierNumber: dossierNumber,
@@ -41,6 +41,8 @@ module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.g
     // eslint-disable-next-line max-len
     training: "[\"Connaissance et pratique des outils diagnostic psychologique\",\"Connaissance des troubles psychopathologiques du jeune adulte : dépressions\",\"risques suicidaires\",\"addictions\",\"comportements à risque\",\"troubles alimentaires\",\"décompensation schizophrénique\",\"psychoses émergeantes ainsi qu’une pratique de leur repérage\",\"Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)\"]",
     departement: `${module.exports.getRandomInt()} - Calvados`,
+    university: `${module.exports.getRandomInt()} Université`,
+    payingUniversityId: uniId,
     region: "Normandie",
     languages: "Français ,Anglais, et Espagnol"
   };
