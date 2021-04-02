@@ -14,7 +14,6 @@ const getpsychologistsForEachUniversity = async () =>  {
 
     const allAppointmentById = await dbAppointments.getCountAppointmentsByYearMonthForUniversity(year, lastMonth)
     console.log("allAppointmentById", allAppointmentById);
-
     return allAppointmentById
   } catch (err) {
     console.error("ERROR: Could not get universities informations", err)

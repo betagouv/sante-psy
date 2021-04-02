@@ -65,6 +65,9 @@ module.exports.getCountAppointmentsByYearMonthForUniversity = async (year, month
       .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
         , ${appointmentsTable}."psychologistId"
         , ${dbPsychologists.psychologistsTable}."payingUniversityId" AS universityId
+        , ${dbPsychologists.psychologistsTable}."firstNames"
+        , ${dbPsychologists.psychologistsTable}."lastName"
+        , ${dbPsychologists.psychologistsTable}."personalEmail"
         `))
         .whereRaw(`EXTRACT(YEAR from ${appointmentsTable}."appointmentDate") = ${year}`)
         .andWhereRaw(`EXTRACT(MONTH from ${appointmentsTable}."appointmentDate") = ${month}`)
@@ -73,6 +76,9 @@ module.exports.getCountAppointmentsByYearMonthForUniversity = async (year, month
           `${dbPsychologists.psychologistsTable}.dossierNumber`)
       .groupBy(`${appointmentsTable}.psychologistId`)
       .groupBy(`${dbPsychologists.psychologistsTable}.payingUniversityId`)
+      .groupBy(`${dbPsychologists.psychologistsTable}.firstNames`)
+      .groupBy(`${dbPsychologists.psychologistsTable}.lastName`)
+      .groupBy(`${dbPsychologists.psychologistsTable}.personalEmail`)
 
     return  query;
   } catch (err) {
