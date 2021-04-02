@@ -63,6 +63,18 @@ async function saveToken(email, token) {
   }
 }
 
+/**
+ * @see Outlook's security measurements causing login problem
+ * https://stackoverflow.com/a/65095191/3535853
+ */
+function isNotSafeLink(req) {
+  //@TODO delete me after tests on review app
+  console.log("req", req);
+  console.log("req.header('Referer');", req.header('Referer'));
+
+  return !req.header('Referer').includes("safelink");
+}
+
 module.exports.getLogin = async function getLogin(req, res) {
   const nextPage = '/psychologue/mes-seances';
 
@@ -71,7 +83,7 @@ module.exports.getLogin = async function getLogin(req, res) {
 
   // Save a token in cookie that expire after config.sessionDurationHours hours if user is logged
   try {
-    if ( req.query.token ) {
+    if ( req.query.token && isNotSafeLink(req) ) {
       const token = req.sanitize(req.query.token);
       const dbToken = await dbLoginToken.getByToken(token);
 
