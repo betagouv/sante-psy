@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+      "outDir": "./dist",
+      "target": "es6",
+      "allowJs": true,
+      "module": "commonjs",
+      "noUnusedLocals": true,
+      "sourceMap": true,
+      "forceConsistentCasingInFileNames": true,
+      "skipLibCheck": true
+  },
+  "include": [
+      "**/*.ts",
+      "**/*.js"
+  ],
+  "exclude": [
+      "node_modules",
+      "**/*.d.ts",
+      "dist"
+  ]
+}
