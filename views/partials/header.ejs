@@ -34,6 +34,64 @@
       </ul>
     </div>
   </div>
+
+  <header role="banner" class="rf-header">
+    <div class="rf-container">
+      <div class="rf-header__body">
+        <div class="rf-header__brand rf-enlarge-link">
+          <div class="rf-header__logo">
+            <p class="rf-logo">
+              Ministère
+              <br>de l'Enseignement
+              <br>Supérieur,
+              <br>de la Recherche
+              <br>et de l'Innovation
+              <!-- todo link to home ? -->
+            </p>
+          </div>
+          <div class="rf-header__service">
+            <a href="<%= locals.isInPsychologistPages ? '/psychologue/mes-seances' : '/' %>"
+               title="Retour à l’accueil">
+              <p class="rf-header__service-title">
+                <%= appName %>
+                <% if (locals.isInPsychologistPages) { %>
+                   - Espace Psychologues
+                <% } %>
+              </p>
+            </a>
+            <p class="rf-header__service-tagline"><%= appDescription %></p>
+          </div>
+        </div>
+        <div class="rf-header__navbar">
+          <button class="rf-btn--menu rf-btn" data-rf-opened="false" aria-controls="header-navigation" aria-haspopup="menu" title="Ouvrir le menu">
+            Ouvrir le menu
+            <!-- todo is that for shortcut links or menu ? -->
+          </button>
+        </div>
+            <div class="rf-header__tools">
+                <div class="rf-shortcuts">
+                    <ul class="rf-shortcuts__list">
+                        <li class="rf-shortcuts__item">
+                            <a class="rf-link rf-fi-add-circle-line" href="#">Créer un espace</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <% if (locals.featureReimbursementPage && locals.isInPsychologistPages) { %>
+          <nav class="rf-nav rf-modal" id="header-navigation" role="navigation" aria-label="Menu principal">
+              <button class="rf-link--close rf-link" aria-controls="header-navigation">Fermer</button>
+              <ul class="rf-nav__list">
+                  <li class="rf-nav__item">
+                      <a class="rf-nav__link" href="#" target="_self">accès direct</a>
+                  </li>
+              </ul>
+          </nav>
+        <% } %>
+    </div>
+ </header>
+
+
   <header class="rf-header">
     <div class="rf-container">
       <div class="rf-header__body">
