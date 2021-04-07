@@ -76,8 +76,9 @@ module.exports.getOneAppointment = function getOneAppointment(patientId, psychol
 
 module.exports.psyList = function getPsyList(personalEmail = 'loginemail@beta.gouv.fr',
   state = 'accepte', archived = false) {
+  const universityId = module.exports.testDossierNumber(Math.random().toString())
   return [
-    module.exports.getOnePsy(personalEmail, state, archived)
+    module.exports.getOnePsy(personalEmail, state, archived, universityId),
   ];
 }
 
