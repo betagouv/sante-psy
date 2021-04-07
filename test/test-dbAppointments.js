@@ -104,6 +104,59 @@ describe('DB Appointments', () => {
     });
   });
 
+  describe('getCountAppointmentsByYearMonthForUniversity', () => {
+    it('should return a count of appointments by year and month for university', async () => {
+      const month = 4
+      const year = 2021
+      const psyList = [
+        clean.getOnePsy('loginemail@beta.gouv.fr', 'accepte', false, '25173f41-6535-524f-bec0-436297a2bc77'),
+        clean.getOnePsy('emaillogin@beta.gouv.fr', 'accepte', false, '14f37152-6535-524f-bec0-436297a2bc77')
+      ]
+      await dbPsychologists.savePsychologistInPG(psyList);
+
+      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail)
+      const psy2 = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[1].personalEmail)
+      const patientToInsert = clean.getOnePatient(psy.dossierNumber)
+      const patient = await dbPatients.insertPatient(
+        patientToInsert.firstNames,
+        patientToInsert.lastName,
+        patientToInsert.INE,
+        patientToInsert.institutionName,
+        patientToInsert.isStudentStatusVerified,
+        patientToInsert.hasPrescription,
+        psy.dossierNumber,
+        patientToInsert.doctorName,
+        patientToInsert.doctorAddress,
+        patientToInsert.doctorPhone,
+      )
+
+      const patient2 = await dbPatients.insertPatient(
+        patientToInsert.firstNames,
+        patientToInsert.lastName,
+        patientToInsert.INE,
+        patientToInsert.institutionName,
+        patientToInsert.isStudentStatusVerified,
+        patientToInsert.hasPrescription,
+        psy2.dossierNumber,
+        patientToInsert.doctorName,
+        patientToInsert.doctorAddress,
+        patientToInsert.doctorPhone,
+      )
+      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient2.id, psy2.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient2.id, psy2.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)
+
+
+      const output = await dbAppointments.getCountAppointmentsByYearMonthForUniversity(year, month);
+      console.log(output)
+      assert(output.length === 2); // 2 university
+      assert(output[0].countAppointments === 2);
+      assert(output[1].countAppointments === 1);
+    });
+  });
+
   describe('getCountPatientsByYearMonth', () => {
     it('should return a count of patients by year and month', async () => {
       const psyList = clean.psyList();
