@@ -1,28 +1,49 @@
 require('dotenv').config();
 
 const bodyParser = require('body-parser');
-const express = require('express');
+// Dernière mise à jour: il y a 2 ans(https://www.npmjs.com/package/body-parser)
+const express = require('express'); // Dernière mise à jour: il y a 1 an (https://www.npmjs.com/package/express)
 const expressSanitizer = require('express-sanitizer');
-const path = require('path');
+// Dernière mise à jour: il y a 2 ans(https://www.npmjs.com/package/express-sanitizer)
+
+const path = require('path'); // Dernière mise à jour: il y a 6 ans(https://www.npmjs.com/package/path)
 
 const flash = require('connect-flash');
+// Dernière mise à jour: il y a 8 ans(https://www.npmjs.com/package/connect-flash)
 const expressJWT = require('express-jwt');
+// Dernière mise à jour: il y a 9 mois(https://www.npmjs.com/package/express-jwt)
 const rateLimit = require("express-rate-limit");
+// Dernière mise à jour: il y a 2 mois(https://www.npmjs.com/package/express-rate-limit)
+
 const slowDown = require("express-slow-down");
+// Dernière mise à jour: il y a 4 mois(https://www.npmjs.com/package/express-slow-down)
 const cookieParser = require('cookie-parser');
+// Dernière mise à jour: il y a 1 an (https://www.npmjs.com/package/cookie-parser)
 const cookieSession = require('cookie-session');
+// Dernière mise à jour: il y a 1 an (https://www.npmjs.com/package/cookie-session)
 const csrf = require('csurf');
+// Dernière mise à jour: il y a 1 an (https://www.npmjs.com/package/csurf)
+
 const config = require('./utils/config');
 const format = require('./utils/format');
 const cspConfig = require('./utils/csp-config');
-const sentry = require('./utils/sentry');
+const sentry = require('./utils/sentry'); // Attention à ne pas logger des infos sensibles
 
 
 const appName = config.appName;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
+// Ces 2 valeurs en dur pourraient être stockées dans la config elles aussi
 const appRepo = 'https://github.com/betagouv/sante-psy';
 
 const app = express();
+// express se base sur de nombreux middlewares dont la majorité n'est plus maintenue.
+// C'est une lib de petit scope. Très populaire. Pourtant elle implémente un javascript dépassé (basé sur les callbacks)
+// Aujourd'hui, Fastify(https://www.fastify.io/), Adonis (https://adonisjs.com/), libs au grand scope
+// ou encore Nest (framework fullstack) sont optimisés.
+// Implémentent du Javascript moderne. Et surtout, elle permettent aux devs de concentrer ses efforts sur le code métier
+// Plutôt que sur l'échafaudage du routeur et de ses middlewares.
+
+// J'apprécie particulièrement, ici, la séparation des responsabilités
 const landingController = require('./controllers/landingController');
 const dashboardController = require('./controllers/dashboardController');
 const appointmentsController = require('./controllers/appointmentsController');
@@ -34,13 +55,19 @@ const reimbursementController = require('./controllers/reimbursementController')
 
 // Desactivate debug log for production as they are a bit too verbose
 if( !config.activateDebug ) {
+  // Il existe des alternatives paramétrables en fonction de l'environnement et des variables d'environnement Node.js
+  // [Roarr](https://www.npmjs.com/package/roarr#roarr-node-js-environment-variables)
+  // [Pino](https://github.com/pinojs/pino/blob/HEAD/docs/help.md#debug)
+  // [Winston](https://www.npmjs.com/package/winston#usage)
   console.log("console.debug is not active - thanks to ACTIVATE_DEBUG_LOG env variable");
   console.debug = function desactivateDebug() {};
 }
 
 app.use(cspConfig);
+// Ici, avec Adonis, par exemple, la stratégie de sécurité du contenu peut être gérée sans lib supplémentaire
 
 app.use(bodyParser.urlencoded({ extended: true }))
+// Adonis embarque son propre body parser (https://adonisjs.com/docs/4.1/request#_setting_up_bodyparser)
 
 app.use(flash());
 app.use(cookieParser(config.secret));
@@ -59,14 +86,14 @@ app.use('/static/tabulator-tables', express.static(
 
 // This session cookie (connect.sid) is only used for displaying the flash messages.
 // The other session cookie (token) contains the authenticated user session.
-app.use(cookieSession({
+app.use(cookieSession({ // Adonis embarque un support de session : https://adonisjs.com/docs/4.1/sessions
   secret: config.secret,
   resave: false,
   saveUninitialized: true,
   maxAge: parseInt(config.sessionDurationHours) * 60 * 60 * 1000
 }));
 
-app.use(flash());
+app.use(flash()); // L'alternative d'Adonis : https://adonisjs.com/docs/4.1/sessions#_flash_messages
 
 if (config.useCSRF) {
   console.log("Using CSRF protection");
@@ -75,10 +102,11 @@ if (config.useCSRF) {
   console.log('NOT using CSRF protection due to env variable USE_CSRF - should only be used for test');
 }
 // Mount express-sanitizer middleware here
-app.use(expressSanitizer());
+app.use(expressSanitizer()); // Adonis et son sanitizer : https://adonisjs.com/docs/4.1/validator#_sanitizing_user_input
 
 
 // Populate some variables for all views
+// Adonis le permet avec les objets globaux : https://adonisjs.com/docs/4.1/views#_globals_2
 app.use(function populate(req, res, next){
   if (config.useCSRF) {
     res.locals._csrf = req.csrfToken();
@@ -99,6 +127,7 @@ app.use(function populate(req, res, next){
 
 app.use(
   expressJWT({
+    // Adonis embarque aussi un authentificateur JWT : https://adonisjs.com/docs/4.1/authentication#_jwt
     secret: config.secret,
     algorithms: ['HS256'],
     getToken: function fromHeaderOrQuerystring (req) {
@@ -153,6 +182,7 @@ app.use((err, req, res, next) => {
 app.locals.format = format
 // prevent abuse
 const rateLimiter = rateLimit({
+// Il semblerait que cette fonctionnalité ne soit pas intégrée dans Adonis. Des libs dédiées existent.
   windowMs: 5 * 60 * 1000, // 5 minute window
   max: 1000, // start blocking after X requests for windowMs time
   message: "Trop de requête venant de cette IP, veuillez essayer plus tard."
@@ -163,7 +193,7 @@ app.get('/', landingController.getLanding);
 
 if (config.featurePsyList) {
   // prevent abuse for some rules
-  const speedLimiter = slowDown({
+  const speedLimiter = slowDown({ // Les options réutilisées pourraient être stockées dans une constante.
     windowMs: 5 * 60 * 1000, // 5 minutes
     delayAfter: 100, // allow X requests per 5 minutes, then...
     delayMs: 500 // begin adding 500ms of delay per request above 100:
@@ -184,6 +214,7 @@ if (config.featurePsyPages) {
     delayAfter: 10, // allow X requests per 5 minutes, then...
     delayMs: 500 // begin adding 500ms of delay per request above 100:
   });
+  // J'apprécie le fait que les routes soient regroupées par ressource
   app.post('/psychologue/login',
     speedLimiterLogin,
     loginController.emailValidators,
@@ -232,6 +263,7 @@ app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
   })
 })
 
+// J'apprécie la centralisation des redirections de 404
 app.get('*', function redirect404(req, res){
   if( req.cookies === undefined ) {
     req.flash('error', "Cette page n'existe pas.")
