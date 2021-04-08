@@ -51,6 +51,13 @@
           <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname" required>
         </div>
         <div class="rf-my-3w">
+          <label class="rf-label" for="birthday">Date de naissance</label>
+          <div class="rf-hint-text" id="birthday-help">
+            Utile en cas d'homonyme
+          </div>
+          <input class="rf-input midlength-input" value="<%= format.formatFrenchDate(patient.birthday) %>" type="date" id="birthday" name="birthday">
+        </div>
+        <div class="rf-my-3w">
           <label class="rf-label" for="institution" aria-describedby="institution-help">Établissement scolaire de l'étudiant</label>
           <div class="rf-hint-text" id="institution-help">
             Exemple : Université de Rennes ou ENSAE

@@ -2,6 +2,7 @@ const assert = require('chai').assert;
 const expect = require('chai').expect;
 require('dotenv').config();
 const dbPatients = require('../db/patients')
+const date = require('../utils/date')
 const knexConfig = require("../knexfile");
 const knex = require("knex")(knexConfig);
 const clean = require('./helper/clean');
@@ -16,6 +17,7 @@ describe('DB Patients', () => {
   const doctorName = "doctorName"
   const doctorAddress = "doctorAddress"
   const doctorPhone = "0600000000"
+  const birthday = date.formatDateForm("20/01/1980")
 
   async function testDataPatientsExist(lastName) {
 
@@ -47,6 +49,7 @@ describe('DB Patients', () => {
         doctorName,
         doctorAddress,
         doctorPhone,
+        birthday,
       );
 
       const exist = await testDataPatientsExist(lastName);
@@ -67,6 +70,7 @@ describe('DB Patients', () => {
           doctorName,
           doctorAddress,
           doctorPhone,
+          birthday,
         );
         assert.fail("insert patient should have failed");
       } catch( error ) {
@@ -97,6 +101,7 @@ describe('DB Patients', () => {
         doctorName,
         doctorAddress,
         doctorPhone,
+        birthday,
       );
 
       const newLastName = "NewName"
@@ -115,6 +120,7 @@ describe('DB Patients', () => {
         doctorName,
         doctorAddress,
         doctorPhone,
+        birthday,
       )
       const newPatient = await dbPatients.getPatientById(oldPatient.id, psychologistId)
       expect(newPatient.lastName).equal(newLastName)

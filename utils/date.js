@@ -1,3 +1,8 @@
+const moment = require('moment');
+
+const formatDateForm = "DD/MM/YYYY"
+module.exports.formatDateForm = formatDateForm;
+
 module.exports.isValidDate = (isoDateString) => {
   if (!isoDateString || isoDateString.length === 0) {
     return false
@@ -8,6 +13,15 @@ module.exports.isValidDate = (isoDateString) => {
 module.exports.getDateNowPG = () => {
   return new Date().toISOString();
 }
+
+module.exports.formatDateForm = (date) => {
+  return parseDateForm(date).format('MM-DD-YYYY')
+}
+
+function parseDateForm(date) {
+  return moment(date, formatDateForm)
+}
+module.exports.parseDateForm = parseDateForm;
 
 module.exports.parseDate = (date) => {
   return new Date(date).toISOString();

@@ -16,6 +16,7 @@ describe('dashboardController', function() {
       const patient =  {
         firstNames : "firstNames",
         lastName : "lastName",
+        birthday : "20/01/1980",
         INE : "INE",
         institutionName : "institutionName",
         isStudentStatusVerified : true,
@@ -33,6 +34,7 @@ describe('dashboardController', function() {
         let patient =  {
           firstNames : "firstNames",
           lastName : "lastName",
+          birthday : "20/01/1980",
           INE : "INE",
           institutionName : "institutionName",
           isStudentStatusVerified : true,

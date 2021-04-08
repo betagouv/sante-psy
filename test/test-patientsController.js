@@ -3,6 +3,8 @@ const app = require('../index')
 const chai = require('chai')
 const clean = require('./helper/clean')
 const cookie = require('../utils/cookie')
+const format = require('../utils/format')
+const date = require('../utils/date')
 const dbPatients = require('../db/patients')
 const { expect } = require('chai')
 const sinon = require('sinon')
@@ -10,6 +12,7 @@ const sinon = require('sinon')
 const doctorName = "doctorName"
 const doctorAddress = "doctorAddress"
 const doctorPhone = "0600000000"
+const birthday = "20/01/1980";
 
 const makePatient = async (psychologistId) => {
   // Insert an appointment and a patient
@@ -23,7 +26,8 @@ const makePatient = async (psychologistId) => {
     psychologistId,
     doctorName,
     doctorAddress,
-    doctorPhone
+    doctorPhone,
+    date.formatDateForm(birthday)
   )
   // Check patient is inserted
   const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
@@ -62,12 +66,12 @@ describe('patientsController', function() {
           hasprescription: undefined,
           doctorname: doctorName,
           doctoraddress :doctorAddress,
+          birthday :birthday,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
-          console.log(patientsArray)
 
           patientsArray.length.should.equal(1)
           expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber)
@@ -95,6 +99,7 @@ describe('patientsController', function() {
           hasprescription: undefined,
           doctorname: doctorName,
           doctoraddress :doctorAddress,
+          birthday :birthday,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login')
@@ -122,6 +127,7 @@ describe('patientsController', function() {
           'hasPrescription': false,
           'doctorname': doctorName,
           'doctoraddress' :doctorAddress,
+          'birthday' : birthday,
         }
         ]))
       return Promise.resolve()
@@ -162,6 +168,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       })
     })
 
@@ -175,6 +182,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       })
     })
 
@@ -188,6 +196,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       })
     })
 
@@ -201,6 +210,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       })
     })
 
@@ -214,6 +224,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       })
     })
 
@@ -227,6 +238,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       })
     })
 
@@ -259,6 +271,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       })
     })
 
@@ -272,6 +285,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       })
     })
 
@@ -285,6 +299,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       })
     })
 
@@ -302,6 +317,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       }
 
       chai.request(app)
@@ -362,6 +378,7 @@ describe('patientsController', function() {
           chai.assert.include(res.text, myPatient.institutionName)
           chai.assert.include(res.text, myPatient.doctorName)
           chai.assert.include(res.text, myPatient.doctorAddress)
+          chai.assert.include(res.text, format.formatFrenchDate(myPatient.birthday))
 
           return Promise.resolve()
         })
@@ -426,7 +443,7 @@ describe('patientsController', function() {
         email: 'prenom.nom@beta.gouv.fr',
       }
       const patient = await makePatient(psy.dossierNumber)
-
+      const updatedBirthday = "25/02/1982"
       return chai.request(app)
         .post('/psychologue/api/modifier-patient')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
@@ -441,6 +458,7 @@ describe('patientsController', function() {
           isstudentstatusverified: 'isstudentstatusverified',
           hasprescription: 'hasprescription',
           doctorname: doctorName,
+          birthday: updatedBirthday,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -454,6 +472,10 @@ describe('patientsController', function() {
           expect(patientsArray[0].institutionName).to.equal('polytech')
           expect(patientsArray[0].isStudentStatusVerified).to.equal(true)
           expect(patientsArray[0].hasPrescription).to.equal(true)
+          console.log("patientsArray[0].birthday", patientsArray[0].birthday);
+          console.log("patientsArray[0].birthday date", new Date(patientsArray[0].birthday).toISOString());
+          console.log("patientsArray[0].birthday type", patientsArray[0].birthday.toISOString());
+          expect(patientsArray[0].birthday).to.equal(date.formatDateForm(date.formatDateForm(updatedBirthday).toDate()))
 
           return Promise.resolve()
         })
@@ -466,7 +488,7 @@ describe('patientsController', function() {
       }
       const anotherPsyId = '495614e8-89af-4406-ba02-9fc038b991f9'
       const patient = await makePatient(anotherPsyId)
-
+      const updatedBirthday = "25/02/1982"
       return chai.request(app)
         .post('/psychologue/api/modifier-patient')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
@@ -482,6 +504,7 @@ describe('patientsController', function() {
           hasprescription: 'hasprescription',
           'doctorname': doctorName,
           'doctoraddress' :doctorAddress,
+          'birthday' : birthday,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/mes-seances')
@@ -496,6 +519,9 @@ describe('patientsController', function() {
           expect(patientsArray[0].institution).to.equal(patient.institution)
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified)
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription)
+          expect(format.formatFrenchDate(patientsArray[0].birthday)).to.equal(
+            format.formatFrenchDate(date.formatDateForm(birthday))
+          )
 
           return Promise.resolve()
         })
@@ -535,6 +561,9 @@ describe('patientsController', function() {
           expect(patientsArray[0].institution).to.equal(patient.institution)
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified)
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription)
+          expect(format.formatFrenchDate(patientsArray[0].birthday)).to.equal(
+            format.formatFrenchDate(date.formatDateForm(birthday))
+          )
 
           return Promise.resolve()
         })
@@ -587,6 +616,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -603,6 +633,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -619,6 +650,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -635,6 +667,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -651,6 +684,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -667,6 +701,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       },
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
@@ -682,6 +717,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       },
       '/psychologue/mes-seances')
     })
@@ -697,6 +733,24 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
+      },
+      '/psychologue/mes-seances')
+    })
+
+    it('should refuse if birthday is not valid', function(done) {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
+      shouldFailUpdatePatientInputValidation(done, {
+        'patientid': patientId,
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890à',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'birthday' : "pizza time",
       },
       '/psychologue/mes-seances')
     })
@@ -731,6 +785,7 @@ describe('patientsController', function() {
         'hasprescription': undefined,
         'doctorname': doctorName,
         'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
       })
     })
 
@@ -740,6 +795,21 @@ describe('patientsController', function() {
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
         'ine': '',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+        'birthday' : birthday,
+      })
+    })
+
+    it('should pass validation when birthday is missing', function(done) {
+      shouldPassUpdatePatientInputValidation(done, {
+        'patientid': '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,

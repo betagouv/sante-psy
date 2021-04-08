@@ -36,6 +36,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         '05 00 00 00 00',
+        '20/01/1980',
       )
 
       return chai.request(app)
@@ -78,6 +79,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         '05 00 00 00 00',
+        '20/01/1980',
       )
 
       return chai.request(app)
@@ -117,6 +119,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         '05 00 00 00 00',
+        '20/01/1980',
       )
 
       return chai.request(app)
@@ -157,6 +160,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         '05 00 00 00 00',
+        '20/01/1980',
       )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
@@ -169,6 +173,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         '05 00 00 00 00',
+        '20/01/1980',
       )
 
       return chai.request(app)
@@ -296,6 +301,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         '05 00 00 00 00',
+        '20/01/1980',
       )
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
@@ -339,6 +345,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         '05 00 00 00 00',
+        '20/01/1980',
       )
       const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psychologistId)
       // Check appointment is inserted

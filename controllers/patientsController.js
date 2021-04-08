@@ -2,6 +2,8 @@ const cookie = require('../utils/cookie')
 const { check, query, oneOf } = require('express-validator');
 const dbPatient = require('../db/patients')
 const validation = require('../utils/validation')
+const format = require('../utils/format')
+const date = require('../utils/date')
 
 module.exports.newPatient = async (req, res) => {
   res.render('editPatient', {
@@ -24,6 +26,7 @@ module.exports.newPatient = async (req, res) => {
       id: '',
       doctorName: '',
       doctorAddress: '',
+      birthday: '',
     }
   })
 }
@@ -55,6 +58,19 @@ const patientValidators = [
         })
     ],
     `Le numéro INE doit faire 11 caractères (chiffres ou lettres).
+    Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
+  ),
+  oneOf(
+    [
+      // Two valid possibilities : birthday is empty, or birthday is valid format.
+      check('birthday').trim().isEmpty(),
+      check('birthday')
+        .trim().isDate({format: date.formatDateForm})
+        .customSanitizer((value, { req }) => {
+          return req.sanitize(value)
+        })
+    ],
+    `La date de naissance n'est pas valide.
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
   ),
   check('institution')
@@ -96,6 +112,11 @@ module.exports.editPatient = async (req, res) => {
   const patientId = req.body['patientid']
   const patientFirstNames = req.body['firstnames']
   const patientLastName = req.body['lastname']
+  const birthday = date.formatDateForm(req.body['birthday'])
+  // @TODO delete me
+  console.log("req.body['birthday']", req.body['birthday'])
+  console.log("birthday", birthday)
+
   const patientINE = req.body['ine']
   const patientInstitutionName = req.body['institution']
   const doctorName = req.body['doctorname']
@@ -117,6 +138,7 @@ module.exports.editPatient = async (req, res) => {
       psychologistId,
       doctorName,
       doctorAddress,
+      birthday,
     )
     let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`
     if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified ||
@@ -152,6 +174,7 @@ module.exports.getEditPatient = async (req, res) => {
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     const patient = await dbPatient.getPatientById(patientId, psychologistId)
+    console.log("birthday", patient.birthday)
     if (!patient) {
       req.flash('error', 'Ce patient n\'existe pas. Vous ne pouvez pas le modifier.')
       return res.redirect('/psychologue/mes-seances')
@@ -183,6 +206,7 @@ module.exports.createNewPatient = async (req, res) => {
   }
   const firstNames = req.body['firstnames']
   const lastName = req.body['lastname']
+  const birthday = date.formatDateForm(req.body['birthday'])
   const INE = req.body['ine']
   const institutionName = req.body['institution']
   const doctorName = req.body['doctorname']
@@ -203,9 +227,10 @@ module.exports.createNewPatient = async (req, res) => {
       psychologistId,
       doctorName,
       doctorAddress,
+      birthday,
     )
     let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
-    if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress ) {
+    if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress || !birthday) {
       infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
         ' en cliquant le bouton "Modifier" du patient.'
     }
