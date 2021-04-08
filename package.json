@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "coverage": "nyc --reporter html --reporter text npm run test",
-    "dev": "nodemon dist/index.js",
+    "dev": "ts-node-dev --respawn --transpile-only index.ts",
     "prestart": "./node_modules/.bin/tsc -p tsconfig.json",
     "devKnex": "DEBUG=knex:query nodemon index.js",
     "ejslint": "ejslint **/*.ejs",
@@ -89,6 +89,7 @@
     "pinst": "^2.1.4",
     "rewire": "^5.0.0",
     "sinon": "^9.2.4",
+    "ts-node-dev": "^1.1.6",
     "typescript": "^4.2.3"
   }
 }
