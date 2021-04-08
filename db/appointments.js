@@ -57,8 +57,8 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
  * Note : january = 1, february = 2, etc
  * Example output :
  * [
- *  {countAppointments: 3, psychologistId: '112323232-33434-3434', universityid: '15555523232-33434-3434, firstNames: "firsname1", lastName: "name", personallEmail: "test@email.com"},
- *  {countAppointments: 2, psychologistId: '343423232-33434-1111', universityid: '23232555551-33434-3434, firstNames: "Stevie", lastName: "Wonder", personallEmail: "personnal@email.com"}},
+ *  {countAppointments: 3, psychologistId: '112323232-33434-3434', universityId: '15555523232-33434-3434, firstNames: "firsname1", lastName: "name", personallEmail: "test@email.com"},
+ *  {countAppointments: 2, psychologistId: '343423232-33434-1111', universityId: '23232555551-33434-3434, firstNames: "Stevie", lastName: "Wonder", personallEmail: "personnal@email.com"}},
  * ]
  */
 module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
