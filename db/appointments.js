@@ -57,8 +57,8 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
  * Note : january = 1, february = 2, etc
  * Example output :
  * [
- *  {countAppointments: 3, psychologistId: '112323232-33434-3434', universityId: '15555523232-33434-3434, firstNames: "firsname1", lastName: "name", personallEmail: "test@email.com"},
- *  {countAppointments: 2, psychologistId: '343423232-33434-1111', universityId: '23232555551-33434-3434, firstNames: "Stevie", lastName: "Wonder", personallEmail: "personnal@email.com"}},
+ *  {countAppointments: 3, psychologistId: '112323232-33434-3434', universityid: '15555523232-33434-3434, firstNames: "firsname1", lastName: "name", personallEmail: "test@email.com"},
+ *  {countAppointments: 2, psychologistId: '343423232-33434-1111', universityid: '23232555551-33434-3434, firstNames: "Stevie", lastName: "Wonder", personallEmail: "personnal@email.com"}},
  * ]
  */
 module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
@@ -66,7 +66,7 @@ module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
     const query = await knex(appointmentsTable)
       .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
         , ${appointmentsTable}."psychologistId"
-        , ${dbPsychologists.psychologistsTable}."payingUniversityId" AS universityId
+        , ${dbPsychologists.psychologistsTable}."payingUniversityId" AS "universityId"
         , ${dbPsychologists.psychologistsTable}."firstNames"
         , ${dbPsychologists.psychologistsTable}."lastName"
         , ${dbPsychologists.psychologistsTable}."personalEmail"
@@ -81,6 +81,7 @@ module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
       .groupBy(`${dbPsychologists.psychologistsTable}.firstNames`)
       .groupBy(`${dbPsychologists.psychologistsTable}.lastName`)
       .groupBy(`${dbPsychologists.psychologistsTable}.personalEmail`)
+      .orderByRaw(`"countAppointments"`)
       //@TODO only psys who have registered appointments ? if yes: HAVING COUNT(*) > 0
 
     return  query;

@@ -21,6 +21,8 @@ describe('appointmentsController', function() {
     })
 
     afterEach(async function() {
+      await clean.cleanAllPatients()
+      await clean.cleanAllAppointments()
       return Promise.resolve()
     })
 
@@ -203,9 +205,10 @@ describe('appointmentsController', function() {
       return Promise.resolve()
     })
 
-    afterEach(function(done) {
+    afterEach(async function() {
+      await clean.cleanAllPatients();
       insertAppointmentStub.restore()
-      done()
+      return Promise.resolve()
     })
 
     it('should refuse invalid patientId', function(done) {
@@ -327,6 +330,8 @@ describe('appointmentsController', function() {
     })
 
     afterEach(async function() {
+      await clean.cleanAllPatients()
+      await clean.cleanAllAppointments()
       return Promise.resolve()
     })
 
