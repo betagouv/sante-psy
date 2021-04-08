@@ -80,22 +80,16 @@ module.exports.updateConventionInfoValidators = [
 ]
 
 module.exports.updateConventionInfo = async (req, res) => {
-  console.log("Am i called ? updateConventionInfo"); // log KO
-  console.log("Before Validation", req.body); // log KO
   if (!validation.checkErrors(req)) {
-    console.log("Validation", validation.checkErrors)
     return res.redirect('/psychologue/mes-remboursements')
   }
 
   const universityId = req.body['university']
   const isConventionSigned = req.body.signed === 'yes'
 
-  console.log("universityId", universityId)
-  console.log("isConventionSigned", isConventionSigned)
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     await dbPsychologists.updateConventionInfo(psychologistId, universityId, isConventionSigned)
-    console.log("psychologistId", psychologistId)
     req.flash('info', `Vos informations de conventionnement sont bien enregistrées.`)
     return res.redirect('/psychologue/mes-remboursements')
   } catch (err) {

@@ -82,6 +82,7 @@ describe('dashboardController', function() {
       patient.doctorAddress='    ';
       hasFolderCompleted(patient).should.equal(false);
     });
+
   });
   describe('display dashaboard', function() {
     beforeEach(async function(done) {
