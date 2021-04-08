@@ -4,7 +4,6 @@ module.exports.checkErrors = (req) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     errors.array().forEach(error => {
-      console.log("error form", error.msg)
       req.flash('error', error.msg)
     })
     return false

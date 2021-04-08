@@ -57,7 +57,7 @@ describe('dashboardController', function() {
         patient.doctorName="doctorName", // trim should work
         patient.institutionName='    ';
         hasFolderCompleted(patient).should.equal(false);
-        patient.doctorName="", 
+        patient.doctorName="",
         patient.institutionName='institutionName';
         hasFolderCompleted(patient).should.equal(false);
         patient.doctorName="doctorName",
