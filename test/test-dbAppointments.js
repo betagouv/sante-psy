@@ -104,10 +104,11 @@ describe('DB Appointments', () => {
     });
   });
 
-  describe('getCountAppointmentsByYearMonthForUniversity', () => {
-    it('should return a count of appointments by year and month for university', async () => {
+  describe('getMonthlyAppointmentsSummary', () => {
+    it('should return a count of appointments by year and month', async () => {
       const month = 4
       const year = 2021
+
       const psyList = [
         clean.getOnePsy('loginemail@beta.gouv.fr', 'accepte', false, '25173f41-6535-524f-bec0-436297a2bc77'),
         clean.getOnePsy('emaillogin@beta.gouv.fr', 'accepte', false, '14f37152-6535-524f-bec0-436297a2bc77')
@@ -142,18 +143,25 @@ describe('DB Appointments', () => {
         patientToInsert.doctorAddress,
         patientToInsert.doctorPhone,
       )
-      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient2.id, psy2.dossierNumber)
+      // For april (should be output)
       await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)
       await dbAppointments.insertAppointment(new Date('2021-04-03'), patient2.id, psy2.dossierNumber)
       await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)
+      // For march (should not be output)
+      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient2.id, psy2.dossierNumber)
 
-
-      const output = await dbAppointments.getCountAppointmentsByYearMonthForUniversity(year, month);
-      console.log(output)
-      assert(output.length === 2); // 2 university
-      assert(output[0].countAppointments === 2);
-      assert(output[1].countAppointments === 1);
+      const output = await dbAppointments.getMonthlyAppointmentsSummary(year, month);
+      console.log(output) // @TODO remove me 
+      assert.equal(output.length, 2); // 2 psys
+      // Psy 1
+      assert.equal(output[0].psychologistId, psy.dossierNumber);
+      assert.equal(output[0].countAppointments, 2); // 2 appointments in april
+      assert.equal(output[0].universityId, psy.payingUniversityId);
+      // Psy 2
+      assert.equal(output[1].psychologistId, psy2.dossierNumber);
+      assert.equal(output[1].countAppointments, 1); // 1 appointment in april
+      assert.equal(output[1].universityId, psy2.payingUniversityId);
     });
   });
 

@@ -73,7 +73,7 @@ describe('reimbursementController', () => {
         })
         .then(async () => {
           const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail)
-          chai.expect(updatedPsy.isConventionSigned).to.equal(true)
+          chai.expect(updatedPsy.isConventionSigned).to.equal(true) // broken here - null
           chai.expect(updatedPsy.payingUniversityId).to.equal(university.id)
         })
     })
@@ -94,6 +94,7 @@ describe('reimbursementController', () => {
         .send(payload)
         .then(async () => {
           const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail)
+          console.log(updatedPsy)
           chai.expect(updatedPsy.isConventionSigned).not.to.exist
           chai.expect(updatedPsy.payingUniversityId).not.to.exist
         })
