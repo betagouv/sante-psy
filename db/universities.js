@@ -1,7 +1,9 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
-// const dbPsychologists = require('./psychologists')
-const dbPsychologists = 'psychologists';
+
+// TODO: Gérer les imports dans un fichier centralisé
+const { psychologistsTable} = require('./psychologists')
+const dbPsychologists = psychologistsTable;
 
 const universitiesTable = "universities";
 module.exports.universitiesTable =  universitiesTable;
