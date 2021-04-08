@@ -28,7 +28,7 @@ describe('dashboardController', function() {
       hasFolderCompleted(patient).should.equal(true);
     });
 
-    it('should return false if patient does not have all needed info (ine, prescription, student status, doctor name)',
+    it('should return false if patient does not have all needed info (prescription, student status, doctor name)',
       function() {
         let patient =  {
           firstNames : "firstNames",
@@ -49,8 +49,6 @@ describe('dashboardController', function() {
         patient.isStudentStatusVerified=false;
         hasFolderCompleted(patient).should.equal(false);
         patient.isStudentStatusVerified=true;
-        patient.INE='';
-        hasFolderCompleted(patient).should.equal(false);
         patient.INE='INE';
         patient.doctorName="    ", // trim should work
         hasFolderCompleted(patient).should.equal(false);
