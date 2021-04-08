@@ -14,6 +14,12 @@ describe('DB Appointments', () => {
     await clean.cleanDataAppointments();
   })
 
+  afterEach(async function after() {
+    await clean.cleanAllPatients();
+    await clean.cleanAllPsychologists();
+    await clean.cleanDataAppointments();
+  })
+
   describe('deleteAppointment', () => {
     it('should change deleted boolean to true and update updatedAt field', async () => {
       const psyList = clean.psyList();
@@ -149,21 +155,21 @@ describe('DB Appointments', () => {
       // For april (should be output)
       await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)
       await dbAppointments.insertAppointment(new Date('2021-04-03'), patient2.id, psy2.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient2.id, psy2.dossierNumber)
       // For march (should not be output)
       await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
       await dbAppointments.insertAppointment(new Date('2021-03-02'), patient2.id, psy2.dossierNumber)
 
       const output = await dbAppointments.getMonthlyAppointmentsSummary(year, month);
-      console.log(output) // @TODO remove me 
+
       assert.equal(output.length, 2); // 2 psys
       // Psy 1
       assert.equal(output[0].psychologistId, psy.dossierNumber);
-      assert.equal(output[0].countAppointments, 2); // 2 appointments in april
+      assert.equal(output[0].countAppointments, 1); // 1 appointment in april
       assert.equal(output[0].universityId, psy.payingUniversityId);
       // Psy 2
       assert.equal(output[1].psychologistId, psy2.dossierNumber);
-      assert.equal(output[1].countAppointments, 1); // 1 appointment in april
+      assert.equal(output[1].countAppointments, 2); // 2 appointments in april
       assert.equal(output[1].universityId, psy2.payingUniversityId);
     });
   });
