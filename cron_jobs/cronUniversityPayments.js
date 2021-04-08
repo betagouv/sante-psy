@@ -12,7 +12,7 @@ const getpsychologistsForEachUniversity = async () =>  {
     const year = "2021"
     console.log(`last month: ${lastMonth}`)
 
-    const allAppointmentById = await dbAppointments.getCountAppointmentsByYearMonthForUniversity(year, lastMonth)
+    const allAppointmentById = await dbAppointments.getMonthlyAppointmentsSummary(year, lastMonth)
     console.log("allAppointmentById", allAppointmentById);
     return allAppointmentById
   } catch (err) {

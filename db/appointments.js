@@ -52,14 +52,16 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
 }
 
 /**
+ * Output the number of appointments for each psy, for the given month and year. Join with university id.
+ * 
  * Note : january = 1, february = 2, etc
  * Example output :
  * [
- *  {countAppointments: 3, psychologistId: '112323232-33434-3434',  universityId: '15555523232-33434-3434'},
- *  {countAppointments: 2, psychologistId: '112323232-33434-3434, universityId: '15555523232-33434-3434''},
+ *  {countAppointments: 3, psychologistId: '112323232-33434-3434', universityId: '15555523232-33434-3434, firstNames: "firsname1", lastName: "name", personallEmail: "test@email.com"},
+ *  {countAppointments: 2, psychologistId: '343423232-33434-1111', universityId: '23232555551-33434-3434, firstNames: "Stevie", lastName: "Wonder", personallEmail: "personnal@email.com"}},
  * ]
  */
-module.exports.getCountAppointmentsByYearMonthForUniversity = async (year, month) => {
+module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
   try {
     const query = await knex(appointmentsTable)
       .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
@@ -79,6 +81,7 @@ module.exports.getCountAppointmentsByYearMonthForUniversity = async (year, month
       .groupBy(`${dbPsychologists.psychologistsTable}.firstNames`)
       .groupBy(`${dbPsychologists.psychologistsTable}.lastName`)
       .groupBy(`${dbPsychologists.psychologistsTable}.personalEmail`)
+      //@TODO only psys who have registered appointments ? if yes: HAVING COUNT(*) > 0
 
     return  query;
   } catch (err) {
