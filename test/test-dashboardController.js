@@ -11,14 +11,14 @@ const dbPatients = require('../db/patients')
 const format = require('../utils/format')
 
 describe('dashboardController', function() {
-  const birthday = date.parseDateForm('20/01/1980')
+  const dateOfBirth = date.parseDateForm('20/01/1980')
   describe('hasFolderCompleted', function() {
     let patient
     beforeEach( function() {
       patient =  {
         firstNames : "firstNames",
         lastName : "lastName",
-        birthday : birthday,
+        dateOfBirth : dateOfBirth,
         INE : "INE",
         institutionName : "institutionName",
         isStudentStatusVerified : true,
@@ -40,8 +40,8 @@ describe('dashboardController', function() {
     });
 
 
-    it('should return true if birthday is missing', function() {
-      patient.birthday=null;
+    it('should return true if dateOfBirth is missing', function() {
+      patient.dateOfBirth=null;
       hasFolderCompleted(patient).should.equal(true);
     });
 
@@ -110,7 +110,7 @@ describe('dashboardController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        birthday,
+        dateOfBirth,
       )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
@@ -122,7 +122,7 @@ describe('dashboardController', function() {
         anotherPsyId,
         'Dr Docteur',
         'adresse du docteur',
-        birthday,
+        dateOfBirth,
       )
 
       return chai.request(app)
@@ -157,7 +157,7 @@ describe('dashboardController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        birthday,
+        dateOfBirth,
       )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
@@ -169,7 +169,7 @@ describe('dashboardController', function() {
         anotherPsyId,
         'Dr Docteur',
         'adresse du docteur',
-        birthday,
+        dateOfBirth,
       )
       const myAppointment =
         await dbAppointments.insertAppointment(new Date('2021-03-01'), myPatient.id, psy.dossierNumber)

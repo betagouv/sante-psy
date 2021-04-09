@@ -10,7 +10,7 @@ const date = require('../utils/date')
 const { expect } = require('chai')
 
 describe('appointmentsController', function() {
-  const birthday = date.parseDateForm('20/01/1980')
+  const dateOfBirth = date.parseDateForm('20/01/1980')
 
   describe('create appointment', function() {
 
@@ -39,7 +39,7 @@ describe('appointmentsController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        birthday,
+        dateOfBirth,
       )
 
       return chai.request(app)
@@ -81,7 +81,7 @@ describe('appointmentsController', function() {
         anotherDossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        birthday,
+        dateOfBirth,
       )
 
       return chai.request(app)
@@ -120,7 +120,7 @@ describe('appointmentsController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        birthday,
+        dateOfBirth,
       )
 
       return chai.request(app)
@@ -160,7 +160,7 @@ describe('appointmentsController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        birthday,
+        dateOfBirth,
       )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
@@ -172,7 +172,7 @@ describe('appointmentsController', function() {
         anotherPsyId,
         'Dr Docteur',
         'adresse du docteur',
-        birthday,
+        dateOfBirth,
       )
 
       return chai.request(app)
@@ -299,7 +299,7 @@ describe('appointmentsController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        birthday,
+        dateOfBirth,
       )
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
@@ -342,7 +342,7 @@ describe('appointmentsController', function() {
         psychologistId,
         'Dr Docteur',
         'adresse du docteur',
-        birthday,
+        dateOfBirth,
       )
       const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psychologistId)
       // Check appointment is inserted

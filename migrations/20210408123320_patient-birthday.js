@@ -2,7 +2,7 @@
 
 const dbPatients = require('../db/patients')
 
-const columnBirthday = 'birthday'
+const columnBirthday = 'dateOfBirth'
 exports.up = function (knex) {
   console.log(`Adding ${columnBirthday} column to ${dbPatients.patientsTable}`)
   return knex.schema.table(dbPatients.patientsTable, function (table) {

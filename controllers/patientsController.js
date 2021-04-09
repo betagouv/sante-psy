@@ -25,7 +25,7 @@ module.exports.newPatient = async (req, res) => {
       id: '',
       doctorName: '',
       doctorAddress: '',
-      birthday: '',
+      dateOfBirth: '',
     }
   })
 }
@@ -61,9 +61,9 @@ const patientValidators = [
   ),
   oneOf(
     [
-      // Two valid possibilities : birthday is empty, or birthday is valid format.
-      check('birthday').trim().isEmpty(),
-      check('birthday')
+      // Two valid possibilities : dateofbirth is empty, or dateofbirth is valid format.
+      check('dateofbirth').trim().isEmpty(),
+      check('dateofbirth')
         .trim().isDate({format: date.formatFrenchDateForm})
         .customSanitizer((value, { req }) => {
           return req.sanitize(value)
@@ -111,7 +111,7 @@ module.exports.editPatient = async (req, res) => {
   const patientId = req.body['patientid']
   const patientFirstNames = req.body['firstnames']
   const patientLastName = req.body['lastname']
-  const birthday = date.toFormatMMDDYYYY(req.body['birthday'])
+  const dateOfBirth = date.toFormatMMDDYYYY(req.body['dateofbirth'])
   const patientINE = req.body['ine']
   const patientInstitutionName = req.body['institution']
   const doctorName = req.body['doctorname']
@@ -133,7 +133,7 @@ module.exports.editPatient = async (req, res) => {
       psychologistId,
       doctorName,
       doctorAddress,
-      birthday,
+      dateOfBirth,
     )
 
     let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`
@@ -170,7 +170,7 @@ module.exports.getEditPatient = async (req, res) => {
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     const patient = await dbPatient.getPatientById(patientId, psychologistId)
-    console.log("birthday", patient.birthday)
+
     if (!patient) {
       req.flash('error', 'Ce patient n\'existe pas. Vous ne pouvez pas le modifier.')
       return res.redirect('/psychologue/mes-seances')
@@ -202,7 +202,7 @@ module.exports.createNewPatient = async (req, res) => {
   }
   const firstNames = req.body['firstnames']
   const lastName = req.body['lastname']
-  const birthday = date.toFormatMMDDYYYY(req.body['birthday'])
+  const dateOfBirth = date.toFormatMMDDYYYY(req.body['dateofbirth'])
   const INE = req.body['ine']
   const institutionName = req.body['institution']
   const doctorName = req.body['doctorname']
@@ -223,10 +223,10 @@ module.exports.createNewPatient = async (req, res) => {
       psychologistId,
       doctorName,
       doctorAddress,
-      birthday,
+      dateOfBirth,
     )
     let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`
-    if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress || !birthday) {
+    if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress || !dateOfBirth) {
       infoMessage += ' Vous pourrez renseigner les champs manquants plus tard' +
         ' en cliquant le bouton "Modifier" du patient.'
     }

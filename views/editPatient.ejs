@@ -51,16 +51,16 @@
           <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname" required>
         </div>
         <div class="rf-my-3w">
-          <label class="rf-label" for="birthday">Date de naissance</label>
-          <div class="rf-hint-text" id="birthday-help">
+          <label class="rf-label" for="dateofbirth">Date de naissance</label>
+          <div class="rf-hint-text" id="dateofbirth-help">
             Date au format JJ/MM/AAAA, exemple : 25/01/1987
           </div>
-          <input class="rf-input midlength-input" value="<%= date.toFormatDDMMYYYY(patient.birthday) %>" 
+          <input class="rf-input midlength-input" value="<%= date.toFormatDDMMYYYY(patient.dateOfBirth) %>" 
           type="text"
           pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
           title="Utilisez 2 chiffres pour les jours, et le mois, et 4 chiffres pour l'année"
           placeholder="Exemple de format : 25/01/1987"
-          id="birthday" name="birthday">
+          id="dateofbirth" name="dateofbirth">
         </div>
         <div class="rf-my-3w">
           <label class="rf-label" for="institution" aria-describedby="institution-help">Établissement scolaire de l'étudiant</label>

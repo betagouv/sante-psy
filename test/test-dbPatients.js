@@ -16,7 +16,7 @@ describe('DB Patients', () => {
   const hasPrescription = false
   const doctorName = "doctorName"
   const doctorAddress = "doctorAddress"
-  const birthday = date.toFormatMMDDYYYY("20/01/1980")
+  const dateOfBirth = date.toFormatMMDDYYYY("20/01/1980")
 
   async function testDataPatientsExist(lastName) {
 
@@ -47,7 +47,7 @@ describe('DB Patients', () => {
         psychologistId,
         doctorName,
         doctorAddress,
-        birthday,
+        dateOfBirth,
       );
 
       const exist = await testDataPatientsExist(lastName);
@@ -67,7 +67,7 @@ describe('DB Patients', () => {
           psychologistId,
           doctorName,
           doctorAddress,
-          birthday,
+          dateOfBirth,
         );
         assert.fail("insert patient should have failed");
       } catch( error ) {
@@ -97,7 +97,7 @@ describe('DB Patients', () => {
         psychologistId,
         doctorName,
         doctorAddress,
-        birthday,
+        dateOfBirth,
       );
 
       const newLastName = "NewName"
@@ -115,7 +115,7 @@ describe('DB Patients', () => {
         psychologistId,
         doctorName,
         doctorAddress,
-        birthday,
+        dateOfBirth,
       )
       const newPatient = await dbPatients.getPatientById(oldPatient.id, psychologistId)
       expect(newPatient.lastName).equal(newLastName)
