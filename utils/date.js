@@ -1,5 +1,3 @@
-const moment = require('moment');
-
 const formatFrenchDateForm = "DD/MM/YYYY"
 module.exports.formatFrenchDateForm = formatFrenchDateForm;
 
@@ -15,22 +13,40 @@ module.exports.getDateNowPG = () => {
 }
 
 module.exports.toFormatMMDDYYYY = (date) => {
-  return parseDateForm(date).format('MM-DD-YYYY')
+  return parseDateForm(date).toISOString() //.('MM-DD-YYYY')
 }
+
+/**
+ * @see https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
+ */
+const dateFormatter = new Intl.DateTimeFormat('fr-FR', {
+  weekday: 'long', year: 'numeric',
+  month: 'long', day: 'numeric',
+})
+
+const shortDateFormatter = new Intl.DateTimeFormat('fr-FR', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+})
+
+module.exports.formatFrenchDate = date => dateFormatter.format(date)
 
 /**
  * used to display date in editPatient
  */
 module.exports.toFormatDDMMYYYY = (date) => {
   if( date ) {
-    return parseDateForm(date).format(formatFrenchDateForm)
+    return shortDateFormatter.format(date);
   } else {
     return null;
   }
 }
 
 function parseDateForm(date) {
-  return moment(date, formatFrenchDateForm)
+  const parsedDate = date.split("/")
+  // year , month , day
+  return new Date(parsedDate[2], parsedDate[1], parsedDate[0])
 }
 module.exports.parseDateForm = parseDateForm;
 

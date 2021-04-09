@@ -14,10 +14,3 @@ module.exports.formatFrenchPhoneNumber = machineReadableNumber => {
       + ' ' + withPrefix.substring(8, 10)
   return splitByPairs
 }
-
-const dateFormatter = new Intl.DateTimeFormat('fr-FR', {
-  weekday: 'long', year: 'numeric',
-  month: 'long', day: 'numeric',
-})
-
-module.exports.formatFrenchDate = date => dateFormatter.format(date)

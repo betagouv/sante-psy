@@ -13,7 +13,6 @@ const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const csrf = require('csurf');
 const config = require('./utils/config');
-const format = require('./utils/format');
 const date = require('./utils/date');
 const cspConfig = require('./utils/csp-config');
 const sentry = require('./utils/sentry');
@@ -151,7 +150,6 @@ app.use((err, req, res, next) => {
 });
 
 
-app.locals.format = format
 app.locals.date = date
 // prevent abuse
 const rateLimiter = rateLimit({

@@ -182,10 +182,10 @@ describe('dashboardController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
           // My appointments are present
-          chai.assert.include(res.text, format.formatFrenchDate(myAppointment.appointmentDate))
+          chai.assert.include(res.text, date.formatFrenchDate(myAppointment.appointmentDate))
 
           // Other psy's patients are not listed
-          chai.assert.notInclude(res.text, format.formatFrenchDate(appointmentForAnotherPsy.appointmentDate))
+          chai.assert.notInclude(res.text, date.formatFrenchDate(appointmentForAnotherPsy.appointmentDate))
 
           return Promise.resolve()
         })

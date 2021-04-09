@@ -1,12 +1,28 @@
 const date = require('../utils/date');
-const moment = require('moment');
 const assert = require('chai').assert;
 
 describe('date', () => {
 
+  describe("parseDateForm", () => {
+    it('should parse a DD/MM/YYYY to a Date', async () => {
+      const testDate = "25/12/1995"
+      const datetime = date.parseDateForm(testDate);
+      datetime.getTime().should.be.equal(new Date("1995-12-25").getTime());
+    });
+  })
+
+  describe("formatFrenchDate", () => {
+    it('should parse a DD/MM/YYYY to a Date', async () => {
+      const testDate = new Date("1995-12-25");
+      const longFrenchFormat = date.formatFrenchDate(testDate);
+      longFrenchFormat.should.be.equal("lundi 25 décembre 1995");
+    });
+  })
+
   describe("toFormatDDMMYYYY", () => {
     it('should return a Date to format DD/MM/YYYY', async () => {
-      const testDate = moment("1995-12-25");
+      const testDate = new Date("1995-12-25");
+      console.log("testDate", testDate)
       const ddMMYYYY = date.toFormatDDMMYYYY(testDate);
       ddMMYYYY.should.be.equal("25/12/1995");
     });
@@ -19,7 +35,7 @@ describe('date', () => {
 
   describe("toFormatMMDDYYYY", () => {
     it('should return a Date to format MM-DD-YYYY', async () => {
-      const testDate = moment("1995-12-25");
+      const testDate = new Date("1995-12-25");
       const ddMMYYYY = date.toFormatMMDDYYYY(testDate);
       ddMMYYYY.should.be.equal("12-25-1995");
     });
