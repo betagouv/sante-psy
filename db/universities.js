@@ -19,25 +19,6 @@ module.exports.getUniversities = async () => {
   }
 }
 
-module.exports.getUniversitiesWithPsy = async () => {
-  try {
-    const universitiesWithPsy = await knex.from(universitiesTable)
-      .innerJoin(`${dbPsychologists}`,
-        `${universitiesTable}.id`,
-        `${dbPsychologists}.payingUniversityId`
-      )
-      .select(`${universitiesTable}.id AS universityId`,
-        `${dbPsychologists}.firstNames`,
-        `${dbPsychologists}.lastName`,
-        `${dbPsychologists}.dossierNumber AS psyId`,
-        `${dbPsychologists}.personalEmail`)
-    return universitiesWithPsy
-  } catch (err) {
-    console.error(`Impossible de récupérer les psychologues`, err)
-    throw new Error(`Impossible de récupérer les psychologues`)
-  }
-}
-
 module.exports.insertUniversity = async (name) => {
   try {
     const universityArray = await knex(module.exports.universitiesTable).insert({
