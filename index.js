@@ -80,11 +80,7 @@ app.use(expressSanitizer());
 
 // Populate some variables for all views
 app.use(function populate(req, res, next){
-  if (config.useCSRF) {
-    res.locals._csrf = req.csrfToken();
-  } else {
-    res.locals._csrf = '';
-  }
+  res.locals._csrf = config.useCSRF ? req.csrfToken() : '';
   res.locals.appName = appName;
   res.locals.appDescription = appDescription;
   res.locals.appRepo = appRepo;
@@ -102,11 +98,7 @@ app.use(
     secret: config.secret,
     algorithms: ['HS256'],
     getToken: function fromHeaderOrQuerystring (req) {
-      if( req.cookies !== undefined ) {
-        return req.cookies.token;
-      } else {
-        return null;
-      }
+      return req.cookies ? req.cookies.token : null
     }
   }).unless({
     path: [
@@ -123,19 +115,18 @@ app.use(
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
-    const psychologueWorkspaceRegexp = new RegExp(/\/psychologue\//, 'g');
-    if (psychologueWorkspaceRegexp.test(req.originalUrl)) {
+    if (req.originalUrl.includes('/psychologue/')) {
       req.flash(
         'error',
-        `Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
+        `Vous n'êtes pas identifié(e) pour accéder à cette page ou votre accès n'est plus valide\
          - la connexion est valide durant ${config.sessionDurationHours} heures`,
       );
       console.log("No token - redirect to login");
       return res.redirect(`/psychologue/login`);
-    } else {
-      req.flash('error', "Cette page n'existe pas.");
-      return res.redirect(`/`);
     }
+
+    req.flash('error', "Cette page n'existe pas.");
+    return res.redirect(`/`);
   } else if( req.cookies === undefined ) {
     req.flash('error', "Cette page n'existe pas.");
     res.redirect('/');
@@ -155,7 +146,7 @@ app.locals.format = format
 const rateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minute window
   max: 1000, // start blocking after X requests for windowMs time
-  message: "Trop de requête venant de cette IP, veuillez essayer plus tard."
+  message: "Trop de requêtes venant de cette IP, veuillez réessayer plus tard."
 });
 app.use(rateLimiter);
 
@@ -235,11 +226,11 @@ app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
 app.get('*', function redirect404(req, res){
   if( req.cookies === undefined ) {
     req.flash('error', "Cette page n'existe pas.")
-    res.redirect('/');
-  } else {
-    req.flash('error', "Cette page n'existe pas.")
-    return res.redirect(`/psychologue/mes-seances`);
+    return res.redirect('/');
   }
+
+  req.flash('error', "Cette page n'existe pas.")
+  return res.redirect(`/psychologue/mes-seances`);
 });
 
 

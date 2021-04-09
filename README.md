@@ -101,7 +101,7 @@ dbPsychologists.savePsychologistInPG([psy])
 ```
 
 ### Test
-Pour utiliser le container Postgresql
+Pour utiliser le container Postgresql. Penser à décommenter les variables d'environnement `SECRET` et `SECRET_LOGS` dans le fichier `.env` avant de lancer les tests localement.
 ```bash
 # Start DB and build SQL tables
 docker-compose -f docker-compose-only-db.yml up

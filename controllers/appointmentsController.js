@@ -63,6 +63,8 @@ module.exports.deleteAppointmentValidators = [
 ]
 
 // We use a POST rather than a DELETE because method=DELETE in the form seems to send a GET. (???)
+// Only POST and GET (and DIALOG, I didn't know this one) are available in the method attribute
+// https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form#attributes_for_form_submission
 module.exports.deleteAppointment = async (req, res) => {
   if (!validation.checkErrors(req)) {
     return res.redirect('/psychologue/mes-seances')
