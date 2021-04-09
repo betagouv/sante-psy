@@ -7,7 +7,9 @@ describe('date', () => {
     it('should parse a DD/MM/YYYY to a Date', async () => {
       const testDate = "25/12/1995"
       const datetime = date.parseDateForm(testDate);
-      datetime.getTime().should.be.equal(new Date("1995-12-25").getTime());
+      datetime.getFullYear().should.be.equal(1995);
+      datetime.getMonth().should.be.equal(11);
+      datetime.getDate().should.be.equal(25);
     });
   })
 
@@ -30,14 +32,6 @@ describe('date', () => {
     it('should return null if Date is null', async () => {
       const output = date.toFormatDDMMYYYY(null);
       assert(output === null)
-    });
-  });
-
-  describe("toFormatMMDDYYYY", () => {
-    it('should return a Date to format MM-DD-YYYY', async () => {
-      const testDate = new Date("1995-12-25");
-      const ddMMYYYY = date.toFormatMMDDYYYY(testDate);
-      ddMMYYYY.should.be.equal("12-25-1995");
     });
   });
 

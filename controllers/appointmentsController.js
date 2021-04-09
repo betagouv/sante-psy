@@ -2,7 +2,7 @@ const cookie = require('../utils/cookie')
 const { check } = require('express-validator');
 const dbAppointments = require('../db/appointments')
 const dbPatient = require('../db/patients')
-const format = require('../utils/format')
+const dateUtils = require('../utils/date')
 const validation = require('../utils/validation')
 
 module.exports.newAppointment = async (req, res) => {
@@ -43,7 +43,7 @@ module.exports.createNewAppointment = async (req, res) => {
     if( patientExist ) {
       await dbAppointments.insertAppointment(date, patientId, psyId)
       console.log(`Appointment created for patient id ${patientId} by psy id ${psyId}`)
-      req.flash('info', `La séance du ${date.formatFrenchDate(date)} a bien été créée.`)
+      req.flash('info', `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`)
     } else {
       console.warn(`Patient id ${patientId} does not exsit for psy id : ${psyId}`);
       req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?')

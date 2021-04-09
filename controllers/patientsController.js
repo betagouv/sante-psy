@@ -111,7 +111,7 @@ module.exports.editPatient = async (req, res) => {
   const patientId = req.body['patientid']
   const patientFirstNames = req.body['firstnames']
   const patientLastName = req.body['lastname']
-  const dateOfBirth = date.toFormatMMDDYYYY(req.body['dateofbirth'])
+  const dateOfBirth = date.parseDateForm(req.body['dateofbirth'])
   const patientINE = req.body['ine']
   const patientInstitutionName = req.body['institution']
   const doctorName = req.body['doctorname']
@@ -202,7 +202,7 @@ module.exports.createNewPatient = async (req, res) => {
   }
   const firstNames = req.body['firstnames']
   const lastName = req.body['lastname']
-  const dateOfBirth = date.toFormatMMDDYYYY(req.body['dateofbirth'])
+  const dateOfBirth = date.parseDateForm(req.body['dateofbirth'])
   const INE = req.body['ine']
   const institutionName = req.body['institution']
   const doctorName = req.body['doctorname']

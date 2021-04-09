@@ -12,10 +12,6 @@ module.exports.getDateNowPG = () => {
   return new Date().toISOString();
 }
 
-module.exports.toFormatMMDDYYYY = (date) => {
-  return parseDateForm(date).toISOString() //.('MM-DD-YYYY')
-}
-
 /**
  * @see https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
  */
@@ -44,9 +40,13 @@ module.exports.toFormatDDMMYYYY = (date) => {
 }
 
 function parseDateForm(date) {
-  const parsedDate = date.split("/")
-  // year , month , day
-  return new Date(parsedDate[2], parsedDate[1], parsedDate[0])
+  if(date) {
+    const parsedDate = date.split("/")
+    // year - month - day
+    return new Date(`${parsedDate[2]}-${parsedDate[1]}-${parsedDate[0]}`)
+  } else {
+    return null;
+  }
 }
 module.exports.parseDateForm = parseDateForm;
 
