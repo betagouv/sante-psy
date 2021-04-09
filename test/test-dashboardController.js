@@ -4,12 +4,14 @@ const chai = require('chai')
 const rewire = require('rewire')
 const clean = require('./helper/clean')
 const cookie = require('../utils/cookie')
+const date = require('../utils/date')
 const dashboardController = rewire('../controllers/dashboardController')
 const dbAppointments = require('../db/appointments')
 const dbPatients = require('../db/patients')
 const format = require('../utils/format')
 
 describe('dashboardController', function() {
+  const birthday = date.parseDateForm('20/01/1980')
   describe('hasFolderCompleted', function() {
     const hasFolderCompleted = dashboardController.__get__('hasFolderCompleted');
     it('should return true if patient has all needed info', function() {
@@ -59,7 +61,7 @@ describe('dashboardController', function() {
         patient.doctorName="doctorName", // trim should work
         patient.institutionName='    ';
         hasFolderCompleted(patient).should.equal(false);
-        patient.doctorName="", 
+        patient.doctorName="",
         patient.institutionName='institutionName';
         hasFolderCompleted(patient).should.equal(false);
         patient.doctorName="doctorName",
@@ -96,7 +98,7 @@ describe('dashboardController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00',
+        birthday,
       )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
@@ -108,7 +110,7 @@ describe('dashboardController', function() {
         anotherPsyId,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00',
+        birthday,
       )
 
       return chai.request(app)
@@ -143,7 +145,7 @@ describe('dashboardController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00',
+        birthday,
       )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
@@ -155,7 +157,7 @@ describe('dashboardController', function() {
         anotherPsyId,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00',
+        birthday,
       )
       const myAppointment =
         await dbAppointments.insertAppointment(new Date('2021-03-01'), myPatient.id, psy.dossierNumber)

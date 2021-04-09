@@ -14,8 +14,19 @@ module.exports.getDateNowPG = () => {
   return new Date().toISOString();
 }
 
-module.exports.formatDateForm = (date) => {
+module.exports.toFormatMMDDYYYY = (date) => {
   return parseDateForm(date).format('MM-DD-YYYY')
+}
+
+/**
+ * used to display date in editPatient
+ */
+module.exports.toFormatDDMMYYYY = (date) => {
+  if( date ) {
+    return parseDateForm(date).format(formatFrenchDateForm)
+  } else {
+    return null;
+  }
 }
 
 function parseDateForm(date) {

@@ -2,7 +2,6 @@ const cookie = require('../utils/cookie')
 const { check, query, oneOf } = require('express-validator');
 const dbPatient = require('../db/patients')
 const validation = require('../utils/validation')
-const format = require('../utils/format')
 const date = require('../utils/date')
 
 module.exports.newPatient = async (req, res) => {
@@ -112,7 +111,7 @@ module.exports.editPatient = async (req, res) => {
   const patientId = req.body['patientid']
   const patientFirstNames = req.body['firstnames']
   const patientLastName = req.body['lastname']
-  const birthday = date.formatDateForm(req.body['birthday'])
+  const birthday = date.toFormatMMDDYYYY(req.body['birthday'])
   const patientINE = req.body['ine']
   const patientInstitutionName = req.body['institution']
   const doctorName = req.body['doctorname']
@@ -203,7 +202,7 @@ module.exports.createNewPatient = async (req, res) => {
   }
   const firstNames = req.body['firstnames']
   const lastName = req.body['lastname']
-  const birthday = date.formatDateForm(req.body['birthday'])
+  const birthday = date.toFormatMMDDYYYY(req.body['birthday'])
   const INE = req.body['ine']
   const institutionName = req.body['institution']
   const doctorName = req.body['doctorname']

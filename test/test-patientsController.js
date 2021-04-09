@@ -25,7 +25,7 @@ const makePatient = async (psychologistId) => {
     psychologistId,
     doctorName,
     doctorAddress,
-    date.formatDateForm(birthday)
+    date.toFormatMMDDYYYY(birthday)
   )
   // Check patient is inserted
   const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId)
@@ -376,7 +376,7 @@ describe('patientsController', function() {
           chai.assert.include(res.text, myPatient.institutionName)
           chai.assert.include(res.text, myPatient.doctorName)
           chai.assert.include(res.text, myPatient.doctorAddress)
-          chai.assert.include(res.text, format.formatFrenchDate(myPatient.birthday))
+          chai.assert.include(res.text, date.toFormatDDMMYYYY(myPatient.birthday))
 
           return Promise.resolve()
         })

@@ -16,7 +16,7 @@ describe('DB Patients', () => {
   const hasPrescription = false
   const doctorName = "doctorName"
   const doctorAddress = "doctorAddress"
-  const birthday = date.formatDateForm("20/01/1980")
+  const birthday = date.toFormatMMDDYYYY("20/01/1980")
 
   async function testDataPatientsExist(lastName) {
 

@@ -1,6 +1,30 @@
 const date = require('../utils/date');
+const moment = require('moment');
+const assert = require('chai').assert;
 
 describe('date', () => {
+
+  describe("toFormatDDMMYYYY", () => {
+    it('should return a Date to format DD/MM/YYYY', async () => {
+      const testDate = moment("1995-12-25");
+      const ddMMYYYY = date.toFormatDDMMYYYY(testDate);
+      ddMMYYYY.should.be.equal("25/12/1995");
+    });
+
+    it('should return null if Date is null', async () => {
+      const output = date.toFormatDDMMYYYY(null);
+      assert(output === null)
+    });
+  });
+
+  describe("toFormatMMDDYYYY", () => {
+    it('should return a Date to format MM-DD-YYYY', async () => {
+      const testDate = moment("1995-12-25");
+      const ddMMYYYY = date.toFormatMMDDYYYY(testDate);
+      ddMMYYYY.should.be.equal("12-25-1995");
+    });
+  });
+
   describe('getFrenchMonthName', () => {
     it('should return the french name for a month number', async () => {
       const janvier = date.getFrenchMonthName(1);
