@@ -5,7 +5,6 @@ const dbPatients = require('../../db/patients')
 const dbAppointments = require('../../db/appointments')
 const dbDsApiCursor = require('../../db/dsApiCursor')
 const dbLoginToken = require('../../db/loginToken')
-const date = require('../../utils/date');
 const uuid = require('../../utils/uuid');
 
 
