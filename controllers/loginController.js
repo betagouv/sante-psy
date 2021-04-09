@@ -68,7 +68,6 @@ module.exports.getLogin = async function getLogin(req, res) {
 
   const sessionDurationHours = config.sessionDurationHours;
   const formUrl = config.demarchesSimplifieesUrl;
-  const contactEmail = res.locals.contactEmail;
 
   // Save a token in cookie that expire after config.sessionDurationHours hours if user is logged
   try {
@@ -95,7 +94,6 @@ module.exports.getLogin = async function getLogin(req, res) {
 
   res.render('login', {
     formUrl,
-    contactEmail,
     sessionDurationHours
   });
 };

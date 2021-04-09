@@ -78,9 +78,9 @@ function getChampValue(champData, attributeName, stringValue = true) {
     return "";
   } else {
     if(stringValue) {
-      return potentialStringValue.stringValue;
+      return potentialStringValue.stringValue.trim();
     } else {
-      return potentialStringValue.value;
+      return potentialStringValue.value.trim();
     }
   }
 }
@@ -112,9 +112,9 @@ function getUuidDossierNumber(number) {
 function parseDossierMetadata(dossier) {
   const state = dossier.state;
   const archived = dossier.archived;
-  const lastName = dossier.demandeur.nom;
-  const firstNames = dossier.demandeur.prenom;
-  const personalEmail = dossier.usager.email;
+  const lastName = dossier.demandeur.nom.trim();
+  const firstNames = dossier.demandeur.prenom.trim();
+  const personalEmail = dossier.usager.email.trim();
   const dossierNumber = getUuidDossierNumber(dossier.number);
   const region = dossier.groupeInstructeur.label;
   const address = getChampValue(dossier.champs, 'Adresse du cabinet');
