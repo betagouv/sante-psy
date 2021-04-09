@@ -65,12 +65,12 @@ const patientValidators = [
       // Two valid possibilities : birthday is empty, or birthday is valid format.
       check('birthday').trim().isEmpty(),
       check('birthday')
-        .trim().isDate({format: date.formatDateForm})
+        .trim().isDate({format: date.formatFrenchDateForm})
         .customSanitizer((value, { req }) => {
           return req.sanitize(value)
         })
     ],
-    `La date de naissance n'est pas valide.
+    `La date de naissance n'est pas valide, le format doit être JJ/MM/AAAA.
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
   ),
   check('institution')
@@ -113,10 +113,6 @@ module.exports.editPatient = async (req, res) => {
   const patientFirstNames = req.body['firstnames']
   const patientLastName = req.body['lastname']
   const birthday = date.formatDateForm(req.body['birthday'])
-  // @TODO delete me
-  console.log("req.body['birthday']", req.body['birthday'])
-  console.log("birthday", birthday)
-
   const patientINE = req.body['ine']
   const patientInstitutionName = req.body['institution']
   const doctorName = req.body['doctorname']
@@ -140,6 +136,7 @@ module.exports.editPatient = async (req, res) => {
       doctorAddress,
       birthday,
     )
+
     let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`
     if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified ||
       !doctorAddress) {

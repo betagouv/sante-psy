@@ -30,7 +30,6 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-        patientToInsert.doctorPhone,
       )
       await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
 
@@ -66,7 +65,6 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-        patientToInsert.doctorPhone,
       )
 
       const patient2 = await dbPatients.insertPatient(
@@ -79,7 +77,6 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-        patientToInsert.doctorPhone,
       )
       await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
       await dbAppointments.insertAppointment(new Date('2021-03-02'), patient2.id, psy.dossierNumber)
@@ -123,7 +120,6 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-        patientToInsert.doctorPhone,
       )
       const patient2 = await dbPatients.insertPatient(
         patientToInsert.firstNames,
@@ -135,7 +131,6 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-        patientToInsert.doctorPhone,
       )
       // 4 appointments in march with 2 patients
       await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
@@ -184,7 +179,6 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-        patientToInsert.doctorPhone,
       )
       const toDelete = await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
       await dbAppointments.insertAppointment(new Date('2021-03-02'), patient.id, psy.dossierNumber)
@@ -217,7 +211,6 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-        patientToInsert.doctorPhone,
       )
 
       await dbAppointments.insertAppointment(new Date('2021-03-02'), patient.id, psy.dossierNumber)

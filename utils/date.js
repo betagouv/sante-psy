@@ -1,7 +1,7 @@
 const moment = require('moment');
 
-const formatDateForm = "DD/MM/YYYY"
-module.exports.formatDateForm = formatDateForm;
+const formatFrenchDateForm = "DD/MM/YYYY"
+module.exports.formatFrenchDateForm = formatFrenchDateForm;
 
 module.exports.isValidDate = (isoDateString) => {
   if (!isoDateString || isoDateString.length === 0) {
@@ -19,7 +19,7 @@ module.exports.formatDateForm = (date) => {
 }
 
 function parseDateForm(date) {
-  return moment(date, formatDateForm)
+  return moment(date, formatFrenchDateForm)
 }
 module.exports.parseDateForm = parseDateForm;
 

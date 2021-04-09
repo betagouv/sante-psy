@@ -11,7 +11,6 @@ const sinon = require('sinon')
 
 const doctorName = "doctorName"
 const doctorAddress = "doctorAddress"
-const doctorPhone = "0600000000"
 const birthday = "20/01/1980";
 
 const makePatient = async (psychologistId) => {
@@ -26,7 +25,6 @@ const makePatient = async (psychologistId) => {
     psychologistId,
     doctorName,
     doctorAddress,
-    doctorPhone,
     date.formatDateForm(birthday)
   )
   // Check patient is inserted
@@ -444,6 +442,10 @@ describe('patientsController', function() {
       }
       const patient = await makePatient(psy.dossierNumber)
       const updatedBirthday = "25/02/1982"
+      const updatedINE = '111222333rr'
+      const updatedLastName = 'Lovelacekkk'
+      const updatedFirstName = 'Adakkk'
+      const updatedInstitution = 'polytech'
       return chai.request(app)
         .post('/psychologue/api/modifier-patient')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
@@ -451,10 +453,10 @@ describe('patientsController', function() {
         .type('form')
         .send({
           patientid: patient.id,
-          lastname: 'Lovelacekkk',
-          firstnames: 'Adakkk',
-          ine: '111222333rr',
-          institution: 'polytech',
+          lastname: updatedLastName,
+          firstnames: updatedFirstName,
+          ine: updatedINE,
+          institution: updatedInstitution,
           isstudentstatusverified: 'isstudentstatusverified',
           hasprescription: 'hasprescription',
           doctorname: doctorName,
@@ -466,16 +468,15 @@ describe('patientsController', function() {
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber)
           expect(patientsArray).to.have.length(1)
           expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber)
-          expect(patientsArray[0].lastName).to.equal('Lovelacekkk')
-          expect(patientsArray[0].firstNames).to.equal('Adakkk')
-          expect(patientsArray[0].INE).to.equal('111222333rr')
-          expect(patientsArray[0].institutionName).to.equal('polytech')
+          expect(patientsArray[0].lastName).to.equal(updatedLastName)
+          expect(patientsArray[0].firstNames).to.equal(updatedFirstName)
+          expect(patientsArray[0].INE).to.equal(updatedINE)
+          expect(patientsArray[0].institutionName).to.equal(updatedInstitution)
           expect(patientsArray[0].isStudentStatusVerified).to.equal(true)
           expect(patientsArray[0].hasPrescription).to.equal(true)
-          console.log("patientsArray[0].birthday", patientsArray[0].birthday);
-          console.log("patientsArray[0].birthday date", new Date(patientsArray[0].birthday).toISOString());
-          console.log("patientsArray[0].birthday type", patientsArray[0].birthday.toISOString());
-          expect(patientsArray[0].birthday).to.equal(date.formatDateForm(date.formatDateForm(updatedBirthday).toDate()))
+          expect(patientsArray[0].birthday.getTime()).to.equal(
+            date.parseDateForm(updatedBirthday).toDate().getTime()
+          )
 
           return Promise.resolve()
         })
@@ -519,8 +520,8 @@ describe('patientsController', function() {
           expect(patientsArray[0].institution).to.equal(patient.institution)
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified)
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription)
-          expect(format.formatFrenchDate(patientsArray[0].birthday)).to.equal(
-            format.formatFrenchDate(date.formatDateForm(birthday))
+          expect(patientsArray[0].birthday.getTime()).to.equal(
+            date.parseDateForm(birthday).toDate().getTime()
           )
 
           return Promise.resolve()
@@ -561,8 +562,8 @@ describe('patientsController', function() {
           expect(patientsArray[0].institution).to.equal(patient.institution)
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified)
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription)
-          expect(format.formatFrenchDate(patientsArray[0].birthday)).to.equal(
-            format.formatFrenchDate(date.formatDateForm(birthday))
+          expect(patientsArray[0].birthday.getTime()).to.equal(
+            date.parseDateForm(birthday).toDate().getTime()
           )
 
           return Promise.resolve()
@@ -744,7 +745,7 @@ describe('patientsController', function() {
         'patientid': patientId,
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
-        'ine': '1234567890à',
+        'ine': '1234567890A',
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
@@ -752,7 +753,7 @@ describe('patientsController', function() {
         'doctoraddress' :doctorAddress,
         'birthday' : "pizza time",
       },
-      '/psychologue/mes-seances')
+      '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
     const shouldPassUpdatePatientInputValidation = (done, postData) => {

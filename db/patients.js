@@ -40,7 +40,6 @@ module.exports.insertPatient = async (
   psychologistId,
   doctorName,
   doctorAddress,
-  doctorPhone,
   birthday) => {
   try {
     const patientsArray = await knex(module.exports.patientsTable).insert({
@@ -53,7 +52,6 @@ module.exports.insertPatient = async (
       psychologistId,
       doctorName,
       doctorAddress,
-      doctorPhone,
       birthday,
     }).returning('*')
     return patientsArray[0]
@@ -65,8 +63,9 @@ module.exports.insertPatient = async (
 
 module.exports.updatePatient = async (
   id, firstNames, lastName, INE, institutionName, isStudentStatusVerified, hasPrescription, psychologistId, doctorName,
-  doctorAddress, doctorPhone, birthday) => {
+  doctorAddress, birthday) => {
   try {
+
     await knex(module.exports.patientsTable)
       .where("id", id)
       .where("psychologistId", psychologistId)
@@ -80,7 +79,6 @@ module.exports.updatePatient = async (
         psychologistId,
         doctorName,
         doctorAddress,
-        doctorPhone,
         birthday,
         updatedAt: date.getDateNowPG()
       })

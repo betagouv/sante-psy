@@ -58,7 +58,6 @@ module.exports.getOnePatient = function getOnePatient(psychologistId, doctorName
     psychologistId:psychologistId,
     doctorName: doctorName,
     doctorAddress:"doctorAddress",
-    doctorPhone:"doctorPhone",
   };
 }
 
