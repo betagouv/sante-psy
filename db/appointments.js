@@ -87,7 +87,7 @@ module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
       .groupBy(`${dbPsychologists.psychologistsTable}.firstNames`)
       .groupBy(`${dbPsychologists.psychologistsTable}.lastName`)
       .groupBy(`${dbPsychologists.psychologistsTable}.personalEmail`)
-      .orderByRaw(`"countAppointments"`)
+      .orderBy(`countAppointments`)
       //@TODO only psys who have registered appointments ? if yes: HAVING COUNT(*) > 0
 
     return  query;
