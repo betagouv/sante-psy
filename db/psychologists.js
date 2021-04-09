@@ -104,6 +104,7 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
   return query;
 }
 
+
 /**
  * Only return accepted psychologist
  * @param {*} email
