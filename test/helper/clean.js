@@ -8,11 +8,6 @@ const dbLoginToken = require('../../db/loginToken')
 const uuid = require('../../utils/uuid');
 
 
-
-module.exports.testDossierNumber = function getTestDossierNumber(random = Math.random().toString()) {
-  return uuid.generateUuidFromString(random);
-}
-
 module.exports.getRandomInt = function getRandomInt() {
   const min = Math.ceil(1);
   const max = Math.floor(99);
@@ -21,7 +16,7 @@ module.exports.getRandomInt = function getRandomInt() {
 
 module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.gouv.fr',
   state = 'accepte', archived = false, uniId) {
-  const dossierNumber = module.exports.testDossierNumber(Math.random().toString())
+  const dossierNumber = uuid.randomUuid()
   return {
     dossierNumber: dossierNumber,
     firstNames: `${module.exports.getRandomInt()}First`,
@@ -49,7 +44,7 @@ module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.g
 
 module.exports.getOnePatient = function getOnePatient(psychologistId, doctorName = "doctorName") {
   return {
-    id: module.exports.testDossierNumber(Math.random().toString()),
+    id: uuid.randomUuid(),
     firstNames:`${module.exports.getRandomInt()}First`,
     lastName:`${module.exports.getRandomInt()}Last`,
     INE:"11111111111",
@@ -65,7 +60,7 @@ module.exports.getOnePatient = function getOnePatient(psychologistId, doctorName
 module.exports.getOneAppointment = function getOneAppointment(patientId, psychologistId, month = 3) {
   const myDate = new Date(2021, month, 10).toISOString();
   return {
-    id: module.exports.testDossierNumber(Math.random().toString()),
+    id: uuid.randomUuid(),
     psychologistId: psychologistId,
     appointmentDate: myDate,
     patientId: patientId,
@@ -74,7 +69,7 @@ module.exports.getOneAppointment = function getOneAppointment(patientId, psychol
 
 module.exports.psyList = function getPsyList(personalEmail = 'loginemail@beta.gouv.fr',
   state = 'accepte', archived = false) {
-  const universityId = module.exports.testDossierNumber(Math.random().toString())
+  const universityId = uuid.randomUuid()
   return [
     module.exports.getOnePsy(personalEmail, state, archived, universityId),
   ];

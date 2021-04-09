@@ -9,32 +9,29 @@ const demarchesSimplifiees = require("../../utils/demarchesSimplifiees")
 const clean = require('../helper/clean');
 const uuid = require('../../utils/uuid');
 
-module.exports.testUniversityUuid = function getTestUniversityUuid(random = Math.random().toString()) {
-  return uuid.generateUuidFromString(random);
-}
 
 exports.seed = async function(knex) {
 
   // A few universities
   const universitiesList = [
     {
-      id: module.exports.testUniversityUuid(),
+      id: uuid.randomUuid(),
       name: '--- Aucune pour le moment'
     },
     {
-      id: module.exports.testUniversityUuid(),
+      id: uuid.randomUuid(),
       name: 'Clermont-Ferrand'
     },
     {
-      id: module.exports.testUniversityUuid(),
+      id: uuid.randomUuid(),
       name: 'Grenoble'
     },
     {
-      id: module.exports.testUniversityUuid(),
+      id: uuid.randomUuid(),
       name: 'Aix-Marseille'
     },
     {
-      id: module.exports.testUniversityUuid(),
+      id: uuid.randomUuid(),
       name: 'Créteil Paris Est'
     },
   ]
