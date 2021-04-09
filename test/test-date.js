@@ -65,4 +65,18 @@ describe('date', () => {
       error.should.be.equal("Erreur");
     });
   });
+
+  describe('getLastMonthAndYear', () => {
+    it('should getLastMonthAndYear, normal case', () => {
+      const { lastMonth, year } = date.getLastMonthAndYear(new Date('2021-03-04'))
+      lastMonth.should.equal(2)
+      year.should.equal(2021)
+    })
+
+    it('should getLastMonthAndYear, january case', () => {
+      const { lastMonth, year } = date.getLastMonthAndYear(new Date('2021-01-04'))
+      lastMonth.should.equal(12)
+      year.should.equal(2020)
+    })
+  });
 });
