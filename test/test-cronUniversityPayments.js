@@ -24,7 +24,6 @@ describe('getSummariesForUniversities', () => {
         ]
       }
     */
-    console.log(summaries)
     assert.equal(summaries['univ-id-1'].length, 2) // 2 psys for univ 1
     // psy 1 with appointments
     assert.equal(summaries['univ-id-1'][0].psychologistId, 'psy-id-1')
