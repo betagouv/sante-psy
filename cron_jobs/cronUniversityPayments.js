@@ -42,7 +42,6 @@ const run = async () => {
   try {
     const allAppointmentsSummary = await dbAppointments.getMonthlyAppointmentsSummary(year, lastMonth)
     const summariesForUniversities = getSummariesForUniversities(allAppointmentsSummary)
-    console.log(summariesForUniversities)
   } catch (err) {
     console.error("ERROR: Could not get universities informations", err)
   }
