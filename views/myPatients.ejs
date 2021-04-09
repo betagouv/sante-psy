@@ -10,7 +10,7 @@
       <% if (!hasAllPatientsWithCompletedFolders) { %>
         <div class="rf-callout">
           <p class="rf-callout__text">
-           Certains de vos patients n'ont pas leur dossier complet - le numéro INE, l'orientation du medecin, le nom du medecin, sa ville,
+           Certains de vos patients n'ont pas leur dossier complet - vérification du statut d'étudiant, l'orientation du medecin, le nom du medecin, sa ville,
            ou l'université du patient sont manquants.
            <strong>
              Ceci est obligatoire pour facturer les séances du patient.
@@ -26,7 +26,7 @@
                 <%= patient.lastName %> <%= patient.firstNames %>
                 <% if (!patient.hasFolderCompleted) { %>
                   <span class="rf-tag bg-orange-warning  rf-fi-alert-line rf-tag--icon-left rf-tag--sm"
-                  title="Le numéro INE, l'orientation du medecin, le nom du medecin, sa ville, ou l'université du patient sont manquants">
+                  title="Le statut d'étudiant, l'orientation du medecin, le nom du medecin, sa ville, ou l'université du patient sont manquants">
                     Informations manquantes
                   </span>
                 <% } else { %>

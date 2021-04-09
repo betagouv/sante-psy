@@ -17,7 +17,7 @@ function hasFolderCompleted(patient) {
     notEmptyDoctorAddress = !(!patient.doctorAddress.trim())
   }
 
-  return !!(patient.INE) && patient.hasPrescription && patient.isStudentStatusVerified && notEmptyDoctorName &&
+  return patient.hasPrescription && patient.isStudentStatusVerified && notEmptyDoctorName &&
   notEmptyInstitutionName && notEmptyDoctorAddress;
 }
 
