@@ -88,7 +88,6 @@ module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
       .groupBy(`${dbPsychologists.psychologistsTable}.lastName`)
       .groupBy(`${dbPsychologists.psychologistsTable}.personalEmail`)
       .orderBy(`countAppointments`)
- 
 
     return  query;
   } catch (err) {
