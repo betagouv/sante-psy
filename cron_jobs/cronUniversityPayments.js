@@ -40,11 +40,12 @@ const getSummariesForUniversities = (allAppointmentsSummary) => {
   return universityContent
 }
 
-async function sendSummaryEmail(email, lastMonth, psy) {
+async function formatSummaryEmail(email, summaryDate, psychologists) {
   try {
     const html = await ejs.renderFile('./views/emails/summaryUniversity.ejs', {
-      lastMonth: lastMonth,
-      psychologists: psy
+      lastMonth: summaryDate.lastMonth,
+      year: summaryDate.year,
+      psychologists: psychologists
     });
     await emailUtils.sendMail(email, `Résumé des séances ${config.appName}`, html);
     console.log(`Summary sent for ${logs.hashForLogs(email)}`);
@@ -54,29 +55,32 @@ async function sendSummaryEmail(email, lastMonth, psy) {
   }
 }
 
-const sendMailToUniversities = (summaryUniversities, lastMonth) => {
+const sendMailToUniversities = (summaryUniversities, summaryDate) => {
   for (let key in summaryUniversities) {
     if (summaryUniversities[key]) {
-      sendSummaryEmail('emeline.merliere@beta.gouv.fr', lastMonth, summaryUniversities[key])
-      console.log('Email send')
+      // voir comment on récupère l'email de l'université ici
+      formatSummaryEmail("emeline.merliere@beta.gouv.fr", summaryDate, summaryUniversities[key])
       return true
     }
   }
 }
 
-
-const run = async () => {
-  const { year, lastMonth } = date.getLastMonthAndYear(new Date())
-  console.log(`last month: ${lastMonth} and year ${year}`)
+const SendSummaryToUniversities = async () => {
+  console.log("Starting SendSummaryToUniversities...");
+  const summaryDate = date.getLastMonthAndYear(new Date())
+  console.log(`last month: ${summaryDate.lastMonth} and year ${summaryDate.year}`)
 
   try {
-    const allAppointmentsSummary = await dbAppointments.getMonthlyAppointmentsSummary(year, 4)
+    const allAppointmentsSummary = await dbAppointments.getMonthlyAppointmentsSummary(
+      summaryDate.year,
+      summaryDate.lastMonth
+    )
     const summariesForUniversities = getSummariesForUniversities(allAppointmentsSummary)
-    console.log(summariesForUniversities)
-    sendMailToUniversities(summariesForUniversities)
+    sendMailToUniversities(summariesForUniversities, summaryDate)
+    console.log("SendSummaryToUniversities done")
   } catch (err) {
     console.error("ERROR: Could not send psychologists informations to universities.", err)
   }
 }
-run();
-module.exports.getSummariesForUniversities = getSummariesForUniversities
+
+module.exports.SendSummaryToUniversities = SendSummaryToUniversities
