@@ -1,11 +1,20 @@
 const cron = require('cron');
 const cronDemarchesSimplifiees  = require("./cronDemarchesSimplifiees")
+const cronUniversityPayments  = require("./cronUniversityPayments")
 const config = require('../utils/config');
 const sentry = require('../utils/sentry');
 
 sentry.initCaptureConsole();
 
 const jobs = [{
+  cronTime: "* 8 1 * * ", // every first of the month at 8 AM
+  onTick: cronUniversityPayments.SendSummaryToUniversities,
+  start: true,
+  timeZone: "Europe/Paris",
+  isActive: config.featureSendSummary,
+  name: "Send monthly appoitment summaries to universities",
+},
+{
   cronTime: "*/5 * * * *", // every 5 minutes
   onTick: cronDemarchesSimplifiees.importLatestDataFromDSToPG,
   start: true,
