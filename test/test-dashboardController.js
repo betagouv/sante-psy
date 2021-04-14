@@ -41,7 +41,6 @@ describe('dashboardController', function() {
       hasFolderCompleted(patient).should.equal(false);
     });
 
-
     it('should return false if isStudentStatusVerified is false', function() {
       patient.isStudentStatusVerified=false;
       hasFolderCompleted(patient).should.equal(false);
@@ -75,6 +74,7 @@ describe('dashboardController', function() {
       hasFolderCompleted(patient).should.equal(false);
     });
   });
+  
   describe('display dashaboard', function() {
     beforeEach(async function(done) {
       done()

@@ -1,6 +1,7 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const dbPatient = require('./patients')
+const dbPsychologists = require('./psychologists')
 const date = require("../utils/date");
 
 const appointmentsTable = "appointments"
@@ -44,6 +45,52 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
       .orderBy([{ column: 'year', order: 'asc'}, { column: 'month', order: 'asc' }])
 
     return query;
+  } catch (err) {
+    console.error(`Impossible de récupérer les appointments`, err)
+    throw new Error(`Impossible de récupérer les appointments`)
+  }
+}
+
+/**
+ * Output the number of appointments for each psy, for the given month and year. Join with university id.
+ * 
+ * Note : january = 1, february = 2, etc
+ * Example output :
+ * [
+ *  {
+ *    countAppointments: 3, psychologistId: '112323232-33434-3434', universityId: '15555523232-33434-3434, 
+ *    firstNames: "firsname1", lastName: "name", personallEmail: "test@email.com"
+ *  },
+ *  {
+ *    countAppointments: 2, psychologistId: '343423232-33434-1111', universityId: '23232555551-33434-3434, 
+ *    firstNames: "Stevie", lastName: "Wonder", personallEmail: "personnal@email.com"
+ *  },
+ * ]
+ */
+module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
+  try {
+    const query = await knex(appointmentsTable)
+      .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
+        , ${appointmentsTable}."psychologistId"
+        , ${dbPsychologists.psychologistsTable}."payingUniversityId" AS "universityId"
+        , ${dbPsychologists.psychologistsTable}."firstNames"
+        , ${dbPsychologists.psychologistsTable}."lastName"
+        , ${dbPsychologists.psychologistsTable}."personalEmail"
+        `))
+        .whereRaw(`EXTRACT(YEAR from ${appointmentsTable}."appointmentDate") = ${year}`)
+        .andWhereRaw(`EXTRACT(MONTH from ${appointmentsTable}."appointmentDate") = ${month}`)
+        .innerJoin(`${dbPsychologists.psychologistsTable}`,
+          `${appointmentsTable}.psychologistId`,
+          `${dbPsychologists.psychologistsTable}.dossierNumber`)
+      .groupBy(`${appointmentsTable}.psychologistId`)
+      .groupBy(`${dbPsychologists.psychologistsTable}.payingUniversityId`)
+      .groupBy(`${dbPsychologists.psychologistsTable}.firstNames`)
+      .groupBy(`${dbPsychologists.psychologistsTable}.lastName`)
+      .groupBy(`${dbPsychologists.psychologistsTable}.personalEmail`)
+      .orderBy(`countAppointments`)
+ 
+
+    return  query;
   } catch (err) {
     console.error(`Impossible de récupérer les appointments`, err)
     throw new Error(`Impossible de récupérer les appointments`)
