@@ -5,7 +5,7 @@
 <h2>Bonjour ! 👋</h2>
 
 <p>
-  Voici le résumé des séances effectuées par les psychologues conventinés par votre établissement pour le <%= lastMonth %>.
+  Voici le résumé des séances effectuées par les psychologues conventinés par votre établissement pour le <%= lastMonth %>/<%= year %>.
 </p>
 
 <ul>
@@ -13,7 +13,7 @@
     <li>
       <h3><%= psychologist.firstNames %> <%= psychologist.lastName %></h3>
       <p>Nombre de séances déclarées : <%= psychologist.countAppointments %></p>
-      <p>Contact: <%= psychologist.email %></p>
+      <p>Contact: <%= psychologist.personalEmail %></p>
     </li>
   <% }); %> 
 </ul>
