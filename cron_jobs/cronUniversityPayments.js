@@ -7,6 +7,7 @@ const logs = require('../utils/logs');
 const config = require('../utils/config');
 const emailUtils = require('../utils/email');
 const dbAppointments = require("../db/appointments");
+const dbUniversities = require("../db/universities");
 
 
 const getSummariesForUniversities = (allAppointmentsSummary) => {
@@ -40,29 +41,33 @@ const getSummariesForUniversities = (allAppointmentsSummary) => {
   return universityContent
 }
 
-async function formatSummaryEmail(email, summaryDate, psychologists) {
-  try {
-    const html = await ejs.renderFile('./views/emails/summaryUniversity.ejs', {
-      lastMonth: summaryDate.lastMonth,
-      year: summaryDate.year,
-      psychologists: psychologists
-    });
-    await emailUtils.sendMail(email, `Résumé des séances ${config.appName}`, html);
-    console.log(`Summary sent for ${logs.hashForLogs(email)}`);
-  } catch (err) {
-    console.error(err);
-    throw new Error("Erreur d'envoi de mail - résumé des séances");
-  }
+async function formatSummaryEmail(summaryDate, psychologists) {
+  const html = await ejs.renderFile('./views/emails/summaryUniversity.ejs', {
+    lastMonth: summaryDate.lastMonth,
+    year: summaryDate.year,
+    psychologists: psychologists
+  });
+  return html
 }
 
-const sendMailToUniversities = (summaryUniversities, summaryDate) => {
-  for (let key in summaryUniversities) {
-    if (summaryUniversities[key]) {
-      // voir comment on récupère l'email de l'université ici
-      formatSummaryEmail("emeline.merliere@beta.gouv.fr", summaryDate, summaryUniversities[key])
-      return true
+const sendMailToUniversities = async (summaryUniversities, summaryDate) => {
+  const allUniversities = await dbUniversities.getUniversities()
+
+  allUniversities.forEach(async (university) => {
+    const summaryUniversity = summaryUniversities[university.id]
+
+    if (summaryUniversity) {
+      const htmlFormated = formatSummaryEmail(summaryDate, summaryUniversity);
+
+      if (!university.email) {
+        console.log(`Summary could not be send. ${university.name} doesn't have email.`)
+        return;
+      }
+
+      await emailUtils.sendMail(summaryUniversity.email, `Résumé des séances ${config.appName}`, htmlFormated);
+      console.log(`Summary sent for ${logs.hashForLogs(university.email)}`);
     }
-  }
+  })
 }
 
 const SendSummaryToUniversities = async () => {
