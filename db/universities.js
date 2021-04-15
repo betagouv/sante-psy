@@ -6,7 +6,7 @@ module.exports.universitiesTable =  universitiesTable;
 
 module.exports.getUniversities = async () => {
   try {
-    return knex.select('id', 'name')
+    return knex.select('id', 'name', 'email')
         .from(universitiesTable)
         .orderBy("name")
   } catch (err) {

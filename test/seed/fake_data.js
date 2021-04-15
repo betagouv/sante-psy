@@ -16,23 +16,28 @@ exports.seed = async function(knex) {
   const universitiesList = [
     {
       id: uuid.randomUuid(),
-      name: '--- Aucune pour le moment'
+      name: '--- Aucune pour le moment',
+      email: `${clean.getRandomInt()}@beta.gouv.fr`
     },
     {
       id: uuid.randomUuid(),
-      name: 'Clermont-Ferrand'
+      name: 'Clermont-Ferrand',
+      email: `${clean.getRandomInt()}@beta.gouv.fr`
     },
     {
       id: uuid.randomUuid(),
-      name: 'Grenoble'
+      name: 'Grenoble',
+      email: `${clean.getRandomInt()}@beta.gouv.fr`
     },
     {
       id: uuid.randomUuid(),
-      name: 'Aix-Marseille'
+      name: 'Aix-Marseille',
+      email: `${clean.getRandomInt()}@beta.gouv.fr`
     },
     {
       id: uuid.randomUuid(),
-      name: 'Créteil Paris Est'
+      name: 'Créteil Paris Est',
+      email: ''
     },
   ]
 
