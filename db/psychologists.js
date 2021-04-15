@@ -21,11 +21,13 @@ module.exports.getPsychologists = async () => {
       'website',
       'teleconsultation',
       'languages',
+      'dossierNumber',
       'description')
         .select()
         .from(module.exports.psychologistsTable)
         .whereNot('archived', true)
-        .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte);
+        .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
+        .orderBy("dossierNumber");
     return psychologists;
   } catch (err) {
     console.error(`Impossible de récupérer les psychologistes`, err)
