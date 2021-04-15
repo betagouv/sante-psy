@@ -1,18 +1,13 @@
 const dbPsychologists = require('../db/psychologists')
 const dbUniversities = require('../db/universities')
 
-// Todo put that data somewhere else, properly.
-const departementToUniversityName = {
-  // todo fill in the data
-  '44 - Loire-Atlantique': 'Grenoble',
-  '25 - Doubs': 'Aix-Marseille',
-  '30 - Gard': 'Créteil Paris Est',
-  '14 - Calvados': 'Créteil Paris Est',
-}
+const departementToUniversityName = require('./departementToUniversityName')
+console.log('departementToUniversityName', Object.entries(departementToUniversityName).length,
+  departementToUniversityName)
 
 const makeDepartementToUniversityIdTable = async () => {
   const universities = await dbUniversities.getUniversities()
-  console.log('universities', universities)
+  console.log(universities.length, 'universities', universities)
   // [{ id: 'my-univ-id', name: 'abc'}]
 
   const universityNameToId = Object.fromEntries(
@@ -20,7 +15,7 @@ const makeDepartementToUniversityIdTable = async () => {
       return [ university.name, university.id ]
     })
   )
-  console.log('univerisityNameToId', universityNameToId)
+  console.log('universityNameToId', Object.entries(universityNameToId).length, universityNameToId)
   // { 'abc': 'my-univ-id'}
 
   const departementToId = Object.fromEntries(
@@ -28,7 +23,7 @@ const makeDepartementToUniversityIdTable = async () => {
       return [ departement, universityNameToId[name]]
     })
   )
-  console.log('departementToId', departementToId)
+  console.log('departementToId', Object.entries(departementToId).length, departementToId)
   // { 'Indre-et-Loire': 'my-univ-id'}
 
   return departementToId
@@ -38,7 +33,7 @@ module.exports.run = async () => {
   const departementToUnivId = await makeDepartementToUniversityIdTable() // todo try catch
 
   let psychologists = await dbPsychologists.getPsychologists()
-  // psychologists = psychologists.slice(0, 10) // todo remove
+  //psychologists = psychologists.slice(0, 10) // todo remove
 
   psychologists.forEach((psychologist) => {
     // Don't rewrite assignedUniversityId if it's already written, in case we made changes by hand that should not be
