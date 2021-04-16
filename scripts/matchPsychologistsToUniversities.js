@@ -8,7 +8,7 @@ console.log('departementToUniversityName', Object.entries(departementToUniversit
 const makeDepartementToUniversityIdTable = async () => {
   const universities = await dbUniversities.getUniversities()
   console.log(universities.length, 'universities', universities)
-  // [{ id: 'my-univ-id', name: 'abc'}]
+  // [{ id: 'my-univ-id', name: 'Avignon'}]
 
   const universityNameToId = Object.fromEntries(
     universities.map(university => {
@@ -16,7 +16,7 @@ const makeDepartementToUniversityIdTable = async () => {
     })
   )
   console.log('universityNameToId', Object.entries(universityNameToId).length, universityNameToId)
-  // { 'abc': 'my-univ-id'}
+  // { 'Avignon': 'my-univ-id'}
 
   const departementToId = Object.fromEntries(
     Object.entries(departementToUniversityName).map(([departement, name]) => {
@@ -24,9 +24,19 @@ const makeDepartementToUniversityIdTable = async () => {
     })
   )
   console.log('departementToId', Object.entries(departementToId).length, departementToId)
-  // { 'Indre-et-Loire': 'my-univ-id'}
+  // { '55': 'my-univ-id'}
 
   return departementToId
+}
+
+/**
+ * Output : "55"
+ * @param {} departementString ex : '55 - Indre-et-Loire'
+ */
+const getDepartementNumberFromString = (departementString) => {
+  // Note : this is not robust. If Demarches Simplifiées changes their format it will break.
+  const parts = departementString.split(' - ')
+  return parts[0]
 }
 
 module.exports.run = async () => {
@@ -45,7 +55,7 @@ module.exports.run = async () => {
     }
 
     // Find universityId for this psychologist
-    const universityIdToAssign = departementToUnivId[psychologist.departement]
+    const universityIdToAssign = departementToUnivId[getDepartementNumberFromString(psychologist.departement)]
     if (!universityIdToAssign) {
       console.log(`No university found for departement ${psychologist.departement}
       - psy id ${psychologist.dossierNumber}
