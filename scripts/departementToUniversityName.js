@@ -91,7 +91,7 @@ module.exports = {
   "89": "Dijon",
   "90": "Franche-Comté",
   "91": "cas particulier",
-  "92": "cas particulier",
+  "92": "Paris Saclay",
   "93": "Sorbonne Paris Nord",
   "94": "cas particulier",
   "95": "Cergy Paris Université",
