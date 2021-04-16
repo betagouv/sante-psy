@@ -54,6 +54,7 @@ const universities = [
   "Nîmes",
   "Antilles - Pôle Martinique",
   "Antilles - Pôle Guadeloupe",
+  "Avignon",
 ]
 
 const runInsert = async () => {
