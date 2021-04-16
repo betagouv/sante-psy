@@ -18,6 +18,14 @@ const makeDepartementToUniversityIdTable = async () => {
   console.log('universityNameToId', Object.entries(universityNameToId).length, universityNameToId)
   // { 'Avignon': 'my-univ-id'}
 
+  const universityIdToName = Object.fromEntries(
+    universities.map(university => {
+      return [ university.id, university.name ]
+    })
+  )
+  console.log('universityNameToId', Object.entries(universityNameToId).length, universityNameToId)
+  // { 'my-univ-id': 'Avignon' }
+
   const departementToId = Object.fromEntries(
     Object.entries(departementToUniversityName).map(([departement, name]) => {
       return [ departement, universityNameToId[name]]
@@ -26,7 +34,7 @@ const makeDepartementToUniversityIdTable = async () => {
   console.log('departementToId', Object.entries(departementToId).length, departementToId)
   // { '55': 'my-univ-id'}
 
-  return departementToId
+  return [universityIdToName, departementToId]
 }
 
 /**
@@ -39,12 +47,14 @@ const getDepartementNumberFromString = (departementString) => {
   return parts[0]
 }
 
-module.exports.run = async () => {
-  const departementToUnivId = await makeDepartementToUniversityIdTable() // todo try catch
+const run = async () => {
+  const [universityIdToName, departementToUnivId] = await makeDepartementToUniversityIdTable() // todo try catch
 
   let psychologists = await dbPsychologists.getPsychologists()
   //psychologists = psychologists.slice(0, 10) // todo remove
 
+  const statsNoUniversityFound = {}
+  const statsConflictingDeclaredUniversity = {}
   psychologists.forEach((psychologist) => {
     // Don't rewrite assignedUniversityId if it's already written, in case we made changes by hand that should not be
     // overwritten by the script.
@@ -60,20 +70,42 @@ module.exports.run = async () => {
       console.log(`No university found for departement ${psychologist.departement}
       - psy id ${psychologist.dossierNumber}
       - ${psychologist.lastName} ${psychologist.firstNames}`)
+
+      if (!statsNoUniversityFound[psychologist.departement]) {
+        statsNoUniversityFound[psychologist.departement] = []
+      }
+      statsNoUniversityFound[psychologist.departement].push(psychologist.dossierNumber)
       return
     }
 
     // If the psychologist declared another university, something is wrong ! Do not write assignedUniversityId.
     if (psychologist.declaredUniversityId && psychologist.declaredUniversityId !== universityIdToAssign) {
       console.log('Psy', psychologist.dossierNumber, 'already declared', psychologist.declaredUniversityId,
-        'so will not assign', universityIdToAssign)
-      // todo output object for debug ? stats ?
+        'so will not assign', universityIdToAssign, universityIdToName[universityIdToAssign])
+      if (!statsConflictingDeclaredUniversity[psychologist.departement]) {
+        statsConflictingDeclaredUniversity[psychologist.departement] = []
+      }
+      statsConflictingDeclaredUniversity[psychologist.departement].push(
+        {
+          psychologistId : psychologist.dossierNumber,
+          declaredUniversityId: psychologist.declaredUniversityId,
+        }
+      )
       return
     }
 
     // Write assignedUniversityId
     // todo write
     console.log('Assigned', psychologist.dossierNumber, 'of departement', psychologist.departement,
-      'to university', universityIdToAssign)
+      'to university', universityIdToAssign, universityIdToName[universityIdToAssign])
   })
+
+  console.log('------------')
+  console.log('No university found : ')
+  Object.entries(statsNoUniversityFound).forEach(([departement, psyList]) => {
+    console.log(departement, ': ', psyList.length, 'psys')
+  })
+
+  console.log('\nConflict between declaredUniversity and assignedUniversity :', statsConflictingDeclaredUniversity)
 }
+module.exports.run = run
