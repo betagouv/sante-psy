@@ -56,12 +56,13 @@ const run = async () => {
   const statsNoUniversityFound = {}
   const statsConflictingDeclaredUniversity = {}
   const statsAssignedWithoutProblem = []
+  const statsAlreadyAssigned = []
   psychologists.forEach((psychologist) => {
-    // Don't rewrite assignedUniversityId if it's already written, in case we made changes by hand that should not be
-    // overwritten by the script.
     if (psychologist.assignedUniversityId) {
+      // Don't rewrite assignedUniversityId if it's already written, in case we made changes by hand that should not be
+      // overwritten by the script.
       console.log('Already assigned', psychologist.dossierNumber, 'to', psychologist.assignedUniversityId)
-      // todo output object for debug ? stats ?
+      statsAlreadyAssigned.push(psychologist.dossierNumber)
       return
     }
 
@@ -111,5 +112,7 @@ const run = async () => {
   console.log('\nConflict between declaredUniversity and assignedUniversity :', statsConflictingDeclaredUniversity)
 
   console.log('\nAssigned without problem :', statsAssignedWithoutProblem.length, 'psys')
+
+  console.log('\nAlready assigned, so this script did nothing :', statsAlreadyAssigned.length, 'psys')
 }
 module.exports.run = run
