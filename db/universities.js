@@ -1,12 +1,13 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 
-module.exports.universitiesTable =  "universities";
+const universitiesTable = "universities";
+module.exports.universitiesTable =  universitiesTable;
 
 module.exports.getUniversities = async () => {
   try {
     return knex.select('id', 'name')
-        .from(module.exports.universitiesTable)
+        .from(universitiesTable)
         .orderBy("name")
   } catch (err) {
     console.error(`Impossible de récupérer les universités`, err)

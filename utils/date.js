@@ -13,6 +13,16 @@ module.exports.parseDate = (date) => {
   return new Date(date).toISOString();
 }
 
+module.exports.getLastMonthAndYear = (now) => {
+  const currentYear = now.getFullYear()
+  /* The first index is 0. Adding + 1 to match with the data in the db */
+  const currentMonth = (now.getUTCMonth() + 1);
+  if (currentMonth === 1) {
+    return { lastMonth: 12, year: currentYear - 1}
+  }
+  return { lastMonth: currentMonth - 1, year: currentYear };
+}
+
 module.exports.getDatePlusOneHour = () => {
   const expirationDate = new Date()
   return new Date(expirationDate.setHours(expirationDate.getHours() + 1)).toISOString();

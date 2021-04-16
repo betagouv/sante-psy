@@ -14,6 +14,12 @@ describe('DB Appointments', () => {
     await clean.cleanDataAppointments();
   })
 
+  afterEach(async function after() {
+    await clean.cleanAllPatients();
+    await clean.cleanAllPsychologists();
+    await clean.cleanDataAppointments();
+  })
+
   describe('deleteAppointment', () => {
     it('should change deleted boolean to true and update updatedAt field', async () => {
       const psyList = clean.psyList();
@@ -104,6 +110,73 @@ describe('DB Appointments', () => {
       assert(output[3].countAppointments === 1);
       assert(output[3].year === 2021);
       assert(output[3].month === 7);
+    });
+  });
+
+  describe('getMonthlyAppointmentsSummary', () => {
+    it('should return a count of appointments by year and month', async () => {
+      const month = 4
+      const year = 2021
+
+      const psyList = [
+        clean.getOnePsy('loginemail@beta.gouv.fr', 'accepte', false, '25173f41-6535-524f-bec0-436297a2bc77'),
+        clean.getOnePsy('emaillogin@beta.gouv.fr', 'accepte', false, '14f37152-6535-524f-bec0-436297a2bc77')
+      ]
+      await dbPsychologists.savePsychologistInPG(psyList);
+
+      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail)
+      const psy2 = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[1].personalEmail)
+      const patientToInsert = clean.getOnePatient(psy.dossierNumber)
+      const patient = await dbPatients.insertPatient(
+        patientToInsert.firstNames,
+        patientToInsert.lastName,
+        patientToInsert.INE,
+        patientToInsert.institutionName,
+        patientToInsert.isStudentStatusVerified,
+        patientToInsert.hasPrescription,
+        psy.dossierNumber,
+        patientToInsert.doctorName,
+        patientToInsert.doctorAddress,
+        patientToInsert.doctorPhone,
+      )
+
+      const patient2 = await dbPatients.insertPatient(
+        patientToInsert.firstNames,
+        patientToInsert.lastName,
+        patientToInsert.INE,
+        patientToInsert.institutionName,
+        patientToInsert.isStudentStatusVerified,
+        patientToInsert.hasPrescription,
+        psy2.dossierNumber,
+        patientToInsert.doctorName,
+        patientToInsert.doctorAddress,
+        patientToInsert.doctorPhone,
+      )
+      // For april (should be output)
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient2.id, psy2.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient2.id, psy2.dossierNumber)
+      // For march (should not be output)
+      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient2.id, psy2.dossierNumber)
+
+      const output = await dbAppointments.getMonthlyAppointmentsSummary(year, month);
+
+      assert.equal(output.length, 2); // 2 psys for april
+      // Psy 1
+      assert.equal(output[0].psychologistId, psy.dossierNumber);
+      assert.equal(output[0].countAppointments, 1); // 1 appointment in april
+      assert.equal(output[0].universityId, psy.payingUniversityId);
+      assert.equal(output[0].personalEmail, psy.personalEmail);
+      assert.equal(output[0].lastName, psy.lastName);
+      assert.equal(output[0].firstNames, psy.firstNames);
+      // Psy 2
+      assert.equal(output[1].psychologistId, psy2.dossierNumber);
+      assert.equal(output[1].countAppointments, 2); // 2 appointments in april
+      assert.equal(output[1].universityId, psy2.payingUniversityId);
+      assert.equal(output[0].personalEmail, psy.personalEmail);
+      assert.equal(output[0].lastName, psy.lastName);
+      assert.equal(output[0].firstNames, psy.firstNames);
     });
   });
 

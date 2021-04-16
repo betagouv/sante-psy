@@ -90,7 +90,6 @@ module.exports.updateConventionInfo = async (req, res) => {
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
     await dbPsychologists.updateConventionInfo(psychologistId, universityId, isConventionSigned)
-
     req.flash('info', `Vos informations de conventionnement sont bien enregistrées.`)
     return res.redirect('/psychologue/mes-remboursements')
   } catch (err) {

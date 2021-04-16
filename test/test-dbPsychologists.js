@@ -187,7 +187,7 @@ describe('DB Psychologists', () => {
       const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
       expect(savedPsy.isConventionSigned).not.to.exist
-      expect(savedPsy.declaredUniversityId).not.to.exist
+      expect(savedPsy.declaredUniversityId).to.not.equal(univUUID)
 
       await dbPsychologists.updateConventionInfo(
         savedPsy.dossierNumber,
