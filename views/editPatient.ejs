@@ -53,13 +53,13 @@
         <div class="rf-my-3w">
           <label class="rf-label" for="dateofbirth">Date de naissance</label>
           <div class="rf-hint-text" id="dateofbirth-help">
-            Date au format JJ/MM/AAAA, exemple : 25/01/1987
+            Exemple : 25/01/1987
           </div>
-          <input class="rf-input midlength-input" value="<%= date.toFormatDDMMYYYY(patient.dateOfBirth) %>" 
+          <input class="rf-input midlength-input" value="<%= date.toFormatDDMMYYYY(patient.dateOfBirth) %>"
           type="text"
           pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
-          title="La date de naissance doit être au format JJ/MM/AAAA, exemple : 25/01/1987"
-          placeholder="Exemple de format : 25/01/1987"
+          title="Format JJ/MM/AAAA, par exemple : 25/01/1987"
+          placeholder="JJ/MM/AAAA"
           id="dateofbirth" name="dateofbirth">
         </div>
         <div class="rf-my-3w">
