@@ -55,6 +55,7 @@ const run = async () => {
 
   const statsNoUniversityFound = {}
   const statsConflictingDeclaredUniversity = {}
+  const statsAssignedWithoutProblem = []
   psychologists.forEach((psychologist) => {
     // Don't rewrite assignedUniversityId if it's already written, in case we made changes by hand that should not be
     // overwritten by the script.
@@ -98,6 +99,7 @@ const run = async () => {
     // todo write
     console.log('Assigned', psychologist.dossierNumber, 'of departement', psychologist.departement,
       'to university', universityIdToAssign, universityIdToName[universityIdToAssign])
+    statsAssignedWithoutProblem.push(psychologist.dossierNumber)
   })
 
   console.log('------------')
@@ -107,5 +109,7 @@ const run = async () => {
   })
 
   console.log('\nConflict between declaredUniversity and assignedUniversity :', statsConflictingDeclaredUniversity)
+
+  console.log('\nAssigned without problem :', statsAssignedWithoutProblem.length, 'psys')
 }
 module.exports.run = run
