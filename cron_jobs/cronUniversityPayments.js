@@ -55,17 +55,18 @@ const sendMailToUniversities = async (summaryUniversities, summaryDate) => {
 
   allUniversities.forEach(async (university) => {
     const summaryUniversity = summaryUniversities[university.id]
-
     if (summaryUniversity) {
-      const htmlFormated = formatSummaryEmail(summaryDate, summaryUniversity);
+      const htmlFormated = await formatSummaryEmail(summaryDate, summaryUniversity);
 
       if (!university.email) {
         console.log(`Summary could not be send. ${university.name} doesn't have email.`)
         return;
       }
-
-      await emailUtils.sendMail(summaryUniversity.email, `Résumé des séances ${config.appName}`, htmlFormated);
-      console.log(`Summary sent for ${logs.hashForLogs(university.email)}`);
+      const currentEmails = university.email.split(" ; ")
+      currentEmails.forEach(async (email) => {
+        await emailUtils.sendMail(email, `Résumé des séances ${config.appName}`, htmlFormated);
+        console.log(`Summary sent for ${logs.hashForLogs(university.email)}`);
+      })
     }
   })
 }
@@ -87,5 +88,4 @@ const SendSummaryToUniversities = async () => {
     console.error("ERROR: Could not send psychologists informations to universities.", err)
   }
 }
-
 module.exports.SendSummaryToUniversities = SendSummaryToUniversities

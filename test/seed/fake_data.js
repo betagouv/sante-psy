@@ -27,12 +27,12 @@ exports.seed = async function(knex) {
     {
       id: uuid.randomUuid(),
       name: 'Grenoble',
-      email: `${clean.getRandomInt()}@beta.gouv.fr`
+      email: `${clean.getRandomInt()}@beta.gouv.fr ; ${clean.getRandomInt()}@beta.gouv.fr`
     },
     {
       id: uuid.randomUuid(),
       name: 'Aix-Marseille',
-      email: `${clean.getRandomInt()}@beta.gouv.fr`
+      email: `${clean.getRandomInt()}@beta.gouv.fr ; ${clean.getRandomInt()}@beta.gouv.fr`
     },
     {
       id: uuid.randomUuid(),
