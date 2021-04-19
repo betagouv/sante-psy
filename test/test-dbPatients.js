@@ -53,13 +53,35 @@ describe('DB Patients', () => {
       exist.should.be.equal(true);
     });
 
-    it('should refuse INsert INE with more than 11 characters in PG', async () => {
+    it('should accept INsert INE with more than 11 characters in PG', async () => {
       const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47'
       try {
         await dbPatients.insertPatient(
           firstNames,
           lastName,
           "11111111111111111",
+          institutionName,
+          isStudentStatusVerified,
+          hasPrescription,
+          psychologistId,
+          doctorName,
+          doctorAddress,
+          doctorPhone,
+        );
+        const exist = await testDataPatientsExist(lastName);
+        exist.should.be.equal(true);
+      } catch( error ) {
+        expect(error).to.be.an('Error');
+      }
+    });
+
+    it('should refuse INsert for INE with more than 50 characters in PG', async () => {
+      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47'
+      try {
+        await dbPatients.insertPatient(
+          firstNames,
+          lastName,
+          "515151515151515151515151551515151515151515151515151",
           institutionName,
           isStudentStatusVerified,
           hasPrescription,

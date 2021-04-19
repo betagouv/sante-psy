@@ -1,6 +1,6 @@
 const cookie = require('../utils/cookie')
 const { check, query, oneOf } = require('express-validator');
-const dbPatient = require('../db/patients')
+const dbPatients = require('../db/patients')
 const validation = require('../utils/validation')
 
 module.exports.newPatient = async (req, res) => {
@@ -49,12 +49,12 @@ const patientValidators = [
       check('ine').trim().isEmpty(),
       check('ine')
         .trim().isAlphanumeric()
-        .isLength({min:11, max:11})
+        .isLength({min:1, max: dbPatients.studentNumberSize})
         .customSanitizer((value, { req }) => {
           return req.sanitize(value)
         })
     ],
-    `Le numéro INE doit faire 11 caractères (chiffres ou lettres).
+    `Le numéro INE doit faire maximum ${dbPatients.studentNumberSize}} caractères (chiffres ou lettres).
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
   ),
   check('institution')
@@ -106,7 +106,7 @@ module.exports.editPatient = async (req, res) => {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    await dbPatient.updatePatient(
+    await dbPatients.updatePatient(
       patientId,
       patientFirstNames,
       patientLastName,
@@ -151,7 +151,7 @@ module.exports.getEditPatient = async (req, res) => {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    const patient = await dbPatient.getPatientById(patientId, psychologistId)
+    const patient = await dbPatients.getPatientById(patientId, psychologistId)
     if (!patient) {
       req.flash('error', 'Ce patient n\'existe pas. Vous ne pouvez pas le modifier.')
       return res.redirect('/psychologue/mes-seances')
@@ -193,7 +193,7 @@ module.exports.createNewPatient = async (req, res) => {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req)
-    await dbPatient.insertPatient(
+    await dbPatients.insertPatient(
       firstNames,
       lastName,
       INE,
