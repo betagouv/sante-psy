@@ -2,7 +2,7 @@
 const dbPatients = require("../db/patients")
 
 /**
- * to join patients.psychologistId with psychologists.id
+ * some students number can be different than 11 chars
  * @param {*} knex 
  */
 exports.up = function(knex) {
