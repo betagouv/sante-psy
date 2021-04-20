@@ -8,8 +8,8 @@
   <div>
     <% if (patients.length) { %>
       <% if (!hasAllPatientsWithCompletedFolders) { %>
-        <div class="rf-callout">
-          <p class="rf-callout__text">
+       <div class="rf-callout rf-mb-2w">
+           <p class="rf-text--md rf-mb-1v">
            Certains de vos patients n'ont pas leur dossier complet - vérification du statut d'étudiant, l'orientation du medecin, le nom du medecin, sa ville,
            ou l'université du patient sont manquants.
            <strong>
@@ -25,14 +25,14 @@
               <li>
                 <%= patient.lastName %> <%= patient.firstNames %>
                 <% if (!patient.hasFolderCompleted) { %>
-                  <span class="rf-tag bg-orange-warning  rf-fi-alert-line rf-tag--icon-left rf-tag--sm"
+                  <p class="rf-tag bg-orange-warning  rf-fi-alert-line rf-tag--icon-left rf-tag--sm"
                   title="Le statut d'étudiant, l'orientation du medecin, le nom du medecin, sa ville, ou l'université du patient sont manquants">
                     Informations manquantes
-                  </span>
+                  </p>
                 <% } else { %>
-                  <span class="rf-tag bg-success rf-fi-check-line rf-tag--icon-left rf-tag--sm">
+                  <p class="rf-tag bg-success rf-fi-check-line rf-tag--icon-left rf-tag--sm">
                     Dossier complet
-                  </span>
+                  </p>
                 <% } %>
               </li>
             </div>

@@ -10,8 +10,7 @@
       <%= appName %>
     <% } %>
   </title>
-  <!-- todo(estellecomment) : import min css and js -->
-  <link rel="stylesheet" href="/static/gouvfr/css/dsfr.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/gouvfr/css/dsfr.min.css">
   <link rel="stylesheet" href="/static/css/custom.css">
   <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon/favicon-32x32.png">
   <!-- Matomo -->
@@ -36,117 +35,71 @@
   </div>
 
   <header role="banner" class="rf-header">
-    <div class="rf-container">
-      <div class="rf-header__body">
-        <div class="rf-header__brand rf-enlarge-link">
-          <div class="rf-header__logo">
-            <p class="rf-logo">
-              Ministère
-              <br>de l'Enseignement
-              <br>Supérieur,
-              <br>de la Recherche
-              <br>et de l'Innovation
-              <!-- todo link to home ? -->
-            </p>
-          </div>
-          <div class="rf-header__service">
-            <a href="<%= locals.isInPsychologistPages ? '/psychologue/mes-seances' : '/' %>"
-               title="Retour à l’accueil">
-              <p class="rf-header__service-title">
-                <%= appName %>
-                <% if (locals.isInPsychologistPages) { %>
-                   - Espace Psychologues
-                <% } %>
-              </p>
-            </a>
-            <p class="rf-header__service-tagline"><%= appDescription %></p>
-          </div>
-        </div>
-        <div class="rf-header__navbar">
-          <button class="rf-btn--menu rf-btn" data-rf-opened="false" aria-controls="header-navigation" aria-haspopup="menu" title="Ouvrir le menu">
-            Ouvrir le menu
-            <!-- todo is that for shortcut links or menu ? -->
-          </button>
-        </div>
-            <div class="rf-header__tools">
-                <div class="rf-shortcuts">
-                    <ul class="rf-shortcuts__list">
-                        <li class="rf-shortcuts__item">
-                            <a class="rf-link rf-fi-add-circle-line" href="#">Créer un espace</a>
-                        </li>
-                    </ul>
+    <div class="rf-header__body">
+      <div class="rf-container">
+          <div class="rf-header__body-row">
+              <div class="rf-header__brand rf-enlarge-link">
+                <div class="rf-header__brand-top">
+                    <div class="rf-header__logo">
+                        <p class="rf-logo">
+                            Ministère
+                            <br>de l'Enseignement
+                            <br>Supérieur,
+                            <br>de la Recherche
+                            <br>et de l'Innovation
+                            <!-- todo link to home ? -->
+                        </p>
+                    </div>
+                    <div class="rf-header__navbar">
+                        <button class="rf-btn--menu rf-btn" data-rf-opened="false" aria-controls="modal-833" aria-haspopup="menu" title="Menu">
+                            Menu
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <% if (locals.featureReimbursementPage && locals.isInPsychologistPages) { %>
-          <nav class="rf-nav rf-modal" id="header-navigation" role="navigation" aria-label="Menu principal">
-              <button class="rf-link--close rf-link" aria-controls="header-navigation">Fermer</button>
-              <ul class="rf-nav__list">
-                  <li class="rf-nav__item">
-                      <a class="rf-nav__link" href="#" target="_self">accès direct</a>
-                  </li>
-              </ul>
-          </nav>
-        <% } %>
+                <div class="rf-header__service">
+                  <a href="<%= locals.isInPsychologistPages ? '/psychologue/mes-seances' : '/' %>"
+                    title="Retour à l’accueil">
+                      <p class="rf-header__service-title">
+                        <%= appName %>
+                        <% if (locals.isInPsychologistPages) { %>
+                          - Espace Psychologues
+                        <% } %>
+                      </p>
+                      </a>
+                      <p class="rf-header__service-tagline"><%= appDescription %></p>
+                </div>
+              </div>
+              <% if (locals.featureReimbursementPage && locals.isInPsychologistPages) { %>
+                <div class="rf-header__tools">
+                    <div class="rf-header__tools-links">
+                        <ul class="rf-links-group">
+                            <li>
+                              <a class="rf-link" href="/psychologue/logout" target="_self">Déconnexion</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+              <% } %>
+          </div>
+      </div>
     </div>
  </header>
 
 
-  <header class="rf-header">
-    <div class="rf-container">
-      <div class="rf-header__body">
-        <div class="rf-header__brand">
-          <a class="rf-logo"
-             href="<%= locals.isInPsychologistPages ? '/psychologue/mes-seances' : '/' %>"
-             title="République française">
-            <span class="rf-logo__title">
-              Ministère
-              <br>de l'Enseignement
-              <br>Supérieur,
-              <br>de la Recherche
-              <br>et de l'Innovation
-            </span>
-          </a>
-        </div>
-        <div class="rf-header__navbar">
-          <div class="rf-service">
-            <a class="rf-service__title" href="<%= locals.isInPsychologistPages ? '/psychologue/mes-seances' : '/' %>" title="<%= appName %>">
-              <%= appName %>
-              <% if (locals.isInPsychologistPages) { %>
-                 - Espace Psychologues
-              <% } %>
-            </a>
-            <p class="rf-service__tagline">
-              <%= appDescription %>
-            </p>
-          </div>
-          <% if (locals.featureReimbursementPage && locals.isInPsychologistPages) { %>
-          <div class="rf-header__tools">
-            <div class="rf-shortcuts">
-                <ul class="rf-shortcuts__list">
-                    <li class="rf-shortcuts__item">
-                      <a class="rf-link" href="/psychologue/logout" target="_self">Déconnexion</a>
-                    </li>
-                </ul>
-            </div>
-          </div>
-        <% } %>
-        </div>
-      </div>
-    </div>
 
-    <% if (locals.featureReimbursementPage && locals.isInPsychologistPages) { %>
+ <% if (locals.featureReimbursementPage && locals.isInPsychologistPages) { %>
+  <header class="rf-header">
       <div class="rf-container">
         <nav  id="header-navigation" class="rf-nav" role="navigation" aria-label="Menu principal">
           <ul class="rf-nav__list">
             <li class="rf-nav__item <% if (page === '/psychologue/mes-seances') { %> rf-nav__item--active <% } %>">
-              <a class="rf-link" href="/psychologue/mes-seances" target="_self">Déclarer mes séances</a>
+              <a class="rf-nav__link" href="/psychologue/mes-seances" target="_self">Déclarer mes séances</a>
             </li>
             <li class="rf-nav__item <% if (page === '/psychologue/mes-remboursements') { %> rf-nav__item--active <% } %>">
-              <a class="rf-link" href="/psychologue/mes-remboursements" target="_self">Remboursement de mes séances</a>
+              <a class="rf-nav__link" href="/psychologue/mes-remboursements" target="_self">Remboursement de mes séances</a>
             </li>
           </ul>
         </nav>
       </div>
-    <% } %>
-  </header>
+    </header>
+<% } %>

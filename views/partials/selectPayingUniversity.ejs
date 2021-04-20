@@ -1,32 +1,32 @@
-<div>
+<div class="rf-mb-3w">
   <h3>Ma convention</h3>
   <div class="rf-mb-3w">
-    <div>
+    <p class="rf-mb-1v">
       L'université avec laquelle vous signez la convention est celle qui va vous rembourser vos séances.
-    </div>
-    <div>
+    </p>
+    <p class="rf-mb-1v">
       Elle remboursera pour tous les étudiants, qu'ils appartiennent à cette université ou une autre.
-    </div>
+    </p>
   </div>
   <% if (!universities || universities.length === 0) { %>
     <!-- Only display current convention if there are universities -->
     A venir bientôt : dites-nous où vous en êtes du conventionnement pour que nous puissions vous aider au besoin.
   <% } else { %>
     <div id="current-university" <% if (showForm) { %> hidden <% } %>>
-      <div><b>Statut de ma convention :</b></div>
-      <div>
+      <h5>Statut de ma convention :</h5>
+      <p class="rf-mb-1v">
         Je suis rattaché à l'université de <b><%= currentConvention.universityName %></b>.
-      </div>
-      <div class="rf-mb-2w">
+      </p>
+      <p class="rf-mb-2w">
         La convention
         <% if (currentConvention.isConventionSigned) { %>
           est <b>signée</b>.
         <% } else { %>
           n'est <b>pas encore signée</b>.
         <% } %>
-      </div>
+      </p>
       <div>
-        <div>Un changement de statut ? Tenez-nous au courant !</div>
+        <p class="rf-mb-2v">Un changement de statut ? Tenez-nous au courant !</p>
         <button id="change-current-university-button" class="rf-btn rf-fi-edit-line rf-btn--icon-left">
           Modifier le statut
         </button>

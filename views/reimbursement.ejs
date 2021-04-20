@@ -1,6 +1,6 @@
 <%- include('partials/header', { isInPsychologistPages: true }) -%>
 
-<div class="rf-container rf-mb-5w">
+<div class="rf-container rf-mb-3w">
   <%- include('partials/ariane',
   {
     items: [
@@ -12,11 +12,6 @@
   })
   -%>
   <h1>Remboursement de mes séances</h1>
-  <div class="rf-mb-5w">
-    <div>
-      Merci de participer au dispositif Santé Psy Etudiants !
-    </div>
-  </div>
   <% if (errors.length) { %>
     <% errors.forEach(function(error) { %>
       <%- include('partials/notificationError', {error: error}) -%>
