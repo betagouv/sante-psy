@@ -1,29 +1,27 @@
-<div>
+<div class="fr-mb-3w">
   <h2>Facturation</h2>
   <h3>
     Comment mes séances seront-elles remboursées ?
   </h3>
-  <div class="rf-mt-2w">
-    <p>
+  <div class="fr-mb-2w">
+    <p class="fr-mb-2w">
       À la fin de chaque mois, vous devez envoyer un email à l'université de conventionnement, contenant une facture des séances
       réalisées. L'université se chargera du remboursement, dans les 30 jours après la réception de cette facture.
     </p>
-    <p>
+    <p class="fr-mb-1v">
       Besoin de plus d'informations ?
     </p>
-    <p>
-      <a class="rf-btn rf-btn--secondary rf-mt-2w" href="/faq#remboursement">
-        Consulter la Foire Aux Questions
-      </a>
-    </p>
+    <a class="fr-btn fr-btn--secondary fr-mt-2w" href="/faq#remboursement">
+      Consulter la Foire Aux Questions
+    </a>
   </div>
   
   <h3>Les élements à apparaître sur votre facturation</h3>
   <% if (total.length) { %>
-    <p>
+    <p class="fr-mb-2w">
       Le nom des patients est couvert par le secret médical, ne le communiquez pas sur la facture. Le nombre de patients suffit.
     </p>
-    <div class="rf-table">
+    <div class="fr-table fr-mb-2w">
       <table>
           <caption>Tableau récapitulatif par mois</caption>
           <thead>
@@ -47,22 +45,22 @@
     <h3>
       Aide pour la facturation
     </h3>
-    <p>
+    <p class="fr-mb-2w">
       Un doute sur le modèle de votre facture ? Vous pouvez prendre exemple sur ce modèle qui contient tous les éléments requis pour votre remboursement :
     </p>
-    <p>
-      <a class="rf-btn rf-btn--secondary rf-mt-2w" href="/static/documents/modele-facturation-sante-psy-etudiant.pdf">
-        <span class="rf-fi-file-download-line" aria-hidden="true"></span> .pdf
+    <p class="fr-mb-2w">  
+      <a class="fr-btn fr-btn--secondary fr-mt-2w" href="/static/documents/modele-facturation-sante-psy-etudiant.pdf">
+        <span class="fr-fi-file-download-line" aria-hidden="true"></span> .pdf
       </a>
-      <a class="rf-btn rf-btn--secondary rf-mt-2w" href="/static/documents/modele-facturation-sante-psy-etudiant.docx">
-        <span class="rf-fi-file-download-line" aria-hidden="true"></span> Microsoft Word .docx
+      <a class="fr-btn fr-btn--secondary fr-mt-2w" href="/static/documents/modele-facturation-sante-psy-etudiant.docx">
+        <span class="fr-fi-file-download-line" aria-hidden="true"></span> Microsoft Word .docx
       </a>
-      <a class="rf-btn rf-btn--secondary rf-mt-2w" href="/static/documents/modele-facturation-sante-psy-etudiant.odt">
-        <span class="rf-fi-file-download-line" aria-hidden="true"></span> Libre Office .odt
+      <a class="fr-btn fr-btn--secondary fr-mt-2w" href="/static/documents/modele-facturation-sante-psy-etudiant.odt">
+        <span class="fr-fi-file-download-line" aria-hidden="true"></span> Libre Office .odt
       </a>
     </p>
   <% } else { %>
-    <p>
+    <p class="fr-mb-2w">
       Vous n'avez pas encore déclaré de séances, vous retrouverez ici votre récapitulatif de séances dans le but de créer vous même votre facture
     </p>
   <% } %>

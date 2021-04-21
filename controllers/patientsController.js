@@ -12,7 +12,7 @@ module.exports.newPatient = async (req, res) => {
       method: 'POST',
       action: '/psychologue/api/creer-nouveau-patient',
       submitButtonText: 'Ajouter le patient',
-      submitButtonIcon: 'rf-fi-add-line',
+      submitButtonIcon: 'fr-fi-add-line',
     },
     patient: {
       firstNames: '',
@@ -164,7 +164,7 @@ module.exports.getEditPatient = async (req, res) => {
         method: 'POST',
         action: '/psychologue/api/modifier-patient',
         submitButtonText: 'Valider les modifications',
-        submitButtonIcon: 'rf-fi-check-line',
+        submitButtonIcon: 'fr-fi-check-line',
       },
       patient: patient
     })
