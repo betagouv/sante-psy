@@ -11,7 +11,7 @@
 <script src="/static/js/datepicker-fr.js"></script>
 
 
-<div class="rf-container rf-mb-3w">
+<div class="fr-container fr-mb-3w">
   <%- include('partials/ariane',
   {
     items: [
@@ -28,9 +28,9 @@
   <h1>
     Nouvelle séance
   </h1>
-  <div class="rf-mb-3w">
+  <p class="fr-mb-2w">
     Vous avez réalisé une séance avec un étudiant ou une étudiante. Renseignez-la sur cette page.
-  </div>
+  </p>
   <% if (errors.length) { %>
     <% errors.forEach(function(error) { %>
       <%- include('partials/notificationError', {error: error}) -%>
@@ -41,23 +41,23 @@
       <%- include('partials/notificationInfo', {info: info}) -%>
     <% }) %>
   <% } %>
-  <div class="rf-my-5w">
+  <div class="fr-mb-5w">
     <form action="/psychologue/creer-nouvelle-seance" method="POST">
       <input type="hidden" name="_csrf" value="<%= _csrf  %>">
       <div>
-        <div class="rf-my-3w">
-          <label class="rf-label" for="date">Date de la séance</label>
-          <input class="rf-input short-input" type="text" id="date" name="date" required autocomplete="off">
+        <div class="fr-my-2w">
+          <label class="fr-label" for="date">Date de la séance</label>
+          <input class="fr-input short-input" type="text" id="date" name="date" required autocomplete="off">
           <input type="text" id="iso-date" name="iso-date" required aria-hidden="true" hidden autocomplete="off">
         </div>
 
-        <div class="rf-select-group">
-          <label class="rf-label" for="patients" aria-describedby="patients-help">Patient</label>
-          <div class="rf-hint-text" id="patients-help">
+        <div class="fr-select-group">
+          <label class="fr-label" for="patients" aria-describedby="patients-help">Patient</label>
+          <div class="fr-hint-text" id="patients-help">
             Votre patient n'est pas dans la liste ?
             <a href="/psychologue/nouveau-patient">Ajoutez un nouveau patient</a>
           </div>
-          <select class="rf-select" id="patients" name="patientId" required>
+          <select class="fr-select" id="patients" name="patientId" required>
               <option value="" selected disabled hidden>- Select -</option>
               <% patients.forEach(function(patient) { %>
                 <option value="<%= patient.id %>"><%= patient.lastName %> <%= patient.firstNames %></option>
@@ -65,8 +65,8 @@
           </select>
       </div>
       </div>
-      <div class="rf-my-5w">
-        <button type="submit" class="rf-btn rf-fi-add-line rf-btn--icon-left">Créer la séance</button>
+      <div class="fr-my-5w">
+        <button type="submit" class="fr-btn fr-fi-add-line fr-btn--icon-left">Créer la séance</button>
       </div>
     </form>
   </div>

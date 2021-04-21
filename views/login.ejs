@@ -1,8 +1,8 @@
 <%- include('partials/header') -%>
 
-<div class="rf-container-fluid">
-  <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
-    <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
+<div class="fr-container-fluid">
+  <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutter">
+    <div class="fr-col fr-col-xs-10 fr-col-md-8 fr-my-4w">
       <h1>
         Espace Psychologues
       </h1>
@@ -19,25 +19,25 @@
             <%- include('partials/notificationInfo', {info: info}) -%>
           <% }) %>
         <% } %>
-        <p class="rf-mb-2w">Vous recevevrez un lien de connexion par email qui vous permettra d'être connecté pendant <%= sessionDurationHours %> heures</p>
+        <p class="fr-mb-2w">Vous recevevrez un lien de connexion par email qui vous permettra d'être connecté pendant <%= sessionDurationHours %> heures</p>
         <form action="/psychologue/login" method="POST" id="login_form">
         <input type="hidden" name="_csrf" value="<%= _csrf  %>">
         <label for="email">Adresse email :</label>
         <input type="email" name="email" id="email" value="" />
-        <button class="rf-btn" id="primary_email_button">Recevoir le lien de connexion</button>
+        <button class="fr-btn" id="primary_email_button">Recevoir le lien de connexion</button>
         </form>
       </div>
 
         <div class="panel border-left-primary">
           <h3>⚠️&nbsp;Problème d'accès ?</h3>
-          <p class="rf-mb-2w">
+          <p class="fr-mb-2w">
               Etes-vous bien enregistré via <a href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">le formulaire d'inscription</a> ?
               Il se peut que votre compte ne soit pas encore validé.
           </p>
-          <p class="rf-mb-2w">
+          <p class="fr-mb-2w">
               L'email à utiliser ici est le même que celui avec lequel vous avez fait votre candidature pour participer au dispositif. Il peut être différent de votre email de contact présenté dans l'annuaire des psychologues.
           </p>
-          <p class="rf-mb-2w">
+          <p class="fr-mb-2w">
               Si vous avez besoin d'aide, vous pouvez toujours envoyer un email à <%- contactEmail %></a>.
           </p>
       </div>

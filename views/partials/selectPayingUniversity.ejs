@@ -1,10 +1,10 @@
-<div class="rf-mb-3w">
+<div class="fr-mb-3w">
   <h3>Ma convention</h3>
-  <div class="rf-mb-3w">
-    <p class="rf-mb-1v">
+  <div class="fr-mb-3w">
+    <p class="fr-mb-1v">
       L'université avec laquelle vous signez la convention est celle qui va vous rembourser vos séances.
     </p>
-    <p class="rf-mb-1v">
+    <p class="fr-mb-1v">
       Elle remboursera pour tous les étudiants, qu'ils appartiennent à cette université ou une autre.
     </p>
   </div>
@@ -14,10 +14,10 @@
   <% } else { %>
     <div id="current-university" <% if (showForm) { %> hidden <% } %>>
       <h5>Statut de ma convention :</h5>
-      <p class="rf-mb-1v">
+      <p class="fr-mb-1v">
         Je suis rattaché à l'université de <b><%= currentConvention.universityName %></b>.
       </p>
-      <p class="rf-mb-2w">
+      <p class="fr-mb-2w">
         La convention
         <% if (currentConvention.isConventionSigned) { %>
           est <b>signée</b>.
@@ -26,8 +26,8 @@
         <% } %>
       </p>
       <div>
-        <p class="rf-mb-2v">Un changement de statut ? Tenez-nous au courant !</p>
-        <button id="change-current-university-button" class="rf-btn rf-fi-edit-line rf-btn--icon-left">
+        <p class="fr-mb-2v">Un changement de statut ? Tenez-nous au courant !</p>
+        <button id="change-current-university-button" class="fr-btn fr-fi-edit-line fr-btn--icon-left">
           Modifier le statut
         </button>
       </div>
@@ -40,12 +40,12 @@
         <form action="/psychologue/api/renseigner-convention" method="POST">
         <input type="hidden" name="_csrf" value="<%= _csrf  %>">
 
-        <div class="rf-select-group">
-          <label class="rf-label" for="university">
+        <div class="fr-select-group">
+          <label class="fr-label" for="university">
             Quelle université vous a contacté pour signer la convention ?
             <span class="red-text">*</span>
           </label>
-          <select class="rf-select" id="university" name="university" required>
+          <select class="fr-select" id="university" name="university" required>
             <% if (!currentConvention.universityid) { %>
               <option value="" selected disabled hidden>- Cliquez pour choisir -</option>
             <% } %>
@@ -60,34 +60,34 @@
           </select>
         </div>
 
-        <div class="rf-form-group">
-          <fieldset class="rf-fieldset">
-            <legend class="rf-label rf-mb-1w"> <!-- we don't use rf-fieldset__legend, it looks different -->
+        <div class="fr-form-group">
+          <fieldset class="fr-fieldset">
+            <legend class="fr-label fr-mb-1w"> <!-- we don't use fr-fieldset__legend, it looks different -->
               Avez-vous déjà signé la convention ?
               <span class="red-text">*</span>
-              <span class="rf-hint-text">
+              <span class="fr-hint-text">
                 Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
                 Vous pourrez mettre à jour vos réponses plus tard si votre statut change.
               </span>
             </legend>
-            <div class="rf-fieldset__content">
-              <div class="rf-radio-group">
+            <div class="fr-fieldset__content">
+              <div class="fr-radio-group">
                 <input type="radio" id="signed-yes" name="signed" value="yes" required
                   <% if (currentConvention.isConventionSigned) { %> checked <% } %>
                 >
-                <label class="rf-label" for="signed-yes">Oui</label>
+                <label class="fr-label" for="signed-yes">Oui</label>
               </div>
-              <div class="rf-radio-group">
+              <div class="fr-radio-group">
                 <input type="radio" id="signed-no" name="signed" value="no" required
                   <% if (!currentConvention.isConventionSigned) { %> checked <% } %>
                 >
-                <label class="rf-label" for="signed-no">Non, pas encore</label>
+                <label class="fr-label" for="signed-no">Non, pas encore</label>
               </div>
             </div>
           </fieldset>
         </div>
-        <div class="rf-my-5w">
-          <button type="submit" class="rf-btn rf-fi-check-line rf-btn--icon-left">Enregistrer</button>
+        <div class="fr-my-5w">
+          <button type="submit" class="fr-btn fr-fi-check-line fr-btn--icon-left">Enregistrer</button>
         </div>
       </form>
     </div>

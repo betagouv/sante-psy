@@ -1,6 +1,6 @@
 <%- include('partials/header', { isInPsychologistPages: true }) -%>
 
-<div class="rf-container rf-mb-3w">
+<div class="fr-container fr-mb-3w">
   <%- include('partials/ariane',
   {
     items: [
@@ -17,11 +17,9 @@
   <h1>
     <%= pageTitle %>
   </h1>
-  <div class="rf-mb-3w">
-    <div>
-      <%= pageIntroText %>
-    </div>
-  </div>
+  <p class="fr-mb-2w">
+    <%= pageIntroText %>
+  </p class="fr-mt-2w">
   <% if (errors.length) { %>
     <% errors.forEach(function(error) { %>
       <%- include('partials/notificationError', {error: error}) -%>
@@ -32,81 +30,81 @@
       <%- include('partials/notificationInfo', {info: info}) -%>
     <% }) %>
   <% } %>
-  <div class="rf-my-5w">
+  <div class="fr-my-3w">
     <form action="<%= form.action %>" method="<%= form.method %>">
-      <div class="rf-text--sm">
+      <p class="fr-text--sm fr-mb-1v">
         Les champs avec une astérique (<span class="red-text">*</span>) sont obligatoires.
-      </div>
-      <div class="rf-text--sm">
+      </p>
+      <p class="fr-text--sm fr-mb-1v">
         S'il vous manque des champs non-obligatoires, vous pourrez y revenir plus tard pour compléter le dossier.
-      </div>
+      </p>
       <input type="hidden" name="_csrf" value="<%= _csrf  %>">
       <div>
-        <div class="rf-my-3w">
-          <label class="rf-label" for="firstnames">Prénoms <span class="red-text">*</span></label>
-          <input class="rf-input midlength-input" value="<%= patient.firstNames %>" type="text" id="firstnames" name="firstnames" required>
+        <div class="fr-my-3w">
+          <label class="fr-label" for="firstnames">Prénoms <span class="red-text">*</span></label>
+          <input class="fr-input midlength-input" value="<%= patient.firstNames %>" type="text" id="firstnames" name="firstnames" required>
         </div>
-        <div class="rf-my-3w">
-          <label class="rf-label" for="lastname">Nom <span class="red-text">*</span></label>
-          <input class="rf-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname" required>
+        <div class="fr-my-3w">
+          <label class="fr-label" for="lastname">Nom <span class="red-text">*</span></label>
+          <input class="fr-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname" required>
         </div>
-        <div class="rf-my-3w">
-          <label class="rf-label" for="institution" aria-describedby="institution-help">Établissement scolaire de l'étudiant</label>
-          <div class="rf-hint-text" id="institution-help">
+        <div class="fr-my-3w">
+          <label class="fr-label" for="institution" aria-describedby="institution-help">Établissement scolaire de l'étudiant</label>
+          <div class="fr-hint-text" id="institution-help">
             Exemple : Université de Rennes ou ENSAE
           </div>
-          <input class="rf-input midlength-input" value="<%= patient.institutionName %>"  type="text" id="institution" name="institution">
+          <input class="fr-input midlength-input" value="<%= patient.institutionName %>"  type="text" id="institution" name="institution">
         </div>
-        <div class="rf-my-3w">
+        <div class="fr-my-3w">
           <!-- todo : JS validation for 11 digit number -->
-          <label class="rf-label" for="ine" aria-describedby="ine-help">Numéro INE de l'étudiant (optionnel)</label>
-          <div class="rf-hint-text" id="ine-help">
+          <label class="fr-label" for="ine" aria-describedby="ine-help">Numéro INE de l'étudiant (optionnel)</label>
+          <div class="fr-hint-text" id="ine-help">
             Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant.
           </div>
-          <input class="rf-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine" maxlength="11" size="11">
+          <input class="fr-input short-input" value="<%= patient.INE %>" type="text" id="ine" name="ine" maxlength="11" size="11">
         </div>
-        <div class="rf-my-3w rf-checkbox-group">
+        <div class="fr-my-3w fr-checkbox-group">
           <input type="checkbox" id="isstudentstatusverified" name="isstudentstatusverified" value="isstudentstatusverified" <% if(patient.isStudentStatusVerified){ %> checked="checked" <% } %> >
-          <label class="rf-label" for="isstudentstatusverified">
+          <label class="fr-label" for="isstudentstatusverified">
             J'ai vérifié le statut étudiant de ce patient
-            <span class="rf-hint-text">J'ai vu sa carte d'étudiant ou un autre justificatif</span>
+            <span class="fr-hint-text">J'ai vu sa carte d'étudiant ou un autre justificatif</span>
           </label>
         </div>
-        <div class="rf-my-3w rf-checkbox-group">
+        <div class="fr-my-3w fr-checkbox-group">
           <input type="checkbox" id="hasprescription" name="hasprescription" value="hasprescription" <% if(patient.hasPrescription){ %> checked="checked" <% } %> >
-          <label class="rf-label" for="hasprescription">
+          <label class="fr-label" for="hasprescription">
             J'ai vérifié que les séances ont bien été prescrites par un médecin ou un Service de Santé Universitaire
-            <span class="rf-hint-text">L'étudiant m'a présenté une lettre ou ordonnance médicale</span>
+            <span class="fr-hint-text">L'étudiant m'a présenté une lettre ou ordonnance médicale</span>
           </label>
         </div>
-        <div class="rf-my-3w">
-          <label class="rf-label" for="doctorname" aria-describedby="doctorname-help">
+        <div class="fr-my-3w">
+          <label class="fr-label" for="doctorname" aria-describedby="doctorname-help">
             Médecin ou Service de Santé Universitaire qui a orienté ce patient
           </label>
-          <div class="rf-hint-text" id="doctorname-help">
+          <div class="fr-hint-text" id="doctorname-help">
             Exemple : Annie Benahmou ou SSU Rennes 1
           </div>
-          <input class="rf-input midlength-input" value="<%= patient.doctorName %>"  type="text" id="doctorname" name="doctorname">
+          <input class="fr-input midlength-input" value="<%= patient.doctorName %>"  type="text" id="doctorname" name="doctorname">
         </div>
-        <div class="rf-my-3w">
-          <label class="rf-label" for="doctoraddress" aria-describedby="doctoraddress-help">
+        <div class="fr-my-3w">
+          <label class="fr-label" for="doctoraddress" aria-describedby="doctoraddress-help">
             Ville et/ou code postal du médecin ou Service de Santé Universitaire
           </label>
-          <div class="rf-hint-text" id="doctoraddress-help">
+          <div class="fr-hint-text" id="doctoraddress-help">
             Exemple : 97400 Saint-Denis
           </div>
-          <input class="rf-input midlength-input" value="<%= patient.doctorAddress %>"  type="text" id="doctoraddress" name="doctoraddress">
+          <input class="fr-input midlength-input" value="<%= patient.doctorAddress %>"  type="text" id="doctoraddress" name="doctoraddress">
         </div>
       </div>
-      <div class="rf-my-5w">
+      <div class="fr-my-5w">
         <input hidden name="patientid" value="<%= patient.id %>" />
-        <button type="submit" class="rf-btn rf-btn--icon-left <%= form.submitButtonIcon %>"><%= form.submitButtonText %></button>
+        <button type="submit" class="fr-btn fr-btn--icon-left <%= form.submitButtonIcon %>"><%= form.submitButtonText %></button>
       </div>
     </form>
   </div>
-  <div>
+  <p>
     Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
-  </div>
+  </p>
 </div>
 </br>
 
