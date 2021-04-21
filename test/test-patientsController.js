@@ -661,7 +661,7 @@ describe('patientsController', function() {
         'patientid': patientId,
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
-        'ine': '515151515151515151515151551515151515151515151515151',
+        'ine': '1'.repeat(51),
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,

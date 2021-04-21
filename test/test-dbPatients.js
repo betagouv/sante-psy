@@ -59,7 +59,7 @@ describe('DB Patients', () => {
         await dbPatients.insertPatient(
           firstNames,
           lastName,
-          "11111111111111111",
+          "1".repeat(12),
           institutionName,
           isStudentStatusVerified,
           hasPrescription,
@@ -81,7 +81,7 @@ describe('DB Patients', () => {
         await dbPatients.insertPatient(
           firstNames,
           lastName,
-          "515151515151515151515151551515151515151515151515151",
+          "1".repeat(51),
           institutionName,
           isStudentStatusVerified,
           hasPrescription,
