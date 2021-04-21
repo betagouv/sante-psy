@@ -1,21 +1,8 @@
 <%- include('partials/header', { isInPsychologistPages: true }) -%>
 
-<div class="rf-container rf-mb-5w">
-  <%- include('partials/ariane',
-  {
-    items: [
-      {
-        label: 'Déclarer mes séances',
-        url: '/psychologue/mes-seances'
-      },
-    ],
-  })
-  -%>
+<div class="fr-container fr-mb-3w fr-mt-2w">
   <h1>Déclarer mes séances</h1>
-  <div class="rf-mb-5w">
-    <div>
-      Merci de participer au dispositif Santé Psy Etudiants !
-    </div>
+  <div class="fr-mb-1w">
     <div>
       Afin que nous puissions vous rembourser les séances réalisées, nous vous proposons de nous les
       indiquer sur ce site.
@@ -31,7 +18,7 @@
       <%- include('partials/notificationInfo', {info: info}) -%>
     <% }) %>
   <% } %>
-  <div class="rf-grid-row rf-grid-row--left rf-grid-row--gutters">
+  <div class="fr-grid-row fr-grid-row--left fr-grid-row--gutters">
     <%- include('myAppointments') -%>
     <%- include('myPatients') -%>
   </div>
@@ -45,16 +32,16 @@
         C'est cette université qui réalisera le remboursement des séances faites dans le cadre de ce dispositif, pour les étudiants que vous aurez accompagnés,
         quelque soit leur lieu de scolarité, le statut de leur école / université ou bien encore leur lieu de résidence.
       </div>
-      <div class="rf-mt-2w">
+      <div class="fr-mt-2w">
         A la fin de chaque mois, vous pouvez réaliser une facture et l'envoyer à l'université avec laquelle vous avez conventionné.
         Nous vous proposerons un modèle de facture sur votre espace prochainement.
       </div>
-      <div class="rf-mt-2w">
+      <div class="fr-mt-2w">
         Dans les 30 jours après la réception de cette facture, l'université effectuera le remboursement des séances que vous avez réalisées et déclarées.
       </div>
     </div>
   <% } %>
-  <div class="rf-my-4w">
+  <div class="fr-my-4w">
     Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
   </div>
 </div>
