@@ -15,16 +15,17 @@
 }
 
 .bg-success {
-  background-color: #79E861;
+  background-color: #e3ebd3; /* gs300 */
 }
 
-.bg-pink-warning {
-  background-color: var(--rm300);
+.bg-orange-warning {
+  background-color: #f7e1d8; /* od300 */
 }
 
 .bg-blue-soft {
   background-color: var(--bs300);
 }
+
 .fr-grid-row--space-between {
   justify-content: space-between;
 }
