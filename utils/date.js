@@ -41,9 +41,9 @@ module.exports.toFormatDDMMYYYY = (date) => {
 
 function parseDateForm(date) {
   if(date) {
-    const parsedDate = date.split("/")
+    const [day, month, year] = date.split("/")
     // year - month - day
-    return new Date(`${parsedDate[2]}-${parsedDate[1]}-${parsedDate[0]}`)
+    return new Date(`${year}-${month}-${day}`)
   } else {
     return null;
   }
