@@ -1,6 +1,6 @@
 <%- include('partials/header') -%>
 
-<div class="rf-container rf-mb-5w">
+<div class="fr-container fr-mb-3w">
   <%- include('partials/ariane',
   {
     items: [
@@ -15,42 +15,42 @@
   })
   -%>
 
-  <div class="rf-grid-row rf-grid-row--gutters rf-b__two-col">
-    <nav class="rf-col-xs-12 rf-col-md-3 rf-sidemenu rf-sidemenu--sticky" aria-label="Menu latéral">
-      <div class="rf-sidemenu__inner">
-        <ul class="rf-sidemenu__list">
-            <li class="rf-sidemenu__item">
-                <a class="rf-sidemenu__link" href="#etudiant" target="_self">Étudiants</a>
+  <div class="fr-grid-row fr-grid-row--gutters fr-b__two-col">
+    <nav class="fr-col-xs-12 fr-col-md-3 fr-sidemenu fr-sidemenu--sticky" aria-label="Menu latéral">
+      <div class="fr-sidemenu__inner">
+        <ul class="fr-sidemenu__list">
+            <li class="fr-sidemenu__item">
+                <a class="fr-sidemenu__link" href="#etudiant" target="_self">Étudiants</a>
             </li>
-            <li class="rf-sidemenu__item">
-                <a class="rf-sidemenu__link" href="#psy" target="_self">Psychologues</a>
+            <li class="fr-sidemenu__item">
+                <a class="fr-sidemenu__link" href="#psy" target="_self">Psychologues</a>
             </li>
-            <li class="rf-sidemenu__item">
-              <a class="rf-sidemenu__link" href="#medecin" target="_self">Médecins</a>
+            <li class="fr-sidemenu__item">
+              <a class="fr-sidemenu__link" href="#medecin" target="_self">Médecins</a>
           </li>
         </ul>
         </div>
     </nav>
 
-    <div class="rf-container rf-col-xs-12 rf-col-md-9">
+    <div class="fr-container fr-col-xs-12 fr-col-md-9">
       <h1 id="etudiant">Je suis étudiant</h1>
 
-      <div class="rf-mb-3w">
+      <div class="fr-mb-3w">
         <div>
-          <span class="rf-fi-arrow-right-line rf-fi--md"></span>
+          <span class="fr-fi-arrow-right-line fr-fi--md"></span>
           <span>Vous voulez plus d'infos sur le dispositif ?</span>
         </div>
         <div>
-          <a class="rf-btn rf-btn--alt rf-mt-2w" href="/static/images/flyer_etudiants.pdf">
+          <a class="fr-btn fr-btn--alt fr-mt-2w" href="/static/images/flyer_etudiants.pdf">
             Voir le flyer étudiants
           </a>
         </div>
-        <div class="rf-text--xs rf-mt-2w">
+        <div class="fr-text--xs fr-mt-2w">
           Note : si vous utilisez Safari et que le flyer ne s'affiche pas ("Module bloqué"), essayez Firefox ou Chrome.
         </div>
       </div>
 
-      <ul class="rf-accordion-group">
+      <ul class="fr-accordion-group">
         <%- include('partials/faq-item',
         {
           id: 'e0',
@@ -103,22 +103,22 @@
 
       <h1 id="psy">Je suis psychologue</h1>
 
-      <div class="rf-mb-3w">
+      <div class="fr-mb-3w">
         <div>
-          <span class="rf-fi-arrow-right-line rf-fi--md"></span>
+          <span class="fr-fi-arrow-right-line fr-fi--md"></span>
           <span>Vous voulez plus d'infos sur le dispositif ?</span>
         </div>
         <div>
-          <a class="rf-btn rf-btn--alt rf-mt-2w" href="/static/images/flyer_psychologues.pdf">
+          <a class="fr-btn fr-btn--alt fr-mt-2w" href="/static/images/flyer_psychologues.pdf">
             Voir le flyer psychologues
           </a>
         </div>
-        <div class="rf-text--xs rf-mt-2w">
+        <div class="fr-text--xs fr-mt-2w">
           Note : si vous utilisez Safari et que le flyer ne s'affiche pas ("Module bloqué"), essayez Firefox ou Chrome.
         </div>
       </div>
 
-      <ul class="rf-accordion-group">
+      <ul class="fr-accordion-group">
 
         <h2>Éligibilité</h2>
         <%- include('partials/faq-item',
@@ -311,27 +311,27 @@
 
       <h1 id="medecin">Je suis médecin généraliste</h1>
 
-      <div class="rf-mb-3w">
+      <div class="fr-mb-3w">
         <div>
-          <span class="rf-fi-arrow-right-line rf-fi--md"></span>
+          <span class="fr-fi-arrow-right-line fr-fi--md"></span>
           <span>Vous voulez plus d'infos sur le dispositif ?</span>
         </div>
         <div>
-          <a class="rf-btn rf-btn--alt rf-mt-2w" href="/static/images/flyer_medecins.pdf">
+          <a class="fr-btn fr-btn--alt fr-mt-2w" href="/static/images/flyer_medecins.pdf">
             Voir le flyer médecins
           </a>
         </div>
         <div>
-          <a class="rf-btn rf-btn--alt rf-mt-2w" href="/static/images/flyer_ssu.pdf">
+          <a class="fr-btn fr-btn--alt fr-mt-2w" href="/static/images/flyer_ssu.pdf">
             Voir le flyer SSU
           </a>
         </div>
-        <div class="rf-text--xs rf-mt-2w">
+        <div class="fr-text--xs fr-mt-2w">
           Note : si vous utilisez Safari et que le flyer ne s'affiche pas ("Module bloqué"), essayez Firefox ou Chrome.
         </div>
       </div>
 
-      <ul class="rf-accordion-group">
+      <ul class="fr-accordion-group">
         <%- include('partials/faq-item',
         {
           id: 'm0',

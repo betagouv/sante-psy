@@ -48,7 +48,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use('/static', express.static('static'));
 app.use('/static/gouvfr', express.static(
-  path.join(__dirname, 'node_modules/@gouvfr/all/dist'))
+  path.join(__dirname, 'node_modules/@gouvfr/dsfr/dist'))
 );
 app.use('/static/jquery', express.static(
   path.join(__dirname, 'node_modules/jquery/dist'))

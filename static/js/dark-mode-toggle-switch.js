@@ -1,9 +1,9 @@
 (function () {
 
-  const SCHEME_ATTRIBUTE = 'data-rf-theme';
-  const TRANSITION_ATTRIBUTE = 'data-rf-transition';
+  const SCHEME_ATTRIBUTE = 'data-fr-theme';
+  const TRANSITION_ATTRIBUTE = 'data-fr-transition';
 
-  const modeToggle = document.getElementById('rf-dark-mode-toggle-switch');
+  const modeToggle = document.getElementById('fr-dark-mode-toggle-switch');
   const root = document.documentElement;
 
   let scheme = window.localStorage.getItem('scheme') ? window.localStorage.getItem('scheme') : null;
