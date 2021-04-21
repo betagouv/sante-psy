@@ -54,7 +54,8 @@ const patientValidators = [
           return req.sanitize(value)
         })
     ],
-    `Le numéro INE doit faire maximum ${dbPatients.studentNumberSize}} caractères (chiffres ou lettres).
+    `Le numéro INE doit faire maximum ${dbPatients.studentNumberSize} caractères alphanumériques \
+(chiffres ou lettres sans accents).
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`
   ),
   check('institution')
