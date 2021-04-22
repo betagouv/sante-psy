@@ -23,6 +23,7 @@ services:
     environment:
       DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
       SECURE: "false"
+      ANNOUNCEMENT: "(Docker-compose variable) Pour déclarer vos séances, veuillez indiquer l'état de votre conventionnement ainsi que votre université de référence."
       SECRET_LOGS: "production_value_should_be_set_in_.env"
       SECRET: "production_value_should_be_set_in_.env"
     ports:
