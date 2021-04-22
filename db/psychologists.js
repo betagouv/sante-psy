@@ -114,7 +114,9 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
 module.exports.getAcceptedPsychologistByEmail = async function getAcceptedPsychologistByEmail(email) {
   return await knex(module.exports.psychologistsTable)
   .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
-  .andWhere('personalEmail', email)
+  .andWhere(
+    knex.raw('LOWER("personalEmail") = ?', email.toLowerCase())
+  )
   .first()
 }
 
