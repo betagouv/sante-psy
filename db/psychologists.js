@@ -25,7 +25,9 @@ module.exports.getPsychologists = async () => {
         .select()
         .from(module.exports.psychologistsTable)
         .whereNot('archived', true)
-        .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte);
+        .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
+        .orderByRaw("RANDOM ()");
+
     return psychologists;
   } catch (err) {
     console.error(`Impossible de récupérer les psychologistes`, err)
