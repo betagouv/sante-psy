@@ -12,6 +12,7 @@ if(!secret || !secretLogs) {
 module.exports = {
   appName: `Santé Psy Étudiant`,
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
+  announcement:  process.env.ANNOUNCEMENT || '',
   port: process.env.PORT || 8080,
   teamEmail: process.env.TEAM_EMAIL || 'equipe-santepsyetudiants@beta.gouv.fr',
   contactEmail: process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr',
