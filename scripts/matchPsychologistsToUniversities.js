@@ -1,9 +1,31 @@
-const dbPsychologists = require('../db/psychologists')
+const knexConfig = require("../knexfile")
+const knex = require("knex")(knexConfig)
 const dbUniversities = require('../db/universities')
 
 const departementToUniversityName = require('./departementToUniversityName')
 console.log('departementToUniversityName', Object.entries(departementToUniversityName).length,
   departementToUniversityName)
+
+const getPsychologists = async () => {
+  try {
+    const psychologists = knex.column(
+      knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
+      'firstNames',
+      'personalEmail',
+      'departement',
+      'dossierNumber',
+      'payingUniversityId as declaredUniversityId') // todo declaredUniversityId
+        .select()
+        .from('psychologists') // todo import table name
+        .whereNot('archived', true)
+        .where('state', 'accepte') // todo import stats
+        .orderBy('dossierNumber');
+    return psychologists;
+  } catch (err) {
+    console.error(`Impossible de récupérer les psychologistes`, err)
+    throw new Error(`Impossible de récupérer les psychologistes`)
+  }
+}
 
 const makeDepartementToUniversityIdTable = async () => {
   const universities = await dbUniversities.getUniversities()
@@ -34,7 +56,7 @@ const makeDepartementToUniversityIdTable = async () => {
   console.log('departementToId', Object.entries(departementToId).length, departementToId)
   // { '55': 'my-univ-id'}
 
-  return [universityIdToName, departementToId]
+  return [universityNameToId, universityIdToName, departementToId]
 }
 
 /**
@@ -51,9 +73,10 @@ const getDepartementNumberFromString = (departementString) => {
 }
 
 const run = async () => {
-  const [universityIdToName, departementToUnivId] = await makeDepartementToUniversityIdTable() // todo try catch
+  // todo try catch
+  const [universityNameToId, universityIdToName, departementToUnivId] = await makeDepartementToUniversityIdTable()
 
-  let psychologists = await dbPsychologists.getPsychologists()
+  let psychologists = await getPsychologists()
   //psychologists = psychologists.slice(0, 10) // todo remove
 
   const statsNoUniversityFound = {}
@@ -94,7 +117,10 @@ const run = async () => {
     }
 
     // If the psychologist declared another university, something is wrong ! Do not write assignedUniversityId.
-    if (psychologist.declaredUniversityId && psychologist.declaredUniversityId !== universityIdToAssign) {
+    const noUniversityId = universityNameToId['--- Aucune pour le moment']
+    if (psychologist.declaredUniversityId &&
+        psychologist.declaredUniversityId !== noUniversityId && // the psy declared "Aucune"
+        psychologist.declaredUniversityId !== universityIdToAssign) {
       console.log('Psy', psychologist.dossierNumber, 'already declared', psychologist.declaredUniversityId,
         'so will not assign', universityIdToAssign, universityIdToName[universityIdToAssign])
       if (!statsConflictingDeclaredUniversity[psychologist.departement]) {
@@ -104,6 +130,9 @@ const run = async () => {
         {
           psychologistId : psychologist.dossierNumber,
           declaredUniversityId: psychologist.declaredUniversityId,
+          declaredUniversityName: universityIdToName[psychologist.declaredUniversityId],
+          universityIdToAssign: universityIdToAssign,
+          universityNameToAssign: universityIdToName[universityIdToAssign]
         }
       )
       return
@@ -130,4 +159,5 @@ const run = async () => {
 
   console.log('\nAlready assigned, so this script did nothing :', statsAlreadyAssigned.length, 'psys')
 }
+
 module.exports.run = run

@@ -83,7 +83,7 @@ module.exports = {
   "81": "Toulouse Midi-Pyrénées",
   "82": "Toulouse Midi-Pyrénées",
   "83": "Toulon",
-  "84": "Avignon", // todo missing in DB !
+  "84": "Avignon",
   "85": "Nantes",
   "86": "Poitiers",
   "87": "Limoges",
