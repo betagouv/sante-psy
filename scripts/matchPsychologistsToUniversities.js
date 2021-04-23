@@ -129,6 +129,7 @@ const run = async () => {
       statsConflictingDeclaredUniversity[psychologist.departement].push(
         {
           psychologistId : psychologist.dossierNumber,
+          psychologistEmail: psychologist.personalEmail,
           declaredUniversityId: psychologist.declaredUniversityId,
           declaredUniversityName: universityIdToName[psychologist.declaredUniversityId],
           universityIdToAssign: universityIdToAssign,
