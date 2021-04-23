@@ -114,6 +114,13 @@ describe('DB Psychologists', () => {
       psy.personalEmail.should.be.equal(psyList[0].personalEmail);
     });
 
+    it("should return a psy if we enter a known login email capitalized", async () => {
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail.toUpperCase());
+      psy.email.should.be.equal(psyList[0].email);
+      psy.personalEmail.should.be.equal(psyList[0].personalEmail);
+    });
+
     it("should return undefined if we enter a unknown email", async () => {
       const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail("unknown@unknown.org")
 

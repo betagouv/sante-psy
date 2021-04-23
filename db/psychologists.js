@@ -27,7 +27,7 @@ module.exports.getPsychologists = async () => {
         .from(module.exports.psychologistsTable)
         .whereNot('archived', true)
         .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
-        .orderBy("dossierNumber");
+        .orderByRaw("RANDOM ()");
     return psychologists;
   } catch (err) {
     console.error(`Impossible de récupérer les psychologistes`, err)
@@ -114,7 +114,9 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
 module.exports.getAcceptedPsychologistByEmail = async function getAcceptedPsychologistByEmail(email) {
   return await knex(module.exports.psychologistsTable)
   .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
-  .andWhere('personalEmail', email)
+  .andWhere(
+    knex.raw('LOWER("personalEmail") = ?', email.toLowerCase())
+  )
   .first()
 }
 

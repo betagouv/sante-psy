@@ -23,7 +23,10 @@ const universities = [
   "Versailles Saint-Quentin (UVSQ)",
   "Franche-Comté",
   "Angers",
-  "Lyon",
+  "Lyon 1",
+  "Lyon 2",
+  "Lyon 3",
+  "Montpellier",
   "Montpellier 3",
   "Perpignan (UPVD)",
   "Corsica Pasquale Paoli",
@@ -51,6 +54,7 @@ const universities = [
   "Nîmes",
   "Antilles - Pôle Martinique",
   "Antilles - Pôle Guadeloupe",
+  "Avignon",
 ]
 
 const runInsert = async () => {

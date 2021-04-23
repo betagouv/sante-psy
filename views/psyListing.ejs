@@ -1,8 +1,9 @@
 <%- include('partials/header') -%>
 <link href="/static/tabulator-tables/css/tabulator_modern.min.css" rel="stylesheet">
 <script type="text/javascript" src="/static/tabulator-tables/js/tabulator.min.js"></script>
-<div class="rf-container-fluid">
-    <div class="rf-grid-row rf-grid-row--center rf-grid-row--gutter">
+<div class="fr-container">
+    <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
+      <div class="fr-container fr-mb-3w">
         <%- include('partials/ariane',
         {
           items: [
@@ -16,7 +17,7 @@
           ],
         })
         -%>
-        <div class="rf-col rf-col-xs-10 rf-col-md-8 rf-my-4w">
+
             <h1>Trouver un psychologue</h1>
               <% if (infos.length) { %>
                 <% infos.forEach(function(info) { %>
@@ -30,28 +31,27 @@
                 <% }) %>
             <% } %>
             <% if (psyList.length > 0) { %>
-            <p>
+            <p class="fr-mb-2w">
                 Il y a actuellement <%= psyList.length %> partenaires du dispositif d'accompagnement.
             </p>
-            <p>
+            <p class="fr-mb-2w">
                 La liste est mise à jour quotidiennement, revenez la consulter si vous n'avez pas pu trouver de psychologue.
             </p>
 
-            <div class="rf-input-group">
-                <label class="rf-label" for="lastName-filter-value">Rechercher par nom : </label>
-                <input class="rf-input midlength-input" id="lastName-filter-value" type="text" placeholder="Delgado">
+            <div class="fr-input-group">
+                <label class="fr-label" for="lastName-filter-value">Rechercher par nom : </label>
+                <input class="fr-input midlength-input" id="lastName-filter-value" type="text" placeholder="Delgado">
             </div>
-            <div class="rf-input-group">
-                <label class="rf-label" for="address-filter-value">Rechercher votre ville ou code postal : </label>
-                <input class="rf-input midlength-input" id="address-filter-value" type="text" placeholder="Amiens ou 80000">
+            <div class="fr-input-group">
+                <label class="fr-label" for="address-filter-value">Rechercher votre ville ou code postal : </label>
+                <input class="fr-input midlength-input" id="address-filter-value" type="text" placeholder="Amiens ou 80000">
             </div>
-            <div class="rf-input-group">
-                <label class="rf-label" for="departement-filter-value">Rechercher par département: </label>
-                <input class="rf-input midlength-input" id="departement-filter-value" type="text" placeholder="Somme ou 80">
+            <div class="fr-input-group">
+                <label class="fr-label" for="departement-filter-value">Rechercher par département: </label>
+                <input class="fr-input midlength-input" id="departement-filter-value" type="text" placeholder="Somme ou 80">
             </div>
             <div id="psy-table"></div>
             <% } %>
-        </div>
     </div>
 </div>
 <!-- Import data as recommended by OWASP :
