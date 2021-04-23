@@ -28,24 +28,37 @@ const parseFile = () => {
   })
 }
 
-const insertEmailToUniversities = async (rawData) => {
-  // console.log("Rawdata:", rawData)
+
+const insertEmailToUniversities = async (universitiesArray) => {
+  console.debug("universitiesArray:", universitiesArray)
   const universities = await dbUniversities.getUniversities()
 
   const unversitiesList = universities.map( uni => {
-    // console.log("rawData['Universités']", rawData[0]['Universités'])
-    console.log("uni name:", uni.name)
-    const foundUni = rawData.find(myElement => myElement['Universités'].includes(uni.name) === true);
+    console.log(`Trying to add university ${uni.name} to DB...`)
+    const foundUni = universitiesArray.find(myElement => myElement['Universités'].includes(uni.name) === true);
     if (foundUni) {
-      uni.emailSSU  = foundUni['Pour envoi des nouvelles listes de psys']
-      uni.emailUniversity = foundUni['Pour envoi du mail recap des séances']
+      console.log(`Add ${uni.name} to list to save`)
+
+      //emailSSU
+      if( foundUni['Pour envoi des nouvelles listes de psys'] !== null) {
+        uni.emailSSU = foundUni['Pour envoi des nouvelles listes de psys']
+      } else {
+        console.warn(`emailSSU is missing for ${uni.name}`)
+      }
+
+      //emailUniversity
+      if( foundUni['Pour envoi du mail recap des séances'] !== null ) {
+        uni.emailUniversity = foundUni['Pour envoi du mail recap des séances']
+      } else {
+        console.warn(`emailUniversity is missing for ${uni.name}`)
+      }
     } else {
-      console.log(`Aucun element trouvé dans le fichier pour ${uni.name}`)
+      console.log(`Aucun element trouvé dans le fichier pour ${uni.name} -- reconsultez la liste d'université ?`)
     }
     return uni
   })
 
-  // console.log("unversitiesList", unversitiesList)
+  console.debug("insertEmailToUniversities - new unversities list", unversitiesList)
 
   dbUniversities.saveUniversities(unversitiesList)
 }

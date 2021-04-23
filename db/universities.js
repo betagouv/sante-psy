@@ -6,7 +6,7 @@ const universitiesTable = "universities";
 module.exports.universitiesTable =  universitiesTable;
 
 module.exports.saveUniversities = async function saveUniversities(universitiesList) {
-  console.log(`UPSERT of ${universitiesList.length} unviersities into PG....`);
+  console.log(`UPSERT of ${universitiesList.length} universties....`);
   const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
 
   const upsertArray = universitiesList.map( university => {
@@ -29,7 +29,7 @@ module.exports.saveUniversities = async function saveUniversities(universitiesLi
 
   const query = await Promise.all(upsertArray);
 
-  console.log(`UPSERT into PG : done`);
+  console.log(`UPSERT universties done`);
 
   return query;
 }
