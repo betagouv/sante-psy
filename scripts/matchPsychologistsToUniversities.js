@@ -1,9 +1,10 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const dbUniversities = require('../db/universities')
-
 const departementToUniversityName = require('./departementToUniversityName')
-console.log('departementToUniversityName', Object.entries(departementToUniversityName).length,
+
+console.log('departementToUniversityName',
+  Object.entries(departementToUniversityName).length,
   departementToUniversityName)
 
 const getPsychologists = async () => {
@@ -24,6 +25,17 @@ const getPsychologists = async () => {
   } catch (err) {
     console.error(`Impossible de récupérer les psychologistes`, err)
     throw new Error(`Impossible de récupérer les psychologistes`)
+  }
+}
+
+const saveAssignedUniversity = async (psychologistId, assignedUniversityId) => {
+  try {
+    return knex('psychologists') // todo import table name
+      .where('dossierNumber', psychologistId)
+      .update('assignedUniversityId', assignedUniversityId)
+  } catch (err) {
+    console.error(`Error assigning university`, err)
+    throw new Error(`Error assigning university`)
   }
 }
 
@@ -72,7 +84,7 @@ const getDepartementNumberFromString = (departementString) => {
   return parts[0]
 }
 
-const run = async () => {
+const run = async (withWrite) => {
   // todo try catch
   const [universityNameToId, universityIdToName, departementToUnivId] = await makeDepartementToUniversityIdTable()
 
@@ -84,7 +96,7 @@ const run = async () => {
   const statsConflictingDeclaredUniversity = {}
   const statsAssignedWithoutProblem = []
   const statsAlreadyAssigned = []
-  psychologists.forEach((psychologist) => {
+  psychologists.forEach(async (psychologist) => {
     if (psychologist.assignedUniversityId) {
       // Don't rewrite assignedUniversityId if it's already written, in case we made changes by hand that should not be
       // overwritten by the script.
@@ -140,8 +152,14 @@ const run = async () => {
     }
 
     // Write assignedUniversityId
-    // todo write
-    console.log('Assigned', psychologist.dossierNumber, 'of departement', psychologist.departement,
+    if (withWrite) {
+      // todo try catch
+      await saveAssignedUniversity(psychologist.dossierNumber, universityIdToAssign)
+    } else {
+      console.log('withWrite is off. This is dry-run, no writing.')
+    }
+    console.log(withWrite ? '' : '[NO WRITE]','Assigned', psychologist.dossierNumber,
+      'of departement', psychologist.departement,
       'to university', universityIdToAssign, universityIdToName[universityIdToAssign])
     statsAssignedWithoutProblem.push(psychologist.dossierNumber)
   })
