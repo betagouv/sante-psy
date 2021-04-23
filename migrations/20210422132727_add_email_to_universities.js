@@ -4,8 +4,8 @@ const dbUniversities = require('../db/universities')
 
 exports.up = function (knex) {
   return knex.schema.table(dbUniversities.universitiesTable, function (table) {
-    table.specificType('emailSSU', 'text[]')
-    table.specificType('emailUniversity', 'text[]')
+    table.text('emailSSU')
+    table.text('emailUniversity')
   })
 }
 

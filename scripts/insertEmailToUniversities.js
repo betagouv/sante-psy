@@ -23,7 +23,6 @@ const parseFile = () => {
         {}
       )
     })
-    // console.log('data', data)
     insertEmailToUniversities(data)
     return data
   })
@@ -32,16 +31,14 @@ const parseFile = () => {
 const insertEmailToUniversities = async (rawData) => {
   // console.log("Rawdata:", rawData)
   const universities = await dbUniversities.getUniversities()
-  // console.log("universities without emails", universities);
 
   const unversitiesList = universities.map( uni => {
     // console.log("rawData['Universités']", rawData[0]['Universités'])
     console.log("uni name:", uni.name)
     const foundUni = rawData.find(myElement => myElement['Universités'].includes(uni.name) === true);
     if (foundUni) {
-      console.log("foundUni", foundUni);
-      uni.emailSSU = foundUni['Pour envoi des nouvelles listes de psys'].split(';').map(email => email.trim())
-      uni.emailUniversity = foundUni['Pour envoi du mail recap des séances'].split(';').map(email => email.trim())
+      uni.emailSSU  = foundUni['Pour envoi des nouvelles listes de psys']
+      uni.emailUniversity = foundUni['Pour envoi du mail recap des séances']
     } else {
       console.log(`Aucun element trouvé dans le fichier pour ${uni.name}`)
     }
