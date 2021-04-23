@@ -42,6 +42,9 @@ const makeDepartementToUniversityIdTable = async () => {
  * @param {} departementString ex : '55 - Indre-et-Loire'
  */
 const getDepartementNumberFromString = (departementString) => {
+  if (!departementString) {
+    return null
+  }
   // Note : this is not robust. If Demarches Simplifiées changes their format it will break.
   const parts = departementString.split(' - ')
   return parts[0]
@@ -54,6 +57,7 @@ const run = async () => {
   //psychologists = psychologists.slice(0, 10) // todo remove
 
   const statsNoUniversityFound = {}
+  const statsNoDepartementFound = []
   const statsConflictingDeclaredUniversity = {}
   const statsAssignedWithoutProblem = []
   const statsAlreadyAssigned = []
@@ -67,7 +71,16 @@ const run = async () => {
     }
 
     // Find universityId for this psychologist
-    const universityIdToAssign = departementToUnivId[getDepartementNumberFromString(psychologist.departement)]
+    const departement = getDepartementNumberFromString(psychologist.departement)
+    if (!departement) {
+      console.log(`No departement found
+          - psy id ${psychologist.dossierNumber}
+          - ${psychologist.lastName} ${psychologist.firstNames}`)
+
+      statsNoDepartementFound.push(psychologist.dossierNumber)
+      return
+    }
+    const universityIdToAssign = departementToUnivId[departement]
     if (!universityIdToAssign) {
       console.log(`No university found for departement ${psychologist.departement}
       - psy id ${psychologist.dossierNumber}
@@ -104,10 +117,12 @@ const run = async () => {
   })
 
   console.log('------------')
-  console.log('No university found : ')
+  console.log('No university to assign automatically : ')
   Object.entries(statsNoUniversityFound).forEach(([departement, psyList]) => {
     console.log(departement, ': ', psyList.length, 'psys')
   })
+
+  console.log('\nNo departement found :', statsNoDepartementFound.length, 'psys')
 
   console.log('\nConflict between declaredUniversity and assignedUniversity :', statsConflictingDeclaredUniversity)
 
