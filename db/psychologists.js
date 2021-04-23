@@ -21,7 +21,6 @@ module.exports.getPsychologists = async () => {
       'website',
       'teleconsultation',
       'languages',
-      'dossierNumber',
       'description')
         .select()
         .from(module.exports.psychologistsTable)
