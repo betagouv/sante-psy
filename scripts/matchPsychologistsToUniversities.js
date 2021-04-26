@@ -17,20 +17,19 @@ const getUniversityName = function getUniversityName(universities, id) {
 }
 
 const run = async (withWrite) => {
-  console.log("Match psychologists to universities")
+  console.log("Match psychologists to universities...")
   const universities = await dbUniversities.getUniversities()
   console.log(`${universities.length} universities`)
-  console.log("{universities}", universities)
 
   let psychologists = await dbPsychologists.getPsychologistsDeclaredUniversity()
   console.log(`${psychologists.length} psychologists`)
-  //psychologists = psychologists.slice(0, 10) // todo remove
 
   const statsNoUniversityFound = {}
   const statsNoDepartementFound = []
   const statsConflictingDeclaredUniversity = {}
   const statsAssignedWithoutProblem = []
   const statsAlreadyAssigned = []
+
   psychologists.forEach(async (psychologist) => {
     if (psychologist.assignedUniversityId) {
       // Don't rewrite assignedUniversityId if it's already written, in case we made changes by hand that should not be
