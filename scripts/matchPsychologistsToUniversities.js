@@ -2,6 +2,7 @@ const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const dbUniversities = require('../db/universities')
 const dbPsychologists = require('../db/psychologists')
+const demarchesSimplifiees = require('../utils/demarchesSimplifiees')
 const departementToUniversityName = require('./departementToUniversityName')
 
 console.log('departementToUniversityName',
@@ -51,19 +52,6 @@ const makeDepartementToUniversityIdTable = async () => {
   return [universityNameToId, universityIdToName, departementToId]
 }
 
-/**
- * Output : "55"
- * @param {} departementString ex : '55 - Indre-et-Loire'
- */
-const getDepartementNumberFromString = (departementString) => {
-  if (!departementString) {
-    return null
-  }
-  // Note : this is not robust. If Demarches Simplifiées changes their format it will break.
-  const parts = departementString.split(' - ')
-  return parts[0]
-}
-
 const run = async (withWrite) => {
   // todo try catch
   const [universityNameToId, universityIdToName, departementToUnivId] = await makeDepartementToUniversityIdTable()
@@ -86,7 +74,7 @@ const run = async (withWrite) => {
     }
 
     // Find universityId for this psychologist
-    const departement = getDepartementNumberFromString(psychologist.departement)
+    const departement = demarchesSimplifiees.getDepartementNumberFromString(psychologist.departement)
     if (!departement) {
       console.log(`No departement found
           - psy id ${psychologist.dossierNumber}
