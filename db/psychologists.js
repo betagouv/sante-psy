@@ -6,6 +6,25 @@ const { universitiesTable } = require("./universities");
 
 module.exports.psychologistsTable =  "psychologists";
 
+module.exports.getPsychologistsDeclaredUniversity = async () => {
+  try {
+    const psychologists = knex.column(
+      knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
+      'firstNames',
+      'personalEmail',
+      'departement',
+      'dossierNumber',
+      'payingUniversityId as declaredUniversityId') // todo declaredUniversityId
+        .select()
+        .from(module.exports.psychologistsTable)
+        .whereNot('archived', true)
+        .orderBy('dossierNumber');
+    return psychologists;
+  } catch (err) {
+    console.error(`Impossible de récupérer les psychologistes`, err)
+    throw new Error(`Impossible de récupérer les psychologistes`)
+  }
+}
 
 module.exports.getPsychologists = async () => {
   try {

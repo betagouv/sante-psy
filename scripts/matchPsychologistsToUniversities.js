@@ -1,32 +1,12 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const dbUniversities = require('../db/universities')
+const dbPsychologists = require('../db/psychologists')
 const departementToUniversityName = require('./departementToUniversityName')
 
 console.log('departementToUniversityName',
   Object.entries(departementToUniversityName).length,
   departementToUniversityName)
-
-const getPsychologists = async () => {
-  try {
-    const psychologists = knex.column(
-      knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
-      'firstNames',
-      'personalEmail',
-      'departement',
-      'dossierNumber',
-      'payingUniversityId as declaredUniversityId') // todo declaredUniversityId
-        .select()
-        .from('psychologists') // todo import table name
-        .whereNot('archived', true)
-        .where('state', 'accepte') // todo import stats
-        .orderBy('dossierNumber');
-    return psychologists;
-  } catch (err) {
-    console.error(`Impossible de récupérer les psychologistes`, err)
-    throw new Error(`Impossible de récupérer les psychologistes`)
-  }
-}
 
 const saveAssignedUniversity = async (psychologistId, assignedUniversityId) => {
   try {
@@ -88,7 +68,7 @@ const run = async (withWrite) => {
   // todo try catch
   const [universityNameToId, universityIdToName, departementToUnivId] = await makeDepartementToUniversityIdTable()
 
-  let psychologists = await getPsychologists()
+  let psychologists = await dbPsychologists.getPsychologistsDeclaredUniversity()
   //psychologists = psychologists.slice(0, 10) // todo remove
 
   const statsNoUniversityFound = {}
