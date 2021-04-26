@@ -60,7 +60,7 @@ const insertEmailToUniversities = async (universitiesArray) => {
 
   console.debug("insertEmailToUniversities - new unversities list", unversitiesList)
 
-  dbUniversities.saveUniversities(unversitiesList)
+  await dbUniversities.saveUniversities(unversitiesList)
 
   // eslint-disable-next-line no-process-exit
   process.exit(1);
