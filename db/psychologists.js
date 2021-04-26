@@ -14,7 +14,7 @@ module.exports.getPsychologistsDeclaredUniversity = async () => {
       'personalEmail',
       'departement',
       'dossierNumber',
-      'payingUniversityId as declaredUniversityId') // todo declaredUniversityId
+      'declaredUniversityId')
         .select()
         .from(module.exports.psychologistsTable)
         .whereNot('archived', true)
