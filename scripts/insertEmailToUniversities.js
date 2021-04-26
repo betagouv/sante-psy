@@ -35,7 +35,7 @@ const insertEmailToUniversities = async (universitiesArray) => {
 
   const unversitiesList = universities.map( uni => {
     console.log(`Trying to add university ${uni.name} to DB...`)
-    const foundUni = universitiesArray.find(myElement => myElement['Universités'].includes(uni.name) === true);
+    const foundUni = universitiesArray.find(myElement => myElement['Universités'] === uni.name);
     if (foundUni) {
       console.log(`Add ${uni.name} to list to save`)
 
