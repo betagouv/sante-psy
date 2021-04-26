@@ -26,6 +26,17 @@ module.exports.getPsychologistsDeclaredUniversity = async () => {
   }
 }
 
+module.exports.saveAssignedUniversity = async (psychologistId, assignedUniversityId) => {
+  try {
+    return knex(module.exports.psychologistsTable)
+      .where('dossierNumber', psychologistId)
+      .update('assignedUniversityId', assignedUniversityId)
+  } catch (err) {
+    console.error(`Error assigning university`, err)
+    throw new Error(`Error assigning university`)
+  }
+}
+
 module.exports.getPsychologists = async () => {
   try {
     const psychologists = knex.column(

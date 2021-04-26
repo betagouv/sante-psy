@@ -1,5 +1,3 @@
-const knexConfig = require("../knexfile")
-const knex = require("knex")(knexConfig)
 const dbUniversities = require('../db/universities')
 const dbPsychologists = require('../db/psychologists')
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees')
@@ -8,17 +6,6 @@ const departementToUniversityName = require('./departementToUniversityName')
 console.log('departementToUniversityName',
   Object.entries(departementToUniversityName).length,
   departementToUniversityName)
-
-const saveAssignedUniversity = async (psychologistId, assignedUniversityId) => {
-  try {
-    return knex('psychologists') // todo import table name
-      .where('dossierNumber', psychologistId)
-      .update('assignedUniversityId', assignedUniversityId)
-  } catch (err) {
-    console.error(`Error assigning university`, err)
-    throw new Error(`Error assigning university`)
-  }
-}
 
 const makeDepartementToUniversityIdTable = async () => {
   const universities = await dbUniversities.getUniversities()
@@ -122,7 +109,7 @@ const run = async (withWrite) => {
     // Write assignedUniversityId
     if (withWrite) {
       // todo try catch
-      await saveAssignedUniversity(psychologist.dossierNumber, universityIdToAssign)
+      await dbPsychologists.saveAssignedUniversity(psychologist.dossierNumber, universityIdToAssign)
     } else {
       console.log('withWrite is off. This is dry-run, no writing.')
     }
