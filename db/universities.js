@@ -1,12 +1,43 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
+const date = require("../utils/date")
 
 const universitiesTable = "universities";
 module.exports.universitiesTable =  universitiesTable;
 
+module.exports.saveUniversities = async function saveUniversities(universitiesList) {
+  console.log(`UPSERT of ${universitiesList.length} universties....`);
+  const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
+
+  const upsertArray = universitiesList.map( university => {
+    const upsertingKey = 'id';
+
+    try {
+      return knex(universitiesTable)
+      .insert(university)
+      .onConflict(upsertingKey)
+      .merge({ // update every field and add updatedAt
+        name: university.name,
+        emailSSU: university.emailSSU,
+        emailUniversity: university.emailUniversity,
+        updatedAt: updatedAt
+      });
+    } catch (err) {
+      console.error(`Error to insert ${university}`, err);
+    }
+  });
+
+  const query = await Promise.all(upsertArray);
+
+  console.log(`UPSERT universties done`);
+
+  return query;
+}
+
+
 module.exports.getUniversities = async () => {
   try {
-    return knex.select('id', 'name')
+    return knex.select('id', 'name', 'emailSSU', 'emailUniversity')
         .from(universitiesTable)
         .orderBy("name")
   } catch (err) {
