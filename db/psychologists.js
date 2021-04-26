@@ -14,10 +14,12 @@ module.exports.getPsychologistsDeclaredUniversity = async () => {
       'personalEmail',
       'departement',
       'dossierNumber',
+      'assignedUniversityId',
       'declaredUniversityId')
         .select()
         .from(module.exports.psychologistsTable)
         .whereNot('archived', true)
+        .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
         .orderBy('dossierNumber');
     return psychologists;
   } catch (err) {
@@ -27,14 +29,22 @@ module.exports.getPsychologistsDeclaredUniversity = async () => {
 }
 
 module.exports.saveAssignedUniversity = async (psychologistId, assignedUniversityId) => {
-  try {
-    return knex(module.exports.psychologistsTable)
-      .where('dossierNumber', psychologistId)
-      .update('assignedUniversityId', assignedUniversityId)
-  } catch (err) {
-    console.error(`Error assigning university`, err)
-    throw new Error(`Error assigning university`)
+  const updatedPsy = await knex(module.exports.psychologistsTable)
+    .where({
+      dossierNumber: psychologistId,
+    })
+    .update({
+      assignedUniversityId: assignedUniversityId,
+      updatedAt: date.getDateNowPG()
+    })
+
+  console.log(`Psy id ${psychologistId} updated with assignedUniversityId ${assignedUniversityId}`, );
+
+  if (!updatedPsy) {
+    throw new Error('No psychologist found for this id')
   }
+
+  return updatedPsy;
 }
 
 module.exports.getPsychologists = async () => {

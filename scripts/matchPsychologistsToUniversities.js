@@ -8,12 +8,22 @@ const getUniversityId = function getUniversityId(universities, name) {
     return uni.name.toString().trim() === name.toString().trim()
   })
 
-  return foundUni.id;
+  if(foundUni) {
+    return foundUni.id
+  } else {
+    return undefined
+  }
 }
 const getUniversityName = function getUniversityName(universities, id) {
-  return universities.filter ( uni => {
+  const foundUni =  universities.filter ( uni => {
     uni.id === id
-  }).name;
+  })
+
+  if(foundUni) {
+    return foundUni.name
+  } else {
+    return undefined
+  }
 }
 
 const run = async (withWrite) => {
@@ -30,13 +40,14 @@ const run = async (withWrite) => {
   const statsAssignedWithoutProblem = []
   const statsAlreadyAssigned = []
 
-  psychologists.forEach(async (psychologist) => {
+  const needToWait = psychologists.map((psychologist) => {
     if (psychologist.assignedUniversityId) {
       // Don't rewrite assignedUniversityId if it's already written, in case we made changes by hand that should not be
       // overwritten by the script.
       console.log('Already assigned', psychologist.dossierNumber, 'to', psychologist.assignedUniversityId)
       statsAlreadyAssigned.push(psychologist.dossierNumber)
-      return
+
+      return Promise.resolve();
     }
 
     // Find universityId for this psychologist
@@ -47,7 +58,15 @@ const run = async (withWrite) => {
           - ${psychologist.lastName} ${psychologist.firstNames}`)
 
       statsNoDepartementFound.push(psychologist.dossierNumber)
-      return
+
+      return Promise.resolve();
+    }
+    const correspondingUniName = departementToUniversityName[departement]
+    if(!correspondingUniName) {
+      console.log(`No corresponding uni name found for
+          - departement ${departement}`)
+
+      return Promise.resolve();
     }
     const universityIdToAssign = getUniversityId(universities, departementToUniversityName[departement])
 
@@ -60,9 +79,8 @@ const run = async (withWrite) => {
         statsNoUniversityFound[psychologist.departement] = []
       }
       statsNoUniversityFound[psychologist.departement].push(psychologist.dossierNumber)
-      return
-    } else {
-      console.log(`will assign ${universityIdToAssign} based on ${psychologist.departement}`);
+
+      return Promise.resolve();
     }
 
     // If the psychologist declared another university, something is wrong ! Do not write assignedUniversityId.
@@ -86,21 +104,25 @@ const run = async (withWrite) => {
           universityNameToAssign: getUniversityName(universities, universityIdToAssign)
         }
       )
-      return
     }
 
-    // Write assignedUniversityId
-    if (withWrite) {
-      // todo try catch
-      await dbPsychologists.saveAssignedUniversity(psychologist.dossierNumber, universityIdToAssign)
-    } else {
-      console.log('withWrite is off. This is dry-run, no writing.')
+    try {
+      if(universityIdToAssign) {
+        console.log('Assigned', psychologist.dossierNumber,
+          'of departement', psychologist.departement,
+          'to university', universityIdToAssign, getUniversityName(universities, universityIdToAssign))
+        statsAssignedWithoutProblem.push(psychologist.dossierNumber)
+        return dbPsychologists.saveAssignedUniversity(psychologist.dossierNumber, universityIdToAssign)
+      } else {
+        return Promise.resolve();
+      }
+    } catch (err) {
+      console.error("Erreur de saveAssignedUniversity", err)
+      throw new Error("Erreur de saveAssignedUniversity")
     }
-    console.log(withWrite ? '' : '[NO WRITE]','Assigned', psychologist.dossierNumber,
-      'of departement', psychologist.departement,
-      'to university', universityIdToAssign, getUniversityName(universities, universityIdToAssign))
-    statsAssignedWithoutProblem.push(psychologist.dossierNumber)
   })
+
+  await Promise.all(needToWait);
 
   console.log('------------')
   console.log('No university to assign automatically : ')
