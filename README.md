@@ -40,6 +40,11 @@ Pour l'exécuter:
 
     $ npm run seed
 
+## Ajout de la correspondance entre université et psychologues
+```
+# need to import psy first (@see #### Test du cron)
+node scripts/matchPsychologistsToUniversities.js
+```
 
 #### Exécuter les migrations
 ```dockerfile
