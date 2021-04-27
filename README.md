@@ -40,11 +40,12 @@ Pour l'exécuter:
 
     $ npm run seed
 
-## Ajout de la correspondance entre université et psychologues
+#### Ajout de la correspondance entre université et psychologues
 ```
-# need to import psy first (@see #### Test du cron)
 node scripts/matchPsychologistsToUniversities.js
-
+# handle special cases - need to update the confidential list - @see support 
+node scripts/matchSpecialPsyToUniversities.js
+```
 #### Insérer les universités pour la production
 Voir aussi le script "scaling-dev-seed.sh" lié à "scalingo.json" qui permet d'insérer ces données sur les reviews app lors de leur 1er deploiement.
 
