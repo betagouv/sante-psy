@@ -42,9 +42,11 @@ Pour l'exécuter:
 
 #### Upload un fichier sur Scalingo
 ```
-# ça va importer ton fichier sur la machine et te connecter.
+# ça va importer ton fichier sur la machine et te connecter
 scalingo -app APP_NAME run --file <nom_de_ton_fichier> bash
+> cp /tmp/uploads/<nom_de_ton_fichier> .
 ```
+
 #### Ajout de la correspondance entre université et psychologues
 ```
 node scripts/matchPsychologistsToUniversities.js
