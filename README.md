@@ -53,6 +53,7 @@ node scripts/matchPsychologistsToUniversities.js
 # handle special cases - need to update the confidential list inside "scripts/psyToUni.js" - @see support
 node scripts/matchSpecialPsyToUniversities.js
 ```
+
 #### Insérer les universités pour la production
 Voir aussi le script "scaling-dev-seed.sh" lié à "scalingo.json" qui permet d'insérer ces données sur les reviews app lors de leur 1er deploiement.
 
