@@ -11,11 +11,16 @@ const uuid = require('../../utils/uuid');
 module.exports.getRandomInt = function getRandomInt() {
   const min = Math.ceil(1);
   const max = Math.floor(99);
-  return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+  const ourRandom = Math.floor(Math.random() * (max - min) + min);
+  if( ourRandom < 10 ) {
+    return '0' + ourRandom.toString()
+  } else {
+    return ourRandom.toString()
+  }
 }
 
 module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.gouv.fr',
-  state = 'accepte', archived = false, uniId) {
+  state = 'accepte', archived = false, uniId = null) {
   const dossierNumber = uuid.randomUuid()
   return {
     dossierNumber: dossierNumber,
