@@ -20,7 +20,7 @@ docker-compose up
 # to access psy workspace with toy data use this email login@beta.gouv.fr
 # to access psy workspace without data use this email empty@beta.gouv.fr
 # all available emails are listed here /test/seed/fake_data.js
-# http://localhost:8080/psychologue/login 
+# http://localhost:8080/psychologue/login
 # login emails are received here : http://localhost:1080/
 ```
 
@@ -36,9 +36,14 @@ Pour controler visuellement la base de données, nous conseillons :
 #### Importer des fausses données
 Voir le fichier dans `test/seed/fake_data.js` qui va créer quelues psy, patients, et séances.
 
-Pour l'exécuter: 
+Pour l'exécuter:
 
     $ npm run seed
+
+## Ajout de la correspondance entre université et psychologues
+```
+# need to import psy first (@see #### Test du cron)
+node scripts/matchPsychologistsToUniversities.js
 
 #### Insérer les universités pour la production
 Voir aussi le script "scaling-dev-seed.sh" lié à "scalingo.json" qui permet d'insérer ces données sur les reviews app lors de leur 1er deploiement.
@@ -46,12 +51,13 @@ Voir aussi le script "scaling-dev-seed.sh" lié à "scalingo.json" qui permet d'
 ```
 node scripts/insertUniversities.js # Insert into universities tables
 node scripts/insertEmailToUniversities.js test/seed/test-ssu-renew.csv # insert emails contacts from CSV files (need to ask support for rights)
+
 ```
 
 #### Exécuter les migrations
 ```dockerfile
 # Supprimer les tables existantes
-docker-compose down 
+docker-compose down
 # ou docker-compose rm -f # removes already existing containers https://docs.docker.com/compose/reference/rm/
 
 # Les recréer
@@ -90,7 +96,7 @@ Avec [le scalingo CLI](https://doc.scalingo.com/cli) et le nom de l'app sur scal
 On peut insérer des données comme ceci :
 ```sql
 INSERT INTO public.psychologists
-("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, teleconsultation, description, languages, training, diploma, university, "payingUniversityId", "createdAt", "updatedAt", archived, state, "personalEmail")
+("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, teleconsultation, description, languages, training, diploma, university, "declaredUniversityId", "createdAt", "updatedAt", archived, state, "personalEmail")
 VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli', 'firstname', 'lastname', 'publicemail@beta.gouv.fr', '', '', '', '', '', false, 'accfzfz', '', '[]', '', '', null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'private.email@beta.gouv.fr');
 ```
 

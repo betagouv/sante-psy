@@ -179,6 +179,16 @@ describe('Demarches Simplifiess', () => {
     });
   });
 
+  describe('getDepartementNumberFromString', () => {
+    it('should return departement number from departement and number', async () => {
+      const departementNumber = '55';
+      const departementString = `${departementNumber} - Indre-et-Loire`;
+      const output = demarchesSimplifiees.getDepartementNumberFromString(departementString)
+
+      output.should.equal(departementNumber);
+    });
+  });
+
   describe('getChampValue', () => {
     it('should return stringValue for field Champ', async () => {
       const result = 'Psychologie clinique de la santé';

@@ -60,7 +60,7 @@ describe('reimbursementController', () => {
       const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail)
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).not.to.exist
-      chai.expect(psy.payingUniversityId).not.to.exist
+      chai.expect(psy.declaredUniversityId).not.to.exist
 
       return chai.request(app)
         .post('/psychologue/api/renseigner-convention')
@@ -74,7 +74,7 @@ describe('reimbursementController', () => {
         .then(async () => {
           const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail)
           chai.expect(updatedPsy.isConventionSigned).to.equal(true)
-          chai.expect(updatedPsy.payingUniversityId).to.equal(university.id)
+          chai.expect(updatedPsy.declaredUniversityId).to.equal(university.id)
         })
     })
 
@@ -84,7 +84,7 @@ describe('reimbursementController', () => {
       const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail)
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).not.to.exist
-      chai.expect(psy.payingUniversityId).not.to.exist
+      chai.expect(psy.declaredUniversityId).not.to.exist
 
       return chai.request(app)
         .post('/psychologue/api/renseigner-convention')
@@ -95,7 +95,7 @@ describe('reimbursementController', () => {
         .then(async () => {
           const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail)
           chai.expect(updatedPsy.isConventionSigned).not.to.exist
-          chai.expect(updatedPsy.payingUniversityId).not.to.exist
+          chai.expect(updatedPsy.declaredUniversityId).not.to.exist
         })
     }
 
