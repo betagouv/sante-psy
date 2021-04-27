@@ -40,10 +40,15 @@ Pour l'exécuter:
 
     $ npm run seed
 
+#### Upload un fichier sur Scalingo
+```
+# ça va importer ton fichier sur la machine et te connecter.
+scalingo -app APP_NAME run --file <nom_de_ton_fichier> bash
+```
 #### Ajout de la correspondance entre université et psychologues
 ```
 node scripts/matchPsychologistsToUniversities.js
-# handle special cases - need to update the confidential list - @see support 
+# handle special cases - need to update the confidential list inside "scripts/psyToUni.js" - @see support
 node scripts/matchSpecialPsyToUniversities.js
 ```
 #### Insérer les universités pour la production
