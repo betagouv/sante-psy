@@ -42,6 +42,7 @@ module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.g
     departement: `${module.exports.getRandomInt()} - Calvados`,
     university: `${module.exports.getRandomInt()} Université`,
     declaredUniversityId: uniId,
+    assignedUniversityId: uniId,
     region: "Normandie",
     languages: "Français ,Anglais, et Espagnol"
   };
