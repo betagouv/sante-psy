@@ -44,10 +44,13 @@ const getSummariesForUniversities = (allAppointmentsSummary) => {
 module.exports.getSummariesForUniversities = getSummariesForUniversities
 
 async function formatSummaryEmail(summaryDate, psychologists) {
+  const totalAppointments = psychologists.reduce((accumulator, psy) => accumulator + psy.countAppointments, 0)
+
   const html = await ejs.renderFile('./views/emails/summaryUniversity.ejs', {
     lastMonth: summaryDate.lastMonth,
     year: summaryDate.year,
-    psychologists: psychologists
+    psychologists: psychologists,
+    totalAppointments: totalAppointments,
   });
   return html
 }
