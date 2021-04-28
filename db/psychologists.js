@@ -6,6 +6,46 @@ const { universitiesTable } = require("./universities");
 
 module.exports.psychologistsTable =  "psychologists";
 
+module.exports.getPsychologistsDeclaredUniversity = async () => {
+  try {
+    const psychologists = knex.column(
+      knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
+      'firstNames',
+      'personalEmail',
+      'departement',
+      'dossierNumber',
+      'assignedUniversityId',
+      'declaredUniversityId')
+        .select()
+        .from(module.exports.psychologistsTable)
+        .whereNot('archived', true)
+        .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
+        .orderBy('dossierNumber');
+    return psychologists;
+  } catch (err) {
+    console.error(`Impossible de récupérer les psychologistes`, err)
+    throw new Error(`Impossible de récupérer les psychologistes`)
+  }
+}
+
+module.exports.saveAssignedUniversity = async (psychologistId, assignedUniversityId) => {
+  const updatedPsy = await knex(module.exports.psychologistsTable)
+    .where({
+      dossierNumber: psychologistId,
+    })
+    .update({
+      assignedUniversityId: assignedUniversityId,
+      updatedAt: date.getDateNowPG()
+    })
+
+  console.log(`Psy id ${psychologistId} updated with assignedUniversityId ${assignedUniversityId}`, );
+
+  if (!updatedPsy) {
+    throw new Error('No psychologist found for this id')
+  }
+
+  return updatedPsy;
+}
 
 module.exports.getPsychologists = async () => {
   try {
@@ -27,7 +67,6 @@ module.exports.getPsychologists = async () => {
         .whereNot('archived', true)
         .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
         .orderByRaw("RANDOM ()");
-
     return psychologists;
   } catch (err) {
     console.error(`Impossible de récupérer les psychologistes`, err)
@@ -142,13 +181,13 @@ module.exports.countAcceptedPsychologistsByPersonalEmail = async () => {
     .groupBy('personalEmail', 'state');
 }
 
-module.exports.updateConventionInfo = async (psychologistId, payingUniversityId, isConventionSigned) => {
+module.exports.updateConventionInfo = async (psychologistId, declaredUniversityId, isConventionSigned) => {
   const updated = await knex(module.exports.psychologistsTable)
     .where({
       dossierNumber: psychologistId,
     })
     .update({
-      payingUniversityId,
+      declaredUniversityId,
       isConventionSigned,
       updatedAt: date.getDateNowPG()
     })
@@ -164,7 +203,7 @@ module.exports.getConventionInfo = async (psychologistId) => {
     .select(`${universitiesTable}.name as universityName`,
       `${universitiesTable}.id as universityId`,
       `${psyTable}.isConventionSigned`)
-    .innerJoin(universitiesTable, `${psyTable}.payingUniversityId`, `${universitiesTable}.id`)
+    .innerJoin(universitiesTable, `${psyTable}.declaredUniversityId`, `${universitiesTable}.id`)
     .where(`${psyTable}.dossierNumber`, psychologistId)
   return psyArray[0]
 }

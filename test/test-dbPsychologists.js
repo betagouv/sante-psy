@@ -194,7 +194,7 @@ describe('DB Psychologists', () => {
       const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
       expect(savedPsy.isConventionSigned).not.to.exist
-      expect(savedPsy.payingUniversityId).to.not.equal(univUUID)
+      expect(savedPsy.declaredUniversityId).to.not.equal(univUUID)
 
       await dbPsychologists.updateConventionInfo(
         savedPsy.dossierNumber,
@@ -205,7 +205,7 @@ describe('DB Psychologists', () => {
       const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
 
       expect(updatedPsy.isConventionSigned).to.equal(true)
-      expect(updatedPsy.payingUniversityId).to.equal(univUUID)
+      expect(updatedPsy.declaredUniversityId).to.equal(univUUID)
     })
 
     it('should not update conventionInfo if psychologistId is unknown', async () => {
@@ -219,6 +219,43 @@ describe('DB Psychologists', () => {
           true, // isConventionSigned
         )
         fail('updateConventionInfo should have thrown error')
+      } catch (err) {
+        // pass
+      }
+    })
+  })
+
+  describe('saveAssignedUniversity', () => {
+    it('should update assignedUniversityId', async () => {
+      const univUUID = '736bd860-3928-457e-9f40-3f367c36be30'
+      const psy = psyList[0]
+      psy.state = demarchesSimplifiees.DOSSIER_STATE.accepte;
+      await dbPsychologists.savePsychologistInPG([psy]);
+      const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      // Check that fields are not set pre-test
+      expect(savedPsy.assignedUniversityId).not.to.exist
+      expect(savedPsy.declaredUniversityId).to.not.equal(univUUID)
+
+      await dbPsychologists.saveAssignedUniversity(
+        savedPsy.dossierNumber,
+        univUUID,
+      )
+
+      const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+
+      expect(updatedPsy.assignedUniversityId).to.equal(univUUID)
+    })
+
+    it('should not update assignedUniversityId if psychologistId is unknown', async () => {
+      const univUUID = '736bd860-3928-457e-9f40-3f367c36be30'
+      const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0675'
+
+      try {
+        await dbPsychologists.saveAssignedUniversity(
+          unknownPsyId,
+          univUUID,
+        )
+        fail('saveAssignedUniversity should have thrown error')
       } catch (err) {
         // pass
       }
