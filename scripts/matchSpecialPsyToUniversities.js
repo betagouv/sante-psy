@@ -51,7 +51,7 @@ const run = async () => {
         statsNoEmailFound.push(psy)
         return Promise.resolve();
       } else {
-        if(psy.declaredUniversityId !== universityIdToAssign) {
+        if( (psy.declaredUniversityId  !== null) && (psy.declaredUniversityId !== universityIdToAssign) ) {
           console.log('Psy', psy.dossierNumber, 'already declared', psy.declaredUniversityId,
             'but was assigned', universityIdToAssign, getUniversityName(universities, universityIdToAssign))
 
