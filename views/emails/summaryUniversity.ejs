@@ -1,11 +1,12 @@
 
-<h1>Récapitulatif Santé Psy Étudiant</h1>
+<h1>Récapitulatif des séances - Santé Psy Etudiant</h1>
 
-
-<h2>Bonjour ! 👋</h2>
+<p>Madame, Monsieur</p>
 
 <p>
-  Voici le résumé des <b><%= totalAppointments %> séances</b> effectuées par les <b><%= psychologists.length %> psychologues conventionnés</b> par votre établissement pour <b><%= lastMonth %> <%= year %></b>.
+  Vous trouverez ci-dessous, le résumé des <b><%= totalAppointments %> séances</b> effectuées
+  en <b><%= lastMonth %> <%= year %></b>, par les <b><%= psychologists.length %> psychologues</b> actifs qui ont conventionnés
+  avec votre établissement.
 </p>
 
 <ul>
@@ -17,13 +18,6 @@
     </li>
   <% }); %> 
 </ul>
-
-<br/>
-<br/>
-
-<p>
-  D'autres statistiques peuvent être obtenues via <a href="http://santepsy-metabase.osc-secnum-fr1.scalingo.io/public/dashboard/efcb7427-c80a-4f67-b0b1-7ff04f8a255b">ce tableau de bord.</a>
-</p>
 
 <br/>
 
