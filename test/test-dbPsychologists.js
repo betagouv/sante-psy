@@ -233,8 +233,7 @@ describe('DB Psychologists', () => {
       await dbPsychologists.savePsychologistInPG([psy]);
       const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
-      expect(savedPsy.assignedUniversityId).not.to.exist
-      expect(savedPsy.declaredUniversityId).to.not.equal(univUUID)
+      expect(savedPsy.assignedUniversityId).to.not.equal(univUUID)
 
       await dbPsychologists.saveAssignedUniversity(
         savedPsy.dossierNumber,
