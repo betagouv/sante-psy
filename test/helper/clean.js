@@ -41,7 +41,7 @@ module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.g
     training: "[\"Connaissance et pratique des outils diagnostic psychologique\",\"Connaissance des troubles psychopathologiques du jeune adulte : dépressions\",\"risques suicidaires\",\"addictions\",\"comportements à risque\",\"troubles alimentaires\",\"décompensation schizophrénique\",\"psychoses émergeantes ainsi qu’une pratique de leur repérage\",\"Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)\"]",
     departement: `${module.exports.getRandomInt()} - Calvados`,
     university: `${module.exports.getRandomInt()} Université`,
-    declaredUniversityId: uniId,
+    declaredUniversityId: null, // not useful after script/matchPsychologistsToUniversities.js was used
     assignedUniversityId: uniId,
     region: "Normandie",
     languages: "Français ,Anglais, et Espagnol"
