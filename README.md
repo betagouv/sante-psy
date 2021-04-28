@@ -40,10 +40,19 @@ Pour l'exécuter:
 
     $ npm run seed
 
-## Ajout de la correspondance entre université et psychologues
+#### Upload un fichier sur Scalingo
 ```
-# need to import psy first (@see #### Test du cron)
+# ça va importer ton fichier sur la machine et te connecter
+scalingo -app APP_NAME run --file <nom_de_ton_fichier> bash
+> cp /tmp/uploads/<nom_de_ton_fichier> .
+```
+
+#### Ajout de la correspondance entre université et psychologues
+```
 node scripts/matchPsychologistsToUniversities.js
+# handle special cases - need to update the confidential list inside "scripts/psyToUni.js" - @see support
+node scripts/matchSpecialPsyToUniversities.js
+```
 
 #### Insérer les universités pour la production
 Voir aussi le script "scaling-dev-seed.sh" lié à "scalingo.json" qui permet d'insérer ces données sur les reviews app lors de leur 1er deploiement.
