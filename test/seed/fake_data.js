@@ -10,30 +10,9 @@ const clean = require('../helper/clean');
 const uuid = require('../../utils/uuid');
 
 exports.seed = async function(knex) {
-
-  // A few universities
-  const universitiesList = [
-    {
-      id: uuid.randomUuid(),
-      name: '--- Aucune pour le moment',
-    },
-    {
-      id: uuid.randomUuid(),
-      name: 'Clermont-Ferrand',
-    },
-    {
-      id: uuid.randomUuid(),
-      name: 'Grenoble',
-    },
-    {
-      id: uuid.randomUuid(),
-      name: 'Aix-Marseille',
-    },
-    {
-      id: uuid.randomUuid(),
-      name: 'Créteil Paris Est',
-    },
-  ]
+  const universitiesList = dbUniversities.universities.map ( uni => {
+    return {name: uni, id: uuid.randomUuid(),}
+  })
 
   await knex(dbUniversities.universitiesTable).insert(universitiesList)
   console.log(`inserted ${universitiesList.length} fake data to universitiesTable`);
@@ -82,10 +61,10 @@ exports.seed = async function(knex) {
   // 5 appointments by patients
   const appointmentList = patientList.flatMap(function (patient) {
     return [
-      clean.getOneAppointment(patient.id, patient.psychologistId),
-      clean.getOneAppointment(patient.id, patient.psychologistId),
-      clean.getOneAppointment(patient.id, patient.psychologistId),
-      clean.getOneAppointment(patient.id, patient.psychologistId, 4),
+      clean.getOneAppointment(patient.id, patient.psychologistId, 2), // 2 === march
+      clean.getOneAppointment(patient.id, patient.psychologistId, 2), // 2 === march
+      clean.getOneAppointment(patient.id, patient.psychologistId, 3), // 3 === april
+      clean.getOneAppointment(patient.id, patient.psychologistId, 4), // you got it ;)
       clean.getOneAppointment(patient.id, patient.psychologistId, 5),
       clean.getOneAppointment(patient.id, patient.psychologistId, 6),
       clean.getOneAppointment(patient.id, patient.psychologistId, 10),
