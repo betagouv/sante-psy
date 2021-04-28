@@ -60,11 +60,11 @@ const sendMailToUniversities = async (summaryUniversities, summaryDate) => {
     if (summaryUniversity) {
       const htmlFormated = await formatSummaryEmail(summaryDate, summaryUniversity);
 
-      if (!university.email) {
+      if (!university.emailSSU && !university.emailUniversity) {
         console.log(`Summary could not be send. ${university.name} doesn't have email.`)
         return;
       }
-      const currentEmails = university.email.split(" ; ")
+      const currentEmails = university.emailUniversity ? university.emailUniversity.split(' ; ') : university.emailSSU.split(' ; ')
       currentEmails.forEach(async (email) => {
         await emailUtils.sendMail(email, `Résumé des séances ${config.appName}`, htmlFormated);
         console.log(`Summary sent for ${logs.hashForLogs(university.email)}`);
