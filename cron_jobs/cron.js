@@ -7,7 +7,7 @@ const sentry = require('../utils/sentry');
 sentry.initCaptureConsole();
 
 const jobs = [{
-  cronTime: "* 8 1 * * ", // every first of the month at 8 AM
+  cronTime: "0 8 1-7 * 1", // first monday of the month : https://crontab.guru/#0_8_1-7_*_1
   onTick: cronUniversityPayments.SendSummaryToUniversities,
   start: true,
   timeZone: "Europe/Paris",
