@@ -48,7 +48,13 @@ module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.g
   };
 }
 
-module.exports.getOnePatient = function getOnePatient(psychologistId, doctorName = "doctorName") {
+module.exports.getOnePatient = function getOnePatient(psychologistId,
+  doctorName = "doctorName",
+  useDateOfBirth = true) {
+  let dateOfBirth = null
+  if(useDateOfBirth) {
+    dateOfBirth = new Date(1980, 1, 10).toISOString();
+  }
   return {
     id: uuid.randomUuid(),
     firstNames:`${module.exports.getRandomInt()}First`,
@@ -60,6 +66,7 @@ module.exports.getOnePatient = function getOnePatient(psychologistId, doctorName
     psychologistId:psychologistId,
     doctorName: doctorName,
     doctorAddress:"doctorAddress",
+    dateOfBirth: dateOfBirth,
   };
 }
 

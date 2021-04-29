@@ -51,8 +51,8 @@ exports.seed = async function(knex) {
       clean.getOnePatient(psy.dossierNumber),
       clean.getOnePatient(psy.dossierNumber),
       clean.getOnePatient(psy.dossierNumber),
-      clean.getOnePatient(psy.dossierNumber),
-      clean.getOnePatient(psy.dossierNumber, ""), // incomplete patient's folder
+      clean.getOnePatient(psy.dossierNumber, ""), // incomplete patient's folder doctor
+      clean.getOnePatient(psy.dossierNumber, "doctorName", false), // incomplete patient's folder : date of birth
     ]
   });
 

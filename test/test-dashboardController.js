@@ -26,6 +26,7 @@ describe('dashboardController', function() {
         psychologistId : "psychologistId",
         doctorName : "doctorName",
         doctorAddress : "30000 Nîmes",
+        createdAt : date.parseDateForm('20/01/2000'),
       }
     })
 
@@ -80,6 +81,17 @@ describe('dashboardController', function() {
     });
     it('should return false if doctor adress is a only white spaces', function() {
       patient.doctorAddress='    ';
+      hasFolderCompleted(patient).should.equal(false);
+    });
+
+    it('should return true if missing date of birth before createdAt deployement feature date', function() {
+      patient.dateOfBirth=null,
+      hasFolderCompleted(patient).should.equal(true);
+    });
+
+    it('should return false if missing date of birth before createdAt deployement feature date', function() {
+      patient.dateOfBirth= null
+      patient.createdAt= date.parseDateForm('20/05/2021')
       hasFolderCompleted(patient).should.equal(false);
     });
 

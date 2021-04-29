@@ -1,5 +1,6 @@
 const cookie = require('../utils/cookie')
 const config = require('../utils/config')
+const date = require('../utils/date')
 const dbAppointments = require('../db/appointments')
 const dbPatient = require('../db/patients')
 
@@ -7,6 +8,8 @@ function hasFolderCompleted(patient) {
   let notEmptyDoctorName = false;
   let notEmptyInstitutionName = false;
   let notEmptyDoctorAddress = false;
+  let mandatoryDateOfBirth = false;
+
   if(patient.doctorName) {
     notEmptyDoctorName = !(!patient.doctorName.trim())
   }
@@ -18,8 +21,18 @@ function hasFolderCompleted(patient) {
     notEmptyDoctorAddress = !(!patient.doctorAddress.trim())
   }
 
-  return patient.hasPrescription && patient.isStudentStatusVerified && notEmptyDoctorName &&
-  notEmptyInstitutionName && notEmptyDoctorAddress;
+  if(patient.dateOfBirth) {
+    mandatoryDateOfBirth = true
+  } else if ( patient.createdAt <= date.parseDateForm(config.dateOfBirthDeploymentDate) ) {
+    mandatoryDateOfBirth = true
+  }
+
+  return patient.hasPrescription &&
+    patient.isStudentStatusVerified &&
+    notEmptyDoctorName &&
+    notEmptyInstitutionName &&
+    notEmptyDoctorAddress &&
+    mandatoryDateOfBirth
 }
 
 module.exports.dashboard = async function dashboard(req, res) {
@@ -47,6 +60,7 @@ module.exports.dashboard = async function dashboard(req, res) {
       patients: patientsWithFolderStatus,
       hasAllPatientsWithCompletedFolders: hasAllPatientsWithCompletedFolders,
       announcement: config.announcement,
+      dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
     });
   } catch (err) {
     req.flash('error', 'Impossible de charger les séances et les patients. Réessayez ultérieurement.')

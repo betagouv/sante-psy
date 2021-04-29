@@ -20,6 +20,7 @@ module.exports = {
   apiUrl: process.env.API_URL ||
     'https://www.demarches-simplifiees.fr/api/v2/graphql',
   databaseUrl: process.env.DATABASE_URL,
+  dateOfBirthDeploymentDate: process.env.DATE_OF_BIRTH_FEATURE_DATE || '20/04/2021',
   demarchesSimplifieesId: process.env.DEMARCHES_SIMPLIFIEES_ID,
   demarchesSimplifieesUrl: process.env.DEMARCHES_SIMPLIFIEES_URL,
   sentryDNS: process.env.SENTRY_DNS || false,

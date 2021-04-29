@@ -3,6 +3,7 @@ const { check, query, oneOf } = require('express-validator');
 const dbPatients = require('../db/patients')
 const validation = require('../utils/validation')
 const date = require('../utils/date')
+const config = require('../utils/config')
 
 module.exports.newPatient = async (req, res) => {
   res.render('editPatient', {
@@ -26,6 +27,7 @@ module.exports.newPatient = async (req, res) => {
       doctorName: '',
       doctorAddress: '',
       dateOfBirth: '',
+      dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
     }
   })
 }
@@ -187,6 +189,7 @@ module.exports.getEditPatient = async (req, res) => {
         submitButtonText: 'Valider les modifications',
         submitButtonIcon: 'fr-fi-check-line',
       },
+      dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
       patient: patient
     })
   } catch (err) {
