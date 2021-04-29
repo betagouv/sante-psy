@@ -27,6 +27,11 @@ docker-compose up
 Pour controler visuellement la base de données, nous conseillons :
 * https://dbeaver.io/download/
 
+
+## Afficher des annonces
+Pour afficher des annonces de service (maintenance, formulaire, ...), on utilise la variable d'environnement `ANNOUNCEMENT` (voir .env.sample ou le fichier docker-compose) qui peut être configurée sur l'hebergeur Scalingo. Elle permet d'afficher de l'HTML ou du texte.
+
+
 ### Pour tester les évolutions de base de données
 
 #### Créer un fichier de migration
@@ -176,7 +181,6 @@ Avec docker: ne pas préciser de MAIL_SERVICE, les bonnes variables d'environnem
 
 Tous les emails envoyés par le code seront visibles depuis l'interface web de Maildev :
 * http://localhost:1080/
-
 ### Lint
 
     $ npm run lint
