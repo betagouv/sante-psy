@@ -140,9 +140,9 @@ module.exports.getAssignedUniversityId = (psychologist, universities) => {
       console.log(`No corresponding uni name found for - departement ${departement}`)
 
       return null;
+    } else {
+      return module.exports.getUniversityId(universities, correspondingUniName)
     }
-
-    return module.exports.getUniversityId(universities, departementToUniversityName[departement])
   }
 }
 
