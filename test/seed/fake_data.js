@@ -11,7 +11,12 @@ const uuid = require('../../utils/uuid');
 
 exports.seed = async function(knex) {
   const universitiesList = dbUniversities.universities.map ( uni => {
-    return {name: uni, id: uuid.randomUuid(),}
+    return {
+      name: uni,
+      id: uuid.randomUuid(),
+      emailUniversity: `${clean.getRandomInt()}@beta.gouv.fr ; ${clean.getRandomInt()}@beta.gouv.fr`,
+      emailSSU: `${clean.getRandomInt()}@beta.gouv.fr ; ${clean.getRandomInt()}@beta.gouv.fr`,
+    }
   })
 
   await knex(dbUniversities.universitiesTable).insert(universitiesList)
