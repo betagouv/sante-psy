@@ -67,13 +67,17 @@ const sendMailToUniversities = async (summaryUniversities, summaryDate) => {
         console.log(`Summary could not be send. ${university.name} doesn't have email.`)
         return;
       }
-      const currentEmails = university.emailUniversity ?
-        university.emailUniversity.split(' ; ') :
-        university.emailSSU.split(' ; ')
-      currentEmails.forEach(async (email) => {
-        await emailUtils.sendMail(email, `Résumé des séances ${config.appName}`, htmlFormated);
-        console.log(`Summary sent for ${logs.hashForLogs(university.email)}`);
-      })
+
+      const emailsTo = dbUniversities.getEmailsTo(university)
+
+      await emailUtils.sendMail(
+        emailsTo,
+        `Résumé des séances ${config.appName}`,
+        htmlFormated,
+        '', // cc mail
+        config.contactEmail // bcc mail
+      )
+      console.log(`Summary sent for ${university.name} - ${logs.hashForLogs(emailsTo)}`);
     }
   })
 }
