@@ -124,22 +124,26 @@ module.exports.insertUniversity = async (name) => {
  * @param {*} universities 
  */
 module.exports.getAssignedUniversityId = (psychologist, universities) => {
-  const departement = demarchesSimplifiees.getDepartementNumberFromString(psychologist.departement)
+  if(psychologist.assignedUniversityId) {
+    return psychologist.assignedUniversityId
+  } else {
+    const departement = demarchesSimplifiees.getDepartementNumberFromString(psychologist.departement)
 
-  if (!departement) {
-    console.log(`No departement found - psy id ${psychologist.dossierNumber}`)
+    if (!departement) {
+      console.log(`No departement found - psy id ${psychologist.dossierNumber}`)
 
-    return null;
+      return null;
+    }
+
+    const correspondingUniName = departementToUniversityName[departement]
+    if(!correspondingUniName) {
+      console.log(`No corresponding uni name found for - departement ${departement}`)
+
+      return null;
+    }
+
+    return module.exports.getUniversityId(universities, departementToUniversityName[departement])
   }
-
-  const correspondingUniName = departementToUniversityName[departement]
-  if(!correspondingUniName) {
-    console.log(`No corresponding uni name found for - departement ${departement}`)
-
-    return null;
-  }
-
-  return module.exports.getUniversityId(universities, departementToUniversityName[departement])
 }
 
 module.exports.getUniversityId = function getUniversityId(universities, name) {

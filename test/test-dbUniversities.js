@@ -22,6 +22,17 @@ describe('DB Universities', () => {
       assignedUniId.should.be.equal(uniId);
     });
 
+    it('should get the same assigned university if already assigned', async () => {
+      const alreadyAssignedUniId = 'aa4d80e0-c2c4-50c5-94d7-a595c34ec81e'
+      const psy = {
+        departement: '30 - Gard',
+        dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
+        assignedUniversityId: alreadyAssignedUniId,
+      }
+      const assignedUniId = dbUniversities.getAssignedUniversityId(psy, universities);
+      assignedUniId.should.be.equal(alreadyAssignedUniId);
+    });
+
     it('should get null if departement is unkwown', async () => {
       const psy = {
         departement: 'pizza',
