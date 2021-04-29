@@ -95,7 +95,7 @@ function addFrenchLanguageIfMissing(languages) {
 module.exports.savePsychologistInPG = async function savePsychologistInPG(psyList) {
   console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
   const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
-  const universities = dbUniversities.getUniversities()
+  const universities = await dbUniversities.getUniversities()
 
   const upsertArray = psyList.map( psy => {
     const upsertingKey = 'dossierNumber';

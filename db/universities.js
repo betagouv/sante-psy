@@ -155,8 +155,8 @@ module.exports.getUniversityId = function getUniversityId(universities, name) {
 }
 
 module.exports.getUniversityName = function getUniversityName(universities, id) {
-  const foundUni =  universities.filter ( uni => {
-    uni.id === id
+  const foundUni =  universities.find ( uni => {
+    return uni.id === id
   })
 
   if(foundUni) {
