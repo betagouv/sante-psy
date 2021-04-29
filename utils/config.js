@@ -24,6 +24,7 @@ module.exports = {
   sentryDNS: process.env.SENTRY_DNS || false,
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
+  featureSendSummary: process.env.FEATURE_SEND_SUMMARY || false,
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
   featureReimbursementPage: (process.env.FEATURE_REIMBURSEMENT_PAGE === 'true'),
   uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid

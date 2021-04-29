@@ -61,10 +61,10 @@ exports.seed = async function(knex) {
   // 5 appointments by patients
   const appointmentList = patientList.flatMap(function (patient) {
     return [
-      clean.getOneAppointment(patient.id, patient.psychologistId),
-      clean.getOneAppointment(patient.id, patient.psychologistId),
-      clean.getOneAppointment(patient.id, patient.psychologistId),
-      clean.getOneAppointment(patient.id, patient.psychologistId, 4),
+      clean.getOneAppointment(patient.id, patient.psychologistId, 2), // 2 === march
+      clean.getOneAppointment(patient.id, patient.psychologistId, 2), // 2 === march
+      clean.getOneAppointment(patient.id, patient.psychologistId, 3), // 3 === april
+      clean.getOneAppointment(patient.id, patient.psychologistId, 4), // you got it ;)
       clean.getOneAppointment(patient.id, patient.psychologistId, 5),
       clean.getOneAppointment(patient.id, patient.psychologistId, 6),
       clean.getOneAppointment(patient.id, patient.psychologistId, 10),

@@ -72,7 +72,7 @@ module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
     const query = await knex(appointmentsTable)
       .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
         , ${appointmentsTable}."psychologistId"
-        , ${dbPsychologists.psychologistsTable}."declaredUniversityId" AS "universityId"
+        , ${dbPsychologists.psychologistsTable}."assignedUniversityId" AS "universityId"
         , ${dbPsychologists.psychologistsTable}."firstNames"
         , ${dbPsychologists.psychologistsTable}."lastName"
         , ${dbPsychologists.psychologistsTable}."personalEmail"
@@ -83,12 +83,11 @@ module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
           `${appointmentsTable}.psychologistId`,
           `${dbPsychologists.psychologistsTable}.dossierNumber`)
       .groupBy(`${appointmentsTable}.psychologistId`)
-      .groupBy(`${dbPsychologists.psychologistsTable}.declaredUniversityId`)
+      .groupBy(`${dbPsychologists.psychologistsTable}.assignedUniversityId`)
       .groupBy(`${dbPsychologists.psychologistsTable}.firstNames`)
       .groupBy(`${dbPsychologists.psychologistsTable}.lastName`)
       .groupBy(`${dbPsychologists.psychologistsTable}.personalEmail`)
       .orderBy(`countAppointments`)
-
 
     return  query;
   } catch (err) {

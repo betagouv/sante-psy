@@ -166,14 +166,14 @@ describe('DB Appointments', () => {
       // Psy 1
       assert.equal(output[0].psychologistId, psy.dossierNumber);
       assert.equal(output[0].countAppointments, 1); // 1 appointment in april
-      assert.equal(output[0].universityId, psy.declaredUniversityId);
+      assert.equal(output[0].universityId, psy.assignedUniversityId);
       assert.equal(output[0].personalEmail, psy.personalEmail);
       assert.equal(output[0].lastName, psy.lastName);
       assert.equal(output[0].firstNames, psy.firstNames);
       // Psy 2
       assert.equal(output[1].psychologistId, psy2.dossierNumber);
       assert.equal(output[1].countAppointments, 2); // 2 appointments in april
-      assert.equal(output[1].universityId, psy2.declaredUniversityId);
+      assert.equal(output[1].universityId, psy2.assignedUniversityId);
       assert.equal(output[0].personalEmail, psy.personalEmail);
       assert.equal(output[0].lastName, psy.lastName);
       assert.equal(output[0].firstNames, psy.firstNames);

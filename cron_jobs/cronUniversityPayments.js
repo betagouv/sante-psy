@@ -1,7 +1,13 @@
 require('dotenv').config();
 
+const ejs = require('ejs');
+
 const date = require("../utils/date");
+const logs = require('../utils/logs');
+const config = require('../utils/config');
+const emailUtils = require('../utils/email');
 const dbAppointments = require("../db/appointments");
+const dbUniversities = require("../db/universities");
 
 
 const getSummariesForUniversities = (allAppointmentsSummary) => {
@@ -35,16 +41,58 @@ const getSummariesForUniversities = (allAppointmentsSummary) => {
   return universityContent
 }
 
-const run = async () => {
-  const { year, lastMonth } = date.getLastMonthAndYear(new Date())
-  console.log(`last month: ${lastMonth} and year ${year}`)
+module.exports.getSummariesForUniversities = getSummariesForUniversities
 
-  try {
-    const allAppointmentsSummary = await dbAppointments.getMonthlyAppointmentsSummary(year, lastMonth)
-    const summariesForUniversities = getSummariesForUniversities(allAppointmentsSummary)
-  } catch (err) {
-    console.error("ERROR: Could not get universities informations", err)
-  }
+async function formatSummaryEmail(summaryDate, psychologists) {
+  const totalAppointments = psychologists.reduce((accumulator, psy) => accumulator + psy.countAppointments, 0)
+  const lastMonthFrench = date.getFrenchMonthName(summaryDate.lastMonth)
+  const html = await ejs.renderFile('./views/emails/summaryUniversity.ejs', {
+    lastMonth: lastMonthFrench,
+    year: summaryDate.year,
+    psychologists: psychologists,
+    totalAppointments: totalAppointments,
+  });
+  return html
 }
 
-module.exports.getSummariesForUniversities = getSummariesForUniversities
+const sendMailToUniversities = async (summaryUniversities, summaryDate) => {
+  const allUniversities = await dbUniversities.getUniversities()
+
+  allUniversities.forEach(async (university) => {
+    const summaryUniversity = summaryUniversities[university.id]
+    if (summaryUniversity) {
+      const htmlFormated = await formatSummaryEmail(summaryDate, summaryUniversity);
+
+      if (!university.emailSSU && !university.emailUniversity) {
+        console.log(`Summary could not be send. ${university.name} doesn't have email.`)
+        return;
+      }
+      const currentEmails = university.emailUniversity ?
+        university.emailUniversity.split(' ; ') :
+        university.emailSSU.split(' ; ')
+      currentEmails.forEach(async (email) => {
+        await emailUtils.sendMail(email, `Résumé des séances ${config.appName}`, htmlFormated);
+        console.log(`Summary sent for ${logs.hashForLogs(university.email)}`);
+      })
+    }
+  })
+}
+
+const SendSummaryToUniversities = async () => {
+  console.log("Starting SendSummaryToUniversities...");
+  const summaryDate = date.getLastMonthAndYear(new Date())
+  console.log(`last month: ${summaryDate.lastMonth} and year ${summaryDate.year}`)
+
+  try {
+    const allAppointmentsSummary = await dbAppointments.getMonthlyAppointmentsSummary(
+      summaryDate.year,
+      summaryDate.lastMonth
+    )
+    const summariesForUniversities = getSummariesForUniversities(allAppointmentsSummary)
+    sendMailToUniversities(summariesForUniversities, summaryDate)
+    console.log("SendSummaryToUniversities done")
+  } catch (err) {
+    console.error("ERROR: Could not send psychologists informations to universities.", err)
+  }
+}
+module.exports.SendSummaryToUniversities = SendSummaryToUniversities
