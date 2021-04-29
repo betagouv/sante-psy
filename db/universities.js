@@ -1,6 +1,8 @@
 const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const date = require("../utils/date")
+const demarchesSimplifiees = require("../utils/demarchesSimplifiees")
+const departementToUniversityName = require('../scripts/departementToUniversityName')
 
 const universitiesTable = "universities";
 module.exports.universitiesTable =  universitiesTable;
@@ -113,5 +115,57 @@ module.exports.insertUniversity = async (name) => {
   } catch (err) {
     console.error("Erreur de sauvegarde de l'université", err)
     throw new Error("Erreur de sauvegarde de l'université")
+  }
+}
+
+/**
+ * inspired from scripts/matchPsychologistsToUniversities
+ * @param {*} psychologist 
+ * @param {*} universities 
+ */
+module.exports.getAssignedUniversityId = (psychologist, universities) => {
+  if(psychologist.assignedUniversityId) {
+    return psychologist.assignedUniversityId
+  } else {
+    const departement = demarchesSimplifiees.getDepartementNumberFromString(psychologist.departement)
+
+    if (!departement) {
+      console.log(`No departement found - psy id ${psychologist.dossierNumber}`)
+
+      return null;
+    }
+
+    const correspondingUniName = departementToUniversityName[departement]
+    if(!correspondingUniName) {
+      console.log(`No corresponding uni name found for - departement ${departement}`)
+
+      return null;
+    } else {
+      return module.exports.getUniversityId(universities, correspondingUniName)
+    }
+  }
+}
+
+module.exports.getUniversityId = function getUniversityId(universities, name) {
+  const foundUni = universities.find ( uni => {
+    return uni.name.toString().trim() === name.toString().trim()
+  })
+
+  if(foundUni) {
+    return foundUni.id
+  } else {
+    return undefined
+  }
+}
+
+module.exports.getUniversityName = function getUniversityName(universities, id) {
+  const foundUni =  universities.find ( uni => {
+    return uni.id === id
+  })
+
+  if(foundUni) {
+    return foundUni.name
+  } else {
+    return undefined
   }
 }

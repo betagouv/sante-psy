@@ -1,31 +1,6 @@
 const dbUniversities = require('../db/universities')
 const dbPsychologists = require('../db/psychologists')
-const demarchesSimplifiees = require('../utils/demarchesSimplifiees')
-const departementToUniversityName = require('./departementToUniversityName')
 const psyToUni = require('./psyToUni')
-
-const getUniversityId = function getUniversityId(universities, name) {
-  const foundUni = universities.find ( uni => {
-    return uni.name.toString().trim() === name.toString().trim()
-  })
-
-  if(foundUni) {
-    return foundUni.id
-  } else {
-    return undefined
-  }
-}
-const getUniversityName = function getUniversityName(universities, id) {
-  const foundUni =  universities.filter ( uni => {
-    uni.id === id
-  })
-
-  if(foundUni) {
-    return foundUni.name
-  } else {
-    return undefined
-  }
-}
 
 /**
  * Update a list of special psy from a excel sheet to match them with a university
@@ -43,7 +18,7 @@ const run = async () => {
   const specialCasePsychologists = psychologists.filter( psy => psyToUni[psy.personalEmail] !== undefined)
   let needToWait = specialCasePsychologists
     .map( psy => {
-      const universityIdToAssign = getUniversityId(universities, psyToUni[psy.personalEmail])
+      const universityIdToAssign = dbUniversities.getUniversityId(universities, psyToUni[psy.personalEmail])
       if (!universityIdToAssign) {
         console.warn(`No university found for psy ${psy.personalEmail}
         - psy id ${psy.dossierNumber}`)
@@ -53,7 +28,8 @@ const run = async () => {
       } else {
         if( (psy.declaredUniversityId  !== null) && (psy.declaredUniversityId !== universityIdToAssign) ) {
           console.log('Psy', psy.dossierNumber, 'already declared', psy.declaredUniversityId,
-            'but was assigned', universityIdToAssign, getUniversityName(universities, universityIdToAssign))
+            'but was assigned', universityIdToAssign,
+            dbUniversities.getUniversityName(universities, universityIdToAssign))
 
           psy.assignedUniversity = universityIdToAssign;
           statsConflictingDeclaredUniversity.push(psy)

@@ -2,7 +2,7 @@ const knexConfig = require("../knexfile")
 const knex = require("knex")(knexConfig)
 const date = require("../utils/date")
 const demarchesSimplifiees = require("../utils/demarchesSimplifiees");
-const { universitiesTable } = require("./universities");
+const dbUniversities = require("./universities");
 
 module.exports.psychologistsTable =  "psychologists";
 
@@ -95,11 +95,15 @@ function addFrenchLanguageIfMissing(languages) {
 module.exports.savePsychologistInPG = async function savePsychologistInPG(psyList) {
   console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
   const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
+  const universities = await dbUniversities.getUniversities()
 
   const upsertArray = psyList.map( psy => {
     const upsertingKey = 'dossierNumber';
 
     psy.languages = addFrenchLanguageIfMissing(psy.languages);
+
+    const assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities)
+
     try {
       return knex(module.exports.psychologistsTable)
       .insert(psy)
@@ -122,6 +126,7 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
         adeli: psy.adeli,
         diploma: psy.diploma,
         languages: addFrenchLanguageIfMissing(psy.languages),
+        assignedUniversityId: assignedUniversityId,
         updatedAt: updatedAt
       });
     } catch (err) {
@@ -200,10 +205,13 @@ module.exports.updateConventionInfo = async (psychologistId, declaredUniversityI
 module.exports.getConventionInfo = async (psychologistId) => {
   const psyTable = module.exports.psychologistsTable
   const psyArray = await knex.from(psyTable)
-    .select(`${universitiesTable}.name as universityName`,
-      `${universitiesTable}.id as universityId`,
+    .select(`${dbUniversities.universitiesTable}.name as universityName`,
+      `${dbUniversities.universitiesTable}.id as universityId`,
       `${psyTable}.isConventionSigned`)
-    .innerJoin(universitiesTable, `${psyTable}.assignedUniversityId`, `${universitiesTable}.id`)
+    .innerJoin(dbUniversities.universitiesTable,
+      `${psyTable}.assignedUniversityId`,
+      `${dbUniversities.universitiesTable}.id`
+    )
     .where(`${psyTable}.dossierNumber`, psychologistId)
   return psyArray[0]
 }

@@ -3,29 +3,6 @@ const dbPsychologists = require('../db/psychologists')
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees')
 const departementToUniversityName = require('./departementToUniversityName')
 
-const getUniversityId = function getUniversityId(universities, name) {
-  const foundUni = universities.find ( uni => {
-    return uni.name.toString().trim() === name.toString().trim()
-  })
-
-  if(foundUni) {
-    return foundUni.id
-  } else {
-    return undefined
-  }
-}
-const getUniversityName = function getUniversityName(universities, id) {
-  const foundUni =  universities.filter ( uni => {
-    uni.id === id
-  })
-
-  if(foundUni) {
-    return foundUni.name
-  } else {
-    return undefined
-  }
-}
-
 const run = async (withWrite) => {
   console.log("Match psychologists to universities...")
   const universities = await dbUniversities.getUniversities()
@@ -68,7 +45,7 @@ const run = async (withWrite) => {
 
       return Promise.resolve();
     }
-    const universityIdToAssign = getUniversityId(universities, departementToUniversityName[departement])
+    const universityIdToAssign = dbUniversities.getUniversityId(universities, departementToUniversityName[departement])
 
     if (!universityIdToAssign) {
       console.warn(`No university found for departement ${psychologist.departement}
@@ -84,12 +61,13 @@ const run = async (withWrite) => {
     }
 
     // If the psychologist declared another university, something is wrong ! Do not write assignedUniversityId.
-    const noUniversityId = getUniversityId(universities, '--- Aucune pour le moment')
+    const noUniversityId = dbUniversities.getUniversityId(universities, '--- Aucune pour le moment')
     if (psychologist.declaredUniversityId &&
         psychologist.declaredUniversityId !== noUniversityId && // the psy declared "Aucune"
         psychologist.declaredUniversityId !== universityIdToAssign) {
       console.log('Psy', psychologist.dossierNumber, 'already declared', psychologist.declaredUniversityId,
-        'so will not assign', universityIdToAssign, getUniversityName(universities, universityIdToAssign))
+        'so will not assign', universityIdToAssign,
+        dbUniversities.getUniversityName(universities, universityIdToAssign))
 
       if (!statsConflictingDeclaredUniversity[psychologist.departement]) {
         statsConflictingDeclaredUniversity[psychologist.departement] = []
@@ -99,9 +77,9 @@ const run = async (withWrite) => {
           psychologistId : psychologist.dossierNumber,
           psychologistEmail: psychologist.personalEmail,
           declaredUniversityId: psychologist.declaredUniversityId,
-          declaredUniversityName: getUniversityName(universities, psychologist.declaredUniversityId),
+          declaredUniversityName: dbUniversities.getUniversityName(universities, psychologist.declaredUniversityId),
           universityIdToAssign: universityIdToAssign,
-          universityNameToAssign: getUniversityName(universities, universityIdToAssign)
+          universityNameToAssign: dbUniversities.getUniversityName(universities, universityIdToAssign)
         }
       )
     }
@@ -110,7 +88,7 @@ const run = async (withWrite) => {
       if(universityIdToAssign) {
         console.log('Assigned', psychologist.dossierNumber,
           'of departement', psychologist.departement,
-          'to university', universityIdToAssign, getUniversityName(universities, universityIdToAssign))
+          'to university', universityIdToAssign, dbUniversities.getUniversityName(universities, universityIdToAssign))
         statsAssignedWithoutProblem.push(psychologist.dossierNumber)
         return dbPsychologists.saveAssignedUniversity(psychologist.dossierNumber, universityIdToAssign)
       } else {
