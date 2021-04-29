@@ -11,11 +11,16 @@ const uuid = require('../../utils/uuid');
 module.exports.getRandomInt = function getRandomInt() {
   const min = Math.ceil(1);
   const max = Math.floor(99);
-  return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+  const ourRandom = Math.floor(Math.random() * (max - min) + min);
+  if( ourRandom < 10 ) {
+    return '0' + ourRandom.toString()
+  } else {
+    return ourRandom.toString()
+  }
 }
 
 module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.gouv.fr',
-  state = 'accepte', archived = false, uniId) {
+  state = 'accepte', archived = false, uniId = null) {
   const dossierNumber = uuid.randomUuid()
   return {
     dossierNumber: dossierNumber,
@@ -36,7 +41,8 @@ module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.g
     training: "[\"Connaissance et pratique des outils diagnostic psychologique\",\"Connaissance des troubles psychopathologiques du jeune adulte : dépressions\",\"risques suicidaires\",\"addictions\",\"comportements à risque\",\"troubles alimentaires\",\"décompensation schizophrénique\",\"psychoses émergeantes ainsi qu’une pratique de leur repérage\",\"Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)\"]",
     departement: `${module.exports.getRandomInt()} - Calvados`,
     university: `${module.exports.getRandomInt()} Université`,
-    payingUniversityId: uniId,
+    declaredUniversityId: null, // not useful after script/matchPsychologistsToUniversities.js was used
+    assignedUniversityId: uniId,
     region: "Normandie",
     languages: "Français ,Anglais, et Espagnol"
   };

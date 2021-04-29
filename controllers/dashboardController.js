@@ -1,4 +1,5 @@
 const cookie = require('../utils/cookie')
+const config = require('../utils/config')
 const dbAppointments = require('../db/appointments')
 const dbPatient = require('../db/patients')
 
@@ -32,6 +33,7 @@ module.exports.dashboard = async function dashboard(req, res) {
     const patients = results[0]
     const appointments = results[1]
 
+    // @TODO create a function for this
     const patientsWithFolderStatus = patients.map ( patient => {
       patient.hasFolderCompleted = hasFolderCompleted(patient)
       if(!patient.hasFolderCompleted) {
@@ -44,6 +46,7 @@ module.exports.dashboard = async function dashboard(req, res) {
       appointments: appointments,
       patients: patientsWithFolderStatus,
       hasAllPatientsWithCompletedFolders: hasAllPatientsWithCompletedFolders,
+      announcement: config.announcement,
     });
   } catch (err) {
     req.flash('error', 'Impossible de charger les séances et les patients. Réessayez ultérieurement.')

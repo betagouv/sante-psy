@@ -3,6 +3,7 @@ const knex = require("knex")(knexConfig)
 const date = require("../utils/date");
 
 module.exports.patientsTable = "patients";
+module.exports.studentNumberSize = 50;
 
 module.exports.getPatientById = async (patientId, psychologistId) => {
   try {

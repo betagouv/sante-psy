@@ -84,6 +84,7 @@ describe('dashboardController', function() {
     });
 
   });
+  
   describe('display dashaboard', function() {
     beforeEach(async function(done) {
       done()

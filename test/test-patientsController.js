@@ -211,20 +211,6 @@ describe('patientsController', function() {
       })
     })
 
-    it('should refuse ine with length not 11 chars', function(done) {
-      shouldFailCreatePatientInputValidation(done, {
-        'firstnames': 'Blou Blou',
-        'lastname': 'Nom',
-        'ine': '1234567890AA',
-        'institution': '42',
-        'isstudentstatusverified': undefined,
-        'hasprescription': undefined,
-        'doctorname': doctorName,
-        'doctoraddress' :doctorAddress,
-        'dateofbirth' : dateOfBirth,
-      })
-    })
-
     it('should refuse ine with non-aphanumeric chars', function(done) {
       shouldFailCreatePatientInputValidation(done, {
         'firstnames': 'Blou Blou',
@@ -257,6 +243,19 @@ describe('patientsController', function() {
           done();
         })
     }
+
+    it('should pass ine with length not 11 chars', function(done) {
+      shouldPassCreatePatientInputValidation(done, {
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890AA',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+      })
+    })
 
     it('should pass validation when all fields are correct', function(done) {
       shouldPassCreatePatientInputValidation(done, {
@@ -673,13 +672,13 @@ describe('patientsController', function() {
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
-    it('should refuse ine with length not 11 chars', function(done) {
+    it('should refuse ine with non-aphanumeric chars', function(done) {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdatePatientInputValidation(done, {
         'patientid': patientId,
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
-        'ine': '1234567890AA',
+        'ine': '1234567890à',
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
@@ -690,13 +689,13 @@ describe('patientsController', function() {
       '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
-    it('should refuse ine with non-aphanumeric chars', function(done) {
+    it('should refuse validation with ine length > 50 chars', function(done) {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
       shouldFailUpdatePatientInputValidation(done, {
         'patientid': patientId,
         'firstnames': 'Blou Blou',
         'lastname': 'Nom',
-        'ine': '1234567890à',
+        'ine': '1'.repeat(51),
         'institution': '42',
         'isstudentstatusverified': undefined,
         'hasprescription': undefined,
@@ -788,6 +787,22 @@ describe('patientsController', function() {
         'doctoraddress' :doctorAddress,
         'dateofbirth' : dateOfBirth,
       })
+    })
+
+    it('should pass validation with ine length not 11 chars', function(done) {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3'
+      shouldPassUpdatePatientInputValidation(done, {
+        'patientid': patientId,
+        'firstnames': 'Blou Blou',
+        'lastname': 'Nom',
+        'ine': '1234567890AA',
+        'institution': '42',
+        'isstudentstatusverified': undefined,
+        'hasprescription': undefined,
+        'doctorname': doctorName,
+        'doctoraddress' :doctorAddress,
+      },
+      '/psychologue/modifier-patient?patientid=' + patientId)
     })
 
     it('should pass validation when INE is missing', function(done) {

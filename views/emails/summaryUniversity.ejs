@@ -1,0 +1,26 @@
+
+<h1>Récapitulatif des séances - Santé Psy Etudiant</h1>
+
+<p>Madame, Monsieur</p>
+
+<p>
+  Vous trouverez ci-dessous, le résumé des <b><%= totalAppointments %> séances</b> effectuées
+  en <b><%= lastMonth %> <%= year %></b>, par les <b><%= psychologists.length %> psychologues</b> actifs qui ont conventionnés
+  avec votre établissement.
+</p>
+
+<ul>
+  <% psychologists.forEach(function(psychologist) { %>
+    <li>
+      <p>
+        <%= psychologist.firstNames %> <%= psychologist.lastName %> (<%= psychologist.personalEmail %>) : <%= psychologist.countAppointments %> séances déclarées
+      </p>
+    </li>
+  <% }); %> 
+</ul>
+
+<br/>
+
+<p>Si vous avez des doutes ou d'autres interrogations, n'hésitez pas à nous écrire en répondant à ce mail.</p>
+
+<p>L'équipe Santé Psy Étudiant</p>

@@ -12,6 +12,7 @@ if(!secret || !secretLogs) {
 module.exports = {
   appName: `Santé Psy Étudiant`,
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
+  announcement:  process.env.ANNOUNCEMENT || '',
   port: process.env.PORT || 8080,
   teamEmail: process.env.TEAM_EMAIL || 'equipe-santepsyetudiants@beta.gouv.fr',
   contactEmail: process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr',
@@ -24,6 +25,7 @@ module.exports = {
   sentryDNS: process.env.SENTRY_DNS || false,
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
+  featureSendSummary: process.env.FEATURE_SEND_SUMMARY || false,
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
   featureReimbursementPage: (process.env.FEATURE_REIMBURSEMENT_PAGE === 'true'),
   uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid
