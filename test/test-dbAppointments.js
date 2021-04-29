@@ -134,7 +134,6 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-        patientToInsert.doctorPhone,
       )
 
       const patient2 = await dbPatients.insertPatient(
@@ -147,7 +146,6 @@ describe('DB Appointments', () => {
         psy2.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-        patientToInsert.doctorPhone,
       )
       // For april (should be output)
       await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)

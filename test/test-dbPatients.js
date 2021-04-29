@@ -67,7 +67,6 @@ describe('DB Patients', () => {
           psychologistId,
           doctorName,
           doctorAddress,
-          doctorPhone,
         );
         const exist = await testDataPatientsExist(lastName);
         exist.should.be.equal(true);
