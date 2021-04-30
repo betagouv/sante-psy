@@ -52,12 +52,6 @@ describe('dashboardController', function() {
       folderCompleted.should.equal(true);
     });
 
-
-    it('should return true if dateOfBirth is missing', function() {
-      patient.dateOfBirth=null;
-      hasFolderCompleted(patient).should.equal(true);
-    });
-
     it('should return false if doctor name is missing', function() {
       patient.doctorName=null;
       const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
