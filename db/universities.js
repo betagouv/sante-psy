@@ -169,3 +169,15 @@ module.exports.getUniversityName = function getUniversityName(universities, id) 
     return undefined
   }
 }
+
+
+/**
+ * need to have a comma separed list for nodemailer
+ */
+module.exports.getEmailsTo = function getEmailsTo(university) {
+  if( university.emailUniversity ) {
+    return university.emailUniversity.split(' ; ').join(',')
+  } else {
+    return university.emailSSU.split(' ; ').join(',')
+  }
+}

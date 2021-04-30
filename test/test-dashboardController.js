@@ -8,7 +8,6 @@ const date = require('../utils/date')
 const dashboardController = rewire('../controllers/dashboardController')
 const dbAppointments = require('../db/appointments')
 const dbPatients = require('../db/patients')
-const format = require('../utils/format')
 
 describe('dashboardController', function() {
   const dateOfBirth = date.parseDateForm('20/01/1980')
@@ -51,6 +50,12 @@ describe('dashboardController', function() {
       const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
       missingInfo.should.equal('')
       folderCompleted.should.equal(true);
+    });
+
+
+    it('should return true if dateOfBirth is missing', function() {
+      patient.dateOfBirth=null;
+      hasFolderCompleted(patient).should.equal(true);
     });
 
     it('should return false if doctor name is missing', function() {
@@ -121,7 +126,6 @@ describe('dashboardController', function() {
       missingInfo.should.equal('date de naissance')
       folderCompleted.should.equal(false);
     });
-
   });
 
   describe('display dashaboard', function() {

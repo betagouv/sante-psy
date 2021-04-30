@@ -15,9 +15,11 @@ const mailTransport = nodemailer.createTransport({
 });
 
 
-module.exports.sendMail = async function sendMail(toEmail, subject, html) {
+module.exports.sendMail = async function sendMail(toEmail, subject, html, ccEmail = '', bccEmail= '') {
   const mail = {
-    to: toEmail,
+    to: toEmail, // Comma separated list or an array
+    cc: ccEmail, // Comma separated list or an array
+    bcc: bccEmail, // Comma separated list or an array
     from: `${config.appName} <${config.contactEmail}>`,
     subject,
     html,

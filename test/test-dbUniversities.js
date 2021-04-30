@@ -69,13 +69,55 @@ describe('DB Universities', () => {
   describe('getUniversityName', () => {
     it('should get uni id for a name', async () => {
       const output = dbUniversities.getUniversityName(universities, uniId);
-      console.log("output", output)
       output.should.be.equal(uniName);
     });
 
     it('should get undefined when unknown id', async () => {
       const output = dbUniversities.getUniversityName(universities, 'pizzaId');
       assert.equal(output, undefined)
+    });
+  });
+
+  describe('getEmailsTo', () => {
+    const emailUniversity1 = 'emailUniversity1@beta.gouv.fr'
+    const emailUniversity2 = 'emailUniversity2@beta.gouv.fr'
+    const emailUniversityAll= `${emailUniversity1} ; ${emailUniversity2}`
+    const emailSSU = 'emailSSU@beta.gouv.fr'
+
+    it('should get a commma list of email if multiple emails', () => {
+      const university = {
+        'id': uniId,
+        'name': uniName,
+        'emailUniversity': emailUniversityAll,
+        'emailSSU': emailSSU,
+      }
+
+      const output = dbUniversities.getEmailsTo(university);
+      output.should.be.equal(`${emailUniversity1},${emailUniversity2}`);
+    });
+
+    it('should get string if only one email', () => {
+      const university = {
+        'id': uniId,
+        'name': uniName,
+        'emailUniversity': emailUniversity1,
+        'emailSSU': emailSSU,
+      }
+
+      const output = dbUniversities.getEmailsTo(university);
+      output.should.be.equal(`${university.emailUniversity}`);
+    });
+
+    it('should get undefined when unknown id', () => {
+      const university = {
+        'id': uniId,
+        'name': uniName,
+        'emailUniversity': null,
+        'emailSSU': emailSSU,
+      }
+
+      const output = dbUniversities.getEmailsTo(university);
+      assert.equal(output, emailSSU)
     });
   });
 });
