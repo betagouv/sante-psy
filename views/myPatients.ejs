@@ -11,7 +11,8 @@
        <div class="fr-callout fr-mb-2w">
            <p class="fr-text--md fr-mb-1v">
            Certains de vos patients n'ont pas leur dossier complet - vérification du statut d'étudiant, l'orientation du medecin, le nom du medecin, sa ville,
-           ou l'université du patient sont manquants.
+           ou l'université du patient, ou date de naissance (obligatoire uniquement pour vos patients enregistrés après le <%= dateOfBirthDeploymentDate %>) sont manquants.
+           <br/>
            <strong>
              Ceci est obligatoire pour facturer les séances du patient.
            </strong>
@@ -20,7 +21,7 @@
       <% } %>
       <ul class="fr-list">
         <% patients.forEach(function(patient) { %>
-          <div class="fr-grid-row fr-grid-row--gutterss fr-grid-row--space-between">
+          <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--space-between">
             <div class="fr-col-xs-12 fr-col-sm-6 fr-col-md-8 fr-col-lg-9 fr-col-xl-9">
               <li>
                 <%= patient.lastName %> <%= patient.firstNames %>

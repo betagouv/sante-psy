@@ -4,18 +4,21 @@ const chai = require('chai')
 const rewire = require('rewire')
 const clean = require('./helper/clean')
 const cookie = require('../utils/cookie')
+const date = require('../utils/date')
 const dashboardController = rewire('../controllers/dashboardController')
 const dbAppointments = require('../db/appointments')
 const dbPatients = require('../db/patients')
 const format = require('../utils/format')
 
 describe('dashboardController', function() {
+  const dateOfBirth = date.parseDateForm('20/01/1980')
   describe('hasFolderCompleted', function() {
     let patient
     beforeEach( function() {
       patient =  {
         firstNames : "firstNames",
         lastName : "lastName",
+        dateOfBirth : dateOfBirth,
         INE : "INE",
         institutionName : "institutionName",
         isStudentStatusVerified : true,
@@ -23,6 +26,7 @@ describe('dashboardController', function() {
         psychologistId : "psychologistId",
         doctorName : "doctorName",
         doctorAddress : "30000 Nîmes",
+        createdAt : date.parseDateForm('20/01/2000'),
       }
     })
 
@@ -33,6 +37,12 @@ describe('dashboardController', function() {
 
     it('should return true if INE is missing', function() {
       patient.INE=null;
+      hasFolderCompleted(patient).should.equal(true);
+    });
+
+
+    it('should return true if dateOfBirth is missing', function() {
+      patient.dateOfBirth=null;
       hasFolderCompleted(patient).should.equal(true);
     });
 
@@ -73,6 +83,18 @@ describe('dashboardController', function() {
       patient.doctorAddress='    ';
       hasFolderCompleted(patient).should.equal(false);
     });
+
+    it('should return true if missing date of birth before createdAt deployement feature date', function() {
+      patient.dateOfBirth=null,
+      hasFolderCompleted(patient).should.equal(true);
+    });
+
+    it('should return false if missing date of birth before createdAt deployement feature date', function() {
+      patient.dateOfBirth= null
+      patient.createdAt= date.parseDateForm('20/05/2021')
+      hasFolderCompleted(patient).should.equal(false);
+    });
+
   });
   
   describe('display dashaboard', function() {
@@ -102,7 +124,7 @@ describe('dashboardController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00',
+        dateOfBirth,
       )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
@@ -114,7 +136,7 @@ describe('dashboardController', function() {
         anotherPsyId,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00',
+        dateOfBirth,
       )
 
       return chai.request(app)
@@ -149,7 +171,7 @@ describe('dashboardController', function() {
         psy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00',
+        dateOfBirth,
       )
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
@@ -161,7 +183,7 @@ describe('dashboardController', function() {
         anotherPsyId,
         'Dr Docteur',
         'adresse du docteur',
-        '05 00 00 00 00',
+        dateOfBirth,
       )
       const myAppointment =
         await dbAppointments.insertAppointment(new Date('2021-03-01'), myPatient.id, psy.dossierNumber)
@@ -174,10 +196,10 @@ describe('dashboardController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
           // My appointments are present
-          chai.assert.include(res.text, format.formatFrenchDate(myAppointment.appointmentDate))
+          chai.assert.include(res.text, date.formatFrenchDate(myAppointment.appointmentDate))
 
           // Other psy's patients are not listed
-          chai.assert.notInclude(res.text, format.formatFrenchDate(appointmentForAnotherPsy.appointmentDate))
+          chai.assert.notInclude(res.text, date.formatFrenchDate(appointmentForAnotherPsy.appointmentDate))
 
           return Promise.resolve()
         })

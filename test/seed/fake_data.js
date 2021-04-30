@@ -23,6 +23,7 @@ exports.seed = async function(knex) {
   console.log(`inserted ${universitiesList.length} fake data to universitiesTable`);
 
   const psyList = universitiesList.filter( university => university.name !== '--- Aucune pour le moment').slice(0,5)
+
   .flatMap(function (university) {
 
     return [
@@ -55,8 +56,8 @@ exports.seed = async function(knex) {
       clean.getOnePatient(psy.dossierNumber),
       clean.getOnePatient(psy.dossierNumber),
       clean.getOnePatient(psy.dossierNumber),
-      clean.getOnePatient(psy.dossierNumber),
-      clean.getOnePatient(psy.dossierNumber, ""), // incomplete patient's folder
+      clean.getOnePatient(psy.dossierNumber, ""), // incomplete patient's folder doctor
+      clean.getOnePatient(psy.dossierNumber, "doctorName", false), // incomplete patient's folder : date of birth
     ]
   });
 

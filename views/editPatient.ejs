@@ -48,6 +48,19 @@
           <label class="fr-label" for="lastname">Nom <span class="red-text">*</span></label>
           <input class="fr-input midlength-input" value="<%= patient.lastName %>"  type="text" id="lastname" name="lastname" required>
         </div>
+
+        <div class="fr-my-3w">
+          <label class="fr-label" for="dateofbirth">Date de naissance (obligatoire uniquement pour vos patients enregistrés après le <%= dateOfBirthDeploymentDate %>)</label>
+          <div class="fr-hint-text" id="dateofbirth-help">
+            Exemple : 25/01/1987
+          </div>
+          <input class="fr-input midlength-input" value="<%= date.toFormatDDMMYYYY(patient.dateOfBirth) %>"
+          type="text"
+          pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
+          title="Format JJ/MM/AAAA, par exemple : 25/01/1987"
+          placeholder="JJ/MM/AAAA"
+          id="dateofbirth" name="dateofbirth">
+        </div>
         <div class="fr-my-3w">
           <label class="fr-label" for="institution" aria-describedby="institution-help">Établissement scolaire de l'étudiant</label>
           <div class="fr-hint-text" id="institution-help">

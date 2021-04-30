@@ -1,3 +1,6 @@
+const formatFrenchDateForm = "DD/MM/YYYY"
+module.exports.formatFrenchDateForm = formatFrenchDateForm;
+
 module.exports.isValidDate = (isoDateString) => {
   if (!isoDateString || isoDateString.length === 0) {
     return false
@@ -8,6 +11,44 @@ module.exports.isValidDate = (isoDateString) => {
 module.exports.getDateNowPG = () => {
   return new Date().toISOString();
 }
+
+/**
+ * @see https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
+ */
+const dateFormatter = new Intl.DateTimeFormat('fr-FR', {
+  weekday: 'long', year: 'numeric',
+  month: 'long', day: 'numeric',
+})
+
+const shortDateFormatter = new Intl.DateTimeFormat('fr-FR', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+})
+
+module.exports.formatFrenchDate = date => dateFormatter.format(date)
+
+/**
+ * used to display date in editPatient
+ */
+module.exports.toFormatDDMMYYYY = (date) => {
+  if( date ) {
+    return shortDateFormatter.format(date);
+  } else {
+    return null;
+  }
+}
+
+function parseDateForm(date) {
+  if(date) {
+    const [day, month, year] = date.split("/")
+    // year - month - day
+    return new Date(`${year}-${month}-${day}`)
+  } else {
+    return null;
+  }
+}
+module.exports.parseDateForm = parseDateForm;
 
 module.exports.parseDate = (date) => {
   return new Date(date).toISOString();

@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 const ejs = require('ejs');
 
 const date = require("../utils/date");
@@ -8,7 +7,6 @@ const config = require('../utils/config');
 const emailUtils = require('../utils/email');
 const dbAppointments = require("../db/appointments");
 const dbUniversities = require("../db/universities");
-
 
 const getSummariesForUniversities = (allAppointmentsSummary) => {
   const universityContent = {}
