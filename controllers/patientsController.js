@@ -27,8 +27,8 @@ module.exports.newPatient = async (req, res) => {
       doctorName: '',
       doctorAddress: '',
       dateOfBirth: '',
-      dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
-    }
+    },
+    dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
   })
 }
 
