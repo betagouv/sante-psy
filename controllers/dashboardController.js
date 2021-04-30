@@ -5,6 +5,7 @@ const dbAppointments = require('../db/appointments')
 const dbPatient = require('../db/patients')
 
 function hasFolderCompleted(patient) {
+  let missingInfo = []
   let notEmptyDoctorName = false;
   let notEmptyInstitutionName = false;
   let notEmptyDoctorAddress = false;
@@ -13,26 +14,53 @@ function hasFolderCompleted(patient) {
   if(patient.doctorName) {
     notEmptyDoctorName = !(!patient.doctorName.trim())
   }
+
+  if(!notEmptyDoctorName) {
+    missingInfo.push('nom du docteur')
+  }
+
   if(patient.institutionName) {
     notEmptyInstitutionName = !(!patient.institutionName.trim())
+
+  }
+  if(!notEmptyInstitutionName) {
+    missingInfo.push('établissement scolaire')
   }
 
   if(patient.doctorAddress) {
     notEmptyDoctorAddress = !(!patient.doctorAddress.trim())
+  }
+  if(!notEmptyDoctorAddress) {
+    missingInfo.push('adresse du docteur')
   }
 
   if(patient.dateOfBirth) {
     mandatoryDateOfBirth = true
   } else if ( patient.createdAt <= date.parseDateForm(config.dateOfBirthDeploymentDate) ) {
     mandatoryDateOfBirth = true
+  } else {
+    missingInfo.push('date de naissance')
   }
 
-  return patient.hasPrescription &&
+  if(!patient.isStudentStatusVerified) {
+    missingInfo.push('statut étudiant')
+  }
+
+  if(!patient.hasPrescription) {
+    missingInfo.push('orientation médicale')
+  }
+
+  const hasFolderCompleted = patient.hasPrescription &&
     patient.isStudentStatusVerified &&
     notEmptyDoctorName &&
     notEmptyInstitutionName &&
     notEmptyDoctorAddress &&
-    mandatoryDateOfBirth
+    mandatoryDateOfBirth;
+
+  return {
+    folderCompleted: hasFolderCompleted,
+    missingInfo: missingInfo.join(', '),
+  }
 }
 
 module.exports.dashboard = async function dashboard(req, res) {
@@ -48,7 +76,10 @@ module.exports.dashboard = async function dashboard(req, res) {
 
     // @TODO create a function for this
     const patientsWithFolderStatus = patients.map ( patient => {
-      patient.hasFolderCompleted = hasFolderCompleted(patient)
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      patient.hasFolderCompleted = folderCompleted
+      patient.missingInfo = missingInfo
+
       if(!patient.hasFolderCompleted) {
         hasAllPatientsWithCompletedFolders = false;
       }

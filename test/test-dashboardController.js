@@ -32,71 +32,98 @@ describe('dashboardController', function() {
 
     const hasFolderCompleted = dashboardController.__get__('hasFolderCompleted');
     it('should return true if patient has all needed info', function() {
-      hasFolderCompleted(patient).should.equal(true);
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+
+      missingInfo.should.equal('')
+      folderCompleted.should.equal(true);
     });
 
     it('should return true if INE is missing', function() {
       patient.INE=null;
-      hasFolderCompleted(patient).should.equal(true);
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('')
+      folderCompleted.should.equal(true);
     });
 
 
-    it('should return true if dateOfBirth is missing', function() {
+    it('should return true if dateOfBirth is missing with createdAt before deployment date', function() {
       patient.dateOfBirth=null;
-      hasFolderCompleted(patient).should.equal(true);
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('')
+      folderCompleted.should.equal(true);
     });
 
     it('should return false if doctor name is missing', function() {
       patient.doctorName=null;
-      hasFolderCompleted(patient).should.equal(false);
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('nom du docteur')
+      folderCompleted.should.equal(false);
     });
 
     it('should return false if isStudentStatusVerified is false', function() {
       patient.isStudentStatusVerified=false;
-      hasFolderCompleted(patient).should.equal(false);
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('statut étudiant')
+      folderCompleted.should.equal(false);
     });
 
     it('should return false if hasPrescription is false', function() {
       patient.hasPrescription=false;
-      hasFolderCompleted(patient).should.equal(false);
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('orientation médicale')
+      folderCompleted.should.equal(false);
     });
 
     it('should return false if doctorName is a only white spaces', function() {
-      patient.doctorName="    ", // trim should work
-      hasFolderCompleted(patient).should.equal(false);
+      patient.doctorName="    ";// trim should work
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('nom du docteur')
+      folderCompleted.should.equal(false);
     });
     it('should return false if doctorName is an empty string', function() {
       patient.doctorName="";
-      hasFolderCompleted(patient).should.equal(false);
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('nom du docteur')
+      folderCompleted.should.equal(false);
     });
 
     it('should return false if institutionName is a only white spaces', function() {
       patient.institutionName='    ';
-      hasFolderCompleted(patient).should.equal(false);
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('établissement scolaire')
+      folderCompleted.should.equal(false);
     });
 
     it('should return false if doctorAddress is an empty string', function() {
       patient.doctorAddress='';
-      hasFolderCompleted(patient).should.equal(false);
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('adresse du docteur')
+      folderCompleted.should.equal(false);
     });
     it('should return false if doctor adress is a only white spaces', function() {
       patient.doctorAddress='    ';
-      hasFolderCompleted(patient).should.equal(false);
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('adresse du docteur')
+      folderCompleted.should.equal(false);
     });
 
     it('should return true if missing date of birth before createdAt deployement feature date', function() {
-      patient.dateOfBirth=null,
-      hasFolderCompleted(patient).should.equal(true);
+      patient.dateOfBirth=null;
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('')
+      folderCompleted.should.equal(true);
     });
 
     it('should return false if missing date of birth before createdAt deployement feature date', function() {
       patient.dateOfBirth= null
       patient.createdAt= date.parseDateForm('20/05/2021')
-      hasFolderCompleted(patient).should.equal(false);
+      const {folderCompleted, missingInfo} = hasFolderCompleted(patient)
+      missingInfo.should.equal('date de naissance')
+      folderCompleted.should.equal(false);
     });
 
   });
-  
+
   describe('display dashaboard', function() {
     beforeEach(async function(done) {
       done()

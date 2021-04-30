@@ -26,9 +26,8 @@
               <li>
                 <%= patient.lastName %> <%= patient.firstNames %>
                 <% if (!patient.hasFolderCompleted) { %>
-                  <p class="fr-tag bg-orange-warning  fr-fi-alert-line fr-tag--icon-left fr-tag--sm"
-                  title="Le statut d'étudiant, l'orientation du medecin, le nom du medecin, sa ville, ou l'université du patient sont manquants">
-                    Informations manquantes
+                  <p class="fr-tag bg-orange-warning  fr-fi-alert-line fr-tag--icon-left fr-tag--sm">
+                    Informations manquantes: <%= patient.missingInfo %>
                   </p>
                 <% } else { %>
                   <p class="fr-tag bg-success fr-fi-check-line fr-tag--icon-left fr-tag--sm">
