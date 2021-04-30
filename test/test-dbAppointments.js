@@ -155,6 +155,10 @@ describe('DB Appointments', () => {
       await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
       await dbAppointments.insertAppointment(new Date('2021-03-02'), patient2.id, psy2.dossierNumber)
 
+      // For april (should be output - as deleted)
+      const toDelete = await dbAppointments.insertAppointment(new Date('2021-04-01'), patient.id, psy.dossierNumber)
+      await dbAppointments.deleteAppointment(toDelete.id, psy.dossierNumber)
+
       const output = await dbAppointments.getMonthlyAppointmentsSummary(year, month);
 
       assert.equal(output.length, 2); // 2 psys for april

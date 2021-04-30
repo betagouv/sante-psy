@@ -79,6 +79,7 @@ module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
         `))
         .whereRaw(`EXTRACT(YEAR from ${appointmentsTable}."appointmentDate") = ${year}`)
         .andWhereRaw(`EXTRACT(MONTH from ${appointmentsTable}."appointmentDate") = ${month}`)
+        .whereNot(`${appointmentsTable}.deleted`, true)
         .innerJoin(`${dbPsychologists.psychologistsTable}`,
           `${appointmentsTable}.psychologistId`,
           `${dbPsychologists.psychologistsTable}.dossierNumber`)
