@@ -46,31 +46,21 @@ function hasFolderCompleted(patient) {
 
 module.exports.dashboard = async function dashboard(req, res) {
   try {
-    let hasAllPatientsWithCompletedFolders = true;
     const psychologistId = cookie.getCurrentPsyId(req);
-    const results = await Promise.all([
+    const [patients, appointments] = await Promise.all([
       dbPatient.getPatients(psychologistId),
       dbAppointments.getAppointments(psychologistId),
     ]);
-    const patients = results[0];
-    const appointments = results[1];
 
-    // @TODO create a function for this
-    const patientsWithFolderStatus = patients.map((patient) => {
+    patients.forEach((patient) => {
       const { folderCompleted, missingInfo } = hasFolderCompleted(patient);
       patient.hasFolderCompleted = folderCompleted;
       patient.missingInfo = missingInfo;
-
-      if (!patient.hasFolderCompleted) {
-        hasAllPatientsWithCompletedFolders = false;
-      }
-      return patient;
     });
 
     res.render('dashboard', {
       appointments,
-      patients: patientsWithFolderStatus,
-      hasAllPatientsWithCompletedFolders,
+      patients,
       announcement: config.announcement,
       dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
     });

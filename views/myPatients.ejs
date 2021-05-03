@@ -7,7 +7,7 @@
   </div>
   <div>
     <% if (patients.length) { %>
-      <% if (!hasAllPatientsWithCompletedFolders) { %>
+      <% if (patients.find((patient) => !patient.hasFolderCompleted)) { %>
        <div class="fr-callout fr-mb-2w">
            <p class="fr-text--md fr-mb-1v">
            Certains de vos patients n'ont pas leur dossier complet - vérification du statut d'étudiant, l'orientation du medecin, le nom du medecin, sa ville,

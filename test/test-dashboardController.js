@@ -115,7 +115,7 @@ describe.only('dashboardController', () => {
     });
   });
 
-  describe('display dashaboard', () => {
+  describe('display dashboard', () => {
     beforeEach(async (done) => {
       done();
     });
@@ -203,8 +203,16 @@ describe.only('dashboardController', () => {
         'adresse du docteur',
         dateOfBirth,
       );
-      const myAppointment = await dbAppointments.insertAppointment(new Date('2021-03-01'), myPatient.id, psy.dossierNumber);
-      const appointmentForAnotherPsy = await dbAppointments.insertAppointment(new Date('2021-12-12'), patientForAnotherPsy.id, anotherPsyId);
+      const myAppointment = await dbAppointments.insertAppointment(
+        new Date('2021-03-01'),
+        myPatient.id,
+        psy.dossierNumber
+      );
+      const appointmentForAnotherPsy = await dbAppointments.insertAppointment(
+        new Date('2021-12-12'),
+        patientForAnotherPsy.id,
+        anotherPsyId
+      );
 
       return chai.request(app)
         .get('/psychologue/mes-seances')
