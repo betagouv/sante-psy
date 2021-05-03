@@ -10,7 +10,7 @@ const dashboardController = rewire('../controllers/dashboardController');
 const dbAppointments = require('../db/appointments');
 const dbPatients = require('../db/patients');
 
-describe.only('dashboardController', () => {
+describe('dashboardController', () => {
   const dateOfBirth = date.parseDateForm('20/01/1980');
   describe('hasFolderCompleted', () => {
     let patient;
