@@ -1,36 +1,35 @@
 /* eslint-disable func-names */
-const app = require('../index')
-const chai = require('chai')
-const clean = require('./helper/clean')
-const dbAppointments = require('../db/appointments')
-const dbPatients = require('../db/patients')
-const sinon = require('sinon')
-const cookie = require('../utils/cookie')
-const date = require('../utils/date')
-const { expect } = require('chai')
+const chai = require('chai');
+const sinon = require('sinon');
+const { expect } = require('chai');
+const app = require('../index');
+const clean = require('./helper/clean');
+const dbAppointments = require('../db/appointments');
+const dbPatients = require('../db/patients');
+const cookie = require('../utils/cookie');
+const date = require('../utils/date');
 
-describe('appointmentsController', function() {
-  const dateOfBirth = date.parseDateForm('20/01/1980')
+describe('appointmentsController', () => {
+  const dateOfBirth = date.parseDateForm('20/01/1980');
 
-  describe('create appointment', function() {
+  describe('create appointment', () => {
+    beforeEach(async () => {
+      await clean.cleanAllPatients();
+      await clean.cleanAllAppointments();
+      return Promise.resolve();
+    });
 
-    beforeEach(async function() {
-      await clean.cleanAllPatients()
-      await clean.cleanAllAppointments()
-      return Promise.resolve()
-    })
+    afterEach(async () => {
+      await clean.cleanAllPatients();
+      await clean.cleanAllAppointments();
+      return Promise.resolve();
+    });
 
-    afterEach(async function() {
-      await clean.cleanAllPatients()
-      await clean.cleanAllAppointments()
-      return Promise.resolve()
-    })
-
-    it('should create appointment', async function() {
+    it('should create appointment', async () => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
-      }
+      };
       const patient = await dbPatients.insertPatient(
         'Ada',
         'Lovelace',
@@ -42,7 +41,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         dateOfBirth,
-      )
+      );
 
       return chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
@@ -50,28 +49,28 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': patient.id,
+          patientId: patient.id,
           date: '09/02/2021',
           'iso-date': '2021-02-09',
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances')
+          res.should.redirectTo('/psychologue/mes-seances');
 
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
-          expect(appointmentArray).to.have.length(1)
-          expect(appointmentArray[0].psychologistId).to.equal(psy.dossierNumber)
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(1);
+          expect(appointmentArray[0].psychologistId).to.equal(psy.dossierNumber);
 
-          return Promise.resolve()
-        })
-    })
+          return Promise.resolve();
+        });
+    });
 
-    it('should not create appointment if patient id is not linked to psy id', async function() {
-      const dossierNumber = '9a42d12f-8328-4545-8da3-11250f876146'
-      const anotherDossierNumber = '8a42d12f-8328-4545-8da3-11250f876146'
+    it('should not create appointment if patient id is not linked to psy id', async () => {
+      const dossierNumber = '9a42d12f-8328-4545-8da3-11250f876146';
+      const anotherDossierNumber = '8a42d12f-8328-4545-8da3-11250f876146';
       const psy = {
-        dossierNumber: dossierNumber,
+        dossierNumber,
         email: 'prenom.nom@beta.gouv.fr',
-      }
+      };
 
       const patient = await dbPatients.insertPatient(
         'Ada',
@@ -84,7 +83,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         dateOfBirth,
-      )
+      );
 
       return chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
@@ -92,26 +91,26 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': patient.id,
+          patientId: patient.id,
           date: '09/02/2021',
           'iso-date': '2021-02-09',
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances')
+          res.should.redirectTo('/psychologue/mes-seances');
 
           // was not created because patient id is not linked to psy id
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
-          expect(appointmentArray).to.have.length(0)
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(0);
 
-          return Promise.resolve()
-        })
-    })
+          return Promise.resolve();
+        });
+    });
 
-    it('should not create appointment if user not logged in', async function() {
+    it('should not create appointment if user not logged in', async () => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
-      }
+      };
       const patient = await dbPatients.insertPatient(
         'Ada',
         'Lovelace',
@@ -123,7 +122,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         dateOfBirth,
-      )
+      );
 
       return chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
@@ -131,27 +130,27 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': patient.id,
+          patientId: patient.id,
           date: '09/02/2021',
           'iso-date': '2021-02-09',
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/login')
+          res.should.redirectTo('/psychologue/login');
 
           // Appointment not created
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
-          expect(appointmentArray).to.have.length(0)
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(0);
 
-          return Promise.resolve()
-        })
-    })
+          return Promise.resolve();
+        });
+    });
 
-    it('should only display my patients in dropdown when creating appointment', async function() {
+    it('should only display my patients in dropdown when creating appointment', async () => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
-      }
-      const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d'
+      };
+      const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d';
       const myPatient = await dbPatients.insertPatient(
         'Ada',
         'Lovelace',
@@ -163,7 +162,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         dateOfBirth,
-      )
+      );
       const patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
         'Wonder',
@@ -175,7 +174,7 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         dateOfBirth,
-      )
+      );
 
       return chai.request(app)
         .get('/psychologue/nouvelle-seance')
@@ -183,53 +182,53 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
           // My patients are present
-          chai.assert.include(res.text, myPatient.firstNames)
-          chai.assert.include(res.text, myPatient.lastName)
+          chai.assert.include(res.text, myPatient.firstNames);
+          chai.assert.include(res.text, myPatient.lastName);
 
           // Other psy's patients are not listed
-          chai.assert.notInclude(res.text, patientForAnotherPsy.firstNames)
-          chai.assert.notInclude(res.text, patientForAnotherPsy.lastName)
-          return Promise.resolve()
-        })
-    })
-  })
+          chai.assert.notInclude(res.text, patientForAnotherPsy.firstNames);
+          chai.assert.notInclude(res.text, patientForAnotherPsy.lastName);
+          return Promise.resolve();
+        });
+    });
+  });
 
-  describe('create appointment - input validation', function() {
-    let insertAppointmentStub
+  describe('create appointment - input validation', () => {
+    let insertAppointmentStub;
 
-    beforeEach(async function() {
+    beforeEach(async () => {
       await clean.cleanAllPatients();
       insertAppointmentStub = sinon.stub(dbAppointments, 'insertAppointment')
-        .returns(Promise.resolve())
+        .returns(Promise.resolve());
 
-      return Promise.resolve()
-    })
+      return Promise.resolve();
+    });
 
-    afterEach(async function() {
+    afterEach(async () => {
       await clean.cleanAllPatients();
-      insertAppointmentStub.restore()
-      return Promise.resolve()
-    })
+      insertAppointmentStub.restore();
+      return Promise.resolve();
+    });
 
-    it('should refuse invalid patientId', function(done) {
+    it('should refuse invalid patientId', (done) => {
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
         .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': 'not-a-uuid',
+          patientId: 'not-a-uuid',
           date: '09/02/2021',
           'iso-date': '2021-02-09',
         })
         .end((err, res) => {
-          res.should.redirectTo('/psychologue/nouvelle-seance')
-          sinon.assert.notCalled(insertAppointmentStub)
-          done()
-        })
-    })
+          res.should.redirectTo('/psychologue/nouvelle-seance');
+          sinon.assert.notCalled(insertAppointmentStub);
+          done();
+        });
+    });
 
-    it('should refuse empty patientId', function(done) {
+    it('should refuse empty patientId', (done) => {
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
         .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
@@ -241,57 +240,57 @@ describe('appointmentsController', function() {
           'iso-date': '2021-02-09',
         })
         .end((err, res) => {
-          res.should.redirectTo('/psychologue/nouvelle-seance')
-          sinon.assert.notCalled(insertAppointmentStub)
-          done()
-        })
-    })
+          res.should.redirectTo('/psychologue/nouvelle-seance');
+          sinon.assert.notCalled(insertAppointmentStub);
+          done();
+        });
+    });
 
-    it('should refuse invalid date', function(done) {
+    it('should refuse invalid date', (done) => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
-      }
+      };
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
+          patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
           'iso-date': '2021-02-09kk',
         })
         .end((err, res) => {
-          res.should.redirectTo('/psychologue/nouvelle-seance')
-          sinon.assert.notCalled(insertAppointmentStub)
-          done()
-        })
-    })
+          res.should.redirectTo('/psychologue/nouvelle-seance');
+          sinon.assert.notCalled(insertAppointmentStub);
+          done();
+        });
+    });
 
-    it('should refuse empty date', function(done) {
+    it('should refuse empty date', (done) => {
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
         .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': '052d3a16-7042-4f93-9fc0-2049e5fdae79',
+          patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
           // not iso-date
         })
         .end((err, res) => {
-          res.should.redirectTo('/psychologue/nouvelle-seance')
-          sinon.assert.notCalled(insertAppointmentStub)
-          done()
-        })
-    })
+          res.should.redirectTo('/psychologue/nouvelle-seance');
+          sinon.assert.notCalled(insertAppointmentStub);
+          done();
+        });
+    });
 
-    it('should ignore the date input and use the iso-date', async function() {
+    it('should ignore the date input and use the iso-date', async () => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
-      }
+      };
       const myPatient = await dbPatients.insertPatient(
         'Ada',
         'Lovelace',
@@ -303,37 +302,37 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         dateOfBirth,
-      )
+      );
       chai.request(app)
         .post('/psychologue/creer-nouvelle-seance')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'patientId': myPatient.id,
+          patientId: myPatient.id,
           date: '12/02/2021 kfjhksdhf',
           'iso-date': '2021-02-09',
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances')
-          sinon.assert.called(insertAppointmentStub)
-          return Promise.resolve()
-        })
-    })
-  })
+          res.should.redirectTo('/psychologue/mes-seances');
+          sinon.assert.called(insertAppointmentStub);
+          return Promise.resolve();
+        });
+    });
+  });
 
-  describe('delete appointment', function() {
-    beforeEach(async function() {
-      await clean.cleanAllPatients()
-      await clean.cleanAllAppointments()
-      return Promise.resolve()
-    })
+  describe('delete appointment', () => {
+    beforeEach(async () => {
+      await clean.cleanAllPatients();
+      await clean.cleanAllAppointments();
+      return Promise.resolve();
+    });
 
-    afterEach(async function() {
-      await clean.cleanAllPatients()
-      await clean.cleanAllAppointments()
-      return Promise.resolve()
-    })
+    afterEach(async () => {
+      await clean.cleanAllPatients();
+      await clean.cleanAllAppointments();
+      return Promise.resolve();
+    });
 
     const makeAppointment = async (psychologistId) => {
       // Insert an appointment and a patient
@@ -348,21 +347,21 @@ describe('appointmentsController', function() {
         'Dr Docteur',
         'adresse du docteur',
         dateOfBirth,
-      )
-      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psychologistId)
+      );
+      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psychologistId);
       // Check appointment is inserted
-      const appointmentArray = await dbAppointments.getAppointments(psychologistId)
-      expect(appointmentArray).to.have.length(1)
-      return appointment
-    }
+      const appointmentArray = await dbAppointments.getAppointments(psychologistId);
+      expect(appointmentArray).to.have.length(1);
+      return appointment;
+    };
 
-    it('should delete appointment', async function() {
+    it('should delete appointment', async () => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
-      }
+      };
 
-      const appointment = await makeAppointment(psy.dossierNumber)
+      const appointment = await makeAppointment(psy.dossierNumber);
 
       return chai.request(app)
         .post('/psychologue/api/supprimer-seance')
@@ -370,25 +369,25 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'appointmentId': appointment.id,
+          appointmentId: appointment.id,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances')
+          res.should.redirectTo('/psychologue/mes-seances');
 
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
-          expect(appointmentArray).to.have.length(0)
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(0);
 
-          return Promise.resolve()
-        })
-    })
+          return Promise.resolve();
+        });
+    });
 
-    it('should not delete appointment if it is not mine', async function() {
+    it('should not delete appointment if it is not mine', async () => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
-      }
-      const anotherPsyId = 'ccb6f32b-8c55-4322-8ecc-556e6900b4ea'
-      const appointment = await makeAppointment(anotherPsyId)
+      };
+      const anotherPsyId = 'ccb6f32b-8c55-4322-8ecc-556e6900b4ea';
+      const appointment = await makeAppointment(anotherPsyId);
 
       return chai.request(app)
         .post('/psychologue/api/supprimer-seance')
@@ -396,24 +395,24 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'appointmentId': appointment.id,
+          appointmentId: appointment.id,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances')
+          res.should.redirectTo('/psychologue/mes-seances');
           // Appointment is not deleted
-          const appointmentArray = await dbAppointments.getAppointments(anotherPsyId)
-          expect(appointmentArray).to.have.length(1)
+          const appointmentArray = await dbAppointments.getAppointments(anotherPsyId);
+          expect(appointmentArray).to.have.length(1);
 
-          return Promise.resolve()
-        })
-    })
+          return Promise.resolve();
+        });
+    });
 
-    it('should refuse invalid appointmentId', async function() {
+    it('should refuse invalid appointmentId', async () => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
-      }
-      const appointment = await makeAppointment(psy.dossierNumber)
+      };
+      const appointment = await makeAppointment(psy.dossierNumber);
 
       return chai.request(app)
         .post('/psychologue/api/supprimer-seance')
@@ -421,25 +420,25 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'appointmentId': appointment.id + '4',
+          appointmentId: `${appointment.id}4`,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances')
+          res.should.redirectTo('/psychologue/mes-seances');
 
           // Appointment is not deleted
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
-          expect(appointmentArray).to.have.length(1)
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(1);
 
-          return Promise.resolve()
-        })
-    })
+          return Promise.resolve();
+        });
+    });
 
-    it('should not delete appointment if user not logged in', async function() {
+    it('should not delete appointment if user not logged in', async () => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
-      }
-      const appointment = await makeAppointment(psy.dossierNumber)
+      };
+      const appointment = await makeAppointment(psy.dossierNumber);
 
       return chai.request(app)
         .post('/psychologue/api/supprimer-seance')
@@ -447,25 +446,25 @@ describe('appointmentsController', function() {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          'appointmentId': appointment.id,
+          appointmentId: appointment.id,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/login')
+          res.should.redirectTo('/psychologue/login');
 
           // Appointment is not deleted
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
-          expect(appointmentArray).to.have.length(1)
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(1);
 
-          return Promise.resolve()
-        })
-    })
+          return Promise.resolve();
+        });
+    });
 
-    it('should refuse empty appointmentId', async function() {
+    it('should refuse empty appointmentId', async () => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
-      }
-      await makeAppointment(psy.dossierNumber)
+      };
+      await makeAppointment(psy.dossierNumber);
 
       return chai.request(app)
         .post('/psychologue/api/supprimer-seance')
@@ -476,13 +475,13 @@ describe('appointmentsController', function() {
           // no appointmentId
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances')
+          res.should.redirectTo('/psychologue/mes-seances');
 
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber)
-          expect(appointmentArray).to.have.length(1)
+          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(1);
 
-          return Promise.resolve()
-        })
-    })
-  })
-})
+          return Promise.resolve();
+        });
+    });
+  });
+});

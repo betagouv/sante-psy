@@ -1,8 +1,8 @@
+const crypto = require('crypto');
 const config = require('./config');
-const crypto = require('crypto')
 
-module.exports.hashForLogs = function hashForLogs(logs = "") {
-  return 'hash ' + crypto.createHmac('sha256', config.secretLogs)
+module.exports.hashForLogs = function hashForLogs(logs = '') {
+  return `hash ${crypto.createHmac('sha256', config.secretLogs)
     .update(logs.toLowerCase())
-    .digest('hex');
-}
+    .digest('hex')}`;
+};

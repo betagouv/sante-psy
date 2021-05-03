@@ -1,31 +1,31 @@
 require('dotenv').config();
-const knexConfig = require("../knexfile")
-const knex = require("knex")(knexConfig)
-const assert = require('chai').assert;
-const dbAppointments = require('../db/appointments')
-const dbPatients = require('../db/patients')
-const dbPsychologists = require('../db/psychologists')
+const knexConfig = require('../knexfile');
+const knex = require('knex')(knexConfig);
+const { assert } = require('chai');
+const dbAppointments = require('../db/appointments');
+const dbPatients = require('../db/patients');
+const dbPsychologists = require('../db/psychologists');
 const clean = require('./helper/clean');
 
 describe('DB Appointments', () => {
-  beforeEach(async function before() {
+  beforeEach(async () => {
     await clean.cleanAllPatients();
     await clean.cleanAllPsychologists();
     await clean.cleanDataAppointments();
-  })
+  });
 
-  afterEach(async function after() {
+  afterEach(async () => {
     await clean.cleanAllPatients();
     await clean.cleanAllPsychologists();
     await clean.cleanDataAppointments();
-  })
+  });
 
   describe('deleteAppointment', () => {
     it('should change deleted boolean to true and update updatedAt field', async () => {
       const psyList = clean.psyList();
       await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail)
-      const patientToInsert = clean.getOnePatient(psy.dossierNumber)
+      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,
         patientToInsert.lastName,
@@ -36,20 +36,20 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-      )
-      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
+      );
+      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber);
 
-      const appointmentsBeforeDelete =  await knex.from(dbAppointments.appointmentsTable)
-      .where("psychologistId", psy.dossierNumber)
-      .where("patientId", patient.id)
+      const appointmentsBeforeDelete = await knex.from(dbAppointments.appointmentsTable)
+      .where('psychologistId', psy.dossierNumber)
+      .where('patientId', patient.id);
 
-      assert(appointmentsBeforeDelete[0].updatedAt === null)
+      assert(appointmentsBeforeDelete[0].updatedAt === null);
       assert(appointmentsBeforeDelete[0].deleted === false);
-      await dbAppointments.deleteAppointment(appointmentsBeforeDelete[0].id, psy.dossierNumber)
+      await dbAppointments.deleteAppointment(appointmentsBeforeDelete[0].id, psy.dossierNumber);
 
-      const appointmentsAfterDelete =  await knex.from(dbAppointments.appointmentsTable)
-      .where("psychologistId", psy.dossierNumber)
-      .where("patientId", patient.id)
+      const appointmentsAfterDelete = await knex.from(dbAppointments.appointmentsTable)
+      .where('psychologistId', psy.dossierNumber)
+      .where('patientId', patient.id);
       assert(appointmentsAfterDelete[0].deleted === true);
       assert(appointmentsAfterDelete[0].updatedAt !== null);
     });
@@ -59,8 +59,8 @@ describe('DB Appointments', () => {
     it('should return a count of appointments by year and month', async () => {
       const psyList = clean.psyList();
       await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail)
-      const patientToInsert = clean.getOnePatient(psy.dossierNumber)
+      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,
         patientToInsert.lastName,
@@ -71,7 +71,7 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-      )
+      );
 
       const patient2 = await dbPatients.insertPatient(
         patientToInsert.firstNames,
@@ -83,18 +83,18 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-      )
-      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient2.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient2.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-06-03'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-07-03'), patient.id, psy.dossierNumber)
+      );
+      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient2.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient2.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-06-03'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-07-03'), patient.id, psy.dossierNumber);
 
       // For april (should be output - as deleted)
-      const toDelete = await dbAppointments.insertAppointment(new Date('2021-04-01'), patient.id, psy.dossierNumber)
-      await dbAppointments.deleteAppointment(toDelete.id, psy.dossierNumber)
+      const toDelete = await dbAppointments.insertAppointment(new Date('2021-04-01'), patient.id, psy.dossierNumber);
+      await dbAppointments.deleteAppointment(toDelete.id, psy.dossierNumber);
 
       const output = await dbAppointments.getCountAppointmentsByYearMonth(psy.dossierNumber);
 
@@ -116,18 +116,18 @@ describe('DB Appointments', () => {
 
   describe('getMonthlyAppointmentsSummary', () => {
     it('should return a count of appointments by year and month', async () => {
-      const month = 4
-      const year = 2021
+      const month = 4;
+      const year = 2021;
 
       const psyList = [
         clean.getOnePsy('loginemail@beta.gouv.fr', 'accepte', false, '25173f41-6535-524f-bec0-436297a2bc77'),
-        clean.getOnePsy('emaillogin@beta.gouv.fr', 'accepte', false, '14f37152-6535-524f-bec0-436297a2bc77')
-      ]
+        clean.getOnePsy('emaillogin@beta.gouv.fr', 'accepte', false, '14f37152-6535-524f-bec0-436297a2bc77'),
+      ];
       await dbPsychologists.savePsychologistInPG(psyList);
 
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail)
-      const psy2 = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[1].personalEmail)
-      const patientToInsert = clean.getOnePatient(psy.dossierNumber)
+      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const psy2 = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[1].personalEmail);
+      const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,
         patientToInsert.lastName,
@@ -138,7 +138,7 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-      )
+      );
 
       const patient2 = await dbPatients.insertPatient(
         patientToInsert.firstNames,
@@ -150,18 +150,18 @@ describe('DB Appointments', () => {
         psy2.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-      )
+      );
       // For april (should be output)
-      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient2.id, psy2.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient2.id, psy2.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient2.id, psy2.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient2.id, psy2.dossierNumber);
       // For march (should not be output)
-      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient2.id, psy2.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient2.id, psy2.dossierNumber);
 
       // For april (should be output - as deleted)
-      const toDelete = await dbAppointments.insertAppointment(new Date('2021-04-01'), patient.id, psy.dossierNumber)
-      await dbAppointments.deleteAppointment(toDelete.id, psy.dossierNumber)
+      const toDelete = await dbAppointments.insertAppointment(new Date('2021-04-01'), patient.id, psy.dossierNumber);
+      await dbAppointments.deleteAppointment(toDelete.id, psy.dossierNumber);
 
       const output = await dbAppointments.getMonthlyAppointmentsSummary(year, month);
 
@@ -187,8 +187,8 @@ describe('DB Appointments', () => {
     it('should return a count of patients by year and month', async () => {
       const psyList = clean.psyList();
       await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail)
-      const patientToInsert = clean.getOnePatient(psy.dossierNumber)
+      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,
         patientToInsert.lastName,
@@ -199,7 +199,7 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-      )
+      );
       const patient2 = await dbPatients.insertPatient(
         patientToInsert.firstNames,
         patientToInsert.lastName,
@@ -210,18 +210,18 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-      )
+      );
       // 4 appointments in march with 2 patients
-      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient2.id, psy.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient2.id, psy.dossierNumber);
       // one in april
-      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-04-03'), patient.id, psy.dossierNumber);
       // one in june
-      await dbAppointments.insertAppointment(new Date('2021-06-03'), patient.id, psy.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-06-03'), patient.id, psy.dossierNumber);
       // one in july
-      await dbAppointments.insertAppointment(new Date('2021-07-03'), patient.id, psy.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-07-03'), patient.id, psy.dossierNumber);
 
       const output = await dbAppointments.getCountPatientsByYearMonth(psy.dossierNumber);
 
@@ -246,8 +246,8 @@ describe('DB Appointments', () => {
     it('should only return not deleted appointments for psy id', async () => {
       const psyList = clean.psyList();
       await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail)
-      const patientToInsert = clean.getOnePatient(psy.dossierNumber)
+      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,
         patientToInsert.lastName,
@@ -258,12 +258,12 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-      )
-      const toDelete = await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient.id, psy.dossierNumber)
+      );
+      const toDelete = await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient.id, psy.dossierNumber);
 
-      await dbAppointments.deleteAppointment(toDelete.id, psy.dossierNumber)
+      await dbAppointments.deleteAppointment(toDelete.id, psy.dossierNumber);
 
       const output = await dbAppointments.getAppointments(psy.dossierNumber);
 
@@ -273,13 +273,13 @@ describe('DB Appointments', () => {
     });
 
     it('should only return psy id appointments', async () => {
-      const psyList = clean.psyList(); //@TODO add another psy
-      let anotherPsy = Object.assign({}, psyList[0]);
-      anotherPsy.dossierNumber = "b2e447cd-2d57-4f83-8884-ab05a2633644";
+      const psyList = clean.psyList(); // @TODO add another psy
+      const anotherPsy = { ...psyList[0] };
+      anotherPsy.dossierNumber = 'b2e447cd-2d57-4f83-8884-ab05a2633644';
 
       await dbPsychologists.savePsychologistInPG([psyList[0], anotherPsy]);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail)
-      const patientToInsert = clean.getOnePatient(psy.dossierNumber)
+      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,
         patientToInsert.lastName,
@@ -290,12 +290,12 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
-      )
+      );
 
-      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-04'), patient.id, psy.dossierNumber)
-      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient.id, anotherPsy.dossierNumber)
+      await dbAppointments.insertAppointment(new Date('2021-03-02'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-04'), patient.id, psy.dossierNumber);
+      await dbAppointments.insertAppointment(new Date('2021-03-03'), patient.id, anotherPsy.dossierNumber);
 
       const output = await dbAppointments.getAppointments(psy.dossierNumber);
 

@@ -1,13 +1,13 @@
-const assert = require('chai').assert;
+const { assert } = require('chai');
 require('dotenv').config();
-const dbDsApiCursor = require('../db/dsApiCursor')
+const dbDsApiCursor = require('../db/dsApiCursor');
 const clean = require('./helper/clean');
 
 describe('DB Ds Api Cursor', () => {
-  //Clean up all data
-  beforeEach(async function before() {
+  // Clean up all data
+  beforeEach(async () => {
     await clean.cleanDataCursor();
-  })
+  });
 
   describe('getLatestCursorSaved', () => {
     it('should return undefined if there is no cursor saved', async () => {
@@ -23,7 +23,7 @@ describe('DB Ds Api Cursor', () => {
     });
 
     it('should return the latest cursor saved', async () => {
-      const myCursor = "test"
+      const myCursor = 'test';
       await dbDsApiCursor.saveLatestCursor(myCursor);
 
       const output = await dbDsApiCursor.getLatestCursorSaved();
