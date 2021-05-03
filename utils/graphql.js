@@ -1,11 +1,11 @@
-const { gql , GraphQLClient} = require('graphql-request');
-const config = require('../utils/config');
+const { gql, GraphQLClient } = require('graphql-request');
+const config = require('./config');
 
 const endpoint = config.apiUrl;
 const graphQLClient = new GraphQLClient(endpoint, {
   headers: {
     authorization: `Bearer ${config.apiToken}`,
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   },
 });
 
@@ -15,10 +15,23 @@ const graphQLClient = new GraphQLClient(endpoint, {
  * @param {*} cursor : String
  */
 function getWhereConditionAfterCursor(cursor) {
-  if( cursor ) {
+  if (cursor) {
     return `(after: "${cursor}")`;
-  } else {
-    return '';
+  }
+  return '';
+}
+
+/**
+ * log errors from DS
+ * @param {*} apiResponse 
+ */
+function logErrorsFromDS(apiResponse) {
+  if (apiResponse.response) {
+    if (apiResponse.response.errors.length > 0) {
+      apiResponse.response.errors.forEach((err) => {
+        console.error('Error details', err);
+      });
+    }
   }
 }
 
@@ -83,21 +96,8 @@ async function requestPsychologist(afterCursor) {
   } catch (err) {
     console.error('API has returned error', err);
     logErrorsFromDS(err);
+    // eslint-disable-next-line no-throw-literal
     throw 'Error from DS API';
-  }
-}
-
-/**
- * log errors from DS
- * @param {*} apiResponse 
- */
-function logErrorsFromDS(apiResponse) {
-  if(apiResponse.response) {
-    if(apiResponse.response.errors.length > 0) {
-      apiResponse.response.errors.forEach(err => {
-        console.error('Error details', err);
-      });
-    }
   }
 }
 

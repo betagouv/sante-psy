@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const config = require('../utils/config');
+const config = require('./config');
 
 const headers = {
   // secure: if true, send cookie over https only.
@@ -14,15 +14,11 @@ const headers = {
   // the original request, but not in the redirect request to the home page.)
   // Same problem can happen with CSRF cookie.
   sameSite: 'Lax',
-}
-module.exports.headers = headers
+};
+module.exports.headers = headers;
 
-module.exports.createAndSetJwtCookie = (res, email, psychologistData) => {
-  res.cookie('token', getJwtTokenForUser(email, psychologistData), headers);
-}
-
-module.exports.clearJwtCookie = (res) => {
-  res.clearCookie('token')
+function getSessionDuration() {
+  return `${config.sessionDurationHours} hours`;
 }
 
 /**
@@ -36,18 +32,22 @@ const getJwtTokenForUser = function getJwtTokenForUser(email, psychologist) {
 
   return jwt.sign(
     {
-      email : email,
-      psychologist : psychologist,
+      email,
+      psychologist,
     },
     config.secret,
-    { expiresIn: duration }
+    { expiresIn: duration },
   );
 };
-module.exports.getJwtTokenForUser = getJwtTokenForUser
+module.exports.getJwtTokenForUser = getJwtTokenForUser;
 
-function getSessionDuration() {
-  return config.sessionDurationHours + ' hours'
-}
+module.exports.createAndSetJwtCookie = (res, email, psychologistData) => {
+  res.cookie('token', getJwtTokenForUser(email, psychologistData), headers);
+};
+
+module.exports.clearJwtCookie = (res) => {
+  res.clearCookie('token');
+};
 
 /**
  * if valid token will return psychologist data
@@ -58,22 +58,22 @@ const verifyJwt = function verifyJwt(token) {
     const verified = jwt.verify(token, config.secret);
     return verified;
   } catch (err) {
-    console.debug("invalid token");
+    console.debug('invalid token');
     return false;
   }
-}
-module.exports.verifyJwt = verifyJwt
+};
+module.exports.verifyJwt = verifyJwt;
 
 /**
  *  Get currently logged in psy's id
  */
 module.exports.getCurrentPsyId = (req) => {
-  const jwtToken = req.cookies.token
-  const tokenData = verifyJwt(jwtToken)
+  const jwtToken = req.cookies.token;
+  const tokenData = verifyJwt(jwtToken);
 
   if (!tokenData) {
-    throw new Error('JWT token invalid')
+    throw new Error('JWT token invalid');
   }
   const psyUuid = tokenData.psychologist;
-  return psyUuid
-}
+  return psyUuid;
+};

@@ -206,12 +206,12 @@ describe('dashboardController', () => {
       const myAppointment = await dbAppointments.insertAppointment(
         new Date('2021-03-01'),
         myPatient.id,
-        psy.dossierNumber
+        psy.dossierNumber,
       );
       const appointmentForAnotherPsy = await dbAppointments.insertAppointment(
         new Date('2021-12-12'),
         patientForAnotherPsy.id,
-        anotherPsyId
+        anotherPsyId,
       );
 
       return chai.request(app)

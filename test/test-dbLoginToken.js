@@ -1,21 +1,20 @@
 require('dotenv').config();
-const assert = require('chai').assert;
-const expect = require('chai').expect;
-const dbToginToken = require('../db/loginToken')
-const date = require('../utils/date')
+const { assert } = require('chai');
+const { expect } = require('chai');
+const dbToginToken = require('../db/loginToken');
+const date = require('../utils/date');
 const clean = require('./helper/clean');
 
 describe('DB Login token', () => {
-  const token = "0Hj1xrlN6p4icK7TwC7YCr6vMLR0NXen";
-  //Clean up all data
-  beforeEach(async function before() {
+  const token = '0Hj1xrlN6p4icK7TwC7YCr6vMLR0NXen';
+  // Clean up all data
+  beforeEach(async () => {
     await clean.cleanDataToken();
-  })
+  });
 
   describe('getByToken', () => {
-
     it('should get all token info with a token', async () => {
-      const email = "prenom.nom@beta.gouv.fr";
+      const email = 'prenom.nom@beta.gouv.fr';
       const expiresAt = date.getDatePlusOneHour();
       await dbToginToken.insert(token, email, expiresAt);
       const result = await dbToginToken.getByToken(token);
@@ -26,8 +25,8 @@ describe('DB Login token', () => {
     });
 
     it('should get nothing if token is older than one hour', async () => {
-      const email = "prenom.nom@beta.gouv.fr";
-      const expirationDate = new Date()
+      const email = 'prenom.nom@beta.gouv.fr';
+      const expirationDate = new Date();
       const expiredDate = new Date(expirationDate.setHours(expirationDate.getHours() - 6)).toISOString();
       await dbToginToken.insert(token, email, expiredDate);
       const result = await dbToginToken.getByToken(token);
@@ -38,7 +37,7 @@ describe('DB Login token', () => {
 
   describe('insert', () => {
     it('should insert a token and get it with its email', async () => {
-      const email = "prenom.nom@beta.gouv.fr";
+      const email = 'prenom.nom@beta.gouv.fr';
       const expiresAt = date.getDatePlusOneHour();
       await dbToginToken.insert(token, email, expiresAt);
 
@@ -51,7 +50,7 @@ describe('DB Login token', () => {
 
   describe('delete', () => {
     it('should delete an existing token', async () => {
-      const email = "prenom.nom@beta.gouv.fr";
+      const email = 'prenom.nom@beta.gouv.fr';
       const expiresAt = date.getDatePlusOneHour();
       await dbToginToken.insert(token, email, expiresAt);
 
@@ -62,9 +61,9 @@ describe('DB Login token', () => {
 
     it('should throw error when token does not exist', async () => {
       try {
-        await dbToginToken.delete("pizza");
-        assert.fail("delete token should have failed");
-      } catch( error ) {
+        await dbToginToken.delete('pizza');
+        assert.fail('delete token should have failed');
+      } catch (error) {
         expect(error).to.be.an('Error');
       }
     });

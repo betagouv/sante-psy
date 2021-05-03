@@ -1,5 +1,5 @@
-const config = require('./config');
 const nodemailer = require('nodemailer');
+const config = require('./config');
 
 const mailTransport = nodemailer.createTransport({
   debug: config.mailDebug,
@@ -14,8 +14,7 @@ const mailTransport = nodemailer.createTransport({
   },
 });
 
-
-module.exports.sendMail = async function sendMail(toEmail, subject, html, ccEmail = '', bccEmail= '') {
+module.exports.sendMail = async function sendMail(toEmail, subject, html, ccEmail = '', bccEmail = '') {
   const mail = {
     to: toEmail, // Comma separated list or an array
     cc: ccEmail, // Comma separated list or an array

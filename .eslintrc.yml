@@ -7,7 +7,11 @@ env:
 
 extends:
   - eslint:recommended
+  - airbnb-base
   - plugin:node/recommended
+
+plugins:
+  - mocha-no-only
 
 parserOptions:
   ecmaVersion: 12
@@ -16,7 +20,6 @@ rules:
   no-trailing-spaces: ["error", { "ignoreComments": true }]
   max-len: ["error", { "code": 120 }]
   no-underscore-dangle: "off"
-  no-unused-vars: "warn"
   no-inner-declarations: "off"
   no-console: "off"
   camelcase: "warn"
@@ -30,6 +33,11 @@ rules:
     - 2
     - MemberExpression: "off"
   node/no-unpublished-require: "off"
+  import/order: "off"
+  radix: "off"
+  no-new: "off"
+  no-plusplus: "off" 
+  mocha-no-only/mocha-no-only: ["error"]
 
 ignorePatterns:
   - "static/**/*.js"
@@ -37,5 +45,11 @@ ignorePatterns:
 overrides:
   - files:
       - "tests/*.js"
+      - "test/*.js"
     rules:
       no-unused-expressions: "off"
+      no-shadow: "off"
+  - files:
+      - "migrations/*.js"
+    rules:
+      max-len: "off"

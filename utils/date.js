@@ -1,76 +1,72 @@
-const formatFrenchDateForm = "DD/MM/YYYY"
+const formatFrenchDateForm = 'DD/MM/YYYY';
 module.exports.formatFrenchDateForm = formatFrenchDateForm;
 
 module.exports.isValidDate = (isoDateString) => {
   if (!isoDateString || isoDateString.length === 0) {
-    return false
+    return false;
   }
-  return !isNaN(new Date(Date.parse(isoDateString)))
-}
+  return !Number.isNaN(new Date(Date.parse(isoDateString)));
+};
 
-module.exports.getDateNowPG = () => {
-  return new Date().toISOString();
-}
+module.exports.getDateNowPG = () => new Date().toISOString();
 
 /**
  * @see https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
  */
 const dateFormatter = new Intl.DateTimeFormat('fr-FR', {
-  weekday: 'long', year: 'numeric',
-  month: 'long', day: 'numeric',
-})
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
 
 const shortDateFormatter = new Intl.DateTimeFormat('fr-FR', {
   day: '2-digit',
   month: '2-digit',
   year: 'numeric',
-})
+});
 
-module.exports.formatFrenchDate = date => dateFormatter.format(date)
+module.exports.formatFrenchDate = (date) => dateFormatter.format(date);
 
 /**
  * used to display date in editPatient
  */
 module.exports.toFormatDDMMYYYY = (date) => {
-  if( date ) {
+  if (date) {
     return shortDateFormatter.format(date);
-  } else {
-    return null;
   }
-}
+  return null;
+};
 
 function parseDateForm(date) {
-  if(date) {
-    const [day, month, year] = date.split("/")
+  if (date) {
+    const [day, month, year] = date.split('/');
     // year - month - day
-    return new Date(`${year}-${month}-${day}`)
-  } else {
-    return null;
+    return new Date(`${year}-${month}-${day}`);
   }
+  return null;
 }
 module.exports.parseDateForm = parseDateForm;
 
-module.exports.parseDate = (date) => {
-  return new Date(date).toISOString();
-}
+module.exports.parseDate = (date) => new Date(date).toISOString();
 
 module.exports.getLastMonthAndYear = (now) => {
-  const currentYear = now.getFullYear()
+  const currentYear = now.getFullYear();
   /* The first index is 0. Adding + 1 to match with the data in the db */
   const currentMonth = (now.getUTCMonth() + 1);
   if (currentMonth === 1) {
-    return { lastMonth: 12, year: currentYear - 1}
+    return { lastMonth: 12, year: currentYear - 1 };
   }
   return { lastMonth: currentMonth - 1, year: currentYear };
-}
+};
 
 module.exports.getDatePlusOneHour = () => {
-  const expirationDate = new Date()
+  const expirationDate = new Date();
   return new Date(expirationDate.setHours(expirationDate.getHours() + 1)).toISOString();
-}
+};
 
 module.exports.getFrenchMonthName = (monthNumber) => {
-  switch(monthNumber) {
+  switch (monthNumber) {
   case 1:
     return 'janvier';
   case 2:
@@ -96,7 +92,7 @@ module.exports.getFrenchMonthName = (monthNumber) => {
   case 12:
     return 'décembre';
   default:
-    console.error("invalid month", monthNumber);
+    console.error('invalid month', monthNumber);
     return 'Erreur';
   }
-}
+};

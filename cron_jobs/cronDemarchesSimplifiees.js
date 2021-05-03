@@ -1,10 +1,10 @@
 require('dotenv').config();
 
-const dbsApiCursor = require("../db/dsApiCursor")
-const dbPsychologists = require("../db/psychologists")
-const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
-const config = require('../utils/config')
 const ejs = require('ejs');
+const dbsApiCursor = require('../db/dsApiCursor');
+const dbPsychologists = require('../db/psychologists');
+const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
+const config = require('../utils/config');
 const emailUtils = require('../utils/email');
 
 /**
@@ -13,53 +13,37 @@ const emailUtils = require('../utils/email');
  */
 async function importDataFromDSToPG(updateEverything = false) {
   try {
-    console.log("Starting importDataFromDSToPG...");
+    console.log('Starting importDataFromDSToPG...');
     const latestCursorInPG = await dbsApiCursor.getLatestCursorSaved(updateEverything);
 
     const dsAPIData = await demarchesSimplifiees.getPsychologistList(latestCursorInPG);
 
-    if(dsAPIData.psychologists.length > 0) {
+    if (dsAPIData.psychologists.length > 0) {
       await dbPsychologists.savePsychologistInPG(dsAPIData.psychologists);
       await dbsApiCursor.saveLatestCursor(dsAPIData.lastCursor);
 
       const numberOfPsychologists = await dbPsychologists.getNumberOfPsychologists();
-      console.log(`psychologists inside PG :`, numberOfPsychologists);
+      console.log('psychologists inside PG :', numberOfPsychologists);
     } else {
-      console.warn("No psychologists to save");
+      console.warn('No psychologists to save');
     }
 
-    console.log("importDataFromDSToPG done");
+    console.log('importDataFromDSToPG done');
 
-    return true; //must return something for cron lib
+    return true; // must return something for cron lib
   } catch (err) {
-    console.error("ERROR: Could not import DS API data to PG", err)
+    console.error('ERROR: Could not import DS API data to PG', err);
+    return false;
   }
 }
 
-module.exports.importEveryDataFromDSToPG = async function importEveryDataFromDSToPG () {
-  importDataFromDSToPG(true)
-}
+module.exports.importEveryDataFromDSToPG = async function importEveryDataFromDSToPG() {
+  importDataFromDSToPG(true);
+};
 
-module.exports.importLatestDataFromDSToPG = async function importLatestDataFromDSToPG () {
-  importDataFromDSToPG(false)
-}
-
-// One person should not have multiple dossiers in "acepte" status, notify the team.
-const checkForMultipleAcceptedDossiers = async () => {
-  const count = await dbPsychologists.countAcceptedPsychologistsByPersonalEmail()
-  const badPsychologists = count.filter(statsPoint => {
-    if (statsPoint.count > 1) {
-      return true
-    }
-  })
-  if (badPsychologists.length > 0) {
-    console.log('Detected psychologists with multiple accepted dossiers!', badPsychologists)
-    await sendAlertEmail(badPsychologists)
-  }
-
-  return true;
-}
-module.exports.checkForMultipleAcceptedDossiers = checkForMultipleAcceptedDossiers
+module.exports.importLatestDataFromDSToPG = async function importLatestDataFromDSToPG() {
+  importDataFromDSToPG(false);
+};
 
 const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
   try {
@@ -67,9 +51,22 @@ const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
       badPsychologists,
       hostnameWithProtocol: config.hostnameWithProtocol,
     });
-    await emailUtils.sendMail(config.teamEmail, `Dossiers multiples détéctés !`, html);
-    console.debug('Email sent for multiple accounts alert')
+    await emailUtils.sendMail(config.teamEmail, 'Dossiers multiples détéctés !', html);
+    console.debug('Email sent for multiple accounts alert');
   } catch (err) {
     console.error("Erreur d'envoi de mail, le mail d'alerte n'est pas envoyé.", err);
   }
-}
+};
+
+// One person should not have multiple dossiers in "acepte" status, notify the team.
+const checkForMultipleAcceptedDossiers = async () => {
+  const count = await dbPsychologists.countAcceptedPsychologistsByPersonalEmail();
+  const badPsychologists = count.filter((statsPoint) => statsPoint.count > 1);
+  if (badPsychologists.length > 0) {
+    console.log('Detected psychologists with multiple accepted dossiers!', badPsychologists);
+    await sendAlertEmail(badPsychologists);
+  }
+
+  return true;
+};
+module.exports.checkForMultipleAcceptedDossiers = checkForMultipleAcceptedDossiers;

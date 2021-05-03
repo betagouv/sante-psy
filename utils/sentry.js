@@ -1,5 +1,5 @@
-const Sentry = require("@sentry/node");
-const sentryIntegrations = require("@sentry/integrations");
+const Sentry = require('@sentry/node');
+const sentryIntegrations = require('@sentry/integrations');
 
 const config = require('./config');
 
@@ -8,19 +8,19 @@ const config = require('./config');
  * @see https://sentry.io/betagouv-f7/sante-psy-prod/getting-started/node-express/
  */
 module.exports.initCaptureConsole = function initCaptureConsole() {
-  const logLevel =  ['error'];
+  const logLevel = ['error'];
   console.log(`Initializing Sentry for log level "${logLevel}" and config: ${config.sentryDNS}`);
   Sentry.init({
     dsn: config.sentryDNS,
-    //https://docs.sentry.io/platforms/javascript/configuration/integrations/plugin/#captureconsole
+    // https://docs.sentry.io/platforms/javascript/configuration/integrations/plugin/#captureconsole
     integrations: [
-      new sentryIntegrations.CaptureConsole({levels: logLevel}),
+      new sentryIntegrations.CaptureConsole({ levels: logLevel }),
     ],
   });
-}
+};
 
 module.exports.initCaptureConsoleWithHandler = function initCaptureConsoleWithHandler(app) {
-  if( config.sentryDNS ) {
+  if (config.sentryDNS) {
     this.initCaptureConsole(config.sentryDNS);
 
     // RequestHandler creates a separate execution context using domains, so that every
@@ -30,6 +30,6 @@ module.exports.initCaptureConsoleWithHandler = function initCaptureConsoleWithHa
     // The error handler must be before any other error middleware and after all controllers
     app.use(Sentry.Handlers.errorHandler());
   } else {
-    console.log("Sentry was not initialized as SENTRY_DNS env variable is missing");
+    console.log('Sentry was not initialized as SENTRY_DNS env variable is missing');
   }
-}
+};

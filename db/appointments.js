@@ -1,10 +1,10 @@
-const knexConfig = require("../knexfile")
-const knex = require("knex")(knexConfig)
-const dbPatient = require('./patients')
-const dbPsychologists = require('./psychologists')
-const date = require("../utils/date");
+const knexConfig = require('../knexfile');
+const knex = require('knex')(knexConfig);
+const dbPatient = require('./patients');
+const dbPsychologists = require('./psychologists');
+const date = require('../utils/date');
 
-const appointmentsTable = "appointments"
+const appointmentsTable = 'appointments';
 module.exports.appointmentsTable = appointmentsTable;
 
 // todo: bug : if appointment has a patientId that does not match a patient object in the db,
@@ -15,13 +15,13 @@ module.exports.getAppointments = async (psychologistId) => {
       .innerJoin(`${appointmentsTable}`, `${dbPatient.patientsTable}.id`, `${appointmentsTable}.patientId`)
       .where(`${appointmentsTable}.psychologistId`, psychologistId)
       .whereNot(`${appointmentsTable}.deleted`, true)
-      .orderBy("appointmentDate", "desc")
-    return appointmentArray
+      .orderBy('appointmentDate', 'desc');
+    return appointmentArray;
   } catch (err) {
-    console.error(`Impossible de récupérer les appointments`, err)
-    throw new Error(`Impossible de récupérer les appointments`)
+    console.error('Impossible de récupérer les appointments', err);
+    throw new Error('Impossible de récupérer les appointments');
   }
-}
+};
 
 /**
  * Note : january = 1, february = 2, etc
@@ -38,19 +38,19 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
         , "psychologistId"
         , EXTRACT(YEAR from "appointmentDate") AS year
         , EXTRACT(MONTH from "appointmentDate") AS month`))
-      .where("psychologistId", psychologistId)
+      .where('psychologistId', psychologistId)
       .whereNot(`${appointmentsTable}.deleted`, true)
       .groupByRaw(`"psychologistId"
         , EXTRACT(YEAR from "appointmentDate")
         , EXTRACT(MONTH from "appointmentDate")`)
-      .orderBy([{ column: 'year', order: 'asc'}, { column: 'month', order: 'asc' }])
+      .orderBy([{ column: 'year', order: 'asc' }, { column: 'month', order: 'asc' }]);
 
     return query;
   } catch (err) {
-    console.error(`Impossible de récupérer les appointments`, err)
-    throw new Error(`Impossible de récupérer les appointments`)
+    console.error('Impossible de récupérer les appointments', err);
+    throw new Error('Impossible de récupérer les appointments');
   }
-}
+};
 
 /**
  * Output the number of appointments for each psy, for the given month and year. Join with university id.
@@ -89,14 +89,14 @@ module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
       .groupBy(`${dbPsychologists.psychologistsTable}.firstNames`)
       .groupBy(`${dbPsychologists.psychologistsTable}.lastName`)
       .groupBy(`${dbPsychologists.psychologistsTable}.personalEmail`)
-      .orderBy(`countAppointments`)
+      .orderBy('countAppointments');
 
-    return  query;
+    return query;
   } catch (err) {
-    console.error(`Impossible de récupérer les appointments`, err)
-    throw new Error(`Impossible de récupérer les appointments`)
+    console.error('Impossible de récupérer les appointments', err);
+    throw new Error('Impossible de récupérer les appointments');
   }
-}
+};
 
 /**
  * Note : january = 1, february = 2, etc
@@ -112,48 +112,48 @@ module.exports.getCountPatientsByYearMonth = async (psychologistId) => {
       .select(knex.raw(`CAST(COUNT(DISTINCT "patientId") AS INTEGER) AS "countPatients"
         , EXTRACT(YEAR from "appointmentDate") AS year
         , EXTRACT(MONTH from "appointmentDate") AS month`))
-      .where("psychologistId", psychologistId)
+      .where('psychologistId', psychologistId)
       .groupByRaw(`EXTRACT(YEAR from "appointmentDate")
         , EXTRACT(MONTH from "appointmentDate")`)
-      .orderBy([{ column: 'year', order: 'asc'}, { column: 'month', order: 'asc' }])
+      .orderBy([{ column: 'year', order: 'asc' }, { column: 'month', order: 'asc' }]);
     return query;
   } catch (err) {
-    console.error(`Impossible de récupérer les appointments`, err)
-    throw new Error(`Impossible de récupérer les appointments`)
+    console.error('Impossible de récupérer les appointments', err);
+    throw new Error('Impossible de récupérer les appointments');
   }
-}
+};
 
 module.exports.insertAppointment = async (appointmentDate, patientId, psychologistId) => {
   try {
     const insertedArray = await knex(appointmentsTable).insert({
       psychologistId,
       appointmentDate,
-      patientId: patientId,
-    }).returning("*")
-    return insertedArray[0]
+      patientId,
+    }).returning('*');
+    return insertedArray[0];
   } catch (err) {
-    console.error("Erreur de sauvegarde du appointments", err)
-    throw new Error("Erreur de sauvegarde du appointments")
+    console.error('Erreur de sauvegarde du appointments', err);
+    throw new Error('Erreur de sauvegarde du appointments');
   }
-}
+};
 
 module.exports.deleteAppointment = async (appointmentId, psychologistId) => {
   try {
     const deletedAppointments = await knex(appointmentsTable)
       .where({
         id: appointmentId,
-        psychologistId: psychologistId
+        psychologistId,
       })
       .update({
         deleted: true,
-        updatedAt: date.getDateNowPG()
-      })
+        updatedAt: date.getDateNowPG(),
+      });
 
     console.log(`Appointment id ${appointmentId} deleted by psy id ${psychologistId}`);
 
-    return deletedAppointments
+    return deletedAppointments;
   } catch (err) {
-    console.error("Erreur de suppression du appointments", err)
-    throw new Error("Erreur de suppression du appointments")
+    console.error('Erreur de suppression du appointments', err);
+    throw new Error('Erreur de suppression du appointments');
   }
-}
+};

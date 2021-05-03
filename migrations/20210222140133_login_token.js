@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-const dbLoginToken = require("../db/loginToken")
+const dbLoginToken = require('../db/loginToken');
 
 exports.up = function (knex) {
   return knex.schema
