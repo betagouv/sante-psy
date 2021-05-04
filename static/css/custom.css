@@ -80,3 +80,6 @@
   color: var(--error);
 }
 
+.fr-sidemenu--sticky {
+  height: 100%;
+}
