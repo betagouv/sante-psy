@@ -60,80 +60,12 @@
       </div>
 
       <ul class="fr-accordion-group">
-        <%- include('partials/faq-item',
-        {
-          id: 'e0',
-          question: 'Je suis étudiant et j’ai besoin d’une aide psychologique. Que dois-je faire ?',
-          response: 'Vous devez consulter le service de santé de votre établissement ou un médecin généraliste, \
-          en étant muni de votre carte d’étudiant ou de tout document équivalent, \
-          qui vous orienteront en cas de besoin vers un psychologue partenaire du dispositif.'
-        })
+        <%- include('partials/faq-items',
+          {
+            faq,
+            section: 'students'
+          })
         -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'e1',
-          question: 'Je ne connais pas mon Service de Santé Universitaire. Que faire ?',
-          response: 'Vous n\'êtes pas obligé de passer par un SSU : vous pouvez consulter votre médecin traitant ou un médecin généraliste, qui vous orientera vers un psychologue partenaire du dispositif. \
-          Vous pouvez aussi consulter le site de votre université ou école, ou téléphoner, pour trouver si vous dépendez d\'un SSU.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'e2',
-          question: 'Puis-je aller voir directement le/la psychologue ?',
-          response: 'Dans le cadre du dispositif Santé Psy Etudiants, \
-          vous ne pouvez pas aller voir directement un psychologue ; vous devez consulter un médecin \
-          du service de santé universitaire ou un médecin généraliste qui vous orientera vers un psychologue partenaire de la démarche.'
-        })
-        -%>
-
-      <%- include('partials/faq-item',
-        {
-          id: 'e3',
-          question: 'Puis-je aller voir un psychologue dans une autre région ou ville ?',
-          response: 'Oui, \
-          vous pouvez contacter un psychologue partenaire dans un autre département \
-          peu importe votre département ou université d\'origine par téléphone, email, visio ou sur son site internet.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'e4',
-          question: 'Qui doit renouveler les séances ? Faut-il vraiment repasser chez le médecin ?',
-          response: 'Au-delà d’un premier cycle de trois séances vous pouvez être de nouveau orienté, \
-          obligatoirement par le médecin du service de santé universitaire ou le médecin généraliste, \
-          vers un psychologue pour un second cycle de trois séances au plus. \
-          Le passage par le médecin répond à la volonté d’inscrire l’étudiant dans un parcours de soin rigoureux.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'e5',
-          question: 'J’ai déjà un suivi. Puis-je cependant bénéficier du dispositif ?',
-          response: 'Les étudiants qui ont déjà un suivi sont éligibles au dispositif Santé Psy Étudiants. Ils devront cependant pour cela aller consulter un psychologue partenaire du dispositif.'
-        })
-        -%>
-        
-        <%- include('partials/faq-item',
-        {
-          id: 'e6',
-          question: 'Je ne suis pas de nationalité française, mais étudiant en France. Suis-je éligible au dispositif ?',
-          response: 'Oui, le dispositif Santé Psy Étudiants concerne tous les étudiants inscrits dans un établissement d‘enseignement supérieur français, sans considération de nationalité. La liste des psychologues participant au dispositif publié sur le site https://santepsy.etudiant.gouv.fr précise les langues pratiquées par ces derniers.'
-        })
-        -%>
-        
-        <%- include('partials/faq-item',
-        {
-          id: 'e7',
-          question: 'Je suis de nationalité française, mais étudiant à l‘étranger. Suis-je éligible au dispositif ?',
-          response: 'Oui, le dispositif Santé Psy Étudiants concerne tous les étudiants français. L‘ensemble des psychologues participant au dispositif sont cependant uniquement localisés en France, mais plusieurs permettent la téléconsultation.'
-        })
-        -%>
-
       </ul>
 
       <h1 id="psy">Je suis psychologue</h1>
@@ -154,194 +86,29 @@
       </div>
 
       <ul class="fr-accordion-group">
-
         <h2>Éligibilité</h2>
-        <%- include('partials/faq-item',
-        {
-          id: 'p0',
-          question: 'Je souhaiterais m’inscrire sur la liste des psychologues habilités à recevoir les étudiants qui \
-          souhaitent bénéficier du dispositif d’accompagnement. Quelles démarches dois-je effectuer ?',
-          response: 'Pour participer au dispositif Santé Psy Étudiants, les psychologues doivent en faire la demande en renseignant un formulaire \
-          <a href="' + formUrl + '" target="_blank" rel="noopener noreferrer">(cliquez ici pour accéder au formulaire)</a>. \
-          Le service de santé universitaire (SSU) le plus proche de votre lieu d’exercice procédera à l’examen de votre demande. \
-          Si elle est conforme aux critères retenus, votre demande sera agréée et vous serez invité(e) à signer une convention \
-          (destinée à définir les conditions de votre participation au dispositif et les modalités de règlement des consultations effectuées) \
-          avec l’université à laquelle le SSU est rattaché. Vos coordonnées seront publiées sur la liste des psychologues participant au dispositif. \
-          Les étudiants orientés, par le SSU ou un médecin généraliste, vers un psychologue choisiront \
-          parmi celles et ceux inscrits sur cette liste et prendront directement rendez-vous avec celle ou celui qu’ils ont choisi(e).'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p1',
-          question: 'Puis-je proposer ma participation au dispositif uniquement par consultations vidéo ?',
-          response: 'Dans ce cas, votre demande sera examinée par le service médical universitaire (SSU) \
-          proche de votre lieu d\’exercice qui déterminera, avec le concours de la fédération française des psychologues et de psychologie, \
-          si l\’offre exclusive de téléconsultation que vous proposez convient.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p2',
-          question: 'N’ayant pas de cabinet professionnel, puis-je me déplacer au domicile des étudiants ?',
-          response: 'Le dispositif Santé Psy Étudiants prévoit deux modalités de consultation : \
-          au cabinet du psychologue ou en téléconsultation. Le déplacement au domicile de l\’étudiant n\’est pas prévu. \
-          Il peut être une option mais pas un mode principal de consultation.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p3',
-          question: 'Puis-je participer au dispositif si je n\’ai pas 3 ans d\’ancienneté ?',
-          response: 'L’expérience requise de trois ans, calculée à partir de la date d’obtention du diplôme, \
-          est une condition impérative pour pouvoir participer au dispositif, condition qui a été retenue après une large \
-          consultation des professionnels concernés (psychologues, médecins, etc.).'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p4',
-          question: 'Je ne dispose pas de numéro Adeli mais d’un numéro Siret. Puis-je participer au dispositif ?',
-          response: 'Le numéro ADELI est obligatoire car il permet d’attester que son détenteur est autorisé à faire usage du titre de psychologue. \
-          Il constitue donc pour les services de santé universitaire une garantie importante préalable à l’agrément, \
-          complémentaire aux trois années d’expérience requises. Le numéro SIRET n’offre pas une telle garantie. '
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p5',
-          question: 'Quels sont les psys concernés ? Uniquement psychologue ? Psychiatre aussi ? Psychanalyste ?',
-          response: 'Le dispositif prévoit de mobiliser celles et ceux qui disposent du titre réglementé de psychologue et \
-          d’une expérience d’au moins trois ans. Certains psychologues détiennent d’autres qualifications qu’ils peuvent mentionner dans le formulaire à remplir. \
-          Les psychiatres relèvent d’un régime de remboursement aux patients de leurs actes par l’assurance maladie. \
-          Ils n’ont donc pas vocation à intégrer le dispositif Santé Psy Étudiants.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p6',
-          question: 'Le dispositif SPE est-il exclusif de celui permettant de recruter des psychologues ou les deux dispositifs sont-ils au contraire cumulatifs ?',
-          response: 'Les deux dispositifs sont cumulatifs pour les établissements éligibles à l’un et l’autre.'
-        })
+        <%- include('partials/faq-items',
+          {
+            faq,
+            section: 'eligibility'
+          })
         -%>
 
         <h2 id="remboursement">Prix de la séance et remboursement</h2>
-        <%- include('partials/faq-item',
-        {
-          id: 'p7',
-          question: 'Comment a été fixé le tarif de 30 euros pour une consultation, sachant que les tarifs varient selon les régions, \
-          selon les formations complémentaires et spécialités de chaque professionnel ?',
-          response: 'S’agissant d’un dispositif national, le tarif doit être identique sur l’ensemble du territoire et il a été fixé à 30 € par le ministère des solidarités et de la santé.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p8',
-          question: 'Est-il prévu soit un allégement des taxes pour que les psychologues \
-          investis dans ce dispositif ne travaillent pas bénévolement ? Est-il simplement prévu que des professionnels donnent leur temps ?',
-          response: 'À ce stade, il n’est prévu aucune mesure particulière.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p9',
-          question: 'Pourquoi les consultations sont-elles fixées à 45 min ?',
-          response: 'La durée des séances ainsi que, par ailleurs, les critères relatifs au diplôme ou à \
-          l’expérience ont été établis avec le concours de la fédération française des psychologues et de psychologie.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p10',
-          question: 'Comment se passe le remboursement ? Quel délai ?',
-          response: 'Les psychologues partenaires du dispositif sont agréés par les services de \
-          santé universitaire (SSU) et signent une convention avec l’établissement dont dépend le SSU qui les a agréés. \
-          Cette convention précise les modalités de paiement des séances réalisées dans le cadre du dispositif. \
-          Ces séances sont déclarées par les psychologues sur une plateforme dédiée. \
-          Cette déclaration va déclencher les opérations de paiement prises en charge par les \
-          services administratifs et financiers de l’établissement, dans le respect du secret médical et professionnel. \
-          Le paiement intervient dans le délai global de paiement, soit 30 jours à partir du moment où les pièces justificatives du paiement sont réunies.'
-        })
+        <%- include('partials/faq-items',
+          {
+            faq,
+            section: 'reimbursement'
+          })
         -%>
 
         <h2>Déroulé</h2>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p11',
-          question: 'Je suis déjà des étudiants. Puis-je continuer à les suivre dans le cadre du dispositif Santé Psy Etudiants ?',
-          response: 'Si les étudiants que vous prenez en charge actuellement souhaitent bénéficier du dispositif et \
-          poursuivre leur consultation avec vous, il est nécessaire qu’ils soient orientés vers un psychologue par le SSU dont \
-          ils dépendent ou un médecin généraliste. Parallèlement, pour pouvoir continuer à suivre ces étudiants, \
-          vous devez être agréé pour participer au dispositif : renseignez le formulaire en ligne <a href="' + formUrl + '" target="_blank" rel="noopener noreferrer">(cliquez ici pour accéder au formulaire)</a>. \
-          Si vous remplissez les conditions de participation et acceptez les modalités de prise en charge des étudiants (tarif, lien avec le corps médical notamment), \
-          une convention avec l’université la plus proche de votre lieu d’exercice vous sera proposée et vous serez inscrit sur la liste des psychologues agréés par le SSU \
-          mise à disposition des étudiants et médecins généralistes.'
-        })
+        <%- include('partials/faq-items',
+          {
+            faq,
+            section: 'process'
+          })
         -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p12',
-          question: 'Les étudiants peuvent-ils directement venir voir le/la psy ?',
-          response: 'Dans le cadre du dispositif Santé Psy Etudiants, les étudiants doivent consulter le service de santé universitaire ou \
-          un médecin généraliste qui peut les orienter vers un psychologue partenaire de la démarche.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p13',
-          question: 'Comment un étudiant sait s’il a un SSU ? Comment fait-il s’il n’en a pas ?',
-          response: 'Les étudiants peuvent savoir si leur établissement dispose d’un service de santé universitaire (SSU) ou s’ils ont accès au SSU \
-          d’un autre établissement (par convention) en consultant le site de leur université ou école ou en leur téléphonant. \
-          Si l’étudiant n’a pas accès à un SSU, il peut se rendre chez un médecin généraliste qui l’orientera en cas de besoin vers un psychologue partenaire du dispositif.\
-          D’une façon générale, les établissements disposant d’un SSU sont invités à ouvrir autant que possible leur service aux écoles partenaires ou partageant le site.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p14',
-          question: 'Qui doit renouveler les séances ? Faut-il vraiment repasser chez le médecin ?',
-          response: 'Au-delà d’un premier cycle de trois séances, l’étudiant peut être de nouveau orienté, \
-          obligatoirement par le médecin du service de santé universitaire ou le médecin généraliste, \
-          vers un psychologue pour un second cycle de trois séances au plus. \
-          Le passage par le médecin répond à la volonté d’inscrire l’étudiant dans un parcours de soin rigoureux.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p15',
-          question: 'Si l’étudiant le souhaite, au-delà de la première consultation "d’orientation", peut-on lui proposer de continuer à le suivre pour les trois séances remboursées ? ',
-          response: 'L’étudiant qui a accès à la liste des psychologues participant au dispositif, \
-          choisit celui qu’il souhaite consulter et prend rendez-vous avec lui. Il revient au psychologue de déterminer, lors de la première consultation, \
-          si l’étudiant a besoin d’une, deux ou trois séances avec lui. Dans l’hypothèse où à l’issue des trois premières séances, \
-          le psychologue considère utile ou nécessaire d’envisager des consultations supplémentaires, \
-          il se rapproche du SSU ou du médecin généraliste qui seuls sont habilités à orienter l’étudiant vers un psychologue pour au plus trois séances supplémentaires.'
-        })
-        -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'p16',
-          question: 'Il est indiqué que les psychologues feront acte de candidature via un formulaire simplifié en ligne et \
-          qu’une plateforme numérique permettra de déclarer le nombre de consultations effectuées. Serait-il possible d’y avoir accès ou bien est-ce réservé aux SSU ?',
-          response: 'Ce sera au psychologue de faire la déclaration des séances faites une fois qu’il est inscrit via le formulaire en ligne et \
-          que son dossier est accepté.  Cette déclaration se fera sur la plateforme santé psy étudiant, dans l’espace personnel du psychologue lorsque que la plateforme sera accessible.'
-        })
-        -%>
-
       </ul>
 
       <h1 id="medecin">Je suis médecin généraliste</h1>
@@ -367,30 +134,12 @@
       </div>
 
       <ul class="fr-accordion-group">
-        <%- include('partials/faq-item',
-        {
-          id: 'm0',
-          question: 'En tant que médecin généraliste je suis contacté par un étudiant. Que dois-je faire ?',
-          response: 'Les étudiants en situation de « mal-être » peuvent soit consulter le médecin du service de santé universitaire (SSU) soit un médecin généraliste. \
-          En cas de besoin identifié, vous pouvez orienter l’étudiant, muni d’une ordonnance, vers l’un des psychologues partenaires du dispositif, \
-          l’étudiant devant vous présenter sa carte d’étudiant ou tout document équivalent. \
-          Cette orientation permet à l’étudiant de bénéficier jusqu’à 3 séances de 45 minutes chacune, entièrement prises en charge par l’université. \
-          Vous pouvez être recontacté par le psychologue pour évoquer la suite de la prise en charge : amélioration de l’état de santé, \
-          inscription dans un parcours de soins spécialisés, nécessité d’autres séances avec le psychologue. Dans ce dernier cas, si vous le jugez nécessaire, \
-          jusqu’à 3 nouvelles séances peuvent être réalisées dans les mêmes conditions que lors de la première orientation.'
-        })
+        <%- include('partials/faq-items',
+          {
+            faq,
+            section: 'doctor'
+          })
         -%>
-
-        <%- include('partials/faq-item',
-        {
-          id: 'm1',
-          question: 'Qu’est-ce que la plateforme https://santepsy.etudiant.gouv.fr ?',
-          response: 'C’est la plateforme du dispositif de soutien psychologique aux étudiants. Elle permet aux médecins généralistes de disposer des informations \
-          utiles pour orienter les étudiants vers les psychologues engagés dans le dispositif. \
-          Sur cette plateforme est disponible la liste des psychologues agréés par les universités.'
-        })
-        -%>
-
       </ul>
 
     </div>
