@@ -9,5 +9,11 @@
   "scripts": {
     "first-deploy": "bash scalingo-dev-seed.sh",
     "postdeploy": "npm run migrate"
+  },
+  "formation": {
+    "web": {
+      "amount": 1,
+      "size": "S"
+    }
   }
 }
