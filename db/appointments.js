@@ -113,6 +113,7 @@ module.exports.getCountPatientsByYearMonth = async (psychologistId) => {
         , EXTRACT(YEAR from "appointmentDate") AS year
         , EXTRACT(MONTH from "appointmentDate") AS month`))
       .where('psychologistId', psychologistId)
+      .whereNot(`${appointmentsTable}.deleted`, true)
       .groupByRaw(`EXTRACT(YEAR from "appointmentDate")
         , EXTRACT(MONTH from "appointmentDate")`)
       .orderBy([{ column: 'year', order: 'asc' }, { column: 'month', order: 'asc' }]);
