@@ -8,15 +8,15 @@ const validation = require('../utils/validation');
 
 function mergeTotalPatientAppointments(totalAppointments, totalPatients) {
   return totalPatients.map((totalPatient) => {
-    const appointForMonthYear = totalAppointments.filter(
+    const appointForMonthYear = totalAppointments.find(
       (appointment) => appointment.year === totalPatient.year && appointment.month === totalPatient.month,
-    )[0];
+    );
 
     return {
       year: totalPatient.year,
       month: date.getFrenchMonthName(totalPatient.month),
       countPatients: totalPatient.countPatients,
-      countAppointments: appointForMonthYear.countAppointments,
+      countAppointments: appointForMonthYear ? appointForMonthYear.countAppointments : 0,
     };
   });
 }

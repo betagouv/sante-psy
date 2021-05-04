@@ -25,6 +25,7 @@ describe('reimbursementController', () => {
       { countPatients: 2, year: 2021, month: 6 },
       { countPatients: 4, year: 2021, month: 7 },
       { countPatients: 4, year: 2021, month: 11 },
+      { countPatients: 1, year: 2021, month: 12 },
     ];
 
     const total = [
@@ -42,6 +43,9 @@ describe('reimbursementController', () => {
       },
       {
         year: 2021, month: 'novembre', countPatients: 4, countAppointments: 8,
+      },
+      {
+        year: 2021, month: 'décembre', countPatients: 1, countAppointments: 0,
       },
     ];
 
