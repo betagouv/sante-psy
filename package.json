@@ -2,7 +2,8 @@
   "name": "sante-psy",
   "version": "1.0.0",
   "engines": {
-    "node": ">=14.16.0"
+    "node": "^14.16.0",
+    "npm": "^6.14.0"
   },
   "description": "Accompagnement Psychologique pour les étudiants",
   "main": "index.js",
