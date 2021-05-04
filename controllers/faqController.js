@@ -1,9 +1,7 @@
-const config = require('../utils/config');
+const faq = require('../utils/faq/faq');
 
 module.exports.getFaq = async function getFaq(req, res) {
-  const formUrl = config.demarchesSimplifieesUrl;
-
   res.render('faq', {
-    formUrl,
+    faq,
   });
 };

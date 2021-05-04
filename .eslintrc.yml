@@ -37,6 +37,7 @@ rules:
   radix: "off"
   no-new: "off"
   no-plusplus: "off" 
+  no-multi-str: "off"
   mocha-no-only/mocha-no-only: ["error"]
 
 ignorePatterns:
