@@ -1,5 +1,5 @@
 const { request, assert } = require('chai');
-const app = require('../index');
+const app = require('../index.ts');
 
 describe('CSP test', () => {
   it('Should have restrictions set in csp', async () => {

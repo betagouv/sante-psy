@@ -1,6 +1,6 @@
 /* eslint-disable func-names */
 const chai = require('chai');
-const app = require('../index');
+const app = require('../index.ts');
 const cookie = require('../utils/cookie');
 
 describe('Redirect if unknown page - 404', () => {
