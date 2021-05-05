@@ -137,7 +137,12 @@ docker-compose -f docker-compose-only-db.yml up
 npm test
 ```
 
-#### Lancer les tests sans le CSRF
+#### .ENV
+
+##### Secrets
+Penser à décommenter les variables d'environnement `SECRET` et `SECRET_LOGS` dans le fichier `.env` avant de lancer les tests localement.
+
+##### Lancer les tests sans le CSRF
 Configurer la variable d'environnement USE_CSRF à "false"
 ```bash
 USE_CSRF="false"
