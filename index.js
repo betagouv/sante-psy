@@ -150,7 +150,7 @@ app.locals.date = date;
 const rateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minute window
   max: 1000, // start blocking after X requests for windowMs time
-  message: 'Trop de requête venant de cette IP, veuillez essayer plus tard.',
+  message: 'Trop de requêtes venant de cette IP, veuillez réessayer plus tard.',
 });
 app.use(rateLimiter);
 
