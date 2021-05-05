@@ -12,7 +12,7 @@
   },
   "formation": {
     "web": {
-      "amount": 1,
+      "amount": 2,
       "size": "S"
     },
     "updateDataDSToPG": {
