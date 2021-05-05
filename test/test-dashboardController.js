@@ -116,23 +116,21 @@ describe('dashboardController', () => {
   });
 
   describe('display dashboard', () => {
-    beforeEach(async (done) => {
-      done();
-    });
+    let psy;
+    let anotherPsyId;
+    let myPatient;
+    let patientForAnotherPsy;
+    let currentAppointement;
+    let previousYearAppointment;
+    let previousMonthAppointment;
 
-    afterEach(async () => {
-      await clean.cleanAllPatients();
-      await clean.cleanAllAppointments();
-      return Promise.resolve();
-    });
-
-    it('should display only my patients in dashboard', async () => {
-      const psy = {
+    before(async () => {
+      psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
       };
-      const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d';
-      const myPatient = await dbPatients.insertPatient(
+      anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d';
+      myPatient = await dbPatients.insertPatient(
         'Ada',
         'Lovelace',
         '12345678901',
@@ -144,7 +142,7 @@ describe('dashboardController', () => {
         'adresse du docteur',
         dateOfBirth,
       );
-      const patientForAnotherPsy = await dbPatients.insertPatient(
+      patientForAnotherPsy = await dbPatients.insertPatient(
         'Stevie',
         'Wonder',
         '34567890123',
@@ -157,7 +155,45 @@ describe('dashboardController', () => {
         dateOfBirth,
       );
 
-      return chai.request(app)
+      const today = new Date();
+      currentAppointement = await dbAppointments.insertAppointment(
+        today,
+        myPatient.id,
+        psy.dossierNumber,
+      );
+
+      await dbAppointments.insertAppointment(
+        today,
+        patientForAnotherPsy.id,
+        anotherPsyId.dossierNumber,
+      );
+
+      const previousYear = new Date();
+      previousYear.setFullYear(today.getFullYear() - 1);
+      previousYearAppointment = await dbAppointments.insertAppointment(
+        previousYear,
+        myPatient.id,
+        psy.dossierNumber,
+      );
+
+      const previousMonth = new Date();
+      previousMonth.setMonth(today.getMonth() - 1);
+      previousMonthAppointment = await dbAppointments.insertAppointment(
+        previousMonth,
+        myPatient.id,
+        psy.dossierNumber,
+      );
+
+      return Promise.resolve();
+    });
+
+    after(async () => {
+      await clean.cleanAllPatients();
+      await clean.cleanAllAppointments();
+      return Promise.resolve();
+    });
+
+    it('should display only my patients in dashboard', () => chai.request(app)
         .get('/psychologue/mes-seances')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
@@ -170,60 +206,54 @@ describe('dashboardController', () => {
           chai.assert.notInclude(res.text, patientForAnotherPsy.firstNames);
           chai.assert.notInclude(res.text, patientForAnotherPsy.lastName);
           return Promise.resolve();
-        });
-    });
+        }));
 
-    it('should display only my appointments in dashboard', async () => {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      };
-      const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d';
-      const myPatient = await dbPatients.insertPatient(
-        'Ada',
-        'Lovelace',
-        '12345678901',
-        '42',
-        false,
-        false,
-        psy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
-      const patientForAnotherPsy = await dbPatients.insertPatient(
-        'Stevie',
-        'Wonder',
-        '34567890123',
-        'Universal',
-        false,
-        true,
-        anotherPsyId,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
-      const myAppointment = await dbAppointments.insertAppointment(
-        new Date('2021-03-01'),
-        myPatient.id,
-        psy.dossierNumber,
-      );
-      const appointmentForAnotherPsy = await dbAppointments.insertAppointment(
-        new Date('2021-12-12'),
-        patientForAnotherPsy.id,
-        anotherPsyId,
-      );
-
-      return chai.request(app)
+    it('should display only my appointments in dashboard', () => chai.request(app)
         .get('/psychologue/mes-seances')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
-          // My appointments are present
-          chai.assert.include(res.text, date.formatFrenchDate(myAppointment.appointmentDate));
+          // My patient is present
+          chai.assert.include(res.text, `${myPatient.firstNames} ${myPatient.lastName}`);
 
           // Other psy's patients are not listed
-          chai.assert.notInclude(res.text, date.formatFrenchDate(appointmentForAnotherPsy.appointmentDate));
+          chai.assert.notInclude(res.text,
+            `${patientForAnotherPsy.firstNames} ${patientForAnotherPsy.lastName}`);
+
+          return Promise.resolve();
+        }));
+
+    it('should display this month appointments by default in dashboard', () => chai.request(app)
+        .get('/psychologue/mes-seances')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .then(async (res) => {
+          // this month appointments are present
+          chai.assert.include(res.text, date.formatFrenchDate(currentAppointement.appointmentDate));
+
+          // Other month appointments are not listed
+          chai.assert.notInclude(res.text, date.formatFrenchDate(previousMonthAppointment.appointmentDate));
+          chai.assert.notInclude(res.text, date.formatFrenchDate(previousYearAppointment.appointmentDate));
+
+          return Promise.resolve();
+        }));
+
+    it('should display requested month appointments in dashboard', () => {
+      const previousYear = new Date();
+      previousYear.setFullYear(previousYear.getFullYear() - 1);
+
+      chai.request(app)
+        .post('/psychologue/mes-seances')
+        .type('form')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .send({ isoDate: previousYear.toDateString() })
+        .redirects(0) // block redirects, we don't want to test them
+        .then(async (res) => {
+          // this month appointments are present
+          chai.assert.include(res.text, date.formatFrenchDate(previousYearAppointment.appointmentDate));
+
+          // Other month appointments are not listed
+          chai.assert.notInclude(res.text, date.formatFrenchDate(currentAppointement.appointmentDate));
 
           return Promise.resolve();
         });

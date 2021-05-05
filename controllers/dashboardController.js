@@ -46,6 +46,7 @@ function hasFolderCompleted(patient) {
 
 module.exports.dashboard = async function dashboard(req, res) {
   try {
+    const monthPicker = req.body && req.body.isoDate ? new Date(req.body.isoDate) : new Date();
     const psychologistId = cookie.getCurrentPsyId(req);
     const [patients, appointments] = await Promise.all([
       dbPatient.getPatients(psychologistId),
@@ -59,8 +60,9 @@ module.exports.dashboard = async function dashboard(req, res) {
     });
 
     res.render('dashboard', {
-      appointments,
+      appointments: appointments.filter((appointment) => date.isSameMonth(appointment.appointmentDate, monthPicker)),
       patients,
+      monthPicker,
       announcement: config.announcement,
       dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
     });
@@ -70,6 +72,7 @@ module.exports.dashboard = async function dashboard(req, res) {
     res.render('dashboard', {
       appointments: [],
       patients: [],
+      monthPicker: new Date(),
     });
   }
 };
