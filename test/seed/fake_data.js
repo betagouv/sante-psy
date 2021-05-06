@@ -10,6 +10,13 @@ const clean = require('../helper/clean');
 const uuid = require('../../utils/uuid');
 
 exports.seed = async function (knex) {
+  console.log('Clean database information');
+
+  await knex(dbAppointments.appointmentsTable).del();
+  await knex(dbPatients.patientsTable).del();
+  await knex(dbPsychologists.psychologistsTable).del();
+  await knex(dbUniversities.universitiesTable).del();
+
   const universitiesList = dbUniversities.universities.map((uni) => ({
     name: uni,
     id: uuid.randomUuid(),
