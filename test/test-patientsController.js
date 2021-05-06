@@ -844,7 +844,7 @@ describe('patientsController', () => {
     });
   });
 
-  describe.only('delete patient', () => {
+  describe('delete patient', () => {
     beforeEach(async () => {
       await clean.cleanAllPatients();
       return Promise.resolve();

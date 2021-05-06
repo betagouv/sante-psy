@@ -223,7 +223,7 @@ describe('DB Patients', () => {
         dateOfBirth,
       );
       await dbPatients.deletePatient(patient.id, psychologistId);
-      
+
       const patients = await dbPatients.getPatients(psychologistId);
       expect(patients).to.have.length(0);
     });
