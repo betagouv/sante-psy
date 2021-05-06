@@ -1,6 +1,6 @@
 const chai = require('chai');
 const rewire = require('rewire');
-const app = require('../index');
+const app = require('../index.ts');
 const clean = require('./helper/clean');
 const cookie = require('../utils/cookie');
 const dbPsychologists = require('../db/psychologists');

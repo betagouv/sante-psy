@@ -1,40 +1,42 @@
-require('dotenv').config();
+import bodyParser from 'body-parser';
+import express from 'express';
+import expressSanitizer from 'express-sanitizer';
+import dotenv from 'dotenv';
 
-const bodyParser = require('body-parser');
-const express = require('express');
-const expressSanitizer = require('express-sanitizer');
-const path = require('path');
+import flash from 'connect-flash';
+import expressJWT from 'express-jwt';
+import rateLimit from 'express-rate-limit';
+import slowDown from 'express-slow-down';
+import cookieParser from 'cookie-parser';
+import cookieSession from 'cookie-session';
+import csrf from 'csurf';
 
-const flash = require('connect-flash');
-const expressJWT = require('express-jwt');
-const rateLimit = require('express-rate-limit');
-const slowDown = require('express-slow-down');
-const cookieParser = require('cookie-parser');
-const cookieSession = require('cookie-session');
-const csrf = require('csurf');
-const config = require('./utils/config');
-const date = require('./utils/date');
-const cspConfig = require('./utils/csp-config');
-const sentry = require('./utils/sentry');
+import config from './utils/config';
+import date from './utils/date';
+import cspConfig from './utils/csp-config';
+import sentry from './utils/sentry';
+
+import landingController from './controllers/landingController';
+import dashboardController from './controllers/dashboardController';
+import appointmentsController from './controllers/appointmentsController';
+import patientsController from './controllers/patientsController';
+import psyListingController from './controllers/psyListingController';
+import loginController from './controllers/loginController';
+import faqController from './controllers/faqController';
+import reimbursementController from './controllers/reimbursementController';
+
+dotenv.config();
 
 const { appName } = config;
 const appDescription = 'Accompagnement psychologique pour les étudiants';
 const appRepo = 'https://github.com/betagouv/sante-psy';
 
 const app = express();
-const landingController = require('./controllers/landingController');
-const dashboardController = require('./controllers/dashboardController');
-const appointmentsController = require('./controllers/appointmentsController');
-const patientsController = require('./controllers/patientsController');
-const psyListingController = require('./controllers/psyListingController');
-const loginController = require('./controllers/loginController');
-const faqController = require('./controllers/faqController');
-const reimbursementController = require('./controllers/reimbursementController');
 
 // Desactivate debug log for production as they are a bit too verbose
 if (!config.activateDebug) {
   console.log('console.debug is not active - thanks to ACTIVATE_DEBUG_LOG env variable');
-  console.debug = function desactivateDebug() {};
+  console.debug = () => {};
 }
 
 app.use(cspConfig);
@@ -44,24 +46,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(cookieParser(config.secret));
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', './views');
 app.use('/static', express.static('static'));
-app.use('/static/gouvfr', express.static(
-  path.join(__dirname, 'node_modules/@gouvfr/dsfr/dist'),
-));
-app.use('/static/jquery', express.static(
-  path.join(__dirname, 'node_modules/jquery/dist'),
-));
-app.use('/static/tabulator-tables', express.static(
-  path.join(__dirname, 'node_modules/tabulator-tables/dist'),
-));
+app.use('/static/gouvfr', express.static('./node_modules/@gouvfr/dsfr/dist'));
+app.use('/static/jquery', express.static('./node_modules/jquery/dist'));
+app.use('/static/tabulator-tables', express.static('./node_modules/tabulator-tables/dist'));
 
 // This session cookie (connect.sid) is only used for displaying the flash messages.
 // The other session cookie (token) contains the authenticated user session.
 app.use(cookieSession({
   secret: config.secret,
-  resave: false,
-  saveUninitialized: true,
   maxAge: parseInt(config.sessionDurationHours) * 60 * 60 * 1000,
 }));
 
