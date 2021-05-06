@@ -23,6 +23,7 @@ module.exports.getPatients = async (psychologistId) => {
   try {
     const patientArray = await knex(module.exports.patientsTable)
         .where('psychologistId', psychologistId)
+        .where('deleted', false)
         .orderBy('lastName');
     return patientArray;
   } catch (err) {
