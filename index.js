@@ -203,6 +203,9 @@ if (config.featurePsyPages) {
   app.post('/psychologue/api/modifier-patient',
     patientsController.editPatientValidators,
     patientsController.editPatient);
+  app.post('/psychologue/api/supprimer-patient',
+    patientsController.deletePatientValidators,
+    patientsController.deletePatient);
 
   if (config.featureReimbursementPage) {
     app.get('/psychologue/mes-remboursements', reimbursementController.reimbursement);

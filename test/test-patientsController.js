@@ -843,4 +843,145 @@ describe('patientsController', () => {
       });
     });
   });
+
+  describe.only('delete patient', () => {
+    beforeEach(async () => {
+      await clean.cleanAllPatients();
+      return Promise.resolve();
+    });
+
+    afterEach(async () => {
+      await clean.cleanAllPatients();
+      return Promise.resolve();
+    });
+
+    it('should delete patient', async () => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'prenom.nom@beta.gouv.fr',
+      };
+      const patient = await makePatient(psy.dossierNumber);
+
+      return chai.request(app)
+        .post('/psychologue/api/supprimer-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          patientId: patient.id,
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/psychologue/mes-seances');
+
+          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
+          console.debug(patientsArray);
+          expect(patientsArray).to.have.length(0);
+
+          return Promise.resolve();
+        });
+    });
+
+    it('should not delete patient if it is not mine', async () => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'prenom.nom@beta.gouv.fr',
+      };
+      const anotherPsyId = 'ccb6f32b-8c55-4322-8ecc-556e6900b4ea';
+      const patient = await makePatient(anotherPsyId);
+
+      return chai.request(app)
+        .post('/psychologue/api/supprimer-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          patientId: patient.id,
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/psychologue/mes-seances');
+          // Patient is not deleted
+          const patientsArray = await dbPatients.getPatients(anotherPsyId);
+          expect(patientsArray).to.have.length(1);
+
+          return Promise.resolve();
+        });
+    });
+
+    it('should refuse invalid patientId', async () => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'prenom.nom@beta.gouv.fr',
+      };
+      const patient = await makePatient(psy.dossierNumber);
+
+      return chai.request(app)
+        .post('/psychologue/api/supprimer-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          patientId: `${patient.id}4`,
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/psychologue/mes-seances');
+
+          // Patient is not deleted
+          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
+          expect(patientsArray).to.have.length(1);
+
+          return Promise.resolve();
+        });
+    });
+
+    it('should not delete patient if user not logged in', async () => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'prenom.nom@beta.gouv.fr',
+      };
+      const patient = await makePatient(psy.dossierNumber);
+
+      return chai.request(app)
+        .post('/psychologue/api/supprimer-patient')
+        // no auth cookie
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          patientId: patient.id,
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/psychologue/login');
+
+          // Patient is not deleted
+          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
+          expect(patientsArray).to.have.length(1);
+
+          return Promise.resolve();
+        });
+    });
+
+    it('should refuse empty patientId', async () => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'prenom.nom@beta.gouv.fr',
+      };
+      await makePatient(psy.dossierNumber);
+
+      return chai.request(app)
+        .post('/psychologue/api/supprimer-patient')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .redirects(0) // block redirects, we don't want to test them
+        .type('form')
+        .send({
+          // no patientId
+        })
+        .then(async (res) => {
+          res.should.redirectTo('/psychologue/mes-seances');
+
+          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
+          expect(patientsArray).to.have.length(1);
+
+          return Promise.resolve();
+        });
+    });
+  });
 });
