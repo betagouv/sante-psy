@@ -13,13 +13,13 @@ describe('DB Ds Api Cursor', () => {
     it('should return undefined if there is no cursor saved', async () => {
       const output = await dbDsApiCursor.getLatestCursorSaved();
 
-      assert(output === undefined);
+      assert.isUndefined(output);
     });
 
     it('should return undefined if we do not want to use the cursor', async () => {
       const output = await dbDsApiCursor.getLatestCursorSaved(false);
 
-      assert(output === undefined);
+      assert.isUndefined(output);
     });
 
     it('should return the latest cursor saved', async () => {
@@ -28,7 +28,7 @@ describe('DB Ds Api Cursor', () => {
 
       const output = await dbDsApiCursor.getLatestCursorSaved();
 
-      assert(output === myCursor);
+      assert.strictEqual(output, myCursor);
     });
   });
 });

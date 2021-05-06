@@ -28,7 +28,7 @@ const makePatient = async (psychologistId) => {
   );
   // Check patient is inserted
   const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId);
-  chai.assert(!!createdPatient);
+  chai.assert.exists(createdPatient);
   return patient;
 };
 

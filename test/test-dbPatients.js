@@ -178,13 +178,13 @@ describe('DB Patients', () => {
 
       const patientBeforeDelete = await dbPatients.getPatientById(patient.id, psychologistId);
 
-      assert(patientBeforeDelete.updatedAt === null);
-      assert(patientBeforeDelete.deleted === false);
+      assert.isNull(patientBeforeDelete.updatedAt);
+      assert.isFalse(patientBeforeDelete.deleted);
       await dbPatients.deletePatient(patientBeforeDelete.id, psychologistId);
 
       const patientAfterDelete = await dbPatients.getPatientById(patient.id, psychologistId);
-      assert(patientAfterDelete.deleted === true);
-      assert(patientAfterDelete.updatedAt !== null);
+      assert.isTrue(patientAfterDelete.deleted);
+      assert.isNotNull(patientAfterDelete.updatedAt);
     });
   });
 
