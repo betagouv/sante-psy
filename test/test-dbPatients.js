@@ -141,4 +141,32 @@ describe('DB Patients', () => {
       expect(newPatient.lastName).equal(newLastName);
     });
   });
+
+  describe('deletePatientInPG', () => {
+    it('should change deleted boolean to true and update updatedAt field', async () => {
+      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const patient = await dbPatients.insertPatient(
+        firstNames,
+        lastName,
+        studentNumber,
+        institutionName,
+        isStudentStatusVerified,
+        hasPrescription,
+        psychologistId,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      );
+
+      const patientBeforeDelete = await dbPatients.getPatientById(patient.id, psychologistId);
+
+      assert(patientBeforeDelete.updatedAt === null);
+      assert(patientBeforeDelete.deleted === false);
+      await dbPatients.deletePatient(patientBeforeDelete.id, psychologistId);
+
+      const patientAfterDelete = await dbPatients.getPatientById(patient.id, psychologistId);
+      assert(patientAfterDelete.deleted === true);
+      assert(patientAfterDelete.updatedAt !== null);
+    });
+  });
 });
