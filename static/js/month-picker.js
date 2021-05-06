@@ -3,7 +3,7 @@ $(function() {
     .datepicker({
         changeMonth: true,
         changeYear: true,
-        dateFormat: 'MM yy',
+        dateFormat: 'M yy',
         onClose: function(dateText, inst) { 
             $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
             $('#month-form').trigger('submit');
