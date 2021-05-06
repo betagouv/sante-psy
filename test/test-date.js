@@ -78,4 +78,24 @@ describe('date', () => {
       year.should.equal(2020);
     });
   });
+
+  describe('isSameMonth', () => {
+    it('should return true if same month and year', () => {
+      const date1 = new Date('2021-05-04');
+      const date2 = new Date('2021-05-02');
+      date.isSameMonth(date1, date2).should.be.true;
+    });
+
+    it('should return false if same month but not same year', () => {
+      const date1 = new Date('2021-05-04');
+      const date2 = new Date('2022-05-02');
+      date.isSameMonth(date1, date2).should.be.false;
+    });
+
+    it('should return false if same year but not same month', () => {
+      const date1 = new Date('2021-05-04');
+      const date2 = new Date('2021-02-04');
+      date.isSameMonth(date1, date2).should.be.false;
+    });
+  });
 });

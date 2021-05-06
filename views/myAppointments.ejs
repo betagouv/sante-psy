@@ -1,4 +1,19 @@
-<div class="fr-col-xs-12 fr-col-sm-12 fr-col-md-12 fr-col-lg-6 fr-col-xl-6 fr-pr-6w fr-pb-5w">
+<!-- Javascript for the datepicker -->
+<script src="/static/jquery/jquery.min.js"></script>
+
+<!-- Jquery-ui is downloaded from https://jqueryui.com/download/#! (no npm package)-->
+<link rel="stylesheet" href="/static/jquery-ui-1.12.1/jquery-ui.min.css">
+<script src="/static/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+
+<script src="/static/js/datepicker-fr.js"></script>
+<script src="/static/js/month-picker.js"></script>
+<style>
+.ui-datepicker-calendar {
+  display: none;
+}
+</style>
+
+<div class="fr-col-xs-12 fr-col-sm-12 fr-col-md-12 fr-col-lg-6 fr-col-xl-6 fr-pb-5w">
   <h2 class="fr-mb-2w">
     Mes séances
   </h2>
@@ -6,35 +21,49 @@
     <a href="/psychologue/nouvelle-seance" class="fr-btn fr-fi-add-line fr-btn--icon-left">Nouvelle séance</a>
   </div>
   <div>
-    <% if (appointments.length) { %>
       <ul class="appointment-list">
+        <li>
+          <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--space-between">
+            <div class="fr-col-4">
+              <form id="month-form" action="/psychologue/mes-seances" method="POST">
+                <input type="hidden" name="_csrf" value="<%= _csrf  %>">
+                  <div class="fr-grid-row fr-grid-row--no-gutters">
+                    <label class="fr-label fr-col-3" for="date">Date</label>
+                    <input class="fr-input short-input month-picker fr-col-9 fr-m-0" id="date" name="date" value="<%= monthPicker %>" required autocomplete="off">
+                    <input type="text" id="isoDate" name="isoDate" required aria-hidden="true" hidden autocomplete="off">
+                  </div>
+              </form>
+            </div>
+            <div class="fr-col-4">
+              Patient
+            </div>
+            <div class="fr-col-4" />
+          </div>
+        </li>
+        <% if (appointments.length) { %>
         <% appointments.forEach(function(appointment) { %>
-          <li>
-            <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--space-between">
-              <div class="fr-col-xs-12 fr-col-sm-6 fr-col-md-6 fr-col-lg-6 fr-col-xl-6">
-                <div>
-                  <%= date.formatFrenchDate(appointment.appointmentDate) %>
-                </div>
-                <div>
-                  avec <%= appointment.firstNames %> <%= appointment.lastName %>
-                </div>
-              </div>
-              <div class="fr-col-xs-12 fr-col-sm-6 fr-col-md-6 fr-col-lg-6 fr-col-xl-6 fr-text-right">
-                <form action="/psychologue/api/supprimer-seance" method="POST">
-                  <input type="hidden" name="_csrf" value="<%= _csrf  %>">
-                  <input hidden name="appointmentId" value="<%= appointment.id %>" />
-                  <button type="submit" class="fr-btn fr-btn--secondary fr-btn--sm fr-fi-close-line fr-btn--icon-left">
-                    Supprimer
-                  </button>
-                </form>
+          <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--space-between">
+            <div class="fr-col-4">
+              <%= date.formatFrenchDate(appointment.appointmentDate) %>
             </div>
+            <div class="fr-col-4">
+              <%= appointment.firstNames %> <%= appointment.lastName %>
             </div>
-          </li>
+            <div class="fr-col-4 fr-text-right">
+              <form action="/psychologue/api/supprimer-seance" method="POST">
+                <input type="hidden" name="_csrf" value="<%= _csrf  %>">
+                <input hidden name="appointmentId" value="<%= appointment.id %>" />
+                <button type="submit" class="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-btn--icon-left">
+                  Supprimer
+                </button>
+              </form>
+            </div>
+          </div>
         <% }) %>
+        <% } else { %>
+          Vous n'avez pas déclaré de séances pour ce mois.
+        <% } %>
       </ul>
-    <% } else { %>
-      Vous n'avez pas encore déclaré de séances.
-    <% } %>
   </div>
 </div>
 

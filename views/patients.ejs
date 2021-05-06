@@ -1,0 +1,31 @@
+<% patients.forEach(function(patient) { %>
+  <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--space-between">
+    <div class="fr-col-xs-12 fr-col-sm-6 fr-col-md-8 fr-col-lg-9 fr-col-xl-9">
+      <li>
+        <%= patient.lastName %> <%= patient.firstNames %>
+        <% if (!patient.hasFolderCompleted) { %>
+          <p class="fr-tag bg-orange-warning  fr-fi-alert-line fr-tag--icon-left fr-tag--sm">
+            Informations manquantes : <%= patient.missingInfo %>
+          </p>
+        <% } else { %>
+          <p class="fr-tag bg-success fr-fi-check-line fr-tag--icon-left fr-tag--sm">
+            Dossier complet
+          </p>
+        <% } %>
+      </li>
+    </div>
+    <div class="fr-col-xs-12 fr-col-sm-6 fr-col-md-4 fr-col-lg-3 fr-col-xl-3 fr-text-right">
+      <form action="/psychologue/modifier-patient" method="GET">
+        <input type="hidden" name="_csrf" value="<%= _csrf  %>">
+        <input hidden name="patientid" value="<%= patient.id %>" />
+        <button type="submit" class="fr-btn fr-btn--secondary fr-btn--sm fr-fi-edit-line fr-btn--icon-left">
+          <% if (!patient.hasFolderCompleted) { %>
+            Compléter
+          <% } else { %>
+            Modifier
+          <% } %>
+        </button>
+      </form>
+    </div>
+  </div>
+<% }) %>

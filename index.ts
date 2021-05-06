@@ -180,6 +180,7 @@ if (config.featurePsyPages) {
   app.get('/psychologue/logout', loginController.getLogout);
 
   app.get('/psychologue/mes-seances', dashboardController.dashboard);
+  app.post('/psychologue/mes-seances', dashboardController.dashboard);
   app.get('/psychologue/nouvelle-seance', appointmentsController.newAppointment);
   app.post('/psychologue/creer-nouvelle-seance',
     appointmentsController.createNewAppointmentValidators,
