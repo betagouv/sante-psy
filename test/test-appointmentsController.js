@@ -2,7 +2,7 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const { expect } = require('chai');
-const app = require('../index');
+const app = require('../index.ts');
 const clean = require('./helper/clean');
 const dbAppointments = require('../db/appointments');
 const dbPatients = require('../db/patients');

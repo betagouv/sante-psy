@@ -5,12 +5,16 @@ env:
   node: true
   mocha: true
 
+parser: "@typescript-eslint/parser"
+
 extends:
   - eslint:recommended
   - airbnb-base
-  - plugin:node/recommended
+  - plugin:@typescript-eslint/eslint-recommended
+  - plugin:@typescript-eslint/recommended
 
 plugins:
+  - "@typescript-eslint"
   - mocha-no-only
 
 parserOptions:
@@ -39,6 +43,8 @@ rules:
   no-plusplus: "off" 
   no-multi-str: "off"
   mocha-no-only/mocha-no-only: ["error"]
+  "@typescript-eslint/no-empty-function": "off"
+  "@typescript-eslint/no-var-requires": "off"
 
 ignorePatterns:
   - "static/**/*.js"

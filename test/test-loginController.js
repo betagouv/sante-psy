@@ -2,7 +2,7 @@
 const rewire = require('rewire');
 const sinon = require('sinon');
 const chai = require('chai');
-const app = require('../index');
+const app = require('../index.ts');
 
 const loginController = rewire('../controllers/loginController');
 const dbLoginToken = require('../db/loginToken');

@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-const app = require('../index');
+const app = require('../index.ts');
 const chai = require('chai');
 const rewire = require('rewire');
 const clean = require('./helper/clean');
