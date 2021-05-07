@@ -45,14 +45,31 @@ function hasFolderCompleted(patient) {
   };
 }
 
-module.exports.dashboard = async function dashboard(req, res) {
+async function displayAppointments(req, res) {
   try {
     const monthPicker = req.body && req.body.isoDate ? new Date(req.body.isoDate) : new Date();
     const psychologistId = cookie.getCurrentPsyId(req);
-    const [patients, appointments] = await Promise.all([
-      dbPatient.getPatients(psychologistId),
-      dbAppointments.getAppointments(psychologistId),
-    ]);
+    const appointments = await dbAppointments.getAppointments(psychologistId);
+
+    res.render('myAppointments', {
+      appointments: appointments.filter((appointment) => date.isSameMonth(appointment.appointmentDate, monthPicker)),
+      monthPicker,
+      ...getAnnouncement(req),
+    });
+  } catch (err) {
+    req.flash('error', 'Impossible de charger les séances. Réessayez ultérieurement.');
+    console.error('myAppointments', err);
+    res.render('myAppointments', {
+      appointments: [],
+      monthPicker: new Date(),
+    });
+  }
+}
+
+async function displayPatients(req, res) {
+  try {
+    const psychologistId = cookie.getCurrentPsyId(req);
+    const patients = await dbPatient.getPatients(psychologistId);
 
     patients.forEach((patient) => {
       const { folderCompleted, missingInfo } = hasFolderCompleted(patient);
@@ -60,20 +77,21 @@ module.exports.dashboard = async function dashboard(req, res) {
       patient.missingInfo = missingInfo;
     });
 
-    res.render('dashboard', {
-      appointments: appointments.filter((appointment) => date.isSameMonth(appointment.appointmentDate, monthPicker)),
+    res.render('myPatients', {
       patients,
-      monthPicker,
       dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
       ...getAnnouncement(req),
     });
   } catch (err) {
-    req.flash('error', 'Impossible de charger les séances et les patients. Réessayez ultérieurement.');
-    console.error('dashboard', err);
-    res.render('dashboard', {
-      appointments: [],
+    req.flash('error', 'Impossible de charger les les patients. Réessayez ultérieurement.');
+    console.error('myPatients', err);
+    res.render('myPatients', {
       patients: [],
-      monthPicker: new Date(),
     });
   }
+}
+
+module.exports = {
+  displayAppointments,
+  displayPatients,
 };

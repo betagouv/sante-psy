@@ -101,14 +101,21 @@
                   <nav  id="header-navigation" class="fr-nav" role="navigation" aria-label="Menu principal">
                      <ul class="fr-nav__list">
                         <li class="fr-nav__item">
-                           <a class="fr-nav__link" href="/psychologue/mes-seances" target="_self" 
+                           <a class="fr-nav__link menu-link" href="/psychologue/mes-seances" target="_self" 
                            <% if (page === '/psychologue/mes-seances') { %> aria-current="true"<% } %>
                            >
                               Déclarer mes séances
                            </a>
                         </li>
                         <li class="fr-nav__item">
-                           <a class="fr-nav__link" href="/psychologue/mes-remboursements" target="_self"
+                           <a class="fr-nav__link menu-link" href="/psychologue/mes-patients" target="_self" 
+                           <% if (page === '/psychologue/mes-patients') { %> aria-current="true"<% } %>
+                           >
+                              Gérer mes patients
+                           </a>
+                        </li>
+                        <li class="fr-nav__item">
+                           <a class="fr-nav__link menu-link" href="/psychologue/mes-remboursements" target="_self"
                            <% if (page === '/psychologue/mes-remboursements') { %> aria-current="true" <% } %>
                            >
                               Remboursement de mes séances

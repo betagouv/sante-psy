@@ -13,57 +13,79 @@
 }
 </style>
 
-<div class="fr-col-xs-12 fr-col-sm-12 fr-col-md-12 fr-col-lg-6 fr-col-xl-6 fr-pb-5w">
-  <h2 class="fr-mb-2w">
-    Mes séances
-  </h2>
-  <div class="fr-mb-2w">
-    <a href="/psychologue/nouvelle-seance" class="fr-btn fr-fi-add-line fr-btn--icon-left">Nouvelle séance</a>
+<%- include('partials/header', { isInPsychologistPages: true }) -%>
+
+<div class="fr-container fr-mb-3w fr-mt-2w">
+  <%- include('partials/announcement') -%>
+  <h1>Déclarer mes séances</h1>
+  <div class="fr-mb-1w">
+    <div>
+      Afin que nous puissions vous rembourser les séances réalisées, nous vous proposons de nous les
+      indiquer sur ce site.
+    </div>
   </div>
-  <div>
-      <ul class="appointment-list">
-        <li>
-          <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--space-between">
-            <div class="fr-col-4">
-              <form id="month-form" action="/psychologue/mes-seances" method="POST">
-                <input type="hidden" name="_csrf" value="<%= _csrf  %>">
-                  <div class="fr-grid-row fr-grid-row--no-gutters">
-                    <label class="fr-label fr-col-3" for="date">Date</label>
-                    <input class="fr-input short-input month-picker fr-col-9 fr-m-0" id="date" name="date" value="<%= monthPicker %>" required autocomplete="off">
-                    <input type="text" id="isoDate" name="isoDate" required aria-hidden="true" hidden autocomplete="off">
-                  </div>
-              </form>
-            </div>
-            <div class="fr-col-4">
-              Patient
-            </div>
-            <div class="fr-col-4" />
-          </div>
-        </li>
-        <% if (appointments.length) { %>
-        <% appointments.forEach(function(appointment) { %>
-          <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--space-between">
-            <div class="fr-col-4">
-              <%= date.formatFrenchDate(appointment.appointmentDate) %>
-            </div>
-            <div class="fr-col-4">
-              <%= appointment.firstNames %> <%= appointment.lastName %>
-            </div>
-            <div class="fr-col-4 fr-text-right">
-              <form action="/psychologue/api/supprimer-seance" method="POST">
-                <input type="hidden" name="_csrf" value="<%= _csrf  %>">
-                <input hidden name="appointmentId" value="<%= appointment.id %>" />
-                <button type="submit" class="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-btn--icon-left">
-                  Supprimer
-                </button>
-              </form>
-            </div>
-          </div>
-        <% }) %>
-        <% } else { %>
-          Vous n'avez pas déclaré de séances pour ce mois.
-        <% } %>
-      </ul>
+  <%- include('partials/notifications') -%>
+  <div class="fr-grid-row fr-grid-row--left fr-grid-row--gutters">
+    <div class="fr-col-12">
+      <h2 class="fr-mb-2w">
+        Mes séances
+      </h2>
+      <div class="fr-mb-2w">
+        <a href="/psychologue/nouvelle-seance" class="fr-btn fr-fi-add-line fr-btn--icon-left">Nouvelle séance</a>
+      </div>
+      <div class="fr-table">
+        <table>
+          <thead>
+              <tr>
+                <th scope="col">
+                  <form id="month-form" action="/psychologue/mes-seances" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
+                    <div class="fr-grid-row fr-grid-row--no-gutters">
+                      <label class="fr-label fr-col-3" for="date">Date</label>
+                      <input class="fr-input short-input month-picker fr-col-9 fr-m-0" id="date" name="date" value="<%= monthPicker %>" required autocomplete="off">
+                      <input type="text" id="isoDate" name="isoDate" required aria-hidden="true" hidden autocomplete="off">
+                    </div>
+                  </form>
+                </th>
+                <th scope="col">
+                  Patient
+                </th>
+                <th scope="col"></th>
+              </tr>
+          </thead>
+          <tbody>
+          <% if (appointments.length) { %>
+            <% appointments.forEach(function(appointment) { %>
+              <tr>
+                <td>
+                  <%= date.formatFrenchDate(appointment.appointmentDate) %>
+                </td>
+                <td>
+                  <%= appointment.firstNames %> <%= appointment.lastName %>
+                </td>
+                <td>
+                  <form action="/psychologue/api/supprimer-seance" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= _csrf  %>">
+                    <input hidden name="appointmentId" value="<%= appointment.id %>" />
+                    <button type="submit" class="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-displayed-xs fr-hidden-sm fr-float-right" />
+                    <button type="submit" class="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-btn--icon-left fr-hidden-xs fr-displayed-sm fr-float-right">
+                      Supprimer
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <span>Vous n‘avez pas déclaré de séances pour ce mois.</span>
+          <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="fr-my-4w">
+    Des questions ? Une difficulté ? Envoyez-nous un email à <b><%= contactEmail %></b>.
   </div>
 </div>
 
+<%- include('partials/footer') -%>

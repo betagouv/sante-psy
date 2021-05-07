@@ -66,7 +66,7 @@ describe('patientsController', () => {
           dateofbirth: dateOfBirth,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
 
@@ -239,7 +239,7 @@ describe('patientsController', () => {
         .send(postData)
         .end((err, res) => {
           sinon.assert.called(insertPatientStub);
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
           done();
         });
     };
@@ -336,7 +336,7 @@ describe('patientsController', () => {
 
           sinon.assert.calledWith(insertPatientStub, ...expected);
 
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
           done();
         });
     });
@@ -392,7 +392,7 @@ describe('patientsController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
 
           // The page does not display patient
           chai.assert.notInclude(res.text, notMyPatient.firstNames);
@@ -415,7 +415,7 @@ describe('patientsController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
 
           return Promise.resolve();
         });
@@ -460,7 +460,7 @@ describe('patientsController', () => {
           dateofbirth: updatedDateOfBirth,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
           expect(patientsArray).to.have.length(1);
@@ -504,7 +504,7 @@ describe('patientsController', () => {
           dateofbirth: dateOfBirth,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
 
           // Patient was not updated
           const patientsArray = await dbPatients.getPatients(anotherPsyId);
@@ -716,7 +716,7 @@ describe('patientsController', () => {
         doctoraddress: doctorAddress,
         dateofbirth: dateOfBirth,
       },
-      '/psychologue/mes-seances');
+      '/psychologue/mes-patients');
     });
 
     it('should refuse if patientid is not valid uuid', (done) => {
@@ -732,7 +732,7 @@ describe('patientsController', () => {
         doctoraddress: doctorAddress,
         dateofbirth: dateOfBirth,
       },
-      '/psychologue/mes-seances');
+      '/psychologue/mes-patients');
     });
 
     it('should refuse if dateOfBirth is not valid', (done) => {
@@ -766,7 +766,7 @@ describe('patientsController', () => {
         .send(postData)
         .end((err, res) => {
           sinon.assert.called(updatePatientStub);
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
           done();
         });
     };
@@ -868,10 +868,10 @@ describe('patientsController', () => {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          patientId: patient.id,
+          patientid: patient.id,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
           console.debug(patientsArray);
@@ -895,10 +895,10 @@ describe('patientsController', () => {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          patientId: patient.id,
+          patientid: patient.id,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
           // Patient is not deleted
           const patientsArray = await dbPatients.getPatients(anotherPsyId);
           expect(patientsArray).to.have.length(1);
@@ -920,10 +920,10 @@ describe('patientsController', () => {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          patientId: `${patient.id}4`,
+          patientid: `${patient.id}4`,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
 
           // Patient is not deleted
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
@@ -946,7 +946,7 @@ describe('patientsController', () => {
         .redirects(0) // block redirects, we don't want to test them
         .type('form')
         .send({
-          patientId: patient.id,
+          patientid: patient.id,
         })
         .then(async (res) => {
           res.should.redirectTo('/psychologue/login');
@@ -975,7 +975,7 @@ describe('patientsController', () => {
           // no patientId
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.should.redirectTo('/psychologue/mes-patients');
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
           expect(patientsArray).to.have.length(1);

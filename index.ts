@@ -179,8 +179,9 @@ if (config.featurePsyPages) {
     loginController.postLogin);
   app.get('/psychologue/logout', loginController.getLogout);
 
-  app.get('/psychologue/mes-seances', dashboardController.dashboard);
-  app.post('/psychologue/mes-seances', dashboardController.dashboard);
+  app.get('/psychologue/mes-patients', dashboardController.displayPatients);
+  app.get('/psychologue/mes-seances', dashboardController.displayAppointments);
+  app.post('/psychologue/mes-seances', dashboardController.displayAppointments);
   app.get('/psychologue/nouvelle-seance', appointmentsController.newAppointment);
   app.post('/psychologue/creer-nouvelle-seance',
     appointmentsController.createNewAppointmentValidators,

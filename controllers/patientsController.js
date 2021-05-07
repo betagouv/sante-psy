@@ -92,7 +92,7 @@ module.exports.editPatient = async (req, res) => {
     const hasPatientIdError = validation.hasErrorsForField(req, 'patientid');
     if (hasPatientIdError) {
       // Do not use the value of patientid in url ! It is not safe since it did not pass validation.
-      return res.redirect('/psychologue/mes-seances');
+      return res.redirect('/psychologue/mes-patients');
     }
     return res.redirect(`/psychologue/modifier-patient?patientid=${req.body.patientid}`);
   }
@@ -133,11 +133,11 @@ module.exports.editPatient = async (req, res) => {
     }
     console.log(`Patient ${patientId} updated by psy id ${psychologistId}`);
     req.flash('info', infoMessage);
-    return res.redirect('/psychologue/mes-seances');
+    return res.redirect('/psychologue/mes-patients');
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'est pas modifié. Pourriez-vous réessayer ?');
     console.error('Erreur pour modifier le patient', err);
-    return res.redirect('/psychologue/mes-seances');
+    return res.redirect('/psychologue/mes-patients');
   }
 };
 
@@ -150,7 +150,7 @@ module.exports.getEditPatientValidators = [
 
 module.exports.getEditPatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/mes-seances');
+    return res.redirect('/psychologue/mes-patients');
   }
 
   // Get patientId from query params, this is a GET request
@@ -163,7 +163,7 @@ module.exports.getEditPatient = async (req, res) => {
 
     if (!patient) {
       req.flash('error', 'Ce patient n\'existe pas. Vous ne pouvez pas le modifier.');
-      return res.redirect('/psychologue/mes-seances');
+      return res.redirect('/psychologue/mes-patients');
     }
     console.debug(`Rendering getEditPatient for ${patientId}`);
     return res.render('editPatient', {
@@ -181,7 +181,7 @@ module.exports.getEditPatient = async (req, res) => {
   } catch (err) {
     req.flash('error', 'Erreur lors de la sauvegarde.');
     console.error('Error getEditPatient', err);
-    return res.redirect('/psychologue/mes-seances');
+    return res.redirect('/psychologue/mes-patients');
   }
 };
 
@@ -223,7 +223,7 @@ module.exports.createNewPatient = async (req, res) => {
     }
     console.log(`Patient created by psy id ${psychologistId}`);
     req.flash('info', infoMessage);
-    return res.redirect('/psychologue/mes-seances');
+    return res.redirect('/psychologue/mes-patients');
   } catch (err) {
     req.flash('error', 'Erreur. Le patient n\'a pas été créé. Pourriez-vous réessayer ?');
     console.error('Erreur pour créer le patient', err);
@@ -232,17 +232,17 @@ module.exports.createNewPatient = async (req, res) => {
 };
 
 module.exports.deletePatientValidators = [
-  check('patientId')
+  check('patientid')
     .isUUID()
     .withMessage('Vous devez spécifier un patient à supprimer.'),
 ];
 
 module.exports.deletePatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/mes-seances');
+    return res.redirect('/psychologue/mes-patients');
   }
 
-  const { patientId } = req.body;
+  const patientId = req.body.patientid;
   try {
     const psychologistId = cookie.getCurrentPsyId(req);
     await dbPatients.deletePatient(patientId, psychologistId);
@@ -253,5 +253,5 @@ module.exports.deletePatient = async (req, res) => {
     console.error('Erreur pour supprimer le patient', err);
   }
 
-  return res.redirect('/psychologue/mes-seances');
+  return res.redirect('/psychologue/mes-patients');
 };
