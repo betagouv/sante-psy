@@ -3,6 +3,7 @@ const config = require('../utils/config');
 const date = require('../utils/date');
 const dbAppointments = require('../db/appointments');
 const dbPatient = require('../db/patients');
+const getAnnouncement = require('../utils/announcement');
 
 const DOCTOR_NAME = 'nom du docteur';
 const INSTITUTION_NAME = 'établissement scolaire';
@@ -63,8 +64,8 @@ module.exports.dashboard = async function dashboard(req, res) {
       appointments: appointments.filter((appointment) => date.isSameMonth(appointment.appointmentDate, monthPicker)),
       patients,
       monthPicker,
-      announcement: config.announcement,
       dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
+      ...getAnnouncement(req),
     });
   } catch (err) {
     req.flash('error', 'Impossible de charger les séances et les patients. Réessayez ultérieurement.');
