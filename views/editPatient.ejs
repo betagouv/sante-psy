@@ -20,16 +20,7 @@
   <p class="fr-mb-2w">
     <%= pageIntroText %>
   </p class="fr-mt-2w">
-  <% if (errors.length) { %>
-    <% errors.forEach(function(error) { %>
-      <%- include('partials/notificationError', {error: error}) -%>
-    <% }) %>
-  <% } %>
-  <% if (infos.length) { %>
-    <% infos.forEach(function(info) { %>
-      <%- include('partials/notificationInfo', {info: info}) -%>
-    <% }) %>
-  <% } %>
+  <%- include('partials/notifications') -%>
   <div class="fr-my-3w">
     <form action="<%= form.action %>" method="<%= form.method %>">
       <p class="fr-text--sm fr-mb-1v">

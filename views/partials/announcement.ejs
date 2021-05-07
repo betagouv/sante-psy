@@ -3,7 +3,8 @@ Use this template to display info messages containing HTML.
 WARNING : this template does not escape HTML, so be sure that no user-provided data is displayed in it, to avoid injection attacks. (google "server side template injection" to learn about it)
 -->
 <% if (announcement) { %>
-  <div class="fr-callout fr-fi-information-line fr-mb-2w bg-orange-warning">
+  <div id="announcement" class="fr-callout fr-fi-information-line fr-mb-2w bg-orange-warning">
     <p class="fr-callout__text"><%- announcement %></p>
+    <span data-hash="<%= announcementHash %>" class="fr-fi-close-line close-announcement" />
   </div>
 <% } %>

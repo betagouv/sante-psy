@@ -19,17 +19,7 @@
         -%>
 
             <h1>Trouver un psychologue</h1>
-              <% if (infos.length) { %>
-                <% infos.forEach(function(info) { %>
-                  <%- include('partials/notificationInfo', {info: info}) -%>
-                <% }) %>
-            <% }  %>
-
-            <% if (errors.length) { %>
-                <% errors.forEach(function(error) { %>
-                  <%- include('partials/notificationError', {error: error}) -%>
-                <% }) %>
-            <% } %>
+            <%- include('partials/notifications') -%>
             <% if (psyList.length > 0) { %>
             <p class="fr-mb-2w">
               Il y a actuellement <%= psyList.length %> partenaires du dispositif d'accompagnement.<br/>

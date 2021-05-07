@@ -3,12 +3,7 @@
   <% if (errors.length || infos.length) { %>
   <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
       <div class="fr-col fr-col-xs-10 fr-col-md-8 fr-my-4w">
-        <% errors.forEach(function(error) { %>
-          <%- include('partials/notificationError', {error: error}) -%>
-        <% }) %>
-        <% infos.forEach(function(info) { %>
-          <%- include('partials/notificationInfo', {info: info}) -%>
-        <% }) %>
+        <%- include('partials/notifications') -%>
       </div>
     </div>
   <% } %>

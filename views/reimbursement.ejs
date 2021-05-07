@@ -2,16 +2,7 @@
 
 <div class="fr-container fr-mb-3w fr-mt-2w">
   <h1>Remboursement de mes séances</h1>
-  <% if (errors.length) { %>
-    <% errors.forEach(function(error) { %>
-      <%- include('partials/notificationError', {error: error}) -%>
-    <% }) %>
-  <% } %>
-  <% if (infos.length) { %>
-    <% infos.forEach(function(info) { %>
-      <%- include('partials/notificationInfo', {info: info}) -%>
-    <% }) %>
-  <% } %>
+  <%- include('partials/notifications') -%>
 
   <%- include('partials/selectPayingUniversity') -%>
   <%- include('partials/billing') -%>

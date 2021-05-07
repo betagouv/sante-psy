@@ -83,3 +83,11 @@
 .fr-sidemenu--sticky {
   height: 100%;
 }
+
+.close-announcement,
+.close-notification {
+  cursor: pointer;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}

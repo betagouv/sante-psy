@@ -1,15 +1,7 @@
 <%- include('partials/header', { isInPsychologistPages: true }) -%>
 
-<!-- Javascript for the datepicker -->
-<script src="/static/jquery/jquery.min.js"></script>
-
-<!-- Jquery-ui is downloaded from https://jqueryui.com/download/#! (no npm package)-->
-<link rel="stylesheet" href="/static/jquery-ui-1.12.1/jquery-ui.min.css">
-<script src="/static/jquery-ui-1.12.1/jquery-ui.min.js"></script>
-
 <script src="/static/js/display-datepicker.js"></script>
 <script src="/static/js/datepicker-fr.js"></script>
-
 
 <div class="fr-container fr-mb-3w">
   <%- include('partials/ariane',
@@ -31,16 +23,7 @@
   <p class="fr-mb-2w">
     Vous avez réalisé une séance avec un étudiant ou une étudiante. Renseignez-la sur cette page.
   </p>
-  <% if (errors.length) { %>
-    <% errors.forEach(function(error) { %>
-      <%- include('partials/notificationError', {error: error}) -%>
-    <% }) %>
-  <% } %>
-  <% if (infos.length) { %>
-    <% infos.forEach(function(info) { %>
-      <%- include('partials/notificationInfo', {info: info}) -%>
-    <% }) %>
-  <% } %>
+  <%- include('partials/notifications') -%>
   <div class="fr-mb-5w">
     <form action="/psychologue/creer-nouvelle-seance" method="POST">
       <input type="hidden" name="_csrf" value="<%= _csrf  %>">

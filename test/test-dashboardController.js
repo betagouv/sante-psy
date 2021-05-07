@@ -10,6 +10,13 @@ const dashboardController = rewire('../controllers/dashboardController');
 const dbAppointments = require('../db/appointments');
 const dbPatients = require('../db/patients');
 
+const psy = {
+  dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+  email: 'prenom.nom@beta.gouv.fr',
+};
+
+const announcement = '(Docker-compose variable) Very important announcement.';
+
 describe('dashboardController', () => {
   const dateOfBirth = date.parseDateForm('20/01/1980');
   describe('hasFolderCompleted', () => {
@@ -116,7 +123,6 @@ describe('dashboardController', () => {
   });
 
   describe('display dashboard', () => {
-    let psy;
     let anotherPsyId;
     let myPatient;
     let patientForAnotherPsy;
@@ -125,10 +131,6 @@ describe('dashboardController', () => {
     let previousMonthAppointment;
 
     before(async () => {
-      psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      };
       anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d';
       myPatient = await dbPatients.insertPatient(
         'Ada',
@@ -259,4 +261,33 @@ describe('dashboardController', () => {
         });
     });
   });
+
+  describe('display annoucement', () => {
+    it('should display annoucement by default', () => chai.request(app)
+    .get('/psychologue/mes-seances')
+    .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+    .redirects(0) // block redirects, we don't want to test them
+    .then(async (res) => {
+      chai.assert.include(res.text, announcement);
+      return Promise.resolve();
+    }));
+  });
+
+  it('should not display annoucement if message is present in cookies', () => chai.request(app)
+  .get('/psychologue/mes-seances')
+  .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)};hiddenAnnouncement=-2132171803`)
+  .redirects(0) // block redirects, we don't want to test them
+  .then(async (res) => {
+    chai.assert.notInclude(res.text, announcement);
+    return Promise.resolve();
+  }));
+
+  it('should display annoucement if another message is present in cookies', () => chai.request(app)
+  .get('/psychologue/mes-seances')
+  .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)};hiddenAnnouncement=oldMessage`)
+  .redirects(0) // block redirects, we don't want to test them
+  .then(async (res) => {
+    chai.assert.include(res.text, announcement);
+    return Promise.resolve();
+  }));
 });
