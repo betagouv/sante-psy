@@ -22,6 +22,7 @@ jobs:
         NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
     - run: npm run lint
     - run: npm run ejslint
+    - run: npm audit
       env:
         CI: true
         DEMARCHES_SIMPLIFIEES_ID: 1
