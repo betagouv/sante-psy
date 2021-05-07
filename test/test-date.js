@@ -30,7 +30,7 @@ describe('date', () => {
 
     it('should return null if Date is null', async () => {
       const output = date.toFormatDDMMYYYY(null);
-      assert(output === null);
+      assert.isNull(output);
     });
   });
 

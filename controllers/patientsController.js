@@ -230,3 +230,28 @@ module.exports.createNewPatient = async (req, res) => {
     return res.redirect('/psychologue/nouveau-patient');
   }
 };
+
+module.exports.deletePatientValidators = [
+  check('patientId')
+    .isUUID()
+    .withMessage('Vous devez spécifier un patient à supprimer.'),
+];
+
+module.exports.deletePatient = async (req, res) => {
+  if (!validation.checkErrors(req)) {
+    return res.redirect('/psychologue/mes-seances');
+  }
+
+  const { patientId } = req.body;
+  try {
+    const psychologistId = cookie.getCurrentPsyId(req);
+    await dbPatients.deletePatient(patientId, psychologistId);
+    console.log(`Patient deleted ${patientId} by psy id ${psychologistId}`);
+    req.flash('info', 'Le patient a bien été supprimé.');
+  } catch (err) {
+    req.flash('error', 'Erreur. Le patient n\'est pas supprimé. Pourriez-vous réessayer ?');
+    console.error('Erreur pour supprimer le patient', err);
+  }
+
+  return res.redirect('/psychologue/mes-seances');
+};

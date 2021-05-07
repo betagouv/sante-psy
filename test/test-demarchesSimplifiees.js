@@ -102,7 +102,7 @@ describe('Demarches Simplifiess', () => {
 
       const getNextCursor = demarchesSimplifiees.__get__('getNextCursor');
 
-      assert(getNextCursor(apiResponse) === undefined);
+      assert.isUndefined(getNextCursor(apiResponse));
     });
   });
 
@@ -173,7 +173,7 @@ describe('Demarches Simplifiess', () => {
 
       const getNextCursor = demarchesSimplifiees.__get__('getNextCursor');
 
-      assert(getNextCursor(apiResponse) === undefined);
+      assert.isUndefined(getNextCursor(apiResponse));
     });
   });
 

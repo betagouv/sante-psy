@@ -23,6 +23,7 @@ module.exports.getPatients = async (psychologistId) => {
   try {
     const patientArray = await knex(module.exports.patientsTable)
         .where('psychologistId', psychologistId)
+        .where('deleted', false)
         .orderBy('lastName');
     return patientArray;
   } catch (err) {
@@ -87,5 +88,24 @@ module.exports.updatePatient = async (
   } catch (err) {
     console.error('Erreur de modification du patient', err);
     throw new Error('Erreur de modification du patient');
+  }
+};
+
+module.exports.deletePatient = async (id, psychologistId) => {
+  try {
+    const deletedPatient = await knex(module.exports.patientsTable)
+      .where('id', id)
+      .where('psychologistId', psychologistId)
+      .update({
+        deleted: true,
+        updatedAt: date.getDateNowPG(),
+      });
+
+    console.log(`Patient id ${id} deleted by psy id ${psychologistId}`);
+
+    return deletedPatient;
+  } catch (err) {
+    console.error('Erreur de suppression du patient', err);
+    throw new Error('Erreur de suppression du patient');
   }
 };

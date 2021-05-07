@@ -102,6 +102,24 @@ describe('DB Patients', () => {
         expect(error).to.be.an('Error');
       }
     });
+
+    it('should set deleted to false by default in PG', async () => {
+      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const insertedPatient = await dbPatients.insertPatient(
+        firstNames,
+        lastName,
+        studentNumber,
+        institutionName,
+        isStudentStatusVerified,
+        hasPrescription,
+        psychologistId,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      );
+
+      expect(insertedPatient.deleted).equal(false);
+    });
   });
 
   describe('updatePatientInPG', () => {
@@ -139,6 +157,75 @@ describe('DB Patients', () => {
       );
       const newPatient = await dbPatients.getPatientById(oldPatient.id, psychologistId);
       expect(newPatient.lastName).equal(newLastName);
+    });
+  });
+
+  describe('deletePatientInPG', () => {
+    it('should change deleted boolean to true and update updatedAt field', async () => {
+      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const patient = await dbPatients.insertPatient(
+        firstNames,
+        lastName,
+        studentNumber,
+        institutionName,
+        isStudentStatusVerified,
+        hasPrescription,
+        psychologistId,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      );
+
+      const patientBeforeDelete = await dbPatients.getPatientById(patient.id, psychologistId);
+
+      assert.isNull(patientBeforeDelete.updatedAt);
+      assert.isFalse(patientBeforeDelete.deleted);
+      await dbPatients.deletePatient(patientBeforeDelete.id, psychologistId);
+
+      const patientAfterDelete = await dbPatients.getPatientById(patient.id, psychologistId);
+      assert.isTrue(patientAfterDelete.deleted);
+      assert.isNotNull(patientAfterDelete.updatedAt);
+    });
+  });
+
+  describe('getPatientsInDB', () => {
+    it('should return patients', async () => {
+      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      await dbPatients.insertPatient(
+        firstNames,
+        lastName,
+        studentNumber,
+        institutionName,
+        isStudentStatusVerified,
+        hasPrescription,
+        psychologistId,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      );
+
+      const patients = await dbPatients.getPatients(psychologistId);
+      expect(patients).to.have.length(1);
+    });
+
+    it('should not return deleted patients', async () => {
+      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const patient = await dbPatients.insertPatient(
+        firstNames,
+        lastName,
+        studentNumber,
+        institutionName,
+        isStudentStatusVerified,
+        hasPrescription,
+        psychologistId,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      );
+      await dbPatients.deletePatient(patient.id, psychologistId);
+
+      const patients = await dbPatients.getPatients(psychologistId);
+      expect(patients).to.have.length(0);
     });
   });
 });

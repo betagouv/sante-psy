@@ -43,15 +43,15 @@ describe('DB Appointments', () => {
       .where('psychologistId', psy.dossierNumber)
       .where('patientId', patient.id);
 
-      assert(appointmentsBeforeDelete[0].updatedAt === null);
-      assert(appointmentsBeforeDelete[0].deleted === false);
+      assert.isNull(appointmentsBeforeDelete[0].updatedAt);
+      assert.isFalse(appointmentsBeforeDelete[0].deleted);
       await dbAppointments.deleteAppointment(appointmentsBeforeDelete[0].id, psy.dossierNumber);
 
       const appointmentsAfterDelete = await knex.from(dbAppointments.appointmentsTable)
       .where('psychologistId', psy.dossierNumber)
       .where('patientId', patient.id);
-      assert(appointmentsAfterDelete[0].deleted === true);
-      assert(appointmentsAfterDelete[0].updatedAt !== null);
+      assert.isTrue(appointmentsAfterDelete[0].deleted);
+      assert.isNotNull(appointmentsAfterDelete[0].updatedAt);
     });
   });
 
@@ -98,19 +98,19 @@ describe('DB Appointments', () => {
 
       const output = await dbAppointments.getCountAppointmentsByYearMonth(psy.dossierNumber);
 
-      assert(output.length === 4); // 4 months
-      assert(output[0].countAppointments === 4);
-      assert(output[0].year === 2021);
-      assert(output[0].month === 3);
-      assert(output[1].countAppointments === 1);
-      assert(output[1].year === 2021);
-      assert(output[1].month === 4);
-      assert(output[2].countAppointments === 1);
-      assert(output[2].year === 2021);
-      assert(output[2].month === 6);
-      assert(output[3].countAppointments === 1);
-      assert(output[3].year === 2021);
-      assert(output[3].month === 7);
+      assert.strictEqual(output.length, 4); // 4 months
+      assert.strictEqual(output[0].countAppointments, 4);
+      assert.strictEqual(output[0].year, 2021);
+      assert.strictEqual(output[0].month, 3);
+      assert.strictEqual(output[1].countAppointments, 1);
+      assert.strictEqual(output[1].year, 2021);
+      assert.strictEqual(output[1].month, 4);
+      assert.strictEqual(output[2].countAppointments, 1);
+      assert.strictEqual(output[2].year, 2021);
+      assert.strictEqual(output[2].month, 6);
+      assert.strictEqual(output[3].countAppointments, 1);
+      assert.strictEqual(output[3].year, 2021);
+      assert.strictEqual(output[3].month, 7);
     });
   });
 
@@ -271,9 +271,9 @@ describe('DB Appointments', () => {
 
       const output = await dbAppointments.getAppointments(psy.dossierNumber);
 
-      assert(output.length === 2);
-      assert(output[0].deleted === false);
-      assert(output[1].deleted === false);
+      assert.strictEqual(output.length, 2);
+      assert.isFalse(output[0].deleted);
+      assert.isFalse(output[1].deleted);
     });
 
     it('should only return psy id appointments', async () => {
