@@ -50,11 +50,13 @@
                               <br>et de l'Innovation
                            </p>
                         </div>
-                        <div class="fr-header__navbar">
-                           <button class="fr-btn--menu fr-btn" data-fr-opened="false" aria-controls="modal-833" aria-haspopup="menu" title="Menu">
-                           Menu
-                           </button>
-                        </div>
+                        <% if (locals.featureReimbursementPage && locals.isInPsychologistPages) { %>
+                           <div class="fr-header__navbar">
+                              <button class="fr-btn--menu fr-btn" data-fr-opened="false" aria-controls="modal-menu" aria-haspopup="menu" title="Menu">
+                              Menu
+                              </button>
+                           </div>
+                        <% } %>
                      </div>
                      <div class="fr-header__service">
                         <a href="<%= locals.isInPsychologistPages ? '/psychologue/mes-seances' : '/' %>"
@@ -83,28 +85,30 @@
                </div>
             </div>
          </div>
+         <% if (locals.featureReimbursementPage && locals.isInPsychologistPages) { %>
+            <div class="fr-header__menu fr-modal" id="modal-menu">
+               <div class="fr-container">
+                  <button class="fr-link--close fr-link" aria-controls="modal-menu">Fermer</button>
+                  <div class="fr-header__menu-links" />
+                  <nav  id="header-navigation" class="fr-nav" role="navigation" aria-label="Menu principal">
+                     <ul class="fr-nav__list">
+                        <li class="fr-nav__item">
+                           <a class="fr-nav__link" href="/psychologue/mes-seances" target="_self" 
+                           <% if (page === '/psychologue/mes-seances') { %> aria-current="true"<% } %>
+                           >
+                              Déclarer mes séances
+                           </a>
+                        </li>
+                        <li class="fr-nav__item">
+                           <a class="fr-nav__link" href="/psychologue/mes-remboursements" target="_self"
+                           <% if (page === '/psychologue/mes-remboursements') { %> aria-current="true" <% } %>
+                           >
+                              Remboursement de mes séances
+                           </a>
+                        </li>
+                     </ul>
+                  </nav>
+               </div>
+            </div>
+         <% } %>
       </header>
-      <% if (locals.featureReimbursementPage && locals.isInPsychologistPages) { %>
-      <header class="fr-header">
-         <div class="fr-container">
-            <nav  id="header-navigation" class="fr-nav" role="navigation" aria-label="Menu principal">
-               <ul class="fr-nav__list">
-                  <li class="fr-nav__item">
-                     <a class="fr-nav__link" href="/psychologue/mes-seances" target="_self" 
-                     <% if (page === '/psychologue/mes-seances') { %> aria-current="true"<% } %>
-                     >
-                        Déclarer mes séances
-                     </a>
-                  </li>
-                  <li class="fr-nav__item">
-                     <a class="fr-nav__link" href="/psychologue/mes-remboursements" target="_self"
-                     <% if (page === '/psychologue/mes-remboursements') { %> aria-current="true" <% } %>
-                     >
-                        Remboursement de mes séances
-                     </a>
-                  </li>
-               </ul>
-            </nav>
-         </div>
-      </header>
-      <% } %>
