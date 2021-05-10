@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import expressSanitizer from 'express-sanitizer';
 import dotenv from 'dotenv';
+import path from 'path';
 
 import flash from 'connect-flash';
 import expressJWT from 'express-jwt';
@@ -9,6 +10,7 @@ import rateLimit from 'express-rate-limit';
 import slowDown from 'express-slow-down';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
+import cors from 'cors';
 import csrf from 'csurf';
 
 import config from './utils/config';
@@ -16,7 +18,6 @@ import date from './utils/date';
 import cspConfig from './utils/csp-config';
 import sentry from './utils/sentry';
 
-import landingController from './controllers/landingController';
 import dashboardController from './controllers/dashboardController';
 import appointmentsController from './controllers/appointmentsController';
 import patientsController from './controllers/patientsController';
@@ -40,17 +41,14 @@ if (!config.activateDebug) {
 }
 
 app.use(cspConfig);
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(flash());
 app.use(cookieParser(config.secret));
-app.set('view engine', 'ejs');
-app.set('views', './views');
+
 app.use('/static', express.static('static'));
-app.use('/static/gouvfr', express.static('./node_modules/@gouvfr/dsfr/dist'));
-app.use('/static/jquery', express.static('./node_modules/jquery/dist'));
-app.use('/static/tabulator-tables', express.static('./node_modules/tabulator-tables/dist'));
+app.use(express.static('./frontend/dist'));
 
 // This session cookie (connect.sid) is only used for displaying the flash messages.
 // The other session cookie (token) contains the authenticated user session.
@@ -89,7 +87,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(
+app.use('/api/*',
   expressJWT({
     secret: config.secret,
     algorithms: ['HS256'],
@@ -103,41 +101,13 @@ app.use(
     path: [
       '/',
       '/psychologue/login',
-      '/trouver-un-psychologue',
+      '/api/trouver-un-psychologue',
       '/consulter-les-psychologues',
       '/mentions-legales',
       '/donnees-personnelles-et-gestion-des-cookies',
       '/faq',
     ],
-  }),
-);
-
-app.use((err, req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
-    const psychologueWorkspaceRegexp = new RegExp(/\/psychologue\//, 'g');
-    if (psychologueWorkspaceRegexp.test(req.originalUrl)) {
-      req.flash(
-        'error',
-        `Vous n'êtes pas identifié pour accéder à cette page ou votre accès n'est plus valide\
-         - la connexion est valide durant ${config.sessionDurationHours} heures`,
-      );
-      console.log('No token - redirect to login');
-      return res.redirect('/psychologue/login');
-    }
-    req.flash('error', "Cette page n'existe pas.");
-    return res.redirect('/');
-  } if (req.cookies === undefined) {
-    req.flash('error', "Cette page n'existe pas.");
-    res.redirect('/');
-  } else if (err !== 'EBADCSRFTOKEN') { // handle CSRF token errors here
-    console.warn(`CSRF token errors detected ${req.csrfToken()} but have ${res.req.body._csrf} in form data`);
-    res.status(403);
-    req.flash('error', 'Une erreur est survenue, pouvez-vous réssayer ?');
-    return res.redirect('/psychologue/mes-seances');
-  }
-
-  return next(err);
-});
+  }));
 
 app.locals.date = date;
 // prevent abuse
@@ -147,8 +117,6 @@ const rateLimiter = rateLimit({
   message: 'Trop de requêtes venant de cette IP, veuillez réessayer plus tard.',
 });
 app.use(rateLimiter);
-
-app.get('/', landingController.getLanding);
 
 if (config.featurePsyList) {
   // prevent abuse for some rules
@@ -161,7 +129,7 @@ if (config.featurePsyList) {
     // request # 103 is delayed by 1500ms
     // etc.
   });
-  app.get('/trouver-un-psychologue', speedLimiter, psyListingController.getPsychologist);
+  app.get('/api/trouver-un-psychologue', speedLimiter, psyListingController.getPsychologist);
   app.get('/consulter-les-psychologues', speedLimiter, psyListingController.getPsychologist);
 }
 
@@ -226,13 +194,7 @@ app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-  if (req.cookies === undefined) {
-    req.flash('error', "Cette page n'existe pas.");
-    res.redirect('/');
-  } else {
-    req.flash('error', "Cette page n'existe pas.");
-    res.redirect('/psychologue/mes-seances');
-  }
+  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
 });
 
 sentry.initCaptureConsoleWithHandler(app);

@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "module": "commonjs",
+    "paths": {
+        "components/*": ["src/components/*"],
+        "services/*": ["src/services/*"],
+    },
+  }
+}

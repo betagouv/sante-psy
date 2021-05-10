@@ -1,0 +1,93 @@
+.fr-centered {
+  text-align: center;
+}
+.fr-text-right {
+  text-align: right;
+}
+
+.bg-fond-alternatif {
+  background-color: var(--g100);
+}
+
+.bg-blue-france {
+  background-color: var(--bf500);
+  color: var(--w);
+}
+
+.bg-success {
+  background-color: #e3ebd3; /* gs300 */
+}
+
+.bg-orange-warning {
+  background-color: #f7e1d8; /* od300 */
+}
+
+.bg-blue-soft {
+  background-color: var(--bs300);
+}
+
+.fr-grid-row--space-between {
+  justify-content: space-between;
+}
+
+/* Style should match etudiants.gouv.fr.
+   Note : not tested on dark theme. */
+.fr-bg--alt, .fr-bg--alt h2 {
+  background-color: #fff9c0;
+}
+.fr-btn--alt, a.fr-btn--alt {
+  background-color: #fff06d;
+  color: var(--g700);
+}
+
+.bg-fond-alternatif {
+  background-color: var(--g100);
+}
+
+.btn--secondary--temporary-fix {
+  border: 1px var(--bf500) solid;
+}
+
+.short-input {
+  max-width: 10rem;
+}
+.midlength-input {
+  max-width: 25rem;
+}
+
+.appointment-list {
+  padding-inline-start: 0px;
+  list-style-type: none;
+}
+
+.appointment-list li:before {
+  content: none; /* overwrite DSFR default */
+}
+
+.appointment-list li{
+  margin-bottom: 1.5rem; /* fr-mb-3w */
+}
+
+.fr-accordion-group li:before {
+  content: none; /* overwrite DSFR default */
+}
+
+.fr-accordion-group li {
+  padding-bottom: 0 !important; /* overwrite DSFR default */
+}
+
+.red-text {
+  color: var(--error);
+}
+
+.fr-sidemenu--sticky {
+  height: 100%;
+}
+
+.close-announcement,
+.close-notification {
+  cursor: pointer;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}

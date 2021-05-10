@@ -10,7 +10,7 @@
   "scripts": {
     "coverage": "nyc --reporter html --reporter text npm run test",
     "dev": "ts-node-dev --respawn --transpile-only index.ts",
-    "build": "./node_modules/.bin/tsc",
+    "build": "tsc",
     "devKnex": "DEBUG=knex:query nodemon index.js",
     "ejslint": "ejslint **/*.ejs",
     "lint": "eslint . --ext .js,.ts",
@@ -25,7 +25,9 @@
     "start": "node dist/index.js",
     "test": "ts-mocha --exit",
     "prepublishOnly": "pinst --disable",
-    "postpublish": "pinst --enable"
+    "postpublish": "pinst --enable",
+    "scalingo-prebuild": "npm --prefix frontend run scalingo-prebuild",
+    "scalingo-postbuild": "tsc && cp -a frontend/dist dist/frontend"
   },
   "repository": {
     "type": "git",
@@ -46,6 +48,7 @@
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
     "cron": "^1.8.2",
     "csurf": "^1.11.0",
     "dotenv": "^8.2.0",
