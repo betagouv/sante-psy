@@ -1,10 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
+import classnames from 'classnames';
 
-const Notification = ({ message, error }) => (
-  <div className={`fr-callout fr-fi-alert-line fr-mb-3w ${error ? 'bg-orange-warning' : ''}`}>
-    <p className="fr-text--md fr-mb-1v">{message}</p>
-    <span className="fr-fi-close-line close-notification" />
-  </div>
-);
+import styles from './notification.cssmodule.scss';
+
+const Notification = ({ message, error, onClose }) => {
+  const [show, setShow] = useState(true);
+
+  const close = () => {
+    if (onClose) {
+      onClose();
+    }
+    setShow(false);
+  };
+
+  return show ? (
+    <div
+      className={classnames(
+        'fr-callout',
+        'fr-mb-3w',
+        { [styles.error]: error },
+        { 'fr-fi-alert-line': error },
+        { 'fr-fi-information-line': !error },
+      )}
+    >
+      <p className="fr-text--md fr-mb-1v">{message}</p>
+      <span className="fr-fi-close-line close-notification" onClick={close} />
+    </div>
+  ) : (
+    <></>
+  );
+};
 
 export default Notification;

@@ -1,24 +1,68 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { observer } from 'mobx-react';
+import Picker from 'react-month-picker';
+import classNames from 'classnames';
+
+import Notification from 'components/Notification/Notification';
 
 import agent from 'services/agent';
-
 import date from 'services/date';
+
 import { useStore } from 'stores/';
+
+import styles from './appointments.cssmodule.scss';
+import 'react-month-picker/css/month-picker.css';
+
+const pickerLang = { months: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'] };
 
 const Appointments = () => {
   const { commonStore: { config } } = useStore();
   const [appointments, setAppointments] = useState([]);
+  const [notification, setNotification] = useState({});
+  const calendar = useRef(null);
 
-  const [month, setMonth] = useState(new Date());
+  const [month, setMonth] = useState({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+  });
 
   useEffect(() => {
-    agent.Appointment.get().then(response => setAppointments(response.appointments));
+    agent.Appointment.get()
+      .then(response => {
+        setAppointments(response.appointments);
+        if (response.error) {
+          setNotification({ success: false, message: response.error });
+        }
+      });
   }, []);
+
+  const deleteAppointment = appointmentId => {
+    setNotification({});
+    agent.Appointment.delete(appointmentId).then(response => {
+      if (response.success) {
+        setNotification(response);
+        setAppointments(appointments.filter(appointment => appointment.id !== appointmentId));
+      } else {
+        setNotification(response);
+      }
+    });
+  };
+
+  const makeText = m => {
+    if (m && m.year && m.month) return (`${pickerLang.months[m.month - 1]}. ${m.year}`);
+    return '?';
+  };
+
+  const filteredAppointments = appointments.filter(appointment => {
+    const appointmentDate = new Date(appointment.appointmentDate);
+    return appointmentDate.getFullYear() === month.year
+        && appointmentDate.getMonth() === month.month - 1;
+  });
 
   return (
     <div className="fr-container fr-mb-3w fr-mt-2w">
       <h1>Déclarer mes séances</h1>
+      {notification.message && <Notification error={!notification.success} message={notification.message} />}
       <div className="fr-mb-1w">
         <div>
           Afin que nous puissions vous rembourser les séances réalisées, nous vous proposons de nous les
@@ -39,34 +83,27 @@ const Appointments = () => {
 
             </a>
           </div>
-          <div className="fr-table">
+          <div className={classNames('fr-table', styles.table)}>
             <table>
               <thead>
                 <tr>
                   <th scope="col">
-                    <form id="month-form" action="/psychologue/mes-seances" method="POST">
-                      <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
-                      <div className="fr-grid-row fr-grid-row--no-gutters">
+                    <Picker
+                      years={{ min: { year: 2021, month: 3 }, max: { year: 2022, month: 12 } }}
+                      ref={calendar}
+                      value={month}
+                      lang={pickerLang.months}
+                      onChange={(y, m) => { setMonth({ month: m, year: y }); calendar.current.dismiss(); }}
+                    >
+                      <div className="fr-grid-row fr-grid-row--middle fr-grid-row--no-gutters">
                         <label className="fr-label fr-col-3" htmlFor="date">Date</label>
                         <input
-                          className="fr-input short-input month-picker fr-col-9 fr-m-0"
-                          id="date"
-                          name="date"
-                          value="<%= monthPicker %>"
-                          required
-                          autoComplete="off"
-                        />
-                        <input
-                          type="text"
-                          id="isoDate"
-                          name="isoDate"
-                          required
-                          aria-hidden="true"
-                          hidden
-                          autoComplete="off"
+                          className="fr-input short-input"
+                          onClick={() => calendar.current.show()}
+                          value={makeText(month)}
                         />
                       </div>
-                    </form>
+                    </Picker>
                   </th>
                   <th scope="col">
                     Patient
@@ -75,37 +112,34 @@ const Appointments = () => {
                 </tr>
               </thead>
               <tbody>
-                {appointments
-                  .filter(appointment => date.isSameMonth(new Date(appointment.appointmentDate), month))
-                  .map(appointment => (
-                    <tr key={appointment.id}>
-                      <td>
-                        {date.formatFrenchDate(new Date(appointment.appointmentDate))}
-                      </td>
-                      <td>
-                        {`${appointment.firstNames} ${appointment.lastName}`}
-                      </td>
-                      <td>
-                        <form action="/psychologue/api/supprimer-seance" method="POST">
-                          <input type="hidden" name="_csrf" value="<%= _csrf  %>" />
-                          <input hidden name="appointmentId" value="<%= appointment.id %>" />
-                          <button
-                            type="submit"
-                            className="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-displayed-xs fr-hidden-sm fr-float-right"
-                          />
-                          <button
-                            type="submit"
-                            className="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-btn--icon-left fr-hidden-xs fr-displayed-sm fr-float-right"
-                          >
-                            Supprimer
-                          </button>
-                        </form>
-                      </td>
-                    </tr>
-                  ))}
+                {filteredAppointments.map(appointment => (
+                  <tr key={appointment.id}>
+                    <td>
+                      {date.formatFrenchDate(new Date(appointment.appointmentDate))}
+                    </td>
+                    <td>
+                      {`${appointment.firstNames} ${appointment.lastName}`}
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => deleteAppointment(appointment.id)}
+                        type="button"
+                        className="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-displayed-xs fr-hidden-sm fr-float-right"
+                        aria-label="Supprimer"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => deleteAppointment(appointment.id)}
+                        className="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-btn--icon-left fr-hidden-xs fr-displayed-sm fr-float-right"
+                      >
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
-            {appointments.length === 0 && <span>Vous n‘avez pas déclaré de séances pour ce mois.</span>}
+            {filteredAppointments.length === 0 && <span>Vous n‘avez pas déclaré de séances pour ce mois.</span>}
           </div>
         </div>
       </div>

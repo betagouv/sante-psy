@@ -19,7 +19,10 @@ client.interceptors.request.use(config => {
   return config;
 });
 
-const Appointment = { get: () => client.get('/appointments').then(responseData) };
+const Appointment = {
+  delete: id => client.delete(`/appointments/${id}`).then(responseData),
+  get: () => client.get('/appointments').then(responseData),
+};
 const Config = { get: () => client.get('/config').then(responseData) };
 const Psychologist = {
   find: () => client.get('/trouver-un-psychologue').then(responseData),

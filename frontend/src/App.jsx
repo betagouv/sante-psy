@@ -8,6 +8,7 @@ import Footer from 'components/Footer/Footer';
 import FindPsychologist from 'components/PsyListing/PsyListing';
 import Login from 'components/Login/Login';
 import Appointments from 'components/Psychologist/Appointments';
+import Announcement from 'components/Notification/Announcement';
 
 import agent from 'services/agent';
 
@@ -27,11 +28,13 @@ function App() {
     document.title = config.appName ? config.appName : __APPNAME__;
   }, [config]);
 
+  const loggedIn = isAuthenticated();
   return (
     <BrowserRouter>
       <Header />
+      {loggedIn && <Announcement />}
       <Switch>
-        {isAuthenticated() && [
+        {loggedIn && [
           <Route key="appointments" exact path="/psychologue/mes-seances" component={Appointments} />,
         ]}
         <Route exact path="/psychologue/login/:token?" component={Login} />

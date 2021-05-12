@@ -82,10 +82,6 @@ app.use('/api/*',
     secret: config.secret,
     algorithms: ['HS256'],
     getToken: (req) => req.token,
-  },
-  (req) => {
-    console.log('ici', cookie.getCurrentPsyId());
-    req.psychologistId = cookie.getCurrentPsyId();
   }).unless({
     path: [
       '/api/config',
@@ -133,15 +129,15 @@ if (config.featurePsyPages) {
   app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
 
   app.get('/api/appointments', appointmentsController.getAppointments);
+  app.delete('/api/appointments/:appointmentId',
+    appointmentsController.deleteAppointmentValidators,
+    appointmentsController.deleteAppointment);
 
   app.get('/psychologue/mes-patients', dashboardController.displayPatients);
   app.get('/psychologue/nouvelle-seance', appointmentsController.newAppointment);
   app.post('/psychologue/creer-nouvelle-seance',
     appointmentsController.createNewAppointmentValidators,
     appointmentsController.createNewAppointment);
-  app.post('/psychologue/api/supprimer-seance',
-    appointmentsController.deleteAppointmentValidators,
-    appointmentsController.deleteAppointment);
   app.get('/psychologue/nouveau-patient', patientsController.newPatient);
   app.post('/psychologue/api/creer-nouveau-patient',
     patientsController.createNewPatientValidators,

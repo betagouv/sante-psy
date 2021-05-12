@@ -81,34 +81,34 @@ module.exports.deleteAppointmentValidators = [
     .withMessage('Vous devez spécifier une séance à supprimer.'),
 ];
 
-// We use a POST rather than a DELETE because method=DELETE in the form seems to send a GET. (???)
 module.exports.deleteAppointment = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/mes-seances');
+    return res.json({ success: false });
   }
 
-  const { appointmentId } = req.body;
   try {
-    const psychologistId = cookie.getCurrentPsyId(req);
+    const { appointmentId } = req.params;
+    const psychologistId = req.user.psychologist;
     await dbAppointments.deleteAppointment(appointmentId, psychologistId);
     console.log(
       `Appointment deleted ${appointmentId} by psy id ${psychologistId}`,
     );
-    req.flash('info', 'La séance a bien été supprimée.');
+    return res.json({
+      success: true,
+      message: 'La séance a bien été supprimée.',
+    });
   } catch (err) {
-    req.flash(
-      'error',
-      "Erreur. La séance n'est pas supprimée. Pourriez-vous réessayer ?",
-    );
     console.error('Erreur pour supprimer la séance', err);
+    return res.json({
+      success: false,
+      message: "Erreur. La séance n'est pas supprimée. Pourriez-vous réessayer ?",
+    });
   }
-
-  return res.redirect('/psychologue/mes-seances');
 };
 
 module.exports.getAppointments = async (req, res) => {
   try {
-    const psychologistId = cookie.getCurrentPsyId(req);
+    const psychologistId = req.user.psychologist;
     const appointments = await dbAppointments.getAppointments(psychologistId);
 
     return res.json({
