@@ -126,7 +126,7 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
         adeli: psy.adeli,
         diploma: psy.diploma,
         languages: addFrenchLanguageIfMissing(psy.languages),
-        assignedUniversityId,
+        // assignedUniversityId, do not update assignedId on already existing psy
         updatedAt,
       });
     } catch (err) {

@@ -89,7 +89,7 @@ Santé Psy Étudiants listening at http://localhost:8080
 Pour afficher une liste de psychologues, nous importons les données venant de l'API démarches simplifiées (DS) dans la base de données Postgresql à l'aide d'un cron. Cela nous permet un meilleur taux de réponses et une maitrise en cas de pic de traffic.
 
 
-L'API DS est appellée à intervalle regulier à l'aide d'un CRON pour mettre à jour la table PG `psychologists` et on stockera le dernier `cursor` qui correspond à la dernière page requête de l'API dans la table PG `ds_api_cursor` pour ne rappeller que les pages necessaires et limiter le nombre d'appel à l'API DS, ceci est fait à l'aide d'un cron.
+L'API DS est appellée à intervalle regulier à l'aide d'un CRON pour mettre à jour la table PG `psychologists` et on stockera le dernier `cursor` qui correspond à la dernière page requête de l'API dans la table PG `ds_api_cursor` pour ne rappeller que les pages necessaires et limiter le nombre d'appel à l'API DS.
 
 Cependant, certaines données dans DS vont être modifiées au fil du temps, et il nous est donc obligatoire de mettre à jour toutes les données, dans ce cas là nous n'utilisons pas le `cursor` de l'API à l'aide d'un 2ème CRON moins fréquent.
 
