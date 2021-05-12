@@ -68,7 +68,7 @@ module.exports.verifyJwt = verifyJwt;
  *  Get currently logged in psy's id
  */
 module.exports.getCurrentPsyId = (req) => {
-  const jwtToken = req.cookies.token;
+  const jwtToken = req.token;
   const tokenData = verifyJwt(jwtToken);
 
   if (!tokenData) {

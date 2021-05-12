@@ -1,5 +1,6 @@
 import axios from 'axios/index';
 import Qs from 'qs';
+import { store } from 'stores/';
 
 const responseData = res => res.data;
 
@@ -10,11 +11,15 @@ const client = axios.create({
   },
 });
 
-// Manage Login
-// client.interceptors.request.use(config => {
-//  return config;
-// });
+client.interceptors.request.use(config => {
+  const { token } = store.userStore;
+  if (token) {
+    config.headers = { Authorization: `Bearer ${token}` };
+  }
+  return config;
+});
 
+const Appointment = { get: () => client.get('/appointments').then(responseData) };
 const Config = { get: () => client.get('/config').then(responseData) };
 const Psychologist = {
   find: () => client.get('/trouver-un-psychologue').then(responseData),
@@ -23,6 +28,7 @@ const Psychologist = {
 };
 
 export default {
+  Appointment,
   Config,
   Psychologist,
 };

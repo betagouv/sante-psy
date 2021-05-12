@@ -7,8 +7,8 @@ import path from 'path';
 import expressJWT from 'express-jwt';
 import rateLimit from 'express-rate-limit';
 import slowDown from 'express-slow-down';
-import cookieParser from 'cookie-parser';
-import cookieSession from 'cookie-session';
+import bearerToken from 'express-bearer-token';
+
 import cors from 'cors';
 import csrf from 'csurf';
 
@@ -24,6 +24,8 @@ import psyListingController from './controllers/psyListingController';
 import loginController from './controllers/loginController';
 import faqController from './controllers/faqController';
 import reimbursementController from './controllers/reimbursementController';
+
+import cookie from './utils/cookie';
 
 dotenv.config();
 
@@ -45,17 +47,10 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(cookieParser(config.secret));
+app.use(bearerToken());
 
 app.use('/static', express.static('static'));
 app.use(express.static('./frontend/dist'));
-
-// This session cookie (connect.sid) is only used for displaying the flash messages.
-// The other session cookie (token) contains the authenticated user session.
-app.use(cookieSession({
-  secret: config.secret,
-  maxAge: parseInt(config.sessionDurationHours) * 60 * 60 * 1000,
-}));
 
 if (config.useCSRF) {
   console.log('Using CSRF protection');
@@ -86,12 +81,11 @@ app.use('/api/*',
   expressJWT({
     secret: config.secret,
     algorithms: ['HS256'],
-    getToken: function fromHeaderOrQuerystring(req) {
-      if (req.cookies !== undefined) {
-        return req.cookies.token;
-      }
-      return null;
-    },
+    getToken: (req) => req.token,
+  },
+  (req) => {
+    console.log('ici', cookie.getCurrentPsyId());
+    req.psychologistId = cookie.getCurrentPsyId();
   }).unless({
     path: [
       '/api/config',
@@ -137,11 +131,10 @@ if (config.featurePsyPages) {
     loginController.emailValidators,
     loginController.sendMail);
   app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
-  app.get('/psychologue/logout', loginController.getLogout);
+
+  app.get('/api/appointments', appointmentsController.getAppointments);
 
   app.get('/psychologue/mes-patients', dashboardController.displayPatients);
-  app.get('/psychologue/mes-seances', dashboardController.displayAppointments);
-  app.post('/psychologue/mes-seances', dashboardController.displayAppointments);
   app.get('/psychologue/nouvelle-seance', appointmentsController.newAppointment);
   app.post('/psychologue/creer-nouvelle-seance',
     appointmentsController.createNewAppointmentValidators,

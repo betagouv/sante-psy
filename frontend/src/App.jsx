@@ -7,10 +7,11 @@ import Landing from 'components/Landing/Landing';
 import Footer from 'components/Footer/Footer';
 import FindPsychologist from 'components/PsyListing/PsyListing';
 import Login from 'components/Login/Login';
+import Appointments from 'components/Psychologist/Appointments';
 
 import agent from 'services/agent';
 
-import useStore from 'stores/';
+import { useStore } from 'stores/';
 
 import './App.css';
 import '@gouvfr/dsfr/dist/css/dsfr.css';
@@ -30,13 +31,9 @@ function App() {
     <BrowserRouter>
       <Header />
       <Switch>
-        {isAuthenticated() && (
-          <>
-            <Route exact path="/psychologue/mes-seances">
-              <p>Vous etes loggé</p>
-            </Route>
-          </>
-        )}
+        {isAuthenticated() && [
+          <Route key="appointments" exact path="/psychologue/mes-seances" component={Appointments} />,
+        ]}
         <Route exact path="/psychologue/login/:token?" component={Login} />
         <Route exact path="/trouver-un-psychologue" component={FindPsychologist} />
         <Route path="/" component={Landing} />

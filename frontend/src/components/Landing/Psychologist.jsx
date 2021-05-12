@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
-import useStore from 'stores/';
+import { useStore } from 'stores/';
 
 const Psychologist = () => {
   const { commonStore: { config } } = useStore();

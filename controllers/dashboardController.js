@@ -45,27 +45,6 @@ function hasFolderCompleted(patient) {
   };
 }
 
-async function displayAppointments(req, res) {
-  try {
-    const monthPicker = req.body && req.body.isoDate ? new Date(req.body.isoDate) : new Date();
-    const psychologistId = cookie.getCurrentPsyId(req);
-    const appointments = await dbAppointments.getAppointments(psychologistId);
-
-    res.render('myAppointments', {
-      appointments: appointments.filter((appointment) => date.isSameMonth(appointment.appointmentDate, monthPicker)),
-      monthPicker,
-      ...getAnnouncement(req),
-    });
-  } catch (err) {
-    req.flash('error', 'Impossible de charger les séances. Réessayez ultérieurement.');
-    console.error('myAppointments', err);
-    res.render('myAppointments', {
-      appointments: [],
-      monthPicker: new Date(),
-    });
-  }
-}
-
 async function displayPatients(req, res) {
   try {
     const psychologistId = cookie.getCurrentPsyId(req);
@@ -92,6 +71,5 @@ async function displayPatients(req, res) {
 }
 
 module.exports = {
-  displayAppointments,
   displayPatients,
 };

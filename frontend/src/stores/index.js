@@ -9,6 +9,6 @@ class RootStore {
   }
 }
 
-const store = new RootStore();
+export const store = new RootStore();
 const StoreContext = createContext(store);
-export default () => useContext(StoreContext);
+export const useStore = () => useContext(StoreContext);

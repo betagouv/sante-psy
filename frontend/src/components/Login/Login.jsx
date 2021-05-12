@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import Notification from 'components/Notification/Notification';
 
-import useStore from 'stores/';
+import { useStore } from 'stores/';
 
 import agent from 'services/agent';
 
 const Login = () => {
-  const { commonStore: { config }, userStore: { setToken } } = useStore();
+  const { commonStore: { config }, userStore: { setToken, isAuthenticated } } = useStore();
   const { token } = useParams();
 
   const [email, setEmail] = useState('');
@@ -31,6 +31,10 @@ const Login = () => {
     e.preventDefault();
     agent.Psychologist.sendMail(email).then(setResult);
   };
+
+  if (isAuthenticated()) {
+    return <Redirect to="/psychologue/mes-seances" />;
+  }
 
   return (
     <div className="fr-container-fluid">

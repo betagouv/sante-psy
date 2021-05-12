@@ -9,9 +9,15 @@ module.exports.newAppointment = async (req, res) => {
   try {
     const psychologistId = cookie.getCurrentPsyId(req);
     const patients = await dbPatient.getPatients(psychologistId);
-    return res.render('newAppointment', { patients, pageTitle: 'Nouvelle séance' });
+    return res.render('newAppointment', {
+      patients,
+      pageTitle: 'Nouvelle séance',
+    });
   } catch (err) {
-    req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?');
+    req.flash(
+      'error',
+      "Erreur. La séance n'est pas créée. Pourriez-vous réessayer ?",
+    );
     console.error('Erreur pour créer la séance', err);
     return res.redirect('/psychologue/mes-seances');
   }
@@ -42,15 +48,28 @@ module.exports.createNewAppointment = async (req, res) => {
     const patientExist = await dbPatient.getPatientById(patientId, psyId);
     if (patientExist) {
       await dbAppointments.insertAppointment(date, patientId, psyId);
-      console.log(`Appointment created for patient id ${patientId} by psy id ${psyId}`);
-      req.flash('info', `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`);
+      console.log(
+        `Appointment created for patient id ${patientId} by psy id ${psyId}`,
+      );
+      req.flash(
+        'info',
+        `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`,
+      );
     } else {
-      console.warn(`Patient id ${patientId} does not exsit for psy id : ${psyId}`);
-      req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?');
+      console.warn(
+        `Patient id ${patientId} does not exsit for psy id : ${psyId}`,
+      );
+      req.flash(
+        'error',
+        "Erreur. La séance n'est pas créée. Pourriez-vous réessayer ?",
+      );
     }
     return res.redirect('/psychologue/mes-seances');
   } catch (err) {
-    req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?');
+    req.flash(
+      'error',
+      "Erreur. La séance n'est pas créée. Pourriez-vous réessayer ?",
+    );
     console.error('Erreur pour créer la séance', err);
     return res.redirect('/psychologue/nouvelle-seance');
   }
@@ -72,12 +91,34 @@ module.exports.deleteAppointment = async (req, res) => {
   try {
     const psychologistId = cookie.getCurrentPsyId(req);
     await dbAppointments.deleteAppointment(appointmentId, psychologistId);
-    console.log(`Appointment deleted ${appointmentId} by psy id ${psychologistId}`);
+    console.log(
+      `Appointment deleted ${appointmentId} by psy id ${psychologistId}`,
+    );
     req.flash('info', 'La séance a bien été supprimée.');
   } catch (err) {
-    req.flash('error', 'Erreur. La séance n\'est pas supprimée. Pourriez-vous réessayer ?');
+    req.flash(
+      'error',
+      "Erreur. La séance n'est pas supprimée. Pourriez-vous réessayer ?",
+    );
     console.error('Erreur pour supprimer la séance', err);
   }
 
   return res.redirect('/psychologue/mes-seances');
+};
+
+module.exports.getAppointments = async (req, res) => {
+  try {
+    const psychologistId = cookie.getCurrentPsyId(req);
+    const appointments = await dbAppointments.getAppointments(psychologistId);
+
+    return res.json({
+      appointments,
+    });
+  } catch (err) {
+    console.error('myAppointments', err);
+    return res.json({
+      appointments: [],
+      error: 'Impossible de charger les séances. Réessayez ultérieurement.',
+    });
+  }
 };
