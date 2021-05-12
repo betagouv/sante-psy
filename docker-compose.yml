@@ -17,7 +17,7 @@ services:
       - "1025:25"
   web:
     build: .
-    command: bash -c "echo 'starting sante-psy... - first npm install can be a bit long'; npm install; npm run migrate; npm run seed; npm run dev"
+    command: bash -c "echo 'starting sante-psy... - first npm install can be a bit long'; npm clean-install; npm run migrate; npm run seed; npm run dev"
     env_file:
       - .env
     environment:
@@ -26,6 +26,7 @@ services:
       ANNOUNCEMENT: "(Docker-compose variable) Pour déclarer vos séances, veuillez indiquer l'état de votre conventionnement ainsi que votre université de référence."
       SECRET_LOGS: "production_value_should_be_set_in_.env"
       SECRET: "production_value_should_be_set_in_.env"
+      HOSTNAME_WITH_PROTOCOL: "http://localhost:3000"
     ports:
       - "8080:8080"
       - "9229:9229"
@@ -39,7 +40,7 @@ services:
     image: node:14
     build: .
     working_dir: /app/frontend
-    command: bash -c "npm install; npm run dev"
+    command: bash -c "npm clean-install; npm run dev"
     ports:
       - "3000:3000"
     volumes:

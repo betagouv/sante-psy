@@ -15,7 +15,12 @@ module.exports = {
     __APPREPO__: false,
   },
   parser: 'babel-eslint',
-  parserOptions: { ecmaFeatures: { legacyDecorators: true } },
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+      legacyDecorators: true,
+    },
+  },
   rules: {
     'arrow-body-style': ['error', 'as-needed'],
     'arrow-parens': ['error', 'as-needed'],

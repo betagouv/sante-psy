@@ -4,7 +4,6 @@ import expressSanitizer from 'express-sanitizer';
 import dotenv from 'dotenv';
 import path from 'path';
 
-import flash from 'connect-flash';
 import expressJWT from 'express-jwt';
 import rateLimit from 'express-rate-limit';
 import slowDown from 'express-slow-down';
@@ -14,10 +13,10 @@ import cors from 'cors';
 import csrf from 'csurf';
 
 import config from './utils/config';
-import date from './utils/date';
 import cspConfig from './utils/csp-config';
 import sentry from './utils/sentry';
 
+import configController from './controllers/configController';
 import dashboardController from './controllers/dashboardController';
 import appointmentsController from './controllers/appointmentsController';
 import patientsController from './controllers/patientsController';
@@ -44,6 +43,7 @@ app.use(cspConfig);
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(cookieParser(config.secret));
 
@@ -56,8 +56,6 @@ app.use(cookieSession({
   secret: config.secret,
   maxAge: parseInt(config.sessionDurationHours) * 60 * 60 * 1000,
 }));
-
-app.use(flash());
 
 if (config.useCSRF) {
   console.log('Using CSRF protection');
@@ -80,9 +78,6 @@ app.use((req, res, next) => {
   res.locals.appRepo = appRepo;
   res.locals.page = req.url;
   res.locals.contactEmail = config.contactEmail;
-  res.locals.errors = req.flash('error');
-  res.locals.infos = req.flash('info');
-  res.locals.successes = req.flash('success');
   res.locals.featureReimbursementPage = config.featureReimbursementPage;
   next();
 });
@@ -99,17 +94,13 @@ app.use('/api/*',
     },
   }).unless({
     path: [
-      '/',
-      '/psychologue/login',
+      '/api/config',
       '/api/trouver-un-psychologue',
-      '/consulter-les-psychologues',
-      '/mentions-legales',
-      '/donnees-personnelles-et-gestion-des-cookies',
-      '/faq',
+      '/api/psychologue/sendMail',
+      '/api/psychologue/login',
     ],
   }));
 
-app.locals.date = date;
 // prevent abuse
 const rateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minute window
@@ -129,22 +120,23 @@ if (config.featurePsyList) {
     // request # 103 is delayed by 1500ms
     // etc.
   });
+  app.get('/api/config', speedLimiter, configController.getConfig);
   app.get('/api/trouver-un-psychologue', speedLimiter, psyListingController.getPsychologist);
   app.get('/consulter-les-psychologues', speedLimiter, psyListingController.getPsychologist);
 }
 
 if (config.featurePsyPages) {
-  app.get('/psychologue/login', loginController.getLogin);
   // prevent abuse for some rules
   const speedLimiterLogin = slowDown({
     windowMs: 5 * 60 * 1000, // 5 minutes
     delayAfter: 10, // allow X requests per 5 minutes, then...
     delayMs: 500, // begin adding 500ms of delay per request above 100:
   });
-  app.post('/psychologue/login',
+  app.post('/api/psychologue/sendMail',
     speedLimiterLogin,
     loginController.emailValidators,
-    loginController.postLogin);
+    loginController.sendMail);
+  app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
   app.get('/psychologue/logout', loginController.getLogout);
 
   app.get('/psychologue/mes-patients', dashboardController.displayPatients);

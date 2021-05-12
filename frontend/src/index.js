@@ -1,11 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import { configure } from 'mobx';
+import { Observer } from 'mobx-react';
+
 import './index.css';
 import App from './App';
 
+configure({ enforceActions: 'never' });
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Observer>
+    {() => (
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    )}
+  </Observer>,
   document.getElementById('root'),
 );

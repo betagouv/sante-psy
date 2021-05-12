@@ -15,6 +15,14 @@ const client = axios.create({
 //  return config;
 // });
 
-const Psychologist = { find: () => client.get('/trouver-un-psychologue').then(responseData) };
+const Config = { get: () => client.get('/config').then(responseData) };
+const Psychologist = {
+  find: () => client.get('/trouver-un-psychologue').then(responseData),
+  login: token => client.post('/psychologue/login', { token }).then(responseData),
+  sendMail: email => client.post('/psychologue/sendMail', { email }).then(responseData),
+};
 
-export default { Psychologist };
+export default {
+  Config,
+  Psychologist,
+};

@@ -26,7 +26,7 @@ function generateToken() {
 async function sendLoginEmail(email, loginUrl, token) {
   try {
     const html = await ejs.renderFile('./views/emails/login.ejs', {
-      loginUrlWithToken: `${loginUrl}?token=${encodeURIComponent(token)}`,
+      loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
       appName: config.appName,
       loginUrl,
     });
@@ -63,37 +63,30 @@ async function saveToken(email, token) {
   }
 }
 
-module.exports.getLogin = async function getLogin(req, res) {
-  const nextPage = '/psychologue/mes-seances';
-
-  const { sessionDurationHours } = config;
-  const formUrl = config.demarchesSimplifieesUrl;
-
-  // Save a token in cookie that expire after config.sessionDurationHours hours if user is logged
+module.exports.login = async function login(req, res) {
+  // Save a token that expire after config.sessionDurationHours hours if user is logged
   try {
-    if (req.query.token) {
-      const token = req.sanitize(req.query.token);
+    if (req.body.token) {
+      const token = req.sanitize(req.body.token);
       const dbToken = await dbLoginToken.getByToken(token);
 
-      if (dbToken !== undefined) {
+      if (dbToken) {
         const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
-        cookie.createAndSetJwtCookie(res, dbToken.email, psychologistData.dossierNumber);
+        const newToken = cookie.getJwtTokenForUser(dbToken.email, psychologistData.dossierNumber);
         await dbLoginToken.delete(token);
-        req.flash('info', `Vous êtes authentifié comme ${dbToken.email}`);
         console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
-        return res.redirect(nextPage);
+        return res.json({ token: newToken });
       }
+
       console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
-      req.flash('error', 'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.');
     }
   } catch (err) {
     console.error(err);
-    req.flash('error', 'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.');
   }
 
-  return res.render('login', {
-    formUrl,
-    sessionDurationHours,
+  return res.json({
+    success: false,
+    message: 'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
   });
 };
 
@@ -104,9 +97,12 @@ function generateLoginUrl() {
 /**
  * Send a email with a login link if the email is already registered
  */
-module.exports.postLogin = async function postLogin(req, res) {
+module.exports.sendMail = async function postLogin(req, res) {
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/login');
+    return res.json({
+      success: false,
+      message: req.error,
+    });
   }
   const { email } = req.body;
 
@@ -118,24 +114,31 @@ module.exports.postLogin = async function postLogin(req, res) {
       const loginUrl = generateLoginUrl();
       await sendLoginEmail(email, loginUrl, token);
       await saveToken(email, token);
-      req.flash('info', `Un lien de connexion a été envoyé à l'adresse ${email}. Le lien est valable une heure.`);
-    } else {
-      const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(email);
-      if (notYetAcceptedEmailExist) {
-        await sendNotYetAcceptedEmail(email);
-        req.flash('info', 'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.');
-      } else {
-        req.flash('error', `L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`);
-        console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : \
-         ${logs.hashForLogs(email)}`);
-      }
+      return res.json({
+        success: true,
+        message: `Un lien de connexion a été envoyé à l'adresse ${email}. Le lien est valable une heure.`,
+      });
     }
-
-    return res.redirect('/psychologue/login');
+    const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(email);
+    if (notYetAcceptedEmailExist) {
+      await sendNotYetAcceptedEmail(email);
+      return res.json({
+        success: true,
+        message: 'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.',
+      });
+    }
+    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : \
+         ${logs.hashForLogs(email)}`);
+    return res.json({
+      success: false,
+      message: `L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`,
+    });
   } catch (err) {
     console.error(err);
-    req.flash('error', "Erreur dans l'authentification. Nos services ont été alertés et vont règler ça au plus vite.");
-    return res.redirect('/psychologue/login');
+    return res.json({
+      success: false,
+      message: "Erreur dans l'authentification. Nos services ont été alertés et vont règler ça au plus vite.",
+    });
   }
 };
 
