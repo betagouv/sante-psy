@@ -102,7 +102,7 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
 
     psy.languages = addFrenchLanguageIfMissing(psy.languages);
 
-    const assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
+    psy.assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
 
     try {
       return knex(module.exports.psychologistsTable)
@@ -126,7 +126,7 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
         adeli: psy.adeli,
         diploma: psy.diploma,
         languages: addFrenchLanguageIfMissing(psy.languages),
-        assignedUniversityId,
+        // assignedUniversityId, do not update assignedId on already existing psy
         updatedAt,
       });
     } catch (err) {
