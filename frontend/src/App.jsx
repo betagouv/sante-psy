@@ -9,6 +9,7 @@ import FindPsychologist from 'components/PsyListing/PsyListing';
 import Login from 'components/Login/Login';
 import Appointments from 'components/Psychologist/Appointments';
 import Announcement from 'components/Notification/Announcement';
+import Faq from 'components/Faq/Faq';
 
 import agent from 'services/agent';
 
@@ -39,6 +40,7 @@ function App() {
         ]}
         <Route exact path="/psychologue/login/:token?" component={Login} />
         <Route exact path="/trouver-un-psychologue" component={FindPsychologist} />
+        <Route exact path="/faq" component={Faq} />
         <Route path="/" component={Landing} />
       </Switch>
       <Footer />
