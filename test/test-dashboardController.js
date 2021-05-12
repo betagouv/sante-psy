@@ -196,7 +196,7 @@ describe('dashboardController', () => {
     });
 
     it('should display only my patients in dashboard', () => chai.request(app)
-        .get('/psychologue/mes-seances')
+        .get('/psychologue/mes-patients')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {

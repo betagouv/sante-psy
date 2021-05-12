@@ -5,6 +5,10 @@
   text-align: right;
 }
 
+.fr-float-right {
+  float: right;
+}
+
 .bg-fond-alternatif {
   background-color: var(--g100);
 }
@@ -55,17 +59,12 @@
   max-width: 25rem;
 }
 
-.appointment-list {
-  padding-inline-start: 0px;
-  list-style-type: none;
+.fr-table thead form {
+  margin-block-end: 0;
 }
 
-.appointment-list li:before {
-  content: none; /* overwrite DSFR default */
-}
-
-.appointment-list li{
-  margin-bottom: 1.5rem; /* fr-mb-3w */
+.fr-table .list-actions button {
+  margin: 0 4px;
 }
 
 .fr-accordion-group li:before {
@@ -90,4 +89,9 @@
   position: absolute;
   top: 8px;
   right: 8px;
+}
+
+.menu-link {
+  /* Fix a bug on safari*/
+  height: 56px !important;
 }
