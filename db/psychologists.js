@@ -102,7 +102,7 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
 
     psy.languages = addFrenchLanguageIfMissing(psy.languages);
 
-    const assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
+    psy.assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
 
     try {
       return knex(module.exports.psychologistsTable)
