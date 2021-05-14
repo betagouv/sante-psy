@@ -47,7 +47,7 @@ const Faq = () => (
         <div className="fr-mb-3w">
           <div>
             <span className="fr-fi-arrow-right-line fr-fi--md" />
-            <span>Vous voulez plus d'infos sur le dispositif ?</span>
+            <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
           </div>
           <div>
             <a className="fr-btn fr-btn--alt fr-mt-2w" href="/static/images/flyer_etudiants.pdf">
@@ -55,7 +55,8 @@ const Faq = () => (
             </a>
           </div>
           <div className="fr-text--xs fr-mt-2w">
-            Note : si vous utilisez Safari et que le flyer ne s'affiche pas ("Module bloqué"), essayez Firefox ou Chrome.
+            Note : si vous utilisez Safari et que le flyer ne s&lsquo;affiche pas (&quot;Module bloqué&quot;),
+            essayez Firefox ou Chrome.
           </div>
         </div>
 
@@ -68,7 +69,7 @@ const Faq = () => (
         <div className="fr-mb-3w">
           <div>
             <span className="fr-fi-arrow-right-line fr-fi--md" />
-            <span>Vous voulez plus d'infos sur le dispositif ?</span>
+            <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
           </div>
           <div>
             <a className="fr-btn fr-btn--alt fr-mt-2w" href="/static/images/flyer_psychologues.pdf">
@@ -76,7 +77,8 @@ const Faq = () => (
             </a>
           </div>
           <div className="fr-text--xs fr-mt-2w">
-            Note : si vous utilisez Safari et que le flyer ne s'affiche pas ("Module bloqué"), essayez Firefox ou Chrome.
+            Note : si vous utilisez Safari et que le flyer ne s&lsquo;affiche pas (&quot;Module bloqué&quot;),
+            essayez Firefox ou Chrome.
           </div>
         </div>
 
@@ -96,7 +98,7 @@ const Faq = () => (
         <div className="fr-mb-3w">
           <div>
             <span className="fr-fi-arrow-right-line fr-fi--md" />
-            <span>Vous voulez plus d'infos sur le dispositif ?</span>
+            <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
           </div>
           <div>
             <a className="fr-btn fr-btn--alt fr-mt-2w" href="/static/images/flyer_medecins.pdf">
@@ -109,7 +111,8 @@ const Faq = () => (
             </a>
           </div>
           <div className="fr-text--xs fr-mt-2w">
-            Note : si vous utilisez Safari et que le flyer ne s'affiche pas ("Module bloqué"), essayez Firefox ou Chrome.
+            Note : si vous utilisez Safari et que le flyer ne s&lsquo;affiche pas (&quot;Module bloqué&quot;),
+            essayez Firefox ou Chrome.
           </div>
         </div>
 
