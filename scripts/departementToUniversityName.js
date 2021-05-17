@@ -58,7 +58,7 @@ module.exports = {
   56: 'Bretagne Sud',
   57: 'Lorraine Sud-Nancy',
   58: 'Dijon',
-  59: 'Lille',
+  59: 'cas particulier',
   60: 'Picardie Jules Verne',
   61: 'Caen Normandie',
   62: 'Lille',
