@@ -62,6 +62,7 @@ module.exports.universities = [
   'Antilles - Pôle Martinique',
   'Antilles - Pôle Guadeloupe',
   'Avignon',
+  'Valenciennes',
 ];
 
 module.exports.saveUniversities = async function saveUniversities(universitiesList) {
