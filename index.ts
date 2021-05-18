@@ -10,7 +10,6 @@ import slowDown from 'express-slow-down';
 import bearerToken from 'express-bearer-token';
 
 import cors from 'cors';
-import csrf from 'csurf';
 
 import config from './utils/config';
 import cspConfig from './utils/csp-config';
@@ -25,13 +24,9 @@ import loginController from './controllers/loginController';
 import faqController from './controllers/faqController';
 import reimbursementController from './controllers/reimbursementController';
 
-import cookie from './utils/cookie';
-
 dotenv.config();
 
 const { appName } = config;
-const appDescription = 'Accompagnement psychologique pour les étudiants';
-const appRepo = 'https://github.com/betagouv/sante-psy';
 
 const app = express();
 
@@ -42,7 +37,7 @@ if (!config.activateDebug) {
 }
 
 app.use(cspConfig);
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -52,30 +47,8 @@ app.use(bearerToken());
 app.use('/static', express.static('static'));
 app.use(express.static('./frontend/dist'));
 
-if (config.useCSRF) {
-  console.log('Using CSRF protection');
-  app.use(csrf({ cookie: true }));
-} else {
-  console.log('NOT using CSRF protection due to env variable USE_CSRF - should only be used for test');
-}
 // Mount express-sanitizer middleware here
 app.use(expressSanitizer());
-
-// Populate some variables for all views
-app.use((req, res, next) => {
-  if (config.useCSRF) {
-    res.locals._csrf = req.csrfToken();
-  } else {
-    res.locals._csrf = '';
-  }
-  res.locals.appName = appName;
-  res.locals.appDescription = appDescription;
-  res.locals.appRepo = appRepo;
-  res.locals.page = req.url;
-  res.locals.contactEmail = config.contactEmail;
-  res.locals.featureReimbursementPage = config.featureReimbursementPage;
-  next();
-});
 
 app.use('/api/*',
   expressJWT({
