@@ -21,8 +21,8 @@ import agent from 'services/agent';
 
 import { useStore } from 'stores/';
 
-import './App.css';
 import '@gouvfr/dsfr/dist/css/dsfr.css';
+import './App.css';
 
 function App() {
   const { commonStore: { setConfig, config }, userStore: { isAuthenticated } } = useStore();
