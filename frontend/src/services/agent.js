@@ -24,6 +24,7 @@ const Appointment = {
   get: () => client.get('/appointments').then(responseData),
 };
 const Config = { get: () => client.get('/config').then(responseData) };
+const Patient = { get: () => client.get('/patients').then(responseData) };
 const Psychologist = {
   find: () => client.get('/trouver-un-psychologue').then(responseData),
   login: token => client.post('/psychologue/login', { token }).then(responseData),
@@ -33,5 +34,6 @@ const Psychologist = {
 export default {
   Appointment,
   Config,
+  Patient,
   Psychologist,
 };

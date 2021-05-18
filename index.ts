@@ -94,7 +94,7 @@ app.use('/api/*',
 // prevent abuse
 const rateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minute window
-  max: 1000, // start blocking after X requests for windowMs time
+  max: 1000000000, // start blocking after X requests for windowMs time
   message: 'Trop de requêtes venant de cette IP, veuillez réessayer plus tard.',
 });
 app.use(rateLimiter);
@@ -112,7 +112,6 @@ if (config.featurePsyList) {
   });
   app.get('/api/config', speedLimiter, configController.getConfig);
   app.get('/api/trouver-un-psychologue', speedLimiter, psyListingController.getPsychologist);
-  app.get('/consulter-les-psychologues', speedLimiter, psyListingController.getPsychologist);
 }
 
 if (config.featurePsyPages) {
@@ -132,6 +131,8 @@ if (config.featurePsyPages) {
   app.delete('/api/appointments/:appointmentId',
     appointmentsController.deleteAppointmentValidators,
     appointmentsController.deleteAppointment);
+
+  app.get('/api/patients', patientsController.getPatients);
 
   app.get('/psychologue/mes-patients', dashboardController.displayPatients);
   app.get('/psychologue/nouvelle-seance', appointmentsController.newAppointment);

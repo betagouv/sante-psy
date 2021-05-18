@@ -8,6 +8,7 @@ import Footer from 'components/Footer/Footer';
 import FindPsychologist from 'components/PsyListing/PsyListing';
 import Login from 'components/Login/Login';
 import Appointments from 'components/Psychologist/Appointments';
+import NewAppointment from 'components/Psychologist/NewAppointment';
 import Announcement from 'components/Notification/Announcement';
 import Faq from 'components/Faq/Faq';
 
@@ -37,6 +38,7 @@ function App() {
       <Switch>
         {loggedIn && [
           <Route key="appointments" exact path="/psychologue/mes-seances" component={Appointments} />,
+          <Route key="new-appointments" exact path="/psychologue/nouvelle-seance" component={NewAppointment} />,
         ]}
         <Route exact path="/psychologue/login/:token?" component={Login} />
         <Route exact path="/trouver-un-psychologue" component={FindPsychologist} />

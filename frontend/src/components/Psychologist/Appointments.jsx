@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import Picker from 'react-month-picker';
 import classNames from 'classnames';
 
 import Notification from 'components/Notification/Notification';
+import Mail from 'components/Footer/Mail';
 
 import agent from 'services/agent';
 import date from 'services/date';
-
-import { useStore } from 'stores/';
 
 import styles from './appointments.cssmodule.scss';
 import 'react-month-picker/css/month-picker.css';
@@ -16,7 +16,6 @@ import 'react-month-picker/css/month-picker.css';
 const pickerLang = { months: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'] };
 
 const Appointments = () => {
-  const { commonStore: { config } } = useStore();
   const [appointments, setAppointments] = useState([]);
   const [notification, setNotification] = useState({});
   const calendar = useRef(null);
@@ -75,13 +74,12 @@ const Appointments = () => {
             Mes séances
           </h2>
           <div className="fr-mb-2w">
-            <a
-              href="/psychologue/nouvelle-seance"
+            <Link
+              to="/psychologue/nouvelle-seance"
               className="fr-btn fr-fi-add-line fr-btn--icon-left"
             >
               Nouvelle séance
-
-            </a>
+            </Link>
           </div>
           <div className={classNames('fr-table', styles.table)}>
             <table>
@@ -143,11 +141,7 @@ const Appointments = () => {
           </div>
         </div>
       </div>
-      <div className="fr-my-4w">
-        Des questions ? Une difficulté ? Envoyez-nous un email à
-        {' '}
-        <b>{config.contactEmail}</b>
-      </div>
+      <Mail />
     </div>
   );
 };

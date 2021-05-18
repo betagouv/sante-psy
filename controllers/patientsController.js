@@ -5,6 +5,20 @@ const validation = require('../utils/validation');
 const date = require('../utils/date');
 const config = require('../utils/config');
 
+module.exports.getPatients = async (req, res) => {
+  try {
+    const psychologistId = cookie.getCurrentPsyId(req);
+    const patients = await dbPatients.getPatients(psychologistId);
+    return res.json({ patients });
+  } catch (err) {
+    console.error('getPatients', err);
+    return res.json({
+      patients: [],
+      error: 'Impossible de charger les patients. Réessayez ultérieurement.',
+    });
+  }
+};
+
 module.exports.newPatient = async (req, res) => {
   res.render('editPatient', {
     pageTitle: 'Nouveau patient',
