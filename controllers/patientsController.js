@@ -203,7 +203,7 @@ module.exports.createNewPatientValidators = patientValidators;
 
 module.exports.createNewPatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/nouveau-patient');
+    return res.json({ success: false, message: req.error });
   }
   const firstNames = req.body.firstnames;
   const lastName = req.body.lastname;
@@ -217,7 +217,7 @@ module.exports.createNewPatient = async (req, res) => {
   const hasPrescription = Boolean(req.body.hasprescription);
 
   try {
-    const psychologistId = cookie.getCurrentPsyId(req);
+    const { psychologistId } = req.user;
     await dbPatients.insertPatient(
       firstNames,
       lastName,
@@ -236,12 +236,16 @@ module.exports.createNewPatient = async (req, res) => {
         + ' en cliquant le bouton "Modifier" du patient.';
     }
     console.log(`Patient created by psy id ${psychologistId}`);
-    req.flash('info', infoMessage);
-    return res.redirect('/psychologue/mes-patients');
+    return res.json({
+      success: true,
+      message: infoMessage,
+    });
   } catch (err) {
-    req.flash('error', 'Erreur. Le patient n\'a pas été créé. Pourriez-vous réessayer ?');
     console.error('Erreur pour créer le patient', err);
-    return res.redirect('/psychologue/nouveau-patient');
+    return res.json({
+      success: false,
+      message: "Erreur. Le patient n'a pas été créé. Pourriez-vous réessayer ?",
+    });
   }
 };
 
@@ -253,7 +257,7 @@ module.exports.deletePatientValidators = [
 
 module.exports.deletePatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.json({ success: false });
+    return res.json({ success: false, message: req.error });
   }
 
   try {

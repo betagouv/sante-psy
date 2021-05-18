@@ -110,19 +110,16 @@ if (config.featurePsyPages) {
     appointmentsController.deleteAppointment);
 
   app.get('/api/patients', patientsController.getPatients);
+  app.get('/api/patients/:patientId', patientsController.getEditPatient);
+  app.post('/api/patients',
+    patientsController.createNewPatientValidators,
+    patientsController.createNewPatient);
+  app.put('/api/patients/:patientId',
+    patientsController.editPatientValidators,
+    patientsController.editPatient);
   app.delete('/api/patients/:patientId',
     patientsController.deletePatientValidators,
     patientsController.deletePatient);
-
-  app.post('/psychologue/api/creer-nouveau-patient',
-    patientsController.createNewPatientValidators,
-    patientsController.createNewPatient);
-  app.get('/psychologue/modifier-patient',
-    patientsController.getEditPatientValidators,
-    patientsController.getEditPatient);
-  app.post('/psychologue/api/modifier-patient',
-    patientsController.editPatientValidators,
-    patientsController.editPatient);
 
   if (config.featureReimbursementPage) {
     app.get('/psychologue/mes-remboursements', reimbursementController.reimbursement);

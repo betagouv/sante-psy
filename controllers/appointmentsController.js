@@ -56,7 +56,7 @@ module.exports.createNewAppointment = async (req, res) => {
     }
 
     console.warn(
-      `Patient id ${patientId} does not exsit for psy id : ${psyId}`,
+      `Patient id ${patientId} does not exist for psy id : ${psyId}`,
     );
   } catch (err) {
     console.error('Erreur pour créer la séance', err);
@@ -76,7 +76,7 @@ module.exports.deleteAppointmentValidators = [
 
 module.exports.deleteAppointment = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.json({ success: false });
+    return res.json({ success: false, message: req.error });
   }
 
   try {
