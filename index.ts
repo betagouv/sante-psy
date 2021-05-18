@@ -16,7 +16,6 @@ import cspConfig from './utils/csp-config';
 import sentry from './utils/sentry';
 
 import configController from './controllers/configController';
-import dashboardController from './controllers/dashboardController';
 import appointmentsController from './controllers/appointmentsController';
 import patientsController from './controllers/patientsController';
 import psyListingController from './controllers/psyListingController';
@@ -111,9 +110,10 @@ if (config.featurePsyPages) {
     appointmentsController.deleteAppointment);
 
   app.get('/api/patients', patientsController.getPatients);
+  app.delete('/api/patients/:patientId',
+    patientsController.deletePatientValidators,
+    patientsController.deletePatient);
 
-  app.get('/psychologue/mes-patients', dashboardController.displayPatients);
-  app.get('/psychologue/nouveau-patient', patientsController.newPatient);
   app.post('/psychologue/api/creer-nouveau-patient',
     patientsController.createNewPatientValidators,
     patientsController.createNewPatient);
@@ -123,9 +123,6 @@ if (config.featurePsyPages) {
   app.post('/psychologue/api/modifier-patient',
     patientsController.editPatientValidators,
     patientsController.editPatient);
-  app.post('/psychologue/api/supprimer-patient',
-    patientsController.deletePatientValidators,
-    patientsController.deletePatient);
 
   if (config.featureReimbursementPage) {
     app.get('/psychologue/mes-remboursements', reimbursementController.reimbursement);

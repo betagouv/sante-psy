@@ -7,7 +7,7 @@ const config = require('../utils/config');
 
 module.exports.getPatients = async (req, res) => {
   try {
-    const psychologistId = cookie.getCurrentPsyId(req);
+    const psychologistId = req.user.psychologist;
     const patients = await dbPatients.getPatients(psychologistId);
     return res.json({ patients });
   } catch (err) {
@@ -246,26 +246,30 @@ module.exports.createNewPatient = async (req, res) => {
 };
 
 module.exports.deletePatientValidators = [
-  check('patientid')
+  check('patientId')
     .isUUID()
     .withMessage('Vous devez spécifier un patient à supprimer.'),
 ];
 
 module.exports.deletePatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/mes-patients');
+    return res.json({ success: false });
   }
 
-  const patientId = req.body.patientid;
   try {
-    const psychologistId = cookie.getCurrentPsyId(req);
+    const { patientId } = req.params;
+    const psychologistId = req.user.psychologist;
     await dbPatients.deletePatient(patientId, psychologistId);
     console.log(`Patient deleted ${patientId} by psy id ${psychologistId}`);
-    req.flash('info', 'Le patient a bien été supprimé.');
+    return res.json({
+      success: true,
+      message: 'Le patient a bien été supprimé.',
+    });
   } catch (err) {
-    req.flash('error', 'Erreur. Le patient n\'est pas supprimé. Pourriez-vous réessayer ?');
     console.error('Erreur pour supprimer le patient', err);
+    return res.json({
+      success: false,
+      message: "Erreur. Le patient n'est pas supprimé. Pourriez-vous réessayer ?",
+    });
   }
-
-  return res.redirect('/psychologue/mes-patients');
 };

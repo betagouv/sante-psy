@@ -17,7 +17,7 @@ const psy = {
 
 const announcement = '(Docker-compose variable) Very important announcement.';
 
-describe('dashboardController', () => {
+describe.skip('dashboardController', () => {
   const dateOfBirth = date.parseDateForm('20/01/1980');
   describe('hasFolderCompleted', () => {
     let patient;

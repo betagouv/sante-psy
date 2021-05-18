@@ -10,6 +10,8 @@ import FindPsychologist from 'components/PsyListing/PsyListing';
 import Login from 'components/Login/Login';
 import Appointments from 'components/Psychologist/Appointments';
 import NewAppointment from 'components/Psychologist/NewAppointment';
+import Patients from 'components/Psychologist/Patients/Patients';
+import NewPatient from 'components/Psychologist/Patients/NewPatient';
 import Announcement from 'components/Notification/Announcement';
 import Faq from 'components/Faq/Faq';
 import LegalNotice from 'components/LegalNotice/LegalNotice';
@@ -43,6 +45,8 @@ function App() {
         {loggedIn && [
           <Route key="appointments" exact path="/psychologue/mes-seances" component={Appointments} />,
           <Route key="new-appointments" exact path="/psychologue/nouvelle-seance" component={NewAppointment} />,
+          <Route key="patients" exact path="/psychologue/mes-patients" component={Patients} />,
+          <Route key="new-patient" exact path="/psychologue/nouveau-patient" component={NewPatient} />,
         ]}
         <Route exact path="/psychologue/login/:token?" component={Login} />
         <Route exact path="/trouver-un-psychologue" component={FindPsychologist} />
