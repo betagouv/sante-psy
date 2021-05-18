@@ -1,4 +1,5 @@
 import React from 'react';
+import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
 
 import { useStore } from 'stores/';
@@ -23,9 +24,9 @@ const Psychologist = () => {
               que vous réaliserez dans le cadre de ce dispositif.
             </p>
             <p className="fr-mb-2w">
-              <a className="fr-btn fr-btn--secondary" href="/faq#psy">
+              <HashLink className="fr-btn fr-btn--secondary" to="/faq#psy">
                 Consulter la Foire Aux Questions
-              </a>
+              </HashLink>
             </p>
             <p className="fr-my-1v">
               Vous voulez devenir psychologue partenaire du dispositif ?
@@ -39,7 +40,9 @@ const Psychologist = () => {
               Commencer mon inscription
             </a>
             <p className="fr-my-1v">Vous avez déjà reçu la validation suite à la démarche ?</p>
-            <a className="fr-btn fr-btn--alt" href="/psychologue/login">Déclarer mes séances</a>
+            <HashLink className="fr-btn fr-btn--alt" to="/psychologue/login">
+              Déclarer mes séances
+            </HashLink>
           </div>
         </div>
       </div>

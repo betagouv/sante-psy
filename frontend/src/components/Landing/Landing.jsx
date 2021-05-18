@@ -1,4 +1,5 @@
 import React from 'react';
+import { HashLink } from 'react-router-hash-link';
 import Section from '../Section/Section';
 
 import styles from './landing.cssmodule.scss';
@@ -46,7 +47,9 @@ const Landing = () => (
     />
     <div className="fr-centered fr-p-2w fr-bg--alt">
       <p className="fr-mb-2w">Étudiants, psychologues, médecins, vous souhaitez plus d’informations ?</p>
-      <a className="fr-btn fr-btn--secondary" href="/faq">Consulter la Foire Aux Questions</a>
+      <HashLink className="fr-btn fr-btn--secondary" to="/faq">
+        Consulter la Foire Aux Questions
+      </HashLink>
     </div>
     <Student />
     <Psychologist />

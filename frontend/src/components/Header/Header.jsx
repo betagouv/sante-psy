@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
 
 import Logo from 'components/Logo/Logo';
@@ -58,14 +59,14 @@ const Header = () => {
                   </div>
                 </div>
                 <div className="fr-header__service">
-                  <Link
+                  <HashLink
                     to="/"
                     title="Retour à l’accueil"
                   >
                     <p className="fr-header__service-title">
                       {`${__APPNAME__}${psychologistPage ? ' - Espace Psychologues' : ''}`}
                     </p>
-                  </Link>
+                  </HashLink>
                   <p className="fr-header__service-tagline">{`${__APPDESCRIPTION__}`}</p>
                 </div>
               </div>

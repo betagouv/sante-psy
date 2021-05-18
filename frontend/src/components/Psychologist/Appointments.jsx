@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
 import Picker from 'react-month-picker';
 import classNames from 'classnames';
@@ -74,12 +74,12 @@ const Appointments = () => {
             Mes séances
           </h2>
           <div className="fr-mb-2w">
-            <Link
+            <HashLink
               to="/psychologue/nouvelle-seance"
               className="fr-btn fr-fi-add-line fr-btn--icon-left"
             >
               Nouvelle séance
-            </Link>
+            </HashLink>
           </div>
           <div className={classNames('fr-table', styles.table)}>
             <table>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 const Student = () => (
   <div className="fr-container--fluid">
@@ -24,12 +24,12 @@ const Student = () => (
               dans n&lsquo;importe quel département, peu importe votre université d&lsquo;origine :
             </p>
             <p className="fr-mb-2w">
-              <Link
+              <HashLink
                 className="fr-btn fr-btn--lg fr-btn--alt"
                 to="/trouver-un-psychologue"
               >
                 Trouver un psychologue
-              </Link>
+              </HashLink>
             </p>
             <p className="fr-mb-2w">
               Des questions, des doutes sur le dispositif ?

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 import Logo from 'components/Logo/Logo';
 
@@ -13,6 +13,7 @@ const Footer = () => (
         <div className="fr-footer__content">
           <p className="fr-footer__content-desc">
             Le code source est ouvert et les contributions sont bienvenues.
+            {' '}
             <a
               title="Voir le code source"
               href={__APPREPO__}
@@ -24,13 +25,13 @@ const Footer = () => (
           </p>
           <ul className="fr-footer__content-list">
             <li className="fr-footer__content-item">
-              <a
+              <HashLink
                 className="fr-footer__content-link"
                 title="Contactez-nous"
-                href="/mentions-legales"
+                to="/mentions-legales"
               >
                 Contactez-nous
-              </a>
+              </HashLink>
             </li>
             <li className="fr-footer__content-item">
               <a className="fr-footer__content-link" href="https://www.etudiant.gouv.fr/">etudiant.gouv.fr</a>
@@ -47,36 +48,36 @@ const Footer = () => (
       <div className="fr-footer__bottom">
         <ul className="fr-footer__bottom-list">
           <li className="fr-footer__bottom-item">
-            <Link
+            <HashLink
               className="fr-footer__bottom-link"
               to="/mentions-legales#accessibilite"
             >
               Accessibilité: non conforme
-            </Link>
+            </HashLink>
           </li>
           <li className="fr-footer__bottom-item">
-            <Link
+            <HashLink
               className="fr-footer__bottom-link"
               to="/donnees-personnelles-et-gestion-des-cookies"
             >
               Données personnelles et gestion des cookies
-            </Link>
+            </HashLink>
           </li>
           <li className="fr-footer__bottom-item">
-            <Link
+            <HashLink
               className="fr-footer__bottom-link"
               to="/mentions-legales"
             >
               Mentions légales
-            </Link>
+            </HashLink>
           </li>
           <li className="fr-footer__bottom-item">
-            <Link
+            <HashLink
               className="fr-footer__bottom-link"
               to="/faq"
             >
               En savoir plus
-            </Link>
+            </HashLink>
           </li>
         </ul>
       </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, forwardRef } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
 
 import Ariane from 'components/Ariane/Ariane';
@@ -88,7 +89,7 @@ const NewAppointment = () => {
               <label className="fr-label" htmlFor="patients" aria-describedby="patients-help">Patient</label>
               <div className="fr-hint-text" id="patients-help">
                 Votre patient n&lsquo;est pas dans la liste ?
-                <Link to="/psychologue/nouveau-patient">Ajoutez un nouveau patient</Link>
+                <HashLink to="/psychologue/nouveau-patient">Ajoutez un nouveau patient</HashLink>
               </div>
               <select
                 className="fr-select"

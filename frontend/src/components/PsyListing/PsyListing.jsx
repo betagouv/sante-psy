@@ -9,7 +9,6 @@ const PsyListing = () => {
   const [filter, setFilter] = useState({});
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     agent.Psychologist.find().then(response => {
       setPsychologists(response.psyList);
     });
