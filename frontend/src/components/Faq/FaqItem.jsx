@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const FaqItem = ({ item, section, index }) => {
+  const collapsableSection = useRef();
   const [expanded, setExpanded] = useState(false);
-  const [collapse, setCollapse] = useState();
+  const [collapse, setCollapse] = useState(0);
+
+  useEffect(() => {
+    const value = expanded
+      ? 0
+      : collapsableSection.current.getBoundingClientRect().height;
+    setCollapse(`-${value}px`);
+  }, [expanded]);
 
   const switchCollapse = () => {
     setExpanded(!expanded);
-    const id = `accordion-${section}${index}`;
-    const value = document.getElementById(id).getBoundingClientRect().height;
-    setCollapse(`-${value}px`);
   };
+
   return (
     <li>
       <section className="fr-accordion">
@@ -27,13 +33,15 @@ const FaqItem = ({ item, section, index }) => {
         <div
           className={expanded ? 'fr-collapse fr-collapse--expanded' : 'fr-collapse'}
           style={{
-            maxHeight: expanded ? null : 'none',
+            maxHeight: expanded ? 'unset' : 0,
             '--collapse': collapse,
           }}
-          id={`accordion-${section}${index}`}
         >
           <div className="fr-accordion__inner">
-            <p className="fr-mb-1v">
+            <p
+              className="fr-mb-1v"
+              ref={collapsableSection}
+            >
               {item.answer}
             </p>
           </div>

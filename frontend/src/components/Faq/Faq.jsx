@@ -4,7 +4,7 @@ import Ariane from 'components/Ariane/Ariane';
 import FaqItems from './FaqItems';
 
 const Faq = () => (
-  <>
+  <div className="fr-container fr-mb-3w">
     <Ariane
       previous={[
         {
@@ -122,7 +122,7 @@ const Faq = () => (
 
       </div>
     </div>
-  </>
+  </div>
 );
 
 export default Faq;
