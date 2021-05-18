@@ -24,10 +24,8 @@ module.exports.newAppointment = async (req, res) => {
 };
 
 module.exports.createNewAppointmentValidators = [
-  // todo : there is a format option, which would allow using "date" rather than iso-date.
-  // Make it work to simplify the html.
-  check('iso-date')
-    .isDate()
+  check('date')
+    .isISO8601()
     .withMessage('Vous devez spécifier une date pour la séance.'),
   check('patientId')
     .isUUID()
@@ -37,42 +35,37 @@ module.exports.createNewAppointmentValidators = [
 module.exports.createNewAppointment = async (req, res) => {
   // Todo : test case where patient id does not exist
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/nouvelle-seance');
+    return res.json({ success: false, message: req.error });
   }
 
-  const date = new Date(Date.parse(req.body['iso-date']));
+  const date = new Date(req.body.date);
   const { patientId } = req.body;
   try {
     const psyId = cookie.getCurrentPsyId(req);
-
     const patientExist = await dbPatient.getPatientById(patientId, psyId);
+
     if (patientExist) {
       await dbAppointments.insertAppointment(date, patientId, psyId);
       console.log(
         `Appointment created for patient id ${patientId} by psy id ${psyId}`,
       );
-      req.flash(
-        'info',
-        `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`,
-      );
-    } else {
-      console.warn(
-        `Patient id ${patientId} does not exsit for psy id : ${psyId}`,
-      );
-      req.flash(
-        'error',
-        "Erreur. La séance n'est pas créée. Pourriez-vous réessayer ?",
-      );
+      return res.json({
+        success: true,
+        message: `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`,
+      });
     }
-    return res.redirect('/psychologue/mes-seances');
-  } catch (err) {
-    req.flash(
-      'error',
-      "Erreur. La séance n'est pas créée. Pourriez-vous réessayer ?",
+
+    console.warn(
+      `Patient id ${patientId} does not exsit for psy id : ${psyId}`,
     );
+  } catch (err) {
     console.error('Erreur pour créer la séance', err);
-    return res.redirect('/psychologue/nouvelle-seance');
   }
+
+  return res.json({
+    success: false,
+    message: "Erreur. La séance n'est pas créée. Pourriez-vous réessayer ?",
+  });
 };
 
 module.exports.deleteAppointmentValidators = [

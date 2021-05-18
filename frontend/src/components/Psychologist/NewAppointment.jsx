@@ -1,5 +1,5 @@
 import React, { useEffect, useState, forwardRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 
 import Ariane from 'components/Ariane/Ariane';
@@ -26,6 +26,7 @@ const DateInput = forwardRef(({ value, onClick }, ref) => (
 ));
 
 const NewAppointment = () => {
+  const history = useHistory();
   const [notification, setNotification] = useState({});
   const [date, setDate] = useState();
   const [patientId, setPatientId] = useState();
@@ -43,7 +44,14 @@ const NewAppointment = () => {
 
   const createNewPatient = e => {
     e.preventDefault();
-    agent.Appointment.add(patientId, date);
+    setNotification({});
+    agent.Appointment.add(patientId, date).then(response => {
+      if (response.success) {
+        history.push('/psychologue/mes-seances');
+      } else {
+        setNotification(response);
+      }
+    });
   };
 
   return (

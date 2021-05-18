@@ -128,6 +128,9 @@ if (config.featurePsyPages) {
   app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
 
   app.get('/api/appointments', appointmentsController.getAppointments);
+  app.post('/api/appointments',
+    appointmentsController.createNewAppointmentValidators,
+    appointmentsController.createNewAppointment);
   app.delete('/api/appointments/:appointmentId',
     appointmentsController.deleteAppointmentValidators,
     appointmentsController.deleteAppointment);
@@ -135,10 +138,6 @@ if (config.featurePsyPages) {
   app.get('/api/patients', patientsController.getPatients);
 
   app.get('/psychologue/mes-patients', dashboardController.displayPatients);
-  app.get('/psychologue/nouvelle-seance', appointmentsController.newAppointment);
-  app.post('/psychologue/creer-nouvelle-seance',
-    appointmentsController.createNewAppointmentValidators,
-    appointmentsController.createNewAppointment);
   app.get('/psychologue/nouveau-patient', patientsController.newPatient);
   app.post('/psychologue/api/creer-nouveau-patient',
     patientsController.createNewPatientValidators,
