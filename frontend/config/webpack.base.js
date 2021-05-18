@@ -76,7 +76,6 @@ const getConfig = () => ({
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new HtmlWebpackPlugin({
       alwaysWriteToDisk: true,
       filename: path.resolve(rootPath, 'dist/index.html'),
