@@ -12,7 +12,7 @@ const Header = () => {
   const location = useLocation();
   const { userStore: { isAuthenticated, setToken } } = useStore();
 
-  const showMenu = location.pathname.startsWith('/psychologue');
+  const psychologistPage = location.pathname.startsWith('/psychologue');
   const loggedIn = isAuthenticated();
   return (
     <>
@@ -63,7 +63,7 @@ const Header = () => {
                     title="Retour à l’accueil"
                   >
                     <p className="fr-header__service-title">
-                      {`${__APPNAME__} - Espace Psychologues`}
+                      {`${__APPNAME__}${psychologistPage ? ' - Espace Psychologues' : ''}`}
                     </p>
                   </Link>
                   <p className="fr-header__service-tagline">{`${__APPDESCRIPTION__}`}</p>
@@ -90,7 +90,7 @@ const Header = () => {
             </div>
           </div>
         </div>
-        {showMenu && loggedIn && <Menu page={location.pathname} />}
+        {psychologistPage && loggedIn && <Menu page={location.pathname} />}
       </header>
     </>
   );

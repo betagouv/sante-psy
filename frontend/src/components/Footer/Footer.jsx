@@ -1,5 +1,7 @@
 import React from 'react';
-import Logo from '../Logo/Logo';
+import { Link } from 'react-router-dom';
+
+import Logo from 'components/Logo/Logo';
 
 const Footer = () => (
   <footer className="fr-footer" id="footer">
@@ -45,16 +47,36 @@ const Footer = () => (
       <div className="fr-footer__bottom">
         <ul className="fr-footer__bottom-list">
           <li className="fr-footer__bottom-item">
-            <a className="fr-footer__bottom-link" href="/mentions-legales#accessibilite">Accessibilité: non conforme</a>
+            <Link
+              className="fr-footer__bottom-link"
+              to="/mentions-legales#accessibilite"
+            >
+              Accessibilité: non conforme
+            </Link>
           </li>
           <li className="fr-footer__bottom-item">
-            <a className="fr-footer__bottom-link" href="/donnees-personnelles-et-gestion-des-cookies">Données personnelles et gestion des cookies</a>
+            <Link
+              className="fr-footer__bottom-link"
+              to="/donnees-personnelles-et-gestion-des-cookies"
+            >
+              Données personnelles et gestion des cookies
+            </Link>
           </li>
           <li className="fr-footer__bottom-item">
-            <a className="fr-footer__bottom-link" href="/mentions-legales">Mentions légales</a>
+            <Link
+              className="fr-footer__bottom-link"
+              to="/mentions-legales"
+            >
+              Mentions légales
+            </Link>
           </li>
           <li className="fr-footer__bottom-item">
-            <a className="fr-footer__bottom-link" href="/faq">En savoir plus</a>
+            <Link
+              className="fr-footer__bottom-link"
+              to="/faq"
+            >
+              En savoir plus
+            </Link>
           </li>
         </ul>
       </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Ariane = ({ previous, current }) => (
   <>
@@ -13,7 +14,7 @@ const Ariane = ({ previous, current }) => (
       <ol className="fr-breadcrumb__list">
         {previous.map(item => (
           <li className="fr-breadcrumb__link" key={item.label}>
-            {item.url ? <a href={item.url}>{item.label}</a> : item.label}
+            {item.url ? <Link to={item.url}>{item.label}</Link> : item.label}
           </li>
         ))}
         <li
