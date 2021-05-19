@@ -195,7 +195,7 @@ describe('DB Psychologists', () => {
       const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
       expect(savedPsy.isConventionSigned).not.to.exist;
-      expect(savedPsy.declaredUniversityId).to.not.equal(univUUID);
+      expect(savedPsy.assignedUniversityId).to.not.equal(univUUID);
 
       await dbPsychologists.updateConventionInfo(
         savedPsy.dossierNumber,
@@ -206,7 +206,7 @@ describe('DB Psychologists', () => {
       const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
 
       expect(updatedPsy.isConventionSigned).to.equal(true);
-      expect(updatedPsy.declaredUniversityId).to.equal(univUUID);
+      expect(updatedPsy.assignedUniversityId).to.equal(univUUID);
     });
 
     it('should not update conventionInfo if psychologistId is unknown', async () => {
