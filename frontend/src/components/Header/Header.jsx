@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
@@ -8,10 +8,12 @@ import Logo from 'components/Logo/Logo';
 import { useStore } from 'stores/';
 
 import Menu from './Menu';
+import Logout from './Logout';
 
 const Header = () => {
+  const [open, setOpen] = useState(false);
   const location = useLocation();
-  const { userStore: { isAuthenticated, setToken } } = useStore();
+  const { userStore: { isAuthenticated } } = useStore();
 
   const psychologistPage = location.pathname.startsWith('/psychologue');
   const loggedIn = isAuthenticated();
@@ -53,6 +55,7 @@ const Header = () => {
                       aria-controls="modal-menu"
                       aria-haspopup="menu"
                       title="Menu"
+                      onClick={() => { setOpen(!open); }}
                     >
                       Menu
                     </button>
@@ -73,25 +76,15 @@ const Header = () => {
               {loggedIn && (
               <div className="fr-header__tools">
                 <div className="fr-header__tools-links">
-                  <ul className="fr-links-group">
-                    <li>
-                      <button
-                        type="button"
-                        className="fr-link"
-                        onClick={() => setToken(null)}
-                      >
-                        Déconnexion
-
-                      </button>
-                    </li>
-                  </ul>
+                  <Logout buttonStyle />
                 </div>
               </div>
               )}
             </div>
           </div>
         </div>
-        {psychologistPage && loggedIn && <Menu page={location.pathname} />}
+        {psychologistPage && loggedIn
+        && <Menu page={location.pathname} open={open} close={() => { setOpen(false); }} />}
       </header>
     </>
   );
