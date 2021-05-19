@@ -107,10 +107,11 @@ app.delete('/api/appointments/:appointmentId',
   appointmentsController.deleteAppointment);
 
 app.get('/api/patients', patientsController.getPatients);
-app.get('/api/patients/:patientId', patientsController.getEditPatient);
 app.post('/api/patients',
   patientsController.createNewPatientValidators,
   patientsController.createNewPatient);
+app.get('/api/patients/:patientId',
+  patientsController.getPatientValidators, patientsController.getPatient);
 app.put('/api/patients/:patientId',
   patientsController.editPatientValidators,
   patientsController.editPatient);
@@ -118,8 +119,8 @@ app.delete('/api/patients/:patientId',
   patientsController.deletePatientValidators,
   patientsController.deletePatient);
 
-app.get('/psychologue/mes-remboursements', reimbursementController.reimbursement);
-app.post('/psychologue/api/renseigner-convention',
+app.get('/api/psychologue/mes-remboursements', reimbursementController.reimbursement);
+app.post('/api/psychologue/renseigner-convention',
   reimbursementController.updateConventionInfoValidators,
   reimbursementController.updateConventionInfo);
 

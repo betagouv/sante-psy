@@ -1,4 +1,5 @@
 import React from 'react';
+import { HashLink } from 'react-router-hash-link';
 
 const PatientRow = ({ patient, deletePatient }) => (
   <tr>
@@ -45,19 +46,19 @@ const PatientRow = ({ patient, deletePatient }) => (
         Supprimer
       </button>
 
-      <button
-        // onClick={() => }
+      <HashLink
+        to={`/psychologue/modifier-patient/${patient.id}`}
         type="button"
         className="fr-btn fr-btn--secondary fr-btn--sm fr-fi-edit-line fr-displayed-xs fr-hidden-md fr-float-right"
         aria-label={!patient.hasFolderCompleted ? 'Compléter' : 'Modifier'}
       />
-      <button
-        type="button"
+      <HashLink
+        to={`/psychologue/modifier-patient/${patient.id}`}
         // onClick={() => }
         className="fr-btn fr-btn--secondary fr-btn--sm fr-fi-edit-line fr-btn--icon-left fr-hidden-xs fr-displayed-md fr-float-right"
       >
         { !patient.hasFolderCompleted ? 'Compléter' : 'Modifier'}
-      </button>
+      </HashLink>
     </td>
   </tr>
 );

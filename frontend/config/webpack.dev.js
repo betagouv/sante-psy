@@ -30,7 +30,7 @@ module.exports = (apiUrl) => Object.assign({}, baseConfig, {
     plugins: baseConfig.plugins.concat([
       new webpack.ProgressPlugin(),
       new webpack.DefinePlugin({
-        __API__: apiUrl ? apiUrl : '"http://localhost:8080/api"'
+        __API__: apiUrl ? apiUrl : '"http://localhost:8080"',
       }),
       new BundleAnalyzerPlugin({
         analyzerMode: 'static',

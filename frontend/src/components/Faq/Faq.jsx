@@ -50,7 +50,10 @@ const Faq = () => (
             <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
           </div>
           <div>
-            <a className="fr-btn fr-btn--alt fr-mt-2w" href="/static/images/flyer_etudiants.pdf">
+            <a
+              className="fr-btn fr-btn--alt fr-mt-2w"
+              href={`${__API__}/static/images/flyer_etudiants.pdf`}
+            >
               Voir le flyer étudiants
             </a>
           </div>
@@ -72,7 +75,10 @@ const Faq = () => (
             <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
           </div>
           <div>
-            <a className="fr-btn fr-btn--alt fr-mt-2w" href="/static/images/flyer_psychologues.pdf">
+            <a
+              className="fr-btn fr-btn--alt fr-mt-2w"
+              href={`${__API__}/static/images/flyer_psychologues.pdf`}
+            >
               Voir le flyer psychologues
             </a>
           </div>
@@ -101,12 +107,18 @@ const Faq = () => (
             <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
           </div>
           <div>
-            <a className="fr-btn fr-btn--alt fr-mt-2w" href="/static/images/flyer_medecins.pdf">
+            <a
+              className="fr-btn fr-btn--alt fr-mt-2w"
+              href={`${__API__}/static/images/flyer_medecins.pdf`}
+            >
               Voir le flyer médecins
             </a>
           </div>
           <div>
-            <a className="fr-btn fr-btn--alt fr-mt-2w" href="/static/images/flyer_ssu.pdf">
+            <a
+              className="fr-btn fr-btn--alt fr-mt-2w"
+              href={`${__API__}/static/images/flyer_ssu.pdf`}
+            >
               Voir le flyer SSU
             </a>
           </div>

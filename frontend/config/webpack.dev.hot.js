@@ -45,7 +45,7 @@ module.exports = Object.assign({}, baseConfig, {
     },
     plugins: baseConfig.plugins.concat([
       new webpack.DefinePlugin({
-        __API__: '"http://localhost:8080/api"',
+        __API__: '"http://localhost:8080"',
       }),
       new webpack.HotModuleReplacementPlugin()
     ]),

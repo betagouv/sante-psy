@@ -49,19 +49,19 @@ module.exports.newPatient = async (req, res) => {
 // Validators we reuse for editPatient and createPatient
 const patientValidators = [
   // todo : do we html-escape here ? We already escape in templates.
-  check('firstnames')
+  check('firstNames')
     .trim().not().isEmpty()
     .customSanitizer((value, { req }) => req.sanitize(value))
     .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
-  check('lastname')
+  check('lastName')
     .trim().not().isEmpty()
     .customSanitizer((value, { req }) => req.sanitize(value))
     .withMessage('Vous devez spécifier le nom du patient.'),
   oneOf(
     [
       // Two valid possibilities : ine is empty, or ine is valid format.
-      check('ine').trim().isEmpty(),
-      check('ine')
+      check('INE').trim().isEmpty(),
+      check('INE')
         .trim().isAlphanumeric()
         .isLength({ min: 1, max: dbPatients.studentNumberSize })
         .customSanitizer((value, { req }) => req.sanitize(value)),
@@ -73,8 +73,8 @@ const patientValidators = [
   oneOf(
     [
       // Two valid possibilities : dateofbirth is empty, or dateofbirth is valid format.
-      check('dateofbirth').trim().isEmpty(),
-      check('dateofbirth')
+      check('dateOfBirth').trim().isEmpty(),
+      check('dateOfBirth')
         .trim().isDate({ format: date.formatFrenchDateForm })
         .customSanitizer((value, { req }) => req.sanitize(value)),
     ],
@@ -84,17 +84,17 @@ const patientValidators = [
   check('institution')
     .trim()
     .customSanitizer((value, { req }) => req.sanitize(value)),
-  check('doctoraddress')
+  check('doctorAddress')
     .trim()
     .customSanitizer((value, { req }) => req.sanitize(value)),
-  check('doctorname')
+  check('doctorName')
     .trim()
     .customSanitizer((value, { req }) => req.sanitize(value)),
 ];
 
 module.exports.editPatientValidators = [
   // todo : do we html-escape here ? We already escape in templates.
-  check('patientid')
+  check('patientId')
     .trim().not().isEmpty()
     .isUUID()
     .withMessage('Ce patient n\'existe pas.'),
@@ -103,28 +103,23 @@ module.exports.editPatientValidators = [
 
 module.exports.editPatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    const hasPatientIdError = validation.hasErrorsForField(req, 'patientid');
-    if (hasPatientIdError) {
-      // Do not use the value of patientid in url ! It is not safe since it did not pass validation.
-      return res.redirect('/psychologue/mes-patients');
-    }
-    return res.redirect(`/psychologue/modifier-patient?patientid=${req.body.patientid}`);
+    return res.json({ success: false, message: req.error });
   }
 
-  const patientId = req.body.patientid;
-  const patientFirstNames = req.body.firstnames;
-  const patientLastName = req.body.lastname;
-  const dateOfBirth = date.parseDateForm(req.body.dateofbirth);
-  const patientINE = req.body.ine;
-  const patientInstitutionName = req.body.institution;
-  const doctorName = req.body.doctorname;
-  const doctorAddress = req.body.doctoraddress;
+  const { patientId } = req.params;
+  const patientFirstNames = req.body.firstNames;
+  const patientLastName = req.body.lastName;
+  const dateOfBirth = date.parseDateForm(req.body.dateOfBirth);
+  const patientINE = req.body.INE;
+  const patientInstitutionName = req.body.institutionName;
+  const { doctorName } = req.body;
+  const { doctorAddress } = req.body;
   // Force to boolean beacause checkbox value send undefined when it's not checked
-  const patientIsStudentStatusVerified = Boolean(req.body.isstudentstatusverified);
-  const patientHasPrescription = Boolean(req.body.hasprescription);
+  const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
+  const patientHasPrescription = Boolean(req.body.hasPrescription);
 
   try {
-    const psychologistId = cookie.getCurrentPsyId(req);
+    const psychologistId = req.user.psychologist;
     await dbPatients.updatePatient(
       patientId,
       patientFirstNames,
@@ -146,56 +141,41 @@ module.exports.editPatient = async (req, res) => {
         + ' en cliquant le bouton "Modifier" du patient.';
     }
     console.log(`Patient ${patientId} updated by psy id ${psychologistId}`);
-    req.flash('info', infoMessage);
-    return res.redirect('/psychologue/mes-patients');
+    return res.json({ success: true, message: infoMessage });
   } catch (err) {
-    req.flash('error', 'Erreur. Le patient n\'est pas modifié. Pourriez-vous réessayer ?');
     console.error('Erreur pour modifier le patient', err);
-    return res.redirect('/psychologue/mes-patients');
+    return res.json({ success: false, message: 'Erreur. Le patient n\'est pas modifié. Pourriez-vous réessayer ?' });
   }
 };
 
-module.exports.getEditPatientValidators = [
-  query('patientid')
+module.exports.getPatientValidators = [
+  check('patientId')
     .trim().not().isEmpty()
     .isUUID()
     .withMessage('Ce patient n\'existe pas.'),
 ];
 
-module.exports.getEditPatient = async (req, res) => {
+module.exports.getPatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/mes-patients');
+    return res.json({ success: false, message: req.error });
   }
 
-  // Get patientId from query params, this is a GET request
-  const patientId = req.query.patientid;
-
+  const { patientId } = req.params;
   try {
-    const psychologistId = cookie.getCurrentPsyId(req);
-
+    const psychologistId = req.user.psychologist;
     const patient = await dbPatients.getPatientById(patientId, psychologistId);
 
     if (!patient) {
-      req.flash('error', 'Ce patient n\'existe pas. Vous ne pouvez pas le modifier.');
-      return res.redirect('/psychologue/mes-patients');
+      return res.json({ success: false, message: 'Ce patient n\'existe pas. Vous ne pouvez pas le modifier.' });
     }
     console.debug(`Rendering getEditPatient for ${patientId}`);
-    return res.render('editPatient', {
-      pageTitle: 'Modifier un patient',
-      pageIntroText: 'Modifiez les informations de l\'étudiant.',
-      form: {
-        method: 'POST',
-        action: '/psychologue/api/modifier-patient',
-        submitButtonText: 'Valider les modifications',
-        submitButtonIcon: 'fr-fi-check-line',
-      },
-      dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
+    return res.json({
+      success: true,
       patient,
     });
   } catch (err) {
-    req.flash('error', 'Erreur lors de la sauvegarde.');
-    console.error('Error getEditPatient', err);
-    return res.redirect('/psychologue/mes-patients');
+    console.error('Error getPatient', err);
+    return res.json({ success: false, message: 'Erreur lors de la recuperation du patient.' });
   }
 };
 
@@ -205,19 +185,19 @@ module.exports.createNewPatient = async (req, res) => {
   if (!validation.checkErrors(req)) {
     return res.json({ success: false, message: req.error });
   }
-  const firstNames = req.body.firstnames;
-  const lastName = req.body.lastname;
-  const dateOfBirth = date.parseDateForm(req.body.dateofbirth);
-  const INE = req.body.ine;
-  const institutionName = req.body.institution;
-  const doctorName = req.body.doctorname;
-  const doctorAddress = req.body.doctoraddress;
+  const { firstNames } = req.body;
+  const { lastName } = req.body;
+  const dateOfBirth = date.parseDateForm(req.body.dateOfBirth);
+  const { INE } = req.body;
+  const { institutionName } = req.body;
+  const { doctorName } = req.body;
+  const { doctorAddress } = req.body;
   // Force to boolean beacause checkbox value send undefined when it's not checked
-  const isStudentStatusVerified = Boolean(req.body.isstudentstatusverified);
-  const hasPrescription = Boolean(req.body.hasprescription);
+  const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
+  const hasPrescription = Boolean(req.body.hasPrescription);
 
   try {
-    const { psychologistId } = req.user;
+    const psychologistId = req.user.psychologist;
     await dbPatients.insertPatient(
       firstNames,
       lastName,

@@ -41,12 +41,14 @@ module.exports.reimbursement = async function reimbursement(req, res) {
     });
   } catch (err) {
     console.error('Could not fetch universities', err);
-    req.flash('error', 'La page Remboursement n\'arrive pas à s\'afficher.');
-    return res.redirect('/psychologue/mes-seances');
+    return res.json({
+      success: false,
+      message: 'La page Remboursement n\'arrive pas à s\'afficher.',
+    });
   }
 
   try {
-    const psychologistId = cookie.getCurrentPsyId(req);
+    const psychologistId = req.user.psychologist;
     const conventionInfo = await dbPsychologists.getConventionInfo(psychologistId);
     const currentConvention = conventionInfo === undefined
       ? { universityId: undefined, universityName: undefined, isConventionSigned: false }
@@ -54,47 +56,49 @@ module.exports.reimbursement = async function reimbursement(req, res) {
 
     const totalAppointmentsAndPatientByPsy = await getTotalAppointmentsAndPatientByPsy(req);
 
-    return res.render('reimbursement', {
-      pageTitle: 'Remboursement',
+    return res.json({
+      success: true,
       universities: universityList,
       currentConvention,
-      showForm: conventionInfo === undefined,
       total: totalAppointmentsAndPatientByPsy,
     });
   } catch (err) {
     console.error('Could not fetch currentPsy or conventionInfo', err);
-    req.flash('error', 'La page Remboursement n\'arrive pas à s\'afficher.');
-    return res.redirect('/psychologue/mes-seances');
+    return res.json({
+      success: false,
+      message: 'La page Remboursement n\'arrive pas à s\'afficher.',
+    });
   }
 };
 
 module.exports.updateConventionInfoValidators = [
   // Note : no sanitizing because isUUID will not allow strange html anyway.
-  check('university')
+  check('universityId')
     .isUUID()
     .withMessage('Vous devez choisir une université.'),
   // Note : no sanitizing because only 2 possible values, so will not allow strange html anyway.
-  check('signed')
-    .isIn(['yes', 'no'])
+  check('isConventionSigned')
+    .isBoolean()
     .withMessage('Vous devez spécifier si la convention est signée ou non.'),
 ];
 
 module.exports.updateConventionInfo = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/mes-remboursements');
+    return res.json({ success: false, message: req.error });
   }
 
-  const universityId = req.body.university;
-  const isConventionSigned = req.body.signed === 'yes';
+  const { universityId, isConventionSigned } = req.body;
+  console.log(universityId, isConventionSigned);
 
   try {
-    const psychologistId = cookie.getCurrentPsyId(req);
+    const psychologistId = req.user.psychologist;
     await dbPsychologists.updateConventionInfo(psychologistId, universityId, isConventionSigned);
-    req.flash('info', 'Vos informations de conventionnement sont bien enregistrées.');
-    return res.redirect('/psychologue/mes-remboursements');
+    return res.json({
+      success: true,
+      message: 'Vos informations de conventionnement sont bien enregistrées.',
+    });
   } catch (err) {
     console.error('Could not update paying university for psy.', err);
-    req.flash('error', 'Erreur pendant l\'enregistrement. Vous pouvez réessayer.');
-    return res.redirect('/psychologue/mes-remboursements');
+    return res.json({ success: false, message: 'Erreur pendant l\'enregistrement. Vous pouvez réessayer.' });
   }
 };

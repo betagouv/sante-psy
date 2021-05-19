@@ -15,13 +15,13 @@ let config;
 let apiUrl = args.env?.API_URL;
 if (args.env?.PROD) {
   config = require('../config/webpack.production.js');
-  apiUrl = apiUrl || '/api';
+  apiUrl = apiUrl || '';
 } else if (args.env?.PRODANALYSER) {
   config = require('../config/webpack.production.with.bundle.js');
-  apiUrl = apiUrl || '/api';
+  apiUrl = apiUrl || '';
 } else {
   config = require('../config/webpack.dev.js');
-  apiUrl = apiUrl || 'http://localhost:8080/api';
+  apiUrl = apiUrl || 'http://localhost:8080';
 }
 
 console.log('Create build...');

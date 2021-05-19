@@ -33,9 +33,10 @@ module.exports.formatFrenchDate = date => dateFormatter.format(date);
  */
 module.exports.toFormatDDMMYYYY = date => {
   if (date) {
+    console.log(date);
     return shortDateFormatter.format(date);
   }
-  return null;
+  return '';
 };
 
 function parseDateForm(date) {

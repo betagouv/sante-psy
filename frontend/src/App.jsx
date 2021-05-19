@@ -8,8 +8,9 @@ import Landing from 'components/Landing/Landing';
 import Footer from 'components/Footer/Footer';
 import FindPsychologist from 'components/PsyListing/PsyListing';
 import Login from 'components/Login/Login';
-import Appointments from 'components/Psychologist/Appointments';
-import NewAppointment from 'components/Psychologist/NewAppointment';
+import Appointments from 'components/Psychologist/Appointments/Appointments';
+import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
+import Reimbursement from 'components/Psychologist/Reimbursement/Reimbursement';
 import Patients from 'components/Psychologist/Patients/Patients';
 import AddEditPatient from 'components/Psychologist/Patients/AddEditPatient';
 import Announcement from 'components/Notification/Announcement';
@@ -47,7 +48,8 @@ function App() {
           <Route key="new-appointments" exact path="/psychologue/nouvelle-seance" component={NewAppointment} />,
           <Route key="patients" exact path="/psychologue/mes-patients" component={Patients} />,
           <Route key="new-patient" exact path="/psychologue/nouveau-patient" component={AddEditPatient} />,
-          <Route key="edit-patient" exact path="/psychologue/modifier-patient" component={AddEditPatient} />,
+          <Route key="edit-patient" exact path="/psychologue/modifier-patient/:patientId" component={AddEditPatient} />,
+          <Route key="reimbursment" exact path="/psychologue/mes-remboursements" component={Reimbursement} />,
         ]}
         <Route exact path="/psychologue/login/:token?" component={Login} />
         <Route exact path="/trouver-un-psychologue" component={FindPsychologist} />
