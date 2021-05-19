@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
@@ -54,7 +54,13 @@ function App() {
         <Route exact path="/mentions-legales" component={LegalNotice} />
         <Route exact path="/donnees-personnelles-et-gestion-des-cookies" component={PersonalData} />
         <Route exact path="/faq" component={Faq} />
-        <Route path="/" component={Landing} />
+        <Route exact path="/" component={Landing} />
+        <Route path="/psychologue/">
+          <Redirect to={loggedIn ? '/psychologue/mes-seances' : '/psychologue/login'} />
+        </Route>
+        <Route path="/">
+          <Redirect to={loggedIn ? '/psychologue/mes-seances' : '/'} />
+        </Route>
       </Switch>
       <Footer />
     </BrowserRouter>
