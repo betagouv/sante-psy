@@ -3,6 +3,7 @@ const rewire = require('rewire');
 require('dotenv').config();
 
 const dbPsychologists = rewire('../db/psychologists');
+const dbUniversities = rewire('../db/universities');
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 const { expect } = require('chai');
 const { fail } = require('chai');
@@ -23,6 +24,7 @@ describe('DB Psychologists', () => {
 
   afterEach(async () => {
     await clean.cleanAllPsychologists();
+    await clean.cleanAllUniversities();
   });
 
   describe('savePsychologistInPG', () => {
@@ -223,6 +225,46 @@ describe('DB Psychologists', () => {
       } catch (err) {
         // pass
       }
+    });
+  });
+
+  describe('getConventionInfo', () => {
+    it('should return assignedUniID, name and signedConvention,', async () => {
+      const univName = 'Fake Uni';
+      await dbUniversities.insertUniversity(univName);
+      const universities = await dbUniversities.getUniversities();
+      const univUUID = universities[0].id;
+      const isConventionSigned = true;
+      const psy = psyList[0];
+      psy.state = demarchesSimplifiees.DOSSIER_STATE.accepte;
+      psy.assignedUniversityId = univUUID;
+      await dbPsychologists.savePsychologistInPG([psy]);
+      const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+
+      await dbPsychologists.updateConventionInfo(
+        savedPsy.dossierNumber,
+        univUUID,
+        isConventionSigned, // isConventionSigned
+      );
+
+      const currentConvention = await dbPsychologists.getConventionInfo(savedPsy.dossierNumber);
+      expect(currentConvention.isConventionSigned).to.equal(isConventionSigned);
+      expect(currentConvention.universityId).to.equal(univUUID);
+      expect(currentConvention.universityName).to.equal(univName);
+    });
+
+    it('should return undefined if no university is linked to the psy', async () => {
+      const psy = psyList[0];
+      psy.state = demarchesSimplifiees.DOSSIER_STATE.accepte;
+      psy.assignedUniversityId = null;
+      await dbPsychologists.savePsychologistInPG([psy]);
+      const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+
+      const currentConvention = await dbPsychologists.getConventionInfo(savedPsy.dossierNumber);
+
+      expect(currentConvention.isConventionSigned).to.equal(false);
+      expect(currentConvention.universityId).to.equal(undefined);
+      expect(currentConvention.universityName).to.equal(undefined);
     });
   });
 

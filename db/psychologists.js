@@ -210,5 +210,11 @@ module.exports.getConventionInfo = async (psychologistId) => {
       `${psyTable}.assignedUniversityId`,
       `${dbUniversities.universitiesTable}.id`)
     .where(`${psyTable}.dossierNumber`, psychologistId);
-  return psyArray[0];
+  const conventionInfo = psyArray[0];
+
+  const currentConvention = conventionInfo === undefined
+    ? { universityId: undefined, universityName: undefined, isConventionSigned: false }
+    : conventionInfo;
+
+  return currentConvention;
 };

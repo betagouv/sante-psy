@@ -52,10 +52,7 @@ async function displayAppointments(req, res) {
     const psychologistId = cookie.getCurrentPsyId(req);
     const appointments = await dbAppointments.getAppointments(psychologistId);
 
-    const conventionInfo = await dbPsychologists.getConventionInfo(psychologistId);
-    const currentConvention = conventionInfo === undefined
-      ? { universityId: undefined, universityName: undefined, isConventionSigned: false }
-      : conventionInfo;
+    const currentConvention = await dbPsychologists.getConventionInfo(psychologistId);
 
     res.render('myAppointments', {
       appointments: appointments.filter((appointment) => date.isSameMonth(appointment.appointmentDate, monthPicker)),
