@@ -47,10 +47,7 @@ module.exports.reimbursement = async function reimbursement(req, res) {
 
   try {
     const psychologistId = cookie.getCurrentPsyId(req);
-    const conventionInfo = await dbPsychologists.getConventionInfo(psychologistId);
-    const currentConvention = conventionInfo === undefined
-      ? { universityId: undefined, universityName: undefined, isConventionSigned: false }
-      : conventionInfo;
+    const currentConvention = await dbPsychologists.getConventionInfo(psychologistId);
 
     const totalAppointmentsAndPatientByPsy = await getTotalAppointmentsAndPatientByPsy(req);
 
@@ -58,7 +55,7 @@ module.exports.reimbursement = async function reimbursement(req, res) {
       pageTitle: 'Remboursement',
       universities: universityList,
       currentConvention,
-      showForm: conventionInfo === undefined,
+      showForm: currentConvention.universityId === undefined,
       total: totalAppointmentsAndPatientByPsy,
     });
   } catch (err) {

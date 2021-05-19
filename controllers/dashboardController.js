@@ -3,6 +3,7 @@ const config = require('../utils/config');
 const date = require('../utils/date');
 const dbAppointments = require('../db/appointments');
 const dbPatient = require('../db/patients');
+const dbPsychologists = require('../db/psychologists');
 const getAnnouncement = require('../utils/announcement');
 
 const DOCTOR_NAME = 'nom du docteur';
@@ -51,9 +52,12 @@ async function displayAppointments(req, res) {
     const psychologistId = cookie.getCurrentPsyId(req);
     const appointments = await dbAppointments.getAppointments(psychologistId);
 
+    const currentConvention = await dbPsychologists.getConventionInfo(psychologistId);
+
     res.render('myAppointments', {
       appointments: appointments.filter((appointment) => date.isSameMonth(appointment.appointmentDate, monthPicker)),
       monthPicker,
+      currentConvention,
       ...getAnnouncement(req),
     });
   } catch (err) {

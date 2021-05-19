@@ -216,7 +216,8 @@ describe('dashboardController', () => {
         .redirects(0) // block redirects, we don't want to test them
         .then(async (res) => {
           // My patient is present
-          chai.assert.include(res.text, `${myPatient.firstNames} ${myPatient.lastName}`);
+          chai.assert.include(res.text, `${myPatient.firstNames}`);
+          chai.assert.include(res.text, `${myPatient.lastName}`);
 
           // Other psy's patients are not listed
           chai.assert.notInclude(res.text,
