@@ -184,13 +184,13 @@ module.exports.countAcceptedPsychologistsByPersonalEmail = () => knex(module.exp
     .count('*')
     .groupBy('personalEmail', 'state');
 
-module.exports.updateConventionInfo = async (psychologistId, declaredUniversityId, isConventionSigned) => {
+module.exports.updateConventionInfo = async (psychologistId, assignedUniversityId, isConventionSigned) => {
   const updated = await knex(module.exports.psychologistsTable)
     .where({
       dossierNumber: psychologistId,
     })
     .update({
-      declaredUniversityId,
+      assignedUniversityId,
       isConventionSigned,
       updatedAt: date.getDateNowPG(),
     });

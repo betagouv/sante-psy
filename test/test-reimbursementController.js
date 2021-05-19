@@ -87,7 +87,7 @@ describe('reimbursementController', () => {
         .then(async () => {
           const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
           chai.expect(updatedPsy.isConventionSigned).to.equal(true);
-          chai.expect(updatedPsy.declaredUniversityId).to.equal(university.id);
+          chai.expect(updatedPsy.assignedUniversityId).to.equal(university.id);
         });
     });
 
