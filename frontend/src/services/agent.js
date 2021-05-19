@@ -20,9 +20,9 @@ client.interceptors.request.use(config => {
 });
 
 const Appointment = {
-  add: (patientId, date) => client.post('/appointments/', { patientId, date }).then(responseData),
-  delete: id => client.delete(`/appointments/${id}`).then(responseData),
-  get: () => client.get('/appointments').then(responseData),
+  add: (patientId, date) => client.post('/psychologue/appointments/', { patientId, date }).then(responseData),
+  delete: id => client.delete(`/psychologue/appointments/${id}`).then(responseData),
+  get: () => client.get('/psychologue/appointments').then(responseData),
 };
 const Config = { get: () => client.get('/config').then(responseData) };
 const Patient = {

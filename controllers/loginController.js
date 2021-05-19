@@ -123,7 +123,7 @@ module.exports.sendMail = async function postLogin(req, res) {
     if (notYetAcceptedEmailExist) {
       await sendNotYetAcceptedEmail(email);
       return res.json({
-        success: true,
+        success: false,
         message: 'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.',
       });
     }

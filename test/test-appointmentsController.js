@@ -44,17 +44,16 @@ describe('appointmentsController', () => {
       );
 
       return chai.request(app)
-        .post('/psychologue/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+        .post('/api/appointments')
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .set('content-type', 'application/json')
         .send({
           patientId: patient.id,
-          date: '09/02/2021',
-          'iso-date': '2021-02-09',
+          date: new Date('09/02/2021'),
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.body.success.should.equal(true);
+          res.body.message.should.equal('La séance du jeudi 2 septembre 2021 a bien été créée.');
 
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);
@@ -86,17 +85,16 @@ describe('appointmentsController', () => {
       );
 
       return chai.request(app)
-        .post('/psychologue/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+      .post('/api/appointments')
+      .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+      .set('content-type', 'application/json')
         .send({
           patientId: patient.id,
-          date: '09/02/2021',
-          'iso-date': '2021-02-09',
+          date: new Date('09/02/2021'),
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?');
 
           // was not created because patient id is not linked to psy id
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
@@ -125,69 +123,19 @@ describe('appointmentsController', () => {
       );
 
       return chai.request(app)
-        .post('/psychologue/creer-nouvelle-seance')
-        // no auth cookie
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+      .post('/api/appointments')
+      .set('content-type', 'application/json')
         .send({
           patientId: patient.id,
-          date: '09/02/2021',
-          'iso-date': '2021-02-09',
+          date: new Date('09/02/2021'),
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/login');
+          res.status.should.equal(401);
 
           // Appointment not created
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
           expect(appointmentArray).to.have.length(0);
 
-          return Promise.resolve();
-        });
-    });
-
-    it('should only display my patients in dropdown when creating appointment', async () => {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      };
-      const anotherPsyId = '60014566-d8bf-4f01-94bf-27b31ca9275d';
-      const myPatient = await dbPatients.insertPatient(
-        'Ada',
-        'Lovelace',
-        '12345678901',
-        '42',
-        false,
-        false,
-        psy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
-      const patientForAnotherPsy = await dbPatients.insertPatient(
-        'Stevie',
-        'Wonder',
-        '34567890123',
-        'Universal',
-        false,
-        true,
-        anotherPsyId,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
-
-      return chai.request(app)
-        .get('/psychologue/nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .then(async (res) => {
-          // My patients are present
-          chai.assert.include(res.text, myPatient.firstNames);
-          chai.assert.include(res.text, myPatient.lastName);
-
-          // Other psy's patients are not listed
-          chai.assert.notInclude(res.text, patientForAnotherPsy.firstNames);
-          chai.assert.notInclude(res.text, patientForAnotherPsy.lastName);
           return Promise.resolve();
         });
     });
@@ -212,17 +160,17 @@ describe('appointmentsController', () => {
 
     it('should refuse invalid patientId', (done) => {
       chai.request(app)
-        .post('/psychologue/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+      .post('/api/appointments')
+      .set('Authorization', `Bearer ${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
+      .set('content-type', 'application/json')
         .send({
           patientId: 'not-a-uuid',
-          date: '09/02/2021',
-          'iso-date': '2021-02-09',
+          date: new Date('09/02/2021'),
         })
         .end((err, res) => {
-          res.should.redirectTo('/psychologue/nouvelle-seance');
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Vous devez spécifier un patient pour la séance.');
+
           sinon.assert.notCalled(insertAppointmentStub);
           done();
         });
@@ -230,17 +178,17 @@ describe('appointmentsController', () => {
 
     it('should refuse empty patientId', (done) => {
       chai.request(app)
-        .post('/psychologue/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+      .post('/api/appointments')
+      .set('Authorization', `Bearer ${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
+      .set('content-type', 'application/json')
         .send({
           // no patientId
-          date: '09/02/2021',
-          'iso-date': '2021-02-09',
+          date: new Date('09/02/2021'),
         })
         .end((err, res) => {
-          res.should.redirectTo('/psychologue/nouvelle-seance');
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Vous devez spécifier un patient pour la séance.');
+
           sinon.assert.notCalled(insertAppointmentStub);
           done();
         });
@@ -252,17 +200,17 @@ describe('appointmentsController', () => {
         email: 'prenom.nom@beta.gouv.fr',
       };
       chai.request(app)
-        .post('/psychologue/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+      .post('/api/appointments')
+      .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+      .set('content-type', 'application/json')
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
-          'iso-date': '2021-02-09kk',
         })
         .end((err, res) => {
-          res.should.redirectTo('/psychologue/nouvelle-seance');
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Vous devez spécifier une date pour la séance.');
+
           sinon.assert.notCalled(insertAppointmentStub);
           done();
         });
@@ -270,53 +218,18 @@ describe('appointmentsController', () => {
 
     it('should refuse empty date', (done) => {
       chai.request(app)
-        .post('/psychologue/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+      .post('/api/appointments')
+      .set('Authorization', `Bearer ${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
+      .set('content-type', 'application/json')
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
-          date: '09/02/2021',
-          // not iso-date
+          // no date
         })
         .end((err, res) => {
-          res.should.redirectTo('/psychologue/nouvelle-seance');
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Vous devez spécifier une date pour la séance.');
           sinon.assert.notCalled(insertAppointmentStub);
           done();
-        });
-    });
-
-    it('should ignore the date input and use the iso-date', async () => {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      };
-      const myPatient = await dbPatients.insertPatient(
-        'Ada',
-        'Lovelace',
-        '12345678901',
-        '42',
-        false,
-        false,
-        psy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
-      chai.request(app)
-        .post('/psychologue/creer-nouvelle-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          patientId: myPatient.id,
-          date: '12/02/2021 kfjhksdhf',
-          'iso-date': '2021-02-09',
-        })
-        .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
-          sinon.assert.called(insertAppointmentStub);
-          return Promise.resolve();
         });
     });
   });
@@ -364,15 +277,11 @@ describe('appointmentsController', () => {
       const appointment = await makeAppointment(psy.dossierNumber);
 
       return chai.request(app)
-        .post('/psychologue/api/supprimer-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          appointmentId: appointment.id,
-        })
+        .delete(`/api/appointments/${appointment.id}`)
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.body.success.should.equal(true);
+          res.body.message.should.equal('La séance a bien été supprimée.');
 
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
           expect(appointmentArray).to.have.length(0);
@@ -390,15 +299,12 @@ describe('appointmentsController', () => {
       const appointment = await makeAppointment(anotherPsyId);
 
       return chai.request(app)
-        .post('/psychologue/api/supprimer-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          appointmentId: appointment.id,
-        })
+        .delete(`/api/appointments/${appointment.id}`)
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Impossible de supprimer cette séance.');
+
           // Appointment is not deleted
           const appointmentArray = await dbAppointments.getAppointments(anotherPsyId);
           expect(appointmentArray).to.have.length(1);
@@ -415,15 +321,11 @@ describe('appointmentsController', () => {
       const appointment = await makeAppointment(psy.dossierNumber);
 
       return chai.request(app)
-        .post('/psychologue/api/supprimer-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          appointmentId: `${appointment.id}4`,
-        })
+        .delete(`/api/appointments/${appointment.id}4`)
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Vous devez spécifier une séance à supprimer.');
 
           // Appointment is not deleted
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
@@ -441,15 +343,9 @@ describe('appointmentsController', () => {
       const appointment = await makeAppointment(psy.dossierNumber);
 
       return chai.request(app)
-        .post('/psychologue/api/supprimer-seance')
-        // no auth cookie
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          appointmentId: appointment.id,
-        })
+        .delete(`/api/appointments/${appointment.id}4`)
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/login');
+          res.status.should.equal(401);
 
           // Appointment is not deleted
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
@@ -467,15 +363,10 @@ describe('appointmentsController', () => {
       await makeAppointment(psy.dossierNumber);
 
       return chai.request(app)
-        .post('/psychologue/api/supprimer-seance')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          // no appointmentId
-        })
+        .delete('/api/appointments')
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-seances');
+          res.status.should.equal(404);
 
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);

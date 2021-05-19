@@ -9,13 +9,8 @@ const dbLoginToken = require('../db/loginToken');
 const dbPsychologists = require('../db/psychologists');
 const emailUtils = require('../utils/email');
 const cookie = require('../utils/cookie');
-const config = require('../utils/config');
-const testUtils = require('./helper/utils');
 
 describe('loginController', async () => {
-  let _csrf;
-  let cookies;
-
   describe('generateLoginUrl', () => {
     it('should create a login url to send in a email', () => {
       const generateLoginUrl = loginController.__get__('generateLoginUrl');
@@ -77,14 +72,14 @@ describe('loginController', async () => {
         ));
 
         chai.request(app)
-        .get(`/psychologue/login?token=${encodeURIComponent(token)}`)
-        .redirects(0)
+        .post('/api/psychologue/login')
+        .send({ token })
         .end((err, res) => {
           sinon.assert.called(getByTokenStub);
           sinon.assert.called(deleteTokenStub);
           sinon.assert.called(getAcceptedPsychologistByEmailStub);
-          res.should.have.cookie('token');
-          res.should.redirectTo('/psychologue/mes-seances');
+
+          res.body.token.should.not.equal(null);
           done();
         });
       });
@@ -94,13 +89,17 @@ describe('loginController', async () => {
         .returns(Promise.resolve());
 
         chai.request(app)
-        .get(`/psychologue/login?token=${encodeURIComponent('pizza_for_token')}`)
-        .redirects(0)
+        .post('/api/psychologue/login')
+        .send({ token: 'pizzaForToken' })
         .end((err, res) => {
           sinon.assert.called(getByTokenStub);
           sinon.assert.notCalled(deleteTokenStub);
           sinon.assert.notCalled(getAcceptedPsychologistByEmailStub);
-          res.should.not.have.cookie('token');
+          chai.assert.isUndefined(res.body.token);
+          res.body.success.should.equal(false);
+          res.body.message.should.equal(
+            'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
+          );
           done();
         });
       });
@@ -138,25 +137,21 @@ describe('loginController', async () => {
         }));
 
         chai.request(app)
-        .get('/psychologue/login')
-        .end((err, res) => {
-          _csrf = testUtils.getCsrfTokenHtml(res);
-          cookies = testUtils.getCsrfTokenCookie(res);
-          chai.request(app)
-          .post('/psychologue/login')
-          .type('form')
-          .set('cookie', cookies)
+          .post('/api/psychologue/sendMail')
           .send({
             email: 'prenom.nom@beta.gouv.fr',
-            _csrf,
           })
-          .end(() => {
+          .end((err, res) => {
             sinon.assert.called(getAcceptedPsychologistByEmailStub);
             sinon.assert.called(sendMailStub);
             sinon.assert.called(insertTokenStub);
+
+            res.body.success.should.equal(true);
+            res.body.message.should.equal(
+              'Un lien de connexion a été envoyé à l\'adresse prenom.nom@beta.gouv.fr. Le lien est valable une heure.',
+            );
             done();
           });
-        });
       });
 
       it('send a not accepted yet email', (done) => {
@@ -170,26 +165,22 @@ describe('loginController', async () => {
         }));
 
         chai.request(app)
-        .get('/psychologue/login')
-        .end((err, res) => {
-          _csrf = testUtils.getCsrfTokenHtml(res);
-          cookies = testUtils.getCsrfTokenCookie(res);
-          chai.request(app)
-          .post('/psychologue/login')
-          .type('form')
-          .set('cookie', cookies)
+          .post('/api/psychologue/sendMail')
           .send({
             email: 'prenom.nom@beta.gouv.fr',
-            _csrf,
           })
-          .end(() => {
+          .end((err, res) => {
             sinon.assert.called(getAcceptedPsychologistByEmailStub);
             sinon.assert.called(getNotYetAcceptedPsychologistStub);
             sinon.assert.called(sendMailStub);
             sinon.assert.notCalled(insertTokenStub);
+
+            res.body.success.should.equal(false);
+            res.body.message.should.equal(
+              'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.',
+            );
             done();
           });
-        });
       });
 
       it('send no email if unknowned email or refuse or sans suite', (done) => {
@@ -200,61 +191,22 @@ describe('loginController', async () => {
         .returns(Promise.resolve());
 
         chai.request(app)
-        .get('/psychologue/login')
-        .end((err, res) => {
-          _csrf = testUtils.getCsrfTokenHtml(res);
-          cookies = testUtils.getCsrfTokenCookie(res);
-          chai.request(app)
-          .post('/psychologue/login')
-          .type('form')
-          .set('cookie', cookies)
+          .post('/api/psychologue/sendMail')
           .send({
             email: 'prenom.nom@beta.gouv.fr',
-            _csrf,
           })
-          .end(() => {
+          .end((err, res) => {
             sinon.assert.called(getAcceptedPsychologistByEmailStub);
             sinon.assert.called(getNotYetAcceptedPsychologistStub);
             sinon.assert.notCalled(sendMailStub);
             sinon.assert.notCalled(insertTokenStub);
+
+            res.body.success.should.equal(false);
+            res.body.message.should.equal(
+              'L\'email prenom.nom@beta.gouv.fr est inconnu, ou est lié à un dossier classé sans suite ou refusé.',
+            );
             done();
           });
-        });
-      });
-
-      it('should refuse login if csrf token is invalid', (done) => {
-        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
-        .returns(Promise.resolve({
-          email,
-          state: 'accepte',
-        }));
-
-        chai.request(app)
-        .get('/psychologue/login')
-        .end((err, res) => {
-          _csrf = testUtils.getCsrfTokenHtml(res);
-          cookies = testUtils.getCsrfTokenCookie(res);
-          chai.request(app)
-          .post('/psychologue/login')
-          .type('form')
-          .set('cookie', cookies)
-          .send({
-            email: 'prenom.nom@beta.gouv.fr',
-            _csrf: 'fake_token__csrf',
-          })
-          .end(() => {
-            if (config.useCSRF) {
-              sinon.assert.notCalled(getAcceptedPsychologistByEmailStub);
-              sinon.assert.notCalled(sendMailStub);
-              sinon.assert.notCalled(insertTokenStub);
-            } else {
-              sinon.assert.called(getAcceptedPsychologistByEmailStub);
-              sinon.assert.called(sendMailStub);
-              sinon.assert.called(insertTokenStub);
-            }
-            done();
-          });
-        });
       });
 
       it('should say that email is invalid', (done) => {
@@ -265,28 +217,21 @@ describe('loginController', async () => {
         }));
 
         chai.request(app)
-        .get('/psychologue/login')
-        .end((err, res) => {
-          _csrf = testUtils.getCsrfTokenHtml(res);
-          cookies = testUtils.getCsrfTokenCookie(res);
-
-          chai.request(app)
-          .post('/psychologue/login')
-          .type('form')
-          .set('cookie', cookies)
+          .post('/api/psychologue/sendMail')
           .send({
             email: 'fake_it',
-            _csrf,
           })
-          .redirects(0)
           .end((err, res) => {
             sinon.assert.notCalled(getAcceptedPsychologistByEmailStub);
             sinon.assert.notCalled(sendMailStub);
             sinon.assert.notCalled(insertTokenStub);
-            res.should.redirectTo('/psychologue/login');
+
+            res.body.success.should.equal(false);
+            res.body.message.should.equal(
+              'Vous devez spécifier un email valide.',
+            );
             done();
           });
-        });
       });
     });
   });

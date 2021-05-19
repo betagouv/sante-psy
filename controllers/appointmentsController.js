@@ -82,7 +82,16 @@ module.exports.deleteAppointment = async (req, res) => {
   try {
     const { appointmentId } = req.params;
     const psychologistId = req.user.psychologist;
-    await dbAppointments.deleteAppointment(appointmentId, psychologistId);
+    const deletedAppointment = await dbAppointments.deleteAppointment(appointmentId, psychologistId);
+    if (deletedAppointment === 0) {
+      console.log(
+        `Appointment ${appointmentId} does not belong to psy id ${psychologistId}`,
+      );
+      return res.json({
+        success: false,
+        message: 'Impossible de supprimer cette séance.',
+      });
+    }
     console.log(
       `Appointment deleted ${appointmentId} by psy id ${psychologistId}`,
     );

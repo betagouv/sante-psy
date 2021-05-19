@@ -73,61 +73,55 @@ const rateLimiter = rateLimit({
 });
 app.use(rateLimiter);
 
-if (config.featurePsyList) {
-  // prevent abuse for some rules
-  const speedLimiter = slowDown({
-    windowMs: 5 * 60 * 1000, // 5 minutes
-    delayAfter: 100, // allow X requests per 5 minutes, then...
-    delayMs: 500, // begin adding 500ms of delay per request above 100:
-    // request # 101 is delayed by  500ms
-    // request # 102 is delayed by 1000ms
-    // request # 103 is delayed by 1500ms
-    // etc.
-  });
-  app.get('/api/config', speedLimiter, configController.getConfig);
-  app.get('/api/trouver-un-psychologue', speedLimiter, psyListingController.getPsychologist);
-}
+// prevent abuse for some rules
+const speedLimiter = slowDown({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  delayAfter: 100, // allow X requests per 5 minutes, then...
+  delayMs: 500, // begin adding 500ms of delay per request above 100:
+  // request # 101 is delayed by  500ms
+  // request # 102 is delayed by 1000ms
+  // request # 103 is delayed by 1500ms
+  // etc.
+});
+app.get('/api/config', speedLimiter, configController.getConfig);
+app.get('/api/trouver-un-psychologue', speedLimiter, psyListingController.getPsychologist);
 
-if (config.featurePsyPages) {
-  // prevent abuse for some rules
-  const speedLimiterLogin = slowDown({
-    windowMs: 5 * 60 * 1000, // 5 minutes
-    delayAfter: 10, // allow X requests per 5 minutes, then...
-    delayMs: 500, // begin adding 500ms of delay per request above 100:
-  });
-  app.post('/api/psychologue/sendMail',
-    speedLimiterLogin,
-    loginController.emailValidators,
-    loginController.sendMail);
-  app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
+// prevent abuse for some rules
+const speedLimiterLogin = slowDown({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  delayAfter: 10, // allow X requests per 5 minutes, then...
+  delayMs: 500, // begin adding 500ms of delay per request above 100:
+});
+app.post('/api/psychologue/sendMail',
+  speedLimiterLogin,
+  loginController.emailValidators,
+  loginController.sendMail);
+app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
 
-  app.get('/api/appointments', appointmentsController.getAppointments);
-  app.post('/api/appointments',
-    appointmentsController.createNewAppointmentValidators,
-    appointmentsController.createNewAppointment);
-  app.delete('/api/appointments/:appointmentId',
-    appointmentsController.deleteAppointmentValidators,
-    appointmentsController.deleteAppointment);
+app.get('/api/appointments', appointmentsController.getAppointments);
+app.post('/api/appointments',
+  appointmentsController.createNewAppointmentValidators,
+  appointmentsController.createNewAppointment);
+app.delete('/api/appointments/:appointmentId',
+  appointmentsController.deleteAppointmentValidators,
+  appointmentsController.deleteAppointment);
 
-  app.get('/api/patients', patientsController.getPatients);
-  app.get('/api/patients/:patientId', patientsController.getEditPatient);
-  app.post('/api/patients',
-    patientsController.createNewPatientValidators,
-    patientsController.createNewPatient);
-  app.put('/api/patients/:patientId',
-    patientsController.editPatientValidators,
-    patientsController.editPatient);
-  app.delete('/api/patients/:patientId',
-    patientsController.deletePatientValidators,
-    patientsController.deletePatient);
+app.get('/api/patients', patientsController.getPatients);
+app.get('/api/patients/:patientId', patientsController.getEditPatient);
+app.post('/api/patients',
+  patientsController.createNewPatientValidators,
+  patientsController.createNewPatient);
+app.put('/api/patients/:patientId',
+  patientsController.editPatientValidators,
+  patientsController.editPatient);
+app.delete('/api/patients/:patientId',
+  patientsController.deletePatientValidators,
+  patientsController.deletePatient);
 
-  if (config.featureReimbursementPage) {
-    app.get('/psychologue/mes-remboursements', reimbursementController.reimbursement);
-    app.post('/psychologue/api/renseigner-convention',
-      reimbursementController.updateConventionInfoValidators,
-      reimbursementController.updateConventionInfo);
-  }
-}
+app.get('/psychologue/mes-remboursements', reimbursementController.reimbursement);
+app.post('/psychologue/api/renseigner-convention',
+  reimbursementController.updateConventionInfoValidators,
+  reimbursementController.updateConventionInfo);
 
 app.get('/faq', faqController.getFaq);
 
