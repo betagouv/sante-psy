@@ -8,22 +8,21 @@
       Elle remboursera pour tous les étudiants, qu'ils appartiennent à cette université ou une autre.
     </p>
   </div>
-  <% if (!universities || universities.length === 0) { %>
-    <!-- Only display current convention if there are universities -->
-    A venir bientôt : dites-nous où vous en êtes du conventionnement pour que nous puissions vous aider au besoin.
-  <% } else { %>
-    <div id="current-university" <% if (showForm) { %> hidden <% } %>>
+  <div id="current-university" <% if (showForm) { %> hidden <% } %>>
       <h5>Statut de ma convention :</h5>
       <p class="fr-mb-1v">
-        Je suis rattaché à l'université de <b><%= currentConvention.universityName %></b>.
+        Je suis rattaché à l'université de
+        <b>
+          <%= currentConvention.universityName %>
+        </b>.
       </p>
       <p class="fr-mb-2w">
         La convention
         <% if (currentConvention.isConventionSigned) { %>
           est <b>signée</b>.
-        <% } else { %>
-          n'est <b>pas encore signée</b>.
-        <% } %>
+          <% } else { %>
+            n'est <b>pas encore signée</b>.
+            <% } %>
       </p>
       <div>
         <p class="fr-mb-2v">Un changement de statut ? Tenez-nous au courant !</p>
@@ -31,67 +30,66 @@
           Modifier le statut
         </button>
       </div>
-    </div>
+  </div>
 
-    <div id="change-current-university-form" <% if (!showForm) { %> hidden <% } %>>
-        <% if (currentConvention.universityId) { %>
-          <h4>Modifier le statut de ma convention</h4>
+  <div id="change-current-university-form" <% if (!showForm) { %> hidden <% } %>>
+      <% if (currentConvention.universityId) { %>
+        <h4>Modifier le statut de ma convention</h4>
         <% } %>
-        <form action="/psychologue/api/renseigner-convention" method="POST">
-        <input type="hidden" name="_csrf" value="<%= _csrf  %>">
+          <form action="/psychologue/api/renseigner-convention" method="POST">
+            <input type="hidden" name="_csrf" value="<%= _csrf  %>">
 
-        <div class="fr-select-group">
-          <label class="fr-label" for="university">
-            Quelle université vous a contacté pour signer la convention ?
-            <span class="red-text">*</span>
-          </label>
-          <select class="fr-select" id="university" name="university" required>
-            <% if (!currentConvention.universityid) { %>
-              <option value="" selected disabled hidden>- Cliquez pour choisir -</option>
-            <% } %>
-            <% universities.forEach(function(university) { %>
-              <option
-                value="<%= university.id %>"
-                <% if (university.id === currentConvention.universityId) { %> selected <% } %>
-              >
-                <%= university.name %>
-              </option>
-            <% }) %>
-          </select>
-        </div>
-
-        <div class="fr-form-group">
-          <fieldset class="fr-fieldset">
-            <legend class="fr-label fr-mb-1w"> <!-- we don't use fr-fieldset__legend, it looks different -->
-              Avez-vous déjà signé la convention ?
-              <span class="red-text">*</span>
-              <span class="fr-hint-text">
-                Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
-                Vous pourrez mettre à jour vos réponses plus tard si votre statut change.
-              </span>
-            </legend>
-            <div class="fr-fieldset__content">
-              <div class="fr-radio-group">
-                <input type="radio" id="signed-yes" name="signed" value="yes" required
-                  <% if (currentConvention.isConventionSigned) { %> checked <% } %>
-                >
-                <label class="fr-label" for="signed-yes">Oui</label>
-              </div>
-              <div class="fr-radio-group">
-                <input type="radio" id="signed-no" name="signed" value="no" required
-                  <% if (!currentConvention.isConventionSigned) { %> checked <% } %>
-                >
-                <label class="fr-label" for="signed-no">Non, pas encore</label>
-              </div>
+            <div class="fr-select-group">
+              <label class="fr-label" for="university">
+                Quelle université vous a contacté pour signer la convention ?
+                <span class="red-text">*</span>
+              </label>
+              <select class="fr-select" id="university" name="university" required>
+                <% if (!currentConvention.universityid) { %>
+                  <option value="" selected disabled hidden>- Cliquez pour choisir -</option>
+                  <% } %>
+                    <% universities.forEach(function(university) { %>
+                      <option value="<%= university.id %>" <% if (university.id===currentConvention.universityId) { %>
+                        selected <% } %>
+                          >
+                          <%= university.name %>
+                      </option>
+                      <% }) %>
+              </select>
             </div>
-          </fieldset>
-        </div>
-        <div class="fr-my-5w">
-          <button type="submit" class="fr-btn fr-fi-check-line fr-btn--icon-left">Enregistrer</button>
-        </div>
-      </form>
-    </div>
-  <% } %>
+
+            <div class="fr-form-group">
+              <fieldset class="fr-fieldset">
+                <legend class="fr-label fr-mb-1w">
+                  <!-- we don't use fr-fieldset__legend, it looks different -->
+                  Avez-vous déjà signé la convention ?
+                  <span class="red-text">*</span>
+                  <span class="fr-hint-text">
+                    Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
+                    Vous pourrez mettre à jour vos réponses plus tard si votre statut change.
+                  </span>
+                </legend>
+                <div class="fr-fieldset__content">
+                  <div class="fr-radio-group">
+                    <input type="radio" id="signed-yes" name="signed" value="yes" required <% if
+                      (currentConvention.isConventionSigned) { %> checked <% } %>
+                      >
+                      <label class="fr-label" for="signed-yes">Oui</label>
+                  </div>
+                  <div class="fr-radio-group">
+                    <input type="radio" id="signed-no" name="signed" value="no" required <% if
+                      (!currentConvention.isConventionSigned) { %> checked <% } %>
+                      >
+                      <label class="fr-label" for="signed-no">Non, pas encore</label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div class="fr-my-5w">
+              <button type="submit" class="fr-btn fr-fi-check-line fr-btn--icon-left">Enregistrer</button>
+            </div>
+          </form>
+  </div>
 </div>
 
 <script src="/static/js/selectPayingUniversity.js"></script>

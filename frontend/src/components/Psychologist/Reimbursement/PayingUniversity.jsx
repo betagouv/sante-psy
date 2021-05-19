@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
 const PayingUniversity = ({ universities, currentConvention, updateConvention }) => {
-  const [showForm, setShowForm] = useState(!currentConvention.universityId);
-  const [convention, setConvention] = useState({});
+  const [showForm, setShowForm] = useState(!currentConvention);
+  const [convention, setConvention] = useState({
+    universityId: '',
+    isConventionSigned: false,
+  });
 
   useEffect(() => {
     setConvention({
-      universityId: currentConvention.universityId,
-      isConventionSigned: currentConvention.isConventionSigned ? currentConvention.isConventionSigned : false,
+      universityId: currentConvention ? currentConvention.universityId : '',
+      isConventionSigned: currentConvention && currentConvention.isConventionSigned
+        ? currentConvention.isConventionSigned
+        : false,
     });
   }, [currentConvention]);
 
@@ -30,7 +35,7 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
       </div>
       {showForm ? (
         <>
-          {currentConvention.universityId && <h4>Modifier le statut de ma convention</h4>}
+          {currentConvention && <h4>Modifier le statut de ma convention</h4>}
           <form onSubmit={saveConvention}>
             <div className="fr-select-group">
               <label className="fr-label" htmlFor="university">

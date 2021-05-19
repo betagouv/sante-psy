@@ -17,6 +17,7 @@ const pickerLang = { months: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', '
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
+  const [convention, setConvention] = useState();
   const [notification, setNotification] = useState({});
   const calendar = useRef(null);
 
@@ -29,6 +30,7 @@ const Appointments = () => {
     agent.Appointment.get()
       .then(response => {
         setAppointments(response.appointments);
+        setConvention(response.currentConvention);
         if (response.error) {
           setNotification({ success: false, message: response.error });
         }
@@ -60,6 +62,13 @@ const Appointments = () => {
 
   return (
     <div className="fr-container fr-mb-3w fr-mt-2w">
+      {(!convention || !convention.universityId) && (
+      <Notification>
+        Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
+        {' '}
+        <HashLink to="/psychologue/mes-remboursements">Remboursement de mes séances</HashLink>
+      </Notification>
+      )}
       <h1>Déclarer mes séances</h1>
       {notification.message && <Notification error={!notification.success} message={notification.message} />}
       <div className="fr-mb-1w">
@@ -97,6 +106,7 @@ const Appointments = () => {
                         <label className="fr-label fr-col-3" htmlFor="date">Date</label>
                         <input
                           className="fr-input short-input"
+                          onChange={() => {}}
                           onClick={() => calendar.current.show()}
                           value={makeText(month)}
                         />

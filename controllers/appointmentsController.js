@@ -2,6 +2,7 @@ const { check } = require('express-validator');
 const cookie = require('../utils/cookie');
 const dbAppointments = require('../db/appointments');
 const dbPatient = require('../db/patients');
+const dbPsychologists = require('../db/psychologists');
 const dateUtils = require('../utils/date');
 const validation = require('../utils/validation');
 
@@ -113,7 +114,9 @@ module.exports.getAppointments = async (req, res) => {
     const psychologistId = req.user.psychologist;
     const appointments = await dbAppointments.getAppointments(psychologistId);
 
-    return res.json({ appointments });
+    const currentConvention = await dbPsychologists.getConventionInfo(psychologistId);
+
+    return res.json({ appointments, currentConvention });
   } catch (err) {
     console.error('myAppointments', err);
     return res.json({

@@ -46,7 +46,7 @@ const Billing = ({ total }) => {
               </thead>
               <tbody>
                 {total.map(totalByMonth => (
-                  <tr>
+                  <tr key={`${totalByMonth.month} ${totalByMonth.year}`}>
                     <td>{`${totalByMonth.month} ${totalByMonth.year}`}</td>
                     <td>{totalByMonth.countAppointments}</td>
                     <td>{totalByMonth.countAppointments}</td>

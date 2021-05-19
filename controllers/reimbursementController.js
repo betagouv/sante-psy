@@ -48,11 +48,8 @@ module.exports.reimbursement = async function reimbursement(req, res) {
   }
 
   try {
-    const psychologistId = req.user.psychologist;
-    const conventionInfo = await dbPsychologists.getConventionInfo(psychologistId);
-    const currentConvention = conventionInfo === undefined
-      ? { universityId: undefined, universityName: undefined, isConventionSigned: false }
-      : conventionInfo;
+    const psychologistId = cookie.getCurrentPsyId(req);
+    const currentConvention = await dbPsychologists.getConventionInfo(psychologistId);
 
     const totalAppointmentsAndPatientByPsy = await getTotalAppointmentsAndPatientByPsy(req);
 

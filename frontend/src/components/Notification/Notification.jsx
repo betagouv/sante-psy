@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import styles from './notification.cssmodule.scss';
 
-const Notification = ({ message, error, onClose }) => {
+const Notification = ({ message, error, onClose, children }) => {
   const [show, setShow] = useState(true);
 
   const close = () => {
@@ -23,7 +23,7 @@ const Notification = ({ message, error, onClose }) => {
         { 'fr-fi-information-line': !error },
       )}
     >
-      <p className="fr-text--md fr-mb-1v">{message}</p>
+      <p className="fr-text--md fr-mb-1v">{message || children}</p>
       <span className="fr-fi-close-line close-notification" onClick={close} />
     </div>
   ) : (
