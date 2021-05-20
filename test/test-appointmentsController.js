@@ -6,7 +6,7 @@ const app = require('../index.ts');
 const clean = require('./helper/clean');
 const dbAppointments = require('../db/appointments');
 const dbPatients = require('../db/patients');
-const cookie = require('../utils/cookie');
+const cookie = require('../utils/jwt');
 const date = require('../utils/date');
 
 describe('appointmentsController', () => {

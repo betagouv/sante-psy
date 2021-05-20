@@ -1,5 +1,4 @@
-const { check, query, oneOf } = require('express-validator');
-const cookie = require('../utils/cookie');
+const { check, oneOf } = require('express-validator');
 const dbPatients = require('../db/patients');
 const validation = require('../utils/validation');
 const date = require('../utils/date');
@@ -17,33 +16,6 @@ module.exports.getPatients = async (req, res) => {
       error: 'Impossible de charger les patients. Réessayez ultérieurement.',
     });
   }
-};
-
-module.exports.newPatient = async (req, res) => {
-  res.render('editPatient', {
-    pageTitle: 'Nouveau patient',
-    pageIntroText: `Déclarez un étudiant comme étant patient du dispositif Santé Psy Etudiants.
-      Vous pourrez ensuite déclarer les séances réalisées avec ce patient.`,
-    form: {
-      method: 'POST',
-      action: '/psychologue/api/creer-nouveau-patient',
-      submitButtonText: 'Ajouter le patient',
-      submitButtonIcon: 'fr-fi-add-line',
-    },
-    patient: {
-      firstNames: '',
-      lastName: '',
-      INE: '',
-      institutionName: '',
-      isStudentStatusVerified: false,
-      hasPrescription: false,
-      id: '',
-      doctorName: '',
-      doctorAddress: '',
-      dateOfBirth: '',
-    },
-    dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
-  });
 };
 
 // Validators we reuse for editPatient and createPatient

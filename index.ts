@@ -20,7 +20,6 @@ import appointmentsController from './controllers/appointmentsController';
 import patientsController from './controllers/patientsController';
 import psyListingController from './controllers/psyListingController';
 import loginController from './controllers/loginController';
-import faqController from './controllers/faqController';
 import reimbursementController from './controllers/reimbursementController';
 
 dotenv.config();
@@ -123,20 +122,6 @@ app.get('/api/psychologue/mes-remboursements', reimbursementController.reimburse
 app.post('/api/psychologue/renseigner-convention',
   reimbursementController.updateConventionInfoValidators,
   reimbursementController.updateConventionInfo);
-
-app.get('/faq', faqController.getFaq);
-
-app.get('/mentions-legales', (req, res) => {
-  res.render('legalNotice', {
-    pageTitle: 'Mentions Légales',
-  });
-});
-
-app.get('/donnees-personnelles-et-gestion-des-cookies', (req, res) => {
-  res.render('données-personnelles-et-gestion-des-cookies', {
-    pageTitle: 'Données personnelles',
-  });
-});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));

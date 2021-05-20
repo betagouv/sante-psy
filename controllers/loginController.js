@@ -5,7 +5,7 @@ const validation = require('../utils/validation');
 const dbPsychologists = require('../db/psychologists');
 const dbLoginToken = require('../db/loginToken');
 const date = require('../utils/date');
-const cookie = require('../utils/cookie');
+const jwt = require('../utils/jwt');
 const logs = require('../utils/logs');
 const emailUtils = require('../utils/email');
 const config = require('../utils/config');
@@ -72,7 +72,7 @@ module.exports.login = async function login(req, res) {
 
       if (dbToken) {
         const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
-        const newToken = cookie.getJwtTokenForUser(dbToken.email, psychologistData.dossierNumber);
+        const newToken = jwt.getJwtTokenForUser(dbToken.email, psychologistData.dossierNumber);
         await dbLoginToken.delete(token);
         console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
         return res.json({ token: newToken });
@@ -140,10 +140,4 @@ module.exports.sendMail = async function postLogin(req, res) {
       message: "Erreur dans l'authentification. Nos services ont été alertés et vont règler ça au plus vite.",
     });
   }
-};
-
-module.exports.getLogout = function getLogout(req, res) {
-  cookie.clearJwtCookie(res);
-  req.flash('info', 'Vous êtes déconnecté.');
-  res.redirect('/psychologue/login');
 };

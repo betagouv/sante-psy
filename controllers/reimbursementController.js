@@ -1,6 +1,5 @@
 const { check } = require('express-validator');
 const dbAppointments = require('../db/appointments');
-const cookie = require('../utils/cookie');
 const date = require('../utils/date');
 const dbPsychologists = require('../db/psychologists');
 const dbUniversities = require('../db/universities');
@@ -22,7 +21,7 @@ function mergeTotalPatientAppointments(totalAppointments, totalPatients) {
 }
 
 async function getTotalAppointmentsAndPatientByPsy(req) {
-  const psychologistId = req.sanitize(cookie.getCurrentPsyId(req));
+  const psychologistId = req.user.psychologist;
   const totalAppointments = await dbAppointments.getCountAppointmentsByYearMonth(psychologistId);
   const totalPatients = await dbAppointments.getCountPatientsByYearMonth(psychologistId);
   return mergeTotalPatientAppointments(totalAppointments, totalPatients);
@@ -48,7 +47,7 @@ module.exports.reimbursement = async function reimbursement(req, res) {
   }
 
   try {
-    const psychologistId = cookie.getCurrentPsyId(req);
+    const psychologistId = req.user.psychologist;
     const currentConvention = await dbPsychologists.getConventionInfo(psychologistId);
 
     const totalAppointmentsAndPatientByPsy = await getTotalAppointmentsAndPatientByPsy(req);

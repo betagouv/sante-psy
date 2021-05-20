@@ -8,7 +8,7 @@ const loginController = rewire('../controllers/loginController');
 const dbLoginToken = require('../db/loginToken');
 const dbPsychologists = require('../db/psychologists');
 const emailUtils = require('../utils/email');
-const cookie = require('../utils/cookie');
+const cookie = require('../utils/jwt');
 
 describe('loginController', async () => {
   describe('generateLoginUrl', () => {

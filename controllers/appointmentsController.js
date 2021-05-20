@@ -1,28 +1,9 @@
 const { check } = require('express-validator');
-const cookie = require('../utils/cookie');
 const dbAppointments = require('../db/appointments');
 const dbPatient = require('../db/patients');
 const dbPsychologists = require('../db/psychologists');
 const dateUtils = require('../utils/date');
 const validation = require('../utils/validation');
-
-module.exports.newAppointment = async (req, res) => {
-  try {
-    const psychologistId = cookie.getCurrentPsyId(req);
-    const patients = await dbPatient.getPatients(psychologistId);
-    return res.render('newAppointment', {
-      patients,
-      pageTitle: 'Nouvelle séance',
-    });
-  } catch (err) {
-    req.flash(
-      'error',
-      "Erreur. La séance n'est pas créée. Pourriez-vous réessayer ?",
-    );
-    console.error('Erreur pour créer la séance', err);
-    return res.redirect('/psychologue/mes-seances');
-  }
-};
 
 module.exports.createNewAppointmentValidators = [
   check('date')
@@ -42,7 +23,7 @@ module.exports.createNewAppointment = async (req, res) => {
   const date = new Date(req.body.date);
   const { patientId } = req.body;
   try {
-    const psyId = cookie.getCurrentPsyId(req);
+    const psyId = req.user.psychologist;
     const patientExist = await dbPatient.getPatientById(patientId, psyId);
 
     if (patientExist) {

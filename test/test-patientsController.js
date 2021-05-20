@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const app = require('../index.ts');
 const clean = require('./helper/clean');
-const cookie = require('../utils/cookie');
+const cookie = require('../utils/jwt');
 const date = require('../utils/date');
 const dbPatients = require('../db/patients');
 
