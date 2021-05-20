@@ -31,7 +31,7 @@ const Billing = ({ total }) => {
         <>
           <p className="fr-mb-2w">
             Le nom des patients est couvert par le secret médical,
-            &lsquo; ne le communiquez pas sur la facture.
+            ne le communiquez pas sur la facture.
             Le nombre de patients suffit.
           </p>
           <div className="fr-table fr-mb-2w">

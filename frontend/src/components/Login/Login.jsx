@@ -53,7 +53,7 @@ const Login = () => {
             </p>
             <form onSubmit={login} id="login_form">
               <label>
-                Adresse email :
+                Adresse email :{' '}
                 <input
                   data-test-id="email-input"
                   type="email"
@@ -61,6 +61,7 @@ const Login = () => {
                   onChange={e => setEmail(e.target.value)}
                 />
               </label>
+              {' '}
               <button
                 data-test-id="email-button"
                 type="submit"

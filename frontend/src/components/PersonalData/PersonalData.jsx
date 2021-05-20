@@ -26,6 +26,7 @@ const PersonalData = () => (
     </p>
     <p>
       Rien d’exceptionnel, pas de passe-droit lié à un
+      {' '}
       <code className="language-plaintext highlighter-rouge">.gouv.fr</code>
       . Nous respectons simplement la loi, qui dit que certains outils de suivi d’audience,
       correctement configurés pour respecter la vie privée, sont exemptés d’autorisation préalable.

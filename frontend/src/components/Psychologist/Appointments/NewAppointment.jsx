@@ -91,6 +91,7 @@ const NewAppointment = () => {
               <label className="fr-label" htmlFor="patients" aria-describedby="patients-help">Patient</label>
               <div className="fr-hint-text" id="patients-help">
                 Votre patient n&lsquo;est pas dans la liste ?
+                {' '}
                 <HashLink to="/psychologue/nouveau-patient">Ajoutez un nouveau patient</HashLink>
               </div>
               <select

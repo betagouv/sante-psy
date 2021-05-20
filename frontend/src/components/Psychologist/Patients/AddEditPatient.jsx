@@ -87,7 +87,7 @@ const AddEditPatient = () => {
       <div className="fr-my-3w">
         <form onSubmit={save}>
           <p className="fr-text--sm fr-mb-1v">
-            Les champs avec une astérique (
+            Les champs avec une astérisque (
             <span className="red-text">*</span>
             ) sont obligatoires.
           </p>
@@ -99,6 +99,7 @@ const AddEditPatient = () => {
             <div className="fr-my-3w">
               <label className="fr-label" htmlFor="firstnames">
                 Prénoms
+                {' '}
                 <span className="red-text">*</span>
               </label>
               <input
@@ -113,6 +114,7 @@ const AddEditPatient = () => {
             <div className="fr-my-3w">
               <label className="fr-label" htmlFor="lastname">
                 Nom
+                {' '}
                 <span className="red-text">*</span>
               </label>
               <input

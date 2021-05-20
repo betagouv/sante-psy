@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
 
-import Logo from 'components/Logo/Logo';
+import Logo from 'components/Logo/LogoHeader';
 
 import { useStore } from 'stores/';
 

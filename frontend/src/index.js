@@ -7,7 +7,6 @@ import { Observer } from 'mobx-react';
 import { registerLocale, setDefaultLocale } from 'react-datepicker';
 import fr from 'date-fns/locale/fr';
 
-import './index.css';
 import App from './App';
 
 configure({ enforceActions: 'never' });

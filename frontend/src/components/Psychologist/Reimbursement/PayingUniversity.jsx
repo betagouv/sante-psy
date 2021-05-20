@@ -40,6 +40,7 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
             <div className="fr-select-group">
               <label className="fr-label" htmlFor="university">
                 Quelle université vous a contacté pour signer la convention ?
+                {' '}
                 <span className="red-text">*</span>
               </label>
               <select
@@ -66,6 +67,7 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
               <fieldset className="fr-fieldset">
                 <legend className="fr-label fr-mb-1w">
                   Avez-vous déjà signé la convention ?
+                  {' '}
                   <span className="red-text">*</span>
                   <span className="fr-hint-text">
                     Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.

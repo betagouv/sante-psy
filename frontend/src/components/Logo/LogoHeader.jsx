@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Logo = () => (
+const LogoHeader = () => (
   <div className="fr-header__logo">
     <p className="fr-logo">
       Ministère
@@ -16,4 +16,4 @@ const Logo = () => (
   </div>
 );
 
-export default Logo;
+export default LogoHeader;

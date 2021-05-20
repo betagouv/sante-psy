@@ -47,6 +47,7 @@ const Faq = () => (
         <div className="fr-mb-3w">
           <div>
             <span className="fr-fi-arrow-right-line fr-fi--md" />
+            {' '}
             <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
           </div>
           <div>
@@ -72,6 +73,7 @@ const Faq = () => (
         <div className="fr-mb-3w">
           <div>
             <span className="fr-fi-arrow-right-line fr-fi--md" />
+            {' '}
             <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
           </div>
           <div>
@@ -104,6 +106,7 @@ const Faq = () => (
         <div className="fr-mb-3w">
           <div>
             <span className="fr-fi-arrow-right-line fr-fi--md" />
+            {' '}
             <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
           </div>
           <div>

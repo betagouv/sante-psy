@@ -68,19 +68,6 @@
   margin: 0 4px;
 }
 
-.appointment-list {
-  padding-inline-start: 0px;
-  list-style-type: none;
-}
-
-.appointment-list li:before {
-  content: none; /* overwrite DSFR default */
-}
-
-.appointment-list li{
-  margin-bottom: 1.5rem; /* fr-mb-3w */
-}
-
 .fr-accordion-group li:before {
   content: none; /* overwrite DSFR default */
 }

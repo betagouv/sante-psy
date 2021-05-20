@@ -1,7 +1,7 @@
 import React from 'react';
 import { HashLink } from 'react-router-hash-link';
 
-import Logo from 'components/Logo/Logo';
+import Logo from 'components/Logo/LogoFooter';
 
 const Footer = () => (
   <footer className="fr-footer" id="footer">

@@ -23,6 +23,8 @@ import agent from 'services/agent';
 import { useStore } from 'stores/';
 
 import '@gouvfr/dsfr/dist/css/dsfr.css';
+
+// Need to be after dsfr to overwrite it
 import './App.css';
 
 function App() {
