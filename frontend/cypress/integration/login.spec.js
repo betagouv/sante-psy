@@ -18,7 +18,7 @@ describe('Login', () => {
     cy.get('[data-test-id="notification-success"]')
       .should(
         'have.text',
-        'Un lien de connexion a été envoyé à l\'adresse login@beta.gouv.fr. Le lien est valable une heure.',
+        'Un lien de connexion a été envoyé à l\'adresse login@beta.gouv.fr. Le lien est valable 2 heures.',
       );
   });
 
