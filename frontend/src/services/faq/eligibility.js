@@ -1,5 +1,5 @@
+/* eslint-disable no-multi-str */
 /* eslint-disable max-len */
-
 module.exports = config => [
   {
     question: 'Je souhaiterais m’inscrire sur la liste des psychologues habilités à recevoir les étudiants qui \

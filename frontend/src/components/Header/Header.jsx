@@ -13,7 +13,7 @@ import Logout from './Logout';
 const Header = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const { userStore: { isAuthenticated }, commonStore: { config } } = useStore();
+  const { userStore: { isAuthenticated } } = useStore();
 
   const psychologistPage = location.pathname.startsWith('/psychologue');
   const loggedIn = isAuthenticated();

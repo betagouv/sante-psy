@@ -1,3 +1,4 @@
+/* eslint-disable no-multi-str */
 /* eslint-disable max-len */
 module.exports = () => [
   {

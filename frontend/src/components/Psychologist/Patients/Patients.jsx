@@ -132,7 +132,9 @@ const Patients = () => {
                     <th scope="col">
                       Statut
                     </th>
-                    <th scope="col" />
+                    <th scope="col">
+                      {' '}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

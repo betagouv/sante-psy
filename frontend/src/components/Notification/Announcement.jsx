@@ -32,7 +32,7 @@ const Announcement = () => {
   const shouldDisplayAnnouncement = () => {
     if (config.announcement) {
       const hiddenAnnouncement = window.localStorage.getItem('hiddenAnnouncement');
-      if (hiddenAnnouncement && hashCode(config.announcement) == hiddenAnnouncement) {
+      if (hiddenAnnouncement && hashCode(config.announcement).toString() === hiddenAnnouncement) {
         return false;
       }
       return true;

@@ -1,3 +1,5 @@
+/* eslint-disable no-multi-str */
+/* eslint-disable max-len */
 module.exports = () => [
   {
     question: 'Je suis étudiant et j’ai besoin d’une aide psychologique. Que dois-je faire ?',
