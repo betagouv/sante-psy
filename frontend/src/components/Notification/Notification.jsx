@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import styles from './notification.cssmodule.scss';
 
-const Notification = ({ message, error, onClose, children }) => {
+const Notification = ({ message, success, onClose, children }) => {
   const [show, setShow] = useState(true);
 
   const close = () => {
@@ -18,9 +18,9 @@ const Notification = ({ message, error, onClose, children }) => {
       className={classnames(
         'fr-callout',
         'fr-mb-3w',
-        { [styles.error]: error },
-        { 'fr-fi-alert-line': error },
-        { 'fr-fi-information-line': !error },
+        { [styles.error]: !success },
+        { 'fr-fi-alert-line': !success },
+        { 'fr-fi-information-line': success },
       )}
     >
       <p className="fr-text--md fr-mb-1v">{message || children}</p>

@@ -102,7 +102,8 @@ module.exports.getAppointments = async (req, res) => {
     console.error('myAppointments', err);
     return res.json({
       appointments: [],
-      error: 'Impossible de charger les séances. Réessayez ultérieurement.',
+      success: false,
+      message: 'Impossible de charger les séances. Réessayez ultérieurement.',
     });
   }
 };

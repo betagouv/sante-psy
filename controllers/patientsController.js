@@ -2,7 +2,6 @@ const { check, oneOf } = require('express-validator');
 const dbPatients = require('../db/patients');
 const validation = require('../utils/validation');
 const date = require('../utils/date');
-const config = require('../utils/config');
 
 module.exports.getPatients = async (req, res) => {
   try {
@@ -13,7 +12,8 @@ module.exports.getPatients = async (req, res) => {
     console.error('getPatients', err);
     return res.json({
       patients: [],
-      error: 'Impossible de charger les patients. Réessayez ultérieurement.',
+      success: false,
+      message: 'Impossible de charger les patients. Réessayez ultérieurement.',
     });
   }
 };

@@ -5,8 +5,10 @@ import DatePicker from 'react-datepicker';
 
 import Ariane from 'components/Ariane/Ariane';
 import Mail from 'components/Footer/Mail';
-import Notification from 'components/Notification/Notification';
+import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
+
+import { useStore } from 'stores/';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -28,17 +30,18 @@ const DateInput = forwardRef(({ value, onClick }, ref) => (
 
 const NewAppointment = () => {
   const history = useHistory();
-  const [notification, setNotification] = useState({});
   const [date, setDate] = useState();
   const [patientId, setPatientId] = useState();
   const [patients, setPatients] = useState([]);
+
+  const { commonStore: { setNotification } } = useStore();
 
   useEffect(() => {
     agent.Patient.get()
       .then(response => {
         setPatients(response.patients);
-        if (response.error) {
-          setNotification({ success: false, message: response.error });
+        if (!response.success) {
+          setNotification(response);
         }
       });
   }, []);
@@ -49,9 +52,8 @@ const NewAppointment = () => {
     agent.Appointment.add(patientId, date).then(response => {
       if (response.success) {
         history.push('/psychologue/mes-seances');
-      } else {
-        setNotification(response);
       }
+      setNotification(response);
     });
   };
 
@@ -72,7 +74,7 @@ const NewAppointment = () => {
       <p className="fr-mb-2w">
         Vous avez réalisé une séance avec un étudiant ou une étudiante. Renseignez-la sur cette page.
       </p>
-      {notification.message && <Notification error={!notification.success} message={notification.message} />}
+      <GlobalNotification />
       <div className="fr-mb-5w">
         <form onSubmit={createNewPatient}>
           <div>

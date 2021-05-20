@@ -9,6 +9,7 @@ function getConfig(req: Request, res: Response): void {
     demarchesSimplifieesUrl: config.demarchesSimplifieesUrl,
     announcement: config.announcement,
     dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
+    sessionDuration: config.sessionDurationHours,
   });
 }
 

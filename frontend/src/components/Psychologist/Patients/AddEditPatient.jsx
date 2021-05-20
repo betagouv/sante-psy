@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
 import Ariane from 'components/Ariane/Ariane';
-import Notification from 'components/Notification/Notification';
+import GlobalNotification from 'components/Notification/GlobalNotification';
 import Mail from 'components/Footer/Mail';
 
 import { useStore } from 'stores/';
@@ -12,10 +12,9 @@ import agent from 'services/agent';
 
 const AddEditPatient = () => {
   const history = useHistory();
-  const { commonStore: { config } } = useStore();
+  const { commonStore: { config, setNotification } } = useStore();
   const { patientId } = useParams();
 
-  const [notification, setNotification] = useState({});
   const [patient, setPatient] = useState({
     INE: '',
     dateOfBirth: '',
@@ -67,9 +66,9 @@ const AddEditPatient = () => {
       if (response.success) {
         history.push('/psychologue/mes-patients');
       } else {
-        setNotification(response);
         window.scrollTo(0, 0);
       }
+      setNotification(response);
     });
   };
   return (
@@ -84,7 +83,7 @@ const AddEditPatient = () => {
       />
       <h1>{pageTitle}</h1>
       <p className="fr-mb-2w">{intro}</p>
-      {notification.message && <Notification error={!notification.success} message={notification.message} />}
+      <GlobalNotification />
       <div className="fr-my-3w">
         <form onSubmit={save}>
           <p className="fr-text--sm fr-mb-1v">

@@ -2,18 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
-import Notification from 'components/Notification/Notification';
+import GlobalNotification from 'components/Notification/GlobalNotification';
 
 import { useStore } from 'stores/';
 
 import agent from 'services/agent';
 
 const Login = () => {
-  const { commonStore: { config }, userStore: { setToken, isAuthenticated } } = useStore();
+  const { commonStore: { config, setNotification }, userStore: { setToken, isAuthenticated } } = useStore();
   const { token } = useParams();
 
   const [email, setEmail] = useState('');
-  const [result, setResult] = useState({});
 
   useEffect(() => {
     if (token) {
@@ -21,7 +20,7 @@ const Login = () => {
         if (loginInfo.token) {
           setToken(loginInfo.token);
         } else {
-          setResult(loginInfo);
+          setNotification(loginInfo);
         }
       });
     }
@@ -29,7 +28,7 @@ const Login = () => {
 
   const login = e => {
     e.preventDefault();
-    agent.Psychologist.sendMail(email).then(setResult);
+    agent.Psychologist.sendMail(email).then(setNotification);
   };
 
   if (isAuthenticated()) {
@@ -46,10 +45,10 @@ const Login = () => {
 
           <div className="panel margin-top-m">
             <h3>Me connecter</h3>
-            {result.message && <Notification message={result.message} error={!result.success} />}
+            <GlobalNotification />
             <p className="fr-mb-2w">
               Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant
-              {config.sessionDuration}
+              {` ${config.sessionDuration}`}
               heures
             </p>
             <form onSubmit={login} id="login_form">

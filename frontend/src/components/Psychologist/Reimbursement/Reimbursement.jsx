@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
 import Mail from 'components/Footer/Mail';
-import Notification from 'components/Notification/Notification';
+import GlobalNotification from 'components/Notification/GlobalNotification';
 
 import agent from 'services/agent';
+
+import { useStore } from 'stores/';
 
 import Billing from './Billing';
 import PayingUniversity from './PayingUniversity';
 
 const Reimbursement = () => {
   const [reimbursement, setReimbursement] = useState();
-  const [notification, setNotification] = useState({});
+  const { commonStore: { setNotification } } = useStore();
   useEffect(() => {
     getReimbursment();
   }, []);
@@ -38,7 +40,7 @@ const Reimbursement = () => {
   return (
     <div className="fr-container fr-mb-3w fr-mt-2w">
       <h1>Remboursement de mes séances</h1>
-      {notification.message && <Notification error={!notification.success} message={notification.message} />}
+      <GlobalNotification />
       {reimbursement && (
       <>
         <PayingUniversity

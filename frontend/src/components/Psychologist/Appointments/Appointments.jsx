@@ -5,10 +5,13 @@ import Picker from 'react-month-picker';
 import classNames from 'classnames';
 
 import Notification from 'components/Notification/Notification';
+import GlobalNotification from 'components/Notification/GlobalNotification';
 import Mail from 'components/Footer/Mail';
 
 import agent from 'services/agent';
 import date from 'services/date';
+
+import { useStore } from 'stores/';
 
 import styles from './appointments.cssmodule.scss';
 import 'react-month-picker/css/month-picker.css';
@@ -18,7 +21,6 @@ const pickerLang = { months: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', '
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [convention, setConvention] = useState();
-  const [notification, setNotification] = useState({});
   const calendar = useRef(null);
 
   const [month, setMonth] = useState({
@@ -26,13 +28,15 @@ const Appointments = () => {
     month: new Date().getMonth() + 1,
   });
 
+  const { commonStore: { setNotification } } = useStore();
+
   useEffect(() => {
     agent.Appointment.get()
       .then(response => {
         setAppointments(response.appointments);
         setConvention(response.currentConvention);
-        if (response.error) {
-          setNotification({ success: false, message: response.error });
+        if (!response.success) {
+          setNotification(response);
         }
       });
   }, []);
@@ -70,7 +74,7 @@ const Appointments = () => {
       </Notification>
       )}
       <h1>Déclarer mes séances</h1>
-      {notification.message && <Notification error={!notification.success} message={notification.message} />}
+      <GlobalNotification />
       <div className="fr-mb-1w">
         <div>
           Afin que nous puissions vous rembourser les séances réalisées, nous vous proposons de nous les

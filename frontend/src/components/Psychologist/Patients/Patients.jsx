@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
 
-import Notification from 'components/Notification/Notification';
+import GlobalNotification from 'components/Notification/GlobalNotification';
 import Mail from 'components/Footer/Mail';
 import PatientRow from 'components/Psychologist/Patients/PatientRow';
 
@@ -15,17 +15,16 @@ import { useStore } from 'stores/';
 import styles from './patients.cssmodule.scss';
 
 const Patients = () => {
-  const { commonStore: { config } } = useStore();
+  const { commonStore: { config, setNotification } } = useStore();
 
   const [patients, setPatients] = useState([]);
-  const [notification, setNotification] = useState({});
 
   useEffect(() => {
     agent.Patient.get()
       .then(response => {
         setPatients(response.patients);
-        if (response.error) {
-          setNotification({ success: false, message: response.error });
+        if (!response.success) {
+          setNotification(response);
         }
       });
   }, []);
@@ -88,7 +87,8 @@ const Patients = () => {
   return (
     <div className="fr-container fr-mb-3w fr-mt-2w">
       <h1>Gérer mes patients</h1>
-      {notification.message && <Notification error={!notification.success} message={notification.message} />}
+      <GlobalNotification />
+      {' '}
       <div className="fr-grid-row fr-grid-row--left">
         <div className="fr-col-12">
           <h2 className="fr-mb-2w">
