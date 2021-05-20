@@ -22,7 +22,7 @@ jobs:
         NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
     - run: npm --prefix frontend run cy:run
     - name: Archive test results
-      if: ${{ always() }}
+      if: ${{ failure() }}
       uses: actions/upload-artifact@v2
       with:
         name: cypress
