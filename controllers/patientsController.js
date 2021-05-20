@@ -7,7 +7,7 @@ module.exports.getPatients = async (req, res) => {
   try {
     const psychologistId = req.user.psychologist;
     const patients = await dbPatients.getPatients(psychologistId);
-    return res.json({ patients });
+    return res.json({ success: true, patients });
   } catch (err) {
     console.error('getPatients', err);
     return res.json({

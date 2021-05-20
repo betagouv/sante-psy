@@ -19,6 +19,7 @@ import 'react-month-picker/css/month-picker.css';
 const pickerLang = { months: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'] };
 
 const Appointments = () => {
+  const [loading, setLoading] = useState(true);
   const [appointments, setAppointments] = useState([]);
   const [convention, setConvention] = useState();
   const calendar = useRef(null);
@@ -33,6 +34,7 @@ const Appointments = () => {
   useEffect(() => {
     agent.Appointment.get()
       .then(response => {
+        setLoading(false);
         setAppointments(response.appointments);
         setConvention(response.currentConvention);
         if (!response.success) {
@@ -66,8 +68,8 @@ const Appointments = () => {
 
   return (
     <div className="fr-container fr-mb-3w fr-mt-2w">
-      {(!convention || !convention.universityId) && (
-      <Notification>
+      {!loading && (!convention || !convention.universityId) && (
+      <Notification success>
         Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
         {' '}
         <HashLink to="/psychologue/mes-remboursements">Remboursement de mes séances</HashLink>

@@ -87,6 +87,7 @@ const Login = () => {
             </p>
             <p className="fr-mb-2w">
               Si vous avez besoin d&lsquo;aide, vous pouvez toujours envoyer un email à
+              {' '}
               <a href={`mailto:${config.contactEmail}`}>{config.contactEmail}</a>
               .
             </p>

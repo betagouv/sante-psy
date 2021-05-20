@@ -97,7 +97,7 @@ module.exports.getAppointments = async (req, res) => {
 
     const currentConvention = await dbPsychologists.getConventionInfo(psychologistId);
 
-    return res.json({ appointments, currentConvention });
+    return res.json({ success: true, appointments, currentConvention });
   } catch (err) {
     console.error('myAppointments', err);
     return res.json({
