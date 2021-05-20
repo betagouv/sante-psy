@@ -11,13 +11,13 @@ describe('Redirection', () => {
     cy.location('pathname').should('eq', '/');
   });
 
-  it('should redirect to mes seacnces page if unknown page but logged', () => {
+  it('should redirect to mes seances page if unknown page but logged', () => {
     login(psy);
     cy.visit('/psychologue/unknown-pizza');
     cy.location('pathname').should('eq', '/psychologue/mes-seances');
   });
 
-  it('should redirect to mes seacnces page if unknown page without /psychologue/ but logged', () => {
+  it('should redirect to mes seances page if unknown page without /psychologue/ but logged', () => {
     login(psy);
     cy.visit('/unknown-pizza');
     cy.location('pathname').should('eq', '/psychologue/mes-seances');

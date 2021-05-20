@@ -21,6 +21,15 @@ jobs:
       env:
         NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
     - run: npm --prefix frontend run cy:run
+    - name: Archive test results
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: cypress
+        retention-days: 1
+        path: |
+          frontend/cypress/screenshots
+          frontend/cypress/videos
     - run: docker-compose down
     - run: npm --prefix frontend run lint
       env:
