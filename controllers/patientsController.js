@@ -81,7 +81,7 @@ const patientValidators = [
     `La date de naissance n'est pas valide, le format doit être JJ/MM/AAAA.
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`,
   ),
-  check('institution')
+  check('institutionName')
     .trim()
     .customSanitizer((value, { req }) => req.sanitize(value)),
   check('doctorAddress')
@@ -120,7 +120,7 @@ module.exports.editPatient = async (req, res) => {
 
   try {
     const psychologistId = req.user.psychologist;
-    await dbPatients.updatePatient(
+    const updated = await dbPatients.updatePatient(
       patientId,
       patientFirstNames,
       patientLastName,
@@ -133,6 +133,11 @@ module.exports.editPatient = async (req, res) => {
       doctorAddress,
       dateOfBirth,
     );
+
+    if (updated === 0) {
+      console.log(`Patient ${patientId} not updated by probably other psy id ${psychologistId}`);
+      return res.json({ success: false, message: 'Ce patient n\'existe pas.' });
+    }
 
     let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`;
     if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified
@@ -243,7 +248,13 @@ module.exports.deletePatient = async (req, res) => {
   try {
     const { patientId } = req.params;
     const psychologistId = req.user.psychologist;
-    await dbPatients.deletePatient(patientId, psychologistId);
+    const deleted = await dbPatients.deletePatient(patientId, psychologistId);
+
+    if (deleted === 0) {
+      console.log(`Patient ${patientId} not deleted by probably other psy id ${psychologistId}`);
+      return res.json({ success: false, message: 'Vous devez spécifier un patient à supprimer.' });
+    }
+
     console.log(`Patient deleted ${patientId} by psy id ${psychologistId}`);
     return res.json({
       success: true,

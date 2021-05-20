@@ -6,24 +6,24 @@ describe('Redirection', () => {
     email: 'prenom.nom@beta.gouv.fr',
   };
 
-  it('should redirect to landing page if unknown page and not loggued', () => {
+  it('should redirect to landing page if unknown page and not logged', () => {
     cy.visit('/unknown-pizza');
     cy.location('pathname').should('eq', '/');
   });
 
-  it('should redirect to mes seacnces page if unknown page but loggued', () => {
+  it('should redirect to mes seacnces page if unknown page but logged', () => {
     login(psy);
     cy.visit('/psychologue/unknown-pizza');
     cy.location('pathname').should('eq', '/psychologue/mes-seances');
   });
 
-  it('should redirect to mes seacnces page if unknown page without /psychologue/ but loggued', () => {
+  it('should redirect to mes seacnces page if unknown page without /psychologue/ but logged', () => {
     login(psy);
     cy.visit('/unknown-pizza');
     cy.location('pathname').should('eq', '/psychologue/mes-seances');
   });
 
-  it('should redirect to login page if unknown page starting with /psychologue/ and not loggued', () => {
+  it('should redirect to login page if unknown page starting with /psychologue/ and not logged', () => {
     cy.visit('/psychologue/unknown-pizza');
     cy.location('pathname').should('eq', '/psychologue/login');
   });

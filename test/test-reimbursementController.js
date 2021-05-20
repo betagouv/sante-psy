@@ -76,22 +76,23 @@ describe('reimbursementController', () => {
       chai.expect(psy.declaredUniversityId).not.to.exist;
 
       return chai.request(app)
-        .post('/psychologue/api/renseigner-convention')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+        .post('/api/psychologue/renseigner-convention')
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send({
-          signed: 'yes',
-          university: university.id,
+          isConventionSigned: true,
+          universityId: university.id,
         })
-        .then(async () => {
+        .then(async (res) => {
+          res.body.success.should.equal(true);
+          res.body.message.should.equal('Vos informations de conventionnement sont bien enregistrées.');
+
           const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
           chai.expect(updatedPsy.isConventionSigned).to.equal(true);
           chai.expect(updatedPsy.assignedUniversityId).to.equal(university.id);
         });
     });
 
-    const failValidation = async (payload) => {
+    const failValidation = async (payload, errorMessage) => {
       const psyEmail = 'login@beta.gouv.fr';
       await dbPsychologists.savePsychologistInPG([clean.getOnePsy(psyEmail, 'accepte', false)]);
       const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
@@ -100,44 +101,45 @@ describe('reimbursementController', () => {
       chai.expect(psy.declaredUniversityId).not.to.exist;
 
       return chai.request(app)
-        .post('/psychologue/api/renseigner-convention')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+      .post('/api/psychologue/renseigner-convention')
+      .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send(payload)
-        .then(async () => {
+        .then(async (res) => {
+          res.body.success.should.equal(false);
+          res.body.message.should.equal(errorMessage);
+
           const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
           chai.expect(updatedPsy.isConventionSigned).not.to.exist;
           chai.expect(updatedPsy.declaredUniversityId).not.to.exist;
         });
     };
 
-    it('should not update if signed is missing', async () => {
+    it('should not update if isConventionSigned is missing', async () => {
       await failValidation({
-        // signed: missing
-        university: university.id,
-      });
+        // isConventionSigned: missing
+        universityId: university.id,
+      }, 'Vous devez spécifier si la convention est signée ou non.');
     });
 
     it('should not update if universityId is missing', async () => {
       await failValidation({
-        signed: 'yes',
-        // university: missing
-      });
+        isConventionSigned: false,
+        // universityId: missing
+      }, 'Vous devez choisir une université.');
     });
 
-    it('should not update if signed is not "yes" or "no"', async () => {
+    it('should not update if isConventionSigned is not a boolean', async () => {
       await failValidation({
-        signed: 'yes maybe',
-        university: university.id,
-      });
+        isConventionSigned: 'yes maybe',
+        universityId: university.id,
+      }, 'Vous devez spécifier si la convention est signée ou non.');
     });
 
     it('should not update if universityId is not a uuid', async () => {
       await failValidation({
-        signed: 'yes',
-        university: 'not a uuid',
-      });
+        isConventionSigned: true,
+        universityId: 'not a uuid',
+      }, 'Vous devez choisir une université.');
     });
   });
 });

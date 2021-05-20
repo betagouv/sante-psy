@@ -12,7 +12,7 @@ module.exports.getPsychologist = async function getPsychologist(req, res) {
     });
   } catch (err) {
     console.error('getPsychologist', err);
-    res.render('psyListing', {
+    res.json('psyListing', {
       psyList: [],
       message: 'Impossible de récupérer les psychologues. Réessayez ultérieurement.',
     });

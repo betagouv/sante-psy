@@ -46,7 +46,6 @@ describe('appointmentsController', () => {
       return chai.request(app)
         .post('/api/appointments')
         .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .set('content-type', 'application/json')
         .send({
           patientId: patient.id,
           date: new Date('09/02/2021'),
@@ -87,7 +86,6 @@ describe('appointmentsController', () => {
       return chai.request(app)
       .post('/api/appointments')
       .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-      .set('content-type', 'application/json')
         .send({
           patientId: patient.id,
           date: new Date('09/02/2021'),
@@ -124,7 +122,6 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .post('/api/appointments')
-      .set('content-type', 'application/json')
         .send({
           patientId: patient.id,
           date: new Date('09/02/2021'),
@@ -162,7 +159,6 @@ describe('appointmentsController', () => {
       chai.request(app)
       .post('/api/appointments')
       .set('Authorization', `Bearer ${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
-      .set('content-type', 'application/json')
         .send({
           patientId: 'not-a-uuid',
           date: new Date('09/02/2021'),
@@ -180,7 +176,6 @@ describe('appointmentsController', () => {
       chai.request(app)
       .post('/api/appointments')
       .set('Authorization', `Bearer ${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
-      .set('content-type', 'application/json')
         .send({
           // no patientId
           date: new Date('09/02/2021'),
@@ -202,7 +197,6 @@ describe('appointmentsController', () => {
       chai.request(app)
       .post('/api/appointments')
       .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-      .set('content-type', 'application/json')
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
@@ -220,7 +214,6 @@ describe('appointmentsController', () => {
       chai.request(app)
       .post('/api/appointments')
       .set('Authorization', `Bearer ${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
-      .set('content-type', 'application/json')
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           // no date
