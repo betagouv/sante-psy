@@ -78,7 +78,7 @@ const Login = () => {
             <p className="fr-mb-2w">
               Etes-vous bien enregistré via
               {' '}
-              <a href="<%= formUrl %>" target="_blank" rel="noopener noreferrer">le formulaire d&lsquo;inscription</a>
+              <a href={config.demarchesSimplifieesUrl} target="_blank" rel="noopener noreferrer">le formulaire d&lsquo;inscription</a>
               {' '}
               ?
               Il se peut que votre compte ne soit pas encore validé.
