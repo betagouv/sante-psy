@@ -1,4 +1,3 @@
-import bodyParser from 'body-parser';
 import express from 'express';
 import expressSanitizer from 'express-sanitizer';
 import dotenv from 'dotenv';
@@ -35,12 +34,11 @@ if (!config.activateDebug) {
 }
 
 app.use(cspConfig);
-if (!config.useCSRF) {
+if (config.useCors) {
   app.use(cors({ origin: 'http://localhost:3000' }));
 }
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use(bearerToken());
 
