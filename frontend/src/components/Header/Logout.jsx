@@ -9,6 +9,7 @@ const Logout = ({ buttonStyle, close }) => {
       <li>
         {buttonStyle ? (
           <button
+            data-test-id="logout-button"
             type="button"
             className="fr-link"
             onClick={() => setToken(null)}

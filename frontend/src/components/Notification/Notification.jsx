@@ -15,6 +15,7 @@ const Notification = ({ message, success, onClose, children }) => {
 
   return show ? (
     <div
+      data-test-id={success ? 'notification-success' : 'notification-error'}
       className={classnames(
         'fr-callout',
         'fr-mb-3w',
@@ -24,7 +25,11 @@ const Notification = ({ message, success, onClose, children }) => {
       )}
     >
       <p className="fr-text--md fr-mb-1v">{message || children}</p>
-      <span className="fr-fi-close-line close-notification" onClick={close} />
+      <span
+        data-test-id="notification-close"
+        className="fr-fi-close-line close-notification"
+        onClick={close}
+      />
     </div>
   ) : (
     <></>

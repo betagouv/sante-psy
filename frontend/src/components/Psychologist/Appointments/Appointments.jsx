@@ -129,7 +129,7 @@ const Appointments = () => {
               </thead>
               <tbody>
                 {filteredAppointments.map(appointment => (
-                  <tr key={appointment.id}>
+                  <tr key={appointment.id} data-test-id="appointment-row">
                     <td>
                       {date.formatFrenchDate(new Date(appointment.appointmentDate))}
                     </td>

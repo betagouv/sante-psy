@@ -7,4 +7,12 @@ const login = psy => window.localStorage.setItem('santepsytoken', jwt.sign(
   { expiresIn: '2 hours' },
 ));
 
-export default { login };
+const loginAsDefault = () => {
+  cy.request('http://localhost:8080/test/psychologue/login@beta.gouv.fr').then(r => login(r.body.psy));
+};
+
+const logout = () => {
+  cy.get('[data-test-id="logout-button"]').click();
+};
+
+export default { login, loginAsDefault, logout };

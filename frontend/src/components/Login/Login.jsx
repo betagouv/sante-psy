@@ -55,12 +55,14 @@ const Login = () => {
               <label>
                 Adresse email :
                 <input
+                  data-test-id="email-input"
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                 />
               </label>
               <button
+                data-test-id="email-button"
                 type="submit"
                 className="fr-btn"
                 id="primary_email_button"
