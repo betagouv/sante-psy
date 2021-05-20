@@ -16,7 +16,7 @@ const Footer = () => (
             {' '}
             <a
               title="Voir le code source"
-              href={__APPREPO__}
+              href="https://github.com/betagouv/sante-psy"
               target="_blank"
               rel="noopener noreferrer"
             >

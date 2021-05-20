@@ -11,8 +11,6 @@ module.exports = {
   globals: {
     __API__: false,
     __APPNAME__: false,
-    __APPDESCRIPTION__: false,
-    __APPREPO__: false,
   },
   parser: 'babel-eslint',
   parserOptions: {

@@ -89,8 +89,6 @@ const getConfig = () => ({
     }),
     new webpack.DefinePlugin({
       __APPNAME__: "'Santé Psy Étudiant'",
-      __APPDESCRIPTION__: "'Accompagnement psychologique pour les étudiants'",
-      __APPREPO__: "'https://github.com/betagouv/sante-psy'",
     }),
   ],
   performance: {

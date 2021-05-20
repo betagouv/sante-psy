@@ -13,7 +13,7 @@ import Logout from './Logout';
 const Header = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const { userStore: { isAuthenticated } } = useStore();
+  const { userStore: { isAuthenticated }, commonStore: { config } } = useStore();
 
   const psychologistPage = location.pathname.startsWith('/psychologue');
   const loggedIn = isAuthenticated();
@@ -70,7 +70,7 @@ const Header = () => {
                       {`${__APPNAME__}${psychologistPage ? ' - Espace Psychologues' : ''}`}
                     </p>
                   </HashLink>
-                  <p className="fr-header__service-tagline">{`${__APPDESCRIPTION__}`}</p>
+                  <p className="fr-header__service-tagline">Accompagnement psychologique pour les étudiants</p>
                 </div>
               </div>
               {loggedIn && (
