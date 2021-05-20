@@ -19,7 +19,6 @@ export default class CommonStore {
   }
 
   setNotification(notification) {
-    console.log(notification);
     this.notification = notification;
   }
 }

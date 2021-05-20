@@ -10,6 +10,8 @@ const dbPsychologists = require('../db/psychologists');
 const emailUtils = require('../utils/email');
 const cookie = require('../utils/jwt');
 
+const LONG_TIMEOUT = 3000;
+
 describe('loginController', async () => {
   describe('generateLoginUrl', () => {
     it('should create a login url to send in a email', () => {
@@ -148,7 +150,7 @@ describe('loginController', async () => {
 
             res.body.success.should.equal(true);
             res.body.message.should.equal(
-              'Un lien de connexion a été envoyé à l\'adresse prenom.nom@beta.gouv.fr. Le lien est valable une heure.',
+              'Un lien de connexion a été envoyé à l\'adresse prenom.nom@beta.gouv.fr. Le lien est valable 2 heures.',
             );
             done();
           });
@@ -183,7 +185,7 @@ describe('loginController', async () => {
           });
       });
 
-      it('send no email if unknowned email or refuse or sans suite', (done) => {
+      it('send no email if unknown email or refuse or sans suite', (done) => {
         getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
         .returns(Promise.resolve(undefined));
 
@@ -207,7 +209,7 @@ describe('loginController', async () => {
             );
             done();
           });
-      });
+      }).timeout(LONG_TIMEOUT);
 
       it('should say that email is invalid', (done) => {
         getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
@@ -232,7 +234,7 @@ describe('loginController', async () => {
             );
             done();
           });
-      });
+      }).timeout(LONG_TIMEOUT);
     });
   });
 });

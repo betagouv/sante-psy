@@ -48,7 +48,7 @@ const Login = () => {
             <GlobalNotification />
             <p className="fr-mb-2w">
               Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant
-              {` ${config.sessionDuration}`}
+              {` ${config.sessionDuration} `}
               heures
             </p>
             <form onSubmit={login} id="login_form">
