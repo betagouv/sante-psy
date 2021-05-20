@@ -116,7 +116,8 @@ module.exports.sendMail = async function postLogin(req, res) {
       await saveToken(email, token);
       return res.json({
         success: true,
-        message: `Un lien de connexion a été envoyé à l'adresse ${email}. Le lien est valable ${config.sessionDurationHours} heures.`,
+        message: `Un lien de connexion a été envoyé à l'adresse ${email
+        }. Le lien est valable ${config.sessionDurationHours} heures.`,
       });
     }
     const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(email);
@@ -127,7 +128,8 @@ module.exports.sendMail = async function postLogin(req, res) {
         message: 'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.',
       });
     }
-    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${logs.hashForLogs(email)}`);
+    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${
+      logs.hashForLogs(email)}`);
     return res.json({
       success: false,
       message: `L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`,
