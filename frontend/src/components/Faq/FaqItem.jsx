@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import sanitizeHtml from 'sanitize-html';
 
 const FaqItem = ({ item, section, index }) => {
   const collapsableSection = useRef();
@@ -41,9 +42,15 @@ const FaqItem = ({ item, section, index }) => {
             <p
               className="fr-mb-1v"
               ref={collapsableSection}
-            >
-              {item.answer}
-            </p>
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{
+                __html: sanitizeHtml(item.answer,
+                  {
+                    allowedTags: ['a'],
+                    allowedAttributes: { a: ['href', 'target', 'rel'] },
+                  }),
+              }}
+            />
           </div>
         </div>
       </section>
