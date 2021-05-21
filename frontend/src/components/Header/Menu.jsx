@@ -53,6 +53,17 @@ const Menu = ({ page, open, close }) => (
                 Remboursement de mes séances
               </NavLink>
             </li>
+            <li className="fr-nav__item">
+              <NavLink
+                className="fr-nav__link menu-link"
+                to="/psychologue/mon-profil"
+                target="_self"
+                aria-current={page === '/psychologue/mon-profil' ? 'true' : 'page'}
+                onClick={close}
+              >
+                Modifier mes informations
+              </NavLink>
+            </li>
           </ul>
         </nav>
         {open && <Logout close={close} />}

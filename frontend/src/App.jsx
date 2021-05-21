@@ -13,6 +13,7 @@ import NewAppointment from 'components/Psychologist/Appointments/NewAppointment'
 import Reimbursement from 'components/Psychologist/Reimbursement/Reimbursement';
 import Patients from 'components/Psychologist/Patients/Patients';
 import AddEditPatient from 'components/Psychologist/Patients/AddEditPatient';
+import EditProfile from 'components/Psychologist/Profile/EditProfile';
 import Announcement from 'components/Notification/Announcement';
 import Faq from 'components/Faq/Faq';
 import LegalNotice from 'components/LegalNotice/LegalNotice';
@@ -52,6 +53,7 @@ function App() {
           <Route key="new-patient" exact path="/psychologue/nouveau-patient" component={AddEditPatient} />,
           <Route key="edit-patient" exact path="/psychologue/modifier-patient/:patientId" component={AddEditPatient} />,
           <Route key="reimbursment" exact path="/psychologue/mes-remboursements" component={Reimbursement} />,
+          <Route key="psy-profil" exact path="/psychologue/mon-profil" component={EditProfile} />,
         ]}
         <Route exact path="/psychologue/login/:token?" component={Login} />
         <Route exact path="/trouver-un-psychologue" component={FindPsychologist} />
