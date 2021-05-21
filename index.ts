@@ -1,6 +1,5 @@
 import express from 'express';
 import expressSanitizer from 'express-sanitizer';
-import dotenv from 'dotenv';
 import path from 'path';
 
 import expressJWT from 'express-jwt';
@@ -22,8 +21,6 @@ import loginController from './controllers/loginController';
 import reimbursementController from './controllers/reimbursementController';
 import testController from './controllers/testController';
 
-dotenv.config();
-
 const { appName } = config;
 
 const app = express();
@@ -38,6 +35,9 @@ app.use(cspConfig);
 
 if (config.useCors) {
   app.use(cors({ origin: 'http://localhost:3000' }));
+}
+
+if (config.testEnvironment) {
   app.get('/test/psychologue/:email', testController.getPsychologist);
 }
 
@@ -68,7 +68,7 @@ app.use('/api/*',
 // prevent abuse
 const rateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minute window
-  max: config.useCors ? 10000000 : 1000, // start blocking after X requests for windowMs time
+  max: config.speedLimitation ? 1000 : 10000, // start blocking after X requests for windowMs time
   message: 'Trop de requêtes venant de cette IP, veuillez réessayer plus tard.',
 });
 app.use(rateLimiter);
@@ -76,7 +76,7 @@ app.use(rateLimiter);
 // prevent abuse for some rules
 const speedLimiter = slowDown({
   windowMs: 5 * 60 * 1000, // 5 minutes
-  max: config.useCors ? 10000000 : 1000, // allow X requests per 5 minutes, then...
+  delayAfter: config.speedLimitation ? 100 : 10000, // allow X requests per 5 minutes, then...
   delayMs: 500, // begin adding 500ms of delay per request above 100:
   // request # 101 is delayed by  500ms
   // request # 102 is delayed by 1000ms
@@ -89,8 +89,8 @@ app.get('/api/trouver-un-psychologue', speedLimiter, psyListingController.getPsy
 // prevent abuse for some rules
 const speedLimiterLogin = slowDown({
   windowMs: 5 * 60 * 1000, // 5 minutes
-  max: config.useCors ? 10000000 : 1000, // allow X requests per 5 minutes, then...
-  delayMs: 500, // begin adding 500ms of delay per request above 100:
+  delayAfter: config.speedLimitation ? 10 : 10000, // allow X requests per 5 minutes, then...
+  delayMs: 500, // begin adding 500ms of delay per request above 10:
 });
 app.post('/api/psychologue/sendMail',
   speedLimiterLogin,

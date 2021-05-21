@@ -10,8 +10,6 @@ const dbPsychologists = require('../db/psychologists');
 const emailUtils = require('../utils/email');
 const cookie = require('../utils/jwt');
 
-const LONG_TIMEOUT = 3000;
-
 describe('loginController', async () => {
   describe('generateLoginUrl', () => {
     it('should create a login url to send in a email', () => {
@@ -209,7 +207,7 @@ describe('loginController', async () => {
             );
             done();
           });
-      }).timeout(LONG_TIMEOUT);
+      });
 
       it('should say that email is invalid', (done) => {
         getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
@@ -234,7 +232,7 @@ describe('loginController', async () => {
             );
             done();
           });
-      }).timeout(LONG_TIMEOUT);
+      });
     });
   });
 });
