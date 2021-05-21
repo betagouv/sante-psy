@@ -354,6 +354,7 @@ describe('DB Psychologists', () => {
     it('should update psychologist if exist', async () => {
       const psy = psyList[0];
       await dbPsychologists.savePsychologistInPG([psy]);
+      expect(psy.updatedAt).to.be.undefined;
 
       const newFirstName = 'John';
       const nbUpdated = await dbPsychologists.updatePsychologist(
@@ -378,6 +379,7 @@ describe('DB Psychologists', () => {
       expect(nbUpdated).to.eql(1);
       const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
       expect(updatedPsy.firstNames).to.equal(newFirstName);
+      expect(updatedPsy.updatedAt).to.not.be.undefined;
     });
   });
 });

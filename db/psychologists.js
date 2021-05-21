@@ -251,6 +251,7 @@ module.exports.updatePsychologist = async (psychologistId,
         training: JSON.stringify(training),
         diploma,
         personalEmail,
+        updatedAt: date.getDateNowPG(),
       });
   } catch (err) {
     console.error('Erreur de modification du psychologue', err);
