@@ -262,9 +262,8 @@ describe('DB Psychologists', () => {
 
       const currentConvention = await dbPsychologists.getConventionInfo(savedPsy.dossierNumber);
 
-      expect(currentConvention.isConventionSigned).to.equal(false);
-      expect(currentConvention.universityId).to.equal(undefined);
-      expect(currentConvention.universityName).to.equal(undefined);
+      expect(currentConvention).to.equal(undefined);
+      expect(currentConvention).to.equal(undefined);
     });
   });
 
