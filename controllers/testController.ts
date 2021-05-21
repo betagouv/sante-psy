@@ -12,7 +12,7 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
       token: token.token,
     });
   } catch (err) {
-    res.status(500).send('Ooops');
+    res.status(500).json({ err });
   }
 };
 
