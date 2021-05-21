@@ -138,12 +138,14 @@ const Appointments = () => {
                     </td>
                     <td>
                       <button
+                        data-test-id="delete-appointment-button-small"
                         onClick={() => deleteAppointment(appointment.id)}
                         type="button"
                         className="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-displayed-xs fr-hidden-sm fr-float-right"
                         aria-label="Supprimer"
                       />
                       <button
+                        data-test-id="delete-appointment-button-large"
                         type="button"
                         onClick={() => deleteAppointment(appointment.id)}
                         className="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-btn--icon-left fr-hidden-xs fr-displayed-sm fr-float-right"

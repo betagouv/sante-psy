@@ -35,8 +35,14 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
       </div>
       {showForm ? (
         <>
-          {currentConvention && <h4>Modifier le statut de ma convention</h4>}
-          <form onSubmit={saveConvention}>
+          {currentConvention && (
+          <h4
+            data-test-id="convention-form-title"
+          >
+            Modifier le statut de ma convention
+          </h4>
+          )}
+          <form data-test-id="convention-form" onSubmit={saveConvention}>
             <div className="fr-select-group">
               <label className="fr-label" htmlFor="university">
                 Quelle université vous a contacté pour signer la convention ?
@@ -44,6 +50,7 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
                 <span className="red-text">*</span>
               </label>
               <select
+                data-test-id="convention-university-select"
                 value={convention.universityId || ''}
                 onChange={e => setConvention({ ...convention, universityId: e.target.value })}
                 className="fr-select"
@@ -77,6 +84,7 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
                 <div className="fr-fieldset__content">
                   <div className="fr-radio-group">
                     <input
+                      data-test-id="convention-signed-input"
                       type="radio"
                       id="signed-yes"
                       name="signed"
@@ -88,6 +96,7 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
                   </div>
                   <div className="fr-radio-group">
                     <input
+                      data-test-id="convention-unsigned-input"
                       type="radio"
                       id="signed-no"
                       name="signed"
@@ -101,21 +110,27 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
               </fieldset>
             </div>
             <div className="fr-my-5w">
-              <button type="submit" className="fr-btn fr-fi-check-line fr-btn--icon-left">Enregistrer</button>
+              <button
+                data-test-id="update-convention-button"
+                type="submit"
+                className="fr-btn fr-fi-check-line fr-btn--icon-left"
+              >
+                Enregistrer
+              </button>
             </div>
           </form>
         </>
       ) : (
         <>
           <h5>Statut de ma convention :</h5>
-          <p className="fr-mb-1v">
+          <p data-test-id="convention-university-name" className="fr-mb-1v">
             Je suis rattaché à l&lsquo;université de
             {' '}
-            <b>{currentConvention.universityName}</b>
+            <b>{currentConvention ? currentConvention.universityName : ''}</b>
             .
           </p>
-          <p className="fr-mb-2w">
-            {currentConvention.isConventionSigned ? (
+          <p data-test-id="convention-signed" className="fr-mb-2w">
+            {currentConvention && currentConvention.isConventionSigned ? (
               <>
                 La convention est
                 {' '}
@@ -135,6 +150,7 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
           <div>
             <p className="fr-mb-2v">Un changement de statut ? Tenez-nous au courant !</p>
             <button
+              data-test-id="show-convention-form"
               type="button"
               className="fr-btn fr-fi-edit-line fr-btn--icon-left"
               onClick={() => { setShowForm(true); }}

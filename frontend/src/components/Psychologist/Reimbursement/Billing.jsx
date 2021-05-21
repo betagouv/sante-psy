@@ -46,7 +46,7 @@ const Billing = ({ total }) => {
               </thead>
               <tbody>
                 {total.map(totalByMonth => (
-                  <tr key={`${totalByMonth.month} ${totalByMonth.year}`}>
+                  <tr data-test-id="billing-row" key={`${totalByMonth.month} ${totalByMonth.year}`}>
                     <td>{`${totalByMonth.month} ${totalByMonth.year}`}</td>
                     <td>{totalByMonth.countAppointments}</td>
                     <td>{totalByMonth.countAppointments}</td>

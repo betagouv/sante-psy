@@ -39,6 +39,8 @@ if (config.useCors) {
 
 if (config.testEnvironment) {
   app.get('/test/psychologue/:email', testController.getPsychologist);
+  app.post('/test/reset', testController.resetDB);
+  app.delete('/test/psychologue/:email/convention', testController.removeConvention);
 }
 
 app.use(express.json());

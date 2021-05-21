@@ -103,6 +103,7 @@ const AddEditPatient = () => {
                 <span className="red-text">*</span>
               </label>
               <input
+                data-test-id="patient-first-name-input"
                 onChange={e => { changePatient('firstNames', e.target.value); }}
                 className="fr-input midlength-input"
                 value={patient.firstNames}
@@ -118,6 +119,7 @@ const AddEditPatient = () => {
                 <span className="red-text">*</span>
               </label>
               <input
+                data-test-id="patient-last-name-input"
                 onChange={e => { changePatient('lastName', e.target.value); }}
                 className="fr-input midlength-input"
                 value={patient.lastName}
@@ -224,6 +226,7 @@ const AddEditPatient = () => {
                 Exemple : Annie Benahmou ou SSU Rennes 1
               </div>
               <input
+                data-test-id="patient-doctor-name-input"
                 onChange={e => { changePatient('doctorName', e.target.value); }}
                 id="doctorname"
                 className="fr-input midlength-input"
@@ -249,6 +252,7 @@ const AddEditPatient = () => {
           </div>
           <div className="fr-my-5w">
             <button
+              data-test-id="save-patient-button"
               type="submit"
               className="fr-btn fr-btn--icon-left button.icon"
             >

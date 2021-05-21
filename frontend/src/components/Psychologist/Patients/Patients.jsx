@@ -105,7 +105,10 @@ const Patients = () => {
           <div className={classNames('fr-table', styles.table)}>
             {patients.length > 0 && extendedPatients.find(patient => !patient.hasFolderCompleted) && (
             <div className="fr-callout fr-mb-2w">
-              <p className="fr-text--md fr-mb-1v">
+              <p
+                data-test-id="patients-missing-info"
+                className="fr-text--md fr-mb-1v"
+              >
                 Certains de vos patients n‘ont pas leur dossier complet - vérification du statut d‘étudiant,
                 l‘orientation du medecin, le nom du medecin, sa ville, ou l‘université du patient, ou date de
                 naissance (obligatoire uniquement pour vos patients enregistrés après le

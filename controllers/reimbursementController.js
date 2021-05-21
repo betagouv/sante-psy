@@ -84,7 +84,6 @@ module.exports.updateConventionInfo = async (req, res) => {
   }
 
   const { universityId, isConventionSigned } = req.body;
-  console.log(universityId, isConventionSigned);
 
   try {
     const psychologistId = req.user.psychologist;
