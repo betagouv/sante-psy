@@ -217,3 +217,43 @@ module.exports.deleteConventionInfo = (email) => knex
     assignedUniversityId: null,
   })
   .where('personalEmail', email);
+
+module.exports.getPsychologistById = async (psychologistId) => {
+  try {
+    const psychologist = await knex(module.exports.psychologistsTable)
+      .where('dossierNumber', psychologistId)
+      .first();
+    return psychologist;
+  } catch (err) {
+    console.error('Impossible de récupérer le psychologue', err);
+    throw new Error('Impossible de récupérer le psychologue');
+  }
+};
+
+module.exports.updatePsychologist = async (psychologistId,
+  firstNames, lastName, email, address, departement, region, phone, website,
+  description, teleconsultation, languages, training, diploma, personalEmail) => {
+  try {
+    return await knex(module.exports.psychologistsTable)
+      .where('dossierNumber', psychologistId)
+      .update({
+        firstNames,
+        lastName,
+        email,
+        address,
+        departement,
+        region,
+        phone,
+        website,
+        description,
+        teleconsultation,
+        languages,
+        training: JSON.stringify(training),
+        diploma,
+        personalEmail,
+      });
+  } catch (err) {
+    console.error('Erreur de modification du psychologue', err);
+    throw new Error('Erreur de modification du psychologue');
+  }
+};

@@ -302,4 +302,82 @@ describe('DB Psychologists', () => {
       }
     });
   });
+
+  describe('getPsychologistById', () => {
+    it('should return undefined if does not exist', async () => {
+      const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0123';
+
+      const returnedPsy = await dbPsychologists.getPsychologistById(unknownPsyId);
+
+      expect(returnedPsy).to.be.undefined;
+    });
+
+    it('should return psychologist if exists', async () => {
+      const psy = psyList[0];
+      await dbPsychologists.savePsychologistInPG([psy]);
+
+      const returnedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+
+      expect(returnedPsy).to.exist;
+      expect(returnedPsy.email).to.eql(psy.email);
+    });
+  });
+
+  describe('updatePsychologist', () => {
+    it('should do nothing if psychologist does not exist', async () => {
+      const psy = psyList[0];
+      const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0123';
+
+      const newFirstName = 'John';
+      const nbUpdated = await dbPsychologists.updatePsychologist(
+        unknownPsyId,
+        newFirstName,
+        psy.lastName,
+        psy.email,
+        psy.address,
+        psy.departement,
+        psy.region,
+        psy.phone,
+        psy.website,
+        psy.description,
+        psy.teleconsultation,
+        psy.languages,
+        psy.training,
+        psy.diploma,
+        psy.university,
+        psy.personalEmail,
+      );
+
+      expect(nbUpdated).to.eql(0);
+    });
+
+    it('should update psychologist if exist', async () => {
+      const psy = psyList[0];
+      await dbPsychologists.savePsychologistInPG([psy]);
+
+      const newFirstName = 'John';
+      const nbUpdated = await dbPsychologists.updatePsychologist(
+        psy.dossierNumber,
+        newFirstName,
+        psy.lastName,
+        psy.email,
+        psy.address,
+        psy.departement,
+        psy.region,
+        psy.phone,
+        psy.website,
+        psy.description,
+        psy.teleconsultation,
+        psy.languages,
+        psy.training,
+        psy.diploma,
+        psy.university,
+        psy.personalEmail,
+      );
+
+      expect(nbUpdated).to.eql(1);
+      const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+      expect(updatedPsy.firstNames).to.equal(newFirstName);
+    });
+  });
 });
