@@ -5,6 +5,7 @@ const dbPsychologists = require('../../db/psychologists');
 const dbPatients = require('../../db/patients');
 const dbAppointments = require('../../db/appointments');
 const dbUniversities = require('../../db/universities');
+const dbLoginToken = require('../../db/loginToken');
 const demarchesSimplifiees = require('../../utils/demarchesSimplifiees');
 const clean = require('../helper/clean');
 const uuid = require('../../utils/uuid');
@@ -12,9 +13,10 @@ const uuid = require('../../utils/uuid');
 exports.seed = async function (knex) {
   console.log('Clean database information');
 
-  await knex(dbAppointments.appointmentsTable).del();
+  await knex(dbLoginToken.loginTokenTable).del();
   await knex(dbPatients.patientsTable).del();
   await knex(dbPsychologists.psychologistsTable).del();
+  await knex(dbUniversities.universitiesTable).del();
   await knex(dbUniversities.universitiesTable).del();
 
   const universitiesList = dbUniversities.universities.map((uni) => ({

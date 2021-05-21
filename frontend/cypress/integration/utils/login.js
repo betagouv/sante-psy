@@ -8,7 +8,10 @@ const login = psy => window.localStorage.setItem('santepsytoken', jwt.sign(
 ));
 
 const loginAsDefault = () => {
-  cy.request('http://localhost:8080/test/psychologue/login@beta.gouv.fr').then(r => login(r.body.psy));
+  cy.request('http://localhost:8080/test/psychologue/login@beta.gouv.fr')
+    .then(r => {
+      login(r.body.psy);
+    });
 };
 
 const logout = () => {

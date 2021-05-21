@@ -18,14 +18,3 @@ module.exports.getPsychologists = async function getPsychologists(req, res) {
     });
   }
 };
-
-module.exports.getPsychologist = async function getPsychologist(req, res) {
-  try {
-    const psy = await dbPsychologists.getAcceptedPsychologistByEmail(req.params.email);
-    res.json({
-      psy,
-    });
-  } catch (err) {
-    res.status(500).send('Ooops');
-  }
-};

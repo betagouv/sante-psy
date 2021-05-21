@@ -9,10 +9,10 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
     const token = await dbLoginToken.getByEMail(req.params.email);
     res.json({
       psy,
-      token: token.token,
+      token: token ? token.token : undefined,
     });
   } catch (err) {
-    res.status(500).json({ err });
+    res.status(500).json('Oops');
   }
 };
 
