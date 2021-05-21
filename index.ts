@@ -128,6 +128,9 @@ app.post('/api/psychologue/renseigner-convention',
   reimbursementController.updateConventionInfo);
 
 app.get('/api/psychologue/:psyId', psyProfileController.getPsyProfile);
+app.put('/api/psychologue/:psyId',
+  psyProfileController.editPsyProfilValidators,
+  psyProfileController.editPsyProfile);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
