@@ -115,21 +115,23 @@ module.exports.editPsyProfile = async (req, res) => {
       throw Error('Le token ne correspond pas à la requête.');
     }
 
-    const { firstNames } = req.body;
-    const { lastName } = req.body;
-    const { email } = req.body;
-    const { address } = req.body;
-    const { departement } = req.body;
-    const { region } = req.body;
-    const { phone } = req.body;
-    const { website } = req.body;
-    const { description } = req.body;
+    const {
+      firstNames,
+      lastName,
+      email,
+      address,
+      departement,
+      region,
+      phone,
+      website,
+      description,
+      languages,
+      training,
+      diploma,
+      personalEmail,
+    } = req.body;
     // Force to boolean beacause checkbox value send undefined when it's not checked
     const teleconsultation = Boolean(req.body.teleconsultation);
-    const { languages } = req.body;
-    const { training } = req.body;
-    const { diploma } = req.body;
-    const { personalEmail } = req.body;
 
     const nbUpdated = await dbPsychologists.updatePsychologist(
       psyId,

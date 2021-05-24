@@ -1,4 +1,4 @@
-import { reaction, makeObservable, observable, action } from 'mobx';
+import { reaction, makeObservable, observable, action, computed } from 'mobx';
 import jwtDecode from 'jwt-decode';
 
 export default class UserStore {
@@ -7,6 +7,7 @@ export default class UserStore {
   constructor() {
     makeObservable(this, {
       token: observable,
+      decodedToken: computed,
       setToken: action.bound,
     });
 
@@ -26,13 +27,16 @@ export default class UserStore {
     this.token = token;
   }
 
+  get decodedToken() {
+    return this.token ? jwtDecode(this.token) : undefined;
+  }
+
   isAuthenticated = () => {
-    if (!this.token) {
+    if (!this.decodedToken) {
       return false;
     }
 
-    const decoded = jwtDecode(this.token);
     const now = new Date();
-    return now.getTime() < decoded.exp * 1000;
+    return now.getTime() < this.decodedToken.exp * 1000;
   }
 }

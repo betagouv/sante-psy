@@ -35,7 +35,11 @@ const Patient = {
 const Psychologist = {
   find: () => client.get('/trouver-un-psychologue').then(responseData),
   login: token => client.post('/psychologue/login', { token }).then(responseData),
+  me: () => client.get(`/psychologue/${store.userStore.decodedToken.psychologist}`).then(responseData),
   sendMail: email => client.post('/psychologue/sendMail', { email }).then(responseData),
+  update: psychologist => client
+    .put(`/psychologue/${store.userStore.decodedToken.psychologist}`, psychologist)
+    .then(responseData),
 };
 
 const Reimbursement = {
