@@ -2,6 +2,7 @@ import React from 'react';
 import { HashLink } from 'react-router-hash-link';
 
 import Logo from 'components/Logo/LogoFooter';
+import FooterBottomItem from './FooterBottomItem';
 
 const Footer = () => (
   <footer className="fr-footer" id="footer">
@@ -47,38 +48,26 @@ const Footer = () => (
       </div>
       <div className="fr-footer__bottom">
         <ul className="fr-footer__bottom-list">
-          <li className="fr-footer__bottom-item">
-            <HashLink
-              className="fr-footer__bottom-link"
-              to="/mentions-legales#accessibilite"
-            >
-              Accessibilité: non conforme
-            </HashLink>
-          </li>
-          <li className="fr-footer__bottom-item">
-            <HashLink
-              className="fr-footer__bottom-link"
-              to="/donnees-personnelles-et-gestion-des-cookies"
-            >
-              Données personnelles et gestion des cookies
-            </HashLink>
-          </li>
-          <li className="fr-footer__bottom-item">
-            <HashLink
-              className="fr-footer__bottom-link"
-              to="/mentions-legales"
-            >
-              Mentions légales
-            </HashLink>
-          </li>
-          <li className="fr-footer__bottom-item">
-            <HashLink
-              className="fr-footer__bottom-link"
-              to="/faq"
-            >
-              En savoir plus
-            </HashLink>
-          </li>
+          <FooterBottomItem
+            to="/mentions-legales#accessibilite"
+            label="Accessibilité: non conforme"
+          />
+          <FooterBottomItem
+            to="/donnees-personnelles-et-gestion-des-cookies"
+            label="Données personnelles et gestion des cookies"
+          />
+          <FooterBottomItem
+            to="/mentions-legales"
+            label="Mentions légales"
+          />
+          <FooterBottomItem
+            to="/faq"
+            label="En savoir plus"
+          />
+          <FooterBottomItem
+            to="/stats"
+            label="Nos statistiques"
+          />
         </ul>
       </div>
     </div>
