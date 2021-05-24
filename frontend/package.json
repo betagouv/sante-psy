@@ -90,10 +90,12 @@
     "build:analyze": "node scripts/build.js --env.PRODANALYSER",
     "start": "webpack serve --config config/webpack.dev.hot.js --open \"Google Chrome\"",
     "dev": "webpack serve --config config/webpack.dev.hot.js --host 0.0.0.0",
+    "dev:test": "webpack --config config/webpack.dev.js",
     "lint": "node_modules/.bin/eslint --quiet . --ext .js,.jsx",
     "lint:fix": "node_modules/.bin/eslint --quiet --fix . --ext .js,.jsx",
     "scalingo-prebuild": "npm clean-install --production=false && npm run build -- --env.PROD",
     "cy:open": "cypress open",
-    "cy:run": "wait-on http://localhost:3000 && wait-on http-get://localhost:8080/api/config && cypress run"
+    "cy:run": "wait-on http://localhost:3000 && cypress run",
+    "cy:ci": "concurrently \"npm run dev\" \"npm run cy:run\""
   }
 }

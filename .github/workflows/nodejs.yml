@@ -3,25 +3,127 @@ name: Node.js CI
 on: [push]
 
 jobs:
-  build:
+  build-back:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: cp .env.sample .env
-    - run: npm install
-    - run: docker-compose -f docker-compose-for-ci-github.yml up --abort-on-container-exit;
-      env:
-        NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
-    - run: npm run lint
-    - run: npm run ejslint
-      env:
-        CI: true
-        DEMARCHES_SIMPLIFIEES_ID: 1
-        API_TOKEN: "token"
+      - uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          tags: santepsy-back:latest
+          outputs: type=docker,dest=/tmp/santepsy-back.tar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: santepsy-back
+          retention-days: 1
+          path: /tmp/santepsy-back.tar
+
+  build-front:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          tags: santepsy-front:latest
+          outputs: type=docker,dest=/tmp/santepsy-front.tar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: santepsy-front
+          retention-days: 1
+          path: /tmp/santepsy-front.tar
+
+  test-back:
+    runs-on: ubuntu-latest
+    needs: [build-back]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: santepsy-back
+          path: /tmp
+      - name: Load Docker image
+        run: docker load --input /tmp/santepsy-back.tar
+      - name: Tests
+        run: docker-compose -f ./docker/docker-compose-for-backend.yml up --abort-on-container-exit;
+
+  test-integration:
+    runs-on: ubuntu-latest
+    needs: [build-back, build-front]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Download back artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: santepsy-back
+          path: /tmp
+      - name: Load Docker back image
+        run: docker load --input /tmp/santepsy-back.tar
+      - name: Download front artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: santepsy-front
+          path: /tmp
+      - name: Load Docker front image
+        run: docker load --input /tmp/santepsy-front.tar
+      - name: Tests
+        run: docker-compose -f ./docker/docker-compose-for-integration.yml up --abort-on-container-exit;
+      - name: Archive test results
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: cypress
+          retention-days: 1
+          path: |
+            frontend/cypress/screenshots
+            frontend/cypress/videos
+
+  linter-back:
+    runs-on: ubuntu-latest
+    needs: [build-back]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Download back artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: santepsy-back
+          path: /tmp
+      - name: Load Docker back image
+        run: docker load --input /tmp/santepsy-back.tar
+      - name: Linter
+        run: docker-compose -f ./docker/docker-compose-for-back-linter.yml up --abort-on-container-exit;
+
+  linter-front:
+    runs-on: ubuntu-latest
+    needs: [build-front]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Download front artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: santepsy-front
+          path: /tmp
+      - name: Load Docker front image
+        run: docker load --input /tmp/santepsy-front.tar
+      - name: Linter
+        run: docker-compose -f ./docker/docker-compose-for-front-linter.yml up --abort-on-container-exit;
+     

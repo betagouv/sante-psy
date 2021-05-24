@@ -1,0 +1,5 @@
+version: '3'
+services:
+  front:
+    image: santepsy-front:latest
+    command: sh -c "npm run lint"

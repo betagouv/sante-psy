@@ -1,15 +1,10 @@
-FROM node:lts
+FROM node:14-alpine
 
-WORKDIR /app
+WORKDIR /app 
 
-RUN chown node:node /app
-
-COPY . .
-
-RUN npm install -g nodemon
-RUN npm install -g
-
-USER node
+COPY .env.sample .env
+COPY . /app 
 
 EXPOSE 8080
-CMD ["node", "index.js"]
+
+RUN npm install
