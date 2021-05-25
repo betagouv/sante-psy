@@ -2,9 +2,8 @@ FROM node:14-alpine
 
 WORKDIR /app 
 
-COPY .env.sample .env
 COPY . /app 
 
-EXPOSE 8080
+EXPOSE 3000
 
 RUN npm install
