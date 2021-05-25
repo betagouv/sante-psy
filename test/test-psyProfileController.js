@@ -24,7 +24,7 @@ describe('psyProfileController', () => {
         });
     });
 
-    it('should not return psy profile if user logged in is not the same as the param', async () => {
+    it('should return 403 if user token does not match the param', async () => {
       const loggedPsyList = clean.psyList();
       const targetPsyList = clean.psyList();
       await dbPsychologists.savePsychologistInPG(loggedPsyList, targetPsyList);
@@ -36,8 +36,7 @@ describe('psyProfileController', () => {
         .get(`/api/psychologue/${targetPsy.dossierNumber}`)
         .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.email, loggedPsy.dossierNumber)}`)
         .then(async (res) => {
-          res.body.success.should.equal(false);
-          res.body.message.should.equal('Erreur lors de la récupération du profil.');
+          res.status.should.equal(403);
         });
     });
 
@@ -200,7 +199,7 @@ describe('psyProfileController', () => {
         });
     });
 
-    it('should not update psy profile if user logged in is not the same as the param', async () => {
+    it('should return 403 if user token does not match the param', async () => {
       const loggedPsyList = clean.psyList();
       const targetPsyList = clean.psyList();
       await dbPsychologists.savePsychologistInPG(loggedPsyList, targetPsyList);
@@ -224,9 +223,7 @@ describe('psyProfileController', () => {
           personalEmail: 'perso@email.com',
         })
         .then(async (res) => {
-          res.body.success.should.equal(false);
-          res.body.message
-          .should.equal('Erreur. Les informations n\'ont pas été mises à jour. Pourriez-vous réessayer ?');
+          res.status.should.equal(403);
         });
     });
 

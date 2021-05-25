@@ -5,11 +5,6 @@ const dbPsychologists = require('../db/psychologists');
 module.exports.getPsyProfile = async (req, res) => {
   try {
     const { psyId } = req.params;
-
-    if (req.user.psychologist !== psyId) {
-      throw Error('Le token ne correspond pas à la requête.');
-    }
-
     const psychologist = await dbPsychologists.getPsychologistById(psyId);
     if (!psychologist) {
       throw Error("Le psychologue n'existe pas.");
@@ -92,11 +87,6 @@ module.exports.editPsyProfile = async (req, res) => {
 
   try {
     const { psyId } = req.params;
-
-    if (req.user.psychologist !== psyId) {
-      throw Error('Le token ne correspond pas à la requête.');
-    }
-
     const {
       email,
       address,
