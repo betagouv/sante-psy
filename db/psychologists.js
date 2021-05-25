@@ -4,7 +4,8 @@ const date = require('../utils/date');
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 const dbUniversities = require('./universities');
 
-module.exports.psychologistsTable = 'psychologists';
+const psychologistsTable = 'psychologists';
+module.exports.psychologistsTable = psychologistsTable;
 
 module.exports.getPsychologistsDeclaredUniversity = async () => {
   try {
@@ -18,7 +19,7 @@ module.exports.getPsychologistsDeclaredUniversity = async () => {
       'declaredUniversityId',
     )
         .select()
-        .from(module.exports.psychologistsTable)
+        .from(psychologistsTable)
         .whereNot('archived', true)
         .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
         .orderBy('dossierNumber');
@@ -30,7 +31,7 @@ module.exports.getPsychologistsDeclaredUniversity = async () => {
 };
 
 module.exports.saveAssignedUniversity = async (psychologistId, assignedUniversityId) => {
-  const updatedPsy = await knex(module.exports.psychologistsTable)
+  const updatedPsy = await knex(psychologistsTable)
     .where({
       dossierNumber: psychologistId,
     })
@@ -65,7 +66,7 @@ module.exports.getPsychologists = async () => {
       'description',
     )
         .select()
-        .from(module.exports.psychologistsTable)
+        .from(psychologistsTable)
         .whereNot('archived', true)
         .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
         .orderByRaw('RANDOM ()');
@@ -105,7 +106,7 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
     psy.assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
 
     try {
-      return knex(module.exports.psychologistsTable)
+      return knex(psychologistsTable)
       .insert(psy)
       .onConflict(upsertingKey)
       .merge({ // update every field and add updatedAt
@@ -143,7 +144,7 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
 };
 
 module.exports.getNumberOfPsychologists = async function getNumberOfPsychologists() {
-  const query = await knex(module.exports.psychologistsTable)
+  const query = await knex(psychologistsTable)
   .select('archived', 'state')
   .count('*')
   .groupBy('archived', 'state');
@@ -156,7 +157,7 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
  * @param {*} email
  */
 module.exports.getAcceptedPsychologistByEmail = function getAcceptedPsychologistByEmail(email) {
-  return knex(module.exports.psychologistsTable)
+  return knex(psychologistsTable)
   .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
   .andWhere(
     knex.raw('LOWER("personalEmail") = ?', email.toLowerCase()),
@@ -169,7 +170,7 @@ module.exports.getAcceptedPsychologistByEmail = function getAcceptedPsychologist
  * it can be tricky if there are multiple dossiers for the same personal emails
  */
 module.exports.getNotYetAcceptedPsychologistByEmail = function getNotYetAcceptedPsychologistByEmail(email) {
-  return knex(module.exports.psychologistsTable)
+  return knex(psychologistsTable)
   .where(function groupWhereOrTogether() {
     this.where('state', demarchesSimplifiees.DOSSIER_STATE.en_construction)
       .orWhere('state', demarchesSimplifiees.DOSSIER_STATE.en_instruction);
@@ -178,14 +179,14 @@ module.exports.getNotYetAcceptedPsychologistByEmail = function getNotYetAccepted
   .first();
 };
 
-module.exports.countAcceptedPsychologistsByPersonalEmail = () => knex(module.exports.psychologistsTable)
+module.exports.countAcceptedPsychologistsByPersonalEmail = () => knex(psychologistsTable)
     .select('personalEmail', 'state')
     .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
     .count('*')
     .groupBy('personalEmail', 'state');
 
 module.exports.updateConventionInfo = async (psychologistId, assignedUniversityId, isConventionSigned) => {
-  const updated = await knex(module.exports.psychologistsTable)
+  const updated = await knex(psychologistsTable)
     .where({
       dossierNumber: psychologistId,
     })
@@ -200,21 +201,19 @@ module.exports.updateConventionInfo = async (psychologistId, assignedUniversityI
   return updated;
 };
 
-module.exports.getConventionInfo = async (psychologistId) => {
-  const psyTable = module.exports.psychologistsTable;
-  const psyArray = await knex.from(psyTable)
+module.exports.getConventionInfo = (psychologistId) => knex.from(psychologistsTable)
     .select(`${dbUniversities.universitiesTable}.name as universityName`,
       `${dbUniversities.universitiesTable}.id as universityId`,
-      `${psyTable}.isConventionSigned`)
+      `${psychologistsTable}.isConventionSigned`)
     .innerJoin(dbUniversities.universitiesTable,
-      `${psyTable}.assignedUniversityId`,
+      `${psychologistsTable}.assignedUniversityId`,
       `${dbUniversities.universitiesTable}.id`)
-    .where(`${psyTable}.dossierNumber`, psychologistId);
-  const conventionInfo = psyArray[0];
+    .where(`${psychologistsTable}.dossierNumber`, psychologistId)
+    .first();
 
-  const currentConvention = conventionInfo === undefined
-    ? { universityId: undefined, universityName: undefined, isConventionSigned: false }
-    : conventionInfo;
-
-  return currentConvention;
-};
+module.exports.deleteConventionInfo = (email) => knex
+  .from(psychologistsTable)
+  .update({
+    assignedUniversityId: null,
+  })
+  .where('personalEmail', email);

@@ -1,0 +1,38 @@
+name: Integration CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: cp .env.sample .env
+    - run: npm install
+    - run: npm --prefix frontend install
+    - run: docker-compose up -d;
+      env:
+        NPM_CONFIG_PREFIX: /home/node/.npm-global # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#global-npm-dependencies
+    - run: npm --prefix frontend run cy:run
+    - name: Archive test results
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: cypress
+        retention-days: 1
+        path: |
+          frontend/cypress/screenshots
+          frontend/cypress/videos
+    - run: docker-compose down
+    - run: npm --prefix frontend run lint
+      env:
+        CI: true
+        DEMARCHES_SIMPLIFIEES_ID: 1
+        API_TOKEN: "token"

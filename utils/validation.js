@@ -5,7 +5,7 @@ module.exports.checkErrors = (req) => {
   if (!errors.isEmpty()) {
     errors.array().forEach((error) => {
       console.debug('checkErrors form', error.msg);
-      req.flash('error', error.msg);
+      req.error = error.msg;
     });
     return false;
   }

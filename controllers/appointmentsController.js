@@ -1,27 +1,13 @@
 const { check } = require('express-validator');
-const cookie = require('../utils/cookie');
 const dbAppointments = require('../db/appointments');
 const dbPatient = require('../db/patients');
+const dbPsychologists = require('../db/psychologists');
 const dateUtils = require('../utils/date');
 const validation = require('../utils/validation');
 
-module.exports.newAppointment = async (req, res) => {
-  try {
-    const psychologistId = cookie.getCurrentPsyId(req);
-    const patients = await dbPatient.getPatients(psychologistId);
-    return res.render('newAppointment', { patients, pageTitle: 'Nouvelle séance' });
-  } catch (err) {
-    req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?');
-    console.error('Erreur pour créer la séance', err);
-    return res.redirect('/psychologue/mes-seances');
-  }
-};
-
 module.exports.createNewAppointmentValidators = [
-  // todo : there is a format option, which would allow using "date" rather than iso-date.
-  // Make it work to simplify the html.
-  check('iso-date')
-    .isDate()
+  check('date')
+    .isISO8601()
     .withMessage('Vous devez spécifier une date pour la séance.'),
   check('patientId')
     .isUUID()
@@ -31,29 +17,37 @@ module.exports.createNewAppointmentValidators = [
 module.exports.createNewAppointment = async (req, res) => {
   // Todo : test case where patient id does not exist
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/nouvelle-seance');
+    return res.json({ success: false, message: req.error });
   }
 
-  const date = new Date(Date.parse(req.body['iso-date']));
+  const date = new Date(req.body.date);
   const { patientId } = req.body;
   try {
-    const psyId = cookie.getCurrentPsyId(req);
-
+    const psyId = req.user.psychologist;
     const patientExist = await dbPatient.getPatientById(patientId, psyId);
+
     if (patientExist) {
       await dbAppointments.insertAppointment(date, patientId, psyId);
-      console.log(`Appointment created for patient id ${patientId} by psy id ${psyId}`);
-      req.flash('info', `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`);
-    } else {
-      console.warn(`Patient id ${patientId} does not exsit for psy id : ${psyId}`);
-      req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?');
+      console.log(
+        `Appointment created for patient id ${patientId} by psy id ${psyId}`,
+      );
+      return res.json({
+        success: true,
+        message: `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`,
+      });
     }
-    return res.redirect('/psychologue/mes-seances');
+
+    console.warn(
+      `Patient id ${patientId} does not exist for psy id : ${psyId}`,
+    );
   } catch (err) {
-    req.flash('error', 'Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?');
     console.error('Erreur pour créer la séance', err);
-    return res.redirect('/psychologue/nouvelle-seance');
   }
+
+  return res.json({
+    success: false,
+    message: "Erreur. La séance n'est pas créée. Pourriez-vous réessayer ?",
+  });
 };
 
 module.exports.deleteAppointmentValidators = [
@@ -62,22 +56,54 @@ module.exports.deleteAppointmentValidators = [
     .withMessage('Vous devez spécifier une séance à supprimer.'),
 ];
 
-// We use a POST rather than a DELETE because method=DELETE in the form seems to send a GET. (???)
 module.exports.deleteAppointment = async (req, res) => {
   if (!validation.checkErrors(req)) {
-    return res.redirect('/psychologue/mes-seances');
+    return res.json({ success: false, message: req.error });
   }
 
-  const { appointmentId } = req.body;
   try {
-    const psychologistId = cookie.getCurrentPsyId(req);
-    await dbAppointments.deleteAppointment(appointmentId, psychologistId);
-    console.log(`Appointment deleted ${appointmentId} by psy id ${psychologistId}`);
-    req.flash('info', 'La séance a bien été supprimée.');
+    const { appointmentId } = req.params;
+    const psychologistId = req.user.psychologist;
+    const deletedAppointment = await dbAppointments.deleteAppointment(appointmentId, psychologistId);
+    if (deletedAppointment === 0) {
+      console.log(
+        `Appointment ${appointmentId} does not belong to psy id ${psychologistId}`,
+      );
+      return res.json({
+        success: false,
+        message: 'Impossible de supprimer cette séance.',
+      });
+    }
+    console.log(
+      `Appointment deleted ${appointmentId} by psy id ${psychologistId}`,
+    );
+    return res.json({
+      success: true,
+      message: 'La séance a bien été supprimée.',
+    });
   } catch (err) {
-    req.flash('error', 'Erreur. La séance n\'est pas supprimée. Pourriez-vous réessayer ?');
     console.error('Erreur pour supprimer la séance', err);
+    return res.json({
+      success: false,
+      message: "Erreur. La séance n'est pas supprimée. Pourriez-vous réessayer ?",
+    });
   }
+};
 
-  return res.redirect('/psychologue/mes-seances');
+module.exports.getAppointments = async (req, res) => {
+  try {
+    const psychologistId = req.user.psychologist;
+    const appointments = await dbAppointments.getAppointments(psychologistId);
+
+    const currentConvention = await dbPsychologists.getConventionInfo(psychologistId);
+
+    return res.json({ success: true, appointments, currentConvention });
+  } catch (err) {
+    console.error('myAppointments', err);
+    return res.json({
+      appointments: [],
+      success: false,
+      message: 'Impossible de charger les séances. Réessayez ultérieurement.',
+    });
+  }
 };

@@ -19,6 +19,19 @@ module.exports.getByToken = async function getByToken(token) {
   }
 };
 
+module.exports.getByEMail = async function getByEMail(email) {
+  try {
+    const result = await knex(loginTokenTable)
+    .where('email', email)
+    .first();
+
+    return result;
+  } catch (err) {
+    console.error('Impossible de récupérer le token', err);
+    throw new Error('Une erreur est survenue.');
+  }
+};
+
 module.exports.insert = async (token, email, expiresAt) => {
   try {
     return await knex(loginTokenTable).insert({

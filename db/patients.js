@@ -69,7 +69,7 @@ module.exports.updatePatient = async (
   doctorAddress, dateOfBirth,
 ) => {
   try {
-    await knex(module.exports.patientsTable)
+    return await knex(module.exports.patientsTable)
       .where('id', id)
       .where('psychologistId', psychologistId)
       .update({

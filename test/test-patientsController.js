@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const app = require('../index.ts');
 const clean = require('./helper/clean');
-const cookie = require('../utils/cookie');
+const cookie = require('../utils/jwt');
 const date = require('../utils/date');
 const dbPatients = require('../db/patients');
 
@@ -50,23 +50,25 @@ describe('patientsController', () => {
       };
 
       return chai.request(app)
-        .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+        .post('/api/patients')
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send({
-          lastname: 'Lovelace',
-          firstnames: 'Ada',
-          ine: '12345678901',
-          institution: 'test',
-          isstudentstatusverified: undefined,
-          hasprescription: undefined,
-          doctorname: doctorName,
-          doctoraddress: doctorAddress,
-          dateofbirth: dateOfBirth,
+          lastName: 'Lovelace',
+          firstNames: 'Ada',
+          INE: '12345678901',
+          institutionName: 'test',
+          isStudentStatusVerified: undefined,
+          hasPrescription: undefined,
+          doctorName,
+          doctorAddress,
+          dateOfBirth,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-patients');
+          res.body.success.should.equal(true);
+          res.body.message.should.equal(
+            'Le patient Ada Lovelace a bien été créé. Vous pourrez renseigner les champs manquants plus tard'
+            + ' en cliquant le bouton "Modifier" du patient.',
+          );
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
 
@@ -83,23 +85,20 @@ describe('patientsController', () => {
       };
 
       return chai.request(app)
-        .post('/psychologue/api/creer-nouveau-patient')
-        // no auth cookie
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+      .post('/api/patients')
         .send({
-          lastname: 'Lovelace',
-          firstnames: 'Ada',
-          ine: '12345678901',
-          institution: '42',
-          isstudentstatusverified: undefined,
-          hasprescription: undefined,
-          doctorname: doctorName,
-          doctoraddress: doctorAddress,
-          dateofbirth: dateOfBirth,
+          lastName: 'Lovelace',
+          firstNames: 'Ada',
+          INE: '12345678901',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          hasPrescription: undefined,
+          doctorName,
+          doctorAddress,
+          dateOfBirth,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/login');
+          res.status.should.equal(401);
 
           // Patient not created
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
@@ -116,15 +115,15 @@ describe('patientsController', () => {
     beforeEach(async () => {
       insertPatientStub = sinon.stub(dbPatients, 'insertPatient')
         .returns(Promise.resolve([{
-          firstnames: 'prenom',
-          lastname: 'nom',
-          ine: 'studentNumber',
-          institution: '42',
+          firstNames: 'prenom',
+          lastName: 'nom',
+          INE: 'studentNumber',
+          institutionName: '42',
           isStudentStatusVerified: false,
           hasPrescription: false,
-          doctorname: doctorName,
-          doctoraddress: doctorAddress,
-          dateofbirth: dateOfBirth,
+          doctorName,
+          doctorAddress,
+          dateOfBirth,
         },
         ]));
       return Promise.resolve();
@@ -135,94 +134,95 @@ describe('patientsController', () => {
       return Promise.resolve();
     });
 
-    const shouldFailCreatePatientInputValidation = (done, postData) => {
+    const shouldFailCreatePatientInputValidation = (done, postData, message) => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
       };
 
       chai.request(app)
-        .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+        .post('/api/patients')
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send(postData)
         .end((err, res) => {
+          res.body.success.should.equal(false);
+          res.body.message.should.equal(message);
+
           sinon.assert.notCalled(insertPatientStub);
-          res.should.redirectTo('/psychologue/nouveau-patient');
 
           done();
         });
     };
 
-    it('should refuse empty firstnames', (done) => {
+    it('should refuse empty firstNames', (done) => {
       shouldFailCreatePatientInputValidation(done, {
-        // no firstnames
-        lastname: 'Nom',
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
-      });
+        // no firstNames
+        lastName: 'Nom',
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      }, 'Vous devez spécifier le.s prénom.s du patient.');
     });
 
-    it('should refuse empty lastname', (done) => {
+    it('should refuse empty lastName', (done) => {
       shouldFailCreatePatientInputValidation(done, {
-        firstnames: 'Blou Blou',
-        // no lastname
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
-      });
+        firstNames: 'Blou Blou',
+        // no lastName
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      }, 'Vous devez spécifier le nom du patient.');
     });
 
-    it('should refuse whitespace firstnames', (done) => {
+    it('should refuse whitespace firstNames', (done) => {
       shouldFailCreatePatientInputValidation(done, {
-        firstnames: '   ',
-        lastname: 'Nom',
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
-      });
+        firstNames: '   ',
+        lastName: 'Nom',
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      }, 'Vous devez spécifier le.s prénom.s du patient.');
     });
 
-    it('should refuse whitespace lastname', (done) => {
+    it('should refuse whitespace lastName', (done) => {
       shouldFailCreatePatientInputValidation(done, {
-        firstnames: 'Blou Blou',
-        lastname: '   ',
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
-      });
+        firstNames: 'Blou Blou',
+        lastName: '   ',
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      }, 'Vous devez spécifier le nom du patient.');
     });
 
-    it('should refuse ine with non-aphanumeric chars', (done) => {
+    it('should refuse INE with non-aphanumeric chars', (done) => {
       shouldFailCreatePatientInputValidation(done, {
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '1234567890à',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
-      });
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '1234567890à',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
 
     const shouldPassCreatePatientInputValidation = (done, postData) => {
@@ -232,70 +232,73 @@ describe('patientsController', () => {
       };
 
       chai.request(app)
-        .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+        .post('/api/patients')
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send(postData)
         .end((err, res) => {
+          res.body.success.should.equal(true);
+          res.body.message.should.equal(
+            'Le patient Blou Blou Nom a bien été créé. Vous pourrez renseigner les champs manquants plus tard'
+              + ' en cliquant le bouton "Modifier" du patient.',
+          );
+
           sinon.assert.called(insertPatientStub);
-          res.should.redirectTo('/psychologue/mes-patients');
           done();
         });
     };
 
-    it('should pass ine with length not 11 chars', (done) => {
+    it('should pass INE with length not 11 chars', (done) => {
       shouldPassCreatePatientInputValidation(done, {
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '1234567890AA',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '1234567890AA',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
       });
     });
 
     it('should pass validation when all fields are correct', (done) => {
       shouldPassCreatePatientInputValidation(done, {
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       });
     });
 
     it('should pass validation when INE is missing', (done) => {
       shouldPassCreatePatientInputValidation(done, {
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       });
     });
 
-    it('should pass validation when institution is missing', (done) => {
+    it('should pass validation when institutionName is missing', (done) => {
       shouldPassCreatePatientInputValidation(done, {
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '',
-        institution: '',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '',
+        institutionName: '',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       });
     });
 
@@ -305,24 +308,27 @@ describe('patientsController', () => {
         email: 'valid@valid.org',
       };
       const postData = {
-        firstnames: 'Blou Blou<div>',
-        lastname: 'Nom</',
-        ine: '',
-        institution: 'stuff<script>evil</script>',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+        firstNames: 'Blou Blou<div>',
+        lastName: 'Nom</',
+        INE: '',
+        institutionName: 'stuff<script>evil</script>',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       };
 
       chai.request(app)
-        .post('/psychologue/api/creer-nouveau-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+      .post('/api/patients')
+      .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send(postData)
         .end((err, res) => {
+          res.body.success.should.equal(true);
+          res.body.message.should.equal(
+            'Le patient Blou Blou<div></div> Nom&lt;/ a bien été créé. Vous pourrez renseigner'
+              + ' les champs manquants plus tard en cliquant le bouton "Modifier" du patient.',
+          );
           sinon.assert.called(insertPatientStub);
           const expected = [
             'Blou Blou<div></div>', // sanitized
@@ -335,8 +341,6 @@ describe('patientsController', () => {
           ];
 
           sinon.assert.calledWith(insertPatientStub, ...expected);
-
-          res.should.redirectTo('/psychologue/mes-patients');
           done();
         });
     });
@@ -360,20 +364,20 @@ describe('patientsController', () => {
       const myPatient = await makePatient(psy.dossierNumber);
 
       return chai.request(app)
-        .get(`/psychologue/modifier-patient?patientid=${myPatient.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
+        .get(`/api/patients/${myPatient.id}`)
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .then(async (res) => {
           expect(res.status).to.equal(200);
+          res.body.success.should.equal(true);
 
           // The page displays myPatient
-          chai.assert.include(res.text, myPatient.firstNames);
-          chai.assert.include(res.text, myPatient.lastName);
-          chai.assert.include(res.text, myPatient.id);
-          chai.assert.include(res.text, myPatient.institutionName);
-          chai.assert.include(res.text, myPatient.doctorName);
-          chai.assert.include(res.text, myPatient.doctorAddress);
-          chai.assert.include(res.text, date.toFormatDDMMYYYY(myPatient.dateOfBirth));
+          res.body.patient.firstNames.should.equal(myPatient.firstNames);
+          res.body.patient.lastName.should.equal(myPatient.lastName);
+          res.body.patient.id.should.equal(myPatient.id);
+          res.body.patient.institutionName.should.equal(myPatient.institutionName);
+          res.body.patient.doctorName.should.equal(myPatient.doctorName);
+          res.body.patient.doctorAddress.should.equal(myPatient.doctorAddress);
+          res.body.patient.dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
 
           return Promise.resolve();
         });
@@ -388,17 +392,16 @@ describe('patientsController', () => {
       const notMyPatient = await makePatient(anotherPsyId);
 
       return chai.request(app)
-        .get(`/psychologue/modifier-patient?patientid=${notMyPatient.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
+        .get(`/api/patients/${notMyPatient.id}`)
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-patients');
-
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Ce patient n\'existe pas. Vous ne pouvez pas le modifier.');
           // The page does not display patient
-          chai.assert.notInclude(res.text, notMyPatient.firstNames);
-          chai.assert.notInclude(res.text, notMyPatient.lastName);
-          chai.assert.notInclude(res.text, notMyPatient.id);
-          chai.assert.notInclude(res.text, notMyPatient.institution);
+          chai.assert.isUndefined(res.body.firstNames);
+          chai.assert.isUndefined(res.body.lastName);
+          chai.assert.isUndefined(res.body.id);
+          chai.assert.isUndefined(res.body.institutionName);
 
           return Promise.resolve();
         });
@@ -411,11 +414,11 @@ describe('patientsController', () => {
       };
 
       return chai.request(app)
-        .get('/psychologue/modifier-patient?patientid=not-a-valid-uuid')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
+        .get('/api/patients/notavalid-uuid')
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-patients');
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Ce patient n\'existe pas.');
 
           return Promise.resolve();
         });
@@ -444,23 +447,24 @@ describe('patientsController', () => {
       const updatedFirstName = 'Adakkk';
       const updatedInstitution = 'polytech';
       return chai.request(app)
-        .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+        .put(`/api/patients/${patient.id}`)
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send({
-          patientid: patient.id,
-          lastname: updatedLastName,
-          firstnames: updatedFirstName,
-          ine: updatedINE,
-          institution: updatedInstitution,
-          isstudentstatusverified: 'isstudentstatusverified',
-          hasprescription: 'hasprescription',
-          doctorname: doctorName,
-          dateofbirth: updatedDateOfBirth,
+          lastName: updatedLastName,
+          firstNames: updatedFirstName,
+          INE: updatedINE,
+          institutionName: updatedInstitution,
+          isStudentStatusVerified: 'isStudentStatusVerified',
+          hasPrescription: 'hasPrescription',
+          doctorName,
+          dateOfBirth: updatedDateOfBirth,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-patients');
+          res.body.success.should.equal(true);
+          res.body.message.should.equal(
+            'Le patient Adakkk Lovelacekkk a bien été modifié. Vous pourrez renseigner les champs'
+            + ' manquants plus tard en cliquant le bouton "Modifier" du patient.',
+          );
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
           expect(patientsArray).to.have.length(1);
@@ -487,24 +491,22 @@ describe('patientsController', () => {
       const anotherPsyId = '495614e8-89af-4406-ba02-9fc038b991f9';
       const patient = await makePatient(anotherPsyId);
       return chai.request(app)
-        .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+        .put(`/api/patients/${patient.id}`)
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send({
-          patientid: patient.id,
-          lastname: 'Lovelacekkk',
-          firstnames: 'Adakkk',
-          ine: '111222333SS',
-          institution: 'Grande ecole',
-          isstudentstatusverified: 'isstudentstatusverified',
-          hasprescription: 'hasprescription',
-          doctorname: doctorName,
-          doctoraddress: doctorAddress,
-          dateofbirth: dateOfBirth,
+          lastName: 'Lovelacekkk',
+          firstNames: 'Adakkk',
+          INE: '111222333SS',
+          institutionName: 'Grande ecole',
+          isStudentStatusVerified: 'isStudentStatusVerified',
+          hasPrescription: 'hasPrescription',
+          doctorName,
+          doctorAddress,
+          dateOfBirth,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-patients');
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Ce patient n\'existe pas.');
 
           // Patient was not updated
           const patientsArray = await dbPatients.getPatients(anotherPsyId);
@@ -513,7 +515,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].lastName).to.equal(patient.lastName);
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames);
           expect(patientsArray[0].INE).to.equal(patient.INE);
-          expect(patientsArray[0].institution).to.equal(patient.institution);
+          expect(patientsArray[0].institutionName).to.equal(patient.institutionName);
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
@@ -532,22 +534,18 @@ describe('patientsController', () => {
       const patient = await makePatient(psy.dossierNumber);
 
       return chai.request(app)
-        .post('/psychologue/api/modifier-patient')
-        // no auth cookie
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+        .put(`/api/patients/${patient.id}`)
         .send({
-          patientid: patient.id,
-          lastname: 'Lovelacekkk',
-          firstnames: 'Adakkk',
-          ine: '111',
-          institution: 'Petite ecole',
-          isstudentstatusverified: 'isstudentstatusverified',
-          hasprescription: 'hasprescription',
-          dateofbirth: dateOfBirth,
+          lastName: 'Lovelacekkk',
+          firstNames: 'Adakkk',
+          INE: '111',
+          institutionName: 'Petite ecole',
+          isStudentStatusVerified: 'isStudentStatusVerified',
+          hasPrescription: 'hasPrescription',
+          dateOfBirth,
         })
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/login');
+          res.status.should.equal(401);
 
           // Patient was not updated
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
@@ -556,7 +554,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].lastName).to.equal(patient.lastName);
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames);
           expect(patientsArray[0].INE).to.equal(patient.INE);
-          expect(patientsArray[0].institution).to.equal(patient.institution);
+          expect(patientsArray[0].institutionName).to.equal(patient.institutionName);
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
@@ -581,265 +579,239 @@ describe('patientsController', () => {
       return Promise.resolve();
     });
 
-    const shouldFailUpdatePatientInputValidation = (done, postData, expectedRedirectUrl) => {
+    const shouldFailUpdatePatientInputValidation = (done, patientId, postData, message) => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       };
 
       chai.request(app)
-        .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+        .put(`/api/patients/${patientId}`)
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send(postData)
         .end((err, res) => {
           sinon.assert.notCalled(updatePatientStub);
-          res.should.redirectTo(expectedRedirectUrl);
 
+          res.body.success.should.equal(false);
+          res.body.message.should.equal(message);
           done();
         });
     };
 
-    it('should refuse empty firstnames', (done) => {
+    it('should refuse empty firstNames', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, {
-        patientid: patientId,
-        // no firstnames
-        lastname: 'Nom',
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+      shouldFailUpdatePatientInputValidation(done, patientId, {
+        // no firstNames
+        lastName: 'Nom',
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       },
-      `/psychologue/modifier-patient?patientid=${patientId}`);
+      'Vous devez spécifier le.s prénom.s du patient.');
     });
 
-    it('should refuse empty lastname', (done) => {
+    it('should refuse empty lastName', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, {
-        patientid: patientId,
-        firstnames: 'Blou Blou',
-        // no lastname
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+      shouldFailUpdatePatientInputValidation(done, patientId, {
+        firstNames: 'Blou Blou',
+        // no lastName
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       },
-      `/psychologue/modifier-patient?patientid=${patientId}`);
+      'Vous devez spécifier le nom du patient.');
     });
 
-    it('should refuse whitespace firstnames', (done) => {
+    it('should refuse whitespace firstNames', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, {
-        patientid: patientId,
-        firstnames: '   ',
-        lastname: 'Nom',
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+      shouldFailUpdatePatientInputValidation(done, patientId, {
+        firstNames: '   ',
+        lastName: 'Nom',
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       },
-      `/psychologue/modifier-patient?patientid=${patientId}`);
+      'Vous devez spécifier le.s prénom.s du patient.');
     });
 
-    it('should refuse whitespace lastname', (done) => {
+    it('should refuse whitespace lastName', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, {
-        patientid: patientId,
-        firstnames: 'Blou Blou',
-        lastname: '   ',
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+      shouldFailUpdatePatientInputValidation(done, patientId, {
+        firstNames: 'Blou Blou',
+        lastName: '   ',
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       },
-      `/psychologue/modifier-patient?patientid=${patientId}`);
+      'Vous devez spécifier le nom du patient.');
     });
 
-    it('should refuse ine with non-aphanumeric chars', (done) => {
+    it('should refuse INE with non-aphanumeric chars', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, {
-        patientid: patientId,
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '1234567890à',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+      shouldFailUpdatePatientInputValidation(done, patientId, {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '1234567890à',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       },
-      `/psychologue/modifier-patient?patientid=${patientId}`);
+      'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
 
-    it('should refuse validation with ine length > 50 chars', (done) => {
+    it('should refuse validation with INE length > 50 chars', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, {
-        patientid: patientId,
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '1'.repeat(51),
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+      shouldFailUpdatePatientInputValidation(done, patientId, {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '1'.repeat(51),
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       },
-      `/psychologue/modifier-patient?patientid=${patientId}`);
+      'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
 
-    it('should refuse if no patientid', (done) => {
-      shouldFailUpdatePatientInputValidation(done, {
-        patientid: '',
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '1234567890à',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+    it('should refuse if patientId is not valid uuid', (done) => {
+      shouldFailUpdatePatientInputValidation(done, 'not-a-valid-uuid', {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '12345678901',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       },
-      '/psychologue/mes-patients');
-    });
-
-    it('should refuse if patientid is not valid uuid', (done) => {
-      shouldFailUpdatePatientInputValidation(done, {
-        patientid: 'not-a-valid-uuid',
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '1234567890à',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
-      },
-      '/psychologue/mes-patients');
+      'Ce patient n\'existe pas.');
     });
 
     it('should refuse if dateOfBirth is not valid', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, {
-        patientid: patientId,
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: 'pizza time',
+      shouldFailUpdatePatientInputValidation(done, patientId, {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth: 'pizza time',
       },
-      `/psychologue/modifier-patient?patientid=${patientId}`);
+      'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.\n'
+      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
 
-    const shouldPassUpdatePatientInputValidation = (done, postData) => {
+    const shouldPassUpdatePatientInputValidation = (done, patientId, postData) => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       };
 
       chai.request(app)
-        .post('/psychologue/api/modifier-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
+        .put(`/api/patients/${patientId}`)
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send(postData)
         .end((err, res) => {
           sinon.assert.called(updatePatientStub);
-          res.should.redirectTo('/psychologue/mes-patients');
+          res.body.success.should.equal(true);
+          res.body.message.should.equal(
+            'Le patient Blou Blou Nom a bien été modifié. Vous pourrez renseigner les champs manquants plus tard'
+            + ' en cliquant le bouton "Modifier" du patient.',
+          );
           done();
         });
     };
 
     it('should pass validation when all fields are correct', (done) => {
-      shouldPassUpdatePatientInputValidation(done, {
-        patientid: '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+      shouldPassUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       });
     });
 
-    it('should pass validation with ine length not 11 chars', (done) => {
+    it('should pass validation with INE length not 11 chars', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldPassUpdatePatientInputValidation(done, {
-        patientid: patientId,
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '1234567890AA',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-      },
-      `/psychologue/modifier-patient?patientid=${patientId}`);
+      shouldPassUpdatePatientInputValidation(done, patientId, {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '1234567890AA',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+      });
     });
 
     it('should pass validation when INE is missing', (done) => {
-      shouldPassUpdatePatientInputValidation(done, {
-        patientid: '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
-        dateofbirth: dateOfBirth,
+      shouldPassUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
       });
     });
 
     it('should pass validation when dateOfBirth is missing', (done) => {
-      shouldPassUpdatePatientInputValidation(done, {
-        patientid: '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '1234567890A',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
-        doctorname: doctorName,
-        doctoraddress: doctorAddress,
+      shouldPassUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
+        doctorName,
+        doctorAddress,
       });
     });
 
     it('should pass validation if doctor name, phone and address are missing', (done) => {
-      shouldPassUpdatePatientInputValidation(done, {
-        patientid: '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
-        firstnames: 'Blou Blou',
-        lastname: 'Nom',
-        ine: '',
-        institution: '42',
-        isstudentstatusverified: undefined,
-        hasprescription: undefined,
+      shouldPassUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        hasPrescription: undefined,
       });
     });
   });
@@ -863,15 +835,11 @@ describe('patientsController', () => {
       const patient = await makePatient(psy.dossierNumber);
 
       return chai.request(app)
-        .post('/psychologue/api/supprimer-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          patientid: patient.id,
-        })
+        .delete(`/api/patients/${patient.id}`)
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-patients');
+          res.body.success.should.equal(true);
+          res.body.message.should.equal('Le patient a bien été supprimé.');
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
           console.debug(patientsArray);
@@ -890,15 +858,11 @@ describe('patientsController', () => {
       const patient = await makePatient(anotherPsyId);
 
       return chai.request(app)
-        .post('/psychologue/api/supprimer-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          patientid: patient.id,
-        })
+        .delete(`/api/patients/${patient.id}`)
+        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-patients');
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
           // Patient is not deleted
           const patientsArray = await dbPatients.getPatients(anotherPsyId);
           expect(patientsArray).to.have.length(1);
@@ -915,15 +879,11 @@ describe('patientsController', () => {
       const patient = await makePatient(psy.dossierNumber);
 
       return chai.request(app)
-        .post('/psychologue/api/supprimer-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          patientid: `${patient.id}4`,
-        })
+      .delete(`/api/patients/${patient.id}4`)
+      .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-patients');
+          res.body.success.should.equal(false);
+          res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
 
           // Patient is not deleted
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
@@ -941,42 +901,11 @@ describe('patientsController', () => {
       const patient = await makePatient(psy.dossierNumber);
 
       return chai.request(app)
-        .post('/psychologue/api/supprimer-patient')
-        // no auth cookie
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          patientid: patient.id,
-        })
+      .delete(`/api/patients/${patient.id}`)
         .then(async (res) => {
-          res.should.redirectTo('/psychologue/login');
+          res.status.should.equal(401);
 
           // Patient is not deleted
-          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
-          expect(patientsArray).to.have.length(1);
-
-          return Promise.resolve();
-        });
-    });
-
-    it('should refuse empty patientId', async () => {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      };
-      await makePatient(psy.dossierNumber);
-
-      return chai.request(app)
-        .post('/psychologue/api/supprimer-patient')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-        .redirects(0) // block redirects, we don't want to test them
-        .type('form')
-        .send({
-          // no patientId
-        })
-        .then(async (res) => {
-          res.should.redirectTo('/psychologue/mes-patients');
-
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
           expect(patientsArray).to.have.length(1);
 

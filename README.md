@@ -142,12 +142,6 @@ npm test
 ##### Secrets
 Penser à décommenter les variables d'environnement `SECRET` et `SECRET_LOGS` dans le fichier `.env` avant de lancer les tests localement.
 
-##### Lancer les tests sans le CSRF
-Configurer la variable d'environnement USE_CSRF à "false"
-```bash
-USE_CSRF="false"
-```
-
 #### Tester uniquement un test
 
     $ npm test -- --grep "should call batchInsert on PG"
@@ -209,4 +203,3 @@ Voir `.env.sample` pour la liste complète
 * <table> http://tabulator.info/
 Tester les fonctions privées :
 * https://github.com/jhnns/rewire
-* CSRF tokens : https://github.com/pillarjs/understanding-csrf#csrf-tokens
