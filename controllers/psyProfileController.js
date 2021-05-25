@@ -30,18 +30,6 @@ module.exports.getPsyProfile = async (req, res) => {
 };
 
 module.exports.editPsyProfilValidators = [
-  check('firstNames')
-    .trim()
-    .not()
-    .isEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
-    .withMessage('Vous devez spécifier votre prénom.'),
-  check('lastName')
-    .trim()
-    .not()
-    .isEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
-    .withMessage('Vous devez spécifier votre nom.'),
   check('email')
     .trim()
     .not()
@@ -92,12 +80,6 @@ module.exports.editPsyProfilValidators = [
   check('languages')
     .trim()
     .customSanitizer((value, { req }) => req.sanitize(value)),
-  check('training')
-    .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
-  check('diploma')
-    .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
   check('personalEmail')
     .trim()
     .customSanitizer((value, { req }) => req.sanitize(value)),
@@ -116,8 +98,6 @@ module.exports.editPsyProfile = async (req, res) => {
     }
 
     const {
-      firstNames,
-      lastName,
       email,
       address,
       departement,
@@ -126,8 +106,6 @@ module.exports.editPsyProfile = async (req, res) => {
       website,
       description,
       languages,
-      training,
-      diploma,
       personalEmail,
     } = req.body;
     // Force to boolean beacause checkbox value send undefined when it's not checked
@@ -135,8 +113,6 @@ module.exports.editPsyProfile = async (req, res) => {
 
     const nbUpdated = await dbPsychologists.updatePsychologist(
       psyId,
-      firstNames,
-      lastName,
       email,
       address,
       departement,
@@ -146,8 +122,6 @@ module.exports.editPsyProfile = async (req, res) => {
       description,
       teleconsultation,
       languages,
-      training,
-      diploma,
       personalEmail,
     );
 

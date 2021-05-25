@@ -328,12 +328,10 @@ describe('DB Psychologists', () => {
       const psy = psyList[0];
       const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0123';
 
-      const newFirstName = 'John';
+      const newEmail = 'new@email.fr';
       const nbUpdated = await dbPsychologists.updatePsychologist(
         unknownPsyId,
-        newFirstName,
-        psy.lastName,
-        psy.email,
+        newEmail,
         psy.address,
         psy.departement,
         psy.region,
@@ -342,9 +340,6 @@ describe('DB Psychologists', () => {
         psy.description,
         psy.teleconsultation,
         psy.languages,
-        psy.training,
-        psy.diploma,
-        psy.university,
         psy.personalEmail,
       );
 
@@ -356,12 +351,10 @@ describe('DB Psychologists', () => {
       await dbPsychologists.savePsychologistInPG([psy]);
       expect(psy.updatedAt).to.be.undefined;
 
-      const newFirstName = 'John';
+      const newEmail = 'new@email.fr';
       const nbUpdated = await dbPsychologists.updatePsychologist(
         psy.dossierNumber,
-        newFirstName,
-        psy.lastName,
-        psy.email,
+        newEmail,
         psy.address,
         psy.departement,
         psy.region,
@@ -370,15 +363,12 @@ describe('DB Psychologists', () => {
         psy.description,
         psy.teleconsultation,
         psy.languages,
-        psy.training,
-        psy.diploma,
-        psy.university,
         psy.personalEmail,
       );
 
       expect(nbUpdated).to.eql(1);
       const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
-      expect(updatedPsy.firstNames).to.equal(newFirstName);
+      expect(updatedPsy.email).to.equal(newEmail);
       expect(updatedPsy.updatedAt).to.not.be.undefined;
     });
   });

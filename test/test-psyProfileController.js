@@ -89,101 +89,57 @@ describe('psyProfileController', () => {
       return Promise.resolve();
     });
 
-    const shouldFailUpdatePsyInputValidation = (done, postData, message) => {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      };
+    // Test example for mandatory fields
 
-      chai.request(app)
-      .put(`/api/psychologue/${psy.dossierNumber}`)
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-      .send(postData)
-      .then(async (res) => {
-        sinon.assert.notCalled(updatePsyStub);
+    // const shouldFailUpdatePsyInputValidation = (done, postData, message) => {
+    //   const psy = {
+    //     dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+    //     email: 'prenom.nom@beta.gouv.fr',
+    //   };
 
-        res.body.success.should.equal(false);
-        res.body.message.should.equal(message);
+    //   chai.request(app)
+    //   .put(`/api/psychologue/${psy.dossierNumber}`)
+    //   .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+    //   .send(postData)
+    //   .then(async (res) => {
+    //     sinon.assert.notCalled(updatePsyStub);
 
-        done();
-      });
-    };
+    //     res.body.success.should.equal(false);
+    //     res.body.message.should.equal(message);
 
-    it('should refuse empty firstNames', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
-        // no firstNames
-        lastName: 'Nom',
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        region: 'Hauts-de-France',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        training: '["Psychologie Clinique","Psychopathologie et/ou Psychologie de la santé"]',
-        diploma: 'Psychologue clinicien',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier votre prénom.');
-    });
+    //     done();
+    //   });
+    // };
 
-    it('should refuse whitespace firstNames', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
-        firstNames: '   ',
-        lastName: 'Nom',
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        region: 'Hauts-de-France',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        training: '["Psychologie Clinique","Psychopathologie et/ou Psychologie de la santé"]',
-        diploma: 'Psychologue clinicien',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier votre prénom.');
-    });
+    // it('should refuse empty ', (done) => {
+    //   shouldFailUpdatePsyInputValidation(done, {
+    //     email: 'public@email.com',
+    //     address: '1 rue du Pôle Nord',
+    //     departement: '59 - Nord',
+    //     region: 'Hauts-de-France',
+    //     phone: '01 02 03 04 05',
+    //     website: 'https://monwebsite.fr',
+    //     description: 'Consultez un psychologue gratuitement',
+    //     teleconsultation: true,
+    //     languages: 'Français, Anglais',
+    //     personalEmail: 'perso@email.com',
+    //   }, 'Vous devez spécifier votre prénom.');
+    // });
 
-    it('should refuse empty lastname', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
-        firstNames: 'Prénom',
-        // no lastName
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        region: 'Hauts-de-France',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        training: '["Psychologie Clinique","Psychopathologie et/ou Psychologie de la santé"]',
-        diploma: 'Psychologue clinicien',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier votre nom.');
-    });
-
-    it('should refuse whitespace lastname', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
-        firstNames: 'Prénom',
-        lastName: '   ',
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        region: 'Hauts-de-France',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        training: '["Psychologie Clinique","Psychopathologie et/ou Psychologie de la santé"]',
-        diploma: 'Psychologue clinicien',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier votre nom.');
-    });
+    // it('should refuse whitespace ', (done) => {
+    //   shouldFailUpdatePsyInputValidation(done, {
+    //     email: 'public@email.com',
+    //     address: '1 rue du Pôle Nord',
+    //     departement: '59 - Nord',
+    //     region: 'Hauts-de-France',
+    //     phone: '01 02 03 04 05',
+    //     website: 'https://monwebsite.fr',
+    //     description: 'Consultez un psychologue gratuitement',
+    //     teleconsultation: true,
+    //     languages: 'Français, Anglais',
+    //     personalEmail: 'perso@email.com',
+    //   }, 'Vous devez spécifier votre prénom.');
+    // });
 
     it('should sanitize string fields', (done) => {
       const psy = {
@@ -192,19 +148,15 @@ describe('psyProfileController', () => {
       };
 
       const postData = {
-        firstNames: 'Prénom<div>',
-        lastName: 'Nom</',
         email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
+        address: '1 rue du Pôle Nord<div>',
         departement: '59 - Nord',
         region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement<script>evil</script>',
         teleconsultation: true,
-        languages: 'Français, Anglais',
-        training: '["Psychologie Clinique","Psychopathologie et/ou Psychologie de la santé"]',
-        diploma: 'Psychologue clinicien',
+        languages: 'Français, Anglais</',
         personalEmail: 'perso@email.com',
       };
 
@@ -218,19 +170,15 @@ describe('psyProfileController', () => {
 
           const expected = [
             psy.dossierNumber,
-            'Prénom<div></div>', // sanitized
-            'Nom&lt;/', // sanitized
             sinon.match.string,
-            sinon.match.string,
+            '1 rue du Pôle Nord<div></div>', // sanitized
             sinon.match.string,
             sinon.match.string,
             sinon.match.string,
             sinon.match.string,
             'Consultez un psychologue gratuitement', // sanitized
             true,
-            sinon.match.string,
-            sinon.match.string,
-            sinon.match.string,
+            'Français, Anglais&lt;/', // sanitized
             sinon.match.string,
           ];
           sinon.assert.calledWith(updatePsyStub, ...expected);
@@ -264,8 +212,6 @@ describe('psyProfileController', () => {
         .put(`/api/psychologue/${targetPsy.dossierNumber}`)
         .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.email, loggedPsy.dossierNumber)}`)
         .send({
-          firstNames: 'Prénom',
-          lastName: 'Nom',
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
           departement: '59 - Nord',
@@ -275,8 +221,6 @@ describe('psyProfileController', () => {
           description: 'Consultez un psychologue gratuitement',
           teleconsultation: true,
           languages: 'Français, Anglais',
-          training: '["Psychologie Clinique","Psychopathologie et/ou Psychologie de la santé"]',
-          diploma: 'Psychologue clinicien',
           personalEmail: 'perso@email.com',
         })
         .then(async (res) => {
@@ -294,8 +238,6 @@ describe('psyProfileController', () => {
         .put(`/api/psychologue/${psy.dossierNumber}`)
         .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send({
-          firstNames: 'Prénom',
-          lastName: 'Nom',
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
           departement: '59 - Nord',
@@ -305,8 +247,6 @@ describe('psyProfileController', () => {
           description: 'Consultez un psychologue gratuitement',
           teleconsultation: true,
           languages: 'Français, Anglais',
-          training: '["Psychologie Clinique","Psychopathologie et/ou Psychologie de la santé"]',
-          diploma: 'Psychologue clinicien',
           personalEmail: 'perso@email.com',
         })
         .then(async (res) => {
@@ -325,8 +265,6 @@ describe('psyProfileController', () => {
         .put(`/api/psychologue/${psy.dossierNumber}`)
         .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
         .send({
-          firstNames: 'Prénom',
-          lastName: 'Nom',
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
           departement: '59 - Nord',
@@ -336,8 +274,6 @@ describe('psyProfileController', () => {
           description: 'Consultez un psychologue gratuitement',
           teleconsultation: true,
           languages: 'Français, Anglais',
-          training: '["Psychologie Clinique","Psychopathologie et/ou Psychologie de la santé"]',
-          diploma: 'Psychologue clinicien',
           personalEmail: 'perso@email.com',
         })
         .then(async (res) => {
@@ -345,8 +281,6 @@ describe('psyProfileController', () => {
           res.body.message.should.equal('Les informations ont bien été mises à jour.');
 
           const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
-          expect(updatedPsy.firstNames).to.eql('Prénom');
-          expect(updatedPsy.lastName).to.eql('Nom');
           expect(updatedPsy.email).to.eql('public@email.com');
           expect(updatedPsy.address).to.eql('1 rue du Pôle Nord');
           expect(updatedPsy.departement).to.eql('59 - Nord');
@@ -356,9 +290,6 @@ describe('psyProfileController', () => {
           expect(updatedPsy.description).to.eql('Consultez un psychologue gratuitement');
           expect(updatedPsy.teleconsultation).to.be.true;
           expect(updatedPsy.languages).to.eql('Français, Anglais');
-          expect(updatedPsy.training)
-          .to.deep.eql(['Psychologie Clinique', 'Psychopathologie et/ou Psychologie de la santé']);
-          expect(updatedPsy.diploma).to.eql('Psychologue clinicien');
           expect(updatedPsy.personalEmail).to.eql('perso@email.com');
         });
     });

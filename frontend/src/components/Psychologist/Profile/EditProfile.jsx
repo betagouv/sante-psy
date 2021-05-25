@@ -55,22 +55,6 @@ const EditProfile = () => {
             ) sont obligatoires.
           </p>
           <Input
-            label="Prénoms"
-            type="text"
-            field="firstNames"
-            value={psychologist.firstNames}
-            onChange={changePsychologist}
-            required
-          />
-          <Input
-            label="Nom"
-            type="text"
-            field="lastName"
-            value={psychologist.lastName}
-            onChange={changePsychologist}
-            required
-          />
-          <Input
             label="Email personnel"
             hint="Exemple : exemple@beta.gouv.fr"
             type="text"
@@ -80,23 +64,8 @@ const EditProfile = () => {
             pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
             placeholder="exemple@beta.gouv.fr"
           />
-          <Input
-            label="Email de contact"
-            hint="Exemple : exemple@beta.gouv.fr"
-            type="text"
-            field="email"
-            value={psychologist.email}
-            onChange={changePsychologist}
-            pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
-            placeholder="exemple@beta.gouv.fr"
-          />
-          <Input
-            label="Adresse du cabinet"
-            type="text"
-            field="address"
-            value={psychologist.address}
-            onChange={changePsychologist}
-          />
+
+          <h2>Informations pour l&lsquo;annuaire</h2>
           <Input
             label="Votre département"
             type="text"
@@ -112,6 +81,13 @@ const EditProfile = () => {
             onChange={changePsychologist}
           />
           <Input
+            label="Adresse du cabinet"
+            type="text"
+            field="address"
+            value={psychologist.address}
+            onChange={changePsychologist}
+          />
+          <Input
             label="Téléphone du secrétariat"
             type="text"
             field="phone"
@@ -119,10 +95,20 @@ const EditProfile = () => {
             onChange={changePsychologist}
           />
           <Input
-            label="Paragraphe de présentation"
-            type="textarea"
-            field="description"
-            value={psychologist.description}
+            label="Email de contact"
+            hint="Exemple : exemple@beta.gouv.fr"
+            type="text"
+            field="email"
+            value={psychologist.email}
+            onChange={changePsychologist}
+            pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+            placeholder="exemple@beta.gouv.fr"
+          />
+          <Input
+            label="Je propose de la téléconsultation"
+            type="checkbox"
+            field="teleconsultation"
+            value={psychologist.teleconsultation}
             onChange={changePsychologist}
           />
           <Input
@@ -133,24 +119,17 @@ const EditProfile = () => {
             onChange={changePsychologist}
           />
           <Input
-            label="Formations et expériences"
+            label="Site web professionnel"
+            type="text"
+            field="website"
+            value={psychologist.website}
+            onChange={changePsychologist}
+          />
+          <Input
+            label="Paragraphe de présentation"
             type="textarea"
-            field="training"
-            value={psychologist.training}
-            onChange={changePsychologist}
-          />
-          <Input
-            label="Diplomes"
-            type="text"
-            field="diploma"
-            value={psychologist.diploma}
-            onChange={changePsychologist}
-          />
-          <Input
-            label="Université"
-            type="text"
-            field="university"
-            value={psychologist.university}
+            field="description"
+            value={psychologist.description}
             onChange={changePsychologist}
           />
           <div className="fr-my-5w">
