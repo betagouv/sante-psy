@@ -1,5 +1,0 @@
-version: '3'
-services:
-  back:
-    image: santepsy-back:latest
-    command: sh -c "npm run lint;"

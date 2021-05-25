@@ -7,8 +7,13 @@ services:
       POSTGRES_PASSWORD: santepsy
     ports:
       - "5432:5432"
-  back:
-    image: santepsy-back:latest
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U santepsy"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  web:
+    image: santepsy:latest
     command: sh -c "npm run migrate; npm run seed; npm run test;"
     environment:
       DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
@@ -16,4 +21,5 @@ services:
       SECRET: "production_value_should_be_set_in_.env"
       SPEED_LIMITATION: "false"
     depends_on:
-      - db
+      db:
+        condition: service_healthy

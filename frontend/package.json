@@ -96,6 +96,6 @@
     "scalingo-prebuild": "npm clean-install --production=false && npm run build -- --env.PROD",
     "cy:open": "cypress open",
     "cy:run": "wait-on http://localhost:3000 && cypress run",
-    "cy:ci": "concurrently \"npm run dev\" \"npm run cy:run\""
+    "cy:ci": "concurrently \"npm run dev\" \"npm run cy:run -- --env baseUrl=http://0.0.0.0:8080/\""
   }
 }
