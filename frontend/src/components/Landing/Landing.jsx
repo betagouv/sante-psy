@@ -36,7 +36,7 @@ const Landing = () => (
           text: 'Votre médecin généraliste ou votre Service de Santé Universitaire vous oriente vers un accompagnement psychologique.',
         },
         {
-          title: '2. Choisissez un psychologue',
+          title: '2. Choisissez un psychologue qui vous convient',
           text: 'Vous choisissez le professionnel qui vous accompagnera parmi la liste des psychologues partenaires.',
         },
         {
