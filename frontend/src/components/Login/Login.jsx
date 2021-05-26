@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
+import Notification from 'components/Notification/Notification';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 
 import { useStore } from 'stores/';
@@ -9,14 +10,17 @@ import { useStore } from 'stores/';
 import agent from 'services/agent';
 
 const Login = () => {
-  const { commonStore: { config, setNotification }, userStore: { setToken, isAuthenticated } } = useStore();
+  const {
+    commonStore: { config, setNotification },
+    userStore: { setToken, user, isTokenExpired, token: existingToken },
+  } = useStore();
   const { token } = useParams();
 
   const [email, setEmail] = useState('');
 
   useEffect(() => {
     if (token) {
-      agent.Psychologist.login(token).then(loginInfo => {
+      agent.User.login(token).then(loginInfo => {
         if (loginInfo.token) {
           setToken(loginInfo.token);
         } else {
@@ -28,10 +32,10 @@ const Login = () => {
 
   const login = e => {
     e.preventDefault();
-    agent.Psychologist.sendMail(email).then(setNotification);
+    agent.User.sendMail(email).then(setNotification);
   };
 
-  if (isAuthenticated()) {
+  if (user) {
     return <Redirect to="/psychologue/mes-seances" />;
   }
 
@@ -45,6 +49,12 @@ const Login = () => {
 
           <div className="panel margin-top-m">
             <h3>Me connecter</h3>
+            {existingToken && isTokenExpired() && (
+              <Notification
+                message="Votre session a expiré, veuillez vous reconnecter."
+                onClose={() => { setToken(null); }}
+              />
+            )}
             <GlobalNotification />
             <p className="fr-mb-2w">
               Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant

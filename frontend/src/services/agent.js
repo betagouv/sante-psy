@@ -24,7 +24,9 @@ const Appointment = {
   delete: id => client.delete(`/appointments/${id}`).then(responseData),
   get: () => client.get('/appointments').then(responseData),
 };
+
 const Config = { get: () => client.get('/config').then(responseData) };
+
 const Patient = {
   create: patient => client.post('/patients/', patient).then(responseData),
   delete: id => client.delete(`/patients/${id}`).then(responseData),
@@ -32,15 +34,18 @@ const Patient = {
   getOne: id => client.get(`/patients/${id}`).then(responseData),
   update: (id, patient) => client.put(`/patients/${id}`, patient).then(responseData),
 };
-const Psychologist = {
-  find: () => client.get('/trouver-un-psychologue').then(responseData),
-  login: token => client.post('/psychologue/login', { token }).then(responseData),
-  sendMail: email => client.post('/psychologue/sendMail', { email }).then(responseData),
-};
+
+const Psychologist = { find: () => client.get('/trouver-un-psychologue').then(responseData) };
 
 const Reimbursement = {
   get: () => client.get('/psychologue/mes-remboursements').then(responseData),
   saveConvention: convention => client.post('/psychologue/renseigner-convention', convention).then(responseData),
+};
+
+const User = {
+  getConnected: () => client.get('/connecteduser').then(responseData),
+  login: token => client.post('/psychologue/login', { token }).then(responseData),
+  sendMail: email => client.post('/psychologue/sendMail', { email }).then(responseData),
 };
 
 export default {
@@ -49,4 +54,5 @@ export default {
   Patient,
   Psychologist,
   Reimbursement,
+  User,
 };

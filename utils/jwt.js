@@ -11,12 +11,11 @@ function getSessionDuration() {
  * @param {*} id
  * @see https://www.ionos.fr/digitalguide/sites-internet/developpement-web/json-web-token-jwt/
  */
-const getJwtTokenForUser = function getJwtTokenForUser(email, psychologist) {
+const getJwtTokenForUser = function getJwtTokenForUser(psychologist) {
   const duration = getSessionDuration();
 
   return jwt.sign(
     {
-      email,
       psychologist,
     },
     config.secret,

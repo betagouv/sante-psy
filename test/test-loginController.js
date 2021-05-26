@@ -2,13 +2,15 @@
 const rewire = require('rewire');
 const sinon = require('sinon');
 const chai = require('chai');
+const { v4: uuidv4 } = require('uuid');
 const app = require('../index.ts');
 
 const loginController = rewire('../controllers/loginController');
 const dbLoginToken = require('../db/loginToken');
 const dbPsychologists = require('../db/psychologists');
 const emailUtils = require('../utils/email');
-const cookie = require('../utils/jwt');
+const jwt = require('../utils/jwt');
+const clean = require('./helper/clean');
 
 describe('loginController', async () => {
   describe('generateLoginUrl', () => {
@@ -37,7 +39,7 @@ describe('loginController', async () => {
   });
 
   describe('login page', () => {
-    const token = cookie.getJwtTokenForUser('email');
+    const token = jwt.getJwtTokenForUser('dossierNumber');
     const email = 'prenom.nom@beta.gouv.fr';
 
     describe('getLogin', () => {
@@ -234,5 +236,35 @@ describe('loginController', async () => {
           });
       });
     });
+  });
+
+  describe('connected user information', () => {
+    it('should return only my basic information', async () => {
+      const psyList = clean.psyList();
+      await dbPsychologists.savePsychologistInPG(psyList);
+
+      return chai.request(app)
+      .get('/api/connecteduser')
+      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psyList[0].dossierNumber)}`)
+      .then(async (res) => {
+        res.body.should.have.all.keys('firstNames', 'lastName', 'email');
+        res.body.firstNames.should.equal(psyList[0].firstNames);
+        res.body.lastName.should.equal(psyList[0].lastName);
+        res.body.email.should.equal(psyList[0].email);
+      });
+    });
+
+    it('should return empty info when psy does not exist', async () => chai.request(app)
+      .get('/api/connecteduser')
+      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(uuidv4())}`)
+      .then(async (res) => {
+        res.body.should.be.empty;
+      }));
+
+    it('should return 401 if user is not connected', async () => chai.request(app)
+      .get('/api/connecteduser')
+      .then(async (res) => {
+        res.status.should.equal(401);
+      }));
   });
 });

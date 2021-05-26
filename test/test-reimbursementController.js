@@ -2,7 +2,7 @@ const chai = require('chai');
 const rewire = require('rewire');
 const app = require('../index.ts');
 const clean = require('./helper/clean');
-const cookie = require('../utils/jwt');
+const jwt = require('../utils/jwt');
 const dbPsychologists = require('../db/psychologists');
 const dbUniversities = require('../db/universities');
 
@@ -77,7 +77,7 @@ describe('reimbursementController', () => {
 
       return chai.request(app)
         .post('/api/psychologue/renseigner-convention')
-        .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
         .send({
           isConventionSigned: true,
           universityId: university.id,
@@ -102,7 +102,7 @@ describe('reimbursementController', () => {
 
       return chai.request(app)
       .post('/api/psychologue/renseigner-convention')
-      .set('Authorization', `Bearer ${cookie.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
         .send(payload)
         .then(async (res) => {
           res.body.success.should.equal(false);
