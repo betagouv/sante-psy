@@ -4,6 +4,12 @@ const cronUniversityPayments = require('./cronUniversityPayments');
 const config = require('../utils/config');
 const sentry = require('../utils/sentry');
 
+// Desactivate debug log for production as they are a bit too verbose
+if (!config.activateDebug) {
+  console.log('console.debug is not active - thanks to ACTIVATE_DEBUG_LOG env variable');
+  console.debug = () => {};
+}
+
 sentry.initCaptureConsole();
 
 const jobs = [{
