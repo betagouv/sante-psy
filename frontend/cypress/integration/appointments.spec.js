@@ -29,8 +29,7 @@ describe('Appointments', () => {
       cy.get('[data-test-id="notification-error"]')
         .should(
           'have.text',
-          '(Docker-compose variable) Pour déclarer vos séances,'
-        + ' veuillez indiquer l\'état de votre conventionnement ainsi que votre université de référence.',
+          '(Docker-compose variable) Very important announcement.',
         );
       cy.get('[data-test-id="notification-close"]')
         .click();
