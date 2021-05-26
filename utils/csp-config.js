@@ -5,5 +5,6 @@ module.exports = helmet.contentSecurityPolicy({
     ...helmet.contentSecurityPolicy.getDefaultDirectives(),
     'script-src': ["'self'", 'https://stats.data.gouv.fr/'],
     'img-src': ["'self'", 'https://stats.data.gouv.fr/', 'data:'],
+    'frame-src': ['https://stats.santepsyetudiant.beta.gouv.fr'],
   },
 });
