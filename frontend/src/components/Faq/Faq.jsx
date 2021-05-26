@@ -1,7 +1,8 @@
 import React from 'react';
 
 import Ariane from 'components/Ariane/Ariane';
-import FaqItems from './FaqItems';
+
+import FaqSection from './FaqSection';
 
 const Faq = () => (
   <div className="fr-container fr-mb-3w">
@@ -42,99 +43,59 @@ const Faq = () => (
       </nav>
 
       <div className="fr-container fr-col-xs-12 fr-col-md-9">
-        <h1 id="etudiant">Je suis étudiant</h1>
-
-        <div className="fr-mb-3w">
-          <div>
-            <span className="fr-fi-arrow-right-line fr-fi--md" />
-            {' '}
-            <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
-          </div>
-          <div>
-            <a
-              className="fr-btn fr-btn--alt fr-mt-2w"
-              href={`${__API__}/static/images/flyer_etudiants.pdf`}
-            >
-              Voir le flyer étudiants
-            </a>
-          </div>
-          <div className="fr-text--xs fr-mt-2w">
-            Note : si vous utilisez Safari et que le flyer ne s&lsquo;affiche pas (&quot;Module bloqué&quot;),
-            essayez Firefox ou Chrome.
-          </div>
-        </div>
-
-        <ul className="fr-accordion-group">
-          <FaqItems section="students" />
-        </ul>
-
-        <h1 id="psy">Je suis psychologue</h1>
-
-        <div className="fr-mb-3w">
-          <div>
-            <span className="fr-fi-arrow-right-line fr-fi--md" />
-            {' '}
-            <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
-          </div>
-          <div>
-            <a
-              className="fr-btn fr-btn--alt fr-mt-2w"
-              href={`${__API__}/static/images/flyer_psychologues.pdf`}
-            >
-              Voir le flyer psychologues
-            </a>
-          </div>
-          <div className="fr-text--xs fr-mt-2w">
-            Note : si vous utilisez Safari et que le flyer ne s&lsquo;affiche pas (&quot;Module bloqué&quot;),
-            essayez Firefox ou Chrome.
-          </div>
-        </div>
-
-        <ul className="fr-accordion-group">
-          <h2>Éligibilité</h2>
-          <FaqItems section="eligibility" />
-
-          <h2 id="remboursement">Prix de la séance et remboursement</h2>
-          <FaqItems section="reimbursement" />
-
-          <h2>Déroulé</h2>
-          <FaqItems section="process" />
-        </ul>
-
-        <h1 id="medecin">Je suis médecin généraliste</h1>
-
-        <div className="fr-mb-3w">
-          <div>
-            <span className="fr-fi-arrow-right-line fr-fi--md" />
-            {' '}
-            <span>Vous voulez plus d&lsquo;infos sur le dispositif ?</span>
-          </div>
-          <div>
-            <a
-              className="fr-btn fr-btn--alt fr-mt-2w"
-              href={`${__API__}/static/images/flyer_medecins.pdf`}
-            >
-              Voir le flyer médecins
-            </a>
-          </div>
-          <div>
-            <a
-              className="fr-btn fr-btn--alt fr-mt-2w"
-              href={`${__API__}/static/images/flyer_ssu.pdf`}
-            >
-              Voir le flyer SSU
-            </a>
-          </div>
-          <div className="fr-text--xs fr-mt-2w">
-            Note : si vous utilisez Safari et que le flyer ne s&lsquo;affiche pas (&quot;Module bloqué&quot;),
-            essayez Firefox ou Chrome.
-          </div>
-        </div>
-
-        <ul className="fr-accordion-group">
-          <FaqItems section="doctor" />
-        </ul>
-
+        <FaqSection
+          id="etudiant"
+          title="Je suis étudiant"
+          sections={[{ name: 'students' }]}
+          flyers={[
+            {
+              href: `${__API__}/static/documents/flyer_etudiants_fr.pdf`,
+              title: 'Voir le dépliant étudiants',
+            },
+            {
+              href: `${__API__}/static/documents/flyer_etudiants_en.pdf`,
+              title: 'See the student flyer',
+            },
+            {
+              href: `${__API__}/static/documents/flyer_etudiants_sp.pdf`,
+              title: 'Ver el folleto del estudiante',
+            },
+            {
+              href: `${__API__}/static/documents/flyer_etudiants_zn.pdf`,
+              title: '见学生传单',
+            },
+          ]}
+        />
+        <FaqSection
+          id="psy"
+          title="Je suis psychologue"
+          sections={[
+            { title: 'Éligibilité', name: 'eligibility' },
+            { title: 'Prix de la séance et remboursement', name: 'reimbursement', id: 'remboursement' },
+            { title: 'Déroulé', name: 'process' },
+          ]}
+          flyers={[
+            {
+              href: `${__API__}/static/documents/flyer_psychologues.pdf`,
+              title: 'Voir le dépliant psychologues',
+            },
+          ]}
+        />
+        <FaqSection
+          id="medecin"
+          title="Je suis médecin généraliste"
+          sections={[{ name: 'doctor' }]}
+          flyers={[
+            {
+              href: `${__API__}/static/documents/flyer_medecins.pdf`,
+              title: 'Voir le dépliant médecins',
+            },
+            {
+              href: `${__API__}/static/documents/flyer_ssu.pdf`,
+              title: 'Voir le dépliant SSU',
+            },
+          ]}
+        />
       </div>
     </div>
   </div>
