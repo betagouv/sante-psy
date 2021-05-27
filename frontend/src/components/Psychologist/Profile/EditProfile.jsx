@@ -56,13 +56,14 @@ const EditProfile = () => {
           </p>
           <Input
             label="Email personnel"
-            hint="Exemple : exemple@beta.gouv.fr"
+            hint="Adresse non communiquée sur l'annuaire, utilisée uniquement pour la réception de mail provenant de Santé Psy Etudiant"
             type="text"
             field="personalEmail"
             value={psychologist.personalEmail}
             onChange={changePsychologist}
             pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
             placeholder="exemple@beta.gouv.fr"
+            required
           />
 
           <h2>Informations pour l&lsquo;annuaire</h2>
@@ -72,6 +73,7 @@ const EditProfile = () => {
             field="department"
             value={psychologist.department}
             onChange={changePsychologist}
+            required
           />
           <Input
             label="Votre région"
@@ -79,24 +81,29 @@ const EditProfile = () => {
             field="region"
             value={psychologist.region}
             onChange={changePsychologist}
+            required
           />
           <Input
             label="Adresse du cabinet"
+            hint="Adresse où se rendre pour le rendez-vous"
             type="text"
             field="address"
             value={psychologist.address}
             onChange={changePsychologist}
+            required
           />
           <Input
             label="Téléphone du secrétariat"
+            hint="Numéro auquel prendre rendez-vous"
             type="text"
             field="phone"
             value={psychologist.phone}
             onChange={changePsychologist}
+            required
           />
           <Input
             label="Email de contact"
-            hint="Exemple : exemple@beta.gouv.fr"
+            hint="Adresse email à laquelle prendre rendez-vous ou poser des questions"
             type="text"
             field="email"
             value={psychologist.email}
@@ -106,6 +113,7 @@ const EditProfile = () => {
           />
           <Input
             label="Je propose de la téléconsultation"
+            hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
             type="checkbox"
             field="teleconsultation"
             value={psychologist.teleconsultation}
@@ -113,13 +121,16 @@ const EditProfile = () => {
           />
           <Input
             label="Langues parlées"
+            hint="Si vous pouvez réaliser les séances dans plusieurs langues, vous pouvez l'indiquer ici."
             type="text"
             field="languages"
             value={psychologist.languages}
             onChange={changePsychologist}
+            required
           />
           <Input
             label="Site web professionnel"
+            hint="Site sur lequel l'étudiant pourra trouver plus d'info sur votre cabinet ou vos services."
             type="text"
             field="website"
             value={psychologist.website}
@@ -127,6 +138,7 @@ const EditProfile = () => {
           />
           <Input
             label="Paragraphe de présentation"
+            hint="Si vous le désirez, quelques lignes pour présenter vos services aux étudiants."
             type="textarea"
             field="description"
             value={psychologist.description}
