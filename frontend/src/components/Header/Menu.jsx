@@ -61,7 +61,7 @@ const Menu = ({ page, open, close }) => (
                 aria-current={page === '/psychologue/mon-profil' ? 'true' : 'page'}
                 onClick={close}
               >
-                Modifier mes informations
+                Mes informations
               </NavLink>
             </li>
           </ul>
