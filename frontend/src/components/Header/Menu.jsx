@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
-import Logout from './Logout';
+import Logout from './TopMenu';
 
 const Menu = ({ page, open, close }) => (
   <div

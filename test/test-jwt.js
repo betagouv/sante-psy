@@ -1,4 +1,6 @@
 const rewire = require('rewire');
+const { v4: uuidv4 } = require('uuid');
+const jwtDecode = require('jwt-decode');
 
 const jwt = rewire('../utils/jwt');
 
@@ -12,23 +14,22 @@ describe('jwt', () => {
   });
 
   describe('getJwtTokenForUser', () => {
-    it('should return a json web token', () => {
-      const email = 'myEmail';
-      const psychologist = { email: 'stuff' };
-      const token = jwt.getJwtTokenForUser(email, psychologist);
+    it('should return a json web token with only id', () => {
+      const psychologist = uuidv4();
+      const token = jwt.getJwtTokenForUser(psychologist);
 
-      token.length.should.be.equal(196);
+      token.length.should.be.equal(200);
+      const decoded = jwtDecode(token);
+      decoded.should.have.all.keys('psychologist', 'iat', 'exp');
     });
   });
 
   describe('verifyJwt', () => {
     it('should return a json web token', () => {
-      const email = 'myEmail';
-      const psychologist = { email: 'stuff' };
-      const token = jwt.getJwtTokenForUser(email, psychologist);
+      const psychologist = uuidv4();
+      const token = jwt.getJwtTokenForUser(psychologist);
       const result = jwt.verifyJwt(token);
 
-      result.email.should.be.equal(email);
       result.psychologist.should.be.eql(psychologist);
     });
 

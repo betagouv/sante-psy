@@ -8,15 +8,14 @@ import Logo from 'components/Logo/LogoHeader';
 import { useStore } from 'stores/';
 
 import Menu from './Menu';
-import Logout from './Logout';
+import TopMenu from './TopMenu';
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const { userStore: { isAuthenticated } } = useStore();
+  const { userStore: { user } } = useStore();
 
   const psychologistPage = location.pathname.startsWith('/psychologue');
-  const loggedIn = isAuthenticated();
   return (
     <>
       <div className="fr-skiplinks">
@@ -73,17 +72,17 @@ const Header = () => {
                   <p className="fr-header__service-tagline">Accompagnement psychologique pour les étudiants</p>
                 </div>
               </div>
-              {loggedIn && (
+              {user && (
               <div className="fr-header__tools">
                 <div className="fr-header__tools-links">
-                  <Logout buttonStyle />
+                  <TopMenu buttonStyle />
                 </div>
               </div>
               )}
             </div>
           </div>
         </div>
-        {psychologistPage && loggedIn
+        {psychologistPage && user
         && <Menu page={location.pathname} open={open} close={() => { setOpen(false); }} />}
       </header>
     </>

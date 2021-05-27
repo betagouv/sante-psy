@@ -99,6 +99,7 @@ app.post('/api/psychologue/sendMail',
   loginController.emailValidators,
   loginController.sendMail);
 app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
+app.get('/api/connecteduser', speedLimiter, loginController.connectedUser);
 
 app.get('/api/appointments', appointmentsController.getAppointments);
 app.post('/api/appointments',

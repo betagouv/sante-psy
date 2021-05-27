@@ -63,6 +63,25 @@ async function saveToken(email, token) {
   }
 }
 
+module.exports.connectedUser = async (req, res) => {
+  try {
+    const psy = await dbPsychologists.getPsychologistById(req.user.psychologist);
+    if (psy) {
+      const { firstNames, lastName, email } = psy;
+      res.json({
+        firstNames,
+        lastName,
+        email,
+      });
+    } else {
+      res.json();
+    }
+  } catch (err) {
+    console.error(`Erreur de recupération de l'utilisateur connecté : ${err}`);
+    res.status(500).json();
+  }
+};
+
 module.exports.login = async function login(req, res) {
   // Save a token that expire after config.sessionDurationHours hours if user is logged
   try {
@@ -72,7 +91,7 @@ module.exports.login = async function login(req, res) {
 
       if (dbToken) {
         const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
-        const newToken = jwt.getJwtTokenForUser(dbToken.email, psychologistData.dossierNumber);
+        const newToken = jwt.getJwtTokenForUser(psychologistData.dossierNumber);
         await dbLoginToken.delete(token);
         console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
         return res.json({ token: newToken });

@@ -1,5 +1,6 @@
 const { assert } = require('chai');
 const rewire = require('rewire');
+const { v4: uuidV4 } = require('uuid');
 require('dotenv').config();
 
 const dbPsychologists = rewire('../db/psychologists');
@@ -7,20 +8,10 @@ const dbUniversities = rewire('../db/universities');
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 const { expect } = require('chai');
 const { fail } = require('chai');
-const knexConfig = require('../knexfile');
-const knex = require('knex')(knexConfig);
 const clean = require('./helper/clean');
 
 describe('DB Psychologists', () => {
   const psyList = clean.psyList();
-
-  async function testDataPsychologistsExist(dossierNumber) {
-    const exist = await knex(dbPsychologists.psychologistsTable)
-      .where('dossierNumber', dossierNumber)
-      .first();
-
-    return exist;
-  }
 
   afterEach(async () => {
     await clean.cleanAllPsychologists();
@@ -31,7 +22,7 @@ describe('DB Psychologists', () => {
     it('should INsert one psychologist in PG', async () => {
       await dbPsychologists.savePsychologistInPG(psyList);
 
-      const psy = await testDataPsychologistsExist(psyList[0].dossierNumber);
+      const psy = await dbPsychologists.getPsychologistById(psyList[0].dossierNumber);
       const exist = (psy !== undefined);
       exist.should.be.equal(true);
     });
@@ -39,12 +30,12 @@ describe('DB Psychologists', () => {
     it('should UPsert one psychologist in PG', async () => {
       // doing a classic insert
       await dbPsychologists.savePsychologistInPG(psyList);
-      const psyInsert = await testDataPsychologistsExist(psyList[0].dossierNumber);
+      const psyInsert = await dbPsychologists.getPsychologistById(psyList[0].dossierNumber);
       assert.isNull(psyInsert.updatedAt);
 
       // we do it twice in a row to UPsert it (field updatedAt will change)
       await dbPsychologists.savePsychologistInPG(psyList);
-      const psyUpsert = await testDataPsychologistsExist(psyList[0].dossierNumber);
+      const psyUpsert = await dbPsychologists.getPsychologistById(psyList[0].dossierNumber);
       assert.isNotNull(psyUpsert.updatedAt);
     });
   });
@@ -142,12 +133,14 @@ describe('DB Psychologists', () => {
       const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
       assert.isUndefined(unknownPsy);
     });
+
     it('should return undefined if known email but en_construction state', async () => {
       psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.en_construction;
       await dbPsychologists.savePsychologistInPG(psyList);
       const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
       assert.isUndefined(unknownPsy);
     });
+
     it('should return undefined if known email but en_instruction state', async () => {
       psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.en_instruction;
       await dbPsychologists.savePsychologistInPG(psyList);
@@ -159,6 +152,20 @@ describe('DB Psychologists', () => {
       psyList[0].state = demarchesSimplifiees.DOSSIER_STATE.refuse;
       await dbPsychologists.savePsychologistInPG(psyList);
       const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      assert.isUndefined(unknownPsy);
+    });
+  });
+
+  describe('getPsychologistById', () => {
+    it('should return a psy if we enter a known id', async () => {
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = await dbPsychologists.getPsychologistById(psyList[0].dossierNumber);
+      psy.email.should.be.equal(psyList[0].email);
+      psy.dossierNumber.should.be.equal(psyList[0].dossierNumber);
+    });
+
+    it('should return undefined if we enter a unknown id', async () => {
+      const unknownPsy = await dbPsychologists.getPsychologistById(uuidV4());
       assert.isUndefined(unknownPsy);
     });
   });
