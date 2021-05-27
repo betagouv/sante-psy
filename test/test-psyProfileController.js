@@ -53,8 +53,6 @@ describe('psyProfileController', () => {
 
           const returnedPsy = res.body.psychologist;
           expect(returnedPsy).to.be.an('object').that.has.all.keys(
-            'firstNames',
-            'lastName',
             'email',
             'address',
             'departement',
@@ -64,13 +62,18 @@ describe('psyProfileController', () => {
             'teleconsultation',
             'description',
             'languages',
-            'training',
-            'diploma',
             'personalEmail',
           );
           expect(returnedPsy.email).to.eql(psy.email);
-          expect(returnedPsy.firstNames).to.eql(psy.firstNames);
-          // TODO: complete
+          expect(returnedPsy.address).to.eql(psy.address);
+          expect(returnedPsy.departement).to.eql(psy.departement);
+          expect(returnedPsy.region).to.eql(psy.region);
+          expect(returnedPsy.phone).to.eql(psy.phone);
+          expect(returnedPsy.website).to.eql(psy.website);
+          expect(returnedPsy.teleconsultation).to.eql(psy.teleconsultation);
+          expect(returnedPsy.description).to.eql(psy.description);
+          expect(returnedPsy.languages).to.eql(psy.languages);
+          expect(returnedPsy.personalEmail).to.eql(psy.personalEmail);
         });
     });
   });

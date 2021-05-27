@@ -10,14 +10,21 @@ module.exports.getPsyProfile = async (req, res) => {
       throw Error("Le psychologue n'existe pas.");
     }
 
-    // TODO: refactor (select on db ?)
-    const {
-      dossierNumber, adeli, archived, createdAt, updatedAt,
-      assignedUniversityId, declaredUniversityId, university,
-      isConventionSigned, state,
-      ...returnedFields
-    } = psychologist;
-    return res.json({ success: true, psychologist: returnedFields });
+    return res.json({
+      success: true,
+      psychologist: {
+        email: psychologist.email,
+        address: psychologist.address,
+        departement: psychologist.departement,
+        region: psychologist.region,
+        phone: psychologist.phone,
+        website: psychologist.website,
+        teleconsultation: psychologist.teleconsultation,
+        description: psychologist.description,
+        languages: psychologist.languages,
+        personalEmail: psychologist.personalEmail,
+      },
+    });
   } catch (err) {
     console.error('Error getPsyProfile', err);
     return res.json({ success: false, message: 'Erreur lors de la récupération du profil.' });
