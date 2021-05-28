@@ -36,6 +36,24 @@ describe('DB Psychologists', () => {
       exist.should.be.equal(true);
     });
 
+    it.only('should Upsert one psychologist selfModified in PG ', async () => {
+      psyList[0].isSelfModified = true;
+      await dbPsychologists.savePsychologistInPG(psyList);
+
+      psyList.firstNames = 'newFirstName';
+      // psyList.lastName = 'newLastName';
+      // psyList.adeli = 'newAdeliNumber';
+      psyList.personalEmail = 'newEmail';
+      await dbPsychologists.savePsychologistInPG(psyList);
+      console.log(psyList);
+
+      // psyList.firstNames.should.be.equal('newFirstName');
+      // psyList.lastName.should.be.equal('newLastName');
+      // psyList.adeli.should.be.equal('newAdeliNumber');
+      psyList.personalEmail.should.be.equal('loginemail@beta.gouv.fr');
+      // psyList.personalEmail.should.be.equal('newEmail');
+    });
+
     it('should UPsert one psychologist in PG', async () => {
       // doing a classic insert
       await dbPsychologists.savePsychologistInPG(psyList);

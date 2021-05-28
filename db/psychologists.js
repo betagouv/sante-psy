@@ -1,3 +1,4 @@
+const { ALL } = require('dns');
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
@@ -105,31 +106,62 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
 
     psy.assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
 
+    const psyInDB = this.getPsychologistById(psy.id);
+
     try {
-      return knex(psychologistsTable)
-      .insert(psy)
-      .onConflict(upsertingKey)
-      .merge({ // update every field and add updatedAt
-        firstNames: psy.firstNames,
-        lastName: psy.lastName,
-        archived: psy.archived,
-        state: psy.state,
-        address: psy.address,
-        region: psy.region,
-        departement: psy.departement,
-        phone: psy.phone,
-        website: psy.website,
-        email: psy.email,
-        personalEmail: psy.personalEmail,
-        teleconsultation: psy.teleconsultation,
-        description: psy.description,
-        training: psy.training,
-        adeli: psy.adeli,
-        diploma: psy.diploma,
-        languages: addFrenchLanguageIfMissing(psy.languages),
-        // assignedUniversityId, do not update assignedId on already existing psy
-        updatedAt,
-      });
+      if (psyInDB.length > 0 && psyInDB.isSelfModified === true) {
+        return knex(psychologistsTable)
+        .insert(psy)
+        .onConflict(upsertingKey)
+        .merge({
+          firstNames: psy.firstNames,
+          lastName: psy.lastName,
+          archived: psy.archived,
+          state: psy.state,
+          // db
+          // address: psyInDB.address,
+          // region: psyInDB.region,
+          // departement: psyInDB.departement,
+          // phone: psyInDB.phone,
+          // website: psyInDB.website,
+          // email: psyInDB.email,
+          // personalEmail: psyInDB.personalEmail,
+          // teleconsultation: psyInDB.teleconsultation,
+          // description: psyInDB.description,
+          // db
+          training: psy.training,
+          adeli: psy.adeli,
+          diploma: psy.diploma,
+          // languages: addFrenchLanguageIfMissing(psyInDB.languages),
+          updatedAt,
+        });
+      }
+      if (psyInDB.isSelfModified === false) {
+        return knex(psychologistsTable)
+        .insert(psy)
+        .onConflict(upsertingKey)
+        .merge({ // update every field and add updatedAt
+          firstNames: psy.firstNames,
+          lastName: psy.lastName,
+          archived: psy.archived,
+          state: psy.state,
+          address: psy.address,
+          region: psy.region,
+          departement: psy.departement,
+          phone: psy.phone,
+          website: psy.website,
+          email: psy.email,
+          personalEmail: psy.personalEmail,
+          teleconsultation: psy.teleconsultation,
+          description: psy.description,
+          training: psy.training,
+          adeli: psy.adeli,
+          diploma: psy.diploma,
+          languages: addFrenchLanguageIfMissing(psy.languages),
+          // assignedUniversityId, do not update assignedId on already existing psy
+          updatedAt,
+        });
+      }
     } catch (err) {
       console.error(`Error to insert ${psy}`, err);
       return Promise.resolve();
@@ -232,7 +264,7 @@ module.exports.getPsychologistById = async (psychologistId) => {
 
 module.exports.updatePsychologist = async (psychologistId,
   email, address, departement, region, phone, website,
-  description, teleconsultation, languages, personalEmail) => {
+  description, teleconsultation, languages, personalEmail, isSelfModified) => {
   try {
     return await knex(module.exports.psychologistsTable)
       .where('dossierNumber', psychologistId)
@@ -247,6 +279,7 @@ module.exports.updatePsychologist = async (psychologistId,
         teleconsultation,
         languages,
         personalEmail,
+        isSelfModified,
         updatedAt: date.getDateNowPG(),
       });
   } catch (err) {

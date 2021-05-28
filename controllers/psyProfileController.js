@@ -100,6 +100,7 @@ module.exports.editPsyProfile = async (req, res) => {
     } = req.body;
     // Force to boolean beacause checkbox value send undefined when it's not checked
     const teleconsultation = Boolean(req.body.teleconsultation);
+    const isSelfModified = true;
 
     const nbUpdated = await dbPsychologists.updatePsychologist(
       psyId,
@@ -113,6 +114,7 @@ module.exports.editPsyProfile = async (req, res) => {
       teleconsultation,
       languages,
       personalEmail,
+      isSelfModified,
     );
 
     if (nbUpdated === 0) {
