@@ -1,9 +1,17 @@
-module.exports = [
+/* eslint-disable no-multi-str */
+/* eslint-disable max-len */
+module.exports = () => [
   {
     question: 'Je suis étudiant et j’ai besoin d’une aide psychologique. Que dois-je faire ?',
     answer: 'Vous devez consulter le service de santé de votre établissement ou un médecin généraliste, \
-        en étant muni de votre carte d’étudiant ou de tout document équivalent, \
-        qui vous orienteront en cas de besoin vers un psychologue partenaire du dispositif.',
+            en étant muni de votre carte d’étudiant ou de tout document équivalent, \
+            qui vous orienteront en cas de besoin vers un psychologue partenaire du dispositif.',
+  },
+  {
+    question: 'Quels sont les critères d\'éligibilité pour bénéficier du dispositif Santé Psy Étudiants ? ',
+    answer: 'Le dispositif Santé Psy Étudiant est accessible à tous les étudiants inscrits dans un établissement\
+        d\'enseignement supérieur qu\'il soit public ou privé, quel que soit leur lieu de scolarité,\
+        le statut de leur école / université ou bien encore leur lieu de résidence.',
   },
   {
     question: 'Je ne connais pas mon Service de Santé Universitaire. Que faire ?',
@@ -14,29 +22,14 @@ module.exports = [
         pour trouver si vous dépendez d\'un SSU.',
   },
   {
-    question: 'Puis-je aller voir directement le/la psychologue ?',
-    answer: 'Dans le cadre du dispositif Santé Psy Etudiants, \
-        vous ne pouvez pas aller voir directement un psychologue ; vous devez consulter un médecin \
-        du service de santé universitaire ou un médecin généraliste \
-        qui vous orientera vers un psychologue partenaire de la démarche.',
-  },
-  {
-    question: 'Puis-je aller voir un psychologue dans une autre région ou ville ?',
-    answer: 'Oui, \
-        vous pouvez contacter un psychologue partenaire dans un autre département \
-        peu importe votre département ou université d\'origine par téléphone, email, visio ou sur son site internet.',
-  },
-  {
-    question: 'Qui doit renouveler les séances ? Faut-il vraiment repasser chez le médecin ?',
-    answer: 'Au-delà d’un premier cycle de trois séances vous pouvez être de nouveau orienté, \
-        obligatoirement par le médecin du service de santé universitaire ou le médecin généraliste, \
-        vers un psychologue pour un second cycle de trois séances au plus. \
-        Le passage par le médecin répond à la volonté d’inscrire l’étudiant dans un parcours de soin rigoureux.',
-  },
-  {
     question: 'J’ai déjà un suivi. Puis-je cependant bénéficier du dispositif ?',
     answer: 'Les étudiants qui ont déjà un suivi sont éligibles au dispositif Santé Psy Étudiants. \
         Ils devront cependant pour cela aller consulter un psychologue partenaire du dispositif.',
+  },
+  {
+    question: 'Je n\'ai pas de numéro INE mais j\'ai bien une carte étudiante et l\'ordonnance du médecin ? ',
+    answer: 'Le numéro INE est facultatif. Si vous êtes étudiant dans le supérieur vous pouvez donc avoir accès\
+    au dispositif en présentant votre lettre d\'orientation.',
   },
   {
     question: 'Je ne suis pas de nationalité française, mais étudiant en France. Suis-je éligible au dispositif ?',

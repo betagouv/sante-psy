@@ -44,4 +44,8 @@ module.exports = config => [
     answer: 'Ce sera au psychologue de faire la déclaration des séances faites une fois qu’il est inscrit via le formulaire en ligne et \
     que son dossier est accepté.  Cette déclaration se fera sur la plateforme santé psy étudiant, dans l’espace personnel du psychologue lorsque que la plateforme sera accessible.',
   },
+  {
+    question: "Je reçois beaucoup de demande d'étudiants, je souhaite ne plus être affiché dans la liste publique des partenaires psychologues, tout en restant dans le dispositif, est-ce possible ? ",
+    answer: 'Vous avez la possibilité de vous inscrire sur la plateforme et ainsi faire bénéficier les étudiants de séances dans le cadre du dispositif. Dans le cas d’une forte demande des étudiants, vous avez la possibilité de refuser par manque de disponibilités lorsqu’un étudiant vous contacte ou éventuellement de l’orienter vers un(e) autre psychologue du dispositif.',
+  },
 ];
