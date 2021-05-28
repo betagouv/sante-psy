@@ -46,8 +46,16 @@ const Faq = () => (
         <FaqSection
           id="etudiant"
           title="Je suis étudiant"
-          sections={[{ name: 'students' }]}
+          sections={[
+            { title: 'Éligibilité', name: 'eligibility' },
+            { title: 'Payement', name: 'payement' },
+            { title: 'Séance', name: 'session' },
+          ]}
           flyers={[
+            {
+              href: `${__API__}/static/documents/parcours_sante_psy_etudiant.pdf`,
+              title: 'Parcours étudiant',
+            },
             {
               href: `${__API__}/static/documents/flyer_etudiants_fr.pdf`,
               title: 'Voir le dépliant étudiants',
@@ -71,10 +79,20 @@ const Faq = () => (
           title="Je suis psychologue"
           sections={[
             { title: 'Éligibilité', name: 'eligibility' },
+            { title: 'Inscription', name: 'registration' },
+            { title: 'Connexion', name: 'connection' },
             { title: 'Prix de la séance et remboursement', name: 'reimbursement', id: 'remboursement' },
             { title: 'Déroulé', name: 'process' },
+            { title: 'Conventionnement', name: 'agreement' },
+            { title: 'Séances', name: 'session' },
+            { title: 'Facturation', name: 'billing' },
+            { title: 'Rétractation', name: 'retraction' },
           ]}
           flyers={[
+            {
+              href: `${__API__}/static/documents/parcours_sante_psy_psychologue.pdf`,
+              title: 'Parcours psychologues',
+            },
             {
               href: `${__API__}/static/documents/flyer_psychologues.pdf`,
               title: 'Voir le dépliant psychologues',

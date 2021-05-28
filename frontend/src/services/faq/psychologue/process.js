@@ -31,7 +31,7 @@ module.exports = config => [
     Le passage par le médecin répond à la volonté d’inscrire l’étudiant dans un parcours de soin rigoureux.',
   },
   {
-    question: 'Si l’étudiant le souhaite, au-delà de la première consultation "d’orientation", peut-on lui proposer de continuer à le suivre pour les trois séances remboursées ? ',
+    question: 'Si l’étudiant le souhaite, au-delà de la première consultation "d’orientation", peut-on lui proposer de continuer à le suivre pour les trois séances remboursées ?',
     answer: 'L’étudiant qui a accès à la liste des psychologues participant au dispositif, \
     choisit celui qu’il souhaite consulter et prend rendez-vous avec lui. Il revient au psychologue de déterminer, lors de la première consultation, \
     si l’étudiant a besoin d’une, deux ou trois séances avec lui. Dans l’hypothèse où à l’issue des trois premières séances, \
@@ -43,5 +43,11 @@ module.exports = config => [
     qu’une plateforme numérique permettra de déclarer le nombre de consultations effectuées. Serait-il possible d’y avoir accès ou bien est-ce réservé aux SSU ?',
     answer: 'Ce sera au psychologue de faire la déclaration des séances faites une fois qu’il est inscrit via le formulaire en ligne et \
     que son dossier est accepté.  Cette déclaration se fera sur la plateforme santé psy étudiant, dans l’espace personnel du psychologue lorsque que la plateforme sera accessible.',
+  },
+  {
+    question: "Je reçois beaucoup de demande d'étudiants, je souhaite ne plus être affiché dans la liste publique des partenaires psychologues, \
+    tout en restant dans le dispositif, est-ce possible ?",
+    answer: 'Vous avez la possibilité de vous inscrire sur la plateforme et ainsi faire bénéficier les étudiants de séances dans le cadre du dispositif. \
+    Dans le cas d’une forte demande des étudiants, vous avez la possibilité de refuser par manque de disponibilités lorsqu’un étudiant vous contacte ou éventuellement de l’orienter vers un(e) autre psychologue du dispositif.',
   },
 ];
