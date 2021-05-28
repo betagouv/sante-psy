@@ -14,16 +14,16 @@ const session = require('./student/session');
 
 module.exports = {
   agreement,
+  billing,
   connection,
+  doctor,
+  eligibility,
   psyEligibility,
   process,
+  psySession,
+  payement,
   registration,
   reimbursement,
   retraction,
-  psySession,
-  billing,
-  doctor,
-  eligibility,
-  payement,
   session,
 };

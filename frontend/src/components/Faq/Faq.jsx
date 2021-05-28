@@ -53,7 +53,7 @@ const Faq = () => (
           ]}
           flyers={[
             {
-              href: `${__API__}/static/documents/Parcours Santé Psy Etudiant.pdf`,
+              href: `${__API__}/static/documents/parcours_sante_psy_etudiant.pdf`,
               title: 'Parcours étudiant',
             },
             {
@@ -90,7 +90,7 @@ const Faq = () => (
           ]}
           flyers={[
             {
-              href: `${__API__}/static/documents/Parcours Santé Psy Psychologue.pdf`,
+              href: `${__API__}/static/documents/parcours_sante_psy_psychologue.pdf`,
               title: 'Parcours psychologues',
             },
             {
