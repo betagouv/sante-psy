@@ -1,15 +1,26 @@
 import React from 'react';
+import { observer } from 'mobx-react';
+
+import { useStore } from 'stores/';
+
 import MetabaseAppEmbed from './MetabaseAppEmbed';
 
 import styles from './statistics.cssmodule.scss';
 
-const Statistics = () => (
-  <MetabaseAppEmbed
-    className={styles.iframe}
-    title="stats"
-    base="https://stats.santepsyetudiant.beta.gouv.fr"
-    path="/public/dashboard/efcb7427-c80a-4f67-b0b1-7ff04f8a255b"
-  />
-);
+const Statistics = () => {
+  const { commonStore: { config } } = useStore();
+  if (!config.satistics) {
+    return <></>;
+  }
 
-export default Statistics;
+  return (
+    <MetabaseAppEmbed
+      className={styles.iframe}
+      title="stats"
+      base={config.satistics.base}
+      path={config.satistics.dashboard}
+    />
+  );
+};
+
+export default observer(Statistics);
