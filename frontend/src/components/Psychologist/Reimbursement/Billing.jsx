@@ -26,35 +26,8 @@ const Billing = ({ total }) => {
         </HashLink>
       </div>
 
-      <h3>Les élements à apparaître sur votre facturation</h3>
       {total.length > 0 ? (
         <>
-          <p className="fr-mb-2w">
-            Le nom des patients est couvert par le secret médical,
-            ne le communiquez pas sur la facture.
-            Le nombre de patients suffit.
-          </p>
-          <div className="fr-table fr-mb-2w">
-            <table>
-              <caption>Tableau récapitulatif par mois</caption>
-              <thead>
-                <tr>
-                  <th scope="col">Mois</th>
-                  <th scope="col">Nombre de séances</th>
-                  <th scope="col">Nombre de patients</th>
-                </tr>
-              </thead>
-              <tbody>
-                {total.map(totalByMonth => (
-                  <tr data-test-id="billing-row" key={`${totalByMonth.month} ${totalByMonth.year}`}>
-                    <td>{`${totalByMonth.month} ${totalByMonth.year}`}</td>
-                    <td>{totalByMonth.countAppointments}</td>
-                    <td>{totalByMonth.countPatients}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
           <h3>
             Aide pour la facturation
           </h3>
@@ -85,12 +58,43 @@ const Billing = ({ total }) => {
               Libre Office .odt
             </a>
           </p>
+
+          <h3>Les élements à apparaître sur votre facturation</h3>
+          <p className="fr-mb-2w">
+            Le nom des patients est couvert par le secret médical,
+            ne le communiquez pas sur la facture.
+            Le nombre de patients suffit.
+          </p>
+          <div className="fr-table fr-mb-2w">
+            <table>
+              <caption>Tableau récapitulatif par mois</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Mois</th>
+                  <th scope="col">Nombre de séances</th>
+                  <th scope="col">Nombre de patients</th>
+                </tr>
+              </thead>
+              <tbody>
+                {total.map(totalByMonth => (
+                  <tr data-test-id="billing-row" key={`${totalByMonth.month} ${totalByMonth.year}`}>
+                    <td>{`${totalByMonth.month} ${totalByMonth.year}`}</td>
+                    <td>{totalByMonth.countAppointments}</td>
+                    <td>{totalByMonth.countPatients}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       ) : (
-        <p className="fr-mb-2w">
-          Vous n&lsquo;avez pas encore déclaré de séances,
-          vous retrouverez ici votre récapitulatif de séances dans le but de créer vous même votre facture
-        </p>
+        <>
+          <h3>Les élements à apparaître sur votre facturation</h3>
+          <p className="fr-mb-2w">
+            Vous n&lsquo;avez pas encore déclaré de séances,
+            vous retrouverez ici votre récapitulatif de séances dans le but de créer vous même votre facture
+          </p>
+        </>
       )}
     </div>
   );
