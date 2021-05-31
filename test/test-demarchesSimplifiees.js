@@ -67,45 +67,6 @@ describe('Demarches Simplifiess', () => {
     });
   });
 
-  describe('getNextCursor', () => {
-    it('should return cursor string if there is more page to load', async () => {
-      const cursor = 'MQ';
-      const apiResponse = {
-        demarche: {
-          dossiers: {
-            pageInfo: {
-              hasNextPage: true,
-              endCursor: cursor,
-            },
-          },
-        },
-      };
-
-      const getNextCursor = demarchesSimplifiees.__get__('getNextCursor');
-      const output = getNextCursor(apiResponse);
-
-      output.should.equal(cursor);
-    });
-
-    it('should return undefined if there is no page to load', async () => {
-      const cursor = 'MQ';
-      const apiResponse = {
-        demarche: {
-          dossiers: {
-            pageInfo: {
-              hasNextPage: false,
-              endCursor: cursor,
-            },
-          },
-        },
-      };
-
-      const getNextCursor = demarchesSimplifiees.__get__('getNextCursor');
-
-      assert.isUndefined(getNextCursor(apiResponse));
-    });
-  });
-
   describe('getUuidDossierNumber', () => {
     it('should return a uuid based on the given id', async () => {
       const dossierNumber = 1;
@@ -135,45 +96,6 @@ describe('Demarches Simplifiess', () => {
       const output = parseTraining(apiResponse);
 
       output.should.equal(JSON.stringify(['training1', 'training2']));
-    });
-  });
-
-  describe('getNextCursor', () => {
-    it('should return cursor string if there is more page to load', async () => {
-      const cursor = 'MQ';
-      const apiResponse = {
-        demarche: {
-          dossiers: {
-            pageInfo: {
-              hasNextPage: true,
-              endCursor: cursor,
-            },
-          },
-        },
-      };
-
-      const getNextCursor = demarchesSimplifiees.__get__('getNextCursor');
-      const output = getNextCursor(apiResponse);
-
-      output.should.equal(cursor);
-    });
-
-    it('should return undefined if there is no page to load', async () => {
-      const cursor = 'MQ';
-      const apiResponse = {
-        demarche: {
-          dossiers: {
-            pageInfo: {
-              hasNextPage: false,
-              endCursor: cursor,
-            },
-          },
-        },
-      };
-
-      const getNextCursor = demarchesSimplifiees.__get__('getNextCursor');
-
-      assert.isUndefined(getNextCursor(apiResponse));
     });
   });
 
