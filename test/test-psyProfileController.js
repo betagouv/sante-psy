@@ -91,7 +91,7 @@ describe('psyProfileController', () => {
       return Promise.resolve();
     });
 
-    const shouldFailUpdatePsyInputValidation = (done, postData, message) => {
+    const shouldFailUpdatePsyInputValidation = async (postData, message) => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
@@ -106,13 +106,11 @@ describe('psyProfileController', () => {
 
         res.body.success.should.equal(false);
         res.body.message.should.equal(message);
-
-        done();
       });
     };
 
-    it('should refuse empty personalEmail', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse empty personalEmail', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
@@ -123,11 +121,11 @@ describe('psyProfileController', () => {
         teleconsultation: true,
         languages: 'Français, Anglais',
         // no personalEmail
-      }, 'Vous devez spécifier votre email personnel.');
+      }, 'Vous devez spécifier un email valide.');
     });
 
-    it('should refuse whitespace personalEmail', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse whitespace personalEmail', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
@@ -138,11 +136,11 @@ describe('psyProfileController', () => {
         teleconsultation: true,
         languages: 'Français, Anglais',
         personalEmail: '  ',
-      }, 'Vous devez spécifier votre email personnel.');
+      }, 'Vous devez spécifier un email valide.');
     });
 
-    it('should refuse empty address', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse empty address', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         // no address
         departement: '59 - Nord',
@@ -156,8 +154,8 @@ describe('psyProfileController', () => {
       }, "Vous devez spécifier l'adresse de votre cabinet.");
     });
 
-    it('should refuse whitespace address', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse whitespace address', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '  ',
         departement: '59 - Nord',
@@ -171,8 +169,8 @@ describe('psyProfileController', () => {
       }, "Vous devez spécifier l'adresse de votre cabinet.");
     });
 
-    it('should refuse empty departement', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse empty departement', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         // no departement
@@ -186,8 +184,8 @@ describe('psyProfileController', () => {
       }, 'Vous devez spécifier votre département.');
     });
 
-    it('should refuse whitespace departement', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse whitespace departement', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '   ',
@@ -201,8 +199,8 @@ describe('psyProfileController', () => {
       }, 'Vous devez spécifier votre département.');
     });
 
-    it('should refuse empty region', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse empty region', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
@@ -216,8 +214,8 @@ describe('psyProfileController', () => {
       }, 'Vous devez spécifier votre région.');
     });
 
-    it('should refuse whitespace region', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse whitespace region', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
@@ -231,8 +229,8 @@ describe('psyProfileController', () => {
       }, 'Vous devez spécifier votre région.');
     });
 
-    it('should refuse empty phone', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse empty phone', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
@@ -246,8 +244,8 @@ describe('psyProfileController', () => {
       }, 'Vous devez spécifier le téléphone du secrétariat.');
     });
 
-    it('should refuse whitespace phone', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse whitespace phone', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
@@ -261,8 +259,8 @@ describe('psyProfileController', () => {
       }, 'Vous devez spécifier le téléphone du secrétariat.');
     });
 
-    it('should refuse empty languages', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse empty languages', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
@@ -276,8 +274,8 @@ describe('psyProfileController', () => {
       }, 'Vous devez spécifier les langues parlées.');
     });
 
-    it('should refuse whitespace languages', (done) => {
-      shouldFailUpdatePsyInputValidation(done, {
+    it('should refuse whitespace languages', async () => {
+      await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
@@ -289,6 +287,51 @@ describe('psyProfileController', () => {
         languages: '   ',
         personalEmail: 'perso@email.com',
       }, 'Vous devez spécifier les langues parlées.');
+    });
+
+    it('should refuse invalid email', async () => {
+      await shouldFailUpdatePsyInputValidation({
+        email: 'public',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier un email valide.');
+    });
+
+    it('should refuse invalid personalEmail', async () => {
+      await shouldFailUpdatePsyInputValidation({
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso',
+      }, 'Vous devez spécifier un email valide.');
+    });
+
+    it('should refuse invalid website', async () => {
+      await shouldFailUpdatePsyInputValidation({
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier une URL valide.');
     });
 
     const shouldPassUpdatePsyInputValidation = async (postData) => {

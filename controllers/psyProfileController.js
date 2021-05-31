@@ -36,7 +36,8 @@ module.exports.editPsyProfilValidators = [
     .trim()
     .notEmpty()
     .customSanitizer((value, { req }) => req.sanitize(value))
-    .withMessage('Vous devez spécifier votre email personnel.'),
+    .isEmail()
+    .withMessage('Vous devez spécifier un email valide.'),
   check('address')
     .trim()
     .notEmpty()
@@ -62,15 +63,31 @@ module.exports.editPsyProfilValidators = [
     .notEmpty()
     .customSanitizer((value, { req }) => req.sanitize(value))
     .withMessage('Vous devez spécifier les langues parlées.'),
-  check('email')
-    .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
+  oneOf(
+    [
+      // Two valid possibilities : email is empty, or email is valid format.
+      check('email').trim().isEmpty(),
+      check('email')
+          .trim()
+          .customSanitizer((value, { req }) => req.sanitize(value))
+          .isEmail()
+          .withMessage('Vous devez spécifier un email valide.'),
+    ],
+  ),
   check('description')
     .trim()
     .customSanitizer((value, { req }) => req.sanitize(value)),
-  check('website')
-    .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
+  oneOf(
+    [
+      // Two valid possibilities : website is empty, or website is valid format.
+      check('website').trim().isEmpty(),
+      check('website')
+            .trim()
+            .customSanitizer((value, { req }) => req.sanitize(value))
+            .isURL()
+            .withMessage('Vous devez spécifier une URL valide.'),
+    ],
+  ),
 ];
 
 module.exports.editPsyProfile = async (req, res) => {
