@@ -35,7 +35,9 @@ const Patient = {
   update: (id, patient) => client.put(`/patients/${id}`, patient).then(responseData),
 };
 const Psychologist = {
-  find: () => client.get('/trouver-un-psychologue').then(responseData)
+  find: () => client.get('/trouver-un-psychologue').then(responseData),
+  getProfile: () => client.get(`/psychologue/${store.userStore.decodedToken.psychologist}`).then(responseData),
+  updateProfile: psychologist => client.put(`/psychologue/${store.userStore.decodedToken.psychologist}`, psychologist).then(responseData),
 };
 
 const Reimbursement = {

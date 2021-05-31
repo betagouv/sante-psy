@@ -5,6 +5,8 @@ import GlobalNotification from 'components/Notification/GlobalNotification';
 import Mail from 'components/Footer/Mail';
 import Input from 'components/Form/Input';
 
+import { REGIONS, DEPARTEMENTS } from 'services/geo';
+
 const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
   <div className="fr-container fr-mb-3w fr-mt-2w">
     <Ariane
@@ -41,18 +43,22 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
           <h2>Informations pour l&lsquo;annuaire</h2>
           <Input
             label="Votre département"
-            type="text"
+            type="select"
             field="departement"
             value={psychologist.departement}
             onChange={changePsychologist}
+            options={DEPARTEMENTS}
+            data-test-id="departement-select"
             required
           />
           <Input
             label="Votre région"
-            type="text"
+            type="select"
             field="region"
-            value={psychologist.region}
+            value={psychologist.departement}
             onChange={changePsychologist}
+            options={REGIONS}
+            data-test-id="region-select"
             required
           />
           <Input

@@ -12,6 +12,7 @@ export default class UserStore {
     makeObservable(this, {
       token: observable,
       user: observable,
+      decodedToken: computed,
       setToken: action.bound,
       pullUser: action.bound,
     });
@@ -30,6 +31,10 @@ export default class UserStore {
 
   setToken(token) {
     this.token = token;
+  }
+
+  get decodedToken() {
+    return this.token ? jwtDecode(this.token) : undefined;
   }
 
   isTokenExpired = () => {

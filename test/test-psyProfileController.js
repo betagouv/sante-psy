@@ -34,7 +34,7 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .get(`/api/psychologue/${targetPsy.dossierNumber}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.email, loggedPsy.dossierNumber)}`)
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
         .then(async (res) => {
           res.status.should.equal(403);
         });
@@ -47,7 +47,7 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .get(`/api/psychologue/${psy.dossierNumber}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.body.success.should.equal(true);
 
@@ -99,7 +99,7 @@ describe('psyProfileController', () => {
 
       chai.request(app)
       .put(`/api/psychologue/${psy.dossierNumber}`)
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
       .send(postData)
       .then(async (res) => {
         sinon.assert.notCalled(updatePsyStub);
@@ -298,7 +298,7 @@ describe('psyProfileController', () => {
 
       chai.request(app)
       .put(`/api/psychologue/${psy.dossierNumber}`)
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
       .send(postData)
       .then(async (res) => {
         sinon.assert.notCalled(updatePsyStub);
@@ -404,7 +404,7 @@ describe('psyProfileController', () => {
 
       chai.request(app)
       .put(`/api/psychologue/${psy.dossierNumber}`)
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
         .send(postData)
         .end((err, res) => {
           res.body.success.should.equal(true);
@@ -452,7 +452,7 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .put(`/api/psychologue/${targetPsy.dossierNumber}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.email, loggedPsy.dossierNumber)}`)
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
         .send({
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
@@ -476,7 +476,7 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .put(`/api/psychologue/${psy.dossierNumber}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
         .send({
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
@@ -503,7 +503,7 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .put(`/api/psychologue/${psy.dossierNumber}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
         .send({
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',

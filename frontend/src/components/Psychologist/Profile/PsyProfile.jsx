@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
 import ViewProfile from 'components/Psychologist/Profile/ViewProfile';
 import EditProfile from 'components/Psychologist/Profile/EditProfile';
@@ -15,7 +15,7 @@ const PsyProfile = () => {
   const [psychologist, setPsychologist] = useState();
 
   useEffect(() => {
-    agent.Psychologist.me().then(response => {
+    agent.Psychologist.getProfile().then(response => {
       if (response.success) {
         setPsychologist({ ...response.psychologist });
         setLoading(false);
@@ -28,7 +28,7 @@ const PsyProfile = () => {
 
   const save = e => {
     e.preventDefault();
-    agent.Psychologist.update(psychologist).then(response => {
+    agent.Psychologist.updateProfile(psychologist).then(response => {
       if (response.success) {
         history.push('/psychologue/mon-profil');
       }
