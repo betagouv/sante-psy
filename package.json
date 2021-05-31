@@ -52,7 +52,7 @@
     "express-bearer-token": "^2.4.0",
     "express-jwt": "^6.0.0",
     "express-rate-limit": "^5.2.6",
-    "express-sanitizer": "^1.0.5",
+    "express-sanitizer": "^1.0.6",
     "express-session": "^1.17.1",
     "express-slow-down": "^1.4.0",
     "express-validator": "^6.10.0",

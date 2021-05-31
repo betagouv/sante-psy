@@ -109,11 +109,9 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
     const psyInDB = this.getPsychologistById(psy.id);
 
     try {
-      if (psyInDB.length > 0 && psyInDB.isSelfModified === true) {
+      if (psyInDB && psyInDB.isSelfModified === true) {
         return knex(psychologistsTable)
-        .insert(psy)
-        .onConflict(upsertingKey)
-        .merge({
+        .update({
           firstNames: psy.firstNames,
           lastName: psy.lastName,
           archived: psy.archived,
@@ -136,8 +134,7 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
           updatedAt,
         });
       }
-      if (psyInDB.isSelfModified === false) {
-        return knex(psychologistsTable)
+      return knex(psychologistsTable)
         .insert(psy)
         .onConflict(upsertingKey)
         .merge({ // update every field and add updatedAt
@@ -161,7 +158,6 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
           // assignedUniversityId, do not update assignedId on already existing psy
           updatedAt,
         });
-      }
     } catch (err) {
       console.error(`Error to insert ${psy}`, err);
       return Promise.resolve();
