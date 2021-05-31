@@ -2,7 +2,7 @@ import React from 'react';
 
 import Label from './Label';
 
-const Select = ({ label, hint, type, required, field, options, onChange, ...remainingProps }) => {
+const Select = ({ label, hint, type, required, field, options, onChange, hiddenOption, ...remainingProps }) => {
   const inputOption = {
     ...remainingProps,
     className: 'fr-select midlength-input',
@@ -20,8 +20,14 @@ const Select = ({ label, hint, type, required, field, options, onChange, ...rema
         hint={hint}
       />
       <select {...inputOption}>
-        { options.map(opt => (
-          <option key={opt} value={opt}>{opt}</option>
+        {hiddenOption && <option value="" disabled hidden>{hiddenOption}</option>}
+        {options.map(option => (
+          <option
+            key={option.id}
+            value={option.id}
+          >
+            {option.label}
+          </option>
         ))}
       </select>
     </div>

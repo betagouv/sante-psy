@@ -45,32 +45,17 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
           </h4>
           )}
           <form data-test-id="convention-form" onSubmit={saveConvention}>
-            <div className="fr-select-group">
-              <label className="fr-label" htmlFor="university">
-                Quelle université vous a contacté pour signer la convention ?
-                {' '}
-                <span className="red-text">*</span>
-              </label>
-              <select
-                data-test-id="convention-university-select"
-                value={convention.universityId || ''}
-                onChange={e => setConvention({ ...convention, universityId: e.target.value })}
-                className="fr-select"
-                id="university"
-                name="university"
-                required
-              >
-                <option value="" disabled hidden>- Cliquez pour choisir -</option>
-                {universities.map(university => (
-                  <option
-                    key={university.id}
-                    value={university.id}
-                  >
-                    {university.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Input
+              data-test-id="convention-university-select"
+              id="university"
+              name="university"
+              type="select"
+              label="Quelle université vous a contacté pour signer la convention ?"
+              value={convention.universityId || ''}
+              onChange={value => setConvention({ ...convention, universityId: value })}
+              required
+              options={universities.map(university => ({ id: university.id, label: university.name }))}
+            />
             <Input
               type="radio"
               value={convention.isConventionSigned}
