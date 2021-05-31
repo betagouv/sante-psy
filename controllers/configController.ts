@@ -10,6 +10,7 @@ function getConfig(req: Request, res: Response): void {
     announcement: config.announcement,
     dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
     sessionDuration: config.sessionDurationHours,
+    satistics: config.satistics,
   });
 }
 
