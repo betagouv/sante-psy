@@ -48,12 +48,12 @@ const Faq = () => (
           title="Je suis étudiant"
           sections={[
             { title: 'Éligibilité', name: 'eligibility' },
-            { title: 'Payement', name: 'payement' },
+            { title: 'Paiement', name: 'payement' },
             { title: 'Séance', name: 'session' },
           ]}
           flyers={[
             {
-              href: `${__API__}/static/documents/parcours_sante_psy_etudiant.pdf`,
+              href: `${__API__}/static/documents/parcours_etudiant_sante_psy_etudiant.pdf`,
               title: 'Parcours étudiant',
             },
             {
@@ -84,14 +84,14 @@ const Faq = () => (
             { title: 'Prix de la séance et remboursement', name: 'reimbursement', id: 'remboursement' },
             { title: 'Déroulé', name: 'process' },
             { title: 'Conventionnement', name: 'agreement' },
-            { title: 'Séances', name: 'session' },
+            { title: 'Séance', name: 'session' },
             { title: 'Facturation', name: 'billing' },
             { title: 'Rétractation', name: 'retraction' },
           ]}
           flyers={[
             {
-              href: `${__API__}/static/documents/parcours_sante_psy_psychologue.pdf`,
-              title: 'Parcours psychologues',
+              href: `${__API__}/static/documents/parcours_psychologue_sante_psy_etudiant.pdf`,
+              title: 'Parcours psychologue',
             },
             {
               href: `${__API__}/static/documents/flyer_psychologues.pdf`,
