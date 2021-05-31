@@ -55,7 +55,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             label="Votre région"
             type="select"
             field="region"
-            value={psychologist.departement}
+            value={psychologist.region}
             onChange={changePsychologist}
             options={REGIONS}
             data-test-id="region-select"
