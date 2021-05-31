@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Label from './Label';
+
 const TextInput = ({ label, hint, type, required, field, onChange, ...remainingProps }) => {
   const inputOption = {
     ...remainingProps,
@@ -11,22 +13,12 @@ const TextInput = ({ label, hint, type, required, field, onChange, ...remainingP
   };
   return (
     <div className="fr-my-3w">
-      <label
-        className="fr-label"
-        htmlFor={field}
-        aria-describedby={`${field}-help`}
-      >
-        {label}
-        {required && <span className="red-text"> *</span>}
-      </label>
-      {hint && (
-      <div
-        className="fr-hint-text"
-        id={`${field}-help`}
-      >
-        {hint}
-      </div>
-      )}
+      <Label
+        field={field}
+        label={label}
+        required={required}
+        hint={hint}
+      />
       {type === 'textarea'
         ? <textarea {...inputOption} />
         : <input {...inputOption} />}

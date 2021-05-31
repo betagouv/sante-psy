@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import Input from 'components/Form/Input';
+
 const PayingUniversity = ({ universities, currentConvention, updateConvention }) => {
   const [showForm, setShowForm] = useState(!currentConvention);
   const [convention, setConvention] = useState({
@@ -69,46 +71,26 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
                 ))}
               </select>
             </div>
+            <Input
+              type="radio"
+              value={convention.isConventionSigned}
+              field="signed"
+              onChange={value => setConvention({ ...convention, isConventionSigned: value })}
+              required
+              label="Avez-vous déjà signé la convention ?"
+              hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
+              Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
+              options={[
+                {
+                  id: true,
+                  label: 'Oui',
+                }, {
+                  id: false,
+                  label: 'Non',
+                },
+              ]}
+            />
 
-            <div className="fr-form-group">
-              <fieldset className="fr-fieldset">
-                <legend className="fr-label fr-mb-1w">
-                  Avez-vous déjà signé la convention ?
-                  {' '}
-                  <span className="red-text">*</span>
-                  <span className="fr-hint-text">
-                    Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
-                    Vous pourrez mettre à jour vos réponses plus tard si votre statut change.
-                  </span>
-                </legend>
-                <div className="fr-fieldset__content">
-                  <div className="fr-radio-group">
-                    <input
-                      data-test-id="convention-signed-input"
-                      type="radio"
-                      id="signed-yes"
-                      name="signed"
-                      required
-                      checked={convention.isConventionSigned}
-                      onChange={() => setConvention({ ...convention, isConventionSigned: true })}
-                    />
-                    <label className="fr-label" htmlFor="signed-yes">Oui</label>
-                  </div>
-                  <div className="fr-radio-group">
-                    <input
-                      data-test-id="convention-unsigned-input"
-                      type="radio"
-                      id="signed-no"
-                      name="signed"
-                      required
-                      checked={!convention.isConventionSigned}
-                      onChange={() => setConvention({ ...convention, isConventionSigned: false })}
-                    />
-                    <label className="fr-label" htmlFor="signed-no">Non, pas encore</label>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
             <div className="fr-my-5w">
               <button
                 data-test-id="update-convention-button"
