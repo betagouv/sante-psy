@@ -309,4 +309,74 @@ describe('DB Psychologists', () => {
       }
     });
   });
+
+  describe('getPsychologistById', () => {
+    it('should return undefined if does not exist', async () => {
+      const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0123';
+
+      const returnedPsy = await dbPsychologists.getPsychologistById(unknownPsyId);
+
+      expect(returnedPsy).to.be.undefined;
+    });
+
+    it('should return psychologist if exists', async () => {
+      const psy = psyList[0];
+      await dbPsychologists.savePsychologistInPG([psy]);
+
+      const returnedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+
+      expect(returnedPsy).to.exist;
+      expect(returnedPsy.email).to.eql(psy.email);
+    });
+  });
+
+  describe('updatePsychologist', () => {
+    it('should do nothing if psychologist does not exist', async () => {
+      const psy = psyList[0];
+      const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0123';
+
+      const newEmail = 'new@email.fr';
+      const nbUpdated = await dbPsychologists.updatePsychologist(
+        unknownPsyId,
+        newEmail,
+        psy.address,
+        psy.departement,
+        psy.region,
+        psy.phone,
+        psy.website,
+        psy.description,
+        psy.teleconsultation,
+        psy.languages,
+        psy.personalEmail,
+      );
+
+      expect(nbUpdated).to.eql(0);
+    });
+
+    it('should update psychologist if exist', async () => {
+      const psy = psyList[0];
+      await dbPsychologists.savePsychologistInPG([psy]);
+      expect(psy.updatedAt).to.be.undefined;
+
+      const newEmail = 'new@email.fr';
+      const nbUpdated = await dbPsychologists.updatePsychologist(
+        psy.dossierNumber,
+        newEmail,
+        psy.address,
+        psy.departement,
+        psy.region,
+        psy.phone,
+        psy.website,
+        psy.description,
+        psy.teleconsultation,
+        psy.languages,
+        psy.personalEmail,
+      );
+
+      expect(nbUpdated).to.eql(1);
+      const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+      expect(updatedPsy.email).to.equal(newEmail);
+      expect(updatedPsy.updatedAt).to.not.be.undefined;
+    });
+  });
 });
