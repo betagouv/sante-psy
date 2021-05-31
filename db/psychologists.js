@@ -165,10 +165,6 @@ module.exports.getAcceptedPsychologistByEmail = function getAcceptedPsychologist
   .first();
 };
 
-module.exports.getPsychologistById = (id) => knex(psychologistsTable)
-  .andWhere('dossierNumber', id)
-  .first();
-
 /**
  * used to send email to not yet accepted users, instead of nothing
  * it can be tricky if there are multiple dossiers for the same personal emails
