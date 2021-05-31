@@ -131,7 +131,7 @@ module.exports.editPsyProfile = async (req, res) => {
 
     return res.json({
       success: true,
-      message: 'Les informations ont bien été mises à jour.',
+      message: 'Vos informations ont bien été mises à jour.',
     });
   } catch (err) {
     console.error('Erreur pour modifier le profil psy', err);

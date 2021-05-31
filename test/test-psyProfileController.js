@@ -347,7 +347,7 @@ describe('psyProfileController', () => {
         sinon.assert.notCalled(updatePsyStub);
 
         res.body.success.should.equal(true);
-        res.body.message.should.equal('Les informations ont bien été mises à jour.');
+        res.body.message.should.equal('Vos informations ont bien été mises à jour.');
       });
     };
 
@@ -561,7 +561,7 @@ describe('psyProfileController', () => {
         })
         .then(async (res) => {
           res.body.success.should.equal(true);
-          res.body.message.should.equal('Les informations ont bien été mises à jour.');
+          res.body.message.should.equal('Vos informations ont bien été mises à jour.');
 
           const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
           expect(updatedPsy.email).to.eql('public@email.com');
