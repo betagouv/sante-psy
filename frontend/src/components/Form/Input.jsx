@@ -7,7 +7,7 @@ const Input = props => {
     case 'checkbox':
       return <CheckBox {...props} />;
     case 'text':
-    case 'textare':
+    case 'textarea':
     default:
       return <TextInput {...props} />;
   }

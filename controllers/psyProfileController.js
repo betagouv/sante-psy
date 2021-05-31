@@ -10,14 +10,21 @@ module.exports.getPsyProfile = async (req, res) => {
       throw Error("Le psychologue n'existe pas.");
     }
 
-    // TODO: refactor (select on db ?)
-    const {
-      dossierNumber, adeli, archived, createdAt, updatedAt,
-      assignedUniversityId, declaredUniversityId, university,
-      isConventionSigned, state,
-      ...returnedFields
-    } = psychologist;
-    return res.json({ success: true, psychologist: returnedFields });
+    return res.json({
+      success: true,
+      psychologist: {
+        email: psychologist.email,
+        address: psychologist.address,
+        departement: psychologist.departement,
+        region: psychologist.region,
+        phone: psychologist.phone,
+        website: psychologist.website,
+        teleconsultation: psychologist.teleconsultation,
+        description: psychologist.description,
+        languages: psychologist.languages,
+        personalEmail: psychologist.personalEmail,
+      },
+    });
   } catch (err) {
     console.error('Error getPsyProfile', err);
     return res.json({ success: false, message: 'Erreur lors de la récupération du profil.' });
@@ -25,57 +32,43 @@ module.exports.getPsyProfile = async (req, res) => {
 };
 
 module.exports.editPsyProfilValidators = [
-  check('email')
+  check('personalEmail')
     .trim()
-    .not()
-    .isEmpty()
+    .notEmpty()
     .customSanitizer((value, { req }) => req.sanitize(value))
-    .withMessage('Vous devez spécifier votre email de contact.'),
+    .withMessage('Vous devez spécifier votre email personnel.'),
   check('address')
     .trim()
-    .not()
-    .isEmpty()
+    .notEmpty()
     .customSanitizer((value, { req }) => req.sanitize(value))
-    .withMessage("Vous devez spécifier l'adresse de votre cabinet"),
+    .withMessage("Vous devez spécifier l'adresse de votre cabinet."),
   check('departement')
     .trim()
-    .not()
-    .isEmpty()
+    .notEmpty()
     .customSanitizer((value, { req }) => req.sanitize(value))
     .withMessage('Vous devez spécifier votre département.'),
   check('region')
     .trim()
-    .not()
-    .isEmpty()
+    .notEmpty()
     .customSanitizer((value, { req }) => req.sanitize(value))
     .withMessage('Vous devez spécifier votre région.'),
   check('phone')
     .trim()
-    .not()
-    .isEmpty()
+    .notEmpty()
     .customSanitizer((value, { req }) => req.sanitize(value))
     .withMessage('Vous devez spécifier le téléphone du secrétariat.'),
-  oneOf(
-    [
-      // Two valid possibilities : website is empty, or website is valid format.
-      check('website').trim().isEmpty(),
-      check('website')
-        .trim()
-        .not()
-        .isEmpty()
-        .customSanitizer((value, { req }) => req.sanitize(value)),
-    ],
-    'Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.',
-  ),
+  check('languages')
+    .trim()
+    .notEmpty()
+    .customSanitizer((value, { req }) => req.sanitize(value))
+    .withMessage('Vous devez spécifier les langues parlées.'),
+  check('email')
+    .trim()
+    .customSanitizer((value, { req }) => req.sanitize(value)),
   check('description')
     .trim()
     .customSanitizer((value, { req }) => req.sanitize(value)),
-  check('teleconsultation')
-    .isBoolean(),
-  check('languages')
-    .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
-  check('personalEmail')
+  check('website')
     .trim()
     .customSanitizer((value, { req }) => req.sanitize(value)),
 ];

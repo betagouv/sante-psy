@@ -53,8 +53,6 @@ describe('psyProfileController', () => {
 
           const returnedPsy = res.body.psychologist;
           expect(returnedPsy).to.be.an('object').that.has.all.keys(
-            'firstNames',
-            'lastName',
             'email',
             'address',
             'departement',
@@ -64,13 +62,18 @@ describe('psyProfileController', () => {
             'teleconsultation',
             'description',
             'languages',
-            'training',
-            'diploma',
             'personalEmail',
           );
           expect(returnedPsy.email).to.eql(psy.email);
-          expect(returnedPsy.firstNames).to.eql(psy.firstNames);
-          // TODO: complete
+          expect(returnedPsy.address).to.eql(psy.address);
+          expect(returnedPsy.departement).to.eql(psy.departement);
+          expect(returnedPsy.region).to.eql(psy.region);
+          expect(returnedPsy.phone).to.eql(psy.phone);
+          expect(returnedPsy.website).to.eql(psy.website);
+          expect(returnedPsy.teleconsultation).to.eql(psy.teleconsultation);
+          expect(returnedPsy.description).to.eql(psy.description);
+          expect(returnedPsy.languages).to.eql(psy.languages);
+          expect(returnedPsy.personalEmail).to.eql(psy.personalEmail);
         });
     });
   });
@@ -88,57 +91,297 @@ describe('psyProfileController', () => {
       return Promise.resolve();
     });
 
-    // Test example for mandatory fields
+    const shouldFailUpdatePsyInputValidation = (done, postData, message) => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'prenom.nom@beta.gouv.fr',
+      };
 
-    // const shouldFailUpdatePsyInputValidation = (done, postData, message) => {
-    //   const psy = {
-    //     dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-    //     email: 'prenom.nom@beta.gouv.fr',
-    //   };
+      chai.request(app)
+      .put(`/api/psychologue/${psy.dossierNumber}`)
+      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+      .send(postData)
+      .then(async (res) => {
+        sinon.assert.notCalled(updatePsyStub);
 
-    //   chai.request(app)
-    //   .put(`/api/psychologue/${psy.dossierNumber}`)
-    //   .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
-    //   .send(postData)
-    //   .then(async (res) => {
-    //     sinon.assert.notCalled(updatePsyStub);
+        res.body.success.should.equal(false);
+        res.body.message.should.equal(message);
 
-    //     res.body.success.should.equal(false);
-    //     res.body.message.should.equal(message);
+        done();
+      });
+    };
 
-    //     done();
-    //   });
-    // };
+    it('should refuse empty personalEmail', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        // no personalEmail
+      }, 'Vous devez spécifier votre email personnel.');
+    });
 
-    // it('should refuse empty ', (done) => {
-    //   shouldFailUpdatePsyInputValidation(done, {
-    //     email: 'public@email.com',
-    //     address: '1 rue du Pôle Nord',
-    //     departement: '59 - Nord',
-    //     region: 'Hauts-de-France',
-    //     phone: '01 02 03 04 05',
-    //     website: 'https://monwebsite.fr',
-    //     description: 'Consultez un psychologue gratuitement',
-    //     teleconsultation: true,
-    //     languages: 'Français, Anglais',
-    //     personalEmail: 'perso@email.com',
-    //   }, 'Vous devez spécifier votre prénom.');
-    // });
+    it('should refuse whitespace personalEmail', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: '  ',
+      }, 'Vous devez spécifier votre email personnel.');
+    });
 
-    // it('should refuse whitespace ', (done) => {
-    //   shouldFailUpdatePsyInputValidation(done, {
-    //     email: 'public@email.com',
-    //     address: '1 rue du Pôle Nord',
-    //     departement: '59 - Nord',
-    //     region: 'Hauts-de-France',
-    //     phone: '01 02 03 04 05',
-    //     website: 'https://monwebsite.fr',
-    //     description: 'Consultez un psychologue gratuitement',
-    //     teleconsultation: true,
-    //     languages: 'Français, Anglais',
-    //     personalEmail: 'perso@email.com',
-    //   }, 'Vous devez spécifier votre prénom.');
-    // });
+    it('should refuse empty address', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        // no address
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, "Vous devez spécifier l'adresse de votre cabinet.");
+    });
+
+    it('should refuse whitespace address', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        address: '  ',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, "Vous devez spécifier l'adresse de votre cabinet.");
+    });
+
+    it('should refuse empty departement', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        // no departement
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier votre département.');
+    });
+
+    it('should refuse whitespace departement', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '   ',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier votre département.');
+    });
+
+    it('should refuse empty region', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        // no region
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier votre région.');
+    });
+
+    it('should refuse whitespace region', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: '  ',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier votre région.');
+    });
+
+    it('should refuse empty phone', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        // no phone
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier le téléphone du secrétariat.');
+    });
+
+    it('should refuse whitespace phone', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '  ',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier le téléphone du secrétariat.');
+    });
+
+    it('should refuse empty languages', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        // no languages
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier les langues parlées.');
+    });
+
+    it('should refuse whitespace languages', (done) => {
+      shouldFailUpdatePsyInputValidation(done, {
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: '   ',
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier les langues parlées.');
+    });
+
+    const shouldPassUpdatePsyInputValidation = async (postData) => {
+      const psyList = clean.psyList();
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = psyList[0];
+
+      chai.request(app)
+      .put(`/api/psychologue/${psy.dossierNumber}`)
+      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.email, psy.dossierNumber)}`)
+      .send(postData)
+      .then(async (res) => {
+        sinon.assert.notCalled(updatePsyStub);
+
+        res.body.success.should.equal(true);
+        res.body.message.should.equal('Les informations ont bien été mises à jour.');
+      });
+    };
+
+    it('should pass validation when teleconsultation is missing', async () => {
+      await shouldPassUpdatePsyInputValidation({
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        // teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      });
+    });
+
+    it('should pass validation when email is missing', async () => {
+      await shouldPassUpdatePsyInputValidation({
+        email: '',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      });
+    });
+
+    it('should pass validation when website is missing', async () => {
+      await shouldPassUpdatePsyInputValidation({
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: '',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      });
+    });
+
+    it('should pass validation when description is missing', async () => {
+      await shouldPassUpdatePsyInputValidation({
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: '',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      });
+    });
+
+    it('should pass validation when optional fields are missing', async () => {
+      await shouldPassUpdatePsyInputValidation({
+        email: '',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: '',
+        description: '',
+        teleconsultation: true,
+        languages: '',
+        personalEmail: 'perso@email.com',
+      });
+    });
 
     it('should sanitize string fields', (done) => {
       const psy = {
