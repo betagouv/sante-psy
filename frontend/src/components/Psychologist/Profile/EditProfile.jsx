@@ -47,7 +47,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             field="departement"
             value={psychologist.departement}
             onChange={changePsychologist}
-            options={DEPARTEMENTS}
+            options={DEPARTEMENTS.map(departement => ({ id: departement, label: departement }))}
             data-test-id="departement-select"
             required
           />
@@ -57,7 +57,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             field="region"
             value={psychologist.region}
             onChange={changePsychologist}
-            options={REGIONS}
+            options={REGIONS.map(region => ({ id: region, label: region }))}
             data-test-id="region-select"
             required
           />
@@ -90,13 +90,22 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             placeholder="exemple@beta.gouv.fr"
           />
           <Input
-            label="Je propose de la téléconsultation"
-            hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
-            type="checkbox"
-            field="teleconsultation"
-            value={psychologist.teleconsultation}
-            onChange={changePsychologist}
-          />
+              type="radio"
+              value={psychologist.teleconsultation}
+              field="teleconsultation"
+              onChange={value => changePsychologist(value, "teleconsultation")}
+              label="Proposez-vous de la téléconsultation ?"
+              hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
+              options={[
+                {
+                  id: true,
+                  label: 'Oui',
+                }, {
+                  id: false,
+                  label: 'Non',
+                },
+              ]}
+            />
           <Input
             label="Langues parlées"
             hint="Exemple : &ldquo;Français, Anglais&rdquo;"
