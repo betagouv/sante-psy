@@ -90,22 +90,22 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             placeholder="exemple@beta.gouv.fr"
           />
           <Input
-              type="radio"
-              value={psychologist.teleconsultation}
-              field="teleconsultation"
-              onChange={value => changePsychologist(value, "teleconsultation")}
-              label="Proposez-vous de la téléconsultation ?"
-              hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
-              options={[
-                {
-                  id: true,
-                  label: 'Oui',
-                }, {
-                  id: false,
-                  label: 'Non',
-                },
-              ]}
-            />
+            type="radio"
+            value={psychologist.teleconsultation}
+            field="teleconsultation"
+            onChange={value => changePsychologist(value, 'teleconsultation')}
+            label="Proposez-vous de la téléconsultation ?"
+            hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
+            options={[
+              {
+                id: true,
+                label: 'Oui',
+              }, {
+                id: false,
+                label: 'Non',
+              },
+            ]}
+          />
           <Input
             label="Langues parlées"
             hint="Exemple : &ldquo;Français, Anglais&rdquo;"
