@@ -1,8 +1,5 @@
 /* eslint-disable no-multi-str */
 /* eslint-disable max-len */
-const React = require('react');
-
-const contact = <a href="mailto:support-santepsyetudiant@beta.gouv.fr">support-santepsyetudiant@beta.gouv.fr</a>;
 module.exports = () => [
   {
     question: "Je n'arrive pas à entrer mes séances sur la plateforme. Comment faire ?",
