@@ -1,4 +1,3 @@
-const { KnownDirectivesRule } = require('graphql');
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
@@ -113,8 +112,6 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
   const universities = await dbUniversities.getUniversities();
 
   const upsertArray = psyList.map(async (psy) => {
-    const upsertingKey = 'dossierNumber';
-
     psy.languages = addFrenchLanguageIfMissing(psy.languages);
     psy.assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
 
@@ -145,9 +142,6 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
         lastName: psy.lastName,
         archived: psy.archived,
         state: psy.state,
-        training: psy.training,
-        adeli: psy.adeli,
-        diploma: psy.diploma,
         address: psy.address,
         region: psy.region,
         departement: psy.departement,
@@ -157,6 +151,9 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
         personalEmail: psy.personalEmail,
         teleconsultation: psy.teleconsultation,
         description: psy.description,
+        training: psy.training,
+        adeli: psy.adeli,
+        diploma: psy.diploma,
         languages: addFrenchLanguageIfMissing(psy.languages),
         // assignedUniversityId, do not update assignedId on already existing psy
         updatedAt,
