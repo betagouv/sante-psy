@@ -27,16 +27,114 @@ describe('DB Psychologists', () => {
       exist.should.be.equal(true);
     });
 
-    it('should UPsert one psychologist in PG', async () => {
+    it('should update one psychologist in PG', async () => {
       // doing a classic insert
       await dbPsychologists.savePsychologistInPG(psyList);
       const psyInsert = await dbPsychologists.getPsychologistById(psyList[0].dossierNumber);
       assert.isNull(psyInsert.updatedAt);
 
-      // we do it twice in a row to UPsert it (field updatedAt will change)
+      // we do it twice in a row to update it (field updatedAt will change)
       await dbPsychologists.savePsychologistInPG(psyList);
       const psyUpsert = await dbPsychologists.getPsychologistById(psyList[0].dossierNumber);
       assert.isNotNull(psyUpsert.updatedAt);
+    });
+
+    it('should update psy if not self modified', async () => {
+      const psyDS = psyList[0];
+
+      // First save psy from DS
+      await dbPsychologists.savePsychologistInPG([psyDS]);
+      const psySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      assert.isNotTrue(psySPE.selfModified);
+      assert.isNull(psySPE.updatedAt);
+      psySPE.firstNames.should.be.equal(psyDS.firstNames);
+      psySPE.region.should.be.equal('Normandie');
+
+      // Update from DS (new firstname and new region)
+      const newPsyDS = { ...psyDS };
+      newPsyDS.firstNames = 'New firstname';
+      newPsyDS.region = 'Bretagne';
+      await dbPsychologists.savePsychologistInPG([newPsyDS]);
+
+      // Assert that data changed are modified in SPE DB
+      const updatedPsySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      updatedPsySPE.firstNames.should.be.equal('New firstname');
+      updatedPsySPE.region.should.be.equal('Bretagne');
+      assert.isFalse(updatedPsySPE.selfModified);
+    });
+
+    it('should not update region if self modified', async () => {
+      const psyDS = psyList[0];
+
+      // First save psy from DS
+      await dbPsychologists.savePsychologistInPG([psyDS]);
+      const psySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      assert.isFalse(psySPE.selfModified);
+      assert.isNull(psySPE.updatedAt);
+      psySPE.firstNames.should.be.equal(psyDS.firstNames);
+      psySPE.region.should.be.equal('Normandie');
+
+      // Update psy in SPE
+      const nbUpdated = await dbPsychologists.updatePsychologist(
+        psyDS.dossierNumber,
+        psyDS.email,
+        psyDS.address,
+        psyDS.departement,
+        'Bretagne',
+        psyDS.phone,
+        psyDS.website,
+        psyDS.description,
+        psyDS.teleconsultation,
+        psyDS.languages,
+        psyDS.personalEmail,
+      );
+      nbUpdated.should.be.equal(1);
+
+      // Update from DS (region : Normandie)
+      await dbPsychologists.savePsychologistInPG([psyDS]);
+
+      // Assert that data didn't changed in SPE DB
+      const updatedPsySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      updatedPsySPE.selfModified.should.be.true;
+      updatedPsySPE.region.should.be.equal('Bretagne');
+    });
+
+    it('should still update firstname if self modified', async () => {
+      const psyDS = psyList[0];
+
+      // First save psy from DS
+      await dbPsychologists.savePsychologistInPG([psyDS]);
+      const psySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      assert.isFalse(psySPE.selfModified);
+      assert.isNull(psySPE.updatedAt);
+      psySPE.firstNames.should.be.equal(psyDS.firstNames);
+
+      // Update psy in SPE
+      const nbUpdated = await dbPsychologists.updatePsychologist(
+        psyDS.dossierNumber,
+        psyDS.email,
+        psyDS.address,
+        psyDS.departement,
+        psyDS.region,
+        psyDS.phone,
+        psyDS.website,
+        psyDS.description,
+        psyDS.teleconsultation,
+        psyDS.languages,
+        psyDS.personalEmail,
+        true,
+      );
+      nbUpdated.should.be.equal(1);
+
+      // Update from DS (new firstname)
+      const newPsyDS = { ...psyDS };
+      newPsyDS.firstNames = 'New firstname';
+      await dbPsychologists.savePsychologistInPG([newPsyDS]);
+
+      // Assert that data changed are modified in SPE DB
+      const updatedPsySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      updatedPsySPE.selfModified.should.be.true;
+      updatedPsySPE.firstNames.should.be.equal('New firstname');
     });
   });
 
@@ -377,6 +475,7 @@ describe('DB Psychologists', () => {
       const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
       expect(updatedPsy.email).to.equal(newEmail);
       expect(updatedPsy.updatedAt).to.not.be.undefined;
+      expect(updatedPsy.selfModified).to.be.true;
     });
   });
 });

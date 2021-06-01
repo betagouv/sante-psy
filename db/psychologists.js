@@ -1,3 +1,4 @@
+const { KnownDirectivesRule } = require('graphql');
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
@@ -89,6 +90,19 @@ function addFrenchLanguageIfMissing(languages) {
   return languages;
 }
 
+const getPsychologistById = async (psychologistId) => {
+  try {
+    const psychologist = await knex(module.exports.psychologistsTable)
+      .where('dossierNumber', psychologistId)
+      .first();
+    return psychologist;
+  } catch (err) {
+    console.error('Impossible de récupérer le psychologue', err);
+    throw new Error('Impossible de récupérer le psychologue');
+  }
+};
+module.exports.getPsychologistById = getPsychologistById;
+
 /**
  * Perform a UPSERT with https://knexjs.org/#Builder-merge
  * @param {*} psy
@@ -98,22 +112,42 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
   const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
   const universities = await dbUniversities.getUniversities();
 
-  const upsertArray = psyList.map((psy) => {
+  const upsertArray = psyList.map(async (psy) => {
     const upsertingKey = 'dossierNumber';
 
     psy.languages = addFrenchLanguageIfMissing(psy.languages);
-
     psy.assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
 
     try {
-      return knex(psychologistsTable)
-      .insert(psy)
-      .onConflict(upsertingKey)
-      .merge({ // update every field and add updatedAt
+      const psyInDb = await getPsychologistById(psy.dossierNumber);
+
+      if (!psyInDb) {
+        // If psy doesn't exist in DB, then insert it
+        return knex(psychologistsTable).insert(psy);
+      } if (psyInDb.selfModified) {
+        // If psy exists in DB and already modified by psy
+        // Then do not update fields modified by psy
+        return knex(psychologistsTable).update({
+          firstNames: psy.firstNames,
+          lastName: psy.lastName,
+          archived: psy.archived,
+          state: psy.state,
+          training: psy.training,
+          adeli: psy.adeli,
+          diploma: psy.diploma,
+          updatedAt,
+        });
+      }
+      // If psy exists in DB and never modified by psy
+      // Then update everything
+      return knex(psychologistsTable).update({
         firstNames: psy.firstNames,
         lastName: psy.lastName,
         archived: psy.archived,
         state: psy.state,
+        training: psy.training,
+        adeli: psy.adeli,
+        diploma: psy.diploma,
         address: psy.address,
         region: psy.region,
         departement: psy.departement,
@@ -123,9 +157,6 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
         personalEmail: psy.personalEmail,
         teleconsultation: psy.teleconsultation,
         description: psy.description,
-        training: psy.training,
-        adeli: psy.adeli,
-        diploma: psy.diploma,
         languages: addFrenchLanguageIfMissing(psy.languages),
         // assignedUniversityId, do not update assignedId on already existing psy
         updatedAt,
@@ -218,18 +249,6 @@ module.exports.deleteConventionInfo = (email) => knex
   })
   .where('personalEmail', email);
 
-module.exports.getPsychologistById = async (psychologistId) => {
-  try {
-    const psychologist = await knex(module.exports.psychologistsTable)
-      .where('dossierNumber', psychologistId)
-      .first();
-    return psychologist;
-  } catch (err) {
-    console.error('Impossible de récupérer le psychologue', err);
-    throw new Error('Impossible de récupérer le psychologue');
-  }
-};
-
 module.exports.updatePsychologist = async (psychologistId,
   email, address, departement, region, phone, website,
   description, teleconsultation, languages, personalEmail) => {
@@ -248,6 +267,7 @@ module.exports.updatePsychologist = async (psychologistId,
         languages,
         personalEmail,
         updatedAt: date.getDateNowPG(),
+        selfModified: true,
       });
   } catch (err) {
     console.error('Erreur de modification du psychologue', err);
