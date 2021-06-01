@@ -253,7 +253,7 @@ module.exports.updatePsychologist = async (psychologistId,
   email, address, departement, region, phone, website,
   description, teleconsultation, languages, personalEmail) => {
   try {
-    return await knex(module.exports.psychologistsTable)
+    await knex(module.exports.psychologistsTable)
       .where('dossierNumber', psychologistId)
       .update({
         email,

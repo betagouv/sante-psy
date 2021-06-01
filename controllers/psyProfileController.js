@@ -70,9 +70,8 @@ module.exports.editPsyProfilValidators = [
       check('email')
           .trim()
           .customSanitizer((value, { req }) => req.sanitize(value))
-          .isEmail()
-          .withMessage('Vous devez spécifier un email valide.'),
-    ],
+          .isEmail(),
+    ], 'Vous devez spécifier un email valide.',
   ),
   check('description')
     .trim()
@@ -84,9 +83,8 @@ module.exports.editPsyProfilValidators = [
       check('website')
             .trim()
             .customSanitizer((value, { req }) => req.sanitize(value))
-            .isURL()
-            .withMessage('Vous devez spécifier une URL valide.'),
-    ],
+            .isURL(),
+    ], 'Vous devez spécifier une URL valide.',
   ),
 ];
 
@@ -111,7 +109,7 @@ module.exports.editPsyProfile = async (req, res) => {
     // Force to boolean beacause checkbox value send undefined when it's not checked
     const teleconsultation = Boolean(req.body.teleconsultation);
 
-    const nbUpdated = await dbPsychologists.updatePsychologist(
+    await dbPsychologists.updatePsychologist(
       psyId,
       email,
       address,
@@ -124,10 +122,6 @@ module.exports.editPsyProfile = async (req, res) => {
       languages,
       personalEmail,
     );
-
-    if (nbUpdated === 0) {
-      throw Error('La requête de mise à jour n\'a modifié aucune ligne.');
-    }
 
     return res.json({
       success: true,

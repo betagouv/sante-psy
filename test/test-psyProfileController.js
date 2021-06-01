@@ -97,16 +97,15 @@ describe('psyProfileController', () => {
         email: 'prenom.nom@beta.gouv.fr',
       };
 
-      chai.request(app)
+      const res = await chai.request(app)
       .put(`/api/psychologue/${psy.dossierNumber}`)
       .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
-      .send(postData)
-      .then(async (res) => {
-        sinon.assert.notCalled(updatePsyStub);
+      .send(postData);
 
-        res.body.success.should.equal(false);
-        res.body.message.should.equal(message);
-      });
+      sinon.assert.notCalled(updatePsyStub);
+
+      res.body.success.should.equal(false);
+      res.body.message.should.equal(message);
     };
 
     it('should refuse empty personalEmail', async () => {
@@ -326,7 +325,7 @@ describe('psyProfileController', () => {
         departement: '59 - Nord',
         region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
-        website: 'monwebsite.fr',
+        website: 'monwebsite',
         description: 'Consultez un psychologue gratuitement',
         teleconsultation: true,
         languages: 'Français, Anglais',
@@ -334,21 +333,37 @@ describe('psyProfileController', () => {
       }, 'Vous devez spécifier une URL valide.');
     });
 
+    it('should refuse multiple invalid fields', async () => {
+      await shouldFailUpdatePsyInputValidation({
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '',
+        website: 'http://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso',
+      }, 'Vous devez spécifier le téléphone du secrétariat.'); // first error is returned
+    });
+
     const shouldPassUpdatePsyInputValidation = async (postData) => {
       const psyList = clean.psyList();
       await dbPsychologists.savePsychologistInPG(psyList);
       const psy = psyList[0];
 
-      chai.request(app)
+      const res = await chai.request(app)
       .put(`/api/psychologue/${psy.dossierNumber}`)
       .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
-      .send(postData)
-      .then(async (res) => {
-        sinon.assert.notCalled(updatePsyStub);
+      .send(postData);
 
-        res.body.success.should.equal(true);
-        res.body.message.should.equal('Vos informations ont bien été mises à jour.');
-      });
+      console.log(res.body);
+
+      sinon.assert.called(updatePsyStub);
+
+      res.body.success.should.equal(true);
+      res.body.message.should.equal('Vos informations ont bien été mises à jour.');
     };
 
     it('should pass validation when teleconsultation is missing', async () => {
@@ -413,15 +428,15 @@ describe('psyProfileController', () => {
 
     it('should pass validation when optional fields are missing', async () => {
       await shouldPassUpdatePsyInputValidation({
-        email: '',
+        email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
         region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
-        website: '',
+        website: 'https://monwebsite.fr',
         description: '',
         teleconsultation: true,
-        languages: '',
+        languages: 'Français',
         personalEmail: 'perso@email.com',
       });
     });
@@ -513,7 +528,7 @@ describe('psyProfileController', () => {
         });
     });
 
-    it('should not update psy profile if it does not exists', async () => {
+    it('should do nothing if it does not exists', async () => {
       const psyList = clean.psyList();
       const psy = psyList[0];
 
@@ -533,9 +548,8 @@ describe('psyProfileController', () => {
           personalEmail: 'perso@email.com',
         })
         .then(async (res) => {
-          res.body.success.should.equal(false);
-          res.body.message
-          .should.equal('Erreur. Les informations n\'ont pas été mises à jour. Pourriez-vous réessayer ?');
+          res.body.success.should.equal(true);
+          res.body.message.should.equal('Vos informations ont bien été mises à jour.');
         });
     });
 
