@@ -108,56 +108,62 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
 
     const psyInDB = this.getPsychologistById(psy.id);
 
+    const psyIsSelfModified = knex(psychologistsTable)
+    .update({
+      firstNames: psy.firstNames,
+      lastName: psy.lastName,
+      archived: psy.archived,
+      state: psy.state,
+      // db
+      // address: psyInDB.address,
+      // region: psyInDB.region,
+      // departement: psyInDB.departement,
+      // phone: psyInDB.phone,
+      // website: psyInDB.website,
+      // email: psyInDB.email,
+      // personalEmail: psyInDB.personalEmail,
+      // teleconsultation: psyInDB.teleconsultation,
+      // description: psyInDB.description,
+      // db
+      training: psy.training,
+      adeli: psy.adeli,
+      diploma: psy.diploma,
+      // languages: addFrenchLanguageIfMissing(psyInDB.languages),
+      updatedAt,
+    });
+
+    const psyMergeFromDS = knex(psychologistsTable)
+    .insert(psy)
+    .onConflict(upsertingKey)
+    .merge({ // update every field and add updatedAt
+      firstNames: psy.firstNames,
+      lastName: psy.lastName,
+      archived: psy.archived,
+      state: psy.state,
+      address: psy.address,
+      region: psy.region,
+      departement: psy.departement,
+      phone: psy.phone,
+      website: psy.website,
+      email: psy.email,
+      personalEmail: psy.personalEmail,
+      teleconsultation: psy.teleconsultation,
+      description: psy.description,
+      training: psy.training,
+      adeli: psy.adeli,
+      diploma: psy.diploma,
+      languages: addFrenchLanguageIfMissing(psy.languages),
+      // assignedUniversityId, do not update assignedId on already existing psy
+      updatedAt,
+    });
+
     try {
       if (psyInDB && psyInDB.isSelfModified === true) {
-        return knex(psychologistsTable)
-        .update({
-          firstNames: psy.firstNames,
-          lastName: psy.lastName,
-          archived: psy.archived,
-          state: psy.state,
-          // db
-          // address: psyInDB.address,
-          // region: psyInDB.region,
-          // departement: psyInDB.departement,
-          // phone: psyInDB.phone,
-          // website: psyInDB.website,
-          // email: psyInDB.email,
-          // personalEmail: psyInDB.personalEmail,
-          // teleconsultation: psyInDB.teleconsultation,
-          // description: psyInDB.description,
-          // db
-          training: psy.training,
-          adeli: psy.adeli,
-          diploma: psy.diploma,
-          // languages: addFrenchLanguageIfMissing(psyInDB.languages),
-          updatedAt,
-        });
+        console.log(psyIsSelfModified);
+        return psyIsSelfModified;
       }
-      return knex(psychologistsTable)
-        .insert(psy)
-        .onConflict(upsertingKey)
-        .merge({ // update every field and add updatedAt
-          firstNames: psy.firstNames,
-          lastName: psy.lastName,
-          archived: psy.archived,
-          state: psy.state,
-          address: psy.address,
-          region: psy.region,
-          departement: psy.departement,
-          phone: psy.phone,
-          website: psy.website,
-          email: psy.email,
-          personalEmail: psy.personalEmail,
-          teleconsultation: psy.teleconsultation,
-          description: psy.description,
-          training: psy.training,
-          adeli: psy.adeli,
-          diploma: psy.diploma,
-          languages: addFrenchLanguageIfMissing(psy.languages),
-          // assignedUniversityId, do not update assignedId on already existing psy
-          updatedAt,
-        });
+      console.log(psyMergeFromDS);
+      return psyMergeFromDS;
     } catch (err) {
       console.error(`Error to insert ${psy}`, err);
       return Promise.resolve();
