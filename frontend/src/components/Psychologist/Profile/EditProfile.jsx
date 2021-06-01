@@ -33,6 +33,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
              Santé Psy Etudiant."
             type="text"
             field="personalEmail"
+            data-test-id="psy-personal-email-input"
             value={psychologist.personalEmail}
             onChange={changePsychologist}
             pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
@@ -45,6 +46,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             label="Votre département"
             type="select"
             field="departement"
+            data-test-id="psy-departement-select"
             value={psychologist.departement}
             onChange={changePsychologist}
             options={DEPARTEMENTS.map(departement => ({ id: departement, label: departement }))}
@@ -55,6 +57,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             label="Votre région"
             type="select"
             field="region"
+            data-test-id="psy-region-select"
             value={psychologist.region}
             onChange={changePsychologist}
             options={REGIONS.map(region => ({ id: region, label: region }))}
@@ -66,6 +69,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             hint="Adresse où se rendre pour le rendez-vous."
             type="text"
             field="address"
+            data-test-id="psy-address-input"
             value={psychologist.address}
             onChange={changePsychologist}
             required
@@ -75,6 +79,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             hint="Numéro auquel prendre rendez-vous."
             type="text"
             field="phone"
+            data-test-id="psy-phone-input"
             value={psychologist.phone}
             onChange={changePsychologist}
             required
@@ -84,6 +89,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             hint="Adresse email à laquelle prendre rendez-vous ou poser des questions."
             type="text"
             field="email"
+            data-test-id="psy-email-input"
             value={psychologist.email}
             onChange={changePsychologist}
             pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
@@ -111,6 +117,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             hint="Exemple : &ldquo;Français, Anglais&rdquo;"
             type="text"
             field="languages"
+            data-test-id="psy-languages-input"
             value={psychologist.languages}
             onChange={changePsychologist}
             required
@@ -120,6 +127,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             hint="Site sur lequel l'étudiant pourra trouver plus d'info sur votre cabinet ou vos services."
             type="text"
             field="website"
+            data-test-id="psy-website-input"
             value={psychologist.website}
             onChange={changePsychologist}
           />
@@ -129,6 +137,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             de l'anxiété.&rdquo;"
             type="textarea"
             field="description"
+            data-test-id="psy-description-input"
             value={psychologist.description}
             onChange={changePsychologist}
           />

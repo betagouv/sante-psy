@@ -24,7 +24,6 @@ describe('Profile', () => {
         .should('not.exist');
       cy.get('[data-test-id="personal-email-info"]')
         .should('have.text', 'Email personnel : login@beta.gouv.fr');
-      // TODO check fields
     });
   });
 
@@ -34,15 +33,16 @@ describe('Profile', () => {
         .click();
       cy.get('[data-test-id="edit-profile-form"]')
         .should('exist');
-      // TODO check fields
+      cy.get('[data-test-id="psy-personal-email-input"]')
+        .clear()
+        .type('new@beta.gouv.fr');
       cy.get('[data-test-id="save-profile-button"]')
         .click();
       cy.wait('@updateProfile');
       cy.get('[data-test-id="edit-profile-form"]')
         .should('not.exist');
       cy.get('[data-test-id="personal-email-info"]')
-        .should('have.text', 'Email personnel : login@beta.gouv.fr');
-      // TODO check fields
+        .should('have.text', 'Email personnel : new@beta.gouv.fr');
       cy.get('[data-test-id="notification-success"]')
         .should(
           'have.text',
