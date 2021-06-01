@@ -50,7 +50,6 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             value={psychologist.departement}
             onChange={changePsychologist}
             options={DEPARTEMENTS.map(departement => ({ id: departement, label: departement }))}
-            data-test-id="departement-select"
             required
           />
           <Input
@@ -61,7 +60,6 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             value={psychologist.region}
             onChange={changePsychologist}
             options={REGIONS.map(region => ({ id: region, label: region }))}
-            data-test-id="region-select"
             required
           />
           <Input
