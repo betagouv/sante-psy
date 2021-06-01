@@ -93,7 +93,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             type="radio"
             value={psychologist.teleconsultation}
             field="teleconsultation"
-            onChange={value => changePsychologist(value, 'teleconsultation')}
+            onChange={changePsychologist}
             label="Proposez-vous de la téléconsultation ?"
             hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
             options={[

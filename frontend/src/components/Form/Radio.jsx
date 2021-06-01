@@ -21,7 +21,7 @@ const Radio = ({ value, options, field, required, label, hint, onChange }) => (
               name={field}
               required={required}
               checked={value === option.id}
-              onChange={() => { onChange(option.id); }}
+              onChange={() => { onChange(option.id, field); }}
             />
             <label className="fr-label" htmlFor={`${field}-${option.id}`}>{option.label}</label>
           </div>
