@@ -1,11 +1,13 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
 
-const ejs = require('ejs');
-const dbsApiCursor = require('../db/dsApiCursor');
-const dbPsychologists = require('../db/psychologists');
-const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
-const config = require('../utils/config');
-const emailUtils = require('../utils/email');
+import ejs from 'ejs';
+import dbsApiCursor from '../db/dsApiCursor';
+import dbPsychologists from '../db/psychologists';
+import demarchesSimplifiees from '../utils/demarchesSimplifiees';
+import config from '../utils/config';
+import emailUtils from '../utils/email';
+
+dotenv.config();
 
 /**
  * Some data can be modified after been loaded inside PG
@@ -37,14 +39,6 @@ async function importDataFromDSToPG(updateEverything = false) {
   }
 }
 
-module.exports.importEveryDataFromDSToPG = async function importEveryDataFromDSToPG() {
-  importDataFromDSToPG(true);
-};
-
-module.exports.importLatestDataFromDSToPG = async function importLatestDataFromDSToPG() {
-  importDataFromDSToPG(false);
-};
-
 const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
   try {
     const html = await ejs.renderFile('./views/emails/multipleAcceptedAlert.ejs', {
@@ -69,4 +63,14 @@ const checkForMultipleAcceptedDossiers = async () => {
 
   return true;
 };
-module.exports.checkForMultipleAcceptedDossiers = checkForMultipleAcceptedDossiers;
+
+const autoAcceptPsychologists = async () => {
+  demarchesSimplifiees.autoAcceptPsychologist();
+};
+
+export default {
+  importEveryDataFromDSToPG: async () => importDataFromDSToPG(true),
+  importLatestDataFromDSToPG: async () => importDataFromDSToPG(false),
+  checkForMultipleAcceptedDossiers,
+  autoAcceptPsychologists,
+};

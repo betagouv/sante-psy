@@ -1,4 +1,5 @@
 require('dotenv').config();
+const autoAcceptMessage = require('./configDS/autoAcceptMessage');
 
 const hostnameWithProtocol = process.env.HOSTNAME_WITH_PROTOCOL || 'http://localhost:8080';
 const { protocol } = new URL(hostnameWithProtocol);
@@ -23,11 +24,16 @@ module.exports = {
   dateOfBirthDeploymentDate: process.env.DATE_OF_BIRTH_FEATURE_DATE || '20/04/2021',
   demarchesSimplifieesId: process.env.DEMARCHES_SIMPLIFIEES_ID,
   demarchesSimplifieesUrl: process.env.DEMARCHES_SIMPLIFIEES_URL,
+  demarchesSimplifieesAutoAcceptDepartments: process.env.DEMARCHES_SIMPLIFIEES_AUTO_ACCEPT_DEPARTMENTS || [],
+  demarchesSimplifieesAutoAcceptMessage: autoAcceptMessage,
+  demarchesSimplifieesAutoAcceptDelay: process.env.DEMARCHES_SIMPLIFIEES_AUTO_ACCEPT_DELAY,
+  demarchesSimplifieesInstructor: process.env.DEMARCHES_SIMPLIFIEES_INSTRUCTOR,
   sentryDNS: process.env.SENTRY_DNS || false,
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
   featureSendSummary: process.env.FEATURE_SEND_SUMMARY || false,
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
+  featureAutoAccept: process.env.FEATURE_AUTO_ACCEPT || false,
   featureReimbursementPage: (process.env.FEATURE_REIMBURSEMENT_PAGE === 'true'),
   uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid
   secret,

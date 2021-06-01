@@ -1,12 +1,14 @@
-require('dotenv').config();
-const ejs = require('ejs');
+import dotenv from 'dotenv';
+import ejs from 'ejs';
 
-const date = require('../utils/date');
-const logs = require('../utils/logs');
-const config = require('../utils/config');
-const emailUtils = require('../utils/email');
-const dbAppointments = require('../db/appointments');
-const dbUniversities = require('../db/universities');
+import date from '../utils/date';
+import logs from '../utils/logs';
+import config from '../utils/config';
+import emailUtils from '../utils/email';
+import dbAppointments from '../db/appointments';
+import dbUniversities from '../db/universities';
+
+dotenv.config();
 
 const getSummariesForUniversities = (allAppointmentsSummary) => {
   const universityContent = {};
@@ -38,8 +40,6 @@ const getSummariesForUniversities = (allAppointmentsSummary) => {
   });
   return universityContent;
 };
-
-module.exports.getSummariesForUniversities = getSummariesForUniversities;
 
 async function formatSummaryEmail(summaryDate, psychologists) {
   const totalAppointments = psychologists.reduce((accumulator, psy) => accumulator + psy.countAppointments, 0);
@@ -80,7 +80,7 @@ const sendMailToUniversities = async (summaryUniversities, summaryDate) => {
   });
 };
 
-const SendSummaryToUniversities = async () => {
+const sendSummaryToUniversities = async () => {
   console.log('Starting SendSummaryToUniversities...');
   const summaryDate = date.getLastMonthAndYear(new Date());
   console.log(`last month: ${summaryDate.lastMonth} and year ${summaryDate.year}`);
@@ -97,4 +97,8 @@ const SendSummaryToUniversities = async () => {
     console.error('ERROR: Could not send psychologists informations to universities.', err);
   }
 };
-module.exports.SendSummaryToUniversities = SendSummaryToUniversities;
+
+export default {
+  sendSummaryToUniversities,
+  getSummariesForUniversities,
+};

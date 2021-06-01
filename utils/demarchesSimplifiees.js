@@ -13,18 +13,15 @@ exports.DOSSIER_STATE = {
   sans_suite: 'sans_suite',
 };
 
-function getChampValue(champData, attributeName, stringValue = true) {
+function getChampValue(champData, attributeName) {
   const potentialStringValue = champData.find((champ) => champ.label === attributeName);
 
   if (typeof potentialStringValue === 'undefined') {
     console.warn(`Champ from API ${attributeName} does not exist`);
-
     return '';
   }
-  if (stringValue) {
-    return potentialStringValue.stringValue.trim();
-  }
-  return potentialStringValue.value.trim();
+
+  return potentialStringValue.stringValue.trim();
 }
 
 /**
@@ -51,65 +48,41 @@ function getUuidDossierNumber(number) {
 }
 
 function parseDossierMetadata(dossier) {
-  const { state } = dossier;
-  const { archived } = dossier;
-  const lastName = dossier.demandeur.nom.trim();
-  const firstNames = dossier.demandeur.prenom.trim();
-  const personalEmail = dossier.usager.email.trim();
-  const dossierNumber = getUuidDossierNumber(dossier.number);
-  const region = dossier.groupeInstructeur.label;
-  const address = getChampValue(dossier.champs, 'Adresse du cabinet');
-  const departement = getChampValue(dossier.champs, 'Votre département'); // "14 - Calvados"
-  const phone = getChampValue(dossier.champs, 'Téléphone du secrétariat');
-  const teleconsultation = parseTeleconsultation(
+  const { state, archived } = dossier;
+  const psy = { state, archived };
+
+  psy.lastName = dossier.demandeur.nom.trim();
+  psy.firstNames = dossier.demandeur.prenom.trim();
+  psy.personalEmail = dossier.usager.email.trim();
+
+  psy.dossierNumber = getUuidDossierNumber(dossier.number);
+  psy.region = dossier.groupeInstructeur.label;
+
+  psy.address = getChampValue(dossier.champs, 'Adresse du cabinet');
+  psy.departement = getChampValue(dossier.champs, 'Votre département'); // "14 - Calvados"
+  psy.phone = getChampValue(dossier.champs, 'Téléphone du secrétariat');
+  psy.teleconsultation = parseTeleconsultation(
     getChampValue(dossier.champs, 'Proposez-vous de la téléconsultation ?'),
   );
-  const website = getChampValue(dossier.champs, 'Site web professionnel (optionnel)');
-  const email = getChampValue(dossier.champs, 'Email de contact');
-  const description = getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
+  psy.website = getChampValue(dossier.champs, 'Site web professionnel (optionnel)');
+  psy.email = getChampValue(dossier.champs, 'Email de contact');
+  psy.description = getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
 
   // @TODO comma separated values not reliable
-  const training = parseTraining(
+  psy.training = parseTraining(
     getChampValue(dossier.champs, 'Formations et expériences'),
   );
-  const adeli = getChampValue(dossier.champs, 'Numéro Adeli');
-  const diploma = getChampValue(dossier.champs, 'Intitulé ou spécialité de votre master de psychologie');
-  const languages = getChampValue(dossier.champs, 'Langues parlées (optionnel)');
-
-  const psy = {
-    dossierNumber,
-    state,
-    archived,
-    lastName,
-    firstNames,
-    address,
-    region,
-    departement,
-    phone,
-    website,
-    email,
-    personalEmail,
-    teleconsultation,
-    description,
-    training,
-    adeli,
-    diploma,
-    languages,
-  };
+  psy.adeli = getChampValue(dossier.champs, 'Numéro Adeli');
+  psy.diploma = getChampValue(dossier.champs, 'Intitulé ou spécialité de votre master de psychologie');
+  psy.languages = getChampValue(dossier.champs, 'Langues parlées (optionnel)');
 
   return psy;
 }
 
-function parsePsychologist(apiResponse) {
-  const dossiers = apiResponse.demarche.dossiers.nodes;
+function parsePsychologist(dossiers) {
   console.log(`Parsing ${dossiers.length} psychologists from DS API`);
 
-  if (dossiers.length > 0) {
-    const psychologists = dossiers.map((dossier) => parseDossierMetadata(dossier));
-    return psychologists;
-  }
-
-  return [];
+  return dossiers.map((dossier) => parseDossierMetadata(dossier));
 }
 
 /**
@@ -117,17 +90,15 @@ function parsePsychologist(apiResponse) {
  * @param {*} cursor
  * @param {*} accumulator
  */
-async function getAllPsychologistList(cursor, accumulator = []) {
-  const apiResponse = await graphql.requestPsychologist(cursor);
+async function getAllPsychologistList(graphqlFunction, cursor, accumulator = []) {
+  const apiResponse = await graphqlFunction(cursor);
 
-  const { pageInfo } = apiResponse.demarche.dossiers;
+  const { pageInfo, nodes } = apiResponse.demarche.dossiers;
 
-  const nextAccumulator = accumulator.concat(
-    parsePsychologist(apiResponse),
-  );
+  const nextAccumulator = accumulator.concat(nodes);
 
   if (pageInfo.hasNextPage) {
-    return getAllPsychologistList(pageInfo.endCursor, nextAccumulator);
+    return getAllPsychologistList(graphqlFunction, pageInfo.endCursor, nextAccumulator);
   }
   return {
     psychologists: nextAccumulator,
@@ -146,10 +117,11 @@ async function getPsychologistList(cursor) {
   const time = `Fetching all psychologists from DS (query id #${Math.random().toString()})`;
 
   console.time(time);
-  const psychologists = await getAllPsychologistList(cursor);
+  const list = await getAllPsychologistList(graphql.requestPsychologist, cursor);
+  list.psychologists = list.psychologists.map((psychologist) => parsePsychologist(psychologist));
   console.timeEnd(time);
 
-  return psychologists;
+  return list;
 }
 exports.getPsychologistList = getPsychologistList;
 
@@ -165,3 +137,28 @@ module.exports.getDepartementNumberFromString = function getDepartementNumberFro
   const parts = departementString.split(' - ');
   return parts[0];
 };
+
+const autoAcceptPsychologist = async () => {
+  const list = await getAllPsychologistList(
+    (cursor) => graphql.getSimplePsyInfo(cursor, this.DOSSIER_STATE.en_instruction),
+  );
+  console.log(`${list.psychologist.length} psychologists are in instruction`);
+  let countAutoAccept = 0;
+  list.psychologists
+    .filter(
+      (psychologist) => {
+        const departement = getChampValue(psychologist.champs, 'Votre département');
+        return config.demarchesSimplifieesAutoAcceptDepartments.includes(departement);
+      },
+    )
+    .forEach(
+      (psychologist) => {
+        graphql.acceptPsychologist(psychologist.id);
+        console.debug(`Auto accept psychologist ${psychologist.id}`);
+        countAutoAccept++;
+      },
+    );
+  console.log(`${countAutoAccept} have been auto accepted`);
+};
+
+exports.autoAcceptPsychologist = autoAcceptPsychologist;

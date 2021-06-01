@@ -35,6 +35,93 @@ function logErrorsFromDS(apiResponse) {
   }
 }
 
+const request = async (query, variables) => {
+  console.debug('GraphQL query sent:', query, variables);
+
+  try {
+    return await graphQLClient.request(query, variables);
+  } catch (err) {
+    console.error('API has returned error', err);
+    logErrorsFromDS(err);
+    // eslint-disable-next-line no-throw-literal
+    throw 'Error from DS API';
+  }
+};
+
+const getSimplePsyInfo = (cursor, state) => {
+  const query = gql`
+    {
+      demarche (number: ${config.demarchesSimplifieesId}) {
+        dossiers (state: ${state}${cursor ? `, after: "${cursor}"` : ''}) {
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+          nodes {
+              id
+              state
+              datePassageEnInstruction
+              champs (id: "Q2hhbXAtMTY1OTUxMw==") {
+                id
+                label
+                stringValue
+              }
+          }
+        }
+      }
+    }
+  `;
+
+  return request(query);
+};
+
+const getInstructors = (groupeInstructeurNumber) => {
+  const query = gql`
+    query getGroupeInstructeur($groupeInstructeurNumber: Int!) {
+      groupeInstructeur(number: $groupeInstructeurNumber) {
+        id
+        number
+        label
+        instructeurs {
+          id
+          email
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    groupeInstructeurNumber,
+  };
+
+  return request(query, variables);
+};
+
+const acceptPsychologist = (id) => {
+  const query = gql`
+    mutation dossierAccepter($input: DossierAccepterInput!) {
+      dossierAccepter(input: $input) {
+        dossier {
+          id
+        }
+        errors {
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      dossierId: id,
+      instructeurId: config.demarchesSimplifieesInstructor,
+      motivation: config.demarchesSimplifieesAutoAcceptMessage,
+    },
+  };
+
+  return request(query, variables);
+};
+
 /**
  * # Arguments pour dossiers
     # after: Returns the elements in the list that come after the
@@ -87,18 +174,10 @@ async function requestPsychologist(afterCursor) {
     }
   `;
 
-  console.debug('GraphQL query sent:', query);
-
-  try {
-    const psychologists = await graphQLClient.request(query);
-
-    return psychologists;
-  } catch (err) {
-    console.error('API has returned error', err);
-    logErrorsFromDS(err);
-    // eslint-disable-next-line no-throw-literal
-    throw 'Error from DS API';
-  }
+  return request(query);
 }
 
+exports.acceptPsychologist = acceptPsychologist;
+exports.getInstructors = getInstructors;
+exports.getSimplePsyInfo = getSimplePsyInfo;
 exports.requestPsychologist = requestPsychologist;

@@ -7,7 +7,7 @@ const config = require('../utils/config');
 
 const demarchesSimplifiees = rewire('../utils/demarchesSimplifiees.js');
 
-describe('Demarches Simplifiess', () => {
+describe('Demarches Simplifiees', () => {
   describe('parsePsychologist', () => {
     it('should return an array of psychologists from a JSON', async () => {
       const apiResponse = testDossiers;
@@ -152,29 +152,6 @@ describe('Demarches Simplifiess', () => {
 
       const getChampValue = demarchesSimplifiees.__get__('getChampValue');
       const output = getChampValue(apiResponse, label);
-
-      output.should.equal(result);
-    });
-
-    it('should return "value" when stringValue is set to false', async () => {
-      const result = 'Psychologie clinique de la santé';
-      const label = 'Intitulé ou spécialité de votre master de psychologie';
-
-      const apiResponse = [
-        {
-          id: 'Q2hhbXAtMTYzMDQxNg==',
-          label: 'Votre carrière et vos qualifications',
-          stringValue: '',
-        },
-        {
-          id: 'Q2hhbXAtMTYzMDQxNw==',
-          label,
-          value: result,
-        },
-      ];
-
-      const getChampValue = demarchesSimplifiees.__get__('getChampValue');
-      const output = getChampValue(apiResponse, label, false);
 
       output.should.equal(result);
     });
