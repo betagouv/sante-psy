@@ -1,14 +1,17 @@
 /* eslint-disable no-multi-str */
 /* eslint-disable max-len */
+const React = require('react');
+
+const contact = <a href="mailto:support-santepsyetudiant@beta.gouv.fr">support-santepsyetudiant@beta.gouv.fr</a>;
 module.exports = () => [
   {
     question: "Je n'arrive pas à entrer mes séances sur la plateforme. Comment faire ?",
-    answer: 'Selon votre demande, assurez—vous de bien lire tous les onglets pour déclarer vos séances. \
-    Une fois cela établi, si votre problème persiste, envoyez—nous un email à support-santepsyetudiant@beta.gouv.fr',
+    answer: 'Selon votre demande, assurez-vous de bien lire tous les onglets pour déclarer vos séances. \
+    Une fois cela établi, si votre problème persiste, envoyez-nous un email à <a href="mailto:support-santepsyetudiant@beta.gouv.fr">support-santepsyetudiant@beta.gouv.fr</a>',
   },
   {
     question: 'Je souhaite modifier des informations sur mon espace. Comment puis-je faire ?',
-    answer: 'Pour modifier vos informations, envoyez-nous un email @ support-santepsyetudiant@beta.gouv.fr \
+    answer: 'Pour modifier vos informations, envoyez-nous un email à <a href="mailto:support-santepsyetudiant@beta.gouv.fr">support-santepsyetudiant@beta.gouv.fr</a> \
     pour repasser votre dossier "en construction". Sachez toutefois que pendant ce temps, \
     vous n’apparaîtrez plus sur l\'annuaire, et vous ne pourrez pas déclarer vos séances. Une fois les modifications effectuées,nous vous invitons à nous renvoyer un email de confirmation afin de réactiver votre dossier.',
   },
