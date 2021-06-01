@@ -22,12 +22,12 @@ module.exports = () => [
     Le passage par le médecin répond à la volonté d’inscrire l’étudiant dans un parcours de soin rigoureux.',
   },
   {
-    question: 'Je suis insatisfaite d\'une séance avec un psychologue, que puis-je faire ?',
+    question: 'Je suis insatisfait d\'une séance avec un psychologue, que puis-je faire ?',
     answer: 'Dans le cadre du dispositif, vous pouvez à tout moment changer de psychologue dans la liste de nos \
     psychologues partenaires si vous en ressentez le besoin.',
   },
   {
-    question: 'J\'ai bénéficier des 3 séances, je souhaite renouveler ma demande, comment faire ?',
+    question: 'J\'ai bénéficié des trois séances, je souhaite renouveler ma demande, comment faire ?',
     answer: 'Pour renouveler votre demande il est obligatoire de consulter une nouvelle fois votre médecin \
     généraliste afin d\'obtenir une lettre d\'orientation. Une fois établis vous avez de nouveau droit à 3 séances \
     avec un des psychologues partenaires.',
