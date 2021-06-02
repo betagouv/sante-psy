@@ -49,4 +49,8 @@ module.exports = {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS,
   },
+  satistics: {
+    base: process.env.METABASE_URL || 'https://stats.santepsyetudiant.beta.gouv.fr',
+    dashboard: process.env.METABASE_DASHBOARD || '/public/dashboard/a3834fd4-aa00-4ee2-a119-11dd2156e082',
+  },
 };

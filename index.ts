@@ -1,6 +1,5 @@
 import express from 'express';
 import expressSanitizer from 'express-sanitizer';
-import path from 'path';
 
 import expressJWT from 'express-jwt';
 import rateLimit from 'express-rate-limit';
@@ -22,6 +21,7 @@ import psyProfileController from './controllers/psyProfileController';
 import loginController from './controllers/loginController';
 import reimbursementController from './controllers/reimbursementController';
 import testController from './controllers/testController';
+import getIndex from './controllers/reactController';
 
 const { appName } = config;
 
@@ -50,9 +50,9 @@ app.use(express.json());
 app.use(bearerToken());
 
 app.use('/static', express.static('static'));
+app.get('/', getIndex);
 app.use(express.static('./frontend/dist'));
 
-// Mount express-sanitizer middleware here
 app.use(expressSanitizer());
 
 app.use('/api/*',
@@ -134,12 +134,13 @@ app.put('/api/psychologue/:psyId',
   [access.checkPsyParam, ...psyProfileController.editPsyProfilValidators],
   psyProfileController.editPsyProfile);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
-});
+app.get('*', getIndex);
 
 sentry.initCaptureConsoleWithHandler(app);
 
-module.exports = app.listen(config.port, () => {
+const server = app.listen(config.port, () => {
   console.log(`${appName} listening at http://localhost:${config.port}`);
 });
+
+module.exports = server;
+export default server;

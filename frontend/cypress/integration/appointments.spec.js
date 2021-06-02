@@ -41,11 +41,15 @@ describe('Appointments', () => {
     });
 
     it('should display convention reminder only when no convention', () => {
-      cy.get('[data-test-id="notification-success"]')
-        .should('not.exist');
+      // Only error message is the announcement
+      cy.get('[data-test-id="notification-error"]')
+        .should('have.length', 1);
       removeConvention('login@beta.gouv.fr');
       cy.reload();
-      cy.get('[data-test-id="notification-success"]')
+      // Now we have both
+      cy.get('[data-test-id="notification-error"]')
+        .should('have.length', 2)
+        .last()
         .should(
           'have.text',
           'Veuillez indiquer l‘état de votre conventionnement sur la page Remboursement de mes séances',

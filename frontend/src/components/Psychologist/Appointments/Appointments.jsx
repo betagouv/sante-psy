@@ -69,7 +69,7 @@ const Appointments = () => {
   return (
     <div className="fr-container fr-mb-3w fr-mt-2w">
       {!loading && (!convention || !convention.universityId) && (
-      <Notification success>
+      <Notification>
         Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
         {' '}
         <HashLink to="/psychologue/mes-remboursements">Remboursement de mes séances</HashLink>

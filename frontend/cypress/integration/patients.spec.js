@@ -36,7 +36,7 @@ describe('Patients', () => {
   });
 
   describe('Update', () => {
-    it.only('should update existing patient and update completion info', () => {
+    it('should update existing patient and update completion info', () => {
       cy.get('[data-test-id="update-patient-button-large"]')
         .first()
         .click();
