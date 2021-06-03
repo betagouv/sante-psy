@@ -75,19 +75,8 @@ describe('DB Psychologists', () => {
       psySPE.region.should.be.equal('Normandie');
 
       // Update psy in SPE
-      const nbUpdated = await dbPsychologists.updatePsychologist(
-        psyDS.dossierNumber,
-        psyDS.email,
-        psyDS.address,
-        psyDS.departement,
-        'Bretagne',
-        psyDS.phone,
-        psyDS.website,
-        psyDS.description,
-        psyDS.teleconsultation,
-        psyDS.languages,
-        psyDS.personalEmail,
-      );
+      psyDS.region = 'Bretagne';
+      const nbUpdated = await dbPsychologists.updatePsychologist(psyDS);
       nbUpdated.should.be.equal(1);
 
       // Update from DS (region : Normandie)
@@ -96,7 +85,7 @@ describe('DB Psychologists', () => {
       // Assert that data didn't changed in SPE DB
       const updatedPsySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
       updatedPsySPE.selfModified.should.be.true;
-      updatedPsySPE.region.should.be.equal('Bretagne');
+      updatedPsySPE.region.should.be.equal(psyDS.region);
     });
 
     it('should still update firstname if self modified', async () => {
@@ -110,20 +99,7 @@ describe('DB Psychologists', () => {
       psySPE.firstNames.should.be.equal(psyDS.firstNames);
 
       // Update psy in SPE
-      const nbUpdated = await dbPsychologists.updatePsychologist(
-        psyDS.dossierNumber,
-        psyDS.email,
-        psyDS.address,
-        psyDS.departement,
-        psyDS.region,
-        psyDS.phone,
-        psyDS.website,
-        psyDS.description,
-        psyDS.teleconsultation,
-        psyDS.languages,
-        psyDS.personalEmail,
-        true,
-      );
+      const nbUpdated = await dbPsychologists.updatePsychologist(psyDS);
       nbUpdated.should.be.equal(1);
 
       // Update from DS (new firstname)
@@ -134,7 +110,7 @@ describe('DB Psychologists', () => {
       // Assert that data changed are modified in SPE DB
       const updatedPsySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
       updatedPsySPE.selfModified.should.be.true;
-      updatedPsySPE.firstNames.should.be.equal('New firstname');
+      updatedPsySPE.firstNames.should.be.equal(newPsyDS.firstNames);
     });
   });
 
@@ -431,22 +407,10 @@ describe('DB Psychologists', () => {
   describe('updatePsychologist', () => {
     it('should do nothing if psychologist does not exist', async () => {
       const psy = psyList[0];
-      const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0123';
+      psy.dossierNumber = '390e285c-ed4a-4ce4-ac30-59bb3adf0123'; // unknown
+      psy.email = 'new@email.fr';
 
-      const newEmail = 'new@email.fr';
-      const nbUpdated = await dbPsychologists.updatePsychologist(
-        unknownPsyId,
-        newEmail,
-        psy.address,
-        psy.departement,
-        psy.region,
-        psy.phone,
-        psy.website,
-        psy.description,
-        psy.teleconsultation,
-        psy.languages,
-        psy.personalEmail,
-      );
+      const nbUpdated = await dbPsychologists.updatePsychologist(psy);
       nbUpdated.should.be.equal(0);
     });
 
@@ -456,19 +420,8 @@ describe('DB Psychologists', () => {
       expect(psy.updatedAt).to.be.undefined;
 
       const newEmail = 'new@email.fr';
-      const nbUpdated = await dbPsychologists.updatePsychologist(
-        psy.dossierNumber,
-        newEmail,
-        psy.address,
-        psy.departement,
-        psy.region,
-        psy.phone,
-        psy.website,
-        psy.description,
-        psy.teleconsultation,
-        psy.languages,
-        psy.personalEmail,
-      );
+      psy.email = newEmail;
+      const nbUpdated = await dbPsychologists.updatePsychologist(psy);
       nbUpdated.should.be.equal(1);
 
       const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);

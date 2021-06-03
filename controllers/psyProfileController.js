@@ -98,32 +98,11 @@ module.exports.editPsyProfile = async (req, res) => {
 
   try {
     const { psyId } = req.params;
-    const {
-      email,
-      address,
-      departement,
-      region,
-      phone,
-      website,
-      description,
-      languages,
-      personalEmail,
-      teleconsultation,
-    } = req.body;
 
-    await dbPsychologists.updatePsychologist(
-      psyId,
-      email,
-      address,
-      departement,
-      region,
-      phone,
-      website,
-      description,
-      teleconsultation,
-      languages,
-      personalEmail,
-    );
+    await dbPsychologists.updatePsychologist({
+      dossierNumber: psyId,
+      ...req.body,
+    });
 
     return res.json({
       success: true,

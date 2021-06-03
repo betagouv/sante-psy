@@ -102,6 +102,29 @@ const getPsychologistById = async (psychologistId) => {
 };
 module.exports.getPsychologistById = getPsychologistById;
 
+const editablePsyFields = (psy) => ({
+  email: psy.email,
+  address: psy.address,
+  departement: psy.departement,
+  region: psy.region,
+  phone: psy.phone,
+  website: psy.website,
+  description: psy.description,
+  teleconsultation: psy.teleconsultation,
+  languages: psy.languages,
+  personalEmail: psy.personalEmail,
+});
+
+const nonEditablePsyFields = (psy) => ({
+  firstNames: psy.firstNames,
+  lastName: psy.lastName,
+  archived: psy.archived,
+  state: psy.state,
+  training: psy.training,
+  adeli: psy.adeli,
+  diploma: psy.diploma,
+});
+
 /**
  * Perform a UPSERT with https://knexjs.org/#Builder-merge
  * @param {*} psy
@@ -119,42 +142,19 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
       const psyInDb = await getPsychologistById(psy.dossierNumber);
 
       if (!psyInDb) {
-        // If psy doesn't exist in DB, then insert it
         return knex(psychologistsTable).insert(psy);
-      } if (psyInDb.selfModified) {
-        // If psy exists in DB and already modified by psy
-        // Then do not update fields modified by psy
+      }
+
+      if (psyInDb.selfModified) {
         return knex(psychologistsTable).update({
-          firstNames: psy.firstNames,
-          lastName: psy.lastName,
-          archived: psy.archived,
-          state: psy.state,
-          training: psy.training,
-          adeli: psy.adeli,
-          diploma: psy.diploma,
+          ...nonEditablePsyFields(psy),
           updatedAt,
         });
       }
-      // If psy exists in DB and never modified by psy
-      // Then update everything
+
       return knex(psychologistsTable).update({
-        firstNames: psy.firstNames,
-        lastName: psy.lastName,
-        archived: psy.archived,
-        state: psy.state,
-        address: psy.address,
-        region: psy.region,
-        departement: psy.departement,
-        phone: psy.phone,
-        website: psy.website,
-        email: psy.email,
-        personalEmail: psy.personalEmail,
-        teleconsultation: psy.teleconsultation,
-        description: psy.description,
-        training: psy.training,
-        adeli: psy.adeli,
-        diploma: psy.diploma,
-        languages: addFrenchLanguageIfMissing(psy.languages),
+        ...editablePsyFields(psy),
+        ...nonEditablePsyFields(psy),
         // assignedUniversityId, do not update assignedId on already existing psy
         updatedAt,
       });
@@ -246,23 +246,12 @@ module.exports.deleteConventionInfo = (email) => knex
   })
   .where('personalEmail', email);
 
-module.exports.updatePsychologist = async (psychologistId,
-  email, address, departement, region, phone, website,
-  description, teleconsultation, languages, personalEmail) => {
+module.exports.updatePsychologist = async (psychologist) => {
   try {
     return knex(psychologistsTable)
-      .where('dossierNumber', psychologistId)
+      .where('dossierNumber', psychologist.dossierNumber)
       .update({
-        email,
-        address,
-        departement,
-        region,
-        phone,
-        website,
-        description,
-        teleconsultation,
-        languages,
-        personalEmail,
+        ...editablePsyFields(psychologist),
         updatedAt: date.getDateNowPG(),
         selfModified: true,
       });

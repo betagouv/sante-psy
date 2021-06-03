@@ -482,21 +482,12 @@ describe('psyProfileController', () => {
         .end((err, res) => {
           res.body.success.should.equal(true);
           sinon.assert.called(updatePsyStub);
+          sinon.assert.calledWith(updatePsyStub, sinon.match({
+            address: '1 rue du Pôle Nord<div></div>',
+            description: 'Consultez un psychologue gratuitement',
+            languages: 'Français, Anglais&lt;/',
+          }));
 
-          const expected = [
-            psy.dossierNumber,
-            sinon.match.string,
-            '1 rue du Pôle Nord<div></div>', // sanitized
-            sinon.match.string,
-            sinon.match.string,
-            sinon.match.string,
-            sinon.match.string,
-            'Consultez un psychologue gratuitement', // sanitized
-            true,
-            'Français, Anglais&lt;/', // sanitized
-            sinon.match.string,
-          ];
-          sinon.assert.calledWith(updatePsyStub, ...expected);
           done();
         });
     });
