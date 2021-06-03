@@ -26,19 +26,15 @@ const PsyProfile = () => {
     });
   }, []);
 
-  const save = e => {
-    e.preventDefault();
-    agent.Psychologist.updateProfile(psychologist).then(response => {
+  const updatePsy = updatedPsychologist => {
+    agent.Psychologist.updateProfile(updatedPsychologist).then(response => {
       if (response.success) {
+        setPsychologist(updatedPsychologist);
         history.push('/psychologue/mon-profil');
       }
       window.scrollTo(0, 0);
       setNotification(response);
     });
-  };
-
-  const changePsychologist = (value, field) => {
-    setPsychologist({ ...psychologist, [field]: value });
   };
 
   return (
@@ -52,8 +48,7 @@ const PsyProfile = () => {
       <Route exact path="/psychologue/mon-profil/modifier">
         <EditProfile
           psychologist={psychologist}
-          changePsychologist={changePsychologist}
-          save={save}
+          updatePsy={updatePsy}
           loading={loading}
         />
       </Route>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
@@ -7,19 +7,31 @@ import Input from 'components/Form/Input';
 
 import { REGIONS, DEPARTEMENTS } from 'services/geo';
 
-const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
-  <div className="fr-container fr-mb-3w fr-mt-2w">
-    <Ariane
-      previous={[
-        {
-          label: 'Mes informations',
-          url: '/psychologue/mon-profil',
-        }]}
-      current="Modifier mes informations"
-    />
-    <h1>Modifier mes informations</h1>
-    <GlobalNotification />
-    {!loading && (
+const EditProfile = ({ psychologist, updatePsy, loading }) => {
+  const [updatedPsychologist, setUpdatedPsychologist] = useState(psychologist);
+
+  const save = e => {
+    e.preventDefault();
+    updatePsy(updatedPsychologist);
+  };
+
+  const changePsychologist = (value, field) => {
+    setUpdatedPsychologist({ ...updatedPsychologist, [field]: value });
+  };
+
+  return (
+    <div className="fr-container fr-mb-3w fr-mt-2w">
+      <Ariane
+        previous={[
+          {
+            label: 'Mes informations',
+            url: '/psychologue/mon-profil',
+          }]}
+        current="Modifier mes informations"
+      />
+      <h1>Modifier mes informations</h1>
+      <GlobalNotification />
+      {!loading && (
       <div className="fr-my-3w">
         <form data-test-id="edit-profile-form" onSubmit={save}>
           <p className="fr-text--sm fr-mb-1v">
@@ -34,7 +46,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             type="text"
             field="personalEmail"
             data-test-id="psy-personal-email-input"
-            value={psychologist.personalEmail}
+            value={updatedPsychologist.personalEmail}
             onChange={changePsychologist}
             pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
             placeholder="exemple@beta.gouv.fr"
@@ -47,7 +59,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             type="select"
             field="departement"
             data-test-id="psy-departement-select"
-            value={psychologist.departement}
+            value={updatedPsychologist.departement}
             onChange={changePsychologist}
             options={DEPARTEMENTS.map(departement => ({ id: departement, label: departement }))}
             required
@@ -57,7 +69,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             type="select"
             field="region"
             data-test-id="psy-region-select"
-            value={psychologist.region}
+            value={updatedPsychologist.region}
             onChange={changePsychologist}
             options={REGIONS.map(region => ({ id: region, label: region }))}
             required
@@ -68,7 +80,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             type="text"
             field="address"
             data-test-id="psy-address-input"
-            value={psychologist.address}
+            value={updatedPsychologist.address}
             onChange={changePsychologist}
             required
           />
@@ -78,7 +90,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             type="text"
             field="phone"
             data-test-id="psy-phone-input"
-            value={psychologist.phone}
+            value={updatedPsychologist.phone}
             onChange={changePsychologist}
             required
           />
@@ -88,14 +100,14 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             type="text"
             field="email"
             data-test-id="psy-email-input"
-            value={psychologist.email}
+            value={updatedPsychologist.email}
             onChange={changePsychologist}
             pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
             placeholder="exemple@beta.gouv.fr"
           />
           <Input
             type="radio"
-            value={psychologist.teleconsultation}
+            value={updatedPsychologist.teleconsultation}
             field="teleconsultation"
             onChange={changePsychologist}
             label="Proposez-vous de la téléconsultation ?"
@@ -109,6 +121,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
                 label: 'Non',
               },
             ]}
+            required
           />
           <Input
             label="Langues parlées"
@@ -116,7 +129,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             type="text"
             field="languages"
             data-test-id="psy-languages-input"
-            value={psychologist.languages}
+            value={updatedPsychologist.languages}
             onChange={changePsychologist}
             required
           />
@@ -126,7 +139,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             type="text"
             field="website"
             data-test-id="psy-website-input"
-            value={psychologist.website}
+            value={updatedPsychologist.website}
             onChange={changePsychologist}
           />
           <Input
@@ -136,7 +149,7 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
             type="textarea"
             field="description"
             data-test-id="psy-description-input"
-            value={psychologist.description}
+            value={updatedPsychologist.description}
             onChange={changePsychologist}
           />
           <div className="fr-my-5w">
@@ -150,9 +163,10 @@ const EditProfile = ({ psychologist, changePsychologist, save, loading }) => (
           </div>
         </form>
       </div>
-    )}
-    <Mail />
-  </div>
-);
+      )}
+      <Mail />
+    </div>
+  );
+};
 
 export default EditProfile;
