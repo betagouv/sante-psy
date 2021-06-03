@@ -17,7 +17,7 @@ const PsyProfile = () => {
   useEffect(() => {
     agent.Psychologist.getProfile().then(response => {
       if (response.success) {
-        setPsychologist({ ...response.psychologist });
+        setPsychologist(response.psychologist);
         setLoading(false);
       } else {
         history.goBack();
