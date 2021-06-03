@@ -142,13 +142,18 @@ const autoAcceptPsychologist = async () => {
   const list = await getAllPsychologistList(
     (cursor) => graphql.getSimplePsyInfo(cursor, this.DOSSIER_STATE.en_instruction),
   );
-  console.log(`${list.psychologist.length} psychologists are in instruction`);
+  console.log(`${list.psychologists.length} psychologists are in instruction`);
   let countAutoAccept = 0;
   list.psychologists
     .filter(
       (psychologist) => {
-        const departement = getChampValue(psychologist.champs, 'Votre département');
-        return config.demarchesSimplifieesAutoAcceptDepartments.includes(departement);
+        const departement = psychologist.champs
+          .find((champ) => champ.id === config.demarchesSimplifieesChampDepartment)
+          .stringValue;
+        const isVerified = psychologist.annotations
+          .find((annotation) => annotation.id === config.demarchesSimplifieesAnnotationVerifiee)
+          .stringValue;
+        return isVerified === 'true' && config.demarchesSimplifieesAutoAcceptDepartments.includes(departement);
       },
     )
     .forEach(

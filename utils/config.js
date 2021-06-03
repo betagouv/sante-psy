@@ -10,13 +10,15 @@ if (!secret || !secretLogs) {
   console.error('Mandatory configurations SECRET or SECRET_LOG is/are missing');
 }
 
+const contactEmail = process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr';
+
 module.exports = {
   appName: 'Santé Psy Étudiant',
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
   announcement: process.env.ANNOUNCEMENT || '',
   port: process.env.PORT || 8080,
   teamEmail: process.env.TEAM_EMAIL || 'equipe-santepsyetudiants@beta.gouv.fr',
-  contactEmail: process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr',
+  contactEmail,
   apiToken: process.env.API_TOKEN,
   apiUrl: process.env.API_URL
     || 'https://www.demarches-simplifiees.fr/api/v2/graphql',
@@ -25,9 +27,11 @@ module.exports = {
   demarchesSimplifieesId: process.env.DEMARCHES_SIMPLIFIEES_ID,
   demarchesSimplifieesUrl: process.env.DEMARCHES_SIMPLIFIEES_URL,
   demarchesSimplifieesAutoAcceptDepartments: process.env.DEMARCHES_SIMPLIFIEES_AUTO_ACCEPT_DEPARTMENTS || [],
-  demarchesSimplifieesAutoAcceptMessage: autoAcceptMessage,
+  demarchesSimplifieesAutoAcceptMessage: autoAcceptMessage(contactEmail),
   demarchesSimplifieesAutoAcceptDelay: process.env.DEMARCHES_SIMPLIFIEES_AUTO_ACCEPT_DELAY,
   demarchesSimplifieesInstructor: process.env.DEMARCHES_SIMPLIFIEES_INSTRUCTOR,
+  demarchesSimplifieesChampDepartment: process.env.DEMARCHES_SIMPLIFIEES_CHAMP_DEPARTMENT,
+  demarchesSimplifieesAnnotationVerifiee: process.env.DEMARCHES_SIMPLIFIEES_ANNOTATION_VERIFIEE,
   sentryDNS: process.env.SENTRY_DNS || false,
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,

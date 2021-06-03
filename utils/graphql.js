@@ -61,7 +61,12 @@ const getSimplePsyInfo = (cursor, state) => {
               id
               state
               datePassageEnInstruction
-              champs (id: "Q2hhbXAtMTY1OTUxMw==") {
+              annotations(id: "${config.demarchesSimplifieesAnnotationVerifiee}") {
+                id
+                label
+                stringValue
+              }
+              champs (id: "${config.demarchesSimplifieesChampDepartment}") {
                 id
                 label
                 stringValue
