@@ -1,33 +1,21 @@
-
-<h1>Récapitulatif des séances - Santé Psy Etudiant</h1>
-
-<p>Madame, Monsieur</p>
+<p>Madame, Monsieur,</p>
 
 <p>
-  Vous trouverez ci-dessous, le résumé des <b><%= totalAppointments %> séances</b> effectuées
-  en <b><%= lastMonth %> <%= year %></b>, par les <b><%= psychologists.length %> psychologues</b> actifs qui sont conventionnés
-  avec votre établissement.
+  Le récapitulatif mensuel des séances à titre de Service Fait évolue. Vous pouvez à présent, consulter en temps réel le nombre de séances réalisées et déclarées par les psychologues conventionnés sur la plateforme metabase.
 </p>
 
-<ul>
-  <% psychologists.forEach(function(psychologist) { %>
-    <li>
-      <p>
-        <%= psychologist.firstNames %> <%= psychologist.lastName %> (<%= psychologist.personalEmail %>) : <%= psychologist.countAppointments %> séances déclarées
-      </p>
-    </li>
-  <% }); %> 
-</ul>
-
-
-<p>Vous pouvez également, si vous avez reçu un compte et défini votre mot de passe, accéder à ces données sur
-  <a href="https://stats.santepsyetudiant.beta.gouv.fr/">le tableau de bord de votre université.</a>
+<p>
+  Pour y accéder, vous pouvez cliquer ici
 </p>
 
+<p>
+  <a href="https://santepsy-metabase.osc-secnum-fr1.scalingo.io" style="margin-bottom: 15px;background: #006be6;padding: 10px;border: none;border-radius: 3px;color: white;min-width: 280px;box-shadow: 1px 1px 2px 0px #333;cursor: pointer;">
+    Accéder au recapitulatif
+  </a>
+</p>
 
-<br/>
-
-
-<p>Si vous avez des doutes ou d'autres interrogations, n'hésitez pas à nous écrire en répondant à ce mail.</p>
+<p>
+  Vous avez normalement reçu des identifiants pour vous y connecter. Si vous rencontrez des difficultés, n'hésitez pas à nous écrire par mail à <a href="mailto:contact-santepsyetudiants@beta.gouv.fr">contact-santepsyetudiants@beta.gouv.fr</a>
+</p>
 
 <p>L'équipe Santé Psy Étudiant</p>
