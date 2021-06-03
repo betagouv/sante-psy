@@ -288,6 +288,36 @@ describe('psyProfileController', () => {
       }, 'Vous devez spécifier les langues parlées.');
     });
 
+    it('should refuse when teleconsultation is missing', async () => {
+      await shouldFailUpdatePsyInputValidation({
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        // teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier si vous proposez la téléconsultation.');
+    });
+
+    it('should refuse when teleconsultation is invalid', async () => {
+      await shouldFailUpdatePsyInputValidation({
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        region: 'Hauts-de-France',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: 'yes',
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      }, 'Vous devez spécifier si vous proposez la téléconsultation.');
+    });
+
     it('should refuse invalid email', async () => {
       await shouldFailUpdatePsyInputValidation({
         email: 'public',
@@ -365,21 +395,6 @@ describe('psyProfileController', () => {
       res.body.success.should.equal(true);
       res.body.message.should.equal('Vos informations ont bien été mises à jour.');
     };
-
-    it('should pass validation when teleconsultation is missing', async () => {
-      await shouldPassUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        region: 'Hauts-de-France',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        // teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      });
-    });
 
     it('should pass validation when email is missing', async () => {
       await shouldPassUpdatePsyInputValidation({

@@ -75,7 +75,7 @@ describe('DB Psychologists', () => {
       psySPE.region.should.be.equal('Normandie');
 
       // Update psy in SPE
-      await dbPsychologists.updatePsychologist(
+      const nbUpdated = await dbPsychologists.updatePsychologist(
         psyDS.dossierNumber,
         psyDS.email,
         psyDS.address,
@@ -88,6 +88,7 @@ describe('DB Psychologists', () => {
         psyDS.languages,
         psyDS.personalEmail,
       );
+      nbUpdated.should.be.equal(1);
 
       // Update from DS (region : Normandie)
       await dbPsychologists.savePsychologistInPG([psyDS]);
@@ -109,7 +110,7 @@ describe('DB Psychologists', () => {
       psySPE.firstNames.should.be.equal(psyDS.firstNames);
 
       // Update psy in SPE
-      await dbPsychologists.updatePsychologist(
+      const nbUpdated = await dbPsychologists.updatePsychologist(
         psyDS.dossierNumber,
         psyDS.email,
         psyDS.address,
@@ -123,6 +124,7 @@ describe('DB Psychologists', () => {
         psyDS.personalEmail,
         true,
       );
+      nbUpdated.should.be.equal(1);
 
       // Update from DS (new firstname)
       const newPsyDS = { ...psyDS };
@@ -432,7 +434,7 @@ describe('DB Psychologists', () => {
       const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0123';
 
       const newEmail = 'new@email.fr';
-      await dbPsychologists.updatePsychologist(
+      const nbUpdated = await dbPsychologists.updatePsychologist(
         unknownPsyId,
         newEmail,
         psy.address,
@@ -445,8 +447,7 @@ describe('DB Psychologists', () => {
         psy.languages,
         psy.personalEmail,
       );
-
-      // should not fail
+      nbUpdated.should.be.equal(0);
     });
 
     it('should update psychologist if exist', async () => {
@@ -455,7 +456,7 @@ describe('DB Psychologists', () => {
       expect(psy.updatedAt).to.be.undefined;
 
       const newEmail = 'new@email.fr';
-      await dbPsychologists.updatePsychologist(
+      const nbUpdated = await dbPsychologists.updatePsychologist(
         psy.dossierNumber,
         newEmail,
         psy.address,
@@ -468,6 +469,7 @@ describe('DB Psychologists', () => {
         psy.languages,
         psy.personalEmail,
       );
+      nbUpdated.should.be.equal(1);
 
       const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
       expect(updatedPsy.email).to.equal(newEmail);

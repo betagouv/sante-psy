@@ -38,9 +38,8 @@ export default class UserStore {
   }
 
   isTokenExpired = () => {
-    const decoded = jwtDecode(this.token);
     const now = new Date();
-    return now.getTime() > decoded.exp * 1000;
+    return now.getTime() > this.decodedToken.exp * 1000;
   }
 
   pullUser() {

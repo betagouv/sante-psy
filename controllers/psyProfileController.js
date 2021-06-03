@@ -86,6 +86,9 @@ module.exports.editPsyProfilValidators = [
             .isURL(),
     ], 'Vous devez spécifier une URL valide.',
   ),
+  check('teleconsultation')
+    .isBoolean()
+    .withMessage('Vous devez spécifier si vous proposez la téléconsultation.'),
 ];
 
 module.exports.editPsyProfile = async (req, res) => {
@@ -105,9 +108,8 @@ module.exports.editPsyProfile = async (req, res) => {
       description,
       languages,
       personalEmail,
+      teleconsultation,
     } = req.body;
-    // Force to boolean beacause checkbox value send undefined when it's not checked
-    const teleconsultation = Boolean(req.body.teleconsultation);
 
     await dbPsychologists.updatePsychologist(
       psyId,
