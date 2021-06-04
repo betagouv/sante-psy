@@ -131,8 +131,8 @@ const AddEditPatient = () => {
               label="Établissement scolaire de l'étudiant"
               hint="Exemple : Université de Rennes ou ENSAE"
               type="text"
-              field="instutionName"
-              value={patient.instutionName}
+              field="institutionName"
+              value={patient.institutionName}
               onChange={changePatient}
             />
             <Input
