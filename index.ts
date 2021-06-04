@@ -11,11 +11,13 @@ import cors from 'cors';
 import config from './utils/config';
 import cspConfig from './utils/csp-config';
 import sentry from './utils/sentry';
+import access from './utils/access';
 
 import configController from './controllers/configController';
 import appointmentsController from './controllers/appointmentsController';
 import patientsController from './controllers/patientsController';
 import psyListingController from './controllers/psyListingController';
+import psyProfileController from './controllers/psyProfileController';
 import loginController from './controllers/loginController';
 import reimbursementController from './controllers/reimbursementController';
 import testController from './controllers/testController';
@@ -126,6 +128,11 @@ app.get('/api/psychologue/mes-remboursements', reimbursementController.reimburse
 app.post('/api/psychologue/renseigner-convention',
   reimbursementController.updateConventionInfoValidators,
   reimbursementController.updateConventionInfo);
+
+app.get('/api/psychologue/:psyId', access.checkPsyParam, psyProfileController.getPsyProfile);
+app.put('/api/psychologue/:psyId',
+  [access.checkPsyParam, ...psyProfileController.editPsyProfilValidators],
+  psyProfileController.editPsyProfile);
 
 app.get('*', getIndex);
 

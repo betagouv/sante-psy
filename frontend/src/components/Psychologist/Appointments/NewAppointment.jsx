@@ -11,6 +11,7 @@ import agent from 'services/agent';
 import { useStore } from 'stores/';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import Select from 'components/Form/Select';
 
 const DateInput = forwardRef(({ value, onClick }, ref) => (
   <div onClick={onClick} ref={ref}>
@@ -88,30 +89,25 @@ const NewAppointment = () => {
             </div>
 
             <div className="fr-select-group">
-              <label className="fr-label" htmlFor="patients" aria-describedby="patients-help">Patient</label>
-              <div className="fr-hint-text" id="patients-help">
-                Votre patient n&lsquo;est pas dans la liste ?
-                {' '}
-                <HashLink to="/psychologue/nouveau-patient">Ajoutez un nouveau patient</HashLink>
-              </div>
-              <select
-                className="fr-select"
+              <Select
                 id="patients"
                 name="patientId"
+                label="Patient"
+                hint={(
+                  <>
+                    Votre patient n&lsquo;est pas dans la liste ?
+                    {' '}
+                    <HashLink to="/psychologue/nouveau-patient">Ajoutez un nouveau patient</HashLink>
+                  </>
+                )}
                 defaultValue=""
-                onChange={event => { setPatientId(event.target.value); }}
+                onChange={value => { setPatientId(value); }}
                 required
-              >
-                <option value="" disabled hidden>- Select -</option>
-                {patients.map(patient => (
-                  <option
-                    key={patient.id}
-                    value={patient.id}
-                  >
-                    {`${patient.lastName} ${patient.firstNames}`}
-                  </option>
+                hiddenOption="- Select -"
+                options={patients.map(patient => (
+                  { id: patient.id, label: `${patient.lastName} ${patient.firstNames}` }
                 ))}
-              </select>
+              />
             </div>
             <div className="fr-my-5w">
               <button

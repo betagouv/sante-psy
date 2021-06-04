@@ -1,4 +1,4 @@
-import { reaction, makeObservable, observable, action } from 'mobx';
+import { reaction, makeObservable, observable, action, computed } from 'mobx';
 import jwtDecode from 'jwt-decode';
 
 import agent from 'services/agent';
@@ -12,6 +12,7 @@ export default class UserStore {
     makeObservable(this, {
       token: observable,
       user: observable,
+      decodedToken: computed,
       setToken: action.bound,
       pullUser: action.bound,
     });
@@ -32,10 +33,13 @@ export default class UserStore {
     this.token = token;
   }
 
+  get decodedToken() {
+    return this.token ? jwtDecode(this.token) : undefined;
+  }
+
   isTokenExpired = () => {
-    const decoded = jwtDecode(this.token);
     const now = new Date();
-    return now.getTime() > decoded.exp * 1000;
+    return now.getTime() > this.decodedToken.exp * 1000;
   }
 
   pullUser() {
