@@ -117,5 +117,12 @@ describe('DB Universities', () => {
       const output = dbUniversities.getEmailsTo(university);
       assert.equal(output, emailSSU);
     });
+
+    it('should manage empty info', () => {
+      const university = {};
+
+      const output = dbUniversities.getEmailsTo(university);
+      assert.isUndefined(output);
+    });
   });
 });

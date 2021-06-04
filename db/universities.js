@@ -169,5 +169,5 @@ module.exports.getEmailsTo = function getEmailsTo(university) {
   if (university.emailUniversity) {
     return university.emailUniversity.split(' ; ').join(',');
   }
-  return university.emailSSU.split(' ; ').join(',');
+  return university.emailSSU ? university.emailSSU.split(' ; ').join(',') : undefined;
 };
