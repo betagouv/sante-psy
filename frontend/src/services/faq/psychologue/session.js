@@ -19,9 +19,9 @@ module.exports = config => [
   },
   {
     question: 'Je reçois trop de demande, comment faire ?',
-    answer: "Vous êtes en droit de refuser des étudiants si vous ne pouvez pas répondre à toutes les demandes. \
+    answer: `Vous êtes en droit de refuser des étudiants si vous ne pouvez pas répondre à toutes les demandes. \
     Vous pouvez également être temporairement retiré de l'annuaire publique des psychologues partenaires. \
-    Pour cela, envoyez nous un email à <a href="mailto:${config.contactEmail}">${config.contactEmail}</a> nous le précisant.",
+    Pour cela, envoyez nous un email à <a href="mailto:${config.contactEmail}">${config.contactEmail}</a> nous le précisant.`,
   },
   {
     question: 'Quelles informations dois-je vérifier auprès du patient lors de la séance ?',
