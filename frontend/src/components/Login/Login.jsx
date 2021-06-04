@@ -26,7 +26,7 @@ const Login = () => {
         .then(loginInfo => {
           setToken(loginInfo.token);
           history.push('/psychologue/mes-seances');
-        })
+        });
     }
   }, [token]);
 

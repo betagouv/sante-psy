@@ -17,7 +17,7 @@ const errorManager = (error: Error, req: Request, res: Response, next: NextFunct
     console.error(error.message);
     res.status(500).json({
       success: false,
-      message: config.activateDebug ? error.message : 'Something went wrong, please ty again',
+      message: config.activateDebug ? error.message : 'Something went wrong, please try again',
     });
   }
 };

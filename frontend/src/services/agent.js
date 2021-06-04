@@ -28,7 +28,7 @@ client.interceptors.response.use(
   response => {
     if (!response.data.success) {
       store.commonStore.setNotification(response.data);
-      throw new Error('Request fail');
+      throw new Error(response.data.message);
     }
     return response.data;
   },
