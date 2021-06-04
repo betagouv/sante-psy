@@ -72,6 +72,7 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
   if (psy) {
     const { firstNames, lastName, email } = psy;
     res.json({
+      success: true,
       firstNames,
       lastName,
       email,

@@ -143,6 +143,7 @@ module.exports.deleteAppointment = async (appointmentId, psychologistId) => {
     const deletedAppointments = await knex(appointmentsTable)
       .where({
         id: appointmentId,
+        deleted: false,
         psychologistId,
       })
       .update({
