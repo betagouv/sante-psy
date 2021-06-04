@@ -1,15 +1,17 @@
 const { validationResult } = require('express-validator');
+const { default: CustomError } = require('./CustomError');
 
 module.exports.checkErrors = (req) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    // TODO manage all errors !
     errors.array().forEach((error) => {
       console.debug('checkErrors form', error.msg);
       req.error = error.msg;
     });
-    return false;
+
+    throw new CustomError(req.error, 400);
   }
-  return true;
 };
 
 // Does not work for "oneOf" matchers
