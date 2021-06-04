@@ -48,7 +48,7 @@ const Faq = () => (
           title="Je suis étudiant"
           sections={[
             { title: 'Éligibilité', name: 'eligibility' },
-            { title: 'Paiement', name: 'payement' },
+            { title: 'Paiement', name: 'payment' },
             { title: 'Séance', name: 'session' },
           ]}
           flyers={[
@@ -78,15 +78,15 @@ const Faq = () => (
           id="psy"
           title="Je suis psychologue"
           sections={[
-            { title: 'Éligibilité', name: 'eligibility' },
+            { title: 'Éligibilité', name: 'psyEligibility' },
             { title: 'Inscription', name: 'registration' },
             { title: 'Connexion', name: 'connection' },
             { title: 'Prix de la séance et remboursement', name: 'reimbursement', id: 'remboursement' },
             { title: 'Déroulé', name: 'process' },
             { title: 'Conventionnement', name: 'agreement' },
-            { title: 'Séance', name: 'session' },
+            { title: 'Séance', name: 'psySession' },
             { title: 'Facturation', name: 'billing' },
-            { title: 'Rétractation', name: 'retraction' },
+            { title: 'Rétractation', name: 'retractation' },
           ]}
           flyers={[
             {
