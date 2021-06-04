@@ -1,6 +1,6 @@
 /* eslint-disable no-multi-str */
 /* eslint-disable max-len */
-module.exports = () => [
+module.exports = config => [
   {
     question: "Puis-je recevoir des étudiants d'autres universités et/ou de départements ?",
     answer: "Oui, vous avez la possibilité de prendre des étudiants quel que soit \
