@@ -1,4 +1,4 @@
-import { Psychologist, EditablePsychologist, NonEditablePsychologist } from '../@types/santepsy/psychologist';
+import { Psychologist, EditablePsychologist, NonEditablePsychologist } from '../types/psychologist';
 import { addFrenchLanguageIfMissing } from '../db/psychologists';
 
 const editablePsyFields = (psy: Psychologist) : EditablePsychologist => ({

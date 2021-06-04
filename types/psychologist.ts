@@ -1,4 +1,4 @@
-import demarchesSimplifiees from '../../utils/demarchesSimplifiees';
+import demarchesSimplifiees from '../utils/demarchesSimplifiees';
 
 export type PsychologistState = keyof typeof demarchesSimplifiees.DOSSIER_STATE;
 
