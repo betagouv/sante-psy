@@ -4,7 +4,7 @@ module.exports = config => [
   {
     question: 'Je souhaiterais m’inscrire sur la liste des psychologues habilités à recevoir les étudiants qui \
       souhaitent bénéficier du dispositif d’accompagnement. Quelles démarches dois-je effectuer ?',
-    answer: `Pour participer au dispositif Santé Psy Étudiants, les psychologues doivent en faire la demande en renseignant un formulaire \
+    answer: `Pour participer au dispositif Santé Psy Étudiant, les psychologues doivent en faire la demande en renseignant un formulaire \
       <a href="${config.demarchesSimplifieesUrl}" target="_blank" rel="noopener noreferrer">(cliquez ici pour accéder au formulaire)</a>. \
       Le service de santé universitaire (SSU) le plus proche de votre lieu d’exercice procédera à l’examen de votre demande. \
       Si elle est conforme aux critères retenus, votre demande sera agréée et vous serez invité(e) à signer une convention \
