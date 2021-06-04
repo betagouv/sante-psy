@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const { assert } = require('chai');
-const cronUniversityPayments = require('../cron_jobs/cronUniversityPayments');
+const { default: cronUniversityPayments } = require('../cron_jobs/cronUniversityPayments');
 
 describe('getSummariesForUniversities', () => {
   it('should getSummariesForUniversities', () => {
