@@ -72,7 +72,6 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
   if (psy) {
     const { firstNames, lastName, email } = psy;
     res.json({
-      success: true,
       firstNames,
       lastName,
       email,
@@ -93,7 +92,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
       const newToken = jwt.getJwtTokenForUser(psychologistData.dossierNumber);
       await dbLoginToken.delete(token);
       console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
-      res.json({ token: newToken });
+      res.json({ success: true, token: newToken });
       return;
     }
 

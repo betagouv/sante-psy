@@ -2,20 +2,27 @@ import axios from 'axios/index';
 import Qs from 'qs';
 import { store } from 'stores/';
 
-const client = axios.create({
-  baseURL: `${__API__}/api`,
-  paramsSerializer(params) {
-    return Qs.stringify(params, { arrayFormat: 'repeat' });
-  },
-});
+const createClient = () => {
+  const simpleClient = axios.create({
+    baseURL: `${__API__}/api`,
+    paramsSerializer(params) {
+      return Qs.stringify(params, { arrayFormat: 'repeat' });
+    },
+  });
 
-client.interceptors.request.use(config => {
-  const { token } = store.userStore;
-  if (token) {
-    config.headers = { Authorization: `Bearer ${token}` };
-  }
-  return config;
-});
+  simpleClient.interceptors.request.use(config => {
+    const { token } = store.userStore;
+    if (token) {
+      config.headers = { Authorization: `Bearer ${token}` };
+    }
+    return config;
+  });
+
+  return simpleClient;
+};
+
+const client = createClient();
+const clientWithoutErrorManagement = createClient();
 
 client.interceptors.response.use(
   response => {
@@ -39,7 +46,7 @@ const Appointment = {
   get: () => client.get('/appointments'),
 };
 
-const Config = { get: () => client.get('/config') };
+const Config = { get: () => clientWithoutErrorManagement.get('/config') };
 
 const Patient = {
   create: patient => client.post('/patients/', patient),
@@ -62,7 +69,7 @@ const Reimbursement = {
 };
 
 const User = {
-  getConnected: () => client.get('/connecteduser'),
+  getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),
   login: token => client.post('/psychologue/login', { token }),
   sendMail: email => client.post('/psychologue/sendMail', { email }),
 };
