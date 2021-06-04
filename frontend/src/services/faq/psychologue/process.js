@@ -41,7 +41,7 @@ module.exports = config => [
   {
     question: 'Il est indiqué que les psychologues feront acte de candidature via un formulaire simplifié en ligne et \
     qu’une plateforme numérique permettra de déclarer le nombre de consultations effectuées. Serait-il possible d’y avoir accès ou bien est-ce réservé aux SSU ?',
-    answer: 'C'est au psychologue de faire la déclaration des séances faites une fois qu’il est inscrit via le formulaire en ligne et \
+    answer: 'C’est au psychologue de faire la déclaration des séances faites une fois qu’il est inscrit via le formulaire en ligne et \
     que son dossier est accepté.  Cette déclaration se fait sur la plateforme Santé Psy Étudiant, dans l’espace personnel du psychologue une fois le dossier accepté.',
   },
   {
