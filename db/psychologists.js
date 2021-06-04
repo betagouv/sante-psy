@@ -3,7 +3,7 @@ const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 const dbUniversities = require('./universities');
-const { default: { editablePsyFields, nonEditablePsyFields } } = require('../services/updatePsyFields');
+const { addFrenchLanguageIfMissing, editablePsyFields, nonEditablePsyFields } = require('../services/updatePsyFields');
 
 const psychologistsTable = 'psychologists';
 module.exports.psychologistsTable = psychologistsTable;
@@ -77,19 +77,6 @@ module.exports.getPsychologists = async () => {
     throw new Error('Impossible de récupérer les psychologistes');
   }
 };
-
-function addFrenchLanguageIfMissing(languages) {
-  const frenchRegexp = new RegExp(/fran[çc]ais/, 'g');
-  const french = 'Français';
-  if (!frenchRegexp.test(languages.toLowerCase())) {
-    if (languages.trim().length === 0) {
-      return french;
-    }
-    return `${french}, ${languages}`;
-  }
-  return languages;
-}
-module.exports.addFrenchLanguageIfMissing = addFrenchLanguageIfMissing;
 
 const getPsychologistById = async (psychologistId) => {
   try {
