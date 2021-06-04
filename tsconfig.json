@@ -8,11 +8,7 @@
       "sourceMap": true,
       "forceConsistentCasingInFileNames": true,
       "skipLibCheck": true,
-      "esModuleInterop": true,
-      "typeRoots": [
-        "@types",
-        "./node_modules/@types",
-      ],
+      "esModuleInterop": true
   },
   "include": [
       "**/*.ts",

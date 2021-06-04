@@ -278,7 +278,8 @@ describe('DB Appointments', () => {
 
     it('should only return psy id appointments', async () => {
       const psyList = clean.psyList(); // @TODO add another psy
-      const anotherPsy = clean.getOnePsy('another@beta.gouv.fr');
+      const anotherPsy = { ...psyList[0] };
+      anotherPsy.dossierNumber = 'b2e447cd-2d57-4f83-8884-ab05a2633644';
 
       await dbPsychologists.savePsychologistInPG([psyList[0], anotherPsy]);
       const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);

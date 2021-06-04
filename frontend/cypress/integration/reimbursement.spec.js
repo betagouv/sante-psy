@@ -51,7 +51,7 @@ describe('Reimbursement', () => {
         .should('exist');
       cy.get('[data-test-id="convention-university-select"]')
         .select('Angers');
-      cy.get('[data-test-id="signed-true"]')
+      cy.get('[data-test-id="convention-signed-input"]')
         .click({ force: true });
       cy.get('[data-test-id="update-convention-button"]')
         .click();
@@ -79,7 +79,7 @@ describe('Reimbursement', () => {
         .should('not.exist');
       cy.get('[data-test-id="convention-university-select"]')
         .select('Aix-Marseille');
-      cy.get('[data-test-id="signed-false"]')
+      cy.get('[data-test-id="convention-unsigned-input"]')
         .click({ force: true });
       cy.get('[data-test-id="update-convention-button"]')
         .click();
