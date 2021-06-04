@@ -12,7 +12,7 @@ module.exports = () => [
     answer: 'À ce stade, il n’est prévu aucune mesure particulière.',
   },
   {
-    question: 'Pourquoi les consultations sont-elles fixées à 45 min ?',
+    question: 'Pourquoi les consultations sont-elles fixées à 45 minutes ?',
     answer: 'La durée des séances ainsi que, par ailleurs, les critères relatifs au diplôme ou à \
     l’expérience ont été établis avec le concours de la fédération française des psychologues et de psychologie.',
   },
