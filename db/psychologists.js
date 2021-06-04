@@ -3,6 +3,7 @@ const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
 const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 const dbUniversities = require('./universities');
+const { default: { editablePsyFields, nonEditablePsyFields } } = require('../services/updatePsyFields');
 
 const psychologistsTable = 'psychologists';
 module.exports.psychologistsTable = psychologistsTable;
@@ -88,6 +89,7 @@ function addFrenchLanguageIfMissing(languages) {
   }
   return languages;
 }
+module.exports.addFrenchLanguageIfMissing = addFrenchLanguageIfMissing;
 
 const getPsychologistById = async (psychologistId) => {
   try {
@@ -101,29 +103,6 @@ const getPsychologistById = async (psychologistId) => {
   }
 };
 module.exports.getPsychologistById = getPsychologistById;
-
-const editablePsyFields = (psy) => ({
-  email: psy.email,
-  address: psy.address,
-  departement: psy.departement,
-  region: psy.region,
-  phone: psy.phone,
-  website: psy.website,
-  description: psy.description,
-  teleconsultation: psy.teleconsultation,
-  languages: psy.languages,
-  personalEmail: psy.personalEmail,
-});
-
-const nonEditablePsyFields = (psy) => ({
-  firstNames: psy.firstNames,
-  lastName: psy.lastName,
-  archived: psy.archived,
-  state: psy.state,
-  training: psy.training,
-  adeli: psy.adeli,
-  diploma: psy.diploma,
-});
 
 /**
  * Perform a UPSERT with https://knexjs.org/#Builder-merge

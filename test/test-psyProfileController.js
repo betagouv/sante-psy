@@ -388,8 +388,6 @@ describe('psyProfileController', () => {
       .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
       .send(postData);
 
-      console.log(res.body);
-
       sinon.assert.called(updatePsyStub);
 
       res.body.success.should.equal(true);
