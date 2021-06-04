@@ -32,7 +32,7 @@ module.exports = config => [
       consultation des professionnels concernés (psychologues, médecins, etc.).',
   },
   {
-    question: 'Je ne dispose pas de numéro Adeli mais d’un numéro Siret. Puis-je participer au dispositif ?',
+    question: 'Je ne dispose pas de numéro Adeli mais d’un numéro SIRET. Puis-je participer au dispositif ?',
     answer: 'Le numéro ADELI est obligatoire car il permet d’attester que son détenteur est autorisé à faire usage du titre de psychologue. \
       Il constitue donc pour les services de santé universitaire une garantie importante préalable à l’agrément, \
       complémentaire aux trois années d’expérience requises. Le numéro SIRET n’offre pas une telle garantie.',
