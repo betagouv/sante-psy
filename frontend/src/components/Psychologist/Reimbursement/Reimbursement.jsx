@@ -19,11 +19,7 @@ const Reimbursement = () => {
 
   const getReimbursment = () => {
     agent.Reimbursement.get().then(response => {
-      if (response.success) {
-        setReimbursement(response);
-      } else {
-        setNotification(response);
-      }
+      setReimbursement(response);
     });
   };
 

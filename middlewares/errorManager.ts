@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { UnauthorizedError } from 'express-jwt';
+import config from '../utils/config';
 import CustomError from '../utils/CustomError';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -16,7 +17,7 @@ const errorManager = (error: Error, req: Request, res: Response, next: NextFunct
     console.error(error.message);
     res.status(500).json({
       success: false,
-      message: 'Something went wrong, please ty again',
+      message: config.activateDebug ? error.message : 'Something went wrong, please ty again',
     });
   }
 };

@@ -42,9 +42,6 @@ const NewAppointment = () => {
     agent.Patient.get()
       .then(response => {
         setPatients(response.patients);
-        if (!response.success) {
-          setNotification(response);
-        }
       });
   }, []);
 
@@ -52,9 +49,7 @@ const NewAppointment = () => {
     e.preventDefault();
     setNotification({});
     agent.Appointment.add(patientId, date).then(response => {
-      if (response.success) {
-        history.push('/psychologue/mes-seances');
-      }
+      history.push('/psychologue/mes-seances');
       setNotification(response);
     });
   };

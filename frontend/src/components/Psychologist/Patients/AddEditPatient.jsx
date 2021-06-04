@@ -31,16 +31,12 @@ const AddEditPatient = () => {
   useEffect(() => {
     if (patientId) {
       agent.Patient.getOne(patientId).then(response => {
-        if (response.success) {
-          setPatient({
-            ...response.patient,
-            dateOfBirth: response.patient.dateOfBirth
-              ? date.toFormatDDMMYYYY(new Date(response.patient.dateOfBirth))
-              : '',
-          });
-        } else {
-          setNotification(response);
-        }
+        setPatient({
+          ...response.patient,
+          dateOfBirth: response.patient.dateOfBirth
+            ? date.toFormatDDMMYYYY(new Date(response.patient.dateOfBirth))
+            : '',
+        });
       });
     }
   }, [patientId]);

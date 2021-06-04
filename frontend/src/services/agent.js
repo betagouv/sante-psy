@@ -2,8 +2,6 @@ import axios from 'axios/index';
 import Qs from 'qs';
 import { store } from 'stores/';
 
-const responseData = res => res.data;
-
 const client = axios.create({
   baseURL: `${__API__}/api`,
   paramsSerializer(params) {
@@ -19,38 +17,54 @@ client.interceptors.request.use(config => {
   return config;
 });
 
+client.interceptors.response.use(
+  response => {
+    if (!response.data.success) {
+      store.commonStore.setNotification(response.data);
+      throw new Error('Request fail');
+    }
+    return response.data;
+  },
+  error => {
+    if (error.response) {
+      store.commonStore.setNotification(error.response.data);
+    }
+    throw error;
+  },
+);
+
 const Appointment = {
-  add: (patientId, date) => client.post('/appointments/', { patientId, date }).then(responseData),
-  delete: id => client.delete(`/appointments/${id}`).then(responseData),
-  get: () => client.get('/appointments').then(responseData),
+  add: (patientId, date) => client.post('/appointments/', { patientId, date }),
+  delete: id => client.delete(`/appointments/${id}`),
+  get: () => client.get('/appointments'),
 };
 
-const Config = { get: () => client.get('/config').then(responseData) };
+const Config = { get: () => client.get('/config') };
 
 const Patient = {
-  create: patient => client.post('/patients/', patient).then(responseData),
-  delete: id => client.delete(`/patients/${id}`).then(responseData),
-  get: () => client.get('/patients').then(responseData),
-  getOne: id => client.get(`/patients/${id}`).then(responseData),
-  update: (id, patient) => client.put(`/patients/${id}`, patient).then(responseData),
+  create: patient => client.post('/patients/', patient),
+  delete: id => client.delete(`/patients/${id}`),
+  get: () => client.get('/patients'),
+  getOne: id => client.get(`/patients/${id}`),
+  update: (id, patient) => client.put(`/patients/${id}`, patient),
 };
 const Psychologist = {
-  find: () => client.get('/trouver-un-psychologue').then(responseData),
-  getProfile: () => client.get(`/psychologue/${store.userStore.decodedToken.psychologist}`).then(responseData),
+  find: () => client.get('/trouver-un-psychologue'),
+  getProfile: () => client.get(`/psychologue/${store.userStore.decodedToken.psychologist}`),
   updateProfile: psychologist => client
-    .put(`/psychologue/${store.userStore.decodedToken.psychologist}`, psychologist)
-    .then(responseData),
+    .put(`/psychologue/${store.userStore.decodedToken.psychologist}`, psychologist),
 };
 
+
 const Reimbursement = {
-  get: () => client.get('/psychologue/mes-remboursements').then(responseData),
-  saveConvention: convention => client.post('/psychologue/renseigner-convention', convention).then(responseData),
+  get: () => client.get('/psychologue/mes-remboursements'),
+  saveConvention: convention => client.post('/psychologue/renseigner-convention', convention),
 };
 
 const User = {
-  getConnected: () => client.get('/connecteduser').then(responseData),
-  login: token => client.post('/psychologue/login', { token }).then(responseData),
-  sendMail: email => client.post('/psychologue/sendMail', { email }).then(responseData),
+  getConnected: () => client.get('/connecteduser'),
+  login: token => client.post('/psychologue/login', { token }),
+  sendMail: email => client.post('/psychologue/sendMail', { email }),
 };
 
 export default {

@@ -23,9 +23,6 @@ const Patients = () => {
     agent.Patient.get()
       .then(response => {
         setPatients(response.patients);
-        if (!response.success) {
-          setNotification(response);
-        }
       });
   }, []);
 
@@ -75,12 +72,8 @@ const Patients = () => {
   const deletePatient = patientId => {
     setNotification({});
     agent.Patient.delete(patientId).then(response => {
-      if (response.success) {
-        setNotification(response);
-        setPatients(patients.filter(patient => patient.id !== patientId));
-      } else {
-        setNotification(response);
-      }
+      setNotification(response);
+      setPatients(patients.filter(patient => patient.id !== patientId));
     });
   };
 
