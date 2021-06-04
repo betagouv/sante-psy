@@ -106,19 +106,22 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
 
     try {
       const psyInDb = await getPsychologistById(psy.dossierNumber);
-
       if (!psyInDb) {
         return knex(psychologistsTable).insert(psy);
       }
 
       if (psyInDb.selfModified) {
-        return knex(psychologistsTable).update({
+        return knex(psychologistsTable)
+        .where({ dossierNumber: psy.dossierNumber })
+        .update({
           ...nonEditablePsyFields(psy),
           updatedAt,
         });
       }
 
-      return knex(psychologistsTable).update({
+      return knex(psychologistsTable)
+      .where({ dossierNumber: psy.dossierNumber })
+      .update({
         ...editablePsyFields(psy),
         ...nonEditablePsyFields(psy),
         // assignedUniversityId, do not update assignedId on already existing psy

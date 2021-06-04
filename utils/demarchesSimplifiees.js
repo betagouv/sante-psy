@@ -79,10 +79,10 @@ function parseDossierMetadata(dossier) {
   return psy;
 }
 
-function parsePsychologist(dossiers) {
-  console.log(`Parsing ${dossiers.length} psychologists from DS API`);
+function parsePsychologists(psychologists) {
+  console.log(`Parsing ${psychologists.length} psychologists from DS API`);
 
-  return dossiers.map((dossier) => parseDossierMetadata(dossier));
+  return psychologists.map((psychologist) => parseDossierMetadata(psychologist));
 }
 
 /**
@@ -118,7 +118,7 @@ async function getPsychologistList(cursor) {
 
   console.time(time);
   const list = await getAllPsychologistList(graphql.requestPsychologist, cursor);
-  list.psychologists = list.psychologists.map((psychologist) => parsePsychologist(psychologist));
+  list.psychologists = parsePsychologists(list.psychologists);
   console.timeEnd(time);
 
   return list;
