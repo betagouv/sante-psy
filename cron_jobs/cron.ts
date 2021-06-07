@@ -47,7 +47,7 @@ const jobs = [
     name: 'checkForMultipleAcceptedDossiers',
   },
   {
-    cronTime: '0 12 * * 1', // Every monday at noon
+    cronTime: '0 12 * * 3', // Every wednesday at noon
     onTick: cronDemarchesSimplifiees.autoAcceptPsychologists,
     start: true,
     timeZone: 'Europe/Paris',
