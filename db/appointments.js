@@ -36,13 +36,13 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
     const query = await knex(appointmentsTable)
       .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
         , "psychologistId"
-        , EXTRACT(YEAR from "appointmentDate") AS year
-        , EXTRACT(MONTH from "appointmentDate") AS month`))
+        , EXTRACT(YEAR from "appointmentDate" AT TIME ZONE 'Europe/Paris') AS year
+        , EXTRACT(MONTH from "appointmentDate" AT TIME ZONE 'Europe/Paris') AS month`))
       .where('psychologistId', psychologistId)
       .whereNot(`${appointmentsTable}.deleted`, true)
       .groupByRaw(`"psychologistId"
-        , EXTRACT(YEAR from "appointmentDate")
-        , EXTRACT(MONTH from "appointmentDate")`)
+        , EXTRACT(YEAR from "appointmentDate" AT TIME ZONE 'Europe/Paris')
+        , EXTRACT(MONTH from "appointmentDate" AT TIME ZONE 'Europe/Paris')`)
       .orderBy([{ column: 'year', order: 'asc' }, { column: 'month', order: 'asc' }]);
 
     return query;
@@ -78,8 +78,9 @@ module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
         , ${dbPsychologists.psychologistsTable}."lastName"
         , ${dbPsychologists.psychologistsTable}."personalEmail"
         `))
-        .whereRaw(`EXTRACT(YEAR from ${appointmentsTable}."appointmentDate") = ${year}`)
-        .andWhereRaw(`EXTRACT(MONTH from ${appointmentsTable}."appointmentDate") = ${month}`)
+        .whereRaw(`EXTRACT(YEAR from ${appointmentsTable}."appointmentDate" AT TIME ZONE 'Europe/Paris') = ${year}`)
+        // eslint-disable-next-line max-len
+        .andWhereRaw(`EXTRACT(MONTH from ${appointmentsTable}."appointmentDate" AT TIME ZONE 'Europe/Paris') = ${month}`)
         .whereNot(`${appointmentsTable}.deleted`, true)
         .innerJoin(`${dbPsychologists.psychologistsTable}`,
           `${appointmentsTable}.psychologistId`,
@@ -110,12 +111,12 @@ module.exports.getCountPatientsByYearMonth = async (psychologistId) => {
   try {
     const query = await knex(appointmentsTable)
       .select(knex.raw(`CAST(COUNT(DISTINCT "patientId") AS INTEGER) AS "countPatients"
-        , EXTRACT(YEAR from "appointmentDate") AS year
-        , EXTRACT(MONTH from "appointmentDate") AS month`))
+        , EXTRACT(YEAR from "appointmentDate" AT TIME ZONE 'Europe/Paris') AS year
+        , EXTRACT(MONTH from "appointmentDate" AT TIME ZONE 'Europe/Paris') AS month`))
       .where('psychologistId', psychologistId)
       .whereNot(`${appointmentsTable}.deleted`, true)
-      .groupByRaw(`EXTRACT(YEAR from "appointmentDate")
-        , EXTRACT(MONTH from "appointmentDate")`)
+      .groupByRaw(`EXTRACT(YEAR from "appointmentDate" AT TIME ZONE 'Europe/Paris')
+        , EXTRACT(MONTH from "appointmentDate" AT TIME ZONE 'Europe/Paris')`)
       .orderBy([{ column: 'year', order: 'asc' }, { column: 'month', order: 'asc' }]);
     return query;
   } catch (err) {
