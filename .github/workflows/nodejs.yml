@@ -26,6 +26,8 @@ jobs:
       run: npm run scalingo-postbuild
     - name: Back linter
       run: npm run lint -- --quiet
+    - name: EJS linter
+      run: npm run ejslint -- --quiet
     - name: Front linter
       run: npm --prefix frontend run lint -- --quiet
     - name: Migrate DB
