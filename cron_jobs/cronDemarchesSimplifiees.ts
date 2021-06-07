@@ -68,9 +68,14 @@ const autoAcceptPsychologists = async () => {
   demarchesSimplifiees.autoAcceptPsychologist();
 };
 
+const autoVerifyPsychologists = async () => {
+  demarchesSimplifiees.autoVerifyPsychologist();
+};
+
 export default {
   importEveryDataFromDSToPG: async () => importDataFromDSToPG(true),
   importLatestDataFromDSToPG: async () => importDataFromDSToPG(false),
   checkForMultipleAcceptedDossiers,
   autoAcceptPsychologists,
+  autoVerifyPsychologists,
 };

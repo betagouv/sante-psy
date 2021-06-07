@@ -127,6 +127,27 @@ const acceptPsychologist = (id) => {
   return request(query, variables);
 };
 
+const getDossiersToBeVerified = (cursor) => {
+  // Retrieve dossiers 
+  // state = en_construction
+  // verifie = false
+  // no messages
+
+  const query = undefined;
+  const variables = {};
+  return request(query, variables);
+};
+
+const putDossierInInstruction = (id, message) => {
+  // TODO: mutation 
+  console.debug(`Put dossier ${id} in instruction with message: ${message}`);
+};
+
+const addVerificationMessage = (id, message) => {
+  // TODO: mutation 
+  console.debug(`Update dossier ${id} to add verification message: ${message}`);
+};
+
 /**
  * # Arguments pour dossiers
     # after: Returns the elements in the list that come after the
@@ -186,3 +207,6 @@ exports.acceptPsychologist = acceptPsychologist;
 exports.getInstructors = getInstructors;
 exports.getSimplePsyInfo = getSimplePsyInfo;
 exports.requestPsychologist = requestPsychologist;
+exports.getDossiersToBeVerified = getDossiersToBeVerified;
+exports.putDossierInInstruction = putDossierInInstruction;
+exports.addVerificationMessage = addVerificationMessage;

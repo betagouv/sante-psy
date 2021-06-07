@@ -167,3 +167,37 @@ const autoAcceptPsychologist = async () => {
 };
 
 exports.autoAcceptPsychologist = autoAcceptPsychologist;
+
+const verifyPsychologist = (psychologist) => {
+  const success = false;
+  const reason = 'Work in progress';
+
+  // TODO: check diploma date
+  // TODO: call api sante to check adeli number
+
+  if (success) {
+    graphql.putDossierInInstruction(psychologist.id, `Dossier vérifié automatiquement le ${new Date()}`);
+    return true;
+  }
+
+  graphql.addVerificationMessage(psychologist.id,
+    `Le dossier n'a pas passé la vérification automatique le ${new Date()} car ${reason}`);
+  return false;
+};
+
+const autoVerifyPsychologist = async () => {
+  const dossiersToBeVerified = await getAllPsychologistList(
+    (cursor) => graphql.getDossiersToBeVerified(cursor),
+  );
+  console.log(`${dossiersToBeVerified.psychologist.length} psychologists needs verification`);
+  let countAutoVerify = 0;
+  dossiersToBeVerified.psychologists.forEach((psychologist) => {
+    const isVerified = verifyPsychologist(psychologist);
+    if (isVerified) {
+      countAutoVerify++;
+    }
+  });
+  console.log(`${countAutoVerify} have been auto verified`);
+};
+
+exports.autoVerifyPsychologist = autoVerifyPsychologist;
