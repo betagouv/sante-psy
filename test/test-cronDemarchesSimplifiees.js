@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { expect } = require('chai');
 const sinon = require('sinon');
+const { v4: uuidv4 } = require('uuid');
 const config = require('../utils/config');
 const dbPsychologists = require('../db/psychologists');
 const dbDsApiCursor = require('../db/dsApiCursor');
@@ -8,9 +9,14 @@ const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 const emailUtils = require('../utils/email');
 
 const {
-  default: { importLatestDataFromDSToPG, checkForMultipleAcceptedDossiers },
+  default: {
+    importLatestDataFromDSToPG,
+    checkForMultipleAcceptedDossiers,
+    importEveryDataFromDSToPG,
+  },
 } = require('../cron_jobs/cronDemarchesSimplifiees');
 const clean = require('./helper/clean');
+const { randomUuid } = require('../utils/uuid');
 
 describe('Import Data from DS to PG', () => {
   let getLatestCursorSavedStub;
@@ -90,5 +96,115 @@ describe('checkForMultipleAcceptedDossiers', () => {
       sinon.match(config.teamEmail), // toEmail
       sinon.match.string, // subject : any
       sinon.match(psyList[0].personalEmail)); // body contains personalEmail
+  });
+});
+
+describe('DS integration tests', () => {
+  const paulId = '036e3a85-24bf-5915-9db0-a189bec8e7f6';
+  const paul = {
+    adeli: '1234567890',
+    firstNames: 'Paul',
+    lastName: 'Burgun',
+    email: 'paul.burgun@beta.gouv.fr',
+    address: '1 Rue Lecourbe 75015 Paris',
+    departement: '2B - Haute-Corse',
+    region: 'défaut',
+    phone: '0123456789',
+    website: '',
+    teleconsultation: false,
+    description: 'Test',
+    languages: 'Français',
+    training: ['Connaissance et pratique des outils diagnostic psychologique'],
+    diploma: 'Psychologue',
+    university: null,
+    declaredUniversityId: null,
+    archived: false,
+    state: 'accepte',
+    personalEmail: 'paul.burgun@beta.gouv.fr',
+    isConventionSigned: null,
+    selfModified: false,
+  };
+  const xavierId = '03ce077a-84c3-5035-9b27-f31a78a19b3a';
+  const xavier = {
+    adeli: '123456789',
+    firstNames: 'Xavier',
+    lastName: 'Dsdr',
+    email: 'xavier.desoindre@beta.gouv.fr',
+    address: 'Traverse C Est Ici 13380 Plan-de-Cuques',
+    departement: '99 - Etranger',
+    region: 'défaut',
+    phone: '01',
+    website: '',
+    teleconsultation: false,
+    description: '',
+    languages: 'Français',
+    training: ['Connaissance et pratique des outils diagnostic psychologique'],
+    diploma: 'T',
+    university: null,
+    declaredUniversityId: null,
+    archived: false,
+    state: 'accepte',
+    personalEmail: 'xavier.desoindre@beta.gouv.fr',
+    isConventionSigned: null,
+    selfModified: false,
+  };
+
+  beforeEach(async () => {
+    await clean.cleanAllPsychologists();
+  });
+
+  const verifyPsy = async (id, expected, universityId) => {
+    const {
+      createdAt,
+      updatedAt,
+      dossierNumber,
+      assignedUniversityId,
+      ...psy
+    } = await dbPsychologists.getPsychologistById(id);
+
+    psy.should.eql(expected);
+    if (universityId) {
+      assignedUniversityId.should.equals(universityId);
+    }
+  };
+
+  it('should import all data from DS', async () => {
+    await importEveryDataFromDSToPG();
+
+    await verifyPsy(paulId, paul);
+    await verifyPsy(xavierId, xavier);
+  });
+
+  it('should update psy info when existing', async () => {
+    const paulUniversityId = uuidv4();
+    const xavierUniversityId = uuidv4();
+    await dbPsychologists.savePsychologistInPG([{
+      ...paul,
+      training: JSON.stringify(paul.training),
+      dossierNumber: paulId,
+      firstNames: 'Paulo',
+      description: 'Biz dev indispensable le jour, master en deguisement la nuit',
+      selfModified: false,
+      assignedUniversityId: paulUniversityId,
+    },
+    {
+      ...xavier,
+      training: JSON.stringify(xavier.training),
+      dossierNumber: xavierId,
+      firstNames: 'Raviere',
+      diploma: 'BTS de claquettes',
+      description: 'Codeur vaudoo, prefere mettre en prod un vendredi soir plutot que de faire des tests',
+      selfModified: true,
+      assignedUniversityId: xavierUniversityId,
+    }]);
+
+    await importEveryDataFromDSToPG();
+
+    await verifyPsy(paulId, paul, paulUniversityId);
+    await verifyPsy(xavierId, {
+      ...xavier,
+      description: 'Codeur vaudoo, prefere mettre en prod un vendredi soir plutot que de faire des tests',
+      selfModified: true,
+    }, xavierUniversityId);
   });
 });
