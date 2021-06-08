@@ -1,6 +1,6 @@
 const { gql, GraphQLClient } = require('graphql-request');
 const config = require('./config');
-const { default: { getChampsIdFromField } } = require('../services/champsAndAnnotations');
+const { default: { getChampsIdFromField, getAnnotationsIdFromField } } = require('../services/champsAndAnnotations');
 
 const endpoint = config.apiUrl;
 const graphQLClient = new GraphQLClient(endpoint, {
@@ -62,12 +62,12 @@ const getSimplePsyInfo = (cursor, state) => {
               id
               state
               datePassageEnInstruction
-              annotations(id: "${config.demarchesSimplifieesAnnotationVerifiee}") {
+              annotations(id: "${getAnnotationsIdFromField('verifiee')}") {
                 id
                 label
                 stringValue
               }
-              champs (id: "${getChampsIdFromField('adeli')}") {{
+              champs (id: "${getChampsIdFromField('adeli')}") {
                 id
                 label
                 stringValue
