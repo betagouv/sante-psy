@@ -1,6 +1,6 @@
 const { gql, GraphQLClient } = require('graphql-request');
 const config = require('./config');
-const { default: { getIdFromField } } = require('../services/champs');
+const { default: { getChampsIdFromField } } = require('../services/champsAndAnnotations');
 
 const endpoint = config.apiUrl;
 const graphQLClient = new GraphQLClient(endpoint, {
@@ -67,7 +67,7 @@ const getSimplePsyInfo = (cursor, state) => {
                 label
                 stringValue
               }
-              champs (id: "${getIdFromField('adeli')}") {{
+              champs (id: "${getChampsIdFromField('adeli')}") {{
                 id
                 label
                 stringValue
@@ -107,9 +107,6 @@ const acceptPsychologist = (id) => {
   const query = gql`
     mutation dossierAccepter($input: DossierAccepterInput!) {
       dossierAccepter(input: $input) {
-        dossier {
-          id
-        }
         errors {
           message
         }
@@ -145,7 +142,6 @@ const putDossierInInstruction = (id, message) => {
 };
 
 const addVerificationMessage = (id, message) => {
-  // TODO: mutation 
   console.debug(`Update dossier ${id} to add verification message: ${message}`);
 };
 

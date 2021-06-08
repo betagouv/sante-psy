@@ -5,7 +5,7 @@ const config = require('../utils/config');
 const { DOSSIER_STATE } = require('../utils/dossierState');
 const { default: { getAdeliInfo } } = require('../utils/adeliAPI');
 const { default: { areSimilar } } = require('../utils/string');
-const { default: { getFieldFromId, getIdFromField } } = require('./champs');
+const { default: { getChampsFieldFromId, getChampsIdFromField } } = require('./champsAndAnnotations');
 
 /**
  * transform string to boolean
@@ -46,7 +46,7 @@ function parseDossierMetadata(dossier) {
   psy.region = groupeInstructeur.label;
 
   champs.forEach((champ) => {
-    const field = getFieldFromId(champ.id);
+    const field = getChampsFieldFromId(champ.id);
     if (field) {
       psy[field] = champ.stringValue.trim();
     }
@@ -135,7 +135,7 @@ exports.autoAcceptPsychologist = autoAcceptPsychologist;
 
 const getDiplomaErrors = (psychologist) => {
   const errors = [];
-  const diplomaYearId = getIdFromField('diplomaYear');
+  const diplomaYearId = getChampsIdFromField('diplomaYear');
   const diplomaYear = psychologist.champs.find((champ) => champ.id === diplomaYearId);
   if (!diplomaYear) {
     errors.push('Diploma year missing');
@@ -152,7 +152,7 @@ const getDiplomaErrors = (psychologist) => {
 
 const getAdeliErrors = (psychologist, adeliInfo) => {
   const errors = [];
-  const adeliChampId = getIdFromField('adeli');
+  const adeliChampId = getChampsIdFromField('adeli');
   const adeliNumber = psychologist.champs.find((champ) => champ.id === adeliChampId);
   const info = adeliNumber && adeliInfo[adeliNumber.stringValue];
   if (!info) {
@@ -196,7 +196,7 @@ const autoVerifyPsychologist = async () => {
   console.log(`${dossiersToBeVerified.psychologists.length} psychologists needs verification`);
   let countAutoVerify = 0;
 
-  const adeliChampId = getIdFromField('adeli');
+  const adeliChampId = getChampsIdFromField('adeli');
   const adeliIds = dossiersToBeVerified.psychologists
     .map((psychologist) => psychologist.champs.find((x) => x.id === adeliChampId))
     .filter((adeli) => adeli)

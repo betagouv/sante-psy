@@ -31,7 +31,7 @@ module.exports = {
   demarchesSimplifieesAutoAcceptDelay: process.env.DEMARCHES_SIMPLIFIEES_AUTO_ACCEPT_DELAY,
   demarchesSimplifieesInstructor: process.env.DEMARCHES_SIMPLIFIEES_INSTRUCTOR,
   demarchesSimplifieesChamps: process.env.DEMARCHES_SIMPLIFIEES_CHAMPS,
-  demarchesSimplifieesAnnotationVerifiee: process.env.DEMARCHES_SIMPLIFIEES_ANNOTATION_VERIFIEE,
+  demarchesSimplifieesAnnotations: process.env.DEMARCHES_SIMPLIFIEES_ANNOTATIONS,
   sentryDNS: process.env.SENTRY_DNS || false,
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
