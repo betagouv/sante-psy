@@ -125,15 +125,42 @@ const acceptPsychologist = (id) => {
   return request(query, variables);
 };
 
-const getDossiersToBeVerified = (cursor) => {
-  // Retrieve dossiers 
-  // state = en_construction
-  // verifie = false
-  // no messages
-
-  const query = undefined;
-  const variables = {};
-  return request(query, variables);
+const getDossiersWithAnnotationsAndMessages = (cursor, state) => {
+  const query = gql`
+  {
+    demarche (number: ${config.demarchesSimplifieesId}) {
+      dossiers (state: ${state}${cursor ? `, after: "${cursor}"` : ''}) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        nodes {
+          id
+          champs {
+            id
+            label
+            stringValue
+          }
+          annotations {
+            id
+            label
+            stringValue
+          }
+          messages {
+            id
+          }
+          demandeur {
+            ... on PersonnePhysique {
+              nom
+              prenom
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+  return request(query);
 };
 
 const putDossierInInstruction = (id, message) => {
@@ -223,6 +250,6 @@ exports.acceptPsychologist = acceptPsychologist;
 exports.getInstructors = getInstructors;
 exports.getSimplePsyInfo = getSimplePsyInfo;
 exports.requestPsychologist = requestPsychologist;
-exports.getDossiersToBeVerified = getDossiersToBeVerified;
+exports.getDossiersWithAnnotationsAndMessages = getDossiersWithAnnotationsAndMessages;
 exports.putDossierInInstruction = putDossierInInstruction;
 exports.addVerificationMessage = addVerificationMessage;
