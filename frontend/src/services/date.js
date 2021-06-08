@@ -102,3 +102,13 @@ function isSameMonth(date1, date2) {
   return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
 }
 module.exports.isSameMonth = isSameMonth;
+
+function convertLocalToUTCDate(date) {
+  if (!date) {
+    return date
+  }
+  date = new Date(date)
+  date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+  return date
+}
+module.exports.convertLocalToUTCDate = convertLocalToUTCDate;

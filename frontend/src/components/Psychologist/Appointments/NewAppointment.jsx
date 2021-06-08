@@ -7,6 +7,7 @@ import Ariane from 'components/Ariane/Ariane';
 import Mail from 'components/Footer/Mail';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
+import { convertLocalToUTCDate } from 'services/date';
 
 import { useStore } from 'stores/';
 
@@ -84,7 +85,7 @@ const NewAppointment = () => {
                 selected={date}
                 dateFormat="dd/MM/yyyy"
                 customInput={<DateInput />}
-                onChange={newDate => setDate(newDate)}
+                onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
               />
             </div>
 
