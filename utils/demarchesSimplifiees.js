@@ -2,6 +2,8 @@
 const graphql = require('./graphql');
 const uuid = require('./uuid');
 const config = require('./config');
+const { default: { getAdeliInfo } } = require('./adeliAPI');
+const { default: { areSimilar } } = require('./string');
 
 // @see https://demarches-simplifiees-graphql.netlify.app/dossierstate.doc.html
 // eslint-disable-next-line no-unused-vars
@@ -168,31 +170,75 @@ const autoAcceptPsychologist = async () => {
 
 exports.autoAcceptPsychologist = autoAcceptPsychologist;
 
-const verifyPsychologist = (psychologist) => {
-  const success = false;
-  const reason = 'Work in progress';
+const getDiplomaErrors = (psychologist) => {
+  const errors = [];
+  const diplomaYear = psychologist.champs.find((champ) => champ.id === 'Q2hhbXAtMTYzOTE2OQ==');
+  if (!diplomaYear) {
+    errors.push('Diploma year missing');
+  } else {
+    const year = parseInt(diplomaYear.stringValue);
+    const today = new Date();
+    if (!year || year >= today.getFullYear() - 3) {
+      errors.push('Diploma is too recent');
+    }
+  }
 
-  // TODO: check diploma date
-  // TODO: call api sante to check adeli number
+  return errors;
+};
 
-  if (success) {
+const getAdeliErrors = (psychologist, adeliInfo) => {
+  const errors = [];
+  const adeliNumber = psychologist.champs.find((champ) => champ.id === 'Q2hhbXAtMTYyNjk4Nw==');
+  const info = adeliNumber && adeliInfo[adeliNumber.stringValue];
+  if (!info) {
+    errors.push('No info found for this Adeli number');
+  } else {
+    if (info['Code profession'] !== 73) {
+      errors.push(`Person is not a Psychologue but a ${info['Libellé profession']}`);
+    }
+
+    if (!areSimilar(info["Prénom d'exercice"], psychologist.demandeur.prenom)) {
+      errors.push(`First name does not match (${info["Prénom d'exercice"]} <> ${psychologist.demandeur.prenom})`);
+    }
+
+    if (!areSimilar(info["Nom d'exercice"], psychologist.demandeur.nom)) {
+      errors.push(`Last name does not match (${info["Nom d'exercice"]} <> ${psychologist.demandeur.nom})`);
+    }
+  }
+  return errors;
+};
+
+const verifyPsychologist = (psychologist, adeliInfo) => {
+  const errors = []
+  .concat(getDiplomaErrors(psychologist))
+  .concat(getAdeliErrors(psychologist, adeliInfo));
+
+  if (errors.length === 0) {
     graphql.putDossierInInstruction(psychologist.id, `Dossier vérifié automatiquement le ${new Date()}`);
     return true;
   }
 
   graphql.addVerificationMessage(psychologist.id,
-    `Le dossier n'a pas passé la vérification automatique le ${new Date()} car ${reason}`);
+    `Le dossier n'a pas passé la vérification automatique le ${new Date()} car ${errors}`);
   return false;
 };
 
 const autoVerifyPsychologist = async () => {
   const dossiersToBeVerified = await getAllPsychologistList(
-    (cursor) => graphql.getDossiersToBeVerified(cursor),
+    (cursor) => graphql.getSimplePsyInfo(cursor, 'en_construction'),
   );
-  console.log(`${dossiersToBeVerified.psychologist.length} psychologists needs verification`);
+
+  console.log(`${dossiersToBeVerified.psychologists.length} psychologists needs verification`);
   let countAutoVerify = 0;
+
+  const adeliIds = dossiersToBeVerified.psychologists
+    .map((psychologist) => psychologist.champs.find((x) => x.id === 'Q2hhbXAtMTYyNjk4Nw=='))
+    .filter((adeli) => adeli)
+    .map((adeli) => adeli.stringValue);
+  const adeliInfo = await getAdeliInfo(adeliIds);
+
   dossiersToBeVerified.psychologists.forEach((psychologist) => {
-    const isVerified = verifyPsychologist(psychologist);
+    const isVerified = verifyPsychologist(psychologist, adeliInfo);
     if (isVerified) {
       countAutoVerify++;
     }
