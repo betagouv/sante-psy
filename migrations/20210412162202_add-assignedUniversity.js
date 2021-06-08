@@ -1,14 +1,12 @@
-const { psychologistsTable } = require('../db/psychologists');
-
 exports.up = function (knex) {
-  return knex.schema.table(psychologistsTable, (table) => {
+  return knex.schema.table('psychologists', (table) => {
     table.uuid('assignedUniversityId');
     table.renameColumn('payingUniversityId', 'declaredUniversityId');
   });
 };
 
 exports.down = function (knex) {
-  return knex.schema.table(psychologistsTable, (table) => {
+  return knex.schema.table('psychologists', (table) => {
     table.dropColumn('assignedUniversityId');
     table.renameColumn('declaredUniversityId', 'payingUniversityId');
   });

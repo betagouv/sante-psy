@@ -1,11 +1,14 @@
 const knexConfig = require('../../knexfile');
 const knex = require('knex')(knexConfig);
-const dbPsychologists = require('../../db/psychologists');
-const dbPatients = require('../../db/patients');
-const dbAppointments = require('../../db/appointments');
-const dbDsApiCursor = require('../../db/dsApiCursor');
-const dbLoginToken = require('../../db/loginToken');
 const uuid = require('../../utils/uuid');
+const {
+  appointmentsTable,
+  patientsTable,
+  psychologistsTable,
+  dsApiCursorTable,
+  loginTokenTable,
+  universitiesTable,
+} = require('../../db/tables');
 
 module.exports.getRandomInt = function getRandomInt() {
   const min = Math.ceil(1);
@@ -87,20 +90,20 @@ module.exports.psyList = function getPsyList(personalEmail = 'loginemail@beta.go
 };
 
 module.exports.cleanDataCursor = async function cleanDataCursor() {
-  return knex(dbDsApiCursor.dsApiCursorTable).select('*').delete();
-};
-
-module.exports.cleanDataAppointments = async function cleanDataAppointments() {
-  return knex(dbAppointments.appointmentsTable).select('*').delete();
+  return knex(dsApiCursorTable).select('*').delete();
 };
 
 module.exports.cleanDataToken = async function cleanDataToken() {
-  return knex(dbLoginToken.loginTokenTable).select('*').delete();
+  return knex(loginTokenTable).select('*').delete();
+};
+
+module.exports.cleanAllAppointments = async function cleanDataAppointments() {
+  return knex(appointmentsTable).select('*').delete();
 };
 
 module.exports.cleanAllPsychologists = async function cleanAllPsychologists() {
   try {
-    return knex(dbPsychologists.psychologistsTable).select('*').delete();
+    return knex(psychologistsTable).select('*').delete();
   } catch (err) {
     console.log(err);
     return undefined;
@@ -108,13 +111,9 @@ module.exports.cleanAllPsychologists = async function cleanAllPsychologists() {
 };
 
 module.exports.cleanAllPatients = function cleanAllPatients() {
-  return knex(dbPatients.patientsTable).select('*').delete();
-};
-
-module.exports.cleanAllAppointments = function cleanAllAppointments() {
-  return knex('appointments').select('*').delete();
+  return knex(patientsTable).select('*').delete();
 };
 
 module.exports.cleanAllUniversities = function cleanAllUniversities() {
-  return knex('universities').select('*').delete();
+  return knex(universitiesTable).select('*').delete();
 };

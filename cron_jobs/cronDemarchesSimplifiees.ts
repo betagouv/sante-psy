@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import ejs from 'ejs';
 import dbsApiCursor from '../db/dsApiCursor';
 import dbPsychologists from '../db/psychologists';
-import demarchesSimplifiees from '../utils/demarchesSimplifiees';
+import demarchesSimplifiees from '../services/demarchesSimplifiees';
 import config from '../utils/config';
 import emailUtils from '../utils/email';
 

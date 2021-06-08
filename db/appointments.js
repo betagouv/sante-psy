@@ -1,18 +1,14 @@
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
-const dbPatient = require('./patients');
-const dbPsychologists = require('./psychologists');
 const date = require('../utils/date');
-
-const appointmentsTable = 'appointments';
-module.exports.appointmentsTable = appointmentsTable;
+const { appointmentsTable, patientsTable, psychologistsTable } = require('./tables');
 
 // todo: bug : if appointment has a patientId that does not match a patient object in the db,
 // this function returns empty.
 module.exports.getAppointments = async (psychologistId) => {
   try {
-    const appointmentArray = await knex.from(dbPatient.patientsTable)
-      .innerJoin(`${appointmentsTable}`, `${dbPatient.patientsTable}.id`, `${appointmentsTable}.patientId`)
+    const appointmentArray = await knex.from(patientsTable)
+      .innerJoin(`${appointmentsTable}`, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
       .where(`${appointmentsTable}.psychologistId`, psychologistId)
       .whereNot(`${appointmentsTable}.deleted`, true)
       .orderBy('appointmentDate', 'desc');
@@ -73,22 +69,22 @@ module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
     const query = await knex(appointmentsTable)
       .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
         , ${appointmentsTable}."psychologistId"
-        , ${dbPsychologists.psychologistsTable}."assignedUniversityId" AS "universityId"
-        , ${dbPsychologists.psychologistsTable}."firstNames"
-        , ${dbPsychologists.psychologistsTable}."lastName"
-        , ${dbPsychologists.psychologistsTable}."personalEmail"
+        , ${psychologistsTable}."assignedUniversityId" AS "universityId"
+        , ${psychologistsTable}."firstNames"
+        , ${psychologistsTable}."lastName"
+        , ${psychologistsTable}."personalEmail"
         `))
         .whereRaw(`EXTRACT(YEAR from ${appointmentsTable}."appointmentDate") = ${year}`)
         .andWhereRaw(`EXTRACT(MONTH from ${appointmentsTable}."appointmentDate") = ${month}`)
         .whereNot(`${appointmentsTable}.deleted`, true)
-        .innerJoin(`${dbPsychologists.psychologistsTable}`,
+        .innerJoin(`${psychologistsTable}`,
           `${appointmentsTable}.psychologistId`,
-          `${dbPsychologists.psychologistsTable}.dossierNumber`)
+          `${psychologistsTable}.dossierNumber`)
       .groupBy(`${appointmentsTable}.psychologistId`)
-      .groupBy(`${dbPsychologists.psychologistsTable}.assignedUniversityId`)
-      .groupBy(`${dbPsychologists.psychologistsTable}.firstNames`)
-      .groupBy(`${dbPsychologists.psychologistsTable}.lastName`)
-      .groupBy(`${dbPsychologists.psychologistsTable}.personalEmail`)
+      .groupBy(`${psychologistsTable}.assignedUniversityId`)
+      .groupBy(`${psychologistsTable}.firstNames`)
+      .groupBy(`${psychologistsTable}.lastName`)
+      .groupBy(`${psychologistsTable}.personalEmail`)
       .orderBy('countAppointments');
 
     return query;

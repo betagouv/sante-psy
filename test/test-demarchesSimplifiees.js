@@ -4,7 +4,7 @@ const testDossiers = require('./dossier.json');
 const uuid = require('../utils/uuid');
 const config = require('../utils/config');
 
-const demarchesSimplifiees = rewire('../utils/demarchesSimplifiees.js');
+const demarchesSimplifiees = rewire('../services/demarchesSimplifiees.js');
 
 describe('Demarches Simplifiees', () => {
   describe('parsePsychologists', () => {
@@ -95,16 +95,6 @@ describe('Demarches Simplifiees', () => {
       const output = parseTraining(apiResponse);
 
       output.should.equal(JSON.stringify(['training1', 'training2']));
-    });
-  });
-
-  describe('getDepartementNumberFromString', () => {
-    it('should return departement number from departement and number', async () => {
-      const departementNumber = '55';
-      const departementString = `${departementNumber} - Indre-et-Loire`;
-      const output = demarchesSimplifiees.getDepartementNumberFromString(departementString);
-
-      output.should.equal(departementNumber);
     });
   });
 

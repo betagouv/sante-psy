@@ -6,18 +6,19 @@ const dbAppointments = require('../db/appointments');
 const dbPatients = require('../db/patients');
 const dbPsychologists = require('../db/psychologists');
 const clean = require('./helper/clean');
+const { appointmentsTable } = require('../db/tables');
 
 describe('DB Appointments', () => {
   beforeEach(async () => {
     await clean.cleanAllPatients();
     await clean.cleanAllPsychologists();
-    await clean.cleanDataAppointments();
+    await clean.cleanAllAppointments();
   });
 
   afterEach(async () => {
     await clean.cleanAllPatients();
     await clean.cleanAllPsychologists();
-    await clean.cleanDataAppointments();
+    await clean.cleanAllAppointments();
   });
 
   describe('deleteAppointment', () => {
@@ -39,7 +40,7 @@ describe('DB Appointments', () => {
       );
       await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber);
 
-      const appointmentsBeforeDelete = await knex.from(dbAppointments.appointmentsTable)
+      const appointmentsBeforeDelete = await knex.from(appointmentsTable)
       .where('psychologistId', psy.dossierNumber)
       .where('patientId', patient.id);
 
@@ -47,7 +48,7 @@ describe('DB Appointments', () => {
       assert.isFalse(appointmentsBeforeDelete[0].deleted);
       await dbAppointments.deleteAppointment(appointmentsBeforeDelete[0].id, psy.dossierNumber);
 
-      const appointmentsAfterDelete = await knex.from(dbAppointments.appointmentsTable)
+      const appointmentsAfterDelete = await knex.from(appointmentsTable)
       .where('psychologistId', psy.dossierNumber)
       .where('patientId', patient.id);
       assert.isTrue(appointmentsAfterDelete[0].deleted);

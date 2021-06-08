@@ -1,19 +1,10 @@
 /* eslint-disable camelcase */
-const graphql = require('./graphql');
-const uuid = require('./uuid');
-const config = require('./config');
-const { default: { getAdeliInfo } } = require('./adeliAPI');
-const { default: { areSimilar } } = require('./string');
-
-// @see https://demarches-simplifiees-graphql.netlify.app/dossierstate.doc.html
-// eslint-disable-next-line no-unused-vars
-exports.DOSSIER_STATE = {
-  en_construction: 'en_construction',
-  en_instruction: 'en_instruction',
-  accepte: 'accepte',
-  refuse: 'refuse',
-  sans_suite: 'sans_suite',
-};
+const graphql = require('../utils/graphql');
+const uuid = require('../utils/uuid');
+const config = require('../utils/config');
+const { DOSSIER_STATE } = require('../utils/dossierState');
+const { default: { getAdeliInfo } } = require('../utils/adeliAPI');
+const { default: { areSimilar } } = require('../utils/string');
 
 function getChampValue(champData, attributeName) {
   const potentialStringValue = champData.find((champ) => champ.label === attributeName);
@@ -127,22 +118,9 @@ async function getPsychologistList(cursor) {
 }
 exports.getPsychologistList = getPsychologistList;
 
-/**
- * Output : "55"
- * @param {} departementString ex : '55 - Indre-et-Loire'
- */
-module.exports.getDepartementNumberFromString = function getDepartementNumberFromString(departementString) {
-  if (!departementString) {
-    return null;
-  }
-  // Note : this is not robust. If Demarches Simplifiées changes their format it will break.
-  const parts = departementString.split(' - ');
-  return parts[0];
-};
-
 const autoAcceptPsychologist = async () => {
   const list = await getAllPsychologistList(
-    (cursor) => graphql.getSimplePsyInfo(cursor, this.DOSSIER_STATE.en_instruction),
+    (cursor) => graphql.getSimplePsyInfo(cursor, DOSSIER_STATE.en_instruction),
   );
   console.log(`${list.psychologists.length} psychologists are in instruction`);
   let countAutoAccept = 0;
@@ -225,7 +203,7 @@ const verifyPsychologist = (psychologist, adeliInfo) => {
 
 const autoVerifyPsychologist = async () => {
   const dossiersToBeVerified = await getAllPsychologistList(
-    (cursor) => graphql.getSimplePsyInfo(cursor, 'en_construction'),
+    (cursor) => graphql.getDossiersToBeVerified(cursor),
   );
 
   console.log(`${dossiersToBeVerified.psychologists.length} psychologists needs verification`);

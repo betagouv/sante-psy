@@ -1,7 +1,7 @@
 const rewire = require('rewire');
 const sinon = require('sinon');
 
-const demarchesSimplifiees = rewire('../../utils/demarchesSimplifiees');
+const demarchesSimplifiees = rewire('../../services/demarchesSimplifiees');
 const graphql = require('../../utils/graphql');
 
 describe('getDiplomaErrors', () => {

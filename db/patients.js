@@ -1,13 +1,11 @@
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
-
-module.exports.patientsTable = 'patients';
-module.exports.studentNumberSize = 50;
+const { patientsTable } = require('./tables');
 
 module.exports.getPatientById = async (patientId, psychologistId) => {
   try {
-    const patient = await knex(module.exports.patientsTable)
+    const patient = await knex(patientsTable)
       .where('id', patientId)
       .where('psychologistId', psychologistId)
       .first();
@@ -21,7 +19,7 @@ module.exports.getPatientById = async (patientId, psychologistId) => {
 
 module.exports.getPatients = async (psychologistId) => {
   try {
-    const patientArray = await knex(module.exports.patientsTable)
+    const patientArray = await knex(patientsTable)
         .where('psychologistId', psychologistId)
         .where('deleted', false)
         .orderBy('lastName');
@@ -45,7 +43,7 @@ module.exports.insertPatient = async (
   dateOfBirth,
 ) => {
   try {
-    const patientsArray = await knex(module.exports.patientsTable).insert({
+    const patientsArray = await knex(patientsTable).insert({
       firstNames,
       lastName,
       INE,
@@ -69,7 +67,7 @@ module.exports.updatePatient = async (
   doctorAddress, dateOfBirth,
 ) => {
   try {
-    return await knex(module.exports.patientsTable)
+    return await knex(patientsTable)
       .where('id', id)
       .where('psychologistId', psychologistId)
       .update({
@@ -93,7 +91,7 @@ module.exports.updatePatient = async (
 
 module.exports.deletePatient = async (id, psychologistId) => {
   try {
-    const deletedPatient = await knex(module.exports.patientsTable)
+    const deletedPatient = await knex(patientsTable)
       .where('id', id)
       .where('psychologistId', psychologistId)
       .update({

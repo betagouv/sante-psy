@@ -1,6 +1,6 @@
 const dbUniversities = require('../db/universities');
 const dbPsychologists = require('../db/psychologists');
-const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
+const { getDepartementNumberFromString } = require('../utils/department');
 const departementToUniversityName = require('./departementToUniversityName');
 
 const run = async () => {
@@ -28,7 +28,7 @@ const run = async () => {
     }
 
     // Find universityId for this psychologist
-    const departement = demarchesSimplifiees.getDepartementNumberFromString(psychologist.departement);
+    const departement = getDepartementNumberFromString(psychologist.departement);
     if (!departement) {
       console.log(`No departement found
           - psy id ${psychologist.dossierNumber}

@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const config = require('../utils/config');
 const dbPsychologists = require('../db/psychologists');
 const dbDsApiCursor = require('../db/dsApiCursor');
-const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
+const demarchesSimplifiees = require('../services/demarchesSimplifiees');
 const emailUtils = require('../utils/email');
 
 const {
