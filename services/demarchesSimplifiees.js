@@ -138,12 +138,12 @@ const getDiplomaErrors = (psychologist) => {
   const diplomaYearId = getChampsIdFromField('diplomaYear');
   const diplomaYear = psychologist.champs.find((champ) => champ.id === diplomaYearId);
   if (!diplomaYear) {
-    errors.push('Diploma year missing');
+    errors.push('Pas d\'année d\'obtemtion du diplome');
   } else {
     const year = parseInt(diplomaYear.stringValue);
     const today = new Date();
     if (!year || year >= today.getFullYear() - 3) {
-      errors.push('Diploma is too recent');
+      errors.push('Le diplome est trop récent');
     }
   }
 
@@ -156,18 +156,18 @@ const getAdeliErrors = (psychologist, adeliInfo) => {
   const adeliNumber = psychologist.champs.find((champ) => champ.id === adeliChampId);
   const info = adeliNumber && adeliInfo[adeliNumber.stringValue];
   if (!info) {
-    errors.push('No info found for this Adeli number');
+    errors.push('Pas de correspondance pour ce numéro Adeli');
   } else {
-    if (info['Code profession'] !== 73) {
-      errors.push(`Person is not a Psychologue but a ${info['Libellé profession']}`);
+    if (info['Code profession'] !== 93) {
+      errors.push(`La personne n'est pas un psychologue mais un ${info['Libellé profession']}`);
     }
 
     if (!areSimilar(info["Prénom d'exercice"], psychologist.demandeur.prenom)) {
-      errors.push(`First name does not match (${info["Prénom d'exercice"]} <> ${psychologist.demandeur.prenom})`);
+      errors.push(`Les prénoms ne matchent pas (${info["Prénom d'exercice"]} vs ${psychologist.demandeur.prenom})`);
     }
 
     if (!areSimilar(info["Nom d'exercice"], psychologist.demandeur.nom)) {
-      errors.push(`Last name does not match (${info["Nom d'exercice"]} <> ${psychologist.demandeur.nom})`);
+      errors.push(`Le nom ne matche pas (${info["Nom d'exercice"]} vs ${psychologist.demandeur.nom})`);
     }
   }
   return errors;

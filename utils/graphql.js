@@ -142,7 +142,26 @@ const putDossierInInstruction = (id, message) => {
 };
 
 const addVerificationMessage = (id, message) => {
-  console.debug(`Update dossier ${id} to add verification message: ${message}`);
+  const query = gql`
+    mutation dossierModifierAnnotationText($input: DossierModifierAnnotationTextInput!) {
+      dossierModifierAnnotationText(input: $input) {
+        errors {
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      dossierId: id,
+      instructeurId: config.demarchesSimplifieesInstructor,
+      annotationId: getAnnotationsIdFromField('message'),
+      value: message,
+    },
+  };
+
+  return request(query, variables);
 };
 
 /**

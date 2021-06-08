@@ -18,7 +18,7 @@ describe('getDiplomaErrors', () => {
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
-    errors[0].should.equals('Diploma year missing');
+    errors[0].should.equals('Pas d\'année d\'obtemtion du diplome');
   });
 
   it('Should refuse non year diploma', () => {
@@ -26,7 +26,7 @@ describe('getDiplomaErrors', () => {
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
-    errors[0].should.equals('Diploma is too recent');
+    errors[0].should.equals('Le diplome est trop récent');
   });
 
   it('Should refuse recent diploma', () => {
@@ -34,7 +34,7 @@ describe('getDiplomaErrors', () => {
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
-    errors[0].should.equals('Diploma is too recent');
+    errors[0].should.equals('Le diplome est trop récent');
   });
 
   it('Should accept old diploma', () => {
@@ -51,7 +51,7 @@ describe('getAdeliErrors', () => {
       'Identifiant PP': '123',
       "Nom d'exercice": 'Doe',
       "Prénom d'exercice": 'Jane',
-      'Code profession': 73,
+      'Code profession': 93,
       'Libellé profession': 'Psychologue',
     },
     456: {
@@ -79,7 +79,7 @@ describe('getAdeliErrors', () => {
 
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(1);
-    errors[0].should.equals('No info found for this Adeli number');
+    errors[0].should.equals('Pas de correspondance pour ce numéro Adeli');
   });
 
   it('Should refuse non psychologue', () => {
@@ -87,7 +87,7 @@ describe('getAdeliErrors', () => {
 
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(1);
-    errors[0].should.equals('Person is not a Psychologue but a Magicien');
+    errors[0].should.equals('La personne n\'est pas un psychologue mais un Magicien');
   });
 
   it('Should refuse missmatching name', () => {
@@ -95,7 +95,7 @@ describe('getAdeliErrors', () => {
 
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(1);
-    errors[0].should.equals('First name does not match (Jane <> john)');
+    errors[0].should.equals('Les prénoms ne matchent pas (Jane vs john)');
   });
 
   it('Should return all missmatching info', () => {
@@ -103,9 +103,9 @@ describe('getAdeliErrors', () => {
 
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(3);
-    errors[0].should.equals('Person is not a Psychologue but a Magicien');
-    errors[1].should.equals('First name does not match (John <> Georges)');
-    errors[2].should.equals('Last name does not match (Doe <> Moustaki)');
+    errors[0].should.equals('La personne n\'est pas un psychologue mais un Magicien');
+    errors[1].should.equals('Les prénoms ne matchent pas (John vs Georges)');
+    errors[2].should.equals('Le nom ne matche pas (Doe vs Moustaki)');
   });
 
   it('Should accept perfect match', () => {
