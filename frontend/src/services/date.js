@@ -105,10 +105,10 @@ module.exports.isSameMonth = isSameMonth;
 
 function convertLocalToUTCDate(date) {
   if (!date) {
-    return date
+    return date;
   }
-  date = new Date(date)
-  date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
-  return date
+  let dateUTC = new Date(date);
+  dateUTC = new Date(Date.UTC(dateUTC.getFullYear(), dateUTC.getMonth(), dateUTC.getDate()));
+  return dateUTC;
 }
 module.exports.convertLocalToUTCDate = convertLocalToUTCDate;
