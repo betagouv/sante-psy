@@ -27,6 +27,7 @@ describe('Demarches Simplifiees', () => {
           adeli: '829302942',
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           diploma: 'Psychologie clinique de la santé',
+          diplomaYear: '05 février 2002',
           phone: '0468396600',
           email: 'psychologue.test@beta.gouv.fr',
           personalEmail: 'loginemail@beta.gouv.fr',
@@ -49,6 +50,7 @@ describe('Demarches Simplifiees', () => {
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           phone: '0468396600',
           diploma: 'Psychologie clinique de la santé',
+          diplomaYear: '05 février 2002',
           email: 'psychologue.test@beta.gouv.fr',
           personalEmail: 'loginEmail2@beta.gouv.fr',
           website: 'beta.gouv.fr',
@@ -95,54 +97,6 @@ describe('Demarches Simplifiees', () => {
       const output = parseTraining(apiResponse);
 
       output.should.equal(JSON.stringify(['training1', 'training2']));
-    });
-  });
-
-  describe('getChampValue', () => {
-    it('should return stringValue for field Champ', async () => {
-      const result = 'Psychologie clinique de la santé';
-      const label = 'Intitulé ou spécialité de votre master de psychologie';
-
-      const apiResponse = [
-        {
-          id: 'Q2hhbXAtMTYzMDQxNg==',
-          label: 'Votre carrière et vos qualifications',
-          stringValue: '',
-        },
-        {
-          id: 'Q2hhbXAtMTYzMDQxNw==',
-          label,
-          stringValue: result,
-        },
-      ];
-
-      const getChampValue = demarchesSimplifiees.__get__('getChampValue');
-      const output = getChampValue(apiResponse, label);
-
-      output.should.equal(result);
-    });
-
-    it('should return empty string for a field Champ that does not exist', async () => {
-      const result = '';
-      const label = 'Intitulé ou spécialité de votre master de psychologie';
-
-      const apiResponse = [
-        {
-          id: 'Q2hhbXAtMTYzMDQxNg==',
-          label: 'Votre carrière et vos qualifications',
-          stringValue: '',
-        },
-        {
-          id: 'Q2hhbXAtMTYzMDQxNw==',
-          label: 'nothing',
-          stringValue: result,
-        },
-      ];
-
-      const getChampValue = demarchesSimplifiees.__get__('getChampValue');
-      const output = getChampValue(apiResponse, label);
-
-      output.should.equal(result);
     });
   });
 });

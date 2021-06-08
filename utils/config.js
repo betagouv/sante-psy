@@ -30,7 +30,7 @@ module.exports = {
   demarchesSimplifieesAutoAcceptMessage: autoAcceptMessage(contactEmail),
   demarchesSimplifieesAutoAcceptDelay: process.env.DEMARCHES_SIMPLIFIEES_AUTO_ACCEPT_DELAY,
   demarchesSimplifieesInstructor: process.env.DEMARCHES_SIMPLIFIEES_INSTRUCTOR,
-  demarchesSimplifieesChampDepartment: process.env.DEMARCHES_SIMPLIFIEES_CHAMP_DEPARTMENT,
+  demarchesSimplifieesChamps: process.env.DEMARCHES_SIMPLIFIEES_CHAMPS,
   demarchesSimplifieesAnnotationVerifiee: process.env.DEMARCHES_SIMPLIFIEES_ANNOTATION_VERIFIEE,
   sentryDNS: process.env.SENTRY_DNS || false,
   featurePsyList: process.env.FEATURE_PSY_LIST || false,

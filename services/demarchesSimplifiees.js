@@ -5,17 +5,7 @@ const config = require('../utils/config');
 const { DOSSIER_STATE } = require('../utils/dossierState');
 const { default: { getAdeliInfo } } = require('../utils/adeliAPI');
 const { default: { areSimilar } } = require('../utils/string');
-
-function getChampValue(champData, attributeName) {
-  const potentialStringValue = champData.find((champ) => champ.label === attributeName);
-
-  if (typeof potentialStringValue === 'undefined') {
-    console.warn(`Champ from API ${attributeName} does not exist`);
-    return '';
-  }
-
-  return potentialStringValue.stringValue.trim();
-}
+const { default: { getFieldFromId, getIdFromField } } = require('./champs');
 
 /**
  * transform string to boolean
@@ -41,33 +31,28 @@ function getUuidDossierNumber(number) {
 }
 
 function parseDossierMetadata(dossier) {
-  const { state, archived } = dossier;
+  const {
+    state, archived, demandeur, usager, number, groupeInstructeur, champs,
+  } = dossier;
   const psy = { state, archived };
 
-  psy.lastName = dossier.demandeur.nom.trim();
-  psy.firstNames = dossier.demandeur.prenom.trim();
-  psy.personalEmail = dossier.usager.email.trim();
+  psy.dossierNumber = getUuidDossierNumber(number);
 
-  psy.dossierNumber = getUuidDossierNumber(dossier.number);
-  psy.region = dossier.groupeInstructeur.label;
+  psy.lastName = demandeur.nom.trim();
+  psy.firstNames = demandeur.prenom.trim();
 
-  psy.address = getChampValue(dossier.champs, 'Adresse du cabinet');
-  psy.departement = getChampValue(dossier.champs, 'Votre département'); // "14 - Calvados"
-  psy.phone = getChampValue(dossier.champs, 'Téléphone du secrétariat');
-  psy.teleconsultation = parseTeleconsultation(
-    getChampValue(dossier.champs, 'Proposez-vous de la téléconsultation ?'),
-  );
-  psy.website = getChampValue(dossier.champs, 'Site web professionnel (optionnel)');
-  psy.email = getChampValue(dossier.champs, 'Email de contact');
-  psy.description = getChampValue(dossier.champs, 'Paragraphe de présentation (optionnel)');
+  psy.personalEmail = usager.email.trim();
 
-  // @TODO comma separated values not reliable
-  psy.training = parseTraining(
-    getChampValue(dossier.champs, 'Formations et expériences'),
-  );
-  psy.adeli = getChampValue(dossier.champs, 'Numéro Adeli');
-  psy.diploma = getChampValue(dossier.champs, 'Intitulé ou spécialité de votre master de psychologie');
-  psy.languages = getChampValue(dossier.champs, 'Langues parlées (optionnel)');
+  psy.region = groupeInstructeur.label;
+
+  champs.forEach((champ) => {
+    const field = getFieldFromId(champ.id);
+    if (field) {
+      psy[field] = champ.stringValue.trim();
+    }
+  });
+  psy.teleconsultation = parseTeleconsultation(psy.teleconsultation);
+  psy.training = parseTraining(psy.training);
 
   return psy;
 }
@@ -150,7 +135,8 @@ exports.autoAcceptPsychologist = autoAcceptPsychologist;
 
 const getDiplomaErrors = (psychologist) => {
   const errors = [];
-  const diplomaYear = psychologist.champs.find((champ) => champ.id === 'Q2hhbXAtMTYzOTE2OQ==');
+  const diplomaYearId = getIdFromField('diplomaYear');
+  const diplomaYear = psychologist.champs.find((champ) => champ.id === diplomaYearId);
   if (!diplomaYear) {
     errors.push('Diploma year missing');
   } else {
@@ -166,7 +152,8 @@ const getDiplomaErrors = (psychologist) => {
 
 const getAdeliErrors = (psychologist, adeliInfo) => {
   const errors = [];
-  const adeliNumber = psychologist.champs.find((champ) => champ.id === 'Q2hhbXAtMTYyNjk4Nw==');
+  const adeliChampId = getIdFromField('adeli');
+  const adeliNumber = psychologist.champs.find((champ) => champ.id === adeliChampId);
   const info = adeliNumber && adeliInfo[adeliNumber.stringValue];
   if (!info) {
     errors.push('No info found for this Adeli number');
@@ -209,8 +196,9 @@ const autoVerifyPsychologist = async () => {
   console.log(`${dossiersToBeVerified.psychologists.length} psychologists needs verification`);
   let countAutoVerify = 0;
 
+  const adeliChampId = getIdFromField('adeli');
   const adeliIds = dossiersToBeVerified.psychologists
-    .map((psychologist) => psychologist.champs.find((x) => x.id === 'Q2hhbXAtMTYyNjk4Nw=='))
+    .map((psychologist) => psychologist.champs.find((x) => x.id === adeliChampId))
     .filter((adeli) => adeli)
     .map((adeli) => adeli.stringValue);
   const adeliInfo = await getAdeliInfo(adeliIds);

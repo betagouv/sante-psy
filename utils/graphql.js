@@ -1,5 +1,6 @@
 const { gql, GraphQLClient } = require('graphql-request');
 const config = require('./config');
+const { default: { getIdFromField } } = require('../services/champs');
 
 const endpoint = config.apiUrl;
 const graphQLClient = new GraphQLClient(endpoint, {
@@ -66,7 +67,7 @@ const getSimplePsyInfo = (cursor, state) => {
                 label
                 stringValue
               }
-              champs (id: "${config.demarchesSimplifieesChampDepartment}") {
+              champs (id: "${getIdFromField('adeli')}") {{
                 id
                 label
                 stringValue
