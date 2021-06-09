@@ -45,7 +45,7 @@ const NewAppointment = () => {
       });
   }, []);
 
-  const createNewPatient = e => {
+  const createNewAppointment = e => {
     e.preventDefault();
     setNotification({});
     agent.Appointment.add(patientId, date).then(response => {
@@ -73,7 +73,7 @@ const NewAppointment = () => {
       </p>
       <GlobalNotification />
       <div className="fr-mb-5w">
-        <form onSubmit={createNewPatient}>
+        <form onSubmit={createNewAppointment}>
           <div>
             <div className="fr-my-2w">
               <DatePicker
