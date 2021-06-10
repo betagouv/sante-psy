@@ -1,6 +1,11 @@
 const { loginAsDefault } = require('./utils/login');
+const { resetDB } = require('./utils/db');
 
 describe('Redirection', () => {
+  before(() => {
+    resetDB();
+  });
+
   beforeEach(() => {
     cy.intercept('GET', '/api/config')
       .as('config');
