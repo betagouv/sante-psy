@@ -25,6 +25,7 @@ const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
       description: psychologist.description,
       languages: psychologist.languages,
       personalEmail: psychologist.personalEmail,
+      active: psychologist.active,
     },
   });
 };
@@ -103,8 +104,42 @@ const editPsyProfile = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+const activate = async (req: Request, res: Response): Promise<void> => {
+  await dbPsychologists.activate(req.params.psyId);
+
+  res.json({
+    success: true,
+    message: 'Vos compte est de nouveau actif.',
+  });
+};
+
+const suspendValidators = [
+  check('date')
+    .isISO8601()
+    .isAfter()
+    .withMessage('Vous devez spécifier une date de fin de suspension dans le futur.'),
+  check('reason')
+    .trim().not().isEmpty()
+    .customSanitizer((value, { req }) => req.sanitize(value))
+    .withMessage('Vous devez spécifier une raison.'),
+];
+
+const suspend = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+
+  await dbPsychologists.suspend(req.params.psyId, req.body.date, req.body.reason);
+
+  res.json({
+    success: true,
+    message: 'Vos compte a bien été suspendu.',
+  });
+};
+
 export default {
   editPsyProfilValidators,
+  suspendValidators,
   getPsyProfile: asyncHelper(getPsyProfile),
   editPsyProfile: asyncHelper(editPsyProfile),
+  activate: asyncHelper(activate),
+  suspend: asyncHelper(suspend),
 };

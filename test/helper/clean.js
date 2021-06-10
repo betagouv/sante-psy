@@ -46,6 +46,7 @@ module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.g
     assignedUniversityId: uniId,
     region: 'Normandie',
     languages: 'Français ,Anglais, et Espagnol',
+    active: true,
   };
 };
 

@@ -130,6 +130,10 @@ app.post('/api/psychologue/renseigner-convention',
   reimbursementController.updateConventionInfoValidators,
   reimbursementController.updateConventionInfo);
 
+app.post('/api/psychologue/:psyId/activate', access.checkPsyParam, psyProfileController.activate);
+app.post('/api/psychologue/:psyId/suspend',
+  [access.checkPsyParam, ...psyProfileController.suspendValidators],
+  psyProfileController.suspend);
 app.get('/api/psychologue/:psyId', access.checkPsyParam, psyProfileController.getPsyProfile);
 app.put('/api/psychologue/:psyId',
   [access.checkPsyParam, ...psyProfileController.editPsyProfilValidators],

@@ -1,14 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { Button } from '@dataesr/react-dsfr';
 
 import GlobalNotification from 'components/Notification/GlobalNotification';
-import Mail from 'components/Footer/Mail';
+import SuspensionInfo from './SuspensionInfo';
 
-const ViewProfile = ({ psychologist, loading }) => (
-  <div className="fr-container fr-mb-3w fr-mt-2w">
-    <h1>Mes informations</h1>
-    <GlobalNotification />
-    {!loading && (
+const ViewProfile = ({ psychologist, loading, activatePsychologist }) => {
+  const history = useHistory();
+  return (
+    <>
+      <h1>Mes informations</h1>
+      <GlobalNotification />
+      {!loading && (
       <div className="fr-my-3w">
         <p data-test-id="personal-email-info">
           <b>Email personnel :</b>
@@ -62,18 +65,22 @@ const ViewProfile = ({ psychologist, loading }) => (
           {psychologist.description}
         </p>
         <div className="fr-my-5w">
-          <Link
-            data-test-id="show-profile-form-button"
-            to="/psychologue/mon-profil/modifier"
-            className="fr-btn fr-btn--icon-left fr-fi-edit-line"
+          <Button
+            icon="fr-fi-edit-line"
+            title="Modify"
+            onClick={() => history.push('/psychologue/mon-profil/modifier')}
           >
             Modifier mes informations
-          </Link>
+          </Button>
         </div>
+        <SuspensionInfo
+          psychologist={psychologist}
+          activatePsychologist={activatePsychologist}
+        />
       </div>
-    )}
-    <Mail />
-  </div>
-);
+      )}
+    </>
+  );
+};
 
 export default ViewProfile;

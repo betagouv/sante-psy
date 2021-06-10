@@ -3,6 +3,7 @@ import cronDemarchesSimplifiees from './cronDemarchesSimplifiees';
 import cronUniversityPayments from './cronUniversityPayments';
 import config from '../utils/config';
 import sentry from '../utils/sentry';
+import cronPsychologists from './cronPsychologists';
 
 // Desactivate debug log for production as they are a bit too verbose
 if (!config.activateDebug) {
@@ -61,6 +62,14 @@ const jobs = [
     timeZone: 'Europe/Paris',
     isActive: config.featureAutoVerify,
     name: 'Auto verify psychologist in DS',
+  },
+  {
+    cronTime: '0 */6 * * *', // every 6 hours
+    onTick: cronPsychologists.reactivatePsychologists,
+    start: true,
+    runOnInit: true,
+    timeZone: 'Europe/Paris',
+    name: 'Check active boolean on every Psychologist',
   },
 ];
 

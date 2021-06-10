@@ -70,11 +70,14 @@ async function saveToken(email: string, token: string) {
 const connectedUser = async (req: Request, res: Response): Promise<void> => {
   const psy = await dbPsychologists.getPsychologistById(req.user.psychologist);
   if (psy) {
-    const { firstNames, lastName, email } = psy;
+    const {
+      firstNames, lastName, email, active,
+    } = psy;
     res.json({
       firstNames,
       lastName,
       email,
+      active,
     });
   } else {
     res.json();

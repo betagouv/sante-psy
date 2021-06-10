@@ -31,7 +31,7 @@ const Appointments = () => {
     month: new Date().getMonth() + 1,
   });
 
-  const { commonStore: { setNotification } } = useStore();
+  const { commonStore: { setNotification }, userStore: { user } } = useStore();
 
   useEffect(() => {
     agent.Appointment.get()
@@ -68,6 +68,13 @@ const Appointments = () => {
         Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
         {' '}
         <HashLink to="/psychologue/mes-remboursements">Remboursement de mes séances</HashLink>
+      </Notification>
+      )}
+      {!loading && user && !user.active && (
+      <Notification>
+        Votre compte est supsendu. Pour que les étudiants puisse vous contacter, rendez vous sur
+        {' '}
+        <HashLink to="/psychologue/mon-profil">votre profil</HashLink>
       </Notification>
       )}
       <h1>Déclarer mes séances</h1>

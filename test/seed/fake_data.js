@@ -16,6 +16,7 @@ const {
 exports.seed = async function (knex) {
   console.log('Clean database information');
 
+  await knex('supsension_reasons').del();
   await knex(loginTokenTable).del();
   await knex(appointmentsTable).del();
   await knex(patientsTable).del();

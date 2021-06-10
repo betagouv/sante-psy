@@ -231,3 +231,50 @@ module.exports.updatePsychologist = async (psychologist) => {
     throw new Error('Erreur de modification du psychologue');
   }
 };
+
+module.exports.activate = async (dossierNumber) => {
+  try {
+    return knex(psychologistsTable)
+      .where({ dossierNumber })
+      .update({
+        active: true,
+        unactiveUntil: null,
+      });
+  } catch (err) {
+    console.error('Erreur d\'activation du psychologue', err);
+    throw new Error('Erreur d\'activation du psychologue');
+  }
+};
+
+module.exports.suspend = async (dossierNumber, unactiveUntil, reason) => knex.transaction((trx) => {
+  const update = knex(psychologistsTable)
+      .transacting(trx)
+      .where({ dossierNumber })
+      .update({
+        active: false,
+        unactiveUntil,
+      });
+  const create = knex('suspension_reasons')
+      .transacting(trx)
+      .insert({
+        psychologistId: dossierNumber,
+        reason,
+        until: unactiveUntil,
+      });
+
+  Promise.all([update, create])
+      .then(() => {
+        trx.commit();
+        console.log(`Psychologue ${dossierNumber} suspendu jusqu'au ${unactiveUntil}`);
+      })
+      .catch((err) => {
+        trx.rollback();
+        console.error('Erreur de suspension du psychologue', err);
+        throw new Error('Erreur de suspension du psychologue');
+      });
+});
+
+module.exports.reactivate = () => knex(psychologistsTable)
+    .where({ active: false })
+    .andWhere('unactiveUntil', '<=', (new Date()).toISOString())
+    .update({ active: true, unactiveUntil: null });

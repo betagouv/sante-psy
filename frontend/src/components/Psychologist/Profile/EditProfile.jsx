@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
-import Mail from 'components/Footer/Mail';
 import Input from 'components/Form/Input';
 
 import { REGIONS, DEPARTEMENTS } from 'services/geo';
@@ -20,7 +19,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
   };
 
   return (
-    <div className="fr-container fr-mb-3w fr-mt-2w">
+    <>
       <Ariane
         previous={[
           {
@@ -164,8 +163,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
         </form>
       </div>
       )}
-      <Mail />
-    </div>
+    </>
   );
 };
 
