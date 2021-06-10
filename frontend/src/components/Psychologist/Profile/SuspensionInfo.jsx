@@ -19,7 +19,7 @@ const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
             sur l&lsquo;annuaire.
           </p>
           <Button
-            icon="fr-fi-delete-line"
+            icon="fr-fi-eye-off-line"
             title="delete"
             onClick={() => history.push('/psychologue/mon-profil/suspendre')}
           >
@@ -36,11 +36,11 @@ const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
             sur l&lsquo;annuaire.
           </p>
           <Button
-            icon="fr-fi-delete-line"
+            icon="fr-fi-eye-line"
             title="delete"
             onClick={activatePsychologist}
           >
-            Activer mon compte
+            Remettre mes informations de l&lsquo;annuaire
           </Button>
         </>
       )}

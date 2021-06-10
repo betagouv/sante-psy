@@ -52,7 +52,7 @@ module.exports.saveAssignedUniversity = async (psychologistId, assignedUniversit
   return updatedPsy;
 };
 
-module.exports.getPsychologists = async () => {
+module.exports.getActivePsychologists = async () => {
   try {
     const psychologists = knex.column(
       knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
@@ -72,6 +72,7 @@ module.exports.getPsychologists = async () => {
         .from(psychologistsTable)
         .whereNot('archived', true)
         .where('state', DOSSIER_STATE.accepte)
+        .andWhere('active', true)
         .orderByRaw('RANDOM ()');
     return psychologists;
   } catch (err) {

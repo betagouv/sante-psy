@@ -6,7 +6,7 @@ import asyncHelper from '../utils/async-helper';
 const getPsychologists = async (req: Request, res: Response): Promise<void> => {
   const time = `getting all psychologists from Postgres (query id #${Math.random().toString()})`;
   console.time(time);
-  const psyList = await dbPsychologists.getPsychologists();
+  const psyList = await dbPsychologists.getActivePsychologists();
   console.timeEnd(time);
 
   res.json({

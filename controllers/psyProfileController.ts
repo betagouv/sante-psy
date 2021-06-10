@@ -109,7 +109,7 @@ const activate = async (req: Request, res: Response): Promise<void> => {
 
   res.json({
     success: true,
-    message: 'Vos compte est de nouveau actif.',
+    message: 'Vos informations sont de nouveaux visibles sur l\'annuaire.',
   });
 };
 
@@ -131,7 +131,7 @@ const suspend = async (req: Request, res: Response): Promise<void> => {
 
   res.json({
     success: true,
-    message: 'Vos compte a bien été suspendu.',
+    message: 'Vos informations ne sont plus visibles sur l\'annuaire.',
   });
 };
 

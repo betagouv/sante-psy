@@ -72,7 +72,7 @@ const Appointments = () => {
       )}
       {!loading && user && !user.active && (
       <Notification>
-        Votre compte est supsendu. Pour que les étudiants puisse vous contacter, rendez vous sur
+        Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur
         {' '}
         <HashLink to="/psychologue/mon-profil">votre profil</HashLink>
       </Notification>

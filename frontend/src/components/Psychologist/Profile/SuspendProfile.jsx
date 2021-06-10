@@ -62,18 +62,18 @@ const SuspendProfile = ({ suspendPsychologist }) => {
             label: 'Mes informations',
             url: '/psychologue/mon-profil',
           }]}
-        current="Suspendre mon compte"
+        current="Retirer mes informations de l'annuaire"
       />
-      <h1>Suspendre mon compte</h1>
+      <h1>Retirer mes informations de l&lsquo;annuaire</h1>
       <GlobalNotification />
       <p>
-        Cette action vous retirera de l&lsquo;annuaire afin de ne plus être contacté par des étudiants.
+        Cette action vous retirera temporairement de l&lsquo;annuaire afin de ne plus être contacté par des étudiants.
         Elle n&lsquo;influe en rien vos remboursements en cours et vous pourrez toujours déclarer vos séances.
         Vous pourez reactiver votre compte à tout moment.
       </p>
       <RadioGroup
-        legend="Pourquoi voulez vous suspendre votre compte ?"
-        ariaLabel="raisons de suspensions"
+        legend="Pourquoi voulez vous retirer vos informations ?"
+        ariaLabel="raison"
         name="reason"
       >
         <Radio
@@ -119,8 +119,8 @@ const SuspendProfile = ({ suspendPsychologist }) => {
         </Row>
       </RadioGroup>
       <RadioGroup
-        legend="Pour combien de temps voulez vous suspendre votre compte ?"
-        ariaLabel="durée de la suspension"
+        legend="Pour combien de temps voulez vous retirer vos informations?"
+        ariaLabel="durée"
       >
         <Radio
           label="1 semaine"
@@ -157,18 +157,18 @@ const SuspendProfile = ({ suspendPsychologist }) => {
 
         </Row>
         <Radio
-          label="Je souhaite suspendre mon compte définitivement"
+          label="Je souhaite retirer mes informations définitivement"
           onChange={selectDuration}
           value="forever"
         />
       </RadioGroup>
       <Button
-        icon="fr-fi-delete-line"
+        icon="fr-fi-eye-off-line"
         title="delete"
         onClick={() => suspendPsychologist(getReason(), calculateSuspensionDate())}
         disabled={!canValidate}
       >
-        Suspendre mon compte
+        Retirer mes informations de l&lsquo;annuaire
       </Button>
     </>
   );
