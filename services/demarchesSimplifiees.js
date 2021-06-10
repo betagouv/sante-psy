@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 const graphql = require('../utils/graphql');
 const uuid = require('../utils/uuid');
+const date = require('../utils/date');
 const config = require('../utils/config');
 const { DOSSIER_STATE } = require('../utils/dossierState');
 const { default: { getAdeliInfo } } = require('../utils/adeliAPI');
@@ -144,12 +145,12 @@ const getDiplomaErrors = (psychologist) => {
   const diplomaYearId = getChampsIdFromField('diplomaYear');
   const diplomaYear = psychologist.champs.find((champ) => champ.id === diplomaYearId);
   if (!diplomaYear) {
-    errors.push('Pas d\'année d\'obtemtion du diplome');
+    errors.push('pas d\'année d\'obtention du diplôme');
   } else {
     const year = parseInt(diplomaYear.stringValue);
     const today = new Date();
     if (!year || year >= today.getFullYear() - 3) {
-      errors.push('Le diplome est trop récent');
+      errors.push('le diplôme est trop récent');
     }
   }
 
@@ -162,35 +163,39 @@ const getAdeliErrors = (psychologist, adeliInfo) => {
   const adeliNumber = psychologist.champs.find((champ) => champ.id === adeliChampId);
   const info = adeliNumber && adeliInfo[adeliNumber.stringValue];
   if (!info) {
-    errors.push('Pas de correspondance pour ce numéro Adeli');
+    errors.push('pas de correspondance pour ce numéro Adeli');
   } else {
     if (info['Code profession'] !== 93) {
-      errors.push(`La personne n'est pas un psychologue mais un ${info['Libellé profession']}`);
+      errors.push(`la personne n'est pas un psychologue mais un ${info['Libellé profession']}`);
     }
 
     if (!areSimilar(info["Prénom d'exercice"], psychologist.demandeur.prenom)) {
-      errors.push(`Les prénoms ne matchent pas (${info["Prénom d'exercice"]} vs ${psychologist.demandeur.prenom})`);
+      errors.push(`les prénoms ne matchent pas (${info["Prénom d'exercice"]} vs ${psychologist.demandeur.prenom})`);
     }
 
     if (!areSimilar(info["Nom d'exercice"], psychologist.demandeur.nom)) {
-      errors.push(`Le nom ne matche pas (${info["Nom d'exercice"]} vs ${psychologist.demandeur.nom})`);
+      errors.push(`le nom ne matche pas (${info["Nom d'exercice"]} vs ${psychologist.demandeur.nom})`);
     }
   }
   return errors;
 };
 
 const verifyPsychologist = (psychologist, adeliInfo) => {
+  const today = date.toFormatDDMMYYYY(new Date());
+
   const errors = []
   .concat(getDiplomaErrors(psychologist))
   .concat(getAdeliErrors(psychologist, adeliInfo));
 
   if (errors.length === 0) {
-    graphql.putDossierInInstruction(psychologist.id, `Dossier vérifié automatiquement le ${new Date()}`);
+    graphql.addVerificationMessage(psychologist.id, `Dossier vérifié automatiquement le ${today}`);
+    graphql.verifyDossier(psychologist.id);
+    graphql.putDossierInInstruction(psychologist.id);
     return true;
   }
 
   graphql.addVerificationMessage(psychologist.id,
-    `Le dossier n'a pas passé la vérification automatique le ${new Date()} car ${errors}`);
+    `Le dossier n'a pas passé la vérification automatique le ${today} car ${errors}`);
   return false;
 };
 

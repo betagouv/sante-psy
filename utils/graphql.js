@@ -163,11 +163,6 @@ const getDossiersWithAnnotationsAndMessages = (cursor, state) => {
   return request(query);
 };
 
-const putDossierInInstruction = (id, message) => {
-  // TODO: mutation 
-  console.debug(`Put dossier ${id} in instruction with message: ${message}`);
-};
-
 const addVerificationMessage = (id, message) => {
   const query = gql`
     mutation dossierModifierAnnotationText($input: DossierModifierAnnotationTextInput!) {
@@ -185,6 +180,50 @@ const addVerificationMessage = (id, message) => {
       instructeurId: config.demarchesSimplifieesInstructor,
       annotationId: getAnnotationsIdFromField('message'),
       value: message,
+    },
+  };
+
+  return request(query, variables);
+};
+
+const verifyDossier = (id) => {
+  const query = gql`
+    mutation dossierModifierAnnotationCheckbox($input: DossierModifierAnnotationCheckboxInput!) {
+      dossierModifierAnnotationCheckbox(input: $input) {
+        errors {
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      dossierId: id,
+      instructeurId: config.demarchesSimplifieesInstructor,
+      annotationId: getAnnotationsIdFromField('verifiee'),
+      value: true,
+    },
+  };
+
+  return request(query, variables);
+};
+
+const putDossierInInstruction = (id) => {
+  const query = gql`
+    mutation dossierPasserEnInstruction($input: DossierPasserEnInstructionInput!) {
+      dossierPasserEnInstruction(input: $input) {
+        errors {
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      dossierId: id,
+      instructeurId: config.demarchesSimplifieesInstructor,
     },
   };
 
@@ -251,5 +290,6 @@ exports.getInstructors = getInstructors;
 exports.getSimplePsyInfo = getSimplePsyInfo;
 exports.requestPsychologist = requestPsychologist;
 exports.getDossiersWithAnnotationsAndMessages = getDossiersWithAnnotationsAndMessages;
-exports.putDossierInInstruction = putDossierInInstruction;
 exports.addVerificationMessage = addVerificationMessage;
+exports.verifyDossier = verifyDossier;
+exports.putDossierInInstruction = putDossierInInstruction;

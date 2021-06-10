@@ -18,7 +18,7 @@ describe('getDiplomaErrors', () => {
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
-    errors[0].should.equals('Pas d\'année d\'obtemtion du diplome');
+    errors[0].should.equals('pas d\'année d\'obtention du diplôme');
   });
 
   it('Should refuse non year diploma', () => {
@@ -26,7 +26,7 @@ describe('getDiplomaErrors', () => {
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
-    errors[0].should.equals('Le diplome est trop récent');
+    errors[0].should.equals('le diplôme est trop récent');
   });
 
   it('Should refuse recent diploma', () => {
@@ -34,7 +34,7 @@ describe('getDiplomaErrors', () => {
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
-    errors[0].should.equals('Le diplome est trop récent');
+    errors[0].should.equals('le diplôme est trop récent');
   });
 
   it('Should accept old diploma', () => {
@@ -79,7 +79,7 @@ describe('getAdeliErrors', () => {
 
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(1);
-    errors[0].should.equals('Pas de correspondance pour ce numéro Adeli');
+    errors[0].should.equals('pas de correspondance pour ce numéro Adeli');
   });
 
   it('Should refuse non psychologue', () => {
@@ -87,7 +87,7 @@ describe('getAdeliErrors', () => {
 
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(1);
-    errors[0].should.equals('La personne n\'est pas un psychologue mais un Magicien');
+    errors[0].should.equals('la personne n\'est pas un psychologue mais un Magicien');
   });
 
   it('Should refuse missmatching name', () => {
@@ -95,7 +95,7 @@ describe('getAdeliErrors', () => {
 
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(1);
-    errors[0].should.equals('Les prénoms ne matchent pas (Jane vs john)');
+    errors[0].should.equals('les prénoms ne matchent pas (Jane vs john)');
   });
 
   it('Should return all missmatching info', () => {
@@ -103,9 +103,9 @@ describe('getAdeliErrors', () => {
 
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(3);
-    errors[0].should.equals('La personne n\'est pas un psychologue mais un Magicien');
-    errors[1].should.equals('Les prénoms ne matchent pas (John vs Georges)');
-    errors[2].should.equals('Le nom ne matche pas (Doe vs Moustaki)');
+    errors[0].should.equals('la personne n\'est pas un psychologue mais un Magicien');
+    errors[1].should.equals('les prénoms ne matchent pas (John vs Georges)');
+    errors[2].should.equals('le nom ne matche pas (Doe vs Moustaki)');
   });
 
   it('Should accept perfect match', () => {
@@ -119,29 +119,32 @@ describe('getAdeliErrors', () => {
 describe('verifyPsychologist', () => {
   let getAdeliErrorsStub;
   let getDiplomaErrorsStub;
-  let putDossierInInstructionStub;
   let addVerificationMessageStub;
+  let verifyDossierStub;
+  let putDossierInInstructionStub;
 
   let unsets = [];
   beforeEach(() => {
     unsets = [];
     getAdeliErrorsStub = sinon.stub();
     getDiplomaErrorsStub = sinon.stub();
-    putDossierInInstructionStub = sinon.stub(graphql, 'putDossierInInstruction');
     addVerificationMessageStub = sinon.stub(graphql, 'addVerificationMessage');
+    verifyDossierStub = sinon.stub(graphql, 'verifyDossier');
+    putDossierInInstructionStub = sinon.stub(graphql, 'putDossierInInstruction');
     unsets.push(demarchesSimplifiees.__set__('getAdeliErrors', getAdeliErrorsStub));
     unsets.push(demarchesSimplifiees.__set__('getDiplomaErrors', getDiplomaErrorsStub));
   });
 
   afterEach((done) => {
-    putDossierInInstructionStub.restore();
     addVerificationMessageStub.restore();
+    verifyDossierStub.restore();
+    putDossierInInstructionStub.restore();
     unsets.forEach((unset) => unset());
     done();
   });
 
   const verifyPsychologist = demarchesSimplifiees.__get__('verifyPsychologist');
-  it('Should call putDossierInInstruction if no errors', () => {
+  it('Should call addVerificationMessage, verifyDossier and putDossierInInstruction if no errors', () => {
     getAdeliErrorsStub.returns([]);
     getDiplomaErrorsStub.returns([]);
 
@@ -150,12 +153,12 @@ describe('verifyPsychologist', () => {
     result.should.equals(true);
     sinon.assert.called(getAdeliErrorsStub);
     sinon.assert.called(getDiplomaErrorsStub);
-    sinon.assert.calledWith(putDossierInInstructionStub,
+    sinon.assert.calledOnce(addVerificationMessageStub);
+    sinon.assert.calledWith(addVerificationMessageStub,
       123,
-      sinon.match((message) => message.startsWith(
-        `Dossier vérifié automatiquement le ${(new Date()).toDateString()}`,
-      )));
-    sinon.assert.notCalled(addVerificationMessageStub);
+      sinon.match((message) => message.startsWith('Dossier vérifié automatiquement le ')));
+    sinon.assert.calledWith(verifyDossierStub, 123);
+    sinon.assert.calledWith(putDossierInInstructionStub, 123);
   });
 
   it('Should call addVerificationMessage if errors', () => {
@@ -167,12 +170,12 @@ describe('verifyPsychologist', () => {
     result.should.equals(false);
     sinon.assert.called(getAdeliErrorsStub);
     sinon.assert.called(getDiplomaErrorsStub);
+    sinon.assert.calledOnce(addVerificationMessageStub);
     sinon.assert.calledWith(addVerificationMessageStub,
       123,
-      sinon.match((message) => message.startsWith(
-        `Le dossier n'a pas passé la vérification automatique le ${(new Date()).toDateString()}`,
-      )
+      sinon.match((message) => message.startsWith('Le dossier n\'a pas passé la vérification automatique le ')
       && message.endsWith('car error 3,error 4,error 1,error 2')));
+    sinon.assert.notCalled(verifyDossierStub);
     sinon.assert.notCalled(putDossierInInstructionStub);
   });
 });
