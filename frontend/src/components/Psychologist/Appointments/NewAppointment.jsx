@@ -42,19 +42,14 @@ const NewAppointment = () => {
     agent.Patient.get()
       .then(response => {
         setPatients(response.patients);
-        if (!response.success) {
-          setNotification(response);
-        }
       });
   }, []);
 
-  const createNewPatient = e => {
+  const createNewAppointment = e => {
     e.preventDefault();
     setNotification({});
     agent.Appointment.add(patientId, date).then(response => {
-      if (response.success) {
-        history.push('/psychologue/mes-seances');
-      }
+      history.push('/psychologue/mes-seances');
       setNotification(response);
     });
   };
@@ -78,7 +73,7 @@ const NewAppointment = () => {
       </p>
       <GlobalNotification />
       <div className="fr-mb-5w">
-        <form onSubmit={createNewPatient}>
+        <form onSubmit={createNewAppointment}>
           <div>
             <div className="fr-my-2w">
               <DatePicker

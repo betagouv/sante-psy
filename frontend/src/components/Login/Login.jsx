@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect, useParams } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import Notification from 'components/Notification/Notification';
@@ -15,18 +15,18 @@ const Login = () => {
     userStore: { setToken, user, isTokenExpired, token: existingToken },
   } = useStore();
   const { token } = useParams();
+  const history = useHistory();
 
   const [email, setEmail] = useState('');
 
   useEffect(() => {
     if (token) {
-      agent.User.login(token).then(loginInfo => {
-        if (loginInfo.token) {
+      setToken();
+      agent.User.login(token)
+        .then(loginInfo => {
           setToken(loginInfo.token);
-        } else {
-          setNotification(loginInfo);
-        }
-      });
+          history.push('/psychologue/mes-seances');
+        });
     }
   }, [token]);
 
@@ -35,7 +35,7 @@ const Login = () => {
     agent.User.sendMail(email).then(setNotification);
   };
 
-  if (user) {
+  if (user && !token) {
     return <Redirect to="/psychologue/mes-seances" />;
   }
 

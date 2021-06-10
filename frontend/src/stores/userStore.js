@@ -46,7 +46,7 @@ export default class UserStore {
     if (this.token) {
       if (!this.isTokenExpired()) {
         return agent.User.getConnected().then(user => {
-          this.user = user;
+          this.user = user.data;
         });
       }
     } else {

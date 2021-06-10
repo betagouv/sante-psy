@@ -37,21 +37,14 @@ const Appointments = () => {
         setLoading(false);
         setAppointments(response.appointments);
         setConvention(response.currentConvention);
-        if (!response.success) {
-          setNotification(response);
-        }
       });
   }, []);
 
   const deleteAppointment = appointmentId => {
     setNotification({});
     agent.Appointment.delete(appointmentId).then(response => {
-      if (response.success) {
-        setNotification(response);
-        setAppointments(appointments.filter(appointment => appointment.id !== appointmentId));
-      } else {
-        setNotification(response);
-      }
+      setNotification(response);
+      setAppointments(appointments.filter(appointment => appointment.id !== appointmentId));
     });
   };
 

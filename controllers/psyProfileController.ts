@@ -1,37 +1,35 @@
-const { check, oneOf } = require('express-validator');
-const validation = require('../utils/validation');
-const dbPsychologists = require('../db/psychologists');
+import { Request, Response } from 'express';
 
-module.exports.getPsyProfile = async (req, res) => {
-  try {
-    const { psyId } = req.params;
-    const psychologist = await dbPsychologists.getPsychologistById(psyId);
-    if (!psychologist) {
-      throw Error("Le psychologue n'existe pas.");
-    }
+import { check, oneOf } from 'express-validator';
+import validation from '../utils/validation';
+import dbPsychologists from '../db/psychologists';
+import asyncHelper from '../utils/async-helper';
 
-    return res.json({
-      success: true,
-      psychologist: {
-        email: psychologist.email,
-        address: psychologist.address,
-        departement: psychologist.departement,
-        region: psychologist.region,
-        phone: psychologist.phone,
-        website: psychologist.website,
-        teleconsultation: psychologist.teleconsultation,
-        description: psychologist.description,
-        languages: psychologist.languages,
-        personalEmail: psychologist.personalEmail,
-      },
-    });
-  } catch (err) {
-    console.error('Error getPsyProfile', err);
-    return res.json({ success: false, message: 'Erreur lors de la récupération du profil.' });
+const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
+  const { psyId } = req.params;
+  const psychologist = await dbPsychologists.getPsychologistById(psyId);
+  if (!psychologist) {
+    throw Error("Le psychologue n'existe pas.");
   }
+
+  res.json({
+    success: true,
+    psychologist: {
+      email: psychologist.email,
+      address: psychologist.address,
+      departement: psychologist.departement,
+      region: psychologist.region,
+      phone: psychologist.phone,
+      website: psychologist.website,
+      teleconsultation: psychologist.teleconsultation,
+      description: psychologist.description,
+      languages: psychologist.languages,
+      personalEmail: psychologist.personalEmail,
+    },
+  });
 };
 
-module.exports.editPsyProfilValidators = [
+const editPsyProfilValidators = [
   check('personalEmail')
     .trim()
     .notEmpty()
@@ -91,28 +89,22 @@ module.exports.editPsyProfilValidators = [
     .withMessage('Vous devez spécifier si vous proposez la téléconsultation.'),
 ];
 
-module.exports.editPsyProfile = async (req, res) => {
-  if (!validation.checkErrors(req)) {
-    return res.json({ success: false, message: req.error });
-  }
+const editPsyProfile = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
 
-  try {
-    const { psyId } = req.params;
+  await dbPsychologists.updatePsychologist({
+    dossierNumber: req.params.psyId,
+    ...req.body,
+  });
 
-    await dbPsychologists.updatePsychologist({
-      dossierNumber: psyId,
-      ...req.body,
-    });
+  res.json({
+    success: true,
+    message: 'Vos informations ont bien été mises à jour.',
+  });
+};
 
-    return res.json({
-      success: true,
-      message: 'Vos informations ont bien été mises à jour.',
-    });
-  } catch (err) {
-    console.error('Erreur pour modifier le profil psy', err);
-    return res.json({
-      success: false,
-      message: 'Erreur. Les informations n\'ont pas été mises à jour. Pourriez-vous réessayer ?',
-    });
-  }
+export default {
+  editPsyProfilValidators,
+  getPsyProfile: asyncHelper(getPsyProfile),
+  editPsyProfile: asyncHelper(editPsyProfile),
 };
