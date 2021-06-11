@@ -2,7 +2,7 @@
 exports.up = function (knex) {
   // Add extention for handling uuids to postgres
   return knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";').then(() => {
-    console.log('Creating universites table');
+    console.log('Creating universities table');
 
     return knex.schema
       .createTable('universities', (table) => {
