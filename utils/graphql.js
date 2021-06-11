@@ -49,6 +49,9 @@ const request = async (query, variables) => {
   }
 };
 
+const executeQuery = (query, variables) => request(query, variables);
+const executeMutation = (query, variables) => request(query, variables);
+
 const getSimplePsyInfo = (cursor, state) => {
   const query = gql`
     {
@@ -78,7 +81,7 @@ const getSimplePsyInfo = (cursor, state) => {
     }
   `;
 
-  return request(query);
+  return executeQuery(query);
 };
 
 const getInstructors = (groupeInstructeurNumber) => {
@@ -100,7 +103,7 @@ const getInstructors = (groupeInstructeurNumber) => {
     groupeInstructeurNumber,
   };
 
-  return request(query, variables);
+  return executeQuery(query, variables);
 };
 
 const acceptPsychologist = (id) => {
@@ -122,7 +125,7 @@ const acceptPsychologist = (id) => {
     },
   };
 
-  return request(query, variables);
+  return executeMutation(query, variables);
 };
 
 const getDossiersWithAnnotationsAndMessages = (cursor, state) => {
@@ -160,7 +163,7 @@ const getDossiersWithAnnotationsAndMessages = (cursor, state) => {
     }
   }
 `;
-  return request(query);
+  return executeQuery(query);
 };
 
 const addVerificationMessage = (id, message) => {
@@ -183,7 +186,7 @@ const addVerificationMessage = (id, message) => {
     },
   };
 
-  return request(query, variables);
+  return executeMutation(query, variables);
 };
 
 const verifyDossier = (id) => {
@@ -206,7 +209,7 @@ const verifyDossier = (id) => {
     },
   };
 
-  return request(query, variables);
+  return executeMutation(query, variables);
 };
 
 const putDossierInInstruction = (id) => {
@@ -227,7 +230,7 @@ const putDossierInInstruction = (id) => {
     },
   };
 
-  return request(query, variables);
+  return executeMutation(query, variables);
 };
 
 /**
@@ -282,7 +285,7 @@ async function requestPsychologist(afterCursor) {
     }
   `;
 
-  return request(query);
+  return executeQuery(query);
 }
 
 exports.acceptPsychologist = acceptPsychologist;

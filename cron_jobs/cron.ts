@@ -55,7 +55,6 @@ const jobs = [
     name: 'Auto accept psychologist from designated universities in DS',
   },
   {
-    // TODO: to be confirmed
     cronTime: '0 10 * * 1-5', // every weekday at 10am
     onTick: cronDemarchesSimplifiees.autoVerifyPsychologists,
     start: true,
