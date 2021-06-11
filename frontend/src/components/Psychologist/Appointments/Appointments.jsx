@@ -15,6 +15,7 @@ import { useStore } from 'stores/';
 
 import styles from './appointments.cssmodule.scss';
 import 'react-month-picker/css/month-picker.css';
+import './custom-month-picker.css';
 
 const shortPickerLang = { months: date.shortFrenchMonthNames };
 const longPickerLang = { months: date.longFrenchMonthNames };

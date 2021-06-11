@@ -95,7 +95,8 @@ module.exports.shortFrenchMonthNames = [
   'Dec',
 ];
 
-module.exports.longFrenchMonthNames = ['Janvier',
+module.exports.longFrenchMonthNames = [
+  'Janvier',
   'Février',
   'Mars',
   'Avril',
