@@ -248,10 +248,11 @@ describe('loginController', async () => {
       .get('/api/connecteduser')
       .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psyList[0].dossierNumber)}`)
       .then(async (res) => {
-        res.body.should.have.all.keys('firstNames', 'lastName', 'email');
+        res.body.should.have.all.keys('firstNames', 'lastName', 'email', 'active');
         res.body.firstNames.should.equal(psyList[0].firstNames);
         res.body.lastName.should.equal(psyList[0].lastName);
         res.body.email.should.equal(psyList[0].email);
+        res.body.active.should.equal(psyList[0].active);
       });
     });
 

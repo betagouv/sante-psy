@@ -20,8 +20,16 @@ module.exports.getRandomInt = function getRandomInt() {
   return ourRandom.toString();
 };
 
+module.exports.getOneInactivePsy = (unactiveUntil) => this.getOnePsy(
+  'loginemail@beta.gouv.fr',
+  'accepte',
+  false,
+  null,
+  unactiveUntil,
+);
+
 module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.gouv.fr',
-  state = 'accepte', archived = false, uniId = null) {
+  state = 'accepte', archived = false, uniId = null, unactiveUntil = undefined) {
   const dossierNumber = uuid.randomUuid();
   return {
     dossierNumber,
@@ -46,7 +54,8 @@ module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.g
     assignedUniversityId: uniId,
     region: 'Normandie',
     languages: 'Français ,Anglais, et Espagnol',
-    active: true,
+    active: !unactiveUntil,
+    unactiveUntil,
   };
 };
 
@@ -83,10 +92,10 @@ module.exports.getOneAppointment = function getOneAppointment(patientId, psychol
 };
 
 module.exports.psyList = function getPsyList(personalEmail = 'loginemail@beta.gouv.fr',
-  state = 'accepte', archived = false) {
+  state = 'accepte', archived = false, unactiveUntil = undefined) {
   const universityId = uuid.randomUuid();
   return [
-    module.exports.getOnePsy(personalEmail, state, archived, universityId),
+    module.exports.getOnePsy(personalEmail, state, archived, universityId, unactiveUntil),
   ];
 };
 
@@ -104,7 +113,8 @@ module.exports.cleanAllAppointments = async function cleanDataAppointments() {
 
 module.exports.cleanAllPsychologists = async function cleanAllPsychologists() {
   try {
-    return knex(psychologistsTable).select('*').delete();
+    await knex('suspension_reasons').del();
+    return knex(psychologistsTable).del();
   } catch (err) {
     console.log(err);
     return undefined;

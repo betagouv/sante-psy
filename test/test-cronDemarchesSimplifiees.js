@@ -86,7 +86,7 @@ describe('checkForMultipleAcceptedDossiers', () => {
     psyList[0].dossierNumber = '0fee0788-b4fe-49f5-a950-5d22a343d495';
     await dbPsychologists.savePsychologistInPG(psyList);
 
-    const psyArray = await dbPsychologists.getPsychologists();
+    const psyArray = await dbPsychologists.getActivePsychologists();
     expect(psyArray).to.have.length(2);
 
     await checkForMultipleAcceptedDossiers();
