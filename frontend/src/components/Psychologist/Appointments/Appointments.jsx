@@ -16,7 +16,8 @@ import { useStore } from 'stores/';
 import styles from './appointments.cssmodule.scss';
 import 'react-month-picker/css/month-picker.css';
 
-const pickerLang = { months: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'] };
+const shortPickerLang = { months: date.shortFrenchMonthNames };
+const longPickerLang = { months: date.longFrenchMonthNames };
 
 const Appointments = () => {
   const [loading, setLoading] = useState(true);
@@ -49,7 +50,7 @@ const Appointments = () => {
   };
 
   const makeText = m => {
-    if (m && m.year && m.month) return (`${pickerLang.months[m.month - 1]}. ${m.year}`);
+    if (m && m.year && m.month) return (`${longPickerLang.months[m.month - 1]} ${m.year}`);
     return '?';
   };
 
@@ -89,28 +90,39 @@ const Appointments = () => {
               Nouvelle séance
             </HashLink>
           </div>
+          <div className="fr-mb-1w">
+            <div>
+              Veuillez trouver ci-dessous vos séances déclarées pour le mois de
+              {' '}
+              <b>{ makeText(month) }</b>
+              .
+              <Picker
+                years={{ min: { year: 2021, month: 3 }, max: { year: 2022, month: 12 } }}
+                ref={calendar}
+                value={month}
+                lang={shortPickerLang.months}
+                onChange={(y, m) => { setMonth({ month: m, year: y }); calendar.current.dismiss(); }}
+              >
+                <div className="fr-grid-row fr-grid-row--middle fr-grid-row--no-gutters">
+                  <label className="fr-label fr-col-6" htmlFor="date">
+                    Pour visualiser vos séances déclarées pour un autre mois, sélectionnez-le ici :
+                  </label>
+                  <input
+                    className="fr-input short-input"
+                    onChange={() => {}}
+                    onClick={() => calendar.current.show()}
+                    value={makeText(month)}
+                  />
+                </div>
+              </Picker>
+            </div>
+          </div>
           <div className={classNames('fr-table', styles.table)}>
             <table>
               <thead>
                 <tr>
                   <th scope="col">
-                    <Picker
-                      years={{ min: { year: 2021, month: 3 }, max: { year: 2022, month: 12 } }}
-                      ref={calendar}
-                      value={month}
-                      lang={pickerLang.months}
-                      onChange={(y, m) => { setMonth({ month: m, year: y }); calendar.current.dismiss(); }}
-                    >
-                      <div className="fr-grid-row fr-grid-row--middle fr-grid-row--no-gutters">
-                        <label className="fr-label fr-col-3" htmlFor="date">Date</label>
-                        <input
-                          className="fr-input short-input"
-                          onChange={() => {}}
-                          onClick={() => calendar.current.show()}
-                          value={makeText(month)}
-                        />
-                      </div>
-                    </Picker>
+                    Date
                   </th>
                   <th scope="col">
                     Patient
@@ -150,7 +162,14 @@ const Appointments = () => {
                 ))}
               </tbody>
             </table>
-            {filteredAppointments.length === 0 && <span>Vous n‘avez pas déclaré de séances pour ce mois.</span>}
+            {filteredAppointments.length === 0 && (
+            <div className="fr-mt-2w">
+              Vous n‘avez pas déclaré de séances pour le mois de
+              {' '}
+              { makeText(month) }
+              .
+            </div>
+            )}
           </div>
         </div>
       </div>

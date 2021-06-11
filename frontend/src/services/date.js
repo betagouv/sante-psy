@@ -65,38 +65,6 @@ module.exports.getDatePlusOneHour = () => {
   return new Date(expirationDate.setHours(expirationDate.getHours() + 1)).toISOString();
 };
 
-module.exports.getFrenchMonthName = monthNumber => {
-  switch (monthNumber) {
-    case 1:
-      return 'janvier';
-    case 2:
-      return 'février';
-    case 3:
-      return 'mars';
-    case 4:
-      return 'avril';
-    case 5:
-      return 'mai';
-    case 6:
-      return 'juin';
-    case 7:
-      return 'juillet';
-    case 8:
-      return 'août';
-    case 9:
-      return 'septembre';
-    case 10:
-      return 'octobre';
-    case 11:
-      return 'novembre';
-    case 12:
-      return 'décembre';
-    default:
-      console.error('invalid month', monthNumber);
-      return 'Erreur';
-  }
-};
-
 function isSameMonth(date1, date2) {
   return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
 }
@@ -111,3 +79,32 @@ function convertLocalToUTCDate(date) {
   return dateUTC;
 }
 module.exports.convertLocalToUTCDate = convertLocalToUTCDate;
+
+module.exports.shortFrenchMonthNames = [
+  'Jan',
+  'Fev',
+  'Mar',
+  'Avr',
+  'Mai',
+  'Jun',
+  'Jul',
+  'Aou',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+module.exports.longFrenchMonthNames = ['Janvier',
+  'Février',
+  'Mars',
+  'Avril',
+  'Mai',
+  'Juin',
+  'Juillet',
+  'Août',
+  'Septembre',
+  'Octobre',
+  'Novembre',
+  'Décembre',
+];
