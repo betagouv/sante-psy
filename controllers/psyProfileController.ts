@@ -4,6 +4,8 @@ import { check, oneOf } from 'express-validator';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
+import config from '../utils/config';
+import CustomError from '../utils/CustomError';
 
 const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
   const { psyId } = req.params;
@@ -126,6 +128,14 @@ const suspendValidators = [
 
 const suspend = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
+
+  // TO REMOVE suspensionDepartment
+  if (config.suspensionDepartment) {
+    const psy = await dbPsychologists.getPsychologistById(req.params.psyId);
+    if (!config.suspensionDepartment.includes(psy.departement)) {
+      throw new CustomError('Feature non disponible pour le moment', 400);
+    }
+  }
 
   await dbPsychologists.suspend(req.params.psyId, req.body.date, req.body.reason);
 
