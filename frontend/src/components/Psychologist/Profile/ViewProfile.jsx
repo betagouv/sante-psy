@@ -66,6 +66,7 @@ const ViewProfile = ({ psychologist, loading, activatePsychologist }) => {
         </p>
         <div className="fr-my-5w">
           <Button
+            data-test-id="show-profile-form-button"
             icon="fr-fi-edit-line"
             title="Modify"
             onClick={() => history.push('/psychologue/mon-profil/modifier')}

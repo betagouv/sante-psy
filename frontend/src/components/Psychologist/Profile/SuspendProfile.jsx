@@ -77,21 +77,25 @@ const SuspendProfile = ({ suspendPsychologist }) => {
         name="reason"
       >
         <Radio
+          data-test-id="radio-reason-holidays"
           label="Je pars en vacances"
           onChange={selectReason}
           value="holidays"
         />
         <Radio
+          data-test-id="radio-reason-toomuch"
           label="Je reçois trop de demandes"
           onChange={selectReason}
           value="toomuch"
         />
         <Radio
+          data-test-id="radio-reason-reimbursments"
           label="Je suis en attente de mes remboursements"
           onChange={selectReason}
           value="reimbursments"
         />
         <Radio
+          data-test-id="radio-reason-convention"
           label="Je suis en attente de ma convention"
           onChange={selectReason}
           value="convention"
@@ -99,6 +103,7 @@ const SuspendProfile = ({ suspendPsychologist }) => {
         <Row className="fr-radio-group">
           <Col n="sm-2">
             <Radio
+              data-test-id="radio-reason-other"
               label="Autre"
               onChange={e => {
                 setReason('other');
@@ -110,6 +115,7 @@ const SuspendProfile = ({ suspendPsychologist }) => {
           {displayReason && (
             <Col>
               <TextInput
+                data-test-id="radio-reason-other-input"
                 required
                 value={otherReason}
                 onChange={e => setOtherReason(e.target.value)}
@@ -123,11 +129,13 @@ const SuspendProfile = ({ suspendPsychologist }) => {
         ariaLabel="durée"
       >
         <Radio
+          data-test-id="radio-duration-week"
           label="1 semaine"
           onChange={selectDuration}
           value="week"
         />
         <Radio
+          data-test-id="radio-duration-month"
           label="1 mois"
           onChange={selectDuration}
           value="month"
@@ -135,6 +143,7 @@ const SuspendProfile = ({ suspendPsychologist }) => {
         <Row className="fr-radio-group">
           <Col n="sm-2">
             <Radio
+              data-test-id="radio-duration-other"
               label="Autre"
               onChange={e => {
                 setDuration('other');
@@ -149,7 +158,11 @@ const SuspendProfile = ({ suspendPsychologist }) => {
                 selected={date}
                 minDate={tomorrow}
                 dateFormat="dd/MM/yyyy"
-                customInput={<DateInput />}
+                customInput={(
+                  <DateInput
+                    dataTestId="radio-duration-other-input"
+                  />
+                )}
                 onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
               />
             </Col>
@@ -157,12 +170,14 @@ const SuspendProfile = ({ suspendPsychologist }) => {
 
         </Row>
         <Radio
+          data-test-id="radio-duration-forever"
           label="Je souhaite retirer mes informations définitivement"
           onChange={selectDuration}
           value="forever"
         />
       </RadioGroup>
       <Button
+        data-test-id="suspend-button"
         icon="fr-fi-eye-off-line"
         title="delete"
         onClick={() => suspendPsychologist(getReason(), calculateSuspensionDate())}
