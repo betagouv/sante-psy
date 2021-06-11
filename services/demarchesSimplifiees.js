@@ -52,9 +52,22 @@ function parseDossierMetadata(dossier) {
 
   psy.region = groupeInstructeur.label;
 
+  const champsToMap = [
+    'departement',
+    'diploma',
+    'adeli',
+    'phone',
+    'address',
+    'email',
+    'languages',
+    'website',
+    'description',
+    'teleconsultation',
+    'training',
+  ];
   champs.forEach((champ) => {
     const field = getChampsFieldFromId(champ.id);
-    if (field) {
+    if (champsToMap.includes(field)) {
       psy[field] = champ.stringValue.trim();
     }
   });
