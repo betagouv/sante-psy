@@ -91,11 +91,10 @@ const Appointments = () => {
             </HashLink>
           </div>
           <div className="fr-mb-1w">
-            <div>
-              Veuillez trouver ci-dessous vos séances déclarées pour le mois de
-              {' '}
-              <b>{ makeText(month) }</b>
-              .
+            <div className="fr-grid-row fr-grid-row--middle fr-grid-row--no-gutters">
+              <label className="fr-label fr-col-xs-10 fr-col-lg-6" htmlFor="date">
+                Veuillez trouver ci-dessous vos séances déclarées pour le mois sélectionné :
+              </label>
               <Picker
                 years={{ min: { year: 2021, month: 3 }, max: { year: 2022, month: 12 } }}
                 ref={calendar}
@@ -103,17 +102,12 @@ const Appointments = () => {
                 lang={shortPickerLang.months}
                 onChange={(y, m) => { setMonth({ month: m, year: y }); calendar.current.dismiss(); }}
               >
-                <div className="fr-grid-row fr-grid-row--middle fr-grid-row--no-gutters">
-                  <label className="fr-label fr-col-6" htmlFor="date">
-                    Pour visualiser vos séances déclarées pour un autre mois, sélectionnez-le ici :
-                  </label>
-                  <input
-                    className="fr-input short-input"
-                    onChange={() => {}}
-                    onClick={() => calendar.current.show()}
-                    value={makeText(month)}
-                  />
-                </div>
+                <input
+                  className="fr-input short-input"
+                  onChange={() => {}}
+                  onClick={() => calendar.current.show()}
+                  value={makeText(month)}
+                />
               </Picker>
             </div>
           </div>
