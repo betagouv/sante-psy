@@ -1,5 +1,6 @@
 const rewire = require('rewire');
 const sinon = require('sinon');
+const config = require('../../utils/config');
 
 const demarchesSimplifiees = rewire('../../services/demarchesSimplifiees');
 const graphql = rewire('../../utils/graphql');
@@ -27,7 +28,7 @@ describe('autoVerifyPsychologist', () => {
 
     const DOSSIER_ID_VALID = 'RG9zc2llci00NzI5ODc3';
     const DOSSIER_ID_INVALID = 'RG9zc2llci00NzI5ODcw';
-    const INSTRUCTOR_ID = 'SW5zdHJ1Y3RldXItNDg5OTM='; // TODO: update once DS test account created
+    const INSTRUCTOR_ID = config.demarchesSimplifieesInstructor;
 
     sinon.assert.calledWith(executeMutationStub.getCall(0),
       sinon.match((query) => query.includes('mutation dossierModifierAnnotationText')),
