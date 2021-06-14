@@ -70,7 +70,7 @@ const getSimplePsyInfo = (cursor, state) => {
                 label
                 stringValue
               }
-              champs (id: "${getChampsIdFromField('adeli')}") {
+              champs (id: "${getChampsIdFromField('departement')}") {
                 id
                 label
                 stringValue

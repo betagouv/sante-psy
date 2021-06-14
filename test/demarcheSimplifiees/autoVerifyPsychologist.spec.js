@@ -71,5 +71,5 @@ describe('autoVerifyPsychologist', () => {
           instructeurId: INSTRUCTOR_ID,
         },
       }));
-  });
+  }).timeout(4000);
 });
