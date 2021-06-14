@@ -33,7 +33,6 @@ module.exports.formatFrenchDate = date => dateFormatter.format(date);
  */
 module.exports.toFormatDDMMYYYY = date => {
   if (date) {
-    console.log(date);
     return shortDateFormatter.format(date);
   }
   return '';
@@ -102,3 +101,13 @@ function isSameMonth(date1, date2) {
   return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
 }
 module.exports.isSameMonth = isSameMonth;
+
+function convertLocalToUTCDate(date) {
+  if (!date) {
+    return date;
+  }
+  let dateUTC = new Date(date);
+  dateUTC = new Date(Date.UTC(dateUTC.getFullYear(), dateUTC.getMonth(), dateUTC.getDate()));
+  return dateUTC;
+}
+module.exports.convertLocalToUTCDate = convertLocalToUTCDate;

@@ -81,6 +81,7 @@ describe('loginController', async () => {
           sinon.assert.called(deleteTokenStub);
           sinon.assert.called(getAcceptedPsychologistByEmailStub);
 
+          res.body.success.should.equal(true);
           res.body.token.should.not.equal(null);
           done();
         });

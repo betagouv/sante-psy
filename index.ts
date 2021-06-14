@@ -22,6 +22,7 @@ import loginController from './controllers/loginController';
 import reimbursementController from './controllers/reimbursementController';
 import testController from './controllers/testController';
 import getIndex from './controllers/reactController';
+import errorManager from './middlewares/errorManager';
 
 const { appName } = config;
 
@@ -135,6 +136,8 @@ app.put('/api/psychologue/:psyId',
   psyProfileController.editPsyProfile);
 
 app.get('*', getIndex);
+
+app.use(errorManager);
 
 sentry.initCaptureConsoleWithHandler(app);
 

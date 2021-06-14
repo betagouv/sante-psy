@@ -34,7 +34,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    agent.Config.get().then(setConfig);
+    agent.Config.get().then(response => setConfig(response.data));
   }, []);
 
   useEffect(() => {

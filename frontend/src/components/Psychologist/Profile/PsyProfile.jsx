@@ -16,25 +16,21 @@ const PsyProfile = () => {
 
   useEffect(() => {
     agent.Psychologist.getProfile().then(response => {
-      if (response.success) {
-        setPsychologist(response.psychologist);
-        setLoading(false);
-      } else {
-        history.goBack();
-        setNotification(response);
-      }
+      setPsychologist(response.psychologist);
+      setLoading(false);
+    }).catch(() => {
+      history.goBack();
     });
   }, []);
 
   const updatePsy = updatedPsychologist => {
-    agent.Psychologist.updateProfile(updatedPsychologist).then(response => {
-      if (response.success) {
+    agent.Psychologist.updateProfile(updatedPsychologist)
+      .then(response => {
         setPsychologist(updatedPsychologist);
         history.push('/psychologue/mon-profil');
-      }
-      window.scrollTo(0, 0);
-      setNotification(response);
-    });
+        setNotification(response);
+      })
+      .catch(() => window.scrollTo(0, 0));
   };
 
   return (

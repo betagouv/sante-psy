@@ -31,16 +31,12 @@ const AddEditPatient = () => {
   useEffect(() => {
     if (patientId) {
       agent.Patient.getOne(patientId).then(response => {
-        if (response.success) {
-          setPatient({
-            ...response.patient,
-            dateOfBirth: response.patient.dateOfBirth
-              ? date.toFormatDDMMYYYY(new Date(response.patient.dateOfBirth))
-              : '',
-          });
-        } else {
-          setNotification(response);
-        }
+        setPatient({
+          ...response.patient,
+          dateOfBirth: response.patient.dateOfBirth
+            ? date.toFormatDDMMYYYY(new Date(response.patient.dateOfBirth))
+            : '',
+        });
       });
     }
   }, [patientId]);
@@ -63,14 +59,12 @@ const AddEditPatient = () => {
     const action = patientId
       ? agent.Patient.update(patientId, patient)
       : agent.Patient.create(patient);
-    action.then(response => {
-      if (response.success) {
+    action
+      .then(response => {
         history.push('/psychologue/mes-patients');
-      } else {
-        window.scrollTo(0, 0);
-      }
-      setNotification(response);
-    });
+        setNotification(response);
+      })
+      .catch(() => window.scrollTo(0, 0));
   };
   return (
     <div className="fr-container fr-mb-3w">
