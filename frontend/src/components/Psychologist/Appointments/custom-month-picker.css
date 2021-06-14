@@ -1,0 +1,24 @@
+.month-picker > .rmp-container .rmp-popup.light {
+  color: var(--bf500);
+}
+@media screen and (max-width: 767px) {
+  .month-picker > .rmp-container .rmp-popup.light {
+    border-top: 1px solid var(--bf500);
+  }
+} 
+@media screen and (min-width: 768px) {
+  .month-picker > .rmp-container .rmp-popup.light {
+    border: 1px solid var(--bf500);
+  }
+}
+@media screen and (min-width: 768px) {
+  .month-picker > .rmp-container .rmp-popup.light .rmp-pad .rmp-btn:hover {
+    background-color: var(--bf200-bf300);
+  } 
+}
+.month-picker > .rmp-container .rmp-popup.light .rmp-pad li.active, .month-picker > .rmp-container .rmp-popup.light .rmp-pad li.active:hover {
+  background-color: var(--bf500);
+}
+.month-picker > .rmp-container .rmp-popup.light .rmp-pad .disable, .month-picker > .rmp-container .rmp-popup.light .rmp-pad .disable:hover, .month-picker > .rmp-container .rmp-popup.light .rmp-pad li.disable, .month-picker > .rmp-container .rmp-popup.light .rmp-pad li.disable:hover {
+  color: var(--g400);
+}
