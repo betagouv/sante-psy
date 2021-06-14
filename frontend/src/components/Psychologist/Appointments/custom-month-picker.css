@@ -1,49 +1,24 @@
-/*
-TODO: remove comments before merging
-Notes:
-- commented lines are from month-picker style
-- comments at the end of lines are previous values from month-picker style
-*/
-
-/* .month-picker > .rmp-container .rmp-overlay {
-  background-color: rgba(0, 0, 0, 0.25); 
-} */
 .month-picker > .rmp-container .rmp-popup.light {
-  color: var(--bf500); /* #666 */
-  /* background-color: rgba(255, 255, 255, 0.96);  */
+  color: var(--bf500);
 }
 @media screen and (max-width: 767px) {
   .month-picker > .rmp-container .rmp-popup.light {
-    border-top: 1px solid var(--bf500); /* #ccc */
-    /* box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.08);  */
+    border-top: 1px solid var(--bf500);
   }
-  /* .month-picker > .rmp-container .rmp-popup.light.range .rmp-pad {
-    border-top: 1px solid rgba(204, 204, 204, 0.5); 
-  } */
 } 
 @media screen and (min-width: 768px) {
   .month-picker > .rmp-container .rmp-popup.light {
-    border: 1px solid var(--bf500); /* #ccc */
-    /* box-shadow: 0 1px 5px #ddd;  */
+    border: 1px solid var(--bf500);
   }
-  /* .month-picker > .rmp-container .rmp-popup.light.range .rmp-pad {
-    background-color: rgba(238, 238, 238, 0.9); 
-  }  */
 }
 @media screen and (min-width: 768px) {
   .month-picker > .rmp-container .rmp-popup.light .rmp-pad .rmp-btn:hover {
-    background-color: var(--bf200-bf300); /*rgba(255, 227, 160, 0.59); */
+    background-color: var(--bf200-bf300);
   } 
 }
-/* .month-picker > .rmp-container .rmp-popup.light .rmp-pad .rmp-btn.select {
-  background-color: #d3d3d3; 
-} */
 .month-picker > .rmp-container .rmp-popup.light .rmp-pad li.active, .month-picker > .rmp-container .rmp-popup.light .rmp-pad li.active:hover {
-  background-color: var(--bf500); /* rgba(31, 42, 58, 0.73); */
-  /* color: white;  */
+  background-color: var(--bf500);
 }
 .month-picker > .rmp-container .rmp-popup.light .rmp-pad .disable, .month-picker > .rmp-container .rmp-popup.light .rmp-pad .disable:hover, .month-picker > .rmp-container .rmp-popup.light .rmp-pad li.disable, .month-picker > .rmp-container .rmp-popup.light .rmp-pad li.disable:hover {
-  /* background-color: transparent; */
-  color: var(--g400); /* #bbb */
-  /* cursor: default;  */
+  color: var(--g400);
 }
