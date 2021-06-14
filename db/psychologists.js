@@ -239,7 +239,7 @@ module.exports.activate = async (dossierNumber) => {
       .where({ dossierNumber })
       .update({
         active: true,
-        unactiveUntil: null,
+        inactiveUntil: null,
       });
   } catch (err) {
     console.error('Erreur d\'activation du psychologue', err);
@@ -247,26 +247,26 @@ module.exports.activate = async (dossierNumber) => {
   }
 };
 
-module.exports.suspend = async (dossierNumber, unactiveUntil, reason) => knex.transaction((trx) => {
+module.exports.suspend = async (dossierNumber, inactiveUntil, reason) => knex.transaction((trx) => {
   const update = knex(psychologistsTable)
       .transacting(trx)
       .where({ dossierNumber })
       .update({
         active: false,
-        unactiveUntil,
+        inactiveUntil,
       });
   const create = knex('suspension_reasons')
       .transacting(trx)
       .insert({
         psychologistId: dossierNumber,
         reason,
-        until: unactiveUntil,
+        until: inactiveUntil,
       });
 
   Promise.all([update, create])
       .then(() => {
         trx.commit();
-        console.log(`Psychologue ${dossierNumber} suspendu jusqu'au ${unactiveUntil}`);
+        console.log(`Psychologue ${dossierNumber} suspendu jusqu'au ${inactiveUntil}`);
       })
       .catch((err) => {
         trx.rollback();
@@ -277,5 +277,5 @@ module.exports.suspend = async (dossierNumber, unactiveUntil, reason) => knex.tr
 
 module.exports.reactivate = () => knex(psychologistsTable)
     .where({ active: false })
-    .andWhere('unactiveUntil', '<=', (new Date()).toISOString())
-    .update({ active: true, unactiveUntil: null });
+    .andWhere('inactiveUntil', '<=', (new Date()).toISOString())
+    .update({ active: true, inactiveUntil: null });

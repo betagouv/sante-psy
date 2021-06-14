@@ -4,11 +4,12 @@ import knex from 'knex';
 
 const db = knex(knexConfig);
 
-const getAllForPsychologist = async (psychologistId: string) : Promise<SuspensionReason[]> => db
+const getForPsychologist = async (psychologistId: string) : Promise<SuspensionReason[]> => db
     .select()
+    // TODO: use the proper file for table name
     .from('suspension_reasons')
     .where(
       { psychologistId },
     );
 
-export default { getAllForPsychologist };
+export default { getForPsychologist };

@@ -10,7 +10,7 @@ const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
   const { commonStore: { config } } = useStore();
 
   // TO REMOVE suspensionDepartment
-  if (config.supsensionDepartments && !config.supsensionDepartments.includes(psychologist.departement)) {
+  if (config.suspensionDepartments && !config.suspensionDepartments.includes(psychologist.departement)) {
     return <></>;
   }
 
@@ -37,7 +37,7 @@ const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
         </>
       ) : (
         <>
-          <p data-test-id="unactivePsy">
+          <p data-test-id="inactivePsy">
             Vos informations
             {' '}
             <b>ne sont pas visibles</b>

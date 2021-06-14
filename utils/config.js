@@ -64,5 +64,5 @@ module.exports = {
     dashboard: process.env.METABASE_DASHBOARD || '/public/dashboard/a3834fd4-aa00-4ee2-a119-11dd2156e082',
   },
   // TO REMOVE suspensionDepartment
-  suspensionDepartment: process.env.SUPSENSION_DEPARTMENTS && JSON.parse(process.env.SUPSENSION_DEPARTMENTS),
+  suspensionDepartment: process.env.SUSPENSION_DEPARTMENTS && JSON.parse(process.env.SUSPENSION_DEPARTMENTS),
 };

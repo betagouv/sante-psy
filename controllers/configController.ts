@@ -12,7 +12,7 @@ function getConfig(req: Request, res: Response): void {
     sessionDuration: config.sessionDurationHours,
     satistics: config.satistics,
     // TO REMOVE suspensionDepartment
-    supsensionDepartments: config.suspensionDepartment,
+    suspensionDepartments: config.suspensionDepartment,
   });
 }
 

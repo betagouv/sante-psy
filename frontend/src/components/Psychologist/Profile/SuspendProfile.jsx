@@ -34,7 +34,7 @@ const SuspendProfile = ({ suspendPsychologist }) => {
     }
   };
 
-  const getReason = () => (reason === 'other' ? `other: ${otherReason}` : reason);
+  const getReason = () => (reason === 'other' ? `Autre: ${otherReason}` : reason);
 
   const selectReason = e => {
     setDisplayReason(false);
@@ -69,7 +69,7 @@ const SuspendProfile = ({ suspendPsychologist }) => {
       <p>
         Cette action vous retirera temporairement de l&lsquo;annuaire afin de ne plus être contacté par des étudiants.
         Elle n&lsquo;influe en rien vos remboursements en cours et vous pourrez toujours déclarer vos séances.
-        Vous pourez reactiver votre compte à tout moment.
+        Vous pourrez reactiver votre compte à tout moment.
       </p>
       <RadioGroup
         legend="Pourquoi voulez vous retirer vos informations ?"
@@ -125,7 +125,7 @@ const SuspendProfile = ({ suspendPsychologist }) => {
         </Row>
       </RadioGroup>
       <RadioGroup
-        legend="Pour combien de temps voulez vous retirer vos informations?"
+        legend="Pour combien de temps voulez vous retirer vos informations ?"
         ariaLabel="durée"
       >
         <Radio

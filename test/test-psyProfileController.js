@@ -647,7 +647,7 @@ describe('psyProfileController', () => {
         .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.body.success.should.equal(true);
-          res.body.message.should.equal('Vos informations sont de nouveaux visibles sur l\'annuaire.');
+          res.body.message.should.equal('Vos informations sont de nouveau visibles sur l\'annuaire.');
 
           sinon.assert.calledWith(activatePsyStub, psy.dossierNumber);
         });
@@ -737,26 +737,26 @@ describe('psyProfileController', () => {
         });
     });
 
-    it('should not supsend psy if no reason', async () => {
+    it('should not suspend psy if no reason', async () => {
       await shouldFailSuspendPsyInputValidation({
         date: new Date(),
       }, 'Vous devez spécifier une raison.');
     });
 
-    it('should not supsend psy if empty reason', async () => {
+    it('should not suspend psy if empty reason', async () => {
       await shouldFailSuspendPsyInputValidation({
         date: new Date(),
         reason: '    ',
       }, 'Vous devez spécifier une raison.');
     });
 
-    it('should not supsend psy if no date', async () => {
+    it('should not suspend psy if no date', async () => {
       await shouldFailSuspendPsyInputValidation({
         reason: 'yeah',
       }, 'Vous devez spécifier une date de fin de suspension dans le futur.');
     });
 
-    it('should not supsend psy if date is in the past', async () => {
+    it('should not suspend psy if date is in the past', async () => {
       const previousDate = new Date();
       previousDate.setDate(previousDate.getDate() - 2);
       await shouldFailSuspendPsyInputValidation({

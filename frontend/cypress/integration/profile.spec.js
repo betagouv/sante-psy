@@ -68,12 +68,12 @@ describe('Profile', () => {
 
           cy.get('[data-test-id="activePsy"]')
             .should('have.text', 'Vos informations sont visibles sur l‘annuaire.');
-          cy.get('[data-test-id="unactivePsy"]')
+          cy.get('[data-test-id="inactivePsy"]')
             .should('not.exist');
           cy.get('[data-test-id="notification-success"]')
             .should(
               'have.text',
-              'Vos informations sont de nouveaux visibles sur l\'annuaire.',
+              'Vos informations sont de nouveau visibles sur l\'annuaire.',
             );
         });
     });
@@ -83,12 +83,12 @@ describe('Profile', () => {
     it('should say that your profile is suspended', () => {
       cy.get('[data-test-id="activePsy"]')
         .should('have.text', 'Vos informations sont visibles sur l‘annuaire.');
-      cy.get('[data-test-id="unactivePsy"]')
+      cy.get('[data-test-id="inactivePsy"]')
         .should('not.exist');
 
       suspend().then(() => {
         cy.reload();
-        cy.get('[data-test-id="unactivePsy"]')
+        cy.get('[data-test-id="inactivePsy"]')
           .should('have.text', 'Vos informations ne sont pas visibles sur l‘annuaire.');
         cy.get('[data-test-id="activePsy"]')
           .should('not.exist');
@@ -279,7 +279,7 @@ describe('Profile', () => {
         .click();
 
       cy.wait('@suspend').then(response => {
-        cy.wrap(response.request.body.reason).should('eq', 'other: parcequuuuuuuuuue');
+        cy.wrap(response.request.body.reason).should('eq', 'Autre: parcequuuuuuuuuue');
         cy.wrap((new Date(response.request.body.date)).getFullYear()).should('eq', tomorrow.getFullYear());
         cy.wrap((new Date(response.request.body.date)).getMonth()).should('eq', tomorrow.getMonth());
         cy.wrap((new Date(response.request.body.date)).getDate()).should('eq', tomorrow.getDate());

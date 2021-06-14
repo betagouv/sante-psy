@@ -89,7 +89,7 @@ const speedLimiter = slowDown({
   // etc.
 });
 app.get('/api/config', speedLimiter, configController.getConfig);
-app.get('/api/trouver-un-psychologue', speedLimiter, psyListingController.getPsychologists);
+app.get('/api/trouver-un-psychologue', speedLimiter, psyListingController.getActivePsychologists);
 
 // prevent abuse for some rules
 const speedLimiterLogin = slowDown({

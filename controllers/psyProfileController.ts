@@ -111,7 +111,7 @@ const activate = async (req: Request, res: Response): Promise<void> => {
 
   res.json({
     success: true,
-    message: 'Vos informations sont de nouveaux visibles sur l\'annuaire.',
+    message: 'Vos informations sont de nouveau visibles sur l\'annuaire.',
   });
 };
 

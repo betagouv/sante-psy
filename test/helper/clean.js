@@ -20,16 +20,16 @@ module.exports.getRandomInt = function getRandomInt() {
   return ourRandom.toString();
 };
 
-module.exports.getOneInactivePsy = (unactiveUntil) => this.getOnePsy(
+module.exports.getOneInactivePsy = (inactiveUntil) => this.getOnePsy(
   'loginemail@beta.gouv.fr',
   'accepte',
   false,
   null,
-  unactiveUntil,
+  inactiveUntil,
 );
 
 module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.gouv.fr',
-  state = 'accepte', archived = false, uniId = null, unactiveUntil = undefined) {
+  state = 'accepte', archived = false, uniId = null, inactiveUntil = undefined) {
   const dossierNumber = uuid.randomUuid();
   return {
     dossierNumber,
@@ -54,8 +54,8 @@ module.exports.getOnePsy = function getOnePsy(personalEmail = 'loginemail@beta.g
     assignedUniversityId: uniId,
     region: 'Normandie',
     languages: 'Français ,Anglais, et Espagnol',
-    active: !unactiveUntil,
-    unactiveUntil,
+    active: !inactiveUntil,
+    inactiveUntil,
   };
 };
 
@@ -92,10 +92,10 @@ module.exports.getOneAppointment = function getOneAppointment(patientId, psychol
 };
 
 module.exports.psyList = function getPsyList(personalEmail = 'loginemail@beta.gouv.fr',
-  state = 'accepte', archived = false, unactiveUntil = undefined) {
+  state = 'accepte', archived = false, inactiveUntil = undefined) {
   const universityId = uuid.randomUuid();
   return [
-    module.exports.getOnePsy(personalEmail, state, archived, universityId, unactiveUntil),
+    module.exports.getOnePsy(personalEmail, state, archived, universityId, inactiveUntil),
   ];
 };
 

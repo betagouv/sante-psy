@@ -73,7 +73,7 @@ describe('Appointments', () => {
     });
   });
 
-  describe('Supsended profile', () => {
+  describe('Suspended profile', () => {
     it('should display warning if psy is suspended', () => {
       cy.get('[data-test-id="notification-close"]')
         .click();
@@ -82,7 +82,7 @@ describe('Appointments', () => {
         cy.get('[data-test-id="notification-error"]')
           .should(
             'have.text',
-            'Votre profil n‘est plus visible dans l‘annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur votre profil',
+            'Votre profil n‘est plus visible dans l‘annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur votre profil.',
           );
       });
     });

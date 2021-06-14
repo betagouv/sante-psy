@@ -75,6 +75,7 @@ const Appointments = () => {
         Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur
         {' '}
         <HashLink to="/psychologue/mon-profil">votre profil</HashLink>
+        .
       </Notification>
       )}
       <h1>Déclarer mes séances</h1>

@@ -166,11 +166,11 @@ describe('DB Psychologists', () => {
       constructionPsy.state = 'en_construction';
       constructionPsy.lastName = 'ConstructionPsy';
       constructionPsy.dossierNumber = 'a2e447cd-2d57-4f83-8884-ab05a2633644';
-      const unactivePsy = { ...psyList[0] };
-      unactivePsy.active = false;
-      unactivePsy.dossierNumber = 'c453be18-b989-4bff-8e29-f01e4b081406';
+      const inactivePsy = { ...psyList[0] };
+      inactivePsy.active = false;
+      inactivePsy.dossierNumber = 'c453be18-b989-4bff-8e29-f01e4b081406';
 
-      await dbPsychologists.savePsychologistInPG([psyList[0], archivedPsy, constructionPsy, unactivePsy]);
+      await dbPsychologists.savePsychologistInPG([psyList[0], archivedPsy, constructionPsy, inactivePsy]);
 
       const shouldBeOne = await dbPsychologists.getActivePsychologists();
       shouldBeOne.length.should.be.equal(1);
@@ -437,21 +437,21 @@ describe('DB Psychologists', () => {
   });
 
   describe('activate', () => {
-    it('should activate psy and remove unactiveUntil date', async () => {
-      const unactivePsy = clean.getOneInactivePsy(new Date());
-      await dbPsychologists.savePsychologistInPG([unactivePsy]);
+    it('should activate psy and remove inactiveUntil date', async () => {
+      const inactivePsy = clean.getOneInactivePsy(new Date());
+      await dbPsychologists.savePsychologistInPG([inactivePsy]);
 
-      await dbPsychologists.activate(unactivePsy.dossierNumber);
+      await dbPsychologists.activate(inactivePsy.dossierNumber);
 
-      const psy = await dbPsychologists.getPsychologistById(unactivePsy.dossierNumber);
+      const psy = await dbPsychologists.getPsychologistById(inactivePsy.dossierNumber);
       psy.active.should.be.equal(true);
       psy.selfModified.should.be.equal(false);
-      assert.isNull(psy.unactiveUntil);
+      assert.isNull(psy.inactiveUntil);
     });
   });
 
   describe('suspend', () => {
-    it('should supsend psy', async () => {
+    it('should suspend psy', async () => {
       const activePsy = clean.getOnePsy();
       await dbPsychologists.savePsychologistInPG([activePsy]);
 
@@ -464,9 +464,9 @@ describe('DB Psychologists', () => {
       const psy = await dbPsychologists.getPsychologistById(activePsy.dossierNumber);
       psy.active.should.be.equal(false);
       psy.selfModified.should.be.equal(false);
-      psy.unactiveUntil.should.be.eql(date);
+      psy.inactiveUntil.should.be.eql(date);
 
-      const reasons = await dbSuspensionReasons.getAllForPsychologist(activePsy.dossierNumber);
+      const reasons = await dbSuspensionReasons.getForPsychologist(activePsy.dossierNumber);
       reasons.length.should.be.equal(1);
       reasons[0].reason.should.be.equal('because i say so');
       reasons[0].until.getFullYear().should.be.equal(date.getFullYear());
@@ -478,39 +478,39 @@ describe('DB Psychologists', () => {
   });
 
   describe('reactivate', () => {
-    it('should reactivate unactive psy with until date before now', async () => {
+    it('should reactivate inactive psy with until date before now', async () => {
       const activePsy = clean.getOnePsy();
       const now = new Date();
       const yesterday = new Date();
       yesterday.setDate(now.getDate() - 1);
       const tomorrow = new Date();
       tomorrow.setDate(now.getDate() + 1);
-      const unactivePsy1 = clean.getOneInactivePsy(yesterday);
-      const unactivePsy2 = clean.getOneInactivePsy(now);
-      const unactivePsy3 = clean.getOneInactivePsy(tomorrow);
-      await dbPsychologists.savePsychologistInPG([activePsy, unactivePsy1, unactivePsy2, unactivePsy3]);
+      const inactivePsy1 = clean.getOneInactivePsy(yesterday);
+      const inactivePsy2 = clean.getOneInactivePsy(now);
+      const inactivePsy3 = clean.getOneInactivePsy(tomorrow);
+      await dbPsychologists.savePsychologistInPG([activePsy, inactivePsy1, inactivePsy2, inactivePsy3]);
 
       await dbPsychologists.reactivate();
 
       let psy = await dbPsychologists.getPsychologistById(activePsy.dossierNumber);
       psy.active.should.be.equal(true);
       psy.selfModified.should.be.equal(false);
-      assert.isNull(psy.unactiveUntil);
+      assert.isNull(psy.inactiveUntil);
 
-      psy = await dbPsychologists.getPsychologistById(unactivePsy1.dossierNumber);
+      psy = await dbPsychologists.getPsychologistById(inactivePsy1.dossierNumber);
       psy.active.should.be.equal(true);
       psy.selfModified.should.be.equal(false);
-      assert.isNull(psy.unactiveUntil);
+      assert.isNull(psy.inactiveUntil);
 
-      psy = await dbPsychologists.getPsychologistById(unactivePsy2.dossierNumber);
+      psy = await dbPsychologists.getPsychologistById(inactivePsy2.dossierNumber);
       psy.active.should.be.equal(true);
       psy.selfModified.should.be.equal(false);
-      assert.isNull(psy.unactiveUntil);
+      assert.isNull(psy.inactiveUntil);
 
-      psy = await dbPsychologists.getPsychologistById(unactivePsy3.dossierNumber);
+      psy = await dbPsychologists.getPsychologistById(inactivePsy3.dossierNumber);
       psy.active.should.be.equal(false);
       psy.selfModified.should.be.equal(false);
-      psy.unactiveUntil.should.be.eql(tomorrow);
+      psy.inactiveUntil.should.be.eql(tomorrow);
     });
   });
 });

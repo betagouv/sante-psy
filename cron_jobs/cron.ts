@@ -64,10 +64,9 @@ const jobs = [
     name: 'Auto verify psychologist in DS',
   },
   {
-    cronTime: '0 */6 * * *', // every 6 hours
+    cronTime: '0 6 * * *', // every day at 6AM
     onTick: cronPsychologists.reactivatePsychologists,
     start: true,
-    runOnInit: true,
     timeZone: 'Europe/Paris',
     name: 'Check active boolean on every Psychologist',
   },
