@@ -1,7 +1,7 @@
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
-const { psychologistsTable } = require('./tables');
+const { psychologistsTable, suspensionReasonsTable } = require('./tables');
 const { DOSSIER_STATE } = require('../utils/dossierState');
 const dbUniversities = require('./universities');
 const {
@@ -255,7 +255,7 @@ module.exports.suspend = async (dossierNumber, inactiveUntil, reason) => knex.tr
         active: false,
         inactiveUntil,
       });
-  const create = knex('suspension_reasons')
+  const create = knex(suspensionReasonsTable)
       .transacting(trx)
       .insert({
         psychologistId: dossierNumber,

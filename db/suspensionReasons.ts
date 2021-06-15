@@ -1,13 +1,14 @@
+import knex from 'knex';
+
 import { SuspensionReason } from '../types/SuspensionReason';
 import knexConfig from '../knexfile';
-import knex from 'knex';
+import { suspensionReasonsTable } from './tables';
 
 const db = knex(knexConfig);
 
 const getForPsychologist = async (psychologistId: string) : Promise<SuspensionReason[]> => db
     .select()
-    // TODO: use the proper file for table name
-    .from('suspension_reasons')
+    .from(suspensionReasonsTable)
     .where(
       { psychologistId },
     );

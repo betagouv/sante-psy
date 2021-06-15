@@ -8,6 +8,7 @@ const {
   dsApiCursorTable,
   loginTokenTable,
   universitiesTable,
+  suspensionReasonsTable,
 } = require('../../db/tables');
 
 module.exports.getRandomInt = function getRandomInt() {
@@ -113,7 +114,7 @@ module.exports.cleanAllAppointments = async function cleanDataAppointments() {
 
 module.exports.cleanAllPsychologists = async function cleanAllPsychologists() {
   try {
-    await knex('suspension_reasons').del();
+    await knex(suspensionReasonsTable).del();
     return knex(psychologistsTable).del();
   } catch (err) {
     console.log(err);
