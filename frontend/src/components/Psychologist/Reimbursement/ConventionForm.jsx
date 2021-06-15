@@ -44,7 +44,9 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
         value={convention.universityId || ''}
         onChange={value => setConvention({ ...convention, universityId: value })}
         required
-        options={config ? config.universities.map(university => ({ id: university.id, label: university.name })) : []}
+        options={config.universities
+          ? config.universities.map(university => ({ id: university.id, label: university.name }))
+          : []}
         hiddenOption="- Select a university -"
       />
       <Input

@@ -16,7 +16,6 @@ const getConfig = async (req: Request, res: Response): Promise<void> => {
   // used to place "-- nothing yet" in first position
   universities.sort(sort);
 
-  console.log(universities);
   res.json({
     appName: config.appName,
     contactEmail: config.contactEmail,

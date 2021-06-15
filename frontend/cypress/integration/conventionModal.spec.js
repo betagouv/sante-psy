@@ -3,9 +3,10 @@ const { resetDB } = require('./utils/db');
 const { removeConvention, signConvention } = require('./utils/psychologist');
 
 const modalShouldExist = exist => {
-  cy.visit('/psychologue/nouvelle-seance');
+  cy.visit('/psychologue/mes-seances');
   cy.wait('@config');
   cy.wait('@user');
+  cy.wait('@appointments');
   cy.get('[data-test-id="convention-modal"]')
     .should(exist ? 'exist' : 'not.exist');
 };
@@ -15,6 +16,8 @@ describe('ConventionModal', () => {
       .as('config');
     cy.intercept('GET', '/api/connecteduser')
       .as('user');
+    cy.intercept('GET', '/api/appointments')
+      .as('appointments');
     cy.intercept('POST', '/api/psychologue/renseigner-convention')
       .as('updateConvention');
 
@@ -62,9 +65,10 @@ describe('ConventionModal', () => {
 
   describe('Update', () => {
     beforeEach(() => {
-      cy.visit('/psychologue/nouvelle-seance');
+      cy.visit('/psychologue/mes-seances');
       cy.wait('@config');
       cy.wait('@user');
+      cy.wait('@appointments');
     });
 
     it('should force user to fill info', () => {
@@ -99,7 +103,7 @@ describe('ConventionModal', () => {
       cy.get('[data-test-id="convention-modal"]')
         .should('not.exist');
 
-      cy.get('[data-test-id="new-appointment-container"]')
+      cy.get('[data-test-id="appointment-container"]')
         .should('exist');
 
       cy.get('[data-test-id="notification-success"]')
@@ -113,7 +117,7 @@ describe('ConventionModal', () => {
       cy.get('[data-test-id="convention-modal"]')
         .should('not.exist');
 
-      cy.get('[data-test-id="new-appointment-container"]')
+      cy.get('[data-test-id="appointment-container"]')
         .should('exist');
     });
   });

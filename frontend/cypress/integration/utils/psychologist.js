@@ -1,8 +1,6 @@
 const { getCurrentUser, getCurrentToken } = require('./login');
 
-const removeConvention = email => {
-  cy.request('DELETE', `http://localhost:8080/test/psychologue/${email}/convention`);
-};
+const removeConvention = email => cy.request('DELETE', `http://localhost:8080/test/psychologue/${email}/convention`);
 
 const suspend = () => {
   const date = new Date();

@@ -48,14 +48,18 @@ describe('loginController', async () => {
       let deleteTokenStub;
       let getAcceptedPsychologistByEmailStub;
       beforeEach(async () => {
-        deleteTokenStub = sinon.stub(dbLoginToken, 'delete')
+        deleteTokenStub = sinon
+          .stub(dbLoginToken, 'delete')
           .returns(Promise.resolve());
 
-        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
-          .returns(Promise.resolve({
-            email,
-            state: 'accepte',
-          }));
+        getAcceptedPsychologistByEmailStub = sinon
+          .stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+          .returns(
+            Promise.resolve({
+              email,
+              state: 'accepte',
+            }),
+          );
       });
 
       afterEach((done) => {
@@ -66,46 +70,48 @@ describe('loginController', async () => {
       });
 
       it('should log someone in', (done) => {
-        getByTokenStub = sinon.stub(dbLoginToken, 'getByToken')
-        .returns(Promise.resolve(
-          {
+        getByTokenStub = sinon.stub(dbLoginToken, 'getByToken').returns(
+          Promise.resolve({
             token,
             email,
-          },
-        ));
+          }),
+        );
 
-        chai.request(app)
-        .post('/api/psychologue/login')
-        .send({ token })
-        .end((err, res) => {
-          sinon.assert.called(getByTokenStub);
-          sinon.assert.called(deleteTokenStub);
-          sinon.assert.called(getAcceptedPsychologistByEmailStub);
+        chai
+          .request(app)
+          .post('/api/psychologue/login')
+          .send({ token })
+          .end((err, res) => {
+            sinon.assert.called(getByTokenStub);
+            sinon.assert.called(deleteTokenStub);
+            sinon.assert.called(getAcceptedPsychologistByEmailStub);
 
-          res.body.success.should.equal(true);
-          res.body.token.should.not.equal(null);
-          done();
-        });
+            res.body.success.should.equal(true);
+            res.body.token.should.not.equal(null);
+            done();
+          });
       });
 
       it('should NOT log someone in', (done) => {
-        getByTokenStub = sinon.stub(dbLoginToken, 'getByToken')
-        .returns(Promise.resolve());
+        getByTokenStub = sinon
+          .stub(dbLoginToken, 'getByToken')
+          .returns(Promise.resolve());
 
-        chai.request(app)
-        .post('/api/psychologue/login')
-        .send({ token: 'pizzaForToken' })
-        .end((err, res) => {
-          sinon.assert.called(getByTokenStub);
-          sinon.assert.notCalled(deleteTokenStub);
-          sinon.assert.notCalled(getAcceptedPsychologistByEmailStub);
-          chai.assert.isUndefined(res.body.token);
-          res.body.success.should.equal(false);
-          res.body.message.should.equal(
-            'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
-          );
-          done();
-        });
+        chai
+          .request(app)
+          .post('/api/psychologue/login')
+          .send({ token: 'pizzaForToken' })
+          .end((err, res) => {
+            sinon.assert.called(getByTokenStub);
+            sinon.assert.notCalled(deleteTokenStub);
+            sinon.assert.notCalled(getAcceptedPsychologistByEmailStub);
+            chai.assert.isUndefined(res.body.token);
+            res.body.success.should.equal(false);
+            res.body.message.should.equal(
+              'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
+            );
+            done();
+          });
       });
     });
 
@@ -116,10 +122,12 @@ describe('loginController', async () => {
       let sendMailStub;
 
       beforeEach(async () => {
-        insertTokenStub = sinon.stub(dbLoginToken, 'insert')
+        insertTokenStub = sinon
+          .stub(dbLoginToken, 'insert')
           .returns(Promise.resolve());
 
-        sendMailStub = sinon.stub(emailUtils, 'sendMail')
+        sendMailStub = sinon
+          .stub(emailUtils, 'sendMail')
           .returns(Promise.resolve());
       });
 
@@ -134,13 +142,17 @@ describe('loginController', async () => {
       });
 
       it('send a login email', (done) => {
-        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
-        .returns(Promise.resolve({
-          email,
-          state: 'accepte',
-        }));
+        getAcceptedPsychologistByEmailStub = sinon
+          .stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+          .returns(
+            Promise.resolve({
+              email,
+              state: 'accepte',
+            }),
+          );
 
-        chai.request(app)
+        chai
+          .request(app)
           .post('/api/psychologue/sendMail')
           .send({
             email: 'prenom.nom@beta.gouv.fr',
@@ -152,23 +164,28 @@ describe('loginController', async () => {
 
             res.body.success.should.equal(true);
             res.body.message.should.equal(
-              'Un lien de connexion a été envoyé à l\'adresse prenom.nom@beta.gouv.fr. Le lien est valable 2 heures.',
+              "Un lien de connexion a été envoyé à l'adresse prenom.nom@beta.gouv.fr. Le lien est valable 2 heures.",
             );
             done();
           });
       });
 
       it('send a not accepted yet email', (done) => {
-        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
-        .returns(Promise.resolve(undefined));
+        getAcceptedPsychologistByEmailStub = sinon
+          .stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+          .returns(Promise.resolve(undefined));
 
-        getNotYetAcceptedPsychologistStub = sinon.stub(dbPsychologists, 'getNotYetAcceptedPsychologistByEmail')
-        .returns(Promise.resolve({
-          email,
-          state: 'en_construction',
-        }));
+        getNotYetAcceptedPsychologistStub = sinon
+          .stub(dbPsychologists, 'getNotYetAcceptedPsychologistByEmail')
+          .returns(
+            Promise.resolve({
+              email,
+              state: 'en_construction',
+            }),
+          );
 
-        chai.request(app)
+        chai
+          .request(app)
           .post('/api/psychologue/sendMail')
           .send({
             email: 'prenom.nom@beta.gouv.fr',
@@ -181,20 +198,23 @@ describe('loginController', async () => {
 
             res.body.success.should.equal(false);
             res.body.message.should.equal(
-              'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.',
+              "Votre compte n'est pas encore validé par nos services, veuillez rééssayer plus tard.",
             );
             done();
           });
       });
 
       it('send no email if unknown email or refuse or sans suite', (done) => {
-        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
-        .returns(Promise.resolve(undefined));
+        getAcceptedPsychologistByEmailStub = sinon
+          .stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+          .returns(Promise.resolve(undefined));
 
-        getNotYetAcceptedPsychologistStub = sinon.stub(dbPsychologists, 'getNotYetAcceptedPsychologistByEmail')
-        .returns(Promise.resolve());
+        getNotYetAcceptedPsychologistStub = sinon
+          .stub(dbPsychologists, 'getNotYetAcceptedPsychologistByEmail')
+          .returns(Promise.resolve());
 
-        chai.request(app)
+        chai
+          .request(app)
           .post('/api/psychologue/sendMail')
           .send({
             email: 'prenom.nom@beta.gouv.fr',
@@ -207,20 +227,24 @@ describe('loginController', async () => {
 
             res.body.success.should.equal(false);
             res.body.message.should.equal(
-              'L\'email prenom.nom@beta.gouv.fr est inconnu, ou est lié à un dossier classé sans suite ou refusé.',
+              "L'email prenom.nom@beta.gouv.fr est inconnu, ou est lié à un dossier classé sans suite ou refusé.",
             );
             done();
           });
       });
 
       it('should say that email is invalid', (done) => {
-        getAcceptedPsychologistByEmailStub = sinon.stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
-        .returns(Promise.resolve({
-          email,
-          state: 'accepte',
-        }));
+        getAcceptedPsychologistByEmailStub = sinon
+          .stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+          .returns(
+            Promise.resolve({
+              email,
+              state: 'accepte',
+            }),
+          );
 
-        chai.request(app)
+        chai
+          .request(app)
           .post('/api/psychologue/sendMail')
           .send({
             email: 'fake_it',
@@ -243,42 +267,61 @@ describe('loginController', async () => {
   describe('connected user information', () => {
     it('should return only my basic information', async () => {
       const universityId = uuidv4();
-      const psy = clean.getOnePsy('loginemail@beta.gouv.fr', 'accepte', false, universityId);
+      const psy = clean.getOnePsy(
+        'loginemail@beta.gouv.fr',
+        'accepte',
+        false,
+        universityId,
+      );
       psy.isConventionSigned = true;
       await dbPsychologists.savePsychologistInPG([psy]);
-      await dbUniversities.saveUniversities([{
-        id: universityId,
-        name: 'Monster university',
-        emailSSU: 'monster@ssu.fr',
-        emailUniversity: 'monster@university.fr',
-      }]);
+      await dbUniversities.saveUniversities([
+        {
+          id: universityId,
+          name: 'Monster university',
+          emailSSU: 'monster@ssu.fr',
+          emailUniversity: 'monster@university.fr',
+        },
+      ]);
 
-      return chai.request(app)
-      .get('/api/connecteduser')
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
-      .then(async (res) => {
-        res.body.should.have.all.keys('firstNames', 'lastName', 'email', 'convention', 'active');
-        res.body.firstNames.should.equal(psy.firstNames);
-        res.body.lastName.should.equal(psy.lastName);
-        res.body.email.should.equal(psy.email);
-        res.body.active.should.equal(psy.active);
-        res.body.convention.should.eql({
-          isConventionSigned: true,
-          universityName: 'Monster university',
-          universityId,
+      return chai
+        .request(app)
+        .get('/api/connecteduser')
+        .set(
+          'Authorization',
+          `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`,
+        )
+        .then(async (res) => {
+          res.body.should.have.all.keys(
+            'firstNames',
+            'lastName',
+            'email',
+            'convention',
+            'active',
+          );
+          res.body.firstNames.should.equal(psy.firstNames);
+          res.body.lastName.should.equal(psy.lastName);
+          res.body.email.should.equal(psy.email);
+          res.body.active.should.equal(psy.active);
+          res.body.convention.should.eql({
+            isConventionSigned: true,
+            universityName: 'Monster university',
+            universityId,
+          });
         });
-      });
     });
 
-    it('should return empty info when psy does not exist', async () => chai.request(app)
-      .get('/api/connecteduser')
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(uuidv4())}`)
-      .then(async (res) => res.body.should.be.empty));
+    it('should return empty info when psy does not exist', async () => chai
+        .request(app)
+        .get('/api/connecteduser')
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(uuidv4())}`)
+        .then(async (res) => res.body.should.be.empty));
 
-    it('should return 401 if user is not connected', async () => chai.request(app)
-      .get('/api/connecteduser')
-      .then(async (res) => {
-        res.status.should.equal(401);
-      }));
+    it('should return 401 if user is not connected', async () => chai
+        .request(app)
+        .get('/api/connecteduser')
+        .then(async (res) => {
+          res.status.should.equal(401);
+        }));
   });
 });
