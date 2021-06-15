@@ -84,7 +84,7 @@ const getSimplePsyInfo = (cursor, state) => {
   return executeQuery(query);
 };
 
-const getInstructors = (groupeInstructeurNumber) => {
+const getInstructors = async (groupeInstructeurNumber) => {
   const query = gql`
     query getGroupeInstructeur($groupeInstructeurNumber: Int!) {
       groupeInstructeur(number: $groupeInstructeurNumber) {
@@ -103,7 +103,9 @@ const getInstructors = (groupeInstructeurNumber) => {
     groupeInstructeurNumber,
   };
 
-  return executeQuery(query, variables);
+  const result = await executeQuery(query, variables);
+  result.groupeInstructeur.instructeurs.forEach((instructeur) => console.log(instructeur));
+  return result;
 };
 
 const acceptPsychologist = (id) => {
