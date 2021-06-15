@@ -7,7 +7,6 @@ const dbPsychologists = rewire('../db/psychologists');
 const dbUniversities = rewire('../db/universities');
 const { DOSSIER_STATE } = require('../utils/dossierState');
 const { default: dbSuspensionReasons } = require('../db/suspensionReasons');
-const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
 const { expect } = require('chai');
 const { fail } = require('chai');
 const clean = require('./helper/clean');
