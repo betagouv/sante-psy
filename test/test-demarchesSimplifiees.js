@@ -1,11 +1,10 @@
 require('dotenv').config();
 const rewire = require('rewire');
-const { assert } = require('chai');
 const testDossiers = require('./dossier.json');
 const uuid = require('../utils/uuid');
 const config = require('../utils/config');
 
-const demarchesSimplifiees = rewire('../utils/demarchesSimplifiees.js');
+const demarchesSimplifiees = rewire('../services/demarchesSimplifiees.js');
 
 describe('Demarches Simplifiees', () => {
   describe('parsePsychologists', () => {
@@ -96,64 +95,6 @@ describe('Demarches Simplifiees', () => {
       const output = parseTraining(apiResponse);
 
       output.should.equal(JSON.stringify(['training1', 'training2']));
-    });
-  });
-
-  describe('getDepartementNumberFromString', () => {
-    it('should return departement number from departement and number', async () => {
-      const departementNumber = '55';
-      const departementString = `${departementNumber} - Indre-et-Loire`;
-      const output = demarchesSimplifiees.getDepartementNumberFromString(departementString);
-
-      output.should.equal(departementNumber);
-    });
-  });
-
-  describe('getChampValue', () => {
-    it('should return stringValue for field Champ', async () => {
-      const result = 'Psychologie clinique de la santé';
-      const label = 'Intitulé ou spécialité de votre master de psychologie';
-
-      const apiResponse = [
-        {
-          id: 'Q2hhbXAtMTYzMDQxNg==',
-          label: 'Votre carrière et vos qualifications',
-          stringValue: '',
-        },
-        {
-          id: 'Q2hhbXAtMTYzMDQxNw==',
-          label,
-          stringValue: result,
-        },
-      ];
-
-      const getChampValue = demarchesSimplifiees.__get__('getChampValue');
-      const output = getChampValue(apiResponse, label);
-
-      output.should.equal(result);
-    });
-
-    it('should return empty string for a field Champ that does not exist', async () => {
-      const result = '';
-      const label = 'Intitulé ou spécialité de votre master de psychologie';
-
-      const apiResponse = [
-        {
-          id: 'Q2hhbXAtMTYzMDQxNg==',
-          label: 'Votre carrière et vos qualifications',
-          stringValue: '',
-        },
-        {
-          id: 'Q2hhbXAtMTYzMDQxNw==',
-          label: 'nothing',
-          stringValue: result,
-        },
-      ];
-
-      const getChampValue = demarchesSimplifiees.__get__('getChampValue');
-      const output = getChampValue(apiResponse, label);
-
-      output.should.equal(result);
     });
   });
 });

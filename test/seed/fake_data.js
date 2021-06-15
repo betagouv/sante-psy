@@ -1,32 +1,35 @@
 /* eslint-disable max-len */
 /* eslint-disable func-names */
 
-const dbPsychologists = require('../../db/psychologists');
-const dbPatients = require('../../db/patients');
-const dbAppointments = require('../../db/appointments');
-const dbUniversities = require('../../db/universities');
-const dbLoginToken = require('../../db/loginToken');
-const demarchesSimplifiees = require('../../utils/demarchesSimplifiees');
 const clean = require('../helper/clean');
 const uuid = require('../../utils/uuid');
+const universities = require('../../utils/universities');
+const { DOSSIER_STATE } = require('../../utils/dossierState');
+const {
+  appointmentsTable,
+  loginTokenTable,
+  patientsTable,
+  psychologistsTable,
+  universitiesTable,
+} = require('../../db/tables');
 
 exports.seed = async function (knex) {
   console.log('Clean database information');
 
-  await knex(dbLoginToken.loginTokenTable).del();
-  await knex(dbPatients.patientsTable).del();
-  await knex(dbPsychologists.psychologistsTable).del();
-  await knex(dbUniversities.universitiesTable).del();
-  await knex(dbUniversities.universitiesTable).del();
+  await knex(loginTokenTable).del();
+  await knex(appointmentsTable).del();
+  await knex(patientsTable).del();
+  await knex(psychologistsTable).del();
+  await knex(universitiesTable).del();
 
-  const universitiesList = dbUniversities.universities.map((uni) => ({
+  const universitiesList = universities.map((uni) => ({
     name: uni,
     id: uuid.randomUuid(),
     emailUniversity: `${clean.getRandomInt()}@beta.gouv.fr ; ${clean.getRandomInt()}@beta.gouv.fr`,
     emailSSU: `${clean.getRandomInt()}@beta.gouv.fr ; ${clean.getRandomInt()}@beta.gouv.fr`,
   }));
 
-  await knex(dbUniversities.universitiesTable).insert(universitiesList);
+  await knex(universitiesTable).insert(universitiesList);
   console.log(`inserted ${universitiesList.length} fake data to universitiesTable`);
 
   const university = universitiesList.find((u) => u.name !== '--- Aucune pour le moment');
@@ -46,15 +49,15 @@ exports.seed = async function (knex) {
   ];
 
   const psyList = [
-    ...mails.map((mail) => clean.getOnePsy(mail, demarchesSimplifiees.DOSSIER_STATE.accepte, false, university.id)),
-    ...[...Array(5).keys()].map(() => clean.getOnePsy(`${clean.getRandomInt()}@beta.gouv.fr`, demarchesSimplifiees.DOSSIER_STATE.accepte, false)),
-    clean.getOnePsy('archived@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, true),
-    clean.getOnePsy('empty@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.accepte, true),
-    clean.getOnePsy('construction@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.en_construction, false),
-    clean.getOnePsy('refuse@beta.gouv.fr', demarchesSimplifiees.DOSSIER_STATE.refuse, false),
+    ...mails.map((mail) => clean.getOnePsy(mail, DOSSIER_STATE.accepte, false, university.id)),
+    ...[...Array(5).keys()].map(() => clean.getOnePsy(`${clean.getRandomInt()}@beta.gouv.fr`, DOSSIER_STATE.accepte, false)),
+    clean.getOnePsy('archived@beta.gouv.fr', DOSSIER_STATE.accepte, true),
+    clean.getOnePsy('empty@beta.gouv.fr', DOSSIER_STATE.accepte, true),
+    clean.getOnePsy('construction@beta.gouv.fr', DOSSIER_STATE.en_construction, false),
+    clean.getOnePsy('refuse@beta.gouv.fr', DOSSIER_STATE.refuse, false),
   ];
 
-  await knex(dbPsychologists.psychologistsTable).insert(psyList);
+  await knex(psychologistsTable).insert(psyList);
   console.log(`inserted ${psyList.length} fake data to psychologistsTable`);
 
   // 4 patients by psy except 'empty@beta.gouv.fr'
@@ -67,7 +70,7 @@ exports.seed = async function (knex) {
     clean.getOnePatient(psy.dossierNumber, 'doctorName', false), // incomplete patient's folder : date of birth
   ]);
 
-  await knex(dbPatients.patientsTable).insert(patientList);
+  await knex(patientsTable).insert(patientList);
   console.log(`inserted ${patientList.length} fake data to patientsTable`);
 
   // 5 appointments by patients
@@ -81,6 +84,6 @@ exports.seed = async function (knex) {
     clean.getOneAppointment(patient.id, patient.psychologistId, 10),
   ]);
 
-  await knex(dbAppointments.appointmentsTable).insert(appointmentList);
+  await knex(appointmentsTable).insert(appointmentList);
   console.log(`inserted ${appointmentList.length} fake data to appointmentsTable`);
 };

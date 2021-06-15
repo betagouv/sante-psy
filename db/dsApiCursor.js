@@ -1,12 +1,11 @@
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
-
-module.exports.dsApiCursorTable = 'ds_api_cursor';
+const { dsApiCursorTable } = require('./tables');
 
 module.exports.getCursorFromDB = async function getCursorFromDB() {
   try {
-    const lastCursor = await knex(module.exports.dsApiCursorTable)
+    const lastCursor = await knex(dsApiCursorTable)
     .where('id', 1)
     .first();
 
@@ -47,7 +46,7 @@ module.exports.saveLatestCursor = async function saveLatestCursor(cursor) {
       if (alreadySavedCursor) {
         console.log(`Updating the cursor ${cursor} in PG`);
 
-        return trx.into(module.exports.dsApiCursorTable)
+        return trx.into(dsApiCursorTable)
         .where('id', 1)
         .update({
           cursor,
@@ -56,7 +55,7 @@ module.exports.saveLatestCursor = async function saveLatestCursor(cursor) {
       } // no cursor already saved, we are going to create one entry
       console.log(`Saving a new cursor ${cursor} to PG`);
 
-      return trx.into(module.exports.dsApiCursorTable).insert({
+      return trx.into(dsApiCursorTable).insert({
         id: 1,
         cursor,
         updatedAt: now,

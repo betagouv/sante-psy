@@ -1,9 +1,7 @@
 /* eslint-disable func-names */
-const dbLoginToken = require('../db/loginToken');
-
 exports.up = function (knex) {
   return knex.schema
-    .createTable(dbLoginToken.loginTokenTable, (table) => {
+    .createTable('login_token', (table) => {
       table.text('token').primary();
       table.text('email').notNullable();
       table.datetime('createdAt').notNullable().defaultTo(knex.fn.now());
@@ -13,5 +11,5 @@ exports.up = function (knex) {
 
 exports.down = function (knex) {
   return knex.schema
-    .dropTable(dbLoginToken.loginTokenTable);
+    .dropTable('login_token');
 };

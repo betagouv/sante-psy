@@ -30,10 +30,10 @@ const patientValidators = [
       check('INE').trim().isEmpty(),
       check('INE')
         .trim().isAlphanumeric()
-        .isLength({ min: 1, max: dbPatients.studentNumberSize })
+        .isLength({ min: 1, max: 50 })
         .customSanitizer((value, { req }) => req.sanitize(value)),
     ],
-    `Le numéro INE doit faire maximum ${dbPatients.studentNumberSize} caractères alphanumériques \
+    `Le numéro INE doit faire maximum 50 caractères alphanumériques \
 (chiffres ou lettres sans accents).
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`,
   ),

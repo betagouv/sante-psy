@@ -1,5 +1,6 @@
 const { gql, GraphQLClient } = require('graphql-request');
 const config = require('./config');
+const { default: { getChampsIdFromField, getAnnotationsIdFromField } } = require('../services/champsAndAnnotations');
 
 const endpoint = config.apiUrl;
 const graphQLClient = new GraphQLClient(endpoint, {
@@ -48,6 +49,9 @@ const request = async (query, variables) => {
   }
 };
 
+const executeQuery = (query, variables) => request(query, variables);
+const executeMutation = (query, variables) => request(query, variables);
+
 const getSimplePsyInfo = (cursor, state) => {
   const query = gql`
     {
@@ -61,12 +65,12 @@ const getSimplePsyInfo = (cursor, state) => {
               id
               state
               datePassageEnInstruction
-              annotations(id: "${config.demarchesSimplifieesAnnotationVerifiee}") {
+              annotations(id: "${getAnnotationsIdFromField('verifiee')}") {
                 id
                 label
                 stringValue
               }
-              champs (id: "${config.demarchesSimplifieesChampDepartment}") {
+              champs (id: "${getChampsIdFromField('departement')}") {
                 id
                 label
                 stringValue
@@ -77,7 +81,7 @@ const getSimplePsyInfo = (cursor, state) => {
     }
   `;
 
-  return request(query);
+  return executeQuery(query);
 };
 
 const getInstructors = (groupeInstructeurNumber) => {
@@ -99,16 +103,13 @@ const getInstructors = (groupeInstructeurNumber) => {
     groupeInstructeurNumber,
   };
 
-  return request(query, variables);
+  return executeQuery(query, variables);
 };
 
 const acceptPsychologist = (id) => {
   const query = gql`
     mutation dossierAccepter($input: DossierAccepterInput!) {
       dossierAccepter(input: $input) {
-        dossier {
-          id
-        }
         errors {
           message
         }
@@ -124,7 +125,112 @@ const acceptPsychologist = (id) => {
     },
   };
 
-  return request(query, variables);
+  return executeMutation(query, variables);
+};
+
+const getDossiersWithAnnotationsAndMessages = (cursor, state) => {
+  const query = gql`
+  {
+    demarche (number: ${config.demarchesSimplifieesId}) {
+      dossiers (state: ${state}${cursor ? `, after: "${cursor}"` : ''}) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        nodes {
+          id
+          champs {
+            id
+            label
+            stringValue
+          }
+          annotations {
+            id
+            label
+            stringValue
+          }
+          messages {
+            id
+          }
+          demandeur {
+            ... on PersonnePhysique {
+              nom
+              prenom
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+  return executeQuery(query);
+};
+
+const addVerificationMessage = (id, message) => {
+  const query = gql`
+    mutation dossierModifierAnnotationText($input: DossierModifierAnnotationTextInput!) {
+      dossierModifierAnnotationText(input: $input) {
+        errors {
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      dossierId: id,
+      instructeurId: config.demarchesSimplifieesInstructor,
+      annotationId: getAnnotationsIdFromField('message'),
+      value: message,
+    },
+  };
+
+  return executeMutation(query, variables);
+};
+
+const verifyDossier = (id) => {
+  const query = gql`
+    mutation dossierModifierAnnotationCheckbox($input: DossierModifierAnnotationCheckboxInput!) {
+      dossierModifierAnnotationCheckbox(input: $input) {
+        errors {
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      dossierId: id,
+      instructeurId: config.demarchesSimplifieesInstructor,
+      annotationId: getAnnotationsIdFromField('verifiee'),
+      value: true,
+    },
+  };
+
+  return executeMutation(query, variables);
+};
+
+const putDossierInInstruction = (id) => {
+  const query = gql`
+    mutation dossierPasserEnInstruction($input: DossierPasserEnInstructionInput!) {
+      dossierPasserEnInstruction(input: $input) {
+        errors {
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      dossierId: id,
+      instructeurId: config.demarchesSimplifieesInstructor,
+    },
+  };
+
+  return executeMutation(query, variables);
 };
 
 /**
@@ -179,10 +285,14 @@ async function requestPsychologist(afterCursor) {
     }
   `;
 
-  return request(query);
+  return executeQuery(query);
 }
 
 exports.acceptPsychologist = acceptPsychologist;
 exports.getInstructors = getInstructors;
 exports.getSimplePsyInfo = getSimplePsyInfo;
 exports.requestPsychologist = requestPsychologist;
+exports.getDossiersWithAnnotationsAndMessages = getDossiersWithAnnotationsAndMessages;
+exports.addVerificationMessage = addVerificationMessage;
+exports.verifyDossier = verifyDossier;
+exports.putDossierInInstruction = putDossierInInstruction;

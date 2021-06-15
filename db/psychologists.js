@@ -1,12 +1,14 @@
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
-const demarchesSimplifiees = require('../utils/demarchesSimplifiees');
+const { psychologistsTable } = require('./tables');
+const { DOSSIER_STATE } = require('../utils/dossierState');
 const dbUniversities = require('./universities');
-const { addFrenchLanguageIfMissing, editablePsyFields, nonEditablePsyFields } = require('../services/updatePsyFields');
-
-const psychologistsTable = 'psychologists';
-module.exports.psychologistsTable = psychologistsTable;
+const {
+  addFrenchLanguageIfMissing,
+  editablePsyFields,
+  nonEditablePsyFields,
+} = require('../services/updatePsyFields');
 
 module.exports.getPsychologistsDeclaredUniversity = async () => {
   try {
@@ -22,7 +24,7 @@ module.exports.getPsychologistsDeclaredUniversity = async () => {
         .select()
         .from(psychologistsTable)
         .whereNot('archived', true)
-        .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
+        .where('state', DOSSIER_STATE.accepte)
         .orderBy('dossierNumber');
     return psychologists;
   } catch (err) {
@@ -69,7 +71,7 @@ module.exports.getPsychologists = async () => {
         .select()
         .from(psychologistsTable)
         .whereNot('archived', true)
-        .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
+        .where('state', DOSSIER_STATE.accepte)
         .orderByRaw('RANDOM ()');
     return psychologists;
   } catch (err) {
@@ -80,7 +82,7 @@ module.exports.getPsychologists = async () => {
 
 const getPsychologistById = async (psychologistId) => {
   try {
-    const psychologist = await knex(module.exports.psychologistsTable)
+    const psychologist = await knex(psychologistsTable)
       .where('dossierNumber', psychologistId)
       .first();
     return psychologist;
@@ -155,7 +157,7 @@ module.exports.getNumberOfPsychologists = async function getNumberOfPsychologist
  */
 module.exports.getAcceptedPsychologistByEmail = function getAcceptedPsychologistByEmail(email) {
   return knex(psychologistsTable)
-  .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
+  .where('state', DOSSIER_STATE.accepte)
   .andWhere(
     knex.raw('LOWER("personalEmail") = ?', email.toLowerCase()),
   )
@@ -169,8 +171,8 @@ module.exports.getAcceptedPsychologistByEmail = function getAcceptedPsychologist
 module.exports.getNotYetAcceptedPsychologistByEmail = function getNotYetAcceptedPsychologistByEmail(email) {
   return knex(psychologistsTable)
   .where(function groupWhereOrTogether() {
-    this.where('state', demarchesSimplifiees.DOSSIER_STATE.en_construction)
-      .orWhere('state', demarchesSimplifiees.DOSSIER_STATE.en_instruction);
+    this.where('state', DOSSIER_STATE.en_construction)
+      .orWhere('state', DOSSIER_STATE.en_instruction);
   })
   .andWhere('personalEmail', email)
   .first();
@@ -178,7 +180,7 @@ module.exports.getNotYetAcceptedPsychologistByEmail = function getNotYetAccepted
 
 module.exports.countAcceptedPsychologistsByPersonalEmail = () => knex(psychologistsTable)
     .select('personalEmail', 'state')
-    .where('state', demarchesSimplifiees.DOSSIER_STATE.accepte)
+    .where('state', DOSSIER_STATE.accepte)
     .count('*')
     .groupBy('personalEmail', 'state');
 
@@ -199,12 +201,12 @@ module.exports.updateConventionInfo = async (psychologistId, assignedUniversityI
 };
 
 module.exports.getConventionInfo = (psychologistId) => knex.from(psychologistsTable)
-    .select(`${dbUniversities.universitiesTable}.name as universityName`,
-      `${dbUniversities.universitiesTable}.id as universityId`,
+    .select(`${'universities'}.name as universityName`,
+      `${'universities'}.id as universityId`,
       `${psychologistsTable}.isConventionSigned`)
-    .innerJoin(dbUniversities.universitiesTable,
+    .innerJoin('universities',
       `${psychologistsTable}.assignedUniversityId`,
-      `${dbUniversities.universitiesTable}.id`)
+      `${'universities'}.id`)
     .where(`${psychologistsTable}.dossierNumber`, psychologistId)
     .first();
 

@@ -1,8 +1,6 @@
 /* eslint-disable func-names */
-const dbPatients = require('../db/patients');
-
 exports.up = function (knex) {
-  return knex.schema.table(dbPatients.patientsTable, (table) => {
+  return knex.schema.table('patients', (table) => {
     table.text('doctorName');
     table.text('doctorAddress');
     table.string('doctorPhone');
@@ -10,7 +8,7 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  return knex.schema.table(dbPatients.patientsTable, (table) => {
+  return knex.schema.table('patients', (table) => {
     table.dropColumn('doctorName');
     table.dropColumn('doctorAddress');
     table.dropColumn('doctorPhone');

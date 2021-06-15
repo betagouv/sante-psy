@@ -6,6 +6,7 @@ const date = require('../utils/date');
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
 const clean = require('./helper/clean');
+const { patientsTable } = require('../db/tables');
 
 describe('DB Patients', () => {
   const firstNames = 'Harry James';
@@ -19,7 +20,7 @@ describe('DB Patients', () => {
   const dateOfBirth = date.parseDateForm('20/01/1980');
 
   async function testDataPatientsExist(lastName) {
-    const exist = await knex(dbPatients.patientsTable)
+    const exist = await knex(patientsTable)
       .where('lastName', lastName)
       .first();
     if (exist) {

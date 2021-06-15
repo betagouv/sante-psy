@@ -36,6 +36,9 @@ jobs:
       run: npm run seed
     - name: Run back tests
       run: npm run test
+      env:
+        API_TOKEN: ${{ secrets.API_TOKEN }}
+        DEMARCHES_SIMPLIFIEES_ID: ${{ secrets.DEMARCHES_SIMPLIFIEES_ID }}
     - name: Run app
       run: node dist/index.js &
     - name: Integration tests

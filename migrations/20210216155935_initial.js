@@ -1,16 +1,11 @@
 /* eslint-disable func-names */
-const dbAppointments = require('../db/appointments');
-const dbPatients = require('../db/patients');
-const dbPsychologists = require('../db/psychologists');
-const dbUniversities = require('../db/universities');
-
 exports.up = function (knex) {
   // Add extention for handling uuids to postgres
   return knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";').then(() => {
-    console.log(`Creating ${dbUniversities.universitiesTable} table`);
+    console.log('Creating universities table');
 
     return knex.schema
-      .createTable(dbUniversities.universitiesTable, (table) => {
+      .createTable('universities', (table) => {
         table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
         table.string('name', 255).notNullable();
 
@@ -18,9 +13,9 @@ exports.up = function (knex) {
         table.timestamp('updatedAt');
       });
   }).then(() => {
-    console.log(`Creating ${dbPatients.patientsTable} table`);
+    console.log('Creating patients table');
 
-    return knex.schema.createTable(dbPatients.patientsTable, (table) => {
+    return knex.schema.createTable('patients', (table) => {
       table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
       table.text('firstNames').notNullable();
       table.text('lastName').notNullable();
@@ -34,10 +29,10 @@ exports.up = function (knex) {
       table.timestamp('updatedAt');
     });
   }).then(() => {
-    console.log(`Creating ${dbPsychologists.psychologistsTable} table`);
+    console.log('Creating psychologists table');
 
     return knex.schema
-        .createTable(dbPsychologists.psychologistsTable, (table) => {
+        .createTable('psychologists', (table) => {
           table.uuid('dossierNumber').primary(); // to avoid duplicate when doing upsert
           table.string('adeli').notNullable(); // all therapists should be registered and have a number
           table.text('firstNames').notNullable();
@@ -62,10 +57,10 @@ exports.up = function (knex) {
         });
   })
 .then(() => {
-  console.log(`Creating ${dbAppointments.appointmentsTable} table`);
+  console.log('Creating appointments table');
 
   return knex.schema
-        .createTable(dbAppointments.appointmentsTable, (table) => {
+        .createTable('appointments', (table) => {
           table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
 
           table.uuid('patientId').notNullable();
@@ -85,7 +80,7 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTable(dbAppointments.appointmentsTable)
-    .then(() => knex.schema.dropTable(dbPsychologists.psychologistsTable)).then(() => knex.schema.dropTable(dbPatients.patientsTable)).then(() => knex.schema.dropTable(dbUniversities.universitiesTable))
+  return knex.schema.dropTable('appointments')
+    .then(() => knex.schema.dropTable('psychologists')).then(() => knex.schema.dropTable('patients')).then(() => knex.schema.dropTable('universities'))
 .then(() => knex.raw('DROP EXTENSION IF EXISTS "uuid-ossp";'));
 };

@@ -2,8 +2,7 @@ const knexConfig = require('../knexfile');
 const date = require('../utils/date');
 const knex = require('knex')(knexConfig);
 
-const loginTokenTable = 'login_token';
-module.exports.loginTokenTable = loginTokenTable;
+const { loginTokenTable } = require('./tables');
 
 module.exports.getByToken = async function getByToken(token) {
   try {

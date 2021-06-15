@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import ejs from 'ejs';
 import dbsApiCursor from '../db/dsApiCursor';
 import dbPsychologists from '../db/psychologists';
-import demarchesSimplifiees from '../utils/demarchesSimplifiees';
+import demarchesSimplifiees from '../services/demarchesSimplifiees';
 import config from '../utils/config';
 import emailUtils from '../utils/email';
 
@@ -68,9 +68,14 @@ const autoAcceptPsychologists = async () => {
   demarchesSimplifiees.autoAcceptPsychologist();
 };
 
+const autoVerifyPsychologists = async () => {
+  demarchesSimplifiees.autoVerifyPsychologist();
+};
+
 export default {
   importEveryDataFromDSToPG: async () => importDataFromDSToPG(true),
   importLatestDataFromDSToPG: async () => importDataFromDSToPG(false),
   checkForMultipleAcceptedDossiers,
   autoAcceptPsychologists,
+  autoVerifyPsychologists,
 };
