@@ -2,7 +2,7 @@
 const chai = require('chai');
 const { expect } = require('chai');
 const sinon = require('sinon');
-const app = require('../index.ts');
+const app = require('../index');
 const clean = require('./helper/clean');
 const jwt = require('../utils/jwt');
 const date = require('../utils/date');

@@ -4,6 +4,7 @@ const loginTokenTable = 'login_token';
 const patientsTable = 'patients';
 const psychologistsTable = 'psychologists';
 const universitiesTable = 'universities';
+const suspensionReasonsTable = 'suspension_reasons';
 
 module.exports = {
   appointmentsTable,
@@ -12,4 +13,5 @@ module.exports = {
   patientsTable,
   psychologistsTable,
   universitiesTable,
+  suspensionReasonsTable,
 };

@@ -6,6 +6,7 @@ require('dotenv').config();
 const dbPsychologists = rewire('../db/psychologists');
 const dbUniversities = rewire('../db/universities');
 const { DOSSIER_STATE } = require('../utils/dossierState');
+const { default: dbSuspensionReasons } = require('../db/suspensionReasons');
 const { expect } = require('chai');
 const { fail } = require('chai');
 const clean = require('./helper/clean');
@@ -154,7 +155,7 @@ describe('DB Psychologists', () => {
     });
   });
 
-  describe('getPsychologists', () => {
+  describe('getActivePsychologists', () => {
     it('should only return not archived and accepte psychologists with capitalized lastName', async () => {
       const archivedPsy = { ...psyList[0] };
       archivedPsy.archived = true;
@@ -164,10 +165,13 @@ describe('DB Psychologists', () => {
       constructionPsy.state = 'en_construction';
       constructionPsy.lastName = 'ConstructionPsy';
       constructionPsy.dossierNumber = 'a2e447cd-2d57-4f83-8884-ab05a2633644';
+      const inactivePsy = { ...psyList[0] };
+      inactivePsy.active = false;
+      inactivePsy.dossierNumber = 'c453be18-b989-4bff-8e29-f01e4b081406';
 
-      await dbPsychologists.savePsychologistInPG([psyList[0], archivedPsy, constructionPsy]);
+      await dbPsychologists.savePsychologistInPG([psyList[0], archivedPsy, constructionPsy, inactivePsy]);
 
-      const shouldBeOne = await dbPsychologists.getPsychologists();
+      const shouldBeOne = await dbPsychologists.getActivePsychologists();
       shouldBeOne.length.should.be.equal(1);
       shouldBeOne[0].lastName.should.be.equal(psyList[0].lastName.toUpperCase());
       assert.isUndefined(shouldBeOne[0].loginEmail);
@@ -428,6 +432,84 @@ describe('DB Psychologists', () => {
       expect(updatedPsy.email).to.equal(newEmail);
       expect(updatedPsy.updatedAt).to.not.be.undefined;
       expect(updatedPsy.selfModified).to.be.true;
+    });
+  });
+
+  describe('activate', () => {
+    it('should activate psy and remove inactiveUntil date', async () => {
+      const inactivePsy = clean.getOneInactivePsy(new Date());
+      await dbPsychologists.savePsychologistInPG([inactivePsy]);
+
+      await dbPsychologists.activate(inactivePsy.dossierNumber);
+
+      const psy = await dbPsychologists.getPsychologistById(inactivePsy.dossierNumber);
+      psy.active.should.be.equal(true);
+      psy.selfModified.should.be.equal(false);
+      assert.isNull(psy.inactiveUntil);
+    });
+  });
+
+  describe('suspend', () => {
+    it('should suspend psy', async () => {
+      const activePsy = clean.getOnePsy();
+      await dbPsychologists.savePsychologistInPG([activePsy]);
+
+      const now = new Date();
+      const date = new Date();
+      date.setDate(date.getDate() + 50);
+
+      await dbPsychologists.suspend(activePsy.dossierNumber, date, 'because i say so');
+
+      const psy = await dbPsychologists.getPsychologistById(activePsy.dossierNumber);
+      psy.active.should.be.equal(false);
+      psy.selfModified.should.be.equal(false);
+      psy.inactiveUntil.should.be.eql(date);
+
+      const reasons = await dbSuspensionReasons.getForPsychologist(activePsy.dossierNumber);
+      reasons.length.should.be.equal(1);
+      reasons[0].reason.should.be.equal('because i say so');
+      reasons[0].until.getFullYear().should.be.equal(date.getFullYear());
+      reasons[0].until.getMonth().should.be.equal(date.getMonth());
+      reasons[0].until.getDate().should.be.equal(date.getDate());
+      reasons[0].createdAt.should.be.at.least(now);
+      reasons[0].createdAt.should.be.at.most(new Date());
+    });
+  });
+
+  describe('reactivate', () => {
+    it('should reactivate inactive psy with until date before now', async () => {
+      const activePsy = clean.getOnePsy();
+      const now = new Date();
+      const yesterday = new Date();
+      yesterday.setDate(now.getDate() - 1);
+      const tomorrow = new Date();
+      tomorrow.setDate(now.getDate() + 1);
+      const inactivePsy1 = clean.getOneInactivePsy(yesterday);
+      const inactivePsy2 = clean.getOneInactivePsy(now);
+      const inactivePsy3 = clean.getOneInactivePsy(tomorrow);
+      await dbPsychologists.savePsychologistInPG([activePsy, inactivePsy1, inactivePsy2, inactivePsy3]);
+
+      await dbPsychologists.reactivate();
+
+      let psy = await dbPsychologists.getPsychologistById(activePsy.dossierNumber);
+      psy.active.should.be.equal(true);
+      psy.selfModified.should.be.equal(false);
+      assert.isNull(psy.inactiveUntil);
+
+      psy = await dbPsychologists.getPsychologistById(inactivePsy1.dossierNumber);
+      psy.active.should.be.equal(true);
+      psy.selfModified.should.be.equal(false);
+      assert.isNull(psy.inactiveUntil);
+
+      psy = await dbPsychologists.getPsychologistById(inactivePsy2.dossierNumber);
+      psy.active.should.be.equal(true);
+      psy.selfModified.should.be.equal(false);
+      assert.isNull(psy.inactiveUntil);
+
+      psy = await dbPsychologists.getPsychologistById(inactivePsy3.dossierNumber);
+      psy.active.should.be.equal(false);
+      psy.selfModified.should.be.equal(false);
+      psy.inactiveUntil.should.be.eql(tomorrow);
     });
   });
 });

@@ -11,11 +11,13 @@ const {
   patientsTable,
   psychologistsTable,
   universitiesTable,
+  suspensionReasonsTable,
 } = require('../../db/tables');
 
 exports.seed = async function (knex) {
   console.log('Clean database information');
 
+  await knex(suspensionReasonsTable).del();
   await knex(loginTokenTable).del();
   await knex(appointmentsTable).del();
   await knex(patientsTable).del();

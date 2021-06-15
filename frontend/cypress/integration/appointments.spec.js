@@ -1,6 +1,6 @@
 const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
-const { removeConvention } = require('./utils/psychologist');
+const { removeConvention, suspend } = require('./utils/psychologist');
 
 describe('Appointments', () => {
   beforeEach(() => {
@@ -70,6 +70,21 @@ describe('Appointments', () => {
           'have.text',
           'La séance a bien été supprimée.',
         );
+    });
+  });
+
+  describe('Suspended profile', () => {
+    it('should display warning if psy is suspended', () => {
+      cy.get('[data-test-id="notification-close"]')
+        .click();
+      suspend().then(() => {
+        cy.reload();
+        cy.get('[data-test-id="notification-error"]')
+          .should(
+            'have.text',
+            'Votre profil n‘est plus visible dans l‘annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur votre profil.',
+          );
+      });
     });
   });
 });

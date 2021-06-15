@@ -2,7 +2,7 @@ const chai = require('chai');
 const { expect } = require('chai');
 const sinon = require('sinon');
 const jwt = require('../utils/jwt');
-const app = require('../index.ts');
+const app = require('../index');
 const clean = require('./helper/clean');
 const dbPsychologists = require('../db/psychologists');
 
@@ -27,7 +27,7 @@ describe('psyProfileController', () => {
     it('should return 403 if user token does not match the param', async () => {
       const loggedPsyList = clean.psyList();
       const targetPsyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(loggedPsyList, targetPsyList);
+      await dbPsychologists.savePsychologistInPG([...loggedPsyList, ...targetPsyList]);
 
       const loggedPsy = loggedPsyList[0];
       const targetPsy = targetPsyList[0];
@@ -63,6 +63,7 @@ describe('psyProfileController', () => {
             'description',
             'languages',
             'personalEmail',
+            'active',
           );
           expect(returnedPsy.email).to.eql(psy.email);
           expect(returnedPsy.address).to.eql(psy.address);
@@ -74,6 +75,7 @@ describe('psyProfileController', () => {
           expect(returnedPsy.description).to.eql(psy.description);
           expect(returnedPsy.languages).to.eql(psy.languages);
           expect(returnedPsy.personalEmail).to.eql(psy.personalEmail);
+          expect(returnedPsy.active).to.eql(psy.active);
         });
     });
   });
@@ -507,7 +509,7 @@ describe('psyProfileController', () => {
     it('should return 403 if user token does not match the param', async () => {
       const loggedPsyList = clean.psyList();
       const targetPsyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(loggedPsyList, targetPsyList);
+      await dbPsychologists.savePsychologistInPG([...loggedPsyList, ...targetPsyList]);
 
       const loggedPsy = loggedPsyList[0];
       const targetPsy = targetPsyList[0];
@@ -593,6 +595,174 @@ describe('psyProfileController', () => {
           expect(updatedPsy.languages).to.eql('Français, Anglais');
           expect(updatedPsy.personalEmail).to.eql('perso@email.com');
         });
+    });
+  });
+
+  describe('activate', () => {
+    let activatePsyStub;
+    beforeEach(() => {
+      activatePsyStub = sinon.stub(dbPsychologists, 'activate');
+    });
+
+    afterEach(() => {
+      activatePsyStub.restore();
+    });
+
+    it('should return 401 if user is not logged in', async () => {
+      const psyList = clean.psyList();
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = psyList[0];
+
+      return chai.request(app)
+        .post(`/api/psychologue/${psy.dossierNumber}/activate`)
+        .then(async (res) => {
+          res.status.should.equal(401);
+          sinon.assert.notCalled(activatePsyStub);
+        });
+    });
+
+    it('should return 403 if user token does not match the param', async () => {
+      const loggedPsyList = clean.psyList();
+      const targetPsyList = clean.psyList();
+      await dbPsychologists.savePsychologistInPG([...loggedPsyList, ...targetPsyList]);
+
+      const loggedPsy = loggedPsyList[0];
+      const targetPsy = targetPsyList[0];
+
+      return chai.request(app)
+        .post(`/api/psychologue/${targetPsy.dossierNumber}/activate`)
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
+        .then(async (res) => {
+          res.status.should.equal(403);
+          sinon.assert.notCalled(activatePsyStub);
+        });
+    });
+
+    it('should activate psy', async () => {
+      const psy = clean.getOneInactivePsy();
+      await dbPsychologists.savePsychologistInPG([psy]);
+
+      return chai.request(app)
+        .post(`/api/psychologue/${psy.dossierNumber}/activate`)
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .then(async (res) => {
+          res.body.success.should.equal(true);
+          res.body.message.should.equal('Vos informations sont de nouveau visibles sur l\'annuaire.');
+
+          sinon.assert.calledWith(activatePsyStub, psy.dossierNumber);
+        });
+    });
+  });
+
+  describe('suspend', () => {
+    let suspendPsyStub;
+    beforeEach(() => {
+      suspendPsyStub = sinon.stub(dbPsychologists, 'suspend');
+    });
+
+    afterEach(() => {
+      suspendPsyStub.restore();
+    });
+
+    const shouldFailSuspendPsyInputValidation = async (postData, message) => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'prenom.nom@beta.gouv.fr',
+      };
+
+      const res = await chai.request(app)
+      .post(`/api/psychologue/${psy.dossierNumber}/suspend`)
+      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+      .send(postData);
+
+      sinon.assert.notCalled(suspendPsyStub);
+
+      res.body.success.should.equal(false);
+      res.body.message.should.equal(message);
+    };
+
+    it('should return 401 if user is not logged in', async () => {
+      const psyList = clean.psyList();
+      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = psyList[0];
+
+      return chai.request(app)
+        .post(`/api/psychologue/${psy.dossierNumber}/suspend`)
+        .then(async (res) => {
+          res.status.should.equal(401);
+          sinon.assert.notCalled(suspendPsyStub);
+        });
+    });
+
+    it('should return 403 if user token does not match the param', async () => {
+      const loggedPsyList = clean.psyList();
+      const targetPsyList = clean.psyList();
+      await dbPsychologists.savePsychologistInPG([...loggedPsyList, ...targetPsyList]);
+
+      const loggedPsy = loggedPsyList[0];
+      const targetPsy = targetPsyList[0];
+
+      return chai.request(app)
+        .post(`/api/psychologue/${targetPsy.dossierNumber}/suspend`)
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
+        .then(async (res) => {
+          res.status.should.equal(403);
+          sinon.assert.notCalled(suspendPsyStub);
+        });
+    });
+
+    it('should suspend psy', async () => {
+      const psy = clean.getOneInactivePsy();
+      await dbPsychologists.savePsychologistInPG([psy]);
+
+      const nextDate = new Date();
+      nextDate.setDate(nextDate.getDate() + 2);
+      return chai.request(app)
+        .post(`/api/psychologue/${psy.dossierNumber}/suspend`)
+        .send({
+          date: nextDate,
+          reason: 'Why are you asking ? are you the police ?',
+        })
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .then(async (res) => {
+          res.body.success.should.equal(true);
+          res.body.message.should.equal('Vos informations ne sont plus visibles sur l\'annuaire.');
+
+          sinon.assert.calledWith(
+            suspendPsyStub,
+            psy.dossierNumber,
+            sinon.match((date) => (new Date(date)).getTime() === nextDate.getTime()),
+            'Why are you asking ? are you the police ?',
+          );
+        });
+    });
+
+    it('should not suspend psy if no reason', async () => {
+      await shouldFailSuspendPsyInputValidation({
+        date: new Date(),
+      }, 'Vous devez spécifier une raison.');
+    });
+
+    it('should not suspend psy if empty reason', async () => {
+      await shouldFailSuspendPsyInputValidation({
+        date: new Date(),
+        reason: '    ',
+      }, 'Vous devez spécifier une raison.');
+    });
+
+    it('should not suspend psy if no date', async () => {
+      await shouldFailSuspendPsyInputValidation({
+        reason: 'yeah',
+      }, 'Vous devez spécifier une date de fin de suspension dans le futur.');
+    });
+
+    it('should not suspend psy if date is in the past', async () => {
+      const previousDate = new Date();
+      previousDate.setDate(previousDate.getDate() - 2);
+      await shouldFailSuspendPsyInputValidation({
+        date: previousDate,
+        reason: 'yeah',
+      }, 'Vous devez spécifier une date de fin de suspension dans le futur.');
     });
   });
 });

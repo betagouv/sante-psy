@@ -55,9 +55,13 @@ const Patient = {
   getOne: id => client.get(`/patients/${id}`),
   update: (id, patient) => client.put(`/patients/${id}`, patient),
 };
+
 const Psychologist = {
+  activate: () => client.post(`/psychologue/${store.userStore.decodedToken.psychologist}/activate`),
   find: () => client.get('/trouver-un-psychologue'),
   getProfile: () => client.get(`/psychologue/${store.userStore.decodedToken.psychologist}`),
+  suspend: (reason, date) => client
+    .post(`/psychologue/${store.userStore.decodedToken.psychologist}/suspend`, { reason, date }),
   updateProfile: psychologist => client
     .put(`/psychologue/${store.userStore.decodedToken.psychologist}`, psychologist),
 };

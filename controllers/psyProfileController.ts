@@ -4,6 +4,8 @@ import { check, oneOf } from 'express-validator';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
+import config from '../utils/config';
+import CustomError from '../utils/CustomError';
 
 const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
   const { psyId } = req.params;
@@ -25,6 +27,7 @@ const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
       description: psychologist.description,
       languages: psychologist.languages,
       personalEmail: psychologist.personalEmail,
+      active: psychologist.active,
     },
   });
 };
@@ -103,8 +106,50 @@ const editPsyProfile = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+const activate = async (req: Request, res: Response): Promise<void> => {
+  await dbPsychologists.activate(req.params.psyId);
+
+  res.json({
+    success: true,
+    message: 'Vos informations sont de nouveau visibles sur l\'annuaire.',
+  });
+};
+
+const suspendValidators = [
+  check('date')
+    .isISO8601()
+    .isAfter()
+    .withMessage('Vous devez spécifier une date de fin de suspension dans le futur.'),
+  check('reason')
+    .trim().not().isEmpty()
+    .customSanitizer((value, { req }) => req.sanitize(value))
+    .withMessage('Vous devez spécifier une raison.'),
+];
+
+const suspend = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+
+  // TO REMOVE suspensionDepartment
+  if (config.suspensionDepartment) {
+    const psy = await dbPsychologists.getPsychologistById(req.params.psyId);
+    if (!config.suspensionDepartment.includes(psy.departement)) {
+      throw new CustomError('Feature non disponible pour le moment', 400);
+    }
+  }
+
+  await dbPsychologists.suspend(req.params.psyId, req.body.date, req.body.reason);
+
+  res.json({
+    success: true,
+    message: 'Vos informations ne sont plus visibles sur l\'annuaire.',
+  });
+};
+
 export default {
   editPsyProfilValidators,
+  suspendValidators,
   getPsyProfile: asyncHelper(getPsyProfile),
   editPsyProfile: asyncHelper(editPsyProfile),
+  activate: asyncHelper(activate),
+  suspend: asyncHelper(suspend),
 };

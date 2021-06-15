@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forwardRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
@@ -6,29 +6,15 @@ import DatePicker from 'react-datepicker';
 import Ariane from 'components/Ariane/Ariane';
 import Mail from 'components/Footer/Mail';
 import GlobalNotification from 'components/Notification/GlobalNotification';
+import Select from 'components/Form/Select';
+import DateInput from 'components/Date/DateInput';
+
 import agent from 'services/agent';
 import { convertLocalToUTCDate } from 'services/date';
 
 import { useStore } from 'stores/';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import Select from 'components/Form/Select';
-
-const DateInput = forwardRef(({ value, onClick }, ref) => (
-  <div onClick={onClick} ref={ref}>
-    <label className="fr-label" htmlFor="date">Date de la séance</label>
-    <input
-      className="fr-input short-input"
-      type="text"
-      id="date"
-      name="date"
-      required
-      autoComplete="off"
-      onChange={() => {}}
-      value={value}
-    />
-  </div>
-));
 
 const NewAppointment = () => {
   const history = useHistory();
@@ -79,7 +65,7 @@ const NewAppointment = () => {
               <DatePicker
                 selected={date}
                 dateFormat="dd/MM/yyyy"
-                customInput={<DateInput />}
+                customInput={<DateInput label="Date de la séance" />}
                 onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
               />
             </div>

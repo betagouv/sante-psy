@@ -1,7 +1,7 @@
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
-const { psychologistsTable } = require('./tables');
+const { psychologistsTable, suspensionReasonsTable } = require('./tables');
 const { DOSSIER_STATE } = require('../utils/dossierState');
 const dbUniversities = require('./universities');
 const {
@@ -52,7 +52,7 @@ module.exports.saveAssignedUniversity = async (psychologistId, assignedUniversit
   return updatedPsy;
 };
 
-module.exports.getPsychologists = async () => {
+module.exports.getActivePsychologists = async () => {
   try {
     const psychologists = knex.column(
       knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
@@ -72,6 +72,7 @@ module.exports.getPsychologists = async () => {
         .from(psychologistsTable)
         .whereNot('archived', true)
         .where('state', DOSSIER_STATE.accepte)
+        .andWhere('active', true)
         .orderByRaw('RANDOM ()');
     return psychologists;
   } catch (err) {
@@ -231,3 +232,50 @@ module.exports.updatePsychologist = async (psychologist) => {
     throw new Error('Erreur de modification du psychologue');
   }
 };
+
+module.exports.activate = async (dossierNumber) => {
+  try {
+    return knex(psychologistsTable)
+      .where({ dossierNumber })
+      .update({
+        active: true,
+        inactiveUntil: null,
+      });
+  } catch (err) {
+    console.error('Erreur d\'activation du psychologue', err);
+    throw new Error('Erreur d\'activation du psychologue');
+  }
+};
+
+module.exports.suspend = async (dossierNumber, inactiveUntil, reason) => knex.transaction((trx) => {
+  const update = knex(psychologistsTable)
+      .transacting(trx)
+      .where({ dossierNumber })
+      .update({
+        active: false,
+        inactiveUntil,
+      });
+  const create = knex(suspensionReasonsTable)
+      .transacting(trx)
+      .insert({
+        psychologistId: dossierNumber,
+        reason,
+        until: inactiveUntil,
+      });
+
+  Promise.all([update, create])
+      .then(() => {
+        trx.commit();
+        console.log(`Psychologue ${dossierNumber} suspendu jusqu'au ${inactiveUntil}`);
+      })
+      .catch((err) => {
+        trx.rollback();
+        console.error('Erreur de suspension du psychologue', err);
+        throw new Error('Erreur de suspension du psychologue');
+      });
+});
+
+module.exports.reactivate = () => knex(psychologistsTable)
+    .where({ active: false })
+    .andWhere('inactiveUntil', '<=', (new Date()).toISOString())
+    .update({ active: true, inactiveUntil: null });
