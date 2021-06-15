@@ -109,7 +109,7 @@ describe('DS integration tests', () => {
     address: '1 Rue Lecourbe 75015 Paris',
     departement: '2B - Haute-Corse',
     region: 'défaut',
-    phone: '0123456789',
+    phone: '01 23 45 67 89',
     website: '',
     teleconsultation: false,
     description: 'Test',
