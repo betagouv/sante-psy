@@ -36,14 +36,18 @@ const SuspendProfile = ({ suspendPsychologist }) => {
 
   const getReason = () => (reason === 'other' ? `Autre: ${otherReason}` : reason);
 
-  const selectReason = e => {
-    setDisplayReason(false);
-    setReason(e.target.value);
+  const selectReason = value => {
+    if (value !== 'other') {
+      setDisplayReason(false);
+      setReason(value);
+    }
   };
 
-  const selectDuration = e => {
-    setDisplayDate(false);
-    setDuration(e.target.value);
+  const selectDuration = value => {
+    if (value !== 'other') {
+      setDisplayDate(false);
+      setDuration(value);
+    }
   };
 
   const canValidate = reason
@@ -75,106 +79,91 @@ const SuspendProfile = ({ suspendPsychologist }) => {
         legend="Pourquoi voulez vous retirer vos informations ?"
         ariaLabel="raison"
         name="reason"
+        value={reason}
+        onChange={selectReason}
       >
         <Radio
           data-test-id="radio-reason-holidays"
           label="Je pars en vacances"
-          onChange={selectReason}
           value="holidays"
         />
         <Radio
           data-test-id="radio-reason-toomuch"
           label="Je reçois trop de demandes"
-          onChange={selectReason}
           value="toomuch"
         />
         <Radio
           data-test-id="radio-reason-reimbursments"
           label="Je suis en attente de mes remboursements"
-          onChange={selectReason}
           value="reimbursments"
         />
         <Radio
           data-test-id="radio-reason-convention"
           label="Je suis en attente de ma convention"
-          onChange={selectReason}
           value="convention"
         />
-        <Row className="fr-radio-group">
-          <Col n="sm-2">
-            <Radio
-              data-test-id="radio-reason-other"
-              label="Autre"
-              onChange={e => {
-                setReason('other');
-                setDisplayReason(e.target.checked);
-              }}
-              value="other"
-            />
-          </Col>
-          {displayReason && (
-            <Col>
-              <TextInput
-                data-test-id="radio-reason-other-input"
-                required
-                value={otherReason}
-                onChange={e => setOtherReason(e.target.value)}
-              />
-            </Col>
-          )}
-        </Row>
+        <Radio
+          data-test-id="radio-reason-other"
+          label="Autre"
+          onChange={e => {
+            setReason('other');
+            setDisplayReason(e.target.checked);
+          }}
+          value="other"
+        />
+        {displayReason && (
+          <TextInput
+            data-test-id="radio-reason-other-input"
+            required
+            value={otherReason}
+            onChange={e => setOtherReason(e.target.value)}
+            textarea
+          />
+        )}
       </RadioGroup>
       <RadioGroup
         legend="Pour combien de temps voulez vous retirer vos informations ?"
         ariaLabel="durée"
+        value={duration}
+        onChange={selectDuration}
       >
         <Radio
           data-test-id="radio-duration-week"
           label="1 semaine"
-          onChange={selectDuration}
           value="week"
         />
         <Radio
           data-test-id="radio-duration-month"
           label="1 mois"
-          onChange={selectDuration}
           value="month"
         />
-        <Row className="fr-radio-group">
-          <Col n="sm-2">
-            <Radio
-              data-test-id="radio-duration-other"
-              label="Autre"
-              onChange={e => {
-                setDuration('other');
-                setDisplayDate(e.target.checked);
-              }}
-              value="other"
-            />
-          </Col>
-          {displayDate && (
-            <Col>
-              <DatePicker
-                selected={date}
-                minDate={tomorrow}
-                dateFormat="dd/MM/yyyy"
-                customInput={(
-                  <DateInput
-                    dataTestId="radio-duration-other-input"
-                  />
-                )}
-                onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
-              />
-            </Col>
-          )}
-
-        </Row>
         <Radio
           data-test-id="radio-duration-forever"
           label="Je souhaite retirer mes informations définitivement"
-          onChange={selectDuration}
           value="forever"
         />
+        <Radio
+          data-test-id="radio-duration-other"
+          label="Autre"
+          onChange={e => {
+            setDuration('other');
+            setDisplayDate(e.target.checked);
+          }}
+          value="other"
+        />
+        {displayDate && (
+          <DatePicker
+            selected={date}
+            minDate={tomorrow}
+            dateFormat="dd/MM/yyyy"
+            customInput={(
+              <DateInput
+                dataTestId="radio-duration-other-input"
+              />
+                )}
+            onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
+          />
+        )}
       </RadioGroup>
       <Button
         data-test-id="suspend-button"
