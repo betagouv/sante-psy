@@ -1,29 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { observer } from 'mobx-react';
+import { useStore } from 'stores/';
+import ConventionForm from './ConventionForm';
 
-import Input from 'components/Form/Input';
-
-const PayingUniversity = ({ universities, currentConvention, updateConvention }) => {
-  const [showForm, setShowForm] = useState(!currentConvention);
-  const [convention, setConvention] = useState({
-    universityId: '',
-    isConventionSigned: false,
-  });
+const PayingUniversity = () => {
+  const { userStore: { user } } = useStore();
+  const [showForm, setShowForm] = useState();
 
   useEffect(() => {
-    setConvention({
-      universityId: currentConvention ? currentConvention.universityId : '',
-      isConventionSigned: currentConvention && currentConvention.isConventionSigned
-        ? currentConvention.isConventionSigned
-        : false,
-    });
-  }, [currentConvention]);
-
-  const saveConvention = e => {
-    e.preventDefault();
-    updateConvention(convention);
-    setShowForm(false);
-  };
-
+    setShowForm(!user.convention);
+  }, [user]);
   return (
     <div className="fr-mb-3w">
       <h3>Ma convention</h3>
@@ -37,55 +23,18 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
       </div>
       {showForm ? (
         <>
-          {currentConvention && (
+          {user.convention && (
           <h4
             data-test-id="convention-form-title"
           >
             Modifier le statut de ma convention
           </h4>
           )}
-          <form data-test-id="convention-form" onSubmit={saveConvention}>
-            <Input
-              data-test-id="convention-university-select"
-              id="university"
-              name="university"
-              type="select"
-              label="Quelle université vous a contacté pour signer la convention ?"
-              value={convention.universityId || ''}
-              onChange={value => setConvention({ ...convention, universityId: value })}
-              required
-              options={universities.map(university => ({ id: university.id, label: university.name }))}
-            />
-            <Input
-              type="radio"
-              value={convention.isConventionSigned}
-              field="signed"
-              onChange={value => setConvention({ ...convention, isConventionSigned: value })}
-              required
-              label="Avez-vous déjà signé la convention ?"
-              hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
-              Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
-              options={[
-                {
-                  id: true,
-                  label: 'Oui',
-                }, {
-                  id: false,
-                  label: 'Non',
-                },
-              ]}
-            />
-
-            <div className="fr-my-5w">
-              <button
-                data-test-id="update-convention-button"
-                type="submit"
-                className="fr-btn fr-fi-check-line fr-btn--icon-left"
-              >
-                Enregistrer
-              </button>
-            </div>
-          </form>
+          <ConventionForm
+            onConventionUpdated={() => { setShowForm(false); }}
+            currentConvention={user.convention}
+            checkDefaultValue
+          />
         </>
       ) : (
         <>
@@ -93,11 +42,11 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
           <p data-test-id="convention-university-name" className="fr-mb-1v">
             Je suis rattaché à l&lsquo;université de
             {' '}
-            <b>{currentConvention ? currentConvention.universityName : ''}</b>
+            <b>{user.convention ? user.convention.universityName : ''}</b>
             .
           </p>
           <p data-test-id="convention-signed" className="fr-mb-2w">
-            {currentConvention && currentConvention.isConventionSigned ? (
+            {user.convention && user.convention.isConventionSigned ? (
               <>
                 La convention est
                 {' '}
@@ -132,4 +81,4 @@ const PayingUniversity = ({ universities, currentConvention, updateConvention })
   );
 };
 
-export default PayingUniversity;
+export default observer(PayingUniversity);

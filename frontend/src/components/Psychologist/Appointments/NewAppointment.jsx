@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
+import { observer } from 'mobx-react';
 
 import Ariane from 'components/Ariane/Ariane';
 import Mail from 'components/Footer/Mail';
@@ -11,8 +12,11 @@ import DateInput from 'components/Date/DateInput';
 
 import agent from 'services/agent';
 import { convertLocalToUTCDate } from 'services/date';
+import { shouldCheckConventionAgain } from 'services/conventionVerification';
 
 import { useStore } from 'stores/';
+
+import ConventionModal from './ConventionModal';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -22,7 +26,7 @@ const NewAppointment = () => {
   const [patientId, setPatientId] = useState();
   const [patients, setPatients] = useState([]);
 
-  const { commonStore: { setNotification } } = useStore();
+  const { commonStore: { setNotification }, userStore: { user } } = useStore();
 
   useEffect(() => {
     agent.Patient.get()
@@ -40,8 +44,14 @@ const NewAppointment = () => {
     });
   };
 
+  const hasSignedConvention = user.convention && user.convention.isConventionSigned;
+  const modal = hasSignedConvention || !shouldCheckConventionAgain()
+    ? <></>
+    : <ConventionModal currentConvention={user.convention} />;
+
   return (
     <div className="fr-container fr-mb-3w">
+      {modal}
       <Ariane
         previous={[
           {
@@ -107,4 +117,4 @@ const NewAppointment = () => {
   );
 };
 
-export default NewAppointment;
+export default observer(NewAppointment);
