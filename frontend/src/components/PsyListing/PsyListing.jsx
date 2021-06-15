@@ -14,12 +14,20 @@ const PsyListing = () => {
     });
   }, []);
 
-  const getFilteredPsychologists = () => psychologists.filter(psychologist => {
-    const sameName = !filter.name || psychologist.lastName.toLowerCase().includes(filter.name);
-    const sameAddress = !filter.address || psychologist.address.toLowerCase().includes(filter.address);
-    const samePostCode = !filter.postCode || psychologist.departement.toLowerCase().includes(filter.postCode);
-    return sameName && sameAddress && samePostCode;
-  });
+  const filterByKey = (psychologist, key, psyKey) => {
+    const filterValue = filter[key];
+    if (!filterValue) {
+      return true;
+    }
+    const psychologistValue = psychologist[psyKey || key];
+    return psychologistValue && psychologistValue.toLowerCase().includes(filterValue);
+  };
+
+  const getFilteredPsychologists = () => psychologists.filter(
+    psychologist => filterByKey(psychologist, 'name', 'lastName')
+        && filterByKey(psychologist, 'address')
+        && filterByKey(psychologist, 'postCode', 'departement'),
+  );
 
   const changeFilter = (name, event) => {
     const newFilter = { ...filter };
