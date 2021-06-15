@@ -18,4 +18,18 @@ const suspend = () => {
   });
 };
 
-export default { removeConvention, suspend };
+const signConvention = (name, isSigned) => cy.request('GET', 'http://localhost:8080/api/config')
+  .then(response => {
+    const university = response.body.universities.find(u => u.name === name);
+    return cy.request({
+      method: 'POST',
+      url: 'http://localhost:8080/api/psychologue/renseigner-convention',
+      body: {
+        universityId: university.id,
+        isConventionSigned: isSigned,
+      },
+      auth: { bearer: getCurrentToken() },
+    });
+  });
+
+export default { removeConvention, signConvention, suspend };

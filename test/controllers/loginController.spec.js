@@ -3,14 +3,15 @@ const rewire = require('rewire');
 const sinon = require('sinon');
 const chai = require('chai');
 const { v4: uuidv4 } = require('uuid');
-const app = require('../index');
+const app = require('../../index');
 
-const loginController = rewire('../controllers/loginController');
-const dbLoginToken = require('../db/loginToken');
-const dbPsychologists = require('../db/psychologists');
-const emailUtils = require('../utils/email');
-const jwt = require('../utils/jwt');
-const { default: clean } = require('./helper/clean');
+const loginController = rewire('../../controllers/loginController');
+const dbLoginToken = require('../../db/loginToken');
+const dbPsychologists = require('../../db/psychologists');
+const dbUniversities = require('../../db/universities');
+const emailUtils = require('../../utils/email');
+const jwt = require('../../utils/jwt');
+const clean = require('../helper/clean');
 
 describe('loginController', async () => {
   describe('generateLoginUrl', () => {
@@ -241,26 +242,38 @@ describe('loginController', async () => {
 
   describe('connected user information', () => {
     it('should return only my basic information', async () => {
-      const psy = await clean.insertOnePsy();
+      const universityId = uuidv4();
+      const psy = clean.getOnePsy('loginemail@beta.gouv.fr', 'accepte', false, universityId);
+      psy.isConventionSigned = true;
+      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbUniversities.saveUniversities([{
+        id: universityId,
+        name: 'Monster university',
+        emailSSU: 'monster@ssu.fr',
+        emailUniversity: 'monster@university.fr',
+      }]);
 
       return chai.request(app)
       .get('/api/connecteduser')
       .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
       .then(async (res) => {
-        res.body.should.have.all.keys('firstNames', 'lastName', 'email', 'active');
+        res.body.should.have.all.keys('firstNames', 'lastName', 'email', 'convention', 'active');
         res.body.firstNames.should.equal(psy.firstNames);
         res.body.lastName.should.equal(psy.lastName);
         res.body.email.should.equal(psy.email);
         res.body.active.should.equal(psy.active);
+        res.body.convention.should.eql({
+          isConventionSigned: true,
+          universityName: 'Monster university',
+          universityId,
+        });
       });
     });
 
     it('should return empty info when psy does not exist', async () => chai.request(app)
       .get('/api/connecteduser')
       .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(uuidv4())}`)
-      .then(async (res) => {
-        res.body.should.be.empty;
-      }));
+      .then(async (res) => res.body.should.be.empty));
 
     it('should return 401 if user is not connected', async () => chai.request(app)
       .get('/api/connecteduser')

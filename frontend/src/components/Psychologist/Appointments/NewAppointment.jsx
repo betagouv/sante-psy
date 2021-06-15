@@ -50,7 +50,7 @@ const NewAppointment = () => {
     : <ConventionModal currentConvention={user.convention} />;
 
   return (
-    <div className="fr-container fr-mb-3w">
+    <div className="fr-container fr-mb-3w" data-test-id="new-appointment-container">
       {modal}
       <Ariane
         previous={[

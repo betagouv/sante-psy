@@ -56,7 +56,6 @@ describe('Reimbursement', () => {
       cy.get('[data-test-id="update-convention-button"]')
         .click();
       cy.wait('@updateConvention');
-      cy.wait('@reimbursement');
       cy.get('[data-test-id="convention-form"]')
         .should('not.exist');
       cy.get('[data-test-id="convention-university-name"]')

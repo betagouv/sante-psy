@@ -15,7 +15,7 @@ const ConventionModal = ({ currentConvention }) => {
   };
 
   return (
-    <Modal isOpen={isOpen}>
+    <Modal isOpen={isOpen} data-test-id="convention-modal">
       <ModalTitle>Veuillez renseigner votre convention</ModalTitle>
       <ModalContent>
         Pour déclarer vos séances vous devez obligatoirement indiqué le statut de votre convention.
