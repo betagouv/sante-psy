@@ -38,6 +38,7 @@ module.exports = {
   featureSendSummary: process.env.FEATURE_SEND_SUMMARY || false,
   featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
   featureAutoAccept: process.env.FEATURE_AUTO_ACCEPT || false,
+  featureAutoVerify: process.env.FEATURE_AUTO_VERIFY || false,
   featureReimbursementPage: (process.env.FEATURE_REIMBURSEMENT_PAGE === 'true'),
   uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid
   secret,
