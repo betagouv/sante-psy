@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
-
-import knexConfig from '../knexfile';
 import knexModule from 'knex';
 
 import dbPsychologists from '../db/psychologists';
 import dbLoginToken from '../db/loginToken';
-import { seed } from '../test/seed/fake_data';
+
+const { seed } = require('../test/seed/fake_data');
+
+const knexConfig = require('../knexfile');
 
 const knex = knexModule(knexConfig);
 

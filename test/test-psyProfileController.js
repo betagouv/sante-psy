@@ -3,7 +3,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const jwt = require('../utils/jwt');
 const app = require('../index');
-const clean = require('./helper/clean');
+const { default: clean } = require('./helper/clean');
 const dbPsychologists = require('../db/psychologists');
 
 describe('psyProfileController', () => {
@@ -13,9 +13,7 @@ describe('psyProfileController', () => {
     });
 
     it('should return 401 if user is not logged in', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = psyList[0];
+      const psy = await clean.insertOnePsy();
 
       return chai.request(app)
         .get(`/api/psychologue/${psy.dossierNumber}`)
@@ -25,12 +23,8 @@ describe('psyProfileController', () => {
     });
 
     it('should return 403 if user token does not match the param', async () => {
-      const loggedPsyList = clean.psyList();
-      const targetPsyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG([...loggedPsyList, ...targetPsyList]);
-
-      const loggedPsy = loggedPsyList[0];
-      const targetPsy = targetPsyList[0];
+      const loggedPsy = await clean.insertOnePsy();
+      const targetPsy = await clean.insertOnePsy();
 
       return chai.request(app)
         .get(`/api/psychologue/${targetPsy.dossierNumber}`)
@@ -41,9 +35,7 @@ describe('psyProfileController', () => {
     });
 
     it('should return psy profile', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = psyList[0];
+      const psy = await clean.insertOnePsy();
 
       return chai.request(app)
         .get(`/api/psychologue/${psy.dossierNumber}`)
@@ -381,9 +373,7 @@ describe('psyProfileController', () => {
     });
 
     const shouldPassUpdatePsyInputValidation = async (postData) => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = psyList[0];
+      const psy = await clean.insertOnePsy();
 
       const res = await chai.request(app)
       .put(`/api/psychologue/${psy.dossierNumber}`)
@@ -495,9 +485,7 @@ describe('psyProfileController', () => {
 
   describe('editPsyProfile', () => {
     it('should return 401 if user is not logged in', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = psyList[0];
+      const psy = await clean.insertOnePsy();
 
       return chai.request(app)
         .put(`/api/psychologue/${psy.dossierNumber}`)
@@ -507,12 +495,8 @@ describe('psyProfileController', () => {
     });
 
     it('should return 403 if user token does not match the param', async () => {
-      const loggedPsyList = clean.psyList();
-      const targetPsyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG([...loggedPsyList, ...targetPsyList]);
-
-      const loggedPsy = loggedPsyList[0];
-      const targetPsy = targetPsyList[0];
+      const loggedPsy = await clean.insertOnePsy();
+      const targetPsy = await clean.insertOnePsy();
 
       return chai.request(app)
         .put(`/api/psychologue/${targetPsy.dossierNumber}`)
@@ -535,8 +519,7 @@ describe('psyProfileController', () => {
     });
 
     it('should do nothing if it does not exists', async () => {
-      const psyList = clean.psyList();
-      const psy = psyList[0];
+      const psy = clean.getOnePsy();
 
       return chai.request(app)
         .put(`/api/psychologue/${psy.dossierNumber}`)
@@ -560,9 +543,7 @@ describe('psyProfileController', () => {
     });
 
     it('should update psy profile', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = psyList[0];
+      const psy = await clean.insertOnePsy();
 
       return chai.request(app)
         .put(`/api/psychologue/${psy.dossierNumber}`)
@@ -609,9 +590,7 @@ describe('psyProfileController', () => {
     });
 
     it('should return 401 if user is not logged in', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = psyList[0];
+      const psy = await clean.insertOnePsy();
 
       return chai.request(app)
         .post(`/api/psychologue/${psy.dossierNumber}/activate`)
@@ -622,12 +601,8 @@ describe('psyProfileController', () => {
     });
 
     it('should return 403 if user token does not match the param', async () => {
-      const loggedPsyList = clean.psyList();
-      const targetPsyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG([...loggedPsyList, ...targetPsyList]);
-
-      const loggedPsy = loggedPsyList[0];
-      const targetPsy = targetPsyList[0];
+      const loggedPsy = await clean.insertOnePsy();
+      const targetPsy = await clean.insertOnePsy();
 
       return chai.request(app)
         .post(`/api/psychologue/${targetPsy.dossierNumber}/activate`)
@@ -682,9 +657,7 @@ describe('psyProfileController', () => {
     };
 
     it('should return 401 if user is not logged in', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = psyList[0];
+      const psy = await clean.insertOnePsy();
 
       return chai.request(app)
         .post(`/api/psychologue/${psy.dossierNumber}/suspend`)
@@ -695,12 +668,8 @@ describe('psyProfileController', () => {
     });
 
     it('should return 403 if user token does not match the param', async () => {
-      const loggedPsyList = clean.psyList();
-      const targetPsyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG([...loggedPsyList, ...targetPsyList]);
-
-      const loggedPsy = loggedPsyList[0];
-      const targetPsy = targetPsyList[0];
+      const loggedPsy = await clean.insertOnePsy();
+      const targetPsy = await clean.insertOnePsy();
 
       return chai.request(app)
         .post(`/api/psychologue/${targetPsy.dossierNumber}/suspend`)

@@ -1,7 +1,7 @@
 const chai = require('chai');
 const rewire = require('rewire');
 const app = require('../index');
-const clean = require('./helper/clean');
+const { default: clean } = require('./helper/clean');
 const jwt = require('../utils/jwt');
 const dbPsychologists = require('../db/psychologists');
 const dbUniversities = require('../db/universities');
@@ -63,7 +63,6 @@ describe('reimbursementController', () => {
     });
 
     afterEach(async () => {
-      await clean.cleanAllPsychologists();
       await clean.cleanAllUniversities();
     });
 

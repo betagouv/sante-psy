@@ -3,16 +3,20 @@ const chai = require('chai');
 const { expect } = require('chai');
 const sinon = require('sinon');
 const app = require('../index');
-const clean = require('./helper/clean');
+const { default: clean } = require('./helper/clean');
 const jwt = require('../utils/jwt');
 const date = require('../utils/date');
 const dbPatients = require('../db/patients');
+const dbPsychologists = require('../db/psychologists');
 
 const doctorName = 'doctorName';
 const doctorAddress = 'doctorAddress';
 const dateOfBirth = '20/01/1980';
 
 const makePatient = async (psychologistId) => {
+  const psy = clean.getOnePsy();
+  psy.dossierNumber = psychologistId;
+  await dbPsychologists.savePsychologistInPG([psy]);
   // Insert an appointment and a patient
   const patient = await dbPatients.insertPatient(
     'Ada',
@@ -44,10 +48,7 @@ describe('patientsController', () => {
     });
 
     it('should create patient', async () => {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      };
+      const psy = await clean.insertOnePsy();
 
       return chai.request(app)
         .post('/api/patients')

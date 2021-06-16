@@ -1,9 +1,9 @@
 require('dotenv').config();
 const { expect } = require('chai');
 const sinon = require('sinon');
-const { v4: uuidv4 } = require('uuid');
 const config = require('../utils/config');
 const dbPsychologists = require('../db/psychologists');
+const dbUniversities = require('../db/universities');
 const dbDsApiCursor = require('../db/dsApiCursor');
 const demarchesSimplifiees = require('../services/demarchesSimplifiees');
 const emailUtils = require('../utils/email');
@@ -15,8 +15,7 @@ const {
     importEveryDataFromDSToPG,
   },
 } = require('../cron_jobs/cronDemarchesSimplifiees');
-const clean = require('./helper/clean');
-const { randomUuid } = require('../utils/uuid');
+const { default: clean } = require('./helper/clean');
 
 describe('Import Data from DS to PG', () => {
   let getLatestCursorSavedStub;
@@ -38,7 +37,7 @@ describe('Import Data from DS to PG', () => {
     // eslint-disable-next-line max-len
     const cursor = '{"id":1,"cursor":"test","createdAt":"2021-02-19T13:16:45.382Z","updatedAt":"2021-02-19T13:16:45.380Z"}';
     const dsApiData = {
-      psychologists: clean.psyList(),
+      psychologists: [clean.getOnePsy()],
       cursor: 'test',
     };
     getLatestCursorSavedStub = sinon.stub(dbDsApiCursor, 'getLatestCursorSaved')
@@ -79,12 +78,12 @@ describe('checkForMultipleAcceptedDossiers', () => {
 
   it('should notify if two accepted dossiers for the same person', async () => {
     // insert 2 psychologists, same data except uuid, with accepte state
-    const psyList = clean.psyList();
-    psyList[0].state = 'accepte';
-    psyList[0].dossierNumber = '27172a9b-5081-4502-9022-b17510ba40a1';
-    await dbPsychologists.savePsychologistInPG(psyList);
-    psyList[0].dossierNumber = '0fee0788-b4fe-49f5-a950-5d22a343d495';
-    await dbPsychologists.savePsychologistInPG(psyList);
+    const psy = clean.getOnePsy();
+    psy.state = 'accepte';
+    psy.dossierNumber = '27172a9b-5081-4502-9022-b17510ba40a1';
+    await dbPsychologists.savePsychologistInPG([psy]);
+    psy.dossierNumber = '0fee0788-b4fe-49f5-a950-5d22a343d495';
+    await dbPsychologists.savePsychologistInPG([psy]);
 
     const psyArray = await dbPsychologists.getActivePsychologists();
     expect(psyArray).to.have.length(2);
@@ -95,7 +94,7 @@ describe('checkForMultipleAcceptedDossiers', () => {
     sinon.assert.calledWith(sendMailStub,
       sinon.match(config.teamEmail), // toEmail
       sinon.match.string, // subject : any
-      sinon.match(psyList[0].personalEmail)); // body contains personalEmail
+      sinon.match(psy.personalEmail)); // body contains personalEmail
   });
 });
 
@@ -178,8 +177,9 @@ describe('DS integration tests', () => {
   });
 
   it('should update psy info when existing', async () => {
-    const paulUniversityId = uuidv4();
-    const xavierUniversityId = uuidv4();
+    const paulUniversity = await dbUniversities.insertUniversity('PaulU');
+    const xavierUniversity = await dbUniversities.insertUniversity('xavierU');
+
     await dbPsychologists.savePsychologistInPG([{
       ...paul,
       training: JSON.stringify(paul.training),
@@ -187,7 +187,7 @@ describe('DS integration tests', () => {
       firstNames: 'Paulo',
       description: 'Biz dev indispensable le jour, master en deguisement la nuit',
       selfModified: false,
-      assignedUniversityId: paulUniversityId,
+      assignedUniversityId: paulUniversity.id,
     },
     {
       ...xavier,
@@ -197,16 +197,16 @@ describe('DS integration tests', () => {
       diploma: 'BTS de claquettes',
       description: 'Codeur vaudoo, prefere mettre en prod un vendredi soir plutot que de faire des tests',
       selfModified: true,
-      assignedUniversityId: xavierUniversityId,
+      assignedUniversityId: xavierUniversity.id,
     }]);
 
     await importEveryDataFromDSToPG();
 
-    await verifyPsy(paulId, paul, paulUniversityId);
+    await verifyPsy(paulId, paul, paulUniversity.id);
     await verifyPsy(xavierId, {
       ...xavier,
       description: 'Codeur vaudoo, prefere mettre en prod un vendredi soir plutot que de faire des tests',
       selfModified: true,
-    }, xavierUniversityId);
+    }, xavierUniversity.id);
   });
 });

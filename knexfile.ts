@@ -1,6 +1,6 @@
 const config = require('./utils/config');
 
-const knexConfig = {
+module.exports = {
   client: 'pg',
   connection: config.databaseUrl,
   acquireConnectionTimeout: 10000,
@@ -9,7 +9,6 @@ const knexConfig = {
   },
   seeds: {
     directory: './test/seed',
+    extension: 'ts',
   },
 };
-
-module.exports = knexConfig;
