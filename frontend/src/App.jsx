@@ -59,7 +59,7 @@ function App() {
             <Route exact path="/stats" component={Statistics} />
             <Route exact path="/" component={Landing} />
             <Route path="/psychologue/">
-              <Redirect to={user ? '/psychologue/mes-seances' : '/psychologue/login'} />
+              <Redirect to="/psychologue/login" />
             </Route>
             <Route path="/">
               <Redirect to={user ? '/psychologue/mes-seances' : '/'} />

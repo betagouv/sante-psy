@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Appointments from 'components/Psychologist/Appointments/Appointments';
 import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
 import Reimbursement from 'components/Psychologist/Reimbursement/Reimbursement';
@@ -15,7 +15,10 @@ const PsychologistRouter = () => (
     <Route exact path="/psychologue/nouveau-patient" component={AddEditPatient} />
     <Route exact path="/psychologue/modifier-patient/:patientId" component={AddEditPatient} />
     <Route exact path="/psychologue/mes-remboursements" component={Reimbursement} />
-    <Route path="/psychologue" component={PsyProfile} />
+    <Route path="/psychologue/mon-profil" component={PsyProfile} />
+    <Route path="/psychologue/">
+      <Redirect to="/psychologue/mes-seances" />
+    </Route>
   </Switch>
 );
 
