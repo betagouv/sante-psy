@@ -7,6 +7,7 @@ import slowDown from 'express-slow-down';
 import bearerToken from 'express-bearer-token';
 
 import cors from 'cors';
+import compression from 'compression';
 
 import config from './utils/config';
 import cspConfig from './utils/csp-config';
@@ -35,6 +36,7 @@ if (!config.activateDebug) {
 }
 
 app.use(cspConfig);
+app.use(compression());
 
 if (config.useCors) {
   app.use(cors({ origin: 'http://localhost:3000' }));
