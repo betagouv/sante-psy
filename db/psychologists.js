@@ -81,6 +81,21 @@ module.exports.getActivePsychologists = async () => {
   }
 };
 
+const getPsychologistsByIds = async (ids) => {
+  try {
+    const groupById = {};
+    const psychologists = await knex(psychologistsTable)
+      .whereIn('dossierNumber', ids);
+    psychologists.forEach((psychologist) => {
+      groupById[psychologist.dossierNumber] = psychologist;
+    });
+    return groupById;
+  } catch (err) {
+    console.error('Impossible de récupérer les psychologues', err);
+    throw new Error('Impossible de récupérer les psychologues');
+  }
+};
+
 const getPsychologistById = async (psychologistId) => {
   try {
     const psychologist = await knex(psychologistsTable)
@@ -103,14 +118,17 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
   const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
   const universities = await dbUniversities.getUniversities();
 
+  const psychologists = await getPsychologistsByIds(psyList.map((psy) => psy.dossierNumber));
+  const psychologistsToInsert = [];
   const upsertArray = psyList.map(async (psy) => {
     psy.languages = addFrenchLanguageIfMissing(psy.languages);
     psy.assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
 
     try {
-      const psyInDb = await getPsychologistById(psy.dossierNumber);
+      const psyInDb = psychologists[psy.dossierNumber];
       if (!psyInDb) {
-        return knex(psychologistsTable).insert(psy);
+        psychologistsToInsert.push(psy);
+        return false;
       }
 
       if (psyInDb.selfModified) {
@@ -136,7 +154,8 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
     }
   });
 
-  const query = await Promise.all(upsertArray);
+  upsertArray.push(knex(psychologistsTable).insert(psychologistsToInsert));
+  const query = await Promise.all(upsertArray.filter((x) => x));
 
   console.log('UPSERT into PG : done');
 
