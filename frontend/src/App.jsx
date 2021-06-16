@@ -8,12 +8,6 @@ import Landing from 'components/Landing/Landing';
 import Footer from 'components/Footer/Footer';
 
 import Login from 'components/Login/Login';
-import Appointments from 'components/Psychologist/Appointments/Appointments';
-import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
-import Reimbursement from 'components/Psychologist/Reimbursement/Reimbursement';
-import Patients from 'components/Psychologist/Patients/Patients';
-import AddEditPatient from 'components/Psychologist/Patients/AddEditPatient';
-import PsyProfile from 'components/Psychologist/Profile/PsyProfile';
 import Announcement from 'components/Notification/Announcement';
 import Faq from 'components/Faq/Faq';
 import LegalNotice from 'components/LegalNotice/LegalNotice';
@@ -30,6 +24,7 @@ import '@gouvfr/dsfr/dist/css/dsfr.css';
 import './App.css';
 
 const FindPsychologist = React.lazy(() => import('components/PsyListing/PsyListing'));
+const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
 function App() {
   const { commonStore: { setConfig, config }, userStore: { user, token, pullUser } } = useStore();
@@ -55,16 +50,8 @@ function App() {
       {!loading && (
         <React.Suspense fallback={<></>}>
           <Switch>
-            {user && [
-              <Route key="appointments" exact path="/psychologue/mes-seances" component={Appointments} />,
-              <Route key="new-appointments" exact path="/psychologue/nouvelle-seance" component={NewAppointment} />,
-              <Route key="patients" exact path="/psychologue/mes-patients" component={Patients} />,
-              <Route key="new-patient" exact path="/psychologue/nouveau-patient" component={AddEditPatient} />,
-              <Route key="edit-patient" exact path="/psychologue/modifier-patient/:patientId" component={AddEditPatient} />,
-              <Route key="reimbursment" exact path="/psychologue/mes-remboursements" component={Reimbursement} />,
-              <Route key="psy-profil" path="/psychologue/mon-profil" component={PsyProfile} />,
-            ]}
             <Route exact path="/psychologue/login/:token?" component={Login} />
+            {user && <Route path="/psychologue/" component={PsychologistRouter} />}
             <Route exact path="/trouver-un-psychologue" component={FindPsychologist} />
             <Route exact path="/mentions-legales" component={LegalNotice} />
             <Route exact path="/donnees-personnelles-et-gestion-des-cookies" component={PersonalData} />
