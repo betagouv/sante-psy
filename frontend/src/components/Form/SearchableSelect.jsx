@@ -20,6 +20,7 @@ const SearchableSelect = ({
   const inputOption = {
     ...remainingProps,
     className: 'fr-select midlength-input',
+    autocomplete: 'off',
     id: field,
     type,
     required,
