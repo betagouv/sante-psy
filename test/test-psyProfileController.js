@@ -540,9 +540,7 @@ describe('psyProfileController', () => {
     });
 
     it('should ignore extra info on psy profile', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = psyList[0];
+      const psy = await clean.insertOnePsy();
 
       return chai.request(app)
         .put(`/api/psychologue/${psy.dossierNumber}`)
