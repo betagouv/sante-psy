@@ -11,7 +11,7 @@ const dbPsychologists = require('../../db/psychologists');
 const dbUniversities = require('../../db/universities');
 const emailUtils = require('../../utils/email');
 const jwt = require('../../utils/jwt');
-const clean = require('../helper/clean');
+const { default: clean } = require('../helper/clean');
 
 describe('loginController', async () => {
   describe('generateLoginUrl', () => {
@@ -267,14 +267,6 @@ describe('loginController', async () => {
   describe('connected user information', () => {
     it('should return only my basic information', async () => {
       const universityId = uuidv4();
-      const psy = clean.getOnePsy(
-        'loginemail@beta.gouv.fr',
-        'accepte',
-        false,
-        universityId,
-      );
-      psy.isConventionSigned = true;
-      await dbPsychologists.savePsychologistInPG([psy]);
       await dbUniversities.saveUniversities([
         {
           id: universityId,
@@ -283,6 +275,14 @@ describe('loginController', async () => {
           emailUniversity: 'monster@university.fr',
         },
       ]);
+      const psy = clean.getOnePsy(
+        'loginemail@beta.gouv.fr',
+        'accepte',
+        false,
+        universityId,
+      );
+      psy.isConventionSigned = true;
+      await dbPsychologists.savePsychologistInPG([psy]);
 
       return chai
         .request(app)

@@ -1,6 +1,6 @@
 const chai = require('chai');
 const app = require('../../index');
-const clean = require('../helper/clean');
+const { default: clean } = require('../helper/clean');
 const dbUniversities = require('../../db/universities');
 
 describe('universityController.spec', () => {

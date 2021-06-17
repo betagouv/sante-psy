@@ -26,7 +26,6 @@ const longPickerLang = { months: date.longFrenchMonthNames };
 const Appointments = () => {
   const [loading, setLoading] = useState(true);
   const [appointments, setAppointments] = useState([]);
-  const [convention, setConvention] = useState();
   const calendar = useRef(null);
 
   const [month, setMonth] = useState({
@@ -41,7 +40,6 @@ const Appointments = () => {
       .then(response => {
         setLoading(false);
         setAppointments(response.appointments);
-        setConvention(response.currentConvention);
       });
   }, []);
 
@@ -72,7 +70,7 @@ const Appointments = () => {
   return (
     <div className="fr-container fr-mb-3w fr-mt-2w" data-test-id="appointment-container">
       {modal}
-      {!loading && (!convention || !convention.universityId) && (
+      {!loading && (!user.convention || !user.convention.universityId) && (
       <Notification>
         Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
         {' '}

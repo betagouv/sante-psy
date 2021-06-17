@@ -16,7 +16,7 @@ const suspend = () => {
   });
 };
 
-const signConvention = (name, isSigned) => cy.request('GET', 'http://localhost:8080/api/config')
+const signConvention = (name, isSigned) => cy.request('GET', 'http://localhost:8080/api/university')
   .then(response => {
     const university = response.body.universities.find(u => u.name === name);
     return cy.request({
