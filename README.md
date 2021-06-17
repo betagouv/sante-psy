@@ -52,6 +52,12 @@ scalingo -app APP_NAME run --file <nom_de_ton_fichier> bash
 > cp /tmp/uploads/<nom_de_ton_fichier> .
 ```
 
+#### Executer un cron manuellement
+```
+scalingo -app APP_NAME run bash
+> ts-node cron/launch.ts <nom_du_job>
+```
+
 #### Ajout de la correspondance entre université et psychologues
 ```
 node scripts/matchPsychologistsToUniversities.js
