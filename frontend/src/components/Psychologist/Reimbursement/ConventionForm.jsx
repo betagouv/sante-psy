@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { observer } from 'mobx-react';
 import Input from 'components/Form/Input';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
 
 const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultValue }) => {
+  const [universities, setUniversities] = useState([]);
   const [convention, setConvention] = useState({
     universityId: '',
     isConventionSigned: '',
   });
 
-  const { commonStore: { setNotification, config }, userStore: { setUser } } = useStore();
+  const { commonStore: { setNotification }, userStore: { setUser } } = useStore();
+
+  useEffect(() => {
+    agent.University.getAll().then(response => {
+      setUniversities(response.universities);
+    });
+  }, []);
 
   useEffect(() => {
     setConvention({
@@ -44,8 +50,8 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
         value={convention.universityId || ''}
         onChange={value => setConvention({ ...convention, universityId: value })}
         required
-        options={config.universities
-          ? config.universities.map(university => ({ id: university.id, label: university.name }))
+        options={universities
+          ? universities.map(university => ({ id: university.id, label: university.name }))
           : []}
         hiddenOption="- Select a university -"
       />
@@ -83,4 +89,4 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
   );
 };
 
-export default observer(ConventionForm);
+export default ConventionForm;

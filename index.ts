@@ -24,6 +24,7 @@ import reimbursementController from './controllers/reimbursementController';
 import testController from './controllers/testController';
 import getIndex from './controllers/reactController';
 import errorManager from './middlewares/errorManager';
+import universitiesController from './controllers/universityController';
 
 const { appName } = config;
 
@@ -65,6 +66,7 @@ app.use('/api/*',
     getToken: (req) => req.token,
   }).unless({
     path: [
+      '/api/university',
       '/api/config',
       '/api/trouver-un-psychologue',
       '/api/psychologue/sendMail',
@@ -140,6 +142,8 @@ app.get('/api/psychologue/:psyId', access.checkPsyParam, psyProfileController.ge
 app.put('/api/psychologue/:psyId',
   [access.checkPsyParam, ...psyProfileController.editPsyProfilValidators],
   psyProfileController.editPsyProfile);
+
+app.get('/api/university', universitiesController.getAll);
 
 app.get('*', getIndex);
 

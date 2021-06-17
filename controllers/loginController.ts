@@ -68,8 +68,9 @@ async function saveToken(email: string, token: string) {
 }
 
 const connectedUser = async (req: Request, res: Response): Promise<void> => {
-  const psy = await dbPsychologists.getPsychologistById(req.user.psychologist);
   const psychologistId = req.user.psychologist;
+
+  const psy = await dbPsychologists.getPsychologistById(psychologistId);
   const convention = await dbPsychologists.getConventionInfo(psychologistId);
 
   if (psy) {

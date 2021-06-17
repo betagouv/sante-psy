@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { check } from 'express-validator';
 import dbAppointments from '../db/appointments';
 import dbPatient from '../db/patients';
-import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import dateUtils from '../utils/date';
@@ -76,9 +75,7 @@ const getAppointments = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.user.psychologist;
   const appointments = await dbAppointments.getAppointments(psychologistId);
 
-  const currentConvention = await dbPsychologists.getConventionInfo(psychologistId);
-
-  res.json({ success: true, appointments, currentConvention });
+  res.json({ success: true, appointments });
 };
 
 export default {

@@ -71,6 +71,8 @@ const Reimbursement = {
   saveConvention: convention => client.post('/psychologue/renseigner-convention', convention),
 };
 
+const University = { getAll: () => client.get('/university') };
+
 const User = {
   getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),
   login: token => client.post('/psychologue/login', { token }),
@@ -83,5 +85,6 @@ export default {
   Patient,
   Psychologist,
   Reimbursement,
+  University,
   User,
 };
