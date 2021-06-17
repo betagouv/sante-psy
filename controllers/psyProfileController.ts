@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import { check, oneOf } from 'express-validator';
+import geo from '../utils/geo';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
@@ -49,11 +50,6 @@ const editPsyProfilValidators = [
     .notEmpty()
     .customSanitizer((value, { req }) => req.sanitize(value))
     .withMessage('Vous devez spécifier votre département.'),
-  check('region')
-    .trim()
-    .notEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
-    .withMessage('Vous devez spécifier votre région.'),
   check('phone')
     .trim()
     .notEmpty()
@@ -95,9 +91,15 @@ const editPsyProfilValidators = [
 const editPsyProfile = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
+  const region = geo.departementToRegion[req.body.departement];
+  if (!region) {
+    throw new CustomError('Departement invalide', 400);
+  }
+
   await dbPsychologists.updatePsychologist({
-    dossierNumber: req.params.psyId,
     ...req.body,
+    dossierNumber: req.params.psyId,
+    region,
   });
 
   res.json({
