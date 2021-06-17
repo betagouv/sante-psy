@@ -121,14 +121,13 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
   const psychologists = await getPsychologistsByIds(psyList.map((psy) => psy.dossierNumber));
   const psychologistsToInsert = [];
   const upsertArray = psyList.map(async (psy) => {
-    psy.languages = addFrenchLanguageIfMissing(psy.languages);
-    psy.assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
-
     try {
       const psyInDb = psychologists[psy.dossierNumber];
       if (!psyInDb) {
+        psy.languages = addFrenchLanguageIfMissing(psy.languages);
+        psy.assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
         psychologistsToInsert.push(psy);
-        return false;
+        return Promise.resolve();
       }
 
       if (psyInDb.selfModified) {
@@ -154,8 +153,11 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
     }
   });
 
-  upsertArray.push(knex(psychologistsTable).insert(psychologistsToInsert));
-  const query = await Promise.all(upsertArray.filter((x) => x));
+  upsertArray.push(
+    knex(psychologistsTable)
+    .insert(psychologistsToInsert),
+  );
+  const query = await Promise.all(upsertArray);
 
   console.log('UPSERT into PG : done');
 
