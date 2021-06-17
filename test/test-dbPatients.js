@@ -5,7 +5,7 @@ const dbPatients = require('../db/patients');
 const date = require('../utils/date');
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
-const clean = require('./helper/clean');
+const { default: clean } = require('./helper/clean');
 const { patientsTable } = require('../db/tables');
 
 describe('DB Patients', () => {
@@ -36,7 +36,7 @@ describe('DB Patients', () => {
 
   describe('insertPatientInPG', () => {
     it('should INsert one patient in PG', async () => {
-      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const psy = await clean.insertOnePsy();
       await dbPatients.insertPatient(
         firstNames,
         lastName,
@@ -44,7 +44,7 @@ describe('DB Patients', () => {
         institutionName,
         isStudentStatusVerified,
         hasPrescription,
-        psychologistId,
+        psy.dossierNumber,
         doctorName,
         doctorAddress,
         dateOfBirth,
@@ -55,7 +55,7 @@ describe('DB Patients', () => {
     });
 
     it('should accept INsert INE with more than 11 characters in PG', async () => {
-      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const psy = await clean.insertOnePsy();
       try {
         await dbPatients.insertPatient(
           firstNames,
@@ -64,7 +64,7 @@ describe('DB Patients', () => {
           institutionName,
           isStudentStatusVerified,
           hasPrescription,
-          psychologistId,
+          psy.dossierNumber,
           doctorName,
           doctorAddress,
         );
@@ -76,7 +76,7 @@ describe('DB Patients', () => {
     });
 
     it('should refuse INsert for INE with more than 50 characters in PG', async () => {
-      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const psy = await clean.insertOnePsy();
       try {
         await dbPatients.insertPatient(
           firstNames,
@@ -85,7 +85,7 @@ describe('DB Patients', () => {
           institutionName,
           isStudentStatusVerified,
           hasPrescription,
-          psychologistId,
+          psy.dossierNumber,
           doctorName,
           doctorAddress,
           dateOfBirth,
@@ -105,7 +105,7 @@ describe('DB Patients', () => {
     });
 
     it('should set deleted to false by default in PG', async () => {
-      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const psy = await clean.insertOnePsy();
       const insertedPatient = await dbPatients.insertPatient(
         firstNames,
         lastName,
@@ -113,7 +113,7 @@ describe('DB Patients', () => {
         institutionName,
         isStudentStatusVerified,
         hasPrescription,
-        psychologistId,
+        psy.dossierNumber,
         doctorName,
         doctorAddress,
         dateOfBirth,
@@ -125,7 +125,7 @@ describe('DB Patients', () => {
 
   describe('updatePatientInPG', () => {
     it('should Update one patient in PG', async () => {
-      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const psy = await clean.insertOnePsy();
       await dbPatients.insertPatient(
         firstNames,
         lastName,
@@ -133,14 +133,14 @@ describe('DB Patients', () => {
         institutionName,
         isStudentStatusVerified,
         hasPrescription,
-        psychologistId,
+        psy.dossierNumber,
         doctorName,
         doctorAddress,
         dateOfBirth,
       );
 
       const newLastName = 'NewName';
-      const patients = await dbPatients.getPatients(psychologistId);
+      const patients = await dbPatients.getPatients(psy.dossierNumber);
       const oldPatient = patients[0];
 
       await dbPatients.updatePatient(
@@ -151,19 +151,19 @@ describe('DB Patients', () => {
         oldPatient.institutionName,
         oldPatient.isStudentStatusVerified,
         oldPatient.hasPrescription,
-        psychologistId,
+        psy.dossierNumber,
         doctorName,
         doctorAddress,
         dateOfBirth,
       );
-      const newPatient = await dbPatients.getPatientById(oldPatient.id, psychologistId);
+      const newPatient = await dbPatients.getPatientById(oldPatient.id, psy.dossierNumber);
       expect(newPatient.lastName).equal(newLastName);
     });
   });
 
   describe('deletePatientInPG', () => {
     it('should change deleted boolean to true and update updatedAt field', async () => {
-      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const psy = await clean.insertOnePsy();
       const patient = await dbPatients.insertPatient(
         firstNames,
         lastName,
@@ -171,19 +171,19 @@ describe('DB Patients', () => {
         institutionName,
         isStudentStatusVerified,
         hasPrescription,
-        psychologistId,
+        psy.dossierNumber,
         doctorName,
         doctorAddress,
         dateOfBirth,
       );
 
-      const patientBeforeDelete = await dbPatients.getPatientById(patient.id, psychologistId);
+      const patientBeforeDelete = await dbPatients.getPatientById(patient.id, psy.dossierNumber);
 
       assert.isNull(patientBeforeDelete.updatedAt);
       assert.isFalse(patientBeforeDelete.deleted);
-      await dbPatients.deletePatient(patientBeforeDelete.id, psychologistId);
+      await dbPatients.deletePatient(patientBeforeDelete.id, psy.dossierNumber);
 
-      const patientAfterDelete = await dbPatients.getPatientById(patient.id, psychologistId);
+      const patientAfterDelete = await dbPatients.getPatientById(patient.id, psy.dossierNumber);
       assert.isTrue(patientAfterDelete.deleted);
       assert.isNotNull(patientAfterDelete.updatedAt);
     });
@@ -191,7 +191,7 @@ describe('DB Patients', () => {
 
   describe('getPatientsInDB', () => {
     it('should return patients', async () => {
-      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const psy = await clean.insertOnePsy();
       await dbPatients.insertPatient(
         firstNames,
         lastName,
@@ -199,18 +199,18 @@ describe('DB Patients', () => {
         institutionName,
         isStudentStatusVerified,
         hasPrescription,
-        psychologistId,
+        psy.dossierNumber,
         doctorName,
         doctorAddress,
         dateOfBirth,
       );
 
-      const patients = await dbPatients.getPatients(psychologistId);
+      const patients = await dbPatients.getPatients(psy.dossierNumber);
       expect(patients).to.have.length(1);
     });
 
     it('should not return deleted patients', async () => {
-      const psychologistId = '357a2085-6d32-44db-8fe6-979c7339fd47';
+      const psy = await clean.insertOnePsy();
       const patient = await dbPatients.insertPatient(
         firstNames,
         lastName,
@@ -218,14 +218,14 @@ describe('DB Patients', () => {
         institutionName,
         isStudentStatusVerified,
         hasPrescription,
-        psychologistId,
+        psy.dossierNumber,
         doctorName,
         doctorAddress,
         dateOfBirth,
       );
-      await dbPatients.deletePatient(patient.id, psychologistId);
+      await dbPatients.deletePatient(patient.id, psy.dossierNumber);
 
-      const patients = await dbPatients.getPatients(psychologistId);
+      const patients = await dbPatients.getPatients(psy.dossierNumber);
       expect(patients).to.have.length(0);
     });
   });

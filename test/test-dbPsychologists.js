@@ -9,10 +9,13 @@ const { DOSSIER_STATE } = require('../utils/dossierState');
 const { default: dbSuspensionReasons } = require('../db/suspensionReasons');
 const { expect } = require('chai');
 const { fail } = require('chai');
-const clean = require('./helper/clean');
+const { default: clean } = require('./helper/clean');
 
 describe('DB Psychologists', () => {
-  const psyList = clean.psyList();
+  let psyList;
+  beforeEach(() => {
+    psyList = [clean.getOnePsy()];
+  });
 
   afterEach(async () => {
     await clean.cleanAllPsychologists();
@@ -275,25 +278,26 @@ describe('DB Psychologists', () => {
 
   describe('updateConventionInfo', () => {
     it('should update conventionInfo', async () => {
-      const univUUID = '736bd860-3928-457e-9f40-3f367c36be30';
+      const univName = 'Fake Uni';
+      const university = await dbUniversities.insertUniversity(univName);
       const psy = psyList[0];
       psy.state = DOSSIER_STATE.accepte;
       await dbPsychologists.savePsychologistInPG([psy]);
       const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
       expect(savedPsy.isConventionSigned).not.to.exist;
-      expect(savedPsy.assignedUniversityId).to.not.equal(univUUID);
+      expect(savedPsy.assignedUniversityId).to.not.equal(university.id);
 
       await dbPsychologists.updateConventionInfo(
         savedPsy.dossierNumber,
-        univUUID,
+        university.id,
         true, // isConventionSigned
       );
 
       const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
 
       expect(updatedPsy.isConventionSigned).to.equal(true);
-      expect(updatedPsy.assignedUniversityId).to.equal(univUUID);
+      expect(updatedPsy.assignedUniversityId).to.equal(university.id);
     });
 
     it('should not update conventionInfo if psychologistId is unknown', async () => {
@@ -316,25 +320,23 @@ describe('DB Psychologists', () => {
   describe('getConventionInfo', () => {
     it('should return assignedUniID, name and signedConvention,', async () => {
       const univName = 'Fake Uni';
-      await dbUniversities.insertUniversity(univName);
-      const universities = await dbUniversities.getUniversities();
-      const univUUID = universities[0].id;
+      const university = await dbUniversities.insertUniversity(univName);
       const isConventionSigned = true;
       const psy = psyList[0];
       psy.state = DOSSIER_STATE.accepte;
-      psy.assignedUniversityId = univUUID;
+      psy.assignedUniversityId = university.id;
       await dbPsychologists.savePsychologistInPG([psy]);
       const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
 
       await dbPsychologists.updateConventionInfo(
         savedPsy.dossierNumber,
-        univUUID,
+        university.id,
         isConventionSigned, // isConventionSigned
       );
 
       const currentConvention = await dbPsychologists.getConventionInfo(savedPsy.dossierNumber);
       expect(currentConvention.isConventionSigned).to.equal(isConventionSigned);
-      expect(currentConvention.universityId).to.equal(univUUID);
+      expect(currentConvention.universityId).to.equal(university.id);
       expect(currentConvention.universityName).to.equal(univName);
     });
 
@@ -354,22 +356,23 @@ describe('DB Psychologists', () => {
 
   describe('saveAssignedUniversity', () => {
     it('should update assignedUniversityId', async () => {
-      const univUUID = '736bd860-3928-457e-9f40-3f367c36be30';
+      const univName = 'Fake Uni';
+      const university = await dbUniversities.insertUniversity(univName);
       const psy = psyList[0];
       psy.state = DOSSIER_STATE.accepte;
       await dbPsychologists.savePsychologistInPG([psy]);
       const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
-      expect(savedPsy.assignedUniversityId).to.not.equal(univUUID);
+      expect(savedPsy.assignedUniversityId).to.not.equal(university.id);
 
       await dbPsychologists.saveAssignedUniversity(
         savedPsy.dossierNumber,
-        univUUID,
+        university.id,
       );
 
       const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
 
-      expect(updatedPsy.assignedUniversityId).to.equal(univUUID);
+      expect(updatedPsy.assignedUniversityId).to.equal(university.id);
     });
 
     it('should not update assignedUniversityId if psychologistId is unknown', async () => {

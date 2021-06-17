@@ -5,7 +5,7 @@ const { assert } = require('chai');
 const dbAppointments = require('../db/appointments');
 const dbPatients = require('../db/patients');
 const dbPsychologists = require('../db/psychologists');
-const clean = require('./helper/clean');
+const { default: clean } = require('./helper/clean');
 const { appointmentsTable } = require('../db/tables');
 
 describe('DB Appointments', () => {
@@ -23,9 +23,7 @@ describe('DB Appointments', () => {
 
   describe('deleteAppointment', () => {
     it('should change deleted boolean to true and update updatedAt field', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy();
       const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,
@@ -58,9 +56,7 @@ describe('DB Appointments', () => {
 
   describe('getCountAppointmentsByYearMonth', () => {
     it('should return a count of appointments by year and month', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy();
       const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,
@@ -120,14 +116,9 @@ describe('DB Appointments', () => {
       const month = 4;
       const year = 2021;
 
-      const psyList = [
-        clean.getOnePsy('loginemail@beta.gouv.fr', 'accepte', false, '25173f41-6535-524f-bec0-436297a2bc77'),
-        clean.getOnePsy('emaillogin@beta.gouv.fr', 'accepte', false, '14f37152-6535-524f-bec0-436297a2bc77'),
-      ];
-      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr');
+      const psy2 = await clean.insertOnePsy('emaillogin@beta.gouv.fr');
 
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
-      const psy2 = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[1].personalEmail);
       const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,
@@ -186,9 +177,7 @@ describe('DB Appointments', () => {
 
   describe('getCountPatientsByYearMonth', () => {
     it('should return a count of patients by year and month', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy();
       const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,
@@ -249,9 +238,7 @@ describe('DB Appointments', () => {
 
   describe('getAppointments', () => {
     it('should only return not deleted appointments for psy id', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy();
       const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,
@@ -278,11 +265,9 @@ describe('DB Appointments', () => {
     });
 
     it('should only return psy id appointments', async () => {
-      const psyList = clean.psyList(); // @TODO add another psy
-      const anotherPsy = clean.getOnePsy('another@beta.gouv.fr');
+      const psy = await clean.insertOnePsy();
+      const anotherPsy = await clean.insertOnePsy('another@beta.gouv.fr');
 
-      await dbPsychologists.savePsychologistInPG([psyList[0], anotherPsy]);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
       const patientToInsert = clean.getOnePatient(psy.dossierNumber);
       const patient = await dbPatients.insertPatient(
         patientToInsert.firstNames,

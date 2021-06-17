@@ -10,7 +10,7 @@ const dbLoginToken = require('../db/loginToken');
 const dbPsychologists = require('../db/psychologists');
 const emailUtils = require('../utils/email');
 const jwt = require('../utils/jwt');
-const clean = require('./helper/clean');
+const { default: clean } = require('./helper/clean');
 
 describe('loginController', async () => {
   describe('generateLoginUrl', () => {
@@ -241,18 +241,17 @@ describe('loginController', async () => {
 
   describe('connected user information', () => {
     it('should return only my basic information', async () => {
-      const psyList = clean.psyList();
-      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = await clean.insertOnePsy();
 
       return chai.request(app)
       .get('/api/connecteduser')
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psyList[0].dossierNumber)}`)
+      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
       .then(async (res) => {
         res.body.should.have.all.keys('firstNames', 'lastName', 'email', 'active');
-        res.body.firstNames.should.equal(psyList[0].firstNames);
-        res.body.lastName.should.equal(psyList[0].lastName);
-        res.body.email.should.equal(psyList[0].email);
-        res.body.active.should.equal(psyList[0].active);
+        res.body.firstNames.should.equal(psy.firstNames);
+        res.body.lastName.should.equal(psy.lastName);
+        res.body.email.should.equal(psy.email);
+        res.body.active.should.equal(psy.active);
       });
     });
 
