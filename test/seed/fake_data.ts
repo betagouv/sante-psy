@@ -1,18 +1,18 @@
-/* eslint-disable max-len */
 /* eslint-disable func-names */
 
-const clean = require('../helper/clean');
-const uuid = require('../../utils/uuid');
-const universities = require('../../utils/universities');
-const { DOSSIER_STATE } = require('../../utils/dossierState');
-const {
+import clean from '../helper/clean';
+
+import uuid from '../../utils/uuid';
+import universities from '../../utils/universities';
+import { DOSSIER_STATE } from '../../utils/dossierState';
+import {
   appointmentsTable,
   loginTokenTable,
   patientsTable,
   psychologistsTable,
   universitiesTable,
   suspensionReasonsTable,
-} = require('../../db/tables');
+} from '../../db/tables';
 
 exports.seed = async function (knex) {
   console.log('Clean database information');
@@ -52,7 +52,8 @@ exports.seed = async function (knex) {
 
   const psyList = [
     ...mails.map((mail) => clean.getOnePsy(mail, DOSSIER_STATE.accepte, false, university.id)),
-    ...[...Array(5).keys()].map(() => clean.getOnePsy(`${clean.getRandomInt()}@beta.gouv.fr`, DOSSIER_STATE.accepte, false)),
+    ...[...Array(5).keys()]
+      .map(() => clean.getOnePsy(`${clean.getRandomInt()}@beta.gouv.fr`, DOSSIER_STATE.accepte, false)),
     clean.getOnePsy('archived@beta.gouv.fr', DOSSIER_STATE.accepte, true),
     clean.getOnePsy('empty@beta.gouv.fr', DOSSIER_STATE.accepte, true),
     clean.getOnePsy('construction@beta.gouv.fr', DOSSIER_STATE.en_construction, false),

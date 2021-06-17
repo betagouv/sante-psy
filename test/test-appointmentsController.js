@@ -3,9 +3,10 @@ const chai = require('chai');
 const sinon = require('sinon');
 const { expect } = require('chai');
 const app = require('../index');
-const clean = require('./helper/clean');
+const { default: clean } = require('./helper/clean');
 const dbAppointments = require('../db/appointments');
 const dbPatients = require('../db/patients');
+const dbPsychologists = require('../db/psychologists');
 const jwt = require('../utils/jwt');
 const date = require('../utils/date');
 
@@ -26,10 +27,7 @@ describe('appointmentsController', () => {
     });
 
     it('should create appointment', async () => {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      };
+      const psy = await clean.insertOnePsy();
       const patient = await dbPatients.insertPatient(
         'Ada',
         'Lovelace',
@@ -63,12 +61,8 @@ describe('appointmentsController', () => {
     });
 
     it('should not create appointment if patient id is not linked to psy id', async () => {
-      const dossierNumber = '9a42d12f-8328-4545-8da3-11250f876146';
-      const anotherDossierNumber = '8a42d12f-8328-4545-8da3-11250f876146';
-      const psy = {
-        dossierNumber,
-        email: 'prenom.nom@beta.gouv.fr',
-      };
+      const psy = await clean.insertOnePsy();
+      const anotherPsy = await clean.insertOnePsy();
 
       const patient = await dbPatients.insertPatient(
         'Ada',
@@ -77,7 +71,7 @@ describe('appointmentsController', () => {
         '42',
         false,
         false,
-        anotherDossierNumber,
+        anotherPsy.dossierNumber,
         'Dr Docteur',
         'adresse du docteur',
         dateOfBirth,
@@ -103,10 +97,7 @@ describe('appointmentsController', () => {
     });
 
     it('should not create appointment if user not logged in', async () => {
-      const psy = {
-        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
-        email: 'prenom.nom@beta.gouv.fr',
-      };
+      const psy = await clean.insertOnePsy();
       const patient = await dbPatients.insertPatient(
         'Ada',
         'Lovelace',
@@ -241,6 +232,9 @@ describe('appointmentsController', () => {
     });
 
     const makeAppointment = async (psychologistId) => {
+      const psy = clean.getOnePsy();
+      psy.dossierNumber = psychologistId;
+      await dbPsychologists.savePsychologistInPG([psy]);
       // Insert an appointment and a patient
       const patient = await dbPatients.insertPatient(
         'Ada',

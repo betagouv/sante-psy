@@ -1,6 +1,6 @@
 import axios from 'axios/index';
 
-import AdeliInfo from '../@types/adeliInfo';
+import { AdeliInfo } from '../types/AdeliInfo';
 
 const client = axios.create({
   baseURL: 'https://api-sante.herokuapp.com/annuaire',

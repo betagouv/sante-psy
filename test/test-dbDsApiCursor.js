@@ -1,7 +1,7 @@
 const { assert } = require('chai');
 require('dotenv').config();
 const dbDsApiCursor = require('../db/dsApiCursor');
-const clean = require('./helper/clean');
+const { default: clean } = require('./helper/clean');
 
 describe('DB Ds Api Cursor', () => {
   // Clean up all data

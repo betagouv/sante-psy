@@ -1,7 +1,7 @@
 const chai = require('chai');
 const rewire = require('rewire');
 const app = require('../index');
-const clean = require('./helper/clean');
+const { default: clean } = require('./helper/clean');
 const jwt = require('../utils/jwt');
 const dbPsychologists = require('../db/psychologists');
 const dbUniversities = require('../db/universities');
@@ -63,14 +63,12 @@ describe('reimbursementController', () => {
     });
 
     afterEach(async () => {
-      await clean.cleanAllPsychologists();
       await clean.cleanAllUniversities();
     });
 
     it('should updateConventionInfo', async () => {
       const psyEmail = 'login@beta.gouv.fr';
-      await dbPsychologists.savePsychologistInPG([clean.getOnePsy(psyEmail, 'accepte', false)]);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
+      const psy = await clean.insertOnePsy(psyEmail, 'accepte', false);
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).not.to.exist;
       chai.expect(psy.declaredUniversityId).not.to.exist;
@@ -94,8 +92,7 @@ describe('reimbursementController', () => {
 
     const failValidation = async (payload, errorMessage) => {
       const psyEmail = 'login@beta.gouv.fr';
-      await dbPsychologists.savePsychologistInPG([clean.getOnePsy(psyEmail, 'accepte', false)]);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
+      const psy = await clean.insertOnePsy(psyEmail, 'accepte', false);
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).not.to.exist;
       chai.expect(psy.declaredUniversityId).not.to.exist;
