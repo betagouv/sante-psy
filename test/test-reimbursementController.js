@@ -68,8 +68,7 @@ describe('reimbursementController', () => {
 
     it('should updateConventionInfo', async () => {
       const psyEmail = 'login@beta.gouv.fr';
-      await dbPsychologists.savePsychologistInPG([clean.getOnePsy(psyEmail, 'accepte', false)]);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
+      const psy = await clean.insertOnePsy(psyEmail, 'accepte', false);
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).not.to.exist;
       chai.expect(psy.declaredUniversityId).not.to.exist;
@@ -93,8 +92,7 @@ describe('reimbursementController', () => {
 
     const failValidation = async (payload, errorMessage) => {
       const psyEmail = 'login@beta.gouv.fr';
-      await dbPsychologists.savePsychologistInPG([clean.getOnePsy(psyEmail, 'accepte', false)]);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
+      const psy = await clean.insertOnePsy(psyEmail, 'accepte', false);
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).not.to.exist;
       chai.expect(psy.declaredUniversityId).not.to.exist;

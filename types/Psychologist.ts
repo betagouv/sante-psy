@@ -21,5 +21,5 @@ export type Psychologist = {
     region: string,
     languages: string,
     active: boolean,
-    inactiveUntil: string | undefined,
+    inactiveUntil: string,
 }
