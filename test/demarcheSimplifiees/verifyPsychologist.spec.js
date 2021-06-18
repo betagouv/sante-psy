@@ -1,7 +1,7 @@
 const rewire = require('rewire');
 const sinon = require('sinon');
 
-const demarchesSimplifiees = rewire('../../services/demarchesSimplifiees');
+const autoVerify = rewire('../../services/demarchesSimplifiees/autoVerify');
 const graphql = require('../../utils/graphql');
 
 describe('getDiplomaErrors', () => {
@@ -12,7 +12,7 @@ describe('getDiplomaErrors', () => {
     }],
   });
 
-  const getDiplomaErrors = demarchesSimplifiees.__get__('getDiplomaErrors');
+  const getDiplomaErrors = autoVerify.__get__('getDiplomaErrors');
   it('Should refuse empty diploma', () => {
     const psychologist = createPsyWithDiploma('2000', 'random');
 
@@ -73,7 +73,7 @@ describe('getAdeliErrors', () => {
     },
   });
 
-  const getAdeliErrors = demarchesSimplifiees.__get__('getAdeliErrors');
+  const getAdeliErrors = autoVerify.__get__('getAdeliErrors');
   it('Should refuse missing adeli number', () => {
     const psychologist = createPsy('jane', 'doe', 'non existing');
 
@@ -131,8 +131,8 @@ describe('verifyPsychologist', () => {
     addVerificationMessageStub = sinon.stub(graphql, 'addVerificationMessage');
     verifyDossierStub = sinon.stub(graphql, 'verifyDossier');
     putDossierInInstructionStub = sinon.stub(graphql, 'putDossierInInstruction');
-    unsets.push(demarchesSimplifiees.__set__('getAdeliErrors', getAdeliErrorsStub));
-    unsets.push(demarchesSimplifiees.__set__('getDiplomaErrors', getDiplomaErrorsStub));
+    unsets.push(autoVerify.__set__('getAdeliErrors', getAdeliErrorsStub));
+    unsets.push(autoVerify.__set__('getDiplomaErrors', getDiplomaErrorsStub));
   });
 
   afterEach((done) => {
@@ -143,7 +143,7 @@ describe('verifyPsychologist', () => {
     done();
   });
 
-  const verifyPsychologist = demarchesSimplifiees.__get__('verifyPsychologist');
+  const verifyPsychologist = autoVerify.__get__('verifyPsychologist');
   it('Should call addVerificationMessage, verifyDossier and putDossierInInstruction if no errors', () => {
     getAdeliErrorsStub.returns([]);
     getDiplomaErrorsStub.returns([]);

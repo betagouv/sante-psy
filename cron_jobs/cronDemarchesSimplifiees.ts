@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 import ejs from 'ejs';
 import dbsApiCursor from '../db/dsApiCursor';
 import dbPsychologists from '../db/psychologists';
-import demarchesSimplifiees from '../services/demarchesSimplifiees';
+import demarchesSimplifiees from '../services/demarchesSimplifiees/demarchesSimplifiees';
+import autoVerify from '../services/demarchesSimplifiees/autoVerify';
+import autoAccept from '../services/demarchesSimplifiees/autoAccept';
 import config from '../utils/config';
 import emailUtils from '../utils/email';
 
@@ -65,11 +67,11 @@ const checkForMultipleAcceptedDossiers = async (): Promise<boolean> => {
 };
 
 const autoAcceptPsychologists = async (): Promise<void> => {
-  demarchesSimplifiees.autoAcceptPsychologist();
+  autoAccept.autoAcceptPsychologist();
 };
 
 const autoVerifyPsychologists = async ():Promise<void> => {
-  demarchesSimplifiees.autoVerifyPsychologist();
+  autoVerify.autoVerifyPsychologist();
 };
 
 export default {

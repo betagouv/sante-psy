@@ -121,7 +121,6 @@ const acceptPsychologist = (id) => {
     input: {
       dossierId: id,
       instructeurId: config.demarchesSimplifieesInstructor,
-      motivation: config.demarchesSimplifieesAutoAcceptMessage,
     },
   };
 
@@ -288,6 +287,68 @@ async function requestPsychologist(afterCursor) {
   return executeQuery(query);
 }
 
+const createDirectUpload = (fileInfo, dossierId) => {
+  // eslint-disable-next-line max-len
+  const mutation = `mutation createDirectUpload($dossierId: ID!, $filename: String!, $byteSize: Int!, $checksum: String!, $contentType: String!) {
+    createDirectUpload(input: {
+      dossierId: $dossierId,
+      filename: $filename,
+      byteSize: $byteSize,
+      checksum: $checksum,
+      contentType: $contentType
+    }) {
+      directUpload {
+        url
+        headers
+        signedBlobId
+      }
+    }
+  }`;
+
+  const variables = {
+    dossierId,
+    ...fileInfo,
+  };
+
+  return executeMutation(mutation, variables);
+};
+
+const sendMessageWithAttachment = (message, attachment, dossierId) => {
+  // eslint-disable-next-line max-len
+  const mutation = `mutation dossierEnvoyerMessage($dossierId: ID!, $instructeurId: ID!, $body: String!, $attachment: ID) {
+    dossierEnvoyerMessage(input: {
+      dossierId: $dossierId,
+      instructeurId: $instructeurId,
+      body: $body,
+      attachment: $attachment
+    }) {
+      message {
+        email
+        body
+        attachment {
+          filename
+          url
+          byteSize
+          checksum
+          contentType
+        }
+      }
+      errors {
+        message
+      }
+    }
+  }`;
+
+  const variables = {
+    dossierId,
+    instructeurId: config.demarchesSimplifieesInstructor,
+    body: message,
+    attachment,
+  };
+
+  return executeMutation(mutation, variables);
+};
+
 exports.acceptPsychologist = acceptPsychologist;
 exports.getInstructors = getInstructors;
 exports.getSimplePsyInfo = getSimplePsyInfo;
@@ -296,3 +357,5 @@ exports.getDossiersWithAnnotationsAndMessages = getDossiersWithAnnotationsAndMes
 exports.addVerificationMessage = addVerificationMessage;
 exports.verifyDossier = verifyDossier;
 exports.putDossierInInstruction = putDossierInInstruction;
+exports.createDirectUpload = createDirectUpload;
+exports.sendMessageWithAttachment = sendMessageWithAttachment;

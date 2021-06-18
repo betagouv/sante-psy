@@ -4,7 +4,7 @@ const testDossiers = require('./dossier.json');
 const uuid = require('../utils/uuid');
 const config = require('../utils/config');
 
-const demarchesSimplifiees = rewire('../services/demarchesSimplifiees.js');
+const demarchesSimplifiees = rewire('../services/demarchesSimplifiees/demarchesSimplifiees');
 
 describe('Demarches Simplifiees', () => {
   describe('parsePsychologists', () => {

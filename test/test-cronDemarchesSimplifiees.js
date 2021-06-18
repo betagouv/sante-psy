@@ -5,7 +5,7 @@ const config = require('../utils/config');
 const dbPsychologists = require('../db/psychologists');
 const dbUniversities = require('../db/universities');
 const dbDsApiCursor = require('../db/dsApiCursor');
-const demarchesSimplifiees = require('../services/demarchesSimplifiees');
+const demarchesSimplifiees = require('../services/demarchesSimplifiees/demarchesSimplifiees');
 const emailUtils = require('../utils/email');
 
 const {
