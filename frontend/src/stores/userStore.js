@@ -15,6 +15,7 @@ export default class UserStore {
       decodedToken: computed,
       setToken: action.bound,
       pullUser: action.bound,
+      setUser: action.bound,
     });
 
     reaction(
@@ -40,6 +41,10 @@ export default class UserStore {
   isTokenExpired = () => {
     const now = new Date();
     return now.getTime() > this.decodedToken.exp * 1000;
+  }
+
+  setUser = user => {
+    this.user = { ...this.user, ...user };
   }
 
   pullUser() {

@@ -10,8 +10,11 @@ import Mail from 'components/Footer/Mail';
 
 import agent from 'services/agent';
 import date from 'services/date';
+import { shouldCheckConventionAgain } from 'services/conventionVerification';
 
 import { useStore } from 'stores/';
+
+import ConventionModal from './ConventionModal';
 
 import styles from './appointments.cssmodule.scss';
 import 'react-month-picker/css/month-picker.css';
@@ -23,7 +26,6 @@ const longPickerLang = { months: date.longFrenchMonthNames };
 const Appointments = () => {
   const [loading, setLoading] = useState(true);
   const [appointments, setAppointments] = useState([]);
-  const [convention, setConvention] = useState();
   const calendar = useRef(null);
 
   const [month, setMonth] = useState({
@@ -38,7 +40,6 @@ const Appointments = () => {
       .then(response => {
         setLoading(false);
         setAppointments(response.appointments);
-        setConvention(response.currentConvention);
       });
   }, []);
 
@@ -61,9 +62,15 @@ const Appointments = () => {
         && appointmentDate.getMonth() === month.month - 1;
   });
 
+  const hasSignedConvention = user.convention && user.convention.isConventionSigned;
+  const modal = hasSignedConvention || !shouldCheckConventionAgain()
+    ? <></>
+    : <ConventionModal currentConvention={user.convention} />;
+
   return (
-    <div className="fr-container fr-mb-3w fr-mt-2w">
-      {!loading && (!convention || !convention.universityId) && (
+    <div className="fr-container fr-mb-3w fr-mt-2w" data-test-id="appointment-container">
+      {modal}
+      {!loading && (!user.convention || !user.convention.universityId) && (
       <Notification>
         Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
         {' '}

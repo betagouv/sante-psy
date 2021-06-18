@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-
+import asyncHelper from '../utils/async-helper';
 import config from '../utils/config';
 
-function getConfig(req: Request, res: Response): void {
+const getConfig = async (req: Request, res: Response): Promise<void> => {
   res.json({
     appName: config.appName,
     contactEmail: config.contactEmail,
@@ -12,8 +12,8 @@ function getConfig(req: Request, res: Response): void {
     sessionDuration: config.sessionDurationHours,
     satistics: config.satistics,
   });
-}
+};
 
 export default {
-  getConfig,
+  getConfig: asyncHelper(getConfig),
 };

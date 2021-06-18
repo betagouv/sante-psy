@@ -4,7 +4,6 @@ import { check } from 'express-validator';
 import dbAppointments from '../db/appointments';
 import date from '../utils/date';
 import dbPsychologists from '../db/psychologists';
-import dbUniversities from '../db/universities';
 import validation from '../utils/validation';
 import asyncHelper from '../utils/async-helper';
 
@@ -31,24 +30,10 @@ async function getTotalAppointmentsAndPatientByPsy(req: Request) {
 }
 
 const reimbursement = async (req: Request, res: Response): Promise<void> => {
-  let universityList = [];
-  universityList = await dbUniversities.getUniversities();
-
-  // used to place "-- nothing yet" in first position
-  universityList.sort((a, b) => {
-    if (a.name < b.name) { return -1; }
-    if (a.name > b.name) { return 1; }
-    return 0;
-  });
-  const psychologistId = req.user.psychologist;
-  const currentConvention = await dbPsychologists.getConventionInfo(psychologistId);
-
   const totalAppointmentsAndPatientByPsy = await getTotalAppointmentsAndPatientByPsy(req);
 
   res.json({
     success: true,
-    universities: universityList,
-    currentConvention,
     total: totalAppointmentsAndPatientByPsy,
   });
 };
@@ -71,9 +56,11 @@ const updateConventionInfo = async (req: Request, res: Response): Promise<void> 
 
   const psychologistId = req.user.psychologist;
   await dbPsychologists.updateConventionInfo(psychologistId, universityId, isConventionSigned);
+  const convention = await dbPsychologists.getConventionInfo(psychologistId);
   res.json({
     success: true,
     message: 'Vos informations de conventionnement sont bien enregistrées.',
+    convention,
   });
 };
 

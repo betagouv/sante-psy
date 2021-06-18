@@ -1,6 +1,6 @@
 const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
-const { removeConvention, suspend } = require('./utils/psychologist');
+const { removeConvention, suspend, signConvention } = require('./utils/psychologist');
 
 describe('Appointments', () => {
   beforeEach(() => {
@@ -13,6 +13,7 @@ describe('Appointments', () => {
 
     resetDB();
     loginAsDefault();
+    signConvention('Angers', true);
 
     cy.visit('/psychologue/mes-seances');
     cy.wait('@config');

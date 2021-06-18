@@ -22,7 +22,7 @@ const loginAsDefault = (duration = 3600) => {
 };
 
 const logout = () => {
-  cy.get('[data-test-id="logout-button"]').click();
+  cy.get('[data-test-id="logout-button"]').click({ force: true });
 };
 
 export default {
