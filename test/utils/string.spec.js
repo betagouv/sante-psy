@@ -8,6 +8,10 @@ describe('String utils', () => {
     { value1: 'HELLOYOU', value2: 'hello you  ', result: true },
     { value1: 'hello_you', value2: 'hello you  ', result: false },
     { value1: 'hello me', value2: 'hello you  ', result: false },
+    { value1: 'Léa', value2: 'lea', result: true },
+    { value1: 'Léa', value2: 'Lèa', result: true },
+    { value1: 'Léa', value2: 'Làa', result: false },
+    { value1: 'Loùloù', value2: 'LOULOU', result: true },
   ];
 
   tests.forEach((test) => {
