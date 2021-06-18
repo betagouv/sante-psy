@@ -11,8 +11,6 @@ function getConfig(req: Request, res: Response): void {
     dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
     sessionDuration: config.sessionDurationHours,
     satistics: config.satistics,
-    // TO REMOVE suspensionDepartment
-    suspensionDepartments: config.suspensionDepartment,
   });
 }
 
