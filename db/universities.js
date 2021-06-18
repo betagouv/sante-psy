@@ -1,4 +1,4 @@
-const knexConfig = require('../knexfile.ts');
+const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
 const departementToUniversityName = require('../scripts/departementToUniversityName');

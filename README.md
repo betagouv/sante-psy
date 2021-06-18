@@ -62,7 +62,7 @@ scalingo -app APP_NAME run bash
 ```
 # handle special cases - need to update the confidential list inside "scripts/psyToUni.js"
 # you can use `--dry-run` option to display the changes without applying them
-> node scripts/matchSpecialPsyToUniversities.js [--dry-run]
+> ts-node scripts/matchSpecialPsyToUniversities.js [--dry-run]
 ```
 
 #### Insérer les universités pour la production
