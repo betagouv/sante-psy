@@ -1,5 +1,3 @@
-/* eslint-disable func-names */
-
 import clean from '../helper/clean';
 
 import uuid from '../../utils/uuid';
@@ -14,7 +12,7 @@ import {
   suspensionReasonsTable,
 } from '../../db/tables';
 
-exports.seed = async function (knex) {
+exports.seed = async (knex) => {
   console.log('Clean database information');
 
   await knex(suspensionReasonsTable).del();

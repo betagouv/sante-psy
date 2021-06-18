@@ -4,7 +4,6 @@ const knex = require('knex')(knexConfig);
 const { assert } = require('chai');
 const dbAppointments = require('../db/appointments');
 const dbPatients = require('../db/patients');
-const dbPsychologists = require('../db/psychologists');
 const { default: clean } = require('./helper/clean');
 const { appointmentsTable } = require('../db/tables');
 

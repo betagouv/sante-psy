@@ -18,23 +18,24 @@ const run = async () => {
   const specialCasePsychologists = psychologists.filter((psy) => psyToUni[psy.personalEmail] !== undefined);
   const needToWait = specialCasePsychologists
     .map((psy) => {
+      const psychologist = { ...psy };
       const universityIdToAssign = dbUniversities.getUniversityId(universities, psyToUni[psy.personalEmail]);
       if (!universityIdToAssign) {
         console.warn(`No university found for psy ${psy.personalEmail}
-        - psy id ${psy.dossierNumber}`);
+        - psy id ${psychologist.dossierNumber}`);
 
-        statsNoEmailFound.push(psy);
+        statsNoEmailFound.push(psychologist);
         return Promise.resolve();
       }
-      if ((psy.declaredUniversityId !== null) && (psy.declaredUniversityId !== universityIdToAssign)) {
-        console.log('Psy', psy.dossierNumber, 'already declared', psy.declaredUniversityId,
+      if (psychologist.declaredUniversityId !== null && psychologist.declaredUniversityId !== universityIdToAssign) {
+        console.log('Psy', psychologist.dossierNumber, 'already declared', psychologist.declaredUniversityId,
           'but was assigned', universityIdToAssign,
           dbUniversities.getUniversityName(universities, universityIdToAssign));
 
-        psy.assignedUniversity = universityIdToAssign;
-        statsConflictingDeclaredUniversity.push(psy);
+        psychologist.assignedUniversity = universityIdToAssign;
+        statsConflictingDeclaredUniversity.push(psychologist);
       }
-      return dbPsychologists.saveAssignedUniversity(psy.dossierNumber, universityIdToAssign);
+      return dbPsychologists.saveAssignedUniversity(psychologist.dossierNumber, universityIdToAssign);
     });
 
   await Promise.all(needToWait);

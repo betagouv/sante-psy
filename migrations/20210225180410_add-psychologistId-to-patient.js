@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 exports.up = function (knex) {
   return knex.schema.table('patients', (table) => {
     table.uuid('psychologistId').notNullable();

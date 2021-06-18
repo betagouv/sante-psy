@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 exports.up = function (knex) {
   console.log(`Creating ${'ds_api_cursor'} table`);
   return knex.schema.createTable('ds_api_cursor', (table) => {

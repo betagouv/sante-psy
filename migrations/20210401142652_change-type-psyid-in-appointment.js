@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 /**
  * to join appointments.psychologistId with psychologists.id
  * @param {*} knex 
