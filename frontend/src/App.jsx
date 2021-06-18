@@ -8,7 +8,6 @@ import Landing from 'components/Landing/Landing';
 import Footer from 'components/Footer/Footer';
 
 import Login from 'components/Login/Login';
-import Announcement from 'components/Notification/Announcement';
 import Faq from 'components/Faq/Faq';
 import LegalNotice from 'components/LegalNotice/LegalNotice';
 import PersonalData from 'components/PersonalData/PersonalData';
@@ -46,27 +45,26 @@ function App() {
     <BrowserRouter>
       <Header />
       <ScrollToTop />
-      {user && <Announcement />}
       <div id="contenu">
         {!loading && (
-          <React.Suspense fallback={<></>}>
-            <Switch>
-              <Route exact path="/psychologue/login/:token?" component={Login} />
-              {user && <Route path="/psychologue/" component={PsychologistRouter} />}
-              <Route exact path="/trouver-un-psychologue" component={FindPsychologist} />
-              <Route exact path="/mentions-legales" component={LegalNotice} />
-              <Route exact path="/donnees-personnelles-et-gestion-des-cookies" component={PersonalData} />
-              <Route exact path="/faq" component={Faq} />
-              <Route exact path="/stats" component={Statistics} />
-              <Route exact path="/" component={Landing} />
-              <Route path="/psychologue/">
-                <Redirect to="/psychologue/login" />
-              </Route>
-              <Route path="/">
-                <Redirect to={user ? '/psychologue/mes-seances' : '/'} />
-              </Route>
-            </Switch>
-          </React.Suspense>
+        <React.Suspense fallback={<></>}>
+          <Switch>
+            <Route exact path="/psychologue/login/:token?" component={Login} />
+            {user && <Route path="/psychologue/" component={PsychologistRouter} />}
+            <Route exact path="/trouver-un-psychologue" component={FindPsychologist} />
+            <Route exact path="/mentions-legales" component={LegalNotice} />
+            <Route exact path="/donnees-personnelles-et-gestion-des-cookies" component={PersonalData} />
+            <Route exact path="/faq" component={Faq} />
+            <Route exact path="/stats" component={Statistics} />
+            <Route exact path="/" component={Landing} />
+            <Route path="/psychologue/">
+              <Redirect to="/psychologue/login" />
+            </Route>
+            <Route path="/">
+              <Redirect to={user ? '/psychologue/mes-seances' : '/'} />
+            </Route>
+          </Switch>
+        </React.Suspense>
         )}
       </div>
       <Footer />
