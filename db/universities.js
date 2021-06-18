@@ -1,4 +1,4 @@
-const knexConfig = require('../knexfile');
+const knexConfig = require('../knexfile.ts');
 const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
 const departementToUniversityName = require('../scripts/departementToUniversityName');
@@ -58,11 +58,6 @@ module.exports.insertUniversity = async (name) => {
   }
 };
 
-/**
- * inspired from scripts/matchPsychologistsToUniversities
- * @param {*} psychologist 
- * @param {*} universities 
- */
 module.exports.getAssignedUniversityId = (psychologist, universities) => {
   if (psychologist.assignedUniversityId) {
     return psychologist.assignedUniversityId;

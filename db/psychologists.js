@@ -1,4 +1,4 @@
-const knexConfig = require('../knexfile');
+const knexConfig = require('../knexfile.ts');
 const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
 const { psychologistsTable, suspensionReasonsTable } = require('./tables');
@@ -10,7 +10,8 @@ const {
   nonEditablePsyFields,
 } = require('../services/updatePsyFields');
 
-module.exports.getPsychologistsDeclaredUniversity = async () => {
+module.exports.getAcceptedPsychologists = async () => {
+  // TODO: extract selected data as argument
   try {
     const psychologists = knex.column(
       knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
@@ -19,13 +20,11 @@ module.exports.getPsychologistsDeclaredUniversity = async () => {
       'departement',
       'dossierNumber',
       'assignedUniversityId',
-      'declaredUniversityId',
     )
         .select()
         .from(psychologistsTable)
         .whereNot('archived', true)
-        .where('state', DOSSIER_STATE.accepte)
-        .orderBy('dossierNumber');
+        .where('state', DOSSIER_STATE.accepte);
     return psychologists;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);

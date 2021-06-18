@@ -16,7 +16,6 @@ export type Psychologist = {
     training: string,
     departement: string,
     university: string,
-    declaredUniversityId?: string,
     assignedUniversityId: string,
     region: string,
     languages: string,

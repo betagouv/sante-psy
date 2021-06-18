@@ -6,45 +6,67 @@ const psyToUni = require('./psyToUni');
  * Update a list of special psy from a excel sheet to match them with a university
  * can be run and rerun again
  */
-const run = async () => {
-  console.log('Match psychologists to universities...');
-  const universities = await dbUniversities.getUniversities();
-  console.log(`${universities.length} universities`);
-  const psychologists = await dbPsychologists.getPsychologistsDeclaredUniversity();
+const run = async (dryRun) => {
+  console.log('Match special psychologists to universities...');
+  if (dryRun) {
+    console.log('WARNING: dry-run mode on! (no changes will be applied)');
+  }
 
-  const statsNoEmailFound = [];
-  const statsConflictingDeclaredUniversity = [];
+  try {
+    const universities = await dbUniversities.getUniversities();
+    const psyFromDb = await dbPsychologists.getAcceptedPsychologists();
 
-  const specialCasePsychologists = psychologists.filter((psy) => psyToUni[psy.personalEmail] !== undefined);
-  const needToWait = specialCasePsychologists
+    const statsAssignmentDone = [];
+    const statsNoUniFound = [];
+    const statsNoChange = [];
+    const psyFoundInDb = psyFromDb.filter((psy) => psyToUni[psy.personalEmail] !== undefined);
+    const emailPsyFromDb = psyFromDb.map((p) => p.personalEmail);
+    const statsNoPsyFound = Object.keys(psyToUni).filter((psy) => emailPsyFromDb.includes(psy) === false);
+
+    const needToWait = psyFoundInDb
     .map((psy) => {
-      const psychologist = { ...psy };
       const universityIdToAssign = dbUniversities.getUniversityId(universities, psyToUni[psy.personalEmail]);
       if (!universityIdToAssign) {
-        console.warn(`No university found for psy ${psy.personalEmail}
-        - psy id ${psychologist.dossierNumber}`);
-
-        statsNoEmailFound.push(psychologist);
+        statsNoUniFound.push(psyToUni[psy.personalEmail]);
         return Promise.resolve();
       }
-      if (psychologist.declaredUniversityId !== null && psychologist.declaredUniversityId !== universityIdToAssign) {
-        console.log('Psy', psychologist.dossierNumber, 'already declared', psychologist.declaredUniversityId,
-          'but was assigned', universityIdToAssign,
-          dbUniversities.getUniversityName(universities, universityIdToAssign));
 
-        psychologist.assignedUniversity = universityIdToAssign;
-        statsConflictingDeclaredUniversity.push(psychologist);
+      if (psy.assignedUniversityId === universityIdToAssign) {
+        statsNoChange.push(psy.personalEmail);
+        return Promise.resolve();
       }
-      return dbPsychologists.saveAssignedUniversity(psychologist.dossierNumber, universityIdToAssign);
+
+      statsAssignmentDone.push({
+        psy: psy.personalEmail,
+        uniFrom: dbUniversities.getUniversityName(universities, psy.assignedUniversityId),
+        uniTo: dbUniversities.getUniversityName(universities, universityIdToAssign),
+      });
+
+      if (dryRun) {
+        return Promise.resolve();
+      }
+      return dbPsychologists.saveAssignedUniversity(psy.dossierNumber, universityIdToAssign);
     });
 
-  await Promise.all(needToWait);
-  console.log(`${specialCasePsychologists.length} special case psychologists done`);
-  console.log('\nNo personalEmail found :', statsNoEmailFound.length, 'psys');
-  console.log('\nConflict between declaredUniversity and assignedUniversity :', statsConflictingDeclaredUniversity);
+    await Promise.all(needToWait);
 
-  // eslint-disable-next-line no-process-exit
-  process.exit(1);
+    console.log('\nPsy found in database for', psyFoundInDb.length, 'lines');
+    console.log('\nNo psy found for', statsNoPsyFound.length, 'lines:', statsNoPsyFound);
+    console.log('\nNo university found for', statsNoUniFound.length, 'lines:', statsNoUniFound);
+    console.log('\nNo changes for', statsNoChange.length, 'psys:', statsNoChange);
+    console.log('\nNew assignments done for', statsAssignmentDone.length, 'psys:', statsAssignmentDone);
+
+    process.exit(0);
+  } catch (err) {
+    console.error(err);
+    process.exit(2);
+  }
 };
 
-run();
+if (process.argv.length > 2 && process.argv[2] !== '--dry-run') {
+  console.log("Invalid arg - did you mean '--dry-run'?");
+  process.exit(1);
+}
+
+const dryRun = process.argv.length > 2 && process.argv[2] === '--dry-run';
+run(dryRun);

@@ -71,7 +71,6 @@ describe('reimbursementController', () => {
       const psy = await clean.insertOnePsy(psyEmail, 'accepte', false);
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).not.to.exist;
-      chai.expect(psy.declaredUniversityId).not.to.exist;
 
       return chai.request(app)
         .post('/api/psychologue/renseigner-convention')
@@ -95,7 +94,6 @@ describe('reimbursementController', () => {
       const psy = await clean.insertOnePsy(psyEmail, 'accepte', false);
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).not.to.exist;
-      chai.expect(psy.declaredUniversityId).not.to.exist;
 
       return chai.request(app)
       .post('/api/psychologue/renseigner-convention')
@@ -107,7 +105,6 @@ describe('reimbursementController', () => {
 
           const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
           chai.expect(updatedPsy.isConventionSigned).not.to.exist;
-          chai.expect(updatedPsy.declaredUniversityId).not.to.exist;
         });
     };
 
