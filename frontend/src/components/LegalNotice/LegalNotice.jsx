@@ -86,7 +86,13 @@ const LegalNotice = () => {
           <h3>En savoir plus</h3>
           Pour en savoir plus sur la politique d’accessibilité numérique de l’État :
           {' '}
-          <a href="http://references.modernisation.gouv.fr/accessibilite-numerique">http://references.modernisation.gouv.fr/accessibilite-numerique</a>
+          <a
+            href="http://references.modernisation.gouv.fr/accessibilite-numerique"
+            target="_blank"
+            rel="noreferrer"
+          >
+            http://references.modernisation.gouv.fr/accessibilite-numerique
+          </a>
         </div>
         <div>
           <h3>Sécurité</h3>

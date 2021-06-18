@@ -39,6 +39,8 @@ const Billing = ({ total }) => {
             <a
               className="fr-btn fr-btn--secondary fr-mt-2w fr-mr-1w"
               href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.pdf`}
+              target="_blank"
+              rel="noreferrer"
             >
               <span className="fr-fi-file-download-line" aria-hidden="true" />
               .pdf
@@ -46,6 +48,8 @@ const Billing = ({ total }) => {
             <a
               className="fr-btn fr-btn--secondary fr-mt-2w fr-mr-1w"
               href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.docx`}
+              target="_blank"
+              rel="noreferrer"
             >
               <span className="fr-fi-file-download-line" aria-hidden="true" />
               Microsoft Word .docx
@@ -53,6 +57,8 @@ const Billing = ({ total }) => {
             <a
               className="fr-btn fr-btn--secondary fr-mt-2w fr-mr-1w"
               href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.odt`}
+              target="_blank"
+              rel="noreferrer"
             >
               <span className="fr-fi-file-download-line" aria-hidden="true" />
               Libre Office .odt

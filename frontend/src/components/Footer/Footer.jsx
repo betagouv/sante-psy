@@ -35,13 +35,34 @@ const Footer = () => (
               </HashLink>
             </li>
             <li className="fr-footer__content-item">
-              <a className="fr-footer__content-link" href="https://www.etudiant.gouv.fr/">etudiant.gouv.fr</a>
+              <a
+                className="fr-footer__content-link"
+                href="https://www.etudiant.gouv.fr/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                etudiant.gouv.fr
+              </a>
             </li>
             <li className="fr-footer__content-item">
-              <a className="fr-footer__content-link" href="https://www.enseignementsup-recherche.gouv.fr">Enseignement supérieur</a>
+              <a
+                className="fr-footer__content-link"
+                href="https://www.enseignementsup-recherche.gouv.fr"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Enseignement supérieur
+              </a>
             </li>
             <li className="fr-footer__content-item">
-              <a className="fr-footer__content-link" href="https://beta.gouv.fr/">beta.gouv.fr</a>
+              <a
+                className="fr-footer__content-link"
+                href="https://beta.gouv.fr/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                beta.gouv.fr
+              </a>
             </li>
           </ul>
         </div>

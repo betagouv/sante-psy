@@ -35,12 +35,22 @@ const Student = () => (
               Des questions, des doutes sur le dispositif ?
             </p>
             <p className="fr-mb-2w">
-              <a className="fr-btn fr-btn--secondary" href="/faq#etudiant">Consulter la Foire Aux Questions</a>
+              <HashLink
+                className="fr-btn fr-btn--secondary"
+                to="/faq#etudiant"
+              >
+                Consulter la Foire Aux Questions
+              </HashLink>
             </p>
             <p className="fr-mb-2w">
               Nous vous suggérons aussi ce site de conseils pour gérer ses difficultés pendant cette période de crise :
             </p>
-            <a className="fr-btn fr-btn--secondary" href="https://www.soutien-etudiant.info" target="_blank" rel="noopener noreferrer">
+            <a
+              className="fr-btn fr-btn--secondary"
+              href="https://www.soutien-etudiant.info"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Voir le site www.soutien-etudiant.info
             </a>
           </div>

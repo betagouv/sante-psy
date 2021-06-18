@@ -17,6 +17,8 @@ const FaqSection = ({ id, sections, title, flyers }) => (
             key={flyer.href}
             className="fr-btn fr-btn--alt fr-mt-2w fr-mr-2w"
             href={flyer.href}
+            target="_blank"
+            rel="noreferrer"
           >
             {flyer.title}
           </a>

@@ -1,8 +1,9 @@
 import React from 'react';
+import { HashLink } from 'react-router-hash-link';
 
 const LogoFooter = () => (
   <div className="fr-footer__brand">
-    <a className="fr-logo" href="/" title="République française">
+    <HashLink className="fr-logo" to="/" title="République française">
       <span className="fr-logo__title">
         Ministère
         <br />
@@ -14,7 +15,7 @@ const LogoFooter = () => (
         <br />
         et de l&lsquo;Innovation
       </span>
-    </a>
+    </HashLink>
   </div>
 );
 
