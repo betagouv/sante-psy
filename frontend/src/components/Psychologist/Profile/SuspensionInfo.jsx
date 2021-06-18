@@ -1,18 +1,10 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { observer } from 'mobx-react';
 
 import { Button } from '@dataesr/react-dsfr';
-import { useStore } from 'stores/';
 
 const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
   const history = useHistory();
-  const { commonStore: { config } } = useStore();
-
-  // TO REMOVE suspensionDepartment
-  if (config.suspensionDepartments && !config.suspensionDepartments.includes(psychologist.departement)) {
-    return <></>;
-  }
 
   return (
     <>
@@ -58,5 +50,4 @@ const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
     </>
   );
 };
-// TO REMOVE suspensionDepartment
-export default observer(SuspensionInfo);
+export default SuspensionInfo;
