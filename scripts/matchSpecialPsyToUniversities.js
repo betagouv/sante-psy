@@ -14,7 +14,11 @@ const run = async (dryRun) => {
 
   try {
     const universities = await dbUniversities.getUniversities();
-    const psyFromDb = await dbPsychologists.getAcceptedPsychologists();
+    const psyFromDb = await dbPsychologists.getAcceptedPsychologists([
+      'personalEmail',
+      'dossierNumber',
+      'assignedUniversityId',
+    ]);
 
     const statsAssignmentDone = [];
     const statsNoUniFound = [];

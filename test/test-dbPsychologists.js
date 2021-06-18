@@ -13,13 +13,13 @@ const { default: clean } = require('./helper/clean');
 
 describe('DB Psychologists', () => {
   let psyList;
-  beforeEach(() => {
-    psyList = [clean.getOnePsy()];
-  });
+  beforeEach(async () => {
+    await Promise.all([
+      clean.cleanAllPsychologists(),
+      clean.cleanAllUniversities(),
+    ]);
 
-  afterEach(async () => {
-    await clean.cleanAllPsychologists();
-    await clean.cleanAllUniversities();
+    psyList = [clean.getOnePsy()];
   });
 
   describe('savePsychologistInPG', () => {
@@ -178,6 +178,41 @@ describe('DB Psychologists', () => {
       shouldBeOne.length.should.be.equal(1);
       shouldBeOne[0].lastName.should.be.equal(psyList[0].lastName.toUpperCase());
       assert.isUndefined(shouldBeOne[0].loginEmail);
+    });
+  });
+
+  describe('getAcceptedPsychologists', () => {
+    it('should return only one selected data from accepted psychologists', async () => {
+      const archivedPsy = { ...psyList[0] };
+      archivedPsy.archived = true;
+      archivedPsy.lastName = 'ArchivedPsy';
+      archivedPsy.dossierNumber = '34e6352f-bdd0-48ce-83de-8de71cad295b';
+      const constructionPsy = { ...psyList[0] };
+      constructionPsy.state = 'en_construction';
+      constructionPsy.lastName = 'ConstructionPsy';
+      constructionPsy.dossierNumber = 'a2e447cd-2d57-4f83-8884-ab05a2633644';
+
+      await dbPsychologists.savePsychologistInPG([psyList[0], archivedPsy, constructionPsy]);
+
+      const result = await dbPsychologists.getAcceptedPsychologists(['personalEmail']);
+      expect(result).to.have.length(1);
+      expect(result[0]).to.have.all.keys('personalEmail');
+      expect(result[0].personalEmail).to.eql(psyList[0].personalEmail);
+    });
+
+    it('should return only multiple selected data from accepted psychologists', async () => {
+      await dbPsychologists.savePsychologistInPG([psyList[0]]);
+
+      const result = await dbPsychologists.getAcceptedPsychologists(['personalEmail',
+        'dossierNumber',
+        'assignedUniversityId']);
+      expect(result).to.have.length(1);
+      expect(result[0]).to.have.all.keys('personalEmail',
+        'dossierNumber',
+        'assignedUniversityId');
+      expect(result[0].personalEmail).to.eql(psyList[0].personalEmail);
+      expect(result[0].dossierNumber).to.eql(psyList[0].dossierNumber);
+      expect(result[0].assignedUniversityId).to.eql(psyList[0].assignedUniversityId);
     });
   });
 

@@ -10,17 +10,9 @@ const {
   nonEditablePsyFields,
 } = require('../services/updatePsyFields');
 
-module.exports.getAcceptedPsychologists = async () => {
-  // TODO: extract selected data as argument
+module.exports.getAcceptedPsychologists = async (selectedData) => {
   try {
-    const psychologists = knex.column(
-      knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
-      'firstNames',
-      'personalEmail',
-      'departement',
-      'dossierNumber',
-      'assignedUniversityId',
-    )
+    const psychologists = knex.column(...selectedData)
         .select()
         .from(psychologistsTable)
         .whereNot('archived', true)
