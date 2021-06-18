@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import Input from 'components/Form/Input';
 
-import { REGIONS, DEPARTEMENTS } from 'services/geo';
+import DEPARTEMENTS from 'services/departments';
 
 const EditProfile = ({ psychologist, updatePsy, loading }) => {
   const [updatedPsychologist, setUpdatedPsychologist] = useState(psychologist);
+  useEffect(() => { setUpdatedPsychologist(psychologist); }, [psychologist]);
 
   const save = e => {
     e.preventDefault();
@@ -55,22 +56,12 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
           <h2>Informations pour l&lsquo;annuaire</h2>
           <Input
             label="Votre département"
-            type="select"
+            type="searchableSelect"
             field="departement"
             data-test-id="psy-departement-select"
             value={updatedPsychologist.departement}
             onChange={changePsychologist}
             options={DEPARTEMENTS.map(departement => ({ id: departement, label: departement }))}
-            required
-          />
-          <Input
-            label="Votre région"
-            type="select"
-            field="region"
-            data-test-id="psy-region-select"
-            value={updatedPsychologist.region}
-            onChange={changePsychologist}
-            options={REGIONS.map(region => ({ id: region, label: region }))}
             required
           />
           <Input

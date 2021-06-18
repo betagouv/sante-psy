@@ -1,0 +1,28 @@
+.select {
+    background-color: white;
+    box-shadow: 0px 4px 30px rgba(43, 43, 43, 0.13);
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    max-height: 32vh;
+    overflow: scroll;
+    display: none;
+}
+
+.option,
+.optionNonClickable {
+    padding: 8px 16px;
+    color: var(--bf500);
+}
+
+.option {
+    cursor: pointer;
+}
+
+.option:hover {
+    background-color: var(--block-color-hover);
+}
+
+.display {
+    display: inherit;
+}

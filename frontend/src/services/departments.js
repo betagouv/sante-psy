@@ -1,25 +1,4 @@
-export const REGIONS = [
-  'Auvergne-Rhône-Alpes',
-  'Bourgogne-Franche-Comté',
-  'Bretagne',
-  'Centre-Val-de-Loire',
-  'Collectivités d\'Outre Mer (St Pierre et Miquelon, St Martin, St Barthélémy, Polynésie Française, Wallis-et-Futuna, Nouvelle Calédonie)',
-  'Corse',
-  'Grand-Est',
-  'Guadeloupe et Martinique',
-  'Guyane',
-  'Hauts-de-France',
-  'Ile-de-France',
-  'La Réunion',
-  'Mayotte',
-  'Normandie',
-  'Nouvelle Aquitaine',
-  'Occitanie',
-  'Pays de la Loire',
-  'Polynésie Française',
-  'Provence-Alpes-Côte d\'Azur'];
-
-export const DEPARTEMENTS = [
+export default [
   '01 - Ain',
   '02 - Aisne',
   '03 - Allier',

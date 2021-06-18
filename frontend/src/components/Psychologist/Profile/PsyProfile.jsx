@@ -32,7 +32,7 @@ const PsyProfile = () => {
   const updatePsy = updatedPsychologist => {
     agent.Psychologist.updateProfile(updatedPsychologist)
       .then(response => {
-        setPsychologist(updatedPsychologist);
+        loadPsychologist();
         history.push('/psychologue/mon-profil');
         setNotification(response);
       })

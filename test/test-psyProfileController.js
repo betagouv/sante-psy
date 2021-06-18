@@ -1,6 +1,7 @@
 const chai = require('chai');
 const { expect } = require('chai');
 const sinon = require('sinon');
+const { v4: uuidv4 } = require('uuid');
 const jwt = require('../utils/jwt');
 const app = require('../index');
 const { default: clean } = require('./helper/clean');
@@ -107,7 +108,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -122,7 +122,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -137,7 +136,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         // no address
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -152,7 +150,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '  ',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -167,7 +164,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         // no departement
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -182,7 +178,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '   ',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -192,34 +187,18 @@ describe('psyProfileController', () => {
       }, 'Vous devez spécifier votre département.');
     });
 
-    it('should refuse empty region', async () => {
+    it('should refuse non existing departement', async () => {
       await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        // no region
+        departement: '9cube - Seine St Denis Style',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
         teleconsultation: true,
         languages: 'Français, Anglais',
         personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier votre région.');
-    });
-
-    it('should refuse whitespace region', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        region: '  ',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier votre région.');
+      }, 'Departement invalide');
     });
 
     it('should refuse empty phone', async () => {
@@ -227,7 +206,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         // no phone
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -242,7 +220,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '  ',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -257,7 +234,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -272,7 +248,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -287,7 +262,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -302,7 +276,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -317,7 +290,6 @@ describe('psyProfileController', () => {
         email: 'public',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -332,7 +304,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -347,7 +318,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'monwebsite',
         description: 'Consultez un psychologue gratuitement',
@@ -362,7 +332,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '',
         website: 'http://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -391,7 +360,6 @@ describe('psyProfileController', () => {
         email: '',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -406,7 +374,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: '',
         description: 'Consultez un psychologue gratuitement',
@@ -421,7 +388,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: '',
@@ -436,7 +402,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: '',
@@ -456,7 +421,6 @@ describe('psyProfileController', () => {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord<div>',
         departement: '59 - Nord',
-        region: 'Hauts-de-France',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement<script>evil</script>',
@@ -505,7 +469,6 @@ describe('psyProfileController', () => {
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
           departement: '59 - Nord',
-          region: 'Hauts-de-France',
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -528,7 +491,6 @@ describe('psyProfileController', () => {
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
           departement: '59 - Nord',
-          region: 'Hauts-de-France',
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -552,13 +514,50 @@ describe('psyProfileController', () => {
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
           departement: '59 - Nord',
-          region: 'Hauts-de-France',
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
           teleconsultation: true,
           languages: 'Français, Anglais',
           personalEmail: 'perso@email.com',
+        })
+        .then(async (res) => {
+          res.body.success.should.equal(true);
+          res.body.message.should.equal('Vos informations ont bien été mises à jour.');
+
+          const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+          expect(updatedPsy.email).to.eql('public@email.com');
+          expect(updatedPsy.address).to.eql('1 rue du Pôle Nord');
+          expect(updatedPsy.departement).to.eql('59 - Nord');
+          expect(updatedPsy.region).to.eql('Hauts-de-France');
+          expect(updatedPsy.phone).to.eql('01 02 03 04 05');
+          expect(updatedPsy.website).to.eql('https://monwebsite.fr');
+          expect(updatedPsy.description).to.eql('Consultez un psychologue gratuitement');
+          expect(updatedPsy.teleconsultation).to.be.true;
+          expect(updatedPsy.languages).to.eql('Français, Anglais');
+          expect(updatedPsy.personalEmail).to.eql('perso@email.com');
+        });
+    });
+
+    it('should ignore extra info on psy profile', async () => {
+      const psy = await clean.insertOnePsy();
+
+      return chai.request(app)
+        .put(`/api/psychologue/${psy.dossierNumber}`)
+        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .send({
+          email: 'public@email.com',
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          phone: '01 02 03 04 05',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          languages: 'Français, Anglais',
+          personalEmail: 'perso@email.com',
+          // To Ignore:
+          region: 'La bas',
+          dossierNumber: uuidv4(),
         })
         .then(async (res) => {
           res.body.success.should.equal(true);

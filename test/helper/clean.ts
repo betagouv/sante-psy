@@ -55,7 +55,7 @@ const getOnePsy = (
     description: 'description',
     // eslint-disable-next-line max-len
     training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
-    departement: `${getRandomInt()} - Calvados`,
+    departement: '14 - Calvados',
     university: `${getRandomInt()} Université`,
     declaredUniversityId: null, // not useful after script/matchPsychologistsToUniversities.js was used
     assignedUniversityId: uniId,
