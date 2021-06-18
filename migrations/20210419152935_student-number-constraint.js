@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 /**
  * some students number can be different than 11 chars
  * @param {*} knex 

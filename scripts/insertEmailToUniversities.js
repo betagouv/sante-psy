@@ -7,27 +7,28 @@ const insertEmailToUniversities = async (universitiesArray) => {
 
   const unversitiesList = universities.map((uni) => {
     console.log(`Trying to add university ${uni.name} to DB...`);
+    const university = { ...uni };
     const foundUni = universitiesArray.find((myElement) => myElement['Universités'] === uni.name);
     if (foundUni) {
       console.log(`Add ${uni.name} to list to save`);
 
       // emailSSU
       if (foundUni['Pour envoi des nouvelles listes de psys'] !== null) {
-        uni.emailSSU = foundUni['Pour envoi des nouvelles listes de psys'];
+        university.emailSSU = foundUni['Pour envoi des nouvelles listes de psys'];
       } else {
         console.warn(`emailSSU is missing for ${uni.name}`);
       }
 
       // emailUniversity
       if (foundUni['Pour envoi du mail recap des séances'] !== null) {
-        uni.emailUniversity = foundUni['Pour envoi du mail recap des séances'];
+        university.emailUniversity = foundUni['Pour envoi du mail recap des séances'];
       } else {
         console.warn(`emailUniversity is missing for ${uni.name}`);
       }
     } else {
       console.log(`Aucun element trouvé dans le fichier pour ${uni.name} -- reconsultez la liste d'université ?`);
     }
-    return uni;
+    return university;
   });
 
   console.debug('insertEmailToUniversities - new unversities list', unversitiesList);

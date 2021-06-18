@@ -124,9 +124,11 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
     try {
       const psyInDb = psychologists[psy.dossierNumber];
       if (!psyInDb) {
-        psy.languages = addFrenchLanguageIfMissing(psy.languages);
-        psy.assignedUniversityId = dbUniversities.getAssignedUniversityId(psy, universities);
-        psychologistsToInsert.push(psy);
+        psychologistsToInsert.push({
+          ...psy,
+          languages: addFrenchLanguageIfMissing(psy.languages),
+          assignedUniversityId: dbUniversities.getAssignedUniversityId(psy, universities),
+        });
         return Promise.resolve();
       }
 

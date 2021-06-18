@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 const columnBirthday = 'dateOfBirth';
 exports.up = function (knex) {
   console.log(`Adding ${columnBirthday} column to 'patients'`);

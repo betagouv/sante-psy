@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 /**
  *
  * to be able to remove psychologist that has been revoked we need to store their state and

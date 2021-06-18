@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 const chai = require('chai');
 const { expect } = require('chai');
 const sinon = require('sinon');

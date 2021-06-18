@@ -53,7 +53,7 @@ const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
 };
 
 // One person should not have multiple dossiers in "acepte" status, notify the team.
-const checkForMultipleAcceptedDossiers = async () => {
+const checkForMultipleAcceptedDossiers = async (): Promise<boolean> => {
   const count = await dbPsychologists.countAcceptedPsychologistsByPersonalEmail();
   const badPsychologists = count.filter((statsPoint) => statsPoint.count > 1);
   if (badPsychologists.length > 0) {
@@ -64,17 +64,17 @@ const checkForMultipleAcceptedDossiers = async () => {
   return true;
 };
 
-const autoAcceptPsychologists = async () => {
+const autoAcceptPsychologists = async (): Promise<void> => {
   demarchesSimplifiees.autoAcceptPsychologist();
 };
 
-const autoVerifyPsychologists = async () => {
+const autoVerifyPsychologists = async ():Promise<void> => {
   demarchesSimplifiees.autoVerifyPsychologist();
 };
 
 export default {
-  importEveryDataFromDSToPG: async () => importDataFromDSToPG(true),
-  importLatestDataFromDSToPG: async () => importDataFromDSToPG(false),
+  importEveryDataFromDSToPG: async (): Promise<boolean> => importDataFromDSToPG(true),
+  importLatestDataFromDSToPG: async (): Promise<boolean> => importDataFromDSToPG(false),
   checkForMultipleAcceptedDossiers,
   autoAcceptPsychologists,
   autoVerifyPsychologists,

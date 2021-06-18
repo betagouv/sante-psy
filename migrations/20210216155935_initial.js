@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 exports.up = function (knex) {
   // Add extention for handling uuids to postgres
   return knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";').then(() => {

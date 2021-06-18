@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 const rewire = require('rewire');
 const sinon = require('sinon');
 const chai = require('chai');
