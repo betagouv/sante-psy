@@ -1,10 +1,10 @@
 const addFrenchLanguageIfMissing = (languages) => {
   const frenchRegexp = new RegExp(/fran[çc]ais/, 'g');
   const french = 'Français';
+  if (!languages || languages.trim().length === 0) {
+    return french;
+  }
   if (!frenchRegexp.test(languages.toLowerCase())) {
-    if (languages.trim().length === 0) {
-      return french;
-    }
     return `${french}, ${languages}`;
   }
   return languages;

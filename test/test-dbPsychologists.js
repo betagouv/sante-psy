@@ -12,39 +12,36 @@ const { fail } = require('chai');
 const { default: clean } = require('./helper/clean');
 
 describe('DB Psychologists', () => {
-  let psyList;
   beforeEach(async () => {
-    await Promise.all([
-      clean.cleanAllPsychologists(),
-      clean.cleanAllUniversities(),
-    ]);
-
-    psyList = [clean.getOnePsy()];
+    await clean.cleanAllUniversities();
   });
 
   describe('savePsychologistInPG', () => {
     it('should INsert one psychologist in PG', async () => {
-      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = clean.getOnePsy();
+      await dbPsychologists.savePsychologistInPG([psy]);
 
-      const psy = await dbPsychologists.getPsychologistById(psyList[0].dossierNumber);
-      const exist = (psy !== undefined);
+      const savedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+      const exist = (savedPsy !== undefined);
       exist.should.be.equal(true);
     });
 
     it('should update one psychologist in PG', async () => {
       // doing a classic insert
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psyInsert = await dbPsychologists.getPsychologistById(psyList[0].dossierNumber);
+      const psy = clean.getOnePsy();
+      await dbPsychologists.savePsychologistInPG([psy]);
+
+      const psyInsert = await dbPsychologists.getPsychologistById(psy.dossierNumber);
       assert.isNull(psyInsert.updatedAt);
 
       // we do it twice in a row to update it (field updatedAt will change)
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psyUpsert = await dbPsychologists.getPsychologistById(psyList[0].dossierNumber);
+      await dbPsychologists.savePsychologistInPG([psy]);
+      const psyUpsert = await dbPsychologists.getPsychologistById(psy.dossierNumber);
       assert.isNotNull(psyUpsert.updatedAt);
     });
 
     it('should update psy if not self modified', async () => {
-      const psyDS = psyList[0];
+      const psyDS = clean.getOnePsy();
 
       // First save psy from DS
       await dbPsychologists.savePsychologistInPG([psyDS]);
@@ -68,7 +65,7 @@ describe('DB Psychologists', () => {
     });
 
     it('should not update region if self modified', async () => {
-      const psyDS = psyList[0];
+      const psyDS = clean.getOnePsy();
 
       // First save psy from DS
       await dbPsychologists.savePsychologistInPG([psyDS]);
@@ -93,7 +90,7 @@ describe('DB Psychologists', () => {
     });
 
     it('should still update firstname if self modified', async () => {
-      const psyDS = psyList[0];
+      const psyDS = clean.getOnePsy();
 
       // First save psy from DS
       await dbPsychologists.savePsychologistInPG([psyDS]);
@@ -123,11 +120,12 @@ describe('DB Psychologists', () => {
       const shouldBeZero = await dbPsychologists.getNumberOfPsychologists();
       shouldBeZero.should.have.length(0);
 
-      await dbPsychologists.savePsychologistInPG(psyList);
+      const psy = clean.getOnePsy();
+      await dbPsychologists.savePsychologistInPG([psy]);
       const shouldBeOne = await dbPsychologists.getNumberOfPsychologists();
       shouldBeOne[0].count.should.be.equal('1');
-      shouldBeOne[0].archived.should.be.equal(psyList[0].archived);
-      shouldBeOne[0].state.should.be.equal(psyList[0].state);
+      shouldBeOne[0].archived.should.be.equal(psy.archived);
+      shouldBeOne[0].state.should.be.equal(psy.state);
     });
   });
 
@@ -160,48 +158,46 @@ describe('DB Psychologists', () => {
 
   describe('getActivePsychologists', () => {
     it('should only return not archived and accepte psychologists with capitalized lastName', async () => {
-      const archivedPsy = { ...psyList[0] };
+      const activePsy = clean.getOnePsy();
+      const archivedPsy = clean.getOnePsy();
       archivedPsy.archived = true;
       archivedPsy.lastName = 'ArchivedPsy';
-      archivedPsy.dossierNumber = '34e6352f-bdd0-48ce-83de-8de71cad295b';
-      const constructionPsy = { ...psyList[0] };
+      const constructionPsy = clean.getOnePsy();
       constructionPsy.state = 'en_construction';
       constructionPsy.lastName = 'ConstructionPsy';
-      constructionPsy.dossierNumber = 'a2e447cd-2d57-4f83-8884-ab05a2633644';
-      const inactivePsy = { ...psyList[0] };
-      inactivePsy.active = false;
-      inactivePsy.dossierNumber = 'c453be18-b989-4bff-8e29-f01e4b081406';
-
-      await dbPsychologists.savePsychologistInPG([psyList[0], archivedPsy, constructionPsy, inactivePsy]);
+      const inactivePsy = clean.getOneInactivePsy(new Date());
+      await dbPsychologists.savePsychologistInPG([activePsy, archivedPsy, constructionPsy, inactivePsy]);
 
       const shouldBeOne = await dbPsychologists.getActivePsychologists();
+      console.log(shouldBeOne);
       shouldBeOne.length.should.be.equal(1);
-      shouldBeOne[0].lastName.should.be.equal(psyList[0].lastName.toUpperCase());
+      shouldBeOne[0].lastName.should.be.equal(activePsy.lastName.toUpperCase());
       assert.isUndefined(shouldBeOne[0].loginEmail);
     });
   });
 
   describe('getAcceptedPsychologists', () => {
     it('should return only one selected data from accepted psychologists', async () => {
-      const archivedPsy = { ...psyList[0] };
+      const acceptedPsy = clean.getOnePsy();
+      const archivedPsy = clean.getOnePsy();
       archivedPsy.archived = true;
       archivedPsy.lastName = 'ArchivedPsy';
       archivedPsy.dossierNumber = '34e6352f-bdd0-48ce-83de-8de71cad295b';
-      const constructionPsy = { ...psyList[0] };
+      const constructionPsy = clean.getOnePsy();
       constructionPsy.state = 'en_construction';
       constructionPsy.lastName = 'ConstructionPsy';
       constructionPsy.dossierNumber = 'a2e447cd-2d57-4f83-8884-ab05a2633644';
 
-      await dbPsychologists.savePsychologistInPG([psyList[0], archivedPsy, constructionPsy]);
+      await dbPsychologists.savePsychologistInPG([acceptedPsy, archivedPsy, constructionPsy]);
 
       const result = await dbPsychologists.getAcceptedPsychologists(['personalEmail']);
       expect(result).to.have.length(1);
       expect(result[0]).to.have.all.keys('personalEmail');
-      expect(result[0].personalEmail).to.eql(psyList[0].personalEmail);
+      expect(result[0].personalEmail).to.eql(acceptedPsy.personalEmail);
     });
 
     it('should return only multiple selected data from accepted psychologists', async () => {
-      await dbPsychologists.savePsychologistInPG([psyList[0]]);
+      const psy = await clean.insertOnePsy();
 
       const result = await dbPsychologists.getAcceptedPsychologists(['personalEmail',
         'dossierNumber',
@@ -210,25 +206,25 @@ describe('DB Psychologists', () => {
       expect(result[0]).to.have.all.keys('personalEmail',
         'dossierNumber',
         'assignedUniversityId');
-      expect(result[0].personalEmail).to.eql(psyList[0].personalEmail);
-      expect(result[0].dossierNumber).to.eql(psyList[0].dossierNumber);
-      expect(result[0].assignedUniversityId).to.eql(psyList[0].assignedUniversityId);
+      expect(result[0].personalEmail).to.eql(psy.personalEmail);
+      expect(result[0].dossierNumber).to.eql(psy.dossierNumber);
+      expect(result[0].assignedUniversityId).to.eql(psy.assignedUniversityId);
     });
   });
 
   describe('getAcceptedPsychologistByEmail', () => {
     it('should return a psy if we enter a known login email', async () => {
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
-      psy.email.should.be.equal(psyList[0].email);
-      psy.personalEmail.should.be.equal(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy();
+      const result = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      result.email.should.be.equal(psy.email);
+      result.personalEmail.should.be.equal(psy.personalEmail);
     });
 
     it('should return a psy if we enter a known login email capitalized', async () => {
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail.toUpperCase());
-      psy.email.should.be.equal(psyList[0].email);
-      psy.personalEmail.should.be.equal(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy();
+      const result = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail.toUpperCase());
+      result.email.should.be.equal(psy.email);
+      result.personalEmail.should.be.equal(psy.personalEmail);
     });
 
     it('should return undefined if we enter a unknown email', async () => {
@@ -238,46 +234,42 @@ describe('DB Psychologists', () => {
     });
 
     it("should return undefined if we dont use 'personalEmail' but 'email' as the login", async () => {
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].email);
+      const psy = await clean.insertOnePsy();
+      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.email);
       assert.isUndefined(unknownPsy);
     });
 
     it('should return undefined if known email but not accepte state', async () => {
-      psyList[0].state = DOSSIER_STATE.sans_suite;
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DOSSIER_STATE.sans_suite);
+      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
 
     it('should return undefined if known email but en_construction state', async () => {
-      psyList[0].state = DOSSIER_STATE.en_construction;
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DOSSIER_STATE.en_construction);
+      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
 
     it('should return undefined if known email but en_instruction state', async () => {
-      psyList[0].state = DOSSIER_STATE.en_instruction;
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DOSSIER_STATE.en_instruction);
+      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
 
     it('should return undefined if known email but refusé state', async () => {
-      psyList[0].state = DOSSIER_STATE.refuse;
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DOSSIER_STATE.refuse);
+      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
   });
 
   describe('getPsychologistById', () => {
     it('should return a psy if we enter a known id', async () => {
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getPsychologistById(psyList[0].dossierNumber);
-      psy.email.should.be.equal(psyList[0].email);
-      psy.dossierNumber.should.be.equal(psyList[0].dossierNumber);
+      const psy = await clean.insertOnePsy();
+      const result = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+      result.email.should.be.equal(psy.email);
+      result.dossierNumber.should.be.equal(psy.dossierNumber);
     });
 
     it('should return undefined if we enter a unknown id', async () => {
@@ -288,26 +280,23 @@ describe('DB Psychologists', () => {
 
   describe('getNotYetAcceptedPsychologistByEmail', () => {
     it('should return a psy if we enter a known login email en_construction', async () => {
-      psyList[0].state = DOSSIER_STATE.en_construction;
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psyList[0].personalEmail);
-      psy.email.should.be.equal(psyList[0].email);
-      psy.personalEmail.should.be.equal(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DOSSIER_STATE.en_construction);
+      const result = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psy.personalEmail);
+      result.email.should.be.equal(psy.email);
+      result.personalEmail.should.be.equal(psy.personalEmail);
     });
 
     it('should return a psy if we enter a known login email en_instruction', async () => {
-      psyList[0].state = DOSSIER_STATE.en_instruction;
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psyList[0].personalEmail);
-      psy.email.should.be.equal(psyList[0].email);
-      psy.personalEmail.should.be.equal(psyList[0].personalEmail);
+      const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DOSSIER_STATE.en_instruction);
+      const result = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psy.personalEmail);
+      result.email.should.be.equal(psy.email);
+      result.personalEmail.should.be.equal(psy.personalEmail);
     });
 
     it('should return undefined if we enter a known login email accepted', async () => {
-      psyList[0].state = DOSSIER_STATE.accepte;
-      await dbPsychologists.savePsychologistInPG(psyList);
-      const psy = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psyList[0].personalEmail);
-      assert.isUndefined(psy);
+      const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DOSSIER_STATE.accepte);
+      const result = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psy.personalEmail);
+      assert.isUndefined(result);
     });
   });
 
@@ -315,9 +304,7 @@ describe('DB Psychologists', () => {
     it('should update conventionInfo', async () => {
       const univName = 'Fake Uni';
       const university = await dbUniversities.insertUniversity(univName);
-      const psy = psyList[0];
-      psy.state = DOSSIER_STATE.accepte;
-      await dbPsychologists.savePsychologistInPG([psy]);
+      const psy = await clean.insertOnePsy();
       const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
       expect(savedPsy.isConventionSigned).not.to.exist;
@@ -357,9 +344,7 @@ describe('DB Psychologists', () => {
       const univName = 'Fake Uni';
       const university = await dbUniversities.insertUniversity(univName);
       const isConventionSigned = true;
-      const psy = psyList[0];
-      psy.state = DOSSIER_STATE.accepte;
-      psy.assignedUniversityId = university.id;
+      const psy = clean.getOnePsy('loginemail@beta.gouv.fr', DOSSIER_STATE.accepte, false, university.id);
       await dbPsychologists.savePsychologistInPG([psy]);
       const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
 
@@ -376,9 +361,7 @@ describe('DB Psychologists', () => {
     });
 
     it('should return undefined if no university is linked to the psy', async () => {
-      const psy = psyList[0];
-      psy.state = DOSSIER_STATE.accepte;
-      psy.assignedUniversityId = null;
+      const psy = clean.getOnePsy('loginemail@beta.gouv.fr', DOSSIER_STATE.accepte, false, null);
       await dbPsychologists.savePsychologistInPG([psy]);
       const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
 
@@ -393,8 +376,7 @@ describe('DB Psychologists', () => {
     it('should update assignedUniversityId', async () => {
       const univName = 'Fake Uni';
       const university = await dbUniversities.insertUniversity(univName);
-      const psy = psyList[0];
-      psy.state = DOSSIER_STATE.accepte;
+      const psy = clean.getOnePsy('loginemail@beta.gouv.fr', DOSSIER_STATE.accepte, false, null);
       await dbPsychologists.savePsychologistInPG([psy]);
       const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
@@ -436,7 +418,7 @@ describe('DB Psychologists', () => {
     });
 
     it('should return psychologist if exists', async () => {
-      const psy = psyList[0];
+      const psy = clean.getOnePsy();
       await dbPsychologists.savePsychologistInPG([psy]);
 
       const returnedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
@@ -448,16 +430,14 @@ describe('DB Psychologists', () => {
 
   describe('updatePsychologist', () => {
     it('should do nothing if psychologist does not exist', async () => {
-      const psy = psyList[0];
-      psy.dossierNumber = '390e285c-ed4a-4ce4-ac30-59bb3adf0123'; // unknown
-      psy.email = 'new@email.fr';
+      const psy = clean.getOnePsy();
 
       const nbUpdated = await dbPsychologists.updatePsychologist(psy);
       nbUpdated.should.be.equal(0);
     });
 
     it('should update psychologist if exist', async () => {
-      const psy = psyList[0];
+      const psy = clean.getOnePsy();
       await dbPsychologists.savePsychologistInPG([psy]);
       expect(psy.updatedAt).to.be.undefined;
 

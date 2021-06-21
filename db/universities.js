@@ -62,39 +62,24 @@ module.exports.getAssignedUniversityId = (psychologist, universities) => {
   if (psychologist.assignedUniversityId) {
     return psychologist.assignedUniversityId;
   }
-  const departement = getDepartementNumberFromString(psychologist.departement);
 
+  const departement = getDepartementNumberFromString(psychologist.departement);
   if (!departement) {
     console.log(`No departement found - psy id ${psychologist.dossierNumber}`);
-
     return null;
   }
 
   const correspondingUniName = departementToUniversityName[departement];
   if (!correspondingUniName) {
     console.log(`No corresponding uni name found for - departement ${departement}`);
-
     return null;
   }
-  return module.exports.getUniversityId(universities, correspondingUniName);
-};
 
-module.exports.getUniversityId = function getUniversityId(universities, name) {
-  const foundUni = universities.find((uni) => uni.name.toString().trim() === name.toString().trim());
-
+  const foundUni = universities.find((uni) => uni.name.toString().trim() === correspondingUniName.toString().trim());
   if (foundUni) {
     return foundUni.id;
   }
-  return undefined;
-};
-
-module.exports.getUniversityName = function getUniversityName(universities, id) {
-  const foundUni = universities.find((uni) => uni.id === id);
-
-  if (foundUni) {
-    return foundUni.name;
-  }
-  return undefined;
+  return null;
 };
 
 /**

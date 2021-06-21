@@ -13,6 +13,12 @@ const matchPsyToUni = async (dryRun) => {
   }
 
   try {
+    const statsAssignmentDone = [];
+    const statsNoUniFound = [];
+    const statsNoChange = [];
+    const psysFoundInDb = [];
+    const statsNoPsyFound = [];
+
     const universities = await dbUniversities.getUniversities();
     const psyFromDb = await dbPsychologists.getAcceptedPsychologists([
       'personalEmail',
@@ -20,41 +26,45 @@ const matchPsyToUni = async (dryRun) => {
       'assignedUniversityId',
     ]);
 
-    const statsAssignmentDone = [];
-    const statsNoUniFound = [];
-    const statsNoChange = [];
-    const psyFoundInDb = psyFromDb.filter((psy) => psyToUni[psy.personalEmail] !== undefined);
-    const emailPsyFromDb = psyFromDb.map((p) => p.personalEmail);
-    const statsNoPsyFound = Object.keys(psyToUni).filter((psy) => emailPsyFromDb.includes(psy) === false);
+    Object.keys(psyToUni).forEach((psyFromFile) => {
+      const psyFoundInDb = psyFromDb.find((psy) => psy.personalEmail === psyFromFile);
+      if (psyFoundInDb) {
+        psysFoundInDb.push(psyFoundInDb);
+      } else {
+        statsNoPsyFound.push(psyFromFile);
+      }
+    });
 
-    const needToWait = psyFoundInDb
+    const needToWait = psysFoundInDb
     .map((psy) => {
-      const universityIdToAssign = dbUniversities.getUniversityId(universities, psyToUni[psy.personalEmail]);
-      if (!universityIdToAssign) {
+      const universityToAssign = universities.find(
+        (uni) => uni.name.toString().trim() === psyToUni[psy.personalEmail].toString().trim(),
+      );
+      if (!universityToAssign) {
         statsNoUniFound.push(psyToUni[psy.personalEmail]);
         return Promise.resolve();
       }
 
-      if (psy.assignedUniversityId === universityIdToAssign) {
+      if (psy.assignedUniversityId === universityToAssign.id) {
         statsNoChange.push(psy.personalEmail);
         return Promise.resolve();
       }
 
       statsAssignmentDone.push({
         psy: psy.personalEmail,
-        uniFrom: dbUniversities.getUniversityName(universities, psy.assignedUniversityId),
-        uniTo: dbUniversities.getUniversityName(universities, universityIdToAssign),
+        uniFrom: universities.find((uni) => uni.id === psy.assignedUniversityId).name,
+        uniTo: universityToAssign.name,
       });
 
       if (dryRun) {
         return Promise.resolve();
       }
-      return dbPsychologists.saveAssignedUniversity(psy.dossierNumber, universityIdToAssign);
+      return dbPsychologists.saveAssignedUniversity(psy.dossierNumber, universityToAssign.id);
     });
 
     await Promise.all(needToWait);
 
-    console.log('\nPsy found in database for', psyFoundInDb.length, 'lines');
+    console.log('\nPsy found in database for', psysFoundInDb.length, 'lines');
     console.log('\nNo psy found for', statsNoPsyFound.length, 'lines:', statsNoPsyFound);
     console.log('\nNo university found for', statsNoUniFound.length, 'lines:', statsNoUniFound);
     console.log('\nNo changes for', statsNoChange.length, 'psys:', statsNoChange);
