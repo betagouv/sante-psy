@@ -116,7 +116,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
       await dbLoginToken.delete(token);
       console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
       // res.cookie('token', newToken, { sameSite: 'lax', secure: config.isSecure, httpOnly: true });
-      return res.json({ success: true });
+      return res.redirect('/psychologue/mes-seances');
     }
 
     console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
