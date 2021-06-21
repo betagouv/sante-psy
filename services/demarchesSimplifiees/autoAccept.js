@@ -22,32 +22,36 @@ const sendAutoAcceptMessage = async (dossierId) => {
 };
 
 const autoAcceptPsychologists = async () => {
-  const list = await getAllPsychologistList(
-    (cursor) => graphql.getSimplePsyInfo(cursor, DOSSIER_STATE.en_instruction),
-  );
-  console.log(`${list.psychologists.length} psychologists are in instruction`);
-  let countAutoAccept = 0;
-  list.psychologists
-    .filter(
-      (psychologist) => {
-        const departement = psychologist.champs
-          .find((champ) => champ.id === getChampsIdFromField('departement'))
-          .stringValue;
-        const isVerified = psychologist.annotations
-          .find((annotation) => annotation.id === getAnnotationsIdFromField('verifiee'))
-          .stringValue;
-        return isVerified === 'true' && config.demarchesSimplifieesAutoAcceptDepartments.includes(departement);
-      },
-    )
-    .forEach(
-      (psychologist) => {
-        graphql.acceptPsychologist(psychologist.id);
-        sendAutoAcceptMessage(psychologist.id);
-        console.debug(`Auto accept psychologist ${psychologist.id}`);
-        countAutoAccept++;
-      },
+  try {
+    const list = await getAllPsychologistList(
+      (cursor) => graphql.getSimplePsyInfo(cursor, DOSSIER_STATE.en_instruction),
     );
-  console.log(`${countAutoAccept} have been auto accepted`);
+    console.log(`${list.psychologists.length} psychologists are in instruction`);
+    let countAutoAccept = 0;
+    list.psychologists
+      .filter(
+        (psychologist) => {
+          const departement = psychologist.champs
+            .find((champ) => champ.id === getChampsIdFromField('departement'))
+            .stringValue;
+          const isVerified = psychologist.annotations
+            .find((annotation) => annotation.id === getAnnotationsIdFromField('verifiee'))
+            .stringValue;
+          return isVerified === 'true' && config.demarchesSimplifieesAutoAcceptDepartments.includes(departement);
+        },
+      )
+      .forEach(
+        (psychologist) => {
+          graphql.acceptPsychologist(psychologist.id);
+          sendAutoAcceptMessage(psychologist.id);
+          console.debug(`Auto accept psychologist ${psychologist.id}`);
+          countAutoAccept++;
+        },
+      );
+    console.log(`${countAutoAccept} have been auto accepted`);
+  } catch (err) {
+    console.error('An error occured in autoAcceptPsychologists job', err);
+  }
 };
 
 module.exports = autoAcceptPsychologists;
