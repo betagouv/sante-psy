@@ -5,6 +5,9 @@ import expressJWT from 'express-jwt';
 import rateLimit from 'express-rate-limit';
 import slowDown from 'express-slow-down';
 import bearerToken from 'express-bearer-token';
+import cookieParser from 'cookie-parser';
+import cookieSession from 'cookie-session';
+// import csrf from 'csurf';
 
 import cors from 'cors';
 
@@ -50,23 +53,43 @@ app.use(express.json());
 
 app.use(bearerToken());
 
+app.use(cookieParser(config.secret));
+
 app.use('/static', express.static('static'));
 app.get('/', getIndex);
 app.use(express.static('./frontend/dist'));
 
 app.use(expressSanitizer());
 
+app.use(cookieSession({
+  secret: config.secret,
+  maxAge: parseInt(config.sessionDurationHours) * 60 * 60 * 1000,
+}));
+
+// if (config.useCSRF) {
+//   console.log('Using CSRF protection');
+//   app.use(csrf({ cookie: true }));
+// } else {
+//   console.log('NOT using CSRF protection due to env variable USE_CSRF - should only be used for test');
+// }
+
 app.use('/api/*',
   expressJWT({
     secret: config.secret,
     algorithms: ['HS256'],
-    getToken: (req) => req.token,
+    getToken: (req) => {
+      if (req.cookies !== undefined) {
+        return req.cookies.token;
+      }
+      return null;
+    },
   }).unless({
     path: [
       '/api/config',
       '/api/trouver-un-psychologue',
       '/api/psychologue/sendMail',
       '/api/psychologue/login',
+      '/api/psychologue/logout',
     ],
   }));
 
@@ -101,8 +124,10 @@ app.post('/api/psychologue/sendMail',
   speedLimiterLogin,
   loginController.emailValidators,
   loginController.sendMail);
-app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
-app.get('/api/connecteduser', speedLimiter, loginController.connectedUser);
+// app.get('/psychologue/login', loginController.getLogin);
+app.get('/psychologue/login', speedLimiterLogin, loginController.login);
+app.get('/connecteduser', speedLimiter, loginController.connectedUser);
+app.get('/psychologue/logout', speedLimiter, loginController.deleteToken);
 
 app.get('/api/appointments', appointmentsController.getAppointments);
 app.post('/api/appointments',

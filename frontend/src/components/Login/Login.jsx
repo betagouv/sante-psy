@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect, useHistory, useParams } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
-import Notification from 'components/Notification/Notification';
+// import Notification from 'components/Notification/Notification';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 
 import { useStore } from 'stores/';
@@ -12,30 +12,25 @@ import agent from 'services/agent';
 const Login = () => {
   const {
     commonStore: { config, setNotification },
-    userStore: { setToken, user, isTokenExpired, token: existingToken },
+    userStore: { user },
   } = useStore();
-  const { token } = useParams();
   const history = useHistory();
 
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    if (token) {
-      setToken();
-      agent.User.login(token)
-        .then(loginInfo => {
-          setToken(loginInfo.token);
-          history.push('/psychologue/mes-seances');
-        });
+    if (user) {
+      agent.User.login()
+        .then(history.push('/psychologue/mes-seances'));
     }
-  }, [token]);
+  });
 
   const login = e => {
     e.preventDefault();
     agent.User.sendMail(email).then(setNotification);
   };
 
-  if (user && !token) {
+  if (user) {
     return <Redirect to="/psychologue/mes-seances" />;
   }
 
@@ -49,12 +44,12 @@ const Login = () => {
 
           <div className="panel margin-top-m">
             <h3>Me connecter</h3>
-            {existingToken && isTokenExpired() && (
+            {/* {existingToken && isTokenExpired() && (
               <Notification
                 message="Votre session a expiré, veuillez vous reconnecter."
                 onClose={() => { setToken(null); }}
               />
-            )}
+            )} */}
             <GlobalNotification />
             <p className="fr-mb-2w">
               Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant

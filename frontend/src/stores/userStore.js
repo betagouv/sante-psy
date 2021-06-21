@@ -1,58 +1,33 @@
-import { reaction, makeObservable, observable, action, computed } from 'mobx';
-import jwtDecode from 'jwt-decode';
+import { makeObservable, observable, action } from 'mobx';
 
 import agent from 'services/agent';
 
 export default class UserStore {
-  token = window.localStorage.getItem('santepsytoken');
-
   user;
 
   constructor() {
     makeObservable(this, {
-      token: observable,
+      // token: observable,
       user: observable,
-      decodedToken: computed,
-      setToken: action.bound,
+      // decodedToken: computed,
+      // setToken: action.bound,
+      logout: action.bound,
       pullUser: action.bound,
     });
-
-    reaction(
-      () => this.token,
-      token => {
-        if (token) {
-          window.localStorage.setItem('santepsytoken', token);
-        } else {
-          window.localStorage.removeItem('santepsytoken');
-        }
-      },
-    );
   }
 
-  setToken(token) {
-    this.token = token;
-  }
-
-  get decodedToken() {
-    return this.token ? jwtDecode(this.token) : undefined;
-  }
-
-  isTokenExpired = () => {
-    const now = new Date();
-    return now.getTime() > this.decodedToken.exp * 1000;
+  logout() {
+    return agent.User.logout();
   }
 
   pullUser() {
-    if (this.token) {
-      if (!this.isTokenExpired()) {
-        return agent.User.getConnected().then(user => {
-          this.user = user.data;
-        });
+    return agent.User.getConnected().then(user => {
+      console.log('USER', user);
+      if (user) {
+        this.user = user.data;
+      } else {
+        this.user = null;
       }
-    } else {
-      this.user = null;
-    }
-
-    return Promise.resolve();
+    });
   }
 }

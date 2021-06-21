@@ -30,7 +30,7 @@ import '@gouvfr/dsfr/dist/css/dsfr.css';
 import './App.css';
 
 function App() {
-  const { commonStore: { setConfig, config }, userStore: { user, token, pullUser } } = useStore();
+  const { commonStore: { setConfig, config }, userStore: { user, pullUser } } = useStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function App() {
 
   useEffect(() => {
     pullUser().then(() => setLoading(false));
-  }, [token]);
+  });
 
   useEffect(() => {
     document.title = config.appName ? config.appName : __APPNAME__;
@@ -50,7 +50,7 @@ function App() {
       <Header />
       <ScrollToTop />
       {user && <Announcement />}
-      {!loading && (
+      {loading && (
         <Switch>
           {user && [
             <Route key="appointments" exact path="/psychologue/mes-seances" component={Appointments} />,

@@ -7,7 +7,8 @@ import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import dbLoginToken from '../db/loginToken';
 import date from '../utils/date';
-import jwt from '../utils/jwt';
+import cookie from '../utils/cookie';
+// import jwt from '../utils/jwt';
 import logs from '../utils/logs';
 import emailUtils from '../utils/email';
 import config from '../utils/config';
@@ -30,7 +31,7 @@ function generateToken() {
 async function sendLoginEmail(email: string, loginUrl: string, token: string) {
   try {
     const html = await ejs.renderFile('./views/emails/login.ejs', {
-      loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
+      loginUrlWithToken: `${loginUrl}?token=${encodeURIComponent(token)}`,
       appName: config.appName,
       loginUrl,
     });
@@ -67,8 +68,25 @@ async function saveToken(email: string, token: string) {
   }
 }
 
+const deleteToken = async (req: Request, res: Response): Promise<void> => {
+  try {
+    cookie.clearJwtCookie(res);
+    console.log('Vous etes déconnecté');
+    res.json({
+      success: true,
+      message: 'Vous etes déconnecté',
+    });
+  } catch (err) {
+    console.error(`Erreur de suppression du token : ${err}`);
+    throw new Error('Erreur de suppression du token');
+  }
+};
+
 const connectedUser = async (req: Request, res: Response): Promise<void> => {
-  const psy = await dbPsychologists.getPsychologistById(req.user.psychologist);
+  const currentPsyId = await cookie.getCurrentPsyId(req);
+  console.log('currentPsyId', currentPsyId);
+  const psy = await dbPsychologists.getPsychologistById(currentPsyId);
+  console.log('TEST PSY', psy);
   if (psy) {
     const { firstNames, lastName, email } = psy;
     res.json({
@@ -82,18 +100,23 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
 };
 
 const login = async (req: Request, res: Response): Promise<void> => {
+  console.log('SALUUUUUUUUUUUUUUUUUUUT');
   // Save a token that expire after config.sessionDurationHours hours if user is logged
-  if (req.body.token) {
-    const token = req.sanitize(req.body.token);
+  console.log('query params', req.query);
+  if (req.query.token) {
+    const token = req.sanitize((String)(req.query.token));
+    console.log('TEST', token);
     const dbToken = await dbLoginToken.getByToken(token);
 
     if (dbToken) {
       const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
-      const newToken = jwt.getJwtTokenForUser(psychologistData.dossierNumber);
+      console.log('dbTOKEN', dbToken.email);
+      console.log('psyDATA', psychologistData.dossierNumber);
+      cookie.createAndSetJwtCookie(res, dbToken.email, psychologistData.dossierNumber);
       await dbLoginToken.delete(token);
       console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
-      res.json({ success: true, token: newToken });
-      return;
+      // res.cookie('token', newToken, { sameSite: 'lax', secure: config.isSecure, httpOnly: true });
+      return res.json({ success: true });
     }
 
     console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
@@ -154,4 +177,5 @@ export default {
   connectedUser: asyncHelper(connectedUser),
   login: asyncHelper(login),
   sendMail: asyncHelper(sendMail),
+  deleteToken: asyncHelper(deleteToken),
 };

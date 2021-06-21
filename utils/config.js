@@ -17,6 +17,7 @@ module.exports = {
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
   announcement: process.env.ANNOUNCEMENT || '',
   port: process.env.PORT || 8080,
+  home: process.env.HOME || '/Users/ASF/Desktop/Damir-Code/BetaGouv/sante-psy/frontend/dist/index.html',
   teamEmail: process.env.TEAM_EMAIL || 'equipe-santepsyetudiants@beta.gouv.fr',
   contactEmail,
   apiToken: process.env.API_TOKEN,
@@ -43,7 +44,8 @@ module.exports = {
   secret,
   secretLogs,
   sessionDurationHours: process.env.SESSION_DURATION_HOURS || '2', // duration in hours
-  useCors: (process.env.USE_CORS || 'false') === 'true',
+  useCors: (process.env.USE_CORS || 'true') === 'true',
+  useCSRF: (process.env.USE_CSRF || 'true') === 'true',
   speedLimitation: (process.env.SPEED_LIMITATION || 'true') === 'true',
   testEnvironment: (process.env.TEST_ENVIRONMENT || 'false') === 'true',
   // mail
