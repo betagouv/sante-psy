@@ -1,8 +1,8 @@
 const rewire = require('rewire');
 const sinon = require('sinon');
 const config = require('../../utils/config');
+const autoAcceptPsychologists = require('../../services/demarchesSimplifiees/autoAccept');
 
-const autoAcceptPsychologists = rewire('../../services/demarchesSimplifiees/autoAccept');
 const graphql = rewire('../../utils/graphql');
 
 describe('autoAcceptPsychologist', () => {
@@ -16,22 +16,24 @@ describe('autoAcceptPsychologist', () => {
     uploadDocumentStub = sinon.stub();
     uploadDocumentStub.returns('un super id');
     unsets.push(graphql.__set__('executeMutation', executeMutationStub));
-    unsets.push(autoAcceptPsychologists.__set__('graphql', graphql));
-    unsets.push(autoAcceptPsychologists.__set__('uploadDocument', uploadDocumentStub));
+    autoAcceptPsychologists.__Rewire__('graphql', graphql);
+    autoAcceptPsychologists.__Rewire__('uploadDocument', uploadDocumentStub);
   });
 
   afterEach((done) => {
+    autoAcceptPsychologists.__ResetDependency__('graphql');
+    autoAcceptPsychologists.__ResetDependency__('uploadDocument');
     unsets.forEach((unset) => unset());
     done();
   });
 
   it('Should accept 1 dossier on DS', async () => {
     const dossierId = 'RG9zc2llci00NzU2Mzc4';
-    await autoAcceptPsychologists();
+    await autoAcceptPsychologists.default();
 
     sinon.assert.calledWith(uploadDocumentStub, sinon.match.string, dossierId);
-    sinon.assert.called(executeMutationStub);
-    sinon.assert.calledWith(executeMutationStub.getCall(0),
+    sinon.assert.calledTwice(executeMutationStub);
+    sinon.assert.calledWith(executeMutationStub.getCall(1),
       sinon.match((query) => query.includes('mutation dossierAccepter')),
       sinon.match({
         input: {
@@ -39,7 +41,7 @@ describe('autoAcceptPsychologist', () => {
           instructeurId: config.demarchesSimplifieesInstructor,
         },
       }));
-    sinon.assert.calledWith(executeMutationStub.getCall(1),
+    sinon.assert.calledWith(executeMutationStub.getCall(0),
       sinon.match((query) => query.includes('mutation dossierEnvoyerMessage')),
       sinon.match({
         dossierId,

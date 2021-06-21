@@ -1,8 +1,7 @@
-const rewire = require('rewire');
 const sinon = require('sinon');
-
-const autoVerify = rewire('../../services/demarchesSimplifiees/autoVerify');
 const graphql = require('../../utils/graphql');
+
+const autoVerifyPsychologists = require('../../services/demarchesSimplifiees/autoVerify');
 
 describe('getDiplomaErrors', () => {
   const createPsyWithDiploma = (year, id = 'Q2hhbXAtMTYzOTE2OQ==') => ({
@@ -12,7 +11,7 @@ describe('getDiplomaErrors', () => {
     }],
   });
 
-  const getDiplomaErrors = autoVerify.__get__('getDiplomaErrors');
+  const getDiplomaErrors = autoVerifyPsychologists.__get__('getDiplomaErrors');
   it('Should refuse empty diploma', () => {
     const psychologist = createPsyWithDiploma('2000', 'random');
 
@@ -73,7 +72,7 @@ describe('getAdeliErrors', () => {
     },
   });
 
-  const getAdeliErrors = autoVerify.__get__('getAdeliErrors');
+  const getAdeliErrors = autoVerifyPsychologists.__get__('getAdeliErrors');
   it('Should refuse missing adeli number', () => {
     const psychologist = createPsy('jane', 'doe', 'non existing');
 
@@ -131,8 +130,8 @@ describe('verifyPsychologist', () => {
     addVerificationMessageStub = sinon.stub(graphql, 'addVerificationMessage');
     verifyDossierStub = sinon.stub(graphql, 'verifyDossier');
     putDossierInInstructionStub = sinon.stub(graphql, 'putDossierInInstruction');
-    unsets.push(autoVerify.__set__('getAdeliErrors', getAdeliErrorsStub));
-    unsets.push(autoVerify.__set__('getDiplomaErrors', getDiplomaErrorsStub));
+    unsets.push(autoVerifyPsychologists.__set__('getAdeliErrors', getAdeliErrorsStub));
+    unsets.push(autoVerifyPsychologists.__set__('getDiplomaErrors', getDiplomaErrorsStub));
   });
 
   afterEach((done) => {
@@ -143,7 +142,7 @@ describe('verifyPsychologist', () => {
     done();
   });
 
-  const verifyPsychologist = autoVerify.__get__('verifyPsychologist');
+  const verifyPsychologist = autoVerifyPsychologists.__get__('verifyPsychologist');
   it('Should call addVerificationMessage, verifyDossier and putDossierInInstruction if no errors', async () => {
     getAdeliErrorsStub.returns([]);
     getDiplomaErrorsStub.returns([]);
