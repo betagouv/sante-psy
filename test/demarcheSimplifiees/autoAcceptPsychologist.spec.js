@@ -2,18 +2,22 @@ const rewire = require('rewire');
 const sinon = require('sinon');
 const config = require('../../utils/config');
 
-const demarchesSimplifiees = rewire('../../services/demarchesSimplifiees');
+const autoAcceptPsychologists = rewire('../../services/demarchesSimplifiees/autoAccept');
 const graphql = rewire('../../utils/graphql');
 
 describe('autoAcceptPsychologist', () => {
   let executeMutationStub;
+  let uploadDocumentStub;
   let unsets = [];
 
   beforeEach(() => {
     unsets = [];
     executeMutationStub = sinon.stub();
+    uploadDocumentStub = sinon.stub();
+    uploadDocumentStub.returns('un super id');
     unsets.push(graphql.__set__('executeMutation', executeMutationStub));
-    unsets.push(demarchesSimplifiees.__set__('graphql', graphql));
+    unsets.push(autoAcceptPsychologists.__set__('graphql', graphql));
+    unsets.push(autoAcceptPsychologists.__set__('uploadDocument', uploadDocumentStub));
   });
 
   afterEach((done) => {
@@ -22,17 +26,26 @@ describe('autoAcceptPsychologist', () => {
   });
 
   it('Should accept 1 dossier on DS', async () => {
-    await demarchesSimplifiees.autoAcceptPsychologist();
+    const dossierId = 'RG9zc2llci00NzU2Mzc4';
+    await autoAcceptPsychologists();
 
-    sinon.assert.calledOnce(executeMutationStub);
+    sinon.assert.calledWith(uploadDocumentStub, sinon.match.string, dossierId);
+    sinon.assert.called(executeMutationStub);
     sinon.assert.calledWith(executeMutationStub.getCall(0),
       sinon.match((query) => query.includes('mutation dossierAccepter')),
       sinon.match({
         input: {
-          dossierId: 'RG9zc2llci00NzU2Mzc4',
+          dossierId,
           instructeurId: config.demarchesSimplifieesInstructor,
-          motivation: config.demarchesSimplifieesAutoAcceptMessage,
         },
+      }));
+    sinon.assert.calledWith(executeMutationStub.getCall(1),
+      sinon.match((query) => query.includes('mutation dossierEnvoyerMessage')),
+      sinon.match({
+        dossierId,
+        instructeurId: config.demarchesSimplifieesInstructor,
+        body: config.demarchesSimplifieesAutoAcceptMessage,
+        attachment: 'un super id',
       }));
   });
 });

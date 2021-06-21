@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 import ejs from 'ejs';
 import dbsApiCursor from '../db/dsApiCursor';
 import dbPsychologists from '../db/psychologists';
-import demarchesSimplifiees from '../services/demarchesSimplifiees';
+import importDossier from '../services/demarchesSimplifiees/importDossier';
+import autoVerifyPsychologists from '../services/demarchesSimplifiees/autoVerify';
+import autoAcceptPsychologists from '../services/demarchesSimplifiees/autoAccept';
 import config from '../utils/config';
 import emailUtils from '../utils/email';
 
@@ -18,7 +20,7 @@ async function importDataFromDSToPG(updateEverything = false) {
     console.log('Starting importDataFromDSToPG...');
     const latestCursorInPG = await dbsApiCursor.getLatestCursorSaved(updateEverything);
 
-    const dsAPIData = await demarchesSimplifiees.getPsychologistList(latestCursorInPG);
+    const dsAPIData = await importDossier.getPsychologistList(latestCursorInPG);
 
     if (dsAPIData.psychologists.length > 0) {
       await dbPsychologists.savePsychologistInPG(dsAPIData.psychologists);
@@ -64,18 +66,10 @@ const checkForMultipleAcceptedDossiers = async (): Promise<boolean> => {
   return true;
 };
 
-const autoAcceptPsychologists = async (): Promise<void> => {
-  demarchesSimplifiees.autoAcceptPsychologist();
-};
-
-const autoVerifyPsychologists = async ():Promise<void> => {
-  demarchesSimplifiees.autoVerifyPsychologist();
-};
-
 export default {
   importEveryDataFromDSToPG: async (): Promise<boolean> => importDataFromDSToPG(true),
   importLatestDataFromDSToPG: async (): Promise<boolean> => importDataFromDSToPG(false),
   checkForMultipleAcceptedDossiers,
-  autoAcceptPsychologists,
-  autoVerifyPsychologists,
+  autoAcceptPsychologists: async (): Promise<void> => autoAcceptPsychologists(),
+  autoVerifyPsychologists: async (): Promise<void> => autoVerifyPsychologists(),
 };
