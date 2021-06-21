@@ -71,43 +71,47 @@ const verifyPsychologist = (psychologist, adeliInfo) => {
 };
 
 const autoVerifyPsychologists = async () => {
-  const dossiersInConstruction = await getAllPsychologistList(
-    (cursor) => graphql.getDossiersWithAnnotationsAndMessages(cursor, DOSSIER_STATE.en_construction),
-  );
-  console.log(`${dossiersInConstruction.psychologists.length} psychologists are in construction`);
-
-  const dossiersToBeVerified = dossiersInConstruction.psychologists
-    .filter(
-      (psychologist) => {
-        const isVerified = psychologist.annotations
-          .find((annotation) => annotation.id === getAnnotationsIdFromField('verifiee'))
-          .stringValue === 'true';
-        const hasVerificationNote = psychologist.annotations
-          .find((annotation) => annotation.id === getAnnotationsIdFromField('message'))
-          .stringValue !== '';
-        const hasMessage = psychologist.messages.length > 1; // There is always one message (submission confirmation)
-        return !isVerified && !hasVerificationNote && !hasMessage;
-      },
+  try {
+    const dossiersInConstruction = await getAllPsychologistList(
+      (cursor) => graphql.getDossiersWithAnnotationsAndMessages(cursor, DOSSIER_STATE.en_construction),
     );
-  console.log(`${dossiersToBeVerified.length} psychologists needs verification`);
+    console.log(`${dossiersInConstruction.psychologists.length} psychologists are in construction`);
 
-  if (dossiersToBeVerified.length > 0) {
-    let countAutoVerify = 0;
+    const dossiersToBeVerified = dossiersInConstruction.psychologists
+      .filter(
+        (psychologist) => {
+          const isVerified = psychologist.annotations
+            .find((annotation) => annotation.id === getAnnotationsIdFromField('verifiee'))
+            .stringValue === 'true';
+          const hasVerificationNote = psychologist.annotations
+            .find((annotation) => annotation.id === getAnnotationsIdFromField('message'))
+            .stringValue !== '';
+          const hasMessage = psychologist.messages.length > 1; // There is always one message (submission confirmation)
+          return !isVerified && !hasVerificationNote && !hasMessage;
+        },
+      );
+    console.log(`${dossiersToBeVerified.length} psychologists needs verification`);
 
-    const adeliChampId = getChampsIdFromField('adeli');
-    const adeliIds = dossiersToBeVerified
-      .map((psychologist) => psychologist.champs.find((x) => x.id === adeliChampId))
-      .filter((adeli) => adeli)
-      .map((adeli) => adeli.stringValue);
-    const adeliInfo = await getAdeliInfo(adeliIds);
+    if (dossiersToBeVerified.length > 0) {
+      let countAutoVerify = 0;
 
-    dossiersToBeVerified.forEach((psychologist) => {
-      const isVerified = verifyPsychologist(psychologist, adeliInfo);
-      if (isVerified) {
-        countAutoVerify++;
-      }
-    });
-    console.log(`${countAutoVerify} have been auto verified`);
+      const adeliChampId = getChampsIdFromField('adeli');
+      const adeliIds = dossiersToBeVerified
+        .map((psychologist) => psychologist.champs.find((x) => x.id === adeliChampId))
+        .filter((adeli) => adeli)
+        .map((adeli) => adeli.stringValue);
+      const adeliInfo = await getAdeliInfo(adeliIds);
+
+      dossiersToBeVerified.forEach((psychologist) => {
+        const isVerified = verifyPsychologist(psychologist, adeliInfo);
+        if (isVerified) {
+          countAutoVerify++;
+        }
+      });
+      console.log(`${countAutoVerify} have been auto verified`);
+    }
+  } catch (err) {
+    console.error('An error occured in autoVerifyPsychologists job', err);
   }
 };
 
