@@ -9,7 +9,7 @@ const {
     getAnnotationsIdFromField,
   },
 } = require('../champsAndAnnotations');
-const { getAllPsychologistList } = require('./demarchesSimplifiees');
+const { getAllPsychologistList } = require('./importDossier');
 
 const getDiplomaErrors = (psychologist) => {
   const errors = [];

@@ -8,7 +8,7 @@ const {
     getAnnotationsIdFromField,
   },
 } = require('../champsAndAnnotations');
-const { getAllPsychologistList } = require('./demarchesSimplifiees');
+const { getAllPsychologistList } = require('./importDossier');
 const { default: uploadDocument } = require('./uploadDocument');
 
 const FILE = path.join(__dirname, '..', '..', 'static', 'documents', 'parcours_psychologue_sante_psy_etudiant.pdf');

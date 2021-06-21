@@ -5,7 +5,7 @@ const config = require('../utils/config');
 const dbPsychologists = require('../db/psychologists');
 const dbUniversities = require('../db/universities');
 const dbDsApiCursor = require('../db/dsApiCursor');
-const demarchesSimplifiees = require('../services/demarchesSimplifiees/demarchesSimplifiees');
+const importDossier = require('../services/demarchesSimplifiees/importDossier');
 const emailUtils = require('../utils/email');
 
 const {
@@ -42,7 +42,7 @@ describe('Import Data from DS to PG', () => {
     };
     getLatestCursorSavedStub = sinon.stub(dbDsApiCursor, 'getLatestCursorSaved')
       .returns(Promise.resolve(cursor));
-    getPsychologistListStub = sinon.stub(demarchesSimplifiees, 'getPsychologistList')
+    getPsychologistListStub = sinon.stub(importDossier, 'getPsychologistList')
       .returns(Promise.resolve(dsApiData));
     savePsychologistInPGStub = sinon.stub(dbPsychologists, 'savePsychologistInPG')
       .returns(Promise.resolve());

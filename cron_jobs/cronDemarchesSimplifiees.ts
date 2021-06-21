@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import ejs from 'ejs';
 import dbsApiCursor from '../db/dsApiCursor';
 import dbPsychologists from '../db/psychologists';
-import demarchesSimplifiees from '../services/demarchesSimplifiees/demarchesSimplifiees';
+import importDossier from '../services/demarchesSimplifiees/importDossier';
 import autoVerify from '../services/demarchesSimplifiees/autoVerify';
 import autoAccept from '../services/demarchesSimplifiees/autoAccept';
 import config from '../utils/config';
@@ -20,7 +20,7 @@ async function importDataFromDSToPG(updateEverything = false) {
     console.log('Starting importDataFromDSToPG...');
     const latestCursorInPG = await dbsApiCursor.getLatestCursorSaved(updateEverything);
 
-    const dsAPIData = await demarchesSimplifiees.getPsychologistList(latestCursorInPG);
+    const dsAPIData = await importDossier.getPsychologistList(latestCursorInPG);
 
     if (dsAPIData.psychologists.length > 0) {
       await dbPsychologists.savePsychologistInPG(dsAPIData.psychologists);
