@@ -4,8 +4,8 @@ import ejs from 'ejs';
 import dbsApiCursor from '../db/dsApiCursor';
 import dbPsychologists from '../db/psychologists';
 import importDossier from '../services/demarchesSimplifiees/importDossier';
-import autoVerify from '../services/demarchesSimplifiees/autoVerify';
-import autoAccept from '../services/demarchesSimplifiees/autoAccept';
+import autoVerifyPsychologists from '../services/demarchesSimplifiees/autoVerify';
+import autoAcceptPsychologists from '../services/demarchesSimplifiees/autoAccept';
 import config from '../utils/config';
 import emailUtils from '../utils/email';
 
@@ -66,18 +66,10 @@ const checkForMultipleAcceptedDossiers = async (): Promise<boolean> => {
   return true;
 };
 
-const autoAcceptPsychologists = async (): Promise<void> => {
-  autoAccept.autoAcceptPsychologist();
-};
-
-const autoVerifyPsychologists = async ():Promise<void> => {
-  autoVerify.autoVerifyPsychologist();
-};
-
 export default {
   importEveryDataFromDSToPG: async (): Promise<boolean> => importDataFromDSToPG(true),
   importLatestDataFromDSToPG: async (): Promise<boolean> => importDataFromDSToPG(false),
   checkForMultipleAcceptedDossiers,
-  autoAcceptPsychologists,
-  autoVerifyPsychologists,
+  autoAcceptPsychologists: async (): Promise<void> => autoAcceptPsychologists(),
+  autoVerifyPsychologists: async (): Promise<void> => autoVerifyPsychologists(),
 };

@@ -70,7 +70,7 @@ const verifyPsychologist = (psychologist, adeliInfo) => {
   return false;
 };
 
-const autoVerifyPsychologist = async () => {
+const autoVerifyPsychologists = async () => {
   const dossiersInConstruction = await getAllPsychologistList(
     (cursor) => graphql.getDossiersWithAnnotationsAndMessages(cursor, DOSSIER_STATE.en_construction),
   );
@@ -111,4 +111,4 @@ const autoVerifyPsychologist = async () => {
   }
 };
 
-exports.autoVerifyPsychologist = autoVerifyPsychologist;
+module.exports = autoVerifyPsychologists;

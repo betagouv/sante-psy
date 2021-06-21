@@ -21,7 +21,7 @@ const sendAutoAcceptMessage = async (dossierId) => {
   console.log('message envoyé :', dossierEnvoyerMessage);
 };
 
-const autoAcceptPsychologist = async () => {
+const autoAcceptPsychologists = async () => {
   const list = await getAllPsychologistList(
     (cursor) => graphql.getSimplePsyInfo(cursor, DOSSIER_STATE.en_instruction),
   );
@@ -50,4 +50,4 @@ const autoAcceptPsychologist = async () => {
   console.log(`${countAutoAccept} have been auto accepted`);
 };
 
-exports.autoAcceptPsychologist = autoAcceptPsychologist;
+module.exports = autoAcceptPsychologists;

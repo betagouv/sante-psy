@@ -2,7 +2,7 @@ const rewire = require('rewire');
 const sinon = require('sinon');
 const config = require('../../utils/config');
 
-const autoAccept = rewire('../../services/demarchesSimplifiees/autoAccept');
+const autoAcceptPsychologists = rewire('../../services/demarchesSimplifiees/autoAccept');
 const graphql = rewire('../../utils/graphql');
 
 describe('autoAcceptPsychologist', () => {
@@ -16,8 +16,8 @@ describe('autoAcceptPsychologist', () => {
     uploadDocumentStub = sinon.stub();
     uploadDocumentStub.returns('un super id');
     unsets.push(graphql.__set__('executeMutation', executeMutationStub));
-    unsets.push(autoAccept.__set__('graphql', graphql));
-    unsets.push(autoAccept.__set__('uploadDocument', uploadDocumentStub));
+    unsets.push(autoAcceptPsychologists.__set__('graphql', graphql));
+    unsets.push(autoAcceptPsychologists.__set__('uploadDocument', uploadDocumentStub));
   });
 
   afterEach((done) => {
@@ -27,7 +27,7 @@ describe('autoAcceptPsychologist', () => {
 
   it('Should accept 1 dossier on DS', async () => {
     const dossierId = 'RG9zc2llci00NzU2Mzc4';
-    await autoAccept.autoAcceptPsychologist();
+    await autoAcceptPsychologists();
 
     sinon.assert.calledWith(uploadDocumentStub, sinon.match.string, dossierId);
     sinon.assert.called(executeMutationStub);
