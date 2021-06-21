@@ -1,7 +1,7 @@
 const graphql = require('../../utils/graphql');
 const date = require('../../utils/date');
 const { DOSSIER_STATE } = require('../../utils/dossierState');
-const { default: { getAdeliInfo } } = require('../../utils/adeliAPI');
+const { getAdeliInfo } = require('../../utils/adeliAPI');
 const { default: { areSimilar } } = require('../../utils/string');
 const {
   default: {
