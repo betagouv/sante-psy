@@ -41,7 +41,7 @@ const request = async (query, variables) => {
 
   try {
     const result = await graphQLClient.request(query, variables);
-    console.debug('GraphQL result: ', result);
+    console.debug('GraphQL query result:', result);
     return result;
   } catch (err) {
     console.error('API has returned error', err);

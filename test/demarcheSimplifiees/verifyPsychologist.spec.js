@@ -144,11 +144,11 @@ describe('verifyPsychologist', () => {
   });
 
   const verifyPsychologist = autoVerify.__get__('verifyPsychologist');
-  it('Should call addVerificationMessage, verifyDossier and putDossierInInstruction if no errors', () => {
+  it('Should call addVerificationMessage, verifyDossier and putDossierInInstruction if no errors', async () => {
     getAdeliErrorsStub.returns([]);
     getDiplomaErrorsStub.returns([]);
 
-    const result = verifyPsychologist({ id: 123 }, {});
+    const result = await verifyPsychologist({ id: 123 }, {});
 
     result.should.equals(true);
     sinon.assert.called(getAdeliErrorsStub);
@@ -161,11 +161,11 @@ describe('verifyPsychologist', () => {
     sinon.assert.calledWith(putDossierInInstructionStub, 123);
   });
 
-  it('Should call addVerificationMessage if errors', () => {
+  it('Should call addVerificationMessage if errors', async () => {
     getAdeliErrorsStub.returns(['error 1', 'error 2']);
     getDiplomaErrorsStub.returns(['error 3', 'error 4']);
 
-    const result = verifyPsychologist({ id: 123 }, {});
+    const result = await verifyPsychologist({ id: 123 }, {});
 
     result.should.equals(false);
     sinon.assert.called(getAdeliErrorsStub);

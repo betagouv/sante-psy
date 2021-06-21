@@ -55,7 +55,7 @@ scalingo -app APP_NAME run --file <nom_de_ton_fichier> bash
 #### Executer un cron manuellement
 ```
 scalingo -app APP_NAME run bash
-> ts-node cron/launch.ts <nom_du_job>
+> ts-node cron_jobs/launch.ts <nom_du_job>
 ```
 
 #### Ajout de la correspondance entre université et psychologues

@@ -28,7 +28,7 @@ const autoAcceptPsychologists = async () => {
     );
     console.log(`${list.psychologists.length} psychologists are in instruction`);
     let countAutoAccept = 0;
-    list.psychologists
+    await Promise.all(list.psychologists
       .filter(
         (psychologist) => {
           const departement = psychologist.champs
@@ -40,14 +40,14 @@ const autoAcceptPsychologists = async () => {
           return isVerified === 'true' && config.demarchesSimplifieesAutoAcceptDepartments.includes(departement);
         },
       )
-      .forEach(
-        (psychologist) => {
-          graphql.acceptPsychologist(psychologist.id);
-          sendAutoAcceptMessage(psychologist.id);
+      .map(
+        async (psychologist) => {
+          await graphql.acceptPsychologist(psychologist.id);
+          await sendAutoAcceptMessage(psychologist.id);
           console.debug(`Auto accept psychologist ${psychologist.id}`);
           countAutoAccept++;
         },
-      );
+      ));
     console.log(`${countAutoAccept} have been auto accepted`);
   } catch (err) {
     console.error('An error occured in autoAcceptPsychologists job', err);
