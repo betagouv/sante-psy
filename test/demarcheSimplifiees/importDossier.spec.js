@@ -1,19 +1,19 @@
 require('dotenv').config();
 const rewire = require('rewire');
 const testDossiers = require('./dossier.json');
-const uuid = require('../utils/uuid');
-const config = require('../utils/config');
+const uuid = require('../../utils/uuid');
+const config = require('../../utils/config');
 
-const demarchesSimplifiees = rewire('../services/demarchesSimplifiees.js');
+const importDossier = rewire('../../services/demarchesSimplifiees/importDossier');
 
 describe('Demarches Simplifiees', () => {
   describe('parsePsychologists', () => {
     it('should return an array of psychologists from a JSON', async () => {
       const apiResponse = testDossiers;
 
-      const getUuidDossierNumber = demarchesSimplifiees.__get__('getUuidDossierNumber');
+      const getUuidDossierNumber = importDossier.__get__('getUuidDossierNumber');
 
-      const parsePsychologists = demarchesSimplifiees.__get__('parsePsychologists');
+      const parsePsychologists = importDossier.__get__('parsePsychologists');
       const output = parsePsychologists(apiResponse);
       // eslint-disable-next-line max-len
       const description = "Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.";
@@ -70,7 +70,7 @@ describe('Demarches Simplifiees', () => {
     it('should return a uuid based on the given id', async () => {
       const dossierNumber = 1;
 
-      const getUuidDossierNumber = demarchesSimplifiees.__get__('getUuidDossierNumber');
+      const getUuidDossierNumber = importDossier.__get__('getUuidDossierNumber');
       const output = getUuidDossierNumber(dossierNumber);
       const result = uuid.generateUuidFromString(`${config.demarchesSimplifieesId}-${dossierNumber}`);
 
@@ -82,7 +82,7 @@ describe('Demarches Simplifiees', () => {
     it('should return an array of a string if only one element', async () => {
       const apiResponse = 'training1';
 
-      const parseTraining = demarchesSimplifiees.__get__('parseTraining');
+      const parseTraining = importDossier.__get__('parseTraining');
       const output = parseTraining(apiResponse);
 
       output.should.equal(JSON.stringify([apiResponse]));
@@ -91,7 +91,7 @@ describe('Demarches Simplifiees', () => {
     it('should return an array of several strings if multiples specialities/Trainings', async () => {
       const apiResponse = 'training1, training2';
 
-      const parseTraining = demarchesSimplifiees.__get__('parseTraining');
+      const parseTraining = importDossier.__get__('parseTraining');
       const output = parseTraining(apiResponse);
 
       output.should.equal(JSON.stringify(['training1', 'training2']));

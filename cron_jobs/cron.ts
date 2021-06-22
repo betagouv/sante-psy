@@ -68,6 +68,7 @@ const jobs = [
     onTick: cronPsychologists.reactivatePsychologists,
     start: true,
     timeZone: 'Europe/Paris',
+    isActive: true,
     name: 'Check active boolean on every Psychologist',
   },
 ];

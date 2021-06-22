@@ -31,6 +31,7 @@ module.exports = (apiUrl) => Object.assign({}, baseConfig, {
       new webpack.ProgressPlugin(),
       new webpack.DefinePlugin({
         __API__: apiUrl ? apiUrl : '"http://localhost:8080"',
+        __MATOMO__: false,
       }),
       new BundleAnalyzerPlugin({
         analyzerMode: 'static',

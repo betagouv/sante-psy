@@ -9,6 +9,8 @@ module.exports = {
     browser: true,
   },
   globals: {
+    _paq: false,
+    __MATOMO__: false,
     __API__: false,
     __APPNAME__: false,
   },

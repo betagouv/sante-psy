@@ -46,6 +46,7 @@ module.exports = Object.assign({}, baseConfig, {
     plugins: baseConfig.plugins.concat([
       new webpack.DefinePlugin({
         __API__: '"http://localhost:8080"',
+        __MATOMO__: false,
       }),
       new webpack.HotModuleReplacementPlugin()
     ]),

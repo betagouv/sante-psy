@@ -1,7 +1,7 @@
 const rewire = require('rewire');
 const sinon = require('sinon');
 
-const demarchesSimplifiees = rewire('../../services/demarchesSimplifiees');
+const autoVerify = rewire('../../services/demarchesSimplifiees/autoVerify');
 const graphql = require('../../utils/graphql');
 
 describe('getDiplomaErrors', () => {
@@ -12,7 +12,7 @@ describe('getDiplomaErrors', () => {
     }],
   });
 
-  const getDiplomaErrors = demarchesSimplifiees.__get__('getDiplomaErrors');
+  const getDiplomaErrors = autoVerify.__get__('getDiplomaErrors');
   it('Should refuse empty diploma', () => {
     const psychologist = createPsyWithDiploma('2000', 'random');
 
@@ -73,7 +73,7 @@ describe('getAdeliErrors', () => {
     },
   });
 
-  const getAdeliErrors = demarchesSimplifiees.__get__('getAdeliErrors');
+  const getAdeliErrors = autoVerify.__get__('getAdeliErrors');
   it('Should refuse missing adeli number', () => {
     const psychologist = createPsy('jane', 'doe', 'non existing');
 
@@ -131,8 +131,8 @@ describe('verifyPsychologist', () => {
     addVerificationMessageStub = sinon.stub(graphql, 'addVerificationMessage');
     verifyDossierStub = sinon.stub(graphql, 'verifyDossier');
     putDossierInInstructionStub = sinon.stub(graphql, 'putDossierInInstruction');
-    unsets.push(demarchesSimplifiees.__set__('getAdeliErrors', getAdeliErrorsStub));
-    unsets.push(demarchesSimplifiees.__set__('getDiplomaErrors', getDiplomaErrorsStub));
+    unsets.push(autoVerify.__set__('getAdeliErrors', getAdeliErrorsStub));
+    unsets.push(autoVerify.__set__('getDiplomaErrors', getDiplomaErrorsStub));
   });
 
   afterEach((done) => {
@@ -143,12 +143,12 @@ describe('verifyPsychologist', () => {
     done();
   });
 
-  const verifyPsychologist = demarchesSimplifiees.__get__('verifyPsychologist');
-  it('Should call addVerificationMessage, verifyDossier and putDossierInInstruction if no errors', () => {
+  const verifyPsychologist = autoVerify.__get__('verifyPsychologist');
+  it('Should call addVerificationMessage, verifyDossier and putDossierInInstruction if no errors', async () => {
     getAdeliErrorsStub.returns([]);
     getDiplomaErrorsStub.returns([]);
 
-    const result = verifyPsychologist({ id: 123 }, {});
+    const result = await verifyPsychologist({ id: 123 }, {});
 
     result.should.equals(true);
     sinon.assert.called(getAdeliErrorsStub);
@@ -161,11 +161,11 @@ describe('verifyPsychologist', () => {
     sinon.assert.calledWith(putDossierInInstructionStub, 123);
   });
 
-  it('Should call addVerificationMessage if errors', () => {
+  it('Should call addVerificationMessage if errors', async () => {
     getAdeliErrorsStub.returns(['error 1', 'error 2']);
     getDiplomaErrorsStub.returns(['error 3', 'error 4']);
 
-    const result = verifyPsychologist({ id: 123 }, {});
+    const result = await verifyPsychologist({ id: 123 }, {});
 
     result.should.equals(false);
     sinon.assert.called(getAdeliErrorsStub);
