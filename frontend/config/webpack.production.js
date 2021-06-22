@@ -28,6 +28,7 @@ module.exports = (apiUrl) => Object.assign({}, baseConfig, {
     plugins: baseConfig.plugins.concat([
       new webpack.DefinePlugin({
         __API__: apiUrl,
+        __MATOMO__: process.env.ACTIVATE_MATOMO,
       }),
     ]),
 });

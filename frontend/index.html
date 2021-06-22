@@ -5,6 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <!-- Matomo -->
+  <script type="text/javascript">
+    var _paq = window._paq || [];
+    (function() {
+      var u="https://stats.data.gouv.fr/";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', 160]);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  <!-- End Matomo Code -->
 </head>
 
 <body>
@@ -13,18 +25,4 @@
   </noscript>
   <div id="root" style="height:100%"></div>
 </body>
-<!-- Matomo -->
-<script type="text/javascript">
-  var _paq = window._paq = window._paq || [];
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="https://stats.data.gouv.fr/";
-    _paq.push(['setTrackerUrl', u+'matomo.js']);
-    _paq.push(['setSiteId', 160]);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<!-- End Matomo Code -->
 </html>

@@ -44,7 +44,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Matomo />
+      {__MATOMO__ && <Matomo />}
       <Header />
       <ScrollToTop />
       <div id="contenu">
