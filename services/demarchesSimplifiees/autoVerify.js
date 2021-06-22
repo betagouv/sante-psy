@@ -51,7 +51,7 @@ const getAdeliErrors = (psychologist, adeliInfo) => {
   return errors;
 };
 
-const verifyPsychologist = (psychologist, adeliInfo) => {
+const verifyPsychologist = async (psychologist, adeliInfo) => {
   const today = date.toFormatDDMMYYYY(new Date());
 
   const errors = []
@@ -59,13 +59,16 @@ const verifyPsychologist = (psychologist, adeliInfo) => {
   .concat(getAdeliErrors(psychologist, adeliInfo));
 
   if (errors.length === 0) {
-    graphql.addVerificationMessage(psychologist.id, `Dossier vérifié automatiquement le ${today}`);
-    graphql.verifyDossier(psychologist.id);
-    graphql.putDossierInInstruction(psychologist.id);
+    const verificationMessage = graphql.addVerificationMessage(
+      psychologist.id, `Dossier vérifié automatiquement le ${today}`,
+    );
+    const verifyDossier = graphql.verifyDossier(psychologist.id);
+    const putDossierInInstruction = graphql.putDossierInInstruction(psychologist.id);
+    await Promise.all([verificationMessage, verifyDossier, putDossierInInstruction]);
     return true;
   }
 
-  graphql.addVerificationMessage(psychologist.id,
+  await graphql.addVerificationMessage(psychologist.id,
     `Le dossier n'a pas passé la vérification automatique le ${today} car ${errors}`);
   return false;
 };
@@ -102,12 +105,13 @@ const autoVerifyPsychologists = async () => {
         .map((adeli) => adeli.stringValue);
       const adeliInfo = await getAdeliInfo(adeliIds);
 
-      dossiersToBeVerified.forEach((psychologist) => {
-        const isVerified = verifyPsychologist(psychologist, adeliInfo);
+      await Promise.all(dossiersToBeVerified.map(async (psychologist) => {
+        const isVerified = await verifyPsychologist(psychologist, adeliInfo);
         if (isVerified) {
           countAutoVerify++;
         }
-      });
+      }));
+
       console.log(`${countAutoVerify} have been auto verified`);
     }
   } catch (err) {
