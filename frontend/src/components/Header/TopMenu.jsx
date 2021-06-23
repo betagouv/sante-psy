@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 import { useStore } from 'stores/';
 
 const TopMenu = ({ buttonStyle, close }) => {
-  const { userStore: { logout } } = useStore();
+  const { userStore: { setToken } } = useStore();
   return (
     <ul className="fr-links-group">
       <li>
@@ -15,7 +15,7 @@ const TopMenu = ({ buttonStyle, close }) => {
               data-test-id="logout-button"
               type="button"
               className="fr-link"
-              onClick={() => logout()}
+              onClick={() => setToken(null)}
             >
               Déconnexion
             </button>
@@ -25,7 +25,7 @@ const TopMenu = ({ buttonStyle, close }) => {
             <Link
               to="/"
               className="fr-link"
-              onClick={() => { logout(); close(); }}
+              onClick={() => { setToken(null); close(); }}
             >
               Déconnexion
             </Link>

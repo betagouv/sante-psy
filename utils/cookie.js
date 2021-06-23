@@ -58,6 +58,7 @@ module.exports.clearJwtCookie = (res) => {
 const verifyJwt = function verifyJwt(token) {
   try {
     const verified = jwt.verify(token, config.secret);
+    console.log('VERIFY JWT', verified);
     return verified;
   } catch (err) {
     console.debug('invalid token');
@@ -71,6 +72,7 @@ module.exports.verifyJwt = verifyJwt;
  */
 module.exports.getCurrentPsyId = (req) => {
   const jwtToken = req.cookies.token;
+  console.log('BONJOUR, TU PASSE PAR LA TOI ?', jwtToken);
   const tokenData = verifyJwt(jwtToken);
 
   if (!tokenData) {

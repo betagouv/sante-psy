@@ -50,7 +50,7 @@ function App() {
       <Header />
       <ScrollToTop />
       {user && <Announcement />}
-      {loading && (
+      {!loading && (
         <Switch>
           {user && [
             <Route key="appointments" exact path="/psychologue/mes-seances" component={Appointments} />,

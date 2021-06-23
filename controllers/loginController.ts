@@ -83,24 +83,32 @@ const deleteToken = async (req: Request, res: Response): Promise<void> => {
 };
 
 const connectedUser = async (req: Request, res: Response): Promise<void> => {
-  const currentPsyId = await cookie.getCurrentPsyId(req);
-  console.log('currentPsyId', currentPsyId);
-  const psy = await dbPsychologists.getPsychologistById(currentPsyId);
-  console.log('TEST PSY', psy);
-  if (psy) {
-    const { firstNames, lastName, email } = psy;
-    res.json({
-      firstNames,
-      lastName,
-      email,
-    });
-  } else {
-    res.json();
+  console.log('Coucou ! connectedUser backend controller');
+  try {
+    const currentPsyId = await cookie.getCurrentPsyId(req); // throws on invalid cookie
+    console.log('currentPsyId', currentPsyId);
+    const psy = await dbPsychologists.getPsychologistById(currentPsyId);
+    console.log('TEST PSY', psy); console.log('Coucou ! connectedUser backend controller');
+    if (psy) {
+      const { firstNames, lastName, email } = psy;
+      res.json({
+        firstNames,
+        lastName,
+        email,
+      });
+      return;
+    }
+    // psy doesn't exist in db
+    console.error('PsyId found in request cookie does not exist in db.');
+    res.json({ success: false }); // todo error ?
+  } catch (err) {
+    console.error('error trying to get connecteduser');
+    res.json(); // todo : return error code ? What does frontend do here ? ;
   }
 };
 
 const login = async (req: Request, res: Response): Promise<void> => {
-  console.log('SALUUUUUUUUUUUUUUUUUUUT');
+  console.log('loginController.login SALUUUUUUUUUUUUUUUUUUUT');
   // Save a token that expire after config.sessionDurationHours hours if user is logged
   console.log('query params', req.query);
   if (req.query.token) {
@@ -112,11 +120,12 @@ const login = async (req: Request, res: Response): Promise<void> => {
       const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
       console.log('dbTOKEN', dbToken.email);
       console.log('psyDATA', psychologistData.dossierNumber);
+      cookie.clearJwtCookie(res);
       cookie.createAndSetJwtCookie(res, dbToken.email, psychologistData.dossierNumber);
       await dbLoginToken.delete(token);
       console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
-      // res.cookie('token', newToken, { sameSite: 'lax', secure: config.isSecure, httpOnly: true });
-      return res.redirect('/psychologue/mes-seances');
+      res.json({ success: true });
+      return;
     }
 
     console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);

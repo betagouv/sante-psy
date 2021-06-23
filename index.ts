@@ -90,6 +90,7 @@ app.use('/api/*',
       '/api/psychologue/sendMail',
       '/api/psychologue/login',
       '/api/psychologue/logout',
+      '/api/connecteduser',
     ],
   }));
 
@@ -125,8 +126,8 @@ app.post('/api/psychologue/sendMail',
   loginController.emailValidators,
   loginController.sendMail);
 // app.get('/psychologue/login', loginController.getLogin);
-app.get('/psychologue/login', speedLimiterLogin, loginController.login);
-app.get('/connecteduser', speedLimiter, loginController.connectedUser);
+app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
+app.get('/api/connecteduser', speedLimiter, loginController.connectedUser);
 app.get('/psychologue/logout', speedLimiter, loginController.deleteToken);
 
 app.get('/api/appointments', appointmentsController.getAppointments);

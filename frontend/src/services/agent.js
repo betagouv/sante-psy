@@ -69,7 +69,7 @@ const Reimbursement = {
 
 const User = {
   getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),
-  login: () => client.get('/psychologue/login'),
+  login: token => client.post('/api/psychologue/login', { token }),
   sendMail: email => client.post('/psychologue/sendMail', { email }),
   logout: () => client.get('/psychologue/logout'),
 };
