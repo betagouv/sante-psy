@@ -31,7 +31,7 @@ function generateToken() {
 async function sendLoginEmail(email: string, loginUrl: string, token: string) {
   try {
     const html = await ejs.renderFile('./views/emails/login.ejs', {
-      loginUrlWithToken: `${loginUrl}?token=${encodeURIComponent(token)}`,
+      loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
       appName: config.appName,
       loginUrl,
     });
@@ -110,9 +110,9 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
 const login = async (req: Request, res: Response): Promise<void> => {
   console.log('loginController.login SALUUUUUUUUUUUUUUUUUUUT');
   // Save a token that expire after config.sessionDurationHours hours if user is logged
-  console.log('query params', req.query);
-  if (req.query.token) {
-    const token = req.sanitize((String)(req.query.token));
+  console.log('query params', req.body);
+  if (req.body.token) {
+    const token = req.sanitize((String)(req.body.token));
     console.log('TEST', token);
     const dbToken = await dbLoginToken.getByToken(token);
 
@@ -120,7 +120,6 @@ const login = async (req: Request, res: Response): Promise<void> => {
       const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
       console.log('dbTOKEN', dbToken.email);
       console.log('psyDATA', psychologistData.dossierNumber);
-      cookie.clearJwtCookie(res);
       cookie.createAndSetJwtCookie(res, dbToken.email, psychologistData.dossierNumber);
       await dbLoginToken.delete(token);
       console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);

@@ -39,7 +39,7 @@ function App() {
 
   useEffect(() => {
     pullUser().then(() => setLoading(false));
-  });
+  }, []);
 
   useEffect(() => {
     document.title = config.appName ? config.appName : __APPNAME__;

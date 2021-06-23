@@ -12,7 +12,7 @@ import agent from 'services/agent';
 const Login = () => {
   const {
     commonStore: { config, setNotification },
-    userStore: { setToken, user, isTokenExpired, token: existingToken, pullUser },
+    userStore: { user, isTokenExpired, pullUser },
   } = useStore();
   const { token } = useParams();
   const history = useHistory();
@@ -24,17 +24,13 @@ const Login = () => {
 
   useEffect(() => {
     if (token) { // token recupéré dans les params
-      setToken();
       // todo :
       //    - changer a lroute du loginController.login : POST /api/psychologue/login -> done.
       agent.User.login(token)
-        .then(loginInfo => {
-          setToken(loginInfo.token);
+        .then(() => {
           pullUser();
           history.push('/psychologue/mes-seances');
         });
-      pullUser();
-      history.push('/psychologue/mes-seances');
       //    - appeler User.getConnected() : ca appelle POST /api/psychologue/login et ca crée un cookie (on doit le voir dans les devtools) (agent.User.getConnected())
       //    - rappeler userStore.pullUser (pour refaire l'appel à /api/connecteduser)
       //    - history.push('/psychologue/mes-seances');

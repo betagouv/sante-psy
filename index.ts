@@ -40,7 +40,7 @@ if (!config.activateDebug) {
 app.use(cspConfig);
 
 if (config.useCors) {
-  app.use(cors({ origin: 'http://localhost:3000' }));
+  app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 }
 
 if (config.testEnvironment) {

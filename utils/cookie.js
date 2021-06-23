@@ -44,7 +44,7 @@ module.exports.getJwtTokenForUser = getJwtTokenForUser;
 module.exports.createAndSetJwtCookie = (res, email, psychologistData) => {
   const cookie = getJwtTokenForUser(email, psychologistData);
   console.log('cookie', cookie);
-  res.cookie('token', cookie, headers);
+  res.cookie('token', cookie);
 };
 
 module.exports.clearJwtCookie = (res) => {
@@ -71,6 +71,7 @@ module.exports.verifyJwt = verifyJwt;
  *  Get currently logged in psy's id
  */
 module.exports.getCurrentPsyId = (req) => {
+  console.log('cookies', req.cookies);
   const jwtToken = req.cookies.token;
   console.log('BONJOUR, TU PASSE PAR LA TOI ?', jwtToken);
   const tokenData = verifyJwt(jwtToken);

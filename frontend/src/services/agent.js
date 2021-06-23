@@ -8,14 +8,7 @@ const createClient = () => {
     paramsSerializer(params) {
       return Qs.stringify(params, { arrayFormat: 'repeat' });
     },
-  });
-
-  simpleClient.interceptors.request.use(config => {
-    const { token } = store.userStore;
-    if (token) {
-      config.headers = { Authorization: `Bearer ${token}` };
-    }
-    return config;
+    withCredentials: true,
   });
 
   return simpleClient;
@@ -69,7 +62,7 @@ const Reimbursement = {
 
 const User = {
   getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),
-  login: token => client.post('/api/psychologue/login', { token }),
+  login: token => client.post('/psychologue/login', { token }),
   sendMail: email => client.post('/psychologue/sendMail', { email }),
   logout: () => client.get('/psychologue/logout'),
 };
