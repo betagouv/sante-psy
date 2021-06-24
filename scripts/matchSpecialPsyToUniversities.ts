@@ -50,9 +50,10 @@ const matchPsyToUni = async (dryRun) => {
         return Promise.resolve();
       }
 
+      const currentUniversity = universities.find((uni) => uni.id === psy.assignedUniversityId);
       statsAssignmentDone.push({
         psy: psy.personalEmail,
-        uniFrom: universities.find((uni) => uni.id === psy.assignedUniversityId).name,
+        uniFrom: currentUniversity ? currentUniversity.name : '',
         uniTo: universityToAssign.name,
       });
 
