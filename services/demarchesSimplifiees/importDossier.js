@@ -1,7 +1,7 @@
 const graphql = require('../../utils/graphql');
 const uuid = require('../../utils/uuid');
 const config = require('../../utils/config');
-const { default: { getChampsFieldFromId } } = require('../champsAndAnnotations');
+const { getChampsFieldFromId } = require('../champsAndAnnotations');
 
 /**
  * transform string to boolean
@@ -77,7 +77,7 @@ function parsePsychologists(psychologists) {
  * @param {*} cursor
  * @param {*} accumulator
  */
-async function getAllPsychologistList(graphqlFunction, cursor, accumulator = []) {
+async function getAllPsychologistList(graphqlFunction, cursor = undefined, accumulator = []) {
   const apiResponse = await graphqlFunction(cursor);
 
   const { pageInfo, nodes } = apiResponse.demarche.dossiers;

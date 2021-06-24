@@ -8,6 +8,4 @@ const simplify = (value: string) : string => value
 
 const areSimilar = (value1: string, value2: string): boolean => simplify(value1) === simplify(value2);
 
-export default {
-  areSimilar,
-};
+export default areSimilar;

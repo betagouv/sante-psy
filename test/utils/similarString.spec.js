@@ -1,4 +1,4 @@
-const { default: { areSimilar } } = require('../../utils/string');
+const { default: areSimilar } = require('../../utils/similarString');
 
 describe('String utils', () => {
   const tests = [

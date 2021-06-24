@@ -1,8 +1,8 @@
 const rewire = require('rewire');
 const sinon = require('sinon');
 const config = require('../../utils/config');
+const autoVerifyPsychologists = require('../../services/demarchesSimplifiees/autoVerify');
 
-const autoVerifyPsychologists = rewire('../../services/demarchesSimplifiees/autoVerify');
 const graphql = rewire('../../utils/graphql');
 
 describe('autoVerifyPsychologist', () => {
@@ -13,16 +13,17 @@ describe('autoVerifyPsychologist', () => {
     unsets = [];
     executeMutationStub = sinon.stub();
     unsets.push(graphql.__set__('executeMutation', executeMutationStub));
-    unsets.push(autoVerifyPsychologists.__set__('graphql', graphql));
+    autoVerifyPsychologists.__Rewire__('graphql', graphql);
   });
 
   afterEach((done) => {
+    autoVerifyPsychologists.__ResetDependency__('graphql');
     unsets.forEach((unset) => unset());
     done();
   });
 
   it('Should execute 4 mutations on DS', async () => {
-    await autoVerifyPsychologists();
+    await autoVerifyPsychologists.default();
 
     sinon.assert.callCount(executeMutationStub, 4);
 

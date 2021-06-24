@@ -1,6 +1,6 @@
 const { gql, GraphQLClient } = require('graphql-request');
 const config = require('./config');
-const { default: { getChampsIdFromField, getAnnotationsIdFromField } } = require('../services/champsAndAnnotations');
+const { getChampsIdFromField, getAnnotationsIdFromField } = require('../services/champsAndAnnotations');
 
 const endpoint = config.apiUrl;
 const graphQLClient = new GraphQLClient(endpoint, {

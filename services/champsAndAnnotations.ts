@@ -19,7 +19,7 @@ const getChampsIdFromField = (field: string) : string => champs.fieldToId[field]
 const getAnnotationsFieldFromId = (id: string) : string => annotations.idToField[id];
 const getAnnotationsIdFromField = (field: string) : string => annotations.fieldToId[field];
 
-export default {
+export {
   getAnnotationsFieldFromId,
   getAnnotationsIdFromField,
   getChampsFieldFromId,
