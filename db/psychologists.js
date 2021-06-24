@@ -155,10 +155,12 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
     }
   });
 
-  upsertArray.push(
-    knex(psychologistsTable)
+  if (psychologistsToInsert.length > 0) {
+    upsertArray.push(
+      knex(psychologistsTable)
     .insert(psychologistsToInsert),
-  );
+    );
+  }
   const query = await Promise.all(upsertArray);
 
   console.log('UPSERT into PG : done');
