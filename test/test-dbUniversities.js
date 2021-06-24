@@ -52,30 +52,6 @@ describe('DB Universities', () => {
     });
   });
 
-  describe('getUniversityId', () => {
-    it('should get uni id for a name', async () => {
-      const output = dbUniversities.getUniversityId(universities, uniName);
-      output.should.be.equal(uniId);
-    });
-
-    it('should get undefined when unknown name', async () => {
-      const output = dbUniversities.getUniversityId(universities, 'pizza university');
-      assert.equal(output, undefined);
-    });
-  });
-
-  describe('getUniversityName', () => {
-    it('should get uni id for a name', async () => {
-      const output = dbUniversities.getUniversityName(universities, uniId);
-      output.should.be.equal(uniName);
-    });
-
-    it('should get undefined when unknown id', async () => {
-      const output = dbUniversities.getUniversityName(universities, 'pizzaId');
-      assert.equal(output, undefined);
-    });
-  });
-
   describe('getEmailsTo', () => {
     const emailUniversity1 = 'emailUniversity1@beta.gouv.fr';
     const emailUniversity2 = 'emailUniversity2@beta.gouv.fr';

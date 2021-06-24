@@ -60,9 +60,9 @@ scalingo -app APP_NAME run bash
 
 #### Ajout de la correspondance entre université et psychologues
 ```
-node scripts/matchPsychologistsToUniversities.js
-# handle special cases - need to update the confidential list inside "scripts/psyToUni.js" - @see support
-node scripts/matchSpecialPsyToUniversities.js
+# handle special cases - need to update the confidential list inside "scripts/psyToUni.js"
+# you can use `--dry-run` option to display the changes without applying them
+> ts-node scripts/matchSpecialPsyToUniversities.ts [--dry-run]
 ```
 
 #### Insérer les universités pour la production
@@ -71,7 +71,6 @@ Voir aussi le script "scaling-dev-seed.sh" lié à "scalingo.json" qui permet d'
 ```
 node scripts/insertUniversities.js # Insert into universities tables
 node scripts/insertEmailToUniversities.js test/seed/test-ssu-renew.csv # insert emails contacts from CSV files (need to ask support for rights)
-
 ```
 
 #### Exécuter les migrations
@@ -116,8 +115,8 @@ Avec [le scalingo CLI](https://doc.scalingo.com/cli) et le nom de l'app sur scal
 On peut insérer des données comme ceci :
 ```sql
 INSERT INTO public.psychologists
-("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, teleconsultation, description, languages, training, diploma, university, "declaredUniversityId", "createdAt", "updatedAt", archived, state, "personalEmail")
-VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli', 'firstname', 'lastname', 'publicemail@beta.gouv.fr', '', '', '', '', '', false, 'accfzfz', '', '[]', '', '', null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'private.email@beta.gouv.fr');
+("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, teleconsultation, description, languages, training, diploma, university, "createdAt", "updatedAt", archived, state, "personalEmail")
+VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli', 'firstname', 'lastname', 'publicemail@beta.gouv.fr', '', '', '', '', '', false, 'accfzfz', '', '[]', '', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'private.email@beta.gouv.fr');
 ```
 
 Autre solution : utiliser le code Node au lieu de SQL.

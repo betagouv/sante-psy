@@ -17,10 +17,10 @@ const FILE = path.join(
 
 const sendAutoAcceptMessage = async (dossierId) => {
   const uploadFileId = await uploadDocument(FILE, dossierId);
-  const { dossierEnvoyerMessage } = await graphql
+  const result = await graphql
     .sendMessageWithAttachment(config.demarchesSimplifieesAutoAcceptMessage, uploadFileId, dossierId);
 
-  console.log('message envoyé :', dossierEnvoyerMessage);
+  console.log('message envoyé :', result);
 };
 
 const autoAcceptPsychologists = async () => {

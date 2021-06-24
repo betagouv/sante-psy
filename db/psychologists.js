@@ -10,22 +10,13 @@ const {
   nonEditablePsyFields,
 } = require('../services/updatePsyFields');
 
-module.exports.getPsychologistsDeclaredUniversity = async () => {
+module.exports.getAcceptedPsychologists = async (selectedData) => {
   try {
-    const psychologists = knex.column(
-      knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
-      'firstNames',
-      'personalEmail',
-      'departement',
-      'dossierNumber',
-      'assignedUniversityId',
-      'declaredUniversityId',
-    )
+    const psychologists = knex.column(...selectedData)
         .select()
         .from(psychologistsTable)
         .whereNot('archived', true)
-        .where('state', DOSSIER_STATE.accepte)
-        .orderBy('dossierNumber');
+        .where('state', DOSSIER_STATE.accepte);
     return psychologists;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
