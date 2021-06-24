@@ -11,7 +11,9 @@ const {
 const { getAllPsychologistList } = require('./importDossier');
 const { default: uploadDocument } = require('./uploadDocument');
 
-const FILE = path.join(__dirname, '..', '..', 'static', 'documents', 'parcours_psychologue_sante_psy_etudiant.pdf');
+const FILE = path.join(
+  __dirname, '..', '..', '..', 'static', 'documents', 'parcours_psychologue_sante_psy_etudiant.pdf',
+);
 
 const sendAutoAcceptMessage = async (dossierId) => {
   const uploadFileId = await uploadDocument(FILE, dossierId);
