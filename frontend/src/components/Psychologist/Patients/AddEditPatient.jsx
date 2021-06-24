@@ -8,7 +8,7 @@ import Input from 'components/Form/Input';
 
 import { useStore } from 'stores/';
 
-import date from 'services/date';
+import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
 
 const AddEditPatient = () => {
@@ -34,7 +34,7 @@ const AddEditPatient = () => {
         setPatient({
           ...response.patient,
           dateOfBirth: response.patient.dateOfBirth
-            ? date.toFormatDDMMYYYY(new Date(response.patient.dateOfBirth))
+            ? formatDDMMYYYY(new Date(response.patient.dateOfBirth))
             : '',
         });
       });

@@ -1,60 +1,11 @@
 const chai = require('chai');
-const rewire = require('rewire');
-const app = require('../index');
-const { default: clean } = require('./helper/clean');
-const jwt = require('../utils/jwt');
-const dbPsychologists = require('../db/psychologists');
-const dbUniversities = require('../db/universities');
+const app = require('../../index');
+const { default: clean } = require('../helper/clean');
+const jwt = require('../../utils/jwt');
+const dbPsychologists = require('../../db/psychologists');
+const dbUniversities = require('../../db/universities');
 
-const reimbursementController = rewire('../controllers/reimbursementController');
-
-describe('reimbursementController', () => {
-  describe('mergeTotalPatientAppointments', () => {
-    const mergeTotalPatientAppointments = reimbursementController.__get__('mergeTotalPatientAppointments');
-
-    const totalAppointments = [
-      { countAppointments: 12, year: 2021, month: 4 },
-      { countAppointments: 4, year: 2021, month: 5 },
-      { countAppointments: 4, year: 2021, month: 6 },
-      { countAppointments: 4, year: 2021, month: 7 },
-      { countAppointments: 8, year: 2021, month: 11 },
-    ];
-    const totalPatients = [
-      { countPatients: 4, year: 2021, month: 4 },
-      { countPatients: 4, year: 2021, month: 5 },
-      { countPatients: 2, year: 2021, month: 6 },
-      { countPatients: 4, year: 2021, month: 7 },
-      { countPatients: 4, year: 2021, month: 11 },
-      { countPatients: 1, year: 2021, month: 12 },
-    ];
-
-    const total = [
-      {
-        year: 2021, month: 'avril', countPatients: 4, countAppointments: 12,
-      },
-      {
-        year: 2021, month: 'mai', countPatients: 4, countAppointments: 4,
-      },
-      {
-        year: 2021, month: 'juin', countPatients: 2, countAppointments: 4,
-      },
-      {
-        year: 2021, month: 'juillet', countPatients: 4, countAppointments: 4,
-      },
-      {
-        year: 2021, month: 'novembre', countPatients: 4, countAppointments: 8,
-      },
-      {
-        year: 2021, month: 'décembre', countPatients: 1, countAppointments: 0,
-      },
-    ];
-
-    it('should merge appointments and patients total together and transform month number to french name', () => {
-      const output = mergeTotalPatientAppointments(totalAppointments, totalPatients);
-      chai.expect(output).to.eql(total);
-    });
-  });
-
+describe('conventionController', () => {
   describe('updateConventionInfo', () => {
     let university;
 

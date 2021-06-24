@@ -97,8 +97,8 @@ const getOnePatient = (
   };
 };
 
-const getOneAppointment = (patientId: string, psychologistId: string, month = 3): Appointment => {
-  const myDate = new Date(2021, month, 10).toISOString();
+const getOneAppointment = (patientId: string, psychologistId: string, month = 3, day = 10): Appointment => {
+  const myDate = new Date(2021, month, day).toISOString();
   return {
     id: uuid.randomUuid(),
     psychologistId,

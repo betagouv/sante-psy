@@ -12,7 +12,7 @@ import {
   suspensionReasonsTable,
 } from '../../db/tables';
 
-exports.seed = async (knex) => {
+exports.seed = async (knex, fixValue) => {
   console.log('Clean database information');
 
   await knex(suspensionReasonsTable).del();
@@ -74,16 +74,29 @@ exports.seed = async (knex) => {
   await knex(patientsTable).insert(patientList);
   console.log(`inserted ${patientList.length} fake data to patientsTable`);
 
-  // 5 appointments by patients
-  const appointmentList = patientList.flatMap((patient) => [
-    clean.getOneAppointment(patient.id, patient.psychologistId, 2), // 2 === march
-    clean.getOneAppointment(patient.id, patient.psychologistId, 2), // 2 === march
-    clean.getOneAppointment(patient.id, patient.psychologistId, 3), // 3 === april
-    clean.getOneAppointment(patient.id, patient.psychologistId, 4), // you got it ;)
-    clean.getOneAppointment(patient.id, patient.psychologistId, 5),
-    clean.getOneAppointment(patient.id, patient.psychologistId, 6),
-    clean.getOneAppointment(patient.id, patient.psychologistId, 10),
-  ]);
+  const appointmentList = fixValue
+    ? patientList.flatMap((patient) => {
+      const result = [];
+      for (let i = 1; i < 13; i++) {
+        result.push(clean.getOneAppointment(patient.id, patient.psychologistId, i));
+      }
+      return result;
+    })
+    : patientList.flatMap((patient) => {
+      const getRandomDay = () => Math.floor((Math.random() * 30) + 1);
+      const getRandomMonth = () => Math.floor((Math.random() * 12) + 1);
+      const nbOfAppointments = Math.random() * 10;
+      const result = [];
+      for (let i = 0; i < nbOfAppointments; i++) {
+        const month = getRandomMonth();
+        const day = getRandomDay();
+        const appointmentPerDay = Math.random() * 5 + 1;
+        for (let j = 0; j < appointmentPerDay; j++) {
+          result.push(clean.getOneAppointment(patient.id, patient.psychologistId, month, day));
+        }
+      }
+      return result;
+    });
 
   await knex(appointmentsTable).insert(appointmentList);
   console.log(`inserted ${appointmentList.length} fake data to appointmentsTable`);
