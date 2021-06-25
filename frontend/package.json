@@ -94,6 +94,7 @@
     "lint": "node_modules/.bin/eslint --quiet . --ext .js,.jsx",
     "lint:fix": "node_modules/.bin/eslint --quiet --fix . --ext .js,.jsx",
     "scalingo-prebuild": "npm clean-install --production=false && npm run build -- --env.PROD",
+    "scalingo-postbuild": "npm prune --production",
     "cy:open": "cypress open",
     "cy:run": "wait-on http://localhost:3000 && wait-on http-get://localhost:8080/api/config && cypress run",
     "cy:ci": "wait-on http-get://localhost:8080/api/config && CYPRESS_BASE_URL=http://localhost:8080/ cypress run"
