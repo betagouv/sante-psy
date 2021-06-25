@@ -71,7 +71,7 @@ const Billing = () => {
         Aide pour la facturation
       </h3>
       <div className={styles.monthPickerContainer}>
-        Gerer ma facture pour le mois de:
+        Générer ma facture pour le mois de :
         <div className={styles.monthPicker}>
           <MonthPicker month={month} setMonth={setMonth} />
         </div>
