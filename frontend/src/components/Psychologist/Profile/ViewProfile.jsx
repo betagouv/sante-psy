@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Button } from '@dataesr/react-dsfr';
 
 import GlobalNotification from 'components/Notification/GlobalNotification';
+import PayingUniversity from './PayingUniversity';
 import SuspensionInfo from './SuspensionInfo';
 
 const ViewProfile = ({ psychologist, loading, activatePsychologist }) => {
@@ -11,6 +12,7 @@ const ViewProfile = ({ psychologist, loading, activatePsychologist }) => {
     <>
       <h1>Mes informations</h1>
       <GlobalNotification />
+      <PayingUniversity />
       {!loading && (
       <div className="fr-my-3w">
         <p data-test-id="personal-email-info">

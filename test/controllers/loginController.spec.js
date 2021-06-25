@@ -295,12 +295,16 @@ describe('loginController', async () => {
             'firstNames',
             'lastName',
             'email',
+            'adeli',
+            'address',
             'convention',
             'active',
           );
           res.body.firstNames.should.equal(psy.firstNames);
           res.body.lastName.should.equal(psy.lastName);
           res.body.email.should.equal(psy.email);
+          res.body.adeli.should.equal(psy.adeli);
+          res.body.address.should.equal(psy.address);
           res.body.active.should.equal(psy.active);
           res.body.convention.should.eql({
             isConventionSigned: true,

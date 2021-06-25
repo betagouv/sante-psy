@@ -16,20 +16,30 @@ const Billing = () => {
     month: new Date().getMonth() + 1,
   });
 
-  const [appointments, setAppointments] = useState([]);
+  const [valuesByDate, setValuesByDate] = useState({ appointments: {}, patients: {} });
 
   useEffect(() => {
     agent.Appointment.get().then(response => {
       const appointmentsByDate = {};
+      const patientsByDate = {};
       response.appointments.forEach(appointment => {
-        const existingValue = appointmentsByDate[appointment.appointmentDate];
-        appointmentsByDate[appointment.appointmentDate] = existingValue ? existingValue + 1 : 1;
+        const existingAppointments = appointmentsByDate[appointment.appointmentDate];
+        appointmentsByDate[appointment.appointmentDate] = existingAppointments ? existingAppointments + 1 : 1;
+        const existingPatients = patientsByDate[appointment.appointmentDate];
+        if (existingPatients) {
+          existingPatients.push(appointment.patientId);
+        } else {
+          patientsByDate[appointment.appointmentDate] = [appointment.patientId];
+        }
       });
-      setAppointments(appointmentsByDate);
+      setValuesByDate({
+        appointments: appointmentsByDate,
+        patients: patientsByDate,
+      });
     });
   }, []);
 
-  const filteredDate = Object.keys(appointments).filter(date => {
+  const filteredDate = Object.keys(valuesByDate.appointments).filter(date => {
     const appointmentDate = new Date(date);
     return appointmentDate.getFullYear() === month.year
         && appointmentDate.getMonth() === month.month - 1;
@@ -70,7 +80,7 @@ const Billing = () => {
       {filteredDate.length > 0 ? (
         <>
           <a
-            className="fr-btn fr-btn--secondary fr-mt-2w fr-mr-1w"
+            className="fr-btn fr-btn--secondary fr-mt-2w fr-mb-2w"
             href={`/psychologue/bill/${month.month}/${month.year}`}
             target="_blank"
             rel="noreferrer"
@@ -78,7 +88,24 @@ const Billing = () => {
             <span className="fr-fi-file-download-line" aria-hidden="true" />
             Télécharger/Imprimer ma facture pré remplie
           </a>
-          <BillingTable filteredDate={filteredDate} appointments={appointments} />
+          <p className="fr-mb-2w" data-test-id="bill-summary-text">
+            En
+            {` ${formatMonth(month)}`}
+            , vous avez effectué
+            <b>
+              {` ${filteredDate.reduce((accumulator, date) => accumulator + valuesByDate.appointments[date], 0)} `}
+            </b>
+            séances auprès de
+            <b>
+              {` ${filteredDate
+                .flatMap(date => valuesByDate.patients[date])
+                .filter((value, index, array) => array.indexOf(value) === index)
+                .length}
+               `}
+            </b>
+            patients.
+          </p>
+          <BillingTable filteredDate={filteredDate} appointments={valuesByDate.appointments} />
         </>
       ) : (
         <p className="fr-mb-2w">

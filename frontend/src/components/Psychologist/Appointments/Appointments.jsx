@@ -65,14 +65,15 @@ const Appointments = () => {
       <Notification>
         Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
         {' '}
-        <HashLink to="/psychologue/mes-remboursements">Remboursement de mes séances</HashLink>
+        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
       </Notification>
       )}
       {!loading && user && !user.active && (
       <Notification>
-        Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur
+        Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire.
+        Pour que les étudiants puissent vous contacter, rendez vous sur la page
         {' '}
-        <HashLink to="/psychologue/mon-profil">votre profil</HashLink>
+        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
         .
       </Notification>
       )}
