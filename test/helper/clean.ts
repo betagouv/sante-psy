@@ -66,7 +66,7 @@ const getOnePsy = (
 };
 
 const getOneInactivePsy = (inactiveUntil: string): Psychologist => getOnePsy(
-  `inactil@${inactiveUntil}.fr`,
+  `inactive@${inactiveUntil}.fr`,
   'accepte',
   false,
   null,
