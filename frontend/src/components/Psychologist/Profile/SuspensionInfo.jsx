@@ -11,7 +11,7 @@ const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
       <h2>Statut de votre compte</h2>
       {psychologist.active ? (
         <>
-          <p data-test-id="activePsy">
+          <p data-test-id="activePsy" className="fr-mb-2v">
             Vos informations sont
             {' '}
             <b>visibles</b>
@@ -29,7 +29,7 @@ const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
         </>
       ) : (
         <>
-          <p data-test-id="inactivePsy">
+          <p data-test-id="inactivePsy" className="fr-mb-2v">
             Vos informations
             {' '}
             <b>ne sont pas visibles</b>
