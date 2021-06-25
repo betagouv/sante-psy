@@ -86,7 +86,7 @@ const Billing = () => {
             rel="noreferrer"
           >
             <span className="fr-fi-file-download-line" aria-hidden="true" />
-            Télécharger/Imprimer ma facture pré remplie
+            Télécharger/Imprimer ma facture pré-remplie
           </a>
           <p className="fr-mb-2w" data-test-id="bill-summary-text">
             En
