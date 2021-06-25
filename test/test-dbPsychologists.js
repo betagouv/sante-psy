@@ -176,12 +176,13 @@ describe('DB Psychologists', () => {
     });
   });
 
-  describe('getAcceptedPsychologists', () => {
+  describe('getAcceptedPsychologistsArchivedOrNot', () => {
     it('should return only one selected data from accepted psychologists', async () => {
       const acceptedPsy = clean.getOnePsy();
       const archivedPsy = clean.getOnePsy();
       archivedPsy.archived = true;
       archivedPsy.lastName = 'ArchivedPsy';
+      archivedPsy.personalEmail = 'loginemail-archived@beta.gouv.fr';
       archivedPsy.dossierNumber = '34e6352f-bdd0-48ce-83de-8de71cad295b';
       const constructionPsy = clean.getOnePsy();
       constructionPsy.state = 'en_construction';
@@ -190,16 +191,19 @@ describe('DB Psychologists', () => {
 
       await dbPsychologists.savePsychologistInPG([acceptedPsy, archivedPsy, constructionPsy]);
 
-      const result = await dbPsychologists.getAcceptedPsychologists(['personalEmail']);
-      expect(result).to.have.length(1);
+      const result = await dbPsychologists.getAcceptedPsychologistsArchivedOrNot(['personalEmail']);
+      expect(result).to.have.length(2);
       expect(result[0]).to.have.all.keys('personalEmail');
-      expect(result[0].personalEmail).to.eql(acceptedPsy.personalEmail);
+      expect(result[1]).to.have.all.keys('personalEmail');
+      expect(result[0].personalEmail).to.be.oneOf([acceptedPsy.personalEmail, archivedPsy.personalEmail]);
+      expect(result[1].personalEmail).to.be.oneOf([acceptedPsy.personalEmail, archivedPsy.personalEmail]);
+      expect(result[0].personalEmail).to.not.be.eql(result[1].personalEmail);
     });
 
     it('should return only multiple selected data from accepted psychologists', async () => {
       const psy = await clean.insertOnePsy();
 
-      const result = await dbPsychologists.getAcceptedPsychologists(['personalEmail',
+      const result = await dbPsychologists.getAcceptedPsychologistsArchivedOrNot(['personalEmail',
         'dossierNumber',
         'assignedUniversityId']);
       expect(result).to.have.length(1);
