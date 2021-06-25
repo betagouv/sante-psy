@@ -20,7 +20,7 @@ const matchPsyToUni = async (dryRun) => {
     const statsNoPsyFound = [];
 
     const universities = await dbUniversities.getUniversities();
-    const psyFromDb = await dbPsychologists.getAcceptedPsychologists([
+    const psyFromDb = await dbPsychologists.getAcceptedPsychologistsArchivedOrNot([
       'personalEmail',
       'dossierNumber',
       'assignedUniversityId',
