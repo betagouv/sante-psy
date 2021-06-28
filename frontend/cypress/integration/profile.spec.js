@@ -270,6 +270,7 @@ describe('Profile', () => {
       tomorrow.setDate(tomorrow.getDate() + 2);
 
       cy.get(`.react-datepicker__day--0${tomorrow.getDate()}`)
+        .last()
         .click();
 
       cy.get('[data-test-id="suspend-button"]')
@@ -350,6 +351,7 @@ describe('Profile', () => {
       tomorrow.setDate(tomorrow.getDate() + 2);
 
       cy.get(`.react-datepicker__day--0${tomorrow.getDate()}`)
+        .last()
         .click();
 
       cy.get('[data-test-id="suspend-button"]')
