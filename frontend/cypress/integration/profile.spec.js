@@ -5,17 +5,17 @@ const { removeConvention } = require('./utils/psychologist');
 
 describe('Profile', () => {
   beforeEach(() => {
-    cy.intercept('POST', '/api/psychologue/*/suspend')
+    cy.intercept('POST', '/api/psychologist/*/suspend')
       .as('suspend');
-    cy.intercept('POST', '/api/psychologue/*/activate')
+    cy.intercept('POST', '/api/psychologist/*/activate')
       .as('activate');
-    cy.intercept('GET', '/api/psychologue/*')
+    cy.intercept('GET', '/api/psychologist/*')
       .as('getProfile');
-    cy.intercept('PUT', '/api/psychologue/*')
+    cy.intercept('PUT', '/api/psychologist/*')
       .as('updateProfile');
     cy.intercept('GET', '/api/config')
       .as('config');
-    cy.intercept('POST', '/api/psychologue/renseigner-convention')
+    cy.intercept('POST', '/api/psychologist/*/convention')
       .as('updateConvention');
 
     resetDB();

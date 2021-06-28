@@ -1,6 +1,6 @@
 const { getCurrentUser, setLoginInfo } = require('./login');
 
-const removeConvention = email => cy.request('DELETE', `http://localhost:8080/test/psychologue/${email}/convention`);
+const removeConvention = email => cy.request('DELETE', `http://localhost:8080/test/psychologist/${email}/convention`);
 
 const suspend = () => {
   const date = new Date();
@@ -8,7 +8,7 @@ const suspend = () => {
   setLoginInfo();
   return cy.request({
     method: 'POST',
-    url: `http://localhost:8080/api/psychologue/${getCurrentUser().dossierNumber}/suspend`,
+    url: `http://localhost:8080/api/psychologist/${getCurrentUser().dossierNumber}/suspend`,
     headers: { 'xsrf-token': 'randomXSRFToken' },
     body: {
       date,
@@ -23,7 +23,7 @@ const signConvention = (name, isSigned) => cy.request('GET', 'http://localhost:8
     setLoginInfo();
     return cy.request({
       method: 'POST',
-      url: 'http://localhost:8080/api/psychologue/renseigner-convention',
+      url: `http://localhost:8080/api/psychologist/${getCurrentUser().dossierNumber}/convention`,
       headers: { 'xsrf-token': 'randomXSRFToken' },
       body: {
         universityId: university.id,

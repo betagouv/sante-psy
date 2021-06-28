@@ -13,6 +13,7 @@ import emailUtils from '../utils/email';
 import config from '../utils/config';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
+import { checkXsrf } from '../middlewares/xsrfProtection';
 
 const emailValidators = [
   check('email')
@@ -75,27 +76,31 @@ const deleteToken = (req: Request, res: Response): void => {
 };
 
 const connectedUser = async (req: Request, res: Response): Promise<void> => {
-  const currentPsyId = cookie.getCurrentPsyId(req, res);
-  const psy = await dbPsychologists.getPsychologistById(currentPsyId);
-  const convention = await dbPsychologists.getConventionInfo(currentPsyId);
+  const tokenData = cookie.verifyJwt(req, res);
+  if (checkXsrf(req, tokenData.xsrfToken)) {
+    const psy = await dbPsychologists.getPsychologistById(tokenData.psychologist);
+    const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
 
-  if (psy) {
-    const {
-      dossierNumber, firstNames, lastName, email, active, adeli, address,
-    } = psy;
-    res.json({
-      dossierNumber,
-      firstNames,
-      lastName,
-      adeli,
-      address,
-      email,
-      convention,
-      active,
-    });
-  } else {
-    res.json();
+    if (psy) {
+      const {
+        dossierNumber, firstNames, lastName, email, active, adeli, address,
+      } = psy;
+      res.json({
+        dossierNumber,
+        firstNames,
+        lastName,
+        adeli,
+        address,
+        email,
+        convention,
+        active,
+      });
+
+      return;
+    }
   }
+
+  res.json();
 };
 
 const login = async (req: Request, res: Response): Promise<void> => {

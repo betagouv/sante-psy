@@ -78,7 +78,7 @@ describe('loginController', async () => {
 
         chai
           .request(app)
-          .post('/api/psychologue/login')
+          .post('/api/psychologist/login')
           .send({ token })
           .end((err, res) => {
             sinon.assert.called(getByTokenStub);
@@ -99,7 +99,7 @@ describe('loginController', async () => {
 
         chai
           .request(app)
-          .post('/api/psychologue/login')
+          .post('/api/psychologist/login')
           .send({ token: 'pizzaForToken' })
           .end((err, res) => {
             sinon.assert.called(getByTokenStub);
@@ -153,7 +153,7 @@ describe('loginController', async () => {
 
         chai
           .request(app)
-          .post('/api/psychologue/sendMail')
+          .post('/api/psychologist/sendMail')
           .send({
             email: 'prenom.nom@beta.gouv.fr',
           })
@@ -186,7 +186,7 @@ describe('loginController', async () => {
 
         chai
           .request(app)
-          .post('/api/psychologue/sendMail')
+          .post('/api/psychologist/sendMail')
           .send({
             email: 'prenom.nom@beta.gouv.fr',
           })
@@ -215,7 +215,7 @@ describe('loginController', async () => {
 
         chai
           .request(app)
-          .post('/api/psychologue/sendMail')
+          .post('/api/psychologist/sendMail')
           .send({
             email: 'prenom.nom@beta.gouv.fr',
           })
@@ -245,7 +245,7 @@ describe('loginController', async () => {
 
         chai
           .request(app)
-          .post('/api/psychologue/sendMail')
+          .post('/api/psychologist/sendMail')
           .send({
             email: 'fake_it',
           })
@@ -321,11 +321,18 @@ describe('loginController', async () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4())}`)
         .then(async (res) => res.body.should.be.empty));
 
-    it('should return 500 if user is not connected', async () => chai
+    it('should return empty info if user is not connected', async () => chai
         .request(app)
         .get('/api/connecteduser')
-        .then(async (res) => {
-          res.status.should.equal(500);
-        }));
+        .then(async (res) => res.body.should.be.empty));
+
+    it('should return empty info if user does not have csrf', async () => {
+      const psy = clean.insertOnePsy();
+      return chai
+        .request(app)
+        .get('/api/connecteduser')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .then(async (res) => res.body.should.be.empty);
+    });
   });
 });

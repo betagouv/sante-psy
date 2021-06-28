@@ -37,7 +37,7 @@ describe('cookie', () => {
       result.psychologist.should.be.eql(psychologist);
     });
 
-    it('should return false ', () => {
+    it('should return false with wrong token', () => {
       // eslint-disable-next-line max-len
       const wrongToken = 'eyfJhbGsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QiLCJpYXQiOjE2MTQwOTUzMzMsImV4cCI6MTYxNDEwMjUzM30.baGPZ6YbvwrfwH7dxv8txWrOdVAhQBx3Eg6e8joGGhU';
       const result = cookie.verifyJwt({ cookies: { token: wrongToken } });

@@ -8,8 +8,7 @@ import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 
 const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
-  const { psyId } = req.params;
-  const psychologist = await dbPsychologists.getPsychologistById(psyId);
+  const psychologist = await dbPsychologists.getPsychologistById(req.user.psychologist);
   if (!psychologist) {
     throw Error("Le psychologue n'existe pas.");
   }
@@ -97,7 +96,7 @@ const editPsyProfile = async (req: Request, res: Response): Promise<void> => {
 
   await dbPsychologists.updatePsychologist({
     ...req.body,
-    dossierNumber: req.params.psyId,
+    dossierNumber: req.user.psychologist,
     region,
   });
 
@@ -108,7 +107,7 @@ const editPsyProfile = async (req: Request, res: Response): Promise<void> => {
 };
 
 const activate = async (req: Request, res: Response): Promise<void> => {
-  await dbPsychologists.activate(req.params.psyId);
+  await dbPsychologists.activate(req.user.psychologist);
 
   res.json({
     success: true,
@@ -130,7 +129,7 @@ const suspendValidators = [
 const suspend = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
-  await dbPsychologists.suspend(req.params.psyId, req.body.date, req.body.reason);
+  await dbPsychologists.suspend(req.user.psychologist, req.body.date, req.body.reason);
 
   res.json({
     success: true,

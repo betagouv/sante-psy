@@ -36,8 +36,8 @@ const getJwtTokenForUser = function getJwtTokenForUser(psychologist, xsrfToken) 
 module.exports.getJwtTokenForUser = getJwtTokenForUser;
 
 module.exports.createAndSetJwtCookie = (res, psychologistData, xsrfToken) => {
-  const cookie = getJwtTokenForUser(psychologistData, xsrfToken);
-  res.cookie('token', cookie, headers);
+  const jwtToken = getJwtTokenForUser(psychologistData, xsrfToken);
+  res.cookie('token', jwtToken, headers);
 };
 
 module.exports.clearJwtCookie = (res) => {
@@ -53,27 +53,13 @@ const verifyJwt = function verifyJwt(req, res) {
     const verified = jwt.verify(req.cookies.token, config.secret);
     return verified;
   } catch (err) {
+    console.log(err);
     if (err instanceof jwt.TokenExpiredError) {
       res.clearCookie('token');
-      throw new CustomError('Votre session a expiré, veuillez vous reconnecter.', 401);
+      throw new CustomError('Votre session a expiré, veuillez vous reconnecter.', 498);
     }
     console.debug('Invalid token: ', err);
     return false;
   }
 };
 module.exports.verifyJwt = verifyJwt;
-
-/**
- *  Get currently logged in psy's id
- */
-const getCurrentPsyId = (req, res) => {
-  const tokenData = verifyJwt(req, res);
-
-  if (!tokenData) {
-    throw new CustomError('Token invalide', 500);
-  }
-  const psyUuid = tokenData.psychologist;
-  return psyUuid;
-};
-
-module.exports.getCurrentPsyId = getCurrentPsyId;

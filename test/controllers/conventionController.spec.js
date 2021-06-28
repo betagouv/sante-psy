@@ -24,7 +24,7 @@ describe('conventionController', () => {
       chai.expect(psy.isConventionSigned).not.to.exist;
 
       return chai.request(app)
-        .post('/api/psychologue/renseigner-convention')
+      .post(`/api/psychologist/${psy.dossierNumber}/convention`)
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
@@ -48,7 +48,7 @@ describe('conventionController', () => {
       chai.expect(psy.isConventionSigned).not.to.exist;
 
       return chai.request(app)
-      .post('/api/psychologue/renseigner-convention')
+      .post(`/api/psychologist/${psy.dossierNumber}/convention`)
       .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
       .set('xsrf-token', 'randomXSRFToken')
         .send(payload)

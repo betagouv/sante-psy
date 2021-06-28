@@ -20,7 +20,7 @@ const login = (psy, duration = 3600) => {
 };
 
 const loginAsDefault = (duration = 3600) => {
-  cy.request('http://localhost:8080/test/psychologue/login@beta.gouv.fr')
+  cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
     .then(res => {
       login(res.body.psy, duration);
     });

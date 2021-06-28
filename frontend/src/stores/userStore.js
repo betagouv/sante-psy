@@ -42,6 +42,7 @@ export default class UserStore {
 
   setXsrfToken(xsrfToken) {
     this.xsrfToken = xsrfToken;
+    this.pullUser();
   }
 
   deleteToken() {

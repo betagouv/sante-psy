@@ -11,16 +11,16 @@ const createClient = () => {
     withCredentials: true,
   });
 
+  simpleClient.interceptors.request.use(request => {
+    request.headers['xsrf-token'] = store.userStore.xsrfToken;
+    return request;
+  });
+
   return simpleClient;
 };
 
 const client = createClient();
 const clientWithoutErrorManagement = createClient();
-
-client.interceptors.request.use(request => {
-  request.headers['xsrf-token'] = store.userStore.xsrfToken;
-  return request;
-});
 
 client.interceptors.response.use(
   response => {
@@ -65,24 +65,27 @@ const Patient = {
 };
 
 const Psychologist = {
-  activate: () => client.post(`/psychologue/${store.userStore.user.dossierNumber}/activate`),
+  activate: () => client.post(`/psychologist/${store.userStore.user.dossierNumber}/activate`),
   find: () => client.get('/trouver-un-psychologue'),
-  getProfile: () => client.get(`/psychologue/${store.userStore.user.dossierNumber}`),
+  getProfile: () => client.get(`/psychologist/${store.userStore.user.dossierNumber}`),
   suspend: (reason, date) => client
-    .post(`/psychologue/${store.userStore.user.dossierNumber}/suspend`, { reason, date }),
+    .post(`/psychologist/${store.userStore.user.dossierNumber}/suspend`, { reason, date }),
   updateProfile: psychologist => client
-    .put(`/psychologue/${store.userStore.user.dossierNumber}`, psychologist),
+    .put(`/psychologist/${store.userStore.user.dossierNumber}`, psychologist),
 };
 
-const Convention = { save: convention => client.post('/psychologue/renseigner-convention', convention) };
+const Convention = {
+  save: convention => client
+    .post(`/psychologist/${store.userStore.user.dossierNumber}/convention`, convention),
+};
 
 const University = { getAll: () => client.get('/university') };
 
 const User = {
   getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),
-  login: token => client.post('/psychologue/login', { token }),
-  sendMail: email => client.post('/psychologue/sendMail', { email }),
-  logout: () => client.get('/psychologue/logout'),
+  login: token => client.post('/psychologist/login', { token }),
+  sendMail: email => client.post('/psychologist/sendMail', { email }),
+  logout: () => client.get('/psychologist/logout'),
 };
 
 export default {

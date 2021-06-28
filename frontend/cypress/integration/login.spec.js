@@ -2,9 +2,9 @@ const { logout, loginAsDefault } = require('./utils/login');
 
 describe('Login', () => {
   beforeEach(() => {
-    cy.intercept('POST', '/api/psychologue/sendMail')
+    cy.intercept('POST', '/api/psychologist/sendMail')
       .as('sendMail');
-    cy.intercept('POST', '/api/psychologue/login')
+    cy.intercept('POST', '/api/psychologist/login')
       .as('login');
   });
 
@@ -26,9 +26,9 @@ describe('Login', () => {
 
   describe('Login', () => {
     it('should login user when token is entered', () => {
-      cy.request('POST', 'http://localhost:8080/api/psychologue/sendMail', { email: 'login@beta.gouv.fr' })
+      cy.request('POST', 'http://localhost:8080/api/psychologist/sendMail', { email: 'login@beta.gouv.fr' })
         .then(() => {
-          cy.request('http://localhost:8080/test/psychologue/login@beta.gouv.fr')
+          cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
             .then(response => {
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');
@@ -49,9 +49,9 @@ describe('Login', () => {
     });
 
     it('should not logged twice with same token', () => {
-      cy.request('POST', 'http://localhost:8080/api/psychologue/sendMail', { email: 'login@beta.gouv.fr' })
+      cy.request('POST', 'http://localhost:8080/api/psychologist/sendMail', { email: 'login@beta.gouv.fr' })
         .then(() => {
-          cy.request('http://localhost:8080/test/psychologue/login@beta.gouv.fr')
+          cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
             .then(response => {
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');
