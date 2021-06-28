@@ -53,8 +53,9 @@ const Billing = () => {
       </h3>
       <div className="fr-mb-2w">
         <p className="fr-mb-2w">
-          À la fin de chaque mois, vous devez envoyer un email à l&lsquo;université de conventionnement,
-          contenant une facture des séances réalisées.
+          À la fin de chaque mois, vous devez envoyer votre facture contenant vos séances réalisées à votre
+          université de convention. Les modalités d&lsquo;envoi sont précisées par l&lsquo;université lors de
+          l&lsquo;établissement de votre convention (Chorus pro, email ou voie postale).
           L&lsquo;université se chargera du remboursement, dans les 30 jours après la réception de cette facture.
         </p>
         <p className="fr-mb-1v">
