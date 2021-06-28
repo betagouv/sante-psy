@@ -106,10 +106,12 @@ const login = async (req: Request, res: Response): Promise<void> => {
 
     if (dbToken) {
       const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
-      cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber);
+      const xsrfToken = crypto.randomBytes(64).toString('hex');
+      cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken);
       await dbLoginToken.delete(token);
       console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
-      res.json({ success: true });
+
+      res.json({ success: true, xsrfToken });
       return;
     }
 

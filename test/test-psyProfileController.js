@@ -29,7 +29,8 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .get(`/api/psychologue/${targetPsy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(403);
         });
@@ -40,7 +41,8 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .get(`/api/psychologue/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.body.success.should.equal(true);
 
@@ -94,7 +96,8 @@ describe('psyProfileController', () => {
 
       const res = await chai.request(app)
       .put(`/api/psychologue/${psy.dossierNumber}`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
       .send(postData);
 
       sinon.assert.notCalled(updatePsyStub);
@@ -346,7 +349,8 @@ describe('psyProfileController', () => {
 
       const res = await chai.request(app)
       .put(`/api/psychologue/${psy.dossierNumber}`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
       .send(postData);
 
       sinon.assert.called(updatePsyStub);
@@ -431,7 +435,8 @@ describe('psyProfileController', () => {
 
       chai.request(app)
       .put(`/api/psychologue/${psy.dossierNumber}`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
           res.body.success.should.equal(true);
@@ -464,7 +469,8 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .put(`/api/psychologue/${targetPsy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
@@ -486,7 +492,8 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .put(`/api/psychologue/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
@@ -509,7 +516,8 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .put(`/api/psychologue/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
@@ -544,7 +552,8 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .put(`/api/psychologue/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
@@ -605,7 +614,8 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .post(`/api/psychologue/${targetPsy.dossierNumber}/activate`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(403);
           sinon.assert.notCalled(activatePsyStub);
@@ -618,7 +628,8 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .post(`/api/psychologue/${psy.dossierNumber}/activate`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.body.success.should.equal(true);
           res.body.message.should.equal('Vos informations sont de nouveau visibles sur l\'annuaire.');
@@ -646,7 +657,8 @@ describe('psyProfileController', () => {
 
       const res = await chai.request(app)
       .post(`/api/psychologue/${psy.dossierNumber}/suspend`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
       .send(postData);
 
       sinon.assert.notCalled(suspendPsyStub);
@@ -672,7 +684,8 @@ describe('psyProfileController', () => {
 
       return chai.request(app)
         .post(`/api/psychologue/${targetPsy.dossierNumber}/suspend`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(403);
           sinon.assert.notCalled(suspendPsyStub);
@@ -691,7 +704,8 @@ describe('psyProfileController', () => {
           date: nextDate,
           reason: 'Why are you asking ? are you the police ?',
         })
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.body.success.should.equal(true);
           res.body.message.should.equal('Vos informations ne sont plus visibles sur l\'annuaire.');

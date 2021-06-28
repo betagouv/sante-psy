@@ -287,7 +287,8 @@ describe('loginController', async () => {
       return chai
         .request(app)
         .get('/api/connecteduser')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.body.should.have.all.keys(
             'dossierNumber',
@@ -320,11 +321,11 @@ describe('loginController', async () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4())}`)
         .then(async (res) => res.body.should.be.empty));
 
-    it('should return 401 if user is not connected', async () => chai
+    it('should return 500 if user is not connected', async () => chai
         .request(app)
         .get('/api/connecteduser')
         .then(async (res) => {
-          res.status.should.equal(401);
+          res.status.should.equal(500);
         }));
   });
 });

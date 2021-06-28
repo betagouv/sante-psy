@@ -47,10 +47,13 @@ describe('cookie', () => {
 
     it('should delete cookie on expired token', () => {
       // eslint-disable-next-line max-len
-      const expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwc3ljaG9sb2dpc3QiOiJmODdlMzNjZC03MGUzLTQxYmItYjE3ZS04YTc2OGFlMGM4OTIiLCJpYXQiOjE2MjQ2MjgxMDIsImV4cCI6MTYyNDYyODEwM30.ZADGJyqXdUNxSkoRB6UVwWxXUJthJujoyP2nGZx_b8k';
+      const expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwc3ljaG9sb2dpc3QiOiJhYjZhYTk0My0wZmU5LTQyYTAtOWRkZC05ZTE2ZjdlOTk5M2UiLCJ4c3JmVG9rZW4iOiJyYW5kb21YU1JGVG9rZW4iLCJpYXQiOjE2MjQ4NzY3ODMsImV4cCI6MTYyNDg3Njg0M30.f8Yp-wJ3PXej6vzvMZD_rT2Xi3flYtXoe5s_wFkjFl0';
       const clearStub = sinon.stub();
 
-      const verify = () => cookie.verifyJwt({ cookies: { token: expiredToken } }, { clearCookie: clearStub });
+      const verify = () => cookie.verifyJwt(
+        { cookies: { token: expiredToken } },
+        { clearCookie: clearStub },
+      );
 
       expect(verify).to.throw(CustomError);
       sinon.assert.calledWith(clearStub, 'token');
