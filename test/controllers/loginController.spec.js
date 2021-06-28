@@ -87,7 +87,7 @@ describe('loginController', async () => {
 
             res.body.success.should.equal(true);
             res.header['set-cookie'][0].should.have.string('token=');
-            res.header['set-cookie'][0].should.have.string('; Path=/; HttpOnly; SameSite=Lax');
+            res.header['set-cookie'][0].should.have.string('; Path=/; HttpOnly; Secure; SameSite=Lax');
             done();
           });
       });
