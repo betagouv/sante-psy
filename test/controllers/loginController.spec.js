@@ -9,7 +9,7 @@ const dbLoginToken = require('../../db/loginToken');
 const dbPsychologists = require('../../db/psychologists');
 const dbUniversities = require('../../db/universities');
 const emailUtils = require('../../utils/email');
-const jwt = require('../../utils/jwt');
+const cookie = require('../../utils/cookie');
 const { default: clean } = require('../helper/clean');
 
 describe('loginController', async () => {
@@ -39,7 +39,7 @@ describe('loginController', async () => {
   });
 
   describe('login page', () => {
-    const token = jwt.getJwtTokenForUser('dossierNumber');
+    const token = cookie.getJwtTokenForUser('dossierNumber');
     const email = 'prenom.nom@beta.gouv.fr';
 
     describe('getLogin', () => {
@@ -86,7 +86,8 @@ describe('loginController', async () => {
             sinon.assert.called(getAcceptedPsychologistByEmailStub);
 
             res.body.success.should.equal(true);
-            res.body.token.should.not.equal(null);
+            res.header['set-cookie'][0].should.have.string('token=');
+            res.header['set-cookie'][0].should.have.string('; Path=/; HttpOnly; SameSite=Lax');
             done();
           });
       });
@@ -286,12 +287,10 @@ describe('loginController', async () => {
       return chai
         .request(app)
         .get('/api/connecteduser')
-        .set(
-          'Authorization',
-          `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`,
-        )
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.body.should.have.all.keys(
+            'dossierNumber',
             'firstNames',
             'lastName',
             'email',
@@ -300,6 +299,7 @@ describe('loginController', async () => {
             'convention',
             'active',
           );
+          res.body.dossierNumber.should.equal(psy.dossierNumber);
           res.body.firstNames.should.equal(psy.firstNames);
           res.body.lastName.should.equal(psy.lastName);
           res.body.email.should.equal(psy.email);
@@ -317,7 +317,7 @@ describe('loginController', async () => {
     it('should return empty info when psy does not exist', async () => chai
         .request(app)
         .get('/api/connecteduser')
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(uuidv4())}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4())}`)
         .then(async (res) => res.body.should.be.empty));
 
     it('should return 401 if user is not connected', async () => chai

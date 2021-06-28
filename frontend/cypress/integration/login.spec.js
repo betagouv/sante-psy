@@ -93,7 +93,6 @@ describe('Login', () => {
       // We explicitely wait for token to expire
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(1000);
-
       cy.visit('/psychologue/login');
       cy.location('pathname').should('eq', '/psychologue/login');
       // message is displayed
@@ -103,19 +102,7 @@ describe('Login', () => {
           'Votre session a expiré, veuillez vous reconnecter.',
         );
       cy.reload();
-      // message is displayed on reload
-      cy.get('[data-test-id="notification-error"]')
-        .should(
-          'have.text',
-          'Votre session a expiré, veuillez vous reconnecter.',
-        );
-      cy.get('[data-test-id="notification-close"]')
-        .click();
-      // message disappear on close
-      cy.get('[data-test-id="notification-error"]')
-        .should('not.exist');
-      cy.reload();
-      // message is never shown after on close
+      // message is never shown after reload
       cy.get('[data-test-id="notification-error"]')
         .should('not.exist');
     });

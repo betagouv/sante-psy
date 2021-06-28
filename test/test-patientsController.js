@@ -3,7 +3,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const app = require('../index');
 const { default: clean } = require('./helper/clean');
-const jwt = require('../utils/jwt');
+const cookie = require('../utils/cookie');
 const date = require('../utils/date');
 const dbPatients = require('../db/patients');
 const dbPsychologists = require('../db/psychologists');
@@ -51,7 +51,7 @@ describe('patientsController', () => {
 
       return chai.request(app)
         .post('/api/patients')
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .send({
           lastName: 'Lovelace',
           firstNames: 'Ada',
@@ -142,7 +142,7 @@ describe('patientsController', () => {
 
       chai.request(app)
         .post('/api/patients')
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .send(postData)
         .end((err, res) => {
           res.body.success.should.equal(false);
@@ -233,7 +233,7 @@ describe('patientsController', () => {
 
       chai.request(app)
         .post('/api/patients')
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .send(postData)
         .end((err, res) => {
           res.body.success.should.equal(true);
@@ -321,7 +321,7 @@ describe('patientsController', () => {
 
       chai.request(app)
       .post('/api/patients')
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .send(postData)
         .end((err, res) => {
           res.body.success.should.equal(true);
@@ -365,7 +365,7 @@ describe('patientsController', () => {
 
       return chai.request(app)
         .get(`/api/patients/${myPatient.id}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           expect(res.status).to.equal(200);
           res.body.success.should.equal(true);
@@ -393,7 +393,7 @@ describe('patientsController', () => {
 
       return chai.request(app)
         .get(`/api/patients/${notMyPatient.id}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.body.success.should.equal(false);
           res.body.message.should.equal('Ce patient n\'existe pas. Vous ne pouvez pas le modifier.');
@@ -415,7 +415,7 @@ describe('patientsController', () => {
 
       return chai.request(app)
         .get('/api/patients/notavalid-uuid')
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.body.success.should.equal(false);
           res.body.message.should.equal('Ce patient n\'existe pas.');
@@ -448,7 +448,7 @@ describe('patientsController', () => {
       const updatedInstitution = 'polytech';
       return chai.request(app)
         .put(`/api/patients/${patient.id}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .send({
           lastName: updatedLastName,
           firstNames: updatedFirstName,
@@ -492,7 +492,7 @@ describe('patientsController', () => {
       const patient = await makePatient(anotherPsyId);
       return chai.request(app)
         .put(`/api/patients/${patient.id}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .send({
           lastName: 'Lovelacekkk',
           firstNames: 'Adakkk',
@@ -587,7 +587,7 @@ describe('patientsController', () => {
 
       chai.request(app)
         .put(`/api/patients/${patientId}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .send(postData)
         .end((err, res) => {
           sinon.assert.notCalled(updatePatientStub);
@@ -736,7 +736,7 @@ describe('patientsController', () => {
 
       chai.request(app)
         .put(`/api/patients/${patientId}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .send(postData)
         .end((err, res) => {
           sinon.assert.called(updatePatientStub);
@@ -836,7 +836,7 @@ describe('patientsController', () => {
 
       return chai.request(app)
         .delete(`/api/patients/${patient.id}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.body.success.should.equal(true);
           res.body.message.should.equal('Le patient a bien été supprimé.');
@@ -859,7 +859,7 @@ describe('patientsController', () => {
 
       return chai.request(app)
         .delete(`/api/patients/${patient.id}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.body.success.should.equal(false);
           res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
@@ -880,7 +880,7 @@ describe('patientsController', () => {
 
       return chai.request(app)
       .delete(`/api/patients/${patient.id}4`)
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.body.success.should.equal(false);
           res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
