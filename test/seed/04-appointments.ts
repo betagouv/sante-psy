@@ -12,7 +12,7 @@ const getOneAppointmentPerMonth = (patient, day, deleted = false) => [...Array(1
   .map((i) => clean.getOneAppointment(patient.id, patient.psychologistId, i, day, deleted));
 
 // eslint-disable-next-line import/prefer-default-export
-export const seed = async (knex: Knex, fixValue = false): Promise<void> => {
+export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
   const patientsByPsychologist = getPatientsByPsychologist();
   const patientList = Object.keys(patientsByPsychologist)
     .flatMap((psychologist) => {
@@ -24,7 +24,7 @@ export const seed = async (knex: Knex, fixValue = false): Promise<void> => {
     });
 
   let appointmentList;
-  if (fixValue) {
+  if (fixedValues) {
     appointmentList = [];
     // Patient 0 => One appointment deleted
     appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[0], 10, true));

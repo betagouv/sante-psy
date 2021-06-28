@@ -12,10 +12,10 @@ export const getPatientsByPsychologist = (): {
   [key: string]: Psychologist
 } => patientsByPsychologist;
 
-export const seed = async (knex: Knex, fixValue = false): Promise<void> => {
+export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
   patientsByPsychologist = {};
   let patientList;
-  if (fixValue) {
+  if (fixedValues) {
     patientList = mails
     .filter((mail) => mail !== 'empty@beta.gouv.fr')
     .flatMap((mail) => {
