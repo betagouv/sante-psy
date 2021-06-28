@@ -1,7 +1,8 @@
 declare namespace Express {
     interface Request {
         user: {
-            psychologist: string
+            psychologist: string,
+            xsrfToken: string
         }
         sanitize: (text: string) => string
     }

@@ -17,6 +17,11 @@ const createClient = () => {
 const client = createClient();
 const clientWithoutErrorManagement = createClient();
 
+client.interceptors.request.use(request => {
+  request.headers['xsrf-token'] = store.userStore.xsrfToken;
+  return request;
+});
+
 client.interceptors.response.use(
   response => {
     if (!response.data.success) {

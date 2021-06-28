@@ -14,6 +14,9 @@ import cspConfig from './utils/csp-config';
 import sentry from './utils/sentry';
 import access from './utils/access';
 
+import errorManager from './middlewares/errorManager';
+import xsrfProtection from './middlewares/xsrfProtection';
+
 import configController from './controllers/configController';
 import appointmentsController from './controllers/appointmentsController';
 import patientsController from './controllers/patientsController';
@@ -23,7 +26,6 @@ import loginController from './controllers/loginController';
 import reimbursementController from './controllers/reimbursementController';
 import testController from './controllers/testController';
 import getIndex from './controllers/reactController';
-import errorManager from './middlewares/errorManager';
 import universitiesController from './controllers/universityController';
 
 const { appName } = config;
@@ -98,6 +100,8 @@ const speedLimiter = slowDown({
   // request # 103 is delayed by 1500ms
   // etc.
 });
+
+app.get('/api/university', universitiesController.getAll);
 app.get('/api/config', speedLimiter, configController.getConfig);
 app.get('/api/trouver-un-psychologue', speedLimiter, psyListingController.getActivePsychologists);
 
@@ -113,44 +117,43 @@ app.post('/api/psychologue/sendMail',
   loginController.sendMail);
 app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
 app.get('/api/connecteduser', speedLimiter, loginController.connectedUser);
+
 app.get('/api/psychologue/logout', speedLimiter, loginController.deleteToken);
 
-app.get('/api/appointments', appointmentsController.getAppointments);
-app.post('/api/appointments',
+app.get('/api/appointments', xsrfProtection, appointmentsController.getAppointments);
+app.post('/api/appointments', xsrfProtection,
   appointmentsController.createNewAppointmentValidators,
   appointmentsController.createNewAppointment);
-app.delete('/api/appointments/:appointmentId',
+app.delete('/api/appointments/:appointmentId', xsrfProtection,
   appointmentsController.deleteAppointmentValidators,
   appointmentsController.deleteAppointment);
 
-app.get('/api/patients', patientsController.getPatients);
-app.post('/api/patients',
+app.get('/api/patients', xsrfProtection, patientsController.getPatients);
+app.post('/api/patients', xsrfProtection,
   patientsController.createNewPatientValidators,
   patientsController.createNewPatient);
-app.get('/api/patients/:patientId',
+app.get('/api/patients/:patientId', xsrfProtection,
   patientsController.getPatientValidators, patientsController.getPatient);
-app.put('/api/patients/:patientId',
+app.put('/api/patients/:patientId', xsrfProtection,
   patientsController.editPatientValidators,
   patientsController.editPatient);
-app.delete('/api/patients/:patientId',
+app.delete('/api/patients/:patientId', xsrfProtection,
   patientsController.deletePatientValidators,
   patientsController.deletePatient);
 
-app.get('/api/psychologue/mes-remboursements', reimbursementController.reimbursement);
-app.post('/api/psychologue/renseigner-convention',
+app.get('/api/psychologue/mes-remboursements', xsrfProtection, reimbursementController.reimbursement);
+app.post('/api/psychologue/renseigner-convention', xsrfProtection,
   reimbursementController.updateConventionInfoValidators,
   reimbursementController.updateConventionInfo);
 
-app.post('/api/psychologue/:psyId/activate', access.checkPsyParam, psyProfileController.activate);
-app.post('/api/psychologue/:psyId/suspend',
+app.post('/api/psychologue/:psyId/activate', xsrfProtection, access.checkPsyParam, psyProfileController.activate);
+app.post('/api/psychologue/:psyId/suspend', xsrfProtection,
   [access.checkPsyParam, ...psyProfileController.suspendValidators],
   psyProfileController.suspend);
-app.get('/api/psychologue/:psyId', access.checkPsyParam, psyProfileController.getPsyProfile);
-app.put('/api/psychologue/:psyId',
+app.get('/api/psychologue/:psyId', xsrfProtection, access.checkPsyParam, psyProfileController.getPsyProfile);
+app.put('/api/psychologue/:psyId', xsrfProtection,
   [access.checkPsyParam, ...psyProfileController.editPsyProfilValidators],
   psyProfileController.editPsyProfile);
-
-app.get('/api/university', universitiesController.getAll);
 
 app.get('*', getIndex);
 

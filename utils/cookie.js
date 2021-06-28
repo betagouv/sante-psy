@@ -21,12 +21,13 @@ module.exports.getSessionDuration = getSessionDuration;
  * @param {*} id
  * @see https://www.ionos.fr/digitalguide/sites-internet/developpement-web/json-web-token-jwt/
  */
-const getJwtTokenForUser = function getJwtTokenForUser(psychologist) {
+const getJwtTokenForUser = function getJwtTokenForUser(psychologist, xsrfToken) {
   const duration = getSessionDuration();
 
   return jwt.sign(
     {
       psychologist,
+      xsrfToken,
     },
     config.secret,
     { expiresIn: duration },
@@ -34,8 +35,8 @@ const getJwtTokenForUser = function getJwtTokenForUser(psychologist) {
 };
 module.exports.getJwtTokenForUser = getJwtTokenForUser;
 
-module.exports.createAndSetJwtCookie = (res, psychologistData) => {
-  const cookie = getJwtTokenForUser(psychologistData);
+module.exports.createAndSetJwtCookie = (res, psychologistData, xsrfToken) => {
+  const cookie = getJwtTokenForUser(psychologistData, xsrfToken);
   res.cookie('token', cookie, headers);
 };
 

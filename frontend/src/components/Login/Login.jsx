@@ -11,7 +11,7 @@ import agent from 'services/agent';
 const Login = () => {
   const {
     commonStore: { config, setNotification },
-    userStore: { user, pullUser },
+    userStore: { user, pullUser, setXsrfToken },
   } = useStore();
   const { token } = useParams();
   const history = useHistory();
@@ -21,7 +21,8 @@ const Login = () => {
   useEffect(() => {
     if (token) {
       agent.User.login(token)
-        .then(() => {
+        .then(response => {
+          setXsrfToken(response.xsrfToken);
           pullUser();
           history.push('/psychologue/mes-seances');
         });

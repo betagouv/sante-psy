@@ -50,7 +50,10 @@ describe('cookie', () => {
       const expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwc3ljaG9sb2dpc3QiOiJmODdlMzNjZC03MGUzLTQxYmItYjE3ZS04YTc2OGFlMGM4OTIiLCJpYXQiOjE2MjQ2MjgxMDIsImV4cCI6MTYyNDYyODEwM30.ZADGJyqXdUNxSkoRB6UVwWxXUJthJujoyP2nGZx_b8k';
       const clearStub = sinon.stub();
 
-      const verify = () => cookie.verifyJwt({ cookies: { token: expiredToken } }, { clearCookie: clearStub });
+      const verify = () => cookie.verifyJwt(
+        { cookies: { token: expiredToken } },
+        { clearCookie: clearStub },
+      );
 
       expect(verify).to.throw(CustomError);
       sinon.assert.calledWith(clearStub, 'token');

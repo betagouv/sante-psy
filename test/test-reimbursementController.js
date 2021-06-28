@@ -74,7 +74,8 @@ describe('reimbursementController', () => {
 
       return chai.request(app)
         .post('/api/psychologue/renseigner-convention')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           isConventionSigned: true,
           universityId: university.id,
@@ -97,7 +98,8 @@ describe('reimbursementController', () => {
 
       return chai.request(app)
       .post('/api/psychologue/renseigner-convention')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
         .send(payload)
         .then(async (res) => {
           res.body.success.should.equal(false);
