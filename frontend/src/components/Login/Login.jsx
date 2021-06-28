@@ -23,8 +23,7 @@ const Login = () => {
       agent.User.login(token)
         .then(response => {
           setXsrfToken(response.xsrfToken);
-          pullUser();
-          history.push('/psychologue/mes-seances');
+          pullUser().then(() => history.push('/psychologue/mes-seances'));
         });
     }
   }, [token]);

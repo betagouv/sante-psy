@@ -34,9 +34,10 @@ export default class UserStore {
   }
 
   pullUser() {
-    return agent.User.getConnected().then(user => {
-      this.user = user.data;
-    });
+    return agent.User.getConnected()
+      .then(user => {
+        this.user = user.data;
+      });
   }
 
   setXsrfToken(xsrfToken) {
