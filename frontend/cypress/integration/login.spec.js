@@ -6,6 +6,8 @@ describe('Login', () => {
       .as('sendMail');
     cy.intercept('POST', '/api/psychologist/login')
       .as('login');
+    cy.intercept('GET', '/api/connecteduser')
+      .as('connectedUser');
   });
 
   describe('Email', () => {
@@ -32,6 +34,8 @@ describe('Login', () => {
             .then(response => {
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');
+              cy.wait('@connectedUser');
+              cy.wait('@connectedUser');
               cy.location('pathname').should('eq', '/psychologue/mes-seances');
             });
         });
@@ -40,6 +44,7 @@ describe('Login', () => {
     it('should display an error when invalid token is entered', () => {
       cy.visit('/psychologue/login/nop');
       cy.wait('@login');
+      cy.wait('@connectedUser');
       cy.location('pathname').should('not.eq', '/psychologue/mes-seances');
       cy.get('[data-test-id="notification-error"]')
         .should(
@@ -55,9 +60,12 @@ describe('Login', () => {
             .then(response => {
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');
+              cy.wait('@connectedUser');
+              cy.wait('@connectedUser');
               logout();
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');
+              cy.wait('@connectedUser');
               cy.location('pathname').should('not.eq', '/psychologue/mes-seances');
               cy.get('[data-test-id="notification-error"]')
                 .should(
