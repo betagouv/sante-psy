@@ -11,7 +11,7 @@ const login = (psy, duration = 3600) => {
     'production_value_should_be_set_in_.env',
     { expiresIn: `${duration / 3600} hours` },
   );
-  window.localStorage.setItem('santepsytoken', currentToken);
+  cy.setCookie('token', currentToken);
 };
 
 const loginAsDefault = (duration = 3600) => {

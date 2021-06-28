@@ -6,7 +6,7 @@ const { default: clean } = require('./helper/clean');
 const dbAppointments = require('../db/appointments');
 const dbPatients = require('../db/patients');
 const dbPsychologists = require('../db/psychologists');
-const jwt = require('../utils/jwt');
+const cookie = require('../utils/cookie');
 const date = require('../utils/date');
 
 describe('appointmentsController', () => {
@@ -42,7 +42,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .post('/api/appointments')
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .send({
           patientId: patient.id,
           date: new Date('09/02/2021'),
@@ -78,7 +78,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .post('/api/appointments')
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .send({
           patientId: patient.id,
           date: new Date('09/02/2021'),
@@ -148,7 +148,7 @@ describe('appointmentsController', () => {
     it('should refuse invalid patientId', (done) => {
       chai.request(app)
       .post('/api/appointments')
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
         .send({
           patientId: 'not-a-uuid',
           date: new Date('09/02/2021'),
@@ -165,7 +165,7 @@ describe('appointmentsController', () => {
     it('should refuse empty patientId', (done) => {
       chai.request(app)
       .post('/api/appointments')
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
         .send({
           // no patientId
           date: new Date('09/02/2021'),
@@ -186,7 +186,7 @@ describe('appointmentsController', () => {
       };
       chai.request(app)
       .post('/api/appointments')
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
@@ -203,7 +203,7 @@ describe('appointmentsController', () => {
     it('should refuse empty date', (done) => {
       chai.request(app)
       .post('/api/appointments')
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr')}`)
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           // no date
@@ -264,7 +264,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .delete(`/api/appointments/${appointment.id}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.body.success.should.equal(true);
           res.body.message.should.equal('La séance a bien été supprimée.');
@@ -286,7 +286,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .delete(`/api/appointments/${appointment.id}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.body.success.should.equal(false);
           res.body.message.should.equal('Impossible de supprimer cette séance.');
@@ -308,7 +308,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .delete(`/api/appointments/${appointment.id}4`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.body.success.should.equal(false);
           res.body.message.should.equal('Vous devez spécifier une séance à supprimer.');
@@ -350,7 +350,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .delete('/api/appointments')
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber)}`)
         .then(async (res) => {
           res.status.should.equal(404);
 

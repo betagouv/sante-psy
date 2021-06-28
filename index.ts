@@ -4,7 +4,7 @@ import expressSanitizer from 'express-sanitizer';
 import expressJWT from 'express-jwt';
 import rateLimit from 'express-rate-limit';
 import slowDown from 'express-slow-down';
-import bearerToken from 'express-bearer-token';
+import cookieParser from 'cookie-parser';
 
 import cors from 'cors';
 import compression from 'compression';
@@ -40,7 +40,7 @@ app.use(cspConfig);
 app.use(compression());
 
 if (config.useCors) {
-  app.use(cors({ origin: 'http://localhost:3000' }));
+  app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 }
 
 if (config.testEnvironment) {
@@ -51,7 +51,7 @@ if (config.testEnvironment) {
 
 app.use(express.json());
 
-app.use(bearerToken());
+app.use(cookieParser(config.secret));
 
 app.use('/static', express.static('static'));
 app.get('/', getIndex);
@@ -63,7 +63,12 @@ app.use('/api/*',
   expressJWT({
     secret: config.secret,
     algorithms: ['HS256'],
-    getToken: (req) => req.token,
+    getToken: (req) => {
+      if (req.cookies !== undefined) {
+        return req.cookies.token;
+      }
+      return null;
+    },
   }).unless({
     path: [
       '/api/university',
@@ -71,6 +76,7 @@ app.use('/api/*',
       '/api/trouver-un-psychologue',
       '/api/psychologue/sendMail',
       '/api/psychologue/login',
+      '/api/connecteduser',
     ],
   }));
 
@@ -107,6 +113,7 @@ app.post('/api/psychologue/sendMail',
   loginController.sendMail);
 app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
 app.get('/api/connecteduser', speedLimiter, loginController.connectedUser);
+app.get('/api/psychologue/logout', speedLimiter, loginController.deleteToken);
 
 app.get('/api/appointments', appointmentsController.getAppointments);
 app.post('/api/appointments',

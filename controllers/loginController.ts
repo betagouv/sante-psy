@@ -7,7 +7,7 @@ import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import dbLoginToken from '../db/loginToken';
 import date from '../utils/date';
-import jwt from '../utils/jwt';
+import cookie from '../utils/cookie';
 import logs from '../utils/logs';
 import emailUtils from '../utils/email';
 import config from '../utils/config';
@@ -67,17 +67,24 @@ async function saveToken(email: string, token: string) {
   }
 }
 
-const connectedUser = async (req: Request, res: Response): Promise<void> => {
-  const psychologistId = req.user.psychologist;
+const deleteToken = (req: Request, res: Response): void => {
+  cookie.clearJwtCookie(res);
+  res.json({
+    success: true,
+  });
+};
 
-  const psy = await dbPsychologists.getPsychologistById(psychologistId);
-  const convention = await dbPsychologists.getConventionInfo(psychologistId);
+const connectedUser = async (req: Request, res: Response): Promise<void> => {
+  const currentPsyId = cookie.getCurrentPsyId(req, res);
+  const psy = await dbPsychologists.getPsychologistById(currentPsyId);
+  const convention = await dbPsychologists.getConventionInfo(currentPsyId);
 
   if (psy) {
     const {
-      firstNames, lastName, email, active,
+      dossierNumber, firstNames, lastName, email, active,
     } = psy;
     res.json({
+      dossierNumber,
       firstNames,
       lastName,
       email,
@@ -97,10 +104,10 @@ const login = async (req: Request, res: Response): Promise<void> => {
 
     if (dbToken) {
       const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
-      const newToken = jwt.getJwtTokenForUser(psychologistData.dossierNumber);
+      cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber);
       await dbLoginToken.delete(token);
       console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
-      res.json({ success: true, token: newToken });
+      res.json({ success: true });
       return;
     }
 
@@ -162,4 +169,5 @@ export default {
   connectedUser: asyncHelper(connectedUser),
   login: asyncHelper(login),
   sendMail: asyncHelper(sendMail),
+  deleteToken,
 };
