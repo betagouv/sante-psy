@@ -4,7 +4,7 @@ import knexModule from 'knex';
 import dbPsychologists from '../db/psychologists';
 import dbLoginToken from '../db/loginToken';
 
-const { seed } = require('../test/seed/fake_data');
+import seed from '../test/helper/fake_data';
 
 const knexConfig = require('../knexfile');
 
@@ -24,7 +24,7 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
 };
 
 const resetDB = async (req: Request, res: Response) : Promise<void> => {
-  await seed(knex);
+  await seed(knex, true);
   res.status(200).json('DB reset');
 };
 

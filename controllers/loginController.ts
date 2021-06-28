@@ -75,11 +75,13 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
 
   if (psy) {
     const {
-      firstNames, lastName, email, active,
+      firstNames, lastName, email, active, adeli, address,
     } = psy;
     res.json({
       firstNames,
       lastName,
+      adeli,
+      address,
       email,
       convention,
       active,

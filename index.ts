@@ -20,11 +20,11 @@ import patientsController from './controllers/patientsController';
 import psyListingController from './controllers/psyListingController';
 import psyProfileController from './controllers/psyProfileController';
 import loginController from './controllers/loginController';
-import reimbursementController from './controllers/reimbursementController';
 import testController from './controllers/testController';
 import getIndex from './controllers/reactController';
 import errorManager from './middlewares/errorManager';
 import universitiesController from './controllers/universityController';
+import conventionController from './controllers/conventionController';
 
 const { appName } = config;
 
@@ -129,10 +129,9 @@ app.delete('/api/patients/:patientId',
   patientsController.deletePatientValidators,
   patientsController.deletePatient);
 
-app.get('/api/psychologue/mes-remboursements', reimbursementController.reimbursement);
 app.post('/api/psychologue/renseigner-convention',
-  reimbursementController.updateConventionInfoValidators,
-  reimbursementController.updateConventionInfo);
+  conventionController.conventionInfoValidators,
+  conventionController.conventionInfo);
 
 app.post('/api/psychologue/:psyId/activate', access.checkPsyParam, psyProfileController.activate);
 app.post('/api/psychologue/:psyId/suspend',

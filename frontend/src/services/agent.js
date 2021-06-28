@@ -66,10 +66,7 @@ const Psychologist = {
     .put(`/psychologue/${store.userStore.decodedToken.psychologist}`, psychologist),
 };
 
-const Reimbursement = {
-  get: () => client.get('/psychologue/mes-remboursements'),
-  saveConvention: convention => client.post('/psychologue/renseigner-convention', convention),
-};
+const Convention = { save: convention => client.post('/psychologue/renseigner-convention', convention) };
 
 const University = { getAll: () => client.get('/university') };
 
@@ -82,9 +79,9 @@ const User = {
 export default {
   Appointment,
   Config,
+  Convention,
   Patient,
   Psychologist,
-  Reimbursement,
   University,
   User,
 };

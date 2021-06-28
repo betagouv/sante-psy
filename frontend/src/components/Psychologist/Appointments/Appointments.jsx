@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
-import Picker from 'react-month-picker';
 import classNames from 'classnames';
 
 import Notification from 'components/Notification/Notification';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import Mail from 'components/Footer/Mail';
+import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
-import date from 'services/date';
+import { formatFrenchDate, formatMonth } from 'services/date';
 import { shouldCheckConventionAgain } from 'services/conventionVerification';
 
 import { useStore } from 'stores/';
@@ -20,13 +20,9 @@ import styles from './appointments.cssmodule.scss';
 import 'react-month-picker/css/month-picker.css';
 import './custom-month-picker.css';
 
-const shortPickerLang = { months: date.shortFrenchMonthNames };
-const longPickerLang = { months: date.longFrenchMonthNames };
-
 const Appointments = () => {
   const [loading, setLoading] = useState(true);
   const [appointments, setAppointments] = useState([]);
-  const calendar = useRef(null);
 
   const [month, setMonth] = useState({
     year: new Date().getFullYear(),
@@ -51,11 +47,6 @@ const Appointments = () => {
     });
   };
 
-  const makeText = m => {
-    if (m && m.year && m.month) return (`${longPickerLang.months[m.month - 1]} ${m.year}`);
-    return '?';
-  };
-
   const filteredAppointments = appointments.filter(appointment => {
     const appointmentDate = new Date(appointment.appointmentDate);
     return appointmentDate.getFullYear() === month.year
@@ -74,14 +65,15 @@ const Appointments = () => {
       <Notification>
         Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
         {' '}
-        <HashLink to="/psychologue/mes-remboursements">Remboursement de mes séances</HashLink>
+        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
       </Notification>
       )}
       {!loading && user && !user.active && (
       <Notification>
-        Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur
+        Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire.
+        Pour que les étudiants puissent vous contacter, rendez vous sur la page
         {' '}
-        <HashLink to="/psychologue/mon-profil">votre profil</HashLink>
+        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
         .
       </Notification>
       )}
@@ -110,21 +102,8 @@ const Appointments = () => {
             <div className="fr-grid-row fr-grid-row--middle fr-grid-row--no-gutters">
               <label className="fr-label fr-col-xs-10 fr-col-lg-6" htmlFor="date">
                 Veuillez trouver ci-dessous vos séances déclarées pour le mois sélectionné :
+                <MonthPicker month={month} setMonth={setMonth} />
               </label>
-              <Picker
-                years={{ min: { year: 2021, month: 3 }, max: { year: 2022, month: 12 } }}
-                ref={calendar}
-                value={month}
-                lang={shortPickerLang.months}
-                onChange={(y, m) => { setMonth({ month: m, year: y }); calendar.current.dismiss(); }}
-              >
-                <input
-                  className="fr-input short-input"
-                  onChange={() => {}}
-                  onClick={() => calendar.current.show()}
-                  value={makeText(month)}
-                />
-              </Picker>
             </div>
           </div>
           <div className={classNames('fr-table', styles.table)}>
@@ -146,7 +125,7 @@ const Appointments = () => {
                 {filteredAppointments.map(appointment => (
                   <tr key={appointment.id} data-test-id="appointment-row">
                     <td>
-                      {date.formatFrenchDate(new Date(appointment.appointmentDate))}
+                      {formatFrenchDate(new Date(appointment.appointmentDate))}
                     </td>
                     <td>
                       {`${appointment.firstNames} ${appointment.lastName}`}
@@ -176,7 +155,7 @@ const Appointments = () => {
             <div className="fr-mt-2w">
               Vous n‘avez pas déclaré de séances pour le mois de
               {' '}
-              { makeText(month) }
+              { formatMonth(month) }
               .
             </div>
             )}

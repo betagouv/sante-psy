@@ -61,7 +61,7 @@ describe('appointmentsController', () => {
 
     it('should not create appointment if patient id is not linked to psy id', async () => {
       const psy = await clean.insertOnePsy();
-      const anotherPsy = await clean.insertOnePsy();
+      const anotherPsy = await clean.insertOnePsy('another@email.fr');
 
       const patient = await dbPatients.insertPatient(
         'Ada',

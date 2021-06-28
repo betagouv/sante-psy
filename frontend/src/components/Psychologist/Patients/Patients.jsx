@@ -8,7 +8,7 @@ import Mail from 'components/Footer/Mail';
 import PatientRow from 'components/Psychologist/Patients/PatientRow';
 
 import agent from 'services/agent';
-import date from 'services/date';
+import { parseDateForm } from 'services/date';
 
 import { useStore } from 'stores/';
 
@@ -48,7 +48,7 @@ const Patients = () => {
       missingInfo.push(DOCTOR_ADDRESS);
     }
 
-    if (!patient.dateOfBirth && patient.createdAt > date.parseDateForm(config.dateOfBirthDeploymentDate)) {
+    if (!patient.dateOfBirth && patient.createdAt > parseDateForm(config.dateOfBirthDeploymentDate)) {
       missingInfo.push(BIRTH_DATE);
     }
 
