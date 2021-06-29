@@ -37,7 +37,7 @@ const getOnePsy = (
   uniId: string = null,
   inactiveUntil: string | undefined = undefined,
 ): Psychologist => {
-  const dossierNumber = uuid.randomUuid();
+  const dossierNumber = uuid.generateUuidFromString(`psychologist-${personalEmail}`);
   return {
     dossierNumber,
     firstNames: `${getRandomInt()}First`,
@@ -66,7 +66,7 @@ const getOnePsy = (
 };
 
 const getOneInactivePsy = (inactiveUntil: string): Psychologist => getOnePsy(
-  'loginemail@beta.gouv.fr',
+  `inactive@${inactiveUntil}.fr`,
   'accepte',
   false,
   null,
@@ -74,6 +74,7 @@ const getOneInactivePsy = (inactiveUntil: string): Psychologist => getOnePsy(
 );
 
 const getOnePatient = (
+  index: number,
   psychologistId: string,
   doctorName = 'doctorName',
   useDateOfBirth = true,
@@ -83,7 +84,7 @@ const getOnePatient = (
     dateOfBirth = new Date(1980, 1, 10).toISOString();
   }
   return {
-    id: uuid.randomUuid(),
+    id: uuid.generateUuidFromString(`patient-${psychologistId}-${index}`),
     firstNames: `${getRandomInt()}First`,
     lastName: `${getRandomInt()}Last`,
     INE: '11111111111',
@@ -97,13 +98,16 @@ const getOnePatient = (
   };
 };
 
-const getOneAppointment = (patientId: string, psychologistId: string, month = 3): Appointment => {
-  const myDate = new Date(2021, month, 10).toISOString();
+const getOneAppointment = (
+  patientId: string, psychologistId: string, month = 3, day = 10, deleted = false,
+): Appointment => {
+  const myDate = new Date(2021, month, day).toISOString();
   return {
     id: uuid.randomUuid(),
     psychologistId,
     appointmentDate: myDate,
     patientId,
+    deleted,
   };
 };
 

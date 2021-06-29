@@ -57,6 +57,7 @@ overrides:
   - files:
       - "tests/*.js"
       - "test/*.js"
+      - "*.spec.js"
     rules:
       no-unused-expressions: "off"
       no-shadow: "off"

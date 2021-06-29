@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
@@ -41,7 +41,7 @@ function App() {
   }, [config]);
 
   return (
-    <BrowserRouter>
+    <>
       {__MATOMO__ && <Matomo />}
       <Header />
       <ScrollToTop />
@@ -68,7 +68,7 @@ function App() {
         )}
       </div>
       <Footer />
-    </BrowserRouter>
+    </>
   );
 }
 

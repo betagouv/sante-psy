@@ -1,6 +1,7 @@
 const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 const { suspend } = require('./utils/psychologist');
+const { removeConvention } = require('./utils/psychologist');
 
 describe('Profile', () => {
   beforeEach(() => {
@@ -14,6 +15,8 @@ describe('Profile', () => {
       .as('updateProfile');
     cy.intercept('GET', '/api/config')
       .as('config');
+    cy.intercept('POST', '/api/psychologue/renseigner-convention')
+      .as('updateConvention');
 
     resetDB();
     loginAsDefault();
@@ -23,12 +26,88 @@ describe('Profile', () => {
     cy.wait('@getProfile');
   });
 
+  describe('Display convention', () => {
+    it('should display convention info in non edition mode when existing', () => {
+      cy.get('[data-test-id="convention-form"]')
+        .should('not.exist');
+      cy.get('[data-test-id="convention-university-name"]')
+        .should('have.text', 'Je suis rattaché à l‘université de Dijon.');
+      cy.get('[data-test-id="convention-signed"]')
+        .should('have.text', 'La convention n‘est pas encore signée.');
+    });
+
+    it('should display convention form when not existing', () => {
+      removeConvention('login@beta.gouv.fr');
+      cy.reload();
+      cy.get('[data-test-id="convention-form"]')
+        .should('exist');
+      cy.get('[data-test-id="convention-university-name"]')
+        .should('not.exist');
+      cy.get('[data-test-id="convention-signed"]')
+        .should('not.exist');
+    });
+  });
+
+  describe('Update convention', () => {
+    it('should udpate existing convention info ', () => {
+      cy.get('[data-test-id="show-convention-form"]')
+        .click();
+      cy.get('[data-test-id="convention-form"]')
+        .should('exist');
+      cy.get('[data-test-id="convention-form-title"]')
+        .should('exist');
+      cy.get('[data-test-id="convention-university-select"]')
+        .select('Angers');
+      cy.get('[data-test-id="signed-true"]')
+        .click({ force: true });
+      cy.get('[data-test-id="update-convention-button"]')
+        .click();
+      cy.wait('@updateConvention');
+      cy.get('[data-test-id="convention-form"]')
+        .should('not.exist');
+      cy.get('[data-test-id="convention-university-name"]')
+        .should('have.text', 'Je suis rattaché à l‘université de Angers.');
+      cy.get('[data-test-id="convention-signed"]')
+        .should('have.text', 'La convention est signée.');
+      cy.get('[data-test-id="notification-success"]')
+        .should(
+          'have.text',
+          'Vos informations de conventionnement sont bien enregistrées.',
+        );
+    });
+
+    it('should create convention', () => {
+      removeConvention('login@beta.gouv.fr');
+      cy.reload();
+      cy.get('[data-test-id="convention-form"]')
+        .should('exist');
+      cy.get('[data-test-id="convention-form-title"]')
+        .should('not.exist');
+      cy.get('[data-test-id="convention-university-select"]')
+        .select('Aix-Marseille');
+      cy.get('[data-test-id="signed-false"]')
+        .click({ force: true });
+      cy.get('[data-test-id="update-convention-button"]')
+        .click();
+      cy.wait('@updateConvention');
+      cy.get('[data-test-id="convention-form"]')
+        .should('not.exist');
+      cy.get('[data-test-id="convention-university-name"]')
+        .should('have.text', 'Je suis rattaché à l‘université de Aix-Marseille.');
+      cy.get('[data-test-id="convention-signed"]')
+        .should('have.text', 'La convention n‘est pas encore signée.');
+      cy.get('[data-test-id="notification-success"]')
+        .should(
+          'have.text',
+          'Vos informations de conventionnement sont bien enregistrées.',
+        );
+    });
+  });
+
   describe('Display profile', () => {
     it('should display profile in non edition mode when existing', () => {
       cy.get('[data-test-id="edit-profile-form"]')
         .should('not.exist');
-      cy.get('[data-test-id="personal-email-info"]')
-        .should('have.text', 'Email personnel : login@beta.gouv.fr');
     });
   });
 
@@ -46,8 +125,6 @@ describe('Profile', () => {
       cy.wait('@updateProfile');
       cy.get('[data-test-id="edit-profile-form"]')
         .should('not.exist');
-      cy.get('[data-test-id="personal-email-info"]')
-        .should('have.text', 'Email personnel : new@beta.gouv.fr');
       cy.get('[data-test-id="notification-success"]')
         .should(
           'have.text',
@@ -193,6 +270,7 @@ describe('Profile', () => {
       tomorrow.setDate(tomorrow.getDate() + 2);
 
       cy.get(`.react-datepicker__day--0${tomorrow.getDate()}`)
+        .last()
         .click();
 
       cy.get('[data-test-id="suspend-button"]')
@@ -273,6 +351,7 @@ describe('Profile', () => {
       tomorrow.setDate(tomorrow.getDate() + 2);
 
       cy.get(`.react-datepicker__day--0${tomorrow.getDate()}`)
+        .last()
         .click();
 
       cy.get('[data-test-id="suspend-button"]')

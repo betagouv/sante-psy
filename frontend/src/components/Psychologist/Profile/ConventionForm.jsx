@@ -30,8 +30,8 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
   const saveConvention = e => {
     e.preventDefault();
     setNotification({});
-    agent.Reimbursement
-      .saveConvention(convention)
+    agent.Convention
+      .save(convention)
       .then(response => {
         setNotification(response);
         setUser({ convention: response.convention });

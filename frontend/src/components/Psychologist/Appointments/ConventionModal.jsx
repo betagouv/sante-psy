@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Modal, ModalTitle, ModalContent } from '@dataesr/react-dsfr';
 import { useStore } from 'stores/';
 import { checkConvention } from 'services/conventionVerification';
-import ConventionForm from '../Reimbursement/ConventionForm';
+import ConventionForm from '../Profile/ConventionForm';
 
 const ConventionModal = ({ currentConvention }) => {
   const { commonStore: { config } } = useStore();

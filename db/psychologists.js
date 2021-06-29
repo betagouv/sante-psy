@@ -10,12 +10,11 @@ const {
   nonEditablePsyFields,
 } = require('../services/updatePsyFields');
 
-module.exports.getAcceptedPsychologists = async (selectedData) => {
+module.exports.getAcceptedPsychologistsArchivedOrNot = async (selectedData) => {
   try {
     const psychologists = knex.column(...selectedData)
         .select()
         .from(psychologistsTable)
-        .whereNot('archived', true)
         .where('state', DOSSIER_STATE.accepte);
     return psychologists;
   } catch (err) {

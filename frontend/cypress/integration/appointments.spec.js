@@ -23,7 +23,7 @@ describe('Appointments', () => {
   describe('Display', () => {
     it('should get appointments', () => {
       cy.get('[data-test-id="appointment-row"]')
-        .should('have.length', 5);
+        .should('have.length', 13);
     });
 
     it('should display default announcement only once', () => {
@@ -53,7 +53,7 @@ describe('Appointments', () => {
         .last()
         .should(
           'have.text',
-          'Veuillez indiquer l‘état de votre conventionnement sur la page Remboursement de mes séances',
+          'Veuillez indiquer l‘état de votre conventionnement sur la page Mes informations',
         );
     });
   });
@@ -65,7 +65,7 @@ describe('Appointments', () => {
         .click();
       cy.wait('@deleteAppointment');
       cy.get('[data-test-id="appointment-row"]')
-        .should('have.length', 4);
+        .should('have.length', 12);
       cy.get('[data-test-id="notification-success"]')
         .should(
           'have.text',
@@ -83,7 +83,7 @@ describe('Appointments', () => {
         cy.get('[data-test-id="notification-error"]')
           .should(
             'have.text',
-            'Votre profil n‘est plus visible dans l‘annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur votre profil.',
+            'Votre profil n‘est plus visible dans l‘annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur la page Mes informations.',
           );
       });
     });
