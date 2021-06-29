@@ -57,7 +57,7 @@ const Header = () => {
             </ToolItemGroup>
           </Tool>
         </HeaderBody>
-        <Nav path={location.pathname} connected={psychologistPage && user}/>
+        <Nav path={location.pathname} connected={psychologistPage && user} />
       </DSHeader>
     </>
   );
