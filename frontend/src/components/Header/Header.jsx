@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import {
-  Skiplinks,
-  SkiplinkItem,
   Header as DSHeader,
   HeaderBody,
   Logo,
@@ -30,11 +28,6 @@ const Header = () => {
   const psychologistPage = location.pathname.startsWith('/psychologue');
   return (
     <>
-      <Skiplinks>
-        <SkiplinkItem href="#contenu">Accéder au contenu</SkiplinkItem>
-        <SkiplinkItem href="#header-navigation">Accéder au menu</SkiplinkItem>
-        <SkiplinkItem href="#footer">Accéder au footer</SkiplinkItem>
-      </Skiplinks>
       <DSHeader>
         <HeaderBody>
           <Logo>

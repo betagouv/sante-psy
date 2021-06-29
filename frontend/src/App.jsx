@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
 import Header from 'components/Header/Header';
+import Skiplinks from 'components/Header/Skiplinks';
 import Matomo from 'components/Matomo/Matomo';
 import Landing from 'components/Landing/Landing';
 import Footer from 'components/Footer/Footer';
@@ -43,6 +44,7 @@ function App() {
   return (
     <>
       {__MATOMO__ && <Matomo />}
+      <Skiplinks />
       <Header />
       <ScrollToTop />
       <div id="contenu">
