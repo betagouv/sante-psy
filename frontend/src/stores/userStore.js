@@ -1,46 +1,32 @@
-import { reaction, makeObservable, observable, action, computed } from 'mobx';
-import jwtDecode from 'jwt-decode';
+import { makeObservable, observable, action, reaction } from 'mobx';
 
 import agent from 'services/agent';
 
 export default class UserStore {
-  token = window.localStorage.getItem('santepsytoken');
-
   user;
+
+  xsrfToken = window.localStorage.getItem('xsrfToken');
 
   constructor() {
     makeObservable(this, {
-      token: observable,
       user: observable,
-      decodedToken: computed,
-      setToken: action.bound,
+      xsrfToken: observable,
       pullUser: action.bound,
       setUser: action.bound,
+      setXsrfToken: action.bound,
+      deleteToken: action.bound,
     });
 
     reaction(
-      () => this.token,
-      token => {
-        if (token) {
-          window.localStorage.setItem('santepsytoken', token);
+      () => this.xsrfToken,
+      xsrfToken => {
+        if (xsrfToken) {
+          window.localStorage.setItem('xsrfToken', xsrfToken);
         } else {
-          window.localStorage.removeItem('santepsytoken');
+          window.localStorage.removeItem('xsrfToken');
         }
       },
     );
-  }
-
-  setToken(token) {
-    this.token = token;
-  }
-
-  get decodedToken() {
-    return this.token ? jwtDecode(this.token) : undefined;
-  }
-
-  isTokenExpired = () => {
-    const now = new Date();
-    return now.getTime() > this.decodedToken.exp * 1000;
   }
 
   setUser = user => {
@@ -48,16 +34,21 @@ export default class UserStore {
   }
 
   pullUser() {
-    if (this.token) {
-      if (!this.isTokenExpired()) {
-        return agent.User.getConnected().then(user => {
-          this.user = user.data;
-        });
-      }
-    } else {
-      this.user = null;
-    }
+    return agent.User.getConnected()
+      .then(user => {
+        this.user = user.data;
+      });
+  }
 
-    return Promise.resolve();
+  setXsrfToken(xsrfToken) {
+    this.xsrfToken = xsrfToken;
+    return this.pullUser();
+  }
+
+  deleteToken() {
+    return agent.User.logout().then(() => {
+      this.user = null;
+      this.xsrfToken = null;
+    });
   }
 }

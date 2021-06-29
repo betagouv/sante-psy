@@ -16,7 +16,7 @@ import Nav from './Nav';
 
 const Header = () => {
   const location = useLocation();
-  const { userStore: { user, setToken } } = useStore();
+  const { userStore: { user, deleteToken } } = useStore();
   const [path, setPath] = useState(() => location.pathname || '');
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const Header = () => {
           <Tool>
             <ToolItemGroup>
               {user ? (
-                <ToolItem data-test-id="logout-button" link="/" onClick={() => { setToken(null); }}>
+                <ToolItem data-test-id="logout-button" link="/" onClick={deleteToken}>
                   Déconnexion
                 </ToolItem>
               ) : (

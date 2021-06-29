@@ -1,7 +1,7 @@
 const chai = require('chai');
 const app = require('../../index');
 const { default: clean } = require('../helper/clean');
-const jwt = require('../../utils/jwt');
+const cookie = require('../../utils/cookie');
 const dbPsychologists = require('../../db/psychologists');
 const dbUniversities = require('../../db/universities');
 
@@ -24,8 +24,9 @@ describe('conventionController', () => {
       chai.expect(psy.isConventionSigned).not.to.exist;
 
       return chai.request(app)
-        .post('/api/psychologue/renseigner-convention')
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+      .post(`/api/psychologist/${psy.dossierNumber}/convention`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           isConventionSigned: true,
           universityId: university.id,
@@ -47,8 +48,9 @@ describe('conventionController', () => {
       chai.expect(psy.isConventionSigned).not.to.exist;
 
       return chai.request(app)
-      .post('/api/psychologue/renseigner-convention')
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+      .post(`/api/psychologist/${psy.dossierNumber}/convention`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
         .send(payload)
         .then(async (res) => {
           res.body.success.should.equal(false);
