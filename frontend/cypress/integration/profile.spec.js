@@ -1,21 +1,22 @@
 const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
+const { selectNextCalendarDate } = require('./utils/calendar');
 const { suspend } = require('./utils/psychologist');
 const { removeConvention } = require('./utils/psychologist');
 
 describe('Profile', () => {
   beforeEach(() => {
-    cy.intercept('POST', '/api/psychologue/*/suspend')
+    cy.intercept('POST', '/api/psychologist/*/suspend')
       .as('suspend');
-    cy.intercept('POST', '/api/psychologue/*/activate')
+    cy.intercept('POST', '/api/psychologist/*/activate')
       .as('activate');
-    cy.intercept('GET', '/api/psychologue/*')
+    cy.intercept('GET', '/api/psychologist/*')
       .as('getProfile');
-    cy.intercept('PUT', '/api/psychologue/*')
+    cy.intercept('PUT', '/api/psychologist/*')
       .as('updateProfile');
     cy.intercept('GET', '/api/config')
       .as('config');
-    cy.intercept('POST', '/api/psychologue/renseigner-convention')
+    cy.intercept('POST', '/api/psychologist/*/convention')
       .as('updateConvention');
 
     resetDB();
@@ -266,12 +267,7 @@ describe('Profile', () => {
       cy.get('[data-test-id="radio-duration-other-input"]')
         .click();
 
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 2);
-
-      cy.get(`.react-datepicker__day--0${tomorrow.getDate()}`)
-        .last()
-        .click();
+      selectNextCalendarDate();
 
       cy.get('[data-test-id="suspend-button"]')
         .should('not.be.disabled');
@@ -347,21 +343,16 @@ describe('Profile', () => {
       cy.get('[data-test-id="radio-duration-other-input"]')
         .click();
 
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 2);
-
-      cy.get(`.react-datepicker__day--0${tomorrow.getDate()}`)
-        .last()
-        .click();
+      const nextCalendarDate = selectNextCalendarDate();
 
       cy.get('[data-test-id="suspend-button"]')
         .click();
 
       cy.wait('@suspend').then(response => {
         cy.wrap(response.request.body.reason).should('eq', 'Autre: parcequuuuuuuuuue');
-        cy.wrap((new Date(response.request.body.date)).getFullYear()).should('eq', tomorrow.getFullYear());
-        cy.wrap((new Date(response.request.body.date)).getMonth()).should('eq', tomorrow.getMonth());
-        cy.wrap((new Date(response.request.body.date)).getDate()).should('eq', tomorrow.getDate());
+        cy.wrap((new Date(response.request.body.date)).getFullYear()).should('eq', nextCalendarDate.getFullYear());
+        cy.wrap((new Date(response.request.body.date)).getMonth()).should('eq', nextCalendarDate.getMonth());
+        cy.wrap((new Date(response.request.body.date)).getDate()).should('eq', nextCalendarDate.getDate());
       });
     });
   });

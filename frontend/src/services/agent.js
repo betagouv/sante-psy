@@ -8,14 +8,12 @@ const createClient = () => {
     paramsSerializer(params) {
       return Qs.stringify(params, { arrayFormat: 'repeat' });
     },
+    withCredentials: true,
   });
 
-  simpleClient.interceptors.request.use(config => {
-    const { token } = store.userStore;
-    if (token) {
-      config.headers = { Authorization: `Bearer ${token}` };
-    }
-    return config;
+  simpleClient.interceptors.request.use(request => {
+    request.headers['xsrf-token'] = store.userStore.xsrfToken;
+    return request;
   });
 
   return simpleClient;
@@ -40,6 +38,16 @@ client.interceptors.response.use(
   },
 );
 
+clientWithoutErrorManagement.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response && error.response.status !== 500) {
+      store.commonStore.setNotification(error.response.data);
+    }
+    throw error;
+  },
+);
+
 const Appointment = {
   add: (patientId, date) => client.post('/appointments/', { patientId, date }),
   delete: id => client.delete(`/appointments/${id}`),
@@ -57,23 +65,27 @@ const Patient = {
 };
 
 const Psychologist = {
-  activate: () => client.post(`/psychologue/${store.userStore.decodedToken.psychologist}/activate`),
+  activate: () => client.post(`/psychologist/${store.userStore.user.dossierNumber}/activate`),
   find: () => client.get('/trouver-un-psychologue'),
-  getProfile: () => client.get(`/psychologue/${store.userStore.decodedToken.psychologist}`),
+  getProfile: () => client.get(`/psychologist/${store.userStore.user.dossierNumber}`),
   suspend: (reason, date) => client
-    .post(`/psychologue/${store.userStore.decodedToken.psychologist}/suspend`, { reason, date }),
+    .post(`/psychologist/${store.userStore.user.dossierNumber}/suspend`, { reason, date }),
   updateProfile: psychologist => client
-    .put(`/psychologue/${store.userStore.decodedToken.psychologist}`, psychologist),
+    .put(`/psychologist/${store.userStore.user.dossierNumber}`, psychologist),
 };
 
-const Convention = { save: convention => client.post('/psychologue/renseigner-convention', convention) };
+const Convention = {
+  save: convention => client
+    .post(`/psychologist/${store.userStore.user.dossierNumber}/convention`, convention),
+};
 
 const University = { getAll: () => client.get('/university') };
 
 const User = {
   getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),
-  login: token => client.post('/psychologue/login', { token }),
-  sendMail: email => client.post('/psychologue/sendMail', { email }),
+  login: token => client.post('/psychologist/login', { token }),
+  sendMail: email => client.post('/psychologist/sendMail', { email }),
+  logout: () => client.post('/psychologist/logout'),
 };
 
 export default {

@@ -2,7 +2,7 @@ const chai = require('chai');
 const { expect } = require('chai');
 const sinon = require('sinon');
 const { v4: uuidv4 } = require('uuid');
-const jwt = require('../utils/jwt');
+const cookie = require('../utils/cookie');
 const app = require('../index');
 const { default: clean } = require('./helper/clean');
 const dbPsychologists = require('../db/psychologists');
@@ -17,7 +17,7 @@ describe('psyProfileController', () => {
       const psy = await clean.insertOnePsy();
 
       return chai.request(app)
-        .get(`/api/psychologue/${psy.dossierNumber}`)
+        .get(`/api/psychologist/${psy.dossierNumber}`)
         .then(async (res) => {
           res.status.should.equal(401);
         });
@@ -28,8 +28,9 @@ describe('psyProfileController', () => {
       const targetPsy = await clean.insertOnePsy('other@psy.fr');
 
       return chai.request(app)
-        .get(`/api/psychologue/${targetPsy.dossierNumber}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
+        .get(`/api/psychologist/${targetPsy.dossierNumber}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(403);
         });
@@ -39,8 +40,9 @@ describe('psyProfileController', () => {
       const psy = await clean.insertOnePsy();
 
       return chai.request(app)
-        .get(`/api/psychologue/${psy.dossierNumber}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .get(`/api/psychologist/${psy.dossierNumber}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.body.success.should.equal(true);
 
@@ -93,8 +95,9 @@ describe('psyProfileController', () => {
       };
 
       const res = await chai.request(app)
-      .put(`/api/psychologue/${psy.dossierNumber}`)
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+      .put(`/api/psychologist/${psy.dossierNumber}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
       .send(postData);
 
       sinon.assert.notCalled(updatePsyStub);
@@ -345,8 +348,9 @@ describe('psyProfileController', () => {
       const psy = await clean.insertOnePsy();
 
       const res = await chai.request(app)
-      .put(`/api/psychologue/${psy.dossierNumber}`)
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+      .put(`/api/psychologist/${psy.dossierNumber}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
       .send(postData);
 
       sinon.assert.called(updatePsyStub);
@@ -430,8 +434,9 @@ describe('psyProfileController', () => {
       };
 
       chai.request(app)
-      .put(`/api/psychologue/${psy.dossierNumber}`)
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+      .put(`/api/psychologist/${psy.dossierNumber}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
           res.body.success.should.equal(true);
@@ -452,7 +457,7 @@ describe('psyProfileController', () => {
       const psy = await clean.insertOnePsy();
 
       return chai.request(app)
-        .put(`/api/psychologue/${psy.dossierNumber}`)
+        .put(`/api/psychologist/${psy.dossierNumber}`)
         .then(async (res) => {
           res.status.should.equal(401);
         });
@@ -463,8 +468,9 @@ describe('psyProfileController', () => {
       const targetPsy = await clean.insertOnePsy('other@psy.fr');
 
       return chai.request(app)
-        .put(`/api/psychologue/${targetPsy.dossierNumber}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
+        .put(`/api/psychologist/${targetPsy.dossierNumber}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
@@ -485,8 +491,9 @@ describe('psyProfileController', () => {
       const psy = clean.getOnePsy();
 
       return chai.request(app)
-        .put(`/api/psychologue/${psy.dossierNumber}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .put(`/api/psychologist/${psy.dossierNumber}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
@@ -508,8 +515,9 @@ describe('psyProfileController', () => {
       const psy = await clean.insertOnePsy();
 
       return chai.request(app)
-        .put(`/api/psychologue/${psy.dossierNumber}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .put(`/api/psychologist/${psy.dossierNumber}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
@@ -543,8 +551,9 @@ describe('psyProfileController', () => {
       const psy = await clean.insertOnePsy();
 
       return chai.request(app)
-        .put(`/api/psychologue/${psy.dossierNumber}`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .put(`/api/psychologist/${psy.dossierNumber}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
@@ -592,7 +601,7 @@ describe('psyProfileController', () => {
       const psy = await clean.insertOnePsy();
 
       return chai.request(app)
-        .post(`/api/psychologue/${psy.dossierNumber}/activate`)
+        .post(`/api/psychologist/${psy.dossierNumber}/activate`)
         .then(async (res) => {
           res.status.should.equal(401);
           sinon.assert.notCalled(activatePsyStub);
@@ -604,8 +613,9 @@ describe('psyProfileController', () => {
       const targetPsy = await clean.insertOnePsy('other@psy.fr');
 
       return chai.request(app)
-        .post(`/api/psychologue/${targetPsy.dossierNumber}/activate`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
+        .post(`/api/psychologist/${targetPsy.dossierNumber}/activate`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(403);
           sinon.assert.notCalled(activatePsyStub);
@@ -617,8 +627,9 @@ describe('psyProfileController', () => {
       await dbPsychologists.savePsychologistInPG([psy]);
 
       return chai.request(app)
-        .post(`/api/psychologue/${psy.dossierNumber}/activate`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .post(`/api/psychologist/${psy.dossierNumber}/activate`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.body.success.should.equal(true);
           res.body.message.should.equal('Vos informations sont de nouveau visibles sur l\'annuaire.');
@@ -645,8 +656,9 @@ describe('psyProfileController', () => {
       };
 
       const res = await chai.request(app)
-      .post(`/api/psychologue/${psy.dossierNumber}/suspend`)
-      .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+      .post(`/api/psychologist/${psy.dossierNumber}/suspend`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
       .send(postData);
 
       sinon.assert.notCalled(suspendPsyStub);
@@ -659,7 +671,7 @@ describe('psyProfileController', () => {
       const psy = await clean.insertOnePsy();
 
       return chai.request(app)
-        .post(`/api/psychologue/${psy.dossierNumber}/suspend`)
+        .post(`/api/psychologist/${psy.dossierNumber}/suspend`)
         .then(async (res) => {
           res.status.should.equal(401);
           sinon.assert.notCalled(suspendPsyStub);
@@ -671,8 +683,9 @@ describe('psyProfileController', () => {
       const targetPsy = await clean.insertOnePsy('other@psy.fr');
 
       return chai.request(app)
-        .post(`/api/psychologue/${targetPsy.dossierNumber}/suspend`)
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(loggedPsy.dossierNumber)}`)
+        .post(`/api/psychologist/${targetPsy.dossierNumber}/suspend`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(403);
           sinon.assert.notCalled(suspendPsyStub);
@@ -686,12 +699,13 @@ describe('psyProfileController', () => {
       const nextDate = new Date();
       nextDate.setDate(nextDate.getDate() + 2);
       return chai.request(app)
-        .post(`/api/psychologue/${psy.dossierNumber}/suspend`)
+        .post(`/api/psychologist/${psy.dossierNumber}/suspend`)
         .send({
           date: nextDate,
           reason: 'Why are you asking ? are you the police ?',
         })
-        .set('Authorization', `Bearer ${jwt.getJwtTokenForUser(psy.dossierNumber)}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.body.success.should.equal(true);
           res.body.message.should.equal('Vos informations ne sont plus visibles sur l\'annuaire.');

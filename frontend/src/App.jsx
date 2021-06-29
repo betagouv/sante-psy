@@ -27,16 +27,13 @@ const FindPsychologist = React.lazy(() => import('components/PsyListing/PsyListi
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
 function App() {
-  const { commonStore: { setConfig, config }, userStore: { user, token, pullUser } } = useStore();
+  const { commonStore: { setConfig, config }, userStore: { user, pullUser } } = useStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     agent.Config.get().then(response => setConfig(response.data));
+    pullUser().finally(() => setLoading(false));
   }, []);
-
-  useEffect(() => {
-    pullUser().then(() => setLoading(false));
-  }, [token]);
 
   useEffect(() => {
     document.title = config.appName ? config.appName : __APPNAME__;

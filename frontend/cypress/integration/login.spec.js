@@ -2,10 +2,14 @@ const { logout, loginAsDefault } = require('./utils/login');
 
 describe('Login', () => {
   beforeEach(() => {
-    cy.intercept('POST', '/api/psychologue/sendMail')
+    cy.intercept('POST', '/api/psychologist/sendMail')
       .as('sendMail');
-    cy.intercept('POST', '/api/psychologue/login')
+    cy.intercept('POST', '/api/psychologist/login')
       .as('login');
+    cy.intercept('POST', '/api/psychologist/logout')
+      .as('logout');
+    cy.intercept('GET', '/api/connecteduser')
+      .as('connectedUser');
   });
 
   describe('Email', () => {
@@ -26,12 +30,14 @@ describe('Login', () => {
 
   describe('Login', () => {
     it('should login user when token is entered', () => {
-      cy.request('POST', 'http://localhost:8080/api/psychologue/sendMail', { email: 'login@beta.gouv.fr' })
+      cy.request('POST', 'http://localhost:8080/api/psychologist/sendMail', { email: 'login@beta.gouv.fr' })
         .then(() => {
-          cy.request('http://localhost:8080/test/psychologue/login@beta.gouv.fr')
+          cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
             .then(response => {
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');
+              cy.wait('@connectedUser');
+              cy.wait('@connectedUser');
               cy.location('pathname').should('eq', '/psychologue/mes-seances');
             });
         });
@@ -40,6 +46,7 @@ describe('Login', () => {
     it('should display an error when invalid token is entered', () => {
       cy.visit('/psychologue/login/nop');
       cy.wait('@login');
+      cy.wait('@connectedUser');
       cy.location('pathname').should('not.eq', '/psychologue/mes-seances');
       cy.get('[data-test-id="notification-error"]')
         .should(
@@ -49,15 +56,18 @@ describe('Login', () => {
     });
 
     it('should not logged twice with same token', () => {
-      cy.request('POST', 'http://localhost:8080/api/psychologue/sendMail', { email: 'login@beta.gouv.fr' })
+      cy.request('POST', 'http://localhost:8080/api/psychologist/sendMail', { email: 'login@beta.gouv.fr' })
         .then(() => {
-          cy.request('http://localhost:8080/test/psychologue/login@beta.gouv.fr')
+          cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
             .then(response => {
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');
+              cy.wait('@connectedUser');
+              cy.wait('@connectedUser');
               logout();
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');
+              cy.wait('@connectedUser');
               cy.location('pathname').should('not.eq', '/psychologue/mes-seances');
               cy.get('[data-test-id="notification-error"]')
                 .should(
@@ -93,7 +103,6 @@ describe('Login', () => {
       // We explicitely wait for token to expire
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(1000);
-
       cy.visit('/psychologue/login');
       cy.location('pathname').should('eq', '/psychologue/login');
       // message is displayed
@@ -103,21 +112,21 @@ describe('Login', () => {
           'Votre session a expiré, veuillez vous reconnecter.',
         );
       cy.reload();
-      // message is displayed on reload
-      cy.get('[data-test-id="notification-error"]')
-        .should(
-          'have.text',
-          'Votre session a expiré, veuillez vous reconnecter.',
-        );
-      cy.get('[data-test-id="notification-close"]')
-        .click();
-      // message disappear on close
+      // message is never shown after reload
       cy.get('[data-test-id="notification-error"]')
         .should('not.exist');
-      cy.reload();
-      // message is never shown after on close
-      cy.get('[data-test-id="notification-error"]')
-        .should('not.exist');
+    });
+  });
+
+  describe('Logout', () => {
+    it('should redirect to home page after login in', () => {
+      loginAsDefault();
+      cy.visit('/psychologue/mes-seances');
+
+      logout();
+      cy.wait('@logout');
+
+      cy.location('pathname').should('eq', '/psychologue/login');
     });
   });
 });
