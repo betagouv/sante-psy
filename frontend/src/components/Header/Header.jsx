@@ -11,6 +11,7 @@ import {
   Tool,
   ToolItemGroup,
   ToolItem,
+  Button,
 } from '@dataesr/react-dsfr';
 import { useStore } from 'stores/';
 import Nav from './Nav';
@@ -51,7 +52,7 @@ const Header = () => {
                 </ToolItem>
               ) : (
                 <ToolItem link="/psychologue/login">
-                  Se connecter en tant que psychologue
+                  <Button>Se connecter en tant que psychologue</Button>
                 </ToolItem>
               )}
             </ToolItemGroup>
