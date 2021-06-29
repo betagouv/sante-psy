@@ -40,7 +40,7 @@ const Header = () => {
           <Tool>
             <ToolItemGroup>
               {user ? (
-                <ToolItem link="/" onClick={() => { setToken(null); }}>
+                <ToolItem data-test-id="logout-button" link="/" onClick={() => { setToken(null); }}>
                   Déconnexion
                 </ToolItem>
               ) : (
