@@ -21,6 +21,7 @@ const Nav = ({ path, connected }) => (
     {connected
       ? connectedItems.map(item => (
         <NavItem
+          key={connectedItems.indexOf(item)}
           current={path === item.link}
           title={item.title}
           asLink={<Link to={item.link} />}
@@ -28,6 +29,7 @@ const Nav = ({ path, connected }) => (
       )) : (
         defaultItems.map(item => (
           <NavItem
+            key={defaultItems.indexOf(item)}
             current={path === item.link}
             title={item.title}
             asLink={<Link to={item.link} />}

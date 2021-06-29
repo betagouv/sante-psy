@@ -1,6 +1,14 @@
 import React from 'react';
 import { Footer as DSFooter, FooterBody, FooterBottom, FooterLink, Logo } from '@dataesr/react-dsfr';
 
+const footerLinks = [
+  { title: 'Accessibilité: non conforme', link: '/mentions-legales#accessibilite' },
+  { title: 'Données personnelles et gestion des cookies', link: '/donnees-personnelles-et-gestion-des-cookies' },
+  { title: 'Mentions légales', link: '/mentions-legales' },
+  { title: 'En savoir plus', link: '/faq' },
+  { title: 'Nos statistiques', link: '/stats' },
+];
+
 const Footer = () => (
   <DSFooter>
     <FooterBody
@@ -20,21 +28,11 @@ const Footer = () => (
       </Logo>
     </FooterBody>
     <FooterBottom>
-      <FooterLink href="/mentions-legales#accessibilite">
-        Accessibilité: non conforme
-      </FooterLink>
-      <FooterLink href="/donnees-personnelles-et-gestion-des-cookies">
-        Données personnelles et gestion des cookies
-      </FooterLink>
-      <FooterLink href="/mentions-legales">
-        Mentions légales
-      </FooterLink>
-      <FooterLink href="/faq">
-        En savoir plus
-      </FooterLink>
-      <FooterLink href="/stats">
-        Nos statistiques
-      </FooterLink>
+      { footerLinks.map(item => (
+        <FooterLink key={footerLinks.indexOf(item)} href={item.link}>
+          {item.title}
+        </FooterLink>
+      ))}
     </FooterBottom>
   </DSFooter>
 );
