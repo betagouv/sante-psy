@@ -7,12 +7,13 @@ import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import dbLoginToken from '../db/loginToken';
 import date from '../utils/date';
-import jwt from '../utils/jwt';
+import cookie from '../utils/cookie';
 import logs from '../utils/logs';
 import emailUtils from '../utils/email';
 import config from '../utils/config';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
+import { checkXsrf } from '../middlewares/xsrfProtection';
 
 const emailValidators = [
   check('email')
@@ -67,28 +68,39 @@ async function saveToken(email: string, token: string) {
   }
 }
 
+const deleteToken = (req: Request, res: Response): void => {
+  cookie.clearJwtCookie(res);
+  res.json({
+    success: true,
+  });
+};
+
 const connectedUser = async (req: Request, res: Response): Promise<void> => {
-  const psychologistId = req.user.psychologist;
+  const tokenData = cookie.verifyJwt(req, res);
+  if (checkXsrf(req, tokenData.xsrfToken)) {
+    const psy = await dbPsychologists.getPsychologistById(tokenData.psychologist);
+    const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
 
-  const psy = await dbPsychologists.getPsychologistById(psychologistId);
-  const convention = await dbPsychologists.getConventionInfo(psychologistId);
+    if (psy) {
+      const {
+        dossierNumber, firstNames, lastName, email, active, adeli, address,
+      } = psy;
+      res.json({
+        dossierNumber,
+        firstNames,
+        lastName,
+        adeli,
+        address,
+        email,
+        convention,
+        active,
+      });
 
-  if (psy) {
-    const {
-      firstNames, lastName, email, active, adeli, address,
-    } = psy;
-    res.json({
-      firstNames,
-      lastName,
-      adeli,
-      address,
-      email,
-      convention,
-      active,
-    });
-  } else {
-    res.json();
+      return;
+    }
   }
+
+  res.json();
 };
 
 const login = async (req: Request, res: Response): Promise<void> => {
@@ -99,10 +111,12 @@ const login = async (req: Request, res: Response): Promise<void> => {
 
     if (dbToken) {
       const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
-      const newToken = jwt.getJwtTokenForUser(psychologistData.dossierNumber);
+      const xsrfToken = crypto.randomBytes(64).toString('hex');
+      cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken);
       await dbLoginToken.delete(token);
       console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
-      res.json({ success: true, token: newToken });
+
+      res.json({ success: true, xsrfToken });
       return;
     }
 
@@ -164,4 +178,5 @@ export default {
   connectedUser: asyncHelper(connectedUser),
   login: asyncHelper(login),
   sendMail: asyncHelper(sendMail),
+  deleteToken,
 };

@@ -1,10 +1,8 @@
 import express from 'express';
 import expressSanitizer from 'express-sanitizer';
 
-import expressJWT from 'express-jwt';
 import rateLimit from 'express-rate-limit';
-import slowDown from 'express-slow-down';
-import bearerToken from 'express-bearer-token';
+import cookieParser from 'cookie-parser';
 
 import cors from 'cors';
 import compression from 'compression';
@@ -12,19 +10,10 @@ import compression from 'compression';
 import config from './utils/config';
 import cspConfig from './utils/csp-config';
 import sentry from './utils/sentry';
-import access from './utils/access';
 
-import configController from './controllers/configController';
-import appointmentsController from './controllers/appointmentsController';
-import patientsController from './controllers/patientsController';
-import psyListingController from './controllers/psyListingController';
-import psyProfileController from './controllers/psyProfileController';
-import loginController from './controllers/loginController';
-import testController from './controllers/testController';
-import getIndex from './controllers/reactController';
 import errorManager from './middlewares/errorManager';
-import universitiesController from './controllers/universityController';
-import conventionController from './controllers/conventionController';
+import getIndex from './controllers/reactController';
+import router from './routers';
 
 const { appName } = config;
 
@@ -40,39 +29,18 @@ app.use(cspConfig);
 app.use(compression());
 
 if (config.useCors) {
-  app.use(cors({ origin: 'http://localhost:3000' }));
-}
-
-if (config.testEnvironment) {
-  app.get('/test/psychologue/:email', testController.getPsychologist);
-  app.post('/test/reset', testController.resetDB);
-  app.delete('/test/psychologue/:email/convention', testController.removeConvention);
+  app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 }
 
 app.use(express.json());
 
-app.use(bearerToken());
+app.use(cookieParser(config.secret));
 
 app.use('/static', express.static('static'));
 app.get('/', getIndex);
 app.use(express.static('./frontend/dist'));
 
 app.use(expressSanitizer());
-
-app.use('/api/*',
-  expressJWT({
-    secret: config.secret,
-    algorithms: ['HS256'],
-    getToken: (req) => req.token,
-  }).unless({
-    path: [
-      '/api/university',
-      '/api/config',
-      '/api/trouver-un-psychologue',
-      '/api/psychologue/sendMail',
-      '/api/psychologue/login',
-    ],
-  }));
 
 // prevent abuse
 const rateLimiter = rateLimit({
@@ -82,67 +50,7 @@ const rateLimiter = rateLimit({
 });
 app.use(rateLimiter);
 
-// prevent abuse for some rules
-const speedLimiter = slowDown({
-  windowMs: 5 * 60 * 1000, // 5 minutes
-  delayAfter: config.speedLimitation ? 100 : 10000, // allow X requests per 5 minutes, then...
-  delayMs: 500, // begin adding 500ms of delay per request above 100:
-  // request # 101 is delayed by  500ms
-  // request # 102 is delayed by 1000ms
-  // request # 103 is delayed by 1500ms
-  // etc.
-});
-app.get('/api/config', speedLimiter, configController.getConfig);
-app.get('/api/trouver-un-psychologue', speedLimiter, psyListingController.getActivePsychologists);
-
-// prevent abuse for some rules
-const speedLimiterLogin = slowDown({
-  windowMs: 5 * 60 * 1000, // 5 minutes
-  delayAfter: config.speedLimitation ? 10 : 10000, // allow X requests per 5 minutes, then...
-  delayMs: 500, // begin adding 500ms of delay per request above 10:
-});
-app.post('/api/psychologue/sendMail',
-  speedLimiterLogin,
-  loginController.emailValidators,
-  loginController.sendMail);
-app.post('/api/psychologue/login', speedLimiterLogin, loginController.login);
-app.get('/api/connecteduser', speedLimiter, loginController.connectedUser);
-
-app.get('/api/appointments', appointmentsController.getAppointments);
-app.post('/api/appointments',
-  appointmentsController.createNewAppointmentValidators,
-  appointmentsController.createNewAppointment);
-app.delete('/api/appointments/:appointmentId',
-  appointmentsController.deleteAppointmentValidators,
-  appointmentsController.deleteAppointment);
-
-app.get('/api/patients', patientsController.getPatients);
-app.post('/api/patients',
-  patientsController.createNewPatientValidators,
-  patientsController.createNewPatient);
-app.get('/api/patients/:patientId',
-  patientsController.getPatientValidators, patientsController.getPatient);
-app.put('/api/patients/:patientId',
-  patientsController.editPatientValidators,
-  patientsController.editPatient);
-app.delete('/api/patients/:patientId',
-  patientsController.deletePatientValidators,
-  patientsController.deletePatient);
-
-app.post('/api/psychologue/renseigner-convention',
-  conventionController.conventionInfoValidators,
-  conventionController.conventionInfo);
-
-app.post('/api/psychologue/:psyId/activate', access.checkPsyParam, psyProfileController.activate);
-app.post('/api/psychologue/:psyId/suspend',
-  [access.checkPsyParam, ...psyProfileController.suspendValidators],
-  psyProfileController.suspend);
-app.get('/api/psychologue/:psyId', access.checkPsyParam, psyProfileController.getPsyProfile);
-app.put('/api/psychologue/:psyId',
-  [access.checkPsyParam, ...psyProfileController.editPsyProfilValidators],
-  psyProfileController.editPsyProfile);
-
-app.get('/api/university', universitiesController.getAll);
+app.use(router);
 
 app.get('*', getIndex);
 

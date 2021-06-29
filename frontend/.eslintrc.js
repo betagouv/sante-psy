@@ -43,6 +43,7 @@ module.exports = {
     'no-plusplus': 'off',
     'no-underscore-dangle': 'off',
     'no-use-before-define': 'off',
+    'no-only-tests/no-only-tests': 'error',
     'object-curly-newline': ['error', {
       ObjectExpression: { multiline: true },
       ObjectPattern: { multiline: true },
@@ -76,5 +77,6 @@ module.exports = {
   },
   plugins: [
     'react',
+    'no-only-tests',
   ],
 };

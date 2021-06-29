@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { observer } from 'mobx-react';
 
 import { useStore } from 'stores/';
 
 const TopMenu = ({ buttonStyle, close }) => {
-  const { userStore: { setToken } } = useStore();
+  const { userStore: { deleteToken } } = useStore();
   return (
     <ul className="fr-links-group">
       <li>
@@ -15,7 +14,7 @@ const TopMenu = ({ buttonStyle, close }) => {
               data-test-id="logout-button"
               type="button"
               className="fr-link"
-              onClick={() => setToken(null)}
+              onClick={deleteToken}
             >
               Déconnexion
             </button>
@@ -25,7 +24,10 @@ const TopMenu = ({ buttonStyle, close }) => {
             <Link
               to="/"
               className="fr-link"
-              onClick={() => { setToken(null); close(); }}
+              onClick={() => {
+                deleteToken();
+                close();
+              }}
             >
               Déconnexion
             </Link>
@@ -36,4 +38,4 @@ const TopMenu = ({ buttonStyle, close }) => {
   );
 };
 
-export default observer(TopMenu);
+export default TopMenu;

@@ -14,6 +14,7 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
   try {
     const psy = await dbPsychologists.getAcceptedPsychologistByEmail(req.params.email);
     const token = await dbLoginToken.getByEMail(req.params.email);
+
     res.json({
       psy,
       token: token ? token.token : undefined,

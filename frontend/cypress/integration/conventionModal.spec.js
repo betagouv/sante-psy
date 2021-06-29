@@ -18,7 +18,7 @@ describe('ConventionModal', () => {
       .as('user');
     cy.intercept('GET', '/api/appointments')
       .as('appointments');
-    cy.intercept('POST', '/api/psychologue/renseigner-convention')
+    cy.intercept('POST', '/api/psychologist/*/convention')
       .as('updateConvention');
 
     resetDB();
