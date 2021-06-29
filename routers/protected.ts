@@ -26,7 +26,7 @@ router.use(expressJWT({
 }));
 router.use(xsrfProtection);
 
-router.get('/psychologist/logout', loginController.deleteToken);
+router.post('/psychologist/logout', loginController.deleteToken);
 
 router.use('/appointments', appointmentsRouter);
 router.use('/patients', patientsRouter);

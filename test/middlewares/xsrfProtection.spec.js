@@ -18,6 +18,7 @@ describe('Route should be XSRF protected', () => {
     { method: 'post', url: '/api/psychologist/495614e8-89af-4406-ba02-9fc038b991f9/suspend' },
     { method: 'get', url: '/api/psychologist/495614e8-89af-4406-ba02-9fc038b991f9' },
     { method: 'put', url: '/api/psychologist/495614e8-89af-4406-ba02-9fc038b991f9' },
+    { method: 'post', url: '/api/psychologist/logout' },
   ];
 
   routes.map((route) => it(`${route.method} ${route.url} without xsrf`,

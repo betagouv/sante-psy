@@ -24,7 +24,10 @@ const TopMenu = ({ buttonStyle, close }) => {
             <Link
               to="/"
               className="fr-link"
-              onClick={() => { deleteToken(); close(); }}
+              onClick={() => {
+                deleteToken();
+                close();
+              }}
             >
               Déconnexion
             </Link>

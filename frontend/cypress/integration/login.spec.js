@@ -6,6 +6,8 @@ describe('Login', () => {
       .as('sendMail');
     cy.intercept('POST', '/api/psychologist/login')
       .as('login');
+    cy.intercept('POST', '/api/psychologist/logout')
+      .as('logout');
     cy.intercept('GET', '/api/connecteduser')
       .as('connectedUser');
   });
@@ -113,6 +115,18 @@ describe('Login', () => {
       // message is never shown after reload
       cy.get('[data-test-id="notification-error"]')
         .should('not.exist');
+    });
+  });
+
+  describe('Logout', () => {
+    it.only('should redirect to home page after login in', () => {
+      loginAsDefault();
+      cy.visit('/psychologue/mes-seances');
+
+      logout();
+      cy.wait('@logout');
+
+      cy.location('pathname').should('eq', '/psychologue/login');
     });
   });
 });

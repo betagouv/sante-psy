@@ -46,9 +46,9 @@ export default class UserStore {
   }
 
   deleteToken() {
-    this.xsrfToken = null;
     return agent.User.logout().then(() => {
       this.user = null;
+      this.xsrfToken = null;
     });
   }
 }
