@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
+import { Button } from '@dataesr/react-dsfr';
 
 import Ariane from 'components/Ariane/Ariane';
 import Mail from 'components/Footer/Mail';
@@ -92,12 +93,9 @@ const NewAppointment = () => {
               />
             </div>
             <div className="fr-my-5w">
-              <button
-                type="submit"
-                className="fr-btn fr-fi-add-line fr-btn--icon-left"
-              >
+              <Button submit className="fr-fi-add-line fr-btn--icon-left">
                 Créer la séance
-              </button>
+              </Button>
             </div>
           </div>
         </form>
