@@ -1,5 +1,12 @@
 import React from 'react';
-import { Footer as DSFooter, FooterBody, FooterBottom, FooterLink, Logo } from '@dataesr/react-dsfr';
+import {
+  Footer as DSFooter,
+  FooterBody,
+  FooterBottom,
+  FooterLink,
+  Logo,
+  Link,
+} from '@dataesr/react-dsfr';
 
 const footerLinks = [
   { title: 'Accessibilité: non conforme', link: '/mentions-legales#accessibilite' },
@@ -13,14 +20,13 @@ const FooterDescription = () => (
   <>
     Le code source est ouvert et les contributions sont bienvenues.
     {' '}
-    <a
+    <Link
       title="Voir le code source"
       href="https://github.com/betagouv/sante-psy"
       target="_blank"
-      rel="noopener noreferrer"
     >
       Voir le code source
-    </a>
+    </Link>
     .
   </>
 );
