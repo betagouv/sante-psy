@@ -119,7 +119,7 @@ describe('Login', () => {
   });
 
   describe('Logout', () => {
-    it.only('should redirect to home page after login in', () => {
+    it('should redirect to home page after login in', () => {
       loginAsDefault();
       cy.visit('/psychologue/mes-seances');
 

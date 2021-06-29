@@ -328,7 +328,7 @@ describe('Profile', () => {
       checkSuspension('convention', 'forever', () => new Date('9999/12/30'), () => new Date('10000/01/01'));
     });
 
-    it.only('should suspend profil for custom reasons and custom date', () => {
+    it('should suspend profil for custom reasons and custom date', () => {
       cy.get('[data-test-id="suspend-redirection-button"]')
         .click();
 
