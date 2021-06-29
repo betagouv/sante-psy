@@ -9,20 +9,25 @@ const footerLinks = [
   { title: 'Nos statistiques', link: '/stats' },
 ];
 
-const Footer = () => (
-  <DSFooter>
-    <FooterBody
-      description="Le code source est ouvert et les contributions sont bienvenues. Voir le code source"
-    >
-      {/* TODO : "Voir le code source" should be a link */}
-      {/* <a
+const FooterDescription = () => (
+  <>
+    Le code source est ouvert et les contributions sont bienvenues.
+    {' '}
+    <a
       title="Voir le code source"
       href="https://github.com/betagouv/sante-psy"
       target="_blank"
       rel="noopener noreferrer"
     >
       Voir le code source
-    </a> */}
+    </a>
+    .
+  </>
+);
+
+const Footer = () => (
+  <DSFooter>
+    <FooterBody description={<FooterDescription />}>
       <Logo href="https://www.enseignementsup-recherche.gouv.fr/">
         Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
       </Logo>
