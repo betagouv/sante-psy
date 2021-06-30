@@ -53,7 +53,6 @@ const verifyJwt = function verifyJwt(req, res) {
     const verified = jwt.verify(req.cookies.token, config.secret);
     return verified;
   } catch (err) {
-    console.log(err);
     if (err instanceof jwt.TokenExpiredError) {
       res.clearCookie('token');
       throw new CustomError('Votre session a expiré, veuillez vous reconnecter.', 498);
