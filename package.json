@@ -23,7 +23,7 @@
     "rollback": "knex migrate:rollback",
     "rollback-one": "knex migrate:down",
     "start": "node dist/index.js",
-    "test": "ts-mocha --require @babel/register --exit test/**",
+    "test": "TEST_ENVIRONMENT=true ts-mocha --require @babel/register --exit test/**",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
     "scalingo-prebuild": "npm --prefix frontend run scalingo-prebuild",
