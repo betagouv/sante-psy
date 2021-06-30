@@ -10,6 +10,7 @@ import {
   ToolItemGroup,
   ToolItem,
   Button,
+  Link,
 } from '@dataesr/react-dsfr';
 import { useStore } from 'stores/';
 import Nav from './Nav';
@@ -40,7 +41,8 @@ const Header = () => {
           <Tool>
             <ToolItemGroup>
               {user ? (
-                <ToolItem data-test-id="logout-button" link="/" onClick={deleteToken}>
+                // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                <ToolItem asLink={<Link data-test-id="logout-button" onClick={deleteToken} />}>
                   Déconnexion
                 </ToolItem>
               ) : (
