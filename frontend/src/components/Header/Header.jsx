@@ -10,7 +10,6 @@ import {
   ToolItemGroup,
   ToolItem,
   Button,
-  Link,
 } from '@dataesr/react-dsfr';
 import { useStore } from 'stores/';
 import Nav from './Nav';
