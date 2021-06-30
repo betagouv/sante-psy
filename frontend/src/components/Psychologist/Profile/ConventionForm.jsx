@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from '@dataesr/react-dsfr';
+
 import Input from 'components/Form/Input';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
@@ -76,14 +78,14 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
       />
 
       <div className="fr-my-5w">
-        <button
+        <Button
+          submit
           data-test-id="update-convention-button"
-          type="submit"
-          className="fr-btn fr-fi-check-line fr-btn--icon-left"
+          className="fr-fi-check-line fr-btn--icon-left"
           disabled={convention.isConventionSigned === '' || convention.universityId === ''}
         >
           Enregistrer
-        </button>
+        </Button>
       </div>
     </form>
   );

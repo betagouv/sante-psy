@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
+import { Button } from '@dataesr/react-dsfr';
 
 import Notification from 'components/Notification/Notification';
 import GlobalNotification from 'components/Notification/GlobalNotification';
@@ -131,21 +132,23 @@ const Appointments = () => {
                       {`${appointment.firstNames} ${appointment.lastName}`}
                     </td>
                     <td>
-                      <button
+                      <Button
                         data-test-id="delete-appointment-button-small"
                         onClick={() => deleteAppointment(appointment.id)}
-                        type="button"
-                        className="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-displayed-xs fr-hidden-sm fr-float-right"
+                        secondary
+                        size="sm"
+                        className="fr-fi-delete-line fr-displayed-xs fr-hidden-sm fr-float-right"
                         aria-label="Supprimer"
                       />
-                      <button
+                      <Button
                         data-test-id="delete-appointment-button-large"
-                        type="button"
+                        secondary
+                        size="sm"
                         onClick={() => deleteAppointment(appointment.id)}
-                        className="fr-btn fr-btn--secondary fr-btn--sm fr-fi-delete-line fr-btn--icon-left fr-hidden-xs fr-displayed-sm fr-float-right"
+                        className="fr-fi-delete-line fr-btn--icon-left fr-hidden-xs fr-displayed-sm fr-float-right"
                       >
                         Supprimer
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                 ))}
