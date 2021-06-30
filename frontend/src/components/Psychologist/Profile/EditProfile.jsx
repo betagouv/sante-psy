@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from '@dataesr/react-dsfr';
 
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
@@ -143,13 +144,13 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             onChange={changePsychologist}
           />
           <div className="fr-my-5w">
-            <button
+            <Button
+              submit
               data-test-id="save-profile-button"
-              type="submit"
-              className="fr-btn fr-btn--icon-left fr-fi-check-line"
+              className="fr-btn--icon-left fr-fi-check-line"
             >
               Valider les modifications
-            </button>
+            </Button>
           </div>
         </form>
       </div>
