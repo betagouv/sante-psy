@@ -6,6 +6,7 @@ const app = require('../../index');
 
 const loginController = rewire('../../controllers/loginController');
 const dbLoginToken = require('../../db/loginToken');
+const { default: dbLastConnection } = require('../../db/lastConnections');
 const dbPsychologists = require('../../db/psychologists');
 const dbUniversities = require('../../db/universities');
 const emailUtils = require('../../utils/email');
@@ -45,12 +46,11 @@ describe('loginController', async () => {
     describe('getLogin', () => {
       let getByTokenStub;
       let deleteTokenStub;
+      let lastConnectionStub;
       let getAcceptedPsychologistByEmailStub;
       beforeEach(async () => {
-        deleteTokenStub = sinon
-          .stub(dbLoginToken, 'delete')
-          .returns(Promise.resolve());
-
+        deleteTokenStub = sinon.stub(dbLoginToken, 'delete');
+        lastConnectionStub = sinon.stub(dbLastConnection, 'upsert');
         getAcceptedPsychologistByEmailStub = sinon
           .stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
           .returns(
@@ -63,6 +63,7 @@ describe('loginController', async () => {
 
       afterEach((done) => {
         getByTokenStub.restore();
+        lastConnectionStub.restore();
         deleteTokenStub.restore();
         getAcceptedPsychologistByEmailStub.restore();
         done();
@@ -83,6 +84,7 @@ describe('loginController', async () => {
           .end((err, res) => {
             sinon.assert.called(getByTokenStub);
             sinon.assert.called(deleteTokenStub);
+            sinon.assert.called(lastConnectionStub);
             sinon.assert.called(getAcceptedPsychologistByEmailStub);
 
             res.body.success.should.equal(true);
@@ -104,6 +106,7 @@ describe('loginController', async () => {
           .end((err, res) => {
             sinon.assert.called(getByTokenStub);
             sinon.assert.notCalled(deleteTokenStub);
+            sinon.assert.notCalled(lastConnectionStub);
             sinon.assert.notCalled(getAcceptedPsychologistByEmailStub);
             chai.assert.isUndefined(res.body.token);
             res.body.success.should.equal(false);
