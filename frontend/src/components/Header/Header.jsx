@@ -41,8 +41,7 @@ const Header = () => {
           <Tool>
             <ToolItemGroup>
               {user ? (
-                // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                <ToolItem asLink={<Link data-test-id="logout-button" onClick={deleteToken} />}>
+                <ToolItem asLink={<div data-test-id="logout-button" onClick={deleteToken} />}>
                   Déconnexion
                 </ToolItem>
               ) : (
