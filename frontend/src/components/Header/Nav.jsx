@@ -25,10 +25,7 @@ const Nav = ({ path, connected }) => (
           current={path.startsWith(item.link)}
           title={item.title}
           asLink={<Link to={item.link} />}
-        >
-          {/* TODO: remove NavSubItem (was added to avoid error) */}
-          <NavSubItem title={item.title} link={item.link} />
-        </NavItem>
+        />
       )) : (
         defaultItems.map(item => (
           <NavItem
@@ -36,10 +33,7 @@ const Nav = ({ path, connected }) => (
             current={path === item.link}
             title={item.title}
             asLink={<Link to={item.link} />}
-          >
-            {/* TODO: remove NavSubItem (was added to avoid error) */}
-            <NavSubItem title={item.title} link={item.link} />
-          </NavItem>
+          />
         )))}
   </HeaderNav>
 );
