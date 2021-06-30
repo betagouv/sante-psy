@@ -52,7 +52,13 @@ const request = async (query, variables) => {
 };
 
 const executeQuery = (query, variables) => request(query, variables);
-const executeMutation = (query, variables) => request(query, variables);
+const executeMutation = async (query, variables) => {
+  if (config.testEnvironment) {
+    console.log('Mutation bypassed because you are using a test environment', query, variables);
+    return Promise.resolve();
+  }
+  return request(query, variables);
+};
 
 const getSimplePsyInfo = (cursor, state) => {
   const query = gql`
