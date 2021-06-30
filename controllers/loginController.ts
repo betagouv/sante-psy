@@ -6,6 +6,7 @@ import ejs from 'ejs';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import dbLoginToken from '../db/loginToken';
+import dbLastConnection from '../db/lastConnections';
 import date from '../utils/date';
 import cookie from '../utils/cookie';
 import logs from '../utils/logs';
@@ -113,8 +114,10 @@ const login = async (req: Request, res: Response): Promise<void> => {
       const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
       const xsrfToken = crypto.randomBytes(64).toString('hex');
       cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken);
-      await dbLoginToken.delete(token);
       console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
+
+      dbLoginToken.delete(token);
+      dbLastConnection.upsert(psychologistData.dossierNumber);
 
       res.json({ success: true, xsrfToken });
       return;
