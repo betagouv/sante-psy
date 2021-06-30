@@ -7,7 +7,8 @@ import {
 } from '../champsAndAnnotations';
 import { getAllPsychologistList } from './importDossier';
 
-const uploadDocument = require('./uploadDocument');
+import uploadDocument from './uploadDocument';
+
 const graphql = require('../../utils/graphql');
 
 const FILE = path.join(

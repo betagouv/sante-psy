@@ -17,7 +17,7 @@ describe('autoAcceptPsychologist', () => {
     uploadDocumentStub.returns('un super id');
     unsets.push(graphql.__set__('executeMutation', executeMutationStub));
     autoAcceptPsychologists.__Rewire__('graphql', graphql);
-    autoAcceptPsychologists.__Rewire__('uploadDocument', uploadDocumentStub);
+    autoAcceptPsychologists.__Rewire__('uploadDocument_1', { default: uploadDocumentStub });
   });
 
   afterEach((done) => {
