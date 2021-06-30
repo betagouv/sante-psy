@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { HeaderNav, NavItem, NavSubItem } from '@dataesr/react-dsfr';
+import { HeaderNav, NavItem } from '@dataesr/react-dsfr';
 
 const defaultItems = [
   { title: 'Comment ça se passe ?', link: '/' },
