@@ -4,7 +4,7 @@ const selectNextCalendarDate = () => {
 
   const dayToSelect = tomorrow.getDate();
 
-  if (dayToSelect < 3) {
+  if (dayToSelect === 1) {
     cy.get('.react-datepicker__navigation--next')
       .click();
   }
