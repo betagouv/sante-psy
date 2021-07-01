@@ -32,7 +32,7 @@ describe('Profile', () => {
       cy.get('[data-test-id="convention-form"]')
         .should('not.exist');
       cy.get('[data-test-id="convention-university-name"]')
-        .should('have.text', 'Je suis rattaché à l‘université de Dijon.');
+        .should('have.text', 'Je suis rattaché à l‘université de Strasbourg (UNISTRA).');
       cy.get('[data-test-id="convention-signed"]')
         .should('have.text', 'La convention n‘est pas encore signée.');
     });
