@@ -4,6 +4,8 @@ import { observer } from 'mobx-react';
 import {
   Header as DSHeader,
   HeaderBody,
+  HeaderNav,
+  NavItem,
   Logo,
   Service,
   Tool,
@@ -12,7 +14,20 @@ import {
   Button,
 } from '@dataesr/react-dsfr';
 import { useStore } from 'stores/';
-import Nav from './Nav';
+
+const defaultItems = [
+  { title: 'Comment ça se passe ?', link: '/' },
+  { title: 'Trouver un psychologue', link: '/trouver-un-psychologue' },
+  { title: 'Foire aux questions', link: '/faq' },
+  // { title: 'Nous contacter', link: '/mentions-legales' },
+];
+
+const connectedItems = [
+  { title: 'Déclarer mes séances', link: '/psychologue/mes-seances' },
+  { title: 'Gérer mes patients', link: '/psychologue/mes-patients' },
+  { title: 'Remboursement de mes séances', link: '/psychologue/mes-remboursements' },
+  { title: 'Mes informations', link: '/psychologue/mon-profil' },
+];
 
 const Header = () => {
   const location = useLocation();
@@ -51,7 +66,25 @@ const Header = () => {
             </ToolItemGroup>
           </Tool>
         </HeaderBody>
-        <Nav path={location.pathname} connected={psychologistPage && user} />
+        <HeaderNav>
+          {psychologistPage && user
+            ? connectedItems.map(item => (
+              <NavItem
+                key={connectedItems.indexOf(item)}
+                current={path.startsWith(item.link)}
+                title={item.title}
+                link={item.link}
+              />
+            )) : (
+              defaultItems.map(item => (
+                <NavItem
+                  key={defaultItems.indexOf(item)}
+                  current={path === item.link}
+                  title={item.title}
+                  link={item.link}
+                />
+              )))}
+        </HeaderNav>
       </DSHeader>
     </>
   );
