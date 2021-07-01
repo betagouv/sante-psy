@@ -61,7 +61,7 @@ const Billing = () => {
         <p className="fr-mb-1v">
           Besoin de plus d&lsquo;informations ?
         </p>
-        <ul class="fr-btns-group fr-btns-group--inline">
+        <ul className="fr-btns-group fr-btns-group--inline">
           <li>
             <HashLink
               className="fr-btn fr-btn--secondary fr-mt-2w"
