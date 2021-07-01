@@ -61,12 +61,27 @@ const Billing = () => {
         <p className="fr-mb-1v">
           Besoin de plus d&lsquo;informations ?
         </p>
-        <HashLink
-          className="fr-btn fr-btn--secondary fr-mt-2w"
-          to="/faq#remboursement"
-        >
-          Consulter la Foire Aux Questions
-        </HashLink>
+        <ul class="fr-btns-group fr-btns-group--inline">
+          <li>
+            <HashLink
+              className="fr-btn fr-btn--secondary fr-mt-2w"
+              to="/faq#remboursement"
+            >
+              Consulter la Foire Aux Questions
+            </HashLink>
+          </li>
+          <li>
+            <a
+              className="fr-btn fr-btn--secondary fr-mt-2w fr-mr-1w"
+              href={`${__API__}/static/documents/tutoriel_choruspro_sante-psy-etudiant.pdf`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="fr-fi-file-download-line" aria-hidden="true" />
+              Tutoriel Chorus PRO
+            </a>
+          </li>
+        </ul>
       </div>
       <h3>
         Aide pour la facturation
