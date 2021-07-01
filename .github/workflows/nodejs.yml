@@ -23,7 +23,7 @@ jobs:
     - name: NPM front install and build
       run: npm run scalingo-prebuild
     - name: Back build
-      run: npm run scalingo-postbuild
+      run: npm run postbuild
     - name: Back linter
       run: npm run lint -- --quiet
     - name: EJS linter
