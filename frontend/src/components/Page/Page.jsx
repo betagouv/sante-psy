@@ -1,18 +1,35 @@
 import React from 'react';
-import classnames from 'classnames';
+
+import {
+  Container,
+  Row,
+  Col,
+  Title,
+  Text,
+} from '@dataesr/react-dsfr';
 
 import styles from './page.cssmodule.scss';
 
 const Page = ({ title, description, background, children }) => (
-  <div className={classnames(styles.page, styles[background], 'fr-container')}>
-    <div className={styles.container}>
-      <div className={styles.sectionTitle}>
-        <div className={styles.title}>{title}</div>
-        <div className={styles.description}>{description}</div>
-      </div>
-      {children}
-    </div>
-  </div>
+  <Container justifyContent="center" spacing="py-4w" className={styles[background]}>
+    <Row>
+      <Col>
+        <Container justifyContent="center" className={styles.container}>
+          <Row>
+            <Col spacing="py-3w" className={styles.sectionTitle}>
+              <Title as="h1" look="h2" className={styles.title}>{title}</Title>
+              <Text size="lg">{description}</Text>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              {children}
+            </Col>
+          </Row>
+        </Container>
+      </Col>
+    </Row>
+  </Container>
 );
 
 export default Page;

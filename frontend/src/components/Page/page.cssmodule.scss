@@ -6,35 +6,18 @@
   background-color: #F5F5FF;
 }
 
-.page {
-  padding-top: 32px;
-  padding-bottom: 32px;
-}
-
 .container {
-  margin: auto;
   background-color: #FFFFFF;
   max-width: 800px;
 }
 
 .sectionTitle {
   color: var(--bf500);
-  margin: auto;
-  padding: 16px;
   text-align: center;
 }
 
 .title {
-  line-height: 64px;
-  font-size: 30px;
-  font-weight: bold;
   position: relative;
-  span, div {position: relative;}
-  margin-bottom: 8px;
   text-decoration: underline #FCEA04 10px;
 }
 
-.description {
-  font-size: 16px;
-  margin-bottom: 16px;
-}
