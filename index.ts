@@ -38,7 +38,7 @@ app.use(cookieParser(config.secret));
 
 app.use('/static', express.static('static'));
 app.get('/', getIndex);
-app.use(express.static('./frontend/dist'));
+app.use(express.static('./dist/frontend'));
 
 app.use(expressSanitizer());
 
