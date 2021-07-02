@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import {
@@ -19,7 +19,6 @@ const defaultItems = [
   { title: 'Comment ça se passe ?', link: '/' },
   { title: 'Trouver un psychologue', link: '/trouver-un-psychologue' },
   { title: 'Foire aux questions', link: '/faq' },
-  // { title: 'Nous contacter', link: '/mentions-legales' },
 ];
 
 const connectedItems = [
@@ -32,13 +31,6 @@ const connectedItems = [
 const Header = () => {
   const location = useLocation();
   const { userStore: { user, deleteToken } } = useStore();
-  const [path, setPath] = useState(() => location.pathname || '');
-
-  useEffect(() => {
-    if (path !== location.pathname) {
-      setPath(location.pathname);
-    }
-  }, [path, setPath, location]);
 
   const psychologistPage = location.pathname.startsWith('/psychologue');
   return (
@@ -71,7 +63,7 @@ const Header = () => {
             ? connectedItems.map(item => (
               <NavItem
                 key={connectedItems.indexOf(item)}
-                current={path.startsWith(item.link)}
+                current={location.pathname && location.pathname.startsWith(item.link)}
                 title={item.title}
                 link={item.link}
               />
@@ -79,7 +71,7 @@ const Header = () => {
               defaultItems.map(item => (
                 <NavItem
                   key={defaultItems.indexOf(item)}
-                  current={path === item.link}
+                  current={location.pathname && location.pathname === item.link}
                   title={item.title}
                   link={item.link}
                 />
