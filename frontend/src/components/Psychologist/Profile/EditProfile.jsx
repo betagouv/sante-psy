@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@dataesr/react-dsfr';
+import { Button, RadioGroup, Radio, TextInput } from '@dataesr/react-dsfr';
 
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import Input from 'components/Form/Input';
 
 import DEPARTEMENTS from 'services/departments';
+import { __Field } from 'graphql';
 
 const EditProfile = ({ psychologist, updatePsy, loading }) => {
   const [updatedPsychologist, setUpdatedPsychologist] = useState(psychologist);
@@ -40,17 +41,14 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             <span className="red-text">*</span>
             ) sont obligatoires.
           </p>
-          <Input
+          <TextInput
             label="Email personnel"
             hint="Adresse non communiquée sur l'annuaire, utilisée uniquement pour la réception de mail provenant de
              Santé Psy Etudiant."
-            type="text"
-            field="personalEmail"
             data-test-id="psy-personal-email-input"
             value={updatedPsychologist.personalEmail}
-            onChange={changePsychologist}
+            onChange={e => changePsychologist(e.target.value, "personalEmail")}
             pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
-            placeholder="exemple@beta.gouv.fr"
             required
           />
 
@@ -65,83 +63,69 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             options={DEPARTEMENTS.map(departement => ({ id: departement, label: departement }))}
             required
           />
-          <Input
+          <TextInput
             label="Adresse du cabinet"
             hint="Adresse où se rendre pour le rendez-vous."
-            type="text"
-            field="address"
             data-test-id="psy-address-input"
             value={updatedPsychologist.address}
-            onChange={changePsychologist}
+            onChange={e => changePsychologist(e.target.value, "address")}
             required
           />
-          <Input
+          <TextInput
             label="Téléphone du secrétariat"
             hint="Numéro auquel prendre rendez-vous."
-            type="text"
-            field="phone"
             data-test-id="psy-phone-input"
             value={updatedPsychologist.phone}
-            onChange={changePsychologist}
+            onChange={e => changePsychologist(e.target.value, "phone")}
             required
           />
-          <Input
+          <TextInput
             label="Email de contact"
             hint="Adresse email à laquelle prendre rendez-vous ou poser des questions."
-            type="text"
-            field="email"
             data-test-id="psy-email-input"
             value={updatedPsychologist.email}
-            onChange={changePsychologist}
+            onChange={e => changePsychologist(e.target.value, "email")}
             pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
-            placeholder="exemple@beta.gouv.fr"
           />
-          <Input
-            type="radio"
+          <RadioGroup
             value={updatedPsychologist.teleconsultation}
-            field="teleconsultation"
-            onChange={changePsychologist}
-            label="Proposez-vous de la téléconsultation ?"
+            onChange={e => changePsychologist(e.target.value, "teleconsultation")}
+            legend="Proposez-vous de la téléconsultation ?"
             hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
-            options={[
-              {
-                id: true,
-                label: 'Oui',
-              }, {
-                id: false,
-                label: 'Non',
-              },
-            ]}
             required
-          />
-          <Input
+          >
+            <Radio
+              label= 'Oui'
+              value= "true"
+            />
+            <Radio
+              label= 'Non'
+              value= "false"
+            />
+          </RadioGroup>
+          <TextInput
             label="Langues parlées"
             hint="Exemple : &ldquo;Français, Anglais&rdquo;"
-            type="text"
-            field="languages"
             data-test-id="psy-languages-input"
             value={updatedPsychologist.languages}
-            onChange={changePsychologist}
+            onChange={e => changePsychologist(e.target.value, "languages")}
             required
           />
-          <Input
+          <TextInput
             label="Site web professionnel"
             hint="Site sur lequel l'étudiant pourra trouver plus d'info sur votre cabinet ou vos services."
-            type="text"
-            field="website"
             data-test-id="psy-website-input"
             value={updatedPsychologist.website}
-            onChange={changePsychologist}
+            onChange={e => changePsychologist(e.target.value, "website")}
           />
-          <Input
+          <TextInput
+            textarea
             label="Paragraphe de présentation"
             hint="Ex : &ldquo;Je propose du suivi pour les jeunes adultes, en particulier pour la gestion du stress et
             de l'anxiété.&rdquo;"
-            type="textarea"
-            field="description"
             data-test-id="psy-description-input"
             value={updatedPsychologist.description}
-            onChange={changePsychologist}
+            onChange={e => changePsychologist(e.target.value, "description")}
           />
           <div className="fr-my-5w">
             <Button

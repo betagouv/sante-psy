@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Ariane from 'components/Ariane/Ariane';
 import agent from 'services/agent';
 import PsyTable from './PsyTable';
+import { TextInput } from '@dataesr/react-dsfr';
 
 const PsyListing = () => {
   const [psychologists, setPsychologists] = useState([]);
@@ -68,10 +69,9 @@ const PsyListing = () => {
             >
               Rechercher par nom :
             </label>
-            <input
+            <TextInput
               className="fr-input midlength-input"
               id="lastName-filter-value"
-              type="text"
               placeholder="Delgado"
               onChange={event => changeFilter('name', event)}
             />
@@ -83,10 +83,9 @@ const PsyListing = () => {
             >
               Rechercher votre ville ou code postal :
             </label>
-            <input
+            <TextInput
               className="fr-input midlength-input"
               id="address-filter-value"
-              type="text"
               placeholder="Amiens ou 80000"
               onChange={event => changeFilter('address', event)}
             />
@@ -98,10 +97,9 @@ const PsyListing = () => {
             >
               Rechercher par département:
             </label>
-            <input
+            <TextInput
               className="fr-input midlength-input"
               id="departement-filter-value"
-              type="text"
               placeholder="Somme ou 80"
               onChange={event => changeFilter('postCode', event)}
             />

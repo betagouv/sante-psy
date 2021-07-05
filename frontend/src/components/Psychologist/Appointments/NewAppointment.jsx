@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
-import { Button } from '@dataesr/react-dsfr';
+import { Button, Select } from '@dataesr/react-dsfr';
 
 import Ariane from 'components/Ariane/Ariane';
 import Mail from 'components/Footer/Mail';
 import GlobalNotification from 'components/Notification/GlobalNotification';
-import Select from 'components/Form/Select';
 import DateInput from 'components/Date/DateInput';
 
 import agent from 'services/agent';

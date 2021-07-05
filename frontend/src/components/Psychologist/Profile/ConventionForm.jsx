@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@dataesr/react-dsfr';
+import { Button, RadioGroup, Radio, Select } from '@dataesr/react-dsfr';
 
-import Input from 'components/Form/Input';
+// import Input from 'components/Form/Input';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
 
@@ -43,11 +43,10 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
 
   return (
     <form data-test-id="convention-form" onSubmit={saveConvention}>
-      <Input
+      <Select
         data-test-id="convention-university-select"
         id="university"
         name="university"
-        type="select"
         label="Quelle université vous a contacté pour signer la convention ?"
         value={convention.universityId || ''}
         onChange={value => setConvention({ ...convention, universityId: value })}
@@ -57,25 +56,23 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
           : []}
         hiddenOption="- Select a university -"
       />
-      <Input
-        type="radio"
+      <RadioGroup
         value={convention.isConventionSigned}
-        field="signed"
         onChange={value => setConvention({ ...convention, isConventionSigned: value })}
         required
-        label="Avez-vous déjà signé la convention ?"
+        legend="Avez-vous déjà signé la convention ?"
         hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
               Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
-        options={[
-          {
-            id: true,
-            label: 'Oui',
-          }, {
-            id: false,
-            label: 'Non',
-          },
-        ]}
-      />
+        >
+        <Radio
+          label="Oui"
+          value="true"
+        />
+        <Radio
+          label="Non"
+          value="false"
+        />
+      </RadioGroup>
 
       <div className="fr-my-5w">
         <Button
