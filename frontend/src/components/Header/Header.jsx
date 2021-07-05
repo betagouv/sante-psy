@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import {
   Header as DSHeader,
@@ -11,8 +11,8 @@ import {
   Tool,
   ToolItemGroup,
   ToolItem,
-  Button,
 } from '@dataesr/react-dsfr';
+
 import { useStore } from 'stores/';
 
 const defaultItems = [
@@ -46,17 +46,28 @@ const Header = () => {
           />
           <Tool>
             <ToolItemGroup>
-              {user ? (
-                <ToolItem asLink={<div data-test-id="logout-button" onClick={deleteToken} />}>
-                  Déconnexion
-                </ToolItem>
-              ) : (
-                <ToolItem link="/psychologue/login">
-                  <Button data-test-id="login-button">
+              { user
+                ? (
+                  <>
+                    { psychologistPage ? (
+                      <ToolItem asLink={<Link data-test-id="back-home-button" to="/" />}>
+                        Revenir à l&lsquo;accueil
+                      </ToolItem>
+                    ) : (
+                      <ToolItem asLink={<Link data-test-id="my-space-button" to="/psychologue/mes-seances" />}>
+                        Accéder à mon espace
+                      </ToolItem>
+                    )}
+                    <ToolItem asLink={<div data-test-id="logout-button" onClick={deleteToken} />}>
+                      Déconnexion
+                    </ToolItem>
+                  </>
+                )
+                : (
+                  <ToolItem asLink={<Link data-test-id="login-button" to="/psychologue/login" />}>
                     Se connecter en tant que psychologue
-                  </Button>
-                </ToolItem>
-              )}
+                  </ToolItem>
+                )}
             </ToolItemGroup>
           </Tool>
         </HeaderBody>
@@ -65,19 +76,17 @@ const Header = () => {
             ? connectedItems.map(item => (
               <NavItem
                 key={item.key}
-                data-test-id={item.key}
                 current={location.pathname && location.pathname.startsWith(item.link)}
                 title={item.title}
-                link={item.link}
+                asLink={<Link data-test-id={item.key} to={item.link} />}
               />
             )) : (
               defaultItems.map(item => (
                 <NavItem
                   key={item.key}
-                  data-test-id={item.key}
                   current={location.pathname && location.pathname === item.link}
                   title={item.title}
-                  link={item.link}
+                  asLink={<Link data-test-id={item.key} to={item.link} />}
                 />
               )))}
         </HeaderNav>
