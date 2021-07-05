@@ -63,7 +63,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
         legend="Avez-vous déjà signé la convention ?"
         hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
               Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
-        >
+      >
         <Radio
           label="Oui"
           value="true"

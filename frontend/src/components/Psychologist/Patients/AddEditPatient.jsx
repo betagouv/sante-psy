@@ -49,6 +49,7 @@ const AddEditPatient = () => {
   const pageTitle = patientId ? 'Modifier un patient' : 'Nouveau patient';
   const intro = patientId
     ? 'Modifiez les informations de l\'étudiant.'
+    // eslint-disable-next-line max-len
     : 'Déclarez un étudiant comme étant patient du dispositif Santé Psy Etudiants. Vous pourrez ensuite déclarer les séances réalisées avec ce patient.';
 
   const button = {
@@ -96,14 +97,14 @@ const AddEditPatient = () => {
               data-test-id="patient-first-name-input"
               label="Prénoms"
               value={patient.firstNames}
-              onChange={ e => changePatient(e.target.value, "firstNames")}
+              onChange={e => changePatient(e.target.value, 'firstNames')}
               required
             />
             <TextInput
               data-test-id="patient-last-name-input"
               label="Nom"
               value={patient.lastName}
-              onChange={ e => changePatient(e.target.value, "lastName")}
+              onChange={e => changePatient(e.target.value, 'lastName')}
               required
             />
             {/* INPUT A MODIFIER */}
@@ -122,39 +123,39 @@ const AddEditPatient = () => {
               label="Établissement scolaire de l'étudiant"
               hint="Exemple : Université de Rennes ou ENSAE"
               value={patient.institutionName}
-              onChange={ e => changePatient(e.target.value, "institutionName")}
+              onChange={e => changePatient(e.target.value, 'institutionName')}
             />
             <TextInput
               label="Numéro INE de l'étudiant (optionnel)"
               hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
               value={patient.INE}
-              onChange={ e => changePatient(e.target.value, "INE")}
+              onChange={e => changePatient(e.target.value, 'INE')}
             />
             <Checkbox
               label="J'ai vérifié que les séances ont bien été prescrites
               par un médecin ou un Service de Santé Universitaire"
               hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
               value="false"
-              onChange={ e => changePatient(e.target.value, "hasPrescription")}
+              onChange={e => changePatient(e.target.value, 'hasPrescription')}
             />
             <Checkbox
               label="J'ai vérifié le statut étudiant de ce patient"
               hint="L'étudiant m'a présenté une lettre ou ordonnance médicale"
               value="false"
-              onChange={ e => changePatient(e.target.value, "isStudentStatusVerified")}
+              onChange={e => changePatient(e.target.value, 'isStudentStatusVerified')}
             />
             <TextInput
               data-test-id="patient-doctor-name-input"
               label="Médecin ou Service de Santé Universitaire qui a orienté ce patient"
               hint="Exemple : Annie Benahmou ou SSU Rennes 1"
               value={patient.doctorName}
-              onChange={ e => changePatient(e.target.value, "doctorName")}
+              onChange={e => changePatient(e.target.value, 'doctorName')}
             />
             <TextInput
               label="Ville et/ou code postal du médecin ou Service de Santé Universitaire"
               hint="Exemple : 97400 Saint-Denis"
               value={patient.doctorAddress}
-              onChange={ e => changePatient(e.target.value, "doctorAddress")}
+              onChange={e => changePatient(e.target.value, 'doctorAddress')}
             />
           </div>
           <div className="fr-my-5w">

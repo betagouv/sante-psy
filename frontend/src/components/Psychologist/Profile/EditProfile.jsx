@@ -6,7 +6,6 @@ import GlobalNotification from 'components/Notification/GlobalNotification';
 import Input from 'components/Form/Input';
 
 import DEPARTEMENTS from 'services/departments';
-import { __Field } from 'graphql';
 
 const EditProfile = ({ psychologist, updatePsy, loading }) => {
   const [updatedPsychologist, setUpdatedPsychologist] = useState(psychologist);
@@ -47,7 +46,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
              Santé Psy Etudiant."
             data-test-id="psy-personal-email-input"
             value={updatedPsychologist.personalEmail}
-            onChange={e => changePsychologist(e.target.value, "personalEmail")}
+            onChange={e => changePsychologist(e.target.value, 'personalEmail')}
             pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
             required
           />
@@ -68,7 +67,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             hint="Adresse où se rendre pour le rendez-vous."
             data-test-id="psy-address-input"
             value={updatedPsychologist.address}
-            onChange={e => changePsychologist(e.target.value, "address")}
+            onChange={e => changePsychologist(e.target.value, 'address')}
             required
           />
           <TextInput
@@ -76,7 +75,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             hint="Numéro auquel prendre rendez-vous."
             data-test-id="psy-phone-input"
             value={updatedPsychologist.phone}
-            onChange={e => changePsychologist(e.target.value, "phone")}
+            onChange={e => changePsychologist(e.target.value, 'phone')}
             required
           />
           <TextInput
@@ -84,23 +83,23 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             hint="Adresse email à laquelle prendre rendez-vous ou poser des questions."
             data-test-id="psy-email-input"
             value={updatedPsychologist.email}
-            onChange={e => changePsychologist(e.target.value, "email")}
+            onChange={e => changePsychologist(e.target.value, 'email')}
             pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
           />
           <RadioGroup
             value={updatedPsychologist.teleconsultation}
-            onChange={e => changePsychologist(e.target.value, "teleconsultation")}
+            onChange={e => changePsychologist(e.target.value, 'teleconsultation')}
             legend="Proposez-vous de la téléconsultation ?"
             hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
             required
           >
             <Radio
-              label= 'Oui'
-              value= "true"
+              label="Oui"
+              value="true"
             />
             <Radio
-              label= 'Non'
-              value= "false"
+              label="Non"
+              value="false"
             />
           </RadioGroup>
           <TextInput
@@ -108,7 +107,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             hint="Exemple : &ldquo;Français, Anglais&rdquo;"
             data-test-id="psy-languages-input"
             value={updatedPsychologist.languages}
-            onChange={e => changePsychologist(e.target.value, "languages")}
+            onChange={e => changePsychologist(e.target.value, 'languages')}
             required
           />
           <TextInput
@@ -116,7 +115,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             hint="Site sur lequel l'étudiant pourra trouver plus d'info sur votre cabinet ou vos services."
             data-test-id="psy-website-input"
             value={updatedPsychologist.website}
-            onChange={e => changePsychologist(e.target.value, "website")}
+            onChange={e => changePsychologist(e.target.value, 'website')}
           />
           <TextInput
             textarea
@@ -125,7 +124,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             de l'anxiété.&rdquo;"
             data-test-id="psy-description-input"
             value={updatedPsychologist.description}
-            onChange={e => changePsychologist(e.target.value, "description")}
+            onChange={e => changePsychologist(e.target.value, 'description')}
           />
           <div className="fr-my-5w">
             <Button

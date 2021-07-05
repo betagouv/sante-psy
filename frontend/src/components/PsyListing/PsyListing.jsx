@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import Ariane from 'components/Ariane/Ariane';
 import agent from 'services/agent';
-import PsyTable from './PsyTable';
 import { TextInput } from '@dataesr/react-dsfr';
+import PsyTable from './PsyTable';
 
 const PsyListing = () => {
   const [psychologists, setPsychologists] = useState([]);
