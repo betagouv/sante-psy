@@ -16,16 +16,16 @@ import {
 import { useStore } from 'stores/';
 
 const defaultItems = [
-  { title: 'Comment ça se passe ?', link: '/' },
-  { title: 'Trouver un psychologue', link: '/trouver-un-psychologue' },
-  { title: 'Foire aux questions', link: '/faq' },
+  { key: 'header-default-link-1', title: 'Comment ça se passe ?', link: '/' },
+  { key: 'header-default-link-2', title: 'Trouver un psychologue', link: '/trouver-un-psychologue' },
+  { key: 'header-default-link-3', title: 'Foire aux questions', link: '/faq' },
 ];
 
 const connectedItems = [
-  { title: 'Déclarer mes séances', link: '/psychologue/mes-seances' },
-  { title: 'Gérer mes patients', link: '/psychologue/mes-patients' },
-  { title: 'Remboursement de mes séances', link: '/psychologue/mes-remboursements' },
-  { title: 'Mes informations', link: '/psychologue/mon-profil' },
+  { key: 'header-connected-link-1', title: 'Déclarer mes séances', link: '/psychologue/mes-seances' },
+  { key: 'header-connected-link-2', title: 'Gérer mes patients', link: '/psychologue/mes-patients' },
+  { key: 'header-connected-link-3', title: 'Remboursement de mes séances', link: '/psychologue/mes-remboursements' },
+  { key: 'header-connected-link-4', title: 'Mes informations', link: '/psychologue/mon-profil' },
 ];
 
 const Header = () => {
@@ -52,7 +52,9 @@ const Header = () => {
                 </ToolItem>
               ) : (
                 <ToolItem link="/psychologue/login">
-                  <Button>Se connecter en tant que psychologue</Button>
+                  <Button data-test-id="login-button">
+                    Se connecter en tant que psychologue
+                  </Button>
                 </ToolItem>
               )}
             </ToolItemGroup>
@@ -62,7 +64,8 @@ const Header = () => {
           {psychologistPage && user
             ? connectedItems.map(item => (
               <NavItem
-                key={connectedItems.indexOf(item)}
+                key={item.key}
+                data-test-id={item.key}
                 current={location.pathname && location.pathname.startsWith(item.link)}
                 title={item.title}
                 link={item.link}
@@ -70,7 +73,8 @@ const Header = () => {
             )) : (
               defaultItems.map(item => (
                 <NavItem
-                  key={defaultItems.indexOf(item)}
+                  key={item.key}
+                  data-test-id={item.key}
                   current={location.pathname && location.pathname === item.link}
                   title={item.title}
                   link={item.link}
