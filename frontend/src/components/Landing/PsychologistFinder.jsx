@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Row, TextInput, Button } from '@dataesr/react-dsfr';
 
 import styles from './psychologistFinder.cssmodule.scss';
 
 const PsychologistFinder = () => {
   const [search, setSearch] = useState('');
+  const history = useHistory();
   return (
     <div className={styles.container}>
       <img
@@ -26,7 +28,12 @@ const PsychologistFinder = () => {
               onChange={e => { setSearch(e.target.value); }}
             />
           </div>
-          <Button size="sm">Trouver un psychologue</Button>
+          <Button
+            size="sm"
+            onClick={() => { history.push(`/trouver-un-psychologue/${search}`); }}
+          >
+            Trouver un psychologue
+          </Button>
         </Row>
       </div>
     </div>

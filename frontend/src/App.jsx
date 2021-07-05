@@ -14,6 +14,8 @@ import Faq from 'components/Faq/Faq';
 import LegalNotice from 'components/LegalNotice/LegalNotice';
 import PersonalData from 'components/PersonalData/PersonalData';
 import Statistics from 'components/Statistics/Statistics';
+import PsyListing from 'components/PsyListing/PsyListing';
+import PublicPsychologistProfile from 'components/PsyListing/PublicPsychologistProfile';
 
 import agent from 'services/agent';
 
@@ -22,7 +24,6 @@ import { useStore } from 'stores/';
 // Need to be after dsfr to overwrite it
 import './App.css';
 
-const FindPsychologist = React.lazy(() => import('components/PsyListing/PsyListing'));
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
 function App() {
@@ -50,7 +51,8 @@ function App() {
           <Switch>
             <Route exact path="/psychologue/login/:token?" component={Login} />
             {user && <Route path="/psychologue/" component={PsychologistRouter} />}
-            <Route exact path="/trouver-un-psychologue" component={FindPsychologist} />
+            <Route exact path="/psy/:psyId" component={PublicPsychologistProfile} />
+            <Route exact path="/trouver-un-psychologue/:search?" component={PsyListing} />
             <Route exact path="/mentions-legales" component={LegalNotice} />
             <Route exact path="/donnees-personnelles-et-gestion-des-cookies" component={PersonalData} />
             <Route exact path="/faq" component={Faq} />
