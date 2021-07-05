@@ -79,6 +79,8 @@ const Convention = {
     .post(`/psychologist/${store.userStore.user.dossierNumber}/convention`, convention),
 };
 
+const Statistics = { getAll: () => client.get('/statistics') };
+
 const University = { getAll: () => client.get('/university') };
 
 const User = {
@@ -94,6 +96,7 @@ export default {
   Convention,
   Patient,
   Psychologist,
+  Statistics,
   University,
   User,
 };

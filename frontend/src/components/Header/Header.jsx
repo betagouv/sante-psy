@@ -1,90 +1,87 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
-
-import Logo from 'components/Logo/LogoHeader';
-
+import {
+  Header as DSHeader,
+  HeaderBody,
+  HeaderNav,
+  NavItem,
+  Logo,
+  Service,
+  Tool,
+  ToolItemGroup,
+  ToolItem,
+  Button,
+} from '@dataesr/react-dsfr';
 import { useStore } from 'stores/';
 
-import Menu from './Menu';
-import TopMenu from './TopMenu';
+const defaultItems = [
+  { key: 'header-default-link-1', title: 'Comment ça se passe ?', link: '/' },
+  { key: 'header-default-link-2', title: 'Trouver un psychologue', link: '/trouver-un-psychologue' },
+  { key: 'header-default-link-3', title: 'Foire aux questions', link: '/faq' },
+];
+
+const connectedItems = [
+  { key: 'header-connected-link-1', title: 'Déclarer mes séances', link: '/psychologue/mes-seances' },
+  { key: 'header-connected-link-2', title: 'Gérer mes patients', link: '/psychologue/mes-patients' },
+  { key: 'header-connected-link-3', title: 'Remboursement de mes séances', link: '/psychologue/mes-remboursements' },
+  { key: 'header-connected-link-4', title: 'Mes informations', link: '/psychologue/mon-profil' },
+];
 
 const Header = () => {
-  const [open, setOpen] = useState(false);
   const location = useLocation();
-  const { userStore: { user } } = useStore();
+  const { userStore: { user, deleteToken } } = useStore();
 
   const psychologistPage = location.pathname.startsWith('/psychologue');
   return (
     <>
-      <div className="fr-skiplinks">
-        <div className="fr-container">
-          <ul className="fr-skiplinks__list">
-            <li>
-              <a className="fr-link" href="#contenu">
-                Accéder au contenu
-              </a>
-            </li>
-            <li>
-              <a className="fr-link" href="#header-navigation">
-                Accéder au menu
-              </a>
-            </li>
-            <li>
-              <a className="fr-link" href="#footer">
-                Accéder au footer
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <header role="banner" className="fr-header">
-        <div className="fr-header__body">
-          <div className="fr-container">
-            <div className="fr-header__body-row">
-              <div className="fr-header__brand fr-enlarge-link">
-                <div className="fr-header__brand-top">
-                  <Logo />
-                  <div className="fr-header__navbar">
-                    <button
-                      type="button"
-                      className="fr-btn--menu fr-btn"
-                      data-fr-opened="false"
-                      aria-controls="modal-menu"
-                      aria-haspopup="menu"
-                      title="Menu"
-                      onClick={() => { setOpen(!open); }}
-                    >
-                      Menu
-                    </button>
-                  </div>
-                </div>
-                <div className="fr-header__service">
-                  <HashLink
-                    to="/"
-                    title="Retour à l’accueil"
-                  >
-                    <p className="fr-header__service-title">
-                      {`${__APPNAME__}${psychologistPage ? ' - Espace Psychologues' : ''}`}
-                    </p>
-                  </HashLink>
-                  <p className="fr-header__service-tagline">Accompagnement psychologique pour les étudiants</p>
-                </div>
-              </div>
-              {user && (
-              <div className="fr-header__tools">
-                <div className="fr-header__tools-links">
-                  <TopMenu buttonStyle />
-                </div>
-              </div>
+      <DSHeader>
+        <HeaderBody>
+          <Logo>
+            Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
+          </Logo>
+          <Service
+            title={`${__APPNAME__}${psychologistPage ? ' - Espace Psychologues' : ''}`}
+            description="Accompagnement psychologique pour les étudiants"
+          />
+          <Tool>
+            <ToolItemGroup>
+              {user ? (
+                <ToolItem asLink={<div data-test-id="logout-button" onClick={deleteToken} />}>
+                  Déconnexion
+                </ToolItem>
+              ) : (
+                <ToolItem link="/psychologue/login">
+                  <Button data-test-id="login-button">
+                    Se connecter en tant que psychologue
+                  </Button>
+                </ToolItem>
               )}
-            </div>
-          </div>
-        </div>
-        {psychologistPage && user
-        && <Menu page={location.pathname} open={open} close={() => { setOpen(false); }} />}
-      </header>
+            </ToolItemGroup>
+          </Tool>
+        </HeaderBody>
+        <HeaderNav>
+          {psychologistPage && user
+            ? connectedItems.map(item => (
+              <NavItem
+                key={item.key}
+                data-test-id={item.key}
+                current={location.pathname && location.pathname.startsWith(item.link)}
+                title={item.title}
+                link={item.link}
+              />
+            )) : (
+              defaultItems.map(item => (
+                <NavItem
+                  key={item.key}
+                  data-test-id={item.key}
+                  current={location.pathname && location.pathname === item.link}
+                  title={item.title}
+                  link={item.link}
+                />
+              )))}
+        </HeaderNav>
+      </DSHeader>
     </>
   );
 };
