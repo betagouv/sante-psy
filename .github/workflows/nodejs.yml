@@ -35,7 +35,7 @@ jobs:
     - name: Seed DB
       run: npm run seed
     - name: Run back tests
-      run: npm run test
+      run: npm run test:ci
       env:
         API_TOKEN: ${{ secrets.API_TOKEN }}
         DEMARCHES_SIMPLIFIEES_ID: ${{ secrets.DEMARCHES_SIMPLIFIEES_ID }}

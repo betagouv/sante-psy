@@ -11,6 +11,7 @@ import {
   loginTokenTable,
   universitiesTable,
   suspensionReasonsTable,
+  lastConnectionsTable,
 } from '../../db/tables';
 
 const knexConfig = require('../../knexfile');
@@ -143,6 +144,7 @@ const cleanAllPatients = async (): Promise<void> => {
 
 const cleanAllPsychologists = async ():Promise<void> => {
   await cleanAllPatients();
+  await db(lastConnectionsTable).del();
   await db(suspensionReasonsTable).del();
   await db(psychologistsTable).del();
 };
