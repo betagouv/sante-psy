@@ -1,47 +1,61 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Table, Pagination } from '@dataesr/react-dsfr';
+import { useHistory } from 'react-router-dom';
+import { Table, Pagination, Button } from '@dataesr/react-dsfr';
 import camelize from 'services/string';
 
-const PsyTable = ({ psychologists }) => {
-  const [page, setPage] = useState(1);
+const PsyTable = ({ psychologists, filter, teleconsultation }) => {
+  const history = useHistory();
+  const [page] = useState(1);
   return (
     <>
       <Table
-        caption="Trouver un psychologue"
+        caption={
+          psychologists.length > 0 ? 'Tous les résultats' : 'Aucun résultat'
+        }
       >
         <thead>
           <tr key="headers">
             <th scope="col">Nom</th>
             <th scope="col">Adresse</th>
-            { /* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <th scope="col" />
           </tr>
         </thead>
         <tbody>
-          {
-        psychologists
-          .slice((page - 1) * 10, page * 10)
-          .map(psychologist => (
-            <tr key={psychologist.dossierNumber}>
-              <td>
-                {`${psychologist.lastName.toUpperCase()} ${camelize(psychologist.firstNames)}`}
-              </td>
-              <td>{psychologist.address}</td>
-              <td>
-                <Link to={`/psy/${psychologist.dossierNumber}`}>voir le profil</Link>
-              </td>
-            </tr>
-          ))
-  }
+          {psychologists
+            .slice((page - 1) * 10, page * 10)
+            .map(psychologist => (
+              <tr key={psychologist.dossierNumber}>
+                <td>
+                  {`${psychologist.lastName.toUpperCase()} ${camelize(
+                    psychologist.firstNames,
+                  )}`}
+                </td>
+                <td>{psychologist.address}</td>
+                <td>
+                  <Button
+                    secondary
+                    onClick={() => {
+                      history.push(`/trouver-un-psychologue?search=${filter}&teleconsultation=${teleconsultation}`);
+                      history.push(`/psy/${psychologist.dossierNumber}`);
+                    }}
+                    className="fr-fi-arrow-right-line fr-btn--icon-right fr-float-right"
+                  >
+                    Voir le profil
+                  </Button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
-      <Pagination
-        buildURL={() => {}}
-        currentPage={page}
-        pageCount={Math.ceil(psychologists.length / 10)}
-        surrendingPages={3}
-      />
+      {psychologists.length > 0 && (
+        <Pagination
+          buildURL={() => {}}
+          currentPage={page}
+          pageCount={Math.ceil(psychologists.length / 10)}
+          surrendingPages={3}
+        />
+      )}
     </>
   );
 };

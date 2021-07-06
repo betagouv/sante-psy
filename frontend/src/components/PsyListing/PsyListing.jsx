@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import agent from 'services/agent';
 import Page from 'components/Page/Page';
-import { TextInput } from '@dataesr/react-dsfr';
+import { Checkbox, TextInput } from '@dataesr/react-dsfr';
 import PsyTable from './PsyTable';
 
 const PsyListing = () => {
+  const query = new URLSearchParams(useLocation().search);
+
   const [psychologists, setPsychologists] = useState([]);
-  const [filter, setFilter] = useState('');
-  const { search } = useParams();
+  const [filter, setFilter] = useState(query.get('search') || '');
+  const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') || false);
 
   useEffect(() => {
     agent.Psychologist.find().then(response => {
@@ -17,22 +19,21 @@ const PsyListing = () => {
     });
   }, []);
 
-  useEffect(() => {
-    if (search) {
-      setFilter(search);
-    }
-  }, search);
-
   const getFilteredPsychologists = () => {
-    if (!filter) {
-      return psychologists;
+    let filteredPsychologists = psychologists;
+    if (teleconsultation) {
+      filteredPsychologists = filteredPsychologists.filter(psychologist => psychologist.teleconsultation);
     }
 
-    const psychologistByName = psychologists
+    if (!filter) {
+      return filteredPsychologists;
+    }
+
+    const psychologistByName = filteredPsychologists
       .filter(
         psychologist => psychologist.lastName.toLowerCase().includes(filter.toLowerCase()),
       );
-    const psychologistByAddress = psychologists.filter(
+    const psychologistByAddress = filteredPsychologists.filter(
       psychologist => (
         !psychologist.lastName.toLowerCase().includes(filter.toLowerCase())
         && (
@@ -59,7 +60,17 @@ const PsyListing = () => {
         onChange={e => setFilter(e.target.value)}
         label="Rechercher par nom, ville, code postal ou région"
       />
-      {filteredPsychologists.length > 0 && <PsyTable psychologists={filteredPsychologists} />}
+      <Checkbox
+        value="teleconsultation"
+        onChange={e => { setTeleconsultation(e.target.checked); }}
+        label="Disponible en téléconsultation"
+        defaultChecked={teleconsultation}
+      />
+      <PsyTable
+        psychologists={filteredPsychologists}
+        filter={filter}
+        teleconsultation={teleconsultation}
+      />
     </Page>
   );
 };
