@@ -4,7 +4,7 @@ import { Row, Col } from '@dataesr/react-dsfr';
 import styles from './faqProcess.cssmodule.scss';
 
 const FaqProcess = ({ label, link }) => (
-  <Row alignItems="middle" gutters>
+  <Row spacing="pt-3w" alignItems="middle" gutters>
     <Col>
       <div className={styles.label}>
         Comment ça se passe pour les

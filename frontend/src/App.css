@@ -96,3 +96,10 @@
   /* Fix a bug on safari*/
   height: 56px !important;
 }
+
+/* overwrite DSFR default */
+@media (min-width: 48em) {
+  .fr-tabs__panel {
+    padding: 0; 
+  }
+}
