@@ -1,17 +1,15 @@
 import React from 'react';
 import sanitizeHtml from 'sanitize-html';
 
+import { Accordion, AccordionItem } from '@dataesr/react-dsfr';
+
 import styles from './faqCard.cssmodule.scss';
 
 const FaqCard = ({ question, answer }) => (
-  <div className="fr-col-12 fr-col-md-6">
-    <div className={styles.card}>
-      <p className={styles.question}>
-        {question}
-      </p>
-      <p
-        className={styles.answer}
-        // eslint-disable-next-line react/no-danger
+  <Accordion key={question} className="fr-col-12 fr-col-md-6">
+    <AccordionItem key={question} title={question} className={styles.card}>
+      <div
+      // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
           __html: sanitizeHtml(answer,
             {
@@ -20,8 +18,9 @@ const FaqCard = ({ question, answer }) => (
             }),
         }}
       />
-    </div>
-  </div>
+    </AccordionItem>
+  </Accordion>
+
 );
 
 export default FaqCard;
