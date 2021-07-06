@@ -19,7 +19,7 @@ const itemsByType = {
   student: {
     index: 1,
     label: 'étudiants',
-    link: '/static/documents/flyer_etudiants_fr.pdf',
+    link: '/static/documents/parcours_etudiant_sante-psy-etudiant.pdf',
     sections: [
       { title: 'Éligibilité', name: 'eligibility' },
       { title: 'Paiement', name: 'payment' },
@@ -29,7 +29,7 @@ const itemsByType = {
   psychologist: {
     index: 2,
     label: 'psychologues',
-    link: '/static/documents/flyer_psychologues.pdf',
+    link: '/static/documents/parcours_psychologue_sante-psy-etudiant.pdf',
     sections: [
       { title: 'Éligibilité', name: 'psyEligibility' },
       { title: 'Inscription', name: 'registration' },
