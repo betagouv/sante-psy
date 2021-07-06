@@ -5,8 +5,6 @@ import { Button, TextInput, Checkbox } from '@dataesr/react-dsfr';
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import Mail from 'components/Footer/Mail';
-import Input from 'components/Form/Input';
-
 import { useStore } from 'stores/';
 
 import { formatDDMMYYYY } from 'services/date';
@@ -49,7 +47,6 @@ const AddEditPatient = () => {
   const pageTitle = patientId ? 'Modifier un patient' : 'Nouveau patient';
   const intro = patientId
     ? 'Modifiez les informations de l\'étudiant.'
-    // eslint-disable-next-line max-len
     : 'Déclarez un étudiant comme étant patient du dispositif Santé Psy Etudiants. Vous pourrez ensuite déclarer les séances réalisées avec ce patient.';
 
   const button = {
@@ -109,14 +106,15 @@ const AddEditPatient = () => {
               onChange={e => changePatient(e.target.value, 'lastName')}
               required
             />
-            <Input
+            <TextInput
+              className="midlength-input"
               label={`Date de naissance (obligatoire uniquement pour vos patients enregistrés après le
                 ${config.dateOfBirthDeploymentDate}
                 )`}
               hint="Format JJ/MM/AAAA, par exemple : 25/01/1987"
-              type="text"
               value={patient.dateOfBirth}
-              onChange={changePatient}
+              type="text"
+              onChange={e => changePatient(e.target.value, 'dateOfBirth')}
               pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
               placeholder="JJ/MM/AAAA"
             />

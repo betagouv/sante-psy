@@ -3,9 +3,9 @@ import { Button, RadioGroup, Radio, TextInput } from '@dataesr/react-dsfr';
 
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
-import Input from 'components/Form/Input';
-
 import DEPARTEMENTS from 'services/departments';
+
+import SearchableSelect from '../../Form/SearchableSelect';
 
 const EditProfile = ({ psychologist, updatePsy, loading }) => {
   const [updatedPsychologist, setUpdatedPsychologist] = useState(psychologist);
@@ -53,7 +53,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
           />
 
           <h2>Informations pour l&lsquo;annuaire</h2>
-          <Input
+          <SearchableSelect
             label="Votre département"
             type="searchableSelect"
             field="departement"

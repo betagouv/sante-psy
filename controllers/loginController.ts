@@ -36,7 +36,6 @@ async function sendLoginEmail(email: string, loginUrl: string, token: string) {
       appName: config.appName,
       loginUrl,
     });
-    console.log('TEST');
     await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
     console.log(`Login email sent for ${logs.hashForLogs(email)}`);
   } catch (err) {
