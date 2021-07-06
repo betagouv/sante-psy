@@ -92,8 +92,9 @@ const AddEditPatient = () => {
             S&lsquo;il vous manque des champs non-obligatoires,
             vous pourrez y revenir plus tard pour compléter le dossier.
           </p>
-          <div className="basic-input">
+          <div>
             <TextInput
+              className="midlength-input"
               data-test-id="patient-first-name-input"
               label="Prénoms"
               value={patient.firstNames}
@@ -101,6 +102,7 @@ const AddEditPatient = () => {
               required
             />
             <TextInput
+              className="midlength-input"
               data-test-id="patient-last-name-input"
               label="Nom"
               value={patient.lastName}
@@ -119,12 +121,14 @@ const AddEditPatient = () => {
               placeholder="JJ/MM/AAAA"
             />
             <TextInput
+              className="midlength-input"
               label="Établissement scolaire de l'étudiant"
               hint="Exemple : Université de Rennes ou ENSAE"
               value={patient.institutionName}
               onChange={e => changePatient(e.target.value, 'institutionName')}
             />
             <TextInput
+              className="midlength-input"
               label="Numéro INE de l'étudiant (optionnel)"
               hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
               value={patient.INE}
@@ -144,6 +148,7 @@ const AddEditPatient = () => {
               onChange={e => changePatient(e.target.value, 'isStudentStatusVerified')}
             />
             <TextInput
+              className="midlength-input"
               data-test-id="patient-doctor-name-input"
               label="Médecin ou Service de Santé Universitaire qui a orienté ce patient"
               hint="Exemple : Annie Benahmou ou SSU Rennes 1"
@@ -151,6 +156,7 @@ const AddEditPatient = () => {
               onChange={e => changePatient(e.target.value, 'doctorName')}
             />
             <TextInput
+              className="midlength-input"
               label="Ville et/ou code postal du médecin ou Service de Santé Universitaire"
               hint="Exemple : 97400 Saint-Denis"
               value={patient.doctorAddress}

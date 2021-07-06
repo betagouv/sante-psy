@@ -33,7 +33,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
       <h1>Modifier mes informations</h1>
       <GlobalNotification />
       {!loading && (
-      <div className="fr-my-3w basic-input">
+      <div className="fr-my-3w">
         <form data-test-id="edit-profile-form" onSubmit={save}>
           <p className="fr-text--sm fr-mb-1v">
             Les champs avec une astérisque (
@@ -41,6 +41,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             ) sont obligatoires.
           </p>
           <TextInput
+            className="midlength-input"
             label="Email personnel"
             hint="Adresse non communiquée sur l'annuaire, utilisée uniquement pour la réception de mail provenant de
              Santé Psy Etudiant."
@@ -63,6 +64,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             required
           />
           <TextInput
+            className="midlength-input"
             label="Adresse du cabinet"
             hint="Adresse où se rendre pour le rendez-vous."
             data-test-id="psy-address-input"
@@ -71,6 +73,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             required
           />
           <TextInput
+            className="midlength-input"
             label="Téléphone du secrétariat"
             hint="Numéro auquel prendre rendez-vous."
             data-test-id="psy-phone-input"
@@ -79,6 +82,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             required
           />
           <TextInput
+            className="midlength-input"
             label="Email de contact"
             hint="Adresse email à laquelle prendre rendez-vous ou poser des questions."
             data-test-id="psy-email-input"
@@ -103,6 +107,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             />
           </RadioGroup>
           <TextInput
+            className="midlength-input"
             label="Langues parlées"
             hint="Exemple : &ldquo;Français, Anglais&rdquo;"
             data-test-id="psy-languages-input"
@@ -111,6 +116,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             required
           />
           <TextInput
+            className="midlength-input"
             label="Site web professionnel"
             hint="Site sur lequel l'étudiant pourra trouver plus d'info sur votre cabinet ou vos services."
             data-test-id="psy-website-input"
@@ -118,6 +124,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             onChange={e => changePsychologist(e.target.value, 'website')}
           />
           <TextInput
+            className="midlength-input"
             textarea
             label="Paragraphe de présentation"
             hint="Ex : &ldquo;Je propose du suivi pour les jeunes adultes, en particulier pour la gestion du stress et

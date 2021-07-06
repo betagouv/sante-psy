@@ -96,19 +96,3 @@
   /* Fix a bug on safari*/
   height: 56px !important;
 }
-
-.basic-input {
-  width: 50%;
-}
-
-@media screen and (max-width: 640px) {
-  .basic-input {
-    width: 90%;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .basic-input {
-    width: 100%;
-  }
-}
