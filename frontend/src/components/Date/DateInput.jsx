@@ -3,7 +3,6 @@ import React, { forwardRef } from 'react';
 const DateInput = forwardRef(({ value, onClick, label, dataTestId }, ref) => (
   <div onClick={onClick} ref={ref}>
     {label && <label className="fr-label" htmlFor="date">{label}</label>}
-    {/* INPUT A MODIFIER */}
     <input
       data-test-id={dataTestId}
       className="fr-input short-input"

@@ -13,7 +13,6 @@ const MonthPicker = ({ month, setMonth }) => {
       lang={shortFrenchMonthNames}
       onChange={(y, m) => { setMonth({ month: m, year: y }); calendar.current.dismiss(); }}
     >
-      {/* INPUT A MODIFIER */}
       <input
         className="fr-input short-input"
         onChange={() => {}}

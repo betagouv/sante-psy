@@ -33,7 +33,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
       <h1>Modifier mes informations</h1>
       <GlobalNotification />
       {!loading && (
-      <div className="fr-my-3w">
+      <div className="fr-my-3w basic-input">
         <form data-test-id="edit-profile-form" onSubmit={save}>
           <p className="fr-text--sm fr-mb-1v">
             Les champs avec une astérisque (

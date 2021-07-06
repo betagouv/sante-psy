@@ -92,7 +92,7 @@ const AddEditPatient = () => {
             S&lsquo;il vous manque des champs non-obligatoires,
             vous pourrez y revenir plus tard pour compléter le dossier.
           </p>
-          <div>
+          <div className="basic-input">
             <TextInput
               data-test-id="patient-first-name-input"
               label="Prénoms"
@@ -107,7 +107,6 @@ const AddEditPatient = () => {
               onChange={e => changePatient(e.target.value, 'lastName')}
               required
             />
-            {/* INPUT A MODIFIER */}
             <Input
               label={`Date de naissance (obligatoire uniquement pour vos patients enregistrés après le
                 ${config.dateOfBirthDeploymentDate}
