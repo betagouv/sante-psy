@@ -21,22 +21,33 @@ describe('Header Test', () => {
         cy.wait('@statistics');
       });
 
-      it('should display login button', () => {
+      it('should display correct tool items', () => {
+        // Connected actions are not present
+        cy.get('[data-test-id="logout-button"]').should('not.exist');
+        cy.get('[data-test-id="back-home-button"]').should('not.exist');
+        cy.get('[data-test-id="my-space-button"]').should('not.exist');
+
+        // Public action is visible and works
         cy.get('[data-test-id="login-button"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/psychologue/login');
       });
 
-      it('should display default header nav', () => {
+      it('should display correct nav items', () => {
+        // Connected nav is not present
+        cy.get('[data-test-id="header-connected-link-1"]').should('not.exist');
+        cy.get('[data-test-id="header-connected-link-2"]').should('not.exist');
+        cy.get('[data-test-id="header-connected-link-3"]').should('not.exist');
+        cy.get('[data-test-id="header-connected-link-4"]').should('not.exist');
+
+        // Public nav is visible and works
         cy.get('[data-test-id="header-default-link-2"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/trouver-un-psychologue');
-      });
 
-      it('should NOT display logout button', () => {
-        cy.get('[data-test-id="logout-button"]').should('not.exist');
-      });
+        cy.get('[data-test-id="header-default-link-3"]').should('be.visible').click();
+        cy.location('pathname').should('eq', '/faq');
 
-      it('should NOT display connected header nav', () => {
-        cy.get('[data-test-id="header-connected-link-2"]').should('not.exist');
+        cy.get('[data-test-id="header-default-link-1"]').should('be.visible').click();
+        cy.location('pathname').should('eq', '/');
       });
     });
 
@@ -50,39 +61,66 @@ describe('Header Test', () => {
         cy.wait('@statistics');
       });
 
-      it('should display login button', () => {
+      it('should display correct tool items', () => {
+        // Public action is not visible
         cy.get('[data-test-id="login-button"]').should('not.be.visible');
-        cy.get('[aria-label="ouvrir la navigation"]').as('burger-menu');
-        cy.get('@burger-menu').should('be.visible').click();
-        cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="login-button"]').should('be.visible').click();
-        });
-        cy.location('pathname').should('eq', '/psychologue/login');
-      });
 
-      it('should display default header nav', () => {
-        cy.get('[data-test-id="header-default-link-2"]').should('not.be.visible');
-        cy.get('[aria-label="ouvrir la navigation"]').as('burger-menu');
-        cy.get('@burger-menu').should('be.visible').click();
-        cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="header-default-link-2"]').should('be.visible').click();
-        });
-        cy.location('pathname').should('eq', '/trouver-un-psychologue');
-      });
+        cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
+        cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
 
-      it('should NOT display logout button', () => {
-        cy.get('[aria-label="ouvrir la navigation"]').as('burger-menu');
-        cy.get('@burger-menu').should('be.visible').click();
+        // Open burger menu
+        cy.get('@open-burger-menu').should('be.visible').click();
         cy.get('.fr-modal--opened').within(() => {
+          cy.get('@close-burger-menu').should('be.visible');
+
+          // Connected actions are not present
           cy.get('[data-test-id="logout-button"]').should('not.exist');
+          cy.get('[data-test-id="back-home-button"]').should('not.exist');
+          cy.get('[data-test-id="my-space-button"]').should('not.exist');
+
+          // Public action is visible and works
+          cy.get('[data-test-id="login-button"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/psychologue/login');
         });
       });
 
-      it('should NOT display connected header nav', () => {
-        cy.get('[aria-label="ouvrir la navigation"]').as('burger-menu');
-        cy.get('@burger-menu').should('be.visible').click();
+      it('should display correct nav items', () => {
+        // Public nav items not visible
+        cy.get('[data-test-id="header-default-link-1"]').should('not.be.visible');
+        cy.get('[data-test-id="header-default-link-2"]').should('not.be.visible');
+        cy.get('[data-test-id="header-default-link-3"]').should('not.be.visible');
+
+        cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
+        cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
+
+        // Open burger menu
+        cy.get('@open-burger-menu').should('be.visible').click();
         cy.get('.fr-modal--opened').within(() => {
+          cy.get('@close-burger-menu').should('be.visible');
+
+          // Connected nav is not present
+          cy.get('[data-test-id="header-connected-link-1"]').should('not.exist');
           cy.get('[data-test-id="header-connected-link-2"]').should('not.exist');
+          cy.get('[data-test-id="header-connected-link-3"]').should('not.exist');
+          cy.get('[data-test-id="header-connected-link-4"]').should('not.exist');
+
+          // Public nav is visible and works
+          cy.get('[data-test-id="header-default-link-2"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/trouver-un-psychologue');
+        });
+
+        cy.get('@close-burger-menu').click();
+        cy.get('@open-burger-menu').click();
+        cy.get('.fr-modal--opened').within(() => {
+          cy.get('[data-test-id="header-default-link-3"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/faq');
+        });
+
+        cy.get('@close-burger-menu').click();
+        cy.get('@open-burger-menu').click();
+        cy.get('.fr-modal--opened').within(() => {
+          cy.get('[data-test-id="header-default-link-1"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/');
         });
       });
     });
@@ -107,23 +145,44 @@ describe('Header Test', () => {
         cy.wait('@appointments');
       });
 
-      it('should display logout button', () => {
+      it('should display correct tool items', () => {
+        // Public action is not present
+        cy.get('[data-test-id="login-button"]').should('not.exist');
+
+        // We are on psy space => back home button is visible and works
+        cy.get('[data-test-id="my-space-button"]').should('not.exist');
+        cy.get('[data-test-id="back-home-button"]').should('be.visible').click();
+        cy.location('pathname').should('eq', '/');
+
+        // We are on public space => my space button is visible and works
+        cy.get('[data-test-id="back-home-button"]').should('not.exist');
+        cy.get('[data-test-id="my-space-button"]').should('be.visible').click();
+        cy.location('pathname').should('eq', '/psychologue/mes-seances');
+
+        // Logout
         cy.get('[data-test-id="logout-button"]').should('be.visible').click();
         cy.wait('@logout');
         cy.location('pathname').should('eq', '/psychologue/login');
       });
 
-      it('should display connected header nav', () => {
+      it('should display correct nav items', () => {
+        // Public nav is not present
+        cy.get('[data-test-id="header-default-link-1"]').should('not.exist');
+        cy.get('[data-test-id="header-default-link-2"]').should('not.exist');
+        cy.get('[data-test-id="header-default-link-3"]').should('not.exist');
+
+        // Connected nav is visible and works
         cy.get('[data-test-id="header-connected-link-2"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/psychologue/mes-patients');
-      });
 
-      it('should NOT display login button', () => {
-        cy.get('[data-test-id="login-button"]').should('not.exist');
-      });
+        cy.get('[data-test-id="header-connected-link-3"]').should('be.visible').click();
+        cy.location('pathname').should('eq', '/psychologue/mes-remboursements');
 
-      it('should NOT display default header nav', () => {
-        cy.get('[data-test-id="header-default-link-2"]').should('not.exist');
+        cy.get('[data-test-id="header-connected-link-4"]').should('be.visible').click();
+        cy.location('pathname').should('eq', '/psychologue/mon-profil');
+
+        cy.get('[data-test-id="header-connected-link-1"]').should('be.visible').click();
+        cy.location('pathname').should('eq', '/psychologue/mes-seances');
       });
     });
 
@@ -136,44 +195,87 @@ describe('Header Test', () => {
         cy.wait('@appointments');
       });
 
-      it('should display logout button', () => {
-        cy.viewport('iphone-6');
-
+      it('should display correct tool items', () => {
+        // Connected actions are not visible
         cy.get('[data-test-id="logout-button"]').should('not.be.visible');
-        cy.get('[aria-label="ouvrir la navigation"]').as('burger-menu');
-        cy.get('@burger-menu').should('be.visible').click();
-        cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="logout-button"]').should('be.visible').click();
-        });
-        cy.wait('@logout');
-        cy.location('pathname').should('eq', '/psychologue/login');
-      });
 
-      it('should display connected header nav', () => {
-        cy.viewport('iphone-6');
+        cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
+        cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
 
-        cy.get('[data-test-id="header-connected-link-2"]').should('not.be.visible');
-        cy.get('[aria-label="ouvrir la navigation"]').as('burger-menu');
-        cy.get('@burger-menu').should('be.visible').click();
+        // Open burger menu
+        cy.get('@open-burger-menu').should('be.visible').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="header-connected-link-2"]').should('be.visible').click();
-        });
-        cy.location('pathname').should('eq', '/psychologue/mes-patients');
-      });
+          cy.get('@close-burger-menu').should('be.visible');
 
-      it('should NOT display login button', () => {
-        cy.get('[aria-label="ouvrir la navigation"]').as('burger-menu');
-        cy.get('@burger-menu').should('be.visible').click();
-        cy.get('.fr-modal--opened').within(() => {
+          // Public action is not present
           cy.get('[data-test-id="login-button"]').should('not.exist');
+
+          // We are on psy space => back home button is visible and works
+          cy.get('[data-test-id="my-space-button"]').should('not.exist');
+          cy.get('[data-test-id="back-home-button"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/');
+        });
+
+        cy.get('@close-burger-menu').click();
+        cy.get('@open-burger-menu').click();
+        cy.get('.fr-modal--opened').within(() => {
+          // We are on public space => my space button is visible and works
+          cy.get('[data-test-id="back-home-button"]').should('not.exist');
+          cy.get('[data-test-id="my-space-button"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/psychologue/mes-seances');
+        });
+
+        cy.get('@close-burger-menu').click();
+        cy.get('@open-burger-menu').click();
+        cy.get('.fr-modal--opened').within(() => {
+          // Logout
+          cy.get('[data-test-id="logout-button"]').should('be.visible').click();
+          cy.wait('@logout');
+          cy.location('pathname').should('eq', '/psychologue/login');
         });
       });
 
-      it('should NOT display default header nav', () => {
-        cy.get('[aria-label="ouvrir la navigation"]').as('burger-menu');
-        cy.get('@burger-menu').should('be.visible').click();
+      it('should display correct nav items', () => {
+        // Connected actions are not visible
+        cy.get('[data-test-id="header-connected-link-2"]').should('not.be.visible');
+
+        cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
+        cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
+
+        // Open burger menu
+        cy.get('@open-burger-menu').should('be.visible').click();
         cy.get('.fr-modal--opened').within(() => {
+          cy.get('@close-burger-menu').should('be.visible');
+
+          // Public nav is not present
+          cy.get('[data-test-id="header-default-link-1"]').should('not.exist');
           cy.get('[data-test-id="header-default-link-2"]').should('not.exist');
+          cy.get('[data-test-id="header-default-link-3"]').should('not.exist');
+
+          // Connected nav is visible and works
+          cy.get('[data-test-id="header-connected-link-2"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/psychologue/mes-patients');
+        });
+
+        cy.get('@close-burger-menu').click();
+        cy.get('@open-burger-menu').click();
+        cy.get('.fr-modal--opened').within(() => {
+          cy.get('[data-test-id="header-connected-link-3"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/psychologue/mes-remboursements');
+        });
+
+        cy.get('@close-burger-menu').click();
+        cy.get('@open-burger-menu').click();
+        cy.get('.fr-modal--opened').within(() => {
+          cy.get('[data-test-id="header-connected-link-4"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/psychologue/mon-profil');
+        });
+
+        cy.get('@close-burger-menu').click();
+        cy.get('@open-burger-menu').click();
+        cy.get('.fr-modal--opened').within(() => {
+          cy.get('[data-test-id="header-connected-link-1"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/psychologue/mes-seances');
         });
       });
     });
