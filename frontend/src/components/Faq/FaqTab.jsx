@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { observer } from 'mobx-react';
 import sanitizeHtml from 'sanitize-html';
 
@@ -10,6 +10,7 @@ import {
   SideMenuLink,
   Accordion,
   AccordionItem,
+  Title,
 } from '@dataesr/react-dsfr';
 
 import FaqProcess from 'components/Faq/FaqProcess';
@@ -94,6 +95,7 @@ const itemsByType = {
 };
 
 const FaqTab = ({ type }) => {
+  const refs = itemsByType[type].sections.map(() => useRef(null));
   const { commonStore: { config } } = useStore();
   const [activeSection, setActiveSection] = useState();
 
@@ -104,41 +106,48 @@ const FaqTab = ({ type }) => {
         links={itemsByType[type].links}
       />
       <Row>
-        <Col n="md-4 sm-12">
-          <SideMenu buttonLabel="Dans cette rubrique">
-            {itemsByType[type].sections.map(section => (
-              <SideMenuLink
-                key={section.title}
-                onClick={() => { setActiveSection(section); }}
-                className={
+        <SideMenu
+          buttonLabel="Dans cette rubrique"
+          className="fr-sidemenu--sticky fr-col-md-4 fr-col-sm-12"
+        >
+          {itemsByType[type].sections.map((section, index) => (
+            <SideMenuLink
+              key={section.title}
+              onClick={() => {
+                refs[index].current.scrollIntoView();
+                setActiveSection(section);
+              }}
+              className={
                       activeSection && activeSection.title === section.title ? 'fr-sidemenu__item--active' : ''
                     }
-              >
-                {section.title}
-              </SideMenuLink>
-            ))}
-          </SideMenu>
-        </Col>
+            >
+              {section.title}
+            </SideMenuLink>
+          ))}
+        </SideMenu>
         <Col n="md-8 sm-12">
-          <Accordion>
-            { itemsByType[type].sections
-              .filter(section => (activeSection ? section.name === activeSection.name : true))
-              .map(section => faq[section.name](config)
-                .map(item => (
-                  <AccordionItem title={item.question}>
-                    <div
+          {itemsByType[type].sections.map((section, index) => (
+            <div ref={refs[index]} key={section.name}>
+              <Title as="h2">{section.title}</Title>
+              <Accordion>
+                {faq[section.name](config)
+                  .map(item => (
+                    <AccordionItem title={item.question} key={item.question}>
+                      <div
                       // eslint-disable-next-line react/no-danger
-                      dangerouslySetInnerHTML={{
-                        __html: sanitizeHtml(item.answer,
-                          {
-                            allowedTags: ['a'],
-                            allowedAttributes: { a: ['href', 'target', 'rel'] },
-                          }),
-                      }}
-                    />
-                  </AccordionItem>
-                )))}
-          </Accordion>
+                        dangerouslySetInnerHTML={{
+                          __html: sanitizeHtml(item.answer,
+                            {
+                              allowedTags: ['a'],
+                              allowedAttributes: { a: ['href', 'target', 'rel'] },
+                            }),
+                        }}
+                      />
+                    </AccordionItem>
+                  ))}
+              </Accordion>
+            </div>
+          ))}
         </Col>
       </Row>
     </Container>

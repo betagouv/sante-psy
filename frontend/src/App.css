@@ -105,6 +105,10 @@ https://gouvfr.atlassian.net/servicedesk/customer/portal/1/DSFR-322
   display: none;
 }
 
+.fr-tabs {
+  overflow: unset;
+}
+
 /* overwrite DSFR default */
 @media (min-width: 48em) {
   .fr-tabs__panel {
