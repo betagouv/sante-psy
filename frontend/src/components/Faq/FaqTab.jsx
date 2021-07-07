@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react';
-
-import { useStore } from 'stores/';
-import faq from 'services/faq/faq';
+import sanitizeHtml from 'sanitize-html';
 
 import {
   Container,
@@ -10,10 +8,14 @@ import {
   Col,
   SideMenu,
   SideMenuLink,
+  Accordion,
+  AccordionItem,
 } from '@dataesr/react-dsfr';
 
-import FaqCard from 'components/Faq/FaqCard';
 import FaqProcess from 'components/Faq/FaqProcess';
+
+import { useStore } from 'stores/';
+import faq from 'services/faq/faq';
 
 const itemsByType = {
   student: {
@@ -102,7 +104,7 @@ const FaqTab = ({ type }) => {
         links={itemsByType[type].links}
       />
       <Row>
-        <Col n="md-3 sm-12">
+        <Col n="md-4 sm-12">
           <SideMenu buttonLabel="Dans cette rubrique">
             {itemsByType[type].sections.map(section => (
               <SideMenuLink
@@ -117,20 +119,26 @@ const FaqTab = ({ type }) => {
             ))}
           </SideMenu>
         </Col>
-        <Col>
-          <Row gutters spacing="pt-3w">
-            { activeSection ? faq[activeSection.name](config).map(item => (
-              <FaqCard
-                question={item.question}
-                answer={item.answer}
-              />
-            )) : itemsByType[type].sections.map(section => faq[section.name](config).map(item => (
-              <FaqCard
-                question={item.question}
-                answer={item.answer}
-              />
-            )))}
-          </Row>
+        <Col n="md-8 sm-12">
+          <Accordion>
+            { itemsByType[type].sections
+              .filter(section => (activeSection ? section.name === activeSection.name : true))
+              .map(section => faq[section.name](config)
+                .map(item => (
+                  <AccordionItem title={item.question}>
+                    <div
+                      // eslint-disable-next-line react/no-danger
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtml(item.answer,
+                          {
+                            allowedTags: ['a'],
+                            allowedAttributes: { a: ['href', 'target', 'rel'] },
+                          }),
+                      }}
+                    />
+                  </AccordionItem>
+                )))}
+          </Accordion>
         </Col>
       </Row>
     </Container>
