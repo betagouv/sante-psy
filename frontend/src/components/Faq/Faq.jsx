@@ -20,7 +20,7 @@ const Faq = () => (
         <FaqTab type="psychologist" />
       </Tab>
       <Tab label="Je suis médecin">
-        {/* <FaqTab type="doctor" /> */}
+        <FaqTab type="doctor" />
       </Tab>
     </Tabs>
   </Page>
