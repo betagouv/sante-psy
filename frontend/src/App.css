@@ -97,6 +97,14 @@
   height: 56px !important;
 }
 
+/*
+Fix DSFR issue 
+https://gouvfr.atlassian.net/servicedesk/customer/portal/1/DSFR-322
+*/
+.fr-tabs__panel:not(.fr-tabs__panel--selected) {
+  display: none;
+}
+
 /* overwrite DSFR default */
 @media (min-width: 48em) {
   .fr-tabs__panel {
