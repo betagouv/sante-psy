@@ -9,9 +9,7 @@ const PsyListing = () => {
   const [filter, setFilter] = useState({});
 
   useEffect(() => {
-    agent.Psychologist.find().then(response => {
-      setPsychologists(response.psyList);
-    });
+    agent.Psychologist.find().then(setPsychologists);
   }, []);
 
   const filterByKey = (psychologist, key, psyKey) => {

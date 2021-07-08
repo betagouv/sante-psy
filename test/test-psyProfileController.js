@@ -44,9 +44,9 @@ describe('psyProfileController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
 
-          const returnedPsy = res.body.psychologist;
+          const returnedPsy = res.body;
           expect(returnedPsy).to.be.an('object').that.has.all.keys(
             'email',
             'address',
@@ -102,7 +102,7 @@ describe('psyProfileController', () => {
 
       sinon.assert.notCalled(updatePsyStub);
 
-      res.body.success.should.equal(false);
+      res.status.should.equal(400);
       res.body.message.should.equal(message);
     };
 
@@ -355,7 +355,7 @@ describe('psyProfileController', () => {
 
       sinon.assert.called(updatePsyStub);
 
-      res.body.success.should.equal(true);
+      res.status.should.equal(200);
       res.body.message.should.equal('Vos informations ont bien été mises à jour.');
     };
 
@@ -439,7 +439,7 @@ describe('psyProfileController', () => {
       .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           sinon.assert.called(updatePsyStub);
           sinon.assert.calledWith(updatePsyStub, sinon.match({
             address: '1 rue du Pôle Nord<div></div>',
@@ -506,7 +506,7 @@ describe('psyProfileController', () => {
           personalEmail: 'perso@email.com',
         })
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal('Vos informations ont bien été mises à jour.');
         });
     });
@@ -530,7 +530,7 @@ describe('psyProfileController', () => {
           personalEmail: 'perso@email.com',
         })
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal('Vos informations ont bien été mises à jour.');
 
           const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
@@ -569,7 +569,7 @@ describe('psyProfileController', () => {
           dossierNumber: uuidv4(),
         })
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal('Vos informations ont bien été mises à jour.');
 
           const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
@@ -631,7 +631,7 @@ describe('psyProfileController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal('Vos informations sont de nouveau visibles sur l\'annuaire.');
 
           sinon.assert.calledWith(activatePsyStub, psy.dossierNumber);
@@ -663,7 +663,7 @@ describe('psyProfileController', () => {
 
       sinon.assert.notCalled(suspendPsyStub);
 
-      res.body.success.should.equal(false);
+      res.status.should.equal(400);
       res.body.message.should.equal(message);
     };
 
@@ -707,7 +707,7 @@ describe('psyProfileController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal('Vos informations ne sont plus visibles sur l\'annuaire.');
 
           sinon.assert.calledWith(

@@ -10,7 +10,7 @@ import CustomError from '../utils/CustomError';
 const getPatients = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.user.psychologist;
   const patients = await dbPatients.getPatients(psychologistId);
-  res.json({ success: true, patients });
+  res.json(patients);
 };
 
 // Validators we reuse for editPatient and createPatient
@@ -110,7 +110,7 @@ const editPatient = async (req: Request, res: Response): Promise<void> => {
         + ' en cliquant le bouton "Modifier" du patient.';
   }
   console.log(`Patient ${patientId} updated by psy id ${psychologistId}`);
-  res.json({ success: true, message: infoMessage });
+  res.json({ message: infoMessage });
 };
 
 const getPatientValidators = [
@@ -132,10 +132,7 @@ const getPatient = async (req: Request, res: Response): Promise<void> => {
   }
 
   console.debug(`Rendering getEditPatient for ${patientId}`);
-  res.json({
-    success: true,
-    patient,
-  });
+  res.json(patient);
 };
 
 const createNewPatient = async (req: Request, res: Response): Promise<void> => {
@@ -172,7 +169,6 @@ const createNewPatient = async (req: Request, res: Response): Promise<void> => {
   }
   console.log(`Patient created by psy id ${psychologistId}`);
   res.json({
-    success: true,
     message: infoMessage,
   });
 };
@@ -197,7 +193,6 @@ const deletePatient = async (req: Request, res: Response): Promise<void> => {
 
   console.log(`Patient deleted ${patientId} by psy id ${psychologistId}`);
   res.json({
-    success: true,
     message: 'Le patient a bien été supprimé.',
   });
 };

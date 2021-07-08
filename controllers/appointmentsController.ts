@@ -32,7 +32,6 @@ const createNewAppointment = async (req: Request, res: Response): Promise<void> 
       `Appointment created for patient id ${patientId} by psy id ${psyId}`,
     );
     res.json({
-      success: true,
       message: `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`,
     });
   } else {
@@ -66,7 +65,6 @@ const deleteAppointment = async (req: Request, res: Response) : Promise<void> =>
   );
 
   res.json({
-    success: true,
     message: 'La séance a bien été supprimée.',
   });
 };
@@ -75,7 +73,7 @@ const getAppointments = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.user.psychologist;
   const appointments = await dbAppointments.getAppointments(psychologistId);
 
-  res.json({ success: true, appointments });
+  res.json(appointments);
 };
 
 export default {

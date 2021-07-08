@@ -87,7 +87,7 @@ describe('loginController', async () => {
             sinon.assert.called(lastConnectionStub);
             sinon.assert.called(getAcceptedPsychologistByEmailStub);
 
-            res.body.success.should.equal(true);
+            res.status.should.equal(200);
             res.header['set-cookie'][0].should.have.string('token=');
             res.header['set-cookie'][0].should.have.string('; Path=/; HttpOnly; Secure; SameSite=Lax');
             done();
@@ -109,7 +109,7 @@ describe('loginController', async () => {
             sinon.assert.notCalled(lastConnectionStub);
             sinon.assert.notCalled(getAcceptedPsychologistByEmailStub);
             chai.assert.isUndefined(res.body.token);
-            res.body.success.should.equal(false);
+            res.status.should.equal(401);
             res.body.message.should.equal(
               'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
             );
@@ -165,7 +165,7 @@ describe('loginController', async () => {
             sinon.assert.called(sendMailStub);
             sinon.assert.called(insertTokenStub);
 
-            res.body.success.should.equal(true);
+            res.status.should.equal(200);
             res.body.message.should.equal(
               "Un lien de connexion a été envoyé à l'adresse prenom.nom@beta.gouv.fr. Le lien est valable 2 heures.",
             );
@@ -199,7 +199,7 @@ describe('loginController', async () => {
             sinon.assert.called(sendMailStub);
             sinon.assert.notCalled(insertTokenStub);
 
-            res.body.success.should.equal(false);
+            res.status.should.equal(401);
             res.body.message.should.equal(
               "Votre compte n'est pas encore validé par nos services, veuillez rééssayer plus tard.",
             );
@@ -228,7 +228,7 @@ describe('loginController', async () => {
             sinon.assert.notCalled(sendMailStub);
             sinon.assert.notCalled(insertTokenStub);
 
-            res.body.success.should.equal(false);
+            res.status.should.equal(401);
             res.body.message.should.equal(
               "L'email prenom.nom@beta.gouv.fr est inconnu, ou est lié à un dossier classé sans suite ou refusé.",
             );
@@ -257,7 +257,7 @@ describe('loginController', async () => {
             sinon.assert.notCalled(sendMailStub);
             sinon.assert.notCalled(insertTokenStub);
 
-            res.body.success.should.equal(false);
+            res.status.should.equal(400);
             res.body.message.should.equal(
               'Vous devez spécifier un email valide.',
             );

@@ -35,7 +35,7 @@ const Appointments = () => {
     agent.Appointment.get()
       .then(response => {
         setLoading(false);
-        setAppointments(response.appointments);
+        setAppointments(response);
       });
   }, []);
 

@@ -22,7 +22,7 @@ const Billing = () => {
     agent.Appointment.get().then(response => {
       const appointmentsByDate = {};
       const patientsByDate = {};
-      response.appointments.forEach(appointment => {
+      response.forEach(appointment => {
         const existingAppointments = appointmentsByDate[appointment.appointmentDate];
         appointmentsByDate[appointment.appointmentDate] = existingAppointments ? existingAppointments + 1 : 1;
         const existingPatients = patientsByDate[appointment.appointmentDate];
