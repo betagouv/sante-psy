@@ -20,7 +20,7 @@ const sendAutoAcceptMessage = async (dossierId) => {
   const result = await graphql
     .sendMessageWithAttachment(config.demarchesSimplifieesAutoAcceptMessage, uploadFileId, dossierId);
 
-  console.log('message envoyé :', result);
+  console.debug('message envoyé :', result);
 };
 
 const autoAcceptPsychologists = async (): Promise<void> => {
