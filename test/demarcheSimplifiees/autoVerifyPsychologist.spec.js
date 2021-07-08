@@ -22,7 +22,7 @@ describe('autoVerifyPsychologist', () => {
     done();
   });
 
-  it('Should execute 4 mutations on DS', async () => {
+  it.skip('Should execute 4 mutations on DS', async () => {
     await autoVerifyPsychologists.default();
 
     sinon.assert.callCount(executeMutationStub, 4);
