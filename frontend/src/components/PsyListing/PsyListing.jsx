@@ -68,7 +68,7 @@ const PsyListing = () => {
           value="teleconsultation"
           onChange={e => { setTeleconsultation(e.target.checked); }}
           label="Disponible en téléconsultation"
-          defaultChecked={teleconsultation}
+          defaultChecked={teleconsultation === 'true'}
         />
       </div>
       <PsyTable
