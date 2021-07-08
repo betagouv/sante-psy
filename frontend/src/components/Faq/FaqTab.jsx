@@ -19,6 +19,8 @@ import { useStore } from 'stores/';
 import faq from 'services/faq/faq';
 import items from 'services/faq/items';
 
+import styles from './faqTab.cssmodule.scss';
+
 const FaqTab = ({ type }) => {
   const refs = items[type].sections.map(() => useRef(null));
   const { commonStore: { config } } = useStore();
@@ -50,9 +52,9 @@ const FaqTab = ({ type }) => {
             </SideMenuLink>
           ))}
         </SideMenu>
-        <Col n="md-8 sm-12">
+        <Col n="md-8 sm-12" className={styles.sections}>
           {items[type].sections.map((section, index) => (
-            <div ref={refs[index]} key={section.name} className="fr-mt-3w">
+            <div ref={refs[index]} key={section.name}>
               <Title as="h2" look="h4">{section.title}</Title>
               <Accordion>
                 {faq[section.name](config)
