@@ -1,21 +1,25 @@
-const knexConfig = require('../knexfile');
-const knex = require('knex')(knexConfig);
-const date = require('../utils/date');
-const { psychologistsTable, suspensionReasonsTable } = require('./tables');
-const { DOSSIER_STATE } = require('../utils/dossierState');
-const dbUniversities = require('./universities');
-const {
+import knexModule from 'knex';
+import date from '../utils/date';
+import { psychologistsTable, suspensionReasonsTable } from './tables';
+import { DossierState } from '../types/DemarcheSimplifiee';
+import dbUniversities from './universities';
+import {
   addFrenchLanguageIfMissing,
   editablePsyFields,
   nonEditablePsyFields,
-} = require('../services/updatePsyFields');
+} from '../services/updatePsyFields';
+import { Psychologist } from '../types/Psychologist';
 
-module.exports.getAcceptedPsychologistsArchivedOrNot = async (selectedData) => {
+const knexConfig = require('../knexfile');
+
+const knex = knexModule(knexConfig);
+
+const getAcceptedPsychologistsArchivedOrNot = async (selectedData: string[]) : Promise<Psychologist[]> => {
   try {
     const psychologists = knex.column(...selectedData)
         .select()
         .from(psychologistsTable)
-        .where('state', DOSSIER_STATE.accepte);
+        .where('state', DossierState.accepte);
     return psychologists;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
@@ -23,7 +27,7 @@ module.exports.getAcceptedPsychologistsArchivedOrNot = async (selectedData) => {
   }
 };
 
-module.exports.saveAssignedUniversity = async (psychologistId, assignedUniversityId) => {
+const saveAssignedUniversity = async (psychologistId: string, assignedUniversityId: string): Promise<number> => {
   const updatedPsy = await knex(psychologistsTable)
     .where({
       dossierNumber: psychologistId,
@@ -42,7 +46,7 @@ module.exports.saveAssignedUniversity = async (psychologistId, assignedUniversit
   return updatedPsy;
 };
 
-module.exports.getActivePsychologists = async () => {
+const getActivePsychologists = async (): Promise<Psychologist[]> => {
   try {
     const psychologists = knex.column(
       knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
@@ -61,7 +65,7 @@ module.exports.getActivePsychologists = async () => {
         .select()
         .from(psychologistsTable)
         .whereNot('archived', true)
-        .where('state', DOSSIER_STATE.accepte)
+        .where('state', DossierState.accepte)
         .andWhere('active', true)
         .orderByRaw('RANDOM ()');
     return psychologists;
@@ -86,7 +90,7 @@ const getPsychologistsByIds = async (ids) => {
   }
 };
 
-const getPsychologistById = async (psychologistId) => {
+const getPsychologistById = async (psychologistId: string): Promise<Psychologist> => {
   try {
     const psychologist = await knex(psychologistsTable)
       .where('dossierNumber', psychologistId)
@@ -97,13 +101,12 @@ const getPsychologistById = async (psychologistId) => {
     throw new Error('Impossible de récupérer le psychologue');
   }
 };
-module.exports.getPsychologistById = getPsychologistById;
 
 /**
  * Perform a UPSERT with https://knexjs.org/#Builder-merge
  * @param {*} psy
  */
-module.exports.savePsychologistInPG = async function savePsychologistInPG(psyList) {
+const savePsychologistInPG = async (psyList: Psychologist[]): Promise<(number | void)[]> => {
   console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
   const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
   const universities = await dbUniversities.getUniversities();
@@ -158,49 +161,45 @@ module.exports.savePsychologistInPG = async function savePsychologistInPG(psyLis
   return query;
 };
 
-module.exports.getNumberOfPsychologists = async function getNumberOfPsychologists() {
-  const query = await knex(psychologistsTable)
+const getNumberOfPsychologists = async (): Promise<any[]> => knex(psychologistsTable)
   .select('archived', 'state')
   .count('*')
   .groupBy('archived', 'state');
-
-  return query;
-};
 
 /**
  * Only return accepted psychologist
  * @param {*} email
  */
-module.exports.getAcceptedPsychologistByEmail = function getAcceptedPsychologistByEmail(email) {
-  return knex(psychologistsTable)
-  .where('state', DOSSIER_STATE.accepte)
+const getAcceptedPsychologistByEmail = async (email: string): Promise<Psychologist> => knex(psychologistsTable)
+  .where('state', DossierState.accepte)
   .andWhere(
     knex.raw('LOWER("personalEmail") = ?', email.toLowerCase()),
   )
   .first();
-};
 
 /**
  * used to send email to not yet accepted users, instead of nothing
  * it can be tricky if there are multiple dossiers for the same personal emails
  */
-module.exports.getNotYetAcceptedPsychologistByEmail = function getNotYetAcceptedPsychologistByEmail(email) {
-  return knex(psychologistsTable)
+const getNotYetAcceptedPsychologistByEmail = async (email: string): Promise<Psychologist> => knex(psychologistsTable)
   .where(function groupWhereOrTogether() {
-    this.where('state', DOSSIER_STATE.en_construction)
-      .orWhere('state', DOSSIER_STATE.en_instruction);
+    this.where('state', DossierState.enConstruction)
+      .orWhere('state', DossierState.enInstruction);
   })
   .andWhere('personalEmail', email)
   .first();
-};
 
-module.exports.countAcceptedPsychologistsByPersonalEmail = () => knex(psychologistsTable)
+const countAcceptedPsychologistsByPersonalEmail = async (): Promise<any> => knex(psychologistsTable)
     .select('personalEmail', 'state')
-    .where('state', DOSSIER_STATE.accepte)
+    .where('state', DossierState.accepte)
     .count('*')
     .groupBy('personalEmail', 'state');
 
-module.exports.updateConventionInfo = async (psychologistId, assignedUniversityId, isConventionSigned) => {
+const updateConventionInfo = async (
+  psychologistId: string,
+  assignedUniversityId: string,
+  isConventionSigned: boolean,
+): Promise<number> => {
   const updated = await knex(psychologistsTable)
     .where({
       dossierNumber: psychologistId,
@@ -216,7 +215,7 @@ module.exports.updateConventionInfo = async (psychologistId, assignedUniversityI
   return updated;
 };
 
-module.exports.getConventionInfo = (psychologistId) => knex.from(psychologistsTable)
+const getConventionInfo = async (psychologistId: string): Promise<any> => knex.from(psychologistsTable)
     .select(`${'universities'}.name as universityName`,
       `${'universities'}.id as universityId`,
       `${psychologistsTable}.isConventionSigned`)
@@ -226,14 +225,14 @@ module.exports.getConventionInfo = (psychologistId) => knex.from(psychologistsTa
     .where(`${psychologistsTable}.dossierNumber`, psychologistId)
     .first();
 
-module.exports.deleteConventionInfo = (email) => knex
+const deleteConventionInfo = async (email: string): Promise<any> => knex
   .from(psychologistsTable)
   .update({
     assignedUniversityId: null,
   })
   .where('personalEmail', email);
 
-module.exports.updatePsychologist = async (psychologist) => {
+const updatePsychologist = async (psychologist: Psychologist): Promise<number> => {
   try {
     return knex(psychologistsTable)
       .where('dossierNumber', psychologist.dossierNumber)
@@ -248,7 +247,7 @@ module.exports.updatePsychologist = async (psychologist) => {
   }
 };
 
-module.exports.activate = async (dossierNumber) => {
+const activate = async (dossierNumber: string): Promise<number> => {
   try {
     return knex(psychologistsTable)
       .where({ dossierNumber })
@@ -262,7 +261,11 @@ module.exports.activate = async (dossierNumber) => {
   }
 };
 
-module.exports.suspend = async (dossierNumber, inactiveUntil, reason) => knex.transaction((trx) => {
+const suspend = async (
+  dossierNumber: string,
+  inactiveUntil: Date,
+  reason: string,
+): Promise<void> => knex.transaction((trx) => {
   const update = knex(psychologistsTable)
       .transacting(trx)
       .where({ dossierNumber })
@@ -290,7 +293,26 @@ module.exports.suspend = async (dossierNumber, inactiveUntil, reason) => knex.tr
       });
 });
 
-module.exports.reactivate = () => knex(psychologistsTable)
+const reactivate = async (): Promise<number> => knex(psychologistsTable)
     .where({ active: false })
     .andWhere('inactiveUntil', '<=', (new Date()).toISOString())
     .update({ active: true, inactiveUntil: null });
+
+export default {
+  getActivePsychologists,
+  getPsychologistById,
+  getAcceptedPsychologistByEmail,
+  getNotYetAcceptedPsychologistByEmail,
+  getAcceptedPsychologistsArchivedOrNot,
+  getNumberOfPsychologists,
+  countAcceptedPsychologistsByPersonalEmail,
+  savePsychologistInPG,
+  saveAssignedUniversity,
+  activate,
+  reactivate,
+  suspend,
+  updatePsychologist,
+  getConventionInfo,
+  updateConventionInfo,
+  deleteConventionInfo,
+};

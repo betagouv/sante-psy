@@ -1,7 +1,7 @@
-import { reactivate } from '../db/psychologists';
+import psychologists from '../db/psychologists';
 
 const reactivatePsychologists = async () : Promise<void> => {
-  const results = await reactivate();
+  const results = await psychologists.reactivate();
   console.log(`${results} psychologists reactivated`);
 };
 

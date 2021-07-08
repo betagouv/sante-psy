@@ -1,7 +1,7 @@
 require('dotenv').config();
 const rewire = require('rewire');
 const testDossiers = require('./dossier.json');
-const uuid = require('../../utils/uuid');
+const { default: uuid } = require('../../utils/uuid');
 const config = require('../../utils/config');
 
 const importDossier = rewire('../../services/demarchesSimplifiees/importDossier');

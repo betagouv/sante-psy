@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const cookie = require('../utils/cookie');
 const app = require('../index');
 const { default: clean } = require('./helper/clean');
-const dbPsychologists = require('../db/psychologists');
+const { default: dbPsychologists } = require('../db/psychologists');
 
 describe('psyProfileController', () => {
   describe('getPsyProfile', () => {
@@ -624,6 +624,7 @@ describe('psyProfileController', () => {
 
     it('should activate psy', async () => {
       const psy = clean.getOneInactivePsy();
+      console.log(dbPsychologists);
       await dbPsychologists.savePsychologistInPG([psy]);
 
       return chai.request(app)

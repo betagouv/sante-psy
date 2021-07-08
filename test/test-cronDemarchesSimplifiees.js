@@ -2,7 +2,7 @@ require('dotenv').config();
 const { expect } = require('chai');
 const sinon = require('sinon');
 const config = require('../utils/config');
-const dbPsychologists = require('../db/psychologists');
+const { default: dbPsychologists } = require('../db/psychologists');
 const dbUniversities = require('../db/universities');
 const dbDsApiCursor = require('../db/dsApiCursor');
 const importDossier = require('../services/demarchesSimplifiees/importDossier');
@@ -115,7 +115,6 @@ describe('DS integration tests', () => {
     languages: 'Français',
     training: ['Connaissance et pratique des outils diagnostic psychologique'],
     diploma: 'Psychologue',
-    university: null,
     archived: false,
     state: 'accepte',
     personalEmail: 'paul.burgun@beta.gouv.fr',
@@ -138,7 +137,6 @@ describe('DS integration tests', () => {
     languages: 'Français',
     training: ['Connaissance et pratique des outils diagnostic psychologique'],
     diploma: 'T',
-    university: null,
     archived: false,
     state: 'accepte',
     personalEmail: 'xavier.desoindre@beta.gouv.fr',

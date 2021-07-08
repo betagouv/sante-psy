@@ -6,7 +6,7 @@ const { default: clean } = require('./helper/clean');
 const cookie = require('../utils/cookie');
 const date = require('../utils/date');
 const dbPatients = require('../db/patients');
-const dbPsychologists = require('../db/psychologists');
+const { default: dbPsychologists } = require('../db/psychologists');
 
 const doctorName = 'doctorName';
 const doctorAddress = 'doctorAddress';

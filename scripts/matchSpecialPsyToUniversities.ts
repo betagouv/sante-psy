@@ -1,5 +1,5 @@
 const dbUniversities = require('../db/universities');
-const dbPsychologists = require('../db/psychologists');
+const { default: dbPsychologists } = require('../db/psychologists');
 const psyToUni = require('./psyToUni');
 
 /**

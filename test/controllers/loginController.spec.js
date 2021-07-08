@@ -7,7 +7,7 @@ const app = require('../../index');
 const loginController = rewire('../../controllers/loginController');
 const dbLoginToken = require('../../db/loginToken');
 const { default: dbLastConnection } = require('../../db/lastConnections');
-const dbPsychologists = require('../../db/psychologists');
+const { default: dbPsychologists } = require('../../db/psychologists');
 const dbUniversities = require('../../db/universities');
 const emailUtils = require('../../utils/email');
 const cookie = require('../../utils/cookie');
@@ -183,7 +183,7 @@ describe('loginController', async () => {
           .returns(
             Promise.resolve({
               email,
-              state: 'en_construction',
+              state: 'enConstruction',
             }),
           );
 
