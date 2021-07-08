@@ -127,8 +127,8 @@ const FaqTab = ({ type }) => {
         </SideMenu>
         <Col n="md-8 sm-12">
           {itemsByType[type].sections.map((section, index) => (
-            <div ref={refs[index]} key={section.name}>
-              <Title as="h2">{section.title}</Title>
+            <div ref={refs[index]} key={section.name} className="fr-mt-3w">
+              <Title as="h2" look="h4">{section.title}</Title>
               <Accordion>
                 {faq[section.name](config)
                   .map(item => (

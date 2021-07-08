@@ -11,7 +11,7 @@ const FaqProcess = ({ label, links }) => (
         {`Comment ça se passe pour les ${label} ?`}
       </Col>
     </Row>
-    <Row justifyContent="center">
+    <Row justifyContent="center" spacing="pt-1w">
       {links.map(link => (
         <a
           key={link.title}
