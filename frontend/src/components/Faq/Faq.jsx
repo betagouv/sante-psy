@@ -6,20 +6,15 @@ import { Tabs, Tab } from '@dataesr/react-dsfr';
 import Page from 'components/Page/Page';
 import FaqTab from 'components/Faq/FaqTab';
 
+import items from 'services/faq/items';
+
 const Faq = () => {
   const query = new URLSearchParams(useLocation().search);
   const getDefaultTab = () => {
     const section = query.get('section');
-    switch (section) {
-      case 'psychologue':
-        return 1;
-      case 'medecin':
-        return 2;
-      case 'etudiant':
-      default:
-        return 0;
-    }
+    return items[section] ? items[section].index : 0;
   };
+
   return (
     <Page
       title="Foire aux questions"
@@ -31,13 +26,13 @@ const Faq = () => {
         defaultActiveTab={getDefaultTab()}
       >
         <Tab label="Je suis étudiant">
-          <FaqTab type="student" />
+          <FaqTab type="etudiant" />
         </Tab>
         <Tab label="Je suis psychologue">
-          <FaqTab type="psychologist" />
+          <FaqTab type="psychologue" />
         </Tab>
         <Tab label="Je suis médecin">
-          <FaqTab type="doctor" />
+          <FaqTab type="medecin" />
         </Tab>
       </Tabs>
     </Page>
