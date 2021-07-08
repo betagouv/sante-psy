@@ -37,7 +37,10 @@ const PsyTable = ({ psychologists, filter, teleconsultation }) => {
                       <Button
                         secondary
                         onClick={() => {
-                          history.push(`/trouver-un-psychologue?search=${filter}&teleconsultation=${teleconsultation}`);
+                          const searchPath = `?search=${filter}&teleconsultation=${teleconsultation}`;
+                          if (history.location.search !== searchPath) {
+                            history.push(`/trouver-un-psychologue${searchPath}`);
+                          }
                           history.push(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
                         }}
                         className="fr-fi-arrow-right-line fr-btn--icon-right fr-float-right"
@@ -58,7 +61,7 @@ const PsyTable = ({ psychologists, filter, teleconsultation }) => {
         </>
       ) : (
         <Title as="h4" look="h4">
-          Aucun résultat n&lsquo;a été trouvé, veuillez élargir votre champs de recherche
+          Aucun résultat n&lsquo;a été trouvé, veuillez élargir votre champ de recherche
         </Title>
       )}
     </>

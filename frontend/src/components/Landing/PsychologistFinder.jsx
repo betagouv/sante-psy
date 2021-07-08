@@ -24,7 +24,7 @@ const PsychologistFinder = () => {
           size="lg"
           buttonLabel="Trouver un psychologue"
           placeholder="Recherche par nom, ville, code postal ou région"
-          onSearch={search => { history.push(`/trouver-un-psychologue?search=${search}`); }}
+          onSearch={search => { history.push(`/trouver-un-psychologue?search=${search}&teleconsultation=false`); }}
         />
       </div>
     </div>
