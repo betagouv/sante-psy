@@ -21,7 +21,7 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
           value: psychologistCount[0].count,
         },
         {
-          label: 'Patients accompagnés',
+          label: 'Étudiants accompagnés',
           value: patientsCount[0].count,
         },
       ],
