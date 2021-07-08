@@ -58,7 +58,7 @@ const deleteAppointment = async (req: Request, res: Response) : Promise<void> =>
     console.log(
       `Appointment ${appointmentId} does not belong to psy id ${psychologistId}`,
     );
-    throw new CustomError('Impossible de supprimer cette séance.', 400);
+    throw new CustomError('Impossible de supprimer cette séance.', 404);
   }
   console.log(
     `Appointment deleted ${appointmentId} by psy id ${psychologistId}`,

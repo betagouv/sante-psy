@@ -874,7 +874,7 @@ describe('patientsController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.status.should.equal(500);
+          res.status.should.equal(404);
           res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
           // Patient is not deleted
           const patientsArray = await dbPatients.getPatients(anotherPsyId);

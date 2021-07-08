@@ -188,7 +188,7 @@ const deletePatient = async (req: Request, res: Response): Promise<void> => {
 
   if (deleted === 0) {
     console.log(`Patient ${patientId} not deleted by probably other psy id ${psychologistId}`);
-    throw new CustomError('Vous devez spécifier un patient à supprimer.', 500);
+    throw new CustomError('Vous devez spécifier un patient à supprimer.', 404);
   }
 
   console.log(`Patient deleted ${patientId} by psy id ${psychologistId}`);

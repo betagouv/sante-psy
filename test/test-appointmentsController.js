@@ -296,7 +296,7 @@ describe('appointmentsController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.status.should.equal(400);
+          res.status.should.equal(404);
           res.body.message.should.equal('Impossible de supprimer cette séance.');
 
           // Appointment is not deleted
