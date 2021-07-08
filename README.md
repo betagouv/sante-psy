@@ -189,17 +189,6 @@ Tous les emails envoyés par le code seront visibles depuis l'interface web de M
 
     $ npm run lint
 
-
-## Pre-commit pre-push
-* Un commit va lancer le linter
-
-En savoir plus : https: //github.com/typicode/husky/tree/master#install
-
-Si vous rencontez des problèmes avec les git hooks
-* S'assurer que le dossier des hooks soit `.git/hooks` : `git rev-parse --git-path hooks`
-* Sinon utilisez cette commande `git config core.hooksPath .git/hooks/`
-
-
 ### Variables d'environnement
 Voir `.env.sample` pour la liste complète
 
