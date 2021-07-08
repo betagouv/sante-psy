@@ -27,7 +27,7 @@ const FaqTab = ({ type }) => {
   const [activeSection, setActiveSection] = useState();
 
   return (
-    <Container>
+    <Container spacing="pb-3w">
       <FaqProcess
         label={items[type].label}
         links={items[type].links}

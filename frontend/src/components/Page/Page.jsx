@@ -14,7 +14,7 @@ const Page = ({ title, description, background, children }) => (
   <Container justifyContent="center" spacing="py-4w" className={styles[background]}>
     <Row>
       <Col>
-        <Container justifyContent="center" className={styles.container}>
+        <Container justifyContent="center" spacing="pb-3w" className={styles.container}>
           <Row>
             <Col spacing="py-3w" className={styles.sectionTitle}>
               <Title as="h1" look="h2" className={styles.title}>{title}</Title>
