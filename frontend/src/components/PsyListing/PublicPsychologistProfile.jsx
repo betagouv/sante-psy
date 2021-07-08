@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Col, Row } from '@dataesr/react-dsfr';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 import Page from 'components/Page/Page';
 
@@ -93,15 +93,7 @@ const PublicPsychologistProfile = () => {
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={[coordinates.lat, coordinates.lon]}>
-              <Popup>
-                A pretty CSS3 popup.
-                {' '}
-                <br />
-                {' '}
-                Easily customizable.
-              </Popup>
-            </Marker>
+            <Marker position={[coordinates.lat, coordinates.lon]} />
           </MapContainer>
           )}
         </Col>

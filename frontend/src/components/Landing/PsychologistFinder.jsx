@@ -16,8 +16,8 @@ const PsychologistFinder = () => {
       <div className={styles.content}>
         <div className={styles.title}>Trouver un psychologue</div>
         <div className={styles.description}>
-          Contacter un psychologue partenaire dans n‘importe quel département,
-          peu importe votre université d‘origine, par téléphone, par email ou par son site web.
+          Je contacte un psychologue partenaire quel que soit son département et
+          mon université d‘origine, par téléphone, par email ou par son site web.
         </div>
         <SearchBar
           label=""

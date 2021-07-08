@@ -19,6 +19,8 @@ const PsyListing = () => {
     });
   }, []);
 
+  const matchFilter = value => value.toLowerCase().includes(filter.toLowerCase());
+
   const getFilteredPsychologists = () => {
     let filteredPsychologists = psychologists;
     if (teleconsultation) {
@@ -31,15 +33,15 @@ const PsyListing = () => {
 
     const psychologistByName = filteredPsychologists
       .filter(
-        psychologist => psychologist.lastName.toLowerCase().includes(filter.toLowerCase()),
+        psychologist => matchFilter(psychologist.lastName),
       );
     const psychologistByAddress = filteredPsychologists.filter(
       psychologist => (
-        !psychologist.lastName.toLowerCase().includes(filter.toLowerCase())
+        !matchFilter(psychologist.lastName)
         && (
-          psychologist.address.toLowerCase().includes(filter.toLowerCase())
-        || psychologist.departement.toLowerCase().includes(filter.toLowerCase())
-        || psychologist.region.toLowerCase().includes(filter.toLowerCase())
+          matchFilter(psychologist.address)
+        || matchFilter(psychologist.departement)
+        || matchFilter(psychologist.region)
         )
       ),
     );
@@ -55,17 +57,20 @@ const PsyListing = () => {
       La liste est mise à jour quotidiennement, revenez la consulter si vous n‘avez pas pu trouver de psychologue.`}
       background="yellow"
     >
-      <TextInput
-        value={filter}
-        onChange={e => setFilter(e.target.value)}
-        label="Rechercher par nom, ville, code postal ou région"
-      />
-      <Checkbox
-        value="teleconsultation"
-        onChange={e => { setTeleconsultation(e.target.checked); }}
-        label="Disponible en téléconsultation"
-        defaultChecked={teleconsultation}
-      />
+      <div className="fr-pb-6w">
+        <TextInput
+          className="fr-mb-1w"
+          value={filter}
+          onChange={e => setFilter(e.target.value)}
+          label="Rechercher par nom, ville, code postal ou région"
+        />
+        <Checkbox
+          value="teleconsultation"
+          onChange={e => { setTeleconsultation(e.target.checked); }}
+          label="Disponible en téléconsultation"
+          defaultChecked={teleconsultation}
+        />
+      </div>
       <PsyTable
         psychologists={filteredPsychologists}
         filter={filter}
