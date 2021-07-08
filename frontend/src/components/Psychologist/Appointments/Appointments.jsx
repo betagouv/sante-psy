@@ -95,7 +95,9 @@ const Appointments = () => {
               to="/psychologue/nouvelle-seance"
               className="fr-btn fr-fi-add-line fr-btn--icon-left"
             >
-              Nouvelle séance
+              <div data-test-id="new-appointment-button">
+                Nouvelle séance
+              </div>
             </HashLink>
           </div>
           <div className="fr-mb-1w">
