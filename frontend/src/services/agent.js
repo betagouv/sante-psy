@@ -56,6 +56,13 @@ const Appointment = {
 
 const Config = { get: () => clientWithoutErrorManagement.get('/config') };
 
+const Convention = {
+  save: convention => client
+    .post(`/psychologist/${store.userStore.user.dossierNumber}/convention`, convention),
+};
+
+const Map = { findAddress: address => axios.get(`https://nominatim.openstreetmap.org/search?q=${address}&format=json`) };
+
 const Patient = {
   create: patient => client.post('/patients/', patient),
   delete: id => client.delete(`/patients/${id}`),
@@ -67,16 +74,11 @@ const Patient = {
 const Psychologist = {
   activate: () => client.post(`/psychologist/${store.userStore.user.dossierNumber}/activate`),
   find: () => client.get('/trouver-un-psychologue'),
-  getProfile: () => client.get(`/psychologist/${store.userStore.user.dossierNumber}`),
+  getProfile: id => client.get(`/psychologist/${id || store.userStore.user.dossierNumber}`),
   suspend: (reason, date) => client
     .post(`/psychologist/${store.userStore.user.dossierNumber}/suspend`, { reason, date }),
   updateProfile: psychologist => client
     .put(`/psychologist/${store.userStore.user.dossierNumber}`, psychologist),
-};
-
-const Convention = {
-  save: convention => client
-    .post(`/psychologist/${store.userStore.user.dossierNumber}/convention`, convention),
 };
 
 const Statistics = { getAll: () => client.get('/statistics') };
@@ -94,6 +96,7 @@ export default {
   Appointment,
   Config,
   Convention,
+  Map,
   Patient,
   Psychologist,
   Statistics,
