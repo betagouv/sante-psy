@@ -103,7 +103,7 @@
 
 /* overwrite DSFR default */
 @media (min-width: 48em) {
-  .fr-tabs__panel {
+  .faqPage .fr-tabs__panel {
     padding: 0; 
   }
 }

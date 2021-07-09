@@ -11,8 +11,8 @@ import {
 
 import styles from './page.cssmodule.scss';
 
-const Page = ({ title, description, background, children, dataTestId }) => (
-  <Container spacing="py-4w" className={styles[background]}>
+const Page = ({ title, description, background, children, className=null, dataTestId=null }) => (
+  <Container spacing="py-4w" className={classnames(className, styles[background])}>
     <Row>
       <Col>
         <div className={classnames('fr-container', styles.container)} data-test-id={dataTestId}>
