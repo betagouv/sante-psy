@@ -65,7 +65,7 @@ const Billing = () => {
           <li>
             <HashLink
               className="fr-btn fr-btn--secondary fr-mt-2w"
-              to="/faq#remboursement"
+              to="/faq?section=psychologue#remboursement"
             >
               Consulter la Foire Aux Questions
             </HashLink>

@@ -47,7 +47,7 @@ const items = {
       { title: 'Éligibilité', name: 'psyEligibility' },
       { title: 'Inscription', name: 'registration' },
       { title: 'Connexion', name: 'connection' },
-      { title: 'Prix de la séance et remboursement', name: 'reimbursement' },
+      { title: 'Prix de la séance et remboursement', name: 'reimbursement', id: 'remboursement' },
       { title: 'Déroulé', name: 'process' },
       { title: 'Conventionnement', name: 'agreement' },
       { title: 'Séance', name: 'psySession' },
