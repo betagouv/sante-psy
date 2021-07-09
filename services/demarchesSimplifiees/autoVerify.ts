@@ -1,5 +1,5 @@
 import date from '../../utils/date';
-import { DOSSIER_STATE } from '../../utils/dossierState';
+import { DossierState } from '../../types/DemarcheSimplifiee';
 import { getAdeliInfo } from '../../utils/adeliAPI';
 import areSimilar from '../../utils/similarString';
 import {
@@ -75,7 +75,7 @@ const verifyPsychologist = async (psychologist, adeliInfo) => {
 const autoVerifyPsychologists = async () : Promise<void> => {
   try {
     const dossiersInConstruction = await getAllPsychologistList(
-      (cursor) => graphql.getDossiersWithAnnotationsAndMessages(cursor, DOSSIER_STATE.en_construction),
+      (cursor) => graphql.getDossiersWithAnnotationsAndMessages(cursor, DossierState.enConstruction),
     );
     console.log(`${dossiersInConstruction.psychologists.length} psychologists are in construction`);
 

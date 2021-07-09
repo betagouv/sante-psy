@@ -3,6 +3,7 @@ import { Patient } from '../../types/Patient';
 import { Appointment } from '../../types/Appointment';
 import knex from 'knex';
 import uuid from '../../utils/uuid';
+import dbPsychologists from '../../db/psychologists';
 import {
   appointmentsTable,
   patientsTable,
@@ -13,10 +14,10 @@ import {
   suspensionReasonsTable,
   lastConnectionsTable,
 } from '../../db/tables';
+import { DossierState } from '../../types/DemarcheSimplifiee';
 
 const knexConfig = require('../../knexfile');
 
-const dbPsychologists = require('../../db/psychologists');
 const dbUniversities = require('../../db/universities');
 
 const db = knex(knexConfig);
@@ -33,7 +34,7 @@ const getRandomInt = () : string => {
 
 const getOnePsy = (
   personalEmail = 'loginemail@beta.gouv.fr',
-  state = 'accepte',
+  state = DossierState.accepte,
   archived = false,
   uniId: string = null,
   inactiveUntil: string | undefined = undefined,
@@ -57,7 +58,6 @@ const getOnePsy = (
     // eslint-disable-next-line max-len
     training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
     departement: '14 - Calvados',
-    university: `${getRandomInt()} Université`,
     assignedUniversityId: uniId,
     region: 'Normandie',
     languages: 'Français ,Anglais, et Espagnol',
@@ -68,7 +68,7 @@ const getOnePsy = (
 
 const getOneInactivePsy = (inactiveUntil: string): Psychologist => getOnePsy(
   `inactive@${inactiveUntil}.fr`,
-  'accepte',
+  DossierState.accepte,
   false,
   null,
   inactiveUntil,
@@ -114,7 +114,7 @@ const getOneAppointment = (
 
 const insertOnePsy = async (
   personalEmail = 'loginemail@beta.gouv.fr',
-  state = 'accepte',
+  state = DossierState.accepte,
   archived = false,
   inactiveUntil = undefined,
 ): Promise<Psychologist> => {

@@ -2,7 +2,7 @@ require('dotenv').config();
 const { expect } = require('chai');
 const sinon = require('sinon');
 const config = require('../utils/config');
-const dbPsychologists = require('../db/psychologists');
+const { default: dbPsychologists } = require('../db/psychologists');
 const dbUniversities = require('../db/universities');
 const dbDsApiCursor = require('../db/dsApiCursor');
 const importDossier = require('../services/demarchesSimplifiees/importDossier');
@@ -16,6 +16,7 @@ const {
   },
 } = require('../cron_jobs/cronDemarchesSimplifiees');
 const { default: clean } = require('./helper/clean');
+const { DossierState } = require('../types/DemarcheSimplifiee');
 
 describe('Import Data from DS to PG', () => {
   let getLatestCursorSavedStub;
@@ -79,7 +80,7 @@ describe('checkForMultipleAcceptedDossiers', () => {
   it('should notify if two accepted dossiers for the same person', async () => {
     // insert 2 psychologists, same data except uuid, with accepte state
     const psy = clean.getOnePsy();
-    psy.state = 'accepte';
+    psy.state = DossierState.accepte;
     psy.dossierNumber = '27172a9b-5081-4502-9022-b17510ba40a1';
     await dbPsychologists.savePsychologistInPG([psy]);
     psy.dossierNumber = '0fee0788-b4fe-49f5-a950-5d22a343d495';
@@ -115,9 +116,8 @@ describe('DS integration tests', () => {
     languages: 'Français',
     training: ['Connaissance et pratique des outils diagnostic psychologique'],
     diploma: 'Psychologue',
-    university: null,
     archived: false,
-    state: 'accepte',
+    state: DossierState.accepte,
     personalEmail: 'paul.burgun@beta.gouv.fr',
     isConventionSigned: null,
     selfModified: false,
@@ -138,9 +138,8 @@ describe('DS integration tests', () => {
     languages: 'Français',
     training: ['Connaissance et pratique des outils diagnostic psychologique'],
     diploma: 'T',
-    university: null,
     archived: false,
-    state: 'accepte',
+    state: DossierState.accepte,
     personalEmail: 'xavier.desoindre@beta.gouv.fr',
     isConventionSigned: null,
     selfModified: false,

@@ -1,4 +1,6 @@
-const addFrenchLanguageIfMissing = (languages) => {
+import { EditablePsychologist, NonEditablePsychologist, Psychologist } from '../types/Psychologist';
+
+export const addFrenchLanguageIfMissing = (languages: string): string => {
   const frenchRegexp = new RegExp(/fran[çc]ais/, 'g');
   const french = 'Français';
   if (!languages || languages.trim().length === 0) {
@@ -10,7 +12,7 @@ const addFrenchLanguageIfMissing = (languages) => {
   return languages;
 };
 
-const editablePsyFields = (psy) => ({
+export const editablePsyFields = (psy: Psychologist): EditablePsychologist => ({
   email: psy.email,
   address: psy.address,
   departement: psy.departement,
@@ -23,7 +25,7 @@ const editablePsyFields = (psy) => ({
   personalEmail: psy.personalEmail,
 });
 
-const nonEditablePsyFields = (psy) => ({
+export const nonEditablePsyFields = (psy: Psychologist): NonEditablePsychologist => ({
   firstNames: psy.firstNames,
   lastName: psy.lastName,
   archived: psy.archived,
@@ -33,7 +35,7 @@ const nonEditablePsyFields = (psy) => ({
   diploma: psy.diploma,
 });
 
-module.exports = {
+export default {
   editablePsyFields,
   nonEditablePsyFields,
   addFrenchLanguageIfMissing,
