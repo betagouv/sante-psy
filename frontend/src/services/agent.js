@@ -50,6 +50,8 @@ const Appointment = {
 
 const Config = { get: () => clientWithoutErrorManagement.get('/config') };
 
+const Contact = { send: message => client.post('/contact', message) };
+
 const Convention = {
   save: convention => client
     .post(`/psychologist/${store.userStore.user.dossierNumber}/convention`, convention),
@@ -89,6 +91,7 @@ const User = {
 export default {
   Appointment,
   Config,
+  Contact,
   Convention,
   Map,
   Patient,

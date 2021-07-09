@@ -1,16 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-import { useStore } from 'stores/';
+const Mail = () => (
+  <div className="fr-my-4w">
+    <Link to="/contact">
+      Des questions ? Une difficulté ? Contactez nous !
 
-const Mail = () => {
-  const { commonStore: { config } } = useStore();
-  return (
-    <div className="fr-my-4w">
-      Des questions ? Une difficulté ? Envoyez-nous un email à
-      {' '}
-      <b>{config.contactEmail}</b>
-    </div>
-  );
-};
+    </Link>
+  </div>
+);
 
 export default Mail;

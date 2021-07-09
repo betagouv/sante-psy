@@ -16,6 +16,7 @@ import PersonalData from 'components/PersonalData/PersonalData';
 import Statistics from 'components/Statistics/Statistics';
 import PsyListing from 'components/PsyListing/PsyListing';
 import PublicPsychologistProfile from 'components/PsyListing/PublicPsychologistProfile';
+import Contact from 'components/Contact/Contact';
 
 import agent from 'services/agent';
 
@@ -57,6 +58,7 @@ function App() {
             <Route exact path="/donnees-personnelles-et-gestion-des-cookies" component={PersonalData} />
             <Route exact path="/faq" component={Faq} />
             <Route exact path="/stats" component={Statistics} />
+            <Route exact path="/contact" component={Contact} />
             <Route exact path="/" component={Landing} />
             <Route path="/psychologue/">
               <Redirect to="/psychologue/login" />

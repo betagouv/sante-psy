@@ -101,6 +101,10 @@
   overflow: unset;
 }
 
+.contactPage textarea.fr-input {
+  resize: vertical;
+}
+
 /* overwrite DSFR default */
 @media (min-width: 48em) {
   .faqPage .fr-tabs__panel {
