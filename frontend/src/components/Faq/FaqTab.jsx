@@ -27,12 +27,12 @@ const FaqTab = ({ type }) => {
   const [activeSection, setActiveSection] = useState();
 
   return (
-    <div className="fr-container fr-pb-3w" data-test-id={`tabpanel-${type}`}>
+    <div data-test-id={`tabpanel-${type}`}>
       <FaqProcess
         label={items[type].label}
         links={items[type].links}
       />
-      <Row>
+      <Row spacing="my-3w">
         <SideMenu
           buttonLabel="Dans cette rubrique"
           className={classnames(styles.menu, 'fr-sidemenu--sticky fr-col-md-4 fr-col-sm-12')}

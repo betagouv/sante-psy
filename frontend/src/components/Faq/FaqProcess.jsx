@@ -1,17 +1,15 @@
 import React from 'react';
 import classnames from 'classnames';
-import { Row, Col } from '@dataesr/react-dsfr';
+import { Row } from '@dataesr/react-dsfr';
 
 import styles from './faqProcess.cssmodule.scss';
 
 const FaqProcess = ({ label, links }) => (
-  <div className={styles.container}>
-    <Row className={styles.label}>
-      <Col>
-        {`Comment ça se passe pour les ${label} ?`}
-      </Col>
+  <>
+    <Row spacing="mt-3w mb-1w" justifyContent="center" className={styles.label}>
+      {`Comment ça se passe pour les ${label} ?`}
     </Row>
-    <Row justifyContent="center" spacing="pt-1w">
+    <Row justifyContent="center" spacing="my-1w">
       {links.map(link => (
         <a
           key={link.title}
@@ -24,7 +22,7 @@ const FaqProcess = ({ label, links }) => (
         </a>
       ))}
     </Row>
-  </div>
+  </>
 );
 
 export default FaqProcess;
