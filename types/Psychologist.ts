@@ -1,24 +1,33 @@
-export type Psychologist = {
-    dossierNumber: string,
+import { DossierState } from './DemarcheSimplifiee';
+
+export type EditablePsychologist = {
+    email: string,
+    address: string,
+    departement: string,
+    region: string,
+    phone: string,
+    website: string,
+    description: string,
+    teleconsultation: boolean,
+    languages: string,
+    personalEmail: string,
+  }
+
+export type NonEditablePsychologist = {
     firstNames: string,
     lastName: string,
     archived: boolean,
-    state: string,
-    adeli: string,
-    address: string,
-    diploma: string,
-    phone: string,
-    email: string,
-    personalEmail: string,
-    website: string,
-    teleconsultation: boolean,
-    description: string,
+    state: DossierState,
     training: string,
-    departement: string,
-    university: string,
+    adeli: string,
+    diploma: string,
+  };
+
+export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
+    dossierNumber: string,
     assignedUniversityId: string,
-    region: string,
-    languages: string,
+    isConventionSigned?: boolean,
+    selfModified?: boolean,
     active: boolean,
     inactiveUntil: string,
-}
+  };
