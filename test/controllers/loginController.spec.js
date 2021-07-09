@@ -12,6 +12,7 @@ const dbUniversities = require('../../db/universities');
 const emailUtils = require('../../utils/email');
 const cookie = require('../../utils/cookie');
 const { default: clean } = require('../helper/clean');
+const { DossierState } = require('../../types/DemarcheSimplifiee');
 
 describe('loginController', async () => {
   describe('generateLoginUrl', () => {
@@ -56,7 +57,7 @@ describe('loginController', async () => {
           .returns(
             Promise.resolve({
               email,
-              state: 'accepte',
+              state: DossierState.accepte,
             }),
           );
       });
@@ -150,7 +151,7 @@ describe('loginController', async () => {
           .returns(
             Promise.resolve({
               email,
-              state: 'accepte',
+              state: DossierState.accepte,
             }),
           );
 
@@ -183,7 +184,7 @@ describe('loginController', async () => {
           .returns(
             Promise.resolve({
               email,
-              state: 'enConstruction',
+              state: DossierState.enConstruction,
             }),
           );
 
@@ -242,7 +243,7 @@ describe('loginController', async () => {
           .returns(
             Promise.resolve({
               email,
-              state: 'accepte',
+              state: DossierState.accepte,
             }),
           );
 
@@ -280,7 +281,7 @@ describe('loginController', async () => {
       ]);
       const psy = clean.getOnePsy(
         'loginemail@beta.gouv.fr',
-        'accepte',
+        DossierState.accepte,
         false,
         universityId,
       );

@@ -3,6 +3,7 @@ const rewire = require('rewire');
 const testDossiers = require('./dossier.json');
 const { default: uuid } = require('../../utils/uuid');
 const config = require('../../utils/config');
+const { DossierState } = require('../../types/DemarcheSimplifiee');
 
 const importDossier = rewire('../../services/demarchesSimplifiees/importDossier');
 
@@ -23,7 +24,7 @@ describe('Demarches Simplifiees', () => {
           lastName: 'Last',
           firstNames: 'First',
           archived: false,
-          state: 'accepte',
+          state: DossierState.accepte,
           adeli: '829302942',
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           diploma: 'Psychologie clinique de la santé',
@@ -44,7 +45,7 @@ describe('Demarches Simplifiees', () => {
           lastName: '2ème',
           firstNames: 'Personne',
           archived: false,
-          state: 'accepte',
+          state: DossierState.accepte,
           adeli: '829302942',
           address: 'SSR CL AL SOLA 66110 MONTBOLO',
           phone: '0468396600',

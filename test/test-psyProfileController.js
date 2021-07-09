@@ -624,7 +624,6 @@ describe('psyProfileController', () => {
 
     it('should activate psy', async () => {
       const psy = clean.getOneInactivePsy();
-      console.log(dbPsychologists);
       await dbPsychologists.savePsychologistInPG([psy]);
 
       return chai.request(app)

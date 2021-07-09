@@ -4,6 +4,7 @@ const { default: clean } = require('../helper/clean');
 const cookie = require('../../utils/cookie');
 const { default: dbPsychologists } = require('../../db/psychologists');
 const dbUniversities = require('../../db/universities');
+const { DossierState } = require('../../types/DemarcheSimplifiee');
 
 describe('conventionController', () => {
   describe('updateConventionInfo', () => {
@@ -19,7 +20,7 @@ describe('conventionController', () => {
 
     it('should updateConventionInfo', async () => {
       const psyEmail = 'login@beta.gouv.fr';
-      const psy = await clean.insertOnePsy(psyEmail, 'accepte', false);
+      const psy = await clean.insertOnePsy(psyEmail, DossierState.accepte, false);
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).not.to.exist;
 
@@ -43,7 +44,7 @@ describe('conventionController', () => {
 
     const failValidation = async (payload, errorMessage) => {
       const psyEmail = 'login@beta.gouv.fr';
-      const psy = await clean.insertOnePsy(psyEmail, 'accepte', false);
+      const psy = await clean.insertOnePsy(psyEmail, DossierState.accepte, false);
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).not.to.exist;
 

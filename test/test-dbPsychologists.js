@@ -137,7 +137,7 @@ describe('DB Psychologists', () => {
       archivedPsy.archived = true;
       archivedPsy.lastName = 'ArchivedPsy';
       const constructionPsy = clean.getOnePsy('construction@psy.fr');
-      constructionPsy.state = 'enConstruction';
+      constructionPsy.state = DossierState.enConstruction;
       constructionPsy.lastName = 'ConstructionPsy';
       const inactivePsy = clean.getOneInactivePsy(new Date());
       await dbPsychologists.savePsychologistInPG([activePsy, archivedPsy, constructionPsy, inactivePsy]);
@@ -159,7 +159,7 @@ describe('DB Psychologists', () => {
       archivedPsy.personalEmail = 'loginemail-archived@beta.gouv.fr';
       archivedPsy.dossierNumber = '34e6352f-bdd0-48ce-83de-8de71cad295b';
       const constructionPsy = clean.getOnePsy();
-      constructionPsy.state = 'enConstruction';
+      constructionPsy.state = DossierState.enConstruction;
       constructionPsy.lastName = 'ConstructionPsy';
       constructionPsy.dossierNumber = 'a2e447cd-2d57-4f83-8884-ab05a2633644';
 
