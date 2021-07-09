@@ -44,26 +44,28 @@ module.exports.saveAssignedUniversity = async (psychologistId, assignedUniversit
 
 module.exports.getActivePsychologists = async () => {
   try {
-    const psychologists = knex.column(
-      knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
-      'adeli',
-      'firstNames',
-      'email',
-      'address',
-      'departement',
-      'region',
-      'phone',
-      'website',
-      'teleconsultation',
-      'languages',
-      'description',
-    )
-        .select()
-        .from(psychologistsTable)
-        .whereNot('archived', true)
-        .where('state', DOSSIER_STATE.accepte)
-        .andWhere('active', true)
-        .orderByRaw('RANDOM ()');
+    const psychologists = knex
+      .column(
+        'dossierNumber',
+        'lastName',
+        'adeli',
+        'firstNames',
+        'email',
+        'address',
+        'departement',
+        'region',
+        'phone',
+        'website',
+        'teleconsultation',
+        'languages',
+        'description',
+      )
+      .select()
+      .from(psychologistsTable)
+      .whereNot('archived', true)
+      .where('state', DOSSIER_STATE.accepte)
+      .andWhere('active', true)
+      .orderByRaw('RANDOM ()');
     return psychologists;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);

@@ -8,6 +8,7 @@ import loginController from '../controllers/loginController';
 import statisticsController from '../controllers/statisticsController';
 
 import config from '../utils/config';
+import psyProfileController from '../controllers/psyProfileController';
 
 const router = express.Router();
 
@@ -42,5 +43,6 @@ router.get('/trouver-un-psychologue', psyListingController.getActivePsychologist
 router.get('/connecteduser', loginController.connectedUser);
 
 router.get('/statistics', statisticsController.getAll);
+router.get('/psychologist/:psyId', psyProfileController.getPsyProfile);
 
 export default router;

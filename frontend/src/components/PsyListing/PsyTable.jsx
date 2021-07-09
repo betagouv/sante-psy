@@ -1,129 +1,71 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Table, Pagination, Button, Title } from '@dataesr/react-dsfr';
+import camelize from 'services/string';
 
-import { ReactTabulator } from 'react-tabulator';
-
-import 'react-tabulator/lib/styles.css';
-import 'react-tabulator/css/tabulator_modern.css';
-
-const addPrefixToUrl = urlCell => {
-  const url = urlCell.getValue();
-  if (!url.startsWith('http')) {
-    return `//${url}`;
-  }
-  return url;
+const PsyTable = ({ psychologists, filter, teleconsultation }) => {
+  const history = useHistory();
+  const [page] = useState(1);
+  return (
+    <>
+      {psychologists.length > 0 ? (
+        <>
+          <Table
+            className="fr-mb-3w"
+            caption="Tous les résultats"
+          >
+            <thead>
+              <tr key="headers">
+                <th scope="col">Nom</th>
+                <th scope="col">Adresse</th>
+                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                <th scope="col" />
+              </tr>
+            </thead>
+            <tbody>
+              {psychologists
+                .slice((page - 1) * 10, page * 10)
+                .map(psychologist => (
+                  <tr key={psychologist.dossierNumber}>
+                    <td>
+                      {`${psychologist.lastName.toUpperCase()} ${camelize(
+                        psychologist.firstNames,
+                      )}`}
+                    </td>
+                    <td>{psychologist.address}</td>
+                    <td>
+                      <Button
+                        secondary
+                        onClick={() => {
+                          const searchPath = `?search=${filter}&teleconsultation=${teleconsultation}`;
+                          if (history.location.search !== searchPath) {
+                            history.push(`/trouver-un-psychologue${searchPath}`);
+                          }
+                          history.push(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
+                        }}
+                        className="fr-fi-arrow-right-line fr-btn--icon-right fr-float-right"
+                      >
+                        Voir le profil
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+          <Pagination
+            buildURL={() => {}}
+            currentPage={page}
+            pageCount={Math.ceil(psychologists.length / 10)}
+            surrendingPages={3}
+          />
+        </>
+      ) : (
+        <Title as="h4" look="h4">
+          Aucun résultat n&lsquo;a été trouvé, veuillez élargir votre champ de recherche
+        </Title>
+      )}
+    </>
+  );
 };
-
-const columns = [
-  {
-    title: 'Nom',
-    field: 'lastName',
-    sorter: 'string',
-    responsive: 0,
-  },
-  {
-    title: 'Prénom(s)',
-    field: 'firstNames',
-    sorter: 'string',
-    responsive: 0,
-  },
-  {
-    title: 'Département',
-    field: 'departement',
-    sorter: 'string',
-    maxWidth: 300,
-    responsive: 0,
-  },
-  {
-    title: 'Adresse',
-    field: 'address',
-    sorter: 'string',
-    maxWidth: 300,
-    responsive: 0,
-    formatter: 'link',
-    formatterParams: { labelField: 'address', urlPrefix: 'https://www.openstreetmap.org/search?query=', target: '_blank' },
-  },
-  {
-    title: '📞',
-    field: 'phone',
-    sorter: 'string',
-    responsive: 0,
-    formatter: 'link',
-    formatterParams: { labelField: 'phone', urlPrefix: 'tel:' },
-  },
-  {
-    title: 'Email',
-    field: 'email',
-    sorter: 'string',
-    responsive: 0,
-    formatter: 'link',
-    formatterParams: { labelField: 'email', urlPrefix: 'mailto:' },
-  },
-  {
-    title: 'Téléconsultation',
-    field: 'teleconsultation',
-    headerTooltip: 'Téléconsultation',
-    responsive: 0,
-    sorter: 'string',
-    hozAlign: 'center',
-    tooltip: 'Est ce que le psychologue accepte la téléconsultation ?',
-    formatter: 'tickCross',
-  },
-  {
-    title: 'Langues parlées',
-    field: 'languages',
-    responsive: 0,
-    sorter: 'string',
-    hozAlign: 'center',
-    formatter: 'textarea',
-  },
-  {
-    title: 'Site web',
-    field: 'website',
-    sorter: 'string',
-    maxWidth: 200,
-    responsive: 0,
-    formatter: 'link',
-    formatterParams: { labelField: 'website', target: '_blank', url: addPrefixToUrl },
-  },
-];
-
-const options = {
-  locale: 'fr-fr',
-  langs: { // http://tabulator.info/docs/4.2/localize#setup
-    'fr-fr': { // French language definition
-      pagination: {
-        first: 'Première',
-        first_title: 'Première Page',
-        last: 'Dernière',
-        last_title: 'Dernière Page',
-        prev: 'Précédent',
-        prev_title: 'Page Précédente',
-        next: 'Suivant',
-        next_title: 'Page Suivante',
-      },
-      headerFilters: { default: 'Rechercher par adresse' },
-    },
-  },
-  tooltipsHeader: true,
-  layout: 'fitData', // fit columns to width of table
-  responsiveLayout: 'hide', // hide columns that dont fit on the table //@TODO
-  tooltips: true, // show tool tips on cells
-  addRowPos: 'top', // when adding a new row, add it to the top of the table
-  history: true, // allow undo and redo actions on the table
-  pagination: 'local', // paginate the data
-  paginationSize: 20, // allow XX rows per page of data
-  movableColumns: false, // allow column order to be changed
-  resizableRows: false, // allow row order to be changed
-  resizableColumns: false,
-  headerFilterPlaceholder: 'Rechercher un psychologue',
-};
-
-const PsyTable = ({ psychologists }) => (
-  <ReactTabulator
-    columns={columns}
-    data={psychologists}
-    options={options}
-  />
-);
 
 export default PsyTable;
