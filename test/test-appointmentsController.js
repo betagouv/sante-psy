@@ -49,7 +49,7 @@ describe('appointmentsController', () => {
           date: new Date('09/02/2021'),
         })
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal('La séance du jeudi 2 septembre 2021 a bien été créée.');
 
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
@@ -86,7 +86,7 @@ describe('appointmentsController', () => {
           date: new Date('09/02/2021'),
         })
         .then(async (res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(500);
           res.body.message.should.equal('Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?');
 
           // was not created because patient id is not linked to psy id
@@ -157,7 +157,7 @@ describe('appointmentsController', () => {
           date: new Date('09/02/2021'),
         })
         .end((err, res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(400);
           res.body.message.should.equal('Vous devez spécifier un patient pour la séance.');
 
           sinon.assert.notCalled(insertAppointmentStub);
@@ -175,7 +175,7 @@ describe('appointmentsController', () => {
           date: new Date('09/02/2021'),
         })
         .end((err, res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(400);
           res.body.message.should.equal('Vous devez spécifier un patient pour la séance.');
 
           sinon.assert.notCalled(insertAppointmentStub);
@@ -197,7 +197,7 @@ describe('appointmentsController', () => {
           date: '09/02/2021',
         })
         .end((err, res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(400);
           res.body.message.should.equal('Vous devez spécifier une date pour la séance.');
 
           sinon.assert.notCalled(insertAppointmentStub);
@@ -215,7 +215,7 @@ describe('appointmentsController', () => {
           // no date
         })
         .end((err, res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(400);
           res.body.message.should.equal('Vous devez spécifier une date pour la séance.');
           sinon.assert.notCalled(insertAppointmentStub);
           done();
@@ -273,7 +273,7 @@ describe('appointmentsController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal('La séance a bien été supprimée.');
 
           const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
@@ -296,7 +296,7 @@ describe('appointmentsController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(404);
           res.body.message.should.equal('Impossible de supprimer cette séance.');
 
           // Appointment is not deleted
@@ -319,7 +319,7 @@ describe('appointmentsController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(400);
           res.body.message.should.equal('Vous devez spécifier une séance à supprimer.');
 
           // Appointment is not deleted

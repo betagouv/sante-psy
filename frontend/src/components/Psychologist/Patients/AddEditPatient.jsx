@@ -33,9 +33,9 @@ const AddEditPatient = () => {
     if (patientId) {
       agent.Patient.getOne(patientId).then(response => {
         setPatient({
-          ...response.patient,
-          dateOfBirth: response.patient.dateOfBirth
-            ? formatDDMMYYYY(new Date(response.patient.dateOfBirth))
+          ...response,
+          dateOfBirth: response.dateOfBirth
+            ? formatDDMMYYYY(new Date(response.dateOfBirth))
             : '',
         });
       });

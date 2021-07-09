@@ -20,10 +20,7 @@ const Patients = () => {
   const [patients, setPatients] = useState([]);
 
   useEffect(() => {
-    agent.Patient.get()
-      .then(response => {
-        setPatients(response.patients);
-      });
+    agent.Patient.get().then(setPatients);
   }, []);
 
   const getMissingInfo = patient => {
@@ -81,7 +78,6 @@ const Patients = () => {
     <div className="fr-container fr-mb-3w fr-mt-2w">
       <h1>Gérer mes patients</h1>
       <GlobalNotification />
-      {' '}
       <div className="fr-grid-row fr-grid-row--left">
         <div className="fr-col-12">
           <h2 className="fr-mb-2w">

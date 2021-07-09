@@ -8,15 +8,13 @@ const errorManager = (error: Error, req: Request, res: Response, next: NextFunct
   if (error instanceof CustomError) {
     console.debug(error.message);
     res.status(error.statusCode).json({
-      success: false,
       message: error.message,
     });
   } else if (error instanceof UnauthorizedError) {
-    res.status(401).json({ sucess: false, message: error.message });
+    res.status(401).json({ message: error.message });
   } else {
     console.error(error.message);
     res.status(500).json({
-      success: false,
       message: config.activateDebug ? error.message : 'Something went wrong, please try again',
     });
   }

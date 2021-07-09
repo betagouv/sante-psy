@@ -15,9 +15,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
   const { commonStore: { setNotification }, userStore: { setUser } } = useStore();
 
   useEffect(() => {
-    agent.University.getAll().then(response => {
-      setUniversities(response.universities);
-    });
+    agent.University.getAll().then(setUniversities);
   }, []);
 
   useEffect(() => {

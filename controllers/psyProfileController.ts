@@ -17,22 +17,17 @@ const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
   const extraInfo = tokenData && tokenData.psychologist === req.params.psyId;
 
   res.json({
-    success: true,
-    psychologist: {
-      firstNames: psychologist.firstNames,
-      lastName: psychologist.lastName,
-      email: psychologist.email,
-      address: psychologist.address,
-      departement: psychologist.departement,
-      region: psychologist.region,
-      phone: psychologist.phone,
-      website: psychologist.website,
-      teleconsultation: psychologist.teleconsultation,
-      description: psychologist.description,
-      languages: psychologist.languages,
-      personalEmail: extraInfo ? psychologist.personalEmail : undefined,
-      active: psychologist.active,
-    },
+    email: psychologist.email,
+    address: psychologist.address,
+    departement: psychologist.departement,
+    region: psychologist.region,
+    phone: psychologist.phone,
+    website: psychologist.website,
+    teleconsultation: psychologist.teleconsultation,
+    description: psychologist.description,
+    languages: psychologist.languages,
+    personalEmail: extraInfo ? psychologist.personalEmail : undefined,
+    active: psychologist.active,
   });
 };
 
@@ -106,7 +101,6 @@ const editPsyProfile = async (req: Request, res: Response): Promise<void> => {
   });
 
   res.json({
-    success: true,
     message: 'Vos informations ont bien été mises à jour.',
   });
 };
@@ -115,7 +109,6 @@ const activate = async (req: Request, res: Response): Promise<void> => {
   await dbPsychologists.activate(req.user.psychologist);
 
   res.json({
-    success: true,
     message: 'Vos informations sont de nouveau visibles sur l\'annuaire.',
   });
 };
@@ -137,7 +130,6 @@ const suspend = async (req: Request, res: Response): Promise<void> => {
   await dbPsychologists.suspend(req.user.psychologist, req.body.date, req.body.reason);
 
   res.json({
-    success: true,
     message: 'Vos informations ne sont plus visibles sur l\'annuaire.',
   });
 };

@@ -23,16 +23,10 @@ const client = createClient();
 const clientWithoutErrorManagement = createClient();
 
 client.interceptors.response.use(
-  response => {
-    if (!response.data.success) {
-      store.commonStore.setNotification(response.data);
-      throw new Error(response.data.message);
-    }
-    return response.data;
-  },
+  response => response.data,
   error => {
     if (error.response) {
-      store.commonStore.setNotification(error.response.data);
+      store.commonStore.setNotification(error.response.data, false);
     }
     throw error;
   },
@@ -42,7 +36,7 @@ clientWithoutErrorManagement.interceptors.response.use(
   response => response,
   error => {
     if (error.response && error.response.status !== 500) {
-      store.commonStore.setNotification(error.response.data);
+      store.commonStore.setNotification(error.response.data, false);
     }
     throw error;
   },

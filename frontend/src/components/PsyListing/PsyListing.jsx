@@ -14,9 +14,7 @@ const PsyListing = () => {
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') || false);
 
   useEffect(() => {
-    agent.Psychologist.find().then(response => {
-      setPsychologists(response.psyList);
-    });
+    agent.Psychologist.find().then(setPsychologists);
   }, []);
 
   const matchFilter = value => value.toLowerCase().includes(filter.toLowerCase());
