@@ -17,6 +17,8 @@ const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
   const extraInfo = tokenData && tokenData.psychologist === req.params.psyId;
 
   res.json({
+    firstNames: psychologist.firstNames,
+    lastName: psychologist.lastName,
     email: psychologist.email,
     address: psychologist.address,
     departement: psychologist.departement,

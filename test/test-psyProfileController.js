@@ -60,7 +60,7 @@ describe('psyProfileController', () => {
         .get(`/api/psychologist/${psy.dossierNumber}`)
         .then(async (res) => {
           res.status.should.equal(200);
-          checkProfile(res.body.psychologist, psy, false);
+          checkProfile(res.body, psy, false);
         });
     });
 
@@ -73,7 +73,7 @@ describe('psyProfileController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(200);
-          checkProfile(res.body.psychologist, psy, false);
+          checkProfile(res.body, psy, false);
         });
     });
 
@@ -86,7 +86,7 @@ describe('psyProfileController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(200);
-          checkProfile(res.body.psychologist, psy, true);
+          checkProfile(res.body, psy, true);
         });
     });
   });
