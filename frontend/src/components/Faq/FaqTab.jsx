@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { observer } from 'mobx-react';
 import sanitizeHtml from 'sanitize-html';
+import classnames from 'classnames';
 
 import {
-  Container,
   Row,
   Col,
   SideMenu,
@@ -27,7 +27,7 @@ const FaqTab = ({ type }) => {
   const [activeSection, setActiveSection] = useState();
 
   return (
-    <Container spacing="pb-3w">
+    <div className="fr-container fr-pb-3w" data-test-id={`tabpanel-${type}`}>
       <FaqProcess
         label={items[type].label}
         links={items[type].links}
@@ -35,7 +35,7 @@ const FaqTab = ({ type }) => {
       <Row>
         <SideMenu
           buttonLabel="Dans cette rubrique"
-          className="fr-sidemenu--sticky fr-col-md-4 fr-col-sm-12"
+          className={classnames(styles.menu, 'fr-sidemenu--sticky fr-col-md-4 fr-col-sm-12')}
         >
           {items[type].sections.map((section, index) => (
             <SideMenuLink
@@ -77,7 +77,7 @@ const FaqTab = ({ type }) => {
           ))}
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 
