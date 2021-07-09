@@ -14,10 +14,7 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
 
   universities.sort(sort);
 
-  res.json({
-    success: true,
-    universities,
-  });
+  res.json(universities);
 };
 
 export default {

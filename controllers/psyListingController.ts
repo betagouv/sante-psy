@@ -9,10 +9,7 @@ const getActivePsychologists = async (req: Request, res: Response): Promise<void
   const psyList = await dbPsychologists.getActivePsychologists();
   console.timeEnd(time);
 
-  res.json({
-    success: true,
-    psyList,
-  });
+  res.json(psyList);
 };
 
 export default {

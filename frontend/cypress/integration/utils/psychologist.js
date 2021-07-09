@@ -19,7 +19,7 @@ const suspend = () => {
 
 const signConvention = (name, isSigned) => cy.request('GET', 'http://localhost:8080/api/university')
   .then(response => {
-    const university = response.body.universities.find(u => u.name === name);
+    const university = response.body.find(u => u.name === name);
     setLoginInfo();
     return cy.request({
       method: 'POST',

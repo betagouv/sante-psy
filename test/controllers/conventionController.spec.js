@@ -32,7 +32,7 @@ describe('conventionController', () => {
           universityId: university.id,
         })
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal('Vos informations de conventionnement sont bien enregistrées.');
 
           const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
@@ -53,7 +53,7 @@ describe('conventionController', () => {
       .set('xsrf-token', 'randomXSRFToken')
         .send(payload)
         .then(async (res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(400);
           res.body.message.should.equal(errorMessage);
 
           const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);

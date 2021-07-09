@@ -22,9 +22,7 @@ const PatientRow = ({ patient, deletePatient }) => (
               data-test-id="patient-row-missing-info"
               className="fr-tag bg-orange-warning  fr-fi-alert-line fr-tag--icon-left fr-tag--sm"
             >
-              Informations manquantes :
-              {' '}
-              {patient.missingInfo.join(',')}
+              {`Informations manquantes : ${patient.missingInfo.join(',')}`}
             </p>
           )
           : (

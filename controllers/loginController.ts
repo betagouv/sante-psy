@@ -71,9 +71,7 @@ async function saveToken(email: string, token: string) {
 
 const deleteToken = (req: Request, res: Response): void => {
   cookie.clearJwtCookie(res);
-  res.json({
-    success: true,
-  });
+  res.json({ });
 };
 
 const connectedUser = async (req: Request, res: Response): Promise<void> => {
@@ -119,7 +117,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
       dbLoginToken.delete(token);
       dbLastConnection.upsert(psychologistData.dossierNumber);
 
-      res.json({ success: true, xsrfToken });
+      res.json(xsrfToken);
       return;
     }
 
@@ -128,7 +126,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
 
   throw new CustomError(
     'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
-    200,
+    401,
   );
 };
 
@@ -170,7 +168,6 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   await sendLoginEmail(email, loginUrl, token);
   await saveToken(email, token);
   res.json({
-    success: true,
     message: `Un lien de connexion a été envoyé à l'adresse ${email
     }. Le lien est valable ${config.sessionDurationHours} heures.`,
   });

@@ -1,11 +1,14 @@
 const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
+const { selectNextCalendarDate } = require('./utils/calendar');
 const { removeConvention, suspend, signConvention } = require('./utils/psychologist');
 
 describe('Appointments', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/appointments')
       .as('appointments');
+    cy.intercept('POST', '/api/appointments')
+      .as('createAppointment');
     cy.intercept('DELETE', '/api/appointments/*')
       .as('deleteAppointment');
     cy.intercept('GET', '/api/config')
@@ -86,6 +89,30 @@ describe('Appointments', () => {
             'Votre profil n‘est plus visible dans l‘annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur la page Mes informations.',
           );
       });
+    });
+  });
+
+  describe('New', () => {
+    it('should create a new appointments', () => {
+      cy.get('[data-test-id="new-appointment-button"]')
+        .click();
+
+      cy.get('[data-test-id="new-appointment-date-input"]')
+        .click();
+
+      selectNextCalendarDate();
+
+      cy.get('select[data-test-id="new-appointment-patient-input"] > option')
+        .eq(1)
+        .then(element => cy.get('select[data-test-id="new-appointment-patient-input"]').select(element.val()));
+
+      cy.get('[data-test-id="new-appointment-submit"]')
+        .click();
+
+      cy.wait('@createAppointment');
+      cy.location('pathname').should('eq', '/psychologue/mes-seances');
+      cy.get('[data-test-id="notification-success"]')
+        .should('exist');
     });
   });
 });

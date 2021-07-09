@@ -25,7 +25,6 @@ const conventionInfo = async (req: Request, res: Response): Promise<void> => {
   await dbPsychologists.updateConventionInfo(psychologistId, universityId, isConventionSigned);
   const convention = await dbPsychologists.getConventionInfo(psychologistId);
   res.json({
-    success: true,
     message: 'Vos informations de conventionnement sont bien enregistrées.',
     convention,
   });
