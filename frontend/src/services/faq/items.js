@@ -40,7 +40,7 @@ const items = {
       },
       {
         href: '/static/documents/flyer_psychologues.pdf',
-        title: 'Voir le dépliant psychologues',
+        title: 'Voir le dépliant',
       },
     ],
     sections: [

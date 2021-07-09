@@ -8,6 +8,8 @@ import FaqTab from 'components/Faq/FaqTab';
 
 import items from 'services/faq/items';
 
+import styles from './faq.cssmodule.scss';
+
 const Faq = () => {
   const query = new URLSearchParams(useLocation().search);
   const getDefaultTab = () => {
@@ -26,6 +28,7 @@ const Faq = () => {
     >
       <Tabs
         defaultActiveTab={getDefaultTab()}
+        className={styles.tabs}
       >
         <Tab label="Je suis étudiant">
           <FaqTab type="etudiant" />
