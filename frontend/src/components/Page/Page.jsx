@@ -17,7 +17,7 @@ const Page = ({ title, description, background, children, className = null, data
       <Row>
         <Col className={styles.sectionTitle}>
           <Title as="h1" look="h2" className={styles.title}>{title}</Title>
-          <Text size="lg">{description}</Text>
+          {description && <Text size="lg">{description}</Text>}
         </Col>
       </Row>
       <Row>
