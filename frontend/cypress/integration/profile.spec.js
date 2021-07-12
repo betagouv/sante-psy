@@ -320,7 +320,7 @@ describe('Profile', () => {
       checkSuspension('holidays', 'month', addMonth, addMonth);
     });
 
-    it('should suspend profile forever because of reimbursments not there', () => {
+    it('should suspend profile forever because of reimbursements not there', () => {
       checkSuspension('reimbursments', 'forever', () => new Date('9999/12/30'), () => new Date('10000/01/01'));
     });
 
