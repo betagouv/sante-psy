@@ -83,10 +83,8 @@ const NewAppointment = () => {
                     <HashLink to="/psychologue/nouveau-patient">Ajoutez un nouveau patient</HashLink>
                   </>
                 )}
-                // defaultValue=""
                 onChange={e => { setPatientId(e.target.value); }}
                 required
-                // hiddenOption="- Select -"
                 options={patients.map(patient => (
                   { value: `${patient.id}`, label: `${patient.lastName} ${patient.firstNames}` }
                 ))}
