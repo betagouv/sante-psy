@@ -8,7 +8,7 @@ const Statistics = () => {
   const [statistics, setStatistics] = useState([]);
 
   useEffect(() => {
-    agent.Statistics.getAll().then(response => setStatistics(response.statistics));
+    agent.Statistics.getAll().then(setStatistics);
   }, []);
 
   return (

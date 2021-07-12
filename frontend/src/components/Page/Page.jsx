@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import {
   Container,
@@ -10,11 +11,11 @@ import {
 
 import styles from './page.cssmodule.scss';
 
-const Page = ({ title, description, background, children }) => (
-  <Container justifyContent="center" spacing="py-4w" className={styles[background]}>
+const Page = ({ title, description, background, children, className = null, dataTestId = null }) => (
+  <Container spacing="py-4w" className={classnames(className, styles[background])}>
     <Row>
       <Col>
-        <Container justifyContent="center" className={styles.container}>
+        <div className={classnames('fr-container', styles.container)} data-test-id={dataTestId}>
           <Row>
             <Col spacing="py-3w" className={styles.sectionTitle}>
               <Title as="h1" look="h2" className={styles.title}>{title}</Title>
@@ -26,7 +27,7 @@ const Page = ({ title, description, background, children }) => (
               {children}
             </Col>
           </Row>
-        </Container>
+        </div>
       </Col>
     </Row>
   </Container>

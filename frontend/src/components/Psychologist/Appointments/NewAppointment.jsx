@@ -25,10 +25,7 @@ const NewAppointment = () => {
   const { commonStore: { setNotification } } = useStore();
 
   useEffect(() => {
-    agent.Patient.get()
-      .then(response => {
-        setPatients(response.patients);
-      });
+    agent.Patient.get().then(setPatients);
   }, []);
 
   const createNewAppointment = e => {
@@ -65,13 +62,19 @@ const NewAppointment = () => {
               <DatePicker
                 selected={date}
                 dateFormat="dd/MM/yyyy"
-                customInput={<DateInput label="Date de la séance" />}
+                customInput={(
+                  <DateInput
+                    label="Date de la séance"
+                    dataTestId="new-appointment-date-input"
+                  />
+                )}
                 onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
               />
             </div>
 
             <div className="fr-select-group">
               <Select
+                data-test-id="new-appointment-patient-input"
                 id="patients"
                 name="patientId"
                 label="Patient"
@@ -91,7 +94,11 @@ const NewAppointment = () => {
               />
             </div>
             <div className="fr-my-5w">
-              <Button submit className="fr-fi-add-line fr-btn--icon-left">
+              <Button
+                data-test-id="new-appointment-submit"
+                submit
+                className="fr-fi-add-line fr-btn--icon-left"
+              >
                 Créer la séance
               </Button>
             </div>

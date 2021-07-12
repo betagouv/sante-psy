@@ -1,6 +1,6 @@
 import knex from 'knex';
 import { Registry } from 'knex/types/result';
-import { DOSSIER_STATE } from '../utils/dossierState';
+import { DossierState } from '../types/DemarcheSimplifiee';
 import { patientsTable, psychologistsTable, universitiesTable } from './tables';
 
 const knexConfig = require('../knexfile');
@@ -13,7 +13,7 @@ const getUniversityCount = (): Promise<Registry[]> => db(psychologistsTable)
 
 const getActivePsychologistCount = (): Promise<Registry[]> => db(psychologistsTable)
     .where({
-      state: DOSSIER_STATE.accepte,
+      state: DossierState.accepte,
       archived: false,
     })
     .countDistinct('dossierNumber');

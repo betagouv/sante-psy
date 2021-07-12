@@ -14,9 +14,7 @@ const PsyListing = () => {
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') || false);
 
   useEffect(() => {
-    agent.Psychologist.find().then(response => {
-      setPsychologists(response.psyList);
-    });
+    agent.Psychologist.find().then(setPsychologists);
   }, []);
 
   const matchFilter = value => value.toLowerCase().includes(filter.toLowerCase());
@@ -56,6 +54,7 @@ const PsyListing = () => {
       description={`Il y a actuellement ${psychologists.length} partenaires du dispositif d‘accompagnement.
       La liste est mise à jour quotidiennement, revenez la consulter si vous n‘avez pas pu trouver de psychologue.`}
       background="yellow"
+      dataTestId="psyListPage"
     >
       {/*
       <div className="fr-input-group">

@@ -1,5 +1,5 @@
 const graphql = require('../../utils/graphql');
-const uuid = require('../../utils/uuid');
+const { default: uuid } = require('../../utils/uuid');
 const config = require('../../utils/config');
 const { getChampsFieldFromId } = require('../champsAndAnnotations');
 

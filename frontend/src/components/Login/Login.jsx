@@ -22,8 +22,8 @@ const Login = () => {
   useEffect(() => {
     if (token) {
       agent.User.login(token)
-        .then(response => {
-          setXsrfToken(response.xsrfToken).then(() => {
+        .then(xsrfToken => {
+          setXsrfToken(xsrfToken).then(() => {
             history.push('/psychologue/mes-seances');
           });
         });

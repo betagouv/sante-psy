@@ -6,6 +6,7 @@ import patientsRouter from './patients';
 import appointmentsRouter from './appointments';
 
 import xsrfProtection from '../middlewares/xsrfProtection';
+import refreshToken from '../middlewares/refreshToken';
 
 import loginController from '../controllers/loginController';
 
@@ -25,6 +26,7 @@ router.use(expressJWT({
   },
 }));
 router.use(xsrfProtection);
+router.use(refreshToken);
 
 router.post('/psychologist/logout', loginController.deleteToken);
 

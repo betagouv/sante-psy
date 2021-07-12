@@ -1,6 +1,6 @@
 import path from 'path';
 import config from '../../utils/config';
-import { DOSSIER_STATE } from '../../utils/dossierState';
+import { DossierState } from '../../types/DemarcheSimplifiee';
 import {
   getChampsIdFromField,
   getAnnotationsIdFromField,
@@ -20,13 +20,13 @@ const sendAutoAcceptMessage = async (dossierId) => {
   const result = await graphql
     .sendMessageWithAttachment(config.demarchesSimplifieesAutoAcceptMessage, uploadFileId, dossierId);
 
-  console.log('message envoyé :', result);
+  console.debug('message envoyé :', result);
 };
 
 const autoAcceptPsychologists = async (): Promise<void> => {
   try {
     const list = await getAllPsychologistList(
-      (cursor) => graphql.getSimplePsyInfo(cursor, DOSSIER_STATE.en_instruction),
+      (cursor) => graphql.getSimplePsyInfo(cursor, DossierState.enInstruction),
     );
     console.log(`${list.psychologists.length} psychologists are in instruction`);
     let countAutoAccept = 0;

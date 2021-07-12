@@ -1,4 +1,5 @@
 import React from 'react';
+import { HashLink } from 'react-router-hash-link';
 import {
   Footer as DSFooter,
   FooterBody,
@@ -10,7 +11,7 @@ import {
 } from '@dataesr/react-dsfr';
 
 const footerBodyLinks = [
-  { key: 'footer-body-link-1', title: 'Contactez-nous', link: '/mentions-legales', external: false },
+  { key: 'footer-body-link-1', title: 'Contactez-nous', link: '/contact', external: false },
   { key: 'footer-body-link-2', title: 'etudiant.gouv.fr', link: 'https://www.etudiant.gouv.fr/', external: true },
   { key: 'footer-body-link-3', title: 'Enseignement supérieur', link: 'https://www.enseignementsup-recherche.gouv.fr/', external: true },
   { key: 'footer-body-link-4', title: 'beta.gouv.fr', link: 'https://beta.gouv.fr/', external: true },
@@ -52,19 +53,29 @@ const Footer = () => (
       </Logo>
       { footerBodyLinks.map(item => (
         <FooterBodyItem key={item.key}>
-          <Link
-            href={item.link}
-            target={item.external ? '_blank' : '_self'}
-            rel={item.external ? 'noopener noreferrer' : 'none'}
-          >
-            {item.title}
-          </Link>
+          {item.external ? (
+            <Link
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {item.title}
+            </Link>
+          ) : (
+            <HashLink to={item.link}>
+              {item.title}
+            </HashLink>
+          )}
         </FooterBodyItem>
       ))}
     </FooterBody>
     <FooterBottom>
       { footerBottomLinks.map(item => (
-        <FooterLink key={item.key} href={item.link}>
+        <FooterLink
+          key={item.key}
+          href={item.external ? item.link : undefined}
+          asLink={item.external ? undefined : <HashLink to={item.link} />}
+        >
           {item.title}
         </FooterLink>
       ))}

@@ -6,7 +6,7 @@ const { default: clean } = require('./helper/clean');
 const cookie = require('../utils/cookie');
 const date = require('../utils/date');
 const dbPatients = require('../db/patients');
-const dbPsychologists = require('../db/psychologists');
+const { default: dbPsychologists } = require('../db/psychologists');
 
 const doctorName = 'doctorName';
 const doctorAddress = 'doctorAddress';
@@ -65,7 +65,7 @@ describe('patientsController', () => {
           dateOfBirth,
         })
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal(
             'Le patient Ada Lovelace a bien été créé. Vous pourrez renseigner les champs manquants plus tard'
             + ' en cliquant le bouton "Modifier" du patient.',
@@ -147,7 +147,7 @@ describe('patientsController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(400);
           res.body.message.should.equal(message);
 
           sinon.assert.notCalled(insertPatientStub);
@@ -239,7 +239,7 @@ describe('patientsController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal(
             'Le patient Blou Blou Nom a bien été créé. Vous pourrez renseigner les champs manquants plus tard'
               + ' en cliquant le bouton "Modifier" du patient.',
@@ -328,7 +328,7 @@ describe('patientsController', () => {
       .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal(
             'Le patient Blou Blou<div></div> Nom&lt;/ a bien été créé. Vous pourrez renseigner'
               + ' les champs manquants plus tard en cliquant le bouton "Modifier" du patient.',
@@ -373,16 +373,16 @@ describe('patientsController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           expect(res.status).to.equal(200);
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
 
           // The page displays myPatient
-          res.body.patient.firstNames.should.equal(myPatient.firstNames);
-          res.body.patient.lastName.should.equal(myPatient.lastName);
-          res.body.patient.id.should.equal(myPatient.id);
-          res.body.patient.institutionName.should.equal(myPatient.institutionName);
-          res.body.patient.doctorName.should.equal(myPatient.doctorName);
-          res.body.patient.doctorAddress.should.equal(myPatient.doctorAddress);
-          res.body.patient.dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
+          res.body.firstNames.should.equal(myPatient.firstNames);
+          res.body.lastName.should.equal(myPatient.lastName);
+          res.body.id.should.equal(myPatient.id);
+          res.body.institutionName.should.equal(myPatient.institutionName);
+          res.body.doctorName.should.equal(myPatient.doctorName);
+          res.body.doctorAddress.should.equal(myPatient.doctorAddress);
+          res.body.dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
 
           return Promise.resolve();
         });
@@ -401,7 +401,7 @@ describe('patientsController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(404);
           res.body.message.should.equal('Ce patient n\'existe pas. Vous ne pouvez pas le modifier.');
           // The page does not display patient
           chai.assert.isUndefined(res.body.firstNames);
@@ -424,7 +424,7 @@ describe('patientsController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(400);
           res.body.message.should.equal('Ce patient n\'existe pas.');
 
           return Promise.resolve();
@@ -468,7 +468,7 @@ describe('patientsController', () => {
           dateOfBirth: updatedDateOfBirth,
         })
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal(
             'Le patient Adakkk Lovelacekkk a bien été modifié. Vous pourrez renseigner les champs'
             + ' manquants plus tard en cliquant le bouton "Modifier" du patient.',
@@ -514,7 +514,7 @@ describe('patientsController', () => {
           dateOfBirth,
         })
         .then(async (res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(404);
           res.body.message.should.equal('Ce patient n\'existe pas.');
 
           // Patient was not updated
@@ -602,7 +602,7 @@ describe('patientsController', () => {
         .end((err, res) => {
           sinon.assert.notCalled(updatePatientStub);
 
-          res.body.success.should.equal(false);
+          res.status.should.equal(400);
           res.body.message.should.equal(message);
           done();
         });
@@ -751,7 +751,7 @@ describe('patientsController', () => {
         .send(postData)
         .end((err, res) => {
           sinon.assert.called(updatePatientStub);
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal(
             'Le patient Blou Blou Nom a bien été modifié. Vous pourrez renseigner les champs manquants plus tard'
             + ' en cliquant le bouton "Modifier" du patient.',
@@ -850,7 +850,7 @@ describe('patientsController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.success.should.equal(true);
+          res.status.should.equal(200);
           res.body.message.should.equal('Le patient a bien été supprimé.');
 
           const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
@@ -874,7 +874,7 @@ describe('patientsController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(404);
           res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
           // Patient is not deleted
           const patientsArray = await dbPatients.getPatients(anotherPsyId);
@@ -896,7 +896,7 @@ describe('patientsController', () => {
       .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
       .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.success.should.equal(false);
+          res.status.should.equal(400);
           res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
 
           // Patient is not deleted

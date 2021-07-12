@@ -9,6 +9,7 @@ import statisticsController from '../controllers/statisticsController';
 
 import config from '../utils/config';
 import psyProfileController from '../controllers/psyProfileController';
+import contactController from '../controllers/contactController';
 
 const router = express.Router();
 
@@ -44,5 +45,6 @@ router.get('/connecteduser', loginController.connectedUser);
 
 router.get('/statistics', statisticsController.getAll);
 router.get('/psychologist/:psyId', psyProfileController.getPsyProfile);
+router.post('/contact', contactController.sendValidators, contactController.send);
 
 export default router;

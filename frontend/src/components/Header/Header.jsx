@@ -19,6 +19,7 @@ const defaultItems = [
   { key: 'header-default-link-1', title: 'Comment ça se passe ?', link: '/' },
   { key: 'header-default-link-2', title: 'Trouver un psychologue', link: '/trouver-un-psychologue' },
   { key: 'header-default-link-3', title: 'Foire aux questions', link: '/faq' },
+  { key: 'header-default-link-4', title: 'Nous contacter', link: '/contact' },
 ];
 
 const connectedItems = [
@@ -37,10 +38,13 @@ const Header = () => {
     <>
       <DSHeader>
         <HeaderBody>
-          <Logo>
+          <Logo
+            asLink={<Link to="/" />}
+          >
             Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
           </Logo>
           <Service
+            asLink={<Link to="/" />}
             title={`${__APPNAME__}${psychologistPage ? ' - Espace Psychologues' : ''}`}
             description="Accompagnement psychologique pour les étudiants"
           />

@@ -22,7 +22,7 @@ const Billing = () => {
     agent.Appointment.get().then(response => {
       const appointmentsByDate = {};
       const patientsByDate = {};
-      response.appointments.forEach(appointment => {
+      response.forEach(appointment => {
         const existingAppointments = appointmentsByDate[appointment.appointmentDate];
         appointmentsByDate[appointment.appointmentDate] = existingAppointments ? existingAppointments + 1 : 1;
         const existingPatients = patientsByDate[appointment.appointmentDate];
@@ -65,7 +65,7 @@ const Billing = () => {
           <li>
             <HashLink
               className="fr-btn fr-btn--secondary fr-mt-2w"
-              to="/faq#remboursement"
+              to="/faq?section=psychologue#remboursement"
             >
               Consulter la Foire Aux Questions
             </HashLink>

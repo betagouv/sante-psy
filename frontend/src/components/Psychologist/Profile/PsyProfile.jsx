@@ -18,7 +18,7 @@ const PsyProfile = () => {
 
   const loadPsychologist = () => {
     agent.Psychologist.getProfile().then(response => {
-      setPsychologist(response.psychologist);
+      setPsychologist(response);
       setLoading(false);
     }).catch(() => {
       history.goBack();

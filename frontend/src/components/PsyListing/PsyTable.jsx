@@ -11,6 +11,7 @@ const PsyTable = ({ psychologists, filter, teleconsultation }) => {
       {psychologists.length > 0 ? (
         <>
           <Table
+            data-test-id="psy-table"
             className="fr-mb-3w"
             caption="Tous les résultats"
           >
@@ -26,7 +27,10 @@ const PsyTable = ({ psychologists, filter, teleconsultation }) => {
               {psychologists
                 .slice((page - 1) * 10, page * 10)
                 .map(psychologist => (
-                  <tr key={psychologist.dossierNumber}>
+                  <tr
+                    data-test-id="psy-table-row"
+                    key={psychologist.dossierNumber}
+                  >
                     <td>
                       {`${psychologist.lastName.toUpperCase()} ${camelize(
                         psychologist.firstNames,
@@ -35,6 +39,7 @@ const PsyTable = ({ psychologists, filter, teleconsultation }) => {
                     <td>{psychologist.address}</td>
                     <td>
                       <Button
+                        data-test-id="psy-table-row-profil-button"
                         secondary
                         onClick={() => {
                           const searchPath = `?search=${filter}&teleconsultation=${teleconsultation}`;
