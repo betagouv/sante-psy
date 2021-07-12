@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Table, Pagination, Button, Title } from '@dataesr/react-dsfr';
 import camelize from 'services/string';
 
 const PsyTable = ({ psychologists, filter, teleconsultation }) => {
   const history = useHistory();
-  const [page] = useState(1);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filter, teleconsultation]);
+
   return (
     <>
       {psychologists.length > 0 ? (
@@ -58,8 +63,8 @@ const PsyTable = ({ psychologists, filter, teleconsultation }) => {
             </tbody>
           </Table>
           <Pagination
-            buildURL={() => {}}
-            currentPage={page}
+            currentPage={Math.min(page, Math.ceil(psychologists.length / 10))}
+            onClick={setPage}
             pageCount={Math.ceil(psychologists.length / 10)}
             surrendingPages={3}
           />
