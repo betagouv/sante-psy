@@ -23,7 +23,6 @@ const fields = [
         : 'Pas de téléconsultation possible'
     ),
   },
-  { name: 'Services de santé universitaire', value: 'address' },
   {
     name: 'Site web',
     custom: psychologist => (
