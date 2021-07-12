@@ -49,7 +49,8 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
 const getActivePsychologists = async (): Promise<Psychologist[]> => {
   try {
     const psychologists = knex.column(
-      knex.raw('UPPER("lastName") as "lastName"'), // force to use quote otherwise knex understands it as "lastname"
+      'dossierNumber',
+      'lastName',
       'adeli',
       'firstNames',
       'email',

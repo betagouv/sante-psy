@@ -44,7 +44,7 @@ const PublicPsychologistProfile = () => {
   const [coordinates, setCoordinates] = useState();
 
   useEffect(() => {
-    agent.Psychologist.getProfile(psyId).then(response => setPsychologist(response.psychologist));
+    agent.Psychologist.getProfile(psyId).then(setPsychologist);
   }, [psyId]);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const PublicPsychologistProfile = () => {
       <Row>
         <Col>
           {fields.map(field => (
-            <div key={field.name} className={styles.field}>
+            <div key={field.name} className={styles.field} data-test-id="psy-info">
               <div className={styles.fieldName}>
                 {field.name}
               </div>
