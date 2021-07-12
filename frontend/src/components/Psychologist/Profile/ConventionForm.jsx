@@ -48,13 +48,14 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
         id="university"
         name="university"
         label="Quelle université vous a contacté pour signer la convention ?"
-        value={convention.universityId || ''}
-        onChange={value => setConvention({ ...convention, universityId: value })}
+        selected={convention.universityId}
+        // value={convention.universityId || ''}
+        onChange={e => setConvention({ ...convention, universityId: e.target.value })}
         required
         options={universities
-          ? universities.map(university => ({ id: university.id, label: university.name }))
+          ? universities.map(university => ({ value: university.id, label: university.name }))
           : []}
-        hiddenOption="- Select a university -"
+        // hiddenOption="- Select a university -"
       />
       <RadioGroup
         value={convention.isConventionSigned}
@@ -66,11 +67,11 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
       >
         <Radio
           label="Oui"
-          value="true"
+          value={`${true}`}
         />
         <Radio
           label="Non"
-          value="false"
+          value={`${false}`}
         />
       </RadioGroup>
 

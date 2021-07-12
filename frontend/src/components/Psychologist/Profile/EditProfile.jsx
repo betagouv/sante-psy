@@ -92,18 +92,18 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
           />
           <RadioGroup
             value={updatedPsychologist.teleconsultation}
-            onChange={e => changePsychologist(e.target.value, 'teleconsultation')}
+            onChange={value => changePsychologist(value, 'teleconsultation')}
             legend="Proposez-vous de la téléconsultation ?"
             hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
             required
           >
             <Radio
               label="Oui"
-              value="true"
+              value={`${true}`}
             />
             <Radio
               label="Non"
-              value="false"
+              value={`${false}`}
             />
           </RadioGroup>
           <TextInput
