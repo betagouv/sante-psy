@@ -54,6 +54,7 @@ const PsyListing = () => {
       description={`Il y a actuellement ${psychologists.length} partenaires du dispositif d‘accompagnement.
       La liste est mise à jour quotidiennement, revenez la consulter si vous n‘avez pas pu trouver de psychologue.`}
       background="yellow"
+      dataTestId="psyListPage"
     >
       <div className="fr-pb-6w">
         <TextInput

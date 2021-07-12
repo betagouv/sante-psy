@@ -96,3 +96,14 @@
   /* Fix a bug on safari*/
   height: 56px !important;
 }
+
+.fr-tabs {
+  overflow: unset;
+}
+
+/* overwrite DSFR default */
+@media (min-width: 48em) {
+  .faqPage .fr-tabs__panel {
+    padding: 0; 
+  }
+}

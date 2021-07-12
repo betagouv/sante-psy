@@ -66,6 +66,7 @@ const PublicPsychologistProfile = () => {
       title={psychologist ? `${psychologist.lastName.toUpperCase()} ${camelize(psychologist.firstNames)}` : 'Loading'}
       description={psychologist ? psychologist.description : ''}
       background="yellow"
+      dataTestId="publicPsyProfilePage"
     >
       {psychologist && (
       <Row>
