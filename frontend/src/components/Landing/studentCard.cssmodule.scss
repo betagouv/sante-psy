@@ -1,0 +1,37 @@
+.container {
+    text-align: center;
+    width: 294px;
+    min-height: 412px;
+    border: 1px solid #133A8D;
+    border-radius: 4px;
+    background: linear-gradient(223.39deg, #FBFBFB 0%, #F5F5FF 99.31%, #EAF6FF 100%);
+    box-shadow: 0 2px 7px 0 rgba(0,0,0,0.21);
+    padding: 24px;
+}
+
+.index {
+    position: relative;
+    span, div {position: relative;}
+    height: 72px;
+    font-size: 54px;
+    font-weight: bold;
+}
+
+.line {
+    margin: auto;
+    height: 12px;
+    width: 45px;
+    background-color: #F7917A;
+    top: 40px;
+}
+
+.title {
+    font-size: 30px;
+    line-height: 42px;
+    font-weight: bold;
+}
+
+.image {
+    width: 80px;
+    margin: 16px;
+}

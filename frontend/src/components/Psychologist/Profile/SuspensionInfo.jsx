@@ -20,10 +20,10 @@ const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
           </p>
           <Button
             data-test-id="suspend-redirection-button"
-            icon="fr-fi-eye-off-line"
             title="delete"
             onClick={() => history.push('/psychologue/mon-profil/suspendre')}
           >
+            <span className="fr-fi-eye-off-line fr-mr-1w" aria-hidden="true" />
             Retirer mes informations de l&lsquo;annuaire
           </Button>
         </>
@@ -38,10 +38,10 @@ const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
           </p>
           <Button
             data-test-id="activate-button"
-            icon="fr-fi-eye-line"
             title="delete"
             onClick={activatePsychologist}
           >
+            <span className="fr-fi-eye-line fr-mr-1w" aria-hidden="true" />
             Remettre mes informations de l&lsquo;annuaire
           </Button>
         </>

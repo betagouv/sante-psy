@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
+import { Button } from '@dataesr/react-dsfr';
 
 import GlobalNotification from 'components/Notification/GlobalNotification';
 
@@ -66,14 +67,12 @@ const Login = () => {
                 />
               </label>
               {' '}
-              <button
+              <Button
+                submit
                 data-test-id="email-button"
-                type="submit"
-                className="fr-btn"
-                id="primary_email_button"
               >
                 Recevoir le lien de connexion
-              </button>
+              </Button>
             </form>
           </div>
 

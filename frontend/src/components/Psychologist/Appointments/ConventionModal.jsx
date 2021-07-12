@@ -10,7 +10,6 @@ const ConventionModal = ({ currentConvention }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const saveResult = () => {
-    document.body.style.overflow = null;
     setIsOpen(false);
     checkConvention();
   };

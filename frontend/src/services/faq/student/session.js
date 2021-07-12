@@ -2,14 +2,14 @@
 /* eslint-disable max-len */
 module.exports = () => [
   {
-    question: 'Puis-je aller voir directement le/la psychologue ?',
+    question: 'Puis-je aller voir directement le/la psychologue ?',
     answer: 'Dans le cadre du dispositif Santé Psy Etudiants, \
     vous ne pouvez pas aller voir directement un psychologue ; vous devez consulter un médecin \
     du service de santé universitaire ou un médecin généraliste \
     qui vous orientera vers un psychologue partenaire de la démarche.',
   },
   {
-    question: 'Puis-je aller voir un psychologue dans une autre région ou ville ?',
+    question: 'Puis-je aller voir un psychologue dans une autre région ou ville ?',
     answer: 'Oui, \
     vous pouvez contacter un psychologue partenaire dans un autre département \
     peu importe votre département ou université d\'origine par téléphone, email, visio ou sur son site internet.',
@@ -22,12 +22,12 @@ module.exports = () => [
     Le passage par le médecin répond à la volonté d’inscrire l’étudiant dans un parcours de soin rigoureux.',
   },
   {
-    question: 'Je suis insatisfait d\'une séance avec un psychologue, que puis-je faire ?',
+    question: 'Je suis insatisfait d\'une séance avec un psychologue, que puis-je faire ?',
     answer: 'Dans le cadre du dispositif, vous pouvez à tout moment changer de psychologue dans la liste de nos \
     psychologues partenaires si vous en ressentez le besoin.',
   },
   {
-    question: 'J\'ai bénéficié des trois séances, je souhaite renouveler ma demande, comment faire ?',
+    question: 'J\'ai bénéficié des trois séances, je souhaite renouveler ma demande, comment faire ?',
     answer: 'Pour renouveler votre demande il est obligatoire de consulter une nouvelle fois votre médecin \
     généraliste afin d\'obtenir une lettre d\'orientation. Une fois prescrite, vous avez de nouveau droit à 3 séances \
     avec un des psychologues partenaires.',

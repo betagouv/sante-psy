@@ -1,0 +1,31 @@
+.title {
+    line-height: 64px;
+    font-size: 45px;
+    font-weight: bold;
+    position: relative;
+    span, div {position: relative;}
+    margin-bottom: 8px;
+    text-decoration: underline #FCEA04 10px;
+}
+
+.description {
+    font-size: 30px;
+    line-height: 42px;
+    margin-bottom: 16px;
+}
+
+.card {
+    justify-content: space-around;
+    padding: 16px 0px;
+    gap: 8px 24px;
+}
+
+.button {
+    background-color: white;
+}
+
+@media (min-width: 768px) {
+    .card {
+        padding: 48px 64px;
+    }
+}

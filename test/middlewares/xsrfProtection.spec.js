@@ -12,11 +12,9 @@ describe('Route should be XSRF protected', () => {
     { method: 'get', url: '/api/patients/495614e8-89af-4406-ba02-9fc038b991f9' },
     { method: 'put', url: '/api/patients/495614e8-89af-4406-ba02-9fc038b991f9' },
     { method: 'delete', url: '/api/patients/495614e8-89af-4406-ba02-9fc038b991f9' },
-    { method: 'get', url: '/api/psychologist/mes-remboursements' },
     { method: 'post', url: '/api/psychologist/495614e8-89af-4406-ba02-9fc038b991f9/convention' },
     { method: 'post', url: '/api/psychologist/495614e8-89af-4406-ba02-9fc038b991f9/activate' },
     { method: 'post', url: '/api/psychologist/495614e8-89af-4406-ba02-9fc038b991f9/suspend' },
-    { method: 'get', url: '/api/psychologist/495614e8-89af-4406-ba02-9fc038b991f9' },
     { method: 'put', url: '/api/psychologist/495614e8-89af-4406-ba02-9fc038b991f9' },
     { method: 'post', url: '/api/psychologist/logout' },
   ];

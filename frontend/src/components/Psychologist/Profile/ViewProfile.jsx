@@ -64,10 +64,10 @@ const ViewProfile = ({ psychologist, loading, activatePsychologist }) => {
             </p>
             <Button
               data-test-id="show-profile-form-button"
-              icon="fr-fi-edit-line"
               title="Modify"
               onClick={() => history.push('/psychologue/mon-profil/modifier')}
             >
+              <span className="fr-fi-edit-line fr-mr-1w" aria-hidden="true" />
               Modifier mes informations
             </Button>
           </div>

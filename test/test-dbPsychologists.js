@@ -131,7 +131,7 @@ describe('DB Psychologists', () => {
   });
 
   describe('getActivePsychologists', () => {
-    it('should only return not archived and accepte psychologists with capitalized lastName', async () => {
+    it('should only return not archived and accepted psychologists', async () => {
       const activePsy = clean.getOnePsy();
       const archivedPsy = clean.getOnePsy('archived@psy.fr');
       archivedPsy.archived = true;
@@ -145,7 +145,6 @@ describe('DB Psychologists', () => {
       const shouldBeOne = await dbPsychologists.getActivePsychologists();
       console.log(shouldBeOne);
       shouldBeOne.length.should.be.equal(1);
-      shouldBeOne[0].lastName.should.be.equal(activePsy.lastName.toUpperCase());
       assert.isUndefined(shouldBeOne[0].loginEmail);
     });
   });

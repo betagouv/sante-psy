@@ -1,3 +1,31 @@
-.image {
-    max-width: 100%;
+.container {
+    color: var(--bf500);
+    margin-bottom: 32px;
+}
+
+.section,
+.sectionLight,
+.sectionAlt {
+    text-align: center;
+    padding: 16px;
+}
+
+.sectionLight {
+    background-color: #F5F5FF;
+}
+
+.sectionAlt {
+    background-color: #FFF9BF;
+}
+
+@media (min-width: 768px) {
+    .section,
+    .sectionLight,
+    .sectionAlt {
+        padding: 64px;
+    }
+
+    .container {
+        margin-bottom: 64px;
+    }
 }

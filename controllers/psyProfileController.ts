@@ -6,14 +6,19 @@ import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
+import cookie from '../utils/cookie';
 
 const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
-  const psychologist = await dbPsychologists.getPsychologistById(req.user.psychologist);
+  const psychologist = await dbPsychologists.getPsychologistById(req.params.psyId);
   if (!psychologist) {
-    throw Error("Le psychologue n'existe pas.");
+    throw new CustomError("Le psychologue n'existe pas.", 500);
   }
+  const tokenData = cookie.verifyJwt(req, res);
+  const extraInfo = tokenData && tokenData.psychologist === req.params.psyId;
 
   res.json({
+    firstNames: psychologist.firstNames,
+    lastName: psychologist.lastName,
     email: psychologist.email,
     address: psychologist.address,
     departement: psychologist.departement,
@@ -23,7 +28,7 @@ const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
     teleconsultation: psychologist.teleconsultation,
     description: psychologist.description,
     languages: psychologist.languages,
-    personalEmail: psychologist.personalEmail,
+    personalEmail: extraInfo ? psychologist.personalEmail : undefined,
     active: psychologist.active,
   });
 };

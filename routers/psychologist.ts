@@ -14,7 +14,6 @@ router.post('/suspend',
   psyProfileController.suspendValidators,
   psyProfileController.suspend);
 
-router.get('/', psyProfileController.getPsyProfile);
 router.put('/',
   psyProfileController.editPsyProfilValidators,
   psyProfileController.editPsyProfile);
