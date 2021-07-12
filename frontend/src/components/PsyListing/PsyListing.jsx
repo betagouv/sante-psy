@@ -29,21 +29,42 @@ const PsyListing = () => {
       return filteredPsychologists;
     }
 
-    const psychologistByName = filteredPsychologists
-      .filter(
-        psychologist => matchFilter(psychologist.lastName),
-      );
-    const psychologistByAddress = filteredPsychologists.filter(
+    const psychologistsId = new Set([]);
+    const psychologistByDepartment = [];
+    const psychologistByName = [];
+    const psychologistByAddress = [];
+
+    const addMatchingPsy = (filterFunction, table) => {
+      filteredPsychologists.forEach(psychologist => {
+        if (!psychologistsId.has(psychologist.dossierNumber) && filterFunction(psychologist)) {
+          table.push(psychologist);
+          psychologistsId.add(psychologist.dossierNumber);
+        }
+      });
+    };
+
+    const departementFilter = +filter;
+    if (departementFilter
+       && (
+         (departementFilter > 0 && departementFilter < 96)
+       || (departementFilter > 970 && departementFilter < 977)
+       )
+    ) {
+      addMatchingPsy(psychologist => matchFilter(psychologist.departement), psychologistByDepartment);
+    }
+
+    addMatchingPsy(psychologist => matchFilter(psychologist.lastName), psychologistByName);
+
+    addMatchingPsy(
       psychologist => (
-        !matchFilter(psychologist.lastName)
-        && (
-          matchFilter(psychologist.address)
-        || matchFilter(psychologist.departement)
-        || matchFilter(psychologist.region)
-        )
+        matchFilter(psychologist.address) || matchFilter(psychologist.departement) || matchFilter(psychologist.region)
       ),
+      psychologistByAddress,
     );
-    return psychologistByName.concat(psychologistByAddress);
+
+    return psychologistByDepartment
+      .concat(psychologistByName)
+      .concat(psychologistByAddress);
   };
 
   const filteredPsychologists = getFilteredPsychologists();
