@@ -44,9 +44,7 @@ const sendValidators = [
     .withMessage('Vous devez préciser qui vous êtes.'),
 ];
 
-const send = async (req: Request, res: Response): Promise<void> => {
-  validation.checkErrors(req);
-
+const sendMessageToCrisp = async (req: Request): Promise<void> => {
   if (config.testEnvironment) {
     console.log('ce message aurait été envoyé... si vous etiez en prod...', req.body);
   } else {
@@ -64,6 +62,12 @@ const send = async (req: Request, res: Response): Promise<void> => {
       content: req.body.message,
     });
   }
+};
+
+const send = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+
+  await sendMessageToCrisp(req);
 
   res.json({ message: 'Votre message a bien été envoyé. Nous reviendrons vers vous rapidement.' });
 };

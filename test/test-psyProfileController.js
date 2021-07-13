@@ -94,14 +94,12 @@ describe('psyProfileController', () => {
   describe('editPsyProfilValidators', () => {
     let updatePsyStub;
 
-    beforeEach(async () => {
+    beforeEach(() => {
       updatePsyStub = sinon.stub(dbPsychologists, 'updatePsychologist');
-      return Promise.resolve();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       updatePsyStub.restore();
-      return Promise.resolve();
     });
 
     const shouldFailUpdatePsyInputValidation = async (postData, message) => {

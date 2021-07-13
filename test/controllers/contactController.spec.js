@@ -1,7 +1,19 @@
+const sinon = require('sinon');
 const chai = require('chai');
 const app = require('../../index');
+const { default: contactController } = require('../../controllers/contactController');
 
 describe('contactController', () => {
+  let sendStub;
+
+  beforeEach(() => {
+    sendStub = sinon.stub(contactController, 'send');
+  });
+
+  afterEach(() => {
+    sendStub.restore();
+  });
+
   describe('send', () => {
     it('should send message', async () => chai.request(app)
       .post('/api/contact')
@@ -16,6 +28,7 @@ describe('contactController', () => {
       .then(async (res) => {
         res.status.should.equal(200);
         res.body.message.should.equal('Votre message a bien été envoyé. Nous reviendrons vers vous rapidement.');
+        sinon.assert.called(sendStub);
       }));
 
     const failValidation = async (payload, errorMessage) => chai.request(app)
