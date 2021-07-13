@@ -60,7 +60,8 @@ const FaqTab = ({ type }) => {
                 {faq[section.name](config)
                   .map(item => (
                     <AccordionItem title={item.question} key={item.question}>
-                      <div className={styles.answer}
+                      <div
+                        className={styles.answer}
                       // eslint-disable-next-line react/no-danger
                         dangerouslySetInnerHTML={{
                           __html: sanitizeHtml(item.answer,

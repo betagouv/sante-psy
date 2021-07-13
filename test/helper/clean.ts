@@ -32,6 +32,12 @@ const getRandomInt = () : string => {
   return ourRandom.toString();
 };
 
+const addresses = [
+  'avenue de segur 75007 paris',
+  'cours de verdun, 33000, Bordeaux',
+  'Boulevard Maréchal Foch 38100 Grenoble',
+];
+
 const getOnePsy = (
   personalEmail = 'loginemail@beta.gouv.fr',
   state = DossierState.accepte,
@@ -47,7 +53,7 @@ const getOnePsy = (
     archived,
     state,
     adeli: `${getRandomInt()}829302942`,
-    address: `${getRandomInt()} avenue de segur 75007 paris`,
+    address: `${getRandomInt()} ${addresses[Math.floor(Math.random() * 100) % 3]}`,
     diploma: 'Psychologie clinique de la santé',
     phone: '0468396600',
     email: `${getRandomInt()}@beta.gouv.fr`,

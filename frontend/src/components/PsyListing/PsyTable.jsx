@@ -3,13 +3,13 @@ import { useHistory } from 'react-router-dom';
 import { Table, Pagination, Button, Title } from '@dataesr/react-dsfr';
 import camelize from 'services/string';
 
-const PsyTable = ({ psychologists, filter, teleconsultation }) => {
+const PsyTable = ({ psychologists, nameFilter, addressFilter, teleconsultation }) => {
   const history = useHistory();
   const [page, setPage] = useState(1);
 
   useEffect(() => {
     setPage(1);
-  }, [filter, teleconsultation]);
+  }, [nameFilter, addressFilter, teleconsultation]);
 
   return (
     <>
@@ -47,7 +47,10 @@ const PsyTable = ({ psychologists, filter, teleconsultation }) => {
                         data-test-id="psy-table-row-profil-button"
                         secondary
                         onClick={() => {
-                          const searchPath = `?search=${filter}&teleconsultation=${teleconsultation}`;
+                          const searchPath = `?name=${
+                            nameFilter}&address=${
+                            addressFilter}&teleconsultation=${
+                            teleconsultation}`;
                           if (history.location.search !== searchPath) {
                             history.push(`/trouver-un-psychologue${searchPath}`);
                           }
