@@ -77,6 +77,7 @@ const NewAppointment = () => {
                 data-test-id="new-appointment-patient-input"
                 id="patients"
                 name="patientId"
+                messageType=""
                 label="Patient"
                 selected={patientId}
                 hint={(

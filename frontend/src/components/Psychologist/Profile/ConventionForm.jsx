@@ -45,6 +45,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
         data-test-id="convention-university-select"
         id="university"
         name="university"
+        messageType=""
         label="Quelle université vous a contacté pour signer la convention ?"
         selected={convention.universityId}
         onChange={e => setConvention({ ...convention, universityId: e.target.value })}
