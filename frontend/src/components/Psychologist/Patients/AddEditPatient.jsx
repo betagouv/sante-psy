@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { Button } from '@dataesr/react-dsfr';
+import { Button, TextInput, Checkbox } from '@dataesr/react-dsfr';
 
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import Mail from 'components/Footer/Mail';
-import Input from 'components/Form/Input';
-
 import { useStore } from 'stores/';
 
 import { formatDDMMYYYY } from 'services/date';
@@ -92,87 +90,75 @@ const AddEditPatient = () => {
             vous pourrez y revenir plus tard pour compléter le dossier.
           </p>
           <div>
-            <Input
+            <TextInput
+              className="midlength-input"
               data-test-id="patient-first-name-input"
               label="Prénoms"
-              type="text"
-              field="firstNames"
               value={patient.firstNames}
-              onChange={changePatient}
+              onChange={e => changePatient(e.target.value, 'firstNames')}
               required
             />
-            <Input
+            <TextInput
+              className="midlength-input"
               data-test-id="patient-last-name-input"
               label="Nom"
-              type="text"
-              field="lastName"
               value={patient.lastName}
-              onChange={changePatient}
+              onChange={e => changePatient(e.target.value, 'lastName')}
               required
             />
-            <Input
+            <TextInput
+              className="midlength-input"
               label={`Date de naissance (obligatoire uniquement pour vos patients enregistrés après le
                 ${config.dateOfBirthDeploymentDate}
                 )`}
               hint="Format JJ/MM/AAAA, par exemple : 25/01/1987"
-              type="text"
-              field="dateOfBirth"
               value={patient.dateOfBirth}
-              onChange={changePatient}
+              type="text"
+              onChange={e => changePatient(e.target.value, 'dateOfBirth')}
               pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
               placeholder="JJ/MM/AAAA"
             />
-            <Input
+            <TextInput
+              className="midlength-input"
               label="Établissement scolaire de l'étudiant"
               hint="Exemple : Université de Rennes ou ENSAE"
-              type="text"
-              field="institutionName"
               value={patient.institutionName}
-              onChange={changePatient}
+              onChange={e => changePatient(e.target.value, 'institutionName')}
             />
-            <Input
+            <TextInput
+              className="midlength-input"
               label="Numéro INE de l'étudiant (optionnel)"
               hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
-              type="text"
-              field="INE"
               value={patient.INE}
-              onChange={changePatient}
-              maxLength="11"
-              size="11"
+              onChange={e => changePatient(e.target.value, 'INE')}
             />
-            <Input
+            <Checkbox
               label="J'ai vérifié que les séances ont bien été prescrites
               par un médecin ou un Service de Santé Universitaire"
               hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
-              type="checkbox"
-              field="hasPrescription"
-              value={patient.hasPrescription}
-              onChange={changePatient}
+              value="false"
+              onChange={e => changePatient(e.target.value, 'hasPrescription')}
             />
-            <Input
+            <Checkbox
               label="J'ai vérifié le statut étudiant de ce patient"
               hint="L'étudiant m'a présenté une lettre ou ordonnance médicale"
-              type="checkbox"
-              field="isStudentStatusVerified"
-              value={patient.isStudentStatusVerified}
-              onChange={changePatient}
+              value="false"
+              onChange={e => changePatient(e.target.value, 'isStudentStatusVerified')}
             />
-            <Input
+            <TextInput
+              className="midlength-input"
               data-test-id="patient-doctor-name-input"
               label="Médecin ou Service de Santé Universitaire qui a orienté ce patient"
               hint="Exemple : Annie Benahmou ou SSU Rennes 1"
-              type="text"
-              field="doctorName"
               value={patient.doctorName}
-              onChange={changePatient}
+              onChange={e => changePatient(e.target.value, 'doctorName')}
             />
-            <Input
+            <TextInput
+              className="midlength-input"
               label="Ville et/ou code postal du médecin ou Service de Santé Universitaire"
               hint="Exemple : 97400 Saint-Denis"
-              type="text"
-              field="doctorAddress"
               value={patient.doctorAddress}
-              onChange={changePatient}
+              onChange={e => changePatient(e.target.value, 'doctorAddress')}
             />
           </div>
           <div className="fr-my-5w">
