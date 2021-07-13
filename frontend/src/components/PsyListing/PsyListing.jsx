@@ -35,7 +35,12 @@ const PsyListing = () => {
         return false;
       }
 
-      if (nameFilter && !matchFilter(psychologist.lastName, nameFilter)) {
+      if (nameFilter && !(
+        matchFilter(psychologist.lastName, nameFilter)
+        || matchFilter(`${psychologist.lastName} ${psychologist.firstNames}`, nameFilter)
+        || matchFilter(`${psychologist.firstNames} ${psychologist.lastName}`, nameFilter)
+      )
+      ) {
         return false;
       }
 
