@@ -57,9 +57,9 @@ describe('Profile', () => {
         .should('exist');
       cy.get('[data-test-id="convention-form-title"]')
         .should('exist');
-      cy.get('[data-test-id="convention-university-select"]')
+      cy.get('[data-test-id="convention-university-select"] > select')
         .select('Angers');
-      cy.get('[data-test-id="signed-true"]')
+      cy.get('[data-test-id="signed-true"] > label')
         .click({ force: true });
       cy.get('[data-test-id="update-convention-button"]')
         .click();
@@ -84,9 +84,9 @@ describe('Profile', () => {
         .should('exist');
       cy.get('[data-test-id="convention-form-title"]')
         .should('not.exist');
-      cy.get('[data-test-id="convention-university-select"]')
+      cy.get('[data-test-id="convention-university-select"] > select')
         .select('Aix-Marseille');
-      cy.get('[data-test-id="signed-false"]')
+      cy.get('[data-test-id="signed-false"] > label')
         .click({ force: true });
       cy.get('[data-test-id="update-convention-button"]')
         .click();
@@ -118,9 +118,11 @@ describe('Profile', () => {
         .click();
       cy.get('[data-test-id="edit-profile-form"]')
         .should('exist');
-      cy.get('[data-test-id="psy-personal-email-input"]')
+      cy.get('[data-test-id="psy-personal-email-input"] > input')
         .clear()
         .type('new@beta.gouv.fr');
+      cy.get('[data-test-id="teleConsultation-true"] > label')
+        .click();
       cy.get('[data-test-id="save-profile-button"]')
         .click();
       cy.wait('@updateProfile');

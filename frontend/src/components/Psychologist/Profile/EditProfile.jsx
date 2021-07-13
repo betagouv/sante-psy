@@ -98,6 +98,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             required
           >
             <Radio
+              data-test-id="teleConsultation-true"
               label="Oui"
               value={`${true}`}
             />

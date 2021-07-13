@@ -62,10 +62,12 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
               Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
       >
         <Radio
+          data-test-id="signed-true"
           label="Oui"
           value={`${true}`}
         />
         <Radio
+          data-test-id="signed-false"
           label="Non"
           value={`${false}`}
         />
