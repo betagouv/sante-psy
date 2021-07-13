@@ -20,7 +20,7 @@ docker-compose up
 # to access psy workspace with toy data use this email login@beta.gouv.fr
 # to access psy workspace without data use this email empty@beta.gouv.fr
 # all available emails are listed here /test/seed/fake_data.js
-# http://localhost:8080/psychologue/login
+# http://localhost:3000/psychologue/login
 # login emails are received here : http://localhost:1080/
 ```
 
@@ -39,13 +39,15 @@ Pour afficher des annonces de service (maintenance, formulaire, ...), on utilise
     $ npm run makeMigration migration-name
 
 #### Importer des fausses données
-Voir le fichier dans `test/seed/fake_data.js` qui va créer quelues psy, patients, et séances.
+Voir les fichiers dans `test/seed` qui vont cleaner la base puis créer quelques universités, psychologues, patients, et séances.
 
 Pour l'exécuter:
 
     $ npm run seed
 
 #### Upload un fichier sur Scalingo
+Attention, le fichier sera supprimé après la déconnexion ! Si tu as besoin d'un fichier permanent sur scalingo, il faut passer par le repo git.
+
 ```
 # ça va importer ton fichier sur la machine et te connecter
 scalingo -app APP_NAME run --file <nom_de_ton_fichier> bash
@@ -68,26 +70,16 @@ scalingo -app APP_NAME run bash
 #### Insérer les universités pour la production
 Voir aussi le script "scaling-dev-seed.sh" lié à "scalingo.json" qui permet d'insérer ces données sur les reviews app lors de leur 1er deploiement.
 
-```
+```bash
 node scripts/insertUniversities.js # Insert into universities tables
 node scripts/insertEmailToUniversities.js test/seed/test-ssu-renew.csv # insert emails contacts from CSV files (need to ask support for rights)
 ```
 
 #### Exécuter les migrations
-```dockerfile
-# Supprimer les tables existantes
-docker-compose down
-# ou docker-compose rm -f # removes already existing containers https://docs.docker.com/compose/reference/rm/
-
-# Les recréer
-docker-compose up
-> (...)
-web_1  | Creating ds_api_cursor table
-web_1  | Creating universities table
-web_1  | Creating patients table
-web_1  | Creating psychologists table
-web_1  | Creating appointments table
-Santé Psy Étudiants listening at http://localhost:8080
+```bash
+# Pour mettre à jour la base de données.
+# Voir la doc https://knexjs.org/#Migrations-make pour plus d'options.
+npm run migrate
 ```
 
 ### Les données
@@ -115,8 +107,8 @@ Avec [le scalingo CLI](https://doc.scalingo.com/cli) et le nom de l'app sur scal
 On peut insérer des données comme ceci :
 ```sql
 INSERT INTO public.psychologists
-("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, teleconsultation, description, languages, training, diploma, university, "createdAt", "updatedAt", archived, state, "personalEmail")
-VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli', 'firstname', 'lastname', 'publicemail@beta.gouv.fr', '', '', '', '', '', false, 'accfzfz', '', '[]', '', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'private.email@beta.gouv.fr');
+("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, teleconsultation, description, languages, training, diploma, "createdAt", "updatedAt", archived, state, "personalEmail")
+VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli', 'firstname', 'lastname', 'publicemail@beta.gouv.fr', '', '', '', '', '', false, 'accfzfz', '', '[]', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'private.email@beta.gouv.fr');
 ```
 
 Autre solution : utiliser le code Node au lieu de SQL.
@@ -133,6 +125,7 @@ dbPsychologists.savePsychologistInPG([psy])
 ```
 
 ### Test
+#### Back
 Pour utiliser le container Postgresql
 ```bash
 # Start DB and build SQL tables
@@ -140,6 +133,14 @@ docker-compose -f docker-compose-only-db.yml up
 
 # start tests
 npm test
+```
+#### Front
+Une fois l'appli lancée normalement, on utilise cypress
+```bash
+docker-compose up
+
+cd frontend
+npm run cy:run
 ```
 
 #### .ENV
@@ -150,23 +151,6 @@ Penser à décommenter les variables d'environnement `SECRET` et `SECRET_LOGS` d
 #### Tester uniquement un test
 
     $ npm test -- --grep "should call batchInsert on PG"
-
-
-
-#### Test du cron
-```bash
-docker-compose up -d
-docker ps # get container name
-docker exec -ti sante-psy_web_1 bash -c "node ./cron_jobs/cron.js"
-> 🚀 The job "Import data from DS API to PG" is ON * * * * *
-Started 1 cron jobs
-(...)
-```
-
-
-#### Test sur la CI
-Sur la CI de github (.github/workflows/nodejs.yml) on utilise docker-compose avec l'option `--abort-on-container-exit` pour lancer les tests dans le container de l'application et finir le container de PG une fois que les tests ont été exécutés.
-> Stops all containers if any container was stopped. Incompatible with --detach.
 
 #### Code coverage
 
@@ -194,6 +178,5 @@ Voir `.env.sample` pour la liste complète
 
 ### Libraries
 * https://github.com/prisma-labs/graphql-request
-* <table> http://tabulator.info/
 Tester les fonctions privées :
 * https://github.com/jhnns/rewire
