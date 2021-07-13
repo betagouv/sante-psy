@@ -98,7 +98,7 @@ describe('ConventionModal', () => {
       cy.get('[data-test-id="update-convention-button"]')
         .click();
 
-      cy.wait('updateConvention');
+      cy.wait('@updateConvention');
 
       cy.get('[data-test-id="convention-modal"]')
         .should('not.exist');
