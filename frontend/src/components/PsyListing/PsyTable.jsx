@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Table, Pagination, Button, Title } from '@dataesr/react-dsfr';
 import camelize from 'services/string';
 
-const PsyTable = ({ psychologists, nameFilter, addressFilter, teleconsultation }) => {
+const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, teleconsultation }) => {
   const history = useHistory();
-  const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    setPage(1);
-  }, [nameFilter, addressFilter, teleconsultation]);
 
   return (
     <>
@@ -47,7 +42,8 @@ const PsyTable = ({ psychologists, nameFilter, addressFilter, teleconsultation }
                         data-test-id="psy-table-row-profil-button"
                         secondary
                         onClick={() => {
-                          const searchPath = `?name=${
+                          const searchPath = `?page=${
+                            page}&name=${
                             nameFilter}&address=${
                             addressFilter}&teleconsultation=${
                             teleconsultation}`;

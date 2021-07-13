@@ -15,10 +15,19 @@ const PsyListing = () => {
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     agent.Psychologist.find().then(setPsychologists);
   }, []);
+
+  useEffect(() => {
+    if (page === 0) {
+      setPage(query.get('page') || 1);
+    } else {
+      setPage(1);
+    }
+  }, [nameFilter, addressFilter, teleconsultation]);
 
   const matchFilter = (value, filter) => value.toLowerCase().includes(filter.toLowerCase());
 
@@ -99,6 +108,8 @@ const PsyListing = () => {
         />
       </div>
       <PsyTable
+        page={page}
+        setPage={setPage}
         psychologists={filteredPsychologists}
         nameFilter={nameFilter}
         addressFilter={addressFilter}
