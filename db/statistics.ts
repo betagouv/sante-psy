@@ -1,7 +1,9 @@
 import knex from 'knex';
 import { Registry } from 'knex/types/result';
 import { DossierState } from '../types/DemarcheSimplifiee';
-import { patientsTable, psychologistsTable, universitiesTable } from './tables';
+import {
+  appointmentsTable, patientsTable, psychologistsTable, universitiesTable,
+} from './tables';
 
 const knexConfig = require('../knexfile');
 
@@ -22,4 +24,13 @@ const getPatientCount = () : Promise<Registry[]> => db(patientsTable)
     .where({ deleted: false })
     .countDistinct('id');
 
-export { getUniversityCount, getActivePsychologistCount, getPatientCount };
+const getAppointmentCount = () : Promise<Registry[]> => db(appointmentsTable)
+    .where({ deleted: false })
+    .countDistinct('id');
+
+export {
+  getUniversityCount,
+  getAppointmentCount,
+  getActivePsychologistCount,
+  getPatientCount,
+};

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
-import { Col, Row } from '@dataesr/react-dsfr';
+import { Button, Col, Row } from '@dataesr/react-dsfr';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 import Page from 'components/Page/Page';
@@ -23,7 +23,6 @@ const fields = [
         : 'Pas de téléconsultation possible'
     ),
   },
-  { name: 'Services de santé universitaire', value: 'address' },
   {
     name: 'Site web',
     custom: psychologist => (
@@ -39,6 +38,7 @@ const fields = [
 ];
 
 const PublicPsychologistProfile = () => {
+  const history = useHistory();
   const { psyId } = useParams();
   const [psychologist, setPsychologist] = useState();
   const [coordinates, setCoordinates] = useState();
@@ -68,6 +68,15 @@ const PublicPsychologistProfile = () => {
       background="yellow"
       dataTestId="publicPsyProfilePage"
     >
+      <Row justifyContent="right">
+        <Button
+          className="fr-mb-3w"
+          secondary
+          onClick={() => history.goBack()}
+        >
+          Revenir à l&lsquo;annuaire
+        </Button>
+      </Row>
       {psychologist && (
       <Row>
         <Col>

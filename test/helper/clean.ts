@@ -32,6 +32,12 @@ const getRandomInt = () : string => {
   return ourRandom.toString();
 };
 
+const addresses = [
+  'avenue de segur 75007 paris',
+  'cours de verdun, 33000, Bordeaux',
+  'Boulevard Maréchal Foch 38100 Grenoble',
+];
+
 const getOnePsy = (
   personalEmail = 'loginemail@beta.gouv.fr',
   state = DossierState.accepte,
@@ -47,20 +53,21 @@ const getOnePsy = (
     archived,
     state,
     adeli: `${getRandomInt()}829302942`,
-    address: `${getRandomInt()} SOLA 66110 MONTBOLO`,
+    address: `${getRandomInt()} ${addresses[Math.floor(Math.random() * 100) % 3]}`,
     diploma: 'Psychologie clinique de la santé',
     phone: '0468396600',
     email: `${getRandomInt()}@beta.gouv.fr`,
     personalEmail,
     website: `${getRandomInt()}beta.gouv.fr`,
     teleconsultation: Math.random() < 0.5,
-    description: 'description',
+    // eslint-disable-next-line max-len
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quam enim, tempus gravida magna a, egestas tincidunt augue. Curabitur id nisl aliquet, dapibus leo sed, viverra metus. Nulla convallis blandit ex. Nullam suscipit ex pellentesque fermentum porttitor. Suspendisse faucibus nibh eu blandit vulputate. Quisque magna ante, varius in pulvinar rhoncus, aliquam sit amet odio. Fusce venenatis orci eleifend pharetra pulvinar. Cras lobortis non libero vitae dictum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur viverra augue quis mauris auctor facilisis.',
     // eslint-disable-next-line max-len
     training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
     departement: '14 - Calvados',
     assignedUniversityId: uniId,
     region: 'Normandie',
-    languages: 'Français ,Anglais, et Espagnol',
+    languages: 'Français, Anglais, et Espagnol',
     active: !inactiveUntil,
     inactiveUntil,
   };

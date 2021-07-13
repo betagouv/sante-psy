@@ -9,7 +9,7 @@ const items = {
       },
       {
         href: '/static/documents/flyer_etudiants_fr.pdf',
-        title: 'Voir le dépliant étudiants',
+        title: 'Voir le dépliant étudiant',
       },
       {
         href: '/static/documents/flyer_etudiants_en.pdf',

@@ -32,7 +32,7 @@ const FaqTab = ({ type }) => {
         label={items[type].label}
         links={items[type].links}
       />
-      <Row spacing="my-3w">
+      <Row spacing="mt-3w">
         <SideMenu
           buttonLabel="Dans cette rubrique"
           className={classnames(styles.menu, 'fr-sidemenu--sticky fr-col-md-4 fr-col-sm-12')}
@@ -60,7 +60,8 @@ const FaqTab = ({ type }) => {
                 {faq[section.name](config)
                   .map(item => (
                     <AccordionItem title={item.question} key={item.question}>
-                      <div className={styles.answer}
+                      <div
+                        className={styles.answer}
                       // eslint-disable-next-line react/no-danger
                         dangerouslySetInnerHTML={{
                           __html: sanitizeHtml(item.answer,

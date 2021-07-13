@@ -9,6 +9,8 @@
 .container {
   background-color: #FFFFFF;
   max-width: 800px;
+  margin: auto;
+  padding: 24px 8px;
 }
 
 .sectionTitle {
@@ -21,3 +23,8 @@
   text-decoration: underline #FCEA04 10px;
 }
 
+@media (min-width: 768px) {
+  .container {
+    padding: 24px;
+  }
+}
