@@ -100,11 +100,11 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             <Radio
               data-test-id="teleConsultation-true"
               label="Oui"
-              value={`${true}`}
+              value="true"
             />
             <Radio
               label="Non"
-              value={`${false}`}
+              value="false"
             />
           </RadioGroup>
           <TextInput
