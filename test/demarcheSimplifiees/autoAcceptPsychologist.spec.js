@@ -22,7 +22,7 @@ describe('autoAcceptPsychologist', () => {
 
   afterEach((done) => {
     autoAcceptPsychologists.__ResetDependency__('graphql');
-    autoAcceptPsychologists.__ResetDependency__('uploadDocument');
+    autoAcceptPsychologists.__ResetDependency__('uploadDocument_1');
     unsets.forEach((unset) => unset());
     done();
   });

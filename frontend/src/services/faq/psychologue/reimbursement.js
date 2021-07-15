@@ -8,16 +8,16 @@ module.exports = () => [
   },
   {
     question: 'Est-il prévu soit un allégement des taxes pour que les psychologues \
-    investis dans ce dispositif ne travaillent pas bénévolement ? Est-il simplement prévu que des professionnels donnent leur temps ?',
+    investis dans ce dispositif ne travaillent pas bénévolement ? Est-il simplement prévu que des professionnels donnent leur temps ?',
     answer: 'À ce stade, il n’est prévu aucune mesure particulière.',
   },
   {
-    question: 'Pourquoi les consultations sont-elles fixées à 45 minutes ?',
+    question: 'Pourquoi les consultations sont-elles fixées à 45 minutes ?',
     answer: 'La durée des séances ainsi que, par ailleurs, les critères relatifs au diplôme ou à \
     l’expérience ont été établis avec le concours de la fédération française des psychologues et de psychologie.',
   },
   {
-    question: 'Comment se passe le remboursement ? Quel délai ?',
+    question: 'Comment se passe le remboursement ? Quel délai ?',
     answer: 'Les psychologues partenaires du dispositif sont agréés par les services de \
     santé universitaire (SSU) et signent une convention avec l’établissement dont dépend le SSU qui les a agréés. \
     Cette convention précise les modalités de paiement des séances réalisées dans le cadre du dispositif. \

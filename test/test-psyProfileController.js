@@ -13,30 +13,71 @@ describe('psyProfileController', () => {
       await clean.cleanAllPsychologists();
     });
 
-    it('should return 401 if user is not logged in', async () => {
+    const checkProfile = (actual, expected, shouldBeComplete) => {
+      const expectedKeys = [
+        'firstNames',
+        'lastName',
+        'email',
+        'address',
+        'departement',
+        'region',
+        'phone',
+        'website',
+        'teleconsultation',
+        'description',
+        'languages',
+        'active',
+      ];
+
+      if (shouldBeComplete) {
+        expectedKeys.push('personalEmail');
+      }
+
+      expect(actual).to.be.an('object').that.has.all.keys(expectedKeys);
+
+      expect(actual.firstNames).to.eql(expected.firstNames);
+      expect(actual.lastName).to.eql(expected.lastName);
+      expect(actual.email).to.eql(expected.email);
+      expect(actual.address).to.eql(expected.address);
+      expect(actual.departement).to.eql(expected.departement);
+      expect(actual.region).to.eql(expected.region);
+      expect(actual.phone).to.eql(expected.phone);
+      expect(actual.website).to.eql(expected.website);
+      expect(actual.teleconsultation).to.eql(expected.teleconsultation);
+      expect(actual.description).to.eql(expected.description);
+      expect(actual.languages).to.eql(expected.languages);
+      expect(actual.active).to.eql(expected.active);
+
+      if (shouldBeComplete) {
+        expect(actual.personalEmail).to.eql(expected.personalEmail);
+      }
+    };
+
+    it('should return basic info if user is not logged in', async () => {
       const psy = await clean.insertOnePsy();
 
       return chai.request(app)
         .get(`/api/psychologist/${psy.dossierNumber}`)
         .then(async (res) => {
-          res.status.should.equal(401);
+          res.status.should.equal(200);
+          checkProfile(res.body, psy, false);
         });
     });
 
-    it('should return 403 if user token does not match the param', async () => {
-      const loggedPsy = await clean.insertOnePsy();
-      const targetPsy = await clean.insertOnePsy('other@psy.fr');
+    it('should return basic info if user is logged in but ask for someone else', async () => {
+      const psy = await clean.insertOnePsy();
 
       return chai.request(app)
-        .get(`/api/psychologist/${targetPsy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken')}`)
+        .get(`/api/psychologist/${psy.dossierNumber}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.status.should.equal(403);
+          res.status.should.equal(200);
+          checkProfile(res.body, psy, false);
         });
     });
 
-    it('should return psy profile', async () => {
+    it('should return full psy profile if connected', async () => {
       const psy = await clean.insertOnePsy();
 
       return chai.request(app)
@@ -45,32 +86,7 @@ describe('psyProfileController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(200);
-
-          const returnedPsy = res.body;
-          expect(returnedPsy).to.be.an('object').that.has.all.keys(
-            'email',
-            'address',
-            'departement',
-            'region',
-            'phone',
-            'website',
-            'teleconsultation',
-            'description',
-            'languages',
-            'personalEmail',
-            'active',
-          );
-          expect(returnedPsy.email).to.eql(psy.email);
-          expect(returnedPsy.address).to.eql(psy.address);
-          expect(returnedPsy.departement).to.eql(psy.departement);
-          expect(returnedPsy.region).to.eql(psy.region);
-          expect(returnedPsy.phone).to.eql(psy.phone);
-          expect(returnedPsy.website).to.eql(psy.website);
-          expect(returnedPsy.teleconsultation).to.eql(psy.teleconsultation);
-          expect(returnedPsy.description).to.eql(psy.description);
-          expect(returnedPsy.languages).to.eql(psy.languages);
-          expect(returnedPsy.personalEmail).to.eql(psy.personalEmail);
-          expect(returnedPsy.active).to.eql(psy.active);
+          checkProfile(res.body, psy, true);
         });
     });
   });

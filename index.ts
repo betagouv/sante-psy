@@ -36,6 +36,7 @@ app.use(express.json());
 
 app.use(cookieParser(config.secret));
 
+app.use('/*/fonts/', express.static('./dist/frontend/fonts'));
 app.use('/static', express.static('static'));
 app.get('/', getIndex);
 app.use(express.static('./dist/frontend'));

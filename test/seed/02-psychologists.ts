@@ -2,6 +2,7 @@ import clean from '../helper/clean';
 
 import { DossierState } from '../../types/DemarcheSimplifiee';
 import uuid from '../../utils/uuid';
+import universities from '../../utils/universities';
 import {
   psychologistsTable,
 } from '../../db/tables';
@@ -23,8 +24,8 @@ export const mails = [
 
 export const seed = async (knex: Knex): Promise<void> => {
   const psyList = [
-    ...mails.map((mail) => clean.getOnePsy(
-      mail, DossierState.accepte, false, uuid.generateUuidFromString('university-Dijon'),
+    ...mails.map((mail, index) => clean.getOnePsy(
+      mail, DossierState.accepte, false, uuid.generateUuidFromString(`university-${universities[index + 1]}`),
     )),
     clean.getOnePsy('archived@beta.gouv.fr', DossierState.accepte, true),
     clean.getOnePsy('empty@beta.gouv.fr', DossierState.accepte, false),

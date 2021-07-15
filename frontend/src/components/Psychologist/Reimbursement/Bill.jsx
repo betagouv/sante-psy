@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-import Logo from 'components/Logo/LogoHeader';
+import {
+  Header as DSHeader,
+  HeaderBody,
+  Logo,
+  Service,
+} from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { formatFrenchDate, formatMonth } from 'services/date';
@@ -18,7 +23,7 @@ const Bill = () => {
   useEffect(() => {
     agent.Appointment.get().then(response => {
       const appointmentsByDate = {};
-      response.appointments.forEach(appointment => {
+      response.forEach(appointment => {
         const existingValue = appointmentsByDate[appointment.appointmentDate];
         appointmentsByDate[appointment.appointmentDate] = existingValue ? existingValue + 1 : 1;
       });
@@ -64,23 +69,18 @@ const Bill = () => {
 
   return (
     <>
-      <header role="banner" className="fr-header">
-        <div className="fr-header__body">
-          <div className="fr-container">
-            <div className={styles.header}>
-              <div className="fr-header__brand-top">
-                <Logo />
-              </div>
-              <div className="fr-header__service">
-                <p className="fr-header__service-title">
-                  {__APPNAME__}
-                </p>
-                <p className="fr-header__service-tagline">{`Facture ${formatMonth({ month, year })}`}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* TODO: fix print view (by using styles.header?) */}
+      <DSHeader>
+        <HeaderBody>
+          <Logo>
+            Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
+          </Logo>
+          <Service
+            title={`${__APPNAME__}`}
+            description={`Facture ${formatMonth({ month, year })}`}
+          />
+        </HeaderBody>
+      </DSHeader>
       <div className={styles.content}>
         {getInfos().map(info => (
           <div className={styles.info}>

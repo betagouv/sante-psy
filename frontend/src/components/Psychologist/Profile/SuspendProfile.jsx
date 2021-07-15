@@ -167,11 +167,11 @@ const SuspendProfile = ({ suspendPsychologist }) => {
       </RadioGroup>
       <Button
         data-test-id="suspend-button"
-        icon="fr-fi-eye-off-line"
         title="delete"
         onClick={() => suspendPsychologist(getReason(), calculateSuspensionDate())}
         disabled={!canValidate}
       >
+        <span className="fr-fi-eye-off-line fr-mr-1w" aria-hidden="true" />
         Retirer mes informations de l&lsquo;annuaire
       </Button>
     </>

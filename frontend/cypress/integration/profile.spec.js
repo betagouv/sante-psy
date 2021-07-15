@@ -32,7 +32,7 @@ describe('Profile', () => {
       cy.get('[data-test-id="convention-form"]')
         .should('not.exist');
       cy.get('[data-test-id="convention-university-name"]')
-        .should('have.text', 'Je suis rattaché à l‘université de Dijon.');
+        .should('have.text', 'Je suis rattaché à l‘université de Strasbourg (UNISTRA).');
       cy.get('[data-test-id="convention-signed"]')
         .should('have.text', 'La convention n‘est pas encore signée.');
     });
@@ -320,7 +320,7 @@ describe('Profile', () => {
       checkSuspension('holidays', 'month', addMonth, addMonth);
     });
 
-    it('should suspend profile forever because of reimbursments not there', () => {
+    it('should suspend profile forever because of reimbursements not there', () => {
       checkSuspension('reimbursments', 'forever', () => new Date('9999/12/30'), () => new Date('10000/01/01'));
     });
 

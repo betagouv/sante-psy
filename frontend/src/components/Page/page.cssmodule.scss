@@ -1,0 +1,30 @@
+.yellow {
+  background-color: #FFF9BF;
+}
+
+.blue {
+  background-color: #F5F5FF;
+}
+
+.container {
+  background-color: #FFFFFF;
+  max-width: 800px;
+  margin: auto;
+  padding: 24px 8px;
+}
+
+.sectionTitle {
+  color: var(--bf500);
+  text-align: center;
+}
+
+.title {
+  position: relative;
+  text-decoration: underline #FCEA04 10px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 24px;
+  }
+}

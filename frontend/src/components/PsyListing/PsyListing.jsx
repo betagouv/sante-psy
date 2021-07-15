@@ -1,113 +1,123 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Checkbox, Row, Col, TextInput } from '@dataesr/react-dsfr';
 
-import Ariane from 'components/Ariane/Ariane';
+import Page from 'components/Page/Page';
+
 import agent from 'services/agent';
+
 import PsyTable from './PsyTable';
 
+import styles from './psyListing.cssmodule.scss';
+
 const PsyListing = () => {
+  const query = new URLSearchParams(useLocation().search);
+
   const [psychologists, setPsychologists] = useState([]);
-  const [filter, setFilter] = useState({});
+  const [nameFilter, setNameFilter] = useState(query.get('name') || '');
+  const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
+  const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     agent.Psychologist.find().then(setPsychologists);
   }, []);
 
-  const filterByKey = (psychologist, key, psyKey) => {
-    const filterValue = filter[key];
-    if (!filterValue) {
-      return true;
+  useEffect(() => {
+    if (page === 0) {
+      setPage(query.get('page') || 1);
+    } else {
+      setPage(1);
     }
-    const psychologistValue = psychologist[psyKey || key];
-    return psychologistValue && psychologistValue.toLowerCase().includes(filterValue);
+  }, [nameFilter, addressFilter, teleconsultation]);
+
+  const matchFilter = (value, filter) => value.toLowerCase().includes(filter.toLowerCase());
+
+  const getFilteredPsychologists = () => {
+    const departementFilter = +addressFilter;
+    const addressIsDepartment = departementFilter
+    && (
+      (departementFilter > 0 && departementFilter < 96)
+    || (departementFilter > 970 && departementFilter < 977)
+    );
+
+    return psychologists.filter(psychologist => {
+      if (teleconsultation && !psychologist.teleconsultation) {
+        return false;
+      }
+
+      if (nameFilter && !(
+        matchFilter(psychologist.lastName, nameFilter)
+        || matchFilter(`${psychologist.lastName} ${psychologist.firstNames}`, nameFilter)
+        || matchFilter(`${psychologist.firstNames} ${psychologist.lastName}`, nameFilter)
+      )
+      ) {
+        return false;
+      }
+
+      if (addressIsDepartment) {
+        if (!matchFilter(psychologist.departement, addressFilter)) {
+          return false;
+        }
+      } else if (addressFilter
+        && !(
+          matchFilter(psychologist.address, addressFilter)
+          || matchFilter(psychologist.departement, addressFilter)
+          || matchFilter(psychologist.region, addressFilter)
+        )
+      ) {
+        return false;
+      }
+
+      return true;
+    });
   };
 
-  const getFilteredPsychologists = () => psychologists.filter(
-    psychologist => filterByKey(psychologist, 'name', 'lastName')
-        && filterByKey(psychologist, 'address')
-        && filterByKey(psychologist, 'postCode', 'departement'),
-  );
-
-  const changeFilter = (name, event) => {
-    const newFilter = { ...filter };
-    newFilter[name] = event.target.value.toLowerCase();
-    setFilter(newFilter);
-  };
+  const filteredPsychologists = getFilteredPsychologists();
 
   return (
-    <div className="fr-container">
-      <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-        <div className="fr-container fr-mb-3w">
-          <Ariane
-            previous={[{
-              label: 'Accueil',
-              url: '/',
-            }]}
-            current="Trouver un psychologue"
-          />
-          <h1>Trouver un psychologue</h1>
-          <p className="fr-mb-2w">
-            Il y a actuellement
-            {` ${psychologists.length} `}
-            partenaires du dispositif d&lsquo;accompagnement.
-            <br />
-            La liste est mise à jour quotidiennement,
-            revenez la consulter si vous n&lsquo;avez pas pu trouver de psychologue.
-          </p>
-          <p className="fr-mb-2w">
-            Vous pouvez contacter un psychologue partenaire dans n&lsquo;importe quel département,
-            peu importe votre université d&lsquo;origine, par téléphone,
-            email ou par son site web.
-          </p>
-
-          <div className="fr-input-group">
-            <label
-              className="fr-label"
-              htmlFor="lastName-filter-value"
-            >
-              Rechercher par nom :
-            </label>
-            <input
-              className="fr-input midlength-input"
-              id="lastName-filter-value"
-              type="text"
-              placeholder="Delgado"
-              onChange={event => changeFilter('name', event)}
+    <Page
+      title="Trouver un psychologue"
+      description={`Il y a actuellement ${psychologists.length} partenaires du dispositif d‘accompagnement.
+      La liste est mise à jour quotidiennement, revenez la consulter si vous n‘avez pas pu trouver de psychologue.`}
+      background="yellow"
+      dataTestId="psyListPage"
+    >
+      <div className="fr-pb-6w">
+        <Row gutters>
+          <Col n="md-6 sm-12" className={styles.input}>
+            <TextInput
+              className="fr-mb-1w"
+              value={nameFilter}
+              onChange={e => setNameFilter(e.target.value)}
+              label="Rechercher par nom"
             />
-          </div>
-          <div className="fr-input-group">
-            <label
-              className="fr-label"
-              htmlFor="address-filter-value"
-            >
-              Rechercher votre ville ou code postal :
-            </label>
-            <input
-              className="fr-input midlength-input"
-              id="address-filter-value"
-              type="text"
-              placeholder="Amiens ou 80000"
-              onChange={event => changeFilter('address', event)}
+          </Col>
+          <Col n="md-6 sm-12" className={styles.input}>
+            <TextInput
+              className="fr-mb-1w"
+              value={addressFilter}
+              onChange={e => setAddressFilter(e.target.value)}
+              label="Rechercher par ville, code postal ou région"
             />
-          </div>
-          <div className="fr-input-group">
-            <label
-              className="fr-label"
-              htmlFor="departement-filter-value"
-            >
-              Rechercher par département:
-            </label>
-            <input
-              className="fr-input midlength-input"
-              id="departement-filter-value"
-              type="text"
-              placeholder="Somme ou 80"
-              onChange={event => changeFilter('postCode', event)}
-            />
-          </div>
-          <PsyTable psychologists={getFilteredPsychologists()} />
-        </div>
+          </Col>
+        </Row>
+        <Checkbox
+          value="teleconsultation"
+          onChange={e => { setTeleconsultation(e.target.checked); }}
+          label="Disponible en téléconsultation"
+          defaultChecked={teleconsultation}
+        />
       </div>
-    </div>
+      <PsyTable
+        page={page}
+        setPage={setPage}
+        psychologists={filteredPsychologists}
+        nameFilter={nameFilter}
+        addressFilter={addressFilter}
+        teleconsultation={teleconsultation}
+      />
+    </Page>
   );
 };
 

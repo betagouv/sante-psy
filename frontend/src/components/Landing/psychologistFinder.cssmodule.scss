@@ -1,0 +1,47 @@
+.container {
+    text-align: center;
+    position: relative;
+}
+
+.image {
+    position: absolute;
+    display: none;
+    bottom: 0;
+    right: -16px;
+}
+
+.content {
+    padding: 16px;
+    max-width: 800px;
+    min-height: 389px;
+    margin: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    line-height: 42px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.description {
+    font-size: 24px;
+    line-height: 33px;
+    margin-bottom: 32px;
+}
+
+.button {
+    width: fit-content;
+}
+
+@media (min-width: 768px) {
+    .image {
+        right: -64px;
+        display: block;
+    }
+}

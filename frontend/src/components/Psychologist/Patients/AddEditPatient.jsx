@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { Button } from '@dataesr/react-dsfr';
 
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
@@ -175,13 +176,13 @@ const AddEditPatient = () => {
             />
           </div>
           <div className="fr-my-5w">
-            <button
+            <Button
+              submit
               data-test-id="save-patient-button"
-              type="submit"
-              className="fr-btn fr-btn--icon-left button.icon"
+              className={`fr-btn--icon-left ${button.icon}`}
             >
               {button.text}
-            </button>
+            </Button>
           </div>
         </form>
       </div>
