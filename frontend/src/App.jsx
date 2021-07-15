@@ -43,7 +43,7 @@ function App() {
     <>
       {__MATOMO__ && <Matomo />}
       <Header />
-      <ScrollToTop />
+      <ScrollToTop loading={loading} />
       <div id="contenu">
         {!loading && (
         <React.Suspense fallback={<></>}>
