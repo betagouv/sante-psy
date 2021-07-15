@@ -37,6 +37,12 @@ const NewAppointment = () => {
     });
   };
 
+  const patientsMap = patients.map(patient => (
+    { value: `${patient.id}`, label: `${patient.lastName} ${patient.firstNames}` }
+  ));
+  const defaultString = [{ value: '', label: '--- Selectionner un patient', disabled: true, hidden: true }];
+  const concatOptions = defaultString.concat(patientsMap);
+
   return (
     <div className="fr-container fr-mb-3w" data-test-id="new-appointment-container">
       <Ariane
@@ -89,9 +95,7 @@ const NewAppointment = () => {
                 )}
                 onChange={e => { setPatientId(e.target.value); }}
                 required
-                options={patients.map(patient => (
-                  { value: `${patient.id}`, label: `${patient.lastName} ${patient.firstNames}` }
-                ))}
+                options={concatOptions}
               />
             </div>
             <div className="fr-my-5w">

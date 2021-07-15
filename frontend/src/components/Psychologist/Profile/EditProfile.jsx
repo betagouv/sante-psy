@@ -48,7 +48,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             data-test-id="psy-personal-email-input"
             value={updatedPsychologist.personalEmail}
             onChange={e => changePsychologist(e.target.value, 'personalEmail')}
-            pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+            type="email"
             required
           />
 
@@ -88,7 +88,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             data-test-id="psy-email-input"
             value={updatedPsychologist.email}
             onChange={e => changePsychologist(e.target.value, 'email')}
-            pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+            type="email"
           />
           <RadioGroup
             value={updatedPsychologist.teleconsultation}
