@@ -55,10 +55,8 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
           : []}
       />
       <RadioGroup
-        value={convention.isConventionSigned}
         onChange={value => setConvention({ ...convention, isConventionSigned: value })}
         required
-        checked={convention.isConventionSigned}
         legend="Avez-vous déjà signé la convention ?"
         hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
               Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
@@ -66,12 +64,12 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
         <Radio
           data-test-id="signed-true"
           label="Oui"
-          value
+          value="true"
         />
         <Radio
           data-test-id="signed-false"
           label="Non"
-          value={false}
+          value="false"
         />
       </RadioGroup>
 
