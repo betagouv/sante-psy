@@ -9,7 +9,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
   const [universities, setUniversities] = useState([]);
   const [convention, setConvention] = useState({
     universityId: '',
-    isConventionSigned: false,
+    isConventionSigned: undefined,
   });
 
   const { commonStore: { setNotification }, userStore: { setUser } } = useStore();
@@ -54,6 +54,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
           ? universities.map(university => ({ value: university.id, label: university.name }))
           : []}
       />
+      {convention.isConventionSigned !== undefined && (
       <RadioGroup
         name="convention"
         value={convention.isConventionSigned ? 'true' : 'false'}
@@ -74,6 +75,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
           value="false"
         />
       </RadioGroup>
+      )}
 
       <div className="fr-my-5w">
         <Button
