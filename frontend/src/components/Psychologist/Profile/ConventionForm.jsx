@@ -55,7 +55,9 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
           : []}
       />
       <RadioGroup
-        onChange={value => setConvention({ ...convention, isConventionSigned: value })}
+        name="convention"
+        value={convention.isConventionSigned ? 'true' : 'false'}
+        onChange={value => setConvention({ ...convention, isConventionSigned: value === 'true' })}
         required
         legend="Avez-vous déjà signé la convention ?"
         hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
