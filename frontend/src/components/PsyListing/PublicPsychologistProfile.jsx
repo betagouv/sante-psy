@@ -79,7 +79,7 @@ const PublicPsychologistProfile = () => {
       </Row>
       {psychologist && (
       <Row>
-        <Col>
+        <Col n="md-6 sm-12">
           {fields.map(field => (
             <div key={field.name} className={styles.field} data-test-id="psy-info">
               <div className={styles.fieldName}>
@@ -91,7 +91,10 @@ const PublicPsychologistProfile = () => {
             </div>
           ))}
         </Col>
-        <Col>
+        <Col
+          n="md-6 sm-12"
+          className={styles.mapContainer}
+        >
           {coordinates && (
           <MapContainer
             center={[coordinates.lat, coordinates.lon]}

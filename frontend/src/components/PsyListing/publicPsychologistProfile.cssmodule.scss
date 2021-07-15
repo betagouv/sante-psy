@@ -6,7 +6,11 @@
   font-weight: bold;
 }
 
+.mapContainer {
+    width: 100%;
+}
+
 .map {
-    height: 500px;
-    min-width: 377px;
+  width: 100%;
+  min-height: 500px;
 }

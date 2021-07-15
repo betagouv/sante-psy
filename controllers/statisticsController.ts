@@ -22,7 +22,7 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
       value: universityCount[0].count,
     },
     {
-      label: 'Nombre de séances réalisées',
+      label: 'Séances réalisées',
       value: appointmentsCount[0].count,
     },
     {

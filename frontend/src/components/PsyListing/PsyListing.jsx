@@ -8,6 +8,8 @@ import agent from 'services/agent';
 
 import PsyTable from './PsyTable';
 
+import styles from './psyListing.cssmodule.scss';
+
 const PsyListing = () => {
   const query = new URLSearchParams(useLocation().search);
 
@@ -83,7 +85,7 @@ const PsyListing = () => {
     >
       <div className="fr-pb-6w">
         <Row gutters>
-          <Col n="md-6 sm-12">
+          <Col n="md-6 sm-12" className={styles.input}>
             <TextInput
               className="fr-mb-1w"
               value={nameFilter}
@@ -91,7 +93,7 @@ const PsyListing = () => {
               label="Rechercher par nom"
             />
           </Col>
-          <Col n="md-6 sm-12">
+          <Col n="md-6 sm-12" className={styles.input}>
             <TextInput
               className="fr-mb-1w"
               value={addressFilter}
