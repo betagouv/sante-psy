@@ -56,52 +56,6 @@ const PsyListing = () => {
       background="yellow"
       dataTestId="psyListPage"
     >
-      {/*
-      <div className="fr-input-group">
-            <label
-              className="fr-label"
-              htmlFor="lastName-filter-value"
-            >
-              Rechercher par nom :
-            </label>
-            <TextInput
-              className="fr-input midlength-input"
-              id="lastName-filter-value"
-              placeholder="Delgado"
-              onChange={event => changeFilter('name', event)}
-            />
-          </div>
-          <div className="fr-input-group">
-            <label
-              className="fr-label"
-              htmlFor="address-filter-value"
-            >
-              Rechercher votre ville ou code postal :
-            </label>
-            <TextInput
-              className="fr-input midlength-input"
-              id="address-filter-value"
-              placeholder="Amiens ou 80000"
-              onChange={event => changeFilter('address', event)}
-            />
-          </div>
-          <div className="fr-input-group">
-            <label
-              className="fr-label"
-              htmlFor="departement-filter-value"
-            >
-              Rechercher par département:
-            </label>
-            <TextInput
-              className="fr-input midlength-input"
-              id="departement-filter-value"
-              placeholder="Somme ou 80"
-              onChange={event => changeFilter('postCode', event)}
-            />
-          </div>
-          <PsyTable psychologists={getFilteredPsychologists()} />
-        </div>
-      */}
       <div className="fr-pb-6w">
         <TextInput
           className="fr-mb-1w"

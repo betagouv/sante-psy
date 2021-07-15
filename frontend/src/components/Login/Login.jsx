@@ -57,7 +57,7 @@ const Login = () => {
             </p>
             <form onSubmit={login} id="login_form">
               <Row alignItems="bottom">
-                <Col>
+                <Col n="md-6 sm-12">
                   <TextInput
                     label="Adresse email :"
                     data-test-id="email-input"

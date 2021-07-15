@@ -41,7 +41,7 @@ const NewAppointment = () => {
     { value: `${patient.id}`, label: `${patient.lastName} ${patient.firstNames}` }
   ));
   const defaultString = [{ value: '', label: '--- Selectionner un patient', disabled: true, hidden: true }];
-  const concatOptions = defaultString.concat(patientsMap);
+  const allOptions = defaultString.concat(patientsMap);
 
   return (
     <div className="fr-container fr-mb-3w" data-test-id="new-appointment-container">
@@ -95,7 +95,7 @@ const NewAppointment = () => {
                 )}
                 onChange={e => { setPatientId(e.target.value); }}
                 required
-                options={concatOptions}
+                options={allOptions}
               />
             </div>
             <div className="fr-my-5w">
