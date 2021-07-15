@@ -34,7 +34,7 @@ const StudentProcess = () => (
     </Row>
     <a
       className={classnames(styles.button, 'fr-btn fr-btn--lg fr-btn--secondary')}
-      href={`${__API__}/static/documents/parcours_psychologue_sante_psy_etudiant.pdf`}
+      href={`${__API__}/static/documents/parcours_etudiant_sante_psy_etudiant.pdf`}
       target="_blank"
       rel="noreferrer"
     >

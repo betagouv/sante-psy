@@ -9,7 +9,7 @@ const items = {
       },
       {
         href: '/static/documents/flyer_etudiants_fr.pdf',
-        title: 'Voir le dépliant étudiants',
+        title: 'Voir le dépliant étudiant',
       },
       {
         href: '/static/documents/flyer_etudiants_en.pdf',
@@ -61,7 +61,7 @@ const items = {
     links: [
       {
         href: '/static/documents/flyer_medecins.pdf',
-        title: 'Voir le dépliant médecins',
+        title: 'Voir le dépliant médecin',
       },
       {
         href: '/static/documents/flyer_ssu.pdf',

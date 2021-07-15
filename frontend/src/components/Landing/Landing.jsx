@@ -10,20 +10,20 @@ import Statistics from './Statistics';
 import styles from './landing.cssmodule.scss';
 
 const Landing = () => (
-  <div className={classnames(styles.container, 'fr-container')} data-test-id="landingPageContainer">
-    <div className={styles.sectionAlt}>
+  <div className={styles.container} data-test-id="landingPageContainer">
+    <div className={classnames(styles.sectionAlt, 'fr-container')}>
       <StudentProcess />
     </div>
-    <div className={styles.section}>
+    <div className={classnames(styles.section, 'fr-container')}>
       <PsychologistFinder />
     </div>
-    <div className={styles.sectionLight}>
+    <div className={classnames(styles.sectionLight, 'fr-container')}>
       <Psychologist />
     </div>
-    <div className={styles.section}>
+    <div className={classnames(styles.section, 'fr-container')}>
       <FAQ />
     </div>
-    <div className={styles.sectionAlt}>
+    <div className={classnames(styles.sectionAlt, 'fr-container')}>
       <Statistics />
     </div>
   </div>

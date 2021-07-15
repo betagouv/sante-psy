@@ -5,6 +5,7 @@ import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
+import { Link } from 'react-router-dom';
 
 const Contact = () => {
   const [user, setUser] = useState('');
@@ -44,8 +45,15 @@ const Contact = () => {
   return (
     <Page
       title="Nous contacter"
-      description="Ma question ne figure pas dans la FAQ,
-    je peux contacter le support."
+      description={(
+        <>
+          Ma question ne figure pas dans la
+          {' '}
+          <Link to="/faq">FAQ</Link>
+          ,
+          je peux contacter le support.
+        </>
+      )}
       background="blue"
       className="contactPage"
     >

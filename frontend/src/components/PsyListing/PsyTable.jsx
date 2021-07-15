@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Table, Pagination, Button, Title } from '@dataesr/react-dsfr';
 import camelize from 'services/string';
 
-const PsyTable = ({ psychologists, filter, teleconsultation }) => {
+const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, teleconsultation }) => {
   const history = useHistory();
-  const [page] = useState(1);
+
   return (
     <>
       {psychologists.length > 0 ? (
@@ -42,7 +42,11 @@ const PsyTable = ({ psychologists, filter, teleconsultation }) => {
                         data-test-id="psy-table-row-profil-button"
                         secondary
                         onClick={() => {
-                          const searchPath = `?search=${filter}&teleconsultation=${teleconsultation}`;
+                          const searchPath = `?page=${
+                            page}&name=${
+                            nameFilter}&address=${
+                            addressFilter}&teleconsultation=${
+                            teleconsultation}`;
                           if (history.location.search !== searchPath) {
                             history.push(`/trouver-un-psychologue${searchPath}`);
                           }
@@ -58,8 +62,8 @@ const PsyTable = ({ psychologists, filter, teleconsultation }) => {
             </tbody>
           </Table>
           <Pagination
-            buildURL={() => {}}
-            currentPage={page}
+            currentPage={Math.min(page, Math.ceil(psychologists.length / 10))}
+            onClick={setPage}
             pageCount={Math.ceil(psychologists.length / 10)}
             surrendingPages={3}
           />
