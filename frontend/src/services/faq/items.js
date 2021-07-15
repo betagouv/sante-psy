@@ -61,7 +61,7 @@ const items = {
     links: [
       {
         href: '/static/documents/flyer_medecins.pdf',
-        title: 'Voir le dépliant médecins',
+        title: 'Voir le dépliant médecin',
       },
       {
         href: '/static/documents/flyer_ssu.pdf',
