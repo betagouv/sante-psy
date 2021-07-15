@@ -45,7 +45,7 @@ module.exports = {
   secretLogs,
   sessionDurationHours: process.env.SESSION_DURATION_HOURS || '2', // duration in hours
   refreshDurationHours: process.env.REFRESH_DURATION_HOURS || 1, // duration in hours
-  useCors: (process.env.USE_CORS || 'false') === 'true',
+  useCors: (process.env.USE_CORS || 'true') === 'true',
   speedLimitation: (process.env.SPEED_LIMITATION || 'true') === 'true',
   testEnvironment: (process.env.TEST_ENVIRONMENT || 'false') === 'true',
   // mail

@@ -38,7 +38,7 @@ const NewAppointment = () => {
   };
 
   const patientsMap = patients.map(patient => (
-    { value: `${patient.id}`, label: `${patient.lastName} ${patient.firstNames}` }
+    { value: patient.id, label: `${patient.lastName} ${patient.firstNames}` }
   ));
   const defaultString = [{ value: '', label: '--- Selectionner un patient', disabled: true, hidden: true }];
   const allOptions = defaultString.concat(patientsMap);
