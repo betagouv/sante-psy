@@ -9,7 +9,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
   const [universities, setUniversities] = useState([]);
   const [convention, setConvention] = useState({
     universityId: '',
-    isConventionSigned: false,
+    isConventionSigned: undefined,
   });
 
   const { commonStore: { setNotification }, userStore: { setUser } } = useStore();
@@ -54,11 +54,12 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
           ? universities.map(university => ({ value: university.id, label: university.name }))
           : []}
       />
+      {convention.isConventionSigned !== undefined && (
       <RadioGroup
-        value={convention.isConventionSigned}
-        onChange={value => setConvention({ ...convention, isConventionSigned: value })}
+        name="convention"
+        value={convention.isConventionSigned ? 'true' : 'false'}
+        onChange={value => setConvention({ ...convention, isConventionSigned: value === 'true' })}
         required
-        checked={convention.isConventionSigned}
         legend="Avez-vous déjà signé la convention ?"
         hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
               Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
@@ -66,14 +67,15 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
         <Radio
           data-test-id="signed-true"
           label="Oui"
-          value
+          value="true"
         />
         <Radio
           data-test-id="signed-false"
           label="Non"
-          value={false}
+          value="false"
         />
       </RadioGroup>
+      )}
 
       <div className="fr-my-5w">
         <Button
