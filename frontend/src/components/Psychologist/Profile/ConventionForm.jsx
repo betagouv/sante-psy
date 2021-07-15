@@ -7,10 +7,7 @@ import { useStore } from 'stores/';
 
 const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultValue }) => {
   const [universities, setUniversities] = useState([]);
-  const [convention, setConvention] = useState({
-    universityId: '',
-    isConventionSigned: undefined,
-  });
+  const [convention, setConvention] = useState();
 
   const { commonStore: { setNotification }, userStore: { setUser } } = useStore();
 
@@ -39,54 +36,63 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
       });
   };
 
+  let defaultValueConventionSigned;
+  if (convention && convention.isConventionSigned !== '') {
+    defaultValueConventionSigned = convention.isConventionSigned ? 'true' : 'false';
+  }
   return (
     <form data-test-id="convention-form" onSubmit={saveConvention}>
-      <Select
-        data-test-id="convention-university-select"
-        id="university"
-        name="university"
-        messageType=""
-        label="Quelle université vous a contacté pour signer la convention ?"
-        selected={convention.universityId}
-        onChange={e => setConvention({ ...convention, universityId: e.target.value })}
-        required
-        options={universities
-          ? universities.map(university => ({ value: university.id, label: university.name }))
-          : []}
-      />
-      {convention.isConventionSigned !== undefined && (
-      <RadioGroup
-        name="convention"
-        value={convention.isConventionSigned ? 'true' : 'false'}
-        onChange={value => setConvention({ ...convention, isConventionSigned: value === 'true' })}
-        required
-        legend="Avez-vous déjà signé la convention ?"
-        hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
+      {convention && (
+        <>
+          <Select
+            data-test-id="convention-university-select"
+            id="university"
+            name="university"
+            messageType=""
+            label="Quelle université vous a contacté pour signer la convention ?"
+            selected={convention.universityId}
+            onChange={e => setConvention({ ...convention, universityId: e.target.value })}
+            required
+            options={universities
+              ? universities.map(university => ({ value: university.id, label: university.name }))
+              : []}
+          />
+          <RadioGroup
+            name="convention"
+            value={defaultValueConventionSigned}
+            onChange={value => setConvention({ ...convention, isConventionSigned: value === 'true' })}
+            required
+            legend="Avez-vous déjà signé la convention ?"
+            hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
               Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
-      >
-        <Radio
-          data-test-id="signed-true"
-          label="Oui"
-          value="true"
-        />
-        <Radio
-          data-test-id="signed-false"
-          label="Non"
-          value="false"
-        />
-      </RadioGroup>
-      )}
+          >
+            <Radio
+              data-test-id="signed-true"
+              label="Oui"
+              value="true"
+            />
+            <Radio
+              data-test-id="signed-false"
+              label="Non"
+              value="false"
+            />
+          </RadioGroup>
 
-      <div className="fr-my-5w">
-        <Button
-          submit
-          data-test-id="update-convention-button"
-          className="fr-fi-check-line fr-btn--icon-left"
-          disabled={convention.isConventionSigned === '' || convention.universityId === ''}
-        >
-          Enregistrer
-        </Button>
-      </div>
+          <div className="fr-my-5w">
+            <Button
+              submit
+              data-test-id="update-convention-button"
+              className="fr-fi-check-line fr-btn--icon-left"
+              disabled={
+                convention.isConventionSigned === ''
+                 || convention.universityId === ''
+                }
+            >
+              Enregistrer
+            </Button>
+          </div>
+        </>
+      )}
     </form>
   );
 };

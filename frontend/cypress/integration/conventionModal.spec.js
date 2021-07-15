@@ -81,8 +81,8 @@ describe('ConventionModal', () => {
       cy.get('[data-test-id="update-convention-button"]')
         .should('be.disabled');
 
-      cy.get('[data-test-id="signed-false"] > label')
-        .click({ force: true });
+      cy.get('[data-test-id="signed-false"]')
+        .click();
 
       cy.get('[data-test-id="update-convention-button"]')
         .should('not.be.disabled');
@@ -92,8 +92,8 @@ describe('ConventionModal', () => {
       cy.get('[data-test-id="convention-university-select"] > select')
         .select('Angers');
 
-      cy.get('[data-test-id="signed-false"] > label')
-        .click({ force: true });
+      cy.get('[data-test-id="signed-false"]')
+        .click();
 
       cy.get('[data-test-id="update-convention-button"]')
         .click();
