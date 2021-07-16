@@ -18,20 +18,20 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
   ] = await Promise.all([university, appointments, psychologist, patients]);
   res.json([
     {
-      label: 'Universités partenaires',
-      value: universityCount[0].count,
-    },
-    {
       label: 'Séances réalisées',
       value: appointmentsCount[0].count,
+    },
+    {
+      label: 'Étudiants accompagnés',
+      value: patientsCount[0].count,
     },
     {
       label: 'Psychologues partenaires',
       value: psychologistCount[0].count,
     },
     {
-      label: 'Étudiants accompagnés',
-      value: patientsCount[0].count,
+      label: 'Universités partenaires',
+      value: universityCount[0].count,
     },
   ]);
 };
