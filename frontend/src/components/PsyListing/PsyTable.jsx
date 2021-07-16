@@ -1,8 +1,18 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Table, Pagination, Button, Title } from '@dataesr/react-dsfr';
 
-const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, teleconsultation }) => {
+import styles from './psyTable.cssmodule.scss';
+
+const PsyTable = ({
+  page,
+  setPage,
+  psychologists,
+  nameFilter,
+  addressFilter,
+  teleconsultation,
+}) => {
+  const [surrendingPages, setSurrendingPages] = useState(0);
   const history = useHistory();
   const table = useRef(null);
 
@@ -18,8 +28,32 @@ const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, tel
     history.push(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
   };
 
+  const updateSurrendingPages = () => {
+    if (table.current) {
+      const { width } = table.current.getBoundingClientRect();
+      if (width > 700) {
+        setSurrendingPages(3);
+      } else if (width > 550) {
+        setSurrendingPages(2);
+      } else if (width > 500) {
+        setSurrendingPages(1);
+      } else {
+        setSurrendingPages(0);
+      }
+    }
+  };
+
+  useEffect(() => {
+    updateSurrendingPages();
+  }, [table]);
+
+  useEffect(() => {
+    window.addEventListener('resize', updateSurrendingPages);
+    return () => window.removeEventListener('resize', updateSurrendingPages);
+  }, []);
+
   return (
-    <>
+    <div ref={table} className={styles.container}>
       {psychologists.length > 0 ? (
         <>
           <Table
@@ -29,7 +63,7 @@ const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, tel
               ? `${psychologists.length} résultats`
               : 'Tous les résultats'}
           >
-            <thead ref={table}>
+            <thead>
               <tr key="headers">
                 <th scope="col">Nom</th>
                 <th scope="col">Adresse</th>
@@ -83,7 +117,7 @@ const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, tel
               table.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
             }}
             pageCount={Math.ceil(psychologists.length / 10)}
-            surrendingPages={0}
+            surrendingPages={surrendingPages}
           />
         </>
       ) : (
@@ -91,7 +125,7 @@ const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, tel
           Aucun résultat n&lsquo;a été trouvé, veuillez élargir votre champ de recherche
         </Title>
       )}
-    </>
+    </div>
   );
 };
 
