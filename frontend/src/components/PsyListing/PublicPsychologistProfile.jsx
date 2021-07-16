@@ -8,7 +8,6 @@ import Page from 'components/Page/Page';
 import Notification from 'components/Notification/Notification';
 
 import agent from 'services/agent';
-import camelize from 'services/string';
 import styles from './publicPsychologistProfile.cssmodule.scss';
 
 const fields = [
@@ -93,7 +92,7 @@ const PublicPsychologistProfile = () => {
           <Row>
             <div key="name" className={styles.field} data-test-id="psy-name">
               <div className={styles.psyName}>
-                {`${psychologist.lastName.toUpperCase()} ${camelize(psychologist.firstNames)}`}
+                {`${psychologist.lastName.toUpperCase()} ${psychologist.firstNames}`}
               </div>
               <div>
                 {psychologist.description}
