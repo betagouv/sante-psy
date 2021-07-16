@@ -26,13 +26,16 @@ const fields = [
   {
     name: 'Site web',
     custom: psychologist => (
-      <a
-        href={psychologist.website}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {psychologist.website}
-      </a>
+      psychologist.website ? (
+        <a
+          href={psychologist.website}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {psychologist.website}
+        </a>
+      )
+        : <></>
     ),
   },
 ];
