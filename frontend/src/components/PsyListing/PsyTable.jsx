@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Table, Pagination, Button, Title } from '@dataesr/react-dsfr';
 import camelize from 'services/string';
 
 const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, teleconsultation }) => {
   const history = useHistory();
+  const table = useRef(null);
+
+  const goToProfile = psychologist => {
+    const searchPath = `?page=${
+      page}&name=${
+      nameFilter}&address=${
+      addressFilter}&teleconsultation=${
+      teleconsultation}`;
+    if (history.location.search !== searchPath) {
+      history.push(`/trouver-un-psychologue${searchPath}`);
+    }
+    history.push(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
+  };
 
   return (
     <>
@@ -15,7 +28,7 @@ const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, tel
             className="fr-mb-3w"
             caption="Tous les résultats"
           >
-            <thead>
+            <thead ref={table}>
               <tr key="headers">
                 <th scope="col">Nom</th>
                 <th scope="col">Adresse</th>
@@ -36,26 +49,30 @@ const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, tel
                         psychologist.firstNames,
                       )}`}
                     </td>
-                    <td>{psychologist.address}</td>
                     <td>
-                      <Button
-                        data-test-id="psy-table-row-profil-button"
-                        secondary
-                        onClick={() => {
-                          const searchPath = `?page=${
-                            page}&name=${
-                            nameFilter}&address=${
-                            addressFilter}&teleconsultation=${
-                            teleconsultation}`;
-                          if (history.location.search !== searchPath) {
-                            history.push(`/trouver-un-psychologue${searchPath}`);
-                          }
-                          history.push(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
-                        }}
-                        className="fr-fi-arrow-right-line fr-btn--icon-right fr-float-right"
-                      >
-                        Voir le profil
-                      </Button>
+                      {psychologist.address}
+                    </td>
+                    <td>
+                      <div className="fr-displayed-xs fr-hidden-sm">
+                        <Button
+                          data-test-id="psy-table-row-profil-button"
+                          secondary
+                          size="sm"
+                          onClick={() => goToProfile(psychologist)}
+                          className="fr-fi-arrow-right-line fr-float-right"
+                        />
+                      </div>
+                      <div className="fr-hidden-xs fr-displayed-sm">
+                        <Button
+                          data-test-id="psy-table-row-profil-button"
+                          secondary
+                          size="sm"
+                          onClick={() => goToProfile(psychologist)}
+                          className="fr-fi-arrow-right-line fr-btn--icon-right fr-float-right"
+                        >
+                          Voir le profil
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -63,9 +80,12 @@ const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, tel
           </Table>
           <Pagination
             currentPage={Math.min(page, Math.ceil(psychologists.length / 10))}
-            onClick={setPage}
+            onClick={p => {
+              setPage(p);
+              table.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+            }}
             pageCount={Math.ceil(psychologists.length / 10)}
-            surrendingPages={3}
+            surrendingPages={0}
           />
         </>
       ) : (
