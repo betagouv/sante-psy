@@ -15,6 +15,9 @@ import {
   lastConnectionsTable,
 } from '../../db/tables';
 import { DossierState } from '../../types/DemarcheSimplifiee';
+import faker from 'faker';
+
+faker.locale = 'fr';
 
 const knexConfig = require('../../knexfile');
 
@@ -32,11 +35,46 @@ const getRandomInt = () : string => {
   return ourRandom.toString();
 };
 
-const addresses = [
-  'avenue de segur 75007 paris',
-  'cours de verdun, 33000, Bordeaux',
-  'Boulevard Maréchal Foch 38100 Grenoble',
-];
+const getFirstNames = () => {
+  let firstNames = faker.name.firstName();
+  if (Math.floor(Math.random() * 100) % 2 === 0) {
+    firstNames += ` ${faker.name.firstName()}`;
+  }
+  if (Math.floor(Math.random() * 100) % 10 === 0) {
+    firstNames += ` ${faker.name.firstName()}`;
+  }
+  return firstNames;
+};
+
+const getAddress = () => {
+  const rand = Math.floor(Math.random() * 5);
+  switch (rand) {
+  case 0:
+    return {
+      address: `${getRandomInt()} avenue de segur 75007 paris`,
+      departement: '75 - Paris',
+      region: 'Ile-de-France',
+    };
+  case 1:
+    return {
+      address: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
+      departement: '33 - Gironde',
+      region: 'Nouvelle-Aquitaine',
+    };
+  case 2:
+    return {
+      address: `${getRandomInt()} Boulevard Maréchal Foch 38100 Grenoble`,
+      departement: '38 - Isère',
+      region: 'Auvergne-Rhône-Alpes',
+    };
+  default:
+    return {
+      address: `${faker.address.streetAddress()}, ${faker.address.cityName()} ${faker.address.country()}`,
+      departement: '14 - Calvados',
+      region: 'Normandie',
+    };
+  }
+};
 
 const getOnePsy = (
   personalEmail = 'loginemail@beta.gouv.fr',
@@ -48,25 +86,23 @@ const getOnePsy = (
   const dossierNumber = uuid.generateUuidFromString(`psychologist-${personalEmail}`);
   return {
     dossierNumber,
-    firstNames: `${getRandomInt()}First`,
-    lastName: `${getRandomInt()}Last`,
+    firstNames: getFirstNames(),
+    lastName: faker.name.lastName(),
     archived,
     state,
     adeli: `${getRandomInt()}829302942`,
-    address: `${getRandomInt()} ${addresses[Math.floor(Math.random() * 100) % 3]}`,
+    ...getAddress(),
     diploma: 'Psychologie clinique de la santé',
-    phone: '0468396600',
-    email: `${getRandomInt()}@beta.gouv.fr`,
+    phone: faker.phone.phoneNumber('0# ## ## ## ##'),
+    email: faker.internet.email(),
     personalEmail,
-    website: `${getRandomInt()}beta.gouv.fr`,
+    website: faker.internet.domainName() + faker.internet.domainSuffix(),
     teleconsultation: Math.random() < 0.5,
     // eslint-disable-next-line max-len
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quam enim, tempus gravida magna a, egestas tincidunt augue. Curabitur id nisl aliquet, dapibus leo sed, viverra metus. Nulla convallis blandit ex. Nullam suscipit ex pellentesque fermentum porttitor. Suspendisse faucibus nibh eu blandit vulputate. Quisque magna ante, varius in pulvinar rhoncus, aliquam sit amet odio. Fusce venenatis orci eleifend pharetra pulvinar. Cras lobortis non libero vitae dictum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur viverra augue quis mauris auctor facilisis.',
+    description: faker.lorem.paragraphs(2),
     // eslint-disable-next-line max-len
     training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
-    departement: '14 - Calvados',
     assignedUniversityId: uniId,
-    region: 'Normandie',
     languages: 'Français, Anglais, et Espagnol',
     active: !inactiveUntil,
     inactiveUntil,
@@ -84,24 +120,24 @@ const getOneInactivePsy = (inactiveUntil: string): Psychologist => getOnePsy(
 const getOnePatient = (
   index: number,
   psychologistId: string,
-  doctorName = 'doctorName',
+  doctorName = undefined,
   useDateOfBirth = true,
 ): Patient => {
   let dateOfBirth = null;
   if (useDateOfBirth) {
-    dateOfBirth = new Date(1980, 1, 10).toISOString();
+    dateOfBirth = faker.date.past();
   }
   return {
     id: uuid.generateUuidFromString(`patient-${psychologistId}-${index}`),
-    firstNames: `${getRandomInt()}First`,
-    lastName: `${getRandomInt()}Last`,
-    INE: '11111111111',
+    firstNames: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    INE: faker.phone.phoneNumber('###########'),
     institutionName: `${getRandomInt()} university`,
     isStudentStatusVerified: true,
     hasPrescription: true,
     psychologistId,
-    doctorName,
-    doctorAddress: 'doctorAddress',
+    doctorName: doctorName === undefined ? faker.name.lastName() : doctorName,
+    doctorAddress: faker.address.streetAddress(),
     dateOfBirth,
   };
 };
