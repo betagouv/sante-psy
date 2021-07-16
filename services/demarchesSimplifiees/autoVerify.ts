@@ -1,7 +1,7 @@
 import date from '../../utils/date';
 import { DossierState } from '../../types/DemarcheSimplifiee';
 import { getAdeliInfo } from '../../utils/adeliAPI';
-import areSimilar from '../../utils/similarString';
+import string from '../../utils/string';
 import {
   getChampsIdFromField,
   getAnnotationsIdFromField,
@@ -39,11 +39,11 @@ const getAdeliErrors = (psychologist, adeliInfo) => {
       errors.push(`la personne n'est pas un psychologue mais un ${info['Libellé profession']}`);
     }
 
-    if (!areSimilar(info["Prénom d'exercice"], psychologist.demandeur.prenom)) {
+    if (!string.areSimilar(info["Prénom d'exercice"], psychologist.demandeur.prenom)) {
       errors.push(`les prénoms ne matchent pas (${info["Prénom d'exercice"]} vs ${psychologist.demandeur.prenom})`);
     }
 
-    if (!areSimilar(info["Nom d'exercice"], psychologist.demandeur.nom)) {
+    if (!string.areSimilar(info["Nom d'exercice"], psychologist.demandeur.nom)) {
       errors.push(`le nom ne matche pas (${info["Nom d'exercice"]} vs ${psychologist.demandeur.nom})`);
     }
   }
