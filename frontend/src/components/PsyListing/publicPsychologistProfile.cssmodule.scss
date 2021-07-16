@@ -1,13 +1,21 @@
+.psyName {
+  font-size: 24px;
+  font-weight: bold;
+  padding-bottom: 12px;
+}
+
 .field {
   padding: 12px 0px;
 }
 
 .fieldName {
   font-weight: bold;
+  padding-bottom: 5px;
 }
 
 .mapContainer {
-    width: 100%;
+  width: 100%;
+  margin-top: 12px;
 }
 
 .map {

@@ -21,7 +21,7 @@ const Faq = () => {
     <Page
       title="Foire aux questions"
       description="J'accède à la foire aux questions, que je sois étudiant, psychologue ou médecin
-    afin de trouver une réponse à ma question"
+    afin de trouver une réponse à ma question."
       background="blue"
       className="faqPage"
       dataTestId="faqPage"

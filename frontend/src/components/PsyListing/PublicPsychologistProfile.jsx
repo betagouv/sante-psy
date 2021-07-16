@@ -66,8 +66,8 @@ const PublicPsychologistProfile = () => {
 
   return (
     <Page
-      title={psychologist ? `${psychologist.lastName.toUpperCase()} ${camelize(psychologist.firstNames)}` : 'Loading'}
-      description={psychologist ? psychologist.description : ''}
+      title="Profil psychologue"
+      description="J'accède aux informations me permettant d'en apprendre plus sur un psychologue et de le contacter."
       background="yellow"
       dataTestId="publicPsyProfilePage"
     >
@@ -81,39 +81,54 @@ const PublicPsychologistProfile = () => {
         </Button>
       </Row>
       {psychologist && (
-      <Row>
-        <Col n="md-6 sm-12">
-          {fields.map(field => (
-            <div key={field.name} className={styles.field} data-test-id="psy-info">
-              <div className={styles.fieldName}>
-                {field.name}
+        <>
+          <Row>
+            <div key="name" className={styles.field} data-test-id="psy-info">
+              <div className={styles.psyName}>
+                {psychologist.lastName.toUpperCase()}
+                {' '}
+                $
+                {camelize(psychologist.firstNames)}
               </div>
               <div>
-                {field.value ? psychologist[field.value] : field.custom(psychologist)}
+                {psychologist.description}
               </div>
             </div>
-          ))}
-        </Col>
-        <Col
-          n="md-6 sm-12"
-          className={styles.mapContainer}
-        >
-          {coordinates && (
-          <MapContainer
-            center={[coordinates.lat, coordinates.lon]}
-            zoom={13}
-            scrollWheelZoom={false}
-            className={styles.map}
-          >
-            <TileLayer
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker position={[coordinates.lat, coordinates.lon]} />
-          </MapContainer>
-          )}
-        </Col>
-      </Row>
+          </Row>
+          <Row>
+            <Col n="md-6 sm-12">
+              {fields.map(field => (
+                <div key={field.name} className={styles.field} data-test-id="psy-info">
+                  <div className={styles.fieldName}>
+                    {field.name}
+                  </div>
+                  <div>
+                    {field.value ? psychologist[field.value] : field.custom(psychologist)}
+                  </div>
+                </div>
+              ))}
+            </Col>
+            <Col
+              n="md-6 sm-12"
+              className={styles.mapContainer}
+            >
+              {coordinates && (
+              <MapContainer
+                center={[coordinates.lat, coordinates.lon]}
+                zoom={13}
+                scrollWheelZoom={false}
+                className={styles.map}
+              >
+                <TileLayer
+                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={[coordinates.lat, coordinates.lon]} />
+              </MapContainer>
+              )}
+            </Col>
+          </Row>
+        </>
       )}
     </Page>
   );
