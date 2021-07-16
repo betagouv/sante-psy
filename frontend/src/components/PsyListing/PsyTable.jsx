@@ -55,7 +55,6 @@ const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, tel
                     <td>
                       <div className="fr-displayed-xs fr-hidden-sm">
                         <Button
-                          data-test-id="psy-table-row-profil-button"
                           secondary
                           size="sm"
                           onClick={() => goToProfile(psychologist)}
