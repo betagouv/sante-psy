@@ -37,10 +37,10 @@ const sendValidators = [
       'rétractation',
       'connexion',
       'presse',
-      'autre'])
+      'autre-raison'])
     .withMessage('Vous devez spécifier une raison.'),
   check('user')
-    .isIn(['étudiant', 'psychologue', 'autre'])
+    .isIn(['étudiant', 'psychologue', 'autre-utilisateur'])
     .withMessage('Vous devez préciser qui vous êtes.'),
 ];
 

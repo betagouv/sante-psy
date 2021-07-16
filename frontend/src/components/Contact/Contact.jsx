@@ -76,7 +76,7 @@ const Contact = () => {
           />
           <Radio
             label="Autre"
-            value="autre"
+            value="autre-utilisateur"
           />
         </RadioGroup>
         <TextInput
@@ -114,7 +114,7 @@ const Contact = () => {
             { value: 'rétractation', label: 'Rétractation' },
             { value: 'connexion', label: 'Problème de connexion' },
             { value: 'presse', label: 'Presse/communication' },
-            { value: 'autre', label: 'Autre' },
+            { value: 'autre-raison', label: 'Autre' },
           ]}
           selected={reason}
           onChange={e => setReason(e.target.value)}
