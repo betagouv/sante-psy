@@ -31,7 +31,7 @@ const PsyListing = () => {
     }
   }, [nameFilter, addressFilter, teleconsultation]);
 
-  const matchFilter = (value, filter) => value.toLowerCase().includes(filter.toLowerCase());
+  const matchFilter = (value, filter) => value && value.toLowerCase().includes(filter.toLowerCase());
 
   const getFilteredPsychologists = () => {
     const departementFilter = +addressFilter;
