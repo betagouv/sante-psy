@@ -5,6 +5,7 @@ import { Button, Col, Row } from '@dataesr/react-dsfr';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 import Page from 'components/Page/Page';
+import Notification from 'components/Notification/Notification';
 
 import agent from 'services/agent';
 import camelize from 'services/string';
@@ -43,11 +44,17 @@ const fields = [
 const PublicPsychologistProfile = () => {
   const history = useHistory();
   const { psyId } = useParams();
+  const [error, setError] = useState();
   const [psychologist, setPsychologist] = useState();
   const [coordinates, setCoordinates] = useState();
 
   useEffect(() => {
-    agent.Psychologist.getProfile(psyId).then(setPsychologist);
+    setError();
+    agent.Psychologist.getProfile(psyId)
+      .then(setPsychologist)
+      .catch(() => {
+        setError('Impossible de trouver les informations pour ce psychologue');
+      });
   }, [psyId]);
 
   useEffect(() => {
@@ -80,6 +87,7 @@ const PublicPsychologistProfile = () => {
           Revenir à l&lsquo;annuaire
         </Button>
       </Row>
+      {error && <Notification message={error} success={false} />}
       {psychologist && (
         <>
           <Row>
