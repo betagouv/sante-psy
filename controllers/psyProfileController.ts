@@ -7,6 +7,7 @@ import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
+import string from '../utils/string';
 
 const getPsyProfilValidators = [
   param('psyId')
@@ -32,7 +33,7 @@ const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
     departement: psychologist.departement,
     region: psychologist.region,
     phone: psychologist.phone,
-    website: psychologist.website,
+    website: string.prefixUrl(psychologist.website),
     teleconsultation: psychologist.teleconsultation,
     description: psychologist.description,
     languages: psychologist.languages,
