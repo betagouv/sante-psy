@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Table, Pagination, Button, Title } from '@dataesr/react-dsfr';
-import camelize from 'services/string';
 
 const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, teleconsultation }) => {
   const history = useHistory();
@@ -47,9 +46,7 @@ const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, tel
                     key={psychologist.dossierNumber}
                   >
                     <td>
-                      {`${psychologist.lastName.toUpperCase()} ${camelize(
-                        psychologist.firstNames,
-                      )}`}
+                      {`${psychologist.lastName.toUpperCase()} ${psychologist.firstNames}`}
                     </td>
                     <td>
                       {psychologist.address}
