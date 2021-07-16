@@ -2,15 +2,14 @@ import React from 'react';
 import classnames from 'classnames';
 import { Row } from '@dataesr/react-dsfr';
 
+import UnderlinedTitle from 'components/Page/UnderlinedTitle';
 import StudentCard from './StudentCard';
 
 import styles from './studentProcess.cssmodule.scss';
 
 const StudentProcess = () => (
   <div className={styles.container}>
-    <div className={styles.title}>
-      Étudiants, parlez de vos difficultés
-    </div>
+    <UnderlinedTitle big title="Étudiants, parlez de vos difficultés" />
     <div className={styles.description}>Consultez un psychologue gratuitement</div>
     <Row className={styles.card}>
       <StudentCard

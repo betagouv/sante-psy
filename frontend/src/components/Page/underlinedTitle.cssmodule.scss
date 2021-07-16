@@ -1,0 +1,38 @@
+.container {
+  margin: auto;
+  width: fit-content;
+  position: relative;
+}
+
+.bigTitle,
+.title {
+  position: relative;
+  margin: 0;
+}
+
+.title {
+  font-size: 2rem;
+  line-height: 2.5rem;
+}
+
+.bigTitle {
+  line-height: 4rem;
+  font-size: 2.8rem;
+}
+
+.bigUnderline,
+.underline {
+  background-color:#FCEA04 ;
+  height: 10px;
+  width: 100%;
+  position: absolute;
+  z-index: 0;
+}
+
+.bigUnderline {
+  top: 48px;
+}
+
+.underline {
+  top: 30px;
+}
