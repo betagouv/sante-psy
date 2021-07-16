@@ -99,7 +99,7 @@ const PublicPsychologistProfile = () => {
               </div>
             </div>
           </Row>
-          <Row>
+          <Row className={styles.psyInfo}>
             <Col n="md-6 sm-12">
               {fields.map(field => (
                 <div key={field.name} className={styles.field} data-test-id="psy-info">
