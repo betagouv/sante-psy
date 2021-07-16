@@ -89,6 +89,17 @@ describe('psyProfileController', () => {
           checkProfile(res.body, psy, true);
         });
     });
+
+    it('should fail if param is not a uuid', async () => {
+      const invalidUuid = 'yakalelo.com';
+
+      return chai.request(app)
+        .get(`/api/psychologist/${invalidUuid}`)
+        .then(async (res) => {
+          res.status.should.equal(400);
+          res.body.message.should.equal('Vous devez spécifier un identifiant valide.');
+        });
+    });
   });
 
   describe('editPsyProfilValidators', () => {

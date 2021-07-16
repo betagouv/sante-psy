@@ -44,7 +44,7 @@ router.get('/trouver-un-psychologue', psyListingController.getActivePsychologist
 router.get('/connecteduser', loginController.connectedUser);
 
 router.get('/statistics', statisticsController.getAll);
-router.get('/psychologist/:psyId', psyProfileController.getPsyProfile);
+router.get('/psychologist/:psyId', psyProfileController.getPsyProfilValidators, psyProfileController.getPsyProfile);
 router.post('/contact', contactController.sendValidators, contactController.send);
 
 export default router;
