@@ -26,7 +26,9 @@ const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, tel
           <Table
             data-test-id="psy-table"
             className="fr-mb-3w"
-            caption="Tous les résultats"
+            caption={nameFilter || addressFilter || teleconsultation
+              ? `${psychologists.length} résultats`
+              : 'Tous les résultats'}
           >
             <thead ref={table}>
               <tr key="headers">
