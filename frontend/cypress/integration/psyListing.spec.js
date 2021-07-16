@@ -26,6 +26,9 @@ describe('Psy Listing', () => {
 
     cy.wait('@psychologist');
 
+    cy.get('[data-test-id="psy-name"]')
+      .should('exist');
+
     cy.get('[data-test-id="psy-info"]')
       .should('have.length', 6);
   });

@@ -83,7 +83,7 @@ const PublicPsychologistProfile = () => {
       {psychologist && (
         <>
           <Row>
-            <div key="name" className={styles.field} data-test-id="psy-info">
+            <div key="name" className={styles.field} data-test-id="psy-name">
               <div className={styles.psyName}>
                 {psychologist.lastName.toUpperCase()}
                 {' '}
