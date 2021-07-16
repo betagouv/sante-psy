@@ -43,11 +43,17 @@ const fields = [
 const PublicPsychologistProfile = () => {
   const history = useHistory();
   const { psyId } = useParams();
+  const [error, setError] = useState();
   const [psychologist, setPsychologist] = useState();
   const [coordinates, setCoordinates] = useState();
 
   useEffect(() => {
-    agent.Psychologist.getProfile(psyId).then(setPsychologist);
+    setError();
+    agent.Psychologist.getProfile(psyId)
+      .then(setPsychologist)
+      .catch(() => {
+        setError('Impossible de trouver les informations pour ce psychologue');
+      });
   }, [psyId]);
 
   useEffect(() => {
@@ -64,9 +70,15 @@ const PublicPsychologistProfile = () => {
     }
   }, [psychologist]);
 
+  let title = 'Loading';
+  if (error) {
+    title = error;
+  } else if (psychologist) {
+    title = `${psychologist.lastName.toUpperCase()} ${camelize(psychologist.firstNames)}`;
+  }
   return (
     <Page
-      title={psychologist ? `${psychologist.lastName.toUpperCase()} ${camelize(psychologist.firstNames)}` : 'Loading'}
+      title={title}
       description={psychologist ? psychologist.description : ''}
       background="yellow"
       dataTestId="publicPsyProfilePage"
