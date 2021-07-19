@@ -91,7 +91,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             type="email"
           />
           <RadioGroup
-            value={updatedPsychologist.teleconsultation}
+            value={updatedPsychologist.teleconsultation ? 'true' : 'false'}
             onChange={value => changePsychologist(value, 'teleconsultation')}
             legend="Proposez-vous de la téléconsultation ?"
             hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
