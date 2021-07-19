@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 
 import { check, oneOf } from 'express-validator';
-import dbPatients from '../db/patients';
-import validation from '../utils/validation';
-import date from '../utils/date';
-import asyncHelper from '../utils/async-helper';
-import CustomError from '../utils/CustomError';
+import dbPatients from '@db/patients';
+import validation from '@utils/validation';
+import date from '@utils/date';
+import asyncHelper from '@utils/async-helper';
+import CustomError from '@utils/CustomError';
 
 const getPatients = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.user.psychologist;

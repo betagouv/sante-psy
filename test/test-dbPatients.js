@@ -19,9 +19,9 @@ describe('DB Patients', () => {
   const doctorAddress = 'doctorAddress';
   const dateOfBirth = date.parseDateForm('20/01/1980');
 
-  async function testDataPatientsExist(lastName) {
+  async function testDataPatientsExist(patientLastName) {
     const exist = await knex(patientsTable)
-      .where('lastName', lastName)
+      .where('lastName', patientLastName)
       .first();
     if (exist) {
       return true;
@@ -69,7 +69,7 @@ describe('DB Patients', () => {
           doctorAddress,
         );
         const exist = await testDataPatientsExist(lastName);
-        exist.should.be.equal(true);
+        exist.to.be.true;
       } catch (error) {
         expect(error).to.be.an('Error');
       }

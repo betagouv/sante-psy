@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import { check } from 'express-validator';
 import Crisp from 'node-crisp-api';
 
-import validation from '../utils/validation';
-import asyncHelper from '../utils/async-helper';
-import config from '../utils/config';
+import validation from '@utils/validation';
+import asyncHelper from '@utils/async-helper';
+import config from '@utils/config';
 
 const CrispClient = new Crisp();
 

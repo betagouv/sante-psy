@@ -1,10 +1,10 @@
 import clean from '../helper/clean';
 
-import uuid from '../../utils/uuid';
-import universities from '../../utils/universities';
+import uuid from '@utils/uuid';
+import universities from '@utils/universities';
 import {
   universitiesTable,
-} from '../../db/tables';
+} from '@db/tables';
 import { Knex } from 'knex';
 
 // eslint-disable-next-line import/prefer-default-export

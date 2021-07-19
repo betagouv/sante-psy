@@ -14,6 +14,17 @@
         "@types",
         "./node_modules/@types",
       ],
+      "moduleResolution": "node",
+      "baseUrl": ".",
+      "paths": {
+        "@controllers/*": ["./controllers/*"],
+        "@db/*": ["./db/*"],
+        "@middlewares/*": ["./middlewares/*"],
+        "@routers/*": ["./routers/*"],
+        "@services/*": ["./services/*"],
+        "types/*": ["./types/*"],
+        "@utils/*": ["utils/*"],
+      },
   },
   "include": [
       "**/*.ts",

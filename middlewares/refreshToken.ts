@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import config from '../utils/config';
-import { createAndSetJwtCookie } from '../utils/cookie';
+import config from '@utils/config';
+import { createAndSetJwtCookie } from '@utils/cookie';
 
 const refreshToken = (req: Request, res: Response, next: NextFunction): void => {
   if (req.user) {

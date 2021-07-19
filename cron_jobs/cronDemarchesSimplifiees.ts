@@ -1,13 +1,13 @@
 import dotenv from 'dotenv';
 
 import ejs from 'ejs';
-import dbsApiCursor from '../db/dsApiCursor';
-import dbPsychologists from '../db/psychologists';
-import importDossier from '../services/demarchesSimplifiees/importDossier';
-import autoVerifyPsychologists from '../services/demarchesSimplifiees/autoVerify';
-import autoAcceptPsychologists from '../services/demarchesSimplifiees/autoAccept';
-import config from '../utils/config';
-import emailUtils from '../utils/email';
+import dbsApiCursor from '@db/dsApiCursor';
+import dbPsychologists from '@db/psychologists';
+import importDossier from '@services/demarchesSimplifiees/importDossier';
+import autoVerifyPsychologists from '@services/demarchesSimplifiees/autoVerify';
+import autoAcceptPsychologists from '@services/demarchesSimplifiees/autoAccept';
+import config from '@utils/config';
+import emailUtils from '@utils/email';
 
 dotenv.config();
 

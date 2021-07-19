@@ -38,16 +38,16 @@ describe('DB Appointments', () => {
       await dbAppointments.insertAppointment(new Date('2021-03-01'), patient.id, psy.dossierNumber);
 
       const appointmentsBeforeDelete = await knex.from(appointmentsTable)
-      .where('psychologistId', psy.dossierNumber)
-      .where('patientId', patient.id);
+        .where('psychologistId', psy.dossierNumber)
+        .where('patientId', patient.id);
 
       assert.isNull(appointmentsBeforeDelete[0].updatedAt);
       assert.isFalse(appointmentsBeforeDelete[0].deleted);
       await dbAppointments.deleteAppointment(appointmentsBeforeDelete[0].id, psy.dossierNumber);
 
       const appointmentsAfterDelete = await knex.from(appointmentsTable)
-      .where('psychologistId', psy.dossierNumber)
-      .where('patientId', patient.id);
+        .where('psychologistId', psy.dossierNumber)
+        .where('patientId', patient.id);
       assert.isTrue(appointmentsAfterDelete[0].deleted);
       assert.isNotNull(appointmentsAfterDelete[0].updatedAt);
     });

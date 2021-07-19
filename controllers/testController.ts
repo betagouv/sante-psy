@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import knexModule from 'knex';
 
-import dbPsychologists from '../db/psychologists';
-import dbLoginToken from '../db/loginToken';
+import dbPsychologists from '@db/psychologists';
+import dbLoginToken from '@db/loginToken';
 
 import seed from '../test/helper/fake_data';
 

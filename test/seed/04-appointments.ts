@@ -1,10 +1,10 @@
 import { Knex } from 'knex';
 import faker from 'faker';
 import clean from '../helper/clean';
-import uuid from '../../utils/uuid';
+import uuid from '@utils/uuid';
 import {
   appointmentsTable,
-} from '../../db/tables';
+} from '@db/tables';
 import { getPatientsByPsychologist } from './03-patients';
 
 const getOneAppointmentPerMonth = (patient, day, deleted = false) => [...Array(12).keys()]

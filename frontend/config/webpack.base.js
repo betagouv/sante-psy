@@ -67,10 +67,9 @@ const getConfig = () => ({
   },
   resolve: {
     alias: {
-      components: path.resolve('src/components/'),
-      services: path.resolve('src/services/'),
-      stores: path.resolve('src/stores/'),
-      src: path.resolve('src/'),
+      "components": path.resolve('src/components/'),
+      "services": path.resolve('src/services/'),
+      "stores": path.resolve('src/stores/'),
     },
     extensions: ['.js', '.jsx'],
   },

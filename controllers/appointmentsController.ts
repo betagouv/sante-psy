@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 
 import { check } from 'express-validator';
-import dbAppointments from '../db/appointments';
-import dbPatient from '../db/patients';
-import asyncHelper from '../utils/async-helper';
-import CustomError from '../utils/CustomError';
-import dateUtils from '../utils/date';
-import validation from '../utils/validation';
+import dbAppointments from '@db/appointments';
+import dbPatient from '@db/patients';
+import asyncHelper from '@utils/async-helper';
+import CustomError from '@utils/CustomError';
+import dateUtils from '@utils/date';
+import validation from '@utils/validation';
 
 const createNewAppointmentValidators = [
   check('date')

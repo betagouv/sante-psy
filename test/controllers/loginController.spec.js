@@ -4,7 +4,7 @@ const chai = require('chai');
 const { v4: uuidv4 } = require('uuid');
 const app = require('../../index');
 
-const loginController = rewire('../../controllers/loginController');
+const loginController = rewire('@controllers/loginController');
 const dbLoginToken = require('../../db/loginToken');
 const { default: dbLastConnection } = require('../../db/lastConnections');
 const { default: dbPsychologists } = require('../../db/psychologists');
@@ -320,15 +320,15 @@ describe('loginController', async () => {
     });
 
     it('should return empty info when psy does not exist', async () => chai
-        .request(app)
-        .get('/api/connecteduser')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4())}`)
-        .then(async (res) => res.body.should.be.empty));
+      .request(app)
+      .get('/api/connecteduser')
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4())}`)
+      .then(async (res) => res.body.should.be.empty));
 
     it('should return empty info if user is not connected', async () => chai
-        .request(app)
-        .get('/api/connecteduser')
-        .then(async (res) => res.body.should.be.empty));
+      .request(app)
+      .get('/api/connecteduser')
+      .then(async (res) => res.body.should.be.empty));
 
     it('should return empty info if user does not have csrf', async () => {
       const psy = clean.insertOnePsy();

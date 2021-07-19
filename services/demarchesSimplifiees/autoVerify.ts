@@ -1,14 +1,14 @@
-import date from '../../utils/date';
-import { DossierState } from '../../types/DemarcheSimplifiee';
-import { getAdeliInfo } from '../../utils/adeliAPI';
-import string from '../../utils/string';
+import date from '@utils/date';
+import { DossierState } from 'types/DemarcheSimplifiee';
+import { getAdeliInfo } from '@utils/adeliAPI';
+import string from '@utils/string';
 import {
   getChampsIdFromField,
   getAnnotationsIdFromField,
 } from '../champsAndAnnotations';
 import { getAllPsychologistList } from './importDossier';
 
-const graphql = require('../../utils/graphql');
+const graphql = require('../utils/graphql');
 
 const getDiplomaErrors = (psychologist) => {
   const errors = [];
@@ -54,8 +54,8 @@ const verifyPsychologist = async (psychologist, adeliInfo) => {
   const today = date.toFormatDDMMYYYY(new Date());
 
   const errors = []
-  .concat(getDiplomaErrors(psychologist))
-  .concat(getAdeliErrors(psychologist, adeliInfo));
+    .concat(getDiplomaErrors(psychologist))
+    .concat(getAdeliErrors(psychologist, adeliInfo));
 
   if (errors.length === 0) {
     const verificationMessage = graphql.addVerificationMessage(
@@ -80,18 +80,18 @@ const autoVerifyPsychologists = async () : Promise<void> => {
     console.log(`${dossiersInConstruction.psychologists.length} psychologists are in construction`);
 
     const dossiersToBeVerified = dossiersInConstruction.psychologists
-    .filter(
-      (psychologist) => {
-        const isVerified = psychologist.annotations
-          .find((annotation) => annotation.id === getAnnotationsIdFromField('verifiee'))
-          .stringValue === 'true';
-        const hasVerificationNote = psychologist.annotations
-          .find((annotation) => annotation.id === getAnnotationsIdFromField('message'))
-          .stringValue !== '';
-        const hasMessage = psychologist.messages.length > 1; // There is always one message (submission confirmation)
-        return !isVerified && !hasVerificationNote && !hasMessage;
-      },
-    );
+      .filter(
+        (psychologist) => {
+          const isVerified = psychologist.annotations
+            .find((annotation) => annotation.id === getAnnotationsIdFromField('verifiee'))
+            .stringValue === 'true';
+          const hasVerificationNote = psychologist.annotations
+            .find((annotation) => annotation.id === getAnnotationsIdFromField('message'))
+            .stringValue !== '';
+          const hasMessage = psychologist.messages.length > 1; // There is always one message (submission confirmation)
+          return !isVerified && !hasVerificationNote && !hasMessage;
+        },
+      );
     console.log(`${dossiersToBeVerified.length} psychologists needs verification`);
 
     if (dossiersToBeVerified.length > 0) {
@@ -99,9 +99,9 @@ const autoVerifyPsychologists = async () : Promise<void> => {
 
       const adeliChampId = getChampsIdFromField('adeli');
       const adeliIds = dossiersToBeVerified
-      .map((psychologist) => psychologist.champs.find((x) => x.id === adeliChampId))
-      .filter((adeli) => adeli)
-      .map((adeli) => adeli.stringValue);
+        .map((psychologist) => psychologist.champs.find((x) => x.id === adeliChampId))
+        .filter((adeli) => adeli)
+        .map((adeli) => adeli.stringValue);
       const adeliInfo = await getAdeliInfo(adeliIds);
 
       await Promise.all(dossiersToBeVerified.map(async (psychologist) => {

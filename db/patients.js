@@ -20,9 +20,9 @@ module.exports.getPatientById = async (patientId, psychologistId) => {
 module.exports.getPatients = async (psychologistId) => {
   try {
     const patientArray = await knex(patientsTable)
-        .where('psychologistId', psychologistId)
-        .where('deleted', false)
-        .orderBy('lastName');
+      .where('psychologistId', psychologistId)
+      .where('deleted', false)
+      .orderBy('lastName');
     return patientArray;
   } catch (err) {
     console.error('Impossible de récupérer les patients', err);
@@ -67,7 +67,7 @@ module.exports.updatePatient = async (
   doctorAddress, dateOfBirth,
 ) => {
   try {
-    return await knex(patientsTable)
+    return knex(patientsTable)
       .where('id', id)
       .where('psychologistId', psychologistId)
       .update({

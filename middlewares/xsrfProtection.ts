@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import CustomError from '../utils/CustomError';
+import CustomError from '@utils/CustomError';
 
 export const checkXsrf = (req: Request, cookieXsrfToken: string): boolean => {
   if (req.headers && req.headers['xsrf-token']) {

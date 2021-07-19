@@ -86,7 +86,7 @@ describe('patientsController', () => {
       };
 
       return chai.request(app)
-      .post('/api/patients')
+        .post('/api/patients')
         .send({
           lastName: 'Lovelace',
           firstNames: 'Ada',
@@ -323,9 +323,9 @@ describe('patientsController', () => {
       };
 
       chai.request(app)
-      .post('/api/patients')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .post('/api/patients')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
           res.status.should.equal(200);
@@ -892,9 +892,9 @@ describe('patientsController', () => {
       const patient = await makePatient(psy.dossierNumber);
 
       return chai.request(app)
-      .delete(`/api/patients/${patient.id}4`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .delete(`/api/patients/${patient.id}4`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(400);
           res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
@@ -915,7 +915,7 @@ describe('patientsController', () => {
       const patient = await makePatient(psy.dossierNumber);
 
       return chai.request(app)
-      .delete(`/api/patients/${patient.id}`)
+        .delete(`/api/patients/${patient.id}`)
         .then(async (res) => {
           res.status.should.equal(401);
 

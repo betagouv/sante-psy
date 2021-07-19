@@ -1,4 +1,4 @@
 export type LastConnection = {
-    psychologistId: string,
-    at: Date
-}
+  psychologistId: string,
+  at: Date
+};

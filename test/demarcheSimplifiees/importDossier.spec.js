@@ -5,7 +5,7 @@ const { default: uuid } = require('../../utils/uuid');
 const config = require('../../utils/config');
 const { DossierState } = require('../../types/DemarcheSimplifiee');
 
-const importDossier = rewire('../../services/demarchesSimplifiees/importDossier');
+const importDossier = rewire('../services/demarchesSimplifiees/importDossier');
 
 describe('Demarches Simplifiees', () => {
   describe('parsePsychologists', () => {

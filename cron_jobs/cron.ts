@@ -2,8 +2,8 @@ import cron from 'cron';
 import cronDemarchesSimplifiees from './cronDemarchesSimplifiees';
 import cronUniversityPayments from './cronUniversityPayments';
 import cronPsychologists from './cronPsychologists';
-import config from '../utils/config';
-import sentry from '../utils/sentry';
+import config from '@utils/config';
+import sentry from '@utils/sentry';
 
 // Desactivate debug log for production as they are a bit too verbose
 if (!config.activateDebug) {

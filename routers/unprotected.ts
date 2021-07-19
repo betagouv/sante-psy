@@ -1,15 +1,15 @@
 import express from 'express';
 import slowDown from 'express-slow-down';
 
-import configController from '../controllers/configController';
-import psyListingController from '../controllers/psyListingController';
-import universitiesController from '../controllers/universityController';
-import loginController from '../controllers/loginController';
-import statisticsController from '../controllers/statisticsController';
+import configController from '@controllers/configController';
+import psyListingController from '@controllers/psyListingController';
+import universitiesController from '@controllers/universityController';
+import loginController from '@controllers/loginController';
+import statisticsController from '@controllers/statisticsController';
 
-import config from '../utils/config';
-import psyProfileController from '../controllers/psyProfileController';
-import contactController from '../controllers/contactController';
+import config from '@utils/config';
+import psyProfileController from '@controllers/psyProfileController';
+import contactController from '@controllers/contactController';
 
 const router = express.Router();
 

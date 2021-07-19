@@ -3,18 +3,18 @@ import { Request, Response } from 'express';
 import crypto from 'crypto';
 import { check } from 'express-validator';
 import ejs from 'ejs';
-import validation from '../utils/validation';
-import dbPsychologists from '../db/psychologists';
-import dbLoginToken from '../db/loginToken';
-import dbLastConnection from '../db/lastConnections';
-import date from '../utils/date';
-import cookie from '../utils/cookie';
-import logs from '../utils/logs';
-import emailUtils from '../utils/email';
-import config from '../utils/config';
-import asyncHelper from '../utils/async-helper';
-import CustomError from '../utils/CustomError';
-import { checkXsrf } from '../middlewares/xsrfProtection';
+import validation from '@utils/validation';
+import dbPsychologists from '@db/psychologists';
+import dbLoginToken from '@db/loginToken';
+import dbLastConnection from '@db/lastConnections';
+import date from '@utils/date';
+import cookie from '@utils/cookie';
+import logs from '@utils/logs';
+import emailUtils from '@utils/email';
+import config from '@utils/config';
+import asyncHelper from '@utils/async-helper';
+import CustomError from '@utils/CustomError';
+import { checkXsrf } from '@middlewares/xsrfProtection';
 
 const emailValidators = [
   check('email')

@@ -21,18 +21,18 @@ describe('Route should be XSRF protected', () => {
 
   routes.map((route) => it(`${route.method} ${route.url} without xsrf`,
     () => chai.request(app)[route.method](route.url)
-  .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken')}`)
-  .then((res) => res.status.should.equal(401))));
+      .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken')}`)
+      .then((res) => res.status.should.equal(401))));
 
   routes.map((route) => it(`${route.method} ${route.url} with wrong xsrf`,
     () => chai.request(app)[route.method](route.url)
-  .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken')}`)
-  .set('xsrf-token', 'notSoRandomXSRFToken')
-  .then((res) => res.status.should.equal(401))));
+      .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken')}`)
+      .set('xsrf-token', 'notSoRandomXSRFToken')
+      .then((res) => res.status.should.equal(401))));
 
   routes.map((route) => it(`${route.method} ${route.url} with xsrf`,
     () => chai.request(app)[route.method](route.url)
-  .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken')}`)
-  .set('xsrf-token', 'randomXSRFToken')
-  .then((res) => res.status.should.not.equal(401))));
+      .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then((res) => res.status.should.not.equal(401))));
 });

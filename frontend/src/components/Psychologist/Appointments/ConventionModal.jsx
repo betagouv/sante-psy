@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Modal, ModalTitle, ModalContent } from '@dataesr/react-dsfr';
+
+import ConventionForm from 'components/Psychologist/Profile/ConventionForm';
+
 import { checkConvention } from 'services/conventionVerification';
-import ConventionForm from '../Profile/ConventionForm';
 
 const ConventionModal = ({ currentConvention }) => {
   const [isOpen, setIsOpen] = useState(true);

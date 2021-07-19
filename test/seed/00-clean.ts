@@ -7,7 +7,7 @@ import {
   universitiesTable,
   suspensionReasonsTable,
   lastConnectionsTable,
-} from '../../db/tables';
+} from '@db/tables';
 
 // eslint-disable-next-line import/prefer-default-export
 export const seed = async (knex: Knex): Promise<void> => {

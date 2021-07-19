@@ -4,7 +4,7 @@ import testRouter from './test';
 import protectedRouter from './protected';
 import unprotectedRouter from './unprotected';
 
-import config from '../utils/config';
+import config from '@utils/config';
 
 const router = express.Router();
 

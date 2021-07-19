@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import asyncHelper from '../utils/async-helper';
-import config from '../utils/config';
+import asyncHelper from '@utils/async-helper';
+import config from '@utils/config';
 
 const getConfig = async (req: Request, res: Response): Promise<void> => {
   res.json({

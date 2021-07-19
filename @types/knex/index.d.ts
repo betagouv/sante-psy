@@ -1,5 +1,5 @@
 declare module 'knex/types/result' {
-    interface Registry {
-        count: number;
-    }
+  interface Registry {
+    count: number;
+  }
 }

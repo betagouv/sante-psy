@@ -7,9 +7,9 @@ const { loginTokenTable } = require('./tables');
 module.exports.getByToken = async function getByToken(token) {
   try {
     const result = await knex(loginTokenTable)
-    .where('token', token)
-    .andWhere('expiresAt', '>', date.getDateNowPG())
-    .first();
+      .where('token', token)
+      .andWhere('expiresAt', '>', date.getDateNowPG())
+      .first();
 
     return result;
   } catch (err) {
@@ -21,8 +21,8 @@ module.exports.getByToken = async function getByToken(token) {
 module.exports.getByEMail = async function getByEMail(email) {
   try {
     const result = await knex(loginTokenTable)
-    .where('email', email)
-    .first();
+      .where('email', email)
+      .first();
 
     return result;
   } catch (err) {
@@ -33,7 +33,7 @@ module.exports.getByEMail = async function getByEMail(email) {
 
 module.exports.insert = async (token, email, expiresAt) => {
   try {
-    return await knex(loginTokenTable).insert({
+    return knex(loginTokenTable).insert({
       token,
       email,
       expiresAt,
@@ -47,11 +47,11 @@ module.exports.insert = async (token, email, expiresAt) => {
 module.exports.delete = async (token) => {
   try {
     const deletedToken = await knex(loginTokenTable)
-    .where({
-      token,
-    })
-    .del()
-    .returning('*');
+      .where({
+        token,
+      })
+      .del()
+      .returning('*');
 
     if (deletedToken.length === 0) {
       console.error('token not deleted : does not exist or is not allowed');

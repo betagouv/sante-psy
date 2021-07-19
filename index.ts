@@ -7,13 +7,13 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import compression from 'compression';
 
-import config from './utils/config';
-import cspConfig from './utils/csp-config';
-import sentry from './utils/sentry';
+import config from '@utils/config';
+import cspConfig from '@utils/csp-config';
+import sentry from '@utils/sentry';
 
-import errorManager from './middlewares/errorManager';
-import getIndex from './controllers/reactController';
-import router from './routers';
+import errorManager from '@middlewares/errorManager';
+import getIndex from '@controllers/reactController';
+import router from '@routers/index';
 
 const { appName } = config;
 

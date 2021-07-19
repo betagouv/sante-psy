@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import {
   getUniversityCount, getAppointmentCount, getActivePsychologistCount, getPatientCount,
-} from '../db/statistics';
-import asyncHelper from '../utils/async-helper';
+} from '@db/statistics';
+import asyncHelper from '@utils/async-helper';
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const university = getUniversityCount();

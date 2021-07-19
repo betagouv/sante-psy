@@ -1,7 +1,7 @@
 import express from 'express';
 
-import psyProfileController from '../controllers/psyProfileController';
-import conventionController from '../controllers/conventionController';
+import psyProfileController from '@controllers/psyProfileController';
+import conventionController from '@controllers/conventionController';
 
 const router = express.Router();
 

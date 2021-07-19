@@ -123,10 +123,10 @@ describe('psyProfileController', () => {
       };
 
       const res = await chai.request(app)
-      .put(`/api/psychologist/${psy.dossierNumber}`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
-      .send(postData);
+        .put(`/api/psychologist/${psy.dossierNumber}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send(postData);
 
       sinon.assert.notCalled(updatePsyStub);
 
@@ -376,10 +376,10 @@ describe('psyProfileController', () => {
       const psy = await clean.insertOnePsy();
 
       const res = await chai.request(app)
-      .put(`/api/psychologist/${psy.dossierNumber}`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
-      .send(postData);
+        .put(`/api/psychologist/${psy.dossierNumber}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send(postData);
 
       sinon.assert.called(updatePsyStub);
 
@@ -462,9 +462,9 @@ describe('psyProfileController', () => {
       };
 
       chai.request(app)
-      .put(`/api/psychologist/${psy.dossierNumber}`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .put(`/api/psychologist/${psy.dossierNumber}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
           res.status.should.equal(200);
@@ -569,7 +569,7 @@ describe('psyProfileController', () => {
           expect(updatedPsy.phone).to.eql('01 02 03 04 05');
           expect(updatedPsy.website).to.eql('https://monwebsite.fr');
           expect(updatedPsy.description).to.eql('Consultez un psychologue gratuitement');
-          expect(updatedPsy.teleconsultation).to.be.true;
+          expect(updatedPsy.teleconsultation).to.equal(true);
           expect(updatedPsy.languages).to.eql('Français, Anglais');
           expect(updatedPsy.personalEmail).to.eql('perso@email.com');
         });
@@ -608,7 +608,7 @@ describe('psyProfileController', () => {
           expect(updatedPsy.phone).to.eql('01 02 03 04 05');
           expect(updatedPsy.website).to.eql('https://monwebsite.fr');
           expect(updatedPsy.description).to.eql('Consultez un psychologue gratuitement');
-          expect(updatedPsy.teleconsultation).to.be.true;
+          expect(updatedPsy.teleconsultation).to.equal(true);
           expect(updatedPsy.languages).to.eql('Français, Anglais');
           expect(updatedPsy.personalEmail).to.eql('perso@email.com');
         });
@@ -684,10 +684,10 @@ describe('psyProfileController', () => {
       };
 
       const res = await chai.request(app)
-      .post(`/api/psychologist/${psy.dossierNumber}/suspend`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
-      .send(postData);
+        .post(`/api/psychologist/${psy.dossierNumber}/suspend`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send(postData);
 
       sinon.assert.notCalled(suspendPsyStub);
 

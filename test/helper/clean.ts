@@ -1,9 +1,10 @@
-import { Psychologist } from '../../types/Psychologist';
-import { Patient } from '../../types/Patient';
-import { Appointment } from '../../types/Appointment';
+import { Psychologist } from 'types/Psychologist';
+import { Patient } from 'types/Patient';
+import { Appointment } from 'types/Appointment';
 import knex from 'knex';
-import uuid from '../../utils/uuid';
-import dbPsychologists from '../../db/psychologists';
+import uuid from '@utils/uuid';
+import dbPsychologists from '@db/psychologists';
+import dbUniversities from '@db/universities';
 import {
   appointmentsTable,
   patientsTable,
@@ -13,15 +14,13 @@ import {
   universitiesTable,
   suspensionReasonsTable,
   lastConnectionsTable,
-} from '../../db/tables';
-import { DossierState } from '../../types/DemarcheSimplifiee';
+} from '@db/tables';
+import { DossierState } from 'types/DemarcheSimplifiee';
 import faker from 'faker';
 
 faker.locale = 'fr';
 
 const knexConfig = require('../../knexfile');
-
-const dbUniversities = require('../../db/universities');
 
 const db = knex(knexConfig);
 
@@ -48,30 +47,30 @@ const getFirstNames = () => {
 const getAddress = () => {
   const rand = faker.datatype.number() % 5;
   switch (rand) {
-  case 0:
-    return {
-      address: `${getRandomInt()} avenue de segur 75007 paris`,
-      departement: '75 - Paris',
-      region: 'Ile-de-France',
-    };
-  case 1:
-    return {
-      address: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
-      departement: '33 - Gironde',
-      region: 'Nouvelle-Aquitaine',
-    };
-  case 2:
-    return {
-      address: `${getRandomInt()} Boulevard Maréchal Foch 38100 Grenoble`,
-      departement: '38 - Isère',
-      region: 'Auvergne-Rhône-Alpes',
-    };
-  default:
-    return {
-      address: `${faker.address.streetAddress()}, ${faker.address.cityName()} ${faker.address.country()}`,
-      departement: '14 - Calvados',
-      region: 'Normandie',
-    };
+    case 0:
+      return {
+        address: `${getRandomInt()} avenue de segur 75007 paris`,
+        departement: '75 - Paris',
+        region: 'Ile-de-France',
+      };
+    case 1:
+      return {
+        address: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
+        departement: '33 - Gironde',
+        region: 'Nouvelle-Aquitaine',
+      };
+    case 2:
+      return {
+        address: `${getRandomInt()} Boulevard Maréchal Foch 38100 Grenoble`,
+        departement: '38 - Isère',
+        region: 'Auvergne-Rhône-Alpes',
+      };
+    default:
+      return {
+        address: `${faker.address.streetAddress()}, ${faker.address.cityName()} ${faker.address.country()}`,
+        departement: '14 - Calvados',
+        region: 'Normandie',
+      };
   }
 };
 

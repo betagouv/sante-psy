@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import mime from 'mime-types';
 import axios from 'axios';
-import graphql from '../../utils/graphql';
+import graphql from '@utils/graphql';
 
 const md5 = (value) => crypto.createHash('md5').update(value).digest('base64');
 const getFileInfo = (file) => {

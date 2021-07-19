@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const config = require('../../utils/config');
 const autoVerifyPsychologists = require('../../services/demarchesSimplifiees/autoVerify');
 
-const graphql = rewire('../../utils/graphql');
+const graphql = rewire('../utils/graphql');
 
 describe('autoVerifyPsychologist', () => {
   let executeMutationStub;

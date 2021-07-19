@@ -1,4 +1,4 @@
-import psychologists from '../db/psychologists';
+import psychologists from '@db/psychologists';
 
 const reactivatePsychologists = async () : Promise<void> => {
   const results = await psychologists.reactivate();

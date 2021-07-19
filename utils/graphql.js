@@ -46,7 +46,7 @@ const request = async (query, variables) => {
   } catch (err) {
     console.error('API has returned error', err);
     logErrorsFromDS(err);
-    // eslint-disable-next-line no-throw-literal
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw 'Error from DS API';
   }
 };

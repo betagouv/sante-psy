@@ -78,9 +78,9 @@ describe('appointmentsController', () => {
       );
 
       return chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: patient.id,
           date: new Date('09/02/2021'),
@@ -113,7 +113,7 @@ describe('appointmentsController', () => {
       );
 
       return chai.request(app)
-      .post('/api/appointments')
+        .post('/api/appointments')
         .send({
           patientId: patient.id,
           date: new Date('09/02/2021'),
@@ -149,9 +149,9 @@ describe('appointmentsController', () => {
 
     it('should refuse invalid patientId', (done) => {
       chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: 'not-a-uuid',
           date: new Date('09/02/2021'),
@@ -167,9 +167,9 @@ describe('appointmentsController', () => {
 
     it('should refuse empty patientId', (done) => {
       chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           // no patientId
           date: new Date('09/02/2021'),
@@ -189,9 +189,9 @@ describe('appointmentsController', () => {
         email: 'prenom.nom@beta.gouv.fr',
       };
       chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
@@ -207,9 +207,9 @@ describe('appointmentsController', () => {
 
     it('should refuse empty date', (done) => {
       chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           // no date

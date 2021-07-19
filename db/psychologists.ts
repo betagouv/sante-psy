@@ -1,14 +1,14 @@
 import knexModule from 'knex';
-import date from '../utils/date';
+import date from '@utils/date';
 import { psychologistsTable, suspensionReasonsTable } from './tables';
-import { DossierState } from '../types/DemarcheSimplifiee';
+import { DossierState } from 'types/DemarcheSimplifiee';
 import dbUniversities from './universities';
 import {
   addFrenchLanguageIfMissing,
   editablePsyFields,
   nonEditablePsyFields,
-} from '../services/updatePsyFields';
-import { Psychologist } from '../types/Psychologist';
+} from '@services/updatePsyFields';
+import { Psychologist } from 'types/Psychologist';
 
 const knexConfig = require('../knexfile');
 
@@ -17,10 +17,10 @@ const knex = knexModule(knexConfig);
 const getAcceptedPsychologistsArchivedOrNot = async (selectedData: string[]) : Promise<Psychologist[]> => {
   try {
     const psychologists = knex.column(...selectedData)
-        .select()
-        .from(psychologistsTable)
-        .where('state', DossierState.accepte);
-    return psychologists;
+      .select()
+      .from(psychologistsTable)
+      .where('state', DossierState.accepte);
+    return await psychologists;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
     throw new Error('Impossible de récupérer les psychologistes');
@@ -63,13 +63,13 @@ const getActivePsychologists = async (): Promise<Psychologist[]> => {
       'languages',
       'description',
     )
-        .select()
-        .from(psychologistsTable)
-        .whereNot('archived', true)
-        .where('state', DossierState.accepte)
-        .andWhere('active', true)
-        .orderByRaw('RANDOM ()');
-    return psychologists;
+      .select()
+      .from(psychologistsTable)
+      .whereNot('archived', true)
+      .where('state', DossierState.accepte)
+      .andWhere('active', true)
+      .orderByRaw('RANDOM ()');
+    return await psychologists;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
     throw new Error('Impossible de récupérer les psychologistes');
@@ -123,26 +123,26 @@ const savePsychologistInPG = async (psyList: Psychologist[]): Promise<(number | 
           languages: addFrenchLanguageIfMissing(psy.languages),
           assignedUniversityId: dbUniversities.getAssignedUniversityId(psy, universities),
         });
-        return Promise.resolve();
+        return await Promise.resolve();
       }
 
       if (psyInDb.selfModified) {
-        return knex(psychologistsTable)
-        .where({ dossierNumber: psy.dossierNumber })
-        .update({
-          ...nonEditablePsyFields(psy),
-          updatedAt,
-        });
+        return await knex(psychologistsTable)
+          .where({ dossierNumber: psy.dossierNumber })
+          .update({
+            ...nonEditablePsyFields(psy),
+            updatedAt,
+          });
       }
 
-      return knex(psychologistsTable)
-      .where({ dossierNumber: psy.dossierNumber })
-      .update({
-        ...editablePsyFields(psy),
-        ...nonEditablePsyFields(psy),
-        // assignedUniversityId, do not update assignedId on already existing psy
-        updatedAt,
-      });
+      return await knex(psychologistsTable)
+        .where({ dossierNumber: psy.dossierNumber })
+        .update({
+          ...editablePsyFields(psy),
+          ...nonEditablePsyFields(psy),
+          // assignedUniversityId, do not update assignedId on already existing psy
+          updatedAt,
+        });
     } catch (err) {
       console.error(`Error to insert ${psy}`, err);
       return Promise.resolve();
@@ -152,7 +152,7 @@ const savePsychologistInPG = async (psyList: Psychologist[]): Promise<(number | 
   if (psychologistsToInsert.length > 0) {
     upsertArray.push(
       knex(psychologistsTable)
-    .insert(psychologistsToInsert),
+        .insert(psychologistsToInsert),
     );
   }
   const query = await Promise.all(upsertArray);
@@ -191,10 +191,10 @@ const getNotYetAcceptedPsychologistByEmail = async (email: string): Promise<Psyc
   .first();
 
 const countAcceptedPsychologistsByPersonalEmail = async (): Promise<any> => knex(psychologistsTable)
-    .select('personalEmail', 'state')
-    .where('state', DossierState.accepte)
-    .count('*')
-    .groupBy('personalEmail', 'state');
+  .select('personalEmail', 'state')
+  .where('state', DossierState.accepte)
+  .count('*')
+  .groupBy('personalEmail', 'state');
 
 const updateConventionInfo = async (
   psychologistId: string,
@@ -217,14 +217,14 @@ const updateConventionInfo = async (
 };
 
 const getConventionInfo = async (psychologistId: string): Promise<any> => knex.from(psychologistsTable)
-    .select(`${'universities'}.name as universityName`,
-      `${'universities'}.id as universityId`,
-      `${psychologistsTable}.isConventionSigned`)
-    .innerJoin('universities',
-      `${psychologistsTable}.assignedUniversityId`,
-      `${'universities'}.id`)
-    .where(`${psychologistsTable}.dossierNumber`, psychologistId)
-    .first();
+  .select(`${'universities'}.name as universityName`,
+    `${'universities'}.id as universityId`,
+    `${psychologistsTable}.isConventionSigned`)
+  .innerJoin('universities',
+    `${psychologistsTable}.assignedUniversityId`,
+    `${'universities'}.id`)
+  .where(`${psychologistsTable}.dossierNumber`, psychologistId)
+  .first();
 
 const deleteConventionInfo = async (email: string): Promise<any> => knex
   .from(psychologistsTable)
@@ -235,7 +235,7 @@ const deleteConventionInfo = async (email: string): Promise<any> => knex
 
 const updatePsychologist = async (psychologist: Psychologist): Promise<number> => {
   try {
-    return knex(psychologistsTable)
+    return await knex(psychologistsTable)
       .where('dossierNumber', psychologist.dossierNumber)
       .update({
         ...editablePsyFields(psychologist),
@@ -250,7 +250,7 @@ const updatePsychologist = async (psychologist: Psychologist): Promise<number> =
 
 const activate = async (dossierNumber: string): Promise<number> => {
   try {
-    return knex(psychologistsTable)
+    return await knex(psychologistsTable)
       .where({ dossierNumber })
       .update({
         active: true,
@@ -268,36 +268,36 @@ const suspend = async (
   reason: string,
 ): Promise<void> => knex.transaction((trx) => {
   const update = knex(psychologistsTable)
-      .transacting(trx)
-      .where({ dossierNumber })
-      .update({
-        active: false,
-        inactiveUntil,
-      });
+    .transacting(trx)
+    .where({ dossierNumber })
+    .update({
+      active: false,
+      inactiveUntil,
+    });
   const create = knex(suspensionReasonsTable)
-      .transacting(trx)
-      .insert({
-        psychologistId: dossierNumber,
-        reason,
-        until: inactiveUntil,
-      });
+    .transacting(trx)
+    .insert({
+      psychologistId: dossierNumber,
+      reason,
+      until: inactiveUntil,
+    });
 
   Promise.all([update, create])
-      .then(() => {
-        trx.commit();
-        console.log(`Psychologue ${dossierNumber} suspendu jusqu'au ${inactiveUntil}`);
-      })
-      .catch((err) => {
-        trx.rollback();
-        console.error('Erreur de suspension du psychologue', err);
-        throw new Error('Erreur de suspension du psychologue');
-      });
+    .then(() => {
+      trx.commit();
+      console.log(`Psychologue ${dossierNumber} suspendu jusqu'au ${inactiveUntil}`);
+    })
+    .catch((err) => {
+      trx.rollback();
+      console.error('Erreur de suspension du psychologue', err);
+      throw new Error('Erreur de suspension du psychologue');
+    });
 });
 
 const reactivate = async (): Promise<number> => knex(psychologistsTable)
-    .where({ active: false })
-    .andWhere('inactiveUntil', '<=', (new Date()).toISOString())
-    .update({ active: true, inactiveUntil: null });
+  .where({ active: false })
+  .andWhere('inactiveUntil', '<=', (new Date()).toISOString())
+  .update({ active: true, inactiveUntil: null });
 
 export default {
   getActivePsychologists,

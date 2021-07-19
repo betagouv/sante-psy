@@ -5,13 +5,13 @@ import psychologistRouter from './psychologist';
 import patientsRouter from './patients';
 import appointmentsRouter from './appointments';
 
-import xsrfProtection from '../middlewares/xsrfProtection';
-import refreshToken from '../middlewares/refreshToken';
+import xsrfProtection from '@middlewares/xsrfProtection';
+import refreshToken from '@middlewares/refreshToken';
 
-import loginController from '../controllers/loginController';
+import loginController from '@controllers/loginController';
 
-import access from '../utils/access';
-import config from '../utils/config';
+import access from '@utils/access';
+import config from '@utils/config';
 
 const router = express.Router();
 

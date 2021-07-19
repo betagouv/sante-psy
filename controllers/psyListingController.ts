@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
-import dbPsychologists from '../db/psychologists';
-import asyncHelper from '../utils/async-helper';
+import dbPsychologists from '@db/psychologists';
+import asyncHelper from '@utils/async-helper';
 
 const getActivePsychologists = async (req: Request, res: Response, reduced: boolean): Promise<void> => {
   const time = `getting all active psychologists from Postgres (query id #${Math.random().toString()})`;

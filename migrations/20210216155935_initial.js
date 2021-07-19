@@ -31,34 +31,34 @@ exports.up = function (knex) {
     console.log('Creating psychologists table');
 
     return knex.schema
-        .createTable('psychologists', (table) => {
-          table.uuid('dossierNumber').primary(); // to avoid duplicate when doing upsert
-          table.string('adeli').notNullable(); // all therapists should be registered and have a number
-          table.text('firstNames').notNullable();
-          table.text('lastName').notNullable();
-          table.text('email').notNullable(); // this will be the login for the user
-          table.text('address');
-          table.string('departement');
-          table.string('region');
-          table.string('phone');
-          table.string('website');
-          table.boolean('teleconsultation');
-          table.text('description');
-          table.text('languages');
-          table.json('training'); // Formations et expériences
-          table.string('diploma');
-          table.string('university');
+      .createTable('psychologists', (table) => {
+        table.uuid('dossierNumber').primary(); // to avoid duplicate when doing upsert
+        table.string('adeli').notNullable(); // all therapists should be registered and have a number
+        table.text('firstNames').notNullable();
+        table.text('lastName').notNullable();
+        table.text('email').notNullable(); // this will be the login for the user
+        table.text('address');
+        table.string('departement');
+        table.string('region');
+        table.string('phone');
+        table.string('website');
+        table.boolean('teleconsultation');
+        table.text('description');
+        table.text('languages');
+        table.json('training'); // Formations et expériences
+        table.string('diploma');
+        table.string('university');
 
-          table.uuid('payingUniversityId');
+        table.uuid('payingUniversityId');
 
-          table.timestamp('createdAt').defaultTo(knex.fn.now());
-          table.timestamp('updatedAt');
-        });
+        table.timestamp('createdAt').defaultTo(knex.fn.now());
+        table.timestamp('updatedAt');
+      });
   })
-.then(() => {
-  console.log('Creating appointments table');
+    .then(() => {
+      console.log('Creating appointments table');
 
-  return knex.schema
+      return knex.schema
         .createTable('appointments', (table) => {
           table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
 
@@ -70,7 +70,7 @@ exports.up = function (knex) {
           table.timestamp('createdAt').defaultTo(knex.fn.now());
           table.timestamp('updatedAt');
         });
-});
+    });
   // todo : a doctor writes an "orientation" of the patient to a psychologist. Upload it, and optionally store
   // doctor's name. Also count the appointments done per orientation (3).
   // todo : accountant at university will need a user account. Create a separate user table ?
@@ -81,5 +81,5 @@ exports.up = function (knex) {
 exports.down = function (knex) {
   return knex.schema.dropTable('appointments')
     .then(() => knex.schema.dropTable('psychologists')).then(() => knex.schema.dropTable('patients')).then(() => knex.schema.dropTable('universities'))
-.then(() => knex.raw('DROP EXTENSION IF EXISTS "uuid-ossp";'));
+    .then(() => knex.raw('DROP EXTENSION IF EXISTS "uuid-ossp";'));
 };

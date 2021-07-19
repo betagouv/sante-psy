@@ -12,11 +12,11 @@ describe('reactController', async () => {
       }));
 
     it('should return no cache headers when asking any pages', async () => chai.request(app)
-    .get('/psychologue/mes-seances')
-    .then(async (res) => {
-      res.header['cache-control'].should.equal('no-cache, no-store, must-revalidate');
-      res.header.pragma.should.equal('no-cache');
-      res.header.expires.should.equal('0');
-    }));
+      .get('/psychologue/mes-seances')
+      .then(async (res) => {
+        res.header['cache-control'].should.equal('no-cache, no-store, must-revalidate');
+        res.header.pragma.should.equal('no-cache');
+        res.header.expires.should.equal('0');
+      }));
   });
 });

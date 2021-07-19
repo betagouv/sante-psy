@@ -9,10 +9,9 @@ parser: "@typescript-eslint/parser"
 
 extends:
   - eslint:recommended
-  - airbnb-base
+  - airbnb-typescript/base
   - plugin:@typescript-eslint/eslint-recommended
   - plugin:@typescript-eslint/recommended
-  - plugin:import/typescript
 
 plugins:
   - "@typescript-eslint"
@@ -20,8 +19,11 @@ plugins:
 
 parserOptions:
   ecmaVersion: 12
+  project: ./tsconfig.json
 
 rules:
+  "@typescript-eslint/indent": ["error", 2]
+  indent: "off"
   no-trailing-spaces: ["error", { "ignoreComments": true }]
   max-len: ["error", { "code": 120 }]
   no-underscore-dangle: "off"
@@ -32,10 +34,6 @@ rules:
   no-restricted-syntax: "warn"
   guard-for-in: "warn"
   eqeqeq: "warn"
-  indent: 
-    - "error"
-    - 2
-    - MemberExpression: "off"
   node/no-unpublished-require: "off"
   import/order: "off"
   radix: "off"
@@ -51,6 +49,7 @@ rules:
   import/extensions: ["error", {
     js: "never",
     ts: "never",
+    json: "always"
   }]
 
 overrides:
@@ -59,7 +58,7 @@ overrides:
       - "test/*.js"
       - "*.spec.js"
     rules:
-      no-unused-expressions: "off"
+      "@typescript-eslint/no-unused-expressions": "off"
       no-shadow: "off"
   - files:
       - "migrations/*.js"

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 
 import { check } from 'express-validator';
-import dbPsychologists from '../db/psychologists';
-import validation from '../utils/validation';
-import asyncHelper from '../utils/async-helper';
+import dbPsychologists from '@db/psychologists';
+import validation from '@utils/validation';
+import asyncHelper from '@utils/async-helper';
 
 const conventionInfoValidators = [
   // Note : no sanitizing because isUUID will not allow strange html anyway.

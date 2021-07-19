@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { UnauthorizedError } from 'express-jwt';
-import config from '../utils/config';
-import CustomError from '../utils/CustomError';
+import config from '@utils/config';
+import CustomError from '@utils/CustomError';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorManager = (error: Error, req: Request, res: Response, next: NextFunction): void => {

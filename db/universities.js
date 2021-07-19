@@ -14,14 +14,14 @@ module.exports.saveUniversities = async function saveUniversities(universitiesLi
 
     try {
       return knex(universitiesTable)
-      .insert(university)
-      .onConflict(upsertingKey)
-      .merge({ // update every field and add updatedAt
-        name: university.name,
-        emailSSU: university.emailSSU,
-        emailUniversity: university.emailUniversity,
-        updatedAt,
-      });
+        .insert(university)
+        .onConflict(upsertingKey)
+        .merge({ // update every field and add updatedAt
+          name: university.name,
+          emailSSU: university.emailSSU,
+          emailUniversity: university.emailUniversity,
+          updatedAt,
+        });
     } catch (err) {
       console.error(`Error to insert ${university}`, err);
       return Promise.resolve();
@@ -38,8 +38,8 @@ module.exports.saveUniversities = async function saveUniversities(universitiesLi
 module.exports.getUniversities = async () => {
   try {
     return knex.select('id', 'name', 'emailSSU', 'emailUniversity')
-        .from(universitiesTable)
-        .orderBy('name');
+      .from(universitiesTable)
+      .orderBy('name');
   } catch (err) {
     console.error('Impossible de récupérer les universités', err);
     throw new Error('Impossible de récupérer les universités');

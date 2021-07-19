@@ -9,7 +9,7 @@ const runJob = async (job) => {
 
 if (process.argv.length < 3) {
   console.log('Please specify the cron you want to launch:');
-  console.log('ts-node cron_jobs/launch.ts job_name');
+  console.log('ts-node -r tsconfig-paths/register cron_jobs/launch.ts job_name');
   process.exit(1);
 }
 

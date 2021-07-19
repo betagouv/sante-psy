@@ -74,12 +74,12 @@ module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
         , ${psychologistsTable}."lastName"
         , ${psychologistsTable}."personalEmail"
         `))
-        .whereRaw(`EXTRACT(YEAR from ${appointmentsTable}."appointmentDate") = ${year}`)
-        .andWhereRaw(`EXTRACT(MONTH from ${appointmentsTable}."appointmentDate") = ${month}`)
-        .whereNot(`${appointmentsTable}.deleted`, true)
-        .innerJoin(`${psychologistsTable}`,
-          `${appointmentsTable}.psychologistId`,
-          `${psychologistsTable}.dossierNumber`)
+      .whereRaw(`EXTRACT(YEAR from ${appointmentsTable}."appointmentDate") = ${year}`)
+      .andWhereRaw(`EXTRACT(MONTH from ${appointmentsTable}."appointmentDate") = ${month}`)
+      .whereNot(`${appointmentsTable}.deleted`, true)
+      .innerJoin(`${psychologistsTable}`,
+        `${appointmentsTable}.psychologistId`,
+        `${psychologistsTable}.dossierNumber`)
       .groupBy(`${appointmentsTable}.psychologistId`)
       .groupBy(`${psychologistsTable}.assignedUniversityId`)
       .groupBy(`${psychologistsTable}.firstNames`)

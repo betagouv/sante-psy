@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import dbUniversities from '../db/universities';
-import asyncHelper from '../utils/async-helper';
+import dbUniversities from '@db/universities';
+import asyncHelper from '@utils/async-helper';
 
 const sort = (a, b) => {
   if (a.name < b.name) { return -1; }

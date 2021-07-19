@@ -6,8 +6,8 @@ const { dsApiCursorTable } = require('./tables');
 module.exports.getCursorFromDB = async function getCursorFromDB() {
   try {
     const lastCursor = await knex(dsApiCursorTable)
-    .where('id', 1)
-    .first();
+      .where('id', 1)
+      .first();
 
     console.debug(`getLatestCursorSaved: Got the latest cursor saved in PG ${JSON.stringify(lastCursor)}`);
     if (lastCursor) {
@@ -42,16 +42,16 @@ module.exports.saveLatestCursor = async function saveLatestCursor(cursor) {
 
     const alreadySavedCursor = await module.exports.getCursorFromDB();
     // eslint-disable-next-line func-names
-    return await knex.transaction((trx) => { // add transaction in case 2 cron jobs modify this cursor
+    return knex.transaction((trx) => { // add transaction in case 2 cron jobs modify this cursor
       if (alreadySavedCursor) {
         console.log(`Updating the cursor ${cursor} in PG`);
 
         return trx.into(dsApiCursorTable)
-        .where('id', 1)
-        .update({
-          cursor,
-          updatedAt: now,
-        });
+          .where('id', 1)
+          .update({
+            cursor,
+            updatedAt: now,
+          });
       } // no cursor already saved, we are going to create one entry
       console.log(`Saving a new cursor ${cursor} to PG`);
 

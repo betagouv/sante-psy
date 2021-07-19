@@ -36,32 +36,32 @@ const matchPsyToUni = async (dryRun) => {
     });
 
     const needToWait = psysFoundInDb
-    .map((psy) => {
-      const universityToAssign = universities.find(
-        (uni) => uni.name.toString().trim() === psyToUni[psy.personalEmail].toString().trim(),
-      );
-      if (!universityToAssign) {
-        statsNoUniFound.push(psyToUni[psy.personalEmail]);
-        return Promise.resolve();
-      }
+      .map((psy) => {
+        const universityToAssign = universities.find(
+          (uni) => uni.name.toString().trim() === psyToUni[psy.personalEmail].toString().trim(),
+        );
+        if (!universityToAssign) {
+          statsNoUniFound.push(psyToUni[psy.personalEmail]);
+          return Promise.resolve();
+        }
 
-      if (psy.assignedUniversityId === universityToAssign.id) {
-        statsNoChange.push(psy.personalEmail);
-        return Promise.resolve();
-      }
+        if (psy.assignedUniversityId === universityToAssign.id) {
+          statsNoChange.push(psy.personalEmail);
+          return Promise.resolve();
+        }
 
-      const currentUniversity = universities.find((uni) => uni.id === psy.assignedUniversityId);
-      statsAssignmentDone.push({
-        psy: psy.personalEmail,
-        uniFrom: currentUniversity ? currentUniversity.name : '',
-        uniTo: universityToAssign.name,
+        const currentUniversity = universities.find((uni) => uni.id === psy.assignedUniversityId);
+        statsAssignmentDone.push({
+          psy: psy.personalEmail,
+          uniFrom: currentUniversity ? currentUniversity.name : '',
+          uniTo: universityToAssign.name,
+        });
+
+        if (dryRun) {
+          return Promise.resolve();
+        }
+        return dbPsychologists.saveAssignedUniversity(psy.dossierNumber, universityToAssign.id);
       });
-
-      if (dryRun) {
-        return Promise.resolve();
-      }
-      return dbPsychologists.saveAssignedUniversity(psy.dossierNumber, universityToAssign.id);
-    });
 
     await Promise.all(needToWait);
 

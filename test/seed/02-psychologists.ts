@@ -1,11 +1,11 @@
 import clean from '../helper/clean';
 
-import { DossierState } from '../../types/DemarcheSimplifiee';
-import uuid from '../../utils/uuid';
-import universities from '../../utils/universities';
+import { DossierState } from 'types/DemarcheSimplifiee';
+import uuid from '@utils/uuid';
+import universities from '@utils/universities';
 import {
   psychologistsTable,
-} from '../../db/tables';
+} from '@db/tables';
 import { Knex } from 'knex';
 
 export const mails = [

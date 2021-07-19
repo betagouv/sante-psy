@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 
 import { check, param, oneOf } from 'express-validator';
-import geo from '../utils/geo';
-import validation from '../utils/validation';
-import dbPsychologists from '../db/psychologists';
-import asyncHelper from '../utils/async-helper';
-import CustomError from '../utils/CustomError';
-import cookie from '../utils/cookie';
-import string from '../utils/string';
+import geo from '@utils/geo';
+import validation from '@utils/validation';
+import dbPsychologists from '@db/psychologists';
+import asyncHelper from '@utils/async-helper';
+import CustomError from '@utils/CustomError';
+import cookie from '@utils/cookie';
+import string from '@utils/string';
 
 const getPsyProfilValidators = [
   param('psyId')
@@ -74,9 +74,9 @@ const editPsyProfilValidators = [
       // Two valid possibilities : email is empty, or email is valid format.
       check('email').trim().isEmpty(),
       check('email')
-          .trim()
-          .customSanitizer((value, { req }) => req.sanitize(value))
-          .isEmail(),
+        .trim()
+        .customSanitizer((value, { req }) => req.sanitize(value))
+        .isEmail(),
     ], 'Vous devez spécifier un email valide.',
   ),
   check('description')
@@ -87,9 +87,9 @@ const editPsyProfilValidators = [
       // Two valid possibilities : website is empty, or website is valid format.
       check('website').trim().isEmpty(),
       check('website')
-            .trim()
-            .customSanitizer((value, { req }) => req.sanitize(value))
-            .isURL(),
+        .trim()
+        .customSanitizer((value, { req }) => req.sanitize(value))
+        .isURL(),
     ], 'Vous devez spécifier une URL valide.',
   ),
   check('teleconsultation')

@@ -50,7 +50,7 @@ describe('Import Data from DS to PG', () => {
     getNumberOfPsychologistsStub = sinon.stub(dbPsychologists, 'getNumberOfPsychologists')
       .returns(Promise.resolve([{ count: 1 }]));
     saveLatestCursorStub = sinon.stub(dbDsApiCursor, 'saveLatestCursor')
-    .returns(Promise.resolve());
+      .returns(Promise.resolve());
 
     await importLatestDataFromDSToPG();
 
