@@ -47,17 +47,23 @@ Voir les fichiers dans `test/seed` qui vont cleaner la base puis créer quelques
 
 Pour l'exécuter:
 
-$ npm run seed
+```bash
+npm run seed
+```
 
 ### Création d'une migration
 
 [KnexJS](http://knexjs.org/#Migrations) permet de créer des migrations de base de données. Un shortcut a été ajouté au `package.json` pour créer une migration :
 
-$ npm run makeMigration <nom de la migration>
+```bash
+npm run makeMigration <nom de la migration>
+```
 
 Une fois la migration créée, vous pouvez l'appliquer avec :
 
-$ npm run migrate
+```bash
+npm run migrate
+```
 
 ### Lancement des tests
 
@@ -87,11 +93,15 @@ npm test
 
 Pour lancer uniquement un test
 
-$ npm test -- --grep "should call batchInsert on PG"
+```bash
+npm test -- --grep "should call batchInsert on PG"
+```
 
 #### Code coverage
 
-$ npm run coverage
+```bash
+npm run coverage
+```
 
 Ensuite, visiter avec votre navigateur pour visualiser le dossier `./coverage` :
 
@@ -115,13 +125,17 @@ Ce repo contient tout ce qu'il faut pour tourner sur Scalingo. Il suffit de dép
 
 Le deploiement sur scalingo se base sur le fichier [`Procfile`](https://doc.scalingo.com/platform/app/procfile)
 
-$ npm start
+```bash
+npm start
+```
 
 ### Accès à postgres
 
 Avec [le scalingo CLI](https://doc.scalingo.com/cli) et le nom de l'app sur scalingo
 
-$ scalingo -a APP_NAME pgsql-console
+```bash
+scalingo -a APP_NAME pgsql-console
+```
 
 On peut insérer des données comme ceci :
 
@@ -133,7 +147,9 @@ VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli', 'firstname', 'lastname',
 
 Autre solution : utiliser le code Node au lieu de SQL.
 
-$ scalingo -a APP_NAME run node
+```bash
+scalingo -a APP_NAME run node
+```
 
 Puis une fois la console node ouverte :
 
@@ -145,7 +161,7 @@ let psy = { 'dossierNumber': '77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli': 12
 dbPsychologists.savePsychologistInPG([psy])
 ```
 
-### Annonces
+### Affichage d'une annonce
 
 Pour afficher des annonces de service (maintenance, formulaire, ...), on utilise la variable d'environnement `ANNOUNCEMENT` (voir .env.sample ou le fichier docker-compose) qui peut être configurée sur l'hebergeur Scalingo. Elle permet d'afficher de l'HTML ou du texte.
 
@@ -156,7 +172,8 @@ Attention, le fichier sera supprimé après la déconnexion ! Si tu as besoin d'
 ```bash
 # import du fichier sur la machine et connexion
 scalingo -app APP_NAME run --file <nom_de_ton_fichier> bash
-> cp /tmp/uploads/<nom_de_ton_fichier> .
+# copie du fichier importé sur le dossier courant
+cp /tmp/uploads/<nom_de_ton_fichier> .
 ```
 
 ### Execution d'un cron manuellement
@@ -182,7 +199,7 @@ Pour gérer les cas particuliers, ce script applique les assignations du fichier
 L'option `--dry-run` permet de visualiser les changements sans qu'ils soient appliqués.
 
 ```bash
-> ts-node scripts/matchSpecialPsyToUniversities.ts [--dry-run]
+ts-node scripts/matchSpecialPsyToUniversities.ts [--dry-run]
 ```
 
 ## Les données
@@ -200,4 +217,6 @@ API de démarches simplifiées :
 
 Pour mettre à jour toutes les données venant de DS vers PG, un cron est lancé à intervalle régulier (voir la page containers de Scalingo) :
 
-$ node ./cron_jobs/cron.js
+```bash
+node ./cron_jobs/cron.js
+```
