@@ -14,23 +14,10 @@ const AddEditPatient = () => {
   const history = useHistory();
   const { commonStore: { config, setNotification } } = useStore();
   const { patientId } = useParams();
-  const [loaded, setLoaded] = useState(false);
-
-  const [patient, setPatient] = useState({
-    INE: '',
-    dateOfBirth: '',
-    doctorAddress: '',
-    doctorName: '',
-    firstNames: '',
-    hasPrescription: undefined,
-    institutionName: '',
-    isStudentStatusVerified: undefined,
-    lastName: '',
-  });
+  const [patient, setPatient] = useState();
 
   useEffect(() => {
     if (patientId) {
-      setLoaded(true);
       agent.Patient.getOne(patientId).then(response => {
         setPatient({
           ...response,
@@ -38,7 +25,18 @@ const AddEditPatient = () => {
             ? formatDDMMYYYY(new Date(response.dateOfBirth))
             : '',
         });
-        setLoaded(false);
+      });
+    } else {
+      setPatient({
+        INE: '',
+        dateOfBirth: '',
+        doctorAddress: '',
+        doctorName: '',
+        firstNames: '',
+        hasPrescription: false,
+        institutionName: '',
+        isStudentStatusVerified: false,
+        lastName: '',
       });
     }
   }, [patientId]);
@@ -69,16 +67,6 @@ const AddEditPatient = () => {
       .catch(() => window.scrollTo(0, 0));
   };
 
-  let defaultValueHasPrescription;
-  if (patient && patient.hasPrescription !== undefined) {
-    defaultValueHasPrescription = !!patient.hasPrescription;
-  }
-
-  let defaultValueIsStudentStatusVerified;
-  if (patient && patient.isStudentStatusVerified !== undefined) {
-    defaultValueIsStudentStatusVerified = !!patient.isStudentStatusVerified;
-  }
-
   return (
     <div className="fr-container fr-mb-3w">
       <Ariane
@@ -104,7 +92,7 @@ const AddEditPatient = () => {
             vous pourrez y revenir plus tard pour compléter le dossier.
           </p>
           <div>
-            {(patient || !patientId || (patient && loaded)) && (
+            {patient && (
             <>
               <TextInput
                 className="midlength-input"
@@ -153,15 +141,15 @@ const AddEditPatient = () => {
                 label="J'ai vérifié que les séances ont bien été prescrites
                 par un médecin ou un Service de Santé Universitaire"
                 hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
-                value={defaultValueHasPrescription}
-                onChange={e => changePatient(e.target.value, 'hasPrescription')}
+                value="hasPrescription"
+                onChange={e => changePatient(e.target.checked, 'hasPrescription')}
               />
               <Checkbox
                 defaultChecked={patient.isStudentStatusVerified}
                 label="J'ai vérifié le statut étudiant de ce patient"
                 hint="L'étudiant m'a présenté une lettre ou ordonnance médicale"
-                value={defaultValueIsStudentStatusVerified}
-                onChange={e => changePatient(e.target.value, 'isStudentStatusVerified')}
+                value="isStudentStatusVerified"
+                onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
               />
               <TextInput
                 className="midlength-input"
