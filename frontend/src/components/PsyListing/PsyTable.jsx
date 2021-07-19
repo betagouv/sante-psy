@@ -52,6 +52,15 @@ const PsyTable = ({
     return () => window.removeEventListener('resize', updateSurrendingPages);
   }, []);
 
+  let title = 'Tous les résultats';
+  if (nameFilter || addressFilter || teleconsultation) {
+    if (psychologists.length === 1) {
+      title = '1 résultat';
+    } else {
+      title = `${psychologists.length} résultats`;
+    }
+  }
+
   return (
     <div ref={table} className={styles.container}>
       {psychologists.length > 0 ? (
@@ -59,9 +68,7 @@ const PsyTable = ({
           <Table
             data-test-id="psy-table"
             className="fr-mb-3w"
-            caption={nameFilter || addressFilter || teleconsultation
-              ? `${psychologists.length} résultats`
-              : 'Tous les résultats'}
+            caption={title}
           >
             <thead>
               <tr key="headers">
