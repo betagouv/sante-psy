@@ -21,7 +21,7 @@ const Contact = () => {
     e.preventDefault();
     agent.Contact.send({ user, name, firstName, email, reason, message })
       .then(response => {
-        setNotification(response);
+        setNotification(response, true, false);
       })
       .catch(error => {
         if (error.response.status === 500) {
@@ -36,7 +36,12 @@ const Contact = () => {
               ),
             },
             false,
+            false,
           );
+        } else {
+          // override agent client interceptor for this call
+          // to allow it to be displayed outside psy pages
+          setNotification(error.response.data, false, false);
         }
       })
       .finally(() => window.scrollTo(0, 0));

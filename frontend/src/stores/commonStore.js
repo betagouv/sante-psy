@@ -18,7 +18,7 @@ export default class CommonStore {
     this.config = config;
   }
 
-  setNotification(notification, success = true) {
-    this.notification = notification ? { message: notification.message, success } : null;
+  setNotification(notification, success = true, displayOnlyOnPsyPages = true) {
+    this.notification = notification ? { message: notification.message, success, displayOnlyOnPsyPages } : null;
   }
 }
