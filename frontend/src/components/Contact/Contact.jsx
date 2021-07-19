@@ -8,28 +8,27 @@ import agent from 'services/agent';
 import { useStore } from 'stores/';
 
 const Contact = () => {
-  const [user, setUser] = useState('');
-  const [name, setName] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [email, setEmail] = useState('');
-  const [reason, setReason] = useState('');
-  const [message, setMessage] = useState('');
+  const [userType, setUserType] = useState();
+  const [name, setName] = useState();
+  const [firstName, setFirstName] = useState();
+  const [email, setEmail] = useState();
+  const [reason, setReason] = useState();
+  const [message, setMessage] = useState();
 
-  const { commonStore: { setNotification, config } } = useStore();
+  const { commonStore: { setNotification, config }, userStore: { user } } = useStore();
   const location = useLocation();
 
   useEffect(() => {
-    if (location.state?.user) {
-      setUser(location.state.user);
-    }
     if (location.state?.reason) {
       setReason(location.state.reason);
     }
   }, [location]);
 
+  const defaultUserType = user ? 'psychologue' : undefined;
+
   const submit = e => {
     e.preventDefault();
-    agent.Contact.send({ user, name, firstName, email, reason, message })
+    agent.Contact.send({ user: userType, name, firstName, email, reason, message })
       .then(response => {
         setNotification(response, true, false);
       })
@@ -78,24 +77,21 @@ const Contact = () => {
           legend="Je suis"
           isInline
           required
-          value={user}
-          onChange={setUser}
+          value={defaultUserType}
+          onChange={setUserType}
         >
           <Radio
             data-test-id="user-student-input"
             label="Étudiant"
             value="étudiant"
-            // checked={user === "étudiant"}
           />
           <Radio
             label="Psychologue"
             value="psychologue"
-            // checked={user === "psychologue"}
           />
           <Radio
             label="Autre"
             value="autre-utilisateur"
-            // checked={user === "autre-utilisateur"}
           />
         </RadioGroup>
         <TextInput

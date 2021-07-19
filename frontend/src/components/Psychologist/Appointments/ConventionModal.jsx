@@ -33,7 +33,7 @@ const ConventionModal = ({ currentConvention }) => {
         <Link
           to={{
             pathname: '/contact',
-            state: { user: 'psychologue', reason: 'convention' },
+            state: { reason: 'convention' },
           }}
         >
           contactez nous
