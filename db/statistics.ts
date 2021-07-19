@@ -2,7 +2,9 @@ import knex from 'knex';
 import { Registry } from 'knex/types/result';
 import { DossierState } from '../types/DemarcheSimplifiee';
 import {
-  appointmentsTable, patientsTable, psychologistsTable, universitiesTable,
+  appointmentsTable,
+  patientsTable,
+  psychologistsTable,
 } from './tables';
 
 const knexConfig = require('../knexfile');
@@ -10,8 +12,7 @@ const knexConfig = require('../knexfile');
 const db = knex(knexConfig);
 
 const getUniversityCount = (): Promise<Registry[]> => db(psychologistsTable)
-    .innerJoin(universitiesTable, 'assignedUniversityId', 'id')
-    .countDistinct('id');
+    .countDistinct('assignedUniversityId');
 
 const getActivePsychologistCount = (): Promise<Registry[]> => db(psychologistsTable)
     .where({
