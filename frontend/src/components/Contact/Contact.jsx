@@ -5,6 +5,7 @@ import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
+import { Link } from 'react-router-dom';
 
 const Contact = () => {
   const [user, setUser] = useState('');
@@ -20,7 +21,7 @@ const Contact = () => {
     e.preventDefault();
     agent.Contact.send({ user, name, firstName, email, reason, message })
       .then(response => {
-        setNotification(response);
+        setNotification(response, true, false);
       })
       .catch(error => {
         if (error.response.status === 500) {
@@ -35,7 +36,12 @@ const Contact = () => {
               ),
             },
             false,
+            false,
           );
+        } else {
+          // override agent client interceptor for this call
+          // to allow it to be displayed outside psy pages
+          setNotification(error.response.data, false, false);
         }
       })
       .finally(() => window.scrollTo(0, 0));
@@ -44,8 +50,15 @@ const Contact = () => {
   return (
     <Page
       title="Nous contacter"
-      description="Ma question ne figure pas dans la FAQ,
-    je peux contacter le support."
+      description={(
+        <>
+          Ma question ne figure pas dans la
+          {' '}
+          <Link to="/faq">FAQ</Link>
+          ,
+          je peux contacter le support.
+        </>
+      )}
       background="blue"
       className="contactPage"
     >
@@ -68,7 +81,7 @@ const Contact = () => {
           />
           <Radio
             label="Autre"
-            value="autre"
+            value="autre-utilisateur"
           />
         </RadioGroup>
         <TextInput
@@ -106,7 +119,7 @@ const Contact = () => {
             { value: 'rétractation', label: 'Rétractation' },
             { value: 'connexion', label: 'Problème de connexion' },
             { value: 'presse', label: 'Presse/communication' },
-            { value: 'autre', label: 'Autre' },
+            { value: 'autre-raison', label: 'Autre' },
           ]}
           selected={reason}
           onChange={e => setReason(e.target.value)}

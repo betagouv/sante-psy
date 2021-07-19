@@ -1,19 +1,74 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Table, Pagination, Button, Title } from '@dataesr/react-dsfr';
-import camelize from 'services/string';
 
-const PsyTable = ({ psychologists, filter, teleconsultation }) => {
+import styles from './psyTable.cssmodule.scss';
+
+const PsyTable = ({
+  page,
+  setPage,
+  psychologists,
+  nameFilter,
+  addressFilter,
+  teleconsultation,
+}) => {
+  const [surrendingPages, setSurrendingPages] = useState(0);
   const history = useHistory();
-  const [page] = useState(1);
+  const table = useRef(null);
+
+  const goToProfile = psychologist => {
+    const searchPath = `?page=${
+      page}&name=${
+      nameFilter}&address=${
+      addressFilter}&teleconsultation=${
+      teleconsultation}`;
+    if (history.location.search !== searchPath) {
+      history.push(`/trouver-un-psychologue${searchPath}`);
+    }
+    history.push(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
+  };
+
+  const updateSurrendingPages = () => {
+    if (table.current) {
+      const { width } = table.current.getBoundingClientRect();
+      if (width > 700) {
+        setSurrendingPages(3);
+      } else if (width > 550) {
+        setSurrendingPages(2);
+      } else if (width > 500) {
+        setSurrendingPages(1);
+      } else {
+        setSurrendingPages(0);
+      }
+    }
+  };
+
+  useEffect(() => {
+    updateSurrendingPages();
+  }, [table]);
+
+  useEffect(() => {
+    window.addEventListener('resize', updateSurrendingPages);
+    return () => window.removeEventListener('resize', updateSurrendingPages);
+  }, []);
+
+  let title = 'Tous les résultats';
+  if (nameFilter || addressFilter || teleconsultation) {
+    if (psychologists.length === 1) {
+      title = '1 résultat';
+    } else {
+      title = `${psychologists.length} résultats`;
+    }
+  }
+
   return (
-    <>
+    <div ref={table} className={styles.container}>
       {psychologists.length > 0 ? (
         <>
           <Table
             data-test-id="psy-table"
             className="fr-mb-3w"
-            caption="Tous les résultats"
+            caption={title}
           >
             <thead>
               <tr key="headers">
@@ -32,36 +87,44 @@ const PsyTable = ({ psychologists, filter, teleconsultation }) => {
                     key={psychologist.dossierNumber}
                   >
                     <td>
-                      {`${psychologist.lastName.toUpperCase()} ${camelize(
-                        psychologist.firstNames,
-                      )}`}
+                      {`${psychologist.lastName.toUpperCase()} ${psychologist.firstNames}`}
                     </td>
-                    <td>{psychologist.address}</td>
                     <td>
-                      <Button
-                        data-test-id="psy-table-row-profil-button"
-                        secondary
-                        onClick={() => {
-                          const searchPath = `?search=${filter}&teleconsultation=${teleconsultation}`;
-                          if (history.location.search !== searchPath) {
-                            history.push(`/trouver-un-psychologue${searchPath}`);
-                          }
-                          history.push(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
-                        }}
-                        className="fr-fi-arrow-right-line fr-btn--icon-right fr-float-right"
-                      >
-                        Voir le profil
-                      </Button>
+                      {psychologist.address}
+                    </td>
+                    <td>
+                      <div className="fr-displayed-xs fr-hidden-sm">
+                        <Button
+                          secondary
+                          size="sm"
+                          onClick={() => goToProfile(psychologist)}
+                          className="fr-fi-arrow-right-line fr-float-right"
+                        />
+                      </div>
+                      <div className="fr-hidden-xs fr-displayed-sm">
+                        <Button
+                          data-test-id="psy-table-row-profil-button"
+                          secondary
+                          size="sm"
+                          onClick={() => goToProfile(psychologist)}
+                          className="fr-fi-arrow-right-line fr-btn--icon-right fr-float-right"
+                        >
+                          Voir le profil
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
             </tbody>
           </Table>
           <Pagination
-            buildURL={() => {}}
-            currentPage={page}
+            currentPage={Math.min(page, Math.ceil(psychologists.length / 10))}
+            onClick={p => {
+              setPage(p);
+              table.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+            }}
             pageCount={Math.ceil(psychologists.length / 10)}
-            surrendingPages={3}
+            surrendingPages={surrendingPages}
           />
         </>
       ) : (
@@ -69,7 +132,7 @@ const PsyTable = ({ psychologists, filter, teleconsultation }) => {
           Aucun résultat n&lsquo;a été trouvé, veuillez élargir votre champ de recherche
         </Title>
       )}
-    </>
+    </div>
   );
 };
 

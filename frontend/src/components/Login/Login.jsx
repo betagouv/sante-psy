@@ -3,7 +3,9 @@ import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
 
+import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
+import Mail from 'components/Footer/Mail';
 
 import { useStore } from 'stores/';
 
@@ -40,68 +42,56 @@ const Login = () => {
   }
 
   return (
-    <div className="fr-container-fluid">
-      <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-        <div className="fr-col fr-col-xs-10 fr-col-md-9 fr-my-4w">
-          <h1>
-            Espace Psychologues
-          </h1>
+    <Page
+      title="Espace Psychologues"
+      background="blue"
+    >
+      <h3>Me connecter</h3>
+      <GlobalNotification />
+      <p className="fr-mb-2w">
+        Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant
+        {` ${config.sessionDuration} `}
+        heures
+      </p>
+      <form onSubmit={login} id="login_form">
+        <Row alignItems="bottom">
+          <Col className="fr-col-12 fr-col-sm-6">
+            <TextInput
+              label="Adresse email :"
+              data-test-id="email-input"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
+          </Col>
+          <Col className="fr-col-12 fr-col-sm-6">
+            <Button
+              submit
+              data-test-id="email-button"
+            >
+              Recevoir le lien de connexion
+            </Button>
+          </Col>
+        </Row>
+      </form>
 
-          <div className="panel margin-top-m">
-            <h3>Me connecter</h3>
-            <GlobalNotification />
-            <p className="fr-mb-2w">
-              Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant
-              {` ${config.sessionDuration} `}
-              heures
-            </p>
-            <form onSubmit={login} id="login_form">
-              <Row alignItems="bottom">
-                <Col className="fr-col-12 fr-col-sm-6">
-                  <TextInput
-                    label="Adresse email :"
-                    data-test-id="email-input"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                  />
-                </Col>
-                <Col className="fr-col-12 fr-col-sm-6">
-                  <Button
-                    submit
-                    data-test-id="email-button"
-                  >
-                    Recevoir le lien de connexion
-                  </Button>
-                </Col>
-              </Row>
-            </form>
-          </div>
-
-          <div className="panel border-left-primary">
-            <h3>⚠️&nbsp;Problème d&lsquo;accès ?</h3>
-            <p className="fr-mb-2w">
-              Etes-vous bien enregistré via
-              {' '}
-              <a href={config.demarchesSimplifieesUrl} target="_blank" rel="noopener noreferrer">le formulaire d&lsquo;inscription</a>
-              {' '}
-              ?
-              Il se peut que votre compte ne soit pas encore validé.
-            </p>
-            <p className="fr-mb-2w">
-              L&lsquo;email à utiliser ici est le même que celui avec lequel vous avez fait votre candidature
-              pour participer au dispositif.
-              Il peut être différent de votre email de contact présenté dans l&lsquo;annuaire des psychologues.
-            </p>
-            <p className="fr-mb-2w">
-              Si vous avez besoin d&lsquo;aide, vous pouvez toujours envoyer un email à
-              {' '}
-              <a href={`mailto:${config.contactEmail}`}>{config.contactEmail}</a>
-              .
-            </p>
-          </div>
-        </div>
+      <div className="panel border-left-primary">
+        <h3>⚠️&nbsp;Problème d&lsquo;accès ?</h3>
+        <p className="fr-mb-2w">
+          Etes-vous bien enregistré via
+          {' '}
+          <a href={config.demarchesSimplifieesUrl} target="_blank" rel="noopener noreferrer">le formulaire d&lsquo;inscription</a>
+          {' '}
+          ?
+          Il se peut que votre compte ne soit pas encore validé.
+        </p>
+        <p className="fr-mb-2w">
+          L&lsquo;email à utiliser ici est le même que celui avec lequel vous avez fait votre candidature
+          pour participer au dispositif.
+          Il peut être différent de votre email de contact présenté dans l&lsquo;annuaire des psychologues.
+        </p>
+        <Mail />
       </div>
-    </div>
+    </Page>
   );
 };
 

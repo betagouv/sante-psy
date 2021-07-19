@@ -42,7 +42,8 @@ describe('psyProfileController', () => {
       expect(actual.departement).to.eql(expected.departement);
       expect(actual.region).to.eql(expected.region);
       expect(actual.phone).to.eql(expected.phone);
-      expect(actual.website).to.eql(expected.website);
+      // website url are not generated with protocol
+      expect(actual.website).to.eql(`http://${expected.website}`);
       expect(actual.teleconsultation).to.eql(expected.teleconsultation);
       expect(actual.description).to.eql(expected.description);
       expect(actual.languages).to.eql(expected.languages);
@@ -87,6 +88,17 @@ describe('psyProfileController', () => {
         .then(async (res) => {
           res.status.should.equal(200);
           checkProfile(res.body, psy, true);
+        });
+    });
+
+    it('should fail if param is not a uuid', async () => {
+      const invalidUuid = 'yakalelo.com';
+
+      return chai.request(app)
+        .get(`/api/psychologist/${invalidUuid}`)
+        .then(async (res) => {
+          res.status.should.equal(400);
+          res.body.message.should.equal('Vous devez spécifier un identifiant valide.');
         });
     });
   });

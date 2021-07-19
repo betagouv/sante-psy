@@ -19,6 +19,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 .title {
@@ -29,13 +30,13 @@
 }
 
 .description {
-    font-size: 20px;
-    line-height: 28px;
+    font-size: 24px;
+    line-height: 33px;
     margin-bottom: 32px;
 }
 
-.input {
-    flex-grow: 1;
+.button {
+    width: fit-content;
 }
 
 @media (min-width: 768px) {

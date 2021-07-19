@@ -23,7 +23,7 @@ const Bill = () => {
   useEffect(() => {
     agent.Appointment.get().then(response => {
       const appointmentsByDate = {};
-      response.appointments.forEach(appointment => {
+      response.forEach(appointment => {
         const existingValue = appointmentsByDate[appointment.appointmentDate];
         appointmentsByDate[appointment.appointmentDate] = existingValue ? existingValue + 1 : 1;
       });

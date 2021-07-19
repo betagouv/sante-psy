@@ -50,7 +50,7 @@ describe('DB Psychologists', () => {
       assert.isNotTrue(psySPE.selfModified);
       assert.isNull(psySPE.updatedAt);
       psySPE.firstNames.should.be.equal(psyDS.firstNames);
-      psySPE.region.should.be.equal('Normandie');
+      psySPE.region.should.be.equal(psyDS.region);
 
       // Update from DS (new firstname and new region)
       const newPsyDS = { ...psyDS };
@@ -74,14 +74,13 @@ describe('DB Psychologists', () => {
       assert.isFalse(psySPE.selfModified);
       assert.isNull(psySPE.updatedAt);
       psySPE.firstNames.should.be.equal(psyDS.firstNames);
-      psySPE.region.should.be.equal('Normandie');
+      psySPE.region.should.be.equal(psyDS.region);
 
       // Update psy in SPE
       psyDS.region = 'Bretagne';
       const nbUpdated = await dbPsychologists.updatePsychologist(psyDS);
       nbUpdated.should.be.equal(1);
 
-      // Update from DS (region : Normandie)
       await dbPsychologists.savePsychologistInPG([psyDS]);
 
       // Assert that data didn't changed in SPE DB

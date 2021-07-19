@@ -1,14 +1,23 @@
 import { Request, Response } from 'express';
 
-import { check, oneOf } from 'express-validator';
+import { check, param, oneOf } from 'express-validator';
 import geo from '../utils/geo';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
+import string from '../utils/string';
+
+const getPsyProfilValidators = [
+  param('psyId')
+    .isUUID()
+    .withMessage('Vous devez spécifier un identifiant valide.'),
+];
 
 const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+
   const psychologist = await dbPsychologists.getPsychologistById(req.params.psyId);
   if (!psychologist) {
     throw new CustomError("Le psychologue n'existe pas.", 500);
@@ -24,7 +33,7 @@ const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
     departement: psychologist.departement,
     region: psychologist.region,
     phone: psychologist.phone,
-    website: psychologist.website,
+    website: string.prefixUrl(psychologist.website),
     teleconsultation: psychologist.teleconsultation,
     description: psychologist.description,
     languages: psychologist.languages,
@@ -137,6 +146,7 @@ const suspend = async (req: Request, res: Response): Promise<void> => {
 };
 
 export default {
+  getPsyProfilValidators,
   editPsyProfilValidators,
   suspendValidators,
   getPsyProfile: asyncHelper(getPsyProfile),

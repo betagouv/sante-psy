@@ -82,10 +82,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
               submit
               data-test-id="update-convention-button"
               className="fr-fi-check-line fr-btn--icon-left"
-              disabled={
-                convention.isConventionSigned === ''
-                 || convention.universityId === ''
-                }
+              disabled={convention.isConventionSigned === '' || convention.universityId === ''}
             >
               Enregistrer
             </Button>

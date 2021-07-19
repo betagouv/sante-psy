@@ -8,7 +8,7 @@ const Faq = () => (
     <div className={styles.description}>
       <div>Vous avez une question ?</div>
       <div>
-        Consultez la foire aux questions Santé Psy Étudiant
+        Retrouvez les réponses aux questions les plus fréquemment posées.
       </div>
     </div>
     <HashLink

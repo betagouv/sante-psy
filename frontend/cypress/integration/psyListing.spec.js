@@ -2,7 +2,7 @@ const { resetDB } = require('./utils/db');
 
 describe('Psy Listing', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/trouver-un-psychologue')
+    cy.intercept('GET', '/api/trouver-un-psychologue/reduced')
       .as('psychologists');
     cy.intercept('GET', '/api/psychologist/*')
       .as('psychologist');
@@ -26,7 +26,10 @@ describe('Psy Listing', () => {
 
     cy.wait('@psychologist');
 
+    cy.get('[data-test-id="psy-name"]')
+      .should('exist');
+
     cy.get('[data-test-id="psy-info"]')
-      .should('have.length', 7);
+      .should('have.length', 6);
   });
 });

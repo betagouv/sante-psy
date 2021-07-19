@@ -1,10 +1,9 @@
+import { Knex } from 'knex';
+import faker from 'faker';
 import clean from '../helper/clean';
-
 import { mails } from './02-psychologists';
-
 import uuid from '../../utils/uuid';
 import { patientsTable } from '../../db/tables';
-import { Knex } from 'knex';
 import { Psychologist } from '../../types/Psychologist';
 
 let patientsByPsychologist = {};
@@ -34,11 +33,11 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
     .filter((mail) => mail !== 'empty@beta.gouv.fr')
     .flatMap((mail) => {
       const dossierNumber = uuid.generateUuidFromString(`psychologist-${mail}`);
-      const numberOfPatients = Math.floor(Math.random() * 25 + 1);
+      const numberOfPatients = faker.datatype.number({ min: 1, max: 25 });
       patientsByPsychologist[mail] = numberOfPatients;
       const patients = [];
       for (let i = 0; i < numberOfPatients; i++) {
-        const random = Math.floor(Math.random() * 100);
+        const random = faker.datatype.number();
         if (random % 20 === 0) {
           patients.push(clean.getOnePatient(i, dossierNumber, `doctor-${i}`, false));
         } else if (random % 11 === 0) {
