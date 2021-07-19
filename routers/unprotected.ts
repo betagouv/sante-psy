@@ -40,7 +40,11 @@ router.use(speedLimiter);
 
 router.get('/university', universitiesController.getAll);
 router.get('/config', configController.getConfig);
-router.get('/trouver-un-psychologue', psyListingController.getActivePsychologists);
+// The reduced route is used by our front to optimise the big chunk of data download
+router.get('/trouver-un-psychologue/reduced', psyListingController.getReducedActivePsychologists);
+// The other route is open to the public to get all psys (do not delete !)
+router.get('/trouver-un-psychologue', psyListingController.getFullActivePsychologists);
+
 router.get('/connecteduser', loginController.connectedUser);
 
 router.get('/statistics', statisticsController.getAll);
