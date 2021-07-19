@@ -1,38 +1,16 @@
-.container {
-  margin: auto;
-  width: fit-content;
-  position: relative;
-}
-
 .bigTitle,
 .title {
-  position: relative;
-  margin: 0;
+  display: inline;
 }
 
 .title {
+  box-shadow: inset 0 -2px white, inset 0 -12px #fcea04;
   font-size: 2rem;
   line-height: 2.5rem;
 }
 
 .bigTitle {
+  box-shadow: inset 0 -5px white, inset 0 -17px #fcea04;
   line-height: 4rem;
   font-size: 2.8rem;
-}
-
-.bigUnderline,
-.underline {
-  background-color:#FCEA04 ;
-  height: 10px;
-  width: 100%;
-  position: absolute;
-  z-index: 0;
-}
-
-.bigUnderline {
-  top: 48px;
-}
-
-.underline {
-  top: 30px;
 }
