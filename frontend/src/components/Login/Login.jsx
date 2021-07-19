@@ -42,7 +42,7 @@ const Login = () => {
   return (
     <div className="fr-container-fluid">
       <div className="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-        <div className="fr-col fr-col-xs-10 fr-col-md-8 fr-my-4w">
+        <div className="fr-col fr-col-xs-10 fr-col-md-9 fr-my-4w">
           <h1>
             Espace Psychologues
           </h1>
@@ -57,7 +57,7 @@ const Login = () => {
             </p>
             <form onSubmit={login} id="login_form">
               <Row alignItems="bottom">
-                <Col>
+                <Col className="fr-col-12 fr-col-sm-6">
                   <TextInput
                     label="Adresse email :"
                     data-test-id="email-input"
@@ -65,7 +65,7 @@ const Login = () => {
                     onChange={e => setEmail(e.target.value)}
                   />
                 </Col>
-                <Col>
+                <Col className="fr-col-12 fr-col-sm-6">
                   <Button
                     submit
                     data-test-id="email-button"
