@@ -1,12 +1,11 @@
+import { Knex } from 'knex';
+import faker from 'faker';
 import clean from '../helper/clean';
-
 import uuid from '../../utils/uuid';
 import {
   appointmentsTable,
 } from '../../db/tables';
-
 import { getPatientsByPsychologist } from './03-patients';
-import { Knex } from 'knex';
 
 const getOneAppointmentPerMonth = (patient, day, deleted = false) => [...Array(12).keys()]
   .map((i) => clean.getOneAppointment(patient.id, patient.psychologistId, i, day, deleted));
@@ -46,17 +45,11 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
     appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1));
   } else {
     appointmentList = patientList.flatMap((patient) => {
-      const getRandomDay = () => Math.floor((Math.random() * 30) + 1);
-      const getRandomMonth = () => Math.floor((Math.random() * 12) + 1);
-      const nbOfAppointments = Math.random() * 10;
+      const nbOfAppointments = faker.datatype.number(10);
       const result = [];
       for (let i = 0; i < nbOfAppointments; i++) {
-        const month = getRandomMonth();
-        const day = getRandomDay();
-        const appointmentPerDay = Math.random() * 5 + 1;
-        for (let j = 0; j < appointmentPerDay; j++) {
-          result.push(clean.getOneAppointment(patient.id, patient.psychologistId, month, day));
-        }
+        const date = faker.date.future();
+        result.push(clean.getOneAppointment(patient.id, patient.psychologistId, date.getMonth(), date.getDate()));
       }
       return result;
     });
