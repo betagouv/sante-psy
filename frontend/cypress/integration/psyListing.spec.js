@@ -2,7 +2,7 @@ const { resetDB } = require('./utils/db');
 
 describe('Psy Listing', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/trouver-un-psychologue')
+    cy.intercept('GET', '/api/trouver-un-psychologue/reduced')
       .as('psychologists');
     cy.intercept('GET', '/api/psychologist/*')
       .as('psychologist');

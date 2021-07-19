@@ -13,6 +13,7 @@ import styles from './psyListing.cssmodule.scss';
 const PsyListing = () => {
   const query = new URLSearchParams(useLocation().search);
 
+  const [loading, setLoading] = useState(true);
   const [psychologists, setPsychologists] = useState([]);
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
@@ -20,7 +21,10 @@ const PsyListing = () => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    agent.Psychologist.find().then(setPsychologists);
+    agent.Psychologist.find().then(psy => {
+      setPsychologists(psy);
+      setLoading(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -78,45 +82,51 @@ const PsyListing = () => {
   return (
     <Page
       title="Trouver un psychologue"
-      description={`Il y a actuellement ${psychologists.length} partenaires du dispositif d‘accompagnement.
+      description={loading
+        ? 'Chargement de la liste des psychologues'
+        : `Il y a actuellement ${psychologists.length} partenaires du dispositif d‘accompagnement.
       La liste est mise à jour quotidiennement, revenez la consulter si vous n‘avez pas pu trouver de psychologue.`}
       background="yellow"
       dataTestId="psyListPage"
     >
-      <div className="fr-pb-6w">
-        <Row gutters>
-          <Col n="md-6 sm-12" className={styles.input}>
-            <TextInput
-              className="fr-mb-1w"
-              value={nameFilter}
-              onChange={e => setNameFilter(e.target.value)}
-              label="Rechercher par nom"
+      {!loading && (
+        <>
+          <div className="fr-pb-6w">
+            <Row gutters>
+              <Col n="md-6 sm-12" className={styles.input}>
+                <TextInput
+                  className="fr-mb-1w"
+                  value={nameFilter}
+                  onChange={e => setNameFilter(e.target.value)}
+                  label="Rechercher par nom"
+                />
+              </Col>
+              <Col n="md-6 sm-12" className={styles.input}>
+                <TextInput
+                  className="fr-mb-1w"
+                  value={addressFilter}
+                  onChange={e => setAddressFilter(e.target.value)}
+                  label="Rechercher par ville, code postal ou région"
+                />
+              </Col>
+            </Row>
+            <Checkbox
+              value="teleconsultation"
+              onChange={e => { setTeleconsultation(e.target.checked); }}
+              label="Disponible en téléconsultation"
+              defaultChecked={teleconsultation}
             />
-          </Col>
-          <Col n="md-6 sm-12" className={styles.input}>
-            <TextInput
-              className="fr-mb-1w"
-              value={addressFilter}
-              onChange={e => setAddressFilter(e.target.value)}
-              label="Rechercher par ville, code postal ou région"
-            />
-          </Col>
-        </Row>
-        <Checkbox
-          value="teleconsultation"
-          onChange={e => { setTeleconsultation(e.target.checked); }}
-          label="Disponible en téléconsultation"
-          defaultChecked={teleconsultation}
-        />
-      </div>
-      <PsyTable
-        page={page}
-        setPage={setPage}
-        psychologists={filteredPsychologists}
-        nameFilter={nameFilter}
-        addressFilter={addressFilter}
-        teleconsultation={teleconsultation}
-      />
+          </div>
+          <PsyTable
+            page={page}
+            setPage={setPage}
+            psychologists={filteredPsychologists}
+            nameFilter={nameFilter}
+            addressFilter={addressFilter}
+            teleconsultation={teleconsultation}
+          />
+        </>
+      )}
     </Page>
   );
 };
