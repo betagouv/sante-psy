@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 import { Button, Select, TextInput, RadioGroup, Radio } from '@dataesr/react-dsfr';
 
 import Page from 'components/Page/Page';
@@ -153,4 +154,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default observer(Contact);
