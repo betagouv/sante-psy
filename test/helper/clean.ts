@@ -26,9 +26,7 @@ const dbUniversities = require('../../db/universities');
 const db = knex(knexConfig);
 
 const getRandomInt = () : string => {
-  const min = Math.ceil(1);
-  const max = Math.floor(99);
-  const ourRandom = Math.floor(Math.random() * (max - min) + min);
+  const ourRandom = faker.datatype.number({ min: 1, max: 99 });
   if (ourRandom < 10) {
     return `0${ourRandom.toString()}`;
   }
@@ -36,18 +34,19 @@ const getRandomInt = () : string => {
 };
 
 const getFirstNames = () => {
+  const rand = faker.datatype.number();
   let firstNames = faker.name.firstName();
-  if (Math.floor(Math.random() * 100) % 2 === 0) {
+  if (rand % 2 === 0) {
     firstNames += ` ${faker.name.firstName()}`;
   }
-  if (Math.floor(Math.random() * 100) % 10 === 0) {
+  if (rand % 10 === 0) {
     firstNames += ` ${faker.name.firstName()}`;
   }
   return firstNames;
 };
 
 const getAddress = () => {
-  const rand = Math.floor(Math.random() * 5);
+  const rand = faker.datatype.number() % 5;
   switch (rand) {
   case 0:
     return {
@@ -97,7 +96,7 @@ const getOnePsy = (
     email: faker.internet.email(),
     personalEmail,
     website: faker.internet.domainName() + faker.internet.domainSuffix(),
-    teleconsultation: Math.random() < 0.5,
+    teleconsultation: faker.datatype.boolean(),
     // eslint-disable-next-line max-len
     description: faker.lorem.paragraphs(2),
     // eslint-disable-next-line max-len
