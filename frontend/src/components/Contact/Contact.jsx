@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import { Button, Select, TextInput, RadioGroup, Radio } from '@dataesr/react-dsfr';
 
 import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
-import { Link } from 'react-router-dom';
 
 const Contact = () => {
   const [user, setUser] = useState('');
@@ -16,6 +16,16 @@ const Contact = () => {
   const [message, setMessage] = useState('');
 
   const { commonStore: { setNotification, config } } = useStore();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.user) {
+      setUser(location.state.user);
+    }
+    if (location.state?.reason) {
+      setReason(location.state.reason);
+    }
+  }, [location]);
 
   const submit = e => {
     e.preventDefault();
@@ -68,20 +78,24 @@ const Contact = () => {
           legend="Je suis"
           isInline
           required
+          value={user}
           onChange={setUser}
         >
           <Radio
             data-test-id="user-student-input"
             label="Étudiant"
             value="étudiant"
+            // checked={user === "étudiant"}
           />
           <Radio
             label="Psychologue"
             value="psychologue"
+            // checked={user === "psychologue"}
           />
           <Radio
             label="Autre"
             value="autre-utilisateur"
+            // checked={user === "autre-utilisateur"}
           />
         </RadioGroup>
         <TextInput

@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import { Modal, ModalTitle, ModalContent } from '@dataesr/react-dsfr';
-import { useStore } from 'stores/';
 import { checkConvention } from 'services/conventionVerification';
 import ConventionForm from '../Profile/ConventionForm';
 
 const ConventionModal = ({ currentConvention }) => {
-  const { commonStore: { config } } = useStore();
   const [isOpen, setIsOpen] = useState(true);
 
   const saveResult = () => {
@@ -29,9 +27,17 @@ const ConventionModal = ({ currentConvention }) => {
         {' '}
         <em>Aucune pour le moment</em>
         .
-        Si vous n&lsquo;avez pas de nouvelles de l&lsquo;université sous 2 à 4 semaines, envoyez nous un mail à
+        <br />
+        Si vous n&lsquo;avez pas de nouvelles de l&lsquo;université sous 2 à 4 semaines,
         {' '}
-        <a href={`mailto:${config.contactEmail}`}>{config.contactEmail}</a>
+        <Link
+          to={{
+            pathname: '/contact',
+            state: { user: 'psychologue', reason: 'convention' },
+          }}
+        >
+          contactez nous
+        </Link>
         .
         <ConventionForm
           currentConvention={currentConvention}
@@ -42,4 +48,4 @@ const ConventionModal = ({ currentConvention }) => {
   );
 };
 
-export default observer(ConventionModal);
+export default ConventionModal;
