@@ -95,7 +95,7 @@ const getOnePsy = (
     phone: faker.phone.phoneNumber('0# ## ## ## ##'),
     email: faker.internet.exampleEmail(),
     personalEmail,
-    website: faker.helpers.randomize([undefined, faker.internet.domainName(), faker.internet.url()]),
+    website: faker.internet.domainName() + faker.internet.domainSuffix(),
     teleconsultation: faker.datatype.boolean(),
     // eslint-disable-next-line max-len
     description: faker.lorem.paragraphs(2),
