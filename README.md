@@ -8,6 +8,7 @@ Accompagnement psychologique pour les étudiants
 
 ### Prérequis
 
+* node
 * npm
 * docker-compose
 
