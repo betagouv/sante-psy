@@ -7,7 +7,7 @@ import date from '../utils/date';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 
-const getPatients = async (req: Request, res: Response): Promise<void> => {
+const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.user.psychologist;
   const patients = await dbPatients.getPatients(psychologistId);
   res.json(patients);
@@ -59,7 +59,7 @@ const patientValidators = [
     .customSanitizer((value, { req }) => req.sanitize(value)),
 ];
 
-const editPatientValidators = [
+const updateValidators = [
   // todo : do we html-escape here ? We already escape in templates.
   check('patientId')
     .trim().not().isEmpty()
@@ -68,7 +68,7 @@ const editPatientValidators = [
   ...patientValidators,
 ];
 
-const editPatient = async (req: Request, res: Response): Promise<void> => {
+const update = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { patientId } = req.params;
@@ -113,14 +113,14 @@ const editPatient = async (req: Request, res: Response): Promise<void> => {
   res.json({ message: infoMessage });
 };
 
-const getPatientValidators = [
+const getOneValidators = [
   check('patientId')
     .trim().not().isEmpty()
     .isUUID()
     .withMessage('Ce patient n\'existe pas.'),
 ];
 
-const getPatient = async (req: Request, res: Response): Promise<void> => {
+const getOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { patientId } = req.params;
@@ -135,7 +135,7 @@ const getPatient = async (req: Request, res: Response): Promise<void> => {
   res.json(patient);
 };
 
-const createNewPatient = async (req: Request, res: Response): Promise<void> => {
+const create = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { firstNames } = req.body;
@@ -173,13 +173,13 @@ const createNewPatient = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
-const deletePatientValidators = [
+const deleteValidators = [
   check('patientId')
     .isUUID()
     .withMessage('Vous devez spécifier un patient à supprimer.'),
 ];
 
-const deletePatient = async (req: Request, res: Response): Promise<void> => {
+const deleteOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { patientId } = req.params;
@@ -198,13 +198,13 @@ const deletePatient = async (req: Request, res: Response): Promise<void> => {
 };
 
 export default {
-  editPatientValidators,
-  getPatientValidators,
-  createNewPatientValidators: patientValidators,
-  deletePatientValidators,
-  getPatients: asyncHelper(getPatients),
-  editPatient: asyncHelper(editPatient),
-  getPatient: asyncHelper(getPatient),
-  createNewPatient: asyncHelper(createNewPatient),
-  deletePatient: asyncHelper(deletePatient),
+  updateValidators,
+  getOneValidators,
+  createValidators: patientValidators,
+  deleteValidators,
+  getAll: asyncHelper(getAll),
+  update: asyncHelper(update),
+  getOne: asyncHelper(getOne),
+  create: asyncHelper(create),
+  delete: asyncHelper(deleteOne),
 };

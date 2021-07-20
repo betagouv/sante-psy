@@ -9,13 +9,13 @@ import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
 import string from '../utils/string';
 
-const getPsyProfilValidators = [
+const getValidators = [
   param('psyId')
     .isUUID()
     .withMessage('Vous devez spécifier un identifiant valide.'),
 ];
 
-const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
+const get = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const psychologist = await dbPsychologists.getPsychologistById(req.params.psyId);
@@ -42,7 +42,7 @@ const getPsyProfile = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
-const editPsyProfilValidators = [
+const updateValidators = [
   check('personalEmail')
     .trim()
     .notEmpty()
@@ -97,7 +97,7 @@ const editPsyProfilValidators = [
     .withMessage('Vous devez spécifier si vous proposez la téléconsultation.'),
 ];
 
-const editPsyProfile = async (req: Request, res: Response): Promise<void> => {
+const update = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const region = geo.departementToRegion[req.body.departement];
@@ -146,11 +146,11 @@ const suspend = async (req: Request, res: Response): Promise<void> => {
 };
 
 export default {
-  getPsyProfilValidators,
-  editPsyProfilValidators,
+  getValidators,
+  updateValidators,
   suspendValidators,
-  getPsyProfile: asyncHelper(getPsyProfile),
-  editPsyProfile: asyncHelper(editPsyProfile),
+  get: asyncHelper(get),
+  update: asyncHelper(update),
   activate: asyncHelper(activate),
   suspend: asyncHelper(suspend),
 };

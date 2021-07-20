@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import asyncHelper from '../utils/async-helper';
 import config from '../utils/config';
 
-const getConfig = async (req: Request, res: Response): Promise<void> => {
+const get = async (req: Request, res: Response): Promise<void> => {
   res.json({
     appName: config.appName,
     contactEmail: config.contactEmail,
@@ -15,5 +15,5 @@ const getConfig = async (req: Request, res: Response): Promise<void> => {
 };
 
 export default {
-  getConfig: asyncHelper(getConfig),
+  get: asyncHelper(get),
 };

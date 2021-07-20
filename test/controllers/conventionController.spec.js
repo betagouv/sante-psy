@@ -7,7 +7,7 @@ const dbUniversities = require('../../db/universities');
 const { DossierState } = require('../../types/DemarcheSimplifiee');
 
 describe('conventionController', () => {
-  describe('updateConventionInfo', () => {
+  describe('update convention info', () => {
     let university;
 
     beforeEach(async () => {
@@ -18,7 +18,7 @@ describe('conventionController', () => {
       await clean.cleanAllUniversities();
     });
 
-    it('should updateConventionInfo', async () => {
+    it('should update convention info', async () => {
       const psyEmail = 'login@beta.gouv.fr';
       const psy = await clean.insertOnePsy(psyEmail, DossierState.accepte, false);
       // Check that the fields we are testing are unset before test

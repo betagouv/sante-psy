@@ -8,7 +8,7 @@ import CustomError from '../utils/CustomError';
 import dateUtils from '../utils/date';
 import validation from '../utils/validation';
 
-const createNewAppointmentValidators = [
+const createValidators = [
   check('date')
     .isISO8601()
     .withMessage('Vous devez spécifier une date pour la séance.'),
@@ -17,7 +17,7 @@ const createNewAppointmentValidators = [
     .withMessage('Vous devez spécifier un patient pour la séance.'),
 ];
 
-const createNewAppointment = async (req: Request, res: Response): Promise<void> => {
+const create = async (req: Request, res: Response): Promise<void> => {
   // Todo : test case where patient id does not exist
   validation.checkErrors(req);
 
@@ -42,13 +42,13 @@ const createNewAppointment = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-const deleteAppointmentValidators = [
+const deleteValidators = [
   check('appointmentId')
     .isUUID()
     .withMessage('Vous devez spécifier une séance à supprimer.'),
 ];
 
-const deleteAppointment = async (req: Request, res: Response) : Promise<void> => {
+const deleteOne = async (req: Request, res: Response) : Promise<void> => {
   validation.checkErrors(req);
 
   const { appointmentId } = req.params;
@@ -69,7 +69,7 @@ const deleteAppointment = async (req: Request, res: Response) : Promise<void> =>
   });
 };
 
-const getAppointments = async (req: Request, res: Response): Promise<void> => {
+const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.user.psychologist;
   const appointments = await dbAppointments.getAppointments(psychologistId);
 
@@ -77,9 +77,9 @@ const getAppointments = async (req: Request, res: Response): Promise<void> => {
 };
 
 export default {
-  createNewAppointmentValidators,
-  deleteAppointmentValidators,
-  createNewAppointment: asyncHelper(createNewAppointment),
-  getAppointments: asyncHelper(getAppointments),
-  deleteAppointment: asyncHelper(deleteAppointment),
+  createValidators,
+  deleteValidators,
+  create: asyncHelper(create),
+  getAll: asyncHelper(getAll),
+  delete: asyncHelper(deleteOne),
 };

@@ -8,7 +8,7 @@ const { default: clean } = require('./helper/clean');
 const { default: dbPsychologists } = require('../db/psychologists');
 
 describe('psyProfileController', () => {
-  describe('getPsyProfile', () => {
+  describe('get psy profile', () => {
     afterEach(async () => {
       await clean.cleanAllPsychologists();
     });
@@ -103,7 +103,7 @@ describe('psyProfileController', () => {
     });
   });
 
-  describe('editPsyProfilValidators', () => {
+  describe('update psy profile - input validation', () => {
     let updatePsyStub;
 
     beforeEach(async () => {
@@ -480,7 +480,7 @@ describe('psyProfileController', () => {
     });
   });
 
-  describe('editPsyProfile', () => {
+  describe('update psy profile', () => {
     it('should return 401 if user is not logged in', async () => {
       const psy = await clean.insertOnePsy();
 
@@ -615,7 +615,7 @@ describe('psyProfileController', () => {
     });
   });
 
-  describe('activate', () => {
+  describe('activate psy', () => {
     let activatePsyStub;
     beforeEach(() => {
       activatePsyStub = sinon.stub(dbPsychologists, 'activate');
@@ -667,7 +667,7 @@ describe('psyProfileController', () => {
     });
   });
 
-  describe('suspend', () => {
+  describe('suspend psy', () => {
     let suspendPsyStub;
     beforeEach(() => {
       suspendPsyStub = sinon.stub(dbPsychologists, 'suspend');

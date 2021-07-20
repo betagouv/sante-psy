@@ -6,7 +6,7 @@ const { universitiesTable } = require('./tables');
 const { getDepartementNumberFromString } = require('../utils/department');
 
 module.exports.saveUniversities = async function saveUniversities(universitiesList) {
-  console.log(`UPSERT of ${universitiesList.length} universties....`);
+  console.log(`UPSERT of ${universitiesList.length} universities....`);
   const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
 
   const upsertArray = universitiesList.map((university) => {
@@ -30,7 +30,7 @@ module.exports.saveUniversities = async function saveUniversities(universitiesLi
 
   const query = await Promise.all(upsertArray);
 
-  console.log('UPSERT universties done');
+  console.log('UPSERT universities done');
 
   return query;
 };

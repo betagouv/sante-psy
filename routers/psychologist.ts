@@ -6,8 +6,8 @@ import conventionController from '../controllers/conventionController';
 const router = express.Router();
 
 router.post('/convention',
-  conventionController.conventionInfoValidators,
-  conventionController.conventionInfo);
+  conventionController.updateValidators,
+  conventionController.update);
 
 router.post('/activate', psyProfileController.activate);
 router.post('/suspend',
@@ -15,7 +15,7 @@ router.post('/suspend',
   psyProfileController.suspend);
 
 router.put('/',
-  psyProfileController.editPsyProfilValidators,
-  psyProfileController.editPsyProfile);
+  psyProfileController.updateValidators,
+  psyProfileController.update);
 
 export default router;
