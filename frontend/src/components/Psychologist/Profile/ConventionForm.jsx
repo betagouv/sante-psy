@@ -3,6 +3,7 @@ import { Button, RadioGroup, Radio, Select } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { useStore } from 'stores/';
+import styles from './conventionForm.cssmodule.scss';
 
 const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultValue }) => {
   const [universities, setUniversities] = useState([]);
@@ -62,10 +63,15 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
             value={defaultValueConventionSigned}
             onChange={value => setConvention({ ...convention, isConventionSigned: value === 'true' })}
             required
-            legend="Avez-vous déjà signé la convention ?"
-            hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
-              Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
           >
+            <p className={styles.legend}>
+              Avez-vous déjà signé la convention ?
+              <span className="red-text"> *</span>
+            </p>
+            <p className={styles.hint}>
+              Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
+              Vous pourrez mettre à jour vos réponses plus tard si votre statut change.
+            </p>
             <Radio
               data-test-id="signed-true"
               label="Oui"
