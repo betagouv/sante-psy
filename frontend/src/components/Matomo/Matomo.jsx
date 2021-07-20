@@ -11,10 +11,10 @@ const Matomo = () => {
       _paq.push(['setReferrerUrl', previousURL]);
     }
 
-    _paq.push(['setCustomUrl', window.location.href]);
+    _paq.push(['setCustomUrl', window.location.pathname]);
     _paq.push(['trackPageView', 'Santé psy étudiants']);
 
-    setPreviousURL(window.location.href);
+    setPreviousURL(window.location.pathname);
   }, [location]);
   return <></>;
 };
