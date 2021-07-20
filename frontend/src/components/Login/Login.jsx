@@ -76,7 +76,7 @@ const Login = () => {
         </Row>
       </form>
 
-      <div className="panel border-left-primary">
+      <div className="fr-mt-3w">
         <h3>⚠️&nbsp;Problème d&lsquo;accès ?</h3>
         <p className="fr-mb-2w">
           Etes-vous bien enregistré via
