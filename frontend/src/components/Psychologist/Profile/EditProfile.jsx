@@ -40,6 +40,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             <span className="red-text">*</span>
             ) sont obligatoires.
           </p>
+          <br />
           <TextInput
             className="midlength-input"
             label="Email personnel"

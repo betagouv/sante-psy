@@ -80,6 +80,7 @@ const NewAppointment = () => {
 
             <div className="fr-select-group">
               <Select
+                className="midlength-select"
                 data-test-id="new-appointment-patient-input"
                 id="patients"
                 name="patientId"

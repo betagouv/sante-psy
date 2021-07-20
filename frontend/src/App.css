@@ -60,6 +60,10 @@
   max-width: 25rem;
 }
 
+.midlength-select {
+  max-width: 30rem;
+}
+
 .fr-table thead form {
   margin-block-end: 0;
 }
