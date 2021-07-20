@@ -38,19 +38,11 @@ Vous pouvez vous connecter à l'espace psy avec les emails
 * login@beta.gouv.fr (compte avec des données) ou
 * empty@beta.gouv.fr (compte sans données)
 
+Vous pouvez accéder voir les emails envoyés sur <http://localhost:1080>.
+
 ### Variables d'environnement
 
 Voir `.env.sample` pour la liste complète
-
-### Import de fausses données
-
-Voir les fichiers dans `test/seed` qui vont cleaner la base puis créer quelques universités, psychologues, patients, et séances.
-
-Pour l'exécuter:
-
-```bash
-npm run seed
-```
 
 ### Création d'une migration
 
@@ -66,13 +58,23 @@ Une fois la migration créée, vous pouvez l'appliquer avec :
 npm run migrate
 ```
 
+### Import de fausses données
+
+Voir les fichiers dans `test/seed` qui vont nettoyer la base puis créer quelques universités, psychologues, patients, et séances.
+
+Pour l'exécuter:
+
+```bash
+npm run seed
+```
+
 ### Lancement des tests
 
 Penser à décommenter les variables d'environnement `SECRET` et `SECRET_LOGS` dans le fichier `.env` avant de lancer les tests localement.
 
 #### Front
 
-Une fois l'appli lancée normalement, on utilise cypress
+Une fois l'appli lancée normalement, on utilise cypress.
 
 ```bash
 docker-compose up
@@ -130,7 +132,7 @@ Le deploiement sur scalingo se base sur le fichier [`Procfile`](https://doc.scal
 npm start
 ```
 
-### Accès à postgres
+### Accès à postgres sur Scalingo
 
 Avec [le scalingo CLI](https://doc.scalingo.com/cli) et le nom de l'app sur scalingo
 
@@ -164,7 +166,7 @@ dbPsychologists.savePsychologistInPG([psy])
 
 ### Affichage d'une annonce
 
-Pour afficher des annonces de service (maintenance, formulaire, ...), on utilise la variable d'environnement `ANNOUNCEMENT` (voir .env.sample ou le fichier docker-compose) qui peut être configurée sur l'hebergeur Scalingo. Elle permet d'afficher de l'HTML ou du texte.
+Pour afficher des annonces de service (maintenance, formulaire, ...), on utilise la variable d'environnement `ANNOUNCEMENT` (voir .env.sample ou le fichier docker-compose) qui peut être configurée sur l'hébergeur Scalingo. Elle permet d'afficher de l'HTML ou du texte.
 
 ### Upload d'un fichier sur Scalingo
 
