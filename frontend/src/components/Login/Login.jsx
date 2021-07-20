@@ -56,15 +56,16 @@ const Login = () => {
       </p>
       <form onSubmit={login} id="login_form">
         <Row alignItems="bottom">
-          <Col className="fr-col-12 fr-col-sm-6">
+          <Col>
             <TextInput
+              className={styles.mailInput}
               label="Adresse email :"
               data-test-id="email-input"
               value={email}
               onChange={e => setEmail(e.target.value)}
             />
           </Col>
-          <Col className="fr-col-12 fr-col-sm-6">
+          <Col>
             <Button
               className={styles.loginButton}
               submit
