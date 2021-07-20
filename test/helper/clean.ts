@@ -37,10 +37,10 @@ const getFirstNames = () => {
   const rand = faker.datatype.number();
   let firstNames = faker.name.firstName();
   if (rand % 2 === 0) {
-    firstNames += ` ${faker.name.firstName()}`;
+    firstNames += ` ${faker.name.middleName()}`;
   }
   if (rand % 10 === 0) {
-    firstNames += ` ${faker.name.firstName()}`;
+    firstNames += ` ${faker.name.middleName()}`;
   }
   return firstNames;
 };
@@ -68,7 +68,7 @@ const getAddress = () => {
     };
   default:
     return {
-      address: `${faker.address.streetAddress()}, ${faker.address.cityName()} ${faker.address.country()}`,
+      address: `${faker.address.streetAddress()} ${faker.address.zipCode('#####')} ${faker.address.city()}`,
       departement: '14 - Calvados',
       region: 'Normandie',
     };
@@ -93,9 +93,9 @@ const getOnePsy = (
     ...getAddress(),
     diploma: 'Psychologie clinique de la santé',
     phone: faker.phone.phoneNumber('0# ## ## ## ##'),
-    email: faker.internet.email(),
+    email: faker.internet.exampleEmail(),
     personalEmail,
-    website: faker.internet.domainName() + faker.internet.domainSuffix(),
+    website: faker.helpers.randomize([undefined, faker.internet.domainName(), faker.internet.url()]),
     teleconsultation: faker.datatype.boolean(),
     // eslint-disable-next-line max-len
     description: faker.lorem.paragraphs(2),

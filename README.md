@@ -132,7 +132,9 @@ Le deploiement sur scalingo se base sur le fichier [`Procfile`](https://doc.scal
 npm start
 ```
 
-### Accès à postgres sur Scalingo
+## Actions ponctuelles sur Scalingo
+
+### Accès à postgres
 
 Avec [le scalingo CLI](https://doc.scalingo.com/cli) et le nom de l'app sur scalingo
 
@@ -168,7 +170,7 @@ dbPsychologists.savePsychologistInPG([psy])
 
 Pour afficher des annonces de service (maintenance, formulaire, ...), on utilise la variable d'environnement `ANNOUNCEMENT` (voir .env.sample ou le fichier docker-compose) qui peut être configurée sur l'hébergeur Scalingo. Elle permet d'afficher de l'HTML ou du texte.
 
-### Upload d'un fichier sur Scalingo
+### Upload d'un fichier
 
 Attention, le fichier sera supprimé après la déconnexion ! Si tu as besoin d'un fichier permanent sur scalingo, il faut passer par le repo git.
 
@@ -203,6 +205,16 @@ L'option `--dry-run` permet de visualiser les changements sans qu'ils soient app
 
 ```bash
 ts-node scripts/matchSpecialPsyToUniversities.ts [--dry-run]
+```
+
+### Anonymisation des données sensibles
+
+Ce script est utilisé sur l'environnement de staging afin de remplacer les données sensibles et visibles par de fausses informations après la récupération de données réelles (cf #les-donnees).
+
+Il ne peut pas être exécuté en production.
+
+```bash
+ts-node scripts/anonymizeDb.ts
 ```
 
 ## Les données
