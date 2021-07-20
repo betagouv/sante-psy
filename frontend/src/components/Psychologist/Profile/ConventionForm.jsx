@@ -36,7 +36,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
   };
 
   let defaultValueConventionSigned;
-  if (convention && convention.isConventionSigned !== '') {
+  if (convention && convention.isConventionSigned !== '' && convention.isConventionSigned !== undefined) {
     defaultValueConventionSigned = convention.isConventionSigned ? 'true' : 'false';
   }
   return (
