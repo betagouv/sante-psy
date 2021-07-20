@@ -10,6 +10,7 @@ import Mail from 'components/Footer/Mail';
 import { useStore } from 'stores/';
 
 import agent from 'services/agent';
+import styles from './login.cssmodule.scss';
 
 const Login = () => {
   const {
@@ -65,6 +66,7 @@ const Login = () => {
           </Col>
           <Col className="fr-col-12 fr-col-sm-6">
             <Button
+              className={styles.loginButton}
               submit
               data-test-id="email-button"
             >
