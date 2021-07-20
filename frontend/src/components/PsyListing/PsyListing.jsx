@@ -13,6 +13,8 @@ import PsyTable from './PsyTable';
 
 import styles from './psyListing.cssmodule.scss';
 
+let lastSearch;
+
 const PsyListing = () => {
   const { commonStore: { psychologists, setPsychologists } } = useStore();
   const query = new URLSearchParams(useLocation().search);
@@ -34,7 +36,37 @@ const PsyListing = () => {
     } else {
       setPage(1);
     }
+
+    logSearchInMatomo();
   }, [nameFilter, addressFilter, teleconsultation]);
+
+  const logSearchInMatomo = () => {
+    if (__MATOMO__) {
+      if (lastSearch) {
+        clearTimeout(lastSearch);
+      }
+
+      let search = '';
+      if (nameFilter) {
+        search += `name=${nameFilter};`;
+      }
+      if (addressFilter) {
+        search += `address=${addressFilter};`;
+      }
+      if (teleconsultation) {
+        search += `teleconsultation=${teleconsultation};`;
+      }
+
+      if (search) {
+        lastSearch = setTimeout(
+          () => {
+            _paq.push(['trackEvent', 'Search', 'Psychologist', search]);
+          },
+          2500,
+        );
+      }
+    }
+  };
 
   const matchFilter = (value, filter) => value && value.toLowerCase().includes(filter.toLowerCase());
 
