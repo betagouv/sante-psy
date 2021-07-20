@@ -91,9 +91,8 @@ const AddEditPatient = () => {
             S&lsquo;il vous manque des champs non-obligatoires,
             vous pourrez y revenir plus tard pour compléter le dossier.
           </p>
-          <div>
-            {patient && (
-            <>
+          {patient && (
+            <div>
               <TextInput
                 className="midlength-input"
                 data-test-id="patient-first-name-input"
@@ -134,6 +133,7 @@ const AddEditPatient = () => {
                 label="Numéro INE de l'étudiant (optionnel)"
                 hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
                 value={patient.INE}
+                pattern="^[a-zA-Z0-9]{11,11}$"
                 onChange={e => changePatient(e.target.value, 'INE')}
               />
               <Checkbox
@@ -141,14 +141,14 @@ const AddEditPatient = () => {
                 label="J'ai vérifié que les séances ont bien été prescrites
                 par un médecin ou un Service de Santé Universitaire"
                 hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
-                value="hasPrescription"
+                value={patient.hasPrescription}
                 onChange={e => changePatient(e.target.checked, 'hasPrescription')}
               />
               <Checkbox
                 defaultChecked={patient.isStudentStatusVerified}
                 label="J'ai vérifié le statut étudiant de ce patient"
                 hint="L'étudiant m'a présenté une lettre ou ordonnance médicale"
-                value="isStudentStatusVerified"
+                value={patient.isStudentStatusVerified}
                 onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
               />
               <TextInput
@@ -166,9 +166,8 @@ const AddEditPatient = () => {
                 value={patient.doctorAddress}
                 onChange={e => changePatient(e.target.value, 'doctorAddress')}
               />
-            </>
-            )}
-          </div>
+            </div>
+          )}
           <div className="fr-my-5w">
             <Button
               submit
