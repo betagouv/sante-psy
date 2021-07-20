@@ -1,4 +1,15 @@
-.loginButton{
+.loginButton {
+    min-width: 275px;
     width: 100%;
-    justify-content: center;
+    display: block;
+}
+
+.mailInput {
+    min-width: 275px;
+}
+
+@media (min-width: 600px) {
+    .loginButton {
+        width: fit-content;
+    }
 }
