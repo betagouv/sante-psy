@@ -4,8 +4,6 @@ import Mail from 'components/Footer/Mail';
 
 import { useStore } from 'stores/';
 
-import { Row } from '@dataesr/react-dsfr';
-
 import Page from 'components/Page/Page';
 import styles from './legalNotice.cssmodule.scss';
 
@@ -16,7 +14,7 @@ const LegalNotice = () => {
       title="Mentions légales"
       background="blue"
     >
-      <Row className={styles.container}>
+      <div className={styles.container}>
         <h1 className={styles.title} id="contactez-nous">
           Contactez-nous
         </h1>
@@ -112,7 +110,7 @@ const LegalNotice = () => {
             la saisie d’informations personnelles.
           </div>
         </div>
-      </Row>
+      </div>
     </Page>
   );
 };
