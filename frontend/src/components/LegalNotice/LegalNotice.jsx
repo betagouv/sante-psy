@@ -51,8 +51,8 @@ const LegalNotice = () => {
             </p>
             <p className="fr-mb-2w">1 rue Descartes - 75231 Paris cedex 05</p>
           </div>
-          <div>
-            <h3 className={styles.marginDiv}>Hébergement de la Plateforme</h3>
+          <div className={styles.marginDiv}>
+            <h3 className={styles.hebergement}>Hébergement de la Plateforme</h3>
             Ce site est hébergé en propre par Scalingo SAS, 15 avenue du Rhin, 67100 Strasbourg, France.
           </div>
           <div className={styles.marginDiv} id="accessibilite">
