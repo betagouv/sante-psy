@@ -18,7 +18,9 @@ const LegalNotice = () => {
         <h1 className={styles.title} id="contactez-nous">
           Contactez-nous
         </h1>
-        <Mail className={styles.mail} />
+        <Mail
+          marge="null"
+        />
         <h1 className={styles.title2} id="mentions-legales">
           Mentions légales
         </h1>
