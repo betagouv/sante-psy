@@ -141,14 +141,14 @@ const AddEditPatient = () => {
                 label="J'ai vérifié que les séances ont bien été prescrites
                 par un médecin ou un Service de Santé Universitaire"
                 hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
-                value={patient.hasPrescription}
+                value="hasPrescription"
                 onChange={e => changePatient(e.target.checked, 'hasPrescription')}
               />
               <Checkbox
                 defaultChecked={patient.isStudentStatusVerified}
                 label="J'ai vérifié le statut étudiant de ce patient"
                 hint="L'étudiant m'a présenté une lettre ou ordonnance médicale"
-                value={patient.isStudentStatusVerified}
+                value="isStudentStatusVerified"
                 onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
               />
               <TextInput
