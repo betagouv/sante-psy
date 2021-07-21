@@ -1,15 +1,24 @@
-body{
+body {
     color :#133A8D;
 }
 
-.title{
+.title {
     font-size: 29px;
 }
 
-.sousTitre{
+.title:first-child {
+    padding: 40px 0 0 0;
+    margin: 0;
+}
+
+.sousTitre {
     font-size: 26px;
 }
 
-.liste{
+.liste {
     list-style-type: none;
+}
+
+.mail {
+    margin: 0 0;
 }

@@ -20,7 +20,7 @@ const LegalNotice = () => {
         <h1 className={styles.title} id="contactez-nous">
           Contactez-nous
         </h1>
-        <Mail />
+        <Mail className={styles.mail} />
         <h1 className={styles.title} id="mentions-legales">
           Mentions légales
         </h1>
