@@ -21,7 +21,7 @@ const LegalNotice = () => {
           Contactez-nous
         </h1>
         <Mail className={styles.mail} />
-        <h1 className={styles.title} id="mentions-legales">
+        <h1 className={styles.title2} id="mentions-legales">
           Mentions légales
         </h1>
         <div>
@@ -44,7 +44,7 @@ const LegalNotice = () => {
             </p>
           </div>
           <div>
-            <h3>Directeur de la publication</h3>
+            <h3 className={styles.sousTitre}>Directeur de la publication</h3>
             <p className="fr-mb-2w">
               MINISTÈRE DE L&lsquo;ENSEIGNEMENT SUPÉRIEUR,
               DE LA RECHERCHE ET DE L&lsquo;INNOVATION
@@ -52,11 +52,11 @@ const LegalNotice = () => {
             <p className="fr-mb-2w">1 rue Descartes - 75231 Paris cedex 05</p>
           </div>
           <div>
-            <h3>Hébergement de la Plateforme</h3>
+            <h3 className={styles.marginDiv}>Hébergement de la Plateforme</h3>
             Ce site est hébergé en propre par Scalingo SAS, 15 avenue du Rhin, 67100 Strasbourg, France.
           </div>
-          <div id="accessibilite">
-            <h3>Accessibilité</h3>
+          <div className={styles.marginDiv} id="accessibilite">
+            <h3 className={styles.sousTitre}>Accessibilité</h3>
             <p className="fr-mb-2w">
               La conformité aux normes d’accessibilité numérique est un objectif ultérieur.
               En attendant, nous tâchons de rendre ce site
@@ -69,7 +69,7 @@ const LegalNotice = () => {
             </ul>
           </div>
           <div>
-            <h3>Signaler un dysfonctionnement</h3>
+            <h3 className={styles.sousTitre}>Signaler un dysfonctionnement</h3>
             <p className="fr-mb-2w">
               Si vous rencontrez un défaut d’accessibilité vous empêchant d’accéder à un contenu
               ou une fonctionnalité du site, merci de nous en faire part en
@@ -91,8 +91,8 @@ const LegalNotice = () => {
               vous êtes en droit de faire parvenir vos doléances ou une demande de saisine au Défenseur des droits.
             </p>
           </div>
-          <div>
-            <h3>En savoir plus</h3>
+          <div className={styles.marginDiv}>
+            <h3 className={styles.sousTitre}>En savoir plus</h3>
             Pour en savoir plus sur la politique d’accessibilité numérique de l’État :
             {' '}
             <a
@@ -103,8 +103,8 @@ const LegalNotice = () => {
               http://references.modernisation.gouv.fr/accessibilite-numerique
             </a>
           </div>
-          <div>
-            <h3>Sécurité</h3>
+          <div className={styles.marginDiv}>
+            <h3 className={styles.sousTitre}>Sécurité</h3>
             Le site est protégé par un certificat électronique,
             matérialisé pour la grande majorité des navigateurs par un cadenas.
             Cette protection participe à la confidentialité des échanges.
