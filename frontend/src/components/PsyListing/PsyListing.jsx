@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Checkbox, Row, Col, TextInput } from '@dataesr/react-dsfr';
+import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
 
 import agent from 'services/agent';
 
+import { useStore } from 'stores/';
+
 import PsyTable from './PsyTable';
 
 import styles from './psyListing.cssmodule.scss';
 
+let lastSearch;
+
 const PsyListing = () => {
+  const { commonStore: { psychologists, setPsychologists } } = useStore();
   const query = new URLSearchParams(useLocation().search);
 
-  const [loading, setLoading] = useState(true);
-  const [psychologists, setPsychologists] = useState([]);
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    agent.Psychologist.find().then(psy => {
-      setPsychologists(psy);
-      setLoading(false);
-    });
+    if (!psychologists) {
+      agent.Psychologist.find().then(setPsychologists);
+    }
   }, []);
 
   useEffect(() => {
@@ -33,11 +36,44 @@ const PsyListing = () => {
     } else {
       setPage(1);
     }
+
+    logSearchInMatomo();
   }, [nameFilter, addressFilter, teleconsultation]);
+
+  const logSearchInMatomo = () => {
+    if (__MATOMO__) {
+      if (lastSearch) {
+        clearTimeout(lastSearch);
+      }
+
+      let search = '';
+      if (nameFilter) {
+        search += `name=${nameFilter};`;
+      }
+      if (addressFilter) {
+        search += `address=${addressFilter};`;
+      }
+      if (teleconsultation) {
+        search += `teleconsultation=${teleconsultation};`;
+      }
+
+      if (search) {
+        lastSearch = setTimeout(
+          () => {
+            _paq.push(['trackEvent', 'Search', 'Psychologist', search]);
+          },
+          2500,
+        );
+      }
+    }
+  };
 
   const matchFilter = (value, filter) => value && value.toLowerCase().includes(filter.toLowerCase());
 
   const getFilteredPsychologists = () => {
+    if (!psychologists) {
+      return [];
+    }
     const departementFilter = +addressFilter;
     const addressIsDepartment = departementFilter
     && (
@@ -82,14 +118,14 @@ const PsyListing = () => {
   return (
     <Page
       title="Trouver un psychologue"
-      description={loading
-        ? 'Chargement de la liste des psychologues'
-        : `Il y a actuellement ${psychologists.length} partenaires du dispositif d‘accompagnement.
-      La liste est mise à jour quotidiennement, revenez la consulter si vous n‘avez pas pu trouver de psychologue.`}
+      description={psychologists
+        ? `Il y a actuellement ${psychologists.length} partenaires du dispositif d‘accompagnement.
+      La liste est mise à jour quotidiennement, revenez la consulter si vous n‘avez pas pu trouver de psychologue.`
+        : 'Chargement de la liste des psychologues'}
       background="yellow"
       dataTestId="psyListPage"
     >
-      {!loading && (
+      {psychologists && (
         <>
           <div className="fr-pb-6w">
             <Row gutters>
@@ -131,4 +167,4 @@ const PsyListing = () => {
   );
 };
 
-export default PsyListing;
+export default observer(PsyListing);

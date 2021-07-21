@@ -109,14 +109,12 @@ describe('Header Test', () => {
           cy.location('pathname').should('eq', '/trouver-un-psychologue');
         });
 
-        cy.get('@close-burger-menu').click();
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
           cy.get('[data-test-id="header-default-link-3"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/faq');
         });
 
-        cy.get('@close-burger-menu').click();
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
           cy.get('[data-test-id="header-default-link-1"]').should('be.visible').click();
@@ -216,7 +214,6 @@ describe('Header Test', () => {
           cy.location('pathname').should('eq', '/');
         });
 
-        cy.get('@close-burger-menu').click();
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
           // We are on public space => my space button is visible and works
@@ -225,7 +222,6 @@ describe('Header Test', () => {
           cy.location('pathname').should('eq', '/psychologue/mes-seances');
         });
 
-        cy.get('@close-burger-menu').click();
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
           // Logout
@@ -257,21 +253,18 @@ describe('Header Test', () => {
           cy.location('pathname').should('eq', '/psychologue/mes-patients');
         });
 
-        cy.get('@close-burger-menu').click();
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
           cy.get('[data-test-id="header-connected-link-3"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/psychologue/mes-remboursements');
         });
 
-        cy.get('@close-burger-menu').click();
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
           cy.get('[data-test-id="header-connected-link-4"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/psychologue/mon-profil');
         });
 
-        cy.get('@close-burger-menu').click();
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
           cy.get('[data-test-id="header-connected-link-1"]').should('be.visible').click();

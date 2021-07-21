@@ -1,25 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 import { Button, Select, TextInput, RadioGroup, Radio } from '@dataesr/react-dsfr';
 
 import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
-import { Link } from 'react-router-dom';
 
 const Contact = () => {
-  const [user, setUser] = useState('');
-  const [name, setName] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [email, setEmail] = useState('');
-  const [reason, setReason] = useState('');
-  const [message, setMessage] = useState('');
+  const [userType, setUserType] = useState();
+  const [name, setName] = useState();
+  const [firstName, setFirstName] = useState();
+  const [email, setEmail] = useState();
+  const [reason, setReason] = useState();
+  const [message, setMessage] = useState();
 
-  const { commonStore: { setNotification, config } } = useStore();
+  const { commonStore: { setNotification, config }, userStore: { user } } = useStore();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.reason) {
+      setReason(location.state.reason);
+    }
+  }, [location]);
+
+  const defaultUserType = user ? 'psychologue' : undefined;
 
   const submit = e => {
     e.preventDefault();
-    agent.Contact.send({ user, name, firstName, email, reason, message })
+    agent.Contact.send({ user: userType, name, firstName, email, reason, message })
       .then(response => {
         setNotification(response, true, false);
       })
@@ -68,7 +78,8 @@ const Contact = () => {
           legend="Je suis"
           isInline
           required
-          onChange={setUser}
+          value={defaultUserType}
+          onChange={setUserType}
         >
           <Radio
             data-test-id="user-student-input"
@@ -143,4 +154,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default observer(Contact);

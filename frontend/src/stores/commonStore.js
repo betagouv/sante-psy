@@ -5,13 +5,21 @@ export default class CommonStore {
 
   notification = null;
 
+  psychologists = undefined;
+
   constructor() {
     makeObservable(this, {
+      psychologists: observable,
+      setPsychologists: action.bound,
       config: observable,
       setConfig: action.bound,
       notification: observable,
       setNotification: action.bound,
     });
+  }
+
+  setPsychologists(psychologists) {
+    this.psychologists = psychologists;
   }
 
   setConfig(config) {

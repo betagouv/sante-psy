@@ -5,9 +5,10 @@ import {
   Container,
   Row,
   Col,
-  Title,
   Text,
 } from '@dataesr/react-dsfr';
+
+import UnderlinedTitle from './UnderlinedTitle';
 
 import styles from './page.cssmodule.scss';
 
@@ -16,7 +17,7 @@ const Page = ({ title, description, background, children, className = null, data
     <div className={styles.container} data-test-id={dataTestId}>
       <Row>
         <Col className={styles.sectionTitle}>
-          <Title as="h1" look="h2" className={styles.title}>{title}</Title>
+          <UnderlinedTitle title={title} className="fr-mb-1w" />
           {description && <Text size="lg">{description}</Text>}
         </Col>
       </Row>
