@@ -37,10 +37,10 @@ const getFirstNames = () => {
   const rand = faker.datatype.number();
   let firstNames = faker.name.firstName();
   if (rand % 2 === 0) {
-    firstNames += ` ${faker.name.middleName()}`;
+    firstNames += ` ${faker.name.firstName()}`;
   }
   if (rand % 10 === 0) {
-    firstNames += ` ${faker.name.middleName()}`;
+    firstNames += ` ${faker.name.firstName()}`;
   }
   return firstNames;
 };

@@ -16,7 +16,7 @@ const fakeFirstnames = (real: string) : string => {
 
   let fake = faker.name.firstName();
   for (let i = 1; i < nbFirstnames; i++) {
-    fake += ` ${faker.name.middleName()}`;
+    fake += ` ${faker.name.firstName()}`;
   }
   return fake;
 };
