@@ -11,15 +11,7 @@ const knexConfig = require('../knexfile');
 
 const knex = knexModule(knexConfig);
 
-const fakeFirstnames = (real: string) : string => {
-  const nbFirstnames = real ? real.split(' ').length - 1 : 0;
-
-  let fake = faker.name.firstName();
-  for (let i = 1; i < nbFirstnames; i++) {
-    fake += ` ${faker.name.firstName()}`;
-  }
-  return fake;
-};
+const fakeFirstnames = (real: string) : string => real.split(' ').map(() => faker.name.firstName()).join(' ');
 
 const fakeLastname = () : string => faker.name.lastName();
 
