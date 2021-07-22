@@ -110,6 +110,17 @@ describe('Update psy fields', () => {
         expect(nonEditablePsy[key]).to.equal(psy[key]);
         expect(editablePsy).to.not.have.own.property(key);
       });
+
+      ['dossierNumber',
+        'assignedUniversityId',
+        'isConventionSigned',
+        'selfModified',
+        'active',
+        'inactiveUntil',
+      ].forEach((key) => {
+        expect(editablePsy).to.not.have.own.property(key);
+        expect(nonEditablePsy).to.not.have.own.property(key);
+      });
     });
   });
 });
