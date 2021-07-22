@@ -1,6 +1,5 @@
 const { assert } = require('chai');
 const rewire = require('rewire');
-const { v4: uuidV4 } = require('uuid');
 require('dotenv').config();
 
 const { default: dbPsychologists } = require('../db/psychologists');
