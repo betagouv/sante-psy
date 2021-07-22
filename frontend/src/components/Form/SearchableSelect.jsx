@@ -19,7 +19,7 @@ const SearchableSelect = ({
 }) => {
   const inputOption = {
     ...remainingProps,
-    className: 'fr-select midlength-input',
+    className: 'fr-select midlength-input midlength-select',
     autoComplete: 'off',
     id: field,
     type,
@@ -69,7 +69,7 @@ const SearchableSelect = ({
         value={internalValue}
       />
       <div
-        className={classnames(styles.select, 'midlength-input', { [styles.display]: showOptions })}
+        className={classnames(styles.select, 'midlength-select', { [styles.display]: showOptions })}
       >
         {filteredOptions.length === 0 ? (
           <div className={styles.optionNonClickable}>

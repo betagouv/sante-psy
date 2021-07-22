@@ -62,6 +62,7 @@ const Login = () => {
               label="Adresse email :"
               data-test-id="email-input"
               value={email}
+              type="email"
               onChange={e => setEmail(e.target.value)}
             />
           </Col>

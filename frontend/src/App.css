@@ -61,11 +61,19 @@
   max-width: 10rem;
 }
 .midlength-input {
+  max-width: 42rem;
+}
+
+.midlength-input input {
+  max-width: 25rem;
+}
+
+.midlength-input textarea {
   max-width: 25rem;
 }
 
 .midlength-select {
-  max-width: 30rem;
+  max-width: 25rem;
 }
 
 .fr-table thead form {
