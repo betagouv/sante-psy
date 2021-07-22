@@ -7,9 +7,9 @@ import date from '../utils/date';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 
-const getPatients = async (req: Request, res: Response): Promise<void> => {
+const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.user.psychologist;
-  const patients = await dbPatients.getPatients(psychologistId);
+  const patients = await dbPatients.getAll(psychologistId);
   res.json(patients);
 };
 
@@ -59,7 +59,7 @@ const patientValidators = [
     .customSanitizer((value, { req }) => req.sanitize(value)),
 ];
 
-const editPatientValidators = [
+const updateValidators = [
   // todo : do we html-escape here ? We already escape in templates.
   check('patientId')
     .trim().not().isEmpty()
@@ -68,13 +68,13 @@ const editPatientValidators = [
   ...patientValidators,
 ];
 
-const editPatient = async (req: Request, res: Response): Promise<void> => {
+const update = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { patientId } = req.params;
   const patientFirstNames = req.body.firstNames;
   const patientLastName = req.body.lastName;
-  const dateOfBirth = date.parseDateForm(req.body.dateOfBirth);
+  const dateOfBirth = date.parseForm(req.body.dateOfBirth);
   const patientINE = req.body.INE;
   const patientInstitutionName = req.body.institutionName;
   const { doctorName } = req.body;
@@ -84,7 +84,7 @@ const editPatient = async (req: Request, res: Response): Promise<void> => {
   const patientHasPrescription = Boolean(req.body.hasPrescription);
 
   const psychologistId = req.user.psychologist;
-  const updated = await dbPatients.updatePatient(
+  const updated = await dbPatients.update(
     patientId,
     patientFirstNames,
     patientLastName,
@@ -113,19 +113,19 @@ const editPatient = async (req: Request, res: Response): Promise<void> => {
   res.json({ message: infoMessage });
 };
 
-const getPatientValidators = [
+const getOneValidators = [
   check('patientId')
     .trim().not().isEmpty()
     .isUUID()
     .withMessage('Ce patient n\'existe pas.'),
 ];
 
-const getPatient = async (req: Request, res: Response): Promise<void> => {
+const getOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { patientId } = req.params;
   const psychologistId = req.user.psychologist;
-  const patient = await dbPatients.getPatientById(patientId, psychologistId);
+  const patient = await dbPatients.getById(patientId, psychologistId);
 
   if (!patient) {
     throw new CustomError('Ce patient n\'existe pas. Vous ne pouvez pas le modifier.', 404);
@@ -135,12 +135,12 @@ const getPatient = async (req: Request, res: Response): Promise<void> => {
   res.json(patient);
 };
 
-const createNewPatient = async (req: Request, res: Response): Promise<void> => {
+const create = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { firstNames } = req.body;
   const { lastName } = req.body;
-  const dateOfBirth = date.parseDateForm(req.body.dateOfBirth);
+  const dateOfBirth = date.parseForm(req.body.dateOfBirth);
   const { INE } = req.body;
   const { institutionName } = req.body;
   const { doctorName } = req.body;
@@ -150,7 +150,7 @@ const createNewPatient = async (req: Request, res: Response): Promise<void> => {
   const hasPrescription = Boolean(req.body.hasPrescription);
 
   const psychologistId = req.user.psychologist;
-  await dbPatients.insertPatient(
+  await dbPatients.insert(
     firstNames,
     lastName,
     INE,
@@ -173,18 +173,18 @@ const createNewPatient = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
-const deletePatientValidators = [
+const deleteValidators = [
   check('patientId')
     .isUUID()
     .withMessage('Vous devez spécifier un patient à supprimer.'),
 ];
 
-const deletePatient = async (req: Request, res: Response): Promise<void> => {
+const deleteOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { patientId } = req.params;
   const psychologistId = req.user.psychologist;
-  const deleted = await dbPatients.deletePatient(patientId, psychologistId);
+  const deleted = await dbPatients.delete(patientId, psychologistId);
 
   if (deleted === 0) {
     console.log(`Patient ${patientId} not deleted by probably other psy id ${psychologistId}`);
@@ -198,13 +198,13 @@ const deletePatient = async (req: Request, res: Response): Promise<void> => {
 };
 
 export default {
-  editPatientValidators,
-  getPatientValidators,
-  createNewPatientValidators: patientValidators,
-  deletePatientValidators,
-  getPatients: asyncHelper(getPatients),
-  editPatient: asyncHelper(editPatient),
-  getPatient: asyncHelper(getPatient),
-  createNewPatient: asyncHelper(createNewPatient),
-  deletePatient: asyncHelper(deletePatient),
+  updateValidators,
+  getOneValidators,
+  createValidators: patientValidators,
+  deleteValidators,
+  getAll: asyncHelper(getAll),
+  update: asyncHelper(update),
+  getOne: asyncHelper(getOne),
+  create: asyncHelper(create),
+  delete: asyncHelper(deleteOne),
 };

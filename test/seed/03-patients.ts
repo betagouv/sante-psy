@@ -18,7 +18,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
     patientList = mails
     .filter((mail) => mail !== 'empty@beta.gouv.fr')
     .flatMap((mail) => {
-      const dossierNumber = uuid.generateUuidFromString(`psychologist-${mail}`);
+      const dossierNumber = uuid.generateFromString(`psychologist-${mail}`);
       patientsByPsychologist[mail] = 5;
       return [
         clean.getOnePatient(0, dossierNumber),
@@ -32,7 +32,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
     patientList = mails
     .filter((mail) => mail !== 'empty@beta.gouv.fr')
     .flatMap((mail) => {
-      const dossierNumber = uuid.generateUuidFromString(`psychologist-${mail}`);
+      const dossierNumber = uuid.generateFromString(`psychologist-${mail}`);
       const numberOfPatients = faker.datatype.number({ min: 1, max: 25 });
       patientsByPsychologist[mail] = numberOfPatients;
       const patients = [];

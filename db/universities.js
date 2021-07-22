@@ -3,11 +3,11 @@ const knex = require('knex')(knexConfig);
 const date = require('../utils/date');
 const departementToUniversityName = require('../scripts/departementToUniversityName');
 const { universitiesTable } = require('./tables');
-const { getDepartementNumberFromString } = require('../utils/department');
+const department = require('../utils/department');
 
-module.exports.saveUniversities = async function saveUniversities(universitiesList) {
-  console.log(`UPSERT of ${universitiesList.length} universties....`);
-  const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
+module.exports.upsertMany = async function upsertMany(universitiesList) {
+  console.log(`UPSERT of ${universitiesList.length} universities....`);
+  const updatedAt = date.now(); // use to perform UPSERT in PG
 
   const upsertArray = universitiesList.map((university) => {
     const upsertingKey = 'id';
@@ -30,12 +30,12 @@ module.exports.saveUniversities = async function saveUniversities(universitiesLi
 
   const query = await Promise.all(upsertArray);
 
-  console.log('UPSERT universties done');
+  console.log('UPSERT universities done');
 
   return query;
 };
 
-module.exports.getUniversities = async () => {
+module.exports.getAllOrderByName = async () => {
   try {
     return knex.select('id', 'name', 'emailSSU', 'emailUniversity')
         .from(universitiesTable)
@@ -46,7 +46,7 @@ module.exports.getUniversities = async () => {
   }
 };
 
-module.exports.insertUniversity = async (name) => {
+module.exports.insertByName = async (name) => {
   try {
     const universityArray = await knex(universitiesTable).insert({
       name,
@@ -63,7 +63,7 @@ module.exports.getAssignedUniversityId = (psychologist, universities) => {
     return psychologist.assignedUniversityId;
   }
 
-  const departement = getDepartementNumberFromString(psychologist.departement);
+  const departement = department.getNumberFromString(psychologist.departement);
   if (!departement) {
     console.log(`No departement found - psy id ${psychologist.dossierNumber}`);
     return null;

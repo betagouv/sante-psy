@@ -10,7 +10,7 @@ const sort = (a, b) => {
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   let universities = [];
-  universities = await dbUniversities.getUniversities();
+  universities = await dbUniversities.getAllOrderByName();
 
   universities.sort(sort);
 

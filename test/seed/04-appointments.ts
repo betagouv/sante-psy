@@ -15,9 +15,9 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
   const patientsByPsychologist = getPatientsByPsychologist();
   const patientList = Object.keys(patientsByPsychologist)
     .flatMap((psychologist) => {
-      const dossierNumber = uuid.generateUuidFromString(`psychologist-${psychologist}`);
+      const dossierNumber = uuid.generateFromString(`psychologist-${psychologist}`);
       return [...Array(patientsByPsychologist[psychologist]).keys()].map((i) => ({
-        id: uuid.generateUuidFromString(`patient-${dossierNumber}-${i}`),
+        id: uuid.generateFromString(`patient-${dossierNumber}-${i}`),
         psychologistId: dossierNumber,
       }));
     });

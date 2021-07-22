@@ -1,9 +1,9 @@
 const { default: uuid } = require('../utils/uuid');
 
 describe('uuid', () => {
-  describe('generateUuidFromString', () => {
+  describe('generateFromString', () => {
     it('should generate a uuid from a string', async () => {
-      const result = uuid.generateUuidFromString('my-id');
+      const result = uuid.generateFromString('my-id');
 
       result.should.be.equal('5b8fca8a-bcfa-5a6d-a97a-72404d0b0216');
     });

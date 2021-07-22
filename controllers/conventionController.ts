@@ -5,7 +5,7 @@ import dbPsychologists from '../db/psychologists';
 import validation from '../utils/validation';
 import asyncHelper from '../utils/async-helper';
 
-const conventionInfoValidators = [
+const updateValidators = [
   // Note : no sanitizing because isUUID will not allow strange html anyway.
   check('universityId')
     .isUUID()
@@ -16,7 +16,7 @@ const conventionInfoValidators = [
     .withMessage('Vous devez spécifier si la convention est signée ou non.'),
 ];
 
-const conventionInfo = async (req: Request, res: Response): Promise<void> => {
+const update = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { universityId, isConventionSigned } = req.body;
@@ -31,6 +31,6 @@ const conventionInfo = async (req: Request, res: Response): Promise<void> => {
 };
 
 export default {
-  conventionInfoValidators,
-  conventionInfo: asyncHelper(conventionInfo),
+  updateValidators,
+  update: asyncHelper(update),
 };

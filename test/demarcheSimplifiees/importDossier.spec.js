@@ -73,7 +73,7 @@ describe('Demarches Simplifiees', () => {
 
       const getUuidDossierNumber = importDossier.__get__('getUuidDossierNumber');
       const output = getUuidDossierNumber(dossierNumber);
-      const result = uuid.generateUuidFromString(`${config.demarchesSimplifieesId}-${dossierNumber}`);
+      const result = uuid.generateFromString(`${config.demarchesSimplifieesId}-${dossierNumber}`);
 
       output.should.equal(result);
     });
