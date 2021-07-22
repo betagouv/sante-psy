@@ -38,7 +38,7 @@ module.exports.getLatestCursorSaved = function getLatestCursorSaved(updateEveryt
 
 module.exports.saveLatestCursor = async function saveLatestCursor(cursor) {
   try {
-    const now = date.getDateNowPG();
+    const now = date.now();
 
     const alreadySavedCursor = await module.exports.getCursorFromDB();
     // eslint-disable-next-line func-names

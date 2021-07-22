@@ -17,7 +17,7 @@ describe('DB Patients', () => {
   const hasPrescription = false;
   const doctorName = 'doctorName';
   const doctorAddress = 'doctorAddress';
-  const dateOfBirth = date.parseDateForm('20/01/1980');
+  const dateOfBirth = date.parseForm('20/01/1980');
 
   async function testDataPatientsExist(lastName) {
     const exist = await knex(patientsTable)

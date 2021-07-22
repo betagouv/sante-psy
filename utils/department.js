@@ -2,7 +2,7 @@
  * Output : "55"
  * @param {} departementString ex : '55 - Indre-et-Loire'
  */
-module.exports.getDepartementNumberFromString = function getDepartementNumberFromString(departementString) {
+module.exports.getNumberFromString = function getNumberFromString(departementString) {
   if (!departementString) {
     return null;
   }

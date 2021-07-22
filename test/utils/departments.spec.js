@@ -1,10 +1,10 @@
-const { getDepartementNumberFromString } = require('../../utils/department');
+const department = require('../../utils/department');
 
-describe('getDepartementNumberFromString', () => {
+describe('department - getNumberFromString', () => {
   it('should return departement number from departement and number', async () => {
     const departementNumber = '55';
     const departementString = `${departementNumber} - Indre-et-Loire`;
-    const output = getDepartementNumberFromString(departementString);
+    const output = department.getNumberFromString(departementString);
 
     output.should.equal(departementNumber);
   });

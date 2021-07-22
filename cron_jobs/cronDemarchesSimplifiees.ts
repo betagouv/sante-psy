@@ -47,7 +47,7 @@ const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
       badPsychologists,
       hostnameWithProtocol: config.hostnameWithProtocol,
     });
-    await emailUtils.sendMail(config.teamEmail, 'Dossiers multiples détéctés !', html);
+    await emailUtils.send(config.teamEmail, 'Dossiers multiples détéctés !', html);
     console.debug('Email sent for multiple accounts alert');
   } catch (err) {
     console.error("Erreur d'envoi de mail, le mail d'alerte n'est pas envoyé.", err);

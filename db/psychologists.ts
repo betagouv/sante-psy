@@ -34,7 +34,7 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
     })
     .update({
       assignedUniversityId,
-      updatedAt: date.getDateNowPG(),
+      updatedAt: date.now(),
     });
 
   console.log(`Psy id ${psychologistId} updated with assignedUniversityId ${assignedUniversityId}`);
@@ -109,7 +109,7 @@ const getById = async (psychologistId: string): Promise<Psychologist> => {
  */
 const savePsychologistInPG = async (psyList: Psychologist[]): Promise<(number | void)[]> => {
   console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
-  const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
+  const updatedAt = date.now(); // use to perform UPSERT in PG
   const universities = await dbUniversities.getAllOrderByName();
 
   const psychologists = await getByIds(psyList.map((psy) => psy.dossierNumber));
@@ -208,7 +208,7 @@ const updateConventionInfo = async (
     .update({
       assignedUniversityId,
       isConventionSigned,
-      updatedAt: date.getDateNowPG(),
+      updatedAt: date.now(),
     });
   if (!updated) {
     throw new Error('No psychologist found for this id');
@@ -239,7 +239,7 @@ const update = async (psychologist: Psychologist): Promise<number> => {
       .where('dossierNumber', psychologist.dossierNumber)
       .update({
         ...editablePsyFields(psychologist),
-        updatedAt: date.getDateNowPG(),
+        updatedAt: date.now(),
         selfModified: true,
       });
   } catch (err) {

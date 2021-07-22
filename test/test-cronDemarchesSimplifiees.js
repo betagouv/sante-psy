@@ -66,7 +66,7 @@ describe('checkForMultipleAcceptedDossiers', () => {
   let sendMailStub;
 
   beforeEach(async () => {
-    sendMailStub = sinon.stub(emailUtils, 'sendMail');
+    sendMailStub = sinon.stub(emailUtils, 'send');
     await clean.cleanAllPsychologists();
     return Promise.resolve();
   });

@@ -20,14 +20,14 @@ const sendMailToUniversities = async () => {
     const htmlFormated = await ejs.renderFile('./views/emails/summaryUniversity.ejs');
     const emailsTo = dbUniversities.getEmailsTo(university);
     if (emailsTo) {
-      await emailUtils.sendMail(
+      await emailUtils.send(
         emailsTo,
         `Résumé des séances ${config.appName}`,
         htmlFormated,
         '', // cc mail
         config.contactEmail, // bcc mail
       );
-      console.log(`Summary sent for ${university.name} - ${logs.hashForLogs(emailsTo)}`);
+      console.log(`Summary sent for ${university.name} - ${logs.hash(emailsTo)}`);
     }
   });
 };

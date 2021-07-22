@@ -82,7 +82,7 @@ const getOnePsy = (
   uniId: string = null,
   inactiveUntil: string | undefined = undefined,
 ): Psychologist => {
-  const dossierNumber = uuid.generateUuidFromString(`psychologist-${personalEmail}`);
+  const dossierNumber = uuid.generateFromString(`psychologist-${personalEmail}`);
   return {
     dossierNumber,
     firstNames: getFirstNames(),
@@ -127,7 +127,7 @@ const getOnePatient = (
     dateOfBirth = faker.date.past();
   }
   return {
-    id: uuid.generateUuidFromString(`patient-${psychologistId}-${index}`),
+    id: uuid.generateFromString(`patient-${psychologistId}-${index}`),
     firstNames: faker.name.firstName(),
     lastName: faker.name.lastName(),
     INE: faker.phone.phoneNumber('###########'),
@@ -146,7 +146,7 @@ const getOneAppointment = (
 ): Appointment => {
   const myDate = new Date(2021, month, day).toISOString();
   return {
-    id: uuid.randomUuid(),
+    id: uuid.generateRandom(),
     psychologistId,
     appointmentDate: myDate,
     patientId,
@@ -160,7 +160,7 @@ const insertOnePsy = async (
   archived = false,
   inactiveUntil = undefined,
 ): Promise<Psychologist> => {
-  const universityId = uuid.randomUuid();
+  const universityId = uuid.generateRandom();
   const psy = getOnePsy(personalEmail, state, archived, universityId, inactiveUntil);
   const id = getRandomInt();
   await dbUniversities.upsertMany([{

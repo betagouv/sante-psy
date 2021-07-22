@@ -144,7 +144,7 @@ module.exports.delete = async (appointmentId, psychologistId) => {
       })
       .update({
         deleted: true,
-        updatedAt: date.getDateNowPG(),
+        updatedAt: date.now(),
       });
 
     console.log(`Appointment id ${appointmentId} deleted by psy id ${psychologistId}`);

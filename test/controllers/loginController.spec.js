@@ -131,7 +131,7 @@ describe('loginController', async () => {
           .returns(Promise.resolve());
 
         sendMailStub = sinon
-          .stub(emailUtils, 'sendMail')
+          .stub(emailUtils, 'send')
           .returns(Promise.resolve());
       });
 

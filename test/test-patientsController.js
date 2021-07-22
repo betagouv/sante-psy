@@ -27,7 +27,7 @@ const makePatient = async (psychologistId) => {
     psychologistId,
     doctorName,
     doctorAddress,
-    date.parseDateForm(dateOfBirth),
+    date.parseForm(dateOfBirth),
   );
   // Check patient is inserted
   const createdPatient = await dbPatients.getById(patient.id, psychologistId);
@@ -484,7 +484,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].isStudentStatusVerified).to.equal(true);
           expect(patientsArray[0].hasPrescription).to.equal(true);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
-            date.parseDateForm(updatedDateOfBirth).getTime(),
+            date.parseForm(updatedDateOfBirth).getTime(),
           );
 
           return Promise.resolve();
@@ -528,7 +528,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
-            date.parseDateForm(dateOfBirth).getTime(),
+            date.parseForm(dateOfBirth).getTime(),
           );
 
           return Promise.resolve();
@@ -567,7 +567,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
-            date.parseDateForm(dateOfBirth).getTime(),
+            date.parseForm(dateOfBirth).getTime(),
           );
 
           return Promise.resolve();

@@ -10,7 +10,7 @@ const cookie = require('../utils/cookie');
 const date = require('../utils/date');
 
 describe('appointmentsController', () => {
-  const dateOfBirth = date.parseDateForm('20/01/1980');
+  const dateOfBirth = date.parseForm('20/01/1980');
 
   describe('create appointment', () => {
     beforeEach(async () => {

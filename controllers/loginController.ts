@@ -36,8 +36,8 @@ async function sendLoginEmail(email: string, loginUrl: string, token: string) {
       appName: config.appName,
       loginUrl,
     });
-    await emailUtils.sendMail(email, `Connexion à ${config.appName}`, html);
-    console.log(`Login email sent for ${logs.hashForLogs(email)}`);
+    await emailUtils.send(email, `Connexion à ${config.appName}`, html);
+    console.log(`Login email sent for ${logs.hash(email)}`);
   } catch (err) {
     console.error(err);
     throw new Error("Erreur d'envoi de mail - sendLoginEmail");
@@ -49,8 +49,8 @@ async function sendNotYetAcceptedEmail(email: string) {
     const html = await ejs.renderFile('./views/emails/loginNotAcceptedYet.ejs', {
       appName: config.appName,
     });
-    await emailUtils.sendMail(email, `C'est trop tôt pour vous connecter à ${config.appName}`, html);
-    console.log(`Not yet accepted email sent for ${logs.hashForLogs(email)}`);
+    await emailUtils.send(email, `C'est trop tôt pour vous connecter à ${config.appName}`, html);
+    console.log(`Not yet accepted email sent for ${logs.hash(email)}`);
   } catch (err) {
     console.error(err);
     throw new Error("Erreur d'envoi de mail - sendNotYetAcceptedEmail");
@@ -62,7 +62,7 @@ async function saveToken(email: string, token: string) {
     const expiredAt = date.getDatePlusOneHour();
     await dbLoginToken.insert(token, email, expiredAt);
 
-    console.log(`Login token created for ${logs.hashForLogs(email)}`);
+    console.log(`Login token created for ${logs.hash(email)}`);
   } catch (err) {
     console.error(`Erreur de sauvegarde du token : ${err}`);
     throw new Error('Erreur de sauvegarde du token');
@@ -112,7 +112,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
       const psychologistData = await dbPsychologists.getAcceptedByEmail(dbToken.email);
       const xsrfToken = crypto.randomBytes(64).toString('hex');
       cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken);
-      console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
+      console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
 
       dbLoginToken.delete(token);
       dbLastConnection.upsert(psychologistData.dossierNumber);
@@ -141,7 +141,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
   const { email } = req.body;
 
-  console.log(`User with ${logs.hashForLogs(email)} asked for a login link`);
+  console.log(`User with ${logs.hash(email)} asked for a login link`);
   const acceptedEmailExist = await dbPsychologists.getAcceptedByEmail(email);
 
   if (!acceptedEmailExist) {
@@ -155,7 +155,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
     }
 
     console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${
-      logs.hashForLogs(email)}
+      logs.hash(email)}
     `);
     throw new CustomError(
       `L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`,

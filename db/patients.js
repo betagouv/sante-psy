@@ -81,7 +81,7 @@ module.exports.update = async (
         doctorName,
         doctorAddress,
         dateOfBirth,
-        updatedAt: date.getDateNowPG(),
+        updatedAt: date.now(),
       });
   } catch (err) {
     console.error('Erreur de modification du patient', err);
@@ -96,7 +96,7 @@ module.exports.delete = async (id, psychologistId) => {
       .where('psychologistId', psychologistId)
       .update({
         deleted: true,
-        updatedAt: date.getDateNowPG(),
+        updatedAt: date.now(),
       });
 
     console.log(`Patient id ${id} deleted by psy id ${psychologistId}`);

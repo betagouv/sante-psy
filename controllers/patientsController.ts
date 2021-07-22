@@ -74,7 +74,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
   const { patientId } = req.params;
   const patientFirstNames = req.body.firstNames;
   const patientLastName = req.body.lastName;
-  const dateOfBirth = date.parseDateForm(req.body.dateOfBirth);
+  const dateOfBirth = date.parseForm(req.body.dateOfBirth);
   const patientINE = req.body.INE;
   const patientInstitutionName = req.body.institutionName;
   const { doctorName } = req.body;
@@ -140,7 +140,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
 
   const { firstNames } = req.body;
   const { lastName } = req.body;
-  const dateOfBirth = date.parseDateForm(req.body.dateOfBirth);
+  const dateOfBirth = date.parseForm(req.body.dateOfBirth);
   const { INE } = req.body;
   const { institutionName } = req.body;
   const { doctorName } = req.body;
