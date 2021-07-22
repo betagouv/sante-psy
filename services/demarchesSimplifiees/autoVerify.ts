@@ -72,7 +72,7 @@ const verifyPsychologist = async (psychologist, adeliInfo) => {
   return false;
 };
 
-const autoVerifyPsychologists = async () : Promise<void> => {
+const autoVerifyPsychologists = async () : Promise<boolean> => {
   try {
     const dossiersInConstruction = await getAllPsychologistList(
       (cursor) => graphql.getDossiersWithAnnotationsAndMessages(cursor, DossierState.enConstruction),
@@ -113,8 +113,10 @@ const autoVerifyPsychologists = async () : Promise<void> => {
 
       console.log(`${countAutoVerify} have been auto verified`);
     }
+    return true;
   } catch (err) {
     console.error('An error occured in autoVerifyPsychologists job', err);
+    return false;
   }
 };
 

@@ -14,7 +14,7 @@ const {
     checkForMultipleAcceptedDossiers,
     importEveryDataFromDSToPG,
   },
-} = require('../cron_jobs/cronDemarchesSimplifiees');
+} = require('../cron/jobs/demarchesSimplifiees');
 const { default: clean } = require('./helper/clean');
 const { DossierState } = require('../types/DemarcheSimplifiee');
 

@@ -23,7 +23,7 @@ const sendAutoAcceptMessage = async (dossierId) => {
   console.debug('message envoyé :', result);
 };
 
-const autoAcceptPsychologists = async (): Promise<void> => {
+const autoAcceptPsychologists = async (): Promise<boolean> => {
   try {
     const list = await getAllPsychologistList(
       (cursor) => graphql.getSimplePsyInfo(cursor, DossierState.enInstruction),
@@ -51,8 +51,10 @@ const autoAcceptPsychologists = async (): Promise<void> => {
       },
     ));
     console.log(`${countAutoAccept} have been auto accepted`);
+    return true;
   } catch (err) {
     console.error('An error occured in autoAcceptPsychologists job', err);
+    return false;
   }
 };
 

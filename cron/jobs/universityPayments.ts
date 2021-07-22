@@ -1,10 +1,10 @@
 import dotenv from 'dotenv';
 import ejs from 'ejs';
 
-import logs from '../utils/logs';
-import config from '../utils/config';
-import emailUtils from '../utils/email';
-import dbUniversities from '../db/universities';
+import logs from '../../utils/logs';
+import config from '../../utils/config';
+import emailUtils from '../../utils/email';
+import dbUniversities from '../../db/universities';
 
 dotenv.config();
 
