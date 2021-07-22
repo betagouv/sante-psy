@@ -56,7 +56,6 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
           <h2>Informations pour l&lsquo;annuaire</h2>
           <SearchableSelect
             label="Votre département"
-            type="searchableSelect"
             field="departement"
             data-test-id="psy-departement-select"
             value={updatedPsychologist.departement}
