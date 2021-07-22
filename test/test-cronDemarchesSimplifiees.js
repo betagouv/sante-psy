@@ -45,7 +45,7 @@ describe('Import Data from DS to PG', () => {
       .returns(Promise.resolve(cursor));
     getPsychologistListStub = sinon.stub(importDossier, 'getPsychologistList')
       .returns(Promise.resolve(dsApiData));
-    savePsychologistInPGStub = sinon.stub(dbPsychologists, 'savePsychologistInPG')
+    savePsychologistInPGStub = sinon.stub(dbPsychologists, 'upsertMany')
       .returns(Promise.resolve());
     getNumberOfPsychologistsStub = sinon.stub(dbPsychologists, 'countByArchivedAndState')
       .returns(Promise.resolve([{ count: 1 }]));
@@ -82,9 +82,9 @@ describe('checkForMultipleAcceptedDossiers', () => {
     const psy = clean.getOnePsy();
     psy.state = DossierState.accepte;
     psy.dossierNumber = '27172a9b-5081-4502-9022-b17510ba40a1';
-    await dbPsychologists.savePsychologistInPG([psy]);
+    await dbPsychologists.upsertMany([psy]);
     psy.dossierNumber = '0fee0788-b4fe-49f5-a950-5d22a343d495';
-    await dbPsychologists.savePsychologistInPG([psy]);
+    await dbPsychologists.upsertMany([psy]);
 
     const psyArray = await dbPsychologists.getAllActive();
     expect(psyArray).to.have.length(2);
@@ -177,7 +177,7 @@ describe('DS integration tests', () => {
     const paulUniversity = await dbUniversities.insertByName('PaulU');
     const xavierUniversity = await dbUniversities.insertByName('xavierU');
 
-    await dbPsychologists.savePsychologistInPG([{
+    await dbPsychologists.upsertMany([{
       ...paul,
       training: JSON.stringify(paul.training),
       dossierNumber: paulId,

@@ -23,7 +23,7 @@ async function importDataFromDSToPG(updateEverything = false) {
     const dsAPIData = await importDossier.getPsychologistList(latestCursorInPG);
 
     if (dsAPIData.psychologists.length > 0) {
-      await dbPsychologists.savePsychologistInPG(dsAPIData.psychologists);
+      await dbPsychologists.upsertMany(dsAPIData.psychologists);
       await dbsApiCursor.saveLatestCursor(dsAPIData.lastCursor);
 
       const numberOfPsychologists = await dbPsychologists.countByArchivedAndState();

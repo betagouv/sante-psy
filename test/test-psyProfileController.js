@@ -652,7 +652,7 @@ describe('psyProfileController', () => {
 
     it('should activate psy', async () => {
       const psy = clean.getOneInactivePsy();
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
 
       return chai.request(app)
         .post(`/api/psychologist/${psy.dossierNumber}/activate`)
@@ -722,7 +722,7 @@ describe('psyProfileController', () => {
 
     it('should suspend psy', async () => {
       const psy = clean.getOneInactivePsy();
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
 
       const nextDate = new Date();
       nextDate.setDate(nextDate.getDate() + 2);

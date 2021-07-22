@@ -286,7 +286,7 @@ describe('loginController', async () => {
         universityId,
       );
       psy.isConventionSigned = true;
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
 
       return chai
         .request(app)

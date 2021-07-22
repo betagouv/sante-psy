@@ -16,10 +16,10 @@ describe('DB Psychologists', () => {
     await clean.cleanAllUniversities();
   });
 
-  describe('savePsychologistInPG', () => {
+  describe('upsertMany', () => {
     it('should INsert one psychologist in PG', async () => {
       const psy = clean.getOnePsy();
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
 
       const savedPsy = await dbPsychologists.getById(psy.dossierNumber);
       const exist = (savedPsy !== undefined);
@@ -29,13 +29,13 @@ describe('DB Psychologists', () => {
     it('should update one psychologist in PG', async () => {
       // doing a classic insert
       const psy = clean.getOnePsy();
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
 
       const psyInsert = await dbPsychologists.getById(psy.dossierNumber);
       assert.isNull(psyInsert.updatedAt);
 
       // we do it twice in a row to update it (field updatedAt will change)
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
       const psyUpsert = await dbPsychologists.getById(psy.dossierNumber);
       assert.isNotNull(psyUpsert.updatedAt);
     });
@@ -44,7 +44,7 @@ describe('DB Psychologists', () => {
       const psyDS = clean.getOnePsy();
 
       // First save psy from DS
-      await dbPsychologists.savePsychologistInPG([psyDS]);
+      await dbPsychologists.upsertMany([psyDS]);
       const psySPE = await dbPsychologists.getById(psyDS.dossierNumber);
       assert.isNotTrue(psySPE.selfModified);
       assert.isNull(psySPE.updatedAt);
@@ -55,7 +55,7 @@ describe('DB Psychologists', () => {
       const newPsyDS = { ...psyDS };
       newPsyDS.firstNames = 'New firstname';
       newPsyDS.region = 'Bretagne';
-      await dbPsychologists.savePsychologistInPG([newPsyDS]);
+      await dbPsychologists.upsertMany([newPsyDS]);
 
       // Assert that data changed are modified in SPE DB
       const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
@@ -68,7 +68,7 @@ describe('DB Psychologists', () => {
       const psyDS = clean.getOnePsy();
 
       // First save psy from DS
-      await dbPsychologists.savePsychologistInPG([psyDS]);
+      await dbPsychologists.upsertMany([psyDS]);
       const psySPE = await dbPsychologists.getById(psyDS.dossierNumber);
       assert.isFalse(psySPE.selfModified);
       assert.isNull(psySPE.updatedAt);
@@ -80,7 +80,7 @@ describe('DB Psychologists', () => {
       const nbUpdated = await dbPsychologists.update(psyDS);
       nbUpdated.should.be.equal(1);
 
-      await dbPsychologists.savePsychologistInPG([psyDS]);
+      await dbPsychologists.upsertMany([psyDS]);
 
       // Assert that data didn't changed in SPE DB
       const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
@@ -92,7 +92,7 @@ describe('DB Psychologists', () => {
       const psyDS = clean.getOnePsy();
 
       // First save psy from DS
-      await dbPsychologists.savePsychologistInPG([psyDS]);
+      await dbPsychologists.upsertMany([psyDS]);
       const psySPE = await dbPsychologists.getById(psyDS.dossierNumber);
       assert.isFalse(psySPE.selfModified);
       assert.isNull(psySPE.updatedAt);
@@ -105,7 +105,7 @@ describe('DB Psychologists', () => {
       // Update from DS (new firstname)
       const newPsyDS = { ...psyDS };
       newPsyDS.firstNames = 'New firstname';
-      await dbPsychologists.savePsychologistInPG([newPsyDS]);
+      await dbPsychologists.upsertMany([newPsyDS]);
 
       // Assert that data changed are modified in SPE DB
       const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
@@ -120,7 +120,7 @@ describe('DB Psychologists', () => {
       shouldBeZero.should.have.length(0);
 
       const psy = clean.getOnePsy();
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
       const shouldBeOne = await dbPsychologists.countByArchivedAndState();
       shouldBeOne[0].count.should.be.equal('1');
       shouldBeOne[0].archived.should.be.equal(psy.archived);
@@ -138,7 +138,7 @@ describe('DB Psychologists', () => {
       constructionPsy.state = DossierState.enConstruction;
       constructionPsy.lastName = 'ConstructionPsy';
       const inactivePsy = clean.getOneInactivePsy(new Date());
-      await dbPsychologists.savePsychologistInPG([activePsy, archivedPsy, constructionPsy, inactivePsy]);
+      await dbPsychologists.upsertMany([activePsy, archivedPsy, constructionPsy, inactivePsy]);
 
       const shouldBeOne = await dbPsychologists.getAllActive();
       console.log(shouldBeOne);
@@ -160,7 +160,7 @@ describe('DB Psychologists', () => {
       constructionPsy.lastName = 'ConstructionPsy';
       constructionPsy.dossierNumber = 'a2e447cd-2d57-4f83-8884-ab05a2633644';
 
-      await dbPsychologists.savePsychologistInPG([acceptedPsy, archivedPsy, constructionPsy]);
+      await dbPsychologists.upsertMany([acceptedPsy, archivedPsy, constructionPsy]);
 
       const result = await dbPsychologists.getAllAccepted(['personalEmail']);
       expect(result).to.have.length(2);
@@ -306,7 +306,7 @@ describe('DB Psychologists', () => {
       const university = await dbUniversities.insertByName(univName);
       const isConventionSigned = true;
       const psy = clean.getOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, university.id);
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
       const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
 
       await dbPsychologists.updateConventionInfo(
@@ -323,7 +323,7 @@ describe('DB Psychologists', () => {
 
     it('should return undefined if no university is linked to the psy', async () => {
       const psy = clean.getOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, null);
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
       const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
 
       const currentConvention = await dbPsychologists.getConventionInfo(savedPsy.dossierNumber);
@@ -338,7 +338,7 @@ describe('DB Psychologists', () => {
       const univName = 'Fake Uni';
       const university = await dbUniversities.insertByName(univName);
       const psy = clean.getOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, null);
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
       const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
       expect(savedPsy.assignedUniversityId).to.not.equal(university.id);
@@ -380,7 +380,7 @@ describe('DB Psychologists', () => {
 
     it('should return psychologist if exists', async () => {
       const psy = clean.getOnePsy();
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
 
       const returnedPsy = await dbPsychologists.getById(psy.dossierNumber);
 
@@ -399,7 +399,7 @@ describe('DB Psychologists', () => {
 
     it('should update psychologist if exist', async () => {
       const psy = clean.getOnePsy();
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
       expect(psy.updatedAt).to.be.undefined;
 
       const newEmail = 'new@email.fr';
@@ -417,7 +417,7 @@ describe('DB Psychologists', () => {
   describe('activate', () => {
     it('should activate psy and remove inactiveUntil date', async () => {
       const inactivePsy = clean.getOneInactivePsy(new Date());
-      await dbPsychologists.savePsychologistInPG([inactivePsy]);
+      await dbPsychologists.upsertMany([inactivePsy]);
 
       await dbPsychologists.activate(inactivePsy.dossierNumber);
 
@@ -431,7 +431,7 @@ describe('DB Psychologists', () => {
   describe('suspend', () => {
     it('should suspend psy', async () => {
       const activePsy = clean.getOnePsy();
-      await dbPsychologists.savePsychologistInPG([activePsy]);
+      await dbPsychologists.upsertMany([activePsy]);
 
       const now = new Date();
       const date = new Date();
@@ -466,7 +466,7 @@ describe('DB Psychologists', () => {
       const inactivePsy1 = clean.getOneInactivePsy(yesterday);
       const inactivePsy2 = clean.getOneInactivePsy(now);
       const inactivePsy3 = clean.getOneInactivePsy(tomorrow);
-      await dbPsychologists.savePsychologistInPG([activePsy, inactivePsy1, inactivePsy2, inactivePsy3]);
+      await dbPsychologists.upsertMany([activePsy, inactivePsy1, inactivePsy2, inactivePsy3]);
 
       await dbPsychologists.reactivate();
 

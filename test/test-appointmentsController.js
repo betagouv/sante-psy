@@ -239,7 +239,7 @@ describe('appointmentsController', () => {
     const makeAppointment = async (psychologistId) => {
       const psy = clean.getOnePsy();
       psy.dossierNumber = psychologistId;
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
       // Insert an appointment and a patient
       const patient = await dbPatients.insert(
         'Ada',

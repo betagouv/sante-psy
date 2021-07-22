@@ -107,7 +107,7 @@ const getById = async (psychologistId: string): Promise<Psychologist> => {
  * Perform a UPSERT with https://knexjs.org/#Builder-merge
  * @param {*} psy
  */
-const savePsychologistInPG = async (psyList: Psychologist[]): Promise<(number | void)[]> => {
+const upsertMany = async (psyList: Psychologist[]): Promise<(number | void)[]> => {
   console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
   const updatedAt = date.now(); // use to perform UPSERT in PG
   const universities = await dbUniversities.getAllOrderByName();
@@ -307,7 +307,7 @@ export default {
   getAllAccepted,
   countByArchivedAndState,
   countAcceptedByPersonalEmail,
-  savePsychologistInPG,
+  upsertMany,
   saveAssignedUniversity,
   activate,
   reactivate,

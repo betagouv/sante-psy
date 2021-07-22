@@ -169,7 +169,7 @@ const insertOnePsy = async (
     emailSSU: `ssu${id}@spe.fr`,
     emailUniversity: `university${id}@spe.fr`,
   }]);
-  await dbPsychologists.savePsychologistInPG([psy]);
+  await dbPsychologists.upsertMany([psy]);
   return psy;
 };
 
