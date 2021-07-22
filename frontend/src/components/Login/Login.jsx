@@ -88,7 +88,9 @@ const Login = () => {
           pour participer au dispositif.
           Il peut être différent de votre email de contact présenté dans l&lsquo;annuaire des psychologues.
         </p>
-        <Mail />
+        <Mail
+          withMarge="withMarge"
+        />
       </div>
     </Page>
   );

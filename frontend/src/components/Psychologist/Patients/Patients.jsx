@@ -151,7 +151,9 @@ const Patients = () => {
           </div>
         </div>
       </div>
-      <Mail />
+      <Mail
+        withMarge="withMarge"
+      />
     </div>
   );
 };

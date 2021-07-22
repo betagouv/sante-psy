@@ -186,7 +186,9 @@ const AddEditPatient = () => {
           </div>
         </form>
       </div>
-      <Mail />
+      <Mail
+        withMarge="withMarge"
+      />
     </div>
   );
 };
