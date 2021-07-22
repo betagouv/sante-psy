@@ -89,7 +89,7 @@ const Login = () => {
           Il peut être différent de votre email de contact présenté dans l&lsquo;annuaire des psychologues.
         </p>
         <Mail
-          withMarge="withMarge"
+          withMarge
         />
       </div>
     </Page>

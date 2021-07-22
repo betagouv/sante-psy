@@ -11,7 +11,7 @@ const Reimbursement = () => (
     <GlobalNotification />
     <Billing />
     <Mail
-      withMarge="withMarge"
+      withMarge
     />
   </div>
 );

@@ -1,9 +1,9 @@
 .container {
-    color: #133A8D;
+    color: var(--bf500);
 }
 
 .title:first-child {
-    padding: 40px 0 0 0;
+    padding-top: 40px;
     font-size: 28px;
 }
 
@@ -19,6 +19,11 @@
 
 .list {
     list-style-type: none;
+    padding: 0;
+}
+
+.list li {
+    padding-bottom: 0;
 }
 
 .sectionTitle {
@@ -28,12 +33,4 @@
 .hebergement {
     margin-bottom: 0;
     font-size: 24px;
-}
-
-li {
-    padding-bottom: 0;
-}
-
-ul {
-    padding: 0;
 }

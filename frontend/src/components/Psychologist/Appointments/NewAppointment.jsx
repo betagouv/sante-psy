@@ -108,7 +108,7 @@ const NewAppointment = () => {
         </form>
       </div>
       <Mail
-        withMarge="withMarge"
+        withMarge
       />
     </div>
   );
