@@ -68,7 +68,7 @@ const getAddress = () => {
     };
   default:
     return {
-      address: `${faker.address.streetAddress()}, ${faker.address.cityName()} ${faker.address.country()}`,
+      address: `${faker.address.streetAddress()} ${faker.address.zipCode('#####')} ${faker.address.city()}`,
       departement: '14 - Calvados',
       region: 'Normandie',
     };
@@ -93,7 +93,7 @@ const getOnePsy = (
     ...getAddress(),
     diploma: 'Psychologie clinique de la santé',
     phone: faker.phone.phoneNumber('0# ## ## ## ##'),
-    email: faker.internet.email(),
+    email: faker.internet.exampleEmail(),
     personalEmail,
     website: faker.internet.domainName() + faker.internet.domainSuffix(),
     teleconsultation: faker.datatype.boolean(),
