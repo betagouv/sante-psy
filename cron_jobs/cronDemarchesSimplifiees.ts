@@ -26,7 +26,7 @@ async function importDataFromDSToPG(updateEverything = false) {
       await dbPsychologists.savePsychologistInPG(dsAPIData.psychologists);
       await dbsApiCursor.saveLatestCursor(dsAPIData.lastCursor);
 
-      const numberOfPsychologists = await dbPsychologists.getNumberOfPsychologists();
+      const numberOfPsychologists = await dbPsychologists.countByArchivedAndState();
       console.log('psychologists inside PG :', numberOfPsychologists);
     } else {
       console.warn('No psychologists to save');
@@ -56,7 +56,7 @@ const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
 
 // One person should not have multiple dossiers in "acepte" status, notify the team.
 const checkForMultipleAcceptedDossiers = async (): Promise<boolean> => {
-  const count = await dbPsychologists.countAcceptedPsychologistsByPersonalEmail();
+  const count = await dbPsychologists.countAcceptedByPersonalEmail();
   const badPsychologists = count.filter((statsPoint) => statsPoint.count > 1);
   if (badPsychologists.length > 0) {
     console.log('Detected psychologists with multiple accepted dossiers!', badPsychologists);

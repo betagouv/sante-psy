@@ -22,7 +22,7 @@ describe('DB Psychologists', () => {
       const psy = clean.getOnePsy();
       await dbPsychologists.savePsychologistInPG([psy]);
 
-      const savedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+      const savedPsy = await dbPsychologists.getById(psy.dossierNumber);
       const exist = (savedPsy !== undefined);
       exist.should.be.equal(true);
     });
@@ -32,12 +32,12 @@ describe('DB Psychologists', () => {
       const psy = clean.getOnePsy();
       await dbPsychologists.savePsychologistInPG([psy]);
 
-      const psyInsert = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+      const psyInsert = await dbPsychologists.getById(psy.dossierNumber);
       assert.isNull(psyInsert.updatedAt);
 
       // we do it twice in a row to update it (field updatedAt will change)
       await dbPsychologists.savePsychologistInPG([psy]);
-      const psyUpsert = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+      const psyUpsert = await dbPsychologists.getById(psy.dossierNumber);
       assert.isNotNull(psyUpsert.updatedAt);
     });
 
@@ -46,7 +46,7 @@ describe('DB Psychologists', () => {
 
       // First save psy from DS
       await dbPsychologists.savePsychologistInPG([psyDS]);
-      const psySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      const psySPE = await dbPsychologists.getById(psyDS.dossierNumber);
       assert.isNotTrue(psySPE.selfModified);
       assert.isNull(psySPE.updatedAt);
       psySPE.firstNames.should.be.equal(psyDS.firstNames);
@@ -59,7 +59,7 @@ describe('DB Psychologists', () => {
       await dbPsychologists.savePsychologistInPG([newPsyDS]);
 
       // Assert that data changed are modified in SPE DB
-      const updatedPsySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
       updatedPsySPE.firstNames.should.be.equal('New firstname');
       updatedPsySPE.region.should.be.equal('Bretagne');
       assert.isFalse(updatedPsySPE.selfModified);
@@ -70,7 +70,7 @@ describe('DB Psychologists', () => {
 
       // First save psy from DS
       await dbPsychologists.savePsychologistInPG([psyDS]);
-      const psySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      const psySPE = await dbPsychologists.getById(psyDS.dossierNumber);
       assert.isFalse(psySPE.selfModified);
       assert.isNull(psySPE.updatedAt);
       psySPE.firstNames.should.be.equal(psyDS.firstNames);
@@ -78,13 +78,13 @@ describe('DB Psychologists', () => {
 
       // Update psy in SPE
       psyDS.region = 'Bretagne';
-      const nbUpdated = await dbPsychologists.updatePsychologist(psyDS);
+      const nbUpdated = await dbPsychologists.update(psyDS);
       nbUpdated.should.be.equal(1);
 
       await dbPsychologists.savePsychologistInPG([psyDS]);
 
       // Assert that data didn't changed in SPE DB
-      const updatedPsySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
       updatedPsySPE.selfModified.should.be.true;
       updatedPsySPE.region.should.be.equal(psyDS.region);
     });
@@ -94,13 +94,13 @@ describe('DB Psychologists', () => {
 
       // First save psy from DS
       await dbPsychologists.savePsychologistInPG([psyDS]);
-      const psySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      const psySPE = await dbPsychologists.getById(psyDS.dossierNumber);
       assert.isFalse(psySPE.selfModified);
       assert.isNull(psySPE.updatedAt);
       psySPE.firstNames.should.be.equal(psyDS.firstNames);
 
       // Update psy in SPE
-      const nbUpdated = await dbPsychologists.updatePsychologist(psyDS);
+      const nbUpdated = await dbPsychologists.update(psyDS);
       nbUpdated.should.be.equal(1);
 
       // Update from DS (new firstname)
@@ -109,27 +109,27 @@ describe('DB Psychologists', () => {
       await dbPsychologists.savePsychologistInPG([newPsyDS]);
 
       // Assert that data changed are modified in SPE DB
-      const updatedPsySPE = await dbPsychologists.getPsychologistById(psyDS.dossierNumber);
+      const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
       updatedPsySPE.selfModified.should.be.true;
       updatedPsySPE.firstNames.should.be.equal(newPsyDS.firstNames);
     });
   });
 
-  describe('getNumberOfPsychologists', () => {
+  describe('countByArchivedAndState', () => {
     it('should return the number of elements in the psychologists table', async () => {
-      const shouldBeZero = await dbPsychologists.getNumberOfPsychologists();
+      const shouldBeZero = await dbPsychologists.countByArchivedAndState();
       shouldBeZero.should.have.length(0);
 
       const psy = clean.getOnePsy();
       await dbPsychologists.savePsychologistInPG([psy]);
-      const shouldBeOne = await dbPsychologists.getNumberOfPsychologists();
+      const shouldBeOne = await dbPsychologists.countByArchivedAndState();
       shouldBeOne[0].count.should.be.equal('1');
       shouldBeOne[0].archived.should.be.equal(psy.archived);
       shouldBeOne[0].state.should.be.equal(psy.state);
     });
   });
 
-  describe('getActivePsychologists', () => {
+  describe('getAllActive', () => {
     it('should only return not archived and accepted psychologists', async () => {
       const activePsy = clean.getOnePsy();
       const archivedPsy = clean.getOnePsy('archived@psy.fr');
@@ -141,14 +141,14 @@ describe('DB Psychologists', () => {
       const inactivePsy = clean.getOneInactivePsy(new Date());
       await dbPsychologists.savePsychologistInPG([activePsy, archivedPsy, constructionPsy, inactivePsy]);
 
-      const shouldBeOne = await dbPsychologists.getActivePsychologists();
+      const shouldBeOne = await dbPsychologists.getAllActive();
       console.log(shouldBeOne);
       shouldBeOne.length.should.be.equal(1);
       assert.isUndefined(shouldBeOne[0].loginEmail);
     });
   });
 
-  describe('getAcceptedPsychologistsArchivedOrNot', () => {
+  describe('getAllAccepted', () => {
     it('should return only one selected data from accepted psychologists', async () => {
       const acceptedPsy = clean.getOnePsy();
       const archivedPsy = clean.getOnePsy();
@@ -163,7 +163,7 @@ describe('DB Psychologists', () => {
 
       await dbPsychologists.savePsychologistInPG([acceptedPsy, archivedPsy, constructionPsy]);
 
-      const result = await dbPsychologists.getAcceptedPsychologistsArchivedOrNot(['personalEmail']);
+      const result = await dbPsychologists.getAllAccepted(['personalEmail']);
       expect(result).to.have.length(2);
       expect(result[0]).to.have.all.keys('personalEmail');
       expect(result[1]).to.have.all.keys('personalEmail');
@@ -175,7 +175,7 @@ describe('DB Psychologists', () => {
     it('should return only multiple selected data from accepted psychologists', async () => {
       const psy = await clean.insertOnePsy();
 
-      const result = await dbPsychologists.getAcceptedPsychologistsArchivedOrNot(['personalEmail',
+      const result = await dbPsychologists.getAllAccepted(['personalEmail',
         'dossierNumber',
         'assignedUniversityId']);
       expect(result).to.have.length(1);
@@ -188,90 +188,76 @@ describe('DB Psychologists', () => {
     });
   });
 
-  describe('getAcceptedPsychologistByEmail', () => {
+  describe('getAcceptedByEmail', () => {
     it('should return a psy if we enter a known login email', async () => {
       const psy = await clean.insertOnePsy();
-      const result = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      const result = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       result.email.should.be.equal(psy.email);
       result.personalEmail.should.be.equal(psy.personalEmail);
     });
 
     it('should return a psy if we enter a known login email capitalized', async () => {
       const psy = await clean.insertOnePsy();
-      const result = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail.toUpperCase());
+      const result = await dbPsychologists.getAcceptedByEmail(psy.personalEmail.toUpperCase());
       result.email.should.be.equal(psy.email);
       result.personalEmail.should.be.equal(psy.personalEmail);
     });
 
     it('should return undefined if we enter a unknown email', async () => {
-      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail('unknown@unknown.org');
+      const unknownPsy = await dbPsychologists.getAcceptedByEmail('unknown@unknown.org');
 
       assert.isUndefined(unknownPsy);
     });
 
     it("should return undefined if we dont use 'personalEmail' but 'email' as the login", async () => {
       const psy = await clean.insertOnePsy();
-      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.email);
+      const unknownPsy = await dbPsychologists.getAcceptedByEmail(psy.email);
       assert.isUndefined(unknownPsy);
     });
 
     it('should return undefined if known email but not accepte state', async () => {
       const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DossierState.sansSuite);
-      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      const unknownPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
 
     it('should return undefined if known email but enConstruction state', async () => {
       const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DossierState.enConstruction);
-      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      const unknownPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
 
     it('should return undefined if known email but enInstruction state', async () => {
       const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DossierState.enInstruction);
-      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      const unknownPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
 
     it('should return undefined if known email but refusé state', async () => {
       const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DossierState.refuse);
-      const unknownPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      const unknownPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
   });
 
-  describe('getPsychologistById', () => {
-    it('should return a psy if we enter a known id', async () => {
-      const psy = await clean.insertOnePsy();
-      const result = await dbPsychologists.getPsychologistById(psy.dossierNumber);
-      result.email.should.be.equal(psy.email);
-      result.dossierNumber.should.be.equal(psy.dossierNumber);
-    });
-
-    it('should return undefined if we enter a unknown id', async () => {
-      const unknownPsy = await dbPsychologists.getPsychologistById(uuidV4());
-      assert.isUndefined(unknownPsy);
-    });
-  });
-
-  describe('getNotYetAcceptedPsychologistByEmail', () => {
+  describe('getNotYetAcceptedByEmail', () => {
     it('should return a psy if we enter a known login email enConstruction', async () => {
       const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DossierState.enConstruction);
-      const result = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psy.personalEmail);
+      const result = await dbPsychologists.getNotYetAcceptedByEmail(psy.personalEmail);
       result.email.should.be.equal(psy.email);
       result.personalEmail.should.be.equal(psy.personalEmail);
     });
 
     it('should return a psy if we enter a known login email enInstruction', async () => {
       const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DossierState.enInstruction);
-      const result = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psy.personalEmail);
+      const result = await dbPsychologists.getNotYetAcceptedByEmail(psy.personalEmail);
       result.email.should.be.equal(psy.email);
       result.personalEmail.should.be.equal(psy.personalEmail);
     });
 
     it('should return undefined if we enter a known login email accepted', async () => {
       const psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DossierState.accepte);
-      const result = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(psy.personalEmail);
+      const result = await dbPsychologists.getNotYetAcceptedByEmail(psy.personalEmail);
       assert.isUndefined(result);
     });
   });
@@ -279,9 +265,9 @@ describe('DB Psychologists', () => {
   describe('updateConventionInfo', () => {
     it('should update conventionInfo', async () => {
       const univName = 'Fake Uni';
-      const university = await dbUniversities.insertUniversity(univName);
+      const university = await dbUniversities.insertByName(univName);
       const psy = await clean.insertOnePsy();
-      const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
       expect(savedPsy.isConventionSigned).not.to.exist;
       expect(savedPsy.assignedUniversityId).to.not.equal(university.id);
@@ -292,7 +278,7 @@ describe('DB Psychologists', () => {
         true, // isConventionSigned
       );
 
-      const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      const updatedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
 
       expect(updatedPsy.isConventionSigned).to.equal(true);
       expect(updatedPsy.assignedUniversityId).to.equal(university.id);
@@ -318,11 +304,11 @@ describe('DB Psychologists', () => {
   describe('getConventionInfo', () => {
     it('should return assignedUniID, name and signedConvention,', async () => {
       const univName = 'Fake Uni';
-      const university = await dbUniversities.insertUniversity(univName);
+      const university = await dbUniversities.insertByName(univName);
       const isConventionSigned = true;
       const psy = clean.getOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, university.id);
       await dbPsychologists.savePsychologistInPG([psy]);
-      const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
 
       await dbPsychologists.updateConventionInfo(
         savedPsy.dossierNumber,
@@ -339,7 +325,7 @@ describe('DB Psychologists', () => {
     it('should return undefined if no university is linked to the psy', async () => {
       const psy = clean.getOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, null);
       await dbPsychologists.savePsychologistInPG([psy]);
-      const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
 
       const currentConvention = await dbPsychologists.getConventionInfo(savedPsy.dossierNumber);
 
@@ -351,10 +337,10 @@ describe('DB Psychologists', () => {
   describe('saveAssignedUniversity', () => {
     it('should update assignedUniversityId', async () => {
       const univName = 'Fake Uni';
-      const university = await dbUniversities.insertUniversity(univName);
+      const university = await dbUniversities.insertByName(univName);
       const psy = clean.getOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, null);
       await dbPsychologists.savePsychologistInPG([psy]);
-      const savedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
       expect(savedPsy.assignedUniversityId).to.not.equal(university.id);
 
@@ -363,7 +349,7 @@ describe('DB Psychologists', () => {
         university.id,
       );
 
-      const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psy.personalEmail);
+      const updatedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
 
       expect(updatedPsy.assignedUniversityId).to.equal(university.id);
     });
@@ -384,11 +370,11 @@ describe('DB Psychologists', () => {
     });
   });
 
-  describe('getPsychologistById', () => {
+  describe('getById', () => {
     it('should return undefined if does not exist', async () => {
       const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0123';
 
-      const returnedPsy = await dbPsychologists.getPsychologistById(unknownPsyId);
+      const returnedPsy = await dbPsychologists.getById(unknownPsyId);
 
       expect(returnedPsy).to.be.undefined;
     });
@@ -397,18 +383,18 @@ describe('DB Psychologists', () => {
       const psy = clean.getOnePsy();
       await dbPsychologists.savePsychologistInPG([psy]);
 
-      const returnedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+      const returnedPsy = await dbPsychologists.getById(psy.dossierNumber);
 
       expect(returnedPsy).to.exist;
       expect(returnedPsy.email).to.eql(psy.email);
     });
   });
 
-  describe('updatePsychologist', () => {
+  describe('update', () => {
     it('should do nothing if psychologist does not exist', async () => {
       const psy = clean.getOnePsy();
 
-      const nbUpdated = await dbPsychologists.updatePsychologist(psy);
+      const nbUpdated = await dbPsychologists.update(psy);
       nbUpdated.should.be.equal(0);
     });
 
@@ -419,10 +405,10 @@ describe('DB Psychologists', () => {
 
       const newEmail = 'new@email.fr';
       psy.email = newEmail;
-      const nbUpdated = await dbPsychologists.updatePsychologist(psy);
+      const nbUpdated = await dbPsychologists.update(psy);
       nbUpdated.should.be.equal(1);
 
-      const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+      const updatedPsy = await dbPsychologists.getById(psy.dossierNumber);
       expect(updatedPsy.email).to.equal(newEmail);
       expect(updatedPsy.updatedAt).to.not.be.undefined;
       expect(updatedPsy.selfModified).to.be.true;
@@ -436,7 +422,7 @@ describe('DB Psychologists', () => {
 
       await dbPsychologists.activate(inactivePsy.dossierNumber);
 
-      const psy = await dbPsychologists.getPsychologistById(inactivePsy.dossierNumber);
+      const psy = await dbPsychologists.getById(inactivePsy.dossierNumber);
       psy.active.should.be.equal(true);
       psy.selfModified.should.be.equal(false);
       assert.isNull(psy.inactiveUntil);
@@ -454,12 +440,12 @@ describe('DB Psychologists', () => {
 
       await dbPsychologists.suspend(activePsy.dossierNumber, date, 'because i say so');
 
-      const psy = await dbPsychologists.getPsychologistById(activePsy.dossierNumber);
+      const psy = await dbPsychologists.getById(activePsy.dossierNumber);
       psy.active.should.be.equal(false);
       psy.selfModified.should.be.equal(false);
       psy.inactiveUntil.should.be.eql(date);
 
-      const reasons = await dbSuspensionReasons.getForPsychologist(activePsy.dossierNumber);
+      const reasons = await dbSuspensionReasons.getByPsychologist(activePsy.dossierNumber);
       reasons.length.should.be.equal(1);
       reasons[0].reason.should.be.equal('because i say so');
       reasons[0].until.getFullYear().should.be.equal(date.getFullYear());
@@ -485,22 +471,22 @@ describe('DB Psychologists', () => {
 
       await dbPsychologists.reactivate();
 
-      let psy = await dbPsychologists.getPsychologistById(activePsy.dossierNumber);
+      let psy = await dbPsychologists.getById(activePsy.dossierNumber);
       psy.active.should.be.equal(true);
       psy.selfModified.should.be.equal(false);
       assert.isNull(psy.inactiveUntil);
 
-      psy = await dbPsychologists.getPsychologistById(inactivePsy1.dossierNumber);
+      psy = await dbPsychologists.getById(inactivePsy1.dossierNumber);
       psy.active.should.be.equal(true);
       psy.selfModified.should.be.equal(false);
       assert.isNull(psy.inactiveUntil);
 
-      psy = await dbPsychologists.getPsychologistById(inactivePsy2.dossierNumber);
+      psy = await dbPsychologists.getById(inactivePsy2.dossierNumber);
       psy.active.should.be.equal(true);
       psy.selfModified.should.be.equal(false);
       assert.isNull(psy.inactiveUntil);
 
-      psy = await dbPsychologists.getPsychologistById(inactivePsy3.dossierNumber);
+      psy = await dbPsychologists.getById(inactivePsy3.dossierNumber);
       psy.active.should.be.equal(false);
       psy.selfModified.should.be.equal(false);
       psy.inactiveUntil.should.be.eql(tomorrow);

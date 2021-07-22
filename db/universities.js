@@ -5,7 +5,7 @@ const departementToUniversityName = require('../scripts/departementToUniversityN
 const { universitiesTable } = require('./tables');
 const { getDepartementNumberFromString } = require('../utils/department');
 
-module.exports.saveUniversities = async function saveUniversities(universitiesList) {
+module.exports.upsertMany = async function upsertMany(universitiesList) {
   console.log(`UPSERT of ${universitiesList.length} universities....`);
   const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
 
@@ -35,7 +35,7 @@ module.exports.saveUniversities = async function saveUniversities(universitiesLi
   return query;
 };
 
-module.exports.getUniversities = async () => {
+module.exports.getAllOrderByName = async () => {
   try {
     return knex.select('id', 'name', 'emailSSU', 'emailUniversity')
         .from(universitiesTable)
@@ -46,7 +46,7 @@ module.exports.getUniversities = async () => {
   }
 };
 
-module.exports.insertUniversity = async (name) => {
+module.exports.insertByName = async (name) => {
   try {
     const universityArray = await knex(universitiesTable).insert({
       name,

@@ -11,7 +11,7 @@ describe('conventionController', () => {
     let university;
 
     beforeEach(async () => {
-      university = await dbUniversities.insertUniversity('Cool U dude');
+      university = await dbUniversities.insertByName('Cool U dude');
     });
 
     afterEach(async () => {
@@ -36,7 +36,7 @@ describe('conventionController', () => {
           res.status.should.equal(200);
           res.body.message.should.equal('Vos informations de conventionnement sont bien enregistrées.');
 
-          const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
+          const updatedPsy = await dbPsychologists.getAcceptedByEmail(psyEmail);
           chai.expect(updatedPsy.isConventionSigned).to.equal(true);
           chai.expect(updatedPsy.assignedUniversityId).to.equal(university.id);
         });
@@ -57,7 +57,7 @@ describe('conventionController', () => {
           res.status.should.equal(400);
           res.body.message.should.equal(errorMessage);
 
-          const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
+          const updatedPsy = await dbPsychologists.getAcceptedByEmail(psyEmail);
           chai.expect(updatedPsy.isConventionSigned).not.to.exist;
         });
     };

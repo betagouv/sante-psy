@@ -6,7 +6,7 @@ import asyncHelper from '../utils/async-helper';
 const getAllActive = async (req: Request, res: Response, reduced: boolean): Promise<void> => {
   const time = `getting all active psychologists from Postgres (query id #${Math.random().toString()})`;
   console.time(time);
-  const psyList = await dbPsychologists.getActivePsychologists();
+  const psyList = await dbPsychologists.getAllActive();
   console.timeEnd(time);
 
   res.json(reduced

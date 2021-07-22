@@ -5,7 +5,7 @@ const { appointmentsTable, patientsTable, psychologistsTable } = require('./tabl
 
 // todo: bug : if appointment has a patientId that does not match a patient object in the db,
 // this function returns empty.
-module.exports.getAppointments = async (psychologistId) => {
+module.exports.getAll = async (psychologistId) => {
   try {
     const appointmentArray = await knex.from(patientsTable)
       .innerJoin(`${appointmentsTable}`, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
@@ -27,7 +27,7 @@ module.exports.getAppointments = async (psychologistId) => {
  *  {countAppointments: 2, year: 2021, month: 4, psychologistId: '112323232-33434-3434'},
  * ]
  */
-module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
+module.exports.getCountByYearMonth = async (psychologistId) => {
   try {
     const query = await knex(appointmentsTable)
       .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
@@ -64,7 +64,7 @@ module.exports.getCountAppointmentsByYearMonth = async (psychologistId) => {
  *  },
  * ]
  */
-module.exports.getMonthlyAppointmentsSummary = async (year, month) => {
+module.exports.getMonthlySummary = async (year, month) => {
   try {
     const query = await knex(appointmentsTable)
       .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
@@ -120,7 +120,7 @@ module.exports.getCountPatientsByYearMonth = async (psychologistId) => {
   }
 };
 
-module.exports.insertAppointment = async (appointmentDate, patientId, psychologistId) => {
+module.exports.insert = async (appointmentDate, patientId, psychologistId) => {
   try {
     const insertedArray = await knex(appointmentsTable).insert({
       psychologistId,
@@ -134,7 +134,7 @@ module.exports.insertAppointment = async (appointmentDate, patientId, psychologi
   }
 };
 
-module.exports.deleteAppointment = async (appointmentId, psychologistId) => {
+module.exports.delete = async (appointmentId, psychologistId) => {
   try {
     const deletedAppointments = await knex(appointmentsTable)
       .where({

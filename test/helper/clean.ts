@@ -163,7 +163,7 @@ const insertOnePsy = async (
   const universityId = uuid.randomUuid();
   const psy = getOnePsy(personalEmail, state, archived, universityId, inactiveUntil);
   const id = getRandomInt();
-  await dbUniversities.saveUniversities([{
+  await dbUniversities.upsertMany([{
     id: universityId,
     name: `University ${id}`,
     emailSSU: `ssu${id}@spe.fr`,

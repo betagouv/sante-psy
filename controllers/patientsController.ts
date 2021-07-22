@@ -9,7 +9,7 @@ import CustomError from '../utils/CustomError';
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.user.psychologist;
-  const patients = await dbPatients.getPatients(psychologistId);
+  const patients = await dbPatients.getAll(psychologistId);
   res.json(patients);
 };
 
@@ -84,7 +84,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
   const patientHasPrescription = Boolean(req.body.hasPrescription);
 
   const psychologistId = req.user.psychologist;
-  const updated = await dbPatients.updatePatient(
+  const updated = await dbPatients.update(
     patientId,
     patientFirstNames,
     patientLastName,
@@ -125,7 +125,7 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
 
   const { patientId } = req.params;
   const psychologistId = req.user.psychologist;
-  const patient = await dbPatients.getPatientById(patientId, psychologistId);
+  const patient = await dbPatients.getById(patientId, psychologistId);
 
   if (!patient) {
     throw new CustomError('Ce patient n\'existe pas. Vous ne pouvez pas le modifier.', 404);
@@ -150,7 +150,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const hasPrescription = Boolean(req.body.hasPrescription);
 
   const psychologistId = req.user.psychologist;
-  await dbPatients.insertPatient(
+  await dbPatients.insert(
     firstNames,
     lastName,
     INE,
@@ -184,7 +184,7 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 
   const { patientId } = req.params;
   const psychologistId = req.user.psychologist;
-  const deleted = await dbPatients.deletePatient(patientId, psychologistId);
+  const deleted = await dbPatients.delete(patientId, psychologistId);
 
   if (deleted === 0) {
     console.log(`Patient ${patientId} not deleted by probably other psy id ${psychologistId}`);

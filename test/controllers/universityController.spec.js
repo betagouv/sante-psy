@@ -6,7 +6,7 @@ const dbUniversities = require('../../db/universities');
 describe('universityController.spec', () => {
   beforeEach(async () => {
     await clean.cleanAllUniversities();
-    await dbUniversities.saveUniversities([{
+    await dbUniversities.upsertMany([{
       id: '18380a4c-51e1-4dcb-ad9a-3d8c2e84d1ff',
       name: 'Monster university',
       emailSSU: 'monster@ssu.fr',

@@ -53,7 +53,7 @@ describe('loginController', async () => {
         deleteTokenStub = sinon.stub(dbLoginToken, 'delete');
         lastConnectionStub = sinon.stub(dbLastConnection, 'upsert');
         getAcceptedPsychologistByEmailStub = sinon
-          .stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+          .stub(dbPsychologists, 'getAcceptedByEmail')
           .returns(
             Promise.resolve({
               email,
@@ -147,7 +147,7 @@ describe('loginController', async () => {
 
       it('send a login email', (done) => {
         getAcceptedPsychologistByEmailStub = sinon
-          .stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+          .stub(dbPsychologists, 'getAcceptedByEmail')
           .returns(
             Promise.resolve({
               email,
@@ -176,11 +176,11 @@ describe('loginController', async () => {
 
       it('send a not accepted yet email', (done) => {
         getAcceptedPsychologistByEmailStub = sinon
-          .stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+          .stub(dbPsychologists, 'getAcceptedByEmail')
           .returns(Promise.resolve(undefined));
 
         getNotYetAcceptedPsychologistStub = sinon
-          .stub(dbPsychologists, 'getNotYetAcceptedPsychologistByEmail')
+          .stub(dbPsychologists, 'getNotYetAcceptedByEmail')
           .returns(
             Promise.resolve({
               email,
@@ -210,11 +210,11 @@ describe('loginController', async () => {
 
       it('send no email if unknown email or refuse or sans suite', (done) => {
         getAcceptedPsychologistByEmailStub = sinon
-          .stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+          .stub(dbPsychologists, 'getAcceptedByEmail')
           .returns(Promise.resolve(undefined));
 
         getNotYetAcceptedPsychologistStub = sinon
-          .stub(dbPsychologists, 'getNotYetAcceptedPsychologistByEmail')
+          .stub(dbPsychologists, 'getNotYetAcceptedByEmail')
           .returns(Promise.resolve());
 
         chai
@@ -239,7 +239,7 @@ describe('loginController', async () => {
 
       it('should say that email is invalid', (done) => {
         getAcceptedPsychologistByEmailStub = sinon
-          .stub(dbPsychologists, 'getAcceptedPsychologistByEmail')
+          .stub(dbPsychologists, 'getAcceptedByEmail')
           .returns(
             Promise.resolve({
               email,
@@ -271,7 +271,7 @@ describe('loginController', async () => {
   describe('connected user information', () => {
     it('should return only my basic information', async () => {
       const universityId = uuidv4();
-      await dbUniversities.saveUniversities([
+      await dbUniversities.upsertMany([
         {
           id: universityId,
           name: 'Monster university',

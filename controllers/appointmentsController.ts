@@ -24,10 +24,10 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const date = new Date(req.body.date);
   const { patientId } = req.body;
   const psyId = req.user.psychologist;
-  const patientExist = await dbPatient.getPatientById(patientId, psyId);
+  const patientExist = await dbPatient.getById(patientId, psyId);
 
   if (patientExist) {
-    await dbAppointments.insertAppointment(date, patientId, psyId);
+    await dbAppointments.insert(date, patientId, psyId);
     console.log(
       `Appointment created for patient id ${patientId} by psy id ${psyId}`,
     );
@@ -53,7 +53,7 @@ const deleteOne = async (req: Request, res: Response) : Promise<void> => {
 
   const { appointmentId } = req.params;
   const psychologistId = req.user.psychologist;
-  const deletedAppointment = await dbAppointments.deleteAppointment(appointmentId, psychologistId);
+  const deletedAppointment = await dbAppointments.delete(appointmentId, psychologistId);
   if (deletedAppointment === 0) {
     console.log(
       `Appointment ${appointmentId} does not belong to psy id ${psychologistId}`,
@@ -71,7 +71,7 @@ const deleteOne = async (req: Request, res: Response) : Promise<void> => {
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.user.psychologist;
-  const appointments = await dbAppointments.getAppointments(psychologistId);
+  const appointments = await dbAppointments.getAll(psychologistId);
 
   res.json(appointments);
 };

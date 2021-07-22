@@ -27,7 +27,7 @@ describe('appointmentsController', () => {
 
     it('should create appointment', async () => {
       const psy = await clean.insertOnePsy();
-      const patient = await dbPatients.insertPatient(
+      const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
         '12345678901',
@@ -52,7 +52,7 @@ describe('appointmentsController', () => {
           res.status.should.equal(200);
           res.body.message.should.equal('La séance du jeudi 2 septembre 2021 a bien été créée.');
 
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);
           expect(appointmentArray[0].psychologistId).to.equal(psy.dossierNumber);
 
@@ -64,7 +64,7 @@ describe('appointmentsController', () => {
       const psy = await clean.insertOnePsy();
       const anotherPsy = await clean.insertOnePsy('another@email.fr');
 
-      const patient = await dbPatients.insertPatient(
+      const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
         '12345678901',
@@ -90,7 +90,7 @@ describe('appointmentsController', () => {
           res.body.message.should.equal('Erreur. La séance n\'est pas créée. Pourriez-vous réessayer ?');
 
           // was not created because patient id is not linked to psy id
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(0);
 
           return Promise.resolve();
@@ -99,7 +99,7 @@ describe('appointmentsController', () => {
 
     it('should not create appointment if user not logged in', async () => {
       const psy = await clean.insertOnePsy();
-      const patient = await dbPatients.insertPatient(
+      const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
         '12345678901',
@@ -122,7 +122,7 @@ describe('appointmentsController', () => {
           res.status.should.equal(401);
 
           // Appointment not created
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(0);
 
           return Promise.resolve();
@@ -135,7 +135,7 @@ describe('appointmentsController', () => {
 
     beforeEach(async () => {
       await clean.cleanAllPatients();
-      insertAppointmentStub = sinon.stub(dbAppointments, 'insertAppointment')
+      insertAppointmentStub = sinon.stub(dbAppointments, 'insert')
         .returns(Promise.resolve());
 
       return Promise.resolve();
@@ -241,7 +241,7 @@ describe('appointmentsController', () => {
       psy.dossierNumber = psychologistId;
       await dbPsychologists.savePsychologistInPG([psy]);
       // Insert an appointment and a patient
-      const patient = await dbPatients.insertPatient(
+      const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
         '12345678901',
@@ -253,9 +253,9 @@ describe('appointmentsController', () => {
         'adresse du docteur',
         dateOfBirth,
       );
-      const appointment = await dbAppointments.insertAppointment(new Date(), patient.id, psychologistId);
+      const appointment = await dbAppointments.insert(new Date(), patient.id, psychologistId);
       // Check appointment is inserted
-      const appointmentArray = await dbAppointments.getAppointments(psychologistId);
+      const appointmentArray = await dbAppointments.getAll(psychologistId);
       expect(appointmentArray).to.have.length(1);
       return appointment;
     };
@@ -276,7 +276,7 @@ describe('appointmentsController', () => {
           res.status.should.equal(200);
           res.body.message.should.equal('La séance a bien été supprimée.');
 
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(0);
 
           return Promise.resolve();
@@ -300,7 +300,7 @@ describe('appointmentsController', () => {
           res.body.message.should.equal('Impossible de supprimer cette séance.');
 
           // Appointment is not deleted
-          const appointmentArray = await dbAppointments.getAppointments(anotherPsyId);
+          const appointmentArray = await dbAppointments.getAll(anotherPsyId);
           expect(appointmentArray).to.have.length(1);
 
           return Promise.resolve();
@@ -323,7 +323,7 @@ describe('appointmentsController', () => {
           res.body.message.should.equal('Vous devez spécifier une séance à supprimer.');
 
           // Appointment is not deleted
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);
 
           return Promise.resolve();
@@ -343,7 +343,7 @@ describe('appointmentsController', () => {
           res.status.should.equal(401);
 
           // Appointment is not deleted
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);
 
           return Promise.resolve();
@@ -364,7 +364,7 @@ describe('appointmentsController', () => {
         .then(async (res) => {
           res.status.should.equal(404);
 
-          const appointmentArray = await dbAppointments.getAppointments(psy.dossierNumber);
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);
 
           return Promise.resolve();

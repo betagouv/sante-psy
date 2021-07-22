@@ -18,7 +18,7 @@ module.exports.getByToken = async function getByToken(token) {
   }
 };
 
-module.exports.getByEMail = async function getByEMail(email) {
+module.exports.getByEmail = async function getByEmail(email) {
   try {
     const result = await knex(loginTokenTable)
     .where('email', email)

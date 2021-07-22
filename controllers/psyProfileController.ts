@@ -18,7 +18,7 @@ const getValidators = [
 const get = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
-  const psychologist = await dbPsychologists.getPsychologistById(req.params.psyId);
+  const psychologist = await dbPsychologists.getById(req.params.psyId);
   if (!psychologist) {
     throw new CustomError("Le psychologue n'existe pas.", 500);
   }
@@ -105,7 +105,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Departement invalide', 400);
   }
 
-  await dbPsychologists.updatePsychologist({
+  await dbPsychologists.update({
     ...req.body,
     dossierNumber: req.user.psychologist,
     region,

@@ -107,7 +107,7 @@ describe('psyProfileController', () => {
     let updatePsyStub;
 
     beforeEach(async () => {
-      updatePsyStub = sinon.stub(dbPsychologists, 'updatePsychologist');
+      updatePsyStub = sinon.stub(dbPsychologists, 'update');
       return Promise.resolve();
     });
 
@@ -561,7 +561,7 @@ describe('psyProfileController', () => {
           res.status.should.equal(200);
           res.body.message.should.equal('Vos informations ont bien été mises à jour.');
 
-          const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+          const updatedPsy = await dbPsychologists.getById(psy.dossierNumber);
           expect(updatedPsy.email).to.eql('public@email.com');
           expect(updatedPsy.address).to.eql('1 rue du Pôle Nord');
           expect(updatedPsy.departement).to.eql('59 - Nord');
@@ -600,7 +600,7 @@ describe('psyProfileController', () => {
           res.status.should.equal(200);
           res.body.message.should.equal('Vos informations ont bien été mises à jour.');
 
-          const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+          const updatedPsy = await dbPsychologists.getById(psy.dossierNumber);
           expect(updatedPsy.email).to.eql('public@email.com');
           expect(updatedPsy.address).to.eql('1 rue du Pôle Nord');
           expect(updatedPsy.departement).to.eql('59 - Nord');

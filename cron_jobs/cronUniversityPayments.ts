@@ -9,7 +9,7 @@ import dbUniversities from '../db/universities';
 dotenv.config();
 
 const sendMailToUniversities = async () => {
-  const allUniversities = await dbUniversities.getUniversities();
+  const allUniversities = await dbUniversities.getAllOrderByName();
 
   allUniversities.forEach(async (university) => {
     if (!university.emailSSU && !university.emailUniversity) {

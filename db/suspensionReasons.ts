@@ -7,11 +7,11 @@ const knexConfig = require('../knexfile');
 
 const db = knex(knexConfig);
 
-const getForPsychologist = async (psychologistId: string) : Promise<SuspensionReason[]> => db
+const getByPsychologist = async (psychologistId: string) : Promise<SuspensionReason[]> => db
     .select()
     .from(suspensionReasonsTable)
     .where(
       { psychologistId },
     );
 
-export default { getForPsychologist };
+export default { getByPsychologist };

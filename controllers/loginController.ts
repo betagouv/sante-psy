@@ -77,7 +77,7 @@ const deleteToken = (req: Request, res: Response): void => {
 const connectedUser = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
   if (checkXsrf(req, tokenData.xsrfToken)) {
-    const psy = await dbPsychologists.getPsychologistById(tokenData.psychologist);
+    const psy = await dbPsychologists.getById(tokenData.psychologist);
     const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
 
     if (psy) {
@@ -109,7 +109,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
     const dbToken = await dbLoginToken.getByToken(token);
 
     if (dbToken) {
-      const psychologistData = await dbPsychologists.getAcceptedPsychologistByEmail(dbToken.email);
+      const psychologistData = await dbPsychologists.getAcceptedByEmail(dbToken.email);
       const xsrfToken = crypto.randomBytes(64).toString('hex');
       cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken);
       console.log(`Successful authentication for ${logs.hashForLogs(dbToken.email)}`);
@@ -142,10 +142,10 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   const { email } = req.body;
 
   console.log(`User with ${logs.hashForLogs(email)} asked for a login link`);
-  const acceptedEmailExist = await dbPsychologists.getAcceptedPsychologistByEmail(email);
+  const acceptedEmailExist = await dbPsychologists.getAcceptedByEmail(email);
 
   if (!acceptedEmailExist) {
-    const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedPsychologistByEmail(email);
+    const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedByEmail(email);
     if (notYetAcceptedEmailExist) {
       await sendNotYetAcceptedEmail(email);
       throw new CustomError(
