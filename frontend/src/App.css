@@ -1,3 +1,7 @@
+.clickable {
+  cursor: pointer;
+}
+
 .fr-centered {
   text-align: center;
 }

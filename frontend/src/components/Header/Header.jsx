@@ -62,9 +62,15 @@ const Header = () => {
                         Accéder à mon espace
                       </ToolItem>
                     )}
-                    <ToolItem asLink={<div data-test-id="logout-button" onClick={deleteToken} />}>
-                      Déconnexion
-                    </ToolItem>
+                    <div
+                      data-test-id="logout-button"
+                      className="clickable"
+                      onClick={deleteToken}
+                    >
+                      <ToolItem asLink={<div />}>
+                        Déconnexion
+                      </ToolItem>
+                    </div>
                   </>
                 )
                 : (
