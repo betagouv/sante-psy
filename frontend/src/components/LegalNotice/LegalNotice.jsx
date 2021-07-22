@@ -20,7 +20,7 @@ const LegalNotice = () => {
           Contactez-nous
         </h1>
         <Mail />
-        <h1 className={styles.title2} id="mentions-legales">
+        <h1 className={styles.title} id="mentions-legales">
           Mentions légales
         </h1>
         <div>
@@ -50,18 +50,18 @@ const LegalNotice = () => {
             </p>
             <p className="fr-mb-2w">1 rue Descartes - 75231 Paris cedex 05</p>
           </div>
-          <div className={styles.containerMargin}>
+          <div className={styles.sectionTitle}>
             <h3 className={styles.hebergement}>Hébergement de la Plateforme</h3>
             Ce site est hébergé en propre par Scalingo SAS, 15 avenue du Rhin, 67100 Strasbourg, France.
           </div>
-          <div className={styles.containerMargin} id="accessibilite">
+          <div className={styles.sectionTitle} id="accessibilite">
             <h3 className={styles.subtitle}>Accessibilité</h3>
             <p className="fr-mb-2w">
               La conformité aux normes d’accessibilité numérique est un objectif ultérieur.
               En attendant, nous tâchons de rendre ce site
               accessible à toutes et à tous :
             </p>
-            <ul className={styles.listMargin}>
+            <ul className={styles.list}>
               <li>Utilisation de composants accessibles (design system de l&lsquo;État)</li>
               <li>Respect des bonnes pratiques (Pilida, Opquast...)</li>
               <li>Tests manuels</li>
@@ -83,7 +83,7 @@ const LegalNotice = () => {
               vous êtes en droit de faire parvenir vos doléances ou une demande de saisine au Défenseur des droits.
             </p>
           </div>
-          <div className={styles.containerMargin}>
+          <div className={styles.sectionTitle}>
             <h3 className={styles.subtitle}>En savoir plus</h3>
             Pour en savoir plus sur la politique d’accessibilité numérique de l’État :
             {' '}
@@ -95,7 +95,7 @@ const LegalNotice = () => {
               http://references.modernisation.gouv.fr/accessibilite-numerique
             </a>
           </div>
-          <div className={styles.containerMargin}>
+          <div className={styles.sectionTitle}>
             <h3 className={styles.subtitle}>Sécurité</h3>
             Le site est protégé par un certificat électronique,
             matérialisé pour la grande majorité des navigateurs par un cadenas.

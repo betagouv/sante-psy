@@ -2,35 +2,32 @@
     color: #133A8D;
 }
 
-.title {
-    font-size: 29px;
-}
-
 .title:first-child {
     padding: 40px 0 0 0;
-    margin: 0;
+    font-size: 28px;
 }
 
-.title2 {
-    font-size: 30px;
+.title {
+    font-size: 28px;
     margin: 0;
 }
 
 .subtitle {
-    font-size: 26px;
+    font-size: 24px;
     margin: 0;
 }
 
-.listMargin {
+.list {
     list-style-type: none;
 }
 
-.containerMargin {
+.sectionTitle {
     margin-bottom: 25px;
 }
 
 .hebergement {
     margin-bottom: 0;
+    font-size: 24px;
 }
 
 li {
