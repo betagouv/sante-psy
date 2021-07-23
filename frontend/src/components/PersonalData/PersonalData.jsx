@@ -9,8 +9,8 @@ const PersonalData = () => (
     title="Suivi d&#39;audience et vie privée"
     background="blue"
   >
-    <div className={styles.title}>
-      <h3 id="cookies-déposés-et-opt-out">Cookies déposés et opt-out</h3>
+    <div className={styles.container}>
+      <h3 className={styles.title}>Cookies déposés et opt-out</h3>
       <p>
         Ce site dépose un petit fichier texte (un « cookie ») sur votre ordinateur lorsque vous le consultez.
         Cela nous permet de mesurer le nombre de visites et de comprendre quelles sont les pages les plus consultées.
@@ -19,7 +19,7 @@ const PersonalData = () => (
       <p>Information sur votre suivi : </p>
       <iframe
         title="stats"
-        style={{ border: 0, height: 140, width: '80%' }}
+        style={{ border: 0, height: 152, width: '80%' }}
         src="https://stats.data.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=&fontSize=&fontFamily=%22Marianne%22%2C%20arial%2C%20sans-serif"
       />
 
