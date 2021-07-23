@@ -35,12 +35,11 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
       {!loading && (
       <div className="fr-my-3w">
         <form data-test-id="edit-profile-form" onSubmit={save}>
-          <p className="fr-text--sm fr-mb-1v">
+          <p className="fr-text--sm fr-mb-3w">
             Les champs avec une astérisque (
             <span className="red-text">*</span>
             ) sont obligatoires.
           </p>
-          <br />
           <TextInput
             className="midlength-input"
             label="Email personnel"
