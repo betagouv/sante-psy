@@ -60,19 +60,23 @@
 .short-input {
   max-width: 10rem;
 }
-.midlength-input {
-  max-width: 41rem;
+
+.fr-checkbox-group .fr-hint-text{
+  margin: -12px 0 0 32px;
 }
 
-.midlength-input input {
-  max-width: 25rem;
+.fr-fieldset__legend {
+  font-weight: normal;
 }
 
+.fr-fieldset .fr-hint-text {
+  margin-top: -12px;
+}
+
+.midlength-select,
+.midlength-input input,
+.midlength-input select,
 .midlength-input textarea {
-  max-width: 25rem;
-}
-
-.midlength-select {
   max-width: 25rem;
 }
 

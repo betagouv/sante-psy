@@ -45,7 +45,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
       {convention && (
         <>
           <Select
-            className="midlength-select"
+            className="midlength-input"
             data-test-id="convention-university-select"
             id="university"
             name="university"
