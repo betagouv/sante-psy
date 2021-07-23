@@ -6,6 +6,7 @@ import { Button } from '@dataesr/react-dsfr';
 import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import Mail from 'components/Footer/Mail';
+import Section from 'components/Page/Section';
 
 import { useStore } from 'stores/';
 
@@ -45,37 +46,42 @@ const Login = () => {
     <Page
       title="Espace Psychologues"
       background="blue"
+      textContent
     >
-      <h3>Me connecter</h3>
-      <GlobalNotification />
-      <p className="fr-mb-2w">
-        Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant
-        {` ${config.sessionDuration} `}
-        heures
-      </p>
-      <form onSubmit={login} id="login_form">
-        <label>
-          Adresse email :
+      <Section
+        title="Me connecter"
+      >
+        <GlobalNotification />
+        <p>
+          Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant
+          {` ${config.sessionDuration} `}
+          heures
+        </p>
+        <form onSubmit={login} id="login_form">
+          <label>
+            Adresse email :
+            {' '}
+            <input
+              data-test-id="email-input"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
+          </label>
           {' '}
-          <input
-            data-test-id="email-input"
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-        </label>
-        {' '}
-        <Button
-          submit
-          data-test-id="email-button"
-        >
-          Recevoir le lien de connexion
-        </Button>
-      </form>
+          <Button
+            submit
+            data-test-id="email-button"
+          >
+            Recevoir le lien de connexion
+          </Button>
+        </form>
+      </Section>
 
-      <div className="fr-mt-3w">
-        <h3>⚠️&nbsp;Problème d&lsquo;accès ?</h3>
-        <p className="fr-mb-2w">
+      <Section
+        title="⚠️&nbsp;Problème d&lsquo;accès ?"
+      >
+        <p>
           Etes-vous bien enregistré via
           {' '}
           <a href={config.demarchesSimplifieesUrl} target="_blank" rel="noopener noreferrer">le formulaire d&lsquo;inscription</a>
@@ -83,13 +89,13 @@ const Login = () => {
           ?
           Il se peut que votre compte ne soit pas encore validé.
         </p>
-        <p className="fr-mb-2w">
+        <p>
           L&lsquo;email à utiliser ici est le même que celui avec lequel vous avez fait votre candidature
           pour participer au dispositif.
           Il peut être différent de votre email de contact présenté dans l&lsquo;annuaire des psychologues.
         </p>
-        <Mail />
-      </div>
+      </Section>
+      <Mail />
     </Page>
   );
 };
