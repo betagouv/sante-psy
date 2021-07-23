@@ -22,7 +22,8 @@ const LegalNotice = () => {
           <p>
             La Plateforme
             {config.appName}
-            , est éditée par l&lsquo;Incubateur de services numériques de la
+            {' '}
+            est éditée par l&lsquo;Incubateur de services numériques de la
             Direction interministérielle du numérique (DINUM).
           </p>
           <p>
