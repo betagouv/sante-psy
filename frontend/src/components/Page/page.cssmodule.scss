@@ -14,6 +14,12 @@
   box-shadow: 0 2px 7px 0 rgba(0,0,0,0.21);
 }
 
+.textContainer {
+  color: var(--bf500);
+  margin-top: 40px;
+  overflow-wrap: anywhere;
+}
+
 .sectionTitle {
   color: var(--bf500);
   text-align: center;
