@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Page from 'components/Page/Page';
+import Mail from 'components/Footer/Mail';
 import styles from './personalData.cssmodule.scss';
 
 const PersonalData = () => (
@@ -10,7 +11,7 @@ const PersonalData = () => (
     background="blue"
   >
     <div className={styles.container}>
-      <h3 className={styles.title}>Cookies déposés et opt-out</h3>
+      <h2 className={styles.subtitle}>Cookies déposés et opt-out</h2>
       <p>
         Ce site dépose un petit fichier texte (un « cookie ») sur votre ordinateur lorsque vous le consultez.
         Cela nous permet de mesurer le nombre de visites et de comprendre quelles sont les pages les plus consultées.
@@ -23,9 +24,9 @@ const PersonalData = () => (
         src="https://stats.data.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=&fontSize=&fontFamily=%22Marianne%22%2C%20arial%2C%20sans-serif"
       />
 
-      <h3 id="ce-site-naffiche-pas-de-bannière-de-consentement-aux-cookies-pourquoi-">
+      <h2 className={styles.subtitle}>
         Ce site n’affiche pas de bannière de consentement aux cookies, pourquoi ?
-      </h3>
+      </h2>
       <p>
         C’est vrai, vous n’avez pas eu à cliquer sur un bloc qui recouvre la moitié de la page
         pour dire que vous êtes d’accord avec le dépôt de cookies — même si vous ne savez pas ce que ça veut dire !
@@ -56,9 +57,9 @@ const PersonalData = () => (
         Il est donc impossible d’associer vos visites sur ce site à votre personne.
       </p>
 
-      <h3 id="je-contribue-à-enrichir-vos-données-puis-je-y-accéder">
+      <h2 className={styles.subtitle}>
         Je contribue à enrichir vos données, puis-je y accéder ?
-      </h3>
+      </h2>
 
       <p>
         Bien sûr ! Les statistiques d’usage sont disponibles en accès libre sur
@@ -66,6 +67,7 @@ const PersonalData = () => (
         <a target="_blank" rel="noopener noreferrer" href="https://stats.data.gouv.fr/index.php?module=CoreHome&action=index&date=yesterday&period=day&idSite=160#?idSite=160&period=day&date=yesterday&segment=&category=Dashboard_Dashboard&subcategory=1">stats.data.gouv.fr</a>
         .
       </p>
+      <Mail />
     </div>
   </Page>
 );

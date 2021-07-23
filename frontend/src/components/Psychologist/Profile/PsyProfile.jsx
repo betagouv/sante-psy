@@ -82,9 +82,7 @@ const PsyProfile = () => {
           />
         </Route>
       </Switch>
-      <Mail
-        withMarge
-      />
+      <Mail />
     </div>
   );
 };

@@ -2,6 +2,10 @@
     color: var(--bf500);
 }
 
-.title {
-    margin-top: 3rem;
+.subtitle {
+    font-size: 24px;
+}
+
+.subtitle:first-child {
+    margin-top: 40px;
 }

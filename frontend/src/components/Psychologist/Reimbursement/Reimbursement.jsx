@@ -10,9 +10,7 @@ const Reimbursement = () => (
     <h1>Remboursement de mes séances</h1>
     <GlobalNotification />
     <Billing />
-    <Mail
-      withMarge
-    />
+    <Mail />
   </div>
 );
 

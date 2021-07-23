@@ -167,9 +167,7 @@ const Appointments = () => {
           </div>
         </div>
       </div>
-      <Mail
-        withMarge
-      />
+      <Mail />
     </div>
   );
 };
