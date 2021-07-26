@@ -87,7 +87,7 @@ const AddEditPatient = () => {
             <span className="red-text">*</span>
             ) sont obligatoires.
           </p>
-          <p className="fr-text--sm fr-mb-1v">
+          <p className="fr-text--sm fr-mb-6v">
             S&lsquo;il vous manque des champs non-obligatoires,
             vous pourrez y revenir plus tard pour compléter le dossier.
           </p>
