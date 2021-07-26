@@ -85,7 +85,7 @@ const getAssignedUniversityId = (psychologist: Psychologist, universities: any[]
 /**
  * need to have a comma separed list for nodemailer
  */
-const getEmailsTo = (university: any): string[] | undefined => {
+const getEmailsTo = (university: any): string | undefined => {
   if (university.emailUniversity) {
     return university.emailUniversity.split(' ; ').join(',');
   }

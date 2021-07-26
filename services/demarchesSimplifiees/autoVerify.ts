@@ -6,7 +6,7 @@ import {
   getChampsIdFromField,
   getAnnotationsIdFromField,
 } from '../champsAndAnnotations';
-import { getAllPsychologistList } from './importDossier';
+import importDossier from './importDossier';
 
 const graphql = require('../../utils/graphql');
 
@@ -74,7 +74,7 @@ const verifyPsychologist = async (psychologist, adeliInfo) => {
 
 const autoVerifyPsychologists = async () : Promise<void> => {
   try {
-    const dossiersInConstruction = await getAllPsychologistList(
+    const dossiersInConstruction = await importDossier.getAllPsychologistList(
       (cursor) => graphql.getDossiersWithAnnotationsAndMessages(cursor, DossierState.enConstruction),
     );
     console.log(`${dossiersInConstruction.psychologists.length} psychologists are in construction`);

@@ -41,6 +41,7 @@ const getDatePlusOneHour = () => {
 };
 
 export default {
+  formatFrenchDateForm: 'DD/MM/YYYY',
   formatFrenchDate: dateFormatter.format,
   getDatePlusOneHour,
   toFormatDDMMYYYY,

@@ -29,7 +29,7 @@ const getByEmail = async (email: string): Promise<any> => {
   }
 };
 
-const insert = async (token: string, email: string, expiresAt: Date): Promise<any> => {
+const insert = async (token: string, email: string, expiresAt: string): Promise<any> => {
   try {
     return await db(loginTokenTable).insert({
       token,

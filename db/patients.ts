@@ -73,7 +73,7 @@ const update = async (
   doctorName: string,
   doctorAddress: string,
   dateOfBirth: Date,
-): Promise<any[]> => {
+): Promise<number> => {
   try {
     return await db(patientsTable)
       .where('id', id)
