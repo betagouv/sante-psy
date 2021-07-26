@@ -16,7 +16,7 @@ const LegalNotice = () => {
       background="blue"
       textContent
     >
-      <div>
+      <>
         <Section title="Éditeur de la Plateforme">
           <p>
             La Plateforme
@@ -91,7 +91,7 @@ const LegalNotice = () => {
           la saisie d’informations personnelles.
         </Section>
         <Mail />
-      </div>
+      </>
     </Page>
   );
 };
