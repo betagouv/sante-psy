@@ -1,19 +1,14 @@
-const jwt = require('jsonwebtoken');
-const config = require('./config');
-const { default: CustomError } = require('./CustomError');
+import jwt from 'jsonwebtoken';
+import config from './config';
+import CustomError from './CustomError';
 
 const headers = {
   secure: !config.useCors,
   httpOnly: true,
   sameSite: 'Lax',
 };
-module.exports.headers = headers;
 
-function getSessionDuration() {
-  return `${config.sessionDurationHours} hours`;
-}
-
-module.exports.getSessionDuration = getSessionDuration;
+const getSessionDuration = (): string => `${config.sessionDurationHours} hours`;
 
 /**
  * get a json web token to store psychologist data
@@ -21,7 +16,7 @@ module.exports.getSessionDuration = getSessionDuration;
  * @param {*} id
  * @see https://www.ionos.fr/digitalguide/sites-internet/developpement-web/json-web-token-jwt/
  */
-const getJwtTokenForUser = function getJwtTokenForUser(psychologist, xsrfToken) {
+const getJwtTokenForUser = (psychologist, xsrfToken) => {
   const duration = getSessionDuration();
 
   return jwt.sign(
@@ -33,14 +28,12 @@ const getJwtTokenForUser = function getJwtTokenForUser(psychologist, xsrfToken) 
     { expiresIn: duration },
   );
 };
-module.exports.getJwtTokenForUser = getJwtTokenForUser;
-
-module.exports.createAndSetJwtCookie = (res, psychologistData, xsrfToken) => {
+const createAndSetJwtCookie = (res, psychologistData, xsrfToken) => {
   const jwtToken = getJwtTokenForUser(psychologistData, xsrfToken);
   res.cookie('token', jwtToken, headers);
 };
 
-module.exports.clearJwtCookie = (res) => {
+const clearJwtCookie = (res) => {
   res.clearCookie('token');
 };
 
@@ -48,7 +41,7 @@ module.exports.clearJwtCookie = (res) => {
  * if valid token will return psychologist data
  * @param {*} token
  */
-const verifyJwt = function verifyJwt(req, res) {
+const verifyJwt = (req, res) => {
   try {
     const verified = jwt.verify(req.cookies.token, config.secret);
     return verified;
@@ -61,4 +54,12 @@ const verifyJwt = function verifyJwt(req, res) {
     return false;
   }
 };
-module.exports.verifyJwt = verifyJwt;
+
+export default {
+  headers,
+  getSessionDuration,
+  getJwtTokenForUser,
+  createAndSetJwtCookie,
+  clearJwtCookie,
+  verifyJwt,
+};

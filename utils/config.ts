@@ -1,5 +1,7 @@
-require('dotenv').config();
-const autoAcceptMessage = require('./configDS/autoAcceptMessage');
+import dotenv from 'dotenv';
+import autoAcceptMessage from './configDS/autoAcceptMessage';
+
+dotenv.config();
 
 const hostnameWithProtocol = process.env.HOSTNAME_WITH_PROTOCOL || 'http://localhost:8080';
 const { protocol } = new URL(hostnameWithProtocol);
@@ -12,7 +14,7 @@ if (!secret || !secretLogs) {
 
 const contactEmail = process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr';
 
-module.exports = {
+export default {
   appName: 'Santé Psy Étudiant',
   activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
   announcement: process.env.ANNOUNCEMENT || '',

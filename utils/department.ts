@@ -2,7 +2,7 @@
  * Output : "55"
  * @param {} departementString ex : '55 - Indre-et-Loire'
  */
-module.exports.getNumberFromString = function getNumberFromString(departementString) {
+const getNumberFromString = (departementString: string): string => {
   if (!departementString) {
     return null;
   }
@@ -10,3 +10,5 @@ module.exports.getNumberFromString = function getNumberFromString(departementStr
   const parts = departementString.split(' - ');
   return parts[0];
 };
+
+export default { getNumberFromString };

@@ -1,6 +1,6 @@
-const { gql, GraphQLClient } = require('graphql-request');
-const config = require('./config');
-const { getChampsIdFromField, getAnnotationsIdFromField } = require('../services/champsAndAnnotations');
+import { gql, GraphQLClient } from 'graphql-request';
+import config from './config';
+import { getChampsIdFromField, getAnnotationsIdFromField } from '../services/champsAndAnnotations';
 
 const endpoint = config.apiUrl;
 const graphQLClient = new GraphQLClient(endpoint, {
@@ -15,18 +15,18 @@ const graphQLClient = new GraphQLClient(endpoint, {
  * @see https://demarches-simplifiees-graphql.netlify.app/pageinfo.doc.html
  * @param {*} cursor : String
  */
-function getWhereConditionAfterCursor(cursor) {
+const getWhereConditionAfterCursor = (cursor) => {
   if (cursor) {
     return `(after: "${cursor}")`;
   }
   return '';
-}
+};
 
 /**
  * log errors from DS
  * @param {*} apiResponse 
  */
-function logErrorsFromDS(apiResponse) {
+const logErrorsFromDS = (apiResponse) => {
   if (apiResponse.response) {
     if (apiResponse.response.errors.length > 0) {
       apiResponse.response.errors.forEach((err) => {
@@ -34,7 +34,7 @@ function logErrorsFromDS(apiResponse) {
       });
     }
   }
-}
+};
 
 const request = async (query, variables) => {
   console.debug('GraphQL query sent:', query, variables);
@@ -51,8 +51,8 @@ const request = async (query, variables) => {
   }
 };
 
-const executeQuery = (query, variables) => request(query, variables);
-const executeMutation = async (query, variables) => {
+const executeQuery = (query, variables = undefined) => request(query, variables);
+const executeMutation = async (query, variables = undefined) => {
   if (config.testEnvironment) {
     console.log('Mutation bypassed because you are using a test environment', query, variables);
     return Promise.resolve();
@@ -253,7 +253,7 @@ const putDossierInInstruction = (id) => {
     mandatory field "usager.email" is used as the login email
  * @see https://demarches-simplifiees-graphql.netlify.app/demarche.doc.html
  */
-async function requestPsychologist(afterCursor) {
+const requestPsychologist = async (afterCursor) => {
   const paginationCondition = getWhereConditionAfterCursor(afterCursor);
   const query = gql`
     {
@@ -293,7 +293,7 @@ async function requestPsychologist(afterCursor) {
   `;
 
   return executeQuery(query);
-}
+};
 
 const createDirectUpload = (fileInfo, dossierId) => {
   // eslint-disable-next-line max-len
@@ -357,13 +357,15 @@ const sendMessageWithAttachment = (message, attachment, dossierId) => {
   return executeMutation(mutation, variables);
 };
 
-exports.acceptPsychologist = acceptPsychologist;
-exports.getInstructors = getInstructors;
-exports.getSimplePsyInfo = getSimplePsyInfo;
-exports.requestPsychologist = requestPsychologist;
-exports.getDossiersWithAnnotationsAndMessages = getDossiersWithAnnotationsAndMessages;
-exports.addVerificationMessage = addVerificationMessage;
-exports.verifyDossier = verifyDossier;
-exports.putDossierInInstruction = putDossierInInstruction;
-exports.createDirectUpload = createDirectUpload;
-exports.sendMessageWithAttachment = sendMessageWithAttachment;
+export default {
+  acceptPsychologist,
+  getInstructors,
+  getSimplePsyInfo,
+  requestPsychologist,
+  getDossiersWithAnnotationsAndMessages,
+  addVerificationMessage,
+  verifyDossier,
+  putDossierInInstruction,
+  createDirectUpload,
+  sendMessageWithAttachment,
+};
