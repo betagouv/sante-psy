@@ -19,7 +19,7 @@ const matchPsyToUni = async (dryRun) => {
     const psysFoundInDb = [];
     const statsNoPsyFound = [];
 
-    const universities = await dbUniversities.getAllOrderByName();
+    const universities = await dbUniversities.getAllNotOrdered();
     const psyFromDb = await dbPsychologists.getAllAccepted([
       'personalEmail',
       'dossierNumber',
