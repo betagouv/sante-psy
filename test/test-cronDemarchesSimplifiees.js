@@ -6,7 +6,7 @@ const { default: dbPsychologists } = require('../db/psychologists');
 const dbUniversities = require('../db/universities');
 const dbDsApiCursor = require('../db/dsApiCursor');
 const importDossier = require('../services/demarchesSimplifiees/importDossier');
-const emailUtils = require('../utils/email');
+const sendEmail = require('../utils/email');
 
 const {
   default: {
@@ -66,7 +66,7 @@ describe('checkForMultipleAcceptedDossiers', () => {
   let sendMailStub;
 
   beforeEach(async () => {
-    sendMailStub = sinon.stub(emailUtils, 'send');
+    sendMailStub = sinon.stub(sendEmail, 'default');
     await clean.cleanAllPsychologists();
     return Promise.resolve();
   });

@@ -3,7 +3,7 @@ import ejs from 'ejs';
 
 import logs from '../utils/logs';
 import config from '../utils/config';
-import emailUtils from '../utils/email';
+import sendEmail from '../utils/email';
 import dbUniversities from '../db/universities';
 
 dotenv.config();
@@ -20,7 +20,7 @@ const sendMailToUniversities = async () => {
     const htmlFormated = await ejs.renderFile('./views/emails/summaryUniversity.ejs');
     const emailsTo = dbUniversities.getEmailsTo(university);
     if (emailsTo) {
-      await emailUtils.send(
+      await sendEmail(
         emailsTo,
         `Résumé des séances ${config.appName}`,
         htmlFormated,
