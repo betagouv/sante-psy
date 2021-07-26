@@ -7,7 +7,6 @@ import { useStore } from 'stores/';
 
 import Page from 'components/Page/Page';
 import Section from 'components/Page/Section';
-import styles from './legalNotice.cssmodule.scss';
 
 const LegalNotice = () => {
   const { commonStore: { config } } = useStore();
@@ -17,7 +16,7 @@ const LegalNotice = () => {
       background="blue"
       textContent
     >
-      <div className={styles.container}>
+      <div>
         <Section title="Éditeur de la Plateforme">
           <p>
             La Plateforme
@@ -46,13 +45,13 @@ const LegalNotice = () => {
         <Section title="Hébergement de la Plateforme">
           Ce site est hébergé en propre par Scalingo SAS, 15 avenue du Rhin, 67100 Strasbourg, France.
         </Section>
-        <Section title="Accessibilité">
+        <Section id="accessibilite" title="Accessibilité">
           <p>
             La conformité aux normes d’accessibilité numérique est un objectif ultérieur.
             En attendant, nous tâchons de rendre ce site
             accessible à toutes et à tous :
           </p>
-          <ul className={styles.list}>
+          <ul className="fr-list">
             <li>Utilisation de composants accessibles (design system de l&lsquo;État)</li>
             <li>Respect des bonnes pratiques (Pilida, Opquast...)</li>
             <li>Tests manuels</li>
