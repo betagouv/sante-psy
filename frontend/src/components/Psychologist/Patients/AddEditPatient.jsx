@@ -137,6 +137,7 @@ const AddEditPatient = () => {
                 onChange={e => changePatient(e.target.value, 'INE')}
               />
               <Checkbox
+                className="fr-input-group"
                 defaultChecked={patient.hasPrescription}
                 label="J'ai vérifié que les séances ont bien été prescrites
                 par un médecin ou un Service de Santé Universitaire"
@@ -145,6 +146,7 @@ const AddEditPatient = () => {
                 onChange={e => changePatient(e.target.checked, 'hasPrescription')}
               />
               <Checkbox
+                className="fr-input-group"
                 defaultChecked={patient.isStudentStatusVerified}
                 label="J'ai vérifié le statut étudiant de ce patient"
                 hint="L'étudiant m'a présenté une lettre ou ordonnance médicale"

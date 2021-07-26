@@ -19,7 +19,7 @@ const SearchableSelect = ({
 }) => {
   const inputOption = {
     ...remainingProps,
-    className: 'fr-select midlength-input midlength-select',
+    className: 'fr-select',
     autoComplete: 'off',
     id: field,
     type,
@@ -55,7 +55,7 @@ const SearchableSelect = ({
 
   const filteredOptions = options.filter(option => option.label.toLowerCase().includes(internalValue.toLowerCase()));
   return (
-    <div className="fr-my-3w">
+    <div className="fr-my-3w midlength-input">
       <Label
         field={field}
         label={label}
