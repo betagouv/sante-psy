@@ -31,7 +31,7 @@ const connectedItems = [
 
 const Header = () => {
   const location = useLocation();
-  const { userStore: { user, deleteToken } } = useStore();
+  const { userStore: { user } } = useStore();
 
   const psychologistPage = location.pathname.startsWith('/psychologue');
   return (
@@ -62,15 +62,16 @@ const Header = () => {
                         Accéder à mon espace
                       </ToolItem>
                     )}
-                    <div
-                      data-test-id="logout-button"
-                      className="clickable"
-                      onClick={deleteToken}
+                    <ToolItem
+                      asLink={(
+                        <Link
+                          data-test-id="logout-link"
+                          to="/psychologue/logout"
+                        />
+)}
                     >
-                      <ToolItem asLink={<div />}>
-                        Déconnexion
-                      </ToolItem>
-                    </div>
+                      Déconnexion
+                    </ToolItem>
                   </>
                 )
                 : (
