@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
 
 import cors from 'cors';
+import helmet from 'helmet';
 import compression from 'compression';
 
 import config from './utils/config';
@@ -24,6 +25,8 @@ if (!config.activateDebug) {
   console.log('console.debug is not active - thanks to ACTIVATE_DEBUG_LOG env variable');
   console.debug = () => {};
 }
+
+app.use(helmet({ contentSecurityPolicy: false }));
 
 app.use(cspConfig);
 app.use(compression());
