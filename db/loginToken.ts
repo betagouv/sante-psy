@@ -1,12 +1,10 @@
-const knexConfig = require('../knexfile');
-const date = require('../utils/date');
-const knex = require('knex')(knexConfig);
+import date from '../utils/date';
+import { loginTokenTable } from './tables';
+import db from './db';
 
-const { loginTokenTable } = require('./tables');
-
-module.exports.getByToken = async function getByToken(token) {
+const getByToken = async (token: string): Promise<any> => {
   try {
-    const result = await knex(loginTokenTable)
+    const result = await db(loginTokenTable)
     .where('token', token)
     .andWhere('expiresAt', '>', date.now())
     .first();
@@ -18,9 +16,9 @@ module.exports.getByToken = async function getByToken(token) {
   }
 };
 
-module.exports.getByEmail = async function getByEmail(email) {
+const getByEmail = async (email: string): Promise<any> => {
   try {
-    const result = await knex(loginTokenTable)
+    const result = await db(loginTokenTable)
     .where('email', email)
     .first();
 
@@ -31,9 +29,9 @@ module.exports.getByEmail = async function getByEmail(email) {
   }
 };
 
-module.exports.insert = async (token, email, expiresAt) => {
+const insert = async (token: string, email: string, expiresAt: Date): Promise<any> => {
   try {
-    return await knex(loginTokenTable).insert({
+    return await db(loginTokenTable).insert({
       token,
       email,
       expiresAt,
@@ -44,9 +42,9 @@ module.exports.insert = async (token, email, expiresAt) => {
   }
 };
 
-module.exports.delete = async (token) => {
+const deleteOne = async (token: string): Promise<void> => {
   try {
-    const deletedToken = await knex(loginTokenTable)
+    const deletedToken = await db(loginTokenTable)
     .where({
       token,
     })
@@ -61,4 +59,11 @@ module.exports.delete = async (token) => {
     console.error(`Erreur de suppression du token : ${err}`);
     throw new Error('Erreur de suppression du token');
   }
+};
+
+export default {
+  getByToken,
+  getByEmail,
+  insert,
+  delete: deleteOne,
 };

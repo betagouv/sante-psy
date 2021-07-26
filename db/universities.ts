@@ -1,11 +1,11 @@
-const knexConfig = require('../knexfile');
-const knex = require('knex')(knexConfig);
-const date = require('../utils/date');
-const departementToUniversityName = require('../scripts/departementToUniversityName');
-const { universitiesTable } = require('./tables');
-const department = require('../utils/department');
+import date from '../utils/date';
+import departementToUniversityName from '../scripts/departementToUniversityName';
+import { universitiesTable } from './tables';
+import department from '../utils/department';
+import { Psychologist } from '../types/Psychologist';
+import db from './db';
 
-module.exports.upsertMany = async function upsertMany(universitiesList) {
+const upsertMany = async (universitiesList: any[]): Promise<any[]> => {
   console.log(`UPSERT of ${universitiesList.length} universities....`);
   const updatedAt = date.now(); // use to perform UPSERT in PG
 
@@ -13,7 +13,7 @@ module.exports.upsertMany = async function upsertMany(universitiesList) {
     const upsertingKey = 'id';
 
     try {
-      return knex(universitiesTable)
+      return db(universitiesTable)
       .insert(university)
       .onConflict(upsertingKey)
       .merge({ // update every field and add updatedAt
@@ -24,7 +24,7 @@ module.exports.upsertMany = async function upsertMany(universitiesList) {
       });
     } catch (err) {
       console.error(`Error to insert ${university}`, err);
-      return Promise.resolve();
+      return Promise.resolve([]);
     }
   });
 
@@ -35,9 +35,9 @@ module.exports.upsertMany = async function upsertMany(universitiesList) {
   return query;
 };
 
-module.exports.getAllOrderByName = async () => {
+const getAllOrderByName = async (): Promise<any[]> => {
   try {
-    return knex.select('id', 'name', 'emailSSU', 'emailUniversity')
+    return db.select('id', 'name', 'emailSSU', 'emailUniversity')
         .from(universitiesTable)
         .orderBy('name');
   } catch (err) {
@@ -46,19 +46,9 @@ module.exports.getAllOrderByName = async () => {
   }
 };
 
-module.exports.getAll = async () => {
+const insertByName = async (name: string): Promise<any> => {
   try {
-    return knex.select('id', 'name', 'emailSSU', 'emailUniversity')
-        .from(universitiesTable);
-  } catch (err) {
-    console.error('Impossible de récupérer les universités', err);
-    throw new Error('Impossible de récupérer les universités');
-  }
-};
-
-module.exports.insertByName = async (name) => {
-  try {
-    const universityArray = await knex(universitiesTable).insert({
+    const universityArray = await db(universitiesTable).insert({
       name,
     }).returning('*');
     return universityArray[0];
@@ -68,7 +58,7 @@ module.exports.insertByName = async (name) => {
   }
 };
 
-module.exports.getAssignedUniversityId = (psychologist, universities) => {
+const getAssignedUniversityId = (psychologist: Psychologist, universities: any[]): string | null => {
   if (psychologist.assignedUniversityId) {
     return psychologist.assignedUniversityId;
   }
@@ -95,9 +85,17 @@ module.exports.getAssignedUniversityId = (psychologist, universities) => {
 /**
  * need to have a comma separed list for nodemailer
  */
-module.exports.getEmailsTo = function getEmailsTo(university) {
+const getEmailsTo = (university: any): string[] | undefined => {
   if (university.emailUniversity) {
     return university.emailUniversity.split(' ; ').join(',');
   }
   return university.emailSSU ? university.emailSSU.split(' ; ').join(',') : undefined;
+};
+
+export default {
+  upsertMany,
+  getAllOrderByName,
+  getAssignedUniversityId,
+  getEmailsTo,
+  insertByName,
 };

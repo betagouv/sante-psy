@@ -1,13 +1,13 @@
-const knexConfig = require('../knexfile');
-const knex = require('knex')(knexConfig);
-const date = require('../utils/date');
-const { appointmentsTable, patientsTable, psychologistsTable } = require('./tables');
+import { Appointment } from '../types/Appointment';
+import date from '../utils/date';
+import { appointmentsTable, patientsTable, psychologistsTable } from './tables';
+import db from './db';
 
 // todo: bug : if appointment has a patientId that does not match a patient object in the db,
 // this function returns empty.
-module.exports.getAll = async (psychologistId) => {
+const getAll = async (psychologistId: string): Promise<any[]> => {
   try {
-    const appointmentArray = await knex.from(patientsTable)
+    const appointmentArray = await db.from(patientsTable)
       .innerJoin(`${appointmentsTable}`, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
       .where(`${appointmentsTable}.psychologistId`, psychologistId)
       .whereNot(`${appointmentsTable}.deleted`, true)
@@ -27,10 +27,10 @@ module.exports.getAll = async (psychologistId) => {
  *  {countAppointments: 2, year: 2021, month: 4, psychologistId: '112323232-33434-3434'},
  * ]
  */
-module.exports.getCountByYearMonth = async (psychologistId) => {
+const getCountByYearMonth = async (psychologistId: string): Promise<any[]> => {
   try {
-    const query = await knex(appointmentsTable)
-      .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
+    const query = await db(appointmentsTable)
+      .select(db.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
         , "psychologistId"
         , EXTRACT(YEAR from "appointmentDate") AS year
         , EXTRACT(MONTH from "appointmentDate") AS month`))
@@ -64,10 +64,10 @@ module.exports.getCountByYearMonth = async (psychologistId) => {
  *  },
  * ]
  */
-module.exports.getMonthlySummary = async (year, month) => {
+const getMonthlySummary = async (year: string, month: string): Promise<any[]> => {
   try {
-    const query = await knex(appointmentsTable)
-      .select(knex.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
+    const query = await db(appointmentsTable)
+      .select(db.raw(`CAST(COUNT(*) AS INTEGER) AS "countAppointments"
         , ${appointmentsTable}."psychologistId"
         , ${psychologistsTable}."assignedUniversityId" AS "universityId"
         , ${psychologistsTable}."firstNames"
@@ -102,10 +102,10 @@ module.exports.getMonthlySummary = async (year, month) => {
  *  {countPatients: 2, year: 2021, month: 4},
  * ]
  */
-module.exports.getCountPatientsByYearMonth = async (psychologistId) => {
+const getCountPatientsByYearMonth = async (psychologistId: string): Promise<any[]> => {
   try {
-    const query = await knex(appointmentsTable)
-      .select(knex.raw(`CAST(COUNT(DISTINCT "patientId") AS INTEGER) AS "countPatients"
+    const query = await db(appointmentsTable)
+      .select(db.raw(`CAST(COUNT(DISTINCT "patientId") AS INTEGER) AS "countPatients"
         , EXTRACT(YEAR from "appointmentDate") AS year
         , EXTRACT(MONTH from "appointmentDate") AS month`))
       .where('psychologistId', psychologistId)
@@ -120,9 +120,9 @@ module.exports.getCountPatientsByYearMonth = async (psychologistId) => {
   }
 };
 
-module.exports.insert = async (appointmentDate, patientId, psychologistId) => {
+const insert = async (appointmentDate: Date, patientId: string, psychologistId: string): Promise<Appointment> => {
   try {
-    const insertedArray = await knex(appointmentsTable).insert({
+    const insertedArray = await db(appointmentsTable).insert({
       psychologistId,
       appointmentDate,
       patientId,
@@ -134,9 +134,9 @@ module.exports.insert = async (appointmentDate, patientId, psychologistId) => {
   }
 };
 
-module.exports.delete = async (appointmentId, psychologistId) => {
+const deleteOne = async (appointmentId: string, psychologistId: string): Promise<number> => {
   try {
-    const deletedAppointments = await knex(appointmentsTable)
+    const deletedAppointments = await db(appointmentsTable)
       .where({
         id: appointmentId,
         deleted: false,
@@ -154,4 +154,13 @@ module.exports.delete = async (appointmentId, psychologistId) => {
     console.error('Erreur de suppression du appointments', err);
     throw new Error('Erreur de suppression du appointments');
   }
+};
+
+export default {
+  getAll,
+  getCountByYearMonth,
+  getMonthlySummary,
+  getCountPatientsByYearMonth,
+  insert,
+  delete: deleteOne,
 };
