@@ -27,7 +27,7 @@ const loginAsDefault = (duration = 3600) => {
 };
 
 const logout = () => {
-  cy.get('[data-test-id="logout-button"]').click({ force: true });
+  cy.get('[data-test-id="logout-link"]').click({ force: true });
 };
 
 export default {

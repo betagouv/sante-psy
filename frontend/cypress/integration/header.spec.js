@@ -23,7 +23,7 @@ describe('Header Test', () => {
 
       it('should display correct tool items', () => {
         // Connected actions are not present
-        cy.get('[data-test-id="logout-button"]').should('not.exist');
+        cy.get('[data-test-id="logout-link"]').should('not.exist');
         cy.get('[data-test-id="back-home-button"]').should('not.exist');
         cy.get('[data-test-id="my-space-button"]').should('not.exist');
 
@@ -74,7 +74,7 @@ describe('Header Test', () => {
           cy.get('@close-burger-menu').should('be.visible');
 
           // Connected actions are not present
-          cy.get('[data-test-id="logout-button"]').should('not.exist');
+          cy.get('[data-test-id="logout-link"]').should('not.exist');
           cy.get('[data-test-id="back-home-button"]').should('not.exist');
           cy.get('[data-test-id="my-space-button"]').should('not.exist');
 
@@ -158,9 +158,9 @@ describe('Header Test', () => {
         cy.location('pathname').should('eq', '/psychologue/mes-seances');
 
         // Logout
-        cy.get('[data-test-id="logout-button"]').should('be.visible').click();
+        cy.get('[data-test-id="logout-link"]').should('be.visible').click();
         cy.wait('@logout');
-        cy.location('pathname').should('eq', '/psychologue/login');
+        cy.location('pathname').should('eq', '/');
       });
 
       it('should display correct nav items', () => {
@@ -195,7 +195,7 @@ describe('Header Test', () => {
 
       it('should display correct tool items', () => {
         // Connected actions are not visible
-        cy.get('[data-test-id="logout-button"]').should('not.be.visible');
+        cy.get('[data-test-id="logout-link"]').should('not.be.visible');
 
         cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
         cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
@@ -225,9 +225,9 @@ describe('Header Test', () => {
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
           // Logout
-          cy.get('[data-test-id="logout-button"]').should('be.visible').click();
+          cy.get('[data-test-id="logout-link"]').should('be.visible').click();
           cy.wait('@logout');
-          cy.location('pathname').should('eq', '/psychologue/login');
+          cy.location('pathname').should('eq', '/');
         });
       });
 
