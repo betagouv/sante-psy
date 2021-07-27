@@ -9,7 +9,7 @@ const dbLoginToken = require('../../db/loginToken');
 const { default: dbLastConnection } = require('../../db/lastConnections');
 const { default: dbPsychologists } = require('../../db/psychologists');
 const dbUniversities = require('../../db/universities');
-const emailUtils = require('../../utils/email');
+const sendEmail = require('../../utils/email');
 const cookie = require('../../utils/cookie');
 const { default: clean } = require('../helper/clean');
 const { DossierState } = require('../../types/DemarcheSimplifiee');
@@ -131,7 +131,7 @@ describe('loginController', async () => {
           .returns(Promise.resolve());
 
         sendMailStub = sinon
-          .stub(emailUtils, 'send')
+          .stub(sendEmail, 'default')
           .returns(Promise.resolve());
       });
 

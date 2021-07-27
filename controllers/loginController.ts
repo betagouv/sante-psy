@@ -10,7 +10,7 @@ import dbLastConnection from '../db/lastConnections';
 import date from '../utils/date';
 import cookie from '../utils/cookie';
 import logs from '../utils/logs';
-import emailUtils from '../utils/email';
+import sendEmail from '../utils/email';
 import config from '../utils/config';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
@@ -36,7 +36,7 @@ async function sendLoginEmail(email: string, loginUrl: string, token: string) {
       appName: config.appName,
       loginUrl,
     });
-    await emailUtils.send(email, `Connexion à ${config.appName}`, html);
+    await sendEmail(email, `Connexion à ${config.appName}`, html);
     console.log(`Login email sent for ${logs.hash(email)}`);
   } catch (err) {
     console.error(err);
@@ -49,7 +49,7 @@ async function sendNotYetAcceptedEmail(email: string) {
     const html = await ejs.renderFile('./views/emails/loginNotAcceptedYet.ejs', {
       appName: config.appName,
     });
-    await emailUtils.send(email, `C'est trop tôt pour vous connecter à ${config.appName}`, html);
+    await sendEmail(email, `C'est trop tôt pour vous connecter à ${config.appName}`, html);
     console.log(`Not yet accepted email sent for ${logs.hash(email)}`);
   } catch (err) {
     console.error(err);

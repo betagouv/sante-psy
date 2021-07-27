@@ -114,9 +114,7 @@ Ensuite, visiter avec votre navigateur pour visualiser le dossier `./coverage` :
 
 [Maildev](http://maildev.github.io/maildev/) est un serveur SMTP avec une interface web conçus pour le développement et les tests.
 
-Sans docker: Une fois installé et lancé, il suffit de mettre la variable d'environnement MAIL_SERVICE à maildev pour l'utiliser. MAIL_USER et MAIL_PASS ne sont pas nécessaires.
-
-Avec docker: ne pas préciser de MAIL_SERVICE, les bonnes variables d'environnement sont déjà précisées dans le docker-compose
+Une fois installé et lancé, il suffit de mettre la variable d'environnement MAIL_HOST à maildev pour l'utiliser. MAIL_USER et MAIL_PASS ne sont pas nécessaires.
 
 Tous les emails envoyés par le code seront visibles depuis l'interface web de Maildev :
 
