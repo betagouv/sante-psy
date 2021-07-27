@@ -120,7 +120,6 @@ const Contact = () => {
         <Select
           data-test-id="reason-select"
           required
-          messageType=""
           label="Motif"
           options={[
             { value: '', label: '- Selectionner la raison de votre message -', disabled: true, hidden: true },

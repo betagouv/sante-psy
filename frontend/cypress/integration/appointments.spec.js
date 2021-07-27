@@ -102,9 +102,9 @@ describe('Appointments', () => {
 
       selectNextCalendarDate();
 
-      cy.get('select[data-test-id="new-appointment-patient-input"] > option')
+      cy.get('[data-test-id="new-appointment-patient-input"] > select > option')
         .eq(1)
-        .then(element => cy.get('select[data-test-id="new-appointment-patient-input"]').select(element.val()));
+        .then(element => cy.get('[data-test-id="new-appointment-patient-input"] > select').select(element.val()));
 
       cy.get('[data-test-id="new-appointment-submit"]')
         .click();

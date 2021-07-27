@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button } from '@dataesr/react-dsfr';
+import { Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
 
 import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
@@ -11,6 +11,7 @@ import Section from 'components/Page/Section';
 import { useStore } from 'stores/';
 
 import agent from 'services/agent';
+import styles from './login.cssmodule.scss';
 
 const Login = () => {
   const {
@@ -58,23 +59,30 @@ const Login = () => {
           heures
         </p>
         <form onSubmit={login} id="login_form">
-          <label>
-            Adresse email :
-            {' '}
-            <input
-              data-test-id="email-input"
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-            />
-          </label>
-          {' '}
-          <Button
-            submit
-            data-test-id="email-button"
-          >
-            Recevoir le lien de connexion
-          </Button>
+          <Row alignItems="bottom">
+            <Col>
+              <label>
+                Adresse email :
+                {' '}
+                <TextInput
+                  className={styles.mailInput}
+                  data-test-id="email-input"
+                  value={email}
+                  type="email"
+                  onChange={e => setEmail(e.target.value)}
+                />
+              </label>
+            </Col>
+            <Col>
+              <Button
+                submit
+                className={styles.loginButton}
+                data-test-id="email-button"
+              >
+                Recevoir le lien de connexion
+              </Button>
+            </Col>
+          </Row>
         </form>
       </Section>
 

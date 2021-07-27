@@ -42,13 +42,13 @@ describe('Patients', () => {
         .click();
       cy.wait('@patient');
 
-      cy.get('[data-test-id="patient-first-name-input"]')
+      cy.get('[data-test-id="patient-first-name-input"] > input')
         .clear()
         .type('Georges');
-      cy.get('[data-test-id="patient-last-name-input"]')
+      cy.get('[data-test-id="patient-last-name-input"] > input')
         .clear()
         .type('Moustaki');
-      cy.get('[data-test-id="patient-doctor-name-input"]')
+      cy.get('[data-test-id="patient-doctor-name-input"] > input')
         .type('My doctor');
       cy.get('[data-test-id="save-patient-button"]')
         .click();

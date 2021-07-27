@@ -75,25 +75,25 @@ describe('ConventionModal', () => {
       cy.get('[data-test-id="update-convention-button"]')
         .should('be.disabled');
 
-      cy.get('[data-test-id="convention-university-select"]')
+      cy.get('[data-test-id="convention-university-select"] > select')
         .select('Aix-Marseille');
 
       cy.get('[data-test-id="update-convention-button"]')
         .should('be.disabled');
 
       cy.get('[data-test-id="signed-false"]')
-        .click({ force: true });
+        .click();
 
       cy.get('[data-test-id="update-convention-button"]')
         .should('not.be.disabled');
     });
 
     it('should update convention and hide info', () => {
-      cy.get('[data-test-id="convention-university-select"]')
+      cy.get('[data-test-id="convention-university-select"] > select')
         .select('Angers');
 
       cy.get('[data-test-id="signed-false"]')
-        .click({ force: true });
+        .click();
 
       cy.get('[data-test-id="update-convention-button"]')
         .click();
