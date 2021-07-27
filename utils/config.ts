@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { URL } from 'url';
 import autoAcceptMessage from './configDS/autoAcceptMessage';
 
 dotenv.config();
@@ -34,7 +35,7 @@ export default {
   demarchesSimplifieesInstructor: process.env.DEMARCHES_SIMPLIFIEES_INSTRUCTOR,
   demarchesSimplifieesChamps: process.env.DEMARCHES_SIMPLIFIEES_CHAMPS,
   demarchesSimplifieesAnnotations: process.env.DEMARCHES_SIMPLIFIEES_ANNOTATIONS,
-  sentryDNS: process.env.SENTRY_DNS || false,
+  sentryDNS: process.env.SENTRY_DNS || '',
   featurePsyList: process.env.FEATURE_PSY_LIST || false,
   featureImportData: process.env.FEATURE_IMPORT_DATA || false,
   featureSendSummary: process.env.FEATURE_SEND_SUMMARY || false,
