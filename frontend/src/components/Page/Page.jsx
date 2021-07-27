@@ -12,7 +12,7 @@ import UnderlinedTitle from './UnderlinedTitle';
 
 import styles from './page.cssmodule.scss';
 
-const Page = ({ title, description, background, children, className = null, dataTestId = null }) => (
+const Page = ({ title, description, background, children, textContent, className = null, dataTestId = null }) => (
   <Container spacing="py-4w" className={classnames(className, styles[background])}>
     <div className={styles.container} data-test-id={dataTestId}>
       <Row>
@@ -23,7 +23,9 @@ const Page = ({ title, description, background, children, className = null, data
       </Row>
       <Row>
         <Col>
-          {children}
+          {textContent
+            ? <div className={styles.textContainer}>{children}</div>
+            : children}
         </Col>
       </Row>
     </div>
