@@ -100,7 +100,7 @@ const getById = async (psychologistId: string): Promise<Psychologist> => {
 };
 
 /**
- * Perform a UPSERT with https://dbjs.org/#Builder-merge
+ * Perform a UPSERT with https://knexjs.org/#Builder-merge
  * @param {*} psy
  */
 const upsertMany = async (psyList: Psychologist[]): Promise<(number | void)[]> => {
