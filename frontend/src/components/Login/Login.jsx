@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
+import { Button, TextInput } from '@dataesr/react-dsfr';
 
 import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
