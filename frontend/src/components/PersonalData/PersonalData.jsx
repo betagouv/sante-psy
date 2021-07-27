@@ -20,7 +20,7 @@ const PersonalData = () => (
       </p>
       <iframe
         title="stats"
-        style={{ border: 0, height: 100, width: '100%' }}
+        style={{ border: 0, height: 120, width: '100%' }}
         src="https://stats.data.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=&fontSize=&fontFamily=%22Marianne%22%2C%20arial%2C%20sans-serif"
       />
     </Section>
