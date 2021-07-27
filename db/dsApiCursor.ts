@@ -39,7 +39,7 @@ const saveLatestCursor = async (cursor: string): Promise<void> => {
   try {
     const now = date.now();
 
-    const alreadySavedCursor = await module.exports.getCursorFromDB();
+    const alreadySavedCursor = await getCursorFromDB();
     // eslint-disable-next-line func-names
     return await db.transaction((trx) => { // add transaction in case 2 cron jobs modify this cursor
       if (alreadySavedCursor) {

@@ -66,5 +66,4 @@ const server = app.listen(config.port, () => {
   console.log(`${appName} listening at http://localhost:${config.port}`);
 });
 
-module.exports = server;
 export default server;

@@ -1,7 +1,7 @@
 const chai = require('chai');
-const app = require('../../index');
+const { default: app } = require('../../index');
 const { default: clean } = require('../helper/clean');
-const dbUniversities = require('../../db/universities');
+const { default: dbUniversities } = require('../../db/universities');
 
 describe('universityController.spec', () => {
   beforeEach(async () => {

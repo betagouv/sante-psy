@@ -6,10 +6,8 @@ import {
   getAnnotationsIdFromField,
 } from '../champsAndAnnotations';
 import importDossier from './importDossier';
-
 import uploadDocument from './uploadDocument';
-
-const graphql = require('../../utils/graphql');
+import graphql from '../../utils/graphql';
 
 const FILE = path.join(
   __dirname, '..', '..', '..', 'static', 'documents', 'parcours_psychologue_sante_psy_etudiant.pdf',

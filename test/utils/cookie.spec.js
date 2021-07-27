@@ -1,16 +1,17 @@
 const sinon = require('sinon');
-const rewire = require('rewire');
 const { expect } = require('chai');
 const { v4: uuidv4 } = require('uuid');
 const jwtDecode = require('jwt-decode');
 const { default: CustomError } = require('../../utils/CustomError');
 
-const cookie = rewire('../../utils/cookie');
+const cookieRewire = require('../../utils/cookie');
+
+const cookie = cookieRewire.default;
 
 describe('cookie', () => {
   describe('getSessionDuration', () => {
     it('should return a duration with format X hours', () => {
-      const getSessionDuration = cookie.__get__('getSessionDuration');
+      const getSessionDuration = cookieRewire.__get__('getSessionDuration');
 
       getSessionDuration().should.equal('2 hours');
     });

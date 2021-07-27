@@ -1,9 +1,8 @@
-const rewire = require('rewire');
 const sinon = require('sinon');
-const config = require('../../utils/config');
+const { default: config } = require('../../utils/config');
 const autoAcceptPsychologists = require('../../services/demarchesSimplifiees/autoAccept');
 
-const graphql = rewire('../../utils/graphql');
+const graphql = require('../../utils/graphql');
 
 describe('autoAcceptPsychologist', () => {
   let executeMutationStub;
@@ -16,12 +15,12 @@ describe('autoAcceptPsychologist', () => {
     uploadDocumentStub = sinon.stub();
     uploadDocumentStub.returns('un super id');
     unsets.push(graphql.__set__('executeMutation', executeMutationStub));
-    autoAcceptPsychologists.__Rewire__('graphql', graphql);
+    autoAcceptPsychologists.__Rewire__('graphql_1', graphql);
     autoAcceptPsychologists.__Rewire__('uploadDocument_1', { default: uploadDocumentStub });
   });
 
   afterEach((done) => {
-    autoAcceptPsychologists.__ResetDependency__('graphql');
+    autoAcceptPsychologists.__ResetDependency__('graphql_1');
     autoAcceptPsychologists.__ResetDependency__('uploadDocument_1');
     unsets.forEach((unset) => unset());
     done();

@@ -1,8 +1,7 @@
 require('dotenv').config();
-const { assert } = require('chai');
-const { expect } = require('chai');
-const dbToginToken = require('../db/loginToken');
-const date = require('../utils/date');
+const { assert, expect } = require('chai');
+const { default: dbToginToken } = require('../db/loginToken');
+const { default: date } = require('../utils/date');
 const { default: clean } = require('./helper/clean');
 
 describe('DB Login token', () => {
@@ -21,7 +20,7 @@ describe('DB Login token', () => {
 
       result.token.should.be.equal(token);
       result.email.should.be.equal(email);
-      date.parseToISO(result.expiresAt).should.be.equal(expiresAt);
+      new Date(result.expiresAt).toISOString().should.be.equal(expiresAt);
     });
 
     it('should get nothing if token is older than one hour', async () => {
@@ -44,7 +43,7 @@ describe('DB Login token', () => {
       const result = await dbToginToken.getByToken(token);
       result.token.should.be.equal(token);
       result.email.should.be.equal(email);
-      date.parseToISO(result.expiresAt).should.be.equal(expiresAt);
+      new Date(result.expiresAt).toISOString().should.be.equal(expiresAt);
     });
   });
 

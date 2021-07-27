@@ -4,6 +4,7 @@ import { Patient } from '../../types/Patient';
 import { Appointment } from '../../types/Appointment';
 import uuid from '../../utils/uuid';
 import dbPsychologists from '../../db/psychologists';
+import dbUniversities from '../../db/universities';
 import {
   appointmentsTable,
   patientsTable,
@@ -18,8 +19,6 @@ import { DossierState } from '../../types/DemarcheSimplifiee';
 import db from '../../db/db';
 
 faker.locale = 'fr';
-
-const dbUniversities = require('../../db/universities');
 
 const getRandomInt = () : string => {
   const ourRandom = faker.datatype.number({ min: 1, max: 99 });

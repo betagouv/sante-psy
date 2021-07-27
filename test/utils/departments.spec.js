@@ -1,4 +1,4 @@
-const department = require('../../utils/department');
+const { default: department } = require('../../utils/department');
 
 describe('department - getNumberFromString', () => {
   it('should return departement number from departement and number', async () => {

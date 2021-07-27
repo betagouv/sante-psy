@@ -1,9 +1,9 @@
 const chai = require('chai');
-const app = require('../../index');
+const { default: app } = require('../../index');
 const { default: clean } = require('../helper/clean');
-const cookie = require('../../utils/cookie');
+const { default: cookie } = require('../../utils/cookie');
 const { default: dbPsychologists } = require('../../db/psychologists');
-const dbUniversities = require('../../db/universities');
+const { default: dbUniversities } = require('../../db/universities');
 const { DossierState } = require('../../types/DemarcheSimplifiee');
 
 describe('conventionController', () => {

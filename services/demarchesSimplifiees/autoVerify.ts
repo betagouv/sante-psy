@@ -7,8 +7,7 @@ import {
   getAnnotationsIdFromField,
 } from '../champsAndAnnotations';
 import importDossier from './importDossier';
-
-const graphql = require('../../utils/graphql');
+import graphql from '../../utils/graphql';
 
 const getDiplomaErrors = (psychologist) => {
   const errors = [];

@@ -35,6 +35,16 @@ const upsertMany = async (universitiesList: any[]): Promise<any[]> => {
   return query;
 };
 
+const getAll = async (): Promise<any[]> => {
+  try {
+    return db.select('id', 'name', 'emailSSU', 'emailUniversity')
+        .from(universitiesTable);
+  } catch (err) {
+    console.error('Impossible de récupérer les universités', err);
+    throw new Error('Impossible de récupérer les universités');
+  }
+};
+
 const getAllOrderByName = async (): Promise<any[]> => {
   try {
     return db.select('id', 'name', 'emailSSU', 'emailUniversity')
@@ -94,6 +104,7 @@ const getEmailsTo = (university: any): string | undefined => {
 
 export default {
   upsertMany,
+  getAll,
   getAllOrderByName,
   getAssignedUniversityId,
   getEmailsTo,

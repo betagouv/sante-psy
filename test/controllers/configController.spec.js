@@ -1,5 +1,5 @@
 const chai = require('chai');
-const app = require('../../index');
+const { default: app } = require('../../index');
 
 describe('configController', () => {
   it('should return basic config info', async () => chai.request(app)

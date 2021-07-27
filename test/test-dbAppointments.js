@@ -2,8 +2,8 @@ require('dotenv').config();
 const knexConfig = require('../knexfile');
 const knex = require('knex')(knexConfig.default);
 const { assert } = require('chai');
-const dbAppointments = require('../db/appointments');
-const dbPatients = require('../db/patients');
+const { default: dbAppointments } = require('../db/appointments');
+const { default: dbPatients } = require('../db/patients');
 const { default: clean } = require('./helper/clean');
 const { appointmentsTable } = require('../db/tables');
 
