@@ -23,7 +23,7 @@ function parseTraining(inputString) {
 }
 
 function getUuidDossierNumber(number) {
-  return uuid.generateUuidFromString(`${config.demarchesSimplifieesId}-${number}`);
+  return uuid.generateFromString(`${config.demarchesSimplifieesId}-${number}`);
 }
 
 function parseDossierMetadata(dossier) {

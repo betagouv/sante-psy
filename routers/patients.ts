@@ -4,17 +4,17 @@ import patientsController from '../controllers/patientsController';
 
 const router = express.Router();
 
-router.get('/', patientsController.getPatients);
+router.get('/', patientsController.getAll);
 router.post('/',
-  patientsController.createNewPatientValidators,
-  patientsController.createNewPatient);
+  patientsController.createValidators,
+  patientsController.create);
 router.get('/:patientId',
-  patientsController.getPatientValidators, patientsController.getPatient);
+  patientsController.getOneValidators, patientsController.getOne);
 router.put('/:patientId',
-  patientsController.editPatientValidators,
-  patientsController.editPatient);
+  patientsController.updateValidators,
+  patientsController.update);
 router.delete('/:patientId',
-  patientsController.deletePatientValidators,
-  patientsController.deletePatient);
+  patientsController.deleteValidators,
+  patientsController.delete);
 
 export default router;

@@ -1,13 +1,13 @@
 const dbUniversities = require('../db/universities');
 
 const runInsert = async () => {
-  const universitiesSavedInDB = await dbUniversities.getUniversities();
+  const universitiesSavedInDB = await dbUniversities.getAll();
 
   if (universitiesSavedInDB.length === 0) { // to avoid duplicates
     for (const university of dbUniversities.universities) {
       try {
         // eslint-disable-next-line no-await-in-loop
-        await dbUniversities.insertUniversity(university);
+        await dbUniversities.insertByName(university);
         console.log('inserted', university);
       } catch (err) {
         console.error('Could not insert', university, err);

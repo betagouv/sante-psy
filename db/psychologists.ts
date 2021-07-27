@@ -14,7 +14,7 @@ const knexConfig = require('../knexfile');
 
 const knex = knexModule(knexConfig);
 
-const getAcceptedPsychologistsArchivedOrNot = async (selectedData: string[]) : Promise<Psychologist[]> => {
+const getAllAccepted = async (selectedData: string[]) : Promise<Psychologist[]> => {
   try {
     const psychologists = knex.column(...selectedData)
         .select()
@@ -34,7 +34,7 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
     })
     .update({
       assignedUniversityId,
-      updatedAt: date.getDateNowPG(),
+      updatedAt: date.now(),
     });
 
   console.log(`Psy id ${psychologistId} updated with assignedUniversityId ${assignedUniversityId}`);
@@ -46,7 +46,7 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
   return updatedPsy;
 };
 
-const getActivePsychologists = async (): Promise<Psychologist[]> => {
+const getAllActive = async (): Promise<Psychologist[]> => {
   try {
     const psychologists = knex.column(
       'dossierNumber',
@@ -76,7 +76,7 @@ const getActivePsychologists = async (): Promise<Psychologist[]> => {
   }
 };
 
-const getPsychologistsByIds = async (ids) => {
+const getByIds = async (ids) => {
   try {
     const groupById = {};
     const psychologists = await knex(psychologistsTable)
@@ -91,7 +91,7 @@ const getPsychologistsByIds = async (ids) => {
   }
 };
 
-const getPsychologistById = async (psychologistId: string): Promise<Psychologist> => {
+const getById = async (psychologistId: string): Promise<Psychologist> => {
   try {
     const psychologist = await knex(psychologistsTable)
       .where('dossierNumber', psychologistId)
@@ -107,12 +107,12 @@ const getPsychologistById = async (psychologistId: string): Promise<Psychologist
  * Perform a UPSERT with https://knexjs.org/#Builder-merge
  * @param {*} psy
  */
-const savePsychologistInPG = async (psyList: Psychologist[]): Promise<(number | void)[]> => {
+const upsertMany = async (psyList: Psychologist[]): Promise<(number | void)[]> => {
   console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
-  const updatedAt = date.getDateNowPG(); // use to perform UPSERT in PG
-  const universities = await dbUniversities.getUniversities();
+  const updatedAt = date.now(); // use to perform UPSERT in PG
+  const universities = await dbUniversities.getAll();
 
-  const psychologists = await getPsychologistsByIds(psyList.map((psy) => psy.dossierNumber));
+  const psychologists = await getByIds(psyList.map((psy) => psy.dossierNumber));
   const psychologistsToInsert = [];
   const upsertArray = psyList.map(async (psy) => {
     try {
@@ -162,7 +162,7 @@ const savePsychologistInPG = async (psyList: Psychologist[]): Promise<(number | 
   return query;
 };
 
-const getNumberOfPsychologists = async (): Promise<any[]> => knex(psychologistsTable)
+const countByArchivedAndState = async (): Promise<any[]> => knex(psychologistsTable)
   .select('archived', 'state')
   .count('*')
   .groupBy('archived', 'state');
@@ -171,7 +171,7 @@ const getNumberOfPsychologists = async (): Promise<any[]> => knex(psychologistsT
  * Only return accepted psychologist
  * @param {*} email
  */
-const getAcceptedPsychologistByEmail = async (email: string): Promise<Psychologist> => knex(psychologistsTable)
+const getAcceptedByEmail = async (email: string): Promise<Psychologist> => knex(psychologistsTable)
   .where('state', DossierState.accepte)
   .andWhere(
     knex.raw('LOWER("personalEmail") = ?', email.toLowerCase()),
@@ -182,7 +182,7 @@ const getAcceptedPsychologistByEmail = async (email: string): Promise<Psychologi
  * used to send email to not yet accepted users, instead of nothing
  * it can be tricky if there are multiple dossiers for the same personal emails
  */
-const getNotYetAcceptedPsychologistByEmail = async (email: string): Promise<Psychologist> => knex(psychologistsTable)
+const getNotYetAcceptedByEmail = async (email: string): Promise<Psychologist> => knex(psychologistsTable)
   .where(function groupWhereOrTogether() {
     this.where('state', DossierState.enConstruction)
       .orWhere('state', DossierState.enInstruction);
@@ -190,7 +190,7 @@ const getNotYetAcceptedPsychologistByEmail = async (email: string): Promise<Psyc
   .andWhere('personalEmail', email)
   .first();
 
-const countAcceptedPsychologistsByPersonalEmail = async (): Promise<any> => knex(psychologistsTable)
+const countAcceptedByPersonalEmail = async (): Promise<any> => knex(psychologistsTable)
     .select('personalEmail', 'state')
     .where('state', DossierState.accepte)
     .count('*')
@@ -208,7 +208,7 @@ const updateConventionInfo = async (
     .update({
       assignedUniversityId,
       isConventionSigned,
-      updatedAt: date.getDateNowPG(),
+      updatedAt: date.now(),
     });
   if (!updated) {
     throw new Error('No psychologist found for this id');
@@ -233,13 +233,13 @@ const deleteConventionInfo = async (email: string): Promise<any> => knex
   })
   .where('personalEmail', email);
 
-const updatePsychologist = async (psychologist: Psychologist): Promise<number> => {
+const update = async (psychologist: Psychologist): Promise<number> => {
   try {
     return knex(psychologistsTable)
       .where('dossierNumber', psychologist.dossierNumber)
       .update({
         ...editablePsyFields(psychologist),
-        updatedAt: date.getDateNowPG(),
+        updatedAt: date.now(),
         selfModified: true,
       });
   } catch (err) {
@@ -267,14 +267,14 @@ const suspend = async (
   inactiveUntil: Date,
   reason: string,
 ): Promise<void> => knex.transaction((trx) => {
-  const update = knex(psychologistsTable)
+  const updateRequest = knex(psychologistsTable)
       .transacting(trx)
       .where({ dossierNumber })
       .update({
         active: false,
         inactiveUntil,
       });
-  const create = knex(suspensionReasonsTable)
+  const createRequest = knex(suspensionReasonsTable)
       .transacting(trx)
       .insert({
         psychologistId: dossierNumber,
@@ -282,7 +282,7 @@ const suspend = async (
         until: inactiveUntil,
       });
 
-  Promise.all([update, create])
+  Promise.all([updateRequest, createRequest])
       .then(() => {
         trx.commit();
         console.log(`Psychologue ${dossierNumber} suspendu jusqu'au ${inactiveUntil}`);
@@ -300,19 +300,19 @@ const reactivate = async (): Promise<number> => knex(psychologistsTable)
     .update({ active: true, inactiveUntil: null });
 
 export default {
-  getActivePsychologists,
-  getPsychologistById,
-  getAcceptedPsychologistByEmail,
-  getNotYetAcceptedPsychologistByEmail,
-  getAcceptedPsychologistsArchivedOrNot,
-  getNumberOfPsychologists,
-  countAcceptedPsychologistsByPersonalEmail,
-  savePsychologistInPG,
+  getAllActive,
+  getById,
+  getAcceptedByEmail,
+  getNotYetAcceptedByEmail,
+  getAllAccepted,
+  countByArchivedAndState,
+  countAcceptedByPersonalEmail,
+  upsertMany,
   saveAssignedUniversity,
   activate,
   reactivate,
   suspend,
-  updatePsychologist,
+  update,
   getConventionInfo,
   updateConventionInfo,
   deleteConventionInfo,

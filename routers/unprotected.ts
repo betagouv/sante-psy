@@ -39,16 +39,16 @@ const speedLimiter = slowDown({
 router.use(speedLimiter);
 
 router.get('/university', universitiesController.getAll);
-router.get('/config', configController.getConfig);
+router.get('/config', configController.get);
 // The reduced route is used by our front to optimise the big chunk of data download
-router.get('/trouver-un-psychologue/reduced', psyListingController.getReducedActivePsychologists);
+router.get('/trouver-un-psychologue/reduced', psyListingController.getReducedActive);
 // The other route is open to the public to get all psys (do not delete !)
-router.get('/trouver-un-psychologue', psyListingController.getFullActivePsychologists);
+router.get('/trouver-un-psychologue', psyListingController.getFullActive);
 
 router.get('/connecteduser', loginController.connectedUser);
 
 router.get('/statistics', statisticsController.getAll);
-router.get('/psychologist/:psyId', psyProfileController.getPsyProfilValidators, psyProfileController.getPsyProfile);
+router.get('/psychologist/:psyId', psyProfileController.getValidators, psyProfileController.get);
 router.post('/contact', contactController.sendValidators, contactController.send);
 
 export default router;

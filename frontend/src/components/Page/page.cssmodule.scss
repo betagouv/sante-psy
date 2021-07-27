@@ -11,6 +11,13 @@
   max-width: 800px;
   margin: auto;
   padding: 24px 8px;
+  box-shadow: 0 2px 7px 0 rgba(0,0,0,0.21);
+}
+
+.textContainer {
+  color: var(--bf500);
+  margin-top: 40px;
+  overflow-wrap: anywhere;
 }
 
 .sectionTitle {

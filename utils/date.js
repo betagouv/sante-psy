@@ -1,14 +1,7 @@
 const formatFrenchDateForm = 'DD/MM/YYYY';
 module.exports.formatFrenchDateForm = formatFrenchDateForm;
 
-module.exports.isValidDate = (isoDateString) => {
-  if (!isoDateString || isoDateString.length === 0) {
-    return false;
-  }
-  return !Number.isNaN(new Date(Date.parse(isoDateString)));
-};
-
-module.exports.getDateNowPG = () => new Date().toISOString();
+module.exports.now = () => new Date().toISOString();
 
 /**
  * @see https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
@@ -38,7 +31,7 @@ module.exports.toFormatDDMMYYYY = (date) => {
   return null;
 };
 
-function parseDateForm(date) {
+function parseForm(date) {
   if (date) {
     const [day, month, year] = date.split('/');
     // year - month - day
@@ -46,9 +39,9 @@ function parseDateForm(date) {
   }
   return null;
 }
-module.exports.parseDateForm = parseDateForm;
+module.exports.parseForm = parseForm;
 
-module.exports.parseDate = (date) => new Date(date).toISOString();
+module.exports.parseToISO = (date) => new Date(date).toISOString();
 
 module.exports.getLastMonthAndYear = (now) => {
   const currentYear = now.getFullYear();

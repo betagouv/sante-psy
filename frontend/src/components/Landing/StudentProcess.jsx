@@ -9,7 +9,11 @@ import styles from './studentProcess.cssmodule.scss';
 
 const StudentProcess = () => (
   <div className={styles.container}>
-    <UnderlinedTitle big title="Étudiants, parlez de vos difficultés" />
+    <UnderlinedTitle
+      big
+      backgroundColor="yellow"
+      title="Étudiants, parlez de vos difficultés"
+    />
     <div className={styles.description}>Consultez un psychologue gratuitement</div>
     <Row className={styles.card}>
       <StudentCard

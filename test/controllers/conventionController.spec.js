@@ -7,18 +7,18 @@ const dbUniversities = require('../../db/universities');
 const { DossierState } = require('../../types/DemarcheSimplifiee');
 
 describe('conventionController', () => {
-  describe('updateConventionInfo', () => {
+  describe('update convention info', () => {
     let university;
 
     beforeEach(async () => {
-      university = await dbUniversities.insertUniversity('Cool U dude');
+      university = await dbUniversities.insertByName('Cool U dude');
     });
 
     afterEach(async () => {
       await clean.cleanAllUniversities();
     });
 
-    it('should updateConventionInfo', async () => {
+    it('should update convention info', async () => {
       const psyEmail = 'login@beta.gouv.fr';
       const psy = await clean.insertOnePsy(psyEmail, DossierState.accepte, false);
       // Check that the fields we are testing are unset before test
@@ -36,7 +36,7 @@ describe('conventionController', () => {
           res.status.should.equal(200);
           res.body.message.should.equal('Vos informations de conventionnement sont bien enregistrées.');
 
-          const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
+          const updatedPsy = await dbPsychologists.getAcceptedByEmail(psyEmail);
           chai.expect(updatedPsy.isConventionSigned).to.equal(true);
           chai.expect(updatedPsy.assignedUniversityId).to.equal(university.id);
         });
@@ -57,7 +57,7 @@ describe('conventionController', () => {
           res.status.should.equal(400);
           res.body.message.should.equal(errorMessage);
 
-          const updatedPsy = await dbPsychologists.getAcceptedPsychologistByEmail(psyEmail);
+          const updatedPsy = await dbPsychologists.getAcceptedByEmail(psyEmail);
           chai.expect(updatedPsy.isConventionSigned).not.to.exist;
         });
     };

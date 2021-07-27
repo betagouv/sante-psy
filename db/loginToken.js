@@ -8,7 +8,7 @@ module.exports.getByToken = async function getByToken(token) {
   try {
     const result = await knex(loginTokenTable)
     .where('token', token)
-    .andWhere('expiresAt', '>', date.getDateNowPG())
+    .andWhere('expiresAt', '>', date.now())
     .first();
 
     return result;
@@ -18,7 +18,7 @@ module.exports.getByToken = async function getByToken(token) {
   }
 };
 
-module.exports.getByEMail = async function getByEMail(email) {
+module.exports.getByEmail = async function getByEmail(email) {
   try {
     const result = await knex(loginTokenTable)
     .where('email', email)

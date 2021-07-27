@@ -8,7 +8,7 @@ const { default: clean } = require('./helper/clean');
 const { default: dbPsychologists } = require('../db/psychologists');
 
 describe('psyProfileController', () => {
-  describe('getPsyProfile', () => {
+  describe('get psy profile', () => {
     afterEach(async () => {
       await clean.cleanAllPsychologists();
     });
@@ -103,11 +103,11 @@ describe('psyProfileController', () => {
     });
   });
 
-  describe('editPsyProfilValidators', () => {
+  describe('update psy profile - input validation', () => {
     let updatePsyStub;
 
     beforeEach(async () => {
-      updatePsyStub = sinon.stub(dbPsychologists, 'updatePsychologist');
+      updatePsyStub = sinon.stub(dbPsychologists, 'update');
       return Promise.resolve();
     });
 
@@ -480,7 +480,7 @@ describe('psyProfileController', () => {
     });
   });
 
-  describe('editPsyProfile', () => {
+  describe('update psy profile', () => {
     it('should return 401 if user is not logged in', async () => {
       const psy = await clean.insertOnePsy();
 
@@ -561,7 +561,7 @@ describe('psyProfileController', () => {
           res.status.should.equal(200);
           res.body.message.should.equal('Vos informations ont bien été mises à jour.');
 
-          const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+          const updatedPsy = await dbPsychologists.getById(psy.dossierNumber);
           expect(updatedPsy.email).to.eql('public@email.com');
           expect(updatedPsy.address).to.eql('1 rue du Pôle Nord');
           expect(updatedPsy.departement).to.eql('59 - Nord');
@@ -600,7 +600,7 @@ describe('psyProfileController', () => {
           res.status.should.equal(200);
           res.body.message.should.equal('Vos informations ont bien été mises à jour.');
 
-          const updatedPsy = await dbPsychologists.getPsychologistById(psy.dossierNumber);
+          const updatedPsy = await dbPsychologists.getById(psy.dossierNumber);
           expect(updatedPsy.email).to.eql('public@email.com');
           expect(updatedPsy.address).to.eql('1 rue du Pôle Nord');
           expect(updatedPsy.departement).to.eql('59 - Nord');
@@ -615,7 +615,7 @@ describe('psyProfileController', () => {
     });
   });
 
-  describe('activate', () => {
+  describe('activate psy', () => {
     let activatePsyStub;
     beforeEach(() => {
       activatePsyStub = sinon.stub(dbPsychologists, 'activate');
@@ -652,7 +652,7 @@ describe('psyProfileController', () => {
 
     it('should activate psy', async () => {
       const psy = clean.getOneInactivePsy();
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
 
       return chai.request(app)
         .post(`/api/psychologist/${psy.dossierNumber}/activate`)
@@ -667,7 +667,7 @@ describe('psyProfileController', () => {
     });
   });
 
-  describe('suspend', () => {
+  describe('suspend psy', () => {
     let suspendPsyStub;
     beforeEach(() => {
       suspendPsyStub = sinon.stub(dbPsychologists, 'suspend');
@@ -722,7 +722,7 @@ describe('psyProfileController', () => {
 
     it('should suspend psy', async () => {
       const psy = clean.getOneInactivePsy();
-      await dbPsychologists.savePsychologistInPG([psy]);
+      await dbPsychologists.upsertMany([psy]);
 
       const nextDate = new Date();
       nextDate.setDate(nextDate.getDate() + 2);

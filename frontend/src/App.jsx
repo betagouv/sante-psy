@@ -9,6 +9,7 @@ import Matomo from 'components/Matomo/Matomo';
 import Landing from 'components/Landing/Landing';
 import Footer from 'components/Footer/Footer';
 
+import Logout from 'components/Login/Logout';
 import Login from 'components/Login/Login';
 import Faq from 'components/Faq/Faq';
 import LegalNotice from 'components/LegalNotice/LegalNotice';
@@ -50,6 +51,7 @@ function App() {
         {!loading && (
         <React.Suspense fallback={<></>}>
           <Switch>
+            <Route exact path="/psychologue/logout" component={Logout} />
             <Route exact path="/psychologue/login/:token?" component={Login} />
             {user && <Route path="/psychologue/" component={PsychologistRouter} />}
             <Route exact path="/trouver-un-psychologue" component={PsyListing} />

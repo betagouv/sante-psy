@@ -11,7 +11,7 @@ import { Knex } from 'knex';
 export const seed = async (knex: Knex): Promise<void> => {
   const universitiesList = universities.map((uni) => ({
     name: uni,
-    id: uuid.generateUuidFromString(`university-${uni}`),
+    id: uuid.generateFromString(`university-${uni}`),
     emailUniversity: `${clean.getRandomInt()}@beta.gouv.fr ; ${clean.getRandomInt()}@beta.gouv.fr`,
     emailSSU: `${clean.getRandomInt()}@beta.gouv.fr ; ${clean.getRandomInt()}@beta.gouv.fr`,
   }));

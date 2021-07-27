@@ -25,7 +25,7 @@ export const mails = [
 export const seed = async (knex: Knex): Promise<void> => {
   const psyList = [
     ...mails.map((mail, index) => clean.getOnePsy(
-      mail, DossierState.accepte, false, uuid.generateUuidFromString(`university-${universities[index + 1]}`),
+      mail, DossierState.accepte, false, uuid.generateFromString(`university-${universities[index + 1]}`),
     )),
     clean.getOnePsy('archived@beta.gouv.fr', DossierState.accepte, true),
     clean.getOnePsy('empty@beta.gouv.fr', DossierState.accepte, false),

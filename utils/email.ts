@@ -1,20 +1,21 @@
-const nodemailer = require('nodemailer');
-const config = require('./config');
+import nodemailer from 'nodemailer';
+import config from './config';
 
 const mailTransport = nodemailer.createTransport({
+  logger: config.mailDebug,
   debug: config.mailDebug,
-  service: config.mailService,
   host: config.mailHost,
   port: config.mailPort,
-  ignoreTLS: config.ignoreTLS,
-  secure: false, // todo use config.isSecure
+  ignoreTLS: !config.isSecure,
+  requireTLS: config.isSecure,
+  secure: config.isSecure,
   auth: {
     user: config.auth.user,
     pass: config.auth.pass,
   },
 });
 
-module.exports.sendMail = async function sendMail(toEmail, subject, html, ccEmail = '', bccEmail = '') {
+const send = (toEmail: string, subject: string, html: string, ccEmail = '', bccEmail = ''): Promise<void> => {
   const mail = {
     to: toEmail, // Comma separated list or an array
     cc: ccEmail, // Comma separated list or an array
@@ -30,3 +31,5 @@ module.exports.sendMail = async function sendMail(toEmail, subject, html, ccEmai
     mailTransport.sendMail(mail, (error, info) => (error ? reject(error) : resolve(info)));
   });
 };
+
+export default send;

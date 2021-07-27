@@ -7,7 +7,7 @@ import importDossier from '../services/demarchesSimplifiees/importDossier';
 import autoVerifyPsychologists from '../services/demarchesSimplifiees/autoVerify';
 import autoAcceptPsychologists from '../services/demarchesSimplifiees/autoAccept';
 import config from '../utils/config';
-import emailUtils from '../utils/email';
+import sendEmail from '../utils/email';
 
 dotenv.config();
 
@@ -23,10 +23,10 @@ async function importDataFromDSToPG(updateEverything = false) {
     const dsAPIData = await importDossier.getPsychologistList(latestCursorInPG);
 
     if (dsAPIData.psychologists.length > 0) {
-      await dbPsychologists.savePsychologistInPG(dsAPIData.psychologists);
+      await dbPsychologists.upsertMany(dsAPIData.psychologists);
       await dbsApiCursor.saveLatestCursor(dsAPIData.lastCursor);
 
-      const numberOfPsychologists = await dbPsychologists.getNumberOfPsychologists();
+      const numberOfPsychologists = await dbPsychologists.countByArchivedAndState();
       console.log('psychologists inside PG :', numberOfPsychologists);
     } else {
       console.warn('No psychologists to save');
@@ -47,7 +47,7 @@ const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
       badPsychologists,
       hostnameWithProtocol: config.hostnameWithProtocol,
     });
-    await emailUtils.sendMail(config.teamEmail, 'Dossiers multiples détéctés !', html);
+    await sendEmail(config.teamEmail, 'Dossiers multiples détéctés !', html);
     console.debug('Email sent for multiple accounts alert');
   } catch (err) {
     console.error("Erreur d'envoi de mail, le mail d'alerte n'est pas envoyé.", err);
@@ -56,7 +56,7 @@ const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
 
 // One person should not have multiple dossiers in "acepte" status, notify the team.
 const checkForMultipleAcceptedDossiers = async (): Promise<boolean> => {
-  const count = await dbPsychologists.countAcceptedPsychologistsByPersonalEmail();
+  const count = await dbPsychologists.countAcceptedByPersonalEmail();
   const badPsychologists = count.filter((statsPoint) => statsPoint.count > 1);
   if (badPsychologists.length > 0) {
     console.log('Detected psychologists with multiple accepted dossiers!', badPsychologists);

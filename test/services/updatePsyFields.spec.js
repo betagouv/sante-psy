@@ -1,27 +1,126 @@
-const { default: updatePsyFields } = require('../../services/updatePsyFields');
+const { expect } = require('chai');
+const sinon = require('sinon');
+const updatePsyFields = require('../../services/updatePsyFields');
+const { DossierState } = require('../../types/DemarcheSimplifiee');
 
-describe('addFrenchLanguageIfMissing', () => {
-  it('should add french if missing with one language', async () => {
-    updatePsyFields.addFrenchLanguageIfMissing('espagnol').should.equal('Français, espagnol');
+describe('Update psy fields', () => {
+  describe('addFrenchLanguageIfMissing', () => {
+    it('should return Français if input is undefined', async () => {
+      const result = updatePsyFields.addFrenchLanguageIfMissing(undefined);
+      expect(result).to.eql('Français');
+    });
+
+    it('should return Français if input is null', async () => {
+      const result = updatePsyFields.addFrenchLanguageIfMissing(null);
+      expect(result).to.eql('Français');
+    });
+
+    it('should return Français if input is empty', async () => {
+      const result = updatePsyFields.addFrenchLanguageIfMissing('');
+      expect(result).to.eql('Français');
+    });
+
+    it('should return Français if input contains only spaces', async () => {
+      const result = updatePsyFields.addFrenchLanguageIfMissing('  ');
+      expect(result).to.eql('Français');
+    });
+
+    it('should add Français if input does not contains it', async () => {
+      const result = updatePsyFields.addFrenchLanguageIfMissing('Anglais');
+      expect(result).to.eql('Français, Anglais');
+    });
+
+    it('should not add Français if input contains it', async () => {
+      const result = updatePsyFields.addFrenchLanguageIfMissing('Français, Anglais');
+      expect(result).to.eql('Français, Anglais');
+    });
+
+    it('should not add Français if input contains it (lower case)', async () => {
+      const result = updatePsyFields.addFrenchLanguageIfMissing('français, anglais');
+      expect(result).to.eql('français, anglais');
+    });
+
+    it('should not add Français if input contains it (no special char)', async () => {
+      const result = updatePsyFields.addFrenchLanguageIfMissing('francais, anglais');
+      expect(result).to.eql('francais, anglais');
+    });
+
+    it('should not add Français if input contains it (no specific order)', async () => {
+      const result = updatePsyFields.addFrenchLanguageIfMissing('Espagnol Francais Anglais');
+      expect(result).to.eql('Espagnol Francais Anglais');
+    });
   });
 
-  it('should add french if nothing there', async () => {
-    updatePsyFields.addFrenchLanguageIfMissing('').should.equal('Français');
-  });
+  describe('fields', () => {
+    let addFrenchLanguageIfMissingStub;
+    beforeEach(() => {
+      addFrenchLanguageIfMissingStub = sinon.stub(updatePsyFields, 'addFrenchLanguageIfMissing')
+        .returnsArg(0);
+    });
 
-  it('should add french if empty spaces for languages', async () => {
-    updatePsyFields.addFrenchLanguageIfMissing('    ').should.equal('Français');
-  });
+    afterEach(() => {
+      addFrenchLanguageIfMissingStub.restore();
+    });
 
-  it('should not add french if already there', async () => {
-    updatePsyFields.addFrenchLanguageIfMissing('français, italien').should.equal('français, italien');
-  });
+    it('Editable psy fields should add french language', () => {
+      const psy = {
+        languages: 'random stuff',
+      };
 
-  it("should not add french if 'francais' is there", async () => {
-    updatePsyFields.addFrenchLanguageIfMissing('francais').should.equal('francais');
-  });
+      updatePsyFields.editablePsyFields(psy);
+      sinon.assert.calledWith(addFrenchLanguageIfMissingStub, psy.languages);
+    });
 
-  it('should not add french (capitalized) if already there', async () => {
-    updatePsyFields.addFrenchLanguageIfMissing('Français et espagnol').should.equal('Français et espagnol');
+    it('Editable and non editable fields should not overlap', () => {
+      const psy = {
+        email: 'email',
+        address: 'adress',
+        departement: 'departement',
+        region: 'region',
+        phone: 'phone',
+        website: 'website',
+        description: 'description',
+        teleconsultation: true,
+        languages: 'francais',
+        personalEmail: 'personalEmail',
+        firstNames: 'firstNames',
+        lastName: 'lastName',
+        archived: true,
+        state: DossierState.accepte,
+        training: 'training',
+        adeli: 'adeli',
+        diploma: 'diploma',
+        dossierNumber: 'dossierNumber',
+        assignedUniversityId: 'assignedUniversityId',
+        isConventionSigned: true,
+        selfModified: true,
+        active: true,
+        inactiveUntil: 'inactiveUntil',
+      };
+
+      const editablePsy = updatePsyFields.editablePsyFields(psy);
+      const nonEditablePsy = updatePsyFields.nonEditablePsyFields(psy);
+
+      Object.keys(editablePsy).forEach((key) => {
+        expect(editablePsy[key]).to.equal(psy[key]);
+        expect(nonEditablePsy).to.not.have.own.property(key);
+      });
+
+      Object.keys(nonEditablePsy).forEach((key) => {
+        expect(nonEditablePsy[key]).to.equal(psy[key]);
+        expect(editablePsy).to.not.have.own.property(key);
+      });
+
+      ['dossierNumber',
+        'assignedUniversityId',
+        'isConventionSigned',
+        'selfModified',
+        'active',
+        'inactiveUntil',
+      ].forEach((key) => {
+        expect(editablePsy).to.not.have.own.property(key);
+        expect(nonEditablePsy).to.not.have.own.property(key);
+      });
+    });
   });
 });

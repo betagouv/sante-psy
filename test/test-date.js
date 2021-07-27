@@ -2,10 +2,10 @@ const { assert } = require('chai');
 const date = require('../utils/date');
 
 describe('date', () => {
-  describe('parseDateForm', () => {
+  describe('parseForm', () => {
     it('should parse a DD/MM/YYYY to a Date', async () => {
       const testDate = '25/12/1995';
-      const datetime = date.parseDateForm(testDate);
+      const datetime = date.parseForm(testDate);
       datetime.getFullYear().should.be.equal(1995);
       datetime.getMonth().should.be.equal(11);
       datetime.getDate().should.be.equal(25);

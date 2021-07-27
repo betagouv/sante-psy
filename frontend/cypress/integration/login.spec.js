@@ -126,7 +126,7 @@ describe('Login', () => {
       logout();
       cy.wait('@logout');
 
-      cy.location('pathname').should('eq', '/psychologue/login');
+      cy.location('pathname').should('eq', '/');
     });
   });
 });

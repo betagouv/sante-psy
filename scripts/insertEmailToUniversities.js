@@ -3,7 +3,7 @@ const dbUniversities = require('../db/universities');
 
 const insertEmailToUniversities = async (universitiesArray) => {
   console.debug('universitiesArray:', universitiesArray);
-  const universities = await dbUniversities.getUniversities();
+  const universities = await dbUniversities.getAll();
 
   const unversitiesList = universities.map((uni) => {
     console.log(`Trying to add university ${uni.name} to DB...`);
@@ -33,7 +33,7 @@ const insertEmailToUniversities = async (universitiesArray) => {
 
   console.debug('insertEmailToUniversities - new unversities list', unversitiesList);
 
-  await dbUniversities.saveUniversities(unversitiesList);
+  await dbUniversities.upsertMany(unversitiesList);
 
   // eslint-disable-next-line no-process-exit
   process.exit(1);

@@ -15,9 +15,9 @@ const dateOfBirth = '20/01/1980';
 const makePatient = async (psychologistId) => {
   const psy = clean.getOnePsy();
   psy.dossierNumber = psychologistId;
-  await dbPsychologists.savePsychologistInPG([psy]);
+  await dbPsychologists.upsertMany([psy]);
   // Insert an appointment and a patient
-  const patient = await dbPatients.insertPatient(
+  const patient = await dbPatients.insert(
     'Ada',
     'Lovelace',
     '12345678901',
@@ -27,10 +27,10 @@ const makePatient = async (psychologistId) => {
     psychologistId,
     doctorName,
     doctorAddress,
-    date.parseDateForm(dateOfBirth),
+    date.parseForm(dateOfBirth),
   );
   // Check patient is inserted
-  const createdPatient = await dbPatients.getPatientById(patient.id, psychologistId);
+  const createdPatient = await dbPatients.getById(patient.id, psychologistId);
   chai.assert.exists(createdPatient);
   return patient;
 };
@@ -71,7 +71,7 @@ describe('patientsController', () => {
             + ' en cliquant le bouton "Modifier" du patient.',
           );
 
-          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
+          const patientsArray = await dbPatients.getAll(psy.dossierNumber);
 
           patientsArray.length.should.equal(1);
           expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber);
@@ -102,7 +102,7 @@ describe('patientsController', () => {
           res.status.should.equal(401);
 
           // Patient not created
-          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
+          const patientsArray = await dbPatients.getAll(psy.dossierNumber);
           expect(patientsArray).to.have.length(0);
 
           return Promise.resolve();
@@ -114,7 +114,7 @@ describe('patientsController', () => {
     let insertPatientStub;
 
     beforeEach(async () => {
-      insertPatientStub = sinon.stub(dbPatients, 'insertPatient')
+      insertPatientStub = sinon.stub(dbPatients, 'insert')
         .returns(Promise.resolve([{
           firstNames: 'prenom',
           lastName: 'nom',
@@ -474,7 +474,7 @@ describe('patientsController', () => {
             + ' manquants plus tard en cliquant le bouton "Modifier" du patient.',
           );
 
-          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
+          const patientsArray = await dbPatients.getAll(psy.dossierNumber);
           expect(patientsArray).to.have.length(1);
           expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber);
           expect(patientsArray[0].lastName).to.equal(updatedLastName);
@@ -484,7 +484,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].isStudentStatusVerified).to.equal(true);
           expect(patientsArray[0].hasPrescription).to.equal(true);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
-            date.parseDateForm(updatedDateOfBirth).getTime(),
+            date.parseForm(updatedDateOfBirth).getTime(),
           );
 
           return Promise.resolve();
@@ -518,7 +518,7 @@ describe('patientsController', () => {
           res.body.message.should.equal('Ce patient n\'existe pas.');
 
           // Patient was not updated
-          const patientsArray = await dbPatients.getPatients(anotherPsyId);
+          const patientsArray = await dbPatients.getAll(anotherPsyId);
           expect(patientsArray).to.have.length(1);
           expect(patientsArray[0].psychologistId).to.equal(anotherPsyId);
           expect(patientsArray[0].lastName).to.equal(patient.lastName);
@@ -528,7 +528,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
-            date.parseDateForm(dateOfBirth).getTime(),
+            date.parseForm(dateOfBirth).getTime(),
           );
 
           return Promise.resolve();
@@ -557,7 +557,7 @@ describe('patientsController', () => {
           res.status.should.equal(401);
 
           // Patient was not updated
-          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
+          const patientsArray = await dbPatients.getAll(psy.dossierNumber);
           expect(patientsArray).to.have.length(1);
           expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber);
           expect(patientsArray[0].lastName).to.equal(patient.lastName);
@@ -567,7 +567,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
-            date.parseDateForm(dateOfBirth).getTime(),
+            date.parseForm(dateOfBirth).getTime(),
           );
 
           return Promise.resolve();
@@ -579,7 +579,7 @@ describe('patientsController', () => {
     let updatePatientStub;
 
     beforeEach(async () => {
-      updatePatientStub = sinon.stub(dbPatients, 'updatePatient');
+      updatePatientStub = sinon.stub(dbPatients, 'update');
       return Promise.resolve();
     });
 
@@ -853,7 +853,7 @@ describe('patientsController', () => {
           res.status.should.equal(200);
           res.body.message.should.equal('Le patient a bien été supprimé.');
 
-          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
+          const patientsArray = await dbPatients.getAll(psy.dossierNumber);
           console.debug(patientsArray);
           expect(patientsArray).to.have.length(0);
 
@@ -877,7 +877,7 @@ describe('patientsController', () => {
           res.status.should.equal(404);
           res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
           // Patient is not deleted
-          const patientsArray = await dbPatients.getPatients(anotherPsyId);
+          const patientsArray = await dbPatients.getAll(anotherPsyId);
           expect(patientsArray).to.have.length(1);
 
           return Promise.resolve();
@@ -900,7 +900,7 @@ describe('patientsController', () => {
           res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
 
           // Patient is not deleted
-          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
+          const patientsArray = await dbPatients.getAll(psy.dossierNumber);
           expect(patientsArray).to.have.length(1);
 
           return Promise.resolve();
@@ -920,7 +920,7 @@ describe('patientsController', () => {
           res.status.should.equal(401);
 
           // Patient is not deleted
-          const patientsArray = await dbPatients.getPatients(psy.dossierNumber);
+          const patientsArray = await dbPatients.getAll(psy.dossierNumber);
           expect(patientsArray).to.have.length(1);
 
           return Promise.resolve();
