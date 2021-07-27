@@ -46,6 +46,16 @@ module.exports.getAllOrderByName = async () => {
   }
 };
 
+module.exports.getAll = async () => {
+  try {
+    return knex.select('id', 'name', 'emailSSU', 'emailUniversity')
+        .from(universitiesTable);
+  } catch (err) {
+    console.error('Impossible de récupérer les universités', err);
+    throw new Error('Impossible de récupérer les universités');
+  }
+};
+
 module.exports.insertByName = async (name) => {
   try {
     const universityArray = await knex(universitiesTable).insert({

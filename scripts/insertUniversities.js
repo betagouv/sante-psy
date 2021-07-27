@@ -1,7 +1,7 @@
 const dbUniversities = require('../db/universities');
 
 const runInsert = async () => {
-  const universitiesSavedInDB = await dbUniversities.getAllOrderByName();
+  const universitiesSavedInDB = await dbUniversities.getAll();
 
   if (universitiesSavedInDB.length === 0) { // to avoid duplicates
     for (const university of dbUniversities.universities) {
