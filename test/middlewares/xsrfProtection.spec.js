@@ -1,6 +1,6 @@
 const chai = require('chai');
-const app = require('../../index');
-const cookie = require('../../utils/cookie');
+const { default: app } = require('../../index');
+const { default: cookie } = require('../../utils/cookie');
 
 describe('Route should be XSRF protected', () => {
   const routes = [

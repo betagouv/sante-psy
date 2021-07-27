@@ -1,11 +1,6 @@
-import knex from 'knex';
-
 import { SuspensionReason } from '../types/SuspensionReason';
 import { suspensionReasonsTable } from './tables';
-
-const knexConfig = require('../knexfile');
-
-const db = knex(knexConfig);
+import db from './db';
 
 const getByPsychologist = async (psychologistId: string) : Promise<SuspensionReason[]> => db
     .select()

@@ -1,15 +1,11 @@
-import config from '../utils/config';
-import knexModule from 'knex';
-import { psychologistsTable } from '../db/tables';
 import faker from 'faker';
+import config from '../utils/config';
+import { psychologistsTable } from '../db/tables';
+import db from '../db/db';
 
 faker.locale = 'fr';
 
 const PROD_HOSTNAME = 'https://santepsy.etudiant.gouv.fr';
-
-const knexConfig = require('../knexfile');
-
-const knex = knexModule(knexConfig);
 
 const fakeFirstnames = (real: string) : string => real.split(' ').map(() => faker.name.firstName()).join(' ');
 
@@ -33,9 +29,9 @@ const anonymizeDb = async () => {
 
   console.log('Anonymizing database...');
   try {
-    const psyList = await knex(psychologistsTable);
+    const psyList = await db(psychologistsTable);
 
-    const anonymizePsy = psyList.map((psy) => knex(psychologistsTable)
+    const anonymizePsy = psyList.map((psy) => db(psychologistsTable)
       .where({ dossierNumber: psy.dossierNumber })
       .update({
         firstNames: fakeFirstnames(psy.firstNames),

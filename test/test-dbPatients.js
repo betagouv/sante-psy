@@ -1,10 +1,10 @@
 const { assert } = require('chai');
 const { expect } = require('chai');
 require('dotenv').config();
-const dbPatients = require('../db/patients');
-const date = require('../utils/date');
+const { default: dbPatients } = require('../db/patients');
+const { default: date } = require('../utils/date');
 const knexConfig = require('../knexfile');
-const knex = require('knex')(knexConfig);
+const knex = require('knex')(knexConfig.default);
 const { default: clean } = require('./helper/clean');
 const { patientsTable } = require('../db/tables');
 

@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 require('dotenv').config();
-const dbUniversities = require('../db/universities');
+const { default: dbUniversities } = require('../db/universities');
 
 describe('DB Universities', () => {
   const uniId = 'bb4d80e0-c2c4-50c5-94d7-a595c34ec81e';

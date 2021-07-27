@@ -1,6 +1,6 @@
-const config = require('./utils/config');
+import config from './utils/config';
 
-module.exports = {
+export default {
   client: 'pg',
   connection: config.databaseUrl,
   acquireConnectionTimeout: 10000,

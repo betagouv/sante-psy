@@ -1,7 +1,6 @@
 require('dotenv').config();
-const rewire = require('rewire');
 
-const graphql = rewire('../utils/graphql.js');
+const graphql = require('../utils/graphql');
 
 describe('GraphQL Handler', () => {
   describe('getWhereConditionAfterCursor', () => {

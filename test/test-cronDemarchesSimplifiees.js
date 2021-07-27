@@ -1,11 +1,11 @@
 require('dotenv').config();
 const { expect } = require('chai');
 const sinon = require('sinon');
-const config = require('../utils/config');
+const { default: config } = require('../utils/config');
 const { default: dbPsychologists } = require('../db/psychologists');
-const dbUniversities = require('../db/universities');
-const dbDsApiCursor = require('../db/dsApiCursor');
-const importDossier = require('../services/demarchesSimplifiees/importDossier');
+const { default: dbUniversities } = require('../db/universities');
+const { default: dbDsApiCursor } = require('../db/dsApiCursor');
+const { default: importDossier } = require('../services/demarchesSimplifiees/importDossier');
 const sendEmail = require('../utils/email');
 
 const {

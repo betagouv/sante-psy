@@ -1,11 +1,10 @@
 require('dotenv').config();
-const rewire = require('rewire');
 const testDossiers = require('./dossier.json');
 const { default: uuid } = require('../../utils/uuid');
-const config = require('../../utils/config');
+const { default: config } = require('../../utils/config');
 const { DossierState } = require('../../types/DemarcheSimplifiee');
 
-const importDossier = rewire('../../services/demarchesSimplifiees/importDossier');
+const importDossier = require('../../services/demarchesSimplifiees/importDossier');
 
 describe('Demarches Simplifiees', () => {
   describe('parsePsychologists', () => {

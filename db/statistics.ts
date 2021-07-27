@@ -1,4 +1,3 @@
-import knex from 'knex';
 import { Registry } from 'knex/types/result';
 import { DossierState } from '../types/DemarcheSimplifiee';
 import {
@@ -6,10 +5,7 @@ import {
   patientsTable,
   psychologistsTable,
 } from './tables';
-
-const knexConfig = require('../knexfile');
-
-const db = knex(knexConfig);
+import db from './db';
 
 const getUniversityCount = (): Promise<Registry[]> => db(psychologistsTable)
     .countDistinct('assignedUniversityId');

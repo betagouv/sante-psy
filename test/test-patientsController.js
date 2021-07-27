@@ -1,11 +1,11 @@
 const chai = require('chai');
 const { expect } = require('chai');
 const sinon = require('sinon');
-const app = require('../index');
+const { default: app } = require('../index');
 const { default: clean } = require('./helper/clean');
-const cookie = require('../utils/cookie');
-const date = require('../utils/date');
-const dbPatients = require('../db/patients');
+const { default: cookie } = require('../utils/cookie');
+const { default: date } = require('../utils/date');
+const { default: dbPatients } = require('../db/patients');
 const { default: dbPsychologists } = require('../db/psychologists');
 
 const doctorName = 'doctorName';

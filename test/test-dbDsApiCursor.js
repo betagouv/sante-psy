@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 require('dotenv').config();
-const dbDsApiCursor = require('../db/dsApiCursor');
+const { default: dbDsApiCursor } = require('../db/dsApiCursor');
 const { default: clean } = require('./helper/clean');
 
 describe('DB Ds Api Cursor', () => {

@@ -1,13 +1,11 @@
-const Sentry = require('@sentry/node');
-const sentryIntegrations = require('@sentry/integrations');
-
-const config = require('./config');
+import Sentry from '@sentry/node';
+import sentryIntegrations from '@sentry/integrations';
+import config from './config';
 
 /**
- * 
  * @see https://sentry.io/betagouv-f7/sante-psy-prod/getting-started/node-express/
  */
-module.exports.initCaptureConsole = function initCaptureConsole() {
+const initCaptureConsole = () => {
   const logLevel = ['error'];
   console.log(`Initializing Sentry for log level "${logLevel}" and config: ${config.sentryDNS}`);
   Sentry.init({
@@ -19,9 +17,9 @@ module.exports.initCaptureConsole = function initCaptureConsole() {
   });
 };
 
-module.exports.initCaptureConsoleWithHandler = function initCaptureConsoleWithHandler(app) {
+const initCaptureConsoleWithHandler = (app) => {
   if (config.sentryDNS) {
-    this.initCaptureConsole(config.sentryDNS);
+    initCaptureConsole();
 
     // RequestHandler creates a separate execution context using domains, so that every
     // transaction/span/breadcrumb is attached to its own Hub instance
@@ -32,4 +30,9 @@ module.exports.initCaptureConsoleWithHandler = function initCaptureConsoleWithHa
   } else {
     console.log('Sentry was not initialized as SENTRY_DNS env variable is missing');
   }
+};
+
+export default {
+  initCaptureConsole,
+  initCaptureConsoleWithHandler,
 };

@@ -1,7 +1,7 @@
-const { validationResult } = require('express-validator');
-const { default: CustomError } = require('./CustomError');
+import { validationResult } from 'express-validator';
+import CustomError from './CustomError';
 
-module.exports.checkErrors = (req) => {
+const checkErrors = (req) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     // TODO manage all errors !
@@ -15,7 +15,7 @@ module.exports.checkErrors = (req) => {
 };
 
 // Does not work for "oneOf" matchers
-module.exports.hasErrorsForField = (req, fieldName) => {
+const hasErrorsForField = (req, fieldName) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     return false;
@@ -27,4 +27,9 @@ module.exports.hasErrorsForField = (req, fieldName) => {
     return false;
   });
   return hasErrorForField;
+};
+
+export default {
+  checkErrors,
+  hasErrorsForField,
 };

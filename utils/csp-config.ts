@@ -1,6 +1,6 @@
-const helmet = require('helmet');
+import helmet from 'helmet';
 
-module.exports = helmet.contentSecurityPolicy({
+export default helmet.contentSecurityPolicy({
   directives: {
     ...helmet.contentSecurityPolicy.getDefaultDirectives(),
     'script-src': [

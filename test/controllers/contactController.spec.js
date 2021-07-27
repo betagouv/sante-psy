@@ -1,5 +1,5 @@
 const chai = require('chai');
-const app = require('../../index');
+const { default: app } = require('../../index');
 
 describe('contactController', () => {
   describe('send', () => {

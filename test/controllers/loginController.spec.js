@@ -1,16 +1,15 @@
-const rewire = require('rewire');
 const sinon = require('sinon');
 const chai = require('chai');
 const { v4: uuidv4 } = require('uuid');
-const app = require('../../index');
+const { default: app } = require('../../index');
 
-const loginController = rewire('../../controllers/loginController');
-const dbLoginToken = require('../../db/loginToken');
+const loginController = require('../../controllers/loginController');
+const { default: dbLoginToken } = require('../../db/loginToken');
 const { default: dbLastConnection } = require('../../db/lastConnections');
 const { default: dbPsychologists } = require('../../db/psychologists');
-const dbUniversities = require('../../db/universities');
+const { default: dbUniversities } = require('../../db/universities');
 const sendEmail = require('../../utils/email');
-const cookie = require('../../utils/cookie');
+const { default: cookie } = require('../../utils/cookie');
 const { default: clean } = require('../helper/clean');
 const { DossierState } = require('../../types/DemarcheSimplifiee');
 

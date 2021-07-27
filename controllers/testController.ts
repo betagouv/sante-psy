@@ -1,14 +1,10 @@
 import { Request, Response } from 'express';
-import knexModule from 'knex';
 
 import dbPsychologists from '../db/psychologists';
 import dbLoginToken from '../db/loginToken';
 
 import seed from '../test/helper/fake_data';
-
-const knexConfig = require('../knexfile');
-
-const knex = knexModule(knexConfig);
+import db from '../db/db';
 
 const getPsychologist = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -25,7 +21,7 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
 };
 
 const resetDB = async (req: Request, res: Response) : Promise<void> => {
-  await seed(knex, true);
+  await seed(db, true);
   res.status(200).json('DB reset');
 };
 

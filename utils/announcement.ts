@@ -1,8 +1,9 @@
 /* eslint-disable no-bitwise */
+import { Request } from 'express';
 import config from './config';
 
 // Code from https://stackoverflow.com/a/7616484
-function hashCode(str) {
+const hashCode = (str: string): number => {
   if (!str) {
     return 0;
   }
@@ -16,9 +17,9 @@ function hashCode(str) {
     hash |= 0; // Convert to 32bit integer
   }
   return hash;
-}
+};
 
-function getAnnouncement(req) {
+const getAnnouncement = (req: Request) => {
   if (req.cookies.hiddenAnnouncement === hashCode(config.announcement).toString()) {
     return {
       announcement: undefined,
@@ -30,6 +31,6 @@ function getAnnouncement(req) {
     announcement: config.announcement,
     announcementHash: hashCode(config.announcement),
   };
-}
+};
 
-module.exports = getAnnouncement;
+export default getAnnouncement;

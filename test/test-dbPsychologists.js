@@ -1,14 +1,11 @@
-const { assert } = require('chai');
-const rewire = require('rewire');
+const { assert, expect, fail } = require('chai');
 require('dotenv').config();
 
-const { default: dbPsychologists } = require('../db/psychologists');
+const { default: dbUniversities } = require('../db/universities');
 
-const dbUniversities = rewire('../db/universities');
 const { DossierState } = require('../types/DemarcheSimplifiee');
+const { default: dbPsychologists } = require('../db/psychologists');
 const { default: dbSuspensionReasons } = require('../db/suspensionReasons');
-const { expect } = require('chai');
-const { fail } = require('chai');
 const { default: clean } = require('./helper/clean');
 
 describe('DB Psychologists', () => {
@@ -141,7 +138,6 @@ describe('DB Psychologists', () => {
       await dbPsychologists.upsertMany([activePsy, archivedPsy, constructionPsy, inactivePsy]);
 
       const shouldBeOne = await dbPsychologists.getAllActive();
-      console.log(shouldBeOne);
       shouldBeOne.length.should.be.equal(1);
       assert.isUndefined(shouldBeOne[0].loginEmail);
     });

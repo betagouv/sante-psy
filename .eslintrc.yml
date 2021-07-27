@@ -44,7 +44,6 @@ rules:
   no-multi-str: "off"
   no-unused-vars: "off"
   "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }]
-  "@typescript-eslint/explicit-module-boundary-types": "error"
   "@typescript-eslint/no-empty-function": "off"
   "@typescript-eslint/no-var-requires": "off"
   mocha-no-only/mocha-no-only: ["error"]

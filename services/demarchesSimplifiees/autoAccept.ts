@@ -5,11 +5,9 @@ import {
   getChampsIdFromField,
   getAnnotationsIdFromField,
 } from '../champsAndAnnotations';
-import { getAllPsychologistList } from './importDossier';
-
+import importDossier from './importDossier';
 import uploadDocument from './uploadDocument';
-
-const graphql = require('../../utils/graphql');
+import graphql from '../../utils/graphql';
 
 const FILE = path.join(
   __dirname, '..', '..', '..', 'static', 'documents', 'parcours_psychologue_sante_psy_etudiant.pdf',
@@ -25,7 +23,7 @@ const sendAutoAcceptMessage = async (dossierId) => {
 
 const autoAcceptPsychologists = async (): Promise<void> => {
   try {
-    const list = await getAllPsychologistList(
+    const list = await importDossier.getAllPsychologistList(
       (cursor) => graphql.getSimplePsyInfo(cursor, DossierState.enInstruction),
     );
     console.log(`${list.psychologists.length} psychologists are in instruction`);

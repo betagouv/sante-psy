@@ -1,9 +1,10 @@
+import faker from 'faker';
 import { Psychologist } from '../../types/Psychologist';
 import { Patient } from '../../types/Patient';
 import { Appointment } from '../../types/Appointment';
-import knex from 'knex';
 import uuid from '../../utils/uuid';
 import dbPsychologists from '../../db/psychologists';
+import dbUniversities from '../../db/universities';
 import {
   appointmentsTable,
   patientsTable,
@@ -15,15 +16,9 @@ import {
   lastConnectionsTable,
 } from '../../db/tables';
 import { DossierState } from '../../types/DemarcheSimplifiee';
-import faker from 'faker';
+import db from '../../db/db';
 
 faker.locale = 'fr';
-
-const knexConfig = require('../../knexfile');
-
-const dbUniversities = require('../../db/universities');
-
-const db = knex(knexConfig);
 
 const getRandomInt = () : string => {
   const ourRandom = faker.datatype.number({ min: 1, max: 99 });

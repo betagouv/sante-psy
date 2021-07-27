@@ -1,11 +1,6 @@
-import knex from 'knex';
-
 import { LastConnection } from '../types/LastConnection';
 import { lastConnectionsTable } from './tables';
-
-const knexConfig = require('../knexfile');
-
-const db = knex(knexConfig);
+import db from './db';
 
 const upsert = async (psychologistId: string) : Promise<LastConnection[]> => db(lastConnectionsTable)
     .insert({

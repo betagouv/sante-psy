@@ -1,9 +1,8 @@
-const rewire = require('rewire');
 const sinon = require('sinon');
-const config = require('../../utils/config');
-const autoVerifyPsychologists = require('../../services/demarchesSimplifiees/autoVerify');
+const { default: config } = require('../../utils/config');
+const { default: autoVerifyPsychologists } = require('../../services/demarchesSimplifiees/autoVerify');
 
-const graphql = rewire('../../utils/graphql');
+const graphql = require('../../utils/graphql');
 
 describe('autoVerifyPsychologist', () => {
   let executeMutationStub;

@@ -1,36 +1,31 @@
-const graphql = require('../../utils/graphql');
-const { default: uuid } = require('../../utils/uuid');
-const config = require('../../utils/config');
-const { getChampsFieldFromId } = require('../champsAndAnnotations');
+import graphql from '../../utils/graphql';
+import uuid from '../../utils/uuid';
+import config from '../../utils/config';
+import { getChampsFieldFromId } from '../champsAndAnnotations';
+import { Psychologist } from '../../types/Psychologist';
 
-/**
- * transform string to boolean
- * @param {*} inputString 'true' or 'false'
- */
-function parseTeleconsultation(inputString) {
-  return inputString === 'true';
-}
+const parseTeleconsultation = (inputString: string): boolean => inputString === 'true';
 
 /**
  * transform string "speciality1, speciality2" to array ["speciality1", "speciality2"]
  * as a JSON to store it inside PG
  */
-function parseTraining(inputString) {
+const parseTraining = (inputString: string): string => {
   if (inputString.includes(',')) {
     return JSON.stringify(inputString.split(', '));
   }
   return JSON.stringify([inputString]);
-}
+};
 
-function getUuidDossierNumber(number) {
-  return uuid.generateFromString(`${config.demarchesSimplifieesId}-${number}`);
-}
+const getUuidDossierNumber = (number: number): string => (
+  uuid.generateFromString(`${config.demarchesSimplifieesId}-${number}`)
+);
 
-function parseDossierMetadata(dossier) {
+const parseDossierMetadata = (dossier: any): Psychologist => {
   const {
     state, archived, demandeur, usager, number, groupeInstructeur, champs,
   } = dossier;
-  const psy = { state, archived };
+  const psy: any = { state, archived };
 
   psy.dossierNumber = getUuidDossierNumber(number);
 
@@ -64,20 +59,20 @@ function parseDossierMetadata(dossier) {
   psy.training = parseTraining(psy.training);
 
   return psy;
-}
+};
 
-function parsePsychologists(psychologists) {
+const parsePsychologists = (psychologists: any[]): Psychologist[] => {
   console.log(`Parsing ${psychologists.length} psychologists from DS API`);
 
   return psychologists.map((psychologist) => parseDossierMetadata(psychologist));
-}
+};
 
 /**
  * helper function called by getPsychologistList
  * @param {*} cursor
  * @param {*} accumulator
  */
-async function getAllPsychologistList(graphqlFunction, cursor = undefined, accumulator = []) {
+const getAllPsychologistList = async (graphqlFunction, cursor = undefined, accumulator = []) => {
   const apiResponse = await graphqlFunction(cursor);
 
   const { pageInfo, nodes } = apiResponse.demarche.dossiers;
@@ -91,7 +86,7 @@ async function getAllPsychologistList(graphqlFunction, cursor = undefined, accum
     psychologists: nextAccumulator,
     lastCursor: pageInfo.endCursor,
   };
-}
+};
 
 /**
  * get all psychologist from DS API
@@ -100,7 +95,7 @@ async function getAllPsychologistList(graphqlFunction, cursor = undefined, accum
  * if we have more than 100 elements in DS, we have to use pagination (cursor)
  * cursor : String - next page to query the API
  */
-async function getPsychologistList(cursor) {
+const getPsychologistList = async (cursor) => {
   const time = `Fetching all psychologists from DS (query id #${Math.random().toString()})`;
 
   console.time(time);
@@ -109,7 +104,9 @@ async function getPsychologistList(cursor) {
   console.timeEnd(time);
 
   return list;
-}
+};
 
-exports.getPsychologistList = getPsychologistList;
-exports.getAllPsychologistList = getAllPsychologistList;
+export default {
+  getPsychologistList,
+  getAllPsychologistList,
+};

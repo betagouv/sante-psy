@@ -2,8 +2,8 @@ const chai = require('chai');
 const { expect } = require('chai');
 const sinon = require('sinon');
 const { v4: uuidv4 } = require('uuid');
-const cookie = require('../utils/cookie');
-const app = require('../index');
+const { default: cookie } = require('../utils/cookie');
+const { default: app } = require('../index');
 const { default: clean } = require('./helper/clean');
 const { default: dbPsychologists } = require('../db/psychologists');
 

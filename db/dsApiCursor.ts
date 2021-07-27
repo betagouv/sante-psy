@@ -1,11 +1,10 @@
-const knexConfig = require('../knexfile');
-const knex = require('knex')(knexConfig);
-const date = require('../utils/date');
-const { dsApiCursorTable } = require('./tables');
+import date from '../utils/date';
+import { dsApiCursorTable } from './tables';
+import db from './db';
 
-module.exports.getCursorFromDB = async function getCursorFromDB() {
+const getCursorFromDB = async (): Promise<string | undefined> => {
   try {
-    const lastCursor = await knex(dsApiCursorTable)
+    const lastCursor = await db(dsApiCursorTable)
     .where('id', 1)
     .first();
 
@@ -27,22 +26,22 @@ module.exports.getCursorFromDB = async function getCursorFromDB() {
  * les pages necessaires
  * @param updateEverything : boolean, if true do not use latest cursor 
  */
-module.exports.getLatestCursorSaved = function getLatestCursorSaved(updateEverything = false) {
+const getLatestCursorSaved = (updateEverything = false): Promise<string | undefined> => {
   if (!updateEverything) {
-    return module.exports.getCursorFromDB();
+    return getCursorFromDB();
   }
   console.log(`Not using cursor saved inside PG due to parameter ${updateEverything}`);
 
   return undefined;
 };
 
-module.exports.saveLatestCursor = async function saveLatestCursor(cursor) {
+const saveLatestCursor = async (cursor: string): Promise<void> => {
   try {
     const now = date.now();
 
-    const alreadySavedCursor = await module.exports.getCursorFromDB();
+    const alreadySavedCursor = await getCursorFromDB();
     // eslint-disable-next-line func-names
-    return await knex.transaction((trx) => { // add transaction in case 2 cron jobs modify this cursor
+    return await db.transaction((trx) => { // add transaction in case 2 cron jobs modify this cursor
       if (alreadySavedCursor) {
         console.log(`Updating the cursor ${cursor} in PG`);
 
@@ -66,3 +65,5 @@ module.exports.saveLatestCursor = async function saveLatestCursor(cursor) {
     throw new Error('Impossible de sauvegarder le dernier cursor de l\'api DS');
   }
 };
+
+export default { getLatestCursorSaved, saveLatestCursor };

@@ -1,11 +1,10 @@
-const knexConfig = require('../knexfile');
-const knex = require('knex')(knexConfig);
-const date = require('../utils/date');
-const { patientsTable } = require('./tables');
+import date from '../utils/date';
+import { patientsTable } from './tables';
+import db from './db';
 
-module.exports.getById = async (patientId, psychologistId) => {
+const getById = async (patientId: string, psychologistId: string): Promise<any> => {
   try {
-    const patient = await knex(patientsTable)
+    const patient = await db(patientsTable)
       .where('id', patientId)
       .where('psychologistId', psychologistId)
       .first();
@@ -17,9 +16,9 @@ module.exports.getById = async (patientId, psychologistId) => {
   }
 };
 
-module.exports.getAll = async (psychologistId) => {
+const getAll = async (psychologistId: string): Promise<any[]> => {
   try {
-    const patientArray = await knex(patientsTable)
+    const patientArray = await db(patientsTable)
         .where('psychologistId', psychologistId)
         .where('deleted', false)
         .orderBy('lastName');
@@ -30,20 +29,20 @@ module.exports.getAll = async (psychologistId) => {
   }
 };
 
-module.exports.insert = async (
-  firstNames,
-  lastName,
-  INE,
-  institutionName,
-  isStudentStatusVerified,
-  hasPrescription,
-  psychologistId,
-  doctorName,
-  doctorAddress,
-  dateOfBirth,
-) => {
+const insert = async (
+  firstNames: string,
+  lastName: string,
+  INE: string,
+  institutionName: string,
+  isStudentStatusVerified: boolean,
+  hasPrescription: boolean,
+  psychologistId: string,
+  doctorName: string,
+  doctorAddress: string,
+  dateOfBirth: Date,
+): Promise<any> => {
   try {
-    const patientsArray = await knex(patientsTable).insert({
+    const patientsArray = await db(patientsTable).insert({
       firstNames,
       lastName,
       INE,
@@ -62,12 +61,21 @@ module.exports.insert = async (
   }
 };
 
-module.exports.update = async (
-  id, firstNames, lastName, INE, institutionName, isStudentStatusVerified, hasPrescription, psychologistId, doctorName,
-  doctorAddress, dateOfBirth,
-) => {
+const update = async (
+  id: string,
+  firstNames: string,
+  lastName: string,
+  INE: string,
+  institutionName: string,
+  isStudentStatusVerified: boolean,
+  hasPrescription: boolean,
+  psychologistId: string,
+  doctorName: string,
+  doctorAddress: string,
+  dateOfBirth: Date,
+): Promise<number> => {
   try {
-    return await knex(patientsTable)
+    return await db(patientsTable)
       .where('id', id)
       .where('psychologistId', psychologistId)
       .update({
@@ -89,9 +97,9 @@ module.exports.update = async (
   }
 };
 
-module.exports.delete = async (id, psychologistId) => {
+const deleteOne = async (id: string, psychologistId: string): Promise<number> => {
   try {
-    const deletedPatient = await knex(patientsTable)
+    const deletedPatient = await db(patientsTable)
       .where('id', id)
       .where('psychologistId', psychologistId)
       .update({
@@ -106,4 +114,12 @@ module.exports.delete = async (id, psychologistId) => {
     console.error('Erreur de suppression du patient', err);
     throw new Error('Erreur de suppression du patient');
   }
+};
+
+export default {
+  getById,
+  getAll,
+  insert,
+  update,
+  delete: deleteOne,
 };

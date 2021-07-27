@@ -56,4 +56,4 @@ const universities = [
   'Valenciennes',
 ];
 
-module.exports = universities;
+export default universities;

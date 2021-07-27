@@ -1,5 +1,5 @@
 const sinon = require('sinon');
-const graphql = require('../../utils/graphql');
+const { default: graphql } = require('../../utils/graphql');
 
 const autoVerifyPsychologists = require('../../services/demarchesSimplifiees/autoVerify');
 

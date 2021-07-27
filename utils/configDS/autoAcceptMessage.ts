@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-const message = (contactEmail) => `Madame, Monsieur, 
+const message = (contactEmail: string): string => `Madame, Monsieur, 
 
 Merci pour votre confiance et votre participation au dispositif Santé Psy. 
 Vos coordonnées sont désormais accessibles aux étudiants sur notre site, rubrique « trouver un psychologue ». 
@@ -14,4 +14,4 @@ Pour déclarer vos séances à rembourser, connecter-vous à votre espace sur la
 Pour toute question, nous vous invitons à consulter notre FAQ ou à nous écrire à ${contactEmail}
 `;
 
-module.exports = message;
+export default message;
