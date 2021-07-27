@@ -80,6 +80,11 @@
   max-width: 25rem;
 }
 
+.first-midlength-input {
+  max-width: 25rem;
+  margin-top: 24px;
+}
+
 .fr-table thead form {
   margin-block-end: 0;
 }

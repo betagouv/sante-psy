@@ -87,14 +87,14 @@ const AddEditPatient = () => {
             <span className="red-text">*</span>
             ) sont obligatoires.
           </p>
-          <p className="fr-text--sm fr-mb-6v">
+          <p className="fr-text--sm fr-mb-1v">
             S&lsquo;il vous manque des champs non-obligatoires,
             vous pourrez y revenir plus tard pour compléter le dossier.
           </p>
           {patient && (
-            <div>
+            <>
               <TextInput
-                className="midlength-input"
+                className="first-midlength-input"
                 data-test-id="patient-first-name-input"
                 label="Prénoms"
                 value={patient.firstNames}
@@ -168,7 +168,7 @@ const AddEditPatient = () => {
                 value={patient.doctorAddress}
                 onChange={e => changePatient(e.target.value, 'doctorAddress')}
               />
-            </div>
+            </>
           )}
           <div className="fr-my-5w">
             <Button
