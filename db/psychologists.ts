@@ -110,7 +110,7 @@ const getById = async (psychologistId: string): Promise<Psychologist> => {
 const upsertMany = async (psyList: Psychologist[]): Promise<(number | void)[]> => {
   console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
   const updatedAt = date.now(); // use to perform UPSERT in PG
-  const universities = await dbUniversities.getAllNotOrdered();
+  const universities = await dbUniversities.getAll();
 
   const psychologists = await getByIds(psyList.map((psy) => psy.dossierNumber));
   const psychologistsToInsert = [];

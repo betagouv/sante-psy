@@ -3,7 +3,7 @@ const dbUniversities = require('../db/universities');
 
 const insertEmailToUniversities = async (universitiesArray) => {
   console.debug('universitiesArray:', universitiesArray);
-  const universities = await dbUniversities.getAllNotOrdered();
+  const universities = await dbUniversities.getAll();
 
   const unversitiesList = universities.map((uni) => {
     console.log(`Trying to add university ${uni.name} to DB...`);
