@@ -94,7 +94,7 @@ const AddEditPatient = () => {
           {patient && (
             <>
               <TextInput
-                className="first-midlength-input"
+                className="midlength-input fr-mt-3w"
                 data-test-id="patient-first-name-input"
                 label="Prénoms"
                 value={patient.firstNames}
