@@ -100,7 +100,6 @@ const Login = () => {
         <p>
           L&lsquo;email à utiliser ici est le même que celui avec lequel vous avez fait votre candidature
           pour participer au dispositif.
-          Il peut être différent de votre email de contact présenté dans l&lsquo;annuaire des psychologues.
         </p>
       </Section>
       <Mail />

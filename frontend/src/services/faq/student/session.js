@@ -12,7 +12,7 @@ module.exports = () => [
     question: 'Puis-je aller voir un psychologue dans une autre région ou ville ?',
     answer: 'Oui, \
     vous pouvez contacter un psychologue partenaire dans un autre département \
-    peu importe votre département ou université d\'origine par téléphone, email, visio ou sur son site internet.',
+    peu importe votre département ou université d\'origine par téléphone, visio ou sur son site internet.',
   },
   {
     question: 'Qui doit renouveler les séances ? Faut-il vraiment repasser chez le médecin ?',
