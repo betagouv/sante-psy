@@ -38,11 +38,6 @@ const ViewProfile = ({ psychologist, loading, activatePsychologist }) => {
               {psychologist.phone}
             </p>
             <p className="fr-mb-1v">
-              <b>Email de contact :</b>
-              {' '}
-              {psychologist.email}
-            </p>
-            <p className="fr-mb-1v">
               <b>Téléconsultation :</b>
               {' '}
               {psychologist.teleconsultation ? 'Oui' : 'Non'}

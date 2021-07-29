@@ -80,15 +80,6 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
             onChange={e => changePsychologist(e.target.value, 'phone')}
             required
           />
-          <TextInput
-            className="midlength-input"
-            label="Email de contact"
-            hint="Adresse email à laquelle prendre rendez-vous ou poser des questions."
-            data-test-id="psy-email-input"
-            value={updatedPsychologist.email}
-            onChange={e => changePsychologist(e.target.value, 'email')}
-            type="email"
-          />
           <RadioGroup
             value={updatedPsychologist.teleconsultation ? 'true' : 'false'}
             onChange={value => changePsychologist(value, 'teleconsultation')}
