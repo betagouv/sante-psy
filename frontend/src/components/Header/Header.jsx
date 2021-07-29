@@ -68,7 +68,7 @@ const Header = () => {
                           data-test-id="logout-link"
                           to="/psychologue/logout"
                         />
-)}
+                      )}
                     >
                       Déconnexion
                     </ToolItem>
