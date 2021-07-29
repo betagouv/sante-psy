@@ -19,7 +19,10 @@ const hashCode = (str: string): number => {
   return hash;
 };
 
-const getAnnouncement = (req: Request) => {
+const getAnnouncement = (req: Request): {
+  announcement: string | undefined,
+  announcementHash: number | undefined,
+} => {
   if (req.cookies.hiddenAnnouncement === hashCode(config.announcement).toString()) {
     return {
       announcement: undefined,

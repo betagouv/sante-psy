@@ -1,5 +1,5 @@
 import { Registry } from 'knex/types/result';
-import { DossierState } from '../types/DemarcheSimplifiee';
+import { DossierState } from '../types/DossierState';
 import {
   appointmentsTable,
   patientsTable,

@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const updatePsyFields = require('../../services/updatePsyFields');
-const { DossierState } = require('../../types/DemarcheSimplifiee');
+const { DossierState } = require('../../types/DossierState');
 
 describe('Update psy fields', () => {
   describe('addFrenchLanguageIfMissing', () => {

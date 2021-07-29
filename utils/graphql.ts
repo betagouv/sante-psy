@@ -1,6 +1,8 @@
 import { gql, GraphQLClient } from 'graphql-request';
 import config from './config';
 import { getChampsIdFromField, getAnnotationsIdFromField } from '../services/champsAndAnnotations';
+import { DSResponse, FileInfo, GroupeInstructeur } from '../types/DemarcheSimplifiee';
+import { DossierState } from '../types/DossierState';
 
 const endpoint = config.apiUrl;
 const graphQLClient = new GraphQLClient(endpoint, {
@@ -15,7 +17,7 @@ const graphQLClient = new GraphQLClient(endpoint, {
  * @see https://demarches-simplifiees-graphql.netlify.app/pageinfo.doc.html
  * @param {*} cursor : String
  */
-const getWhereConditionAfterCursor = (cursor) => {
+const getWhereConditionAfterCursor = (cursor: string): string => {
   if (cursor) {
     return `(after: "${cursor}")`;
   }
@@ -26,7 +28,7 @@ const getWhereConditionAfterCursor = (cursor) => {
  * log errors from DS
  * @param {*} apiResponse 
  */
-const logErrorsFromDS = (apiResponse) => {
+const logErrorsFromDS = (apiResponse: {response: {errors: string[]}}): void => {
   if (apiResponse.response) {
     if (apiResponse.response.errors.length > 0) {
       apiResponse.response.errors.forEach((err) => {
@@ -36,6 +38,7 @@ const logErrorsFromDS = (apiResponse) => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const request = async (query, variables) => {
   console.debug('GraphQL query sent:', query, variables);
 
@@ -51,7 +54,9 @@ const request = async (query, variables) => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const executeQuery = (query, variables = undefined) => request(query, variables);
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const executeMutation = async (query, variables = undefined) => {
   if (config.testEnvironment) {
     console.log('Mutation bypassed because you are using a test environment', query, variables);
@@ -60,7 +65,7 @@ const executeMutation = async (query, variables = undefined) => {
   return request(query, variables);
 };
 
-const getSimplePsyInfo = (cursor, state) => {
+const getSimplePsyInfo = (cursor: string, state: DossierState): Promise<DSResponse> => {
   const query = gql`
     {
       demarche (number: ${config.demarchesSimplifieesId}) {
@@ -92,7 +97,7 @@ const getSimplePsyInfo = (cursor, state) => {
   return executeQuery(query);
 };
 
-const getInstructors = (groupeInstructeurNumber) => {
+const getInstructors = (groupeInstructeurNumber: string): Promise<GroupeInstructeur> => {
   const query = gql`
     query getGroupeInstructeur($groupeInstructeurNumber: Int!) {
       groupeInstructeur(number: $groupeInstructeurNumber) {
@@ -114,7 +119,7 @@ const getInstructors = (groupeInstructeurNumber) => {
   return executeQuery(query, variables);
 };
 
-const acceptPsychologist = (id) => {
+const acceptPsychologist = (id: string): Promise<{errors: {message: string}}[]> => {
   const query = gql`
     mutation dossierAccepter($input: DossierAccepterInput!) {
       dossierAccepter(input: $input) {
@@ -135,7 +140,7 @@ const acceptPsychologist = (id) => {
   return executeMutation(query, variables);
 };
 
-const getDossiersWithAnnotationsAndMessages = (cursor, state) => {
+const getDossiersWithAnnotationsAndMessages = (cursor: string, state: DossierState): Promise<DSResponse> => {
   const query = gql`
   {
     demarche (number: ${config.demarchesSimplifieesId}) {
@@ -173,7 +178,7 @@ const getDossiersWithAnnotationsAndMessages = (cursor, state) => {
   return executeQuery(query);
 };
 
-const addVerificationMessage = (id, message) => {
+const addVerificationMessage = (id: string, message: string): Promise<{errors: {message: string}}[]> => {
   const query = gql`
     mutation dossierModifierAnnotationText($input: DossierModifierAnnotationTextInput!) {
       dossierModifierAnnotationText(input: $input) {
@@ -196,7 +201,7 @@ const addVerificationMessage = (id, message) => {
   return executeMutation(query, variables);
 };
 
-const verifyDossier = (id) => {
+const verifyDossier = (id: string): Promise<{errors: {message: string}}[]> => {
   const query = gql`
     mutation dossierModifierAnnotationCheckbox($input: DossierModifierAnnotationCheckboxInput!) {
       dossierModifierAnnotationCheckbox(input: $input) {
@@ -219,7 +224,7 @@ const verifyDossier = (id) => {
   return executeMutation(query, variables);
 };
 
-const putDossierInInstruction = (id) => {
+const putDossierInInstruction = (id: string): Promise<{errors: {message: string}}[]> => {
   const query = gql`
     mutation dossierPasserEnInstruction($input: DossierPasserEnInstructionInput!) {
       dossierPasserEnInstruction(input: $input) {
@@ -253,7 +258,7 @@ const putDossierInInstruction = (id) => {
     mandatory field "usager.email" is used as the login email
  * @see https://demarches-simplifiees-graphql.netlify.app/demarche.doc.html
  */
-const requestPsychologist = async (afterCursor) => {
+const requestPsychologist = async (afterCursor: string | undefined): Promise<DSResponse> => {
   const paginationCondition = getWhereConditionAfterCursor(afterCursor);
   const query = gql`
     {
@@ -295,7 +300,11 @@ const requestPsychologist = async (afterCursor) => {
   return executeQuery(query);
 };
 
-const createDirectUpload = (fileInfo, dossierId) => {
+const createDirectUpload = (fileInfo: FileInfo, dossierId: string)
+: Promise<{
+  createDirectUpload:{
+    directUpload: {url: string, headers: string, signedBlobId: string}
+  }}> => {
   // eslint-disable-next-line max-len
   const mutation = `mutation createDirectUpload($dossierId: ID!, $filename: String!, $byteSize: Int!, $checksum: String!, $contentType: String!) {
     createDirectUpload(input: {
@@ -321,7 +330,8 @@ const createDirectUpload = (fileInfo, dossierId) => {
   return executeMutation(mutation, variables);
 };
 
-const sendMessageWithAttachment = (message, attachment, dossierId) => {
+const sendMessageWithAttachment = (message: string, attachment: string, dossierId: string)
+  : Promise<{errors: {message: string}}[]> => {
   // eslint-disable-next-line max-len
   const mutation = `mutation dossierEnvoyerMessage($dossierId: ID!, $instructeurId: ID!, $body: String!, $attachment: ID) {
     dossierEnvoyerMessage(input: {
@@ -330,17 +340,6 @@ const sendMessageWithAttachment = (message, attachment, dossierId) => {
       body: $body,
       attachment: $attachment
     }) {
-      message {
-        email
-        body
-        attachment {
-          filename
-          url
-          byteSize
-          checksum
-          contentType
-        }
-      }
       errors {
         message
       }

@@ -1,11 +1,13 @@
+import { CookieOptions, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { JWT } from '../types/LoginToken';
 import config from './config';
 import CustomError from './CustomError';
 
-const headers = {
+const headers: CookieOptions = {
   secure: !config.useCors,
   httpOnly: true,
-  sameSite: 'Lax',
+  sameSite: 'lax',
 };
 
 const getSessionDuration = (): string => `${config.sessionDurationHours} hours`;
@@ -16,7 +18,7 @@ const getSessionDuration = (): string => `${config.sessionDurationHours} hours`;
  * @param {*} id
  * @see https://www.ionos.fr/digitalguide/sites-internet/developpement-web/json-web-token-jwt/
  */
-const getJwtTokenForUser = (psychologist, xsrfToken) => {
+const getJwtTokenForUser = (psychologist: string, xsrfToken: string): string => {
   const duration = getSessionDuration();
 
   return jwt.sign(
@@ -28,30 +30,26 @@ const getJwtTokenForUser = (psychologist, xsrfToken) => {
     { expiresIn: duration },
   );
 };
-const createAndSetJwtCookie = (res, psychologistData, xsrfToken) => {
+const createAndSetJwtCookie = (res: Response, psychologistData: string, xsrfToken: string): void => {
   const jwtToken = getJwtTokenForUser(psychologistData, xsrfToken);
   res.cookie('token', jwtToken, headers);
 };
 
-const clearJwtCookie = (res) => {
+const clearJwtCookie = (res: Response): void => {
   res.clearCookie('token');
 };
 
-/**
- * if valid token will return psychologist data
- * @param {*} token
- */
-const verifyJwt = (req, res) => {
+const verifyJwt = (req: Request, res: Response): JWT | undefined => {
   try {
     const verified = jwt.verify(req.cookies.token, config.secret);
-    return verified;
+    return verified as JWT;
   } catch (err) {
     if (err instanceof jwt.TokenExpiredError) {
       res.clearCookie('token');
       throw new CustomError('Votre session a expiré, veuillez vous reconnecter.', 498);
     }
     console.debug('Invalid token: ', err);
-    return false;
+    return undefined;
   }
 };
 

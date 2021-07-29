@@ -1,11 +1,12 @@
 import date from '../utils/date';
-import departementToUniversityName from '../scripts/departementToUniversityName';
+import departementToUniversityName from '../utils/departementToUniversityName';
 import { universitiesTable } from './tables';
 import department from '../utils/department';
 import { Psychologist } from '../types/Psychologist';
 import db from './db';
+import { University } from '../types/University';
 
-const upsertMany = async (universitiesList: any[]): Promise<any[]> => {
+const upsertMany = async (universitiesList: University[]): Promise<void> => {
   console.log(`UPSERT of ${universitiesList.length} universities....`);
   const updatedAt = date.now(); // use to perform UPSERT in PG
 
@@ -28,14 +29,11 @@ const upsertMany = async (universitiesList: any[]): Promise<any[]> => {
     }
   });
 
-  const query = await Promise.all(upsertArray);
-
+  await Promise.all(upsertArray);
   console.log('UPSERT universities done');
-
-  return query;
 };
 
-const getAll = async (): Promise<any[]> => {
+const getAll = async (): Promise<University[]> => {
   try {
     return db.select('id', 'name', 'emailSSU', 'emailUniversity')
         .from(universitiesTable);
@@ -45,7 +43,7 @@ const getAll = async (): Promise<any[]> => {
   }
 };
 
-const getAllOrderByName = async (): Promise<any[]> => {
+const getAllOrderByName = async (): Promise<University[]> => {
   try {
     return db.select('id', 'name', 'emailSSU', 'emailUniversity')
         .from(universitiesTable)
@@ -56,7 +54,7 @@ const getAllOrderByName = async (): Promise<any[]> => {
   }
 };
 
-const insertByName = async (name: string): Promise<any> => {
+const insertByName = async (name: string): Promise<University> => {
   try {
     const universityArray = await db(universitiesTable).insert({
       name,
@@ -68,7 +66,7 @@ const insertByName = async (name: string): Promise<any> => {
   }
 };
 
-const getAssignedUniversityId = (psychologist: Psychologist, universities: any[]): string | null => {
+const getAssignedUniversityId = (psychologist: Psychologist, universities: University[]): string | null => {
   if (psychologist.assignedUniversityId) {
     return psychologist.assignedUniversityId;
   }
@@ -79,23 +77,20 @@ const getAssignedUniversityId = (psychologist: Psychologist, universities: any[]
     return null;
   }
 
-  const correspondingUniName = departementToUniversityName[departement];
+  const correspondingUniName: string = departementToUniversityName[departement];
   if (!correspondingUniName) {
     console.log(`No corresponding uni name found for - departement ${departement}`);
     return null;
   }
 
-  const foundUni = universities.find((uni) => uni.name.toString().trim() === correspondingUniName.toString().trim());
+  const foundUni = universities.find((uni) => uni.name.trim() === correspondingUniName);
   if (foundUni) {
     return foundUni.id;
   }
   return null;
 };
 
-/**
- * need to have a comma separed list for nodemailer
- */
-const getEmailsTo = (university: any): string | undefined => {
+const getEmailsTo = (university: University): string | undefined => {
   if (university.emailUniversity) {
     return university.emailUniversity.split(' ; ').join(',');
   }

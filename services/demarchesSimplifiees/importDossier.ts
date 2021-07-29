@@ -2,7 +2,8 @@ import graphql from '../../utils/graphql';
 import uuid from '../../utils/uuid';
 import config from '../../utils/config';
 import { getChampsFieldFromId } from '../champsAndAnnotations';
-import { Psychologist } from '../../types/Psychologist';
+import { DSPsychologist, Psychologist } from '../../types/Psychologist';
+import { DSResponse } from '../../types/DemarcheSimplifiee';
 
 const parseTeleconsultation = (inputString: string): boolean => inputString === 'true';
 
@@ -21,10 +22,17 @@ const getUuidDossierNumber = (number: number): string => (
   uuid.generateFromString(`${config.demarchesSimplifieesId}-${number}`)
 );
 
-const parseDossierMetadata = (dossier: any): Psychologist => {
+const parseDossierMetadata = (dossier: DSPsychologist): Psychologist => {
   const {
-    state, archived, demandeur, usager, number, groupeInstructeur, champs,
+    state,
+    archived,
+    demandeur,
+    usager,
+    number,
+    groupeInstructeur,
+    champs,
   } = dossier;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const psy: any = { state, archived };
 
   psy.dossierNumber = getUuidDossierNumber(number);
@@ -61,7 +69,7 @@ const parseDossierMetadata = (dossier: any): Psychologist => {
   return psy;
 };
 
-const parsePsychologists = (psychologists: any[]): Psychologist[] => {
+const parsePsychologists = (psychologists: DSPsychologist[]): Psychologist[] => {
   console.log(`Parsing ${psychologists.length} psychologists from DS API`);
 
   return psychologists.map((psychologist) => parseDossierMetadata(psychologist));
@@ -72,7 +80,14 @@ const parsePsychologists = (psychologists: any[]): Psychologist[] => {
  * @param {*} cursor
  * @param {*} accumulator
  */
-const getAllPsychologistList = async (graphqlFunction, cursor = undefined, accumulator = []) => {
+const getAllPsychologistList = async (
+  graphqlFunction: (string) => Promise<DSResponse>,
+  cursor: string | undefined = undefined,
+  accumulator: DSPsychologist[] = [],
+): Promise<{
+  psychologists: DSPsychologist[],
+  lastCursor: string,
+}> => {
   const apiResponse = await graphqlFunction(cursor);
 
   const { pageInfo, nodes } = apiResponse.demarche.dossiers;
@@ -95,15 +110,21 @@ const getAllPsychologistList = async (graphqlFunction, cursor = undefined, accum
  * if we have more than 100 elements in DS, we have to use pagination (cursor)
  * cursor : String - next page to query the API
  */
-const getPsychologistList = async (cursor) => {
+const getPsychologistList = async (cursor: string | undefined): Promise<{
+  psychologists: Psychologist[],
+  lastCursor: string,
+}> => {
   const time = `Fetching all psychologists from DS (query id #${Math.random().toString()})`;
 
   console.time(time);
   const list = await getAllPsychologistList(graphql.requestPsychologist, cursor);
-  list.psychologists = parsePsychologists(list.psychologists);
+  const results = {
+    psychologists: parsePsychologists(list.psychologists),
+    lastCursor: list.lastCursor,
+  };
   console.timeEnd(time);
 
-  return list;
+  return results;
 };
 
 export default {

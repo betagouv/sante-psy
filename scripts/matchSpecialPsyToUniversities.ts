@@ -6,7 +6,7 @@ const psyToUni = require('./psyToUni');
  * Update a list of special psy from a excel sheet to match them with a university
  * can be run and rerun again
  */
-const matchPsyToUni = async (dryRun) => {
+const matchPsyToUni = async (dryRun): Promise<void> => {
   console.log('Match special psychologists to universities...');
   if (dryRun) {
     console.log('WARNING: dry-run mode on! (no changes will be applied)');

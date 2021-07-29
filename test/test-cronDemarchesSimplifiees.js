@@ -16,7 +16,7 @@ const {
   },
 } = require('../cron_jobs/cronDemarchesSimplifiees');
 const { default: clean } = require('./helper/clean');
-const { DossierState } = require('../types/DemarcheSimplifiee');
+const { DossierState } = require('../types/DossierState');
 
 describe('Import Data from DS to PG', () => {
   let getLatestCursorSavedStub;

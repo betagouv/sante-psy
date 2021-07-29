@@ -2,7 +2,7 @@ require('dotenv').config();
 const testDossiers = require('./dossier.json');
 const { default: uuid } = require('../../utils/uuid');
 const { default: config } = require('../../utils/config');
-const { DossierState } = require('../../types/DemarcheSimplifiee');
+const { DossierState } = require('../../types/DossierState');
 
 const importDossier = require('../../services/demarchesSimplifiees/importDossier');
 

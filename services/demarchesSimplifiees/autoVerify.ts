@@ -1,5 +1,5 @@
 import date from '../../utils/date';
-import { DossierState } from '../../types/DemarcheSimplifiee';
+import { DossierState } from '../../types/DossierState';
 import { getAdeliInfo } from '../../utils/adeliAPI';
 import string from '../../utils/string';
 import {
@@ -8,8 +8,10 @@ import {
 } from '../champsAndAnnotations';
 import importDossier from './importDossier';
 import graphql from '../../utils/graphql';
+import { DSPsychologist } from '../../types/Psychologist';
+import { AdeliInfo } from '../../types/AdeliInfo';
 
-const getDiplomaErrors = (psychologist) => {
+const getDiplomaErrors = (psychologist: DSPsychologist): string[] => {
   const errors = [];
   const diplomaYearId = getChampsIdFromField('diplomaYear');
   const diplomaYear = psychologist.champs.find((champ) => champ.id === diplomaYearId);
@@ -26,7 +28,7 @@ const getDiplomaErrors = (psychologist) => {
   return errors;
 };
 
-const getAdeliErrors = (psychologist, adeliInfo) => {
+const getAdeliErrors = (psychologist: DSPsychologist, adeliInfo: {[key: string]: AdeliInfo}): string[] => {
   const errors = [];
   const adeliChampId = getChampsIdFromField('adeli');
   const adeliNumber = psychologist.champs.find((champ) => champ.id === adeliChampId);
@@ -49,7 +51,8 @@ const getAdeliErrors = (psychologist, adeliInfo) => {
   return errors;
 };
 
-const verifyPsychologist = async (psychologist, adeliInfo) => {
+const verifyPsychologist = async (psychologist: DSPsychologist, adeliInfo:{[key: string]: AdeliInfo})
+  : Promise<boolean> => {
   const today = date.toFormatDDMMYYYY(new Date());
 
   const errors = []

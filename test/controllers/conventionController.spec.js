@@ -4,7 +4,7 @@ const { default: clean } = require('../helper/clean');
 const { default: cookie } = require('../../utils/cookie');
 const { default: dbPsychologists } = require('../../db/psychologists');
 const { default: dbUniversities } = require('../../db/universities');
-const { DossierState } = require('../../types/DemarcheSimplifiee');
+const { DossierState } = require('../../types/DossierState');
 
 describe('conventionController', () => {
   describe('update convention info', () => {

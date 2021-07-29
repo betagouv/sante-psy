@@ -15,7 +15,7 @@ import {
   suspensionReasonsTable,
   lastConnectionsTable,
 } from '../../db/tables';
-import { DossierState } from '../../types/DemarcheSimplifiee';
+import { DossierState } from '../../types/DossierState';
 import db from '../../db/db';
 
 faker.locale = 'fr';
@@ -28,7 +28,7 @@ const getRandomInt = () : string => {
   return ourRandom.toString();
 };
 
-const getFirstNames = () => {
+const getFirstNames = (): string => {
   const rand = faker.datatype.number();
   let firstNames = faker.name.firstName();
   if (rand % 2 === 0) {
@@ -40,7 +40,7 @@ const getFirstNames = () => {
   return firstNames;
 };
 
-const getAddress = () => {
+const getAddress = (): {address: string, departement: string, region: string} => {
   const rand = faker.datatype.number() % 5;
   switch (rand) {
   case 0:

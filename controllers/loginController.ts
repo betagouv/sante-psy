@@ -25,11 +25,11 @@ const emailValidators = [
 /**
  * @see https://www.ssi.gouv.fr/administration/precautions-elementaires/calculer-la-force-dun-mot-de-passe/
  */
-function generateToken() {
+function generateToken(): string {
   return crypto.randomBytes(64).toString('hex');
 }
 
-async function sendLoginEmail(email: string, loginUrl: string, token: string) {
+async function sendLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
   try {
     const html = await ejs.renderFile('./views/emails/login.ejs', {
       loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
@@ -44,7 +44,7 @@ async function sendLoginEmail(email: string, loginUrl: string, token: string) {
   }
 }
 
-async function sendNotYetAcceptedEmail(email: string) {
+async function sendNotYetAcceptedEmail(email: string): Promise<void> {
   try {
     const html = await ejs.renderFile('./views/emails/loginNotAcceptedYet.ejs', {
       appName: config.appName,
@@ -57,7 +57,7 @@ async function sendNotYetAcceptedEmail(email: string) {
   }
 }
 
-async function saveToken(email: string, token: string) {
+async function saveToken(email: string, token: string): Promise<void> {
   try {
     const expiredAt = date.getDatePlusOneHour();
     await dbLoginToken.insert(token, email, expiredAt);
@@ -130,7 +130,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
   );
 };
 
-function generateLoginUrl() {
+function generateLoginUrl(): string {
   return `${config.hostnameWithProtocol}/psychologue/login`;
 }
 

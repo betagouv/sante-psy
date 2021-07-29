@@ -1,4 +1,4 @@
-module.exports = {
+const departementToUniversityName = {
   '01': 'cas particulier',
   '02': 'Picardie Jules Verne',
   '03': 'Clermont-Auvergne (UCA)',
@@ -101,3 +101,5 @@ module.exports = {
   974: 'La Réunion',
   976: '',
 };
+
+export default departementToUniversityName;
