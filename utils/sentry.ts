@@ -1,6 +1,7 @@
-import Sentry from '@sentry/node';
-import sentryIntegrations from '@sentry/integrations';
 import config from './config';
+
+const Sentry = require('@sentry/node');
+const sentryIntegrations = require('@sentry/integrations');
 
 /**
  * @see https://sentry.io/betagouv-f7/sante-psy-prod/getting-started/node-express/
