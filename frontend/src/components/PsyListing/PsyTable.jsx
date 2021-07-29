@@ -27,7 +27,7 @@ const PsyTable = ({
       label: 'Adresse',
     },
     {
-      name: 'site',
+      name: 'action',
       label: '',
       render: psychologist => (
         <>
@@ -100,6 +100,7 @@ const PsyTable = ({
     }
   }
 
+  const currentPage = Math.min(page, Math.ceil(psychologists.length / 10));
   return (
     <div ref={table} className={styles.container}>
       {psychologists.length > 0 ? (
@@ -111,9 +112,11 @@ const PsyTable = ({
             rowKey="dossierNumber"
             columns={columns}
             data={psychologists}
+            page={currentPage}
+            perPage={10}
           />
           <Pagination
-            currentPage={Math.min(page, Math.ceil(psychologists.length / 10))}
+            currentPage={currentPage}
             onClick={p => {
               setPage(p);
               table.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
