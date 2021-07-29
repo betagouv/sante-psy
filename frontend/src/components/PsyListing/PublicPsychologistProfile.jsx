@@ -13,7 +13,6 @@ import styles from './publicPsychologistProfile.cssmodule.scss';
 const fields = [
   { name: 'Adresse', value: 'address' },
   { name: 'Téléphone', value: 'phone' },
-  { name: 'Adresse email', value: 'email' },
   { name: 'Langues parlées', value: 'languages' },
   {
     name: 'Disponibilité de téléconsultation',
