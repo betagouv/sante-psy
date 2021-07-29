@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@dataesr/react-dsfr": "^0.4.9",
+    "@dataesr/react-dsfr": "^0.5.3",
     "axios": "^0.21.1",
     "classnames": "^2.3.1",
     "date-fns": "^2.22.1",
