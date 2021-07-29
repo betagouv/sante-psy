@@ -28,7 +28,6 @@ const get = async (req: Request, res: Response): Promise<void> => {
   res.json({
     firstNames: psychologist.firstNames,
     lastName: psychologist.lastName,
-    email: psychologist.email,
     address: psychologist.address,
     departement: psychologist.departement,
     region: psychologist.region,

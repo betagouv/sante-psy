@@ -49,7 +49,6 @@ const getAllActive = async (): Promise<Psychologist[]> => {
       'lastName',
       'adeli',
       'firstNames',
-      'email',
       'address',
       'departement',
       'region',
