@@ -1,13 +1,11 @@
-import chai from 'chai';
-
-const { expect } = require('chai');
-const sinon = require('sinon');
-const { default: app } = require('../index');
-const { default: clean } = require('./helper/clean');
-const { default: cookie } = require('../utils/cookie');
-const { default: date } = require('../utils/date');
-const { default: dbPatients } = require('../db/patients');
-const { default: dbPsychologists } = require('../db/psychologists');
+import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import app from '../index';
+import clean from './helper/clean';
+import cookie from '../utils/cookie';
+import date from '../utils/date';
+import dbPatients from '../db/patients';
+import dbPsychologists from '../db/psychologists';
 
 const doctorName = 'doctorName';
 const doctorAddress = 'doctorAddress';

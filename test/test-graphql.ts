@@ -1,4 +1,6 @@
-require('dotenv').config();
+import dotEnv from 'dotenv';
+
+dotEnv.config();
 
 const graphql = require('../utils/graphql');
 

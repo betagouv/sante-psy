@@ -1,7 +1,8 @@
+import rewire from 'rewire';
 import sinon from 'sinon';
-import graphql from '../../utils/graphql';
+import graphql from '../utils/graphql';
 
-import autoVerifyPsychologists from '../../services/demarchesSimplifiees/autoVerify';
+const autoVerify = rewire('../services/demarchesSimplifiees/autoVerify');
 
 describe('getDiplomaErrors', () => {
   const createPsyWithDiploma = (year, id = 'Q2hhbXAtMTYzOTE2OQ==') => ({
@@ -11,10 +12,10 @@ describe('getDiplomaErrors', () => {
     }],
   });
 
-  const getDiplomaErrors = autoVerifyPsychologists.__get__('getDiplomaErrors');
   it('Should refuse empty diploma', () => {
     const psychologist = createPsyWithDiploma('2000', 'random');
 
+    const getDiplomaErrors = autoVerify.__get__('getDiplomaErrors');
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
     errors[0].should.equals('pas d\'année d\'obtention du diplôme');
@@ -23,6 +24,7 @@ describe('getDiplomaErrors', () => {
   it('Should refuse non year diploma', () => {
     const psychologist = createPsyWithDiploma('not a year');
 
+    const getDiplomaErrors = autoVerify.__get__('getDiplomaErrors');
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
     errors[0].should.equals('le diplôme est trop récent');
@@ -31,6 +33,7 @@ describe('getDiplomaErrors', () => {
   it('Should refuse recent diploma', () => {
     const psychologist = createPsyWithDiploma('2020');
 
+    const getDiplomaErrors = autoVerify.__get__('getDiplomaErrors');
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
     errors[0].should.equals('le diplôme est trop récent');
@@ -39,6 +42,7 @@ describe('getDiplomaErrors', () => {
   it('Should accept old diploma', () => {
     const psychologist = createPsyWithDiploma('2000');
 
+    const getDiplomaErrors = autoVerify.__get__('getDiplomaErrors');
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(0);
   });
@@ -72,10 +76,10 @@ describe('getAdeliErrors', () => {
     },
   });
 
-  const getAdeliErrors = autoVerifyPsychologists.__get__('getAdeliErrors');
   it('Should refuse missing adeli number', () => {
     const psychologist = createPsy('jane', 'doe', 'non existing');
 
+    const getAdeliErrors = autoVerify.__get__('getAdeliErrors');
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(1);
     errors[0].should.equals('pas de correspondance pour ce numéro Adeli');
@@ -84,6 +88,7 @@ describe('getAdeliErrors', () => {
   it('Should refuse non psychologue', () => {
     const psychologist = createPsy('john', 'doe', '456');
 
+    const getAdeliErrors = autoVerify.__get__('getAdeliErrors');
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(1);
     errors[0].should.equals('la personne n\'est pas un psychologue mais un Magicien');
@@ -92,6 +97,7 @@ describe('getAdeliErrors', () => {
   it('Should refuse missmatching name', () => {
     const psychologist = createPsy('john', 'doe', '123');
 
+    const getAdeliErrors = autoVerify.__get__('getAdeliErrors');
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(1);
     errors[0].should.equals('les prénoms ne matchent pas (Jane vs john)');
@@ -100,6 +106,7 @@ describe('getAdeliErrors', () => {
   it('Should return all missmatching info', () => {
     const psychologist = createPsy('Georges', 'Moustaki', '456');
 
+    const getAdeliErrors = autoVerify.__get__('getAdeliErrors');
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(3);
     errors[0].should.equals('la personne n\'est pas un psychologue mais un Magicien');
@@ -110,6 +117,7 @@ describe('getAdeliErrors', () => {
   it('Should accept perfect match', () => {
     const psychologist = createPsy('jane', 'doe', '123');
 
+    const getAdeliErrors = autoVerify.__get__('getAdeliErrors');
     const errors = getAdeliErrors(psychologist, adeliInfo);
     errors.length.should.equals(0);
   });
@@ -130,8 +138,8 @@ describe('verifyPsychologist', () => {
     addVerificationMessageStub = sinon.stub(graphql, 'addVerificationMessage');
     verifyDossierStub = sinon.stub(graphql, 'verifyDossier');
     putDossierInInstructionStub = sinon.stub(graphql, 'putDossierInInstruction');
-    unsets.push(autoVerifyPsychologists.__set__('getAdeliErrors', getAdeliErrorsStub));
-    unsets.push(autoVerifyPsychologists.__set__('getDiplomaErrors', getDiplomaErrorsStub));
+    unsets.push(autoVerify.__set__('getAdeliErrors', getAdeliErrorsStub));
+    unsets.push(autoVerify.__set__('getDiplomaErrors', getDiplomaErrorsStub));
   });
 
   afterEach((done) => {
@@ -142,11 +150,11 @@ describe('verifyPsychologist', () => {
     done();
   });
 
-  const verifyPsychologist = autoVerifyPsychologists.__get__('verifyPsychologist');
   it('Should call addVerificationMessage, verifyDossier and putDossierInInstruction if no errors', async () => {
     getAdeliErrorsStub.returns([]);
     getDiplomaErrorsStub.returns([]);
 
+    const verifyPsychologist = autoVerify.__get__('verifyPsychologist');
     const result = await verifyPsychologist({ id: 123 }, {});
 
     result.should.equals(true);
@@ -164,6 +172,7 @@ describe('verifyPsychologist', () => {
     getAdeliErrorsStub.returns(['error 1', 'error 2']);
     getDiplomaErrorsStub.returns(['error 3', 'error 4']);
 
+    const verifyPsychologist = autoVerify.__get__('verifyPsychologist');
     const result = await verifyPsychologist({ id: 123 }, {});
 
     result.should.equals(false);

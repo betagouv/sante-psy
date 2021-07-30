@@ -1,3 +1,4 @@
+import dotEnv from 'dotenv';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import config from '../utils/config';
@@ -5,19 +6,13 @@ import dbPsychologists from '../db/psychologists';
 import dbUniversities from '../db/universities';
 import dbDsApiCursor from '../db/dsApiCursor';
 import importDossier from '../services/demarchesSimplifiees/importDossier';
-import sendEmail from '../utils/email';
+import cronDemarchesSimplifiees from '../cron_jobs/cronDemarchesSimplifiees';
+import clean from './helper/clean';
+import { DossierState } from '../types/DossierState';
 
-require('dotenv').config();
+const sendEmail = require('../utils/email');
 
-const {
-  default: {
-    importLatestDataFromDSToPG,
-    checkForMultipleAcceptedDossiers,
-    importEveryDataFromDSToPG,
-  },
-} = require('../cron_jobs/cronDemarchesSimplifiees');
-const { default: clean } = require('./helper/clean');
-const { DossierState } = require('../types/DossierState');
+dotEnv.config();
 
 describe('Import Data from DS to PG', () => {
   let getLatestCursorSavedStub;
@@ -53,7 +48,7 @@ describe('Import Data from DS to PG', () => {
     saveLatestCursorStub = sinon.stub(dbDsApiCursor, 'saveLatestCursor')
     .returns(Promise.resolve());
 
-    await importLatestDataFromDSToPG();
+    await cronDemarchesSimplifiees.importLatestDataFromDSToPG();
 
     sinon.assert.called(getLatestCursorSavedStub);
     sinon.assert.called(getPsychologistListStub);
@@ -90,7 +85,7 @@ describe('checkForMultipleAcceptedDossiers', () => {
     const psyArray = await dbPsychologists.getAllActive();
     expect(psyArray).to.have.length(2);
 
-    await checkForMultipleAcceptedDossiers();
+    await cronDemarchesSimplifiees.checkForMultipleAcceptedDossiers();
 
     sinon.assert.called(sendMailStub);
     sinon.assert.calledWith(sendMailStub,
@@ -150,7 +145,7 @@ describe('DS integration tests', () => {
     await clean.cleanAllPsychologists();
   });
 
-  const verifyPsy = async (id, expected, universityId) => {
+  const verifyPsy = async (id, expected, universityId = undefined) => {
     const {
       createdAt,
       updatedAt,
@@ -161,6 +156,7 @@ describe('DS integration tests', () => {
       ...psy
     } = await dbPsychologists.getById(id);
 
+    console.log(assignedUniversityId);
     psy.should.eql(expected);
     if (universityId) {
       assignedUniversityId.should.equals(universityId);
@@ -168,12 +164,10 @@ describe('DS integration tests', () => {
   };
 
   it('should import all data from DS', async () => {
-    const paulUniversity = await dbUniversities.insertByName('PaulU');
-    const xavierUniversity = await dbUniversities.insertByName('xavierU');
-    await importEveryDataFromDSToPG();
+    await cronDemarchesSimplifiees.importEveryDataFromDSToPG();
 
-    await verifyPsy(paulId, paul, paulUniversity);
-    await verifyPsy(xavierId, xavier, xavierUniversity);
+    await verifyPsy(paulId, paul);
+    await verifyPsy(xavierId, xavier);
   });
 
   it('should update psy info when existing', async () => {
@@ -200,7 +194,7 @@ describe('DS integration tests', () => {
       assignedUniversityId: xavierUniversity.id,
     }]);
 
-    await importEveryDataFromDSToPG();
+    await cronDemarchesSimplifiees.importEveryDataFromDSToPG();
 
     await verifyPsy(paulId, paul, paulUniversity.id);
     await verifyPsy(xavierId, {

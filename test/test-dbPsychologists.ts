@@ -4,9 +4,11 @@ import dbUniversities from '../db/universities';
 import dbPsychologists from '../db/psychologists';
 import dbSuspensionReasons from '../db/suspensionReasons';
 import clean from './helper/clean';
-import { DossierState } from '../types/DemarcheSimplifiee';
+import { DossierState } from '../types/DossierState';
 
-require('dotenv').config();
+import dotEnv from 'dotenv';
+
+dotEnv.config();
 
 describe('DB Psychologists', () => {
   beforeEach(async () => {
@@ -14,7 +16,7 @@ describe('DB Psychologists', () => {
   });
 
   describe('upsertMany', () => {
-    it('should INsert one psychologist in PG', async () => {
+    it('should insert one psychologist in PG', async () => {
       const psy = clean.getOnePsy();
       await dbPsychologists.upsertMany([psy]);
 
@@ -134,7 +136,7 @@ describe('DB Psychologists', () => {
       const constructionPsy = clean.getOnePsy('construction@psy.fr');
       constructionPsy.state = DossierState.enConstruction;
       constructionPsy.lastName = 'ConstructionPsy';
-      const inactivePsy = clean.getOneInactivePsy(`${new Date()}`);
+      const inactivePsy = clean.getOneInactivePsy(new Date());
       await dbPsychologists.upsertMany([activePsy, archivedPsy, constructionPsy, inactivePsy]);
 
       const shouldBeOne = await dbPsychologists.getAllActive();
@@ -404,14 +406,14 @@ describe('DB Psychologists', () => {
 
       const updatedPsy = await dbPsychologists.getById(psy.dossierNumber);
       expect(updatedPsy.email).to.equal(newEmail);
-      expect(updatedPsy.updatedAt).to.not.be.undefined;
+      expect(updatedPsy.updatedAt).to.not.be.null;
       expect(updatedPsy.selfModified).to.be.true;
     });
   });
 
   describe('activate', () => {
     it('should activate psy and remove inactiveUntil date', async () => {
-      const inactivePsy = clean.getOneInactivePsy(`${new Date()}`);
+      const inactivePsy = clean.getOneInactivePsy(new Date());
       await dbPsychologists.upsertMany([inactivePsy]);
 
       await dbPsychologists.activate(inactivePsy.dossierNumber);
@@ -458,9 +460,9 @@ describe('DB Psychologists', () => {
       yesterday.setDate(now.getDate() - 1);
       const tomorrow = new Date();
       tomorrow.setDate(now.getDate() + 1);
-      const inactivePsy1 = clean.getOneInactivePsy(`${yesterday}`);
-      const inactivePsy2 = clean.getOneInactivePsy(`${now}`);
-      const inactivePsy3 = clean.getOneInactivePsy(`${tomorrow}`);
+      const inactivePsy1 = clean.getOneInactivePsy(yesterday);
+      const inactivePsy2 = clean.getOneInactivePsy(now);
+      const inactivePsy3 = clean.getOneInactivePsy(tomorrow);
       await dbPsychologists.upsertMany([activePsy, inactivePsy1, inactivePsy2, inactivePsy3]);
 
       await dbPsychologists.reactivate();

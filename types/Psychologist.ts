@@ -29,9 +29,8 @@ export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
     isConventionSigned?: boolean,
     selfModified?: boolean,
     active: boolean,
-    inactiveUntil: string,
-    // loginEmail: string,
-    updatedAt: Date,
+    inactiveUntil: Date,
+    updatedAt?: Date,
     createdAt: Date,
   };
 

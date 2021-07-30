@@ -1,6 +1,7 @@
 export type LoginToken = {
     token: string,
-    email: string
+    email: string,
+    expiresAt: Date
 }
 
 export type JWT = {

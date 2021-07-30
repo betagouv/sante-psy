@@ -1,7 +1,7 @@
 import chai from 'chai';
-import app from '../../index';
-import clean from '../helper/clean';
-import dbUniversities from '../../db/universities';
+import app from '../index';
+import clean from './helper/clean';
+import dbUniversities from '../db/universities';
 
 describe('universityController.spec', () => {
   beforeEach(async () => {

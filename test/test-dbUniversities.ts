@@ -1,7 +1,9 @@
 import { assert } from 'chai';
+import dotEnv from 'dotenv';
+import dbUniversities from '../db/universities';
+import clean from './helper/clean';
 
-require('dotenv').config();
-const { default: dbUniversities } = require('../db/universities');
+dotEnv.config();
 
 describe('DB Universities', () => {
   const uniId = 'bb4d80e0-c2c4-50c5-94d7-a595c34ec81e';
@@ -9,11 +11,14 @@ describe('DB Universities', () => {
   const universities = [{
     id: uniId,
     name: uniName,
+    emailSSU: '',
+    emailUniversity: '',
   }];
 
   describe('getAssignedUniversityId', () => {
     it('should get a assigned university based on departement number', async () => {
       const psy = {
+        ...clean.getOnePsy(),
         departement: '30 - Gard',
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
       };
@@ -24,6 +29,7 @@ describe('DB Universities', () => {
     it('should get the same assigned university if already assigned', async () => {
       const alreadyAssignedUniId = 'alreadyAssignedUniId';
       const psy = {
+        ...clean.getOnePsy(),
         departement: '30 - Gard',
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
         assignedUniversityId: alreadyAssignedUniId,
@@ -34,6 +40,7 @@ describe('DB Universities', () => {
 
     it('should get null if departement is unkwown', async () => {
       const psy = {
+        ...clean.getOnePsy(),
         departement: 'pizza',
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
       };
@@ -44,6 +51,7 @@ describe('DB Universities', () => {
 
     it('should get null if uni name is unknown for department', async () => {
       const psy = {
+        ...clean.getOnePsy(),
         departement: '100 - pizza', // 100 does not match any uni in our list
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
       };
@@ -98,6 +106,7 @@ describe('DB Universities', () => {
     it('should manage empty info', () => {
       const university = {};
 
+      // @ts-expect-error => test
       const output = dbUniversities.getEmailsTo(university);
       assert.isUndefined(output);
     });

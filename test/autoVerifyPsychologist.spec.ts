@@ -1,7 +1,7 @@
 import sinon from 'sinon';
-import graphql from '../../utils/graphql';
-import config from '../../utils/config';
-import autoVerifyPsychologists from '../../services/demarchesSimplifiees/autoVerify';
+import graphql from '../utils/graphql';
+import config from '../utils/config';
+import autoVerifyPsychologists from '../services/demarchesSimplifiees/autoVerify';
 
 describe('autoVerifyPsychologist', () => {
   let executeMutationStub;
@@ -21,7 +21,7 @@ describe('autoVerifyPsychologist', () => {
   });
 
   it.skip('Should execute 4 mutations on DS', async () => {
-    await autoVerifyPsychologists.default();
+    await autoVerifyPsychologists();
 
     sinon.assert.callCount(executeMutationStub, 4);
 

@@ -1,11 +1,13 @@
 import { assert, expect } from 'chai';
 import dbPatients from '../db/patients';
 import date from '../utils/date';
-import knex from 'knex';
+import db from '../db/db';
 import clean from './helper/clean';
 import { patientsTable } from '../db/tables';
 
-require('dotenv').config();
+import dotEnv from 'dotenv';
+
+dotEnv.config();
 
 describe('DB Patients', () => {
   const firstNames = 'Harry James';
@@ -19,7 +21,7 @@ describe('DB Patients', () => {
   const dateOfBirth = date.parseForm('20/01/1980');
 
   async function testDataPatientsExist(lastName) {
-    const exist = await knex(patientsTable)
+    const exist = await db(patientsTable)
       .where('lastName', lastName)
       .first();
     if (exist) {
@@ -34,7 +36,7 @@ describe('DB Patients', () => {
   });
 
   describe('insert', () => {
-    it('should INsert one patient in PG', async () => {
+    it('should insert one patient in PG', async () => {
       const psy = await clean.insertOnePsy();
       await dbPatients.insert(
         firstNames,
@@ -53,7 +55,7 @@ describe('DB Patients', () => {
       exist.should.be.equal(true);
     });
 
-    it('should accept INsert INE with more than 11 characters in PG', async () => {
+    it('should accept insert INE with more than 11 characters in PG', async () => {
       const psy = await clean.insertOnePsy();
       try {
         await dbPatients.insert(
@@ -75,7 +77,7 @@ describe('DB Patients', () => {
       }
     });
 
-    it('should refuse INsert for INE with more than 50 characters in PG', async () => {
+    it('should refuse insert for INE with more than 50 characters in PG', async () => {
       const psy = await clean.insertOnePsy();
       try {
         await dbPatients.insert(
@@ -96,7 +98,7 @@ describe('DB Patients', () => {
       }
     });
 
-    it('should refuse INsert without mandatory params in PG', async () => {
+    it('should refuse insert without mandatory params in PG', async () => {
       try {
         await dbPatients.insert(firstNames, studentNumber);
       } catch (error) {
@@ -147,7 +149,7 @@ describe('DB Patients', () => {
         oldPatient.id,
         oldPatient.firstNames,
         newLastName,
-        oldPatient.studentNumber,
+        oldPatient.INE,
         oldPatient.institutionName,
         oldPatient.isStudentStatusVerified,
         oldPatient.hasPrescription,

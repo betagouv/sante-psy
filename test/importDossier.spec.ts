@@ -1,10 +1,12 @@
 import testDossiers from './dossier.json';
-import uuid from '../../utils/uuid';
-import config from '../../utils/config';
-import { DossierState } from '../../types/DemarcheSimplifiee';
-import importDossier from '../../services/demarchesSimplifiees/importDossier';
+import uuid from '../utils/uuid';
+import config from '../utils/config';
+import { DossierState } from '../types/DossierState';
+import importDossier from '../services/demarchesSimplifiees/importDossier';
 
-require('dotenv').config();
+import dotEnv from 'dotenv';
+
+dotEnv.config();
 
 describe('Demarches Simplifiees', () => {
   describe('parsePsychologists', () => {

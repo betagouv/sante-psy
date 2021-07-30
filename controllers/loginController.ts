@@ -76,7 +76,7 @@ const deleteToken = (req: Request, res: Response): void => {
 
 const connectedUser = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
-  if (checkXsrf(req, tokenData.xsrfToken)) {
+  if (tokenData && checkXsrf(req, tokenData.xsrfToken)) {
     const psy = await dbPsychologists.getById(tokenData.psychologist);
     const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
 

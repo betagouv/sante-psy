@@ -1,10 +1,10 @@
 import chai from 'chai';
-import app from '../../index';
-import clean from '../helper/clean';
-import cookie from '../../utils/cookie';
-import dbPsychologists from '../../db/psychologists';
-import dbUniversities from '../../db/universities';
-import { DossierState } from '../../types/DemarcheSimplifiee';
+import app from '../index';
+import clean from './helper/clean';
+import cookie from '../utils/cookie';
+import dbPsychologists from '../db/psychologists';
+import dbUniversities from '../db/universities';
+import { DossierState } from '../types/DossierState';
 
 describe('conventionController', () => {
   describe('update convention info', () => {

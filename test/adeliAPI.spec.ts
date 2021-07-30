@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const { preprocessIds } = require('../../utils/adeliAPI');
+import { expect } from 'chai';
+import { preprocessIds } from '../utils/adeliAPI';
 
 describe('preprocessIds', () => {
   it('should return preprocessIds', async () => {

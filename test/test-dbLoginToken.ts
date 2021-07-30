@@ -3,7 +3,9 @@ import dbToginToken from '../db/loginToken';
 import date from '../utils/date';
 import clean from './helper/clean';
 
-require('dotenv').config();
+import dotEnv from 'dotenv';
+
+dotEnv.config();
 
 describe('DB Login token', () => {
   const token = '0Hj1xrlN6p4icK7TwC7YCr6vMLR0NXen';

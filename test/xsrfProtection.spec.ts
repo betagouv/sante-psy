@@ -1,6 +1,6 @@
 import chai from 'chai';
-import app from '../../index';
-import cookie from '../../utils/cookie';
+import app from '../index';
+import cookie from '../utils/cookie';
 
 describe('Route should be XSRF protected', () => {
   const routes = [

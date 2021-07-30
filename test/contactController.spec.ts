@@ -1,5 +1,5 @@
 import chai from 'chai';
-import app from '../../index';
+import app from '../index';
 
 describe('contactController', () => {
   describe('send', () => {

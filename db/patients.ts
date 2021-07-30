@@ -33,14 +33,14 @@ const getAll = async (psychologistId: string): Promise<Patient[]> => {
 const insert = async (
   firstNames: string,
   lastName: string,
-  INE: string,
-  institutionName: string,
-  isStudentStatusVerified: boolean,
-  hasPrescription: boolean,
-  psychologistId: string,
-  doctorName: string,
-  doctorAddress: string,
-  dateOfBirth: Date,
+  INE?: string,
+  institutionName?: string,
+  isStudentStatusVerified?: boolean,
+  hasPrescription?: boolean,
+  psychologistId?: string,
+  doctorName?: string,
+  doctorAddress?: string,
+  dateOfBirth?: Date,
 ): Promise<Patient> => {
   try {
     const patientsArray = await db(patientsTable).insert({

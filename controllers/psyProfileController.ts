@@ -46,6 +46,7 @@ const updateValidators = [
   check('personalEmail')
     .trim()
     .notEmpty()
+    .withMessage('Vous devez spécifier un email valide.')
     .customSanitizer((value, { req }) => req.sanitize(value))
     .isEmail()
     .withMessage('Vous devez spécifier un email valide.'),
@@ -127,10 +128,12 @@ const activate = async (req: Request, res: Response): Promise<void> => {
 const suspendValidators = [
   check('date')
     .isISO8601()
+    .withMessage('Vous devez spécifier une date de fin de suspension dans le futur.')
     .isAfter()
     .withMessage('Vous devez spécifier une date de fin de suspension dans le futur.'),
   check('reason')
     .trim().not().isEmpty()
+    .withMessage('Vous devez spécifier une raison.')
     .customSanitizer((value, { req }) => req.sanitize(value))
     .withMessage('Vous devez spécifier une raison.'),
 ];

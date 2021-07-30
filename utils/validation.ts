@@ -5,12 +5,12 @@ import CustomError from './CustomError';
 const checkErrors = (req: Request): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const allErrors = errors.array().map((error) => {
-      console.debug('checkErrors form', error.msg);
+    const allErrors = errors.array({ onlyFirstError: true }).map((error) => {
+      console.log('checkErrors form', error);
       return error.msg;
     });
 
-    throw new CustomError(allErrors.join(), 400);
+    throw new CustomError(allErrors.join(' '), 400);
   }
 };
 

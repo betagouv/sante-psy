@@ -1,7 +1,9 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 
-require('dotenv').config();
+import dotEnv from 'dotenv';
+
+dotEnv.config();
 
 chai.use(chaiHttp);
 chai.should();

@@ -75,7 +75,7 @@ const getOnePsy = (
   state = DossierState.accepte,
   archived = false,
   uniId: string = null,
-  inactiveUntil: string | undefined = undefined,
+  inactiveUntil: Date | undefined = undefined,
 ): Psychologist => {
   const dossierNumber = uuid.generateFromString(`psychologist-${personalEmail}`);
   return {
@@ -92,7 +92,6 @@ const getOnePsy = (
     personalEmail,
     website: faker.internet.domainName() + faker.internet.domainSuffix(),
     teleconsultation: faker.datatype.boolean(),
-    // eslint-disable-next-line max-len
     description: faker.lorem.paragraphs(2),
     // eslint-disable-next-line max-len
     training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
@@ -100,12 +99,11 @@ const getOnePsy = (
     languages: 'Français, Anglais, et Espagnol',
     active: !inactiveUntil,
     inactiveUntil,
-    updatedAt: null,
     createdAt: new Date(),
   };
 };
 
-const getOneInactivePsy = (inactiveUntil: string): Psychologist => getOnePsy(
+const getOneInactivePsy = (inactiveUntil?: Date): Psychologist => getOnePsy(
   `inactive@${inactiveUntil}.fr`,
   DossierState.accepte,
   false,

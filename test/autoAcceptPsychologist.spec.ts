@@ -1,8 +1,8 @@
 import sinon from 'sinon';
-import config from '../../utils/config';
-import autoAcceptPsychologists from '../../services/demarchesSimplifiees/autoAccept';
+import config from '../utils/config';
+import autoAcceptPsychologists from '../services/demarchesSimplifiees/autoAccept';
 
-import graphql from '../../utils/graphql';
+import graphql from '../utils/graphql';
 
 describe('autoAcceptPsychologist', () => {
   let executeMutationStub;
@@ -28,7 +28,7 @@ describe('autoAcceptPsychologist', () => {
 
   it('Should accept 1 dossier on DS', async () => {
     const dossierId = 'RG9zc2llci00NzU2Mzc4';
-    await autoAcceptPsychologists.default();
+    await autoAcceptPsychologists();
 
     sinon.assert.calledWith(uploadDocumentStub, sinon.match.string, dossierId);
     sinon.assert.calledTwice(executeMutationStub);

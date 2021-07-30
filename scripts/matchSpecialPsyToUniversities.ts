@@ -1,7 +1,6 @@
 import dbUniversities from '../db/universities';
-
-const { default: dbPsychologists } = require('../db/psychologists');
-const psyToUni = require('./psyToUni');
+import dbPsychologists from '../db/psychologists';
+import psyToUni from './psyToUni';
 
 /**
  * Update a list of special psy from a excel sheet to match them with a university
@@ -43,12 +42,12 @@ const matchPsyToUni = async (dryRun): Promise<void> => {
       );
       if (!universityToAssign) {
         statsNoUniFound.push(psyToUni[psy.personalEmail]);
-        return Promise.resolve();
+        return Promise.resolve(0);
       }
 
       if (psy.assignedUniversityId === universityToAssign.id) {
         statsNoChange.push(psy.personalEmail);
-        return Promise.resolve();
+        return Promise.resolve(0);
       }
 
       const currentUniversity = universities.find((uni) => uni.id === psy.assignedUniversityId);
@@ -59,7 +58,7 @@ const matchPsyToUni = async (dryRun): Promise<void> => {
       });
 
       if (dryRun) {
-        return Promise.resolve();
+        return Promise.resolve(0);
       }
       return dbPsychologists.saveAssignedUniversity(psy.dossierNumber, universityToAssign.id);
     });

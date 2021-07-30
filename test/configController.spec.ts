@@ -1,5 +1,5 @@
 import chai from 'chai';
-import app from '../../index';
+import app from '../index';
 
 describe('configController', () => {
   it('should return basic config info', async () => chai.request(app)

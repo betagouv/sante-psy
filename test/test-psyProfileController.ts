@@ -1,6 +1,6 @@
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
-import uuidv4 from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import cookie from '../utils/cookie';
 import app from '../index';
 import clean from './helper/clean';
@@ -368,7 +368,8 @@ describe('psyProfileController', () => {
         teleconsultation: true,
         languages: 'Français, Anglais',
         personalEmail: 'perso',
-      }, 'Vous devez spécifier le téléphone du secrétariat.'); // first error is returned
+      },
+      'Vous devez spécifier un email valide. Vous devez spécifier le téléphone du secrétariat.');
     });
 
     const shouldPassUpdatePsyInputValidation = async (postData) => {

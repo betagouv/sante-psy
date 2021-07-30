@@ -1,52 +1,53 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { DossierState } from '../../types/DemarcheSimplifiee';
-import { addFrenchLanguageIfMissing, editablePsyFields, nonEditablePsyFields } from '../../services/updatePsyFields';
+import { DossierState } from '../types/DossierState';
+import * as updatePsyFields from '../services/updatePsyFields';
+import clean from './helper/clean';
 
 describe('Update psy fields', () => {
   describe('addFrenchLanguageIfMissing', () => {
     it('should return Français if input is undefined', async () => {
-      const result = addFrenchLanguageIfMissing(undefined);
+      const result = updatePsyFields.addFrenchLanguageIfMissing(undefined);
       expect(result).to.eql('Français');
     });
 
     it('should return Français if input is null', async () => {
-      const result = addFrenchLanguageIfMissing(null);
+      const result = updatePsyFields.addFrenchLanguageIfMissing(null);
       expect(result).to.eql('Français');
     });
 
     it('should return Français if input is empty', async () => {
-      const result = addFrenchLanguageIfMissing('');
+      const result = updatePsyFields.addFrenchLanguageIfMissing('');
       expect(result).to.eql('Français');
     });
 
     it('should return Français if input contains only spaces', async () => {
-      const result = addFrenchLanguageIfMissing('  ');
+      const result = updatePsyFields.addFrenchLanguageIfMissing('  ');
       expect(result).to.eql('Français');
     });
 
     it('should add Français if input does not contains it', async () => {
-      const result = addFrenchLanguageIfMissing('Anglais');
+      const result = updatePsyFields.addFrenchLanguageIfMissing('Anglais');
       expect(result).to.eql('Français, Anglais');
     });
 
     it('should not add Français if input contains it', async () => {
-      const result = addFrenchLanguageIfMissing('Français, Anglais');
+      const result = updatePsyFields.addFrenchLanguageIfMissing('Français, Anglais');
       expect(result).to.eql('Français, Anglais');
     });
 
     it('should not add Français if input contains it (lower case)', async () => {
-      const result = addFrenchLanguageIfMissing('français, anglais');
+      const result = updatePsyFields.addFrenchLanguageIfMissing('français, anglais');
       expect(result).to.eql('français, anglais');
     });
 
     it('should not add Français if input contains it (no special char)', async () => {
-      const result = addFrenchLanguageIfMissing('francais, anglais');
+      const result = updatePsyFields.addFrenchLanguageIfMissing('francais, anglais');
       expect(result).to.eql('francais, anglais');
     });
 
     it('should not add Français if input contains it (no specific order)', async () => {
-      const result = addFrenchLanguageIfMissing('Espagnol Francais Anglais');
+      const result = updatePsyFields.addFrenchLanguageIfMissing('Espagnol Francais Anglais');
       expect(result).to.eql('Espagnol Francais Anglais');
     });
   });
@@ -63,11 +64,10 @@ describe('Update psy fields', () => {
     });
 
     it('Editable psy fields should add french language', () => {
-      const psy = {
-        languages: 'random stuff',
-      };
+      const psy = clean.getOnePsy();
+      psy.languages = 'random stuff';
 
-      editablePsyFields(psy[0]);
+      updatePsyFields.editablePsyFields(psy);
       sinon.assert.calledWith(addFrenchLanguageIfMissingStub, psy.languages);
     });
 
@@ -96,13 +96,12 @@ describe('Update psy fields', () => {
         isConventionSigned: true,
         selfModified: true,
         active: true,
-        inactiveUntil: 'inactiveUntil',
-        updatedAt: null,
+        inactiveUntil: new Date(),
         createdAt: creationDate,
       };
 
-      const editablePsy = editablePsyFields(psy);
-      const nonEditablePsy = nonEditablePsyFields(psy);
+      const editablePsy = updatePsyFields.editablePsyFields(psy);
+      const nonEditablePsy = updatePsyFields.nonEditablePsyFields(psy);
 
       Object.keys(editablePsy).forEach((key) => {
         expect(editablePsy[key]).to.equal(psy[key]);

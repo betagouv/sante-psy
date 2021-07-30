@@ -1,17 +1,15 @@
-const sinon = require('sinon');
-const { expect } = require('chai');
-const { v4: uuidv4 } = require('uuid');
-const jwtDecode = require('jwt-decode');
-const { default: CustomError } = require('../../utils/CustomError');
+import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import { v4 as uuidv4 } from 'uuid';
+import jwtDecode from 'jwt-decode';
+import CustomError from '../utils/CustomError';
 
-const cookieRewire = require('../../utils/cookie');
-
-const cookie = cookieRewire.default;
+import cookie from '../utils/cookie';
 
 describe('cookie', () => {
   describe('getSessionDuration', () => {
     it('should return a duration with format X hours', () => {
-      const getSessionDuration = cookieRewire.__get__('getSessionDuration');
+      const getSessionDuration = cookie.__get__('getSessionDuration');
 
       getSessionDuration().should.equal('2 hours');
     });
@@ -20,7 +18,7 @@ describe('cookie', () => {
   describe('getJwtTokenForUser', () => {
     it('should return a json web token with only id', () => {
       const psychologist = uuidv4();
-      const token = cookie.getJwtTokenForUser(psychologist);
+      const token = cookie.getJwtTokenForUser(psychologist, 'randomXSRF');
 
       token.length.should.be.equal(200);
       const decoded = jwtDecode(token);
@@ -31,8 +29,9 @@ describe('cookie', () => {
   describe('verifyJwt', () => {
     it('should return a json web token', () => {
       const psychologist = uuidv4();
-      const token = cookie.getJwtTokenForUser(psychologist);
+      const token = cookie.getJwtTokenForUser(psychologist, 'randomXSRF');
 
+      // @ts-expect-error => fake cookie
       const result = cookie.verifyJwt({ cookies: { token } });
 
       result.psychologist.should.be.eql(psychologist);
@@ -41,9 +40,10 @@ describe('cookie', () => {
     it('should return false with wrong token', () => {
       // eslint-disable-next-line max-len
       const wrongToken = 'eyfJhbGsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QiLCJpYXQiOjE2MTQwOTUzMzMsImV4cCI6MTYxNDEwMjUzM30.baGPZ6YbvwrfwH7dxv8txWrOdVAhQBx3Eg6e8joGGhU';
+      // @ts-expect-error => fake cookie
       const result = cookie.verifyJwt({ cookies: { token: wrongToken } });
 
-      result.should.be.equal(false);
+      chai.assert.isUndefined(result);
     });
 
     it('should delete cookie on expired token', () => {
@@ -52,6 +52,7 @@ describe('cookie', () => {
       const clearStub = sinon.stub();
 
       const verify = () => cookie.verifyJwt(
+      // @ts-expect-error => fake cookie
         { cookies: { token: expiredToken } },
         { clearCookie: clearStub },
       );

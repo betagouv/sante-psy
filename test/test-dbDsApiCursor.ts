@@ -2,7 +2,9 @@ import { assert } from 'chai';
 import dbDsApiCursor from '../db/dsApiCursor';
 import clean from './helper/clean';
 
-require('dotenv').config();
+import dotEnv from 'dotenv';
+
+dotEnv.config();
 
 describe('DB Ds Api Cursor', () => {
   // Clean up all data

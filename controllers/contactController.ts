@@ -22,6 +22,7 @@ const sendValidators = [
     .withMessage('Vous devez spécifier un prénom.'),
   check('email')
     .trim().not().isEmpty()
+    .withMessage('Vous devez spécifier un email valide.')
     .customSanitizer((value, { req }) => req.sanitize(value))
     .isEmail()
     .withMessage('Vous devez spécifier un email valide.'),

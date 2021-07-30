@@ -1,5 +1,5 @@
-const { default: string } = require('../../utils/string');
-const { expect } = require('chai');
+import string from '../utils/string';
+import { expect } from 'chai';
 
 describe('String utils', () => {
   describe('Are similar', () => {

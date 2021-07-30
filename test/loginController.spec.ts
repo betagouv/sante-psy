@@ -1,22 +1,23 @@
 import sinon from 'sinon';
 import chai from 'chai';
 import uuidv4 from 'uuid';
-import app from '../../index';
+import app from '../index';
 
-import loginController from '../../controllers/loginController';
-import dbLoginToken from '../../db/loginToken';
-import dbLastConnection from '../../db/lastConnections';
-import dbPsychologists from '../../db/psychologists';
-import dbUniversities from '../../db/universities';
-import sendEmail from '../../utils/email';
-import cookie from '../../utils/cookie';
-import clean from '../helper/clean';
-import { DossierState } from '../../types/DemarcheSimplifiee';
+import loginController from '../controllers/loginController';
+import dbLoginToken from '../db/loginToken';
+import dbLastConnection from '../db/lastConnections';
+import dbPsychologists from '../db/psychologists';
+import dbUniversities from '../db/universities';
+import cookie from '../utils/cookie';
+import clean from './helper/clean';
+import { DossierState } from '../types/DossierState';
+
+const sendEmail = require('../utils/email');
 
 describe('loginController', async () => {
   describe('generateLoginUrl', () => {
     it('should create a login url to send in a email', () => {
-      const generateLoginUrl = loginController.generateLoginUrl();
+      const generateLoginUrl = loginController.__get__('generateLoginUrl');
       const output = generateLoginUrl();
 
       output.should.equal('http://localhost:8080/psychologue/login');
@@ -25,13 +26,13 @@ describe('loginController', async () => {
 
   describe('generateToken', () => {
     it('should generate a token', () => {
-      const generateToken = loginController.generateToken();
+      const generateToken = loginController.__get__('generateToken');
       const output = generateToken('localhost:8080');
       output.length.should.equal(128);
     });
 
     it('should generate a different token everytime the function is called', () => {
-      const generateToken = loginController.generateToken();
+      const generateToken = loginController.__get__('generateToken');
       const output1 = generateToken('localhost:8080');
       const output2 = generateToken('localhost:8080');
 
@@ -327,7 +328,7 @@ describe('loginController', async () => {
     it('should return empty info if user is not connected', async () => chai
         .request(app)
         .get('/api/connecteduser')
-        .then(async (res) => res.body.should.be.empty));
+        .then(async (res) => { console.log(res.body); res.body.should.be.empty; }));
 
     it('should return empty info if user does not have csrf', async () => {
       const psy = clean.insertOnePsy();
