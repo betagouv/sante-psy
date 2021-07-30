@@ -179,4 +179,6 @@ export default {
   login: asyncHelper(login),
   sendMail: asyncHelper(sendMail),
   deleteToken,
+  generateLoginUrl,
+  generateToken,
 };

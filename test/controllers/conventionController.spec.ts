@@ -1,10 +1,10 @@
-const chai = require('chai');
-const { default: app } = require('../../index');
-const { default: clean } = require('../helper/clean');
-const { default: cookie } = require('../../utils/cookie');
-const { default: dbPsychologists } = require('../../db/psychologists');
-const { default: dbUniversities } = require('../../db/universities');
-const { DossierState } = require('../../types/DossierState');
+import chai from 'chai';
+import app from '../../index';
+import clean from '../helper/clean';
+import cookie from '../../utils/cookie';
+import dbPsychologists from '../../db/psychologists';
+import dbUniversities from '../../db/universities';
+import { DossierState } from '../../types/DemarcheSimplifiee';
 
 describe('conventionController', () => {
   describe('update convention info', () => {

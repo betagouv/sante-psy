@@ -100,6 +100,8 @@ const getOnePsy = (
     languages: 'Français, Anglais, et Espagnol',
     active: !inactiveUntil,
     inactiveUntil,
+    updatedAt: null,
+    createdAt: new Date(),
   };
 };
 

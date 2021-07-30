@@ -1,5 +1,5 @@
-const chai = require('chai');
-const { default: app } = require('../../index');
+import chai from 'chai';
+import app from '../../index';
 
 describe('contactController', () => {
   describe('send', () => {

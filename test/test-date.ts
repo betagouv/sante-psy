@@ -1,5 +1,5 @@
-const { assert } = require('chai');
-const { default: date } = require('../utils/date');
+import { assert } from 'chai';
+import date from '../utils/date';
 
 describe('date', () => {
   describe('parseForm', () => {

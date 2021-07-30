@@ -1,22 +1,22 @@
-const sinon = require('sinon');
-const chai = require('chai');
-const { v4: uuidv4 } = require('uuid');
-const { default: app } = require('../../index');
+import sinon from 'sinon';
+import chai from 'chai';
+import uuidv4 from 'uuid';
+import app from '../../index';
 
-const loginController = require('../../controllers/loginController');
-const { default: dbLoginToken } = require('../../db/loginToken');
-const { default: dbLastConnection } = require('../../db/lastConnections');
-const { default: dbPsychologists } = require('../../db/psychologists');
-const { default: dbUniversities } = require('../../db/universities');
-const sendEmail = require('../../utils/email');
-const { default: cookie } = require('../../utils/cookie');
-const { default: clean } = require('../helper/clean');
-const { DossierState } = require('../../types/DemarcheSimplifiee');
+import loginController from '../../controllers/loginController';
+import dbLoginToken from '../../db/loginToken';
+import dbLastConnection from '../../db/lastConnections';
+import dbPsychologists from '../../db/psychologists';
+import dbUniversities from '../../db/universities';
+import sendEmail from '../../utils/email';
+import cookie from '../../utils/cookie';
+import clean from '../helper/clean';
+import { DossierState } from '../../types/DemarcheSimplifiee';
 
 describe('loginController', async () => {
   describe('generateLoginUrl', () => {
     it('should create a login url to send in a email', () => {
-      const generateLoginUrl = loginController.__get__('generateLoginUrl');
+      const generateLoginUrl = loginController.generateLoginUrl();
       const output = generateLoginUrl();
 
       output.should.equal('http://localhost:8080/psychologue/login');
@@ -25,13 +25,13 @@ describe('loginController', async () => {
 
   describe('generateToken', () => {
     it('should generate a token', () => {
-      const generateToken = loginController.__get__('generateToken');
+      const generateToken = loginController.generateToken();
       const output = generateToken('localhost:8080');
       output.length.should.equal(128);
     });
 
     it('should generate a different token everytime the function is called', () => {
-      const generateToken = loginController.__get__('generateToken');
+      const generateToken = loginController.generateToken();
       const output1 = generateToken('localhost:8080');
       const output2 = generateToken('localhost:8080');
 
@@ -40,7 +40,7 @@ describe('loginController', async () => {
   });
 
   describe('login page', () => {
-    const token = cookie.getJwtTokenForUser('dossierNumber');
+    const token = cookie.getJwtTokenForUser('dossierNumber', 'randomXSRFToken');
     const email = 'prenom.nom@beta.gouv.fr';
 
     describe('getLogin', () => {
@@ -321,7 +321,7 @@ describe('loginController', async () => {
     it('should return empty info when psy does not exist', async () => chai
         .request(app)
         .get('/api/connecteduser')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4())}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken')}`)
         .then(async (res) => res.body.should.be.empty));
 
     it('should return empty info if user is not connected', async () => chai
@@ -334,7 +334,7 @@ describe('loginController', async () => {
       return chai
         .request(app)
         .get('/api/connecteduser')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser((await psy).dossierNumber, 'randomXSRFToken')}`)
         .then(async (res) => res.body.should.be.empty);
     });
   });

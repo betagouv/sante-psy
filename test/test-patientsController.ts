@@ -1,4 +1,5 @@
-const chai = require('chai');
+import chai from 'chai';
+
 const { expect } = require('chai');
 const sinon = require('sinon');
 const { default: app } = require('../index');

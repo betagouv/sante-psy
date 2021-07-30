@@ -1,4 +1,5 @@
-const dbUniversities = require('../db/universities');
+import dbUniversities from '../db/universities';
+
 const { default: dbPsychologists } = require('../db/psychologists');
 const psyToUni = require('./psyToUni');
 

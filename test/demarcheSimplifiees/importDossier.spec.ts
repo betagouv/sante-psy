@@ -1,10 +1,10 @@
-require('dotenv').config();
-const testDossiers = require('./dossier.json');
-const { default: uuid } = require('../../utils/uuid');
-const { default: config } = require('../../utils/config');
-const { DossierState } = require('../../types/DossierState');
+import testDossiers from './dossier.json';
+import uuid from '../../utils/uuid';
+import config from '../../utils/config';
+import { DossierState } from '../../types/DemarcheSimplifiee';
+import importDossier from '../../services/demarchesSimplifiees/importDossier';
 
-const importDossier = require('../../services/demarchesSimplifiees/importDossier');
+require('dotenv').config();
 
 describe('Demarches Simplifiees', () => {
   describe('parsePsychologists', () => {

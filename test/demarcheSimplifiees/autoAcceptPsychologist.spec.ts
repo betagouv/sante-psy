@@ -1,8 +1,8 @@
-const sinon = require('sinon');
-const { default: config } = require('../../utils/config');
-const autoAcceptPsychologists = require('../../services/demarchesSimplifiees/autoAccept');
+import sinon from 'sinon';
+import config from '../../utils/config';
+import autoAcceptPsychologists from '../../services/demarchesSimplifiees/autoAccept';
 
-const graphql = require('../../utils/graphql');
+import graphql from '../../utils/graphql';
 
 describe('autoAcceptPsychologist', () => {
   let executeMutationStub;

@@ -1,7 +1,8 @@
-const { assert } = require('chai');
+import { assert } from 'chai';
+import dbDsApiCursor from '../db/dsApiCursor';
+import clean from './helper/clean';
+
 require('dotenv').config();
-const { default: dbDsApiCursor } = require('../db/dsApiCursor');
-const { default: clean } = require('./helper/clean');
 
 describe('DB Ds Api Cursor', () => {
   // Clean up all data

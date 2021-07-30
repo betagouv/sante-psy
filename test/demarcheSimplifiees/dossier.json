@@ -5,6 +5,9 @@
       "groupeInstructeur": {
         "label": "Normandie"
       },
+      "repo": "TypeScript",
+      "dry": false,
+      "debug": false,
       "state": "accepte",
       "champs": [
         {
