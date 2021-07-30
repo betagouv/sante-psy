@@ -3,7 +3,6 @@ import slowDown from 'express-slow-down';
 
 import configController from '../controllers/configController';
 import psyListingController from '../controllers/psyListingController';
-import universitiesController from '../controllers/universityController';
 import loginController from '../controllers/loginController';
 import statisticsController from '../controllers/statisticsController';
 
@@ -38,7 +37,6 @@ const speedLimiter = slowDown({
 });
 router.use(speedLimiter);
 
-router.get('/university', universitiesController.getAll);
 router.get('/config', configController.get);
 // The reduced route is used by our front to optimise the big chunk of data download
 router.get('/trouver-un-psychologue/reduced', psyListingController.getReducedActive);
