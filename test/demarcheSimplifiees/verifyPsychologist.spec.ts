@@ -1,7 +1,7 @@
-const sinon = require('sinon');
-const { default: graphql } = require('../../utils/graphql');
+import sinon from 'sinon';
+import graphql from '../../utils/graphql';
 
-const autoVerifyPsychologists = require('../../services/demarchesSimplifiees/autoVerify');
+import autoVerifyPsychologists from '../../services/demarchesSimplifiees/autoVerify';
 
 describe('getDiplomaErrors', () => {
   const createPsyWithDiploma = (year, id = 'Q2hhbXAtMTYzOTE2OQ==') => ({

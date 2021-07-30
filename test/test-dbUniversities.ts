@@ -1,4 +1,5 @@
-const { assert } = require('chai');
+import { assert } from 'chai';
+
 require('dotenv').config();
 const { default: dbUniversities } = require('../db/universities');
 

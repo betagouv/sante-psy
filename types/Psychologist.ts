@@ -11,7 +11,7 @@ export type EditablePsychologist = {
     teleconsultation: boolean,
     languages: string,
     personalEmail: string,
-  }
+  };
 
 export type NonEditablePsychologist = {
     firstNames: string,
@@ -30,4 +30,7 @@ export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
     selfModified?: boolean,
     active: boolean,
     inactiveUntil: string,
+    // loginEmail: string,
+    updatedAt: Date,
+    createdAt: Date,
   };

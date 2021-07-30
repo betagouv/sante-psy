@@ -1,12 +1,11 @@
-const { assert } = require('chai');
-const { expect } = require('chai');
+import { assert, expect } from 'chai';
+import dbPatients from '../db/patients';
+import date from '../utils/date';
+import knex from 'knex';
+import clean from './helper/clean';
+import { patientsTable } from '../db/tables';
+
 require('dotenv').config();
-const { default: dbPatients } = require('../db/patients');
-const { default: date } = require('../utils/date');
-const knexConfig = require('../knexfile');
-const knex = require('knex')(knexConfig.default);
-const { default: clean } = require('./helper/clean');
-const { patientsTable } = require('../db/tables');
 
 describe('DB Patients', () => {
   const firstNames = 'Harry James';
@@ -31,7 +30,7 @@ describe('DB Patients', () => {
 
   // Clean up all data
   afterEach(async () => {
-    await clean.cleanAllPatients(lastName);
+    await clean.cleanAllPatients();
   });
 
   describe('insert', () => {
@@ -67,6 +66,7 @@ describe('DB Patients', () => {
           psy.dossierNumber,
           doctorName,
           doctorAddress,
+          dateOfBirth,
         );
         const exist = await testDataPatientsExist(lastName);
         exist.should.be.equal(true);

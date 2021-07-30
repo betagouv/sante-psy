@@ -1,8 +1,9 @@
+import { assert, expect } from 'chai';
+import dbToginToken from '../db/loginToken';
+import date from '../utils/date';
+import clean from './helper/clean';
+
 require('dotenv').config();
-const { assert, expect } = require('chai');
-const { default: dbToginToken } = require('../db/loginToken');
-const { default: date } = require('../utils/date');
-const { default: clean } = require('./helper/clean');
 
 describe('DB Login token', () => {
   const token = '0Hj1xrlN6p4icK7TwC7YCr6vMLR0NXen';

@@ -1,12 +1,12 @@
-const { assert, expect, fail } = require('chai');
+import { assert, expect } from 'chai';
+
+import dbUniversities from '../db/universities';
+import dbPsychologists from '../db/psychologists';
+import dbSuspensionReasons from '../db/suspensionReasons';
+import clean from './helper/clean';
+import { DossierState } from '../types/DemarcheSimplifiee';
+
 require('dotenv').config();
-
-const { default: dbUniversities } = require('../db/universities');
-
-const { DossierState } = require('../types/DemarcheSimplifiee');
-const { default: dbPsychologists } = require('../db/psychologists');
-const { default: dbSuspensionReasons } = require('../db/suspensionReasons');
-const { default: clean } = require('./helper/clean');
 
 describe('DB Psychologists', () => {
   beforeEach(async () => {
@@ -81,7 +81,7 @@ describe('DB Psychologists', () => {
 
       // Assert that data didn't changed in SPE DB
       const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
-      updatedPsySPE.selfModified.should.be.true;
+      updatedPsySPE.selfModified.should.be.eql(true);
       updatedPsySPE.region.should.be.equal(psyDS.region);
     });
 
@@ -106,7 +106,7 @@ describe('DB Psychologists', () => {
 
       // Assert that data changed are modified in SPE DB
       const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
-      updatedPsySPE.selfModified.should.be.true;
+      updatedPsySPE.selfModified.should.eql(true);
       updatedPsySPE.firstNames.should.be.equal(newPsyDS.firstNames);
     });
   });
@@ -134,12 +134,11 @@ describe('DB Psychologists', () => {
       const constructionPsy = clean.getOnePsy('construction@psy.fr');
       constructionPsy.state = DossierState.enConstruction;
       constructionPsy.lastName = 'ConstructionPsy';
-      const inactivePsy = clean.getOneInactivePsy(new Date());
+      const inactivePsy = clean.getOneInactivePsy(`${new Date()}`);
       await dbPsychologists.upsertMany([activePsy, archivedPsy, constructionPsy, inactivePsy]);
 
       const shouldBeOne = await dbPsychologists.getAllActive();
       shouldBeOne.length.should.be.equal(1);
-      assert.isUndefined(shouldBeOne[0].loginEmail);
     });
   });
 
@@ -289,7 +288,7 @@ describe('DB Psychologists', () => {
           univUUID,
           true, // isConventionSigned
         );
-        fail('updateConventionInfo should have thrown error');
+        expect.fail('updateConventionInfo should have thrown error');
       } catch (err) {
         // pass
       }
@@ -358,7 +357,7 @@ describe('DB Psychologists', () => {
           unknownPsyId,
           univUUID,
         );
-        fail('saveAssignedUniversity should have thrown error');
+        expect.fail('saveAssignedUniversity should have thrown error');
       } catch (err) {
         // pass
       }
@@ -412,7 +411,7 @@ describe('DB Psychologists', () => {
 
   describe('activate', () => {
     it('should activate psy and remove inactiveUntil date', async () => {
-      const inactivePsy = clean.getOneInactivePsy(new Date());
+      const inactivePsy = clean.getOneInactivePsy(`${new Date()}`);
       await dbPsychologists.upsertMany([inactivePsy]);
 
       await dbPsychologists.activate(inactivePsy.dossierNumber);
@@ -459,9 +458,9 @@ describe('DB Psychologists', () => {
       yesterday.setDate(now.getDate() - 1);
       const tomorrow = new Date();
       tomorrow.setDate(now.getDate() + 1);
-      const inactivePsy1 = clean.getOneInactivePsy(yesterday);
-      const inactivePsy2 = clean.getOneInactivePsy(now);
-      const inactivePsy3 = clean.getOneInactivePsy(tomorrow);
+      const inactivePsy1 = clean.getOneInactivePsy(`${yesterday}`);
+      const inactivePsy2 = clean.getOneInactivePsy(`${now}`);
+      const inactivePsy3 = clean.getOneInactivePsy(`${tomorrow}`);
       await dbPsychologists.upsertMany([activePsy, inactivePsy1, inactivePsy2, inactivePsy3]);
 
       await dbPsychologists.reactivate();

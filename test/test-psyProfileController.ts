@@ -1,11 +1,10 @@
-const chai = require('chai');
-const { expect } = require('chai');
-const sinon = require('sinon');
-const { v4: uuidv4 } = require('uuid');
-const { default: cookie } = require('../utils/cookie');
-const { default: app } = require('../index');
-const { default: clean } = require('./helper/clean');
-const { default: dbPsychologists } = require('../db/psychologists');
+import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import uuidv4 from 'uuid';
+import cookie from '../utils/cookie';
+import app from '../index';
+import clean from './helper/clean';
+import dbPsychologists from '../db/psychologists';
 
 describe('psyProfileController', () => {
   describe('get psy profile', () => {
@@ -569,7 +568,7 @@ describe('psyProfileController', () => {
           expect(updatedPsy.phone).to.eql('01 02 03 04 05');
           expect(updatedPsy.website).to.eql('https://monwebsite.fr');
           expect(updatedPsy.description).to.eql('Consultez un psychologue gratuitement');
-          expect(updatedPsy.teleconsultation).to.be.true;
+          expect(updatedPsy.teleconsultation).to.eql(true);
           expect(updatedPsy.languages).to.eql('Français, Anglais');
           expect(updatedPsy.personalEmail).to.eql('perso@email.com');
         });
@@ -608,7 +607,7 @@ describe('psyProfileController', () => {
           expect(updatedPsy.phone).to.eql('01 02 03 04 05');
           expect(updatedPsy.website).to.eql('https://monwebsite.fr');
           expect(updatedPsy.description).to.eql('Consultez un psychologue gratuitement');
-          expect(updatedPsy.teleconsultation).to.be.true;
+          expect(updatedPsy.teleconsultation).to.eql(true);
           expect(updatedPsy.languages).to.eql('Français, Anglais');
           expect(updatedPsy.personalEmail).to.eql('perso@email.com');
         });

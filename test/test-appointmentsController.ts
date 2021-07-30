@@ -1,13 +1,12 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const { expect } = require('chai');
-const { default: app } = require('../index');
-const { default: clean } = require('./helper/clean');
-const { default: dbAppointments } = require('../db/appointments');
-const { default: dbPatients } = require('../db/patients');
-const { default: dbPsychologists } = require('../db/psychologists');
-const { default: cookie } = require('../utils/cookie');
-const { default: date } = require('../utils/date');
+import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import app from '../index';
+import clean from './helper/clean';
+import dbAppointments from '../db/appointments';
+import dbPatients from '../db/patients';
+import dbPsychologists from '../db/psychologists';
+import cookie from '../utils/cookie';
+import date from '../utils/date';
 
 describe('appointmentsController', () => {
   const dateOfBirth = date.parseForm('20/01/1980');

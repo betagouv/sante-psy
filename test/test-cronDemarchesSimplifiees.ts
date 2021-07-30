@@ -1,12 +1,13 @@
+import { expect } from 'chai';
+import sinon from 'sinon';
+import config from '../utils/config';
+import dbPsychologists from '../db/psychologists';
+import dbUniversities from '../db/universities';
+import dbDsApiCursor from '../db/dsApiCursor';
+import importDossier from '../services/demarchesSimplifiees/importDossier';
+import sendEmail from '../utils/email';
+
 require('dotenv').config();
-const { expect } = require('chai');
-const sinon = require('sinon');
-const { default: config } = require('../utils/config');
-const { default: dbPsychologists } = require('../db/psychologists');
-const { default: dbUniversities } = require('../db/universities');
-const { default: dbDsApiCursor } = require('../db/dsApiCursor');
-const { default: importDossier } = require('../services/demarchesSimplifiees/importDossier');
-const sendEmail = require('../utils/email');
 
 const {
   default: {
@@ -167,10 +168,12 @@ describe('DS integration tests', () => {
   };
 
   it('should import all data from DS', async () => {
+    const paulUniversity = await dbUniversities.insertByName('PaulU');
+    const xavierUniversity = await dbUniversities.insertByName('xavierU');
     await importEveryDataFromDSToPG();
 
-    await verifyPsy(paulId, paul);
-    await verifyPsy(xavierId, xavier);
+    await verifyPsy(paulId, paul, paulUniversity);
+    await verifyPsy(xavierId, xavier, xavierUniversity);
   });
 
   it('should update psy info when existing', async () => {

@@ -1,4 +1,4 @@
-const { default: uuid } = require('../utils/uuid');
+import uuid from '../utils/uuid';
 
 describe('uuid', () => {
   describe('generateFromString', () => {
