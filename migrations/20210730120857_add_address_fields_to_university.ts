@@ -4,8 +4,8 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.table('universities', (table) => {
     table.string('siret');
     table.text('address');
-    table.text('postal_code');
-    table.text('city');
+    table.string('postal_code');
+    table.string('city');
   });
 }
 

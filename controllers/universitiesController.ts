@@ -20,7 +20,6 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const university = await dbUniversities.getById(req.params.universityId);
-  console.debug('university', university);
 
   if (!university) {
     throw new CustomError("L'université n'existe pas.", 500);
