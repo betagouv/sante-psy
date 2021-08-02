@@ -17,24 +17,18 @@ const sendEmail = require('../utils/email');
 describe('loginController', async () => {
   describe('generateLoginUrl', () => {
     it('should create a login url to send in a email', () => {
-      const generateLoginUrl = loginController.__get__('generateLoginUrl');
-      const output = generateLoginUrl();
-
-      output.should.equal('http://localhost:8080/psychologue/login');
+      loginController.generateLoginUrl().should.equal('http://localhost:8080/psychologue/login');
     });
   });
 
   describe('generateToken', () => {
     it('should generate a token', () => {
-      const generateToken = loginController.__get__('generateToken');
-      const output = generateToken('localhost:8080');
-      output.length.should.equal(128);
+      loginController.generateToken().length.should.equal(128);
     });
 
     it('should generate a different token everytime the function is called', () => {
-      const generateToken = loginController.__get__('generateToken');
-      const output1 = generateToken('localhost:8080');
-      const output2 = generateToken('localhost:8080');
+      const output1 = loginController.generateToken();
+      const output2 = loginController.generateToken();
 
       output1.length.should.not.equal(output2);
     });

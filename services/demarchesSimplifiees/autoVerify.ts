@@ -1,78 +1,12 @@
-import date from '../../utils/date';
 import { DossierState } from '../../types/DossierState';
 import { getAdeliInfo } from '../../utils/adeliAPI';
-import string from '../../utils/string';
 import {
   getChampsIdFromField,
   getAnnotationsIdFromField,
 } from '../champsAndAnnotations';
 import importDossier from './importDossier';
-import graphql from '../../utils/graphql';
-import { DSPsychologist } from '../../types/Psychologist';
-import { AdeliInfo } from '../../types/AdeliInfo';
-
-const getDiplomaErrors = (psychologist: DSPsychologist): string[] => {
-  const errors = [];
-  const diplomaYearId = getChampsIdFromField('diplomaYear');
-  const diplomaYear = psychologist.champs.find((champ) => champ.id === diplomaYearId);
-  if (!diplomaYear) {
-    errors.push('pas d\'année d\'obtention du diplôme');
-  } else {
-    const year = parseInt(diplomaYear.stringValue);
-    const today = new Date();
-    if (!year || year >= today.getFullYear() - 3) {
-      errors.push('le diplôme est trop récent');
-    }
-  }
-
-  return errors;
-};
-
-const getAdeliErrors = (psychologist: DSPsychologist, adeliInfo: {[key: string]: AdeliInfo}): string[] => {
-  const errors = [];
-  const adeliChampId = getChampsIdFromField('adeli');
-  const adeliNumber = psychologist.champs.find((champ) => champ.id === adeliChampId);
-  const info = adeliNumber && adeliInfo[adeliNumber.stringValue];
-  if (!info) {
-    errors.push('pas de correspondance pour ce numéro Adeli');
-  } else {
-    if (info['Code profession'] !== 93) {
-      errors.push(`la personne n'est pas un psychologue mais un ${info['Libellé profession']}`);
-    }
-
-    if (!string.areSimilar(info["Prénom d'exercice"], psychologist.demandeur.prenom)) {
-      errors.push(`les prénoms ne matchent pas (${info["Prénom d'exercice"]} vs ${psychologist.demandeur.prenom})`);
-    }
-
-    if (!string.areSimilar(info["Nom d'exercice"], psychologist.demandeur.nom)) {
-      errors.push(`le nom ne matche pas (${info["Nom d'exercice"]} vs ${psychologist.demandeur.nom})`);
-    }
-  }
-  return errors;
-};
-
-const verifyPsychologist = async (psychologist: DSPsychologist, adeliInfo:{[key: string]: AdeliInfo})
-  : Promise<boolean> => {
-  const today = date.toFormatDDMMYYYY(new Date());
-
-  const errors = []
-  .concat(getDiplomaErrors(psychologist))
-  .concat(getAdeliErrors(psychologist, adeliInfo));
-
-  if (errors.length === 0) {
-    const verificationMessage = graphql.addVerificationMessage(
-      psychologist.id, `Dossier vérifié automatiquement le ${today}`,
-    );
-    const verifyDossier = graphql.verifyDossier(psychologist.id);
-    const putDossierInInstruction = graphql.putDossierInInstruction(psychologist.id);
-    await Promise.all([verificationMessage, verifyDossier, putDossierInInstruction]);
-    return true;
-  }
-
-  await graphql.addVerificationMessage(psychologist.id,
-    `Le dossier n'a pas passé la vérification automatique le ${today} car ${errors}`);
-  return false;
-};
+import verifyPsychologist from './verifyPsychologist';
+import graphql from './buildRequest';
 
 const autoVerifyPsychologists = async () : Promise<void> => {
   try {
