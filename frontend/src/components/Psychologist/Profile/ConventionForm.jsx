@@ -59,8 +59,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
               ? universities.map(university => ({ value: university.id, label: university.name }))
               : []}
           />
-          {universities.length >= 1
-          && (convention.universityId === laSorbonneParisNord.id || convention.universityId === laSorbonne.id) && (
+          {((laSorbonneParisNord && convention.universityId === laSorbonneParisNord.id) || (laSorbonne && convention.universityId === laSorbonne.id)) && (
             <Alert
               description="Pensez à vérifier que l'université sélectionnée est exacte.
             Dans le cas de La Sorbonne (75) et Sorbonne Paris Nord (93)."
