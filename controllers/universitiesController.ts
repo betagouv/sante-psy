@@ -7,7 +7,8 @@ import CustomError from '../utils/CustomError';
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const universities = await dbUniversities.getAllOrderByName();
-  res.json(universities);
+  const minimalUniversities = universities.map((uni) => ({ id: uni.id, name: uni.name }));
+  res.json(minimalUniversities);
 };
 
 const getOneValidators = [

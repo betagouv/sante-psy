@@ -46,8 +46,7 @@ const getById = async (universityId: string) : Promise<any> => {
 
 const getAll = async (): Promise<any[]> => {
   try {
-    return db.select('id', 'name', 'emailSSU', 'emailUniversity')
-        .from(universitiesTable);
+    return db(universitiesTable);
   } catch (err) {
     console.error('Impossible de récupérer les universités', err);
     throw new Error('Impossible de récupérer les universités');
@@ -56,8 +55,7 @@ const getAll = async (): Promise<any[]> => {
 
 const getAllOrderByName = async (): Promise<any[]> => {
   try {
-    return db.select('id', 'name')
-        .from(universitiesTable)
+    return db(universitiesTable)
         .orderBy('name');
   } catch (err) {
     console.error('Impossible de récupérer les universités', err);
