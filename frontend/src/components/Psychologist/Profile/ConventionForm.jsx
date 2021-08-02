@@ -35,8 +35,8 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
       });
   };
 
-  const laSorbonne = 'b394d7e8-a968-53f7-9016-e37d070080b0';
-  const laSorbonneParisNord = '47ec8346-6019-588e-af40-2c437361ecac';
+  const laSorbonne = universities.find(university => university.name === 'La Sorbonne');
+  const laSorbonneParisNord = universities.find(university => university.name === 'Sorbonne Paris Nord');
 
   let defaultValueConventionSigned;
   if (convention && convention.isConventionSigned !== '' && convention.isConventionSigned !== undefined) {
@@ -59,7 +59,8 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
               ? universities.map(university => ({ value: university.id, label: university.name }))
               : []}
           />
-          {(convention.universityId === laSorbonneParisNord || convention.universityId === laSorbonne) && (
+          {universities.length >= 1
+          && (convention.universityId === laSorbonneParisNord.id || convention.universityId === laSorbonne.id) && (
             <Alert
               description="Pensez à vérifier que l'université sélectionnée est exacte.
             Dans le cas de La Sorbonne (75) et Sorbonne Paris Nord (93)."
