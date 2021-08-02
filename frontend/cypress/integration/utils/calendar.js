@@ -10,7 +10,8 @@ const selectNextCalendarDate = () => {
   }
 
   cy.get(`.react-datepicker__day--0${dayToSelect < 10 ? `0${dayToSelect}` : dayToSelect}`)
-    .last()
+    .not('.react-datepicker__day--disabled')
+    .first()
     .click();
 
   return tomorrow;
