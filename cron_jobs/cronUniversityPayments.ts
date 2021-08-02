@@ -18,13 +18,13 @@ const sendMailToUniversities = async (): Promise<void> => {
       return;
     }
 
-    const htmlFormated = await ejs.renderFile('./views/emails/summaryUniversity.ejs');
+    const htmlFormatted = await ejs.renderFile('./views/emails/summaryUniversity.ejs');
     const emailsTo = dbUniversities.getEmailsTo(university);
     if (emailsTo) {
       await sendEmail(
         emailsTo,
         `Résumé des séances ${config.appName}`,
-        htmlFormated,
+        htmlFormatted,
         '', // cc mail
         config.contactEmail, // bcc mail
       );
@@ -35,8 +35,7 @@ const sendMailToUniversities = async (): Promise<void> => {
 
 const sendMailToMESRI = async (): Promise<void> => {
   const appointments = await dbAppointments.getLastWeekByUniversity();
-  console.log(appointments);
-  const htmlFormated = await ejs.renderFile('./views/emails/summaryMESRI.ejs', {
+  const htmlFormatted = await ejs.renderFile('./views/emails/summaryMESRI.ejs', {
     appointments,
     total: appointments.reduce((acc, appointment) => acc + parseInt(appointment.count), 0),
   });
@@ -44,7 +43,7 @@ const sendMailToMESRI = async (): Promise<void> => {
   await sendEmail(
     emailsTo,
     `Résumé des séances ${config.appName}`,
-    htmlFormated,
+    htmlFormatted,
     '',
     config.contactEmail,
   );

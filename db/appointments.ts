@@ -10,12 +10,12 @@ const getAll = async (psychologistId: string): Promise<AppointmentWithPatient[]>
     const appointmentArray = await db.from(patientsTable)
     .innerJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
     .where(`${appointmentsTable}.psychologistId`, psychologistId)
-    .whereNot(`${appointmentsTable}.deleted`, true)
+    .where(`${appointmentsTable}.deleted`, false)
     .orderBy('appointmentDate', 'desc');
     return appointmentArray;
   } catch (err) {
-    console.error('Impossible de récupérer les appointments', err);
-    throw new Error('Impossible de récupérer les appointments');
+    console.error('Impossible de récupérer les rendez-vous', err);
+    throw new Error('Impossible de récupérer les rendez-vous');
   }
 };
 
@@ -34,14 +34,15 @@ const getLastWeekByUniversity = async (): Promise<{name: string, count: string}[
     .innerJoin(universitiesTable, `${psychologistsTable}.assignedUniversityId`, `${universitiesTable}.id`)
     .where(`${appointmentsTable}.appointmentDate`, '>=', lastWeek.toISOString())
     .where(`${appointmentsTable}.appointmentDate`, '<', now.toISOString())
+    .where(`${appointmentsTable}.deleted`, false)
     .count('*')
     .groupBy(`${universitiesTable}.name`)
     .orderBy(`${universitiesTable}.name`);
 
     return appointments;
   } catch (err) {
-    console.error('Impossible de récupérer les appointments', err);
-    throw new Error('Impossible de récupérer les appointments');
+    console.error('Impossible de récupérer les rendez-vous', err);
+    throw new Error('Impossible de récupérer les rendez-vous');
   }
 };
 
@@ -54,8 +55,8 @@ const insert = async (appointmentDate: Date, patientId: string, psychologistId: 
     }).returning('*');
     return insertedArray[0];
   } catch (err) {
-    console.error('Erreur de sauvegarde du appointments', err);
-    throw new Error('Erreur de sauvegarde du appointments');
+    console.error('Erreur de sauvegarde du rendez-vous', err);
+    throw new Error('Erreur de sauvegarde du rendez-vous');
   }
 };
 
@@ -77,8 +78,8 @@ const deleteOne = async (appointmentId: string, psychologistId: string): Promise
     console.log('deleted', deletedAppointments);
     return deletedAppointments;
   } catch (err) {
-    console.error('Erreur de suppression du appointments', err);
-    throw new Error('Erreur de suppression du appointments');
+    console.error('Erreur de suppression du rendez-vous', err);
+    throw new Error('Erreur de suppression du rendez-vous');
   }
 };
 

@@ -141,6 +141,8 @@ describe('DB Appointments', () => {
       await dbAppointments.insert(now, patient1.id, psy1.dossierNumber);
       await dbAppointments.insert(now, patient2.id, psy2.dossierNumber);
 
+      const toDelete = await dbAppointments.insert(now, patient2.id, psy2.dossierNumber);
+
       // Out of scope
       now = new Date();
       now.setHours(18, 1, 0, 0);
@@ -151,6 +153,8 @@ describe('DB Appointments', () => {
       now.setHours(17, 59, 0, 0);
       await dbAppointments.insert(now, patient1.id, psy1.dossierNumber);
       await dbAppointments.insert(now, patient2.id, psy2.dossierNumber);
+
+      await dbAppointments.delete(toDelete.id, psy2.dossierNumber);
 
       const appointments = await dbAppointments.getLastWeekByUniversity();
 
