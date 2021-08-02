@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, RadioGroup, Radio, Select } from '@dataesr/react-dsfr';
+import { Button, RadioGroup, Radio, Select, Alert } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { useStore } from 'stores/';
@@ -35,6 +35,9 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
       });
   };
 
+  const laSorbonne = 'b394d7e8-a968-53f7-9016-e37d070080b0';
+  const laSorbonneParisNord = '47ec8346-6019-588e-af40-2c437361ecac';
+
   let defaultValueConventionSigned;
   if (convention && convention.isConventionSigned !== '' && convention.isConventionSigned !== undefined) {
     defaultValueConventionSigned = convention.isConventionSigned ? 'true' : 'false';
@@ -56,6 +59,14 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
               ? universities.map(university => ({ value: university.id, label: university.name }))
               : []}
           />
+          {(convention.universityId === laSorbonneParisNord || convention.universityId === laSorbonne) && (
+            <Alert
+              description="Pensez à vérifier que l'université sélectionnée est exacte.
+            Dans le cas de La Sorbonne (75) et Sorbonne Paris Nord (93)."
+              closable
+            />
+          )}
+
           <RadioGroup
             name="convention"
             legend="Avez-vous déjà signé la convention ?"
