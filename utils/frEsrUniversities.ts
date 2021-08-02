@@ -1,5 +1,6 @@
 // eslint-disable-next-line max-len
 // Source: https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-principaux-etablissements-enseignement-superieur/
+// 30/07/2021
 
 const frEsrUniversities = [
   {
