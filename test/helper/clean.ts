@@ -1,5 +1,5 @@
 import faker from 'faker';
-import { Psychologist } from '../../types/Psychologist';
+import { DSPsychologist, Psychologist } from '../../types/Psychologist';
 import { Patient } from '../../types/Patient';
 import { Appointment } from '../../types/Appointment';
 import uuid from '../../utils/uuid';
@@ -111,6 +111,34 @@ const getOneInactivePsy = (inactiveUntil?: Date): Psychologist => getOnePsy(
   inactiveUntil,
 );
 
+const getOnePsyDS = (
+  champValue = faker.datatype.string(),
+  champId = faker.datatype.string(),
+  firstName = faker.name.firstName(),
+  lastName = faker.name.lastName(),
+) : DSPsychologist => ({
+  id: faker.datatype.string(),
+  state: DossierState.accepte,
+  archived: false,
+  usager: {
+    email: faker.internet.exampleEmail(),
+  },
+  number: faker.datatype.number(),
+  groupeInstructeur: {
+    label: faker.lorem.word(),
+  },
+  messages: [],
+  annotations: [],
+  champs: [{
+    id: champId,
+    stringValue: champValue,
+  }],
+  demandeur: {
+    nom: lastName,
+    prenom: firstName,
+  },
+});
+
 const getOnePatient = (
   index: number,
   psychologistId: string,
@@ -198,6 +226,7 @@ export default {
   getOnePsy,
   insertOnePsy,
   getOneInactivePsy,
+  getOnePsyDS,
   cleanDataCursor,
   cleanDataToken,
   cleanAllPatients,

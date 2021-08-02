@@ -9,9 +9,7 @@ import cookie from '../utils/cookie';
 describe('cookie', () => {
   describe('getSessionDuration', () => {
     it('should return a duration with format X hours', () => {
-      const getSessionDuration = cookie.__get__('getSessionDuration');
-
-      getSessionDuration().should.equal('2 hours');
+      cookie.getSessionDuration().should.equal('2 hours');
     });
   });
 

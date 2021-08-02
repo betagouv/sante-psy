@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import mime from 'mime-types';
 import axios from 'axios';
-import graphql from '../../utils/graphql';
+import graphql from './buildRequest';
 import { FileInfo } from '../../types/DemarcheSimplifiee';
 
 const md5 = (value: Buffer): string => crypto.createHash('md5').update(value).digest('base64');

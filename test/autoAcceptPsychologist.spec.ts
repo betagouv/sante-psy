@@ -1,52 +1,45 @@
 import sinon from 'sinon';
 import config from '../utils/config';
 import autoAcceptPsychologists from '../services/demarchesSimplifiees/autoAccept';
+import graphql from '../services/demarchesSimplifiees/buildRequest';
 
-import graphql from '../utils/graphql';
+const uploadDocument = require('../services/demarchesSimplifiees/uploadDocument');
 
 describe('autoAcceptPsychologist', () => {
-  let executeMutationStub;
   let uploadDocumentStub;
-  let unsets = [];
+  let sendMessageWithAttachmentStub;
+  let acceptPsychologistStub;
+
+  const FILE_ID = 'un super id';
 
   beforeEach(() => {
-    unsets = [];
-    executeMutationStub = sinon.stub();
-    uploadDocumentStub = sinon.stub();
-    uploadDocumentStub.returns('un super id');
-    unsets.push(graphql.__set__('executeMutation', executeMutationStub));
-    autoAcceptPsychologists.__Rewire__('graphql_1', graphql);
-    autoAcceptPsychologists.__Rewire__('uploadDocument_1', { default: uploadDocumentStub });
+    uploadDocumentStub = sinon.stub(uploadDocument, 'default').returns(FILE_ID);
+    sendMessageWithAttachmentStub = sinon.stub(graphql, 'sendMessageWithAttachment');
+    acceptPsychologistStub = sinon.stub(graphql, 'acceptPsychologist');
   });
 
   afterEach((done) => {
-    autoAcceptPsychologists.__ResetDependency__('graphql_1');
-    autoAcceptPsychologists.__ResetDependency__('uploadDocument_1');
-    unsets.forEach((unset) => unset());
+    uploadDocumentStub.restore();
+    sendMessageWithAttachmentStub.restore();
+    acceptPsychologistStub.restore();
     done();
   });
 
   it('Should accept 1 dossier on DS', async () => {
     const dossierId = 'RG9zc2llci00NzU2Mzc4';
+
     await autoAcceptPsychologists();
 
-    sinon.assert.calledWith(uploadDocumentStub, sinon.match.string, dossierId);
-    sinon.assert.calledTwice(executeMutationStub);
-    sinon.assert.calledWith(executeMutationStub.getCall(1),
-      sinon.match((query) => query.includes('mutation dossierAccepter')),
-      sinon.match({
-        input: {
-          dossierId,
-          instructeurId: config.demarchesSimplifieesInstructor,
-        },
-      }));
-    sinon.assert.calledWith(executeMutationStub.getCall(0),
-      sinon.match((query) => query.includes('mutation dossierEnvoyerMessage')),
-      sinon.match({
-        dossierId,
-        instructeurId: config.demarchesSimplifieesInstructor,
-        body: config.demarchesSimplifieesAutoAcceptMessage,
-        attachment: 'un super id',
-      }));
+    sinon.assert.calledWith(uploadDocumentStub,
+      sinon.match.string,
+      dossierId);
+
+    sinon.assert.calledWith(sendMessageWithAttachmentStub,
+      config.demarchesSimplifieesAutoAcceptMessage,
+      FILE_ID,
+      dossierId);
+
+    sinon.assert.calledWith(acceptPsychologistStub,
+      dossierId);
   });
 });

@@ -1,6 +1,7 @@
 import dotEnv from 'dotenv';
 import { expect } from 'chai';
 import sinon from 'sinon';
+import { Psychologist } from '../types/Psychologist';
 import config from '../utils/config';
 import dbPsychologists from '../db/psychologists';
 import dbUniversities from '../db/universities';
@@ -97,7 +98,8 @@ describe('checkForMultipleAcceptedDossiers', () => {
 
 describe('DS integration tests', () => {
   const paulId = '036e3a85-24bf-5915-9db0-a189bec8e7f6';
-  const paul = {
+  const paul : Psychologist = {
+    dossierNumber: paulId,
     adeli: '1234567890',
     firstNames: 'Paul',
     lastName: 'Burgun',
@@ -110,16 +112,22 @@ describe('DS integration tests', () => {
     teleconsultation: false,
     description: 'Test',
     languages: 'Français',
-    training: ['Connaissance et pratique des outils diagnostic psychologique'],
+    training: 'Connaissance et pratique des outils diagnostic psychologique',
     diploma: 'Psychologue',
     archived: false,
     state: DossierState.accepte,
     personalEmail: 'paul.burgun@beta.gouv.fr',
     isConventionSigned: null,
     selfModified: false,
+    assignedUniversityId: null,
+    active: true,
+    inactiveUntil: null,
+    updatedAt: null,
+    createdAt: new Date(),
   };
   const xavierId = '03ce077a-84c3-5035-9b27-f31a78a19b3a';
-  const xavier = {
+  const xavier : Psychologist = {
+    dossierNumber: xavierId,
     adeli: '123456789',
     firstNames: 'Xavier',
     lastName: 'Dsdr',
@@ -132,13 +140,18 @@ describe('DS integration tests', () => {
     teleconsultation: false,
     description: '',
     languages: 'Français',
-    training: ['Connaissance et pratique des outils diagnostic psychologique'],
+    training: 'Connaissance et pratique des outils diagnostic psychologique',
     diploma: 'T',
     archived: false,
     state: DossierState.accepte,
     personalEmail: 'xavier.desoindre@beta.gouv.fr',
     isConventionSigned: null,
     selfModified: false,
+    assignedUniversityId: null,
+    active: true,
+    inactiveUntil: null,
+    updatedAt: null,
+    createdAt: new Date(),
   };
 
   beforeEach(async () => {
