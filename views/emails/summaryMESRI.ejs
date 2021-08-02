@@ -1,0 +1,58 @@
+<p>Madame, Monsieur,</p>
+
+<p>
+  Voici le récapitulatif des séances réalisées et déclarées, par université, cette semaine.
+</p>
+
+<table style="border-spacing:0;border-color:grey;">
+  <thead style="display:table-header-group;vertical-align:middle;">
+    <tr>
+      <th style="font-weight:700;font-size:0.875rem;padding:1rem;border-bottom:.125rem solid #6a6a6a;background-color:#f9f8f6;color:#383838;">
+        Université
+      </th>
+      <th style="font-weight:700;font-size:0.875rem;padding:1rem;border-bottom:.125rem solid #6a6a6a;background-color:#f9f8f6;color:#383838;">
+        Séances réalisées et déclarées
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <%appointments.map((appointment, index) => {%>
+      <% if (index % 2 === 0) {%>
+        <tr style="background-color:#fff">
+      <%} else {%>
+        <tr style="background-color:#f9f8f6">
+      <%}%>
+        <td style="padding:1rem">
+          <%=appointment.name%>
+        </td>
+        <td style="padding:1rem">
+          <%=appointment.count%>
+        </td>
+      </tr>
+    <%})%>
+    <% if (appointments.length % 2 === 0) {%>
+      <tr style="background-color:#fff;font-weight:700;">
+    <%} else {%>
+      <tr style="background-color:#f9f8f6;font-weight:700;">
+    <%}%>
+      <td style="padding:1rem">
+        Nombre total de séances réalisées cette semaine
+      </td>
+      <td style="padding:1rem">
+        <%=total%>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  Pour connaître les données en temps réel, pensez à consulter votre tableau de bord metabase.
+</p>
+
+<p style="margin: 32px 0">
+  <a href="https://santepsy-metabase.osc-secnum-fr1.scalingo.io" style="background: #006be6;padding: 16px;border: none;border-radius: 3px;color: white;min-width: 280px;box-shadow: 1px 1px 2px 0px #333;cursor: pointer;">
+    Accéder au recapitulatif en temps réel
+  </a>
+</p>
+
+<p>L'équipe Santé Psy Étudiant</p>

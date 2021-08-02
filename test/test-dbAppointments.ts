@@ -116,4 +116,48 @@ describe('DB Appointments', () => {
       assert.equal(output[2].psychologistId, psy.dossierNumber);
     });
   });
+
+  describe('getLastWeekByUniversity', () => {
+    it('should return weekly appointments grouped by universities', async () => {
+      const psy1 = await clean.insertOnePsy('firstPsy');
+      const patient1 = await clean.insertOnePatient(0, psy1.dossierNumber);
+
+      const psy2 = await clean.insertOnePsy('secondPsy');
+      const patient2 = await clean.insertOnePatient(0, psy2.dossierNumber);
+
+      // In scope
+      let now = new Date();
+      now.setHours(17, 59, 0, 0);
+      await dbAppointments.insert(now, patient1.id, psy1.dossierNumber);
+      await dbAppointments.insert(now, patient2.id, psy2.dossierNumber);
+
+      now.setDate(now.getDate() - 2);
+      await dbAppointments.insert(now, patient1.id, psy1.dossierNumber);
+      await dbAppointments.insert(now, patient1.id, psy1.dossierNumber);
+      await dbAppointments.insert(now, patient2.id, psy2.dossierNumber);
+
+      now.setDate(now.getDate() - 5);
+      now.setHours(18, 1, 0, 0);
+      await dbAppointments.insert(now, patient1.id, psy1.dossierNumber);
+      await dbAppointments.insert(now, patient2.id, psy2.dossierNumber);
+
+      // Out of scope
+      now = new Date();
+      now.setHours(18, 1, 0, 0);
+      await dbAppointments.insert(now, patient1.id, psy1.dossierNumber);
+      await dbAppointments.insert(now, patient2.id, psy2.dossierNumber);
+
+      now.setDate(now.getDate() - 7);
+      now.setHours(17, 59, 0, 0);
+      await dbAppointments.insert(now, patient1.id, psy1.dossierNumber);
+      await dbAppointments.insert(now, patient2.id, psy2.dossierNumber);
+
+      const appointments = await dbAppointments.getLastWeekByUniversity();
+
+      appointments.length.should.be.equal(2);
+      // Because of random order we cannot know the order between 4 and 3 :/
+      appointments.find((x) => x.count === '4').count.should.equal('4');
+      appointments.find((x) => x.count === '3').count.should.equal('3');
+    });
+  });
 });

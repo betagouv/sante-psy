@@ -19,8 +19,16 @@ const jobs = [
     onTick: cronUniversityPayments.sendSummaryToUniversities,
     start: true,
     timeZone: 'Europe/Paris',
-    isActive: config.featureSendSummary,
-    name: 'Send monthly appoitment summaries to universities',
+    isActive: config.featureSendSummaryToUniversities,
+    name: 'Send monthly appointment summaries to universities',
+  },
+  {
+    cronTime: '0 18 * * 5', // every friday at 6pm
+    onTick: cronUniversityPayments.sendSummaryToMESRI,
+    start: true,
+    timeZone: 'Europe/Paris',
+    isActive: config.featureSendSummaryToMESRI,
+    name: 'Send weekly appointment summaries to MESRI',
   },
   {
     cronTime: '*/5 * * * *', // every 5 minutes

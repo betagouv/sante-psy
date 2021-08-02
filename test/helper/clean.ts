@@ -5,6 +5,7 @@ import { Appointment } from '../../types/Appointment';
 import uuid from '../../utils/uuid';
 import dbPsychologists from '../../db/psychologists';
 import dbUniversities from '../../db/universities';
+import dbPatients from '../../db/patients';
 import {
   appointmentsTable,
   patientsTable,
@@ -136,6 +137,27 @@ const getOnePatient = (
   };
 };
 
+const insertOnePatient = async (
+  index: number,
+  psychologistId: string,
+  doctorName = undefined,
+  useDateOfBirth = true,
+): Promise<Patient> => {
+  const patient = getOnePatient(index, psychologistId, doctorName, useDateOfBirth);
+  return dbPatients.insert(
+    patient.firstNames,
+    patient.lastName,
+    patient.INE,
+    patient.institutionName,
+    patient.isStudentStatusVerified,
+    patient.hasPrescription,
+    psychologistId,
+    patient.doctorName,
+    patient.doctorAddress,
+    patient.dateOfBirth,
+  );
+};
+
 const getOneAppointment = (
   patientId: string, psychologistId: string, month = 3, day = 10, deleted = false,
 ): Appointment => {
@@ -197,6 +219,7 @@ export default {
   getOnePatient,
   getOnePsy,
   insertOnePsy,
+  insertOnePatient,
   getOneInactivePsy,
   cleanDataCursor,
   cleanDataToken,

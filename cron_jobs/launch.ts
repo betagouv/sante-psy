@@ -14,7 +14,8 @@ if (process.argv.length < 3) {
 }
 
 const cronJobs = {
-  sendSummaryMail: cronUniversityPayments.sendSummaryToUniversities,
+  sendSummaryToMESRI: cronUniversityPayments.sendSummaryToMESRI,
+  sendSummaryToUniversities: cronUniversityPayments.sendSummaryToUniversities,
   importLatestDataFromDS: cronDemarchesSimplifiees.importLatestDataFromDSToPG,
   importEveryDataFromDS: cronDemarchesSimplifiees.importEveryDataFromDSToPG,
   checkForMultipleAcceptedDossiers: cronDemarchesSimplifiees.checkForMultipleAcceptedDossiers,

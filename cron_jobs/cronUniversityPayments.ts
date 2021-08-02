@@ -5,6 +5,7 @@ import logs from '../utils/logs';
 import config from '../utils/config';
 import sendEmail from '../utils/email';
 import dbUniversities from '../db/universities';
+import dbAppointments from '../db/appointments';
 
 dotenv.config();
 
@@ -32,6 +33,24 @@ const sendMailToUniversities = async (): Promise<void> => {
   });
 };
 
+const sendMailToMESRI = async (): Promise<void> => {
+  const appointments = await dbAppointments.getLastWeekByUniversity();
+  console.log(appointments);
+  const htmlFormated = await ejs.renderFile('./views/emails/summaryMESRI.ejs', {
+    appointments,
+    total: appointments.reduce((acc, appointment) => acc + parseInt(appointment.count), 0),
+  });
+  const emailsTo = config.emailsMESRI;
+  await sendEmail(
+    emailsTo,
+    `Résumé des séances ${config.appName}`,
+    htmlFormated,
+    '',
+    config.contactEmail,
+  );
+  console.log('Summary sent to MESRI');
+};
+
 const sendSummaryToUniversities = async (): Promise<boolean> => {
   console.log('Starting sendSummaryToUniversities...');
 
@@ -39,7 +58,20 @@ const sendSummaryToUniversities = async (): Promise<boolean> => {
     sendMailToUniversities();
     console.log('sendSummaryToUniversities done');
   } catch (err) {
-    console.error('ERROR: Could not send psychologists informations to universities.', err);
+    console.error('ERROR: Could not send appointments informations to universities.', err);
+  }
+
+  return true;
+};
+
+const sendSummaryToMESRI = async (): Promise<boolean> => {
+  console.log('Starting sendSummaryToMESRI...');
+
+  try {
+    await sendMailToMESRI();
+    console.log('sendSummaryToMESRI done');
+  } catch (err) {
+    console.error('ERROR: Could not send appointments informations to MESRI.', err);
   }
 
   return true;
@@ -47,4 +79,5 @@ const sendSummaryToUniversities = async (): Promise<boolean> => {
 
 export default {
   sendSummaryToUniversities,
+  sendSummaryToMESRI,
 };
