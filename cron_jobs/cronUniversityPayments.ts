@@ -11,10 +11,10 @@ dotenv.config();
 const sendMailToUniversities = async () => {
   const allUniversities = await dbUniversities.getAll();
 
-  allUniversities.forEach(async (university) => {
+  const sendMails = allUniversities.map(async (university) => {
     if (!university.emailSSU && !university.emailUniversity) {
       console.log(`Summary could not be send. ${university.name} doesn't have email.`);
-      return;
+      return Promise.resolve();
     }
 
     const htmlFormated = await ejs.renderFile('./views/emails/summaryUniversity.ejs');
@@ -29,14 +29,18 @@ const sendMailToUniversities = async () => {
       );
       console.log(`Summary sent for ${university.name} - ${logs.hash(emailsTo)}`);
     }
+
+    return Promise.resolve();
   });
+
+  await Promise.all(sendMails);
 };
 
 const sendSummaryToUniversities = async (): Promise<boolean> => {
   console.log('Starting sendSummaryToUniversities...');
 
   try {
-    sendMailToUniversities();
+    await sendMailToUniversities();
     console.log('sendSummaryToUniversities done');
   } catch (err) {
     console.error('ERROR: Could not send psychologists informations to universities.', err);
