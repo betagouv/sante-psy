@@ -322,7 +322,7 @@ describe('loginController', async () => {
     it('should return empty info if user is not connected', async () => chai
         .request(app)
         .get('/api/connecteduser')
-        .then(async (res) => { console.log(res.body); res.body.should.be.empty; }));
+        .then(async (res) => res.body.should.be.empty));
 
     it('should return empty info if user does not have csrf', async () => {
       const psy = clean.insertOnePsy();

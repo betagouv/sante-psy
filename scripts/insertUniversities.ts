@@ -1,10 +1,11 @@
 import dbUniversities from '../db/universities';
+import universities from '../utils/universities';
 
 const runInsert = async (): Promise<void> => {
   const universitiesSavedInDB = await dbUniversities.getAll();
 
   if (universitiesSavedInDB.length === 0) { // to avoid duplicates
-    for (const university of dbUniversities.universities) {
+    for (const university of universities) {
       try {
         // eslint-disable-next-line no-await-in-loop
         await dbUniversities.insertByName(university);

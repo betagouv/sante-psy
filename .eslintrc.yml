@@ -57,19 +57,14 @@ rules:
 
 overrides:
   - files:
-      - "tests/*.ts"
       - "test/*.ts"
-      - "*.spec.ts"
     rules:
       no-unused-expressions: "off"
       no-shadow: "off"
+      "@typescript-eslint/explicit-function-return-type": "off"
   - files:
       - "migrations/*.js"
     rules:
       max-len: "off"
-      func-names: "off"
-  - files:
-      - "test/*.ts"
-      - "*.js"
-    rules:
+      func-names: "off"      
       "@typescript-eslint/explicit-function-return-type": "off"
