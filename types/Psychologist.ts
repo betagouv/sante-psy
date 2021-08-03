@@ -53,7 +53,7 @@ export type DSPsychologist = {
   annotations: {
     id: string,
     stringValue: string,
-  }[]
+  }[],
   champs: {
     id: string,
     stringValue: string,
