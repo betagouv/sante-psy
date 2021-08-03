@@ -1,6 +1,6 @@
-const dbUniversities = require('../db/universities');
+import dbUniversities from '../db/universities';
 
-const runInsert = async () => {
+const runInsert = async (): Promise<void> => {
   const universitiesSavedInDB = await dbUniversities.getAll();
 
   if (universitiesSavedInDB.length === 0) { // to avoid duplicates
@@ -24,4 +24,4 @@ const runInsert = async () => {
   process.exit(1);
 };
 
-return runInsert();
+runInsert();

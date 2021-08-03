@@ -1,7 +1,8 @@
-const fs = require('fs');
-const dbUniversities = require('../db/universities');
+import fs from 'fs';
+import dbUniversities from '../db/universities';
+import { University } from '../types/University';
 
-const insertEmailToUniversities = async (universitiesArray) => {
+const insertEmailToUniversities = async (universitiesArray: University[]): Promise<void> => {
   console.debug('universitiesArray:', universitiesArray);
   const universities = await dbUniversities.getAll();
 
@@ -39,7 +40,7 @@ const insertEmailToUniversities = async (universitiesArray) => {
   process.exit(1);
 };
 
-const parseFile = () => {
+const parseFile = (): void => {
   const filePath = process.argv[2];
   fs.readFile(filePath, (err, datum) => {
     if (err) {
@@ -59,7 +60,7 @@ const parseFile = () => {
         }),
         {},
       ));
-    insertEmailToUniversities(data);
+    insertEmailToUniversities(data as University[]);
     return data;
   });
 };

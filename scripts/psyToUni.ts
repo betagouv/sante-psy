@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   'paul.leclercq@beta.gouv.fr': 'La Sorbonne',
   'login@beta.gouv.fr': 'Paris Est Créteil (UPEC)',
   'estelle.comment@beta.gouv.fr': 'Lyon 2',
