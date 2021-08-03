@@ -3,7 +3,7 @@ import { universitiesTable } from '../db/tables';
 import universities from '../utils/frEsrUniversities';
 
 const insertAddressToUniversities = async () => {
-  console.log('Filling siret & address fields to universities...');
+  console.log('Inserting siret & address fields to universities...');
 
   const promises = [];
   try {
@@ -17,7 +17,7 @@ const insertAddressToUniversities = async () => {
           university.address2,
           university.address3,
           university.address3,
-        ].join(' '),
+        ].filter((x) => x).join(' '),
         postal_code: university.postal_code,
         city: university.city,
       }));

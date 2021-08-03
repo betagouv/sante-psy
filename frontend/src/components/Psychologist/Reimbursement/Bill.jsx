@@ -42,7 +42,7 @@ const Bill = () => {
           if (university && (university.address || university.postal_code || university.city)) {
             setUniversityInfos([
               university.name,
-              [university.address || '', university.postal_code || '', university.city || ''].join(' '),
+              [university.address || '', university.postal_code || '', university.city || ''].filter(x => x).join(' '),
             ]);
           }
         });
