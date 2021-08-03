@@ -3,7 +3,6 @@ import chai from 'chai';
 import { v4 as uuidv4 } from 'uuid';
 import app from '../index';
 
-import loginController from '../controllers/loginController';
 import dbLoginToken from '../db/loginToken';
 import dbLastConnection from '../db/lastConnections';
 import dbPsychologists from '../db/psychologists';
@@ -15,25 +14,6 @@ import { DossierState } from '../types/DossierState';
 const sendEmail = require('../utils/email');
 
 describe('loginController', async () => {
-  describe('generateLoginUrl', () => {
-    it('should create a login url to send in a email', () => {
-      loginController.generateLoginUrl().should.equal('http://localhost:8080/psychologue/login');
-    });
-  });
-
-  describe('generateToken', () => {
-    it('should generate a token', () => {
-      loginController.generateToken().length.should.equal(128);
-    });
-
-    it('should generate a different token everytime the function is called', () => {
-      const output1 = loginController.generateToken();
-      const output2 = loginController.generateToken();
-
-      output1.length.should.not.equal(output2);
-    });
-  });
-
   describe('login page', () => {
     const token = cookie.getJwtTokenForUser('dossierNumber', 'randomXSRFToken');
     const email = 'prenom.nom@beta.gouv.fr';

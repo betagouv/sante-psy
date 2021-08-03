@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 
-import crypto from 'crypto';
 import { check } from 'express-validator';
 import ejs from 'ejs';
 import validation from '../utils/validation';
@@ -15,19 +14,13 @@ import config from '../utils/config';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { checkXsrf } from '../middlewares/xsrfProtection';
+import loginInformations from '../services/loginInformations';
 
 const emailValidators = [
   check('email')
     .isEmail()
     .withMessage('Vous devez spécifier un email valide.'),
 ];
-
-/**
- * @see https://www.ssi.gouv.fr/administration/precautions-elementaires/calculer-la-force-dun-mot-de-passe/
- */
-function generateToken(): string {
-  return crypto.randomBytes(64).toString('hex');
-}
 
 async function sendLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
   try {
@@ -110,7 +103,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
 
     if (dbToken) {
       const psychologistData = await dbPsychologists.getAcceptedByEmail(dbToken.email);
-      const xsrfToken = crypto.randomBytes(64).toString('hex');
+      const xsrfToken = loginInformations.generateToken();
       cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken);
       console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
 
@@ -129,10 +122,6 @@ const login = async (req: Request, res: Response): Promise<void> => {
     401,
   );
 };
-
-function generateLoginUrl(): string {
-  return `${config.hostnameWithProtocol}/psychologue/login`;
-}
 
 /**
  * Send a email with a login link if the email is already registered
@@ -163,8 +152,8 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
     );
   }
 
-  const token = generateToken();
-  const loginUrl = generateLoginUrl();
+  const token = loginInformations.generateToken();
+  const loginUrl = loginInformations.generateLoginUrl();
   await sendLoginEmail(email, loginUrl, token);
   await saveToken(email, token);
   res.json({
@@ -179,6 +168,4 @@ export default {
   login: asyncHelper(login),
   sendMail: asyncHelper(sendMail),
   deleteToken,
-  generateLoginUrl,
-  generateToken,
 };
