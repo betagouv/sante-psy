@@ -62,6 +62,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
           />
           {isSorbonne(convention.universityId) && (
             <Alert
+              className="fr-my-2w"
               description="Pensez à vérifier que l'université sélectionnée est exacte.
             Dans le cas de La Sorbonne (75) et Sorbonne Paris Nord (93)."
             />
