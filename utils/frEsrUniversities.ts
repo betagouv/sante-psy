@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-len
 // Source: https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-principaux-etablissements-enseignement-superieur/
-// 30/07/2021
+// Note: all are "Université" except Lorraine Sud-Nancy which is "Grand établissement"
 
 const frEsrUniversities = [
   {
@@ -24,7 +24,7 @@ const frEsrUniversities = [
     city: 'ANGERS CEDEX 1',
   },
   {
-    name: 'Antilles – Pôle Guadeloupe',
+    name: 'Antilles - Pôle Guadeloupe',
     siret: '19971585500011',
     address1: '',
     address2: '',
@@ -42,6 +42,16 @@ const frEsrUniversities = [
     address4: '',
     postal_code: '84029',
     city: 'Avignon CEDEX 1',
+  },
+  {
+    name: 'Bordeaux',
+    siret: '19331766600017',
+    address1: '',
+    address2: '22 avenue Pey Berland',
+    address3: '',
+    address4: '',
+    postal_code: '33600',
+    city: 'PESSAC',
   },
   {
     name: 'Bretagne Occidentale',
@@ -104,7 +114,7 @@ const frEsrUniversities = [
     city: 'Corte',
   },
   {
-    name: 'Côte d’Azur',
+    name: "Côte d'Azur",
     siret: '13002566100013',
     address1: '',
     address2: '28 avenue Valrose',
@@ -364,7 +374,7 @@ const frEsrUniversities = [
     city: 'Saint-Aubin',
   },
   {
-    name: 'Pau et Pays de l’Adour (UPPA)',
+    name: "Pau et Pays de l'Adour (UPPA)",
     siret: '19640251500270',
     address1: '',
     address2: 'Avenue de l’Université',
@@ -434,7 +444,7 @@ const frEsrUniversities = [
     city: 'Mont-Saint-Aignan CEDEX',
   },
   {
-    name: 'Saint-Etienne – Jean Monnet',
+    name: 'Saint-Etienne - Jean Monnet',
     siret: '19421095100423',
     address1: '',
     address2: '10 rue Tréfilerie',
@@ -482,6 +492,16 @@ const frEsrUniversities = [
     address4: 'CS 60584',
     postal_code: '83041',
     city: 'TOULON CEDEX 9',
+  },
+  {
+    name: 'Toulouse Midi-Pyrénées',
+    siret: '19311382600013',
+    address1: '',
+    address2: '2 rue du Doyen-Gabriel-Marty',
+    address3: '',
+    address4: '',
+    postal_code: '31042',
+    city: 'Toulouse CEDEX',
   },
   {
     name: 'Tours',
