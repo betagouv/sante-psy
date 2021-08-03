@@ -1,12 +1,13 @@
-import { Appointment, AppointmentWithPatient } from '../types/Appointment';
+import { Appointment } from '../types/Appointment';
+import { Patient } from '../types/Patient';
 import date from '../utils/date';
 import { appointmentsTable, patientsTable } from './tables';
 import db from './db';
 
-const getAll = async (psychologistId: string): Promise<AppointmentWithPatient[]> => {
+const getAll = async (psychologistId: string): Promise<(Appointment & Patient)[]> => {
   try {
     const appointmentArray = await db.from(patientsTable)
-    .innerJoin(`${appointmentsTable}`, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
+    .innerJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
     .where(`${appointmentsTable}.psychologistId`, psychologistId)
     .whereNot(`${appointmentsTable}.deleted`, true)
     .orderBy('appointmentDate', 'desc');
@@ -45,8 +46,6 @@ const deleteOne = async (appointmentId: string, psychologistId: string): Promise
       });
 
     console.log(`Appointment id ${appointmentId} deleted by psy id ${psychologistId}`);
-
-    console.log('deleted', deletedAppointments);
     return deletedAppointments;
   } catch (err) {
     console.error('Erreur de suppression du appointments', err);
