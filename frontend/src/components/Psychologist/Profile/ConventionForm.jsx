@@ -37,6 +37,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
 
   const laSorbonne = universities.find(university => university.name === 'La Sorbonne');
   const laSorbonneParisNord = universities.find(university => university.name === 'Sorbonne Paris Nord');
+  const isSorbonne = id => (laSorbonneParisNord && id === laSorbonneParisNord.id) || (laSorbonne && id === laSorbonne.id);
 
   let defaultValueConventionSigned;
   if (convention && convention.isConventionSigned !== '' && convention.isConventionSigned !== undefined) {
@@ -59,13 +60,12 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
               ? universities.map(university => ({ value: university.id, label: university.name }))
               : []}
           />
-          {((laSorbonneParisNord && convention.universityId === laSorbonneParisNord.id) || (laSorbonne && convention.universityId === laSorbonne.id)) && (
+          {isSorbonne(convention.universityId) && (
             <Alert
               description="Pensez à vérifier que l'université sélectionnée est exacte.
             Dans le cas de La Sorbonne (75) et Sorbonne Paris Nord (93)."
             />
           )}
-
           <RadioGroup
             name="convention"
             legend="Avez-vous déjà signé la convention ?"
