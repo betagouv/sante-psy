@@ -18,9 +18,9 @@ describe('cookie', () => {
       const psychologist = uuidv4();
       const token = cookie.getJwtTokenForUser(psychologist, 'randomXSRF');
 
-      token.length.should.be.equal(200);
+      token.length.should.be.equal(233);
       const decoded = jwtDecode(token);
-      decoded.should.have.all.keys('psychologist', 'iat', 'exp');
+      decoded.should.have.all.keys('psychologist', 'xsrfToken', 'iat', 'exp');
     });
   });
 

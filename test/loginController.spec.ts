@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import chai from 'chai';
-import uuidv4 from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import app from '../index';
 
 import loginController from '../controllers/loginController';

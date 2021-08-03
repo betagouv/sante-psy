@@ -39,10 +39,10 @@ const request = async (query, variables) => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const executeQuery = (query, variables = undefined) => request(query, variables);
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const executeMutation = async (query, variables = undefined) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const executeQuery = (query: string, variables = undefined): Promise<any> => request(query, variables);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const executeMutation = async (query: string, variables = undefined): Promise<any> => {
   if (config.testEnvironment) {
     console.log('Mutation bypassed because you are using a test environment', query, variables);
     return Promise.resolve();
