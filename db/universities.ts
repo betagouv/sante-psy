@@ -35,10 +35,18 @@ const upsertMany = async (universitiesList: any[]): Promise<any[]> => {
   return query;
 };
 
+const getById = async (universityId: string) : Promise<any> => {
+  try {
+    return db(universitiesTable).where('id', universityId).first();
+  } catch (err) {
+    console.error("Erreur de récupération de l'université", err);
+    throw new Error("Erreur de récupération de l'université");
+  }
+};
+
 const getAll = async (): Promise<any[]> => {
   try {
-    return db.select('id', 'name', 'emailSSU', 'emailUniversity')
-        .from(universitiesTable);
+    return db(universitiesTable);
   } catch (err) {
     console.error('Impossible de récupérer les universités', err);
     throw new Error('Impossible de récupérer les universités');
@@ -47,8 +55,7 @@ const getAll = async (): Promise<any[]> => {
 
 const getAllOrderByName = async (): Promise<any[]> => {
   try {
-    return db.select('id', 'name', 'emailSSU', 'emailUniversity')
-        .from(universitiesTable)
+    return db(universitiesTable)
         .orderBy('name');
   } catch (err) {
     console.error('Impossible de récupérer les universités', err);
@@ -104,6 +111,7 @@ const getEmailsTo = (university: any): string | undefined => {
 
 export default {
   upsertMany,
+  getById,
   getAll,
   getAllOrderByName,
   getAssignedUniversityId,

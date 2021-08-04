@@ -149,21 +149,32 @@ const getOneAppointment = (
   };
 };
 
+const getOneUniversity = (name: string) : any => ({
+  name,
+  id: uuid.generateFromString(`university-${name}`),
+  emailUniversity: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
+  emailSSU: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
+  siret: faker.helpers.replaceSymbols('##############'),
+  address: faker.address.streetAddress(),
+  postal_code: faker.address.zipCode('#####'),
+  city: faker.address.city(),
+});
+
 const insertOnePsy = async (
   personalEmail = 'loginemail@beta.gouv.fr',
   state = DossierState.accepte,
   archived = false,
   inactiveUntil = undefined,
+  withUniversity = true,
 ): Promise<Psychologist> => {
-  const universityId = uuid.generateRandom();
+  let universityId = null;
+  if (withUniversity) {
+    const university = getOneUniversity(faker.company.companyName());
+    await dbUniversities.upsertMany([university]);
+    universityId = university.id;
+  }
+
   const psy = getOnePsy(personalEmail, state, archived, universityId, inactiveUntil);
-  const id = getRandomInt();
-  await dbUniversities.upsertMany([{
-    id: universityId,
-    name: `University ${id}`,
-    emailSSU: `ssu${id}@spe.fr`,
-    emailUniversity: `university${id}@spe.fr`,
-  }]);
   await dbPsychologists.upsertMany([psy]);
   return psy;
 };
@@ -195,6 +206,7 @@ export default {
   getRandomInt,
   getOneAppointment,
   getOnePatient,
+  getOneUniversity,
   getOnePsy,
   insertOnePsy,
   getOneInactivePsy,
