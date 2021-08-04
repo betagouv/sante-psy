@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 
-import crypto from 'crypto';
 import { check } from 'express-validator';
 import ejs from 'ejs';
 import validation from '../utils/validation';
@@ -15,6 +14,7 @@ import config from '../utils/config';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { checkXsrf } from '../middlewares/xsrfProtection';
+import loginInformations from '../services/loginInformations';
 
 const emailValidators = [
   check('email')
@@ -22,14 +22,7 @@ const emailValidators = [
     .withMessage('Vous devez spécifier un email valide.'),
 ];
 
-/**
- * @see https://www.ssi.gouv.fr/administration/precautions-elementaires/calculer-la-force-dun-mot-de-passe/
- */
-function generateToken() {
-  return crypto.randomBytes(64).toString('hex');
-}
-
-async function sendLoginEmail(email: string, loginUrl: string, token: string) {
+async function sendLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
   try {
     const html = await ejs.renderFile('./views/emails/login.ejs', {
       loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
@@ -44,7 +37,7 @@ async function sendLoginEmail(email: string, loginUrl: string, token: string) {
   }
 }
 
-async function sendNotYetAcceptedEmail(email: string) {
+async function sendNotYetAcceptedEmail(email: string): Promise<void> {
   try {
     const html = await ejs.renderFile('./views/emails/loginNotAcceptedYet.ejs', {
       appName: config.appName,
@@ -57,7 +50,7 @@ async function sendNotYetAcceptedEmail(email: string) {
   }
 }
 
-async function saveToken(email: string, token: string) {
+async function saveToken(email: string, token: string): Promise<void> {
   try {
     const expiredAt = date.getDatePlusOneHour();
     await dbLoginToken.insert(token, email, expiredAt);
@@ -76,7 +69,7 @@ const deleteToken = (req: Request, res: Response): void => {
 
 const connectedUser = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
-  if (checkXsrf(req, tokenData.xsrfToken)) {
+  if (tokenData && checkXsrf(req, tokenData.xsrfToken)) {
     const psy = await dbPsychologists.getById(tokenData.psychologist);
     const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
 
@@ -110,7 +103,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
 
     if (dbToken) {
       const psychologistData = await dbPsychologists.getAcceptedByEmail(dbToken.email);
-      const xsrfToken = crypto.randomBytes(64).toString('hex');
+      const xsrfToken = loginInformations.generateToken();
       cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken);
       console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
 
@@ -129,10 +122,6 @@ const login = async (req: Request, res: Response): Promise<void> => {
     401,
   );
 };
-
-function generateLoginUrl() {
-  return `${config.hostnameWithProtocol}/psychologue/login`;
-}
 
 /**
  * Send a email with a login link if the email is already registered
@@ -163,8 +152,8 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
     );
   }
 
-  const token = generateToken();
-  const loginUrl = generateLoginUrl();
+  const token = loginInformations.generateToken();
+  const loginUrl = loginInformations.generateLoginUrl();
   await sendLoginEmail(email, loginUrl, token);
   await saveToken(email, token);
   res.json({

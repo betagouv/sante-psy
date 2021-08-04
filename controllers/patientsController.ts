@@ -63,6 +63,7 @@ const updateValidators = [
   // todo : do we html-escape here ? We already escape in templates.
   check('patientId')
     .trim().not().isEmpty()
+    .withMessage('Ce patient n\'existe pas.')
     .isUUID()
     .withMessage('Ce patient n\'existe pas.'),
   ...patientValidators,
@@ -116,6 +117,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
 const getOneValidators = [
   check('patientId')
     .trim().not().isEmpty()
+    .withMessage('Ce patient n\'existe pas.')
     .isUUID()
     .withMessage('Ce patient n\'existe pas.'),
 ];

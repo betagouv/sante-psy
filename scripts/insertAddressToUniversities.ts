@@ -2,7 +2,7 @@ import db from '../db/db';
 import { universitiesTable } from '../db/tables';
 import universities from '../utils/frEsrUniversities';
 
-const insertAddressToUniversities = async () => {
+const insertAddressToUniversities = async (): Promise<void> => {
   console.log('Inserting siret & address fields to universities...');
 
   const promises = [];

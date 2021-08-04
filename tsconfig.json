@@ -5,6 +5,7 @@
       "target": "esnext",
       "allowJs": true,
       "module": "commonjs",
+      "resolveJsonModule": true,
       "noUnusedLocals": true,
       "sourceMap": true,
       "forceConsistentCasingInFileNames": true,
@@ -13,7 +14,7 @@
       "typeRoots": [
         "@types",
         "./node_modules/@types",
-      ],
+      ]
   },
   "include": [
       "**/*.ts",

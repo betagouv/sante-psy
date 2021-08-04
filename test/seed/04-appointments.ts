@@ -6,8 +6,10 @@ import {
   appointmentsTable,
 } from '../../db/tables';
 import { getPatientsByPsychologist } from './03-patients';
+import { Appointment } from '../../types/Appointment';
 
-const getOneAppointmentPerMonth = (patient, day, deleted = false) => [...Array(12).keys()]
+const getOneAppointmentPerMonth = (patient: {id: string, psychologistId: string}, day: number, deleted = false)
+  : Appointment[] => [...Array(12).keys()]
   .map((i) => clean.getOneAppointment(patient.id, patient.psychologistId, i, day, deleted));
 
 // eslint-disable-next-line import/prefer-default-export

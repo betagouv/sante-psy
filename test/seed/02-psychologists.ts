@@ -1,6 +1,6 @@
 import clean from '../helper/clean';
 
-import { DossierState } from '../../types/DemarcheSimplifiee';
+import { DossierState } from '../../types/DossierState';
 import uuid from '../../utils/uuid';
 import universities from '../../utils/universities';
 import {

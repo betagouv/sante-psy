@@ -1,6 +1,6 @@
 import date from '../utils/date';
 import { psychologistsTable, suspensionReasonsTable } from './tables';
-import { DossierState } from '../types/DemarcheSimplifiee';
+import { DossierState } from '../types/DossierState';
 import dbUniversities from './universities';
 import {
   addFrenchLanguageIfMissing,
@@ -72,7 +72,7 @@ const getAllActive = async (): Promise<Psychologist[]> => {
   }
 };
 
-const getByIds = async (ids) => {
+const getByIds = async (ids: string[]): Promise<{[key: string]: Psychologist}> => {
   try {
     const groupById = {};
     const psychologists = await db(psychologistsTable)
@@ -103,7 +103,7 @@ const getById = async (psychologistId: string): Promise<Psychologist> => {
  * Perform a UPSERT with https://knexjs.org/#Builder-merge
  * @param {*} psy
  */
-const upsertMany = async (psyList: Psychologist[]): Promise<(number | void)[]> => {
+const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
   console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
   const updatedAt = date.now(); // use to perform UPSERT in PG
   const universities = await dbUniversities.getAll();
@@ -151,22 +151,24 @@ const upsertMany = async (psyList: Psychologist[]): Promise<(number | void)[]> =
     .insert(psychologistsToInsert),
     );
   }
-  const query = await Promise.all(upsertArray);
 
+  await Promise.all(upsertArray);
   console.log('UPSERT into PG : done');
-
-  return query;
 };
 
-const countByArchivedAndState = async (): Promise<any[]> => db(psychologistsTable)
+const countByArchivedAndState = async ()
+  : Promise<{count: number, archived: boolean, state: DossierState}[]> => db(psychologistsTable)
   .select('archived', 'state')
   .count('*')
   .groupBy('archived', 'state');
 
-/**
- * Only return accepted psychologist
- * @param {*} email
- */
+const countAcceptedByPersonalEmail = async ()
+  : Promise<{count: number, personalEmail: string, state: DossierState}[]> => db(psychologistsTable)
+.select('personalEmail', 'state')
+.where('state', DossierState.accepte)
+.count('*')
+.groupBy('personalEmail', 'state');
+
 const getAcceptedByEmail = async (email: string): Promise<Psychologist> => db(psychologistsTable)
   .where('state', DossierState.accepte)
   .andWhere(
@@ -185,12 +187,6 @@ const getNotYetAcceptedByEmail = async (email: string): Promise<Psychologist> =>
   })
   .andWhere('personalEmail', email)
   .first();
-
-const countAcceptedByPersonalEmail = async (): Promise<any> => db(psychologistsTable)
-    .select('personalEmail', 'state')
-    .where('state', DossierState.accepte)
-    .count('*')
-    .groupBy('personalEmail', 'state');
 
 const updateConventionInfo = async (
   psychologistId: string,
@@ -212,7 +208,8 @@ const updateConventionInfo = async (
   return updated;
 };
 
-const getConventionInfo = async (psychologistId: string): Promise<any> => db.from(psychologistsTable)
+const getConventionInfo = async (psychologistId: string)
+  : Promise<{universityName: string, universityId: string, isConventionSigned: boolean}> => db.from(psychologistsTable)
     .select(`${'universities'}.name as universityName`,
       `${'universities'}.id as universityId`,
       `${psychologistsTable}.isConventionSigned`)
@@ -222,7 +219,7 @@ const getConventionInfo = async (psychologistId: string): Promise<any> => db.fro
     .where(`${psychologistsTable}.dossierNumber`, psychologistId)
     .first();
 
-const deleteConventionInfo = async (email: string): Promise<any> => db
+const deleteConventionInfo = async (email: string): Promise<number> => db
   .from(psychologistsTable)
   .update({
     assignedUniversityId: null,

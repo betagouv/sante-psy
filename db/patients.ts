@@ -1,8 +1,9 @@
 import date from '../utils/date';
 import { patientsTable } from './tables';
 import db from './db';
+import { Patient } from '../types/Patient';
 
-const getById = async (patientId: string, psychologistId: string): Promise<any> => {
+const getById = async (patientId: string, psychologistId: string): Promise<Patient> => {
   try {
     const patient = await db(patientsTable)
       .where('id', patientId)
@@ -16,7 +17,7 @@ const getById = async (patientId: string, psychologistId: string): Promise<any> 
   }
 };
 
-const getAll = async (psychologistId: string): Promise<any[]> => {
+const getAll = async (psychologistId: string): Promise<Patient[]> => {
   try {
     const patientArray = await db(patientsTable)
         .where('psychologistId', psychologistId)
@@ -32,15 +33,15 @@ const getAll = async (psychologistId: string): Promise<any[]> => {
 const insert = async (
   firstNames: string,
   lastName: string,
-  INE: string,
-  institutionName: string,
-  isStudentStatusVerified: boolean,
-  hasPrescription: boolean,
-  psychologistId: string,
-  doctorName: string,
-  doctorAddress: string,
-  dateOfBirth: Date,
-): Promise<any> => {
+  INE?: string,
+  institutionName?: string,
+  isStudentStatusVerified?: boolean,
+  hasPrescription?: boolean,
+  psychologistId?: string,
+  doctorName?: string,
+  doctorAddress?: string,
+  dateOfBirth?: Date,
+): Promise<Patient> => {
   try {
     const patientsArray = await db(patientsTable).insert({
       firstNames,

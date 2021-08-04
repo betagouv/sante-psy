@@ -1,4 +1,4 @@
-import { DossierState } from './DemarcheSimplifiee';
+import { DossierState } from './DossierState';
 
 export type EditablePsychologist = {
     email: string,
@@ -11,7 +11,7 @@ export type EditablePsychologist = {
     teleconsultation: boolean,
     languages: string,
     personalEmail: string,
-  }
+  };
 
 export type NonEditablePsychologist = {
     firstNames: string,
@@ -29,5 +29,33 @@ export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
     isConventionSigned?: boolean,
     selfModified?: boolean,
     active: boolean,
-    inactiveUntil: string,
+    inactiveUntil: Date,
+    updatedAt?: Date,
+    createdAt: Date,
   };
+
+export type DSPsychologist = {
+  id: string,
+  state: DossierState,
+  archived: boolean,
+  usager: {
+    email: string,
+  },
+  number: number,
+  groupeInstructeur: {
+    label: string
+  },
+  demandeur: {
+    nom: string,
+    prenom: string,
+  },
+  messages: string[],
+  annotations: {
+    id: string,
+    stringValue: string,
+  }[],
+  champs: {
+    id: string,
+    stringValue: string,
+  }[],
+}

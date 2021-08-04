@@ -8,7 +8,7 @@ import dbUniversities from '../db/universities';
 
 dotenv.config();
 
-const sendMailToUniversities = async () => {
+const sendMailToUniversities = async (): Promise<void> => {
   const allUniversities = await dbUniversities.getAll();
 
   const sendMails = allUniversities.map(async (university) => {

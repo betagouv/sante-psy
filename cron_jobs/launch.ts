@@ -2,7 +2,7 @@ import cronDemarchesSimplifiees from './cronDemarchesSimplifiees';
 import cronUniversityPayments from './cronUniversityPayments';
 import cronPsychologists from './cronPsychologists';
 
-const runJob = async (job) => {
+const runJob = async (job): Promise<void> => {
   await job();
   process.exit(0);
 };
