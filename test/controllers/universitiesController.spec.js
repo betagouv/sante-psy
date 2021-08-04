@@ -6,7 +6,7 @@ const { default: clean } = require('../helper/clean');
 const { default: cookie } = require('../../utils/cookie');
 const { default: dbUniversities } = require('../../db/universities');
 
-describe('universitiesController.spec', () => {
+describe('universitiesController', () => {
   let university;
   let university2;
   let psy;

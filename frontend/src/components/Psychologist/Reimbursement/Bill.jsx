@@ -22,7 +22,7 @@ const Bill = () => {
   const { month, year } = useParams();
   const [user, setUser] = useState({});
   const [appointments, setAppointments] = useState([]);
-  const [universityInfos, setUniversityInfos] = useState([undefined, undefined]);
+  const [universityInfos, setUniversityInfos] = useState({ name: undefined, address: undefined });
 
   useEffect(() => {
     agent.Appointment.get().then(response => {
@@ -40,10 +40,11 @@ const Bill = () => {
       if (universityId) {
         agent.University.getOne(universityId).then(university => {
           if (university && (university.address || university.postal_code || university.city)) {
-            setUniversityInfos([
-              university.name,
-              [university.address || '', university.postal_code || '', university.city || ''].filter(x => x).join(' '),
-            ]);
+            setUniversityInfos({
+              name: university.name,
+              address: [university.address || '', university.postal_code || '', university.city || '']
+                .filter(x => x).join(' '),
+            });
           }
         });
       }
@@ -69,8 +70,8 @@ const Bill = () => {
     `Email du prestataire : ${user.email}`,
     `Date de l'émission de la facture : ${formatFrenchDate(new Date())}`,
     'Numéro de la facture : ________________________________________________________________',
-    `Nom et adresse de l'université : ${universityInfos[0] ? universityInfos[0] : PARTIAL_UNDESCORE_LINE_UNI_NAME}`,
-    `${universityInfos[1] ? universityInfos[1] : FULL_UNDERSCORE_LINE}`,
+    `Nom et adresse de l'université : ${universityInfos.name || PARTIAL_UNDESCORE_LINE_UNI_NAME}`,
+    `${universityInfos.address || FULL_UNDERSCORE_LINE}`,
     'E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :',
     FULL_UNDERSCORE_LINE,
     FULL_UNDERSCORE_LINE,
