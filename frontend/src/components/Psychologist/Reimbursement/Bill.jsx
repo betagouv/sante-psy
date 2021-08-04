@@ -16,9 +16,13 @@ import BillingTable from './BillingTable';
 import styles from './bill.cssmodule.scss';
 
 const Bill = () => {
+  const FULL_UNDERSCORE_LINE = '_____________________________________________________________________________________';
+  const PARTIAL_UNDESCORE_LINE_UNI_NAME = '________________________________________________________';
+
   const { month, year } = useParams();
   const [user, setUser] = useState({});
   const [appointments, setAppointments] = useState([]);
+  const [universityInfos, setUniversityInfos] = useState({ name: undefined, address: undefined });
 
   useEffect(() => {
     agent.Appointment.get().then(response => {
@@ -31,6 +35,19 @@ const Bill = () => {
     });
     agent.User.getConnected().then(response => {
       setUser(response.data);
+
+      const { universityId } = response.data.convention;
+      if (universityId) {
+        agent.University.getOne(universityId).then(university => {
+          if (university && (university.address || university.postal_code || university.city)) {
+            setUniversityInfos({
+              name: university.name,
+              address: [university.address || '', university.postal_code || '', university.city || '']
+                .filter(x => x).join(' '),
+            });
+          }
+        });
+      }
     });
   }, []);
 
@@ -53,17 +70,17 @@ const Bill = () => {
     `Email du prestataire : ${user.email}`,
     `Date de l'émission de la facture : ${formatFrenchDate(new Date())}`,
     'Numéro de la facture : ________________________________________________________________',
-    'Nom et adresse de l\'université : ________________________________________________________',
-    '_____________________________________________________________________________________',
+    `Nom et adresse de l'université : ${universityInfos.name || PARTIAL_UNDESCORE_LINE_UNI_NAME}`,
+    `${universityInfos.address || FULL_UNDERSCORE_LINE}`,
     'E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :',
-    '_____________________________________________________________________________________',
-    '_____________________________________________________________________________________',
+    FULL_UNDERSCORE_LINE,
+    FULL_UNDERSCORE_LINE,
     'Numéro du bon de commande de l’université (à demander à l’université) : ___________________',
   ];
 
   const getFooter = () => [
     'À régler sur le compte bancaire ci-dessous (RIB / IBAN) :',
-    '_____________________________________________________________________________________',
+    FULL_UNDERSCORE_LINE,
     'Délai de paiement : 30 jours à réception de facture',
   ];
 

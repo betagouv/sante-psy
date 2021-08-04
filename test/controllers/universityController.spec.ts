@@ -2,37 +2,62 @@ import chai from 'chai';
 import app from '../../index';
 import clean from '../helper/clean';
 import dbUniversities from '../../db/universities';
+import { DossierState } from '../../types/DossierState';
+import cookie from '../../utils/cookie';
 
-describe('universityController.spec', () => {
+describe('universitiesController', () => {
+  let university;
+  let university2;
+  let psy;
+
   beforeEach(async () => {
     await clean.cleanAllUniversities();
-    await dbUniversities.upsertMany([{
-      id: '18380a4c-51e1-4dcb-ad9a-3d8c2e84d1ff',
-      name: 'Monster university',
-      emailSSU: 'monster@ssu.fr',
-      emailUniversity: 'monster@university.fr',
-    }, {
-      id: 'abaa66b8-1d78-4a61-9805-3e5e353db0af',
-      name: 'University of love',
-      emailSSU: 'love@ssu.fr',
-      emailUniversity: 'love@university.fr',
-    },
-    ]);
+
+    psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, undefined, false);
+
+    university = clean.getOneUniversity('Monster university');
+    university2 = clean.getOneUniversity('University of love');
+    await dbUniversities.upsertMany([university, university2]);
   });
 
   it('should return all universities', async () => chai.request(app)
-        .get('/api/university')
+        .get('/api/universities')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
+          res.body.forEach((university) => {
+            university.should.have.all.keys('id', 'name');
+          });
           res.body.should.eql([{
-            id: '18380a4c-51e1-4dcb-ad9a-3d8c2e84d1ff',
-            name: 'Monster university',
-            emailSSU: 'monster@ssu.fr',
-            emailUniversity: 'monster@university.fr',
+            id: university.id,
+            name: university.name,
           }, {
-            id: 'abaa66b8-1d78-4a61-9805-3e5e353db0af',
-            name: 'University of love',
-            emailSSU: 'love@ssu.fr',
-            emailUniversity: 'love@university.fr',
+            id: university2.id,
+            name: university2.name,
           }]);
+        }));
+
+  it('should return one university', async () => chai.request(app)
+        .get(`/api/universities/${university.id}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .then(async (res) => {
+          res.body.should.have.all.keys('name', 'siret', 'address', 'postal_code', 'city');
+          res.body.should.eql({
+            name: university.name,
+            siret: university.siret,
+            address: university.address,
+            postal_code: university.postal_code,
+            city: university.city,
+          });
+        }));
+
+  it('should NOT return one university if invalid id', async () => chai.request(app)
+        .get('/api/universities/invalid_id')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .then(async (res) => {
+          res.status.should.eql(400);
+          res.body.should.eql({ message: 'Vous devez spécifier un identifiant valide.' });
         }));
 });
