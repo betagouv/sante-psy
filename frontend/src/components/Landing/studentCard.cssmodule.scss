@@ -2,9 +2,9 @@
     text-align: center;
     width: 294px;
     min-height: 412px;
-    border: 1px solid #133A8D;
+    border: 1px solid var(--bf500);
     border-radius: 4px;
-    background: linear-gradient(223.39deg, #FBFBFB 0%, #F5F5FF 99.31%, #EAF6FF 100%);
+    background: linear-gradient(223.39deg, var(--white) 0%, var(--blue-france-100) 99.31%, var(--blue-france-200) 100%);
     box-shadow: 0 2px 7px 0 rgba(0,0,0,0.21);
     padding: 24px;
 }

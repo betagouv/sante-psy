@@ -11,11 +11,11 @@
 }
 
 .sectionLight {
-    background-color: #F5F5FF;
+    background-color: var(--bf100);
 }
 
 .sectionAlt {
-    background-color: #FFF9BF;
+    background-color: var(--yellow-medium-300);
 }
 
 @media (min-width: 768px) {

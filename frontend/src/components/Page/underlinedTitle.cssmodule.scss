@@ -4,17 +4,17 @@
 }
 
 .title {
-  box-shadow: inset 0 -2px white, inset 0 -12px #fcea04;
+  box-shadow: inset 0 -2px white, inset 0 -12px var(--yellow-medium-500);
   font-size: 2rem;
   line-height: 2.5rem;
 }
 
 .bigTitle {
-  box-shadow: inset 0 -5px white, inset 0 -17px #fcea04;
+  box-shadow: inset 0 -5px white, inset 0 -17px var(--yellow-medium-500);
   line-height: 4rem;
   font-size: 2.8rem;
 }
 
 .bigTitle-yellow {
-  box-shadow: inset 0 -5px #FFF9BF, inset 0 -17px #fcea04;
+  box-shadow: inset 0 -5px var(--yellow-medium-300), inset 0 -17px var(--yellow-medium-500);
 }
