@@ -22,11 +22,14 @@ const create = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const date = new Date(req.body.date);
+  const today = new Date();
+  const diffInMs = Math.abs(date.getTime() - today.getTime());
+  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
   const { patientId } = req.body;
   const psyId = req.user.psychologist;
   const patientExist = await dbPatient.getById(patientId, psyId);
 
-  if (patientExist) {
+  if (patientExist && diffInDays <= 120) {
     await dbAppointments.insert(date, patientId, psyId);
     console.log(
       `Appointment created for patient id ${patientId} by psy id ${psyId}`,
@@ -36,7 +39,8 @@ const create = async (req: Request, res: Response): Promise<void> => {
     });
   } else {
     console.warn(
-      `Patient id ${patientId} does not exist for psy id : ${psyId}`,
+      `Patient id ${patientId} does not exist for psy id : ${psyId}
+      or the difference between today and the declaration date is beyond 4 month`,
     );
     throw new CustomError("Erreur. La séance n'est pas créée. Pourriez-vous réessayer ?");
   }
