@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { observer } from 'mobx-react';
 import sanitizeHtml from 'sanitize-html';
-import classnames from 'classnames';
 
 import {
   Row,
