@@ -27,6 +27,8 @@ export default class CommonStore {
   }
 
   setNotification(notification, success = true, displayOnlyOnPsyPages = true) {
-    this.notification = notification ? { message: notification.message, success, displayOnlyOnPsyPages } : null;
+    this.notification = notification
+      ? { message: notification.message, type: success ? 'success' : 'error', displayOnlyOnPsyPages }
+      : null;
   }
 }

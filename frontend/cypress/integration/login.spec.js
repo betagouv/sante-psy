@@ -20,7 +20,7 @@ describe('Login', () => {
       cy.get('[data-test-id="email-button"]')
         .click();
       cy.wait('@sendMail');
-      cy.get('[data-test-id="notification-success"]')
+      cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
           'Un lien de connexion a été envoyé à l\'adresse login@beta.gouv.fr. Le lien est valable 2 heures.',
@@ -48,7 +48,7 @@ describe('Login', () => {
       cy.wait('@login');
       cy.wait('@connectedUser');
       cy.location('pathname').should('not.eq', '/psychologue/mes-seances');
-      cy.get('[data-test-id="notification-error"]')
+      cy.get('[data-test-id="notification-error"] p')
         .should(
           'have.text',
           'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
@@ -69,7 +69,7 @@ describe('Login', () => {
               cy.wait('@login');
               cy.wait('@connectedUser');
               cy.location('pathname').should('not.eq', '/psychologue/mes-seances');
-              cy.get('[data-test-id="notification-error"]')
+              cy.get('[data-test-id="notification-error"] p')
                 .should(
                   'have.text',
                   'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
@@ -91,7 +91,7 @@ describe('Login', () => {
 
       cy.reload();
       cy.location('pathname').should('eq', '/psychologue/login');
-      cy.get('[data-test-id="notification-error"]')
+      cy.get('[data-test-id="notification-error"] p')
         .should(
           'have.text',
           'Votre session a expiré, veuillez vous reconnecter.',
@@ -106,14 +106,14 @@ describe('Login', () => {
       cy.visit('/psychologue/login');
       cy.location('pathname').should('eq', '/psychologue/login');
       // message is displayed
-      cy.get('[data-test-id="notification-error"]')
+      cy.get('[data-test-id="notification-error"] p')
         .should(
           'have.text',
           'Votre session a expiré, veuillez vous reconnecter.',
         );
       cy.reload();
       // message is never shown after reload
-      cy.get('[data-test-id="notification-error"]')
+      cy.get('[data-test-id="notification-error"] p')
         .should('not.exist');
     });
   });

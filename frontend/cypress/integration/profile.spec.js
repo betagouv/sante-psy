@@ -70,7 +70,7 @@ describe('Profile', () => {
         .should('have.text', 'Je suis rattaché à l‘université de Angers.');
       cy.get('[data-test-id="convention-signed"]')
         .should('have.text', 'La convention est signée.');
-      cy.get('[data-test-id="notification-success"]')
+      cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
           'Vos informations de conventionnement sont bien enregistrées.',
@@ -97,7 +97,7 @@ describe('Profile', () => {
         .should('have.text', 'Je suis rattaché à l‘université de Aix-Marseille.');
       cy.get('[data-test-id="convention-signed"]')
         .should('have.text', 'La convention n‘est pas encore signée.');
-      cy.get('[data-test-id="notification-success"]')
+      cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
           'Vos informations de conventionnement sont bien enregistrées.',
@@ -128,7 +128,7 @@ describe('Profile', () => {
       cy.wait('@updateProfile');
       cy.get('[data-test-id="edit-profile-form"]')
         .should('not.exist');
-      cy.get('[data-test-id="notification-success"]')
+      cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
           'Vos informations ont bien été mises à jour.',
@@ -150,7 +150,7 @@ describe('Profile', () => {
             .should('have.text', 'Vos informations sont visibles sur l‘annuaire.');
           cy.get('[data-test-id="inactivePsy"]')
             .should('not.exist');
-          cy.get('[data-test-id="notification-success"]')
+          cy.get('[data-test-id="notification-success"] p')
             .should(
               'have.text',
               'Vos informations sont de nouveau visibles sur l\'annuaire.',

@@ -63,14 +63,14 @@ const Appointments = () => {
     <div className="fr-container fr-mb-3w fr-mt-2w" data-test-id="appointment-container">
       {modal}
       {!loading && (!user.convention || !user.convention.universityId) && (
-      <Notification>
+      <Notification type="info">
         Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
         {' '}
         <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
       </Notification>
       )}
       {!loading && user && !user.active && (
-      <Notification>
+      <Notification type="info">
         Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire.
         Pour que les étudiants puissent vous contacter, rendez vous sur la page
         {' '}
