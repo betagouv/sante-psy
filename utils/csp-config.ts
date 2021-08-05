@@ -6,14 +6,12 @@ export default helmet.contentSecurityPolicy({
     'script-src': [
       "'self'",
       'https://stats.data.gouv.fr/',
-      'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js',
       // Matomo script hash
       "'sha256-4sJsjD6jok0r8RIemFeNZ1nEQfYv6qdzYIaUCTrSIhs='",
     ],
     'img-src': [
       "'self'",
       'https://stats.data.gouv.fr/',
-      'https://unpkg.com/leaflet@1.7.1/dist/images/',
       'https://*.tile.openstreetmap.org/',
       'data:',
     ],
