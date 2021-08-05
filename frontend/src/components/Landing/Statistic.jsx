@@ -10,7 +10,7 @@ const Statistic = ({ value, description }) => (
     >
       {value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
     </div>
-    <div className={styles.description}>{description}</div>
+    <div>{description}</div>
   </div>
 );
 
