@@ -26,7 +26,8 @@ if (!config.activateDebug) {
   console.debug = (): void => {};
 }
 
-app.use(helmet({ contentSecurityPolicy: false }));
+// HSTS is managed directly by scalingo => if we set it there it appears twice and can be misinterpreted
+app.use(helmet({ contentSecurityPolicy: false, hsts: false }));
 
 app.use(cspConfig);
 app.use(compression());
