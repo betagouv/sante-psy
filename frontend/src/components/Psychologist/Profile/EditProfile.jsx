@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, RadioGroup, Radio, TextInput } from '@dataesr/react-dsfr';
+import { Button, RadioGroup, Radio, TextInput, SearcheableSelect } from '@dataesr/react-dsfr';
 
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import DEPARTEMENTS from 'services/departments';
-
-import SearchableSelect from '../../Form/SearchableSelect';
 
 const EditProfile = ({ psychologist, updatePsy, loading }) => {
   const [updatedPsychologist, setUpdatedPsychologist] = useState(psychologist);
@@ -53,13 +51,13 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
           />
 
           <h2>Informations pour l&lsquo;annuaire</h2>
-          <SearchableSelect
+          <SearcheableSelect
             label="Votre département"
             field="departement"
             data-test-id="psy-departement-select"
-            value={updatedPsychologist.departement}
-            onChange={changePsychologist}
-            options={DEPARTEMENTS.map(departement => ({ id: departement, label: departement }))}
+            selected={updatedPsychologist.departement}
+            onChange={e => { changePsychologist(e, 'departement'); }}
+            options={DEPARTEMENTS.map(departement => ({ value: departement, label: departement }))}
             required
           />
           <TextInput
