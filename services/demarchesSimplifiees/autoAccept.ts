@@ -1,19 +1,19 @@
 import path from 'path';
 import config from '../../utils/config';
-import { DossierState } from '../../types/DemarcheSimplifiee';
+import { DossierState } from '../../types/DossierState';
 import {
   getChampsIdFromField,
   getAnnotationsIdFromField,
 } from '../champsAndAnnotations';
 import importDossier from './importDossier';
 import uploadDocument from './uploadDocument';
-import graphql from '../../utils/graphql';
+import graphql from './buildRequest';
 
 const FILE = path.join(
   __dirname, '..', '..', '..', 'static', 'documents', 'parcours_psychologue_sante_psy_etudiant.pdf',
 );
 
-const sendAutoAcceptMessage = async (dossierId) => {
+const sendAutoAcceptMessage = async (dossierId: string): Promise<void> => {
   const uploadFileId = await uploadDocument(FILE, dossierId);
   const result = await graphql
     .sendMessageWithAttachment(config.demarchesSimplifieesAutoAcceptMessage, uploadFileId, dossierId);

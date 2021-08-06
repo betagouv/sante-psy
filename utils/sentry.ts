@@ -1,12 +1,12 @@
+import * as Sentry from '@sentry/node';
+import * as sentryIntegrations from '@sentry/integrations';
+import { Express } from 'express';
 import config from './config';
-
-const Sentry = require('@sentry/node');
-const sentryIntegrations = require('@sentry/integrations');
 
 /**
  * @see https://sentry.io/betagouv-f7/sante-psy-prod/getting-started/node-express/
  */
-const initCaptureConsole = () => {
+const initCaptureConsole = (): void => {
   const logLevel = ['error'];
   console.log(`Initializing Sentry for log level "${logLevel}" and config: ${config.sentryDNS}`);
   Sentry.init({
@@ -18,7 +18,7 @@ const initCaptureConsole = () => {
   });
 };
 
-const initCaptureConsoleWithHandler = (app) => {
+const initCaptureConsoleWithHandler = (app: Express): void => {
   if (config.sentryDNS) {
     initCaptureConsole();
 

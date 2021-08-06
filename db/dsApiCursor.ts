@@ -14,9 +14,9 @@ const getCursorFromDB = async (): Promise<string | undefined> => {
     }
     return undefined;
   } catch (err) {
+    // not a blocking error
     console.error('Impossible de récupèrer le dernier cursor de l\'api DS, le cron ne va pas utilser de cursor', err);
-
-    return undefined; // not a blocking error
+    return undefined;
   }
 };
 

@@ -1,4 +1,4 @@
-const now = () => new Date().toISOString();
+const now = (): string => new Date().toISOString();
 
 /**
  * @see https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
@@ -19,14 +19,14 @@ const shortDateFormatter = new Intl.DateTimeFormat('fr-FR', {
 /**
  * used to display date in editPatient
  */
-const toFormatDDMMYYYY = (date) => {
+const toFormatDDMMYYYY = (date: Date): string => {
   if (date) {
     return shortDateFormatter.format(date);
   }
   return null;
 };
 
-const parseForm = (date) => {
+const parseForm = (date: string): Date => {
   if (date) {
     const [day, month, year] = date.split('/');
     // year - month - day
@@ -35,7 +35,7 @@ const parseForm = (date) => {
   return null;
 };
 
-const getDatePlusOneHour = () => {
+const getDatePlusOneHour = (): string => {
   const expirationDate = new Date();
   return new Date(expirationDate.setHours(expirationDate.getHours() + 1)).toISOString();
 };

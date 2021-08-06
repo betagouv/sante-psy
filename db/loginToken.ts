@@ -1,8 +1,9 @@
 import date from '../utils/date';
 import { loginTokenTable } from './tables';
 import db from './db';
+import { LoginToken } from '../types/LoginToken';
 
-const getByToken = async (token: string): Promise<any> => {
+const getByToken = async (token: string): Promise<LoginToken> => {
   try {
     const result = await db(loginTokenTable)
     .where('token', token)
@@ -16,7 +17,7 @@ const getByToken = async (token: string): Promise<any> => {
   }
 };
 
-const getByEmail = async (email: string): Promise<any> => {
+const getByEmail = async (email: string): Promise<LoginToken> => {
   try {
     const result = await db(loginTokenTable)
     .where('email', email)
@@ -29,7 +30,7 @@ const getByEmail = async (email: string): Promise<any> => {
   }
 };
 
-const insert = async (token: string, email: string, expiresAt: string): Promise<any> => {
+const insert = async (token: string, email: string, expiresAt: string): Promise<LoginToken> => {
   try {
     return await db(loginTokenTable).insert({
       token,

@@ -15,7 +15,7 @@ dotenv.config();
  * Some data can be modified after been loaded inside PG
  * We need to re import them all from time to time using boolean @param updateEverything
  */
-async function importDataFromDSToPG(updateEverything = false) {
+async function importDataFromDSToPG(updateEverything = false): Promise<boolean> {
   try {
     console.log('Starting importDataFromDSToPG...');
     const latestCursorInPG = await dbsApiCursor.getLatestCursorSaved(updateEverything);
@@ -41,7 +41,7 @@ async function importDataFromDSToPG(updateEverything = false) {
   }
 }
 
-const sendAlertEmail = async function sendAlertEmail(badPsychologists) {
+const sendAlertEmail = async function sendAlertEmail(badPsychologists): Promise<void> {
   try {
     const html = await ejs.renderFile('./views/emails/multipleAcceptedAlert.ejs', {
       badPsychologists,

@@ -3,6 +3,7 @@ import expressJWT from 'express-jwt';
 
 import psychologistRouter from './psychologist';
 import patientsRouter from './patients';
+import universitiesRouter from './universities';
 import appointmentsRouter from './appointments';
 
 import xsrfProtection from '../middlewares/xsrfProtection';
@@ -32,6 +33,7 @@ router.post('/psychologist/logout', loginController.deleteToken);
 
 router.use('/appointments', appointmentsRouter);
 router.use('/patients', patientsRouter);
+router.use('/universities', universitiesRouter);
 router.use('/psychologist/:psyId', access.checkPsyParam, psychologistRouter);
 
 export default router;

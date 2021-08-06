@@ -17,7 +17,11 @@ const suspend = () => {
   });
 };
 
-const signConvention = (name, isSigned) => cy.request('GET', 'http://localhost:8080/api/university')
+const signConvention = (name, isSigned) => cy.request({
+  method: 'GET',
+  url: 'http://localhost:8080/api/universities',
+  headers: { 'xsrf-token': 'randomXSRFToken' },
+})
   .then(response => {
     const university = response.body.find(u => u.name === name);
     setLoginInfo();

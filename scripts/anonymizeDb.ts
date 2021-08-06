@@ -21,7 +21,7 @@ const fakePhone = () : string => faker.phone.phoneNumber('0# ## ## ## ##');
 // eslint-disable-next-line max-len
 const fakeWebsite = (real: string) : string => (real ? faker.helpers.randomize([faker.internet.domainName(), faker.internet.url()]) : real);
 
-const anonymizeDb = async () => {
+const anonymizeDb = async (): Promise<void> => {
   if (config.hostnameWithProtocol.startsWith(PROD_HOSTNAME)) {
     console.error("You can't do this on production!");
     process.exit(2);

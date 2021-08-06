@@ -79,7 +79,10 @@ const Psychologist = {
 
 const Statistics = { getAll: () => client.get('/statistics') };
 
-const University = { getAll: () => client.get('/university') };
+const University = {
+  getAll: () => client.get('/universities'),
+  getOne: id => client.get(`/universities/${id}`),
+};
 
 const User = {
   getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),

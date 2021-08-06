@@ -1,5 +1,5 @@
 import faker from 'faker';
-import { Psychologist } from '../../types/Psychologist';
+import { DSPsychologist, Psychologist } from '../../types/Psychologist';
 import { Patient } from '../../types/Patient';
 import { Appointment } from '../../types/Appointment';
 import uuid from '../../utils/uuid';
@@ -15,8 +15,9 @@ import {
   suspensionReasonsTable,
   lastConnectionsTable,
 } from '../../db/tables';
-import { DossierState } from '../../types/DemarcheSimplifiee';
+import { DossierState } from '../../types/DossierState';
 import db from '../../db/db';
+import { University } from '../../types/University';
 
 faker.locale = 'fr';
 
@@ -28,7 +29,7 @@ const getRandomInt = () : string => {
   return ourRandom.toString();
 };
 
-const getFirstNames = () => {
+const getFirstNames = (): string => {
   const rand = faker.datatype.number();
   let firstNames = faker.name.firstName();
   if (rand % 2 === 0) {
@@ -40,7 +41,7 @@ const getFirstNames = () => {
   return firstNames;
 };
 
-const getAddress = () => {
+const getAddress = (): {address: string, departement: string, region: string} => {
   const rand = faker.datatype.number() % 5;
   switch (rand) {
   case 0:
@@ -75,7 +76,7 @@ const getOnePsy = (
   state = DossierState.accepte,
   archived = false,
   uniId: string = null,
-  inactiveUntil: string | undefined = undefined,
+  inactiveUntil: Date | undefined = undefined,
 ): Psychologist => {
   const dossierNumber = uuid.generateFromString(`psychologist-${personalEmail}`);
   return {
@@ -92,7 +93,6 @@ const getOnePsy = (
     personalEmail,
     website: faker.internet.domainName() + faker.internet.domainSuffix(),
     teleconsultation: faker.datatype.boolean(),
-    // eslint-disable-next-line max-len
     description: faker.lorem.paragraphs(2),
     // eslint-disable-next-line max-len
     training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
@@ -100,16 +100,45 @@ const getOnePsy = (
     languages: 'Français, Anglais, et Espagnol',
     active: !inactiveUntil,
     inactiveUntil,
+    createdAt: new Date(),
   };
 };
 
-const getOneInactivePsy = (inactiveUntil: string): Psychologist => getOnePsy(
+const getOneInactivePsy = (inactiveUntil?: Date): Psychologist => getOnePsy(
   `inactive@${inactiveUntil}.fr`,
   DossierState.accepte,
   false,
   null,
   inactiveUntil,
 );
+
+const getOnePsyDS = (
+  champValue = faker.datatype.string(),
+  champId = faker.datatype.string(),
+  firstName = faker.name.firstName(),
+  lastName = faker.name.lastName(),
+) : DSPsychologist => ({
+  id: faker.datatype.string(),
+  state: DossierState.accepte,
+  archived: false,
+  usager: {
+    email: faker.internet.exampleEmail(),
+  },
+  number: faker.datatype.number(),
+  groupeInstructeur: {
+    label: faker.lorem.word(),
+  },
+  messages: [],
+  annotations: [],
+  champs: [{
+    id: champId,
+    stringValue: champValue,
+  }],
+  demandeur: {
+    nom: lastName,
+    prenom: firstName,
+  },
+});
 
 const getOnePatient = (
   index: number,
@@ -149,21 +178,32 @@ const getOneAppointment = (
   };
 };
 
+const getOneUniversity = (name: string) : University => ({
+  name,
+  id: uuid.generateFromString(`university-${name}`),
+  emailUniversity: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
+  emailSSU: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
+  siret: faker.helpers.replaceSymbols('##############'),
+  address: faker.address.streetAddress(),
+  postal_code: faker.address.zipCode('#####'),
+  city: faker.address.city(),
+});
+
 const insertOnePsy = async (
   personalEmail = 'loginemail@beta.gouv.fr',
   state = DossierState.accepte,
   archived = false,
   inactiveUntil = undefined,
+  withUniversity = true,
 ): Promise<Psychologist> => {
-  const universityId = uuid.generateRandom();
+  let universityId = null;
+  if (withUniversity) {
+    const university = getOneUniversity(faker.company.companyName());
+    await dbUniversities.upsertMany([university]);
+    universityId = university.id;
+  }
+
   const psy = getOnePsy(personalEmail, state, archived, universityId, inactiveUntil);
-  const id = getRandomInt();
-  await dbUniversities.upsertMany([{
-    id: universityId,
-    name: `University ${id}`,
-    emailSSU: `ssu${id}@spe.fr`,
-    emailUniversity: `university${id}@spe.fr`,
-  }]);
   await dbPsychologists.upsertMany([psy]);
   return psy;
 };
@@ -195,9 +235,11 @@ export default {
   getRandomInt,
   getOneAppointment,
   getOnePatient,
+  getOneUniversity,
   getOnePsy,
   insertOnePsy,
   getOneInactivePsy,
+  getOnePsyDS,
   cleanDataCursor,
   cleanDataToken,
   cleanAllPatients,

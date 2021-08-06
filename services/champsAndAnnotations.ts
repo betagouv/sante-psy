@@ -1,10 +1,13 @@
 import config from '../utils/config';
 
-const init = (configValues) => {
+const init = (configValues: string): {
+  idToField: {[key: string]: string},
+  fieldToId: {[key: string]: string},
+} => {
   const idToField = {};
   const fieldToId = {};
   JSON.parse(configValues)
-      .forEach(([id, field]) => {
+      .forEach(([id, field]: string[]) => {
         idToField[id] = field;
         fieldToId[field] = id;
       });

@@ -44,6 +44,9 @@ rules:
   no-multi-str: "off"
   no-unused-vars: "off"
   "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }]
+  "@typescript-eslint/explicit-function-return-type": "error"
+  "@typescript-eslint/explicit-module-boundary-types": "error"
+  "@typescript-eslint/no-explicit-any": "error"
   "@typescript-eslint/no-empty-function": "off"
   "@typescript-eslint/no-var-requires": "off"
   mocha-no-only/mocha-no-only: ["error"]
@@ -54,14 +57,14 @@ rules:
 
 overrides:
   - files:
-      - "tests/*.js"
-      - "test/*.js"
-      - "*.spec.js"
+      - "test/**/*.ts"
     rules:
       no-unused-expressions: "off"
       no-shadow: "off"
+      "@typescript-eslint/explicit-function-return-type": "off"
   - files:
       - "migrations/*.js"
     rules:
       max-len: "off"
-      func-names: "off"
+      func-names: "off"      
+      "@typescript-eslint/explicit-function-return-type": "off"

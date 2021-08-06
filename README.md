@@ -193,6 +193,7 @@ Voir aussi le script "scaling-dev-seed.sh" lié à "scalingo.json" qui permet d'
 ```bash
 node scripts/insertUniversities.js # Insert into universities tables
 node scripts/insertEmailToUniversities.js test/seed/test-ssu-renew.csv # insert emails contacts from CSV files (need to ask support for rights)
+ts-node scripts/insertAddressToUniversities.ts
 ```
 
 ### Ajout de la correspondance entre université et psychologues
