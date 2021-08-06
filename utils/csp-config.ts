@@ -18,6 +18,10 @@ export default helmet.contentSecurityPolicy({
       'data:',
     ],
     'frame-src': ['https://stats.santepsyetudiant.beta.gouv.fr'],
-    'connect-src': ["'self'", 'https://nominatim.openstreetmap.org'],
+    'connect-src': [
+      "'self'",
+      'https://nominatim.openstreetmap.org',
+      'https://stats.data.gouv.fr/',
+    ],
   },
 });
