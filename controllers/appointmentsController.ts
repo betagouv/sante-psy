@@ -23,13 +23,22 @@ const create = async (req: Request, res: Response): Promise<void> => {
 
   const date = new Date(req.body.date);
   const today = new Date();
-  const diffInMs = Math.abs(date.getTime() - today.getTime());
-  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+  const diffInMonth = Math.abs(date.getMonth() - today.getMonth());
   const { patientId } = req.body;
   const psyId = req.user.psychologist;
   const patientExist = await dbPatient.getById(patientId, psyId);
 
-  if (patientExist && diffInDays <= 120) {
+  if (patientExist) {
+    if (diffInMonth > 4) {
+      res.json({
+        message: "Erreur. La séance n'est pas créée. Nous ne pouvons crée une séance au dela de 4 mois avant/apres la date d'aujourd'hui",
+      });
+      console.warn(
+        'The difference between today and the declaration date is beyond 4 month',
+      );
+      throw new CustomError("Erreur. La séance n'est pas créée. \
+      Nous ne pouvons crée une séance au dela de 4 mois avant/apres la date d'aujourd'hui");
+    }
     await dbAppointments.insert(date, patientId, psyId);
     console.log(
       `Appointment created for patient id ${patientId} by psy id ${psyId}`,

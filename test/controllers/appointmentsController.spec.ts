@@ -369,5 +369,43 @@ describe('appointmentsController', () => {
           return Promise.resolve();
         });
     });
+
+    it('should not create appointment if diff in month > 4', async () => {
+      const psy = await clean.insertOnePsy();
+      const patient = await dbPatients.insert(
+        'Ada',
+        'Lovelace',
+        '12345678901',
+        '42',
+        false,
+        false,
+        psy.dossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        dateOfBirth,
+      );
+
+      const todayDate = new Date();
+      const newDatePlus4month = new Date(todayDate.setMonth(todayDate.getMonth() + 5));
+      console.log(newDatePlus4month, 'NEW DATE PLUS 4 MONTH');
+
+      return chai.request(app)
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send({
+          patientId: patient.id,
+          date: newDatePlus4month,
+        })
+        .then(async (res) => {
+          res.status.should.equal(200);
+          res.body.message.should.equal("Erreur. La séance n'est pas créée. Nous ne pouvons crée une séance au dela de 4 mois avant/apres la date d'aujourd'hui");
+
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(0);
+
+          return Promise.resolve();
+        });
+    });
   });
 });

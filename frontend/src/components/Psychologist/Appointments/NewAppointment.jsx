@@ -29,12 +29,17 @@ const NewAppointment = () => {
   }, []);
 
   const createNewAppointment = e => {
-    e.preventDefault();
-    setNotification({});
-    agent.Appointment.add(patientId, date).then(response => {
-      history.push('/psychologue/mes-seances');
-      setNotification(response);
-    });
+    const today = new Date();
+    const todayUTC = convertLocalToUTCDate(today);
+    const diffInMonth = Math.abs(date.getMonth() - todayUTC.getMonth());
+    if (diffInMonth <= 4) {
+      e.preventDefault();
+      setNotification({});
+      agent.Appointment.add(patientId, date).then(response => {
+        history.push('/psychologue/mes-seances');
+        setNotification(response);
+      });
+    }
   };
 
   const patientsMap = patients.map(patient => (
