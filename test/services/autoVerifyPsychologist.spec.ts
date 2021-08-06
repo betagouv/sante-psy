@@ -22,7 +22,7 @@ describe('autoVerifyPsychologist', () => {
 
     const DOSSIER_ID_VALID = 'RG9zc2llci00ODkwOTEw';
     const DOSSIER_ID_INVALID = 'RG9zc2llci00Nzg5MzM2';
-    const INSTRUCTOR_ID = config.demarchesSimplifieesInstructor;
+    const INSTRUCTOR_ID = config.demarchesSimplifiees.instructor;
 
     sinon.assert.calledWith(executeMutationStub.getCall(0),
       sinon.match((query) => query.includes('mutation dossierModifierAnnotationText')),

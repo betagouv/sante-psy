@@ -2,16 +2,16 @@ import nodemailer from 'nodemailer';
 import config from './config';
 
 const mailTransport = nodemailer.createTransport({
-  logger: config.mailDebug,
-  debug: config.mailDebug,
-  host: config.mailHost,
-  port: config.mailPort,
+  logger: config.mail.debug,
+  debug: config.mail.debug,
+  host: config.mail.host,
+  port: config.mail.port,
   ignoreTLS: !config.isSecure,
   requireTLS: config.isSecure,
   secure: config.isSecure,
   auth: {
-    user: config.auth.user,
-    pass: config.auth.pass,
+    user: config.mail.auth.user,
+    pass: config.mail.auth.pass,
   },
 });
 

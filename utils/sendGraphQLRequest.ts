@@ -1,10 +1,10 @@
 import { GraphQLClient } from 'graphql-request';
 import config from './config';
 
-const endpoint = config.apiUrl;
+const endpoint = config.demarchesSimplifiees.apiUrl;
 const graphQLClient = new GraphQLClient(endpoint, {
   headers: {
-    authorization: `Bearer ${config.apiToken}`,
+    authorization: `Bearer ${config.demarchesSimplifiees.apiToken}`,
     'Content-Type': 'application/json',
   },
 });

@@ -9,7 +9,7 @@ import graphql from '../../utils/graphql';
 const getSimplePsyInfo = (cursor: string, state: DossierState): Promise<DSResponse> => {
   const query = gql`
     {
-      demarche (number: ${config.demarchesSimplifieesId}) {
+      demarche (number: ${config.demarchesSimplifiees.id}) {
         dossiers (state: ${state}${cursor ? `, after: "${cursor}"` : ''}) {
           pageInfo {
             hasNextPage
@@ -74,7 +74,7 @@ const acceptPsychologist = (id: string): Promise<{errors: {message: string}}[]> 
   const variables = {
     input: {
       dossierId: id,
-      instructeurId: config.demarchesSimplifieesInstructor,
+      instructeurId: config.demarchesSimplifiees.instructor,
     },
   };
 
@@ -84,7 +84,7 @@ const acceptPsychologist = (id: string): Promise<{errors: {message: string}}[]> 
 const getDossiersWithAnnotationsAndMessages = (cursor: string, state: DossierState): Promise<DSResponse> => {
   const query = gql`
   {
-    demarche (number: ${config.demarchesSimplifieesId}) {
+    demarche (number: ${config.demarchesSimplifiees.id}) {
       dossiers (state: ${state}${cursor ? `, after: "${cursor}"` : ''}) {
         pageInfo {
           hasNextPage
@@ -133,7 +133,7 @@ const addVerificationMessage = (id: string, message: string): Promise<{errors: {
   const variables = {
     input: {
       dossierId: id,
-      instructeurId: config.demarchesSimplifieesInstructor,
+      instructeurId: config.demarchesSimplifiees.instructor,
       annotationId: getAnnotationsIdFromField('message'),
       value: message,
     },
@@ -156,7 +156,7 @@ const verifyDossier = (id: string): Promise<{errors: {message: string}}[]> => {
   const variables = {
     input: {
       dossierId: id,
-      instructeurId: config.demarchesSimplifieesInstructor,
+      instructeurId: config.demarchesSimplifiees.instructor,
       annotationId: getAnnotationsIdFromField('verifiee'),
       value: true,
     },
@@ -179,7 +179,7 @@ const putDossierInInstruction = (id: string): Promise<{errors: {message: string}
   const variables = {
     input: {
       dossierId: id,
-      instructeurId: config.demarchesSimplifieesInstructor,
+      instructeurId: config.demarchesSimplifiees.instructor,
     },
   };
 
@@ -203,7 +203,7 @@ const requestPsychologist = async (afterCursor: string | undefined): Promise<DSR
   const paginationCondition = graphql.getWhereConditionAfterCursor(afterCursor);
   const query = gql`
     {
-      demarche (number: ${config.demarchesSimplifieesId}) {
+      demarche (number: ${config.demarchesSimplifiees.id}) {
         id
         dossiers ${paginationCondition} {
           pageInfo {
@@ -289,7 +289,7 @@ const sendMessageWithAttachment = (message: string, attachment: string, dossierI
 
   const variables = {
     dossierId,
-    instructeurId: config.demarchesSimplifieesInstructor,
+    instructeurId: config.demarchesSimplifiees.instructor,
     body: message,
     attachment,
   };

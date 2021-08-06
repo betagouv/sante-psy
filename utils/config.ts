@@ -15,54 +15,57 @@ if (!secret || !secretLogs) {
 
 const contactEmail = process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr';
 
+const getBooleanEnv = (value: string, defaultValue: string): boolean => (value || defaultValue) === 'true';
+
 export default {
   appName: 'Santé Psy Étudiant',
-  activateDebug: (process.env.ACTIVATE_DEBUG_LOG || 'true') === 'false',
+  activateDebug: getBooleanEnv(process.env.ACTIVATE_DEBUG_LOG, 'false'),
   announcement: process.env.ANNOUNCEMENT || '',
   port: process.env.PORT || 8080,
   teamEmail: process.env.TEAM_EMAIL || 'equipe-santepsyetudiants@beta.gouv.fr',
   contactEmail,
-  apiToken: process.env.API_TOKEN,
-  apiUrl: process.env.API_URL
-    || 'https://www.demarches-simplifiees.fr/api/v2/graphql',
   databaseUrl: process.env.DATABASE_URL,
   dateOfBirthDeploymentDate: process.env.DATE_OF_BIRTH_FEATURE_DATE || '20/04/2021',
-  demarchesSimplifieesId: process.env.DEMARCHES_SIMPLIFIEES_ID,
-  demarchesSimplifieesUrl: process.env.DEMARCHES_SIMPLIFIEES_URL,
-  demarchesSimplifieesAutoAcceptDepartments: process.env.DEMARCHES_SIMPLIFIEES_AUTO_ACCEPT_DEPARTMENTS || [],
-  demarchesSimplifieesAutoAcceptMessage: autoAcceptMessage(contactEmail),
-  demarchesSimplifieesAutoAcceptDelay: process.env.DEMARCHES_SIMPLIFIEES_AUTO_ACCEPT_DELAY,
-  demarchesSimplifieesInstructor: process.env.DEMARCHES_SIMPLIFIEES_INSTRUCTOR,
-  demarchesSimplifieesChamps: process.env.DEMARCHES_SIMPLIFIEES_CHAMPS,
-  demarchesSimplifieesAnnotations: process.env.DEMARCHES_SIMPLIFIEES_ANNOTATIONS,
+  demarchesSimplifiees: {
+    apiToken: process.env.API_TOKEN,
+    apiUrl: process.env.API_URL
+    || 'https://www.demarches-simplifiees.fr/api/v2/graphql',
+    id: process.env.DEMARCHES_SIMPLIFIEES_ID,
+    url: process.env.DEMARCHES_SIMPLIFIEES_URL,
+    autoAcceptDepartments: process.env.DEMARCHES_SIMPLIFIEES_AUTO_ACCEPT_DEPARTMENTS || [],
+    autoAcceptMessage: autoAcceptMessage(contactEmail),
+    instructor: process.env.DEMARCHES_SIMPLIFIEES_INSTRUCTOR,
+    champs: process.env.DEMARCHES_SIMPLIFIEES_CHAMPS,
+    annotations: process.env.DEMARCHES_SIMPLIFIEES_ANNOTATIONS,
+  },
   sentryDNS: process.env.SENTRY_DNS || '',
-  featurePsyList: process.env.FEATURE_PSY_LIST || false,
-  featureImportData: process.env.FEATURE_IMPORT_DATA || false,
-  featureSendSummary: process.env.FEATURE_SEND_SUMMARY || false,
-  featurePsyPages: process.env.FEATURE_PSY_PAGES || false,
-  featureAutoAccept: process.env.FEATURE_AUTO_ACCEPT || false,
-  featureAutoVerify: process.env.FEATURE_AUTO_VERIFY || false,
-  featureReimbursementPage: (process.env.FEATURE_REIMBURSEMENT_PAGE === 'true'),
-  uuidNamespace: process.env.UUID_NAMESPACE, // used to generate uuid
+  feature: {
+    importData: getBooleanEnv(process.env.FEATURE_IMPORT_DATA, 'false'),
+    checkMultipleFiles: getBooleanEnv(process.env.FEATURE_CHECK_MULTIPLE_FILES, 'false'),
+    sendSummary: getBooleanEnv(process.env.FEATURE_SEND_SUMMARY, 'false'),
+    autoAccept: getBooleanEnv(process.env.FEATURE_AUTO_ACCEPT, 'false'),
+    autoVerify: getBooleanEnv(process.env.FEATURE_AUTO_VERIFY, 'false'),
+  },
+  uuidNamespace: process.env.UUID_NAMESPACE,
   secret,
   secretLogs,
-  sessionDurationHours: process.env.SESSION_DURATION_HOURS || '2', // duration in hours
-  refreshDurationHours: process.env.REFRESH_DURATION_HOURS || 1, // duration in hours
-  useCors: (process.env.USE_CORS || 'false') === 'true',
-  speedLimitation: (process.env.SPEED_LIMITATION || 'true') === 'true',
-  testEnvironment: (process.env.TEST_ENVIRONMENT || 'false') === 'true',
-  // mail
+  sessionDurationHours: process.env.SESSION_DURATION_HOURS || '2',
+  refreshDurationHours: process.env.REFRESH_DURATION_HOURS || '1',
+  useCors: getBooleanEnv(process.env.USE_CORS, 'false'),
+  speedLimitation: getBooleanEnv(process.env.SPEED_LIMITATION, 'true'),
+  testEnvironment: getBooleanEnv(process.env.TEST_ENVIRONMENT, 'false'),
   hostnameWithProtocol,
-  protocol,
   isSecure: protocol === 'https:',
-  mailDebug: process.env.MAIL_DEBUG === 'true',
-  mailHost: process.env.MAIL_HOST,
-  mailPort: parseInt(process.env.MAIL_PORT || '25', 10),
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
+  mail: {
+    debug: getBooleanEnv(process.env.MAIL_DEBUG, 'false'),
+    host: process.env.MAIL_HOST,
+    port: parseInt(process.env.MAIL_PORT || '25', 10),
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
   },
-  satistics: {
+  statistics: {
     base: process.env.METABASE_URL || 'https://stats.santepsyetudiant.beta.gouv.fr',
     dashboard: process.env.METABASE_DASHBOARD || '/public/dashboard/a3834fd4-aa00-4ee2-a119-11dd2156e082',
   },

@@ -5,7 +5,7 @@ import buildRequest from '../../services/demarchesSimplifiees/buildRequest';
 import config from '../../utils/config';
 
 describe('Build Request', () => {
-  const INSTRUCTOR_ID = config.demarchesSimplifieesInstructor;
+  const INSTRUCTOR_ID = config.demarchesSimplifiees.instructor;
   let executeMutationStub;
 
   beforeEach(() => {
@@ -77,7 +77,7 @@ describe('Build Request', () => {
       sinon.match({
         input: {
           dossierId: id,
-          instructeurId: config.demarchesSimplifieesInstructor,
+          instructeurId: INSTRUCTOR_ID,
         },
       }));
   });
@@ -93,7 +93,7 @@ describe('Build Request', () => {
       sinon.match((query) => query.includes('mutation dossierEnvoyerMessage')),
       sinon.match({
         dossierId: id,
-        instructeurId: config.demarchesSimplifieesInstructor,
+        instructeurId: INSTRUCTOR_ID,
         body: message,
         attachment,
       }));
