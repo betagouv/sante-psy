@@ -1,7 +1,9 @@
-import { assert } from 'chai';
+import { assert, expect } from 'chai';
 import dotEnv from 'dotenv';
 import dbUniversities from '../../db/universities';
 import clean from '../helper/clean';
+import seed from '../helper/fake_data';
+import db from '../../db/db';
 
 dotEnv.config();
 
@@ -109,6 +111,16 @@ describe('DB Universities', () => {
       // @ts-expect-error => test
       const output = dbUniversities.getEmailsTo(university);
       assert.isUndefined(output);
+    });
+  });
+
+  describe('getNoUniversityNow', () => {
+    it('should return proper university', async () => {
+      await seed(db, true);
+      const noUniversityNow = await dbUniversities.getNoUniversityNow();
+
+      expect(noUniversityNow.id).to.not.be.undefined;
+      noUniversityNow.name.should.be.equal('--- Aucune pour le moment');
     });
   });
 });

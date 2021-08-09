@@ -24,7 +24,7 @@
     "rollback-one": "knex migrate:down",
     "start": "node dist/index.js",
     "test": "TEST_ENVIRONMENT=true ts-mocha --require @babel/register --exit test/** test/**/*",
-    "test:ci": "npm run test",
+    "test:ci": "wait-on --timeout 60000 https://api-sante.herokuapp.com/annuaire/annuaire.json?Identification+nationale+PP__in=0 && npm run test",
     "preinstall": "npx npm-force-resolutions",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",

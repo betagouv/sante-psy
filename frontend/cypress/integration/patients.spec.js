@@ -60,7 +60,7 @@ describe('Patients', () => {
       cy.get('[data-test-id="patients-missing-info"]')
         .should('not.exist');
 
-      cy.get('[data-test-id="notification-success"]')
+      cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
           'Le patient Georges Moustaki a bien été modifié.',
@@ -76,7 +76,7 @@ describe('Patients', () => {
       cy.wait('@deletePatients');
       cy.get('[data-test-id="patient-row"]')
         .should('have.length', 4);
-      cy.get('[data-test-id="notification-success"]')
+      cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
           'Le patient a bien été supprimé.',
@@ -92,7 +92,7 @@ describe('Patients', () => {
       cy.wait('@deletePatients');
       cy.get('[data-test-id="patient-row"]')
         .should('have.length', 4);
-      cy.get('[data-test-id="notification-success"]')
+      cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
           'Le patient a bien été supprimé.',

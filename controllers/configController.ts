@@ -6,11 +6,11 @@ const get = async (req: Request, res: Response): Promise<void> => {
   res.json({
     appName: config.appName,
     contactEmail: config.contactEmail,
-    demarchesSimplifieesUrl: config.demarchesSimplifieesUrl,
+    demarchesSimplifieesUrl: config.demarchesSimplifiees.url,
     announcement: config.announcement,
     dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
     sessionDuration: config.sessionDurationHours,
-    satistics: config.satistics,
+    statistics: config.statistics,
   });
 };
 

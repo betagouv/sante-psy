@@ -42,6 +42,16 @@ const getById = async (universityId: string) : Promise<University> => {
   }
 };
 
+let noUniversityNow;
+const getNoUniversityNow = async (): Promise<University> => {
+  if (!noUniversityNow) {
+    noUniversityNow = db(universitiesTable)
+        .where({ name: '--- Aucune pour le moment' })
+        .first();
+  }
+  return noUniversityNow;
+};
+
 const getAll = async (): Promise<University[]> => {
   try {
     return db(universitiesTable);
@@ -106,6 +116,7 @@ const getEmailsTo = (university: University): string | undefined => {
 
 export default {
   upsertMany,
+  getNoUniversityNow,
   getById,
   getAll,
   getAllOrderByName,

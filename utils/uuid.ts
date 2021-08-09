@@ -6,7 +6,7 @@ const generateFromString = (id: string): string => uuidv5(id, config.uuidNamespa
 const generateRandom = (random = Math.random().toString()): string => generateFromString(random);
 
 const getUuidDossierNumber = (number: number): string => (
-  generateFromString(`${config.demarchesSimplifieesId}-${number}`)
+  generateFromString(`${config.demarchesSimplifiees.id}-${number}`)
 );
 export default {
   generateFromString,

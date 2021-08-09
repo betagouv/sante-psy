@@ -30,28 +30,29 @@ describe('Appointments', () => {
     });
 
     it('should display default announcement only once', () => {
-      cy.get('[data-test-id="notification-error"]')
+      cy.get('[data-test-id="notification-info"] p')
+        .last()
         .should(
           'have.text',
           '(Docker-compose variable) Very important announcement.',
         );
-      cy.get('[data-test-id="notification-close"]')
+      cy.get('[data-test-id="notification-info"] button')
         .click();
-      cy.get('[data-test-id="notification-error"]')
+      cy.get('[data-test-id="notification-info"] p')
         .should('not.exist');
       cy.reload();
-      cy.get('[data-test-id="notification-error"]')
+      cy.get('[data-test-id="notification-info"] p')
         .should('not.exist');
     });
 
     it('should display convention reminder only when no convention', () => {
       // Only error message is the announcement
-      cy.get('[data-test-id="notification-error"]')
+      cy.get('[data-test-id="notification-info"]')
         .should('have.length', 1);
       removeConvention('login@beta.gouv.fr');
       cy.reload();
       // Now we have both
-      cy.get('[data-test-id="notification-error"]')
+      cy.get('[data-test-id="notification-info"] p')
         .should('have.length', 2)
         .last()
         .should(
@@ -69,7 +70,7 @@ describe('Appointments', () => {
       cy.wait('@deleteAppointment');
       cy.get('[data-test-id="appointment-row"]')
         .should('have.length', 12);
-      cy.get('[data-test-id="notification-success"]')
+      cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
           'La séance a bien été supprimée.',
@@ -79,11 +80,11 @@ describe('Appointments', () => {
 
   describe('Suspended profile', () => {
     it('should display warning if psy is suspended', () => {
-      cy.get('[data-test-id="notification-close"]')
+      cy.get('[data-test-id="notification-info"] button')
         .click();
       suspend().then(() => {
         cy.reload();
-        cy.get('[data-test-id="notification-error"]')
+        cy.get('[data-test-id="notification-info"] p')
           .should(
             'have.text',
             'Votre profil n‘est plus visible dans l‘annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur la page Mes informations.',
@@ -111,7 +112,7 @@ describe('Appointments', () => {
 
       cy.wait('@createAppointment');
       cy.location('pathname').should('eq', '/psychologue/mes-seances');
-      cy.get('[data-test-id="notification-success"]')
+      cy.get('[data-test-id="notification-success"] p')
         .should('exist');
     });
   });

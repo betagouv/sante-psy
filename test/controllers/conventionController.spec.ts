@@ -11,6 +11,7 @@ describe('conventionController', () => {
     let university;
 
     beforeEach(async () => {
+      university = await dbUniversities.insertByName('--- Aucune pour le moment');
       university = await dbUniversities.insertByName('Cool U dude');
     });
 
@@ -88,6 +89,14 @@ describe('conventionController', () => {
         isConventionSigned: true,
         universityId: 'not a uuid',
       }, 'Vous devez choisir une université.');
+    });
+
+    it('should not update if convention is signed and no university now selected', async () => {
+      const noUniversity = await dbUniversities.getNoUniversityNow();
+      await failValidation({
+        isConventionSigned: true,
+        universityId: noUniversity.id,
+      }, 'Impossible de signer une convention avec cette université.');
     });
   });
 });

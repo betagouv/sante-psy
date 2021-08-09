@@ -26,6 +26,12 @@ const FaqTab = ({ type }) => {
   const { commonStore: { config } } = useStore();
   const [activeSection, setActiveSection] = useState();
 
+  const onOpenQuestion = item => {
+    if (__MATOMO__) {
+      _paq.push(['trackEvent', 'FAQ', type, item.question]);
+    }
+  };
+
   return (
     <div data-test-id={`tabpanel-${type}`}>
       <FaqProcess
@@ -45,7 +51,9 @@ const FaqTab = ({ type }) => {
                 setActiveSection(section);
               }}
               className={
-                      activeSection && activeSection.title === section.title ? 'fr-sidemenu__item--active' : ''
+                      activeSection && activeSection.title === section.title
+                        ? 'fr-sidemenu__item--active'
+                        : ''
                     }
             >
               {section.title}
@@ -59,7 +67,15 @@ const FaqTab = ({ type }) => {
               <Accordion>
                 {faq[section.name](config)
                   .map(item => (
-                    <AccordionItem title={item.question} key={item.question}>
+                    <AccordionItem
+                      onClick={close => {
+                        if (!close) {
+                          onOpenQuestion(item);
+                        }
+                      }}
+                      title={item.question}
+                      key={item.question}
+                    >
                       <div
                         className={styles.answer}
                       // eslint-disable-next-line react/no-danger

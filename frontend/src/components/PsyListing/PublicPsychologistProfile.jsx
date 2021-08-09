@@ -86,7 +86,7 @@ const PublicPsychologistProfile = () => {
           Revenir à l&lsquo;annuaire
         </Button>
       </Row>
-      {error && <Notification message={error} success={false} />}
+      {error && <Notification message={error} type="error" />}
       {psychologist && (
         <>
           <Row>

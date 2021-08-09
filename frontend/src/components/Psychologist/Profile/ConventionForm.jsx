@@ -1,17 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button, RadioGroup, Radio, Select, Alert } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { useStore } from 'stores/';
 
 const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultValue }) => {
+  const noUniversityId = useRef();
   const [universities, setUniversities] = useState([]);
   const [convention, setConvention] = useState();
 
   const { commonStore: { setNotification }, userStore: { setUser } } = useStore();
 
   useEffect(() => {
-    agent.University.getAll().then(setUniversities);
+    agent.University.getAll().then(response => {
+      const noUniversity = response.find(university => university.name === '--- Aucune pour le moment');
+      if (noUniversity) {
+        noUniversityId.current = noUniversity.id;
+      }
+      setUniversities(response);
+    });
   }, []);
 
   useEffect(() => {
@@ -57,7 +64,11 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
             onChange={e => setConvention({ ...convention, universityId: e.target.value })}
             required
             options={universities
-              ? universities.map(university => ({ value: university.id, label: university.name }))
+              ? universities.map(university => ({
+                value: university.id,
+                label: university.name,
+                disabled: convention.isConventionSigned && university.id === noUniversityId.current,
+              }))
               : []}
           />
           {isSorbonne(convention.universityId) && (
@@ -80,6 +91,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
               data-test-id="signed-true"
               label="Oui"
               value="true"
+              isDisabled={convention.universityId === noUniversityId.current}
             />
             <Radio
               data-test-id="signed-false"
@@ -93,7 +105,11 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
               submit
               data-test-id="update-convention-button"
               className="fr-fi-check-line fr-btn--icon-left"
-              disabled={convention.isConventionSigned === '' || convention.universityId === ''}
+              disabled={
+                convention.isConventionSigned === ''
+                || convention.universityId === ''
+                || (convention.isConventionSigned && convention.universityId === noUniversityId.current)
+              }
             >
               Enregistrer
             </Button>

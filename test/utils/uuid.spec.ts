@@ -15,7 +15,7 @@ describe('uuid', () => {
       const dossierNumber = 1;
 
       const output = uuid.getUuidDossierNumber(dossierNumber);
-      const result = uuid.generateFromString(`${config.demarchesSimplifieesId}-${dossierNumber}`);
+      const result = uuid.generateFromString(`${config.demarchesSimplifiees.id}-${dossierNumber}`);
 
       output.should.equal(result);
     });

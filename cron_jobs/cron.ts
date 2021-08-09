@@ -19,7 +19,7 @@ const jobs = [
     onTick: cronUniversityPayments.sendSummaryToUniversities,
     start: true,
     timeZone: 'Europe/Paris',
-    isActive: config.featureSendSummary,
+    isActive: config.feature.sendSummary,
     name: 'Send monthly appoitment summaries to universities',
   },
   {
@@ -27,7 +27,7 @@ const jobs = [
     onTick: cronDemarchesSimplifiees.importLatestDataFromDSToPG,
     start: true,
     timeZone: 'Europe/Paris',
-    isActive: config.featureImportData,
+    isActive: config.feature.importData,
     name: 'Import latest data from DS API to PG',
   },
   {
@@ -36,7 +36,7 @@ const jobs = [
     start: true,
     runOnInit: true,
     timeZone: 'Europe/Paris',
-    isActive: config.featureImportData,
+    isActive: config.feature.importData,
     name: 'Import ALL data from DS API to PG',
   },
   {
@@ -44,7 +44,7 @@ const jobs = [
     onTick: cronDemarchesSimplifiees.checkForMultipleAcceptedDossiers,
     start: true,
     timeZone: 'Europe/Paris',
-    isActive: config.featureImportData,
+    isActive: config.feature.checkMultipleFiles,
     name: 'checkForMultipleAcceptedDossiers',
   },
   {
@@ -52,7 +52,7 @@ const jobs = [
     onTick: cronDemarchesSimplifiees.autoAcceptPsychologists,
     start: true,
     timeZone: 'Europe/Paris',
-    isActive: config.featureAutoAccept,
+    isActive: config.feature.autoAccept,
     name: 'Auto accept psychologist from designated universities in DS',
   },
   {
@@ -60,7 +60,7 @@ const jobs = [
     onTick: cronDemarchesSimplifiees.autoVerifyPsychologists,
     start: true,
     timeZone: 'Europe/Paris',
-    isActive: config.featureAutoVerify,
+    isActive: config.feature.autoVerify,
     name: 'Auto verify psychologist in DS',
   },
   {

@@ -46,7 +46,7 @@ const Announcement = () => {
 
   return shouldDisplayAnnouncement() ? (
     <div className={classnames('fr-container', { [styles.notification]: true })}>
-      <Notification message={config.announcement} onClose={onClose} error />
+      <Notification message={config.announcement} onClose={onClose} type="info" />
     </div>
   ) : (
     <></>
