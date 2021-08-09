@@ -433,6 +433,7 @@ describe('DB Psychologists', () => {
       const now = new Date();
       const date = new Date();
       date.setDate(date.getDate() + 50);
+      date.setHours(0, 0, 0, 0);
 
       await dbPsychologists.suspend(activePsy.dossierNumber, date, 'because i say so');
 
@@ -482,6 +483,7 @@ describe('DB Psychologists', () => {
       psy.selfModified.should.be.equal(false);
       assert.isNull(psy.inactiveUntil);
 
+      tomorrow.setHours(0, 0, 0, 0);
       psy = await dbPsychologists.getById(inactivePsy3.dossierNumber);
       psy.active.should.be.equal(false);
       psy.selfModified.should.be.equal(false);
