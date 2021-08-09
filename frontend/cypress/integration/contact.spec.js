@@ -7,7 +7,7 @@ describe('Contact', () => {
   });
 
   it('should send contact info', () => {
-    cy.get('[data-test-id="notification-success"]')
+    cy.get('[data-test-id="notification-success"] p')
       .should('not.exist');
 
     cy.get('[data-test-id="user-student-input"]')
@@ -27,7 +27,7 @@ describe('Contact', () => {
     cy.get('[data-test-id="submit-button"]')
       .click();
 
-    cy.get('[data-test-id="notification-success"]')
+    cy.get('[data-test-id="notification-success"] p')
       .should(
         'have.text',
         'Votre message a bien été envoyé. Nous reviendrons vers vous rapidement.',

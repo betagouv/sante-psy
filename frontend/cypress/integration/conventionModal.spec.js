@@ -106,7 +106,7 @@ describe('ConventionModal', () => {
       cy.get('[data-test-id="appointment-container"]')
         .should('exist');
 
-      cy.get('[data-test-id="notification-success"]')
+      cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
           'Vos informations de conventionnement sont bien enregistrées.',

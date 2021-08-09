@@ -18,7 +18,12 @@ const GlobalNotification = () => {
 
   if (notification && notification.message
     && (location.pathname.startsWith('/psychologue') || !notification.displayOnlyOnPsyPages)) {
-    return <Notification {...notification} onClose={() => setNotification(null)} />;
+    return (
+      <Notification
+        {...notification}
+        onClose={() => setNotification(null)}
+      />
+    );
   }
 
   return <></>;

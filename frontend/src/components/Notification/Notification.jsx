@@ -1,39 +1,16 @@
-import React, { useState } from 'react';
-import classnames from 'classnames';
+import React from 'react';
 
-import styles from './notification.cssmodule.scss';
+import { Alert } from '@dataesr/react-dsfr';
 
-const Notification = ({ message, success, onClose, children }) => {
-  const [show, setShow] = useState(true);
-
-  const close = () => {
-    if (onClose) {
-      onClose();
-    }
-    setShow(false);
-  };
-
-  return show ? (
-    <div
-      data-test-id={success ? 'notification-success' : 'notification-error'}
-      className={classnames(
-        'fr-callout',
-        'fr-mb-3w',
-        { [styles.error]: !success },
-        { 'fr-fi-alert-line': !success },
-        { 'fr-fi-information-line': success },
-      )}
-    >
-      <p className="fr-text--md fr-mb-1v">{message || children}</p>
-      <span
-        data-test-id="notification-close"
-        className="fr-fi-close-line close-notification"
-        onClick={close}
-      />
-    </div>
-  ) : (
-    <></>
-  );
-};
+const Notification = ({ message, type, onClose, children }) => (
+  <div data-test-id={`notification-${type}`}>
+    <Alert
+      type={type}
+      title={message || children}
+      closable
+      onClose={onClose}
+    />
+  </div>
+);
 
 export default Notification;
