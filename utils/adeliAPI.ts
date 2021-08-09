@@ -3,7 +3,7 @@ import axios from 'axios/index';
 import { AdeliInfo } from '../types/AdeliInfo';
 
 const client = axios.create({
-  baseURL: 'https://api-sante.herokuapp.com/annuaire',
+  baseURL: 'https://api-annuaire-sante.herokuapp.com/annuaire',
 });
 
 const preprocessIds = (ids: string[]) : string[] => ids.map((id) => id.replace(/ /g, ''))
