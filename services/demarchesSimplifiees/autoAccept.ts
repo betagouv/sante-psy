@@ -16,7 +16,7 @@ const FILE = path.join(
 const sendAutoAcceptMessage = async (dossierId: string): Promise<void> => {
   const uploadFileId = await uploadDocument(FILE, dossierId);
   const result = await graphql
-    .sendMessageWithAttachment(config.demarchesSimplifieesAutoAcceptMessage, uploadFileId, dossierId);
+    .sendMessageWithAttachment(config.demarchesSimplifiees.autoAcceptMessage, uploadFileId, dossierId);
 
   console.debug('message envoyé :', result);
 };
@@ -37,7 +37,7 @@ const autoAcceptPsychologists = async (): Promise<void> => {
         const isVerified = psychologist.annotations
           .find((annotation) => annotation.id === getAnnotationsIdFromField('verifiee'))
           .stringValue;
-        return isVerified === 'true' && config.demarchesSimplifieesAutoAcceptDepartments.includes(departement);
+        return isVerified === 'true' && config.demarchesSimplifiees.autoAcceptDepartments.includes(departement);
       },
     )
     .map(

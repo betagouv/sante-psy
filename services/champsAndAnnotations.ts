@@ -14,8 +14,8 @@ const init = (configValues: string): {
   return { idToField, fieldToId };
 };
 
-const champs = init(config.demarchesSimplifieesChamps);
-const annotations = init(config.demarchesSimplifieesAnnotations);
+const champs = init(config.demarchesSimplifiees.champs);
+const annotations = init(config.demarchesSimplifiees.annotations);
 
 const getChampsFieldFromId = (id: string) : string => champs.idToField[id];
 const getChampsIdFromField = (field: string) : string => champs.fieldToId[field];

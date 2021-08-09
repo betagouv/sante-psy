@@ -35,7 +35,7 @@ describe('autoAcceptPsychologist', () => {
       dossierId);
 
     sinon.assert.calledWith(sendMessageWithAttachmentStub,
-      config.demarchesSimplifieesAutoAcceptMessage,
+      config.demarchesSimplifiees.autoAcceptMessage,
       FILE_ID,
       dossierId);
 

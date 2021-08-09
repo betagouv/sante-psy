@@ -9,7 +9,7 @@ import styles from './statistics.cssmodule.scss';
 
 const Statistics = () => {
   const { commonStore: { config } } = useStore();
-  if (!config.satistics) {
+  if (!config.statistics) {
     return <></>;
   }
 
@@ -17,8 +17,8 @@ const Statistics = () => {
     <MetabaseAppEmbed
       className={styles.iframe}
       title="stats"
-      base={config.satistics.base}
-      path={config.satistics.dashboard}
+      base={config.statistics.base}
+      path={config.statistics.dashboard}
     />
   );
 };
