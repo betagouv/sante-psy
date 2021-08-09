@@ -52,6 +52,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
 
           <h2>Informations pour l&lsquo;annuaire</h2>
           <SearcheableSelect
+            className="midlength-select"
             label="Votre département"
             field="departement"
             data-test-id="psy-departement-select"
