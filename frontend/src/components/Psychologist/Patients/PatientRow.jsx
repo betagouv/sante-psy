@@ -1,6 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button } from '@dataesr/react-dsfr';
+import { Button, Tag } from '@dataesr/react-dsfr';
+
+import classNames from 'classnames';
+import styles from './patientRow.cssmodule.scss';
 
 const PatientRow = ({ patient, deletePatient }) => {
   const history = useHistory();
@@ -15,26 +18,46 @@ const PatientRow = ({ patient, deletePatient }) => {
       <td>
         <div className="fr-col-2 fr-col-md-1 fr-displayed-xs fr-hidden-lg">
           { !patient.hasFolderCompleted
-            ? (<p className="fr-tag bg-orange-warning  fr-fi-alert-line fr-tag--sm" />)
-            : (<p className="fr-tag bg-success fr-fi-check-line fr-tag--sm" />)}
+            ? (
+              <Tag
+                className={classNames(styles.incomplete, styles.small)}
+                icon="fr-fi-alert-line"
+                iconPosition="left"
+                size="sm"
+              />
+            )
+            : (
+              <Tag
+                className={classNames(styles.complete, styles.small)}
+                icon="fr-fi-check-line"
+                iconPosition="left"
+                size="sm"
+              />
+            )}
         </div>
         <div className="fr-col-4 fr-col-xl-5 fr-hidden-xs fr-displayed-lg">
           { !patient.hasFolderCompleted
             ? (
-              <p
+              <Tag
                 data-test-id="patient-row-missing-info"
-                className="fr-tag bg-orange-warning  fr-fi-alert-line fr-tag--icon-left fr-tag--sm"
+                className={classNames(styles.incomplete, styles.big)}
+                icon="fr-fi-alert-line"
+                iconPosition="left"
+                size="sm"
               >
                 {`Informations manquantes : ${patient.missingInfo.join(', ')}`}
-              </p>
+              </Tag>
             )
             : (
-              <p
+              <Tag
                 data-test-id="patient-row-complete-info"
-                className="fr-tag bg-success fr-fi-check-line fr-tag--icon-left fr-tag--sm"
+                className={classNames(styles.complete, styles.big)}
+                icon="fr-fi-check-line"
+                iconPosition="left"
+                size="sm"
               >
                 Dossier complet
-              </p>
+              </Tag>
             )}
         </div>
       </td>

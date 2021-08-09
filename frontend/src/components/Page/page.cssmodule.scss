@@ -1,13 +1,13 @@
 .yellow {
-  background-color: #FFF9BF;
+  background-color: var(--yellow-medium-300);
 }
 
 .blue {
-  background-color: #F5F5FF;
+  background-color: var(--blue-france-100);
 }
 
 .container {
-  background-color: #FFFFFF;
+  background-color: var(--w);
   max-width: 800px;
   margin: auto;
   padding: 24px 8px;

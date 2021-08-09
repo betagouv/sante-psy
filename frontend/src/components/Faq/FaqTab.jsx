@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { observer } from 'mobx-react';
 import sanitizeHtml from 'sanitize-html';
-import classnames from 'classnames';
 
 import {
   Row,
@@ -41,7 +40,7 @@ const FaqTab = ({ type }) => {
       <Row spacing="mt-3w">
         <SideMenu
           buttonLabel="Dans cette rubrique"
-          className={classnames(styles.menu, 'fr-sidemenu--sticky fr-col-md-4 fr-col-sm-12')}
+          className="fr-sidemenu--sticky fr-col-md-4 fr-col-sm-12 fr-mb-3w"
         >
           {items[type].sections.map((section, index) => (
             <SideMenuLink

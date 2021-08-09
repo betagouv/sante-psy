@@ -23,7 +23,6 @@ import agent from 'services/agent';
 
 import { useStore } from 'stores/';
 
-// Need to be after dsfr to overwrite it
 import './App.css';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));

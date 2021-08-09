@@ -1,0 +1,20 @@
+.incomplete {
+    background-color: var(--orange-soft-300);
+}
+
+.complete {
+    background-color: var(--green-soft-300);
+}
+
+.big {
+    [class*=fr-fi-]:before {
+        font-size: inherit;
+        margin-left: 4px;
+    }
+}
+
+.small {
+    span {
+        margin-right: 0 !important;
+    }
+}

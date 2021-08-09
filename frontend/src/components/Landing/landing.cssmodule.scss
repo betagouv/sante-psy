@@ -1,6 +1,7 @@
 .container {
     color: var(--bf500);
     margin-bottom: 32px;
+    padding: 0;
 }
 
 .section,
@@ -11,11 +12,11 @@
 }
 
 .sectionLight {
-    background-color: #F5F5FF;
+    background-color: var(--blue-france-100);
 }
 
 .sectionAlt {
-    background-color: #FFF9BF;
+    background-color: var(--yellow-medium-300);
 }
 
 @media (min-width: 768px) {

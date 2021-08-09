@@ -1,4 +1,5 @@
 import React from 'react';
+import SectionTitle from './SectionTitle';
 
 import styles from './studentCard.cssmodule.scss';
 
@@ -8,7 +9,7 @@ const StudentCard = ({ index, title, description, image }) => (
       <div className={styles.line} />
       <span>{index}</span>
     </div>
-    <div className={styles.title}>{title}</div>
+    <SectionTitle>{title}</SectionTitle>
     <img className={styles.image} src={`/images/${image}.png`} alt={image} />
     <div className={styles.description}>{description}</div>
   </div>
