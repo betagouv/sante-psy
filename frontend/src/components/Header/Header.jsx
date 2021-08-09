@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import {
@@ -11,6 +11,7 @@ import {
   Tool,
   ToolItemGroup,
   ToolItem,
+  SwitchTheme,
 } from '@dataesr/react-dsfr';
 
 import { useStore } from 'stores/';
@@ -31,11 +32,13 @@ const connectedItems = [
 
 const Header = () => {
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
   const { userStore: { user } } = useStore();
 
   const psychologistPage = location.pathname.startsWith('/psychologue');
   return (
     <>
+      <SwitchTheme isOpen={isOpen} setIsOpen={setIsOpen} />
       <DSHeader>
         <HeaderBody>
           <Logo
@@ -50,6 +53,15 @@ const Header = () => {
           />
           <Tool>
             <ToolItemGroup>
+              <ToolItem onClick={() => setIsOpen(true)}>
+                <span
+                  className="fr-fi-theme-fill fr-link--icon-left"
+                  aria-controls="fr-theme-modal"
+                  data-fr-opened={isOpen}
+                >
+                  Paramètres d’affichage
+                </span>
+              </ToolItem>
               { user
                 ? (
                   <>

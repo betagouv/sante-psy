@@ -23,6 +23,7 @@ import agent from 'services/agent';
 
 import { useStore } from 'stores/';
 
+import './colors.css';
 import './App.css';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
