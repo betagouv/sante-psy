@@ -19,6 +19,49 @@ describe('conventionController', () => {
       await clean.cleanAllUniversities();
     });
 
+    it('should NOT update convention info if user not logged in', async () => {
+      const psyEmail = 'login@beta.gouv.fr';
+      const psy = await clean.insertOnePsy(psyEmail, DossierState.accepte, false);
+
+      return chai.request(app)
+      .post(`/api/psychologist/${psy.dossierNumber}/convention`)
+        .send({
+          isConventionSigned: true,
+          universityId: university.id,
+        })
+        .then(async (res) => {
+          res.status.should.equal(401);
+          res.body.message.should.equal('No authorization token was found');
+
+          const updatedPsy = await dbPsychologists.getAcceptedByEmail(psyEmail);
+          chai.expect(updatedPsy.isConventionSigned).not.to.exist;
+          chai.expect(updatedPsy.assignedUniversityId).to.not.equal(university.id);
+        });
+    });
+
+    it('should NOT update convention info if wrong user logged in', async () => {
+      const targetPsyEmail = 'login@beta.gouv.fr';
+      const connectedPsyEmail = 'connected@beta.gouv.fr';
+      const targetPsy = await clean.insertOnePsy(targetPsyEmail, DossierState.accepte, false);
+      const connectedPsy = await clean.insertOnePsy(connectedPsyEmail, DossierState.accepte, false);
+
+      return chai.request(app)
+      .post(`/api/psychologist/${targetPsy.dossierNumber}/convention`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(connectedPsy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send({
+          isConventionSigned: true,
+          universityId: university.id,
+        })
+        .then(async (res) => {
+          res.status.should.equal(403);
+
+          const updatedPsy = await dbPsychologists.getAcceptedByEmail(targetPsyEmail);
+          chai.expect(updatedPsy.isConventionSigned).not.to.exist;
+          chai.expect(updatedPsy.assignedUniversityId).to.not.equal(university.id);
+        });
+    });
+
     it('should update convention info', async () => {
       const psyEmail = 'login@beta.gouv.fr';
       const psy = await clean.insertOnePsy(psyEmail, DossierState.accepte, false);
