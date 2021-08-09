@@ -398,11 +398,47 @@ describe('appointmentsController', () => {
           date: newDatePlus4month,
         })
         .then(async (res) => {
-          res.status.should.equal(200);
-          res.body.message.should.equal("Erreur. La séance n'est pas créée. Nous ne pouvons crée une séance au dela de 4 mois avant/apres la date d'aujourd'hui");
+          res.status.should.equal(400);
+          res.body.message.should.equal('La date de la séance doit être dans moins de 4 mois');
 
           const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(0);
+
+          return Promise.resolve();
+        });
+    });
+
+    it('should create appointment if date between 21/03/21 and today', async () => {
+      const psy = await clean.insertOnePsy();
+      const patient = await dbPatients.insert(
+        'Ada',
+        'Lovelace',
+        '12345678901',
+        '42',
+        false,
+        false,
+        psy.dossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        dateOfBirth,
+      );
+
+      const beginningDatePlusOneDay = new Date('2021-03-22');
+
+      return chai.request(app)
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send({
+          patientId: patient.id,
+          date: beginningDatePlusOneDay,
+        })
+        .then(async (res) => {
+          res.status.should.equal(200);
+          res.body.message.should.equal('La séance du lundi 22 mars 2021 a bien été créée.');
+
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(1);
 
           return Promise.resolve();
         });
