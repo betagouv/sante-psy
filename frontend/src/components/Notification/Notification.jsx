@@ -3,7 +3,7 @@ import React from 'react';
 import { Alert } from '@dataesr/react-dsfr';
 
 const Notification = ({ message, type, onClose, children }) => (
-  <div data-test-id={`notification-${type}`}>
+  <div data-test-id={`notification-${type}`} className="fr-my-2w">
     <Alert
       type={type}
       title={message || children}
