@@ -18,4 +18,8 @@ module.exports = () => [
     pour les étudiant(e)s que vous aurez accompagné(e)s, quel que soit leur lieu de scolarité, \
     le statut de leur école / université ou bien encore leur lieu de résidence.",
   },
+  {
+    question: 'J’ai signé une convention avec une université, dois-je en signer une avec l’université de mes patients ?',
+    answer: "La convention est indépendante de l'école/université de vos patients étudiants. Elle est signée entre vous et l'université de rattachement qui est en charge de vous rembourser. De ce fait, vous pouvez recevoir des étudiants quel que soit leur lieu de résidence, école/université ou département.",
+  },
 ];
