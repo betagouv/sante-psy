@@ -26,4 +26,8 @@ module.exports = () => [
     services administratifs et financiers de l’établissement, dans le respect du secret médical et professionnel. \
     Le paiement intervient dans le délai global de paiement, soit 30 jours à partir du moment où les pièces justificatives du paiement sont réunies.',
   },
+  {
+    question: 'Quelle est la procédure à suivre pour se faire rembourser ?',
+    answer: 'La première étape est de déclarer vos séances réalisées sur votre espace psychologue. Une fois la convention signée avec l’université, vous devez ensuite lui adresser vos facturations selon ses modalités d’envoi. <br /> Si votre convention est en cours, nous vous invitons à patienter. L’université de rattachement prendra contact avec vous sous 2 à 4 semaines pour signer votre convention et vous transmettre ses modalités de facturation (numéro de bon de commande si nécessaire, mode d’envoi etc.).',
+  },
 ];

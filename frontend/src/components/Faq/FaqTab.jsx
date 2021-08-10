@@ -81,7 +81,7 @@ const FaqTab = ({ type }) => {
                         dangerouslySetInnerHTML={{
                           __html: sanitizeHtml(item.answer,
                             {
-                              allowedTags: ['a'],
+                              allowedTags: ['a', 'br'],
                               allowedAttributes: { a: ['href', 'target', 'rel'] },
                             }),
                         }}
