@@ -1,0 +1,18 @@
+:root {
+    --bg-yellow: var(--yellow-medium-300);
+    --bg-blue: var(--blue-france-100);
+    --yellow: var(--yellow-medium-500);
+    --pink: var(--yellow-medium-500);
+    --green: var(--green-medium-700);
+    --tag-green: var(--green-soft-300);
+    --tag-orange: var(--orange-soft-300);
+}
+
+:root[data-fr-theme=dark] {
+    --bg-yellow: var(--beige);  
+    --bg-blue: var(--beige);
+    --yellow: var(--green-dark-700);
+    --green: #9ed8b4;
+    --tag-green: var(--green-soft-700);
+    --tag-orange: var(--orange-soft-700);
+}

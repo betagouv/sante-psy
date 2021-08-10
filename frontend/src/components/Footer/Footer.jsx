@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
 import {
   Footer as DSFooter,
@@ -8,6 +8,7 @@ import {
   FooterLink,
   Logo,
   Link,
+  SwitchTheme,
 } from '@dataesr/react-dsfr';
 
 const footerBodyLinks = [
@@ -45,42 +46,59 @@ const FooterDescription = () => (
   </>
 );
 
-const Footer = () => (
-  <DSFooter>
-    <FooterBody description={<FooterDescription />}>
-      <Logo href="https://www.enseignementsup-recherche.gouv.fr/">
-        Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
-      </Logo>
-      { footerBodyLinks.map(item => (
-        <FooterBodyItem key={item.key}>
-          {item.external ? (
-            <Link
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
+const Footer = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <DSFooter>
+        <FooterBody description={<FooterDescription />}>
+          <Logo href="https://www.enseignementsup-recherche.gouv.fr/">
+            Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
+          </Logo>
+          { footerBodyLinks.map(item => (
+            <FooterBodyItem key={item.key}>
+              {item.external ? (
+                <Link
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {item.title}
+                </Link>
+              ) : (
+                <HashLink to={item.link}>
+                  {item.title}
+                </HashLink>
+              )}
+            </FooterBodyItem>
+          ))}
+        </FooterBody>
+        <FooterBottom>
+          { [(
+            <FooterLink onClick={() => setIsOpen(true)}>
+              <span
+                className="fr-fi-theme-fill fr-link--icon-left"
+                aria-controls="fr-theme-modal"
+                data-fr-opened={isOpen}
+              >
+                Paramètres d’affichage
+              </span>
+            </FooterLink>
+          )].concat(footerBottomLinks.map(item => (
+            <FooterLink
+              key={item.key}
+              href={item.external ? item.link : undefined}
+              asLink={item.external ? undefined : <HashLink to={item.link} />}
             >
               {item.title}
-            </Link>
-          ) : (
-            <HashLink to={item.link}>
-              {item.title}
-            </HashLink>
-          )}
-        </FooterBodyItem>
-      ))}
-    </FooterBody>
-    <FooterBottom>
-      { footerBottomLinks.map(item => (
-        <FooterLink
-          key={item.key}
-          href={item.external ? item.link : undefined}
-          asLink={item.external ? undefined : <HashLink to={item.link} />}
-        >
-          {item.title}
-        </FooterLink>
-      ))}
-    </FooterBottom>
-  </DSFooter>
-);
+            </FooterLink>
+          )))}
+        </FooterBottom>
+      </DSFooter>
+      <SwitchTheme isOpen={isOpen} setIsOpen={setIsOpen} />
+    </>
+  );
+};
 
 export default Footer;
