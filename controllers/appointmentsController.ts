@@ -30,25 +30,28 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const patientExist = await dbPatient.getById(patientId, psyId);
 
   if (patientExist) {
-    if (date > today && diffInMonth > 4) {
+    if (date < beginningDate) {
+      console.warn(
+        "It's impossible to declare an appointment before 21/03/2021",
+      );
+      throw new CustomError('La date de la séance doit être apres le 21 mars 2021', 400);
+    }
+    if (diffInMonth > 4) {
       console.warn(
         'The difference between today and the declaration date is beyond 4 month',
       );
       throw new CustomError('La date de la séance doit être dans moins de 4 mois', 400);
     }
-    if (date <= today && date >= beginningDate) {
-      await dbAppointments.insert(date, patientId, psyId);
-      console.log(
-        `Appointment created for patient id ${patientId} by psy id ${psyId}`,
-      );
-      res.json({
-        message: `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`,
-      });
-    }
+    await dbAppointments.insert(date, patientId, psyId);
+    console.log(
+      `Appointment created for patient id ${patientId} by psy id ${psyId}`,
+    );
+    res.json({
+      message: `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`,
+    });
   } else {
     console.warn(
-      `Patient id ${patientId} does not exist for psy id : ${psyId}
-      or the difference between today and the declaration date is beyond 4 month`,
+      `Patient id ${patientId} does not exist for psy id : ${psyId}`,
     );
     throw new CustomError("Erreur. La séance n'est pas créée. Pourriez-vous réessayer ?");
   }

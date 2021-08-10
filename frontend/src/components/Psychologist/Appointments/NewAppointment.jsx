@@ -29,19 +29,17 @@ const NewAppointment = () => {
   }, []);
 
   const createNewAppointment = e => {
-    const beginningDate = new Date('2021-03-21');
-    const today = new Date();
-    const todayUTC = convertLocalToUTCDate(today);
-    const diffInMonth = Math.abs(date.getMonth() - todayUTC.getMonth());
-    if (diffInMonth <= 4 || (date >= beginningDate && date <= today)) {
-      e.preventDefault();
-      setNotification({});
-      agent.Appointment.add(patientId, date).then(response => {
-        history.push('/psychologue/mes-seances');
-        setNotification(response);
-      });
-    }
+    e.preventDefault();
+    setNotification({});
+    agent.Appointment.add(patientId, date).then(response => {
+      history.push('/psychologue/mes-seances');
+      setNotification(response);
+    });
   };
+
+  const beginningDate = new Date('2021-03-22');
+  const today = new Date();
+  const maxDate = new Date(today.setMonth(today.getMonth() + 4));
 
   const patientsMap = patients.map(patient => (
     { value: patient.id, label: `${patient.lastName} ${patient.firstNames}` }
@@ -73,6 +71,8 @@ const NewAppointment = () => {
             <div className="fr-my-2w">
               <DatePicker
                 selected={date}
+                minDate={beginningDate}
+                maxDate={maxDate}
                 dateFormat="dd/MM/yyyy"
                 customInput={(
                   <DateInput

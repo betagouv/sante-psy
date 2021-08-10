@@ -387,7 +387,6 @@ describe('appointmentsController', () => {
 
       const todayDate = new Date();
       const newDatePlus4month = new Date(todayDate.setMonth(todayDate.getMonth() + 5));
-      console.log(newDatePlus4month, 'NEW DATE PLUS 4 MONTH');
 
       return chai.request(app)
         .post('/api/appointments')
@@ -439,6 +438,43 @@ describe('appointmentsController', () => {
 
           const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);
+
+          return Promise.resolve();
+        });
+    });
+
+    it('should not create appointment if date before 21/03/21', async () => {
+      const psy = await clean.insertOnePsy();
+      const patient = await dbPatients.insert(
+        'Ada',
+        'Lovelace',
+        '12345678901',
+        '42',
+        false,
+        false,
+        psy.dossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        dateOfBirth,
+      );
+
+      const beginningDate = new Date('2021-03-22');
+      const invalidDate = new Date(beginningDate.setMonth(beginningDate.getMonth(), -2));
+
+      return chai.request(app)
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send({
+          patientId: patient.id,
+          date: invalidDate,
+        })
+        .then(async (res) => {
+          res.status.should.equal(400);
+          res.body.message.should.equal('La date de la séance doit être apres le 21 mars 2021');
+
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(0);
 
           return Promise.resolve();
         });
