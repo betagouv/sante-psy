@@ -32,8 +32,8 @@ export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
     inactiveUntil: Date,
     updatedAt?: Date,
     createdAt: Date,
-    longitude: number,
-    latitude: number,
+    longitude?: number,
+    latitude?: number,
   };
 
 export type DSPsychologist = {
