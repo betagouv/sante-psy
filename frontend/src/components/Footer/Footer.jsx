@@ -76,7 +76,10 @@ const Footer = () => {
         </FooterBody>
         <FooterBottom>
           { [(
-            <FooterLink onClick={() => setIsOpen(true)}>
+            <FooterLink
+              key="theme"
+              onClick={() => setIsOpen(true)}
+            >
               <span
                 className="fr-fi-theme-fill fr-link--icon-left"
                 aria-controls="fr-theme-modal"
