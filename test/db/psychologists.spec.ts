@@ -5,6 +5,7 @@ import dbPsychologists from '../../db/psychologists';
 import dbSuspensionReasons from '../../db/suspensionReasons';
 import clean from '../helper/clean';
 import { DossierState } from '../../types/DossierState';
+import { Psychologist } from '../../types/Psychologist';
 
 import dotEnv from 'dotenv';
 
@@ -141,6 +142,55 @@ describe('DB Psychologists', () => {
 
       const shouldBeOne = await dbPsychologists.getAllActive();
       shouldBeOne.length.should.be.equal(1);
+    });
+
+    it('should return psychologists ordered randomly if no location', async () => {
+      const psyInParis = clean.getOnePsy('paris@beta.gouv.fr');
+      psyInParis.longitude = 2.3488;
+      psyInParis.latitude = 48.85341;
+      const psyInLyon = clean.getOnePsy('lyon@beta.gouv.fr');
+      psyInLyon.longitude = 4.84671;
+      psyInLyon.latitude = 45.74846;
+      const psyInMarseille = clean.getOnePsy('marseille@beta.gouv.fr');
+      psyInMarseille.longitude = 5.38107;
+      psyInMarseille.latitude = 43.29695;
+      const psyWithoutLoc = clean.getOnePsy('perdu@beta.gouv.fr');
+      psyWithoutLoc.longitude = null;
+      psyWithoutLoc.latitude = null;
+
+      await dbPsychologists.upsertMany([psyInParis, psyInLyon, psyInMarseille, psyWithoutLoc]);
+
+      const result1 = await dbPsychologists.getAllActive();
+      const result2 = await dbPsychologists.getAllActive();
+      const concatDossierNumber = (arr : Psychologist[]) => arr.map((x) => x.dossierNumber).join(',');
+      concatDossierNumber(result1).should.not.equal(concatDossierNumber(result2));
+    });
+
+    it('should return psychologists ordered by distance if location', async () => {
+      const psyInParis = clean.getOnePsy('paris@beta.gouv.fr');
+      psyInParis.longitude = 2.3488;
+      psyInParis.latitude = 48.85341;
+      const psyInLyon = clean.getOnePsy('lyon@beta.gouv.fr');
+      psyInLyon.longitude = 4.84671;
+      psyInLyon.latitude = 45.74846;
+      const psyInMarseille = clean.getOnePsy('marseille@beta.gouv.fr');
+      psyInMarseille.longitude = 5.38107;
+      psyInMarseille.latitude = 43.29695;
+      const psyWithoutLoc = clean.getOnePsy('perdu@beta.gouv.fr');
+      psyWithoutLoc.longitude = null;
+      psyWithoutLoc.latitude = null;
+
+      const longFromNice = 7.26608;
+      const latFromNice = 43.70313;
+      await dbPsychologists.upsertMany([psyInParis, psyInLyon, psyInMarseille, psyWithoutLoc]);
+
+      const result = await dbPsychologists.getAllActive(longFromNice, latFromNice);
+
+      result.length.should.equal(4);
+      result[0].dossierNumber.should.equal(psyInMarseille.dossierNumber);
+      result[1].dossierNumber.should.equal(psyInLyon.dossierNumber);
+      result[2].dossierNumber.should.equal(psyInParis.dossierNumber);
+      result[3].dossierNumber.should.equal(psyWithoutLoc.dossierNumber);
     });
   });
 
