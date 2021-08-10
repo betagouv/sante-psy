@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, RadioGroup, Radio, TextInput, SearcheableSelect } from '@dataesr/react-dsfr';
+import { Button, RadioGroup, Radio, TextInput, SearchableSelect } from '@dataesr/react-dsfr';
 
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
@@ -51,7 +51,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
           />
 
           <h2>Informations pour l&lsquo;annuaire</h2>
-          <SearcheableSelect
+          <SearchableSelect
             className="midlength-select"
             label="Votre département"
             field="departement"

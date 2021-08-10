@@ -43,14 +43,14 @@
   },
   "homepage": "https://github.com/betagouv/sante-psy#readme",
   "dependencies": {
-    "@sentry/integrations": "^6.10.0",
-    "@sentry/node": "^6.10.0",
-    "@sentry/tracing": "^6.10.0",
-    "@sentry/types": "^6.10.0",
+    "@sentry/integrations": "^6.11.0",
+    "@sentry/node": "^6.11.0",
+    "@sentry/tracing": "^6.11.0",
+    "@sentry/types": "^6.11.0",
     "@types/chai": "^4.2.21",
     "@types/faker": "^5.5.7",
     "@types/jsonwebtoken": "^8.5.4",
-    "@types/node": "^16.4.6",
+    "@types/node": "^16.4.13",
     "axios": "^0.21.1",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
@@ -77,7 +77,7 @@
     "node-crisp-api": "^1.12.2",
     "nodemailer": "^6.6.3",
     "pg": "^8.7.1",
-    "ts-node": "^10.1.0",
+    "ts-node": "^10.2.0",
     "typescript": "^4.3.5",
     "uuid": "^8.3.2",
     "wait-on": "^6.0.0"
@@ -87,15 +87,15 @@
     "@types/express": "^4.17.13",
     "@types/express-jwt": "^6.0.2",
     "@types/mocha": "^9.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.28.5",
-    "@typescript-eslint/parser": "^4.28.5",
+    "@typescript-eslint/eslint-plugin": "^4.29.1",
+    "@typescript-eslint/parser": "^4.29.1",
     "babel-core": "^6.26.3",
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
     "ejs-lint": "^1.2.1",
-    "eslint": "^7.31.0",
+    "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-import": "^2.24.0",
     "eslint-plugin-mocha-no-only": "^1.1.1",
     "eslint-plugin-node": "^11.1.0",
     "jwt-decode": "^3.1.2",
@@ -111,6 +111,7 @@
   },
   "resolutions": {
     "socket.io-parser": "3.4.1",
-    "xmlhttprequest-ssl": "1.6.2"
+    "xmlhttprequest-ssl": "1.6.2",
+    "ws": "5.2.3"
   }
 }
