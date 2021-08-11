@@ -36,7 +36,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
       );
       throw new CustomError('La date de la séance doit être apres le 21 mars 2021', 400);
     }
-    if (diffInMonth > 4) {
+    if (date > today && diffInMonth > 4) {
       console.warn(
         'The difference between today and the declaration date is beyond 4 month',
       );

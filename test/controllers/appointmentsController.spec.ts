@@ -386,7 +386,7 @@ describe('appointmentsController', () => {
       );
 
       const todayDate = new Date();
-      const newDatePlus4month = new Date(todayDate.setMonth(todayDate.getMonth() + 5));
+      const newDatePlus5month = new Date(todayDate.setMonth(todayDate.getMonth() + 5));
 
       return chai.request(app)
         .post('/api/appointments')
@@ -394,7 +394,7 @@ describe('appointmentsController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: patient.id,
-          date: newDatePlus4month,
+          date: newDatePlus5month,
         })
         .then(async (res) => {
           res.status.should.equal(400);
