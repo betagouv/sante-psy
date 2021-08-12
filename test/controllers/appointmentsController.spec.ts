@@ -39,17 +39,31 @@ describe('appointmentsController', () => {
         dateOfBirth,
       );
 
+      const today = new Date();
+      const day = today.getDay();
+      const number = today.getDate();
+      const month = today.getMonth();
+      const annee = today.getFullYear();
+      const frenchDays = [
+        'dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi',
+      ];
+      const frenchMonth = [
+        'janv', 'fév', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'sept', 'octobre', 'nov', 'déc',
+      ];
+
       return chai.request(app)
         .post('/api/appointments')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: patient.id,
-          date: new Date('09/02/2021'),
+          date: new Date(),
         })
         .then(async (res) => {
           res.status.should.equal(200);
-          res.body.message.should.equal('La séance du jeudi 2 septembre 2021 a bien été créée.');
+          res.body.message.should.equal(
+            `La séance du ${frenchDays[day]} ${number} ${frenchMonth[month]} ${annee} a bien été créée.`,
+          );
 
           const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);

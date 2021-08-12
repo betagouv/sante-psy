@@ -40,10 +40,23 @@ const getDatePlusOneHour = (): string => {
   return new Date(expirationDate.setHours(expirationDate.getHours() + 1)).toISOString();
 };
 
+const getDiffInMonth = (date1: Date, date2: Date): number => {
+  if (date1.getMonth() > date2.getMonth()) {
+    console.log('BAKA pas bon');
+    const diffInMonth = ((date2.getMonth() - date1.getMonth()) % 12);
+    const m = ((diffInMonth) + 12) % 12;
+    return m < 0 ? m + Math.abs(12) : m;
+  }
+  const diffInMonth = ((date1.getMonth() - date2.getMonth()) % 12);
+  const m = ((diffInMonth) + 12) % 12;
+  return m < 0 ? m + Math.abs(12) : m;
+};
+
 export default {
   formatFrenchDateForm: 'DD/MM/YYYY',
   formatFrenchDate: dateFormatter.format,
   getDatePlusOneHour,
+  getDiffInMonth,
   toFormatDDMMYYYY,
   parseForm,
   now,

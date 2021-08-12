@@ -24,7 +24,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const beginningDate = new Date('2021-03-21');
   const date = new Date(req.body.date);
   const today = new Date();
-  const diffInMonth = Math.abs(date.getMonth() - today.getMonth());
+  const diffInMonth = dateUtils.getDiffInMonth(date, today);
   const { patientId } = req.body;
   const psyId = req.user.psychologist;
   const patientExist = await dbPatient.getById(patientId, psyId);
@@ -36,7 +36,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
       );
       throw new CustomError('La date de la séance doit être apres le 21 mars 2021', 400);
     }
-    if (date > today && diffInMonth > 4) {
+    if (diffInMonth > 4 && date > today) {
       console.warn(
         'The difference between today and the declaration date is beyond 4 month',
       );
