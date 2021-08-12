@@ -17,6 +17,19 @@ describe('DB Universities', () => {
     emailUniversity: '',
   }];
 
+  describe('getAllOrderByName', () => {
+    it('should get all universities and order them', async () => {
+      await seed(db, true);
+
+      const universities = await dbUniversities.getAllOrderByName();
+      universities.length.should.equal(55);
+      universities
+        .map((university) => university.name)
+        .sort()
+        .forEach((university, i) => university.should.equal(universities[i].name));
+    });
+  });
+
   describe('getAssignedUniversityId', () => {
     it('should get a assigned university based on departement number', async () => {
       const psy = {
