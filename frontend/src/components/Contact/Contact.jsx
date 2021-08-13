@@ -87,6 +87,7 @@ const Contact = () => {
             value="étudiant"
           />
           <Radio
+            data-test-id="user-psychologist-input"
             label="Psychologue"
             value="psychologue"
           />
