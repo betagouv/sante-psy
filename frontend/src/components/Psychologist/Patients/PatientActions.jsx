@@ -26,7 +26,7 @@ const PatientActions = ({ patient, deletePatient }) => {
     <div className="list-actions">
       <ShrinkableButton
         data-test-id="appointment-etudiant-button"
-        onClick={deletePatient}
+        onClick={() => history.push(`/psychologue/nouvelle-seance/${patient.id}`)}
         secondary
         size="sm"
         className="fr-fi-calendar-line"
