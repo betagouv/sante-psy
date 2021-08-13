@@ -3,7 +3,7 @@ import { Button, RadioGroup, Radio, TextInput, SearchableSelect } from '@dataesr
 
 import DEPARTEMENTS from 'services/departments';
 
-const EditProfile = ({ psychologist, updatePsy, loading }) => {
+const EditProfile = ({ psychologist, updatePsy }) => {
   const [updatedPsychologist, setUpdatedPsychologist] = useState(psychologist);
   useEffect(() => { setUpdatedPsychologist(psychologist); }, [psychologist]);
 
@@ -16,7 +16,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
     setUpdatedPsychologist({ ...updatedPsychologist, [field]: value });
   };
 
-  return (loading ? <></> : (
+  return (
     <form data-test-id="edit-profile-form" onSubmit={save}>
       <p className="fr-text--sm fr-mb-3w">
         Les champs avec une astérisque (
@@ -124,7 +124,7 @@ const EditProfile = ({ psychologist, updatePsy, loading }) => {
         Valider les modifications
       </Button>
     </form>
-  ));
+  );
 };
 
 export default EditProfile;
