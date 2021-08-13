@@ -25,8 +25,8 @@ const defaultItems = [
 
 const connectedItems = [
   { key: 'header-connected-link-1', title: 'Déclarer mes séances', link: '/psychologue/mes-seances' },
-  { key: 'header-connected-link-2', title: 'Gérer mes patients', link: '/psychologue/mes-patients' },
-  { key: 'header-connected-link-3', title: 'Remboursement de mes séances', link: '/psychologue/mes-remboursements' },
+  { key: 'header-connected-link-2', title: 'Gérer mes étudiants', link: '/psychologue/mes-etudiants' },
+  { key: 'header-connected-link-3', title: 'Gérer mes facturations', link: '/psychologue/mes-remboursements' },
   { key: 'header-connected-link-4', title: 'Mes informations', link: '/psychologue/mon-profil' },
 ];
 

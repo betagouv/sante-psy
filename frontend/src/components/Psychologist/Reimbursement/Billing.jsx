@@ -46,46 +46,7 @@ const Billing = () => {
   });
 
   return (
-    <div className="fr-mb-3w">
-      <h2>Facturation</h2>
-      <h3>
-        Comment mes séances seront-elles remboursées ?
-      </h3>
-      <div className="fr-mb-2w">
-        <p className="fr-mb-2w">
-          À la fin de chaque mois, vous devez envoyer votre facture contenant vos séances réalisées à votre
-          université de convention. Les modalités d&lsquo;envoi sont précisées par l&lsquo;université lors de
-          l&lsquo;établissement de votre convention (Chorus pro, email ou voie postale).
-          L&lsquo;université se chargera du remboursement, dans les 30 jours après la réception de cette facture.
-        </p>
-        <p className="fr-mb-1v">
-          Besoin de plus d&lsquo;informations ?
-        </p>
-        <ul className="fr-btns-group fr-btns-group--inline">
-          <li>
-            <HashLink
-              className="fr-btn fr-btn--secondary fr-mt-2w"
-              to="/faq?section=psychologue#remboursement"
-            >
-              Consulter la Foire Aux Questions
-            </HashLink>
-          </li>
-          <li>
-            <a
-              className="fr-btn fr-btn--secondary fr-mt-2w fr-mr-1w"
-              href={`${__API__}/static/documents/tutoriel_choruspro_sante-psy-etudiant.pdf`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span className="fr-fi-file-download-line" aria-hidden="true" />
-              Tutoriel Chorus PRO
-            </a>
-          </li>
-        </ul>
-      </div>
-      <h3>
-        Aide pour la facturation
-      </h3>
+    <div className="fr-my-2w">
       <div className={styles.monthPickerContainer}>
         Générer ma facture pour le mois de :
         <div className={styles.monthPicker}>
@@ -95,16 +56,7 @@ const Billing = () => {
 
       {filteredDate.length > 0 ? (
         <>
-          <a
-            className="fr-btn fr-btn--secondary fr-mt-2w fr-mb-2w"
-            href={`/psychologue/bill/${month.month}/${month.year}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span className="fr-fi-file-download-line" aria-hidden="true" />
-            Télécharger/Imprimer ma facture pré-remplie
-          </a>
-          <p className="fr-mb-2w" data-test-id="bill-summary-text">
+          <p className="fr-my-2w" data-test-id="bill-summary-text">
             En
             {` ${formatMonth(month)}`}
             , vous avez effectué
@@ -119,8 +71,17 @@ const Billing = () => {
                 .length}
                `}
             </b>
-            patients.
+            étudiants.
           </p>
+          <a
+            className="fr-btn fr-mb-2w"
+            href={`/psychologue/bill/${month.month}/${month.year}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span className="fr-fi-file-download-line" aria-hidden="true" />
+            Télécharger/Imprimer ma facture pré-remplie
+          </a>
           <BillingTable filteredDate={filteredDate} appointments={valuesByDate.appointments} />
         </>
       ) : (
@@ -130,18 +91,17 @@ const Billing = () => {
           , vous retrouverez ici votre récapitulatif de séances dans le but de créer vous même votre facture
         </p>
       )}
-
-      <h3>Les élements à apparaître sur votre facturation</h3>
-      <p className="fr-mb-2w">
-        Le nom des patients est couvert par le secret médical,
+      <h4>Les élements à apparaître sur votre facturation</h4>
+      <p className="fr-mb-1w">
+        Le nom des étudiants est couvert par le secret médical,
         ne le communiquez pas sur la facture.
-        Le nombre de patients suffit.
+        Le nombre d&lsquo;étudiant suffit.
       </p>
-      <p className="fr-mb-2w">
+      <p className="fr-mb-1w">
         Si le prestataire n’est pas assujetti à la TVA,
         la facture doit comporter la mention «TVA non applicable, art.293 B du CGI »
       </p>
-      <p className="fr-mb-2w">
+      <p className="fr-mb-1w">
         Un doute sur le modèle de votre facture ?
         Vous pouvez prendre exemple sur ce modèle qui contient tous les éléments requis pour votre remboursement :
       </p>
@@ -174,6 +134,28 @@ const Billing = () => {
           Libre Office .odt
         </a>
       </p>
+      <h4>Demander de l&lsquo;aide</h4>
+      <ul className="fr-btns-group fr-btns-group--inline">
+        <li>
+          <HashLink
+            className="fr-btn fr-btn--secondary"
+            to="/faq?section=psychologue#remboursement"
+          >
+            Consulter la Foire Aux Questions
+          </HashLink>
+        </li>
+        <li>
+          <a
+            className="fr-btn fr-btn--secondary fr-mr-1w"
+            href={`${__API__}/static/documents/tutoriel_choruspro_sante-psy-etudiant.pdf`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span className="fr-fi-file-download-line" aria-hidden="true" />
+            Tutoriel Chorus PRO
+          </a>
+        </li>
+      </ul>
     </div>
   );
 };

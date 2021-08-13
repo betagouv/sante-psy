@@ -8,45 +8,25 @@ const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
 
   return (
     <>
-      <h2>Statut de votre compte</h2>
-      {psychologist.active ? (
-        <>
-          <p data-test-id="activePsy" className="fr-mb-2v">
-            Vos informations sont
-            {' '}
-            <b>visibles</b>
-            {' '}
-            sur l&lsquo;annuaire.
-          </p>
-          <Button
-            data-test-id="suspend-redirection-button"
-            title="delete"
-            onClick={() => history.push('/psychologue/mon-profil/suspendre')}
-          >
-            <span className="fr-fi-eye-off-line fr-mr-1w" aria-hidden="true" />
-            Retirer mes informations de l&lsquo;annuaire
-          </Button>
-        </>
-      ) : (
-        <>
-          <p data-test-id="inactivePsy" className="fr-mb-2v">
-            Vos informations
-            {' '}
-            <b>ne sont pas visibles</b>
-            {' '}
-            sur l&lsquo;annuaire.
-          </p>
-          <Button
-            data-test-id="activate-button"
-            title="delete"
-            onClick={activatePsychologist}
-          >
-            <span className="fr-fi-eye-line fr-mr-1w" aria-hidden="true" />
-            Remettre mes informations de l&lsquo;annuaire
-          </Button>
-        </>
-      )}
-
+      <h5>Statut de mon compte</h5>
+      <p data-test-id={psychologist.active ? 'activePsy' : 'inactivePsy'} className="fr-mb-2v">
+        Mes informations
+        {' '}
+        <b>{psychologist.active ? 'sont visibles' : 'ne sont pas visibles'}</b>
+        {' '}
+        sur l&lsquo;annuaire.
+      </p>
+      <Button
+        data-test-id={psychologist.active ? 'suspend-redirection-button' : 'activate-button'}
+        icon={psychologist.active ? 'fr-fi-eye-off-line' : 'fr-fi-eye-line'}
+        onClick={() => (psychologist.active
+          ? history.push('/psychologue/mon-profil/suspendre')
+          : activatePsychologist())}
+      >
+        {psychologist.active
+          ? "Retirer mes informations de l'annuaire"
+          : "Remettre mes informations de l'annuaire"}
+      </Button>
     </>
   );
 };

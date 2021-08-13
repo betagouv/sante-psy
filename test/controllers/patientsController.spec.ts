@@ -66,7 +66,7 @@ describe('patientsController', () => {
         .then(async (res) => {
           res.status.should.equal(200);
           res.body.message.should.equal(
-            'Le patient Ada Lovelace a bien été créé. Vous pourrez renseigner les champs manquants plus tard'
+            "L'étudiant Ada Lovelace a bien été créé. Vous pourrez renseigner les champs manquants plus tard"
             + ' en cliquant le bouton "Modifier" du patient.',
           );
 
@@ -240,7 +240,7 @@ describe('patientsController', () => {
         .end((err, res) => {
           res.status.should.equal(200);
           res.body.message.should.equal(
-            'Le patient Blou Blou Nom a bien été créé. Vous pourrez renseigner les champs manquants plus tard'
+            "L'étudiant Blou Blou Nom a bien été créé. Vous pourrez renseigner les champs manquants plus tard"
               + ' en cliquant le bouton "Modifier" du patient.',
           );
 
@@ -329,7 +329,7 @@ describe('patientsController', () => {
         .end((err, res) => {
           res.status.should.equal(200);
           res.body.message.should.equal(
-            'Le patient Blou Blou<div></div> Nom&lt;/ a bien été créé. Vous pourrez renseigner'
+            "L'étudiant Blou Blou<div></div> Nom&lt;/ a bien été créé. Vous pourrez renseigner"
               + ' les champs manquants plus tard en cliquant le bouton "Modifier" du patient.',
           );
           sinon.assert.called(insertPatientStub);
@@ -469,7 +469,7 @@ describe('patientsController', () => {
         .then(async (res) => {
           res.status.should.equal(200);
           res.body.message.should.equal(
-            'Le patient Adakkk Lovelacekkk a bien été modifié. Vous pourrez renseigner les champs'
+            "L'étudiant Adakkk Lovelacekkk a bien été modifié. Vous pourrez renseigner les champs"
             + ' manquants plus tard en cliquant le bouton "Modifier" du patient.',
           );
 
@@ -752,7 +752,7 @@ describe('patientsController', () => {
           sinon.assert.called(updatePatientStub);
           res.status.should.equal(200);
           res.body.message.should.equal(
-            'Le patient Blou Blou Nom a bien été modifié. Vous pourrez renseigner les champs manquants plus tard'
+            "L'étudiant Blou Blou Nom a bien été modifié. Vous pourrez renseigner les champs manquants plus tard"
             + ' en cliquant le bouton "Modifier" du patient.',
           );
           done();
@@ -850,7 +850,7 @@ describe('patientsController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(200);
-          res.body.message.should.equal('Le patient a bien été supprimé.');
+          res.body.message.should.equal("L'étudiant a bien été supprimé.");
 
           const patientsArray = await dbPatients.getAll(psy.dossierNumber);
           console.debug(patientsArray);

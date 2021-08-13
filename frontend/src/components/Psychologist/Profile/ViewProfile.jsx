@@ -2,76 +2,46 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from '@dataesr/react-dsfr';
 
-import GlobalNotification from 'components/Notification/GlobalNotification';
 import PayingUniversity from './PayingUniversity';
 import SuspensionInfo from './SuspensionInfo';
 
+const informations = [
+  { label: 'Département', key: 'departement' },
+  { label: 'Région', key: 'region' },
+  { label: 'Adresse du cabinet', key: 'address' },
+  { label: 'Téléphone du secrétariat', key: 'phone' },
+  { label: 'Email de contact', key: 'email' },
+  { label: 'Téléconsultation', key: psychologist => (psychologist.teleconsultation ? 'Oui' : 'Non') },
+  { label: 'Langues parlées', key: 'languages' },
+  { label: 'Site web professionnel', key: 'website' },
+  { label: 'Paragraphe de présentation', key: 'description' },
+];
 const ViewProfile = ({ psychologist, loading, activatePsychologist }) => {
   const history = useHistory();
   return (
     <>
-      <h1>Mes informations</h1>
-      <GlobalNotification />
       <PayingUniversity />
       {!loading && (
         <>
-          <div className="fr-mb-3w">
-            <h2>Informations pour l&lsquo;annuaire</h2>
-            <p className="fr-mb-1v">
-              <b>Votre département :</b>
-              {' '}
-              {psychologist.departement}
-            </p>
-            <p className="fr-mb-1v">
-              <b>Votre région :</b>
-              {' '}
-              {psychologist.region}
-            </p>
-            <p className="fr-mb-1v">
-              <b>Adresse du cabinet :</b>
-              {' '}
-              {psychologist.address}
-            </p>
-            <p className="fr-mb-1v">
-              <b>Téléphone du secrétariat :</b>
-              {' '}
-              {psychologist.phone}
-            </p>
-            <p className="fr-mb-1v">
-              <b>Email de contact :</b>
-              {' '}
-              {psychologist.email}
-            </p>
-            <p className="fr-mb-1v">
-              <b>Téléconsultation :</b>
-              {' '}
-              {psychologist.teleconsultation ? 'Oui' : 'Non'}
-            </p>
-            <p className="fr-mb-1v">
-              <b>Langues parlées :</b>
-              {' '}
-              {psychologist.languages}
-            </p>
-            <p className="fr-mb-1v">
-              <b>Site web professionnel :</b>
-              {' '}
-              {psychologist.website}
-            </p>
-            <p className="fr-mb-2v">
-              <b>Paragraphe de présentation :</b>
-              {' '}
-              {psychologist.description}
-            </p>
+          <div className="fr-my-3w">
+            <h5>Informations pour l&lsquo;annuaire</h5>
             <Button
+              className="fr-mb-1w"
               data-test-id="show-profile-form-button"
               title="Modify"
+              icon="fr-fi-edit-line"
               onClick={() => history.push('/psychologue/mon-profil/modifier')}
             >
-              <span className="fr-fi-edit-line fr-mr-1w" aria-hidden="true" />
               Modifier mes informations
             </Button>
+            {informations.map(info => (
+              <p className="fr-mb-1v" key={info.label}>
+                <b>{`${info.label} :`}</b>
+                {` ${typeof info.key === 'string' ? psychologist[info.key] : info.key(psychologist)}`}
+              </p>
+            ))}
           </div>
-          <div className="fr-mb-3w">
+          <div className="fr-mb-2w">
             <SuspensionInfo
               psychologist={psychologist}
               activatePsychologist={activatePsychologist}

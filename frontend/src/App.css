@@ -30,7 +30,12 @@
 }
 
 .fr-table .list-actions button {
-  margin: 0 4px;
+  margin: 4px;
+  width: 125px;
+}
+
+.fr-table table {
+  display: table;
 }
 
 .fr-accordion-group li:before {

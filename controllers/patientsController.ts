@@ -104,7 +104,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Ce patient n\'existe pas.', 404);
   }
 
-  let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`;
+  let infoMessage = `L'étudiant ${patientFirstNames} ${patientLastName} a bien été modifié.`;
   if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified
       || !doctorAddress) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
@@ -164,7 +164,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     doctorAddress,
     dateOfBirth,
   );
-  let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`;
+  let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
   if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress || !dateOfBirth) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
         + ' en cliquant le bouton "Modifier" du patient.';
@@ -195,7 +195,7 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 
   console.log(`Patient deleted ${patientId} by psy id ${psychologistId}`);
   res.json({
-    message: 'Le patient a bien été supprimé.',
+    message: "L'étudiant a bien été supprimé.",
   });
 };
 

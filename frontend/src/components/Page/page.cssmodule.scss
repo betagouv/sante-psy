@@ -25,6 +25,10 @@
   text-align: center;
 }
 
+.section {
+  color: var(--bf500);
+}
+
 @media (min-width: 768px) {
   .container {
     padding: 24px;

@@ -6,30 +6,70 @@ import {
   Row,
   Col,
   Text,
+  Callout,
+  CalloutText,
 } from '@dataesr/react-dsfr';
 
+import Section from '../Landing/Section';
 import UnderlinedTitle from './UnderlinedTitle';
 
 import styles from './page.cssmodule.scss';
 
-const Page = ({ title, description, background, children, textContent, className = null, dataTestId = null }) => (
-  <Container spacing="py-4w" className={classnames(className, styles[background])}>
-    <div className={styles.container} data-test-id={dataTestId}>
-      <Row>
-        <Col className={styles.sectionTitle}>
-          <UnderlinedTitle title={title} className="fr-mb-1w" />
-          {description && <Text size="lg">{description}</Text>}
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          {textContent
-            ? <div className={styles.textContainer}>{children}</div>
-            : children}
-        </Col>
-      </Row>
-    </div>
-  </Container>
+const Page = ({
+  title,
+  description,
+  background,
+  children,
+  textContent,
+  callout,
+  withContact,
+  className = null,
+  dataTestId = null,
+}) => (
+  <>
+    <Container
+      spacing="py-4w"
+      className={classnames(className, styles[background])}
+    >
+      <div className={styles.container} data-test-id={dataTestId}>
+        <Row>
+          <Col className={styles.sectionTitle}>
+            <UnderlinedTitle title={title} className="fr-mb-1w" />
+            {description && <Text size="lg">{description}</Text>}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {callout && (
+            <Callout hasInfoIcon={false}>
+              <CalloutText>
+                {callout}
+              </CalloutText>
+            </Callout>
+            )}
+            {textContent
+              ? <div className={styles.textContainer}>{children}</div>
+              : children}
+          </Col>
+        </Row>
+      </div>
+    </Container>
+    {withContact && (
+    <Container
+      spacing="py-4w"
+      className={styles.section}
+    >
+      <Section
+        title="Vous avez une question ?"
+        description="Retrouvez les réponses aux questions les plus fréquemment posées."
+        buttonAlignment="right"
+        buttonText="Consulter la foire aux questions"
+        buttonUrl="/faq"
+        buttonSecondary
+      />
+    </Container>
+    ) }
+  </>
 );
 
 export default Page;

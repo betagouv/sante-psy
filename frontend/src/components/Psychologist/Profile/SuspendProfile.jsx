@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { TextInput, RadioGroup, Radio, Button } from '@dataesr/react-dsfr';
+import { TextInput, RadioGroup, Radio, Button, Callout, CalloutText } from '@dataesr/react-dsfr';
 import DatePicker from 'react-datepicker';
 
-import Ariane from 'components/Ariane/Ariane';
-import GlobalNotification from 'components/Notification/GlobalNotification';
 import DateInput from 'components/Date/DateInput';
 
 import { convertLocalToUTCDate } from 'services/date';
@@ -60,21 +58,13 @@ const SuspendProfile = ({ suspendPsychologist }) => {
 
   return (
     <>
-      <Ariane
-        previous={[
-          {
-            label: 'Mes informations',
-            url: '/psychologue/mon-profil',
-          }]}
-        current="Retirer mes informations de l'annuaire"
-      />
-      <h1>Retirer mes informations de l&lsquo;annuaire</h1>
-      <GlobalNotification />
-      <p>
-        Cette action vous retirera temporairement de l&lsquo;annuaire afin de ne plus être contacté par des étudiants.
-        Elle n&lsquo;influe en rien vos remboursements en cours et vous pourrez toujours déclarer vos séances.
-        Vous pourrez reactiver votre compte à tout moment.
-      </p>
+      <Callout className="fr-mb-2w" hasInfoIcon={false}>
+        <CalloutText>
+          Cette action vous retirera temporairement de l&lsquo;annuaire afin de ne plus être contacté par des étudiants.
+          Elle n&lsquo;influe en rien vos remboursements en cours et vous pourrez toujours déclarer vos séances.
+          Vous pourrez reactiver votre compte à tout moment.
+        </CalloutText>
+      </Callout>
       <RadioGroup
         legend="Pourquoi voulez vous retirer vos informations ?"
         ariaLabel="raison"
@@ -167,11 +157,10 @@ const SuspendProfile = ({ suspendPsychologist }) => {
       </RadioGroup>
       <Button
         data-test-id="suspend-button"
-        title="delete"
+        icon="fr-fi-eye-off-line"
         onClick={() => suspendPsychologist(getReason(), calculateSuspensionDate())}
         disabled={!canValidate}
       >
-        <span className="fr-fi-eye-off-line fr-mr-1w" aria-hidden="true" />
         Retirer mes informations de l&lsquo;annuaire
       </Button>
     </>

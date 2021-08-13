@@ -7,7 +7,7 @@ import { useStore } from 'stores/';
 
 import Notification from './Notification';
 
-const GlobalNotification = () => {
+const GlobalNotification = ({ className }) => {
   const { commonStore: { notification, setNotification } } = useStore();
   const history = useHistory();
   const location = useLocation();
@@ -21,6 +21,7 @@ const GlobalNotification = () => {
     return (
       <Notification
         {...notification}
+        className={className}
         onClose={() => setNotification(null)}
       />
     );

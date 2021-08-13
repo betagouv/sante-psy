@@ -171,7 +171,7 @@ describe('Header Test', () => {
 
         // Connected nav is visible and works
         cy.get('[data-test-id="header-connected-link-2"]').should('be.visible').click();
-        cy.location('pathname').should('eq', '/psychologue/mes-patients');
+        cy.location('pathname').should('eq', '/psychologue/mes-etudiants');
 
         cy.get('[data-test-id="header-connected-link-3"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/psychologue/mes-remboursements');
@@ -250,7 +250,7 @@ describe('Header Test', () => {
 
           // Connected nav is visible and works
           cy.get('[data-test-id="header-connected-link-2"]').should('be.visible').click();
-          cy.location('pathname').should('eq', '/psychologue/mes-patients');
+          cy.location('pathname').should('eq', '/psychologue/mes-etudiants');
         });
 
         cy.get('@open-burger-menu').click();

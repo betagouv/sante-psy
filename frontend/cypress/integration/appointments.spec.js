@@ -1,7 +1,8 @@
+const { checkConvention } = require('../../src/services/conventionVerification');
 const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 const { selectNextCalendarDate } = require('./utils/calendar');
-const { removeConvention, suspend, signConvention } = require('./utils/psychologist');
+const { removeConvention, suspend } = require('./utils/psychologist');
 
 describe('Appointments', () => {
   beforeEach(() => {
@@ -16,7 +17,7 @@ describe('Appointments', () => {
 
     resetDB();
     loginAsDefault();
-    signConvention('Angers', true);
+    checkConvention();
 
     cy.visit('/psychologue/mes-seances');
     cy.wait('@config');
@@ -25,8 +26,8 @@ describe('Appointments', () => {
 
   describe('Display', () => {
     it('should get appointments', () => {
-      cy.get('[data-test-id="appointment-row"]')
-        .should('have.length', 13);
+      cy.get('[data-test-id="appointments-table"] tr')
+        .should('have.length', 14);
     });
 
     it('should display default announcement only once', () => {
@@ -68,8 +69,8 @@ describe('Appointments', () => {
         .first()
         .click();
       cy.wait('@deleteAppointment');
-      cy.get('[data-test-id="appointment-row"]')
-        .should('have.length', 12);
+      cy.get('[data-test-id="appointments-table"] tr')
+        .should('have.length', 13);
       cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
@@ -103,9 +104,12 @@ describe('Appointments', () => {
 
       selectNextCalendarDate();
 
-      cy.get('[data-test-id="new-appointment-patient-input"] > select > option')
+      cy.get('[data-test-id="new-appointment-etudiant-input"] input')
+        .click();
+
+      cy.get('[data-test-id="new-appointment-etudiant-input"] option')
         .eq(1)
-        .then(element => cy.get('[data-test-id="new-appointment-patient-input"] > select').select(element.val()));
+        .click();
 
       cy.get('[data-test-id="new-appointment-submit"]')
         .click();

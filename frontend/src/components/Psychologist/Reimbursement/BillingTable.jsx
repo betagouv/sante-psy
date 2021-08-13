@@ -1,37 +1,39 @@
+import { Table } from '@dataesr/react-dsfr';
 import React from 'react';
 
 import { formatDDMMYYYY } from 'services/date';
 
-const BillingTable = ({ filteredDate, appointments }) => (
-  <div className="fr-table fr-mb-2w">
-    <table>
-      <caption>Tableau récapitulatif </caption>
-      <thead>
-        <tr>
-          <th scope="col">Date des séances effectuées</th>
-          <th scope="col">Nombre de séances réalisées</th>
-          <th scope="col">Total TTC €</th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredDate.map(date => {
-          const appointment = appointments[date];
-          return (
-            <tr data-test-id="billing-row" key={date}>
-              <td>{formatDDMMYYYY(new Date(date))}</td>
-              <td>{appointment}</td>
-              <td>{`${appointment * 30}€`}</td>
-            </tr>
-          );
-        })}
-        <tr data-test-id="billing-row">
-          <td>Total</td>
-          <td>{filteredDate.reduce((accumulator, date) => accumulator + appointments[date], 0)}</td>
-          <td>{`${filteredDate.reduce((accumulator, date) => accumulator + appointments[date], 0) * 30}€`}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-);
+const BillingTable = ({ filteredDate, appointments }) => {
+  const columns = [
+    {
+      name: 'date',
+      label: 'Date des séances effectuées',
+      render: date => (date === 'total' ? 'Total' : formatDDMMYYYY(new Date(date))),
+    },
+    {
+      name: 'appointment',
+      label: 'Nombre de séances réalisées',
+      render: date => (date === 'total'
+        ? filteredDate.reduce((accumulator, d) => accumulator + appointments[d], 0)
+        : appointments[date]),
+    },
+    {
+      name: 'total',
+      label: 'Total TTC €',
+      render: date => (date === 'total'
+        ? `${filteredDate.reduce((accumulator, d) => accumulator + appointments[d], 0) * 30}€`
+        : `${appointments[date] * 30}€`),
+    },
+  ];
+  return (
+    <Table
+      data-test-id="billing-table"
+      caption="Tableau récapitulatif"
+      columns={columns}
+      data={filteredDate.concat(['total'])}
+      rowKey={x => x}
+    />
+  );
+};
 
 export default BillingTable;

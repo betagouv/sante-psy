@@ -1,28 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
-import { observer } from 'mobx-react';
-import classNames from 'classnames';
-import { Button } from '@dataesr/react-dsfr';
+import { Button, Table } from '@dataesr/react-dsfr';
 
-import Notification from 'components/Notification/Notification';
-import GlobalNotification from 'components/Notification/GlobalNotification';
-import Mail from 'components/Footer/Mail';
 import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
 import { formatFrenchDate, formatMonth } from 'services/date';
-import { shouldCheckConventionAgain } from 'services/conventionVerification';
 
 import { useStore } from 'stores/';
 
-import ConventionModal from './ConventionModal';
-
-import styles from './appointments.cssmodule.scss';
-import 'react-month-picker/css/month-picker.css';
-import './custom-month-picker.css';
-
 const Appointments = () => {
-  const [loading, setLoading] = useState(true);
   const [appointments, setAppointments] = useState([]);
 
   const [month, setMonth] = useState({
@@ -30,12 +17,11 @@ const Appointments = () => {
     month: new Date().getMonth() + 1,
   });
 
-  const { commonStore: { setNotification }, userStore: { user } } = useStore();
+  const { commonStore: { setNotification } } = useStore();
 
   useEffect(() => {
     agent.Appointment.get()
       .then(response => {
-        setLoading(false);
         setAppointments(response);
       });
   }, []);
@@ -54,122 +40,71 @@ const Appointments = () => {
         && appointmentDate.getMonth() === month.month - 1;
   });
 
-  const hasSignedConvention = user.convention && user.convention.isConventionSigned;
-  const modal = hasSignedConvention || !shouldCheckConventionAgain()
-    ? <></>
-    : <ConventionModal currentConvention={user.convention} />;
+  const columns = [
+    { name: 'date', label: 'Date', render: ({ appointmentDate }) => formatFrenchDate(new Date(appointmentDate)) },
+    { name: 'student', label: 'Étudiant', render: ({ firstNames, lastName }) => `${firstNames} ${lastName}` },
+    {
+      name: 'actions',
+      label: '',
+      render: appointment => (
+        <>
+          <Button
+            data-test-id="delete-appointment-button-small"
+            onClick={() => deleteAppointment(appointment.id)}
+            secondary
+            size="sm"
+            className="fr-fi-delete-line fr-displayed-xs fr-hidden-sm fr-float-right"
+            aria-label="Supprimer"
+          />
+          <Button
+            data-test-id="delete-appointment-button-large"
+            secondary
+            size="sm"
+            onClick={() => deleteAppointment(appointment.id)}
+            className="fr-fi-delete-line fr-btn--icon-left fr-hidden-xs fr-displayed-sm fr-float-right"
+          >
+            Supprimer
+          </Button>
+        </>
+      ),
+    },
+  ];
 
   return (
-    <div className="fr-container fr-mb-3w fr-mt-2w" data-test-id="appointment-container">
-      {modal}
-      {!loading && (!user.convention || !user.convention.universityId) && (
-      <Notification type="info">
-        Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
-        {' '}
-        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
-      </Notification>
-      )}
-      {!loading && user && !user.active && (
-      <Notification type="info">
-        Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire.
-        Pour que les étudiants puissent vous contacter, rendez vous sur la page
-        {' '}
-        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
-        .
-      </Notification>
-      )}
-      <h1>Déclarer mes séances</h1>
-      <GlobalNotification />
-      <div className="fr-mb-1w">
+    <>
+      <div className="fr-my-2w">
+        <HashLink
+          to="/psychologue/nouvelle-seance"
+          className="fr-btn fr-fi-add-line fr-btn--icon-left"
+        >
+          <div data-test-id="new-appointment-button">
+            Nouvelle séance
+          </div>
+        </HashLink>
+      </div>
+      <div className="fr-mb-2w">
+        Veuillez trouver ci-dessous vos séances déclarées pour le mois sélectionné :
+        <div className="fr-mt-1w">
+          <MonthPicker month={month} setMonth={setMonth} />
+        </div>
+      </div>
+      {filteredAppointments.length > 0 ? (
+        <Table
+          data-test-id="appointments-table"
+          columns={columns}
+          data={filteredAppointments}
+          rowKey="id"
+        />
+      ) : (
         <div>
-          Afin que nous puissions vous rembourser les séances réalisées, nous vous proposons de nous les
-          indiquer sur ce site.
+          Vous n‘avez pas déclaré de séances pour le mois de
+          {' '}
+          { formatMonth(month) }
+          .
         </div>
-      </div>
-      <div className="fr-grid-row fr-grid-row--left fr-grid-row--gutters">
-        <div className="fr-col-12">
-          <h2 className="fr-mb-2w">
-            Mes séances
-          </h2>
-          <div className="fr-mb-2w">
-            <HashLink
-              to="/psychologue/nouvelle-seance"
-              className="fr-btn fr-fi-add-line fr-btn--icon-left"
-            >
-              <div data-test-id="new-appointment-button">
-                Nouvelle séance
-              </div>
-            </HashLink>
-          </div>
-          <div className="fr-mb-1w">
-            <div className="fr-grid-row fr-grid-row--middle fr-grid-row--no-gutters">
-              <label className="fr-label fr-col-xs-10 fr-col-lg-6" htmlFor="date">
-                Veuillez trouver ci-dessous vos séances déclarées pour le mois sélectionné :
-                <MonthPicker month={month} setMonth={setMonth} />
-              </label>
-            </div>
-          </div>
-          <div className={classNames('fr-table', styles.table)}>
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">
-                    Date
-                  </th>
-                  <th scope="col">
-                    Patient
-                  </th>
-                  <th scope="col">
-                    {' '}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredAppointments.map(appointment => (
-                  <tr key={appointment.id} data-test-id="appointment-row">
-                    <td>
-                      {formatFrenchDate(new Date(appointment.appointmentDate))}
-                    </td>
-                    <td>
-                      {`${appointment.firstNames} ${appointment.lastName}`}
-                    </td>
-                    <td>
-                      <Button
-                        data-test-id="delete-appointment-button-small"
-                        onClick={() => deleteAppointment(appointment.id)}
-                        secondary
-                        size="sm"
-                        className="fr-fi-delete-line fr-displayed-xs fr-hidden-sm fr-float-right"
-                        aria-label="Supprimer"
-                      />
-                      <Button
-                        data-test-id="delete-appointment-button-large"
-                        secondary
-                        size="sm"
-                        onClick={() => deleteAppointment(appointment.id)}
-                        className="fr-fi-delete-line fr-btn--icon-left fr-hidden-xs fr-displayed-sm fr-float-right"
-                      >
-                        Supprimer
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {filteredAppointments.length === 0 && (
-            <div className="fr-mt-2w">
-              Vous n‘avez pas déclaré de séances pour le mois de
-              {' '}
-              { formatMonth(month) }
-              .
-            </div>
-            )}
-          </div>
-        </div>
-      </div>
-      <Mail />
-    </div>
+      )}
+    </>
   );
 };
 
-export default observer(Appointments);
+export default Appointments;
