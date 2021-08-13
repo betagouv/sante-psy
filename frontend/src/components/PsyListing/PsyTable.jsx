@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Table, Pagination, Button, Title } from '@dataesr/react-dsfr';
+import { Table, Button, Title } from '@dataesr/react-dsfr';
 
 import styles from './psyTable.cssmodule.scss';
 
@@ -112,16 +112,13 @@ const PsyTable = ({
             rowKey="dossierNumber"
             columns={columns}
             data={psychologists}
+            pagination
             page={currentPage}
             perPage={10}
-          />
-          <Pagination
-            currentPage={currentPage}
-            onClick={p => {
+            setPage={p => {
               setPage(p);
               table.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
             }}
-            pageCount={Math.ceil(psychologists.length / 10)}
             surrendingPages={surrendingPages}
           />
         </>
