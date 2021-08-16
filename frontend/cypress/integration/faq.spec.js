@@ -1,3 +1,5 @@
+const { loginAsDefault } = require('./utils/login');
+
 describe('FAQ Page Test', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/config')
@@ -22,5 +24,27 @@ describe('FAQ Page Test', () => {
     cy.get('[data-test-id="tabpanel-etudiant"]').should('not.be.visible');
     cy.get('[data-test-id="tabpanel-psychologue"]').should('be.visible');
     cy.get('[data-test-id="tabpanel-medecin"]').should('not.be.visible');
+  });
+
+  it('display psychologist tab if connected', () => {
+    loginAsDefault();
+    cy.visit('/faq');
+    cy.wait('@config');
+
+    cy.get('[data-test-id="faqPage"]').should('exist');
+    cy.get('[data-test-id="tabpanel-etudiant"]').should('not.be.visible');
+    cy.get('[data-test-id="tabpanel-psychologue"]').should('be.visible');
+    cy.get('[data-test-id="tabpanel-medecin"]').should('not.be.visible');
+  });
+
+  it('display section tab if connected but specified', () => {
+    loginAsDefault();
+    cy.visit('/faq?section=medecin');
+    cy.wait('@config');
+
+    cy.get('[data-test-id="faqPage"]').should('exist');
+    cy.get('[data-test-id="tabpanel-etudiant"]').should('not.be.visible');
+    cy.get('[data-test-id="tabpanel-psychologue"]').should('not.be.visible');
+    cy.get('[data-test-id="tabpanel-medecin"]').should('be.visible');
   });
 });

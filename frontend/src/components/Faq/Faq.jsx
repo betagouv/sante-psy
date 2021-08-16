@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { observer } from 'mobx-react';
 
 import { Tabs, Tab } from '@dataesr/react-dsfr';
 
@@ -8,13 +9,23 @@ import FaqTab from 'components/Faq/FaqTab';
 
 import items from 'services/faq/items';
 
+import { useStore } from 'stores/';
 import styles from './faq.cssmodule.scss';
 
 const Faq = () => {
   const query = new URLSearchParams(useLocation().search);
+  const { userStore: { user } } = useStore();
   const getDefaultTab = () => {
     const section = query.get('section');
-    return items[section] ? items[section].index : 0;
+    if (items[section]) {
+      return items[section].index;
+    }
+
+    if (user) {
+      return items.psychologue.index;
+    }
+
+    return 0;
   };
 
   return (
@@ -43,4 +54,4 @@ const Faq = () => {
     </Page>
   );
 };
-export default Faq;
+export default observer(Faq);
