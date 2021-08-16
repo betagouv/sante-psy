@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, RadioGroup, Radio, Button, Callout, CalloutText } from '@dataesr/react-dsfr';
+import { TextInput, RadioGroup, Radio, Button } from '@dataesr/react-dsfr';
 import DatePicker from 'react-datepicker';
 
 import DateInput from 'components/Date/DateInput';
@@ -58,13 +58,6 @@ const SuspendProfile = ({ suspendPsychologist }) => {
 
   return (
     <>
-      <Callout className="fr-mb-2w" hasInfoIcon={false}>
-        <CalloutText>
-          Cette action vous retirera temporairement de l&lsquo;annuaire afin de ne plus être contacté par des étudiants.
-          Elle n&lsquo;influe en rien vos remboursements en cours et vous pourrez toujours déclarer vos séances.
-          Vous pourrez reactiver votre compte à tout moment.
-        </CalloutText>
-      </Callout>
       <RadioGroup
         legend="Pourquoi voulez vous retirer vos informations ?"
         ariaLabel="raison"
