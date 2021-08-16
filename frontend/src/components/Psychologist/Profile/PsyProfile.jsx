@@ -58,6 +58,11 @@ const PsyProfile = () => {
       .catch(() => window.scrollTo(0, 0));
   };
 
+  const cancelEditProfile = () => {
+    setEditMode(false);
+    viewProfilRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  };
+
   const suspendPsychologist = (reason, date) => {
     agent.Psychologist.suspend(reason, date)
       .then(response => {
@@ -79,6 +84,11 @@ const PsyProfile = () => {
       .catch(() => window.scrollTo(0, 0));
   };
 
+  const cancelSuspension = () => {
+    setSuspensionMode(false);
+    suspensionInfoRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  };
+
   return (
     <>
       <PayingUniversity />
@@ -94,6 +104,7 @@ const PsyProfile = () => {
               <EditProfile
                 psychologist={psychologist}
                 updatePsy={updatePsy}
+                cancelEditProfile={cancelEditProfile}
               />
             )
             : (
@@ -126,6 +137,7 @@ const PsyProfile = () => {
             psychologist={psychologist}
             activatePsychologist={activatePsychologist}
             suspendPsychologist={suspendPsychologist}
+            cancelSuspension={cancelSuspension}
           />
         </div>
       </>

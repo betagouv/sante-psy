@@ -9,6 +9,7 @@ const SuspensionInfo = ({
   suspendPsychologist,
   suspensionMode,
   setSuspensionMode,
+  cancelSuspension,
 }) => (
   <>
     <h3>Statut de mon compte</h3>
@@ -16,6 +17,7 @@ const SuspensionInfo = ({
       ? (
         <SuspendProfile
           suspendPsychologist={suspendPsychologist}
+          cancelSuspension={cancelSuspension}
         />
       )
       : (

@@ -3,7 +3,7 @@ import { Button, RadioGroup, Radio, TextInput, SearchableSelect } from '@dataesr
 
 import DEPARTEMENTS from 'services/departments';
 
-const EditProfile = ({ psychologist, updatePsy }) => {
+const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
   const [updatedPsychologist, setUpdatedPsychologist] = useState(psychologist);
   useEffect(() => { setUpdatedPsychologist(psychologist); }, [psychologist]);
 
@@ -119,9 +119,16 @@ const EditProfile = ({ psychologist, updatePsy }) => {
       <Button
         submit
         data-test-id="save-profile-button"
-        className="fr-btn--icon-left fr-fi-check-line fr-mb-2w"
+        className="fr-btn--icon-left fr-fi-check-line fr-mb-2w fr-mr-2w"
       >
         Valider les modifications
+      </Button>
+      <Button
+        onClick={cancelEditProfile}
+        secondary
+        className="fr-btn--icon-left fr-fi-close-line"
+      >
+        Annuler
       </Button>
     </form>
   );

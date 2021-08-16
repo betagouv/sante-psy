@@ -6,7 +6,7 @@ import DateInput from 'components/Date/DateInput';
 
 import { convertLocalToUTCDate } from 'services/date';
 
-const SuspendProfile = ({ suspendPsychologist }) => {
+const SuspendProfile = ({ suspendPsychologist, cancelSuspension }) => {
   const [reason, setReason] = useState();
   const [duration, setDuration] = useState();
   const [displayDate, setDisplayDate] = useState(false);
@@ -150,12 +150,18 @@ const SuspendProfile = ({ suspendPsychologist }) => {
       </RadioGroup>
       <Button
         data-test-id="suspend-button"
-        icon="fr-fi-eye-off-line"
-        className="fr-mb-2w"
+        className="fr-btn--icon-left fr-fi-eye-off-line fr-mb-2w fr-mr-2w"
         onClick={() => suspendPsychologist(getReason(), calculateSuspensionDate())}
         disabled={!canValidate}
       >
         Retirer mes informations de l&lsquo;annuaire
+      </Button>
+      <Button
+        onClick={cancelSuspension}
+        secondary
+        className="fr-btn--icon-left fr-fi-close-line"
+      >
+        Annuler
       </Button>
     </>
   );
