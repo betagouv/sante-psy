@@ -13,7 +13,7 @@ const PayingUniversity = () => {
   }, [user]);
 
   return (
-    <div>
+    <div className="fr-mb-3w">
       {showForm ? (
         <>
           {user.convention && (
