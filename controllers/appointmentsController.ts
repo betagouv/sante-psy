@@ -21,12 +21,27 @@ const create = async (req: Request, res: Response): Promise<void> => {
   // Todo : test case where patient id does not exist
   validation.checkErrors(req);
 
+  const beginningDate = new Date('2021-03-21');
   const date = new Date(req.body.date);
+  const today = new Date();
+  const limitDate = new Date(today.setMonth(today.getMonth() + 4));
   const { patientId } = req.body;
   const psyId = req.user.psychologist;
   const patientExist = await dbPatient.getById(patientId, psyId);
 
   if (patientExist) {
+    if (date < beginningDate) {
+      console.warn(
+        "It's impossible to declare an appointment before 21/03/2021",
+      );
+      throw new CustomError('La date de la séance doit être apres le 21 mars 2021', 400);
+    }
+    if (date > limitDate) {
+      console.warn(
+        'The difference between today and the declaration date is beyond 4 month',
+      );
+      throw new CustomError('La date de la séance doit être dans moins de 4 mois', 400);
+    }
     await dbAppointments.insert(date, patientId, psyId);
     console.log(
       `Appointment created for patient id ${patientId} by psy id ${psyId}`,
