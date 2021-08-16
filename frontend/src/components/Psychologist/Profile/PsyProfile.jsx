@@ -24,6 +24,7 @@ const informations = [
 
 const PsyProfile = () => {
   const viewProfilRef = useRef();
+  const suspensionInfoRef = useRef();
 
   const { commonStore: { setNotification }, userStore: { pullUser } } = useStore();
   const history = useHistory();
@@ -63,6 +64,7 @@ const PsyProfile = () => {
         setSuspensionMode(false);
         loadPsychologist();
         setNotification(response);
+        suspensionInfoRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
       })
       .catch(() => window.scrollTo(0, 0));
   };
@@ -114,7 +116,10 @@ const PsyProfile = () => {
               </>
             )}
         </div>
-        <div className="fr-mb-2w">
+        <div 
+          className="fr-mb-2w" 
+          ref={suspensionInfoRef}
+        >
           <SuspensionInfo
             suspensionMode={suspensionMode}
             setSuspensionMode={setSuspensionMode}
