@@ -57,7 +57,7 @@ const Page = ({
     {withContact && (
     <Container
       spacing="py-4w"
-      className={styles.section}
+      className={styles.sectionFaq}
     >
       <Section
         title="Vous avez une question ?"

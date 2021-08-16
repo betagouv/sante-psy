@@ -20,13 +20,9 @@
   overflow-wrap: anywhere;
 }
 
-.sectionTitle {
+.sectionTitle, .sectionFaq {
   color: var(--bf500);
   text-align: center;
-}
-
-.section {
-  color: var(--bf500);
 }
 
 @media (min-width: 768px) {
