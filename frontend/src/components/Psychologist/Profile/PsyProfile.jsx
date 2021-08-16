@@ -88,7 +88,7 @@ const PsyProfile = () => {
           className="fr-my-3w"
           ref={viewProfilRef}
         >
-          <h5>Informations pour l&lsquo;annuaire</h5>
+          <h3>Informations pour l&lsquo;annuaire</h3>
           {editMode
             ? (
               <EditProfile
@@ -116,8 +116,8 @@ const PsyProfile = () => {
               </>
             )}
         </div>
-        <div 
-          className="fr-mb-2w" 
+        <div
+          className="fr-mb-2w"
           ref={suspensionInfoRef}
         >
           <SuspensionInfo

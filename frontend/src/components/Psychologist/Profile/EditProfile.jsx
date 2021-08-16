@@ -119,7 +119,7 @@ const EditProfile = ({ psychologist, updatePsy }) => {
       <Button
         submit
         data-test-id="save-profile-button"
-        className="fr-btn--icon-left fr-fi-check-line"
+        className="fr-btn--icon-left fr-fi-check-line fr-mb-2w"
       >
         Valider les modifications
       </Button>

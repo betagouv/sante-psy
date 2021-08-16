@@ -17,9 +17,9 @@ const PayingUniversity = () => {
       {showForm ? (
         <>
           {user.convention && (
-          <h5 data-test-id="convention-form-title">
+          <h3 data-test-id="convention-form-title">
             Modifier le statut de ma convention
-          </h5>
+          </h3>
           )}
           <ConventionForm
             onConventionUpdated={() => { setShowForm(false); }}
@@ -29,7 +29,7 @@ const PayingUniversity = () => {
         </>
       ) : (
         <>
-          <h5>Statut de ma convention</h5>
+          <h3>Statut de ma convention</h3>
           <Button
             className="fr-mb-1w"
             data-test-id="show-convention-form"

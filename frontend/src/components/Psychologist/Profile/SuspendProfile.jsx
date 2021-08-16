@@ -158,6 +158,7 @@ const SuspendProfile = ({ suspendPsychologist }) => {
       <Button
         data-test-id="suspend-button"
         icon="fr-fi-eye-off-line"
+        className="fr-mb-2w"
         onClick={() => suspendPsychologist(getReason(), calculateSuspensionDate())}
         disabled={!canValidate}
       >

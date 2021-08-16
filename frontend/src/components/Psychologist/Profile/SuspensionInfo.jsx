@@ -11,7 +11,7 @@ const SuspensionInfo = ({
   setSuspensionMode,
 }) => (
   <>
-    <h5>Statut de mon compte</h5>
+    <h3>Statut de mon compte</h3>
     {suspensionMode
       ? (
         <SuspendProfile
@@ -31,6 +31,7 @@ const SuspensionInfo = ({
           <Button
             data-test-id={psychologist.active ? 'suspend-redirection-button' : 'activate-button'}
             icon={psychologist.active ? 'fr-fi-eye-off-line' : 'fr-fi-eye-line'}
+            className="fr-mb-2w"
             onClick={() => (psychologist.active
               ? setSuspensionMode(true)
               : activatePsychologist())}

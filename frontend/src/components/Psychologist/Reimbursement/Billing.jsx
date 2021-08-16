@@ -47,6 +47,7 @@ const Billing = () => {
 
   return (
     <div className="fr-my-2w">
+      <h3>Générer ma facture</h3>
       <div className={styles.monthPickerContainer}>
         Générer ma facture pour le mois de :
         <div className={styles.monthPicker}>
@@ -91,7 +92,7 @@ const Billing = () => {
           , vous retrouverez ici votre récapitulatif de séances dans le but de créer vous même votre facture
         </p>
       )}
-      <h4>Les élements à apparaître sur votre facturation</h4>
+      <h3>Les élements à apparaître sur votre facturation</h3>
       <p className="fr-mb-1w">
         Le nom des étudiants est couvert par le secret médical,
         ne le communiquez pas sur la facture.
@@ -107,7 +108,7 @@ const Billing = () => {
       </p>
       <p className="fr-mb-2w">
         <a
-          className="fr-btn fr-btn--secondary fr-mt-2w fr-mr-1w"
+          className="fr-btn fr-btn--secondary fr-my-2w fr-mr-1w"
           href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.pdf`}
           target="_blank"
           rel="noreferrer"
@@ -116,7 +117,7 @@ const Billing = () => {
           .pdf
         </a>
         <a
-          className="fr-btn fr-btn--secondary fr-mt-2w fr-mr-1w"
+          className="fr-btn fr-btn--secondary fr-my-2w fr-mr-1w"
           href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.docx`}
           target="_blank"
           rel="noreferrer"
@@ -125,7 +126,7 @@ const Billing = () => {
           Microsoft Word .docx
         </a>
         <a
-          className="fr-btn fr-btn--secondary fr-mt-2w fr-mr-1w"
+          className="fr-btn fr-btn--secondary fr-my-2w fr-mr-1w"
           href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.odt`}
           target="_blank"
           rel="noreferrer"
@@ -134,7 +135,7 @@ const Billing = () => {
           Libre Office .odt
         </a>
       </p>
-      <h4>Demander de l&lsquo;aide</h4>
+      <h3>Demander de l&lsquo;aide</h3>
       <ul className="fr-btns-group fr-btns-group--inline">
         <li>
           <HashLink
