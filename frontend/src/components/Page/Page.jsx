@@ -42,7 +42,7 @@ const Page = ({
           <Col>
             {callout && (
             <Callout hasInfoIcon={false}>
-              <CalloutText>
+              <CalloutText className="fr-text">
                 {callout}
               </CalloutText>
             </Callout>
