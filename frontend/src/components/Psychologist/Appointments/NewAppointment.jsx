@@ -34,6 +34,10 @@ const NewAppointment = () => {
     });
   };
 
+  const beginningDate = new Date('2021-03-22');
+  const today = new Date();
+  const maxDate = new Date(today.setMonth(today.getMonth() + 4));
+
   const patientsMap = patients.map(patient => (
     { value: patient.id, label: `${patient.lastName} ${patient.firstNames}` }
   ));
@@ -64,6 +68,8 @@ const NewAppointment = () => {
       <DatePicker
         className="date-picker"
         selected={date}
+        minDate={beginningDate}
+        maxDate={maxDate}
         dateFormat="dd/MM/yyyy"
         showPopperArrow={false}
         customInput={(
