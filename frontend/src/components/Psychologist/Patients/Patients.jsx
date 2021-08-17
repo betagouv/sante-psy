@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Alert, Table, Callout, CalloutText } from '@dataesr/react-dsfr';
+import { Table, Callout, CalloutText } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { parseDateForm } from 'services/date';
