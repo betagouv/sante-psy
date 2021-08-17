@@ -107,15 +107,6 @@ const Patients = () => {
         </Link>
       </div>
       <div className={classNames('fr-table', styles.table)}>
-        {patients.length > 0 && extendedPatients.find(patient => !patient.hasFolderCompleted) && (
-          <Alert
-            data-test-id="etudiants-missing-info"
-            className="fr-my-2w"
-            title="Certains de vos étudiants n‘ont pas leur dossier complet"
-            description="Ceci est obligatoire pour facturer les séances de l'étudiant."
-            type="error"
-          />
-        )}
         {patients.length > 0 ? (
           <Table
             data-test-id="etudiant-table"
