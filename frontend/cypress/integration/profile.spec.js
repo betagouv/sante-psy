@@ -52,7 +52,7 @@ describe('Profile', () => {
   });
 
   describe('Update convention', () => {
-    it('should udpate existing convention info ', () => {
+    it('should update existing convention info ', () => {
       cy.get('[data-test-id="show-convention-form"]')
         .click();
       cy.get('[data-test-id="convention-form"]')
@@ -121,7 +121,7 @@ describe('Profile', () => {
   });
 
   describe('Update profile', () => {
-    it('should udpate existing profile', () => {
+    it('should update existing profile', () => {
       cy.get('[data-test-id="show-profile-form-button"]')
         .click();
       cy.get('[data-test-id="edit-profile-form"]')

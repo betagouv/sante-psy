@@ -1,33 +1,56 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 import { Button } from '@dataesr/react-dsfr';
+import SuspendProfile from './SuspendProfile';
 
-const SuspensionInfo = ({ psychologist, activatePsychologist }) => {
-  const history = useHistory();
-
-  return (
-    <>
-      <h5>Statut de mon compte</h5>
-      <p data-test-id={psychologist.active ? 'activePsy' : 'inactivePsy'} className="fr-mb-2v">
-        Mes informations
-        {' '}
-        <b>{psychologist.active ? 'sont visibles' : 'ne sont pas visibles'}</b>
-        {' '}
-        sur l&lsquo;annuaire.
-      </p>
-      <Button
-        data-test-id={psychologist.active ? 'suspend-redirection-button' : 'activate-button'}
-        icon={psychologist.active ? 'fr-fi-eye-off-line' : 'fr-fi-eye-line'}
-        onClick={() => (psychologist.active
-          ? history.push('/psychologue/mon-profil/suspendre')
-          : activatePsychologist())}
-      >
-        {psychologist.active
-          ? "Retirer mes informations de l'annuaire"
-          : "Remettre mes informations de l'annuaire"}
-      </Button>
-    </>
-  );
-};
+const SuspensionInfo = ({
+  psychologist,
+  activatePsychologist,
+  suspendPsychologist,
+  suspensionMode,
+  setSuspensionMode,
+  cancelSuspension,
+}) => (
+  <>
+    <h3>Statut de mon compte</h3>
+    {suspensionMode
+      ? (
+        <SuspendProfile
+          suspendPsychologist={suspendPsychologist}
+          cancelSuspension={cancelSuspension}
+        />
+      )
+      : (
+        <>
+          {' '}
+          <p data-test-id={psychologist.active ? 'activePsy' : 'inactivePsy'} className="fr-mb-2w">
+            Mes informations
+            {' '}
+            <b>{psychologist.active ? 'sont visibles' : 'ne sont pas visibles'}</b>
+            {' '}
+            sur l&lsquo;annuaire.
+          </p>
+          { psychologist.active && (
+            <p className="fr-mb-2w">
+              Vous pouvez retirer vos informations temporairement de l&lsquo;annuaire afin de ne plus être contacté
+              par des étudiants. Cela n&lsquo;influe en rien vos remboursements en cours et vous pourrez toujours
+              déclarer vos séances. Vous pourrez reactiver votre compte à tout moment.
+            </p>
+          )}
+          <Button
+            data-test-id={psychologist.active ? 'suspend-redirection-button' : 'activate-button'}
+            icon={psychologist.active ? 'fr-fi-eye-off-line' : 'fr-fi-eye-line'}
+            className="fr-mb-2w"
+            onClick={() => (psychologist.active
+              ? setSuspensionMode(true)
+              : activatePsychologist())}
+          >
+            {psychologist.active
+              ? "Retirer mes informations de l'annuaire"
+              : "Remettre mes informations de l'annuaire"}
+          </Button>
+        </>
+      )}
+  </>
+);
 export default SuspensionInfo;
