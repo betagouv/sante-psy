@@ -6,8 +6,6 @@ import {
   Row,
   Col,
   Text,
-  Callout,
-  CalloutText,
 } from '@dataesr/react-dsfr';
 
 import Section from '../Landing/Section';
@@ -21,7 +19,6 @@ const Page = ({
   background,
   children,
   textContent,
-  callout,
   withContact,
   className = null,
   dataTestId = null,
@@ -40,13 +37,6 @@ const Page = ({
         </Row>
         <Row>
           <Col>
-            {callout && (
-            <Callout hasInfoIcon={false}>
-              <CalloutText className="fr-text">
-                {callout}
-              </CalloutText>
-            </Callout>
-            )}
             {textContent
               ? <div className={styles.textContainer}>{children}</div>
               : children}

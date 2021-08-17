@@ -43,7 +43,6 @@ const PsychologistRouter = () => {
         return {
           title: 'Gérer mes étudiants',
           description: 'Veuillez enregistrer vos nouveaux étudiants afin de déclarer leurs séances pour procéder à vos remboursements.',
-          callout: 'Nous vous rappelons que vous pouvez recevoir des étudiants quel que soit leur département, écoles supérieures/universités ou lieu de résidence.',
         };
       case 'nouvel-etudiant':
         return {
@@ -56,15 +55,6 @@ const PsychologistRouter = () => {
         return {
           title: 'Gérer mes facturations',
           description: 'Vous pouvez éditer et générer vos factures sur cet espace avant de les envoyer au Service de Santé Universitaire afin de vous faire rembourser.',
-          callout: (
-            <span>
-              À la fin de chaque mois, vous devez envoyer votre facture contenant vos séances réalisées à votre université de convention.
-              <br />
-              Les modalités d‘envoi sont précisées par l‘université lors de l‘établissement de votre convention (Chorus pro, email ou voie postale).
-              <br />
-              L‘université se chargera du remboursement, dans les 30 jours après la réception de cette facture.
-            </span>
-          ),
         };
       case 'mon-profil':
         return {
@@ -75,7 +65,6 @@ const PsychologistRouter = () => {
         return {
           title: 'Déclarer mes séances',
           description: 'La déclaration des séances en ligne est nécessaire à votre remboursement.',
-          callout: "Faîtes attention à vérifier l'exactitude de vos déclarations afin d'éviter l'allongement de vos délais de remboursements.",
         };
     }
   };

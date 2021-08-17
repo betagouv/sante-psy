@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Alert, Table } from '@dataesr/react-dsfr';
+import { Alert, Table, Callout, CalloutText } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { parseDateForm } from 'services/date';
@@ -92,6 +92,12 @@ const Patients = () => {
 
   return (
     <>
+      <Callout hasInfoIcon={false}>
+        <CalloutText className="fr-text">
+          Nous vous rappelons que vous pouvez recevoir des étudiants quel que soit leur département,
+          écoles supérieures/universités ou lieu de résidence.
+        </CalloutText>
+      </Callout>
       <div className="fr-my-2w">
         <Link
           to="/psychologue/nouvel-etudiant"
