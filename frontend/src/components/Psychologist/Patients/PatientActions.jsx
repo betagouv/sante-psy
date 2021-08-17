@@ -27,12 +27,11 @@ const PatientActions = ({ patient, deletePatient }) => {
       <ShrinkableButton
         data-test-id="appointment-etudiant-button"
         onClick={() => history.push(`/psychologue/nouvelle-seance/${patient.id}`)}
-        secondary
         size="sm"
         className="fr-fi-calendar-line"
-        aria-label="seance"
+        aria-label="Déclarer une séance"
       >
-        Séance
+        Déclarer une séance
       </ShrinkableButton>
       <ShrinkableButton
         data-test-id="update-etudiant-button"
