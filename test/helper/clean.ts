@@ -101,8 +101,8 @@ const getOnePsy = (
     active: !inactiveUntil,
     inactiveUntil,
     createdAt: new Date(),
-    longitude: Number(faker.address.longitude(10, -6)),
-    latitude: Number(faker.address.latitude(51, 41)),
+    // longitude: Number(faker.address.longitude(10, -6)),
+    // latitude: Number(faker.address.latitude(51, 41)),
   };
 };
 

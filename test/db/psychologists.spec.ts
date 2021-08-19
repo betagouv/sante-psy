@@ -1,4 +1,5 @@
 import { assert, expect } from 'chai';
+import sinon from 'sinon';
 
 import dbUniversities from '../../db/universities';
 import dbPsychologists from '../../db/psychologists';
@@ -9,11 +10,29 @@ import { Psychologist } from '../../types/Psychologist';
 
 import dotEnv from 'dotenv';
 
+const getAddrCoordinates = require('../../services/getAddrCoordinates');
+
 dotEnv.config();
 
+const LONGITUDE_PARIS = 2.3488;
+const LATITUDE_PARIS = 48.85341;
+const LONGITUDE_MARSEILLE = 5.38107;
+const LATITUDE_MARSEILLE = 43.29695;
+const LONGITUDE_LYON = 4.84671;
+const LATITUDE_LYON = 45.74846;
+const LONGITUDE_NICE = 7.26608;
+const LATITUDE_NICE = 43.70313;
+
 describe('DB Psychologists', () => {
+  let getAddrCoordinatesStub;
+
   beforeEach(async () => {
     await clean.cleanAllUniversities();
+    getAddrCoordinatesStub = sinon.stub(getAddrCoordinates, 'default').returns();
+  });
+
+  afterEach(async () => {
+    getAddrCoordinatesStub.restore();
   });
 
   describe('upsertMany', () => {
@@ -112,6 +131,43 @@ describe('DB Psychologists', () => {
       updatedPsySPE.selfModified.should.eql(true);
       updatedPsySPE.firstNames.should.be.equal(newPsyDS.firstNames);
     });
+
+    it('should set coordinates when inserting psychologist in PG', async () => {
+      const psy = clean.getOnePsy();
+      getAddrCoordinatesStub.returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS });
+
+      await dbPsychologists.upsertMany([psy]);
+
+      const savedPsy = await dbPsychologists.getById(psy.dossierNumber);
+      savedPsy.should.exist;
+      savedPsy.longitude.should.be.equal(LONGITUDE_PARIS);
+      savedPsy.latitude.should.be.equal(LATITUDE_PARIS);
+    });
+
+    it('should update psy coordinates if address changed', async () => {
+      getAddrCoordinatesStub
+        .onFirstCall().returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS })
+        .onSecondCall().returns({ longitude: LONGITUDE_MARSEILLE, latitude: LATITUDE_MARSEILLE });
+
+      // First save psy from DS
+      const psyDS = clean.getOnePsy();
+      await dbPsychologists.upsertMany([psyDS]);
+      const psySPE = await dbPsychologists.getById(psyDS.dossierNumber);
+      psySPE.address.should.be.equal(psyDS.address);
+      psySPE.longitude.should.be.equal(LONGITUDE_PARIS);
+      psySPE.latitude.should.be.equal(LATITUDE_PARIS);
+
+      // Update from DS (new address)
+      const newPsyDS = { ...psyDS };
+      newPsyDS.address = '1 rue du Pôle Nord';
+      await dbPsychologists.upsertMany([newPsyDS]);
+
+      // Assert that data changed are modified in SPE DB
+      const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
+      updatedPsySPE.address.should.be.equal('1 rue du Pôle Nord');
+      updatedPsySPE.longitude.should.be.equal(LONGITUDE_MARSEILLE);
+      updatedPsySPE.latitude.should.be.equal(LATITUDE_MARSEILLE);
+    });
   });
 
   describe('countByArchivedAndState', () => {
@@ -146,14 +202,14 @@ describe('DB Psychologists', () => {
 
     it('should return psychologists ordered randomly if no location', async () => {
       const psyInParis = clean.getOnePsy('paris@beta.gouv.fr');
-      psyInParis.longitude = 2.3488;
-      psyInParis.latitude = 48.85341;
+      psyInParis.longitude = LONGITUDE_PARIS;
+      psyInParis.latitude = LATITUDE_PARIS;
       const psyInLyon = clean.getOnePsy('lyon@beta.gouv.fr');
-      psyInLyon.longitude = 4.84671;
-      psyInLyon.latitude = 45.74846;
+      psyInLyon.longitude = LONGITUDE_LYON;
+      psyInLyon.latitude = LATITUDE_LYON;
       const psyInMarseille = clean.getOnePsy('marseille@beta.gouv.fr');
-      psyInMarseille.longitude = 5.38107;
-      psyInMarseille.latitude = 43.29695;
+      psyInMarseille.longitude = LONGITUDE_MARSEILLE;
+      psyInMarseille.latitude = LATITUDE_MARSEILLE;
       const psyWithoutLoc = clean.getOnePsy('perdu@beta.gouv.fr');
       psyWithoutLoc.longitude = null;
       psyWithoutLoc.latitude = null;
@@ -168,23 +224,21 @@ describe('DB Psychologists', () => {
 
     it('should return psychologists ordered by distance if location', async () => {
       const psyInParis = clean.getOnePsy('paris@beta.gouv.fr');
-      psyInParis.longitude = 2.3488;
-      psyInParis.latitude = 48.85341;
+      psyInParis.longitude = LONGITUDE_PARIS;
+      psyInParis.latitude = LATITUDE_PARIS;
       const psyInLyon = clean.getOnePsy('lyon@beta.gouv.fr');
-      psyInLyon.longitude = 4.84671;
-      psyInLyon.latitude = 45.74846;
+      psyInLyon.longitude = LONGITUDE_LYON;
+      psyInLyon.latitude = LATITUDE_LYON;
       const psyInMarseille = clean.getOnePsy('marseille@beta.gouv.fr');
-      psyInMarseille.longitude = 5.38107;
-      psyInMarseille.latitude = 43.29695;
+      psyInMarseille.longitude = LONGITUDE_MARSEILLE;
+      psyInMarseille.latitude = LATITUDE_MARSEILLE;
       const psyWithoutLoc = clean.getOnePsy('perdu@beta.gouv.fr');
       psyWithoutLoc.longitude = null;
       psyWithoutLoc.latitude = null;
 
-      const longFromNice = 7.26608;
-      const latFromNice = 43.70313;
       await dbPsychologists.upsertMany([psyInParis, psyInLyon, psyInMarseille, psyWithoutLoc]);
 
-      const result = await dbPsychologists.getAllActive(longFromNice, latFromNice);
+      const result = await dbPsychologists.getAllActive(LONGITUDE_NICE, LATITUDE_NICE);
 
       result.length.should.equal(4);
       result[0].dossierNumber.should.equal(psyInMarseille.dossierNumber);

@@ -7,6 +7,7 @@ import {
   editablePsyFields,
   nonEditablePsyFields,
 } from '../services/updatePsyFields';
+import getAddrCoordinates from '../services/getAddrCoordinates';
 import { Psychologist } from '../types/Psychologist';
 import db from './db';
 
@@ -121,10 +122,15 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
     try {
       const psyInDb = psychologists[psy.dossierNumber];
       if (!psyInDb) {
+        const coordinates = await getAddrCoordinates(psy.address);
         psychologistsToInsert.push({
           ...psy,
           languages: addFrenchLanguageIfMissing(psy.languages),
           assignedUniversityId: dbUniversities.getAssignedUniversityId(psy, universities),
+          ...(coordinates && coordinates.longitude && coordinates.latitude && {
+            longitude: coordinates.longitude,
+            latitude: coordinates.latitude,
+          }),
         });
         return Promise.resolve();
       }
@@ -136,6 +142,14 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
           ...nonEditablePsyFields(psy),
           updatedAt,
         });
+      }
+
+      if (psyInDb.address !== psy.address) {
+        const coordinates = await getAddrCoordinates(psy.address);
+        if (coordinates && coordinates.longitude && coordinates.latitude) {
+          psy.longitude = coordinates.longitude;
+          psy.latitude = coordinates.latitude;
+        }
       }
 
       return db(psychologistsTable)
@@ -152,14 +166,11 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
     }
   });
 
-  if (psychologistsToInsert.length > 0) {
-    upsertArray.push(
-      db(psychologistsTable)
-    .insert(psychologistsToInsert),
-    );
-  }
-
   await Promise.all(upsertArray);
+
+  if (psychologistsToInsert.length > 0) {
+    await db(psychologistsTable).insert(psychologistsToInsert);
+  }
   console.log('UPSERT into PG : done');
 };
 
