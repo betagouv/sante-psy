@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
-import { Button, Table } from '@dataesr/react-dsfr';
+import { Button, Table, Callout, CalloutText } from '@dataesr/react-dsfr';
 
 import MonthPicker from 'components/Date/MonthPicker';
 
@@ -72,6 +72,12 @@ const Appointments = () => {
 
   return (
     <>
+      <Callout hasInfoIcon={false}>
+        <CalloutText className="fr-text">
+          Faîtes attention à vérifier l&lsquo;exactitude de vos déclarations afin d&lsquo;éviter l&lsquo;allongement de
+          vos délais de remboursements.
+        </CalloutText>
+      </Callout>
       <div className="fr-my-2w">
         <HashLink
           to="/psychologue/nouvelle-seance"

@@ -30,8 +30,6 @@ describe('Patient', () => {
         .should('have.length', 1);
       cy.get('[data-test-id="etudiant-row-complete-info"]')
         .should('have.length', 4);
-      cy.get('[data-test-id="etudiants-missing-info"]')
-        .should('exist');
     });
   });
 
@@ -57,8 +55,6 @@ describe('Patient', () => {
         .should('have.length', 6);
       cy.get('[data-test-id="etudiant-row-complete-info"]')
         .should('have.length', 5);
-      cy.get('[data-test-id="etudiants-missing-info"]')
-        .should('not.exist');
 
       cy.get('[data-test-id="notification-success"] p')
         .should(
@@ -69,7 +65,7 @@ describe('Patient', () => {
   });
 
   describe('Remove', () => {
-    it('should remove etudiant with incomplete info, notify user and remove message', () => {
+    it('should remove etudiant with incomplete info and notify user', () => {
       cy.get('[data-test-id="delete-etudiant-button-large"]')
         .first()
         .click();
@@ -81,11 +77,9 @@ describe('Patient', () => {
           'have.text',
           "L'étudiant a bien été supprimé.",
         );
-      cy.get('[data-test-id="etudiants-missing-info"]')
-        .should('not.exist');
     });
 
-    it('should remove etudiant with complete info, notify user and not remove message', () => {
+    it('should remove etudiant with complete info and notify user', () => {
       cy.get('[data-test-id="delete-etudiant-button-large"]')
         .last()
         .click();
@@ -97,8 +91,6 @@ describe('Patient', () => {
           'have.text',
           "L'étudiant a bien été supprimé.",
         );
-      cy.get('[data-test-id="etudiants-missing-info"]')
-        .should('exist');
     });
   });
 });

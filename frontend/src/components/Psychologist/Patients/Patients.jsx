@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Alert, Table } from '@dataesr/react-dsfr';
+import { Table, Callout, CalloutText } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { parseDateForm } from 'services/date';
@@ -96,6 +96,12 @@ const Patients = () => {
 
   return (
     <>
+      <Callout hasInfoIcon={false}>
+        <CalloutText className="fr-text">
+          Nous vous rappelons que vous pouvez recevoir des étudiants quel que soit leur département,
+          écoles supérieures/universités ou lieu de résidence.
+        </CalloutText>
+      </Callout>
       <div className="fr-my-2w">
         <Link
           to="/psychologue/nouvel-etudiant"
@@ -105,15 +111,6 @@ const Patients = () => {
         </Link>
       </div>
       <div className={classNames('fr-table', styles.table)}>
-        {patients.length > 0 && extendedPatients.find(patient => !patient.hasFolderCompleted) && (
-          <Alert
-            data-test-id="etudiants-missing-info"
-            className="fr-my-2w"
-            title="Certains de vos étudiants n‘ont pas leur dossier complet"
-            description="Ceci est obligatoire pour facturer les séances de l'étudiant."
-            type="error"
-          />
-        )}
         {patients.length > 0 ? (
           <>
             <PatientActionsLegend />
