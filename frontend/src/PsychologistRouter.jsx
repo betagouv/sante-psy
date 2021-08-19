@@ -108,7 +108,7 @@ const PsychologistRouter = () => {
       <GlobalNotification className="fr-my-2w" />
       <Switch>
         <Route exact path="/psychologue/mes-seances" component={Appointments} />
-        <Route exact path="/psychologue/nouvelle-seance" component={NewAppointment} />
+        <Route exact path="/psychologue/nouvelle-seance/:patientId?" component={NewAppointment} />
         <Route exact path="/psychologue/mes-etudiants" component={Patients} />
         <Route exact path="/psychologue/nouvel-etudiant" component={AddEditPatient} />
         <Route exact path="/psychologue/modifier-etudiant/:patientId" component={AddEditPatient} />

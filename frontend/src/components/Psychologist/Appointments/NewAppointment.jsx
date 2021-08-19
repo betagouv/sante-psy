@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
-import { Button, SearchableSelect } from '@dataesr/react-dsfr';
+import { Button, SearchableSelect, Select } from '@dataesr/react-dsfr';
 
 import DateInput from 'components/Date/DateInput';
 
@@ -16,7 +16,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 const NewAppointment = () => {
   const history = useHistory();
   const [date, setDate] = useState();
-  const [patientId, setPatientId] = useState();
+  const params = useParams();
+  const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
 
   const { commonStore: { setNotification } } = useStore();
@@ -46,25 +47,41 @@ const NewAppointment = () => {
 
   return (
     <form onSubmit={createNewAppointment} className="fr-my-2w">
-      <SearchableSelect
-        className="midlength-select"
-        data-test-id="new-appointment-etudiant-input"
-        id="etudiants"
-        name="patientId"
-        label="Etudiant"
-        selected={patientId}
-        hint={(
-          <>
-            Votre étudiant n&lsquo;est pas dans la liste ?
-            {' '}
-            <HashLink to="/psychologue/nouvel-etudiant">Ajoutez un nouvel étudiant</HashLink>
-          </>
+      {patients.length > 0 ? (
+        <SearchableSelect
+          className="midlength-select"
+          data-test-id="new-appointment-etudiant-input"
+          id="etudiants"
+          name="patientId"
+          label="Etudiant"
+          selected={patientId}
+          hint={(
+            <>
+              Votre étudiant n&lsquo;est pas dans la liste ?
+              {' '}
+              <HashLink to="/psychologue/nouvel-etudiant">Ajoutez un nouvel étudiant</HashLink>
+            </>
               )}
-        onChange={e => { setPatientId(e); }}
-        required
-        options={allOptions}
-      />
-
+          onChange={e => { setPatientId(e); }}
+          required
+          options={allOptions}
+        />
+      ) : (
+        <Select
+          className="midlength-select"
+          label="Etudiant"
+          disabled
+          required
+          options={[]}
+          hint={(
+            <>
+              Vous n&lsquo;avez aucun étudiant dans votre liste!
+              {' '}
+              <HashLink to="/psychologue/nouvel-etudiant">Ajoutez un nouvel étudiant</HashLink>
+            </>
+          )}
+        />
+      )}
       <DatePicker
         className="date-picker"
         selected={date}

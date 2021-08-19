@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-
 import { check, oneOf } from 'express-validator';
+import DOMPurify from '../services/sanitizer';
+
 import dbPatients from '../db/patients';
 import validation from '../utils/validation';
 import date from '../utils/date';
@@ -18,11 +19,11 @@ const patientValidators = [
   // todo : do we html-escape here ? We already escape in templates.
   check('firstNames')
     .trim().not().isEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
   check('lastName')
     .trim().not().isEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier le nom du patient.'),
   oneOf(
     [
@@ -31,7 +32,7 @@ const patientValidators = [
       check('INE')
         .trim().isAlphanumeric()
         .isLength({ min: 1, max: 50 })
-        .customSanitizer((value, { req }) => req.sanitize(value)),
+        .customSanitizer(DOMPurify.sanitize),
     ],
     `Le numéro INE doit faire maximum 50 caractères alphanumériques \
 (chiffres ou lettres sans accents).
@@ -43,20 +44,20 @@ const patientValidators = [
       check('dateOfBirth').trim().isEmpty(),
       check('dateOfBirth')
         .trim().isDate({ format: date.formatFrenchDateForm })
-        .customSanitizer((value, { req }) => req.sanitize(value)),
+        .customSanitizer(DOMPurify.sanitize),
     ],
     `La date de naissance n'est pas valide, le format doit être JJ/MM/AAAA.
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`,
   ),
   check('institutionName')
     .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
+    .customSanitizer(DOMPurify.sanitize),
   check('doctorAddress')
     .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
+    .customSanitizer(DOMPurify.sanitize),
   check('doctorName')
     .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
+    .customSanitizer(DOMPurify.sanitize),
 ];
 
 const updateValidators = [

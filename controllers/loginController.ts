@@ -15,6 +15,7 @@ import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { checkXsrf } from '../middlewares/xsrfProtection';
 import loginInformations from '../services/loginInformations';
+import DOMPurify from '../services/sanitizer';
 
 const emailValidators = [
   check('email')
@@ -98,7 +99,7 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
 const login = async (req: Request, res: Response): Promise<void> => {
   // Save a token that expire after config.sessionDurationHours hours if user is logged
   if (req.body.token) {
-    const token = req.sanitize(req.body.token);
+    const token = DOMPurify.sanitize(req.body.token);
     const dbToken = await dbLoginToken.getByToken(token);
 
     if (dbToken) {

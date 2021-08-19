@@ -9,6 +9,7 @@ import { parseDateForm } from 'services/date';
 
 import { useStore } from 'stores/';
 
+import PatientActionsLegend from './PatientActionsLegend';
 import PatientActions from './PatientActions';
 import PatientStatus from './PatientStatus';
 
@@ -75,8 +76,11 @@ const Patients = () => {
   };
 
   const columns = [
-    { name: 'lastName', label: 'Nom' },
-    { name: 'firstNames', label: 'Prénoms' },
+    {
+      name: 'name',
+      label: 'Nom',
+      render: patient => `${patient.lastName.toUpperCase()} ${patient.firstNames}`,
+    },
     { name: 'status', label: 'Statut', render: PatientStatus },
     {
       name: 'actions',
@@ -111,13 +115,16 @@ const Patients = () => {
           />
         )}
         {patients.length > 0 ? (
-          <Table
-            data-test-id="etudiant-table"
-            columns={columns}
-            data={extendedPatients.filter(patient => !patient.hasFolderCompleted)
-              .concat(extendedPatients.filter(patient => patient.hasFolderCompleted))}
-            rowKey="id"
-          />
+          <>
+            <PatientActionsLegend />
+            <Table
+              data-test-id="etudiant-table"
+              columns={columns}
+              data={extendedPatients.filter(patient => !patient.hasFolderCompleted)
+                .concat(extendedPatients.filter(patient => patient.hasFolderCompleted))}
+              rowKey="id"
+            />
+          </>
         ) : (<span>Vous n‘avez pas encore déclaré d&lsquo;étudiants.</span>)}
       </div>
     </>

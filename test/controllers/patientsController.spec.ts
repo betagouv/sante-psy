@@ -490,6 +490,47 @@ describe('patientsController', () => {
         });
     });
 
+    it('should update patient with minimum info', async () => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'prenom.nom@beta.gouv.fr',
+      };
+      const patient = await makePatient(psy.dossierNumber);
+      return chai.request(app)
+        .put(`/api/patients/${patient.id}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send({
+          lastName: patient.lastName,
+          firstNames: patient.firstNames,
+          INE: '',
+          institutionName: '',
+          isStudentStatusVerified: false,
+          hasPrescription: false,
+          doctorName: '',
+          doctorAddress: '',
+          dateOfBirth: '',
+        })
+        .then(async (res) => {
+          res.status.should.equal(200);
+
+          const patientsArray = await dbPatients.getAll(psy.dossierNumber);
+          expect(patientsArray).to.have.length(1);
+          expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber);
+          expect(patientsArray[0].lastName).to.equal(patient.lastName);
+          expect(patientsArray[0].firstNames).to.equal(patient.firstNames);
+          expect(patientsArray[0].INE).to.equal('');
+          expect(patientsArray[0].institutionName).to.equal('');
+          expect(patientsArray[0].isStudentStatusVerified).to.equal(false);
+          expect(patientsArray[0].hasPrescription).to.equal(false);
+          expect(patientsArray[0].dateOfBirth).to.equal(null);
+          expect(patientsArray[0].doctorName).to.equal('');
+          expect(patientsArray[0].doctorAddress).to.equal('');
+
+          return Promise.resolve();
+        });
+    });
+
     it('should not update patient if it is not mine', async () => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',

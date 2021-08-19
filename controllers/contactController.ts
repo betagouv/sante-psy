@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import DOMPurify from '../services/sanitizer';
 import { check } from 'express-validator';
 import Crisp from 'node-crisp-api';
 
@@ -14,21 +15,21 @@ CrispClient.authenticate(config.crisp.identifier, config.crisp.key);
 const sendValidators = [
   check('name')
     .trim().not().isEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier un nom.'),
   check('firstName')
     .trim().not().isEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier un prénom.'),
   check('email')
     .trim().not().isEmpty()
     .withMessage('Vous devez spécifier un email valide.')
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .isEmail()
     .withMessage('Vous devez spécifier un email valide.'),
   check('message')
     .trim().not().isEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier un message.'),
   check('reason')
     .isIn([
