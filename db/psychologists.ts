@@ -1,3 +1,4 @@
+/* eslint no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsFor": ["psy"] }] */
 import date from '../utils/date';
 import { psychologistsTable, suspensionReasonsTable } from './tables';
 import { DossierState } from '../types/DossierState';
