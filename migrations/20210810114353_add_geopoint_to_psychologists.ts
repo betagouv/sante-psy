@@ -6,8 +6,8 @@ export async function up(knex: Knex): Promise<void> {
      CREATE EXTENSION IF NOT EXISTS "earthdistance";',
   )
   .then(() => knex.schema.table('psychologists', (table) => {
-    table.decimal('longitude');
-    table.decimal('latitude');
+    table.specificType('longitude', 'double precision');
+    table.specificType('latitude', 'double precision');
   }));
 }
 

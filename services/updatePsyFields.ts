@@ -17,6 +17,8 @@ export const editablePsyFields = (psy: Psychologist): EditablePsychologist => ({
   address: psy.address,
   departement: psy.departement,
   region: psy.region,
+  longitude: psy.longitude,
+  latitude: psy.latitude,
   phone: psy.phone,
   website: psy.website,
   description: psy.description,

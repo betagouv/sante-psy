@@ -6,6 +6,8 @@ import app from '../../index';
 import clean from '../helper/clean';
 import dbPsychologists from '../../db/psychologists';
 
+const getAddrCoordinates = require('../../services/getAddrCoordinates');
+
 describe('psyProfileController', () => {
   describe('get psy profile', () => {
     afterEach(async () => {
@@ -481,6 +483,17 @@ describe('psyProfileController', () => {
   });
 
   describe('update psy profile', () => {
+    let getAddrCoordinatesStub;
+
+    beforeEach(async () => {
+      getAddrCoordinatesStub = sinon.stub(getAddrCoordinates, 'default');
+    });
+
+    afterEach(async () => {
+      await clean.cleanAllPsychologists();
+      getAddrCoordinatesStub.restore();
+    });
+
     it('should return 401 if user is not logged in', async () => {
       const psy = await clean.insertOnePsy();
 
@@ -541,6 +554,9 @@ describe('psyProfileController', () => {
 
     it('should update psy profile', async () => {
       const psy = await clean.insertOnePsy();
+      const LONGITUDE_PARIS = 2.3488;
+      const LATITUDE_PARIS = 48.85341;
+      getAddrCoordinatesStub.returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS });
 
       return chai.request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
@@ -566,6 +582,8 @@ describe('psyProfileController', () => {
           expect(updatedPsy.address).to.eql('1 rue du Pôle Nord');
           expect(updatedPsy.departement).to.eql('59 - Nord');
           expect(updatedPsy.region).to.eql('Hauts-de-France');
+          expect(updatedPsy.longitude).to.eql(LONGITUDE_PARIS);
+          expect(updatedPsy.latitude).to.eql(LATITUDE_PARIS);
           expect(updatedPsy.phone).to.eql('01 02 03 04 05');
           expect(updatedPsy.website).to.eql('https://monwebsite.fr');
           expect(updatedPsy.description).to.eql('Consultez un psychologue gratuitement');

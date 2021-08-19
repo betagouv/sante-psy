@@ -5,6 +5,8 @@ export type EditablePsychologist = {
     address: string,
     departement: string,
     region: string,
+    longitude?: number,
+    latitude?: number,
     phone: string,
     website: string,
     description: string,
@@ -32,8 +34,6 @@ export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
     inactiveUntil: Date,
     updatedAt?: Date,
     createdAt: Date,
-    longitude?: number,
-    latitude?: number,
   };
 
 export type DSPsychologist = {
