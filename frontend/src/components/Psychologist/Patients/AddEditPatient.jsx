@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Button, TextInput, Checkbox } from '@dataesr/react-dsfr';
+import DatePicker from 'react-datepicker';
+import DateInput from 'components/Date/DateInput';
 
 import Ariane from 'components/Ariane/Ariane';
 import GlobalNotification from 'components/Notification/GlobalNotification';
@@ -67,6 +69,10 @@ const AddEditPatient = () => {
       .catch(() => window.scrollTo(0, 0));
   };
 
+  const today = new Date();
+  const maxPatientDateOfBirth = new Date(today.setFullYear(today.getFullYear() - 100));
+  const minPatientDateOfBirth = new Date(today.setFullYear(today.getFullYear() + 90));
+
   return (
     <div className="fr-container fr-mb-3w">
       <Ariane
@@ -109,7 +115,29 @@ const AddEditPatient = () => {
                 onChange={e => changePatient(e.target.value, 'lastName')}
                 required
               />
-              <TextInput
+              <DatePicker
+                selected={patient.dateOfBirth}
+                dateFormat="dd/MM/yyyy"
+                minDate={maxPatientDateOfBirth}
+                maxDate={minPatientDateOfBirth}
+                onChange={
+                  date => changePatient(date, 'dateOfBirth')
+                }
+                peekNextMonth
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                customInput={(
+                  <DateInput
+                    label={`Date de naissance (obligatoire uniquement pour vos patients enregistrés après le
+                    ${config.dateOfBirthDeploymentDate}
+                    )`}
+                    dataTestId="new-appointment-date-input"
+                  />
+                )}
+              />
+
+              {/* <TextInput
                 className="midlength-input"
                 label={`Date de naissance (obligatoire uniquement pour vos patients enregistrés après le
                 ${config.dateOfBirthDeploymentDate}
@@ -120,7 +148,7 @@ const AddEditPatient = () => {
                 onChange={e => changePatient(e.target.value, 'dateOfBirth')}
                 pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
                 placeholder="JJ/MM/AAAA"
-              />
+              /> */}
               <TextInput
                 className="midlength-input"
                 label="Établissement scolaire de l'étudiant"

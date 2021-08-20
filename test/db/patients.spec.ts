@@ -19,6 +19,8 @@ describe('DB Patients', () => {
   const doctorName = 'doctorName';
   const doctorAddress = 'doctorAddress';
   const dateOfBirth = date.parseForm('20/01/1980');
+  const tooOld = date.parseForm('20/01/1900');
+  const tooYoung = date.parseForm('20/01/2017');
 
   async function testDataPatientsExist(lastName) {
     const exist = await db(patientsTable)
@@ -53,6 +55,48 @@ describe('DB Patients', () => {
 
       const exist = await testDataPatientsExist(lastName);
       exist.should.be.equal(true);
+    });
+
+    it('should not insert if age > 100', async () => {
+      const psy = await clean.insertOnePsy();
+      try {
+        await dbPatients.insert(
+          firstNames,
+          lastName,
+          studentNumber,
+          institutionName,
+          isStudentStatusVerified,
+          hasPrescription,
+          psy.dossierNumber,
+          doctorName,
+          doctorAddress,
+          tooOld,
+        );
+        assert.fail('insert patient should have failed');
+      } catch (error) {
+        expect(error).to.be.an('Error');
+      }
+    });
+
+    it('should not insert if age < 10', async () => {
+      const psy = await clean.insertOnePsy();
+      try {
+        await dbPatients.insert(
+          firstNames,
+          lastName,
+          studentNumber,
+          institutionName,
+          isStudentStatusVerified,
+          hasPrescription,
+          psy.dossierNumber,
+          doctorName,
+          doctorAddress,
+          tooYoung,
+        );
+        assert.fail('insert patient should have failed');
+      } catch (error) {
+        expect(error).to.be.an('Error');
+      }
     });
 
     it('should accept insert INE with more than 11 characters in PG', async () => {
