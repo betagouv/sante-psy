@@ -486,7 +486,7 @@ describe('psyProfileController', () => {
     let getAddrCoordinatesStub;
 
     beforeEach(async () => {
-      getAddrCoordinatesStub = sinon.stub(getAddrCoordinates, 'default');
+      getAddrCoordinatesStub = sinon.stub(getAddrCoordinates, 'default').returns({});
     });
 
     afterEach(async () => {

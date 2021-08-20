@@ -108,7 +108,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Departement invalide', 400);
   }
 
-  let coordinates : Coordinates|void;
+  let coordinates : Coordinates;
   const psychologist = await dbPsychologists.getById(req.user.psychologist);
   if (psychologist && psychologist.address !== req.body.address) {
     coordinates = await getAddrCoordinates(req.body.address);

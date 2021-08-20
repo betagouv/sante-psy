@@ -22,7 +22,7 @@ const insertCoordinatesToPsychologists = async (): Promise<void> => {
 
         const coord = await getAddrCoordinates(psy.address);
 
-        if (coord) {
+        if (coord && coord.longitude && coord.latitude) {
           await db(psychologistsTable)
             .where({ dossierNumber: psy.dossierNumber })
             .update({

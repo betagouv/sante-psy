@@ -28,7 +28,7 @@ describe('DB Psychologists', () => {
 
   beforeEach(async () => {
     await clean.cleanAllUniversities();
-    getAddrCoordinatesStub = sinon.stub(getAddrCoordinates, 'default').returns();
+    getAddrCoordinatesStub = sinon.stub(getAddrCoordinates, 'default').returns({});
   });
 
   afterEach(async () => {
