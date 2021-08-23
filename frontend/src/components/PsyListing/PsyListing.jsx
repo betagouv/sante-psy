@@ -104,9 +104,13 @@ const PsyListing = () => {
       return [];
     }
 
-    return psychologists.filter(psychologist => {
+    const DO_NOT_DISPLAY = -1;
+    const DISPLAY_PRIMARY = 1;
+    const DISPLAY_SECONDARY = 2;
+
+    return psychologists.map(psychologist => {
       if (teleconsultation && !psychologist.teleconsultation) {
-        return false;
+        return { ...psychologist, order: DO_NOT_DISPLAY };
       }
 
       if (nameFilter && !(
@@ -115,12 +119,12 @@ const PsyListing = () => {
         || matchFilter(`${psychologist.firstNames} ${psychologist.lastName}`, nameFilter)
       )
       ) {
-        return false;
+        return { ...psychologist, order: DO_NOT_DISPLAY };
       }
 
       if (isDepartment()) {
         if (!matchFilter(psychologist.departement, addressFilter)) {
-          return false;
+          return { ...psychologist, order: DISPLAY_SECONDARY };
         }
       } else if (addressFilter
         && !(
@@ -129,11 +133,13 @@ const PsyListing = () => {
           || matchFilter(psychologist.region, addressFilter)
         )
       ) {
-        return false;
+        return { ...psychologist, order: DISPLAY_SECONDARY };
       }
-
-      return true;
-    });
+      return { ...psychologist, order: DISPLAY_PRIMARY };
+    })
+      .filter(psychologist => psychologist.order !== DO_NOT_DISPLAY)
+      .reverse() // to keep previous sorting
+      .sort((psychologist1, psychologist2) => (psychologist1.order > psychologist2.order ? 1 : -1));
   };
 
   const filteredPsychologists = getFilteredPsychologists();
