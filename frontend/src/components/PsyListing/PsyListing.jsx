@@ -88,18 +88,21 @@ const PsyListing = () => {
     }
   };
 
+  const isDepartment = () => {
+    const departementFilter = +addressFilter;
+    return departementFilter
+    && (
+      (departementFilter > 0 && departementFilter < 96)
+    || (departementFilter > 970 && departementFilter < 977)
+    );
+  };
+
   const matchFilter = (value, filter) => value && value.toLowerCase().includes(filter.toLowerCase());
 
   const getFilteredPsychologists = () => {
     if (!psychologists) {
       return [];
     }
-    const departementFilter = +addressFilter;
-    const addressIsDepartment = departementFilter
-    && (
-      (departementFilter > 0 && departementFilter < 96)
-    || (departementFilter > 970 && departementFilter < 977)
-    );
 
     return psychologists.filter(psychologist => {
       if (teleconsultation && !psychologist.teleconsultation) {
@@ -115,7 +118,7 @@ const PsyListing = () => {
         return false;
       }
 
-      if (addressIsDepartment) {
+      if (isDepartment()) {
         if (!matchFilter(psychologist.departement, addressFilter)) {
           return false;
         }
