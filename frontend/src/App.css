@@ -29,11 +29,6 @@
   max-width: 25rem;
 }
 
-.fr-table .list-actions button {
-  margin: 4px;
-  width: 190px;
-}
-
 .fr-table table {
   display: table;
 }

@@ -3,6 +3,8 @@ import { useHistory } from 'react-router-dom';
 import { Button } from '@dataesr/react-dsfr';
 import classnames from 'classnames';
 
+import styles from './patientactions.cssmodule.scss';
+
 const ShrinkableButton = props => (
   <>
     <Button
@@ -23,7 +25,7 @@ const ShrinkableButton = props => (
 const PatientActions = ({ patient, deletePatient }) => {
   const history = useHistory();
   return (
-    <div className="list-actions">
+    <div className={styles.cell}>
       <ShrinkableButton
         data-test-id="appointment-etudiant-button"
         onClick={() => history.push(`/psychologue/nouvelle-seance/${patient.id}`)}
