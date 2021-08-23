@@ -16,7 +16,7 @@ import styles from './psyListing.cssmodule.scss';
 let lastSearch;
 
 const PsyListing = () => {
-  const { commonStore: { psychologists, setPsychologists } } = useStore();
+  const { commonStore: { psychologists, setPsychologists, lastAddressSearch, setLastAddressSearch } } = useStore();
   const query = new URLSearchParams(useLocation().search);
 
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
@@ -24,11 +24,31 @@ const PsyListing = () => {
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
   const [page, setPage] = useState(0);
 
+  const getPsychologists = () => {
+    if (!addressFilter || addressFilter.trim() === '') {
+      agent.Psychologist.find().then(returnedPsychologists => {
+        setPsychologists(returnedPsychologists);
+        setLastAddressSearch('');
+      });
+    } else {
+      agent.Psychologist.findByAddress(addressFilter).then(returnedPsychologists => {
+        setPsychologists(returnedPsychologists);
+        setLastAddressSearch(addressFilter);
+      });
+    }
+  };
+
   useEffect(() => {
     if (!psychologists) {
-      agent.Psychologist.find().then(setPsychologists);
+      getPsychologists();
     }
   }, []);
+
+  useEffect(() => {
+    if (lastAddressSearch !== addressFilter) {
+      getPsychologists();
+    }
+  }, [addressFilter]);
 
   useEffect(() => {
     if (page === 0) {

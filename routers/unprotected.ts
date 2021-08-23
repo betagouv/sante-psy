@@ -39,7 +39,8 @@ router.use(speedLimiter);
 
 router.get('/config', configController.get);
 // The reduced route is used by our front to optimize the big chunk of data download
-router.get('/trouver-un-psychologue/reduced/:address', psyListingController.getReducedActive);
+router.get('/trouver-un-psychologue/reduced', psyListingController.getReducedActive);
+router.get('/trouver-un-psychologue/:address/reduced', psyListingController.getReducedActive);
 // The other route is open to the public to get all psys (do not delete !)
 router.get('/trouver-un-psychologue', psyListingController.getFullActive);
 

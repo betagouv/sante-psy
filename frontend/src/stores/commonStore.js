@@ -7,10 +7,14 @@ export default class CommonStore {
 
   psychologists = undefined;
 
+  lastAddressSearch = '';
+
   constructor() {
     makeObservable(this, {
       psychologists: observable,
       setPsychologists: action.bound,
+      lastAddressSearch: observable,
+      setLastAddressSearch: action.bound,
       config: observable,
       setConfig: action.bound,
       notification: observable,
@@ -20,6 +24,10 @@ export default class CommonStore {
 
   setPsychologists(psychologists) {
     this.psychologists = psychologists;
+  }
+
+  setLastAddressSearch(lastAddressSearch) {
+    this.lastAddressSearch = lastAddressSearch;
   }
 
   setConfig(config) {
