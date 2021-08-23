@@ -8,7 +8,7 @@ import {
   Text,
 } from '@dataesr/react-dsfr';
 
-import Section from '../Landing/Section';
+import FaqSection from './FaqSection';
 import UnderlinedTitle from './UnderlinedTitle';
 
 import styles from './page.cssmodule.scss';
@@ -44,21 +44,7 @@ const Page = ({
         </Row>
       </div>
     </Container>
-    {withContact && (
-    <Container
-      spacing="py-4w"
-      className={styles.sectionFaq}
-    >
-      <Section
-        title="Vous avez une question ?"
-        description="Retrouvez les réponses aux questions les plus fréquemment posées."
-        buttonAlignment="right"
-        buttonText="Consulter la foire aux questions"
-        buttonUrl="/faq"
-        buttonSecondary
-      />
-    </Container>
-    ) }
+    {withContact && <FaqSection /> }
   </>
 );
 
