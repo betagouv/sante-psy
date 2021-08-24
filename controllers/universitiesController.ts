@@ -5,10 +5,21 @@ import asyncHelper from '../utils/async-helper';
 import validation from '../utils/validation';
 import CustomError from '../utils/CustomError';
 
+let universitiesCache;
 const getAll = async (req: Request, res: Response): Promise<void> => {
-  const universities = await dbUniversities.getAllOrderByName();
-  const minimalUniversities = universities.map((uni) => ({ id: uni.id, name: uni.name }));
-  res.json(minimalUniversities);
+  if (universitiesCache && universitiesCache.expireAt > new Date()) {
+    res.json(universitiesCache.universities);
+  } else {
+    const universities = await dbUniversities.getAllOrderByName();
+    const minimalUniversities = universities.map((uni) => ({ id: uni.id, name: uni.name }));
+    res.json(minimalUniversities);
+    const expireAt = new Date();
+    expireAt.setHours(expireAt.getHours() + 6);
+    universitiesCache = {
+      expireAt,
+      universities: minimalUniversities,
+    };
+  }
 };
 
 const getOneValidators = [
