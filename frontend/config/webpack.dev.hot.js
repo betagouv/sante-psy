@@ -11,7 +11,6 @@ module.exports = Object.assign({}, baseConfig, {
       main: [`webpack-dev-server/client?http://localhost:3000/`, './src/index.js'],
     },
     devServer: {
-      contentBase: path.resolve(baseConfig.context, 'dist'),
       headers: {
           'Access-Control-Allow-Origin': '*'
       },
