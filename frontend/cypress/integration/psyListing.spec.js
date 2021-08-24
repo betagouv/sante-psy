@@ -12,7 +12,6 @@ describe('Psy Listing', () => {
 
   it('Should display table and redirect to public profile page', () => {
     cy.visit('/trouver-un-psychologue');
-    cy.wait('@psychologists');
 
     cy.get('[data-test-id="psy-table"]')
       .should('exist');
