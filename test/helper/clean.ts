@@ -101,12 +101,51 @@ const getOnePsy = (
     active: !inactiveUntil,
     inactiveUntil,
     createdAt: new Date(),
-    // longitude: Number(faker.address.longitude(10, -6)),
-    // latitude: Number(faker.address.latitude(51, 41)),
   };
 };
 
-const getOneInactivePsy = (inactiveUntil?: Date): Psychologist => getOnePsy(
+const getOnePsyForListing = (
+  personalEmail: string,
+  lastName: string,
+  firstNames: string,
+  teleconsultation: boolean,
+  address: string,
+  departement: string,
+  region: string,
+  longitude: number,
+  latitude: number,
+): Psychologist => {
+  const dossierNumber = uuid.generateFromString(`psychologist-${personalEmail}`);
+  return {
+    dossierNumber,
+    firstNames,
+    lastName,
+    archived: false,
+    state: DossierState.accepte,
+    adeli: `${getRandomInt()}829302942`,
+    address,
+    departement,
+    region,
+    longitude,
+    latitude,
+    diploma: 'Psychologie clinique de la santé',
+    phone: faker.phone.phoneNumber('0# ## ## ## ##'),
+    email: faker.internet.exampleEmail(),
+    personalEmail,
+    website: faker.internet.domainName() + faker.internet.domainSuffix(),
+    teleconsultation,
+    description: faker.lorem.paragraphs(2),
+    // eslint-disable-next-line max-len
+    training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
+    assignedUniversityId: null,
+    languages: 'Français, Anglais, et Espagnol',
+    active: true,
+    inactiveUntil: undefined,
+    createdAt: new Date(),
+  };
+};
+
+const getOneInactivePsy = (inactiveUntil: Date = new Date()): Psychologist => getOnePsy(
   `inactive@${inactiveUntil}.fr`,
   DossierState.accepte,
   false,
@@ -242,6 +281,7 @@ export default {
   insertOnePsy,
   getOneInactivePsy,
   getOnePsyDS,
+  getOnePsyForListing,
   cleanDataCursor,
   cleanDataToken,
   cleanAllPatients,
