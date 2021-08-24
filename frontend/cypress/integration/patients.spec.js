@@ -42,12 +42,12 @@ describe('Patient', () => {
 
       cy.get('[data-test-id="etudiant-first-name-input"] > input')
         .clear()
-        .type('Georges');
+        .type('A');
       cy.get('[data-test-id="etudiant-last-name-input"] > input')
         .clear()
-        .type('Moustaki');
+        .type('B');
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
-        .type('My doctor');
+        .type('C');
       cy.get('[data-test-id="save-etudiant-button"]')
         .click();
 
@@ -59,7 +59,7 @@ describe('Patient', () => {
       cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
-          "L'étudiant Georges Moustaki a bien été modifié.",
+          "L'étudiant A B a bien été modifié.",
         );
     });
   });

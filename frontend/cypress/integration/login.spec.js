@@ -16,14 +16,14 @@ describe('Login', () => {
     it('should send an email and notify the user', () => {
       cy.visit('/psychologue/login');
       cy.get('[data-test-id="email-input"]')
-        .type('login@beta.gouv.fr');
+        .type('a@b.fr');
       cy.get('[data-test-id="email-button"]')
         .click();
       cy.wait('@sendMail');
       cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
-          'Un lien de connexion a été envoyé à l\'adresse login@beta.gouv.fr. Le lien est valable 2 heures.',
+          'Un lien de connexion a été envoyé à l\'adresse a@b.fr. Le lien est valable 2 heures.',
         );
     });
   });

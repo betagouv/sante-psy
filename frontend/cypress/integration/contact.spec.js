@@ -15,16 +15,16 @@ describe('Contact', () => {
     cy.get('[data-test-id="user-student-input"]')
       .click();
     cy.get('[data-test-id="name-input"]')
-      .type('Brown');
+      .type('A');
     cy.get('[data-test-id="first-name-input"]')
-      .type('Alphonse');
+      .type('B');
     cy.get('[data-test-id="email-input"]')
-      .type('alphonse.brown@funk.fr');
+      .type('a@b.fr');
     cy.get('[data-test-id="reason-select"] > select > option')
       .eq(1)
       .then(element => cy.get('[data-test-id="reason-select"] > select').select(element.val()));
     cy.get('[data-test-id="message-input"]')
-      .type('La puissance du port du havre');
+      .type('C');
 
     cy.get('[data-test-id="submit-button"]')
       .click();

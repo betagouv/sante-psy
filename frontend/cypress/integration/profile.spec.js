@@ -128,7 +128,7 @@ describe('Profile', () => {
         .should('exist');
       cy.get('[data-test-id="psy-personal-email-input"] > input')
         .clear()
-        .type('new@beta.gouv.fr');
+        .type('a@b.fr');
       cy.get('[data-test-id="teleConsultation-true"]')
         .click();
       cy.get('[data-test-id="save-profile-button"]')
@@ -243,7 +243,7 @@ describe('Profile', () => {
         .should('be.disabled');
 
       cy.get('[data-test-id="radio-reason-other-input"]')
-        .type('this is my reason !');
+        .type('A');
 
       cy.get('[data-test-id="suspend-button"]')
         .should('not.be.disabled');
@@ -345,7 +345,7 @@ describe('Profile', () => {
       cy.get('[data-test-id="radio-reason-other"]')
         .click();
       cy.get('[data-test-id="radio-reason-other-input"]')
-        .type('parcequuuuuuuuuue');
+        .type('B');
 
       cy.get('[data-test-id="radio-duration-other"]')
         .click();
@@ -359,7 +359,7 @@ describe('Profile', () => {
         .click();
 
       cy.wait('@suspend').then(response => {
-        cy.wrap(response.request.body.reason).should('eq', 'Autre: parcequuuuuuuuuue');
+        cy.wrap(response.request.body.reason).should('eq', 'Autre: B');
         cy.wrap((new Date(response.request.body.date)).getFullYear()).should('eq', nextCalendarDate.getFullYear());
         cy.wrap((new Date(response.request.body.date)).getMonth()).should('eq', nextCalendarDate.getMonth());
         cy.wrap((new Date(response.request.body.date)).getDate()).should('eq', nextCalendarDate.getDate());
