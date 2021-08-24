@@ -5,6 +5,8 @@
     --green: #107449;
     --tag-green: #bfeae2;
     --tag-orange: #ffdbd2;
+    --button-color-hover: rgba(0,0,221,0.5);
+    --button-color-active: rgba(41,41,255,0.5);
 }
 
 :root[data-fr-theme=dark] {
@@ -14,4 +16,6 @@
     --green: #9ed8b4;
     --tag-green: #008169;
     --tag-orange: #bf5339;
+    --button-color-hover: rgba(71,71,255,0.5);
+    --button-color-active: rgba(0,0,243,0.5);
 }

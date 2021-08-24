@@ -20,8 +20,8 @@ module.exports = () => [
     Nous vous invitons à consulter les questions concernant la procédure de facturation.",
   },
   {
-    question: "Que faire lorsqu'un patient étudiant du dispositif, annule sa consultation ?",
-    answer: "Lorsqu'un patient annule sa consultation, le remboursement n'est malheureusement pas comptabilisé, \
+    question: "Que faire lorsqu'un étudiant du dispositif, annule sa consultation ?",
+    answer: "Lorsqu'un étudiant annule sa consultation, le remboursement n'est malheureusement pas comptabilisé, \
     seules les séances effectuées doivent être déclarées. Le paiement n'étant effectué qu'après un service fait.",
   },
   {

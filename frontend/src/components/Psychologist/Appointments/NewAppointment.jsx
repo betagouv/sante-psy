@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
-import { Button, Select } from '@dataesr/react-dsfr';
+import { Button, SearchableSelect, Select } from '@dataesr/react-dsfr';
 
-import Ariane from 'components/Ariane/Ariane';
-import Mail from 'components/Footer/Mail';
-import GlobalNotification from 'components/Notification/GlobalNotification';
 import DateInput from 'components/Date/DateInput';
 
 import agent from 'services/agent';
@@ -19,7 +16,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 const NewAppointment = () => {
   const history = useHistory();
   const [date, setDate] = useState();
-  const [patientId, setPatientId] = useState();
+  const params = useParams();
+  const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
 
   const { commonStore: { setNotification } } = useStore();
@@ -44,80 +42,70 @@ const NewAppointment = () => {
   const patientsMap = patients.map(patient => (
     { value: patient.id, label: `${patient.lastName} ${patient.firstNames}` }
   ));
-  const defaultString = [{ value: '', label: '--- Selectionner un patient', disabled: true, hidden: true }];
+  const defaultString = [{ value: '', label: '--- Selectionner un étudiant', disabled: true, hidden: true }];
   const allOptions = defaultString.concat(patientsMap);
 
   return (
-    <div className="fr-container fr-mb-3w" data-test-id="new-appointment-container">
-      <Ariane
-        previous={[
-          {
-            label: 'Déclarer mes séances',
-            url: '/psychologue/mes-seances',
-          },
-        ]}
-        current="Nouvelle séance"
+    <form onSubmit={createNewAppointment} className="fr-my-2w">
+      {patients.length > 0 ? (
+        <SearchableSelect
+          className="midlength-select"
+          data-test-id="new-appointment-etudiant-input"
+          id="etudiants"
+          name="patientId"
+          label="Etudiant"
+          selected={patientId}
+          hint={(
+            <>
+              Votre étudiant n&lsquo;est pas dans la liste ?
+              {' '}
+              <HashLink to="/psychologue/nouvel-etudiant">Ajoutez un nouvel étudiant</HashLink>
+            </>
+              )}
+          onChange={e => { setPatientId(e); }}
+          required
+          options={allOptions}
+        />
+      ) : (
+        <Select
+          className="midlength-select"
+          label="Etudiant"
+          disabled
+          required
+          options={[]}
+          hint={(
+            <>
+              Vous n&lsquo;avez aucun étudiant dans votre liste!
+              {' '}
+              <HashLink to="/psychologue/nouvel-etudiant">Ajoutez un nouvel étudiant</HashLink>
+            </>
+          )}
+        />
+      )}
+      <DatePicker
+        className="date-picker"
+        selected={date}
+        minDate={beginningDate}
+        maxDate={maxDate}
+        dateFormat="dd/MM/yyyy"
+        showPopperArrow={false}
+        customInput={(
+          <DateInput
+            label="Date de la séance"
+            dataTestId="new-appointment-date-input"
+          />
+        )}
+        onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
+        required
       />
-      <h1>
-        Nouvelle séance
-      </h1>
-      <p className="fr-mb-2w">
-        Vous avez réalisé une séance avec un étudiant ou une étudiante. Renseignez-la sur cette page.
-      </p>
-      <GlobalNotification />
-      <div className="fr-mb-5w">
-        <form onSubmit={createNewAppointment}>
-          <div>
-            <div className="fr-my-2w">
-              <DatePicker
-                selected={date}
-                minDate={beginningDate}
-                maxDate={maxDate}
-                dateFormat="dd/MM/yyyy"
-                customInput={(
-                  <DateInput
-                    label="Date de la séance"
-                    dataTestId="new-appointment-date-input"
-                  />
-                )}
-                onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
-              />
-            </div>
-
-            <div className="fr-select-group">
-              <Select
-                className="midlength-input"
-                data-test-id="new-appointment-patient-input"
-                id="patients"
-                name="patientId"
-                label="Patient"
-                selected={patientId}
-                hint={(
-                  <>
-                    Votre patient n&lsquo;est pas dans la liste ?
-                    {' '}
-                    <HashLink to="/psychologue/nouveau-patient">Ajoutez un nouveau patient</HashLink>
-                  </>
-                )}
-                onChange={e => { setPatientId(e.target.value); }}
-                required
-                options={allOptions}
-              />
-            </div>
-            <div className="fr-my-5w">
-              <Button
-                data-test-id="new-appointment-submit"
-                submit
-                className="fr-fi-add-line fr-btn--icon-left"
-              >
-                Créer la séance
-              </Button>
-            </div>
-          </div>
-        </form>
-      </div>
-      <Mail />
-    </div>
+      <Button
+        data-test-id="new-appointment-submit"
+        submit
+        className="fr-fi-add-line fr-btn--icon-left fr-mt-4w"
+      >
+        Créer la séance
+      </Button>
+    </form>
   );
 };
 
