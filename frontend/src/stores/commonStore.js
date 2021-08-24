@@ -5,16 +5,16 @@ export default class CommonStore {
 
   notification = null;
 
-  psychologists = undefined;
+  statistics = undefined;
 
-  lastAddressSearch = '';
+  searchPsychologists = undefined;
 
   constructor() {
     makeObservable(this, {
-      psychologists: observable,
-      setPsychologists: action.bound,
-      lastAddressSearch: observable,
-      setLastAddressSearch: action.bound,
+      statistics: observable,
+      setStatistics: action.bound,
+      searchPsychologists: observable,
+      setSearchPsychologists: action.bound,
       config: observable,
       setConfig: action.bound,
       notification: observable,
@@ -22,12 +22,12 @@ export default class CommonStore {
     });
   }
 
-  setPsychologists(psychologists) {
-    this.psychologists = psychologists;
+  setStatistics(statistics) {
+    this.statistics = statistics;
   }
 
-  setLastAddressSearch(lastAddressSearch) {
-    this.lastAddressSearch = lastAddressSearch;
+  setSearchPsychologists(searchPsychologists) {
+    this.searchPsychologists = searchPsychologists;
   }
 
   setConfig(config) {

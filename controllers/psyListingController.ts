@@ -9,6 +9,9 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
   const time = `getting all active psychologists from Postgres (query id #${Math.random().toString()})`;
   console.time(time);
 
+  // TODO: sanitize body request params
+  // TODO: return psychologists matching body request
+
   let coordinates : Coordinates = {};
   if (req.params && req.params.address && req.params.address !== 'undefined') {
     coordinates = await getAddrCoordinates(req.params.address);

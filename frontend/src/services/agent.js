@@ -69,8 +69,8 @@ const Patient = {
 
 const Psychologist = {
   activate: () => client.post(`/psychologist/${store.userStore.user.dossierNumber}/activate`),
-  find: () => client.get('/trouver-un-psychologue/reduced'),
-  findByAddress: address => client.get(`/trouver-un-psychologue/${address}/reduced`),
+  find: (nameFilter, addressFilter, teleconsultation) => client
+    .post('/trouver-un-psychologue/reduced', { nameFilter, addressFilter, teleconsultation }),
   getProfile: id => client.get(`/psychologist/${id || store.userStore.user.dossierNumber}`),
   suspend: (reason, date) => client
     .post(`/psychologist/${store.userStore.user.dossierNumber}/suspend`, { reason, date }),

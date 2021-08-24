@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { observer } from 'mobx-react';
 import agent from 'services/agent';
+import { useStore } from 'stores/';
 import Section from './Section';
 import Statistic from './Statistic';
 
 import styles from './statistics.cssmodule.scss';
 
 const Statistics = () => {
-  const [statistics, setStatistics] = useState([]);
+  const { commonStore: { statistics, setStatistics } } = useStore();
 
   useEffect(() => {
-    agent.Statistics.getAll().then(setStatistics);
+    if (!statistics) {
+      agent.Statistics.getAll().then(setStatistics);
+    }
   }, []);
 
   return (
@@ -17,7 +21,7 @@ const Statistics = () => {
       title="Santé Psy Étudiant en quelques chiffres"
       description={(
         <div className={styles.content}>
-          {statistics.map(
+          {statistics && statistics.map(
             statistic => (
               <Statistic
                 key={statistic.label}
@@ -32,4 +36,4 @@ const Statistics = () => {
   );
 };
 
-export default Statistics;
+export default observer(Statistics);

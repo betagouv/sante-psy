@@ -1,71 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, Row, Col, TextInput } from '@dataesr/react-dsfr';
+import { Checkbox, Row, Col, TextInput, Button } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
-
-import Page from 'components/Page/Page';
-
 import agent from 'services/agent';
-
 import { useStore } from 'stores/';
-
+import Page from 'components/Page/Page';
 import PsyTable from './PsyTable';
 
 import styles from './psyListing.cssmodule.scss';
 
-let lastSearch;
-
 const PsyListing = () => {
-  const { commonStore: { psychologists, setPsychologists, lastAddressSearch, setLastAddressSearch } } = useStore();
+  const { commonStore: { statistics, searchPsychologists, setSearchPsychologists } } = useStore();
   const query = new URLSearchParams(useLocation().search);
 
+  const [loading, setLoading] = useState(true);
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
   const [page, setPage] = useState(0);
 
-  const getPsychologists = () => {
-    if (!addressFilter || addressFilter.trim() === '') {
-      agent.Psychologist.find().then(returnedPsychologists => {
-        setPsychologists(returnedPsychologists);
-        setLastAddressSearch('');
-      });
-    } else {
-      agent.Psychologist.findByAddress(addressFilter).then(returnedPsychologists => {
-        setPsychologists(returnedPsychologists);
-        setLastAddressSearch(addressFilter);
-      });
-    }
-  };
-
   useEffect(() => {
-    if (!psychologists) {
+    resetPage();
+    if (!searchPsychologists || searchHasChanged()) {
       getPsychologists();
+    } else {
+      setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    if (lastAddressSearch !== addressFilter) {
-      getPsychologists();
-    }
-  }, [addressFilter]);
-
-  useEffect(() => {
+  const resetPage = () => {
     if (page === 0) {
       setPage(query.get('page') || 1);
     } else {
       setPage(1);
     }
+  };
 
-    logSearchInMatomo();
-  }, [nameFilter, addressFilter, teleconsultation]);
+  const searchHasChanged = () => nameFilter !== searchPsychologists.nameFilter
+  || addressFilter !== searchPsychologists.addressFilter
+  || teleconsultation !== searchPsychologists.teleconsultation;
+
+  const getPsychologists = () => {
+    setLoading(true);
+    agent.Psychologist.find(nameFilter, addressFilter, teleconsultation).then(psychologists => {
+      setSearchPsychologists({
+        psychologists,
+        nameFilter,
+        addressFilter,
+        teleconsultation,
+      });
+      setLoading(false);
+    });
+  };
+
+  const onSearchButtonClick = () => {
+    resetPage();
+    if (searchHasChanged) {
+      getPsychologists();
+      logSearchInMatomo(); // TODO: should we log matomo only on change?
+    }
+  };
 
   const logSearchInMatomo = () => {
     if (__MATOMO__) {
-      if (lastSearch) {
-        clearTimeout(lastSearch);
-      }
-
       let search = '';
       if (nameFilter) {
         search += `name=${nameFilter};`;
@@ -78,83 +75,24 @@ const PsyListing = () => {
       }
 
       if (search) {
-        lastSearch = setTimeout(
-          () => {
-            _paq.push(['trackEvent', 'Search', 'Psychologist', search]);
-          },
-          2500,
-        );
+        _paq.push(['trackEvent', 'Search', 'Psychologist', search]);
       }
     }
   };
 
-  const isDepartment = () => {
-    const departementFilter = +addressFilter;
-    return departementFilter
-    && (
-      (departementFilter > 0 && departementFilter < 96)
-    || (departementFilter > 970 && departementFilter < 977)
-    );
-  };
-
-  const matchFilter = (value, filter) => value && value.toLowerCase().includes(filter.toLowerCase());
-
-  const getFilteredPsychologists = () => {
-    if (!psychologists) {
-      return [];
-    }
-
-    const DO_NOT_DISPLAY = -1;
-    const DISPLAY_PRIMARY = 1;
-    const DISPLAY_SECONDARY = 2;
-
-    return psychologists.map(psychologist => {
-      if (teleconsultation && !psychologist.teleconsultation) {
-        return { ...psychologist, order: DO_NOT_DISPLAY };
-      }
-
-      if (nameFilter && !(
-        matchFilter(psychologist.lastName, nameFilter)
-        || matchFilter(`${psychologist.lastName} ${psychologist.firstNames}`, nameFilter)
-        || matchFilter(`${psychologist.firstNames} ${psychologist.lastName}`, nameFilter)
-      )
-      ) {
-        return { ...psychologist, order: DO_NOT_DISPLAY };
-      }
-
-      if (isDepartment()) {
-        if (!matchFilter(psychologist.departement, addressFilter)) {
-          return { ...psychologist, order: DISPLAY_SECONDARY };
-        }
-      } else if (addressFilter
-        && !(
-          matchFilter(psychologist.address, addressFilter)
-          || matchFilter(psychologist.departement, addressFilter)
-          || matchFilter(psychologist.region, addressFilter)
-        )
-      ) {
-        return { ...psychologist, order: DISPLAY_SECONDARY };
-      }
-      return { ...psychologist, order: DISPLAY_PRIMARY };
-    })
-      .filter(psychologist => psychologist.order !== DO_NOT_DISPLAY)
-      .reverse() // to keep previous sorting
-      .sort((psychologist1, psychologist2) => (psychologist1.order > psychologist2.order ? 1 : -1));
-  };
-
-  const filteredPsychologists = getFilteredPsychologists();
+  // FIXME: if statistics undefined, they need to be retrieved and put in cache
+  const nbPsychologists = statistics ? statistics.find(s => s.label === 'Psychologues partenaires').value : '??';
 
   return (
     <Page
       title="Trouver un psychologue"
-      description={psychologists
-        ? `Il y a actuellement ${psychologists.length} partenaires du dispositif d‘accompagnement.
-      La liste est mise à jour quotidiennement, revenez la consulter si vous n‘avez pas pu trouver de psychologue.`
-        : 'Chargement de la liste des psychologues'}
+      description={`Il y a actuellement ${nbPsychologists} partenaires du dispositif d‘accompagnement.
+      La liste est mise à jour quotidiennement, revenez la consulter si vous n‘avez pas pu trouver de psychologue.`}
       background="yellow"
       dataTestId="psyListPage"
     >
-      {psychologists && (
+      {loading && (<div className={styles.loading}>Chargement en cours</div>)}
+      {!loading && (
         <>
           <div className="fr-pb-6w">
             <Row gutters>
@@ -175,17 +113,29 @@ const PsyListing = () => {
                 />
               </Col>
             </Row>
-            <Checkbox
-              value="teleconsultation"
-              onChange={e => { setTeleconsultation(e.target.checked); }}
-              label="Disponible en téléconsultation"
-              defaultChecked={teleconsultation}
-            />
+            <Row gutters>
+              <Col n="md-6 sm-12">
+                <Checkbox
+                  value="teleconsultation"
+                  onChange={e => { setTeleconsultation(e.target.checked); }}
+                  label="Disponible en téléconsultation"
+                  defaultChecked={teleconsultation}
+                />
+              </Col>
+              <Col n="md-6 sm-12">
+                <Button
+                  onClick={onSearchButtonClick}
+                  className="fr-fi-search-line fr-btn--icon-left fr-float-right"
+                >
+                  Rechercher
+                </Button>
+              </Col>
+            </Row>
           </div>
           <PsyTable
             page={page}
             setPage={setPage}
-            psychologists={filteredPsychologists}
+            psychologists={searchPsychologists.psychologists}
             nameFilter={nameFilter}
             addressFilter={addressFilter}
             teleconsultation={teleconsultation}
