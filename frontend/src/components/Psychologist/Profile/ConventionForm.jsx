@@ -25,7 +25,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
     setConvention({
       universityId: currentConvention ? currentConvention.universityId : '',
       isConventionSigned: checkDefaultValue
-        ? currentConvention && currentConvention.isConventionSigned
+        ? currentConvention && currentConvention.isConventionSigned === true
         : '',
     });
   }, [currentConvention]);
@@ -53,7 +53,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
 
   return (
     <form data-test-id="convention-form" onSubmit={saveConvention}>
-      {convention && (
+      {convention && universities.length > 0 && (
         <>
           <SearchableSelect
             className="midlength-select"
