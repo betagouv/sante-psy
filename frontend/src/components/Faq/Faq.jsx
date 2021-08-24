@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { observer } from 'mobx-react';
 
 import { Tabs, Tab } from '@dataesr/react-dsfr';
 
@@ -8,13 +9,22 @@ import FaqTab from 'components/Faq/FaqTab';
 
 import items from 'services/faq/items';
 
-import styles from './faq.cssmodule.scss';
+import { useStore } from 'stores/';
 
 const Faq = () => {
   const query = new URLSearchParams(useLocation().search);
+  const { userStore: { user } } = useStore();
   const getDefaultTab = () => {
     const section = query.get('section');
-    return items[section] ? items[section].index : 0;
+    if (items[section]) {
+      return items[section].index;
+    }
+
+    if (user) {
+      return items.psychologue.index;
+    }
+
+    return 0;
   };
 
   return (
@@ -26,10 +36,7 @@ const Faq = () => {
       className="faqPage"
       dataTestId="faqPage"
     >
-      <Tabs
-        defaultActiveTab={getDefaultTab()}
-        className={styles.tabs}
-      >
+      <Tabs defaultActiveTab={getDefaultTab()}>
         <Tab label="Je suis étudiant">
           <FaqTab type="etudiant" />
         </Tab>
@@ -43,4 +50,4 @@ const Faq = () => {
     </Page>
   );
 };
-export default Faq;
+export default observer(Faq);

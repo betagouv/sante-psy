@@ -21,7 +21,7 @@ module.exports = config => [
   },
   {
     question: 'N’ayant pas de cabinet professionnel, puis-je me déplacer au domicile des étudiants ?',
-    answer: 'Le dispositif Santé Psy Étudiants prévoit deux modalités de consultation : \
+    answer: 'Le dispositif Santé Psy Étudiant prévoit deux modalités de consultation : \
       au cabinet du psychologue ou en téléconsultation. Le déplacement au domicile de l’étudiant n’est pas prévu. \
       Il peut être une option mais pas un mode principal de consultation.',
   },
@@ -41,8 +41,8 @@ module.exports = config => [
     question: 'Quels sont les psys concernés ? Uniquement psychologue ? Psychiatre aussi ? Psychanalyste ?',
     answer: 'Le dispositif prévoit de mobiliser celles et ceux qui disposent du titre réglementé de psychologue et \
       d’une expérience d’au moins trois ans. Certains psychologues détiennent d’autres qualifications qu’ils peuvent mentionner dans le formulaire à remplir. \
-      Les psychiatres relèvent d’un régime de remboursement aux patients de leurs actes par l’assurance maladie. \
-      Ils n’ont donc pas vocation à intégrer le dispositif Santé Psy Étudiants.',
+      Les psychiatres relèvent d’un régime de remboursement aux étudiants de leurs actes par l’assurance maladie. \
+      Ils n’ont donc pas vocation à intégrer le dispositif Santé Psy Étudiant.',
   },
   {
     question: 'Le dispositif SPE est-il exclusif de celui permettant de recruter des psychologues ou les deux dispositifs sont-ils au contraire cumulatifs ?',

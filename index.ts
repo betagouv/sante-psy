@@ -1,5 +1,4 @@
 import express from 'express';
-import expressSanitizer from 'express-sanitizer';
 
 import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
@@ -44,8 +43,6 @@ app.use('/*/fonts/', express.static('./dist/frontend/fonts'));
 app.use('/static', express.static('static'));
 app.get('/', getIndex);
 app.use(express.static('./dist/frontend'));
-
-app.use(expressSanitizer());
 
 // prevent abuse
 const rateLimiter = rateLimit({

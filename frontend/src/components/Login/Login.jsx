@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
@@ -18,10 +18,15 @@ const Login = () => {
     commonStore: { config, setNotification },
     userStore: { user, setXsrfToken },
   } = useStore();
+  const emailRef = useRef();
   const { token } = useParams();
   const history = useHistory();
 
   const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    emailRef.current.focus();
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -65,6 +70,7 @@ const Login = () => {
                 Adresse email :
                 {' '}
                 <TextInput
+                  ref={emailRef}
                   className={styles.mailInput}
                   data-test-id="email-input"
                   value={email}
