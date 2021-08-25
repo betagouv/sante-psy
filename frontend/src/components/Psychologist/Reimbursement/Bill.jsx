@@ -9,6 +9,7 @@ import {
 
 import agent from 'services/agent';
 import { formatFrenchDate, formatMonth } from 'services/date';
+import billingInfoService from 'services/billingInfo';
 
 import { useParams } from 'react-router-dom';
 import BillingTable from './BillingTable';
@@ -63,26 +64,36 @@ const Bill = () => {
         && appointmentDate.getMonth() === parseInt(month, 10) - 1;
   });
 
-  const getInfos = () => [
-    `Nom, prénom du prestataire : ${user.lastName} ${user.firstNames}`,
-    `Numéro d’enregistrement professionnel (SIRET ou numéro ADELI) : ${user.adeli}`,
-    `Adresse du prestataire : ${user.address}`,
-    `Email du prestataire : ${user.email}`,
-    `Date de l'émission de la facture : ${formatFrenchDate(new Date())}`,
-    'Numéro de la facture : ________________________________________________________________',
-    `Nom et adresse de l'université : ${universityInfos.name || PARTIAL_UNDESCORE_LINE_UNI_NAME}`,
-    `${universityInfos.address || FULL_UNDERSCORE_LINE}`,
-    'E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :',
-    FULL_UNDERSCORE_LINE,
-    FULL_UNDERSCORE_LINE,
-    'Numéro du bon de commande de l’université (à demander à l’université) : ___________________',
-  ];
+  const getInfos = () => {
+    const billingInfo = billingInfoService.get();
+    return [
+      `Nom, prénom du prestataire : ${user.lastName} ${user.firstNames}`,
+      `Numéro d’enregistrement professionnel (SIRET ou numéro ADELI) : ${user.adeli}`,
+      `Adresse du prestataire : ${user.address}`,
+      `Email du prestataire : ${user.email}`,
+      `Date de l'émission de la facture : ${formatFrenchDate(new Date())}`,
+      `Numéro de la facture : ${
+        billingInfo.billingNumber || '________________________________________________________________'
+      }`,
+      `Nom et adresse de l'université : ${universityInfos.name || PARTIAL_UNDESCORE_LINE_UNI_NAME}`,
+      `${universityInfos.address || FULL_UNDERSCORE_LINE}`,
+      'E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :',
+      billingInfo.address1 || FULL_UNDERSCORE_LINE,
+      billingInfo.address2 || FULL_UNDERSCORE_LINE,
+      `Numéro du bon de commande de l’université (à demander à l’université) : ${
+        billingInfo.orderNumber || '___________________'
+      }`,
+    ];
+  };
 
-  const getFooter = () => [
-    'À régler sur le compte bancaire ci-dessous (RIB / IBAN) :',
-    FULL_UNDERSCORE_LINE,
-    'Délai de paiement : 30 jours à réception de facture',
-  ];
+  const getFooter = () => {
+    const billingInfo = billingInfoService.get();
+    return [
+      'À régler sur le compte bancaire ci-dessous (RIB / IBAN) :',
+      billingInfo.iban ? billingInfo.iban : FULL_UNDERSCORE_LINE,
+      'Délai de paiement : 30 jours à réception de facture',
+    ];
+  };
 
   return (
     <>
