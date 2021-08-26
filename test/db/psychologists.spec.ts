@@ -6,7 +6,6 @@ import dbPsychologists from '../../db/psychologists';
 import dbSuspensionReasons from '../../db/suspensionReasons';
 import clean from '../helper/clean';
 import { DossierState } from '../../types/DossierState';
-import { Psychologist } from '../../types/Psychologist';
 
 import dotEnv from 'dotenv';
 
@@ -18,10 +17,6 @@ const LONGITUDE_PARIS = 2.3488;
 const LATITUDE_PARIS = 48.85341;
 const LONGITUDE_MARSEILLE = 5.38107;
 const LATITUDE_MARSEILLE = 43.29695;
-const LONGITUDE_LYON = 4.84671;
-const LATITUDE_LYON = 45.74846;
-const LONGITUDE_NICE = 7.26608;
-const LATITUDE_NICE = 43.70313;
 
 describe('DB Psychologists', () => {
   let getAddrCoordinatesStub;
