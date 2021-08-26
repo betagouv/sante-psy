@@ -13,7 +13,6 @@ const PsyListing = () => {
   const { commonStore: { statistics, searchPsychologists, setSearchPsychologists } } = useStore();
   const query = new URLSearchParams(useLocation().search);
 
-  const [loading, setLoading] = useState(true);
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
@@ -23,8 +22,6 @@ const PsyListing = () => {
     resetPage();
     if (!searchPsychologists || searchHasChanged()) {
       getPsychologists();
-    } else {
-      setLoading(false);
     }
   }, []);
 
@@ -41,7 +38,6 @@ const PsyListing = () => {
   || teleconsultation !== searchPsychologists.teleconsultation;
 
   const getPsychologists = () => {
-    setLoading(true);
     agent.Psychologist.find(nameFilter, addressFilter, teleconsultation).then(psychologists => {
       setSearchPsychologists({
         psychologists,
@@ -49,7 +45,6 @@ const PsyListing = () => {
         addressFilter,
         teleconsultation,
       });
-      setLoading(false);
     });
   };
 
@@ -91,8 +86,7 @@ const PsyListing = () => {
       background="yellow"
       dataTestId="psyListPage"
     >
-      {loading && (<div className={styles.loading}>Chargement en cours</div>)}
-      {!loading && (
+      {searchPsychologists && searchPsychologists.psychologists && (
         <>
           <div className="fr-pb-6w">
             <Row gutters>

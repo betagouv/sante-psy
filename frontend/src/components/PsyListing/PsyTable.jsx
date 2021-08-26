@@ -91,13 +91,11 @@ const PsyTable = ({
     return () => window.removeEventListener('resize', updateSurrendingPages);
   }, []);
 
-  let title = 'Tous les résultats';
-  if (nameFilter || addressFilter || teleconsultation) {
-    if (psychologists.length === 1) {
-      title = '1 résultat';
-    } else {
-      title = `${psychologists.length} résultats`;
-    }
+  let title = '';
+  if (psychologists.length === 1) {
+    title = '1 résultat';
+  } else {
+    title = `${psychologists.length} résultats`;
   }
 
   const currentPage = Math.min(page, Math.ceil(psychologists.length / 10));
