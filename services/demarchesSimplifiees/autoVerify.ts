@@ -35,9 +35,9 @@ const autoVerifyPsychologists = async () : Promise<void> => {
 
       const adeliChampId = getChampsIdFromField('adeli');
       const adeliIds = dossiersToBeVerified
-      .map((psychologist) => psychologist.champs.find((x) => x.id === adeliChampId))
-      .filter((adeli) => adeli)
-      .map((adeli) => adeli.stringValue);
+        .map((psychologist) => psychologist.champs.find((x) => x.id === adeliChampId))
+        .filter((adeli) => adeli)
+        .map((adeli) => adeli.stringValue);
       const adeliInfo = await getAdeliInfo(adeliIds);
 
       await Promise.all(dossiersToBeVerified.map(async (psychologist) => {
