@@ -1,6 +1,5 @@
 import clean from '../helper/clean';
 import getAdeliErrors from '../../services/getAdeliErrors';
-import { DSPsychologist } from '../../types/Psychologist';
 
 describe('getAdeliErrors', () => {
   const adeliInfo = {
@@ -18,48 +17,106 @@ describe('getAdeliErrors', () => {
       'Code profession': 77,
       'Libellé profession': 'Magicien',
     },
+    1: {
+      'Identifiant PP': '123',
+      "Nom d'exercice": 'De La Batte',
+      "Prénom d'exercice": 'Hubert',
+      'Code profession': 93,
+      'Libellé profession': 'Psychologue',
+    },
+    2: {
+      'Identifiant PP': '123',
+      "Nom d'exercice": 'De La Batte',
+      "Prénom d'exercice": 'Bonisseur',
+      'Code profession': 93,
+      'Libellé profession': 'Psychologue',
+    },
+    3: {
+      'Identifiant PP': '123',
+      "Nom d'exercice": 'De La Batte',
+      "Prénom d'exercice": 'Hubert Bonisseur',
+      'Code profession': 93,
+      'Libellé profession': 'Psychologue',
+    },
+    4: {
+      'Identifiant PP': '123',
+      "Nom d'exercice": 'Batte',
+      "Prénom d'exercice": 'Hubert Bonisseur',
+      'Code profession': 93,
+      'Libellé profession': 'Psychologue',
+    },
+    5: {
+      'Identifiant PP': '123',
+      "Nom d'exercice": 'De La Batte',
+      "Prénom d'exercice": 'Humberto',
+      'Code profession': 93,
+      'Libellé profession': 'Psychologue',
+    },
   };
 
   const ADELI_ID = 'Q2hhbXAtMTYyNjk4Nw==';
 
-  it('Should refuse missing adeli number', () => {
-    const psychologist : DSPsychologist = clean.getOnePsyDS('non existing', ADELI_ID, 'jane', 'doe');
+  const useCases = [
+    {
+      psychologist: ['non existing', ADELI_ID, 'jane', 'doe'],
+      errors: ['pas de correspondance pour ce numéro Adeli'],
+    },
+    {
+      psychologist: ['456', ADELI_ID, 'john', 'doe'],
+      errors: ['la personne n\'est pas un psychologue mais un Magicien'],
+    },
+    {
+      psychologist: ['123', ADELI_ID, 'john', 'doe'],
+      errors: ['les prénoms ne matchent pas (Jane vs john)'],
+    },
+    {
+      psychologist: ['123', ADELI_ID, 'jane', 'Dane'],
+      errors: ['le nom ne matche pas (Doe vs Dane)'],
+    },
+    {
+      psychologist: ['456', ADELI_ID, 'Georges', 'Moustaki'],
+      errors: [
+        'la personne n\'est pas un psychologue mais un Magicien',
+        'les prénoms ne matchent pas (John vs Georges)',
+        'le nom ne matche pas (Doe vs Moustaki)',
+      ],
+    },
+    {
+      psychologist: ['1', ADELI_ID, 'Hubert Bonisseur', 'De la batte'],
+      errors: [],
+    },
+    {
+      psychologist: ['2', ADELI_ID, 'Hubert Bonisseur', 'De la batte'],
+      errors: [],
+    },
+    {
+      psychologist: ['3', ADELI_ID, 'Hubert Bonisseur', 'De la batte'],
+      errors: [],
+    },
+    {
+      psychologist: ['4', ADELI_ID, 'Hubert Bonisseur', 'De la batte'],
+      errors: ['le nom ne matche pas (Batte vs De la batte)'],
+    },
+    {
+      psychologist: ['3', ADELI_ID, 'Hubert Bonisseur III', 'De La Batte'],
+      errors: ['les prénoms ne matchent pas (Hubert Bonisseur vs Hubert Bonisseur III)'],
+    },
+    {
+      psychologist: ['5', ADELI_ID, 'Hubert Bonisseur', 'De La Batte'],
+      errors: ['les prénoms ne matchent pas (Humberto vs Hubert Bonisseur)'],
+    },
+    {
+      psychologist: ['123', ADELI_ID, 'jane', 'doe'],
+      errors: [],
+    },
+  ];
 
-    const errors = getAdeliErrors(psychologist, adeliInfo);
-    errors.length.should.equals(1);
-    errors[0].should.equals('pas de correspondance pour ce numéro Adeli');
-  });
-
-  it('Should refuse non psychologue', () => {
-    const psychologist : DSPsychologist = clean.getOnePsyDS('456', ADELI_ID, 'john', 'doe');
-
-    const errors = getAdeliErrors(psychologist, adeliInfo);
-    errors.length.should.equals(1);
-    errors[0].should.equals('la personne n\'est pas un psychologue mais un Magicien');
-  });
-
-  it('Should refuse missmatching name', () => {
-    const psychologist : DSPsychologist = clean.getOnePsyDS('123', ADELI_ID, 'john', 'doe');
-
-    const errors = getAdeliErrors(psychologist, adeliInfo);
-    errors.length.should.equals(1);
-    errors[0].should.equals('les prénoms ne matchent pas (Jane vs john)');
-  });
-
-  it('Should return all missmatching info', () => {
-    const psychologist : DSPsychologist = clean.getOnePsyDS('456', ADELI_ID, 'Georges', 'Moustaki');
-
-    const errors = getAdeliErrors(psychologist, adeliInfo);
-    errors.length.should.equals(3);
-    errors[0].should.equals('la personne n\'est pas un psychologue mais un Magicien');
-    errors[1].should.equals('les prénoms ne matchent pas (John vs Georges)');
-    errors[2].should.equals('le nom ne matche pas (Doe vs Moustaki)');
-  });
-
-  it('Should accept perfect match', () => {
-    const psychologist : DSPsychologist = clean.getOnePsyDS('123', ADELI_ID, 'jane', 'doe');
-
-    const errors = getAdeliErrors(psychologist, adeliInfo);
-    errors.length.should.equals(0);
+  useCases.forEach((useCase) => {
+    it(`Should ${useCase.errors.length > 0 ? 'refuse' : 'accept'} ${useCase.psychologist.join()}`, () => {
+      const psychologist = clean.getOnePsyDS(...useCase.psychologist);
+      const errors = getAdeliErrors(psychologist, adeliInfo);
+      errors.length.should.equals(useCase.errors.length);
+      useCase.errors.forEach((error, index) => error.should.equals(errors[index]));
+    });
   });
 });

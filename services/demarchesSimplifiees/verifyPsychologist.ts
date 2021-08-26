@@ -10,8 +10,8 @@ const verifyPsychologist = async (psychologist: DSPsychologist, adeliInfo:{[key:
   const today = date.toFormatDDMMYYYY(new Date());
 
   const errors = []
-  .concat(getDiplomaErrors(psychologist))
-  .concat(getAdeliErrors(psychologist, adeliInfo));
+    .concat(getDiplomaErrors(psychologist))
+    .concat(getAdeliErrors(psychologist, adeliInfo));
 
   if (errors.length === 0) {
     const verificationMessage = graphql.addVerificationMessage(

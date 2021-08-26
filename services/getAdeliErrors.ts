@@ -3,6 +3,17 @@ import { getChampsIdFromField } from './champsAndAnnotations';
 import { DSPsychologist } from '../types/Psychologist';
 import { AdeliInfo } from '../types/AdeliInfo';
 
+const hasOneMatchingFirstName = (adeliFirstName: string, firstNames: string): boolean => {
+  if (adeliFirstName.includes(' ')) {
+    return string.areSimilar(adeliFirstName, firstNames);
+  }
+
+  const match = firstNames
+    .split(' ')
+    .find((firstName) => string.areSimilar(adeliFirstName, firstName));
+  return match !== undefined;
+};
+
 const getAdeliErrors = (psychologist: DSPsychologist, adeliInfo: {[key: string]: AdeliInfo}): string[] => {
   const errors = [];
   const adeliChampId = getChampsIdFromField('adeli');
@@ -15,7 +26,7 @@ const getAdeliErrors = (psychologist: DSPsychologist, adeliInfo: {[key: string]:
       errors.push(`la personne n'est pas un psychologue mais un ${info['Libellé profession']}`);
     }
 
-    if (!string.areSimilar(info["Prénom d'exercice"], psychologist.demandeur.prenom)) {
+    if (!hasOneMatchingFirstName(info["Prénom d'exercice"], psychologist.demandeur.prenom)) {
       errors.push(`les prénoms ne matchent pas (${info["Prénom d'exercice"]} vs ${psychologist.demandeur.prenom})`);
     }
 
