@@ -10,7 +10,7 @@ import {
 } from '../services/updatePsyFields';
 import getAddrCoordinates from '../services/getAddrCoordinates';
 import { Psychologist } from '../types/Psychologist';
-import { Coordinates } from '../types/Coordinates';
+import { Knex } from 'knex';
 import db from './db';
 
 const getAllAccepted = async (selectedData: string[]) : Promise<Psychologist[]> => {
@@ -45,18 +45,8 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
   return updatedPsy;
 };
 
-const getAllActive = async (
-  modifyQuery = (queryBuilder) : void => {},
-  coordinates: Coordinates = {},
-): Promise<Psychologist[]> => {
+const getAllActive = async (modifyQuery: ((queryBuilder: Knex.QueryBuilder) => void)): Promise<Psychologist[]> => {
   try {
-    let orderByRawValue = 'RANDOM()';
-    if (coordinates.longitude && coordinates.latitude) {
-      // Careful! Human convention is (lat, long) 
-      // but Cartesian coordinate convention is (long, lat)
-      orderByRawValue = `point(longitude, latitude) <@> point(${coordinates.longitude}, ${coordinates.latitude})`;
-    }
-
     const psychologists = db.column(
       'dossierNumber',
       'lastName',
@@ -79,8 +69,7 @@ const getAllActive = async (
           state: DossierState.accepte,
           active: true,
         })
-        .modify(modifyQuery)
-        .orderByRaw(orderByRawValue);
+        .modify(modifyQuery);
     return psychologists;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);

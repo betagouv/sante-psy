@@ -6,6 +6,7 @@ import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import getAddrCoordinates from '../services/getAddrCoordinates';
 import { Coordinates } from '../types/Coordinates';
+import { Knex } from 'knex';
 
 const getAllValidators = [
   check('nameFilter')
@@ -52,7 +53,7 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
     coordinates = await getAddrCoordinates(req.body.addressFilter);
   }
 
-  const modifyQuery = (queryBuilder) : void => {
+  const modifyQuery = (queryBuilder: Knex.QueryBuilder) : void => {
     if (teleconsultation) {
       queryBuilder.where('teleconsultation', true);
     }
@@ -66,9 +67,18 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
     if (isDepartment(addressFilter)) {
       queryBuilder.whereRaw('"departement" LIKE ?', `${addressFilter}%`);
     }
+
+    if (coordinates.longitude && coordinates.latitude) {
+      // Careful! Human convention is (lat, long) but Cartesian coordinate convention is (long, lat)
+      queryBuilder.orderByRaw(
+        `point(longitude, latitude) <@> point(${coordinates.longitude}, ${coordinates.latitude})`,
+      );
+    } else {
+      queryBuilder.orderByRaw('RANDOM()');
+    }
   };
 
-  const psyList = await dbPsychologists.getAllActive(modifyQuery, coordinates);
+  const psyList = await dbPsychologists.getAllActive(modifyQuery);
 
   let result = [];
   if (addressFilter && !isDepartment(addressFilter)) {
