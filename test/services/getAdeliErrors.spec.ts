@@ -109,6 +109,10 @@ describe('getAdeliErrors', () => {
       psychologist: ['123', ADELI_ID, 'jane', 'doe'],
       errors: [],
     },
+    {
+      psychologist: ['1 2 3', ADELI_ID, 'jane', 'doe'],
+      errors: [],
+    },
   ];
 
   useCases.forEach((useCase) => {

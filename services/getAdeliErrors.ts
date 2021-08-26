@@ -2,6 +2,7 @@ import string from '../utils/string';
 import { getChampsIdFromField } from './champsAndAnnotations';
 import { DSPsychologist } from '../types/Psychologist';
 import { AdeliInfo } from '../types/AdeliInfo';
+import { cleanId } from '../utils/adeliAPI';
 
 const hasOneMatchingFirstName = (adeliFirstName: string, firstNames: string): boolean => {
   if (adeliFirstName.includes(' ')) {
@@ -18,7 +19,7 @@ const getAdeliErrors = (psychologist: DSPsychologist, adeliInfo: {[key: string]:
   const errors = [];
   const adeliChampId = getChampsIdFromField('adeli');
   const adeliNumber = psychologist.champs.find((champ) => champ.id === adeliChampId);
-  const info = adeliNumber && adeliInfo[adeliNumber.stringValue];
+  const info = adeliNumber && adeliInfo[cleanId(adeliNumber.stringValue)];
   if (!info) {
     errors.push('pas de correspondance pour ce numéro Adeli');
   } else {
