@@ -10,7 +10,7 @@ import PsyTable from './PsyTable';
 import styles from './psyListing.cssmodule.scss';
 
 const PsyListing = () => {
-  const { commonStore: { statistics, searchPsychologists, setSearchPsychologists } } = useStore();
+  const { commonStore: { statistics, setStatistics, searchPsychologists, setSearchPsychologists } } = useStore();
   const query = new URLSearchParams(useLocation().search);
 
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
@@ -20,6 +20,9 @@ const PsyListing = () => {
 
   useEffect(() => {
     resetPage();
+    if (!statistics) {
+      agent.Statistics.getAll().then(setStatistics);
+    }
     if (!searchPsychologists || searchHasChanged()) {
       getPsychologists();
     }
@@ -75,8 +78,7 @@ const PsyListing = () => {
     }
   };
 
-  // FIXME: if statistics undefined, they need to be retrieved and put in cache
-  const nbPsychologists = statistics ? statistics.find(s => s.label === 'Psychologues partenaires').value : '??';
+  const nbPsychologists = statistics ? statistics.find(s => s.label === 'Psychologues partenaires').value : '';
 
   return (
     <Page
