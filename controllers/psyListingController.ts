@@ -22,6 +22,8 @@ const getAllValidators = [
 ];
 
 const isDepartment = (addressFilter: string) : boolean => {
+  if (!addressFilter) return false;
+
   const departementFilter = +addressFilter;
   return departementFilter
   && (
@@ -39,43 +41,49 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
   const time = `getting all active psychologists from Postgres (query id #${Math.random().toString()})`;
   console.time(time);
 
+  const teleconsultation = req.body && req.body.teleconsultation;
+  const nameFilter = req.body && req.body.nameFilter !== '' ? req.body.nameFilter : undefined;
+  const addressFilter = (req.body && req.body.addressFilter && req.body.addressFilter !== '')
+    ? req.body.addressFilter : undefined;
+  const isAddressFilterDepartment = isDepartment(addressFilter);
+
   let coordinates : Coordinates = {};
-  if (req.body && req.body.addressFilter && req.body.addressFilter !== '' && !isDepartment(req.body.addressFilter)) {
+  if (addressFilter && !isAddressFilterDepartment) {
     coordinates = await getAddrCoordinates(req.body.addressFilter);
   }
 
   const modifyQuery = (queryBuilder) : void => {
-    if (req.body && req.body.teleconsultation === true) {
+    if (teleconsultation) {
       queryBuilder.where('teleconsultation', true);
     }
-    if (req.body && req.body.nameFilter !== '') {
+    if (nameFilter) {
       queryBuilder.whereRaw(
-        'LOWER("lastName" || "firstNames") LIKE ?', `%${req.body.nameFilter.replace(/\s/g, '').toLowerCase()}%`,
+        'LOWER("lastName" || "firstNames") LIKE ?', `%${nameFilter.toLowerCase()}%`,
       );
     }
-    if (req.body && req.body.addressFilter && req.body.addressFilter !== '' && isDepartment(req.body.addressFilter)) {
-      queryBuilder.whereRaw('"departement" LIKE ?', `${req.body.addressFilter}%`);
+    if (isDepartment(addressFilter)) {
+      queryBuilder.whereRaw('"departement" LIKE ?', `${addressFilter}%`);
     }
   };
 
   const psyList = await dbPsychologists.getAllActive(modifyQuery, coordinates);
 
-  let returnedPsyList = [];
-  if (req.body && req.body.addressFilter && req.body.addressFilter !== '' && !isDepartment(req.body.addressFilter)) {
-    const matchingPsy = psyList.filter((p) => matchFilter(p.address, req.body.addressFilter)
-    || matchFilter(p.departement, req.body.addressFilter)
-    || matchFilter(p.region, req.body.addressFilter));
+  let result = [];
+  if (addressFilter && !isDepartment(addressFilter)) {
+    const matchingPsy = psyList.filter((p) => matchFilter(p.address, addressFilter)
+    || matchFilter(p.departement, addressFilter)
+    || matchFilter(p.region, addressFilter));
 
-    returnedPsyList.push(...matchingPsy);
-    returnedPsyList.push(...psyList.filter((p) => !matchingPsy.includes(p)));
+    result.push(...matchingPsy);
+    result.push(...psyList.filter((p) => !matchingPsy.includes(p)));
   } else {
-    returnedPsyList = psyList;
+    result = psyList;
   }
 
   console.timeEnd(time);
 
   res.json(reduced
-    ? returnedPsyList.map((psy) => ({
+    ? result.map((psy) => ({
       dossierNumber: psy.dossierNumber,
       firstNames: psy.firstNames,
       lastName: psy.lastName,
@@ -84,7 +92,7 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
       departement: psy.departement,
       region: psy.region,
     }))
-    : returnedPsyList);
+    : result);
 };
 
 export default {
