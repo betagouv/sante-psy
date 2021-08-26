@@ -1,0 +1,722 @@
+{
+  "CCI - CFA (BTS NDRC)": {
+    "target": "ESIEE - CCI Paris Ile-de-France Education",
+    "rating": 0.12,
+    "go": false
+  },
+  "Staps": {
+    "target": "ENSTA Bretagne",
+    "rating": 0.125,
+    "go": false
+  },
+  "IUT LOUIS PASTEUR SCHILTIGHEIM": {
+    "target": "ISTOM",
+    "rating": 0.13333333333333333,
+    "go": false
+  },
+  "ECOLE nATIONALE SUPERIEUREMARITIME MARSEILLE": {
+    "target": "INALCO",
+    "rating": 0.13333333333333333,
+    "go": false
+  },
+  "ecam": {
+    "target": "Sup'Biotech",
+    "rating": 0.15384615384615385,
+    "go": false
+  },
+  "iUT Illkirch": {
+    "target": "UT1",
+    "rating": 0.16666666666666666,
+    "go": false
+  },
+  "IUT robert Schumann": {
+    "target": "IUT Robert SCHUMAN",
+    "rating": 0.17647058823529413,
+    "go": true
+  },
+  "IUT Robert SCHUMAN": {
+    "target": "Y SCHOOLS",
+    "rating": 0.18181818181818182,
+    "go": false
+  },
+  "UNIVERSITE DE STRASBOURG": {
+    "target": "Université de Strasbourg",
+    "rating": 0.2,
+    "go": true
+  },
+  "FACULTE DE MEDECINE": {
+    "target": "ITECH",
+    "rating": 0.2,
+    "go": false
+  },
+  "IUT Haguenau": {
+    "target": "École navale",
+    "rating": 0.2,
+    "go": false
+  },
+  "SCIENCES POLITIQUE STRASBOURG": {
+    "target": "ESTIA",
+    "rating": 0.2,
+    "go": false
+  },
+  "Lycée Fustel de Coulange - classe prépa - STRASBOURG": {
+    "target": "Institut national des sciences appliquées de Toulouse",
+    "rating": 0.20224719101123595,
+    "go": false
+  },
+  "UNIVERSITE DE LYON": {
+    "target": "ITECH",
+    "rating": 0.21052631578947367,
+    "go": false
+  },
+  "BTS Immobilier ESCIN": {
+    "target": "ESIEE Amiens",
+    "rating": 0.2222222222222222,
+    "go": false
+  },
+  "Iconograf": {
+    "target": "Isara-Lyon",
+    "rating": 0.23529411764705882,
+    "go": false
+  },
+  "Classes préparatoires Lycée KLEBER": {
+    "target": "Conservatoire national des arts et métiers",
+    "rating": 0.24242424242424243,
+    "go": false
+  },
+  "LUT Louis Pasteur": {
+    "target": "École nationale supérieure Louis Lumière",
+    "rating": 0.24489795918367346,
+    "go": false
+  },
+  "Métamorphoses": {
+    "target": "Arts et Métiers",
+    "rating": 0.25,
+    "go": false
+  },
+  "CESI de Lingolsheim": {
+    "target": "Institut d'ingénierie informatique de Limoges",
+    "rating": 0.25,
+    "go": false
+  },
+  "Lycée René Cassin": {
+    "target": "ENS de Rennes",
+    "rating": 0.25,
+    "go": false
+  },
+  "Physiotherapie Schule Ortenau (Allemagne)": {
+    "target": "École nationale supérieure de techniques avancées Bretagne",
+    "rating": 0.25,
+    "go": false
+  },
+  "Iut illkirch": {
+    "target": "Centrale Lille Institut",
+    "rating": 0.26666666666666666,
+    "go": false
+  },
+  "Fustel de Coulanges": {
+    "target": "IEP de Toulouse",
+    "rating": 0.2857142857142857,
+    "go": false
+  },
+  "Unistra": {
+    "target": "Université de Strasbourg",
+    "rating": 0.2962962962962963,
+    "go": true
+  },
+  "EOST": {
+    "target": "ESTP",
+    "rating": 0.3333333333333333,
+    "go": false
+  },
+  "Insa": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.3333333333333333,
+    "go": true
+  },
+  "ENGEES": {
+    "target": "ESIGELEC",
+    "rating": 0.3333333333333333,
+    "go": false
+  },
+  "IFSI": {
+    "target": "IFAO",
+    "rating": 0.3333333333333333,
+    "go": false
+  },
+  "Faculté de medecine": {
+    "target": "Facultés libres de l'Ouest",
+    "rating": 0.3684210526315789,
+    "go": false
+  },
+  "Faculté de Médecine": {
+    "target": "Facultés libres de l'Ouest",
+    "rating": 0.3684210526315789,
+    "go": false
+  },
+  "Faculté de médecine": {
+    "target": "Facultés libres de l'Ouest",
+    "rating": 0.3684210526315789,
+    "go": false
+  },
+  "Faculté de Géographie et d'Aménagement Strasbourg": {
+    "target": "École nationale du génie de l'eau et de l'environnement de Strasbourg",
+    "rating": 0.37623762376237624,
+    "go": false
+  },
+  "Ecole d'orthophonie": {
+    "target": "EPF - École d'ingénieurs",
+    "rating": 0.3783783783783784,
+    "go": false
+  },
+  "PSO": {
+    "target": "IPSA",
+    "rating": 0.4,
+    "go": false
+  },
+  "unistra": {
+    "target": "Université de Strasbourg",
+    "rating": 0.4,
+    "go": true
+  },
+  "ES Banque": {
+    "target": "ESB Nantes",
+    "rating": 0.4,
+    "go": false
+  },
+  "Ecole éducateur jeunes enfants strasbourg": {
+    "target": "École nationale supérieure d'architecture de Strasbourg",
+    "rating": 0.4,
+    "go": false
+  },
+  "ESCM": {
+    "target": "ESJ",
+    "rating": 0.4,
+    "go": false
+  },
+  "Faculté de droit": {
+    "target": "Facultés libres de l'Ouest",
+    "rating": 0.4,
+    "go": false
+  },
+  "Etudiant des métiers": {
+    "target": "Audencia Nantes",
+    "rating": 0.4,
+    "go": false
+  },
+  "CNED": {
+    "target": "EDL",
+    "rating": 0.4,
+    "go": false
+  },
+  "UNISTRA": {
+    "target": "Université de Strasbourg",
+    "rating": 0.4,
+    "go": true
+  },
+  "Fac de lettres": {
+    "target": "Ecole de l'air et de l'espace",
+    "rating": 0.4117647058823529,
+    "go": false
+  },
+  "Esadhar Le Havre": {
+    "target": "Université Le Havre",
+    "rating": 0.41379310344827586,
+    "go": false
+  },
+  "Faculté des sciences et du sport": {
+    "target": "Université Paris sciences et lettres",
+    "rating": 0.42105263157894735,
+    "go": false
+  },
+  "Faculté de Langues étrangères appliquées": {
+    "target": "Facultés libres de l'Ouest",
+    "rating": 0.42105263157894735,
+    "go": false
+  },
+  "UFR Mathématiques et Informatique": {
+    "target": "École supérieure d'informatique électronique automatique",
+    "rating": 0.425,
+    "go": false
+  },
+  "Ecole de design Nantes Atlantique": {
+    "target": "École centrale de Nantes",
+    "rating": 0.4583333333333333,
+    "go": false
+  },
+  "ESSEC Business School (95021 CERGY-PONTOISE Cedex)": {
+    "target": "ESCP Business School",
+    "rating": 0.45901639344262296,
+    "go": false
+  },
+  "Doctorat Sciences de l'ingénieur Strasbourg": {
+    "target": "École d'ingénieurs des sciences aérospatiales",
+    "rating": 0.46153846153846156,
+    "go": false
+  },
+  "EI CESI NANCY": {
+    "target": "ICES",
+    "rating": 0.46153846153846156,
+    "go": false
+  },
+  "Faculté géographie Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.4878048780487805,
+    "go": false
+  },
+  "Faculté des Sciences de la Vie Strasbourg": {
+    "target": "Institut national des sciences appliquées de Strasbourg",
+    "rating": 0.4878048780487805,
+    "go": false
+  },
+  "Etudiant en Allemagne - Université de Freibourg": {
+    "target": "Université Bretagne-Sud",
+    "rating": 0.4918032786885246,
+    "go": false
+  },
+  "ISCOM": {
+    "target": "ISTOM",
+    "rating": 0.5,
+    "go": false
+  },
+  "Ecole d'orthophonie de Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.5,
+    "go": false
+  },
+  "Faculté des sciences sociales Strasbourg": {
+    "target": "Institut national des sciences appliquées de Strasbourg",
+    "rating": 0.5060240963855421,
+    "go": false
+  },
+  "Faculté des lettres Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.5106382978723404,
+    "go": false
+  },
+  "Institut Supérieur Arts Appliqués Strasbourg": {
+    "target": "Institut national des sciences appliquées de Strasbourg",
+    "rating": 0.5287356321839081,
+    "go": false
+  },
+  "Sciences Po Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.5294117647058824,
+    "go": false
+  },
+  "Faculté de sociologie Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.5306122448979592,
+    "go": false
+  },
+  "ESITC CAEN": {
+    "target": "ENSICAEN",
+    "rating": 0.5333333333333333,
+    "go": false
+  },
+  "Faculté de psychologie": {
+    "target": "Facultés Libres de Philosophie et de Psychologie",
+    "rating": 0.5333333333333333,
+    "go": false
+  },
+  "NEOMA Business school - RHEIMS": {
+    "target": "ICN Business School",
+    "rating": 0.5365853658536586,
+    "go": false
+  },
+  "Faculté de lettres": {
+    "target": "Facultés libres de l'Ouest",
+    "rating": 0.5405405405405406,
+    "go": false
+  },
+  "Faculté de Pharmacie Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.5416666666666666,
+    "go": false
+  },
+  "Faculté des Arts Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.5454545454545454,
+    "go": false
+  },
+  "Sciences politiques Lille": {
+    "target": "Institut d'études politiques de Lille",
+    "rating": 0.5555555555555556,
+    "go": true
+  },
+  "Strasbourg Biologie": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.5625,
+    "go": false
+  },
+  "Faculté des arts de Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.5652173913043478,
+    "go": false
+  },
+  "INSA": {
+    "target": "INSTN",
+    "rating": 0.5714285714285714,
+    "go": false
+  },
+  "ESEIS": {
+    "target": "ESEO",
+    "rating": 0.5714285714285714,
+    "go": false
+  },
+  "ISEG": {
+    "target": "IÉSEG",
+    "rating": 0.5714285714285714,
+    "go": true
+  },
+  "faculté de sciences economiques de Strasbourg": {
+    "target": "Institut national des sciences appliquées de Strasbourg",
+    "rating": 0.5747126436781609,
+    "go": false
+  },
+  "L'Ecole de Management": {
+    "target": "École de management de Normandie",
+    "rating": 0.5777777777777777,
+    "go": false
+  },
+  "Faculté de Droit Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.5909090909090909,
+    "go": false
+  },
+  "IEP strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.5925925925925926,
+    "go": false
+  },
+  "Pigier Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.6,
+    "go": false
+  },
+  "Université Fédérale Toulouse Midi Pyrénées": {
+    "target": "Université de Toulouse-III",
+    "rating": 0.6,
+    "go": false
+  },
+  "ISCOM Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.6206896551724138,
+    "go": false
+  },
+  "Faculté d'histoire université de Strabourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.6206896551724138,
+    "go": true
+  },
+  "L'Ecole de sciences Politiques de Strasbourg": {
+    "target": "Institut national des sciences appliquées de Strasbourg",
+    "rating": 0.627906976744186,
+    "go": false
+  },
+  "Université de STRASBOURG": {
+    "target": "Université de Strasbourg",
+    "rating": 0.6285714285714286,
+    "go": true
+  },
+  "EOST Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.6428571428571429,
+    "go": false
+  },
+  "Insa Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.6428571428571429,
+    "go": true
+  },
+  "CFUO Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.6428571428571429,
+    "go": false
+  },
+  "IFMK Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.6428571428571429,
+    "go": false
+  },
+  "Université Paris 1 Panthéon Sorbonne": {
+    "target": "Sorbonne Université",
+    "rating": 0.6666666666666666,
+    "go": false
+  },
+  "TNS": {
+    "target": "INSTN",
+    "rating": 0.6666666666666666,
+    "go": false
+  },
+  "IEP Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.6666666666666666,
+    "go": false
+  },
+  "BTS Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.6666666666666666,
+    "go": false
+  },
+  "Ecole d'architecture strasbourg": {
+    "target": "École nationale supérieure d'architecture de Strasbourg",
+    "rating": 0.6753246753246753,
+    "go": true
+  },
+  "Faculté de medecine université de Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.6779661016949152,
+    "go": false
+  },
+  "ENSPS Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.6896551724137931,
+    "go": false
+  },
+  "ENSAI strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.6896551724137931,
+    "go": false
+  },
+  "Université de Belfort": {
+    "target": "Université de Corse",
+    "rating": 0.7058823529411765,
+    "go": false
+  },
+  "ISCOM de Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.7096774193548387,
+    "go": false
+  },
+  "Institut national des arts appliqués": {
+    "target": "Institut national des sciences appliquées de Lyon",
+    "rating": 0.7123287671232876,
+    "go": false
+  },
+  "ENS Lyon": {
+    "target": "ENS de Lyon",
+    "rating": 0.7142857142857143,
+    "go": true
+  },
+  "Rennes School of Business": {
+    "target": "Brest Business School",
+    "rating": 0.717948717948718,
+    "go": false
+  },
+  "Université Lyon lumière 2": {
+    "target": "Université Lyon-I",
+    "rating": 0.7222222222222222,
+    "go": false
+  },
+  "université de psychologie de Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.7272727272727273,
+    "go": true
+  },
+  "université rennes 2": {
+    "target": "Université Rennes-I",
+    "rating": 0.7272727272727273,
+    "go": false
+  },
+  "Université de Montréal": {
+    "target": "Université de Montpellier",
+    "rating": 0.7317073170731707,
+    "go": false
+  },
+  "ITIRI, université Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.7391304347826086,
+    "go": true
+  },
+  "Université Toulouse Master GEPS": {
+    "target": "Université Toulouse-I",
+    "rating": 0.7391304347826086,
+    "go": false
+  },
+  "Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.75,
+    "go": true
+  },
+  "Université Toulouse 1 Capitole": {
+    "target": "Université Toulouse-I",
+    "rating": 0.7555555555555555,
+    "go": true
+  },
+  "ENSAS Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.7586206896551724,
+    "go": false
+  },
+  "Université de Metz": {
+    "target": "Université de Pau",
+    "rating": 0.7586206896551724,
+    "go": false
+  },
+  "université strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.8,
+    "go": true
+  },
+  "Université de Lyon III": {
+    "target": "Université Lyon-III",
+    "rating": 0.8,
+    "go": true
+  },
+  "Universite de strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.8095238095238095,
+    "go": true
+  },
+  "Universitaire de Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.8444444444444444,
+    "go": true
+  },
+  "Université de Nancy": {
+    "target": "Université de Nantes",
+    "rating": 0.8484848484848485,
+    "go": false
+  },
+  "université Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.85,
+    "go": true
+  },
+  "université de strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.8571428571428571,
+    "go": true
+  },
+  "universite de Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.8571428571428571,
+    "go": true
+  },
+  "INSA Strasbourg": {
+    "target": "INSA de Strasbourg",
+    "rating": 0.8571428571428571,
+    "go": true
+  },
+  "Universite de Strasasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.8636363636363636,
+    "go": true
+  },
+  "université de Strasbourg IFSI": {
+    "target": "Université de Strasbourg",
+    "rating": 0.8695652173913043,
+    "go": true
+  },
+  "Université Aix Marseille": {
+    "target": "Aix-Marseille Université",
+    "rating": 0.8837209302325582,
+    "go": true
+  },
+  "KEDGE business School": {
+    "target": "KEDGE Business School",
+    "rating": 0.8888888888888888,
+    "go": true
+  },
+  "INSA. Université de Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.8936170212765957,
+    "go": true
+  },
+  "Université Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.9,
+    "go": true
+  },
+  "Université Paris 1": {
+    "target": "Université Paris-I",
+    "rating": 0.9032258064516129,
+    "go": true
+  },
+  "Université Paris 8": {
+    "target": "Université Paris-I",
+    "rating": 0.9032258064516129,
+    "go": false
+  },
+  "Université de strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.9047619047619048,
+    "go": true
+  },
+  "Universite de Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.9047619047619048,
+    "go": true
+  },
+  "Université Paris": {
+    "target": "Université Paris-I",
+    "rating": 0.9333333333333333,
+    "go": true
+  },
+  "université de Lille": {
+    "target": "Université de Lille",
+    "rating": 0.9375,
+    "go": true
+  },
+  "université de Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 0.9523809523809523,
+    "go": true
+  },
+  "Université Aix-Marseille": {
+    "target": "Aix-Marseille Université",
+    "rating": 0.9545454545454546,
+    "go": true
+  },
+  "Haute école des arts du Rhin": {
+    "target": "Haute école des arts du Rhin",
+    "rating": 1,
+    "go": true
+  },
+  "Université de Lorraine": {
+    "target": "Université de Lorraine",
+    "rating": 1,
+    "go": true
+  },
+  "Université de Rouen": {
+    "target": "Université de Rouen",
+    "rating": 1,
+    "go": true
+  },
+  "CNAM": {
+    "target": "CNAM",
+    "rating": 1,
+    "go": true
+  },
+  "Audencia": {
+    "target": "Audencia",
+    "rating": 1,
+    "go": true
+  },
+  "ENSTA Bretagne": {
+    "target": "ENSTA Bretagne",
+    "rating": 1,
+    "go": true
+  },
+  "ENSAS": {
+    "target": "ENSAS",
+    "rating": 1,
+    "go": true
+  },
+  "Université Clermont Auvergne": {
+    "target": "Université Clermont Auvergne",
+    "rating": 1,
+    "go": true
+  },
+  "Université de Strasbourg": {
+    "target": "Université de Strasbourg",
+    "rating": 1,
+    "go": true
+  },
+  "HEAR": {
+    "target": "HEAR",
+    "rating": 1,
+    "go": true
+  }
+}
