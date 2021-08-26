@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
@@ -19,10 +19,29 @@ const Patients = () => {
   const { commonStore: { config, setNotification } } = useStore();
 
   const [patients, setPatients] = useState([]);
+  const [seeAppointments, setSeeAppointments] = useState(true);
+  const table = useRef(null);
+
+  const updateAppointentsColumns = () => {
+    if (table.current) {
+      const { width } = table.current.getBoundingClientRect();
+      if (width < 375) {
+        setSeeAppointments(false);
+      } else {
+        setSeeAppointments(true);
+      }
+    }
+  };
 
   useEffect(() => {
     agent.Patient.get().then(setPatients);
+    window.addEventListener('resize', updateAppointentsColumns);
+    return () => window.removeEventListener('resize', updateAppointentsColumns);
   }, []);
+
+  useEffect(() => {
+    updateAppointentsColumns();
+  }, [table]);
 
   const getMissingInfo = patient => {
     const DOCTOR_NAME = 'nom du docteur';
@@ -46,7 +65,7 @@ const Patients = () => {
       missingInfo.push(DOCTOR_ADDRESS);
     }
 
-    if (!patient.dateOfBirth && patient.createdAt > parseDateForm(config.dateOfBirthDeploymentDate)) {
+    if (!patient.dateOfBirth && new Date(patient.createdAt) > parseDateForm(config.dateOfBirthDeploymentDate)) {
       missingInfo.push(BIRTH_DATE);
     }
 
@@ -62,9 +81,12 @@ const Patients = () => {
   };
 
   const extendedPatients = patients.map(patient => {
-    patient.hasFolderCompleted = getMissingInfo(patient).length === 0;
-    patient.missingInfo = getMissingInfo(patient);
-    return patient;
+    const missingInfo = getMissingInfo(patient);
+    return {
+      ...patient,
+      hasFolderCompleted: missingInfo.length === 0,
+      missingInfo,
+    };
   });
 
   const deletePatient = patientId => {
@@ -80,8 +102,20 @@ const Patients = () => {
       name: 'name',
       label: 'Nom',
       render: patient => `${patient.lastName.toUpperCase()} ${patient.firstNames}`,
+      sortable: true,
+      sort: (a, b) => (`${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`),
     },
-    { name: 'status', label: 'Statut', render: PatientStatus },
+    {
+      name: 'status',
+      label: 'Statut',
+      render: PatientStatus,
+      sortable: true,
+      sort: (a, b) => a.missingInfo.length - b.missingInfo.length,
+    }];
+  if (seeAppointments) {
+    columns.push({ name: 'appointmentsCount', label: 'Séances', sortable: true });
+  }
+  columns.push(
     {
       name: 'actions',
       label: '',
@@ -92,7 +126,7 @@ const Patients = () => {
         />
       ),
     },
-  ];
+  );
 
   return (
     <>
@@ -110,15 +144,17 @@ const Patients = () => {
           Nouvel étudiant
         </Link>
       </div>
-      <div className={classNames('fr-table', styles.table)}>
+      <div
+        ref={table}
+        className={classNames('fr-table', styles.table)}
+      >
         {patients.length > 0 ? (
           <>
             <PatientActionsLegend />
             <Table
               data-test-id="etudiant-table"
               columns={columns}
-              data={extendedPatients.filter(patient => !patient.hasFolderCompleted)
-                .concat(extendedPatients.filter(patient => patient.hasFolderCompleted))}
+              data={extendedPatients.sort((a, b) => b.missingInfo.length - a.missingInfo.length)}
               rowKey="id"
             />
           </>
