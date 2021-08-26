@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
 
-import { Callout, CalloutText } from '@dataesr/react-dsfr';
+import { ButtonGroup, Callout, CalloutText } from '@dataesr/react-dsfr';
 import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
@@ -119,9 +119,9 @@ const Billing = () => {
           Un doute sur le modèle de votre facture ?
           Vous pouvez prendre exemple sur ce modèle qui contient tous les éléments requis pour votre remboursement :
         </p>
-        <p className="fr-mb-2w">
+        <ButtonGroup isInlineFrom="xs" className="fr-my-2w">
           <a
-            className="fr-btn fr-btn--secondary fr-my-2w fr-mr-2w"
+            className="fr-btn fr-btn--secondary"
             href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.pdf`}
             target="_blank"
             rel="noreferrer"
@@ -130,7 +130,7 @@ const Billing = () => {
             .pdf
           </a>
           <a
-            className="fr-btn fr-btn--secondary fr-my-2w fr-mr-2w"
+            className="fr-btn fr-btn--secondary"
             href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.docx`}
             target="_blank"
             rel="noreferrer"
@@ -139,7 +139,7 @@ const Billing = () => {
             Microsoft Word .docx
           </a>
           <a
-            className="fr-btn fr-btn--secondary fr-my-2w fr-mr-2w"
+            className="fr-btn fr-btn--secondary"
             href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.odt`}
             target="_blank"
             rel="noreferrer"
@@ -147,29 +147,25 @@ const Billing = () => {
             <span className="fr-fi-file-download-line" aria-hidden="true" />
             Libre Office .odt
           </a>
-        </p>
+        </ButtonGroup>
         <h3>Demander de l&lsquo;aide</h3>
-        <ul className="fr-btns-group fr-btns-group--inline">
-          <li>
-            <HashLink
-              className="fr-btn fr-btn--secondary"
-              to="/faq?section=psychologue#remboursement"
-            >
-              Consulter la Foire Aux Questions
-            </HashLink>
-          </li>
-          <li>
-            <a
-              className="fr-btn fr-btn--secondary"
-              href={`${__API__}/static/documents/tutoriel_choruspro_sante-psy-etudiant.pdf`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span className="fr-fi-file-download-line" aria-hidden="true" />
-              Tutoriel Chorus PRO
-            </a>
-          </li>
-        </ul>
+        <ButtonGroup isInlineFrom="xs">
+          <HashLink
+            className="fr-btn fr-btn--secondary"
+            to="/faq?section=psychologue#remboursement"
+          >
+            Consulter la Foire Aux Questions
+          </HashLink>
+          <a
+            className="fr-btn fr-btn--secondary"
+            href={`${__API__}/static/documents/tutoriel_choruspro_sante-psy-etudiant.pdf`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span className="fr-fi-file-download-line" aria-hidden="true" />
+            Tutoriel Chorus PRO
+          </a>
+        </ButtonGroup>
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import { Row } from '@dataesr/react-dsfr';
+import { ButtonGroup, Row } from '@dataesr/react-dsfr';
 
 import styles from './faqProcess.cssmodule.scss';
 
@@ -9,7 +9,7 @@ const FaqProcess = ({ label, links }) => (
     <Row spacing="mt-3w mb-1w" justifyContent="center" className={styles.label}>
       {`Comment ça se passe pour les ${label} ?`}
     </Row>
-    <Row justifyContent="center" spacing="my-1w">
+    <ButtonGroup isInlineFrom="xs" align="center">
       {links.map(link => (
         <a
           key={link.title}
@@ -21,7 +21,7 @@ const FaqProcess = ({ label, links }) => (
           {link.title}
         </a>
       ))}
-    </Row>
+    </ButtonGroup>
   </>
 );
 

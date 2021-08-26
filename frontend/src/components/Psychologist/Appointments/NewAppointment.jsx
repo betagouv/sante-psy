@@ -101,7 +101,8 @@ const NewAppointment = () => {
       <Button
         data-test-id="new-appointment-submit"
         submit
-        className="fr-fi-add-line fr-btn--icon-left fr-mt-4w"
+        icon="fr-fi-add-line"
+        className="fr-mt-4w"
       >
         Créer la séance
       </Button>

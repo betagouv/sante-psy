@@ -36,7 +36,7 @@ const PsyTable = ({
               secondary
               size="sm"
               onClick={() => goToProfile(psychologist)}
-              className="fr-fi-arrow-right-line fr-float-right"
+              className="fr-fi-arrow-right-line"
             />
           </div>
           <div className="fr-hidden-xs fr-displayed-sm">
@@ -45,7 +45,8 @@ const PsyTable = ({
               secondary
               size="sm"
               onClick={() => goToProfile(psychologist)}
-              className="fr-fi-arrow-right-line fr-btn--icon-right fr-float-right"
+              icon="fr-fi-arrow-right-line"
+              iconPosition="right"
             >
               Voir le profil
             </Button>
