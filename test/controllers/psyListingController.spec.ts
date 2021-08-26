@@ -85,206 +85,249 @@ describe.only('psyListingController', () => {
     getAddrCoordinatesStub.restore();
   });
 
-  it('should return all active psy', async () => {
-    const res = await chai.request(app)
+  describe('getReducedActive', () => {
+    it('should return all active psy', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send();
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(4);
-    const resDossierNumbers = res.body.map((p) => p.dossierNumber);
-    expect(resDossierNumbers).to.have.members([
-      psyInParis.dossierNumber,
-      psyInLyon.dossierNumber,
-      psyInMarseille.dossierNumber,
-      psyWithoutLoc.dossierNumber,
-    ]);
-  });
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(4);
+      const resDossierNumbers = res.body.map((p) => p.dossierNumber);
+      expect(resDossierNumbers).to.have.members([
+        psyInParis.dossierNumber,
+        psyInLyon.dossierNumber,
+        psyInMarseille.dossierNumber,
+        psyWithoutLoc.dossierNumber,
+      ]);
+      expect(res.body[0]).to.have.all.keys([
+        'dossierNumber',
+        'firstNames',
+        'lastName',
+        'teleconsultation',
+        'address',
+        'departement',
+        'region',
+      ]);
+    });
 
-  it('should sanitize body request', async () => {
-    const res = await chai.request(app)
+    it('should sanitize body request', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: true, addressFilter: '<script>console.log(123)</script>', teleconsultation: '123' });
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.be.empty;
-  });
+      expect(res.status).to.equal(200);
+      expect(res.body).to.be.empty;
+    });
 
-  it('should return only teleconsultation psy if teleconsultation is true', async () => {
-    const res = await chai.request(app)
+    it('should return only teleconsultation psy if teleconsultation is true', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: '', addressFilter: '', teleconsultation: true });
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(2);
-    const resDossierNumbers = res.body.map((p) => p.dossierNumber);
-    expect(resDossierNumbers).to.have.members([
-      psyInLyon.dossierNumber,
-      psyWithoutLoc.dossierNumber,
-    ]);
-  });
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(2);
+      const resDossierNumbers = res.body.map((p) => p.dossierNumber);
+      expect(resDossierNumbers).to.have.members([
+        psyInLyon.dossierNumber,
+        psyWithoutLoc.dossierNumber,
+      ]);
+    });
 
-  it('should return all active psy if teleconsultation is false', async () => {
-    const res = await chai.request(app)
+    it('should return all active psy if teleconsultation is false', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: '', addressFilter: '', teleconsultation: false });
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(4);
-  });
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(4);
+    });
 
-  it('should return only psy with matching lastname', async () => {
-    const res = await chai.request(app)
+    it('should return only psy with matching lastname', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: 'martin ', addressFilter: '', teleconsultation: false });
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(1);
-    expect(res.body[0].dossierNumber).to.equal(psyInParis.dossierNumber);
-  });
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(1);
+      expect(res.body[0].dossierNumber).to.equal(psyInParis.dossierNumber);
+    });
 
-  it('should return psy with matching firstname', async () => {
-    const res = await chai.request(app)
+    it('should return psy with matching firstname', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: 'Bernard', addressFilter: '', teleconsultation: false });
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(2);
-    const resDossierNumbers = res.body.map((p) => p.dossierNumber);
-    expect(resDossierNumbers).to.have.members([
-      psyInLyon.dossierNumber,
-      psyInMarseille.dossierNumber,
-    ]);
-  });
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(2);
+      const resDossierNumbers = res.body.map((p) => p.dossierNumber);
+      expect(resDossierNumbers).to.have.members([
+        psyInLyon.dossierNumber,
+        psyInMarseille.dossierNumber,
+      ]);
+    });
 
-  // FIXME
-  it.skip('should return psy with matching lastname and firstname', async () => {
-    const res = await chai.request(app)
+    // FIXME
+    it.skip('should return psy with matching lastname and firstname', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: 'Bernard Thomas', addressFilter: '', teleconsultation: false });
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(2);
-    const resDossierNumbers = res.body.map((p) => p.dossierNumber);
-    expect(resDossierNumbers).to.have.members([
-      psyInLyon.dossierNumber,
-      psyInMarseille.dossierNumber,
-    ]);
-  });
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(2);
+      const resDossierNumbers = res.body.map((p) => p.dossierNumber);
+      expect(resDossierNumbers).to.have.members([
+        psyInLyon.dossierNumber,
+        psyInMarseille.dossierNumber,
+      ]);
+    });
 
-  // FIXME
-  it.skip('should return psy with matching firstname and lastname', async () => {
-    const res = await chai.request(app)
+    // FIXME
+    it.skip('should return psy with matching firstname and lastname', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: 'Thomas Bernard', addressFilter: '', teleconsultation: false });
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(2);
-    const resDossierNumbers = res.body.map((p) => p.dossierNumber);
-    expect(resDossierNumbers).to.have.members([
-      psyInLyon.dossierNumber,
-      psyInMarseille.dossierNumber,
-    ]);
-  });
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(2);
+      const resDossierNumbers = res.body.map((p) => p.dossierNumber);
+      expect(resDossierNumbers).to.have.members([
+        psyInLyon.dossierNumber,
+        psyInMarseille.dossierNumber,
+      ]);
+    });
 
-  it('should return psy with matching address even if no localisation if address filter', async () => {
-    const res = await chai.request(app)
+    it('should return psy with matching address even if no localisation if address filter', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: '', addressFilter: 'Mairie', teleconsultation: false });
 
-    expect(res.status).to.equal(200);
-    expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
+      expect(res.status).to.equal(200);
+      expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
 
-    sinon.assert.calledWith(getAddrCoordinatesStub, 'Mairie');
-  });
+      sinon.assert.calledWith(getAddrCoordinatesStub, 'Mairie');
+    });
 
-  it('should return psy with matching department even if no localisation if address filter', async () => {
-    const res = await chai.request(app)
+    it('should return psy with matching department even if no localisation if address filter', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: '', addressFilter: 'Creuse', teleconsultation: false });
 
-    expect(res.status).to.equal(200);
-    expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
+      expect(res.status).to.equal(200);
+      expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
 
-    sinon.assert.calledWith(getAddrCoordinatesStub, 'Creuse');
-  });
+      sinon.assert.calledWith(getAddrCoordinatesStub, 'Creuse');
+    });
 
-  it('should return psy with matching region even if no localisation if address filter', async () => {
-    const res = await chai.request(app)
+    it('should return psy with matching region even if no localisation if address filter', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: '', addressFilter: 'Aquitaine', teleconsultation: false });
 
-    expect(res.status).to.equal(200);
-    expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
+      expect(res.status).to.equal(200);
+      expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
 
-    sinon.assert.calledWith(getAddrCoordinatesStub, 'Aquitaine');
-  });
+      sinon.assert.calledWith(getAddrCoordinatesStub, 'Aquitaine');
+    });
 
-  it('should return only psy with matching department if address filter is department number', async () => {
-    const res = await chai.request(app)
+    it('should return only psy with matching department if address filter is department number', async () => {
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: '', addressFilter: '13', teleconsultation: false });
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(1);
-    expect(res.body[0].dossierNumber).to.equal(psyInMarseille.dossierNumber);
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(1);
+      expect(res.body[0].dossierNumber).to.equal(psyInMarseille.dossierNumber);
 
-    sinon.assert.notCalled(getAddrCoordinatesStub);
-  });
+      sinon.assert.notCalled(getAddrCoordinatesStub);
+    });
 
-  it('should return all psy ordered by distance if address filter', async () => {
-    getAddrCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
+    it('should return all psy ordered by distance if address filter', async () => {
+      getAddrCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
 
-    const res = await chai.request(app)
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: '', addressFilter: 'Nice', teleconsultation: false });
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(4);
-    const resDossierNumbers = res.body.map((p) => p.dossierNumber);
-    expect(resDossierNumbers).to.have.ordered.members([
-      psyInMarseille.dossierNumber,
-      psyInLyon.dossierNumber,
-      psyInParis.dossierNumber,
-      psyWithoutLoc.dossierNumber,
-    ]);
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(4);
+      const resDossierNumbers = res.body.map((p) => p.dossierNumber);
+      expect(resDossierNumbers).to.have.ordered.members([
+        psyInMarseille.dossierNumber,
+        psyInLyon.dossierNumber,
+        psyInParis.dossierNumber,
+        psyWithoutLoc.dossierNumber,
+      ]);
 
-    sinon.assert.calledWith(getAddrCoordinatesStub, 'Nice');
-  });
+      sinon.assert.calledWith(getAddrCoordinatesStub, 'Nice');
+    });
 
-  it('should return psy matching teleconsultation and ordered by distance', async () => {
-    getAddrCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
+    it('should return psy matching teleconsultation and ordered by distance', async () => {
+      getAddrCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
 
-    const res = await chai.request(app)
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: '', addressFilter: 'Nice', teleconsultation: true });
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(2);
-    const resDossierNumbers = res.body.map((p) => p.dossierNumber);
-    expect(resDossierNumbers).to.have.ordered.members([
-      psyInLyon.dossierNumber,
-      psyWithoutLoc.dossierNumber,
-    ]);
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(2);
+      const resDossierNumbers = res.body.map((p) => p.dossierNumber);
+      expect(resDossierNumbers).to.have.ordered.members([
+        psyInLyon.dossierNumber,
+        psyWithoutLoc.dossierNumber,
+      ]);
 
-    sinon.assert.calledWith(getAddrCoordinatesStub, 'Nice');
-  });
+      sinon.assert.calledWith(getAddrCoordinatesStub, 'Nice');
+    });
 
-  it('should return psy matching name and ordered by distance', async () => {
-    getAddrCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
+    it('should return psy matching name and ordered by distance', async () => {
+      getAddrCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
 
-    const res = await chai.request(app)
+      const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: 'bernard', addressFilter: 'nice', teleconsultation: false });
 
-    expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(2);
-    const resDossierNumbers = res.body.map((p) => p.dossierNumber);
-    expect(resDossierNumbers).to.have.ordered.members([
-      psyInMarseille.dossierNumber,
-      psyInLyon.dossierNumber,
-    ]);
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(2);
+      const resDossierNumbers = res.body.map((p) => p.dossierNumber);
+      expect(resDossierNumbers).to.have.ordered.members([
+        psyInMarseille.dossierNumber,
+        psyInLyon.dossierNumber,
+      ]);
 
-    sinon.assert.calledWith(getAddrCoordinatesStub, 'nice');
+      sinon.assert.calledWith(getAddrCoordinatesStub, 'nice');
+    });
+  });
+
+  describe('getFullActive', () => {
+    it('should return all active psy', async () => {
+      const res = await chai.request(app)
+        .get('/api/trouver-un-psychologue');
+
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(4);
+      const resDossierNumbers = res.body.map((p) => p.dossierNumber);
+      expect(resDossierNumbers).to.have.members([
+        psyInParis.dossierNumber,
+        psyInLyon.dossierNumber,
+        psyInMarseille.dossierNumber,
+        psyWithoutLoc.dossierNumber,
+      ]);
+      expect(res.body[0]).to.have.all.keys([
+        'dossierNumber',
+        'firstNames',
+        'lastName',
+        'teleconsultation',
+        'address',
+        'departement',
+        'region',
+        'adeli',
+        'description',
+        'email',
+        'languages',
+        'phone',
+        'website',
+      ]);
+    });
   });
 });
