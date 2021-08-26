@@ -57,9 +57,11 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
       queryBuilder.where('teleconsultation', true);
     }
     if (nameFilter) {
-      queryBuilder.whereRaw(
-        'LOWER("lastName" || "firstNames") LIKE ?', `%${nameFilter.toLowerCase()}%`,
-      );
+      queryBuilder.where((builder) => builder.whereRaw(
+        'LOWER("lastName" || \' \' || "firstNames") LIKE ?', `%${nameFilter.toLowerCase()}%`,
+      ).orWhereRaw(
+        'LOWER("firstNames" || \' \' || "lastName") LIKE ?', `%${nameFilter.toLowerCase()}%`,
+      ));
     }
     if (isDepartment(addressFilter)) {
       queryBuilder.whereRaw('"departement" LIKE ?', `${addressFilter}%`);

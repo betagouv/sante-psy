@@ -57,32 +57,6 @@ const getAllActive = async (
       orderByRawValue = `point(longitude, latitude) <@> point(${coordinates.longitude}, ${coordinates.latitude})`;
     }
 
-    console.debug(db.column(
-      'dossierNumber',
-      'lastName',
-      'adeli',
-      'firstNames',
-      'email',
-      'address',
-      'departement',
-      'region',
-      'phone',
-      'website',
-      'teleconsultation',
-      'languages',
-      'description',
-    )
-        .select()
-        .from(psychologistsTable)
-        .where({
-          archived: false,
-          state: DossierState.accepte,
-          active: true,
-        })
-        .modify(modifyQuery)
-        .orderByRaw(orderByRawValue)
-.toString());
-
     const psychologists = db.column(
       'dossierNumber',
       'lastName',

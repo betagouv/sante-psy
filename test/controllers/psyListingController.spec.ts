@@ -167,34 +167,24 @@ describe.only('psyListingController', () => {
       ]);
     });
 
-    // FIXME
-    it.skip('should return psy with matching lastname and firstname', async () => {
+    it('should return psy with matching lastname and firstname', async () => {
       const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: 'Bernard Thomas', addressFilter: '', teleconsultation: false });
 
       expect(res.status).to.equal(200);
-      expect(res.body).to.have.length(2);
-      const resDossierNumbers = res.body.map((p) => p.dossierNumber);
-      expect(resDossierNumbers).to.have.members([
-        psyInLyon.dossierNumber,
-        psyInMarseille.dossierNumber,
-      ]);
+      expect(res.body).to.have.length(1);
+      expect(res.body[0].dossierNumber).to.equal(psyInMarseille.dossierNumber);
     });
 
-    // FIXME
-    it.skip('should return psy with matching firstname and lastname', async () => {
+    it('should return psy with matching firstname and lastname', async () => {
       const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
         .send({ nameFilter: 'Thomas Bernard', addressFilter: '', teleconsultation: false });
 
       expect(res.status).to.equal(200);
-      expect(res.body).to.have.length(2);
-      const resDossierNumbers = res.body.map((p) => p.dossierNumber);
-      expect(resDossierNumbers).to.have.members([
-        psyInLyon.dossierNumber,
-        psyInMarseille.dossierNumber,
-      ]);
+      expect(res.body).to.have.length(1);
+      expect(res.body[0].dossierNumber).to.equal(psyInMarseille.dossierNumber);
     });
 
     it('should return psy with matching address even if no localisation if address filter', async () => {
