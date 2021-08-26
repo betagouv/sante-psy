@@ -10,6 +10,7 @@ import {
 } from '../services/updatePsyFields';
 import getAddrCoordinates from '../services/getAddrCoordinates';
 import { Psychologist } from '../types/Psychologist';
+import { Coordinates } from '../types/Coordinates';
 import db from './db';
 
 const getAllAccepted = async (selectedData: string[]) : Promise<Psychologist[]> => {
@@ -44,14 +45,43 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
   return updatedPsy;
 };
 
-const getAllActive = async (longitude: number = undefined, latitude: number = undefined): Promise<Psychologist[]> => {
+const getAllActive = async (
+  modifyQuery = (queryBuilder) : void => {},
+  coordinates: Coordinates = {},
+): Promise<Psychologist[]> => {
   try {
     let orderByRawValue = 'RANDOM()';
-    if (longitude && latitude) {
+    if (coordinates.longitude && coordinates.latitude) {
       // Careful! Human convention is (lat, long) 
       // but Cartesian coordinate convention is (long, lat)
-      orderByRawValue = `point(longitude, latitude) <@> point(${longitude}, ${latitude})`;
+      orderByRawValue = `point(longitude, latitude) <@> point(${coordinates.longitude}, ${coordinates.latitude})`;
     }
+
+    console.debug(db.column(
+      'dossierNumber',
+      'lastName',
+      'adeli',
+      'firstNames',
+      'email',
+      'address',
+      'departement',
+      'region',
+      'phone',
+      'website',
+      'teleconsultation',
+      'languages',
+      'description',
+    )
+        .select()
+        .from(psychologistsTable)
+        .where({
+          archived: false,
+          state: DossierState.accepte,
+          active: true,
+        })
+        .modify(modifyQuery)
+        .orderByRaw(orderByRawValue)
+.toString());
 
     const psychologists = db.column(
       'dossierNumber',
@@ -70,9 +100,12 @@ const getAllActive = async (longitude: number = undefined, latitude: number = un
     )
         .select()
         .from(psychologistsTable)
-        .whereNot('archived', true)
-        .where('state', DossierState.accepte)
-        .andWhere('active', true)
+        .where({
+          archived: false,
+          state: DossierState.accepte,
+          active: true,
+        })
+        .modify(modifyQuery)
         .orderByRaw(orderByRawValue);
     return psychologists;
   } catch (err) {

@@ -26,8 +26,6 @@ describe.only('psyListingController', () => {
   let psyArchived;
 
   before(async () => {
-    getAddrCoordinatesStub = sinon.stub(getAddrCoordinates, 'default').returns({});
-
     await clean.cleanAllPsychologists();
 
     psyInParis = clean.getOnePsyForListing(
@@ -79,7 +77,11 @@ describe.only('psyListingController', () => {
     await dbPsychologists.upsertMany([psyInParis, psyInLyon, psyInMarseille, psyWithoutLoc, psyInactive, psyArchived]);
   });
 
-  after(() => {
+  beforeEach(() => {
+    getAddrCoordinatesStub = sinon.stub(getAddrCoordinates, 'default').returns({});
+  });
+
+  afterEach(() => {
     getAddrCoordinatesStub.restore();
   });
 
@@ -99,18 +101,19 @@ describe.only('psyListingController', () => {
     ]);
   });
 
-  it('should return 400 if wrong param format', async () => {
+  it('should sanitize body request', async () => {
     const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
-        .send({ nameFilter: 123, addressFilter: true, teleconsultation: '123' });
+        .send({ nameFilter: true, addressFilter: '<script>console.log(123)</script>', teleconsultation: '123' });
 
-    expect(res.status).to.equal(400);
+    expect(res.status).to.equal(200);
+    expect(res.body).to.be.empty;
   });
 
   it('should return only teleconsultation psy if teleconsultation is true', async () => {
     const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
-        .send({ teleconsultation: true });
+        .send({ nameFilter: '', addressFilter: '', teleconsultation: true });
 
     expect(res.status).to.equal(200);
     expect(res.body).to.have.length(2);
@@ -124,26 +127,56 @@ describe.only('psyListingController', () => {
   it('should return all active psy if teleconsultation is false', async () => {
     const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
-        .send({ teleconsultation: false });
+        .send({ nameFilter: '', addressFilter: '', teleconsultation: false });
 
     expect(res.status).to.equal(200);
     expect(res.body).to.have.length(4);
   });
 
-  it('should return only psy with matching lastname if name filter', async () => {
+  it('should return only psy with matching lastname', async () => {
     const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
-        .send({ nameFilter: 'Pierre' });
+        .send({ nameFilter: 'martin ', addressFilter: '', teleconsultation: false });
 
     expect(res.status).to.equal(200);
     expect(res.body).to.have.length(1);
     expect(res.body[0].dossierNumber).to.equal(psyInParis.dossierNumber);
   });
 
-  it('should return psy with matching firstname if name filter', async () => {
+  it('should return psy with matching firstname', async () => {
     const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
-        .send({ nameFilter: 'Bernard' });
+        .send({ nameFilter: 'Bernard', addressFilter: '', teleconsultation: false });
+
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.length(2);
+    const resDossierNumbers = res.body.map((p) => p.dossierNumber);
+    expect(resDossierNumbers).to.have.members([
+      psyInLyon.dossierNumber,
+      psyInMarseille.dossierNumber,
+    ]);
+  });
+
+  // FIXME
+  it.skip('should return psy with matching lastname and firstname', async () => {
+    const res = await chai.request(app)
+        .post('/api/trouver-un-psychologue/reduced')
+        .send({ nameFilter: 'Bernard Thomas', addressFilter: '', teleconsultation: false });
+
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.length(2);
+    const resDossierNumbers = res.body.map((p) => p.dossierNumber);
+    expect(resDossierNumbers).to.have.members([
+      psyInLyon.dossierNumber,
+      psyInMarseille.dossierNumber,
+    ]);
+  });
+
+  // FIXME
+  it.skip('should return psy with matching firstname and lastname', async () => {
+    const res = await chai.request(app)
+        .post('/api/trouver-un-psychologue/reduced')
+        .send({ nameFilter: 'Thomas Bernard', addressFilter: '', teleconsultation: false });
 
     expect(res.status).to.equal(200);
     expect(res.body).to.have.length(2);
@@ -157,19 +190,40 @@ describe.only('psyListingController', () => {
   it('should return psy with matching address even if no localisation if address filter', async () => {
     const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
-        .send({ addressFilter: 'Mairie' });
+        .send({ nameFilter: '', addressFilter: 'Mairie', teleconsultation: false });
 
     expect(res.status).to.equal(200);
-    expect(res.body).to.have.length(4);
     expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
 
     sinon.assert.calledWith(getAddrCoordinatesStub, 'Mairie');
   });
 
-  it('should return only psy with matching department if address filter is department', async () => {
+  it('should return psy with matching department even if no localisation if address filter', async () => {
     const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
-        .send({ addressFilter: '13' });
+        .send({ nameFilter: '', addressFilter: 'Creuse', teleconsultation: false });
+
+    expect(res.status).to.equal(200);
+    expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
+
+    sinon.assert.calledWith(getAddrCoordinatesStub, 'Creuse');
+  });
+
+  it('should return psy with matching region even if no localisation if address filter', async () => {
+    const res = await chai.request(app)
+        .post('/api/trouver-un-psychologue/reduced')
+        .send({ nameFilter: '', addressFilter: 'Aquitaine', teleconsultation: false });
+
+    expect(res.status).to.equal(200);
+    expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
+
+    sinon.assert.calledWith(getAddrCoordinatesStub, 'Aquitaine');
+  });
+
+  it('should return only psy with matching department if address filter is department number', async () => {
+    const res = await chai.request(app)
+        .post('/api/trouver-un-psychologue/reduced')
+        .send({ nameFilter: '', addressFilter: '13', teleconsultation: false });
 
     expect(res.status).to.equal(200);
     expect(res.body).to.have.length(1);
@@ -183,7 +237,7 @@ describe.only('psyListingController', () => {
 
     const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
-        .send({ addressFilter: 'Nice' });
+        .send({ nameFilter: '', addressFilter: 'Nice', teleconsultation: false });
 
     expect(res.status).to.equal(200);
     expect(res.body).to.have.length(4);
@@ -196,9 +250,6 @@ describe.only('psyListingController', () => {
     ]);
 
     sinon.assert.calledWith(getAddrCoordinatesStub, 'Nice');
-
-    // Put back default behavior
-    getAddrCoordinatesStub.returns({});
   });
 
   it('should return psy matching teleconsultation and ordered by distance', async () => {
@@ -206,7 +257,7 @@ describe.only('psyListingController', () => {
 
     const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
-        .send({ teleconsultation: true, addressFilter: 'Nice' });
+        .send({ nameFilter: '', addressFilter: 'Nice', teleconsultation: true });
 
     expect(res.status).to.equal(200);
     expect(res.body).to.have.length(2);
@@ -217,9 +268,6 @@ describe.only('psyListingController', () => {
     ]);
 
     sinon.assert.calledWith(getAddrCoordinatesStub, 'Nice');
-
-    // Put back default behavior
-    getAddrCoordinatesStub.returns({});
   });
 
   it('should return psy matching name and ordered by distance', async () => {
@@ -227,7 +275,7 @@ describe.only('psyListingController', () => {
 
     const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
-        .send({ nameFilter: 'bernard', addressFilter: 'nice' });
+        .send({ nameFilter: 'bernard', addressFilter: 'nice', teleconsultation: false });
 
     expect(res.status).to.equal(200);
     expect(res.body).to.have.length(2);
@@ -238,8 +286,5 @@ describe.only('psyListingController', () => {
     ]);
 
     sinon.assert.calledWith(getAddrCoordinatesStub, 'nice');
-
-    // Put back default behavior
-    getAddrCoordinatesStub.returns({});
   });
 });
