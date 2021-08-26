@@ -199,53 +199,6 @@ describe('DB Psychologists', () => {
       const shouldBeOne = await dbPsychologists.getAllActive();
       shouldBeOne.length.should.be.equal(1);
     });
-
-    it('should return psychologists ordered randomly if no location', async () => {
-      const psyInParis = clean.getOnePsy('paris@beta.gouv.fr');
-      psyInParis.longitude = LONGITUDE_PARIS;
-      psyInParis.latitude = LATITUDE_PARIS;
-      const psyInLyon = clean.getOnePsy('lyon@beta.gouv.fr');
-      psyInLyon.longitude = LONGITUDE_LYON;
-      psyInLyon.latitude = LATITUDE_LYON;
-      const psyInMarseille = clean.getOnePsy('marseille@beta.gouv.fr');
-      psyInMarseille.longitude = LONGITUDE_MARSEILLE;
-      psyInMarseille.latitude = LATITUDE_MARSEILLE;
-      const psyWithoutLoc = clean.getOnePsy('perdu@beta.gouv.fr');
-      psyWithoutLoc.longitude = null;
-      psyWithoutLoc.latitude = null;
-
-      await dbPsychologists.upsertMany([psyInParis, psyInLyon, psyInMarseille, psyWithoutLoc]);
-
-      const result1 = await dbPsychologists.getAllActive();
-      const result2 = await dbPsychologists.getAllActive();
-      const concatDossierNumber = (arr : Psychologist[]) => arr.map((x) => x.dossierNumber).join(',');
-      concatDossierNumber(result1).should.not.equal(concatDossierNumber(result2));
-    });
-
-    it('should return psychologists ordered by distance if location', async () => {
-      const psyInParis = clean.getOnePsy('paris@beta.gouv.fr');
-      psyInParis.longitude = LONGITUDE_PARIS;
-      psyInParis.latitude = LATITUDE_PARIS;
-      const psyInLyon = clean.getOnePsy('lyon@beta.gouv.fr');
-      psyInLyon.longitude = LONGITUDE_LYON;
-      psyInLyon.latitude = LATITUDE_LYON;
-      const psyInMarseille = clean.getOnePsy('marseille@beta.gouv.fr');
-      psyInMarseille.longitude = LONGITUDE_MARSEILLE;
-      psyInMarseille.latitude = LATITUDE_MARSEILLE;
-      const psyWithoutLoc = clean.getOnePsy('perdu@beta.gouv.fr');
-      psyWithoutLoc.longitude = null;
-      psyWithoutLoc.latitude = null;
-
-      await dbPsychologists.upsertMany([psyInParis, psyInLyon, psyInMarseille, psyWithoutLoc]);
-
-      const result = await dbPsychologists.getAllActive(LONGITUDE_NICE, LATITUDE_NICE);
-
-      result.length.should.equal(4);
-      result[0].dossierNumber.should.equal(psyInMarseille.dossierNumber);
-      result[1].dossierNumber.should.equal(psyInLyon.dossierNumber);
-      result[2].dossierNumber.should.equal(psyInParis.dossierNumber);
-      result[3].dossierNumber.should.equal(psyWithoutLoc.dossierNumber);
-    });
   });
 
   describe('getAllAccepted', () => {

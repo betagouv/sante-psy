@@ -16,7 +16,7 @@ const LATITUDE_LYON = 45.74846;
 const LONGITUDE_NICE = 7.26608;
 const LATITUDE_NICE = 43.70313;
 
-describe.only('psyListingController', () => {
+describe('psyListingController', () => {
   let getAddrCoordinatesStub;
   let psyInParis;
   let psyInLyon;
