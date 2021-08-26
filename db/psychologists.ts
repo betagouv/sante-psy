@@ -45,7 +45,9 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
   return updatedPsy;
 };
 
-const getAllActive = async (modifyQuery: ((queryBuilder: Knex.QueryBuilder) => void)): Promise<Psychologist[]> => {
+const getAllActive = async (
+  modifyQuery: ((queryBuilder: Knex.QueryBuilder) => void) = () : void => {},
+): Promise<Psychologist[]> => {
   try {
     const psychologists = db.column(
       'dossierNumber',
