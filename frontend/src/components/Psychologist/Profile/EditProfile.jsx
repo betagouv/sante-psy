@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, RadioGroup, Radio, TextInput, SearchableSelect } from '@dataesr/react-dsfr';
+import { Button, RadioGroup, Radio, TextInput, SearchableSelect, ButtonGroup } from '@dataesr/react-dsfr';
 
 import DEPARTEMENTS from 'services/departments';
 
@@ -116,20 +116,22 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         value={updatedPsychologist.description}
         onChange={e => changePsychologist(e.target.value, 'description')}
       />
-      <Button
-        submit
-        data-test-id="save-profile-button"
-        className="fr-btn--icon-left fr-fi-check-line fr-mb-2w fr-mr-2w"
-      >
-        Valider les modifications
-      </Button>
-      <Button
-        onClick={cancelEditProfile}
-        secondary
-        className="fr-btn--icon-left fr-fi-close-line"
-      >
-        Annuler
-      </Button>
+      <ButtonGroup isInlineFrom="xs">
+        <Button
+          submit
+          data-test-id="save-profile-button"
+          icon="fr-fi-check-line"
+        >
+          Valider les modifications
+        </Button>
+        <Button
+          onClick={cancelEditProfile}
+          secondary
+          icon="fr-fi-close-line"
+        >
+          Annuler
+        </Button>
+      </ButtonGroup>
     </form>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, RadioGroup, Radio, Button } from '@dataesr/react-dsfr';
+import { TextInput, RadioGroup, Radio, Button, ButtonGroup } from '@dataesr/react-dsfr';
 import DatePicker from 'react-datepicker';
 
 import DateInput from 'components/Date/DateInput';
@@ -148,21 +148,23 @@ const SuspendProfile = ({ suspendPsychologist, cancelSuspension }) => {
           />
         )}
       </RadioGroup>
-      <Button
-        data-test-id="suspend-button"
-        className="fr-btn--icon-left fr-fi-eye-off-line fr-mb-2w fr-mr-2w"
-        onClick={() => suspendPsychologist(getReason(), calculateSuspensionDate())}
-        disabled={!canValidate}
-      >
-        Retirer mes informations de l&lsquo;annuaire
-      </Button>
-      <Button
-        onClick={cancelSuspension}
-        secondary
-        className="fr-btn--icon-left fr-fi-close-line"
-      >
-        Annuler
-      </Button>
+      <ButtonGroup isInlineFrom="xs">
+        <Button
+          data-test-id="suspend-button"
+          icon="fr-fi-eye-off-line"
+          onClick={() => suspendPsychologist(getReason(), calculateSuspensionDate())}
+          disabled={!canValidate}
+        >
+          Retirer mes informations de l&lsquo;annuaire
+        </Button>
+        <Button
+          onClick={cancelSuspension}
+          secondary
+          icon="fr-fi-close-line"
+        >
+          Annuler
+        </Button>
+      </ButtonGroup>
     </>
   );
 };

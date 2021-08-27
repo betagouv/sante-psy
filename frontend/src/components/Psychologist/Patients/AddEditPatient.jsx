@@ -154,7 +154,7 @@ const AddEditPatient = () => {
           <Button
             submit
             data-test-id="save-etudiant-button"
-            className={`fr-btn--icon-left ${button.icon}`}
+            icon={button.icon}
           >
             {button.text}
           </Button>
