@@ -1,32 +1,31 @@
-<p>Bonjour ! 👋</p>
-
-<p>
-  Vous avez demandé un lien de connexion à la plateforme <%= appName %>.
-</p>
-<p>
-  Pour vous authentifier, cliquez sur le bouton ci-dessous dans <strong>l'heure qui suit</strong> la réception de ce message - ce bouton n'est utilisable qu'une seule fois.
-</p>
-
-<p>
-  <a href="<%= loginUrlWithToken %>" style="margin-bottom: 15px;background: #006be6;padding: 10px;border: none;border-radius: 3px;color: white;min-width: 280px;box-shadow: 1px 1px 2px 0px #333;cursor: pointer;">
-    Me connecter
-  </a>
-</p>
-
-<br/>
-
-<p>
-  Ca n'a pas marché pas en cliquant sur le bouton ?
- <p>
-   <a title="Redemander un lien de connexion en cas de problème" href="<%= loginUrl %>">Redemander un lien de connexion ici</a> et au lieu de cliquer sur le bouton, essayez de copier ce lien et le coller dans votre navigateur :
- </p>
-</p>
-<p>
-  <%= loginUrlWithToken %>
-</p>
-
-<br/>
-
-<p>En cas de problème avec votre compte, n'hésitez pas à répondre à ce mail</p>
-
-<p>L'équipe Santé Psy Étudiant</p>
+<%- include('header'); -%>
+  <p>Bonjour ! 👋</p>
+  <p>
+    <div>
+      Vous avez demandé un lien de connexion à la plateforme <%= appName %>.
+    </div>
+    <div>
+      Pour vous authentifier, cliquez sur le bouton ci-dessous dans <strong>l'heure qui suit</strong> la réception de ce message - ce bouton n'est utilisable qu'une seule fois.
+    </div>
+  </p>
+  <p>
+    <a href="<%= loginUrlWithToken %>" class="loginButton">
+      Me connecter
+    </a>
+  </p>
+  <br/>
+  <p>
+    <div>
+      Ca n'a pas marché pas en cliquant sur le bouton ?
+    </div>
+    <div>
+      <a title="Redemander un lien de connexion en cas de problème" href="<%= loginUrl %>">Redemander un lien de connexion ici</a> et au lieu de cliquer sur le bouton, essayez de copier ce lien et le coller dans votre navigateur :
+    </div>
+  </p>
+  <p>
+    <%= loginUrlWithToken %>
+  </p>
+  <p>
+    En cas de problème avec votre compte, n'hésitez pas à répondre à ce mail.
+  </p>
+<%- include('footer'); -%>
