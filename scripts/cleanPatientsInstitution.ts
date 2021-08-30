@@ -7,7 +7,7 @@ const clean = async (dryRun: boolean): Promise<void> => {
   const patients: Patient[] = await db(patientsTable);
   const updates = patients.map(async (patient) => {
     const match = newPatientsInstitution[patient.institutionName];
-    if (match && match.go) {
+    if (match && match.go && match.target !== patient.institutionName) {
       console.log(`update ${patient.institutionName} to ${match.target}`);
       if (!dryRun) {
         await db(patientsTable)
