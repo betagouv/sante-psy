@@ -74,15 +74,16 @@ const getAddress = (): {address: string, departement: string, region: string} =>
 
 const getOneCustomPsy = (inputs: Partial<Psychologist>): Psychologist => {
   const testAddress = getAddress();
-
   if (!inputs.address || !inputs.departement || !inputs.region) {
     expect(inputs.address, 'No address defined but departement and/or region are defined').to.be.undefined;
     expect(inputs.departement, 'No departement defined but address and/or region are defined').to.be.undefined;
     expect(inputs.region, 'No region defined but address and/or departement are defined').to.be.undefined;
   }
 
+  const personalEmail = inputs.personalEmail || faker.internet.exampleEmail();
+  const dossierNumber = inputs.dossierNumber || uuid.generateFromString(`psychologist-${personalEmail}`);
   return {
-    dossierNumber: inputs.dossierNumber || uuid.generateRandom(),
+    dossierNumber,
     firstNames: inputs.firstNames || getFirstNames(),
     lastName: inputs.lastName || faker.name.lastName(),
     archived: inputs.archived || false,
@@ -96,7 +97,7 @@ const getOneCustomPsy = (inputs: Partial<Psychologist>): Psychologist => {
     diploma: inputs.diploma || 'Psychologie clinique de la santé',
     phone: inputs.phone || faker.phone.phoneNumber('0# ## ## ## ##'),
     email: inputs.email || faker.internet.exampleEmail(),
-    personalEmail: inputs.personalEmail || faker.internet.exampleEmail(),
+    personalEmail,
     website: inputs.website || faker.internet.domainName() + faker.internet.domainSuffix(),
     teleconsultation: inputs.teleconsultation === undefined ? faker.datatype.boolean() : inputs.teleconsultation,
     description: inputs.description || faker.lorem.paragraphs(2),
