@@ -51,7 +51,7 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
   }
 
   const modifyQuery = (queryBuilder: Knex.QueryBuilder) : void => {
-    if (teleconsultation) {
+    if (teleconsultation === true) {
       queryBuilder.where('teleconsultation', true);
     }
     if (nameFilter && nameFilter !== '') {

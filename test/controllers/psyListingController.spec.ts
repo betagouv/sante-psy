@@ -28,50 +28,49 @@ describe('psyListingController', () => {
   before(async () => {
     await clean.cleanAllPsychologists();
 
-    psyInParis = clean.getOnePsyForListing(
-      'paris@beta.gouv.fr',
-      'Martin',
-      'Pierre',
-      false,
-      "rue de l'Eglise 75000 Paris",
-      '75 - Paris',
-      'Ile-de-France',
-      LONGITUDE_PARIS,
-      LATITUDE_PARIS,
-    );
-    psyInLyon = clean.getOnePsyForListing(
-      'lyon@beta.gouv.fr',
-      'Bernard',
-      'Jeanne',
-      true,
-      'rue de la gare 69000 Lyon',
-      '69 - Rhône',
-      'Auvergne-Rhône-Alpes',
-      LONGITUDE_LYON,
-      LATITUDE_LYON,
-    );
-    psyInMarseille = clean.getOnePsyForListing(
-      'marseille@beta.gouv.fr',
-      'Thomas',
-      'Bernard',
-      false,
-      'rue des écoles 13000 Marseille',
-      '13 - Bouches-du-Rhône',
-      "Provence-Alpes-Côte d'Azur",
-      LONGITUDE_MARSEILLE,
-      LATITUDE_MARSEILLE,
-    );
-    psyWithoutLoc = clean.getOnePsyForListing(
-      'perdu@beta.gouv.fr',
-      'Petit',
-      'Monique',
-      true,
-      'rue de la mairie 23123 Perdu',
-      '23 - Creuse',
-      'Nouvelle Aquitaine',
-      null,
-      null,
-    );
+    psyInParis = clean.getOneCustomPsy({
+      personalEmail: 'paris@beta.gouv.fr',
+      lastName: 'Martin',
+      firstNames: 'Pierre',
+      teleconsultation: false,
+      address: "rue de l'Eglise 75000 Paris",
+      departement: '75 - Paris',
+      region: 'Ile-de-France',
+      longitude: LONGITUDE_PARIS,
+      latitude: LATITUDE_PARIS,
+    });
+    psyInLyon = clean.getOneCustomPsy({
+      personalEmail: 'lyon@beta.gouv.fr',
+      lastName: 'Bernard',
+      firstNames: 'Jeanne',
+      teleconsultation: true,
+      address: 'rue de la gare 69000 Lyon',
+      departement: '69 - Rhône',
+      region: 'Auvergne-Rhône-Alpes',
+      longitude: LONGITUDE_LYON,
+      latitude: LATITUDE_LYON,
+    });
+    psyInMarseille = clean.getOneCustomPsy({
+      personalEmail: 'marseille@beta.gouv.fr',
+      lastName: 'Thomas',
+      firstNames: 'Bernard',
+      teleconsultation: false,
+      address: 'rue des écoles 13000 Marseille',
+      departement: '13 - Bouches-du-Rhône',
+      region: "Provence-Alpes-Côte d'Azur",
+      longitude: LONGITUDE_MARSEILLE,
+      latitude: LATITUDE_MARSEILLE,
+    });
+    psyWithoutLoc = clean.getOneCustomPsy({
+      personalEmail: 'perdu@beta.gouv.fr',
+      lastName: 'Petit',
+      firstNames: 'Monique',
+      teleconsultation: true,
+      address: 'rue de la mairie 23123 Perdu',
+      departement: '23 - Creuse',
+      region: 'Nouvelle Aquitaine',
+    });
+
     psyInactive = clean.getOneInactivePsy();
     psyArchived = clean.getOnePsy('archived@beta.gouv.fr', DossierState.accepte, true);
     await dbPsychologists.upsertMany([psyInParis, psyInLyon, psyInMarseille, psyWithoutLoc, psyInactive, psyArchived]);

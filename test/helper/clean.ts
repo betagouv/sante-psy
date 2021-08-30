@@ -1,4 +1,5 @@
 import faker from 'faker';
+import { expect } from 'chai';
 import { DSPsychologist, Psychologist } from '../../types/Psychologist';
 import { Patient } from '../../types/Patient';
 import { Appointment } from '../../types/Appointment';
@@ -71,87 +72,64 @@ const getAddress = (): {address: string, departement: string, region: string} =>
   }
 };
 
+const getOneCustomPsy = (inputs: Partial<Psychologist>): Psychologist => {
+  const testAddress = getAddress();
+
+  if (!inputs.address || !inputs.departement || !inputs.region) {
+    expect(inputs.address, 'No address defined but departement and/or region are defined').to.be.undefined;
+    expect(inputs.departement, 'No departement defined but address and/or region are defined').to.be.undefined;
+    expect(inputs.region, 'No region defined but address and/or departement are defined').to.be.undefined;
+  }
+
+  return {
+    dossierNumber: inputs.dossierNumber || uuid.generateRandom(),
+    firstNames: inputs.firstNames || getFirstNames(),
+    lastName: inputs.lastName || faker.name.lastName(),
+    archived: inputs.archived || false,
+    state: inputs.state || DossierState.accepte,
+    adeli: inputs.adeli || `${getRandomInt()}829302942`,
+    address: inputs.address || testAddress.address,
+    departement: inputs.departement || testAddress.departement,
+    region: inputs.region || testAddress.region,
+    longitude: inputs.longitude,
+    latitude: inputs.latitude,
+    diploma: inputs.diploma || 'Psychologie clinique de la santé',
+    phone: inputs.phone || faker.phone.phoneNumber('0# ## ## ## ##'),
+    email: inputs.email || faker.internet.exampleEmail(),
+    personalEmail: inputs.personalEmail || faker.internet.exampleEmail(),
+    website: inputs.website || faker.internet.domainName() + faker.internet.domainSuffix(),
+    teleconsultation: inputs.teleconsultation === undefined ? faker.datatype.boolean() : inputs.teleconsultation,
+    description: inputs.description || faker.lorem.paragraphs(2),
+    // eslint-disable-next-line max-len
+    training: inputs.training || '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
+    assignedUniversityId: inputs.assignedUniversityId || null,
+    languages: inputs.languages || 'Français, Anglais, et Espagnol',
+    active: inputs.active === undefined ? true : inputs.active,
+    inactiveUntil: inputs.inactiveUntil,
+    createdAt: inputs.createdAt || new Date(),
+  };
+};
+
 const getOnePsy = (
   personalEmail = 'loginemail@beta.gouv.fr',
   state = DossierState.accepte,
   archived = false,
-  uniId: string = null,
+  assignedUniversityId: string = null,
   inactiveUntil: Date | undefined = undefined,
-): Psychologist => {
-  const dossierNumber = uuid.generateFromString(`psychologist-${personalEmail}`);
-  return {
-    dossierNumber,
-    firstNames: getFirstNames(),
-    lastName: faker.name.lastName(),
-    archived,
-    state,
-    adeli: `${getRandomInt()}829302942`,
-    ...getAddress(),
-    diploma: 'Psychologie clinique de la santé',
-    phone: faker.phone.phoneNumber('0# ## ## ## ##'),
-    email: faker.internet.exampleEmail(),
-    personalEmail,
-    website: faker.internet.domainName() + faker.internet.domainSuffix(),
-    teleconsultation: faker.datatype.boolean(),
-    description: faker.lorem.paragraphs(2),
-    // eslint-disable-next-line max-len
-    training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
-    assignedUniversityId: uniId,
-    languages: 'Français, Anglais, et Espagnol',
-    active: !inactiveUntil,
-    inactiveUntil,
-    createdAt: new Date(),
-  };
-};
-
-const getOnePsyForListing = (
-  personalEmail: string,
-  lastName: string,
-  firstNames: string,
-  teleconsultation: boolean,
-  address: string,
-  departement: string,
-  region: string,
-  longitude: number,
-  latitude: number,
-): Psychologist => {
-  const dossierNumber = uuid.generateFromString(`psychologist-${personalEmail}`);
-  return {
-    dossierNumber,
-    firstNames,
-    lastName,
-    archived: false,
-    state: DossierState.accepte,
-    adeli: `${getRandomInt()}829302942`,
-    address,
-    departement,
-    region,
-    longitude,
-    latitude,
-    diploma: 'Psychologie clinique de la santé',
-    phone: faker.phone.phoneNumber('0# ## ## ## ##'),
-    email: faker.internet.exampleEmail(),
-    personalEmail,
-    website: faker.internet.domainName() + faker.internet.domainSuffix(),
-    teleconsultation,
-    description: faker.lorem.paragraphs(2),
-    // eslint-disable-next-line max-len
-    training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
-    assignedUniversityId: null,
-    languages: 'Français, Anglais, et Espagnol',
-    active: true,
-    inactiveUntil: undefined,
-    createdAt: new Date(),
-  };
-};
-
-const getOneInactivePsy = (inactiveUntil: Date = new Date()): Psychologist => getOnePsy(
-  `inactive@${inactiveUntil}.fr`,
-  DossierState.accepte,
-  false,
-  null,
+): Psychologist => getOneCustomPsy({
+  personalEmail,
+  state,
+  archived,
+  assignedUniversityId,
   inactiveUntil,
-);
+  active: !inactiveUntil,
+});
+
+const getOneInactivePsy = (inactiveUntil: Date = new Date('9999-12-31')): Psychologist => getOneCustomPsy({
+  personalEmail: `inactive@${inactiveUntil}.fr`,
+  inactiveUntil,
+  active: false,
+});
 
 const getOnePsyDS = (
   champValue = faker.datatype.string(),
@@ -293,10 +271,10 @@ export default {
   getOneIncompletePatient,
   getOnePatient,
   getOneUniversity,
+  getOneCustomPsy,
   getOnePsy,
   getOneInactivePsy,
   getOnePsyDS,
-  getOnePsyForListing,
   insertOnePsy,
   insertOneAppointment,
   cleanDataCursor,
