@@ -45,7 +45,7 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
   const { teleconsultation, nameFilter, addressFilter } = req.body;
   const isAddressFilterDepartment = isDepartment(addressFilter);
 
-  let coordinates : Coordinates;
+  let coordinates : Coordinates = {};
   if (addressFilter && !isAddressFilterDepartment) {
     coordinates = await getAddressCoordinates(req.body.addressFilter);
   }
