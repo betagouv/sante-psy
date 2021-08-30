@@ -8,8 +8,6 @@ const getAddressCoordinates = async (address: string): Promise<Coordinates> => {
     return Promise.resolve({});
   }
 
-  const MIN_SCORE = 0.55;
-
   const url = encodeURI(`https://api-adresse.data.gouv.fr/search/?q=${address}&limit=1`);
   const response = await axios.get(url)
     .catch((error) => {
@@ -18,13 +16,11 @@ const getAddressCoordinates = async (address: string): Promise<Coordinates> => {
 
   if (response && response.data.features && response.data.features.length > 0) {
     const feature = response.data.features[0];
-    const longitude = feature.geometry.coordinates[0];
-    const latitude = feature.geometry.coordinates[1];
-    const { score } = feature.properties;
-    const { label } = feature.properties;
+    const [longitude, latitude] = feature.geometry.coordinates;
+    const { score, label } = feature.properties;
     console.debug(`"${address}" ; "${label}" ; "${score}"`);
 
-    if (score > MIN_SCORE) {
+    if (score > config.minScoreAddress) {
       return Promise.resolve({
         longitude,
         latitude,
