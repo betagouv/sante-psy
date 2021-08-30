@@ -1,4 +1,3 @@
-/* eslint no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsFor": ["psy"] }] */
 import date from '../utils/date';
 import { psychologistsTable, suspensionReasonsTable } from './tables';
 import { DossierState } from '../types/DossierState';
@@ -12,6 +11,7 @@ import getAddressCoordinates from '../services/getAddressCoordinates';
 import { Psychologist } from '../types/Psychologist';
 import { Knex } from 'knex';
 import db from './db';
+import { Coordinates } from '../types/Coordinates';
 
 const getAllAccepted = async (selectedData: string[]) : Promise<Psychologist[]> => {
   try {
@@ -143,18 +143,21 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
         });
       }
 
+      let coordinates : Coordinates;
       if (psyInDb.address !== psy.address) {
-        const coordinates = await getAddressCoordinates(psy.address);
-        if (coordinates && coordinates.longitude && coordinates.latitude) {
-          psy.longitude = coordinates.longitude;
-          psy.latitude = coordinates.latitude;
-        }
+        coordinates = await getAddressCoordinates(psy.address);
       }
 
       return db(psychologistsTable)
       .where({ dossierNumber: psy.dossierNumber })
       .update({
-        ...editablePsyFields(psy),
+        ...editablePsyFields({
+          ...psy,
+          ...(coordinates && coordinates.longitude && coordinates.latitude && {
+            longitude: coordinates.longitude,
+            latitude: coordinates.latitude,
+          }),
+        }),
         ...nonEditablePsyFields(psy),
         // assignedUniversityId, do not update assignedId on already existing psy
         updatedAt,
