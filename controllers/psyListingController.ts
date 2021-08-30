@@ -23,7 +23,7 @@ const getAllValidators = [
 ];
 
 const isDepartment = (addressFilter: string) : boolean => {
-  if (!addressFilter) return false;
+  if (!addressFilter || addressFilter === '') return false;
 
   const departementFilter = +addressFilter;
   return departementFilter
@@ -42,10 +42,7 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
   const time = `getting all active psychologists from Postgres (query id #${Math.random().toString()})`;
   console.time(time);
 
-  const teleconsultation = req.body && req.body.teleconsultation;
-  const nameFilter = req.body && req.body.nameFilter !== '' ? req.body.nameFilter : undefined;
-  const addressFilter = (req.body && req.body.addressFilter && req.body.addressFilter !== '')
-    ? req.body.addressFilter : undefined;
+  const { teleconsultation, nameFilter, addressFilter } = req.body;
   const isAddressFilterDepartment = isDepartment(addressFilter);
 
   let coordinates : Coordinates = {};
@@ -57,7 +54,7 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
     if (teleconsultation) {
       queryBuilder.where('teleconsultation', true);
     }
-    if (nameFilter) {
+    if (nameFilter && nameFilter !== '') {
       queryBuilder.where((builder) => builder.whereRaw(
         'LOWER("lastName" || \' \' || "firstNames") LIKE ?', `%${nameFilter.toLowerCase()}%`,
       ).orWhereRaw(
