@@ -78,7 +78,7 @@ const PsyListing = () => {
     }
   };
 
-  const nbPsychologists = statistics ? statistics.find(s => s.label === 'Psychologues partenaires').value : '';
+  const nbPsychologists = statistics ? statistics.find(s => s.slug === 'psychologists').value : '';
 
   return (
     <Page
