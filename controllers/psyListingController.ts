@@ -4,7 +4,7 @@ import DOMPurify from '../services/sanitizer';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
-import getAddrCoordinates from '../services/getAddrCoordinates';
+import getAddressCoordinates from '../services/getAddressCoordinates';
 import { Coordinates } from '../types/Coordinates';
 import { Knex } from 'knex';
 
@@ -50,7 +50,7 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
 
   let coordinates : Coordinates = {};
   if (addressFilter && !isAddressFilterDepartment) {
-    coordinates = await getAddrCoordinates(req.body.addressFilter);
+    coordinates = await getAddressCoordinates(req.body.addressFilter);
   }
 
   const modifyQuery = (queryBuilder: Knex.QueryBuilder) : void => {

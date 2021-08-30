@@ -9,7 +9,7 @@ import { DossierState } from '../../types/DossierState';
 
 import dotEnv from 'dotenv';
 
-const getAddrCoordinates = require('../../services/getAddrCoordinates');
+const getAddressCoordinates = require('../../services/getAddressCoordinates');
 
 dotEnv.config();
 
@@ -19,15 +19,15 @@ const LONGITUDE_MARSEILLE = 5.38107;
 const LATITUDE_MARSEILLE = 43.29695;
 
 describe('DB Psychologists', () => {
-  let getAddrCoordinatesStub;
+  let getAddressCoordinatesStub;
 
   beforeEach(async () => {
     await clean.cleanAllUniversities();
-    getAddrCoordinatesStub = sinon.stub(getAddrCoordinates, 'default').returns({});
+    getAddressCoordinatesStub = sinon.stub(getAddressCoordinates, 'default').returns({});
   });
 
   afterEach(async () => {
-    getAddrCoordinatesStub.restore();
+    getAddressCoordinatesStub.restore();
   });
 
   describe('upsertMany', () => {
@@ -129,7 +129,7 @@ describe('DB Psychologists', () => {
 
     it('should set coordinates when inserting psychologist in PG', async () => {
       const psy = clean.getOnePsy();
-      getAddrCoordinatesStub.returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS });
+      getAddressCoordinatesStub.returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS });
 
       await dbPsychologists.upsertMany([psy]);
 
@@ -140,7 +140,7 @@ describe('DB Psychologists', () => {
     });
 
     it('should update psy coordinates if address changed', async () => {
-      getAddrCoordinatesStub
+      getAddressCoordinatesStub
         .onFirstCall().returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS })
         .onSecondCall().returns({ longitude: LONGITUDE_MARSEILLE, latitude: LATITUDE_MARSEILLE });
 

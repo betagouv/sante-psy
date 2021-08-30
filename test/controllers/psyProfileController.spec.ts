@@ -6,7 +6,7 @@ import app from '../../index';
 import clean from '../helper/clean';
 import dbPsychologists from '../../db/psychologists';
 
-const getAddrCoordinates = require('../../services/getAddrCoordinates');
+const getAddressCoordinates = require('../../services/getAddressCoordinates');
 
 describe('psyProfileController', () => {
   describe('get psy profile', () => {
@@ -483,15 +483,15 @@ describe('psyProfileController', () => {
   });
 
   describe('update psy profile', () => {
-    let getAddrCoordinatesStub;
+    let getAddressCoordinatesStub;
 
     beforeEach(async () => {
-      getAddrCoordinatesStub = sinon.stub(getAddrCoordinates, 'default').returns({});
+      getAddressCoordinatesStub = sinon.stub(getAddressCoordinates, 'default').returns({});
     });
 
     afterEach(async () => {
       await clean.cleanAllPsychologists();
-      getAddrCoordinatesStub.restore();
+      getAddressCoordinatesStub.restore();
     });
 
     it('should return 401 if user is not logged in', async () => {
@@ -556,7 +556,7 @@ describe('psyProfileController', () => {
       const psy = await clean.insertOnePsy();
       const LONGITUDE_PARIS = 2.3488;
       const LATITUDE_PARIS = 48.85341;
-      getAddrCoordinatesStub.returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS });
+      getAddressCoordinatesStub.returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS });
 
       return chai.request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)

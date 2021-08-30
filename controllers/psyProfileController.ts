@@ -9,7 +9,7 @@ import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
 import string from '../utils/string';
-import getAddrCoordinates from '../services/getAddrCoordinates';
+import getAddressCoordinates from '../services/getAddressCoordinates';
 import { Coordinates } from '../types/Coordinates';
 
 const getValidators = [
@@ -112,7 +112,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
   let coordinates : Coordinates;
   const psychologist = await dbPsychologists.getById(req.user.psychologist);
   if (psychologist && psychologist.address !== req.body.address) {
-    coordinates = await getAddrCoordinates(req.body.address);
+    coordinates = await getAddressCoordinates(req.body.address);
   }
 
   await dbPsychologists.update({

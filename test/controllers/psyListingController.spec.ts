@@ -5,7 +5,7 @@ import clean from '../helper/clean';
 import dbPsychologists from '../../db/psychologists';
 import { DossierState } from '../../types/DossierState';
 
-const getAddrCoordinates = require('../../services/getAddrCoordinates');
+const getAddressCoordinates = require('../../services/getAddressCoordinates');
 
 const LONGITUDE_PARIS = 2.3488;
 const LATITUDE_PARIS = 48.85341;
@@ -17,7 +17,7 @@ const LONGITUDE_NICE = 7.26608;
 const LATITUDE_NICE = 43.70313;
 
 describe('psyListingController', () => {
-  let getAddrCoordinatesStub;
+  let getAddressCoordinatesStub;
   let psyInParis;
   let psyInLyon;
   let psyInMarseille;
@@ -78,11 +78,11 @@ describe('psyListingController', () => {
   });
 
   beforeEach(() => {
-    getAddrCoordinatesStub = sinon.stub(getAddrCoordinates, 'default').returns({});
+    getAddressCoordinatesStub = sinon.stub(getAddressCoordinates, 'default').returns({});
   });
 
   afterEach(() => {
-    getAddrCoordinatesStub.restore();
+    getAddressCoordinatesStub.restore();
   });
 
   describe('getReducedActive', () => {
@@ -195,7 +195,7 @@ describe('psyListingController', () => {
       expect(res.status).to.equal(200);
       expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
 
-      sinon.assert.calledWith(getAddrCoordinatesStub, 'Mairie');
+      sinon.assert.calledWith(getAddressCoordinatesStub, 'Mairie');
     });
 
     it('should return psy with matching department even if no localisation if address filter', async () => {
@@ -206,7 +206,7 @@ describe('psyListingController', () => {
       expect(res.status).to.equal(200);
       expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
 
-      sinon.assert.calledWith(getAddrCoordinatesStub, 'Creuse');
+      sinon.assert.calledWith(getAddressCoordinatesStub, 'Creuse');
     });
 
     it('should return psy with matching region even if no localisation if address filter', async () => {
@@ -217,7 +217,7 @@ describe('psyListingController', () => {
       expect(res.status).to.equal(200);
       expect(res.body[0].dossierNumber).to.equal(psyWithoutLoc.dossierNumber);
 
-      sinon.assert.calledWith(getAddrCoordinatesStub, 'Aquitaine');
+      sinon.assert.calledWith(getAddressCoordinatesStub, 'Aquitaine');
     });
 
     it('should return only psy with matching department if address filter is department number', async () => {
@@ -229,11 +229,11 @@ describe('psyListingController', () => {
       expect(res.body).to.have.length(1);
       expect(res.body[0].dossierNumber).to.equal(psyInMarseille.dossierNumber);
 
-      sinon.assert.notCalled(getAddrCoordinatesStub);
+      sinon.assert.notCalled(getAddressCoordinatesStub);
     });
 
     it('should return all psy ordered by distance if address filter', async () => {
-      getAddrCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
+      getAddressCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
 
       const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
@@ -249,11 +249,11 @@ describe('psyListingController', () => {
         psyWithoutLoc.dossierNumber,
       ]);
 
-      sinon.assert.calledWith(getAddrCoordinatesStub, 'Nice');
+      sinon.assert.calledWith(getAddressCoordinatesStub, 'Nice');
     });
 
     it('should return psy matching teleconsultation and ordered by distance', async () => {
-      getAddrCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
+      getAddressCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
 
       const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
@@ -267,11 +267,11 @@ describe('psyListingController', () => {
         psyWithoutLoc.dossierNumber,
       ]);
 
-      sinon.assert.calledWith(getAddrCoordinatesStub, 'Nice');
+      sinon.assert.calledWith(getAddressCoordinatesStub, 'Nice');
     });
 
     it('should return psy matching name and ordered by distance', async () => {
-      getAddrCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
+      getAddressCoordinatesStub.returns({ longitude: LONGITUDE_NICE, latitude: LATITUDE_NICE });
 
       const res = await chai.request(app)
         .post('/api/trouver-un-psychologue/reduced')
@@ -285,7 +285,7 @@ describe('psyListingController', () => {
         psyInLyon.dossierNumber,
       ]);
 
-      sinon.assert.calledWith(getAddrCoordinatesStub, 'nice');
+      sinon.assert.calledWith(getAddressCoordinatesStub, 'nice');
     });
   });
 
