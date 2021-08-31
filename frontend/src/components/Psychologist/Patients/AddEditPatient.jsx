@@ -24,7 +24,7 @@ const AddEditPatient = () => {
         setPatient({
           ...response,
           dateOfBirth: response.dateOfBirth
-            ? formatDDMMYYYY(new Date(response.dateOfBirth))
+            ? new Date(response.dateOfBirth)
             : '',
         });
       });
@@ -59,8 +59,8 @@ const AddEditPatient = () => {
   const save = e => {
     e.preventDefault();
     const action = patientId
-      ? agent.Patient.update(patientId, patient)
-      : agent.Patient.create(patient);
+      ? agent.Patient.update(patientId, { ...patient, dateOfBirth: formatDDMMYYYY(new Date(patient.dateOfBirth)) })
+      : agent.Patient.create({ ...patient, dateOfBirth: formatDDMMYYYY(new Date(patient.dateOfBirth)) });
     action
       .then(response => {
         history.push('/psychologue/mes-patients');
