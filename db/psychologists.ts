@@ -8,7 +8,7 @@ import {
   editablePsyFields,
   nonEditablePsyFields,
 } from '../services/updatePsyFields';
-import getAddrCoordinates from '../services/getAddrCoordinates';
+import getAddressCoordinates from '../services/getAddressCoordinates';
 import { Psychologist } from '../types/Psychologist';
 import db from './db';
 
@@ -123,7 +123,7 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
     try {
       const psyInDb = psychologists[psy.dossierNumber];
       if (!psyInDb) {
-        const coordinates = await getAddrCoordinates(psy.address);
+        const coordinates = await getAddressCoordinates(psy.address);
         psychologistsToInsert.push({
           ...psy,
           languages: addFrenchLanguageIfMissing(psy.languages),
@@ -146,7 +146,7 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
       }
 
       if (psyInDb.address !== psy.address) {
-        const coordinates = await getAddrCoordinates(psy.address);
+        const coordinates = await getAddressCoordinates(psy.address);
         if (coordinates && coordinates.longitude && coordinates.latitude) {
           psy.longitude = coordinates.longitude;
           psy.latitude = coordinates.latitude;

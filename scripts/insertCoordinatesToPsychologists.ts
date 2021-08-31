@@ -2,7 +2,7 @@
 
 import db from '../db/db';
 import { psychologistsTable } from '../db/tables';
-import getAddrCoordinates from '../services/getAddrCoordinates';
+import getAddressCoordinates from '../services/getAddressCoordinates';
 
 const delay = (ms = 1000) : Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -20,7 +20,7 @@ const insertCoordinatesToPsychologists = async (): Promise<void> => {
         // See https://geo.api.gouv.fr/faq)
         await delay(25); // 1 request every 25ms => 40 requests per second
 
-        const coord = await getAddrCoordinates(psy.address);
+        const coord = await getAddressCoordinates(psy.address);
 
         if (coord) {
           await db(psychologistsTable)

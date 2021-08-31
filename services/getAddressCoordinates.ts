@@ -2,7 +2,7 @@ import axios from 'axios/index';
 import { Coordinates } from '../types/Coordinates';
 import config from '../utils/config';
 
-const getAddrCoordinates = async (address: string): Promise<Coordinates|void> => {
+const getAddressCoordinates = async (address: string): Promise<Coordinates|void> => {
   if (config.testEnvironment) {
     console.log('Request to api-adresse.data.gouv.fr bypassed because you are using a test environment');
     return Promise.resolve();
@@ -38,4 +38,4 @@ const getAddrCoordinates = async (address: string): Promise<Coordinates|void> =>
   return Promise.resolve();
 };
 
-export default getAddrCoordinates;
+export default getAddressCoordinates;
