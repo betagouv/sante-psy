@@ -11,8 +11,8 @@ const FaqSection = () => (
     className={styles.container}
   >
     <div className={styles.text}>
-      <div className={styles.title}>Vous avez une question ?</div>
-      <div className={styles.description}>
+      <h3>Vous avez une question ?</h3>
+      <div className="fr-text--lg">
         Retrouvez les réponses aux questions les plus fréquemment posées.
       </div>
     </div>
