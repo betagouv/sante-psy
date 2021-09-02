@@ -2,13 +2,16 @@ import axios from 'axios/index';
 import { Coordinates } from '../types/Coordinates';
 import config from '../utils/config';
 
+const ADDRESS_DELIMITER = ';';
+
 const getAddressCoordinates = async (address: string): Promise<Coordinates> => {
   if (config.testEnvironment) {
     console.log('Request to api-adresse.data.gouv.fr bypassed because you are using a test environment');
     return Promise.resolve({});
   }
 
-  const url = encodeURI(`https://api-adresse.data.gouv.fr/search/?q=${address}&limit=1`);
+  const firstAddress = address.split(ADDRESS_DELIMITER)[0];
+  const url = encodeURI(`https://api-adresse.data.gouv.fr/search/?q=${firstAddress}&limit=1`);
   const response = await axios.get(url)
     .catch((error) => {
       console.log('error', error);
@@ -18,7 +21,7 @@ const getAddressCoordinates = async (address: string): Promise<Coordinates> => {
     const feature = response.data.features[0];
     const [longitude, latitude] = feature.geometry.coordinates;
     const { score, label } = feature.properties;
-    console.debug(`"${address}" ; "${label}" ; "${score}"`);
+    console.debug(`"${firstAddress}" ; "${label}" ; "${score}"`);
 
     if (score > config.minScoreAddress) {
       return Promise.resolve({
@@ -30,7 +33,7 @@ const getAddressCoordinates = async (address: string): Promise<Coordinates> => {
     return Promise.resolve({});
   }
   // Not found
-  console.debug(`"${address}" ; "" ; "0"`);
+  console.debug(`"${firstAddress}" ; "" ; "0"`);
   return Promise.resolve({});
 };
 
