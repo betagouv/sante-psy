@@ -1,4 +1,4 @@
-const ADDRESS_DELIMITER = ' ; ';
+const ADDRESS_DELIMITER = ';';
 
 const matchFilter = (value, filter) => value && value.toLowerCase().includes(filter.trim().toLowerCase());
 

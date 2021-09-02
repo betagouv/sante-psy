@@ -25,7 +25,7 @@ describe('Search', () => {
       { address: '9 boulevard des capucines', filter: '75', result: false },
       { address: '13 boulevard des capucines 75002 paris', filter: '13', result: false },
       { address: '25 rue du Vieux Pont 92000 Nanterre', filter: '20', result: false },
-      { address: '13 boulevard des capucines 75002 paris ; 25 rue du Vieux Pont 92000 Nanterre', filter: '75', result: true },
+      { address: '13 boulevard des capucines 75002 paris;25 rue du Vieux Pont 92000 Nanterre', filter: '75', result: true },
       { address: '13 boulevard des capucines 75002 paris ; 25 rue du Vieux Pont 92000 Nanterre', filter: '92', result: true },
       { address: '13 boulevard des capucines 75002 paris ; 25 rue du Vieux Pont 92000 Nanterre', filter: '20', result: false },
     ];
@@ -47,10 +47,10 @@ describe('Search', () => {
       { address: 'rue du faubourg saint honoré 75008 paris', filter: ' pari', result: true },
       { address: 'rue du faubourg saint honoré 75008 paris', filter: 'Marseille', result: false },
       { address: 'rue du faubourg saint honoré 75008 paris', filter: 'faubourg', result: false },
-      { address: 'rue du faubourg saint honoré 75008 paris ; 71 Avenue Jean Jaurès 93500 Pantin ', filter: '75008', result: true },
+      { address: 'rue du faubourg saint honoré 75008 paris;71 Avenue Jean Jaurès 93500 Pantin ', filter: '75008', result: true },
       { address: 'rue du faubourg saint honoré 75008 paris ; 71 Avenue Jean Jaurès 93500 Pantin ', filter: '93500', result: true },
-      { address: 'rue du faubourg saint honoré 75008 paris ; 71 Avenue Jean Jaurès 93500 Pantin ', filter: 'pari', result: true },
-      { address: 'rue du faubourg saint honoré 75008 paris ; 71 Avenue Jean Jaurès 93500 Pantin ', filter: 'panti', result: true },
+      { address: 'rue du faubourg saint honoré 75008 paris; 71 Avenue Jean Jaurès 93500 Pantin ', filter: 'pari', result: true },
+      { address: 'rue du faubourg saint honoré 75008 paris ;71 Avenue Jean Jaurès 93500 Pantin ', filter: 'panti', result: true },
       { address: 'rue du faubourg saint honoré 75008 paris ; 71 Avenue Jean Jaurès 93500 Pantin ', filter: 'jean', result: false },
       { address: 'rue du faubourg saint honoré 75008 paris ; 71 Avenue Jean Jaurès 93500 Pantin ', filter: 'faubourg', result: false },
     ];
