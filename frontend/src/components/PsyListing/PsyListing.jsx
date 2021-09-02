@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import Page from 'components/Page/Page';
 
 import agent from 'services/agent';
-import search from 'services/search';
+import utils from 'services/search';
 
 import { useStore } from 'stores/';
 
@@ -86,23 +86,23 @@ const PsyListing = () => {
       }
 
       if (nameFilter && !(
-        search.matchFilter(psychologist.lastName, nameFilter)
-        || search.matchFilter(`${psychologist.lastName} ${psychologist.firstNames}`, nameFilter)
-        || search.matchFilter(`${psychologist.firstNames} ${psychologist.lastName}`, nameFilter)
+        utils.matchFilter(psychologist.lastName, nameFilter)
+        || utils.matchFilter(`${psychologist.lastName} ${psychologist.firstNames}`, nameFilter)
+        || utils.matchFilter(`${psychologist.firstNames} ${psychologist.lastName}`, nameFilter)
       )
       ) {
         return false;
       }
 
       if (addressIsDepartment) {
-        if (!search.matchDepartment(psychologist.address, addressFilter)) {
+        if (!utils.matchDepartment(psychologist.address, addressFilter)) {
           return false;
         }
       } else if (addressFilter
         && !(
-          search.matchZipCodeOrCity(psychologist.address, addressFilter)
-          || search.matchFilter(psychologist.departement, addressFilter)
-          || search.matchFilter(psychologist.region, addressFilter)
+          utils.matchZipCodeOrCity(psychologist.address, addressFilter)
+          || utils.matchFilter(psychologist.departement, addressFilter)
+          || utils.matchFilter(psychologist.region, addressFilter)
         )
       ) {
         return false;
