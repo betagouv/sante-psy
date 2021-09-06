@@ -57,11 +57,7 @@ const PsyTable = ({
   ];
 
   const goToProfile = psychologist => {
-    const searchPath = `?page=${
-      page}&name=${
-      nameFilter}&address=${
-      addressFilter}&teleconsultation=${
-      teleconsultation}`;
+    const searchPath = `?page=${page}&name=${nameFilter}&address=${addressFilter}&teleconsultation=${teleconsultation}`;
     if (history.location.search !== searchPath) {
       history.push(`/trouver-un-psychologue${searchPath}`);
     }
@@ -125,7 +121,7 @@ const PsyTable = ({
         </>
       ) : (
         <Title as="h4" look="h4">
-          Aucun résultat n&lsquo;a été trouvé, veuillez élargir votre champ de recherche
+          Aucun résultat n&lsquo;a été trouvé, veuillez élargir votre champ de recherche ou rechercher autour de vous.
         </Title>
       )}
     </div>
