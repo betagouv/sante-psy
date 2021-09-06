@@ -61,6 +61,8 @@
 
 .fr-tabs {
   overflow: unset;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .contactPage textarea.fr-input {
