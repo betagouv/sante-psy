@@ -29,8 +29,8 @@
   max-width: 25rem;
 }
 
-.fr-table .list-actions button {
-  margin: 0 4px;
+.fr-table table {
+  display: table;
 }
 
 .fr-accordion-group li:before {
@@ -39,6 +39,11 @@
 
 .fr-accordion-group li {
   padding-bottom: 0 !important; /* overwrite DSFR default */
+}
+
+.fr-text--lead,
+.fr-text--lg {
+  margin-bottom: 2rem; /* overwrite DSFR default */
 }
 
 .red-text {

@@ -216,6 +216,35 @@ Il ne peut pas être exécuté en production.
 ts-node scripts/anonymizeDb.ts
 ```
 
+### Clean des noms d'institutions
+
+Cette tache s'effectue en 3 étapes.
+
+#### Géneration du fichier de référence des institutions (en local)
+
+Apres avoir mis à jour le fichier `script/completeInstitutions.json` téléchargé en json depuis 
+[le site officiel](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-principaux-etablissements-enseignement-superieur/export/?disjunctive.type_d_etablissement&disjunctive.typologie_d_universites_et_assimiles), on récupere les noms des institutions avec:
+```bash
+ts-node scripts/createInstitutionNames.ts
+```
+
+#### Récuperération des institutions rentrées par les psy (en local)
+
+Il faut récuperer la liste des noms d'institutions qu'on veut mettre à jour depuis métabase dans le fichier `script/patientsInstitution.json` et lancer:
+```bash
+ts-node scripts/getCleanInstitutionsName.ts
+```
+
+Ceci crée un fichier `script/newPatientsInstitution.json`. Ce dernier est un dictionnaire qui montre comment va être transformé chaque nom d'institution. Le nouveau nom est stocké dans `target`, il y a le `rating` determiné par le paquet `string-similarity` et enfin un boolean `go` pour determiner si on peut changer le nom ou pas. Par defaut si le rating est supérieur à 0.7, il vaut true. Mais une analyse manuelle est nécessaire pour s'assurer de la cohérence des noms (ne pas hésiter à changer go en true ou false ou même la target directement).
+
+#### Update en base (sur le serveur de prod)
+
+Une fois le fichier `script/newPatientsInstitution.json` créé, on le push sur le serveur (voir la section correspondante) on peut faire l'update en base.
+L'option `--dry-run` permet de visualiser les changements sans qu'ils soient appliqués.
+```bash
+ts-node scripts/cleanPatientsInstitution.ts [--dry-run]
+```
+
 ## Les données
 
 Pour afficher une liste de psychologues, nous importons les données venant de l'API démarches simplifiées (DS) dans la base de données Postgresql à l'aide d'un cron. Cela nous permet un meilleur taux de réponses et une maitrise en cas de pic de traffic.

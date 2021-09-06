@@ -17,7 +17,7 @@ const Section = ({
   <div className={classNames(styles.container, styles[buttonAlignment])}>
     <div className={styles.text}>
       <SectionTitle>{title}</SectionTitle>
-      <div className={styles.description}>
+      <div className="fr-text--lead">
         {description}
       </div>
     </div>

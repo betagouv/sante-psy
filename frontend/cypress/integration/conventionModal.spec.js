@@ -75,8 +75,11 @@ describe('ConventionModal', () => {
       cy.get('[data-test-id="update-convention-button"]')
         .should('be.disabled');
 
-      cy.get('[data-test-id="convention-university-select"] > select')
-        .select('Aix-Marseille');
+      cy.get('[data-test-id="convention-university-select"] input')
+        .click();
+      cy.get('[data-test-id="convention-university-select"] option')
+        .eq(2)
+        .click();
 
       cy.get('[data-test-id="update-convention-button"]')
         .should('be.disabled');
@@ -89,8 +92,14 @@ describe('ConventionModal', () => {
     });
 
     it('should update convention and hide info', () => {
-      cy.get('[data-test-id="convention-university-select"] > select')
-        .select('Angers');
+      cy.get('[data-test-id="update-convention-button"]')
+        .should('be.disabled');
+
+      cy.get('[data-test-id="convention-university-select"] input')
+        .click();
+      cy.get('[data-test-id="convention-university-select"] option')
+        .eq(5)
+        .click();
 
       cy.get('[data-test-id="signed-false"]')
         .click();
@@ -103,9 +112,6 @@ describe('ConventionModal', () => {
       cy.get('[data-test-id="convention-modal"]')
         .should('not.exist');
 
-      cy.get('[data-test-id="appointment-container"]')
-        .should('exist');
-
       cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
@@ -116,9 +122,6 @@ describe('ConventionModal', () => {
 
       cy.get('[data-test-id="convention-modal"]')
         .should('not.exist');
-
-      cy.get('[data-test-id="appointment-container"]')
-        .should('exist');
     });
   });
 });

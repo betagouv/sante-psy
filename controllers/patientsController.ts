@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-
 import { check, oneOf } from 'express-validator';
+import DOMPurify from '../services/sanitizer';
+
 import dbPatients from '../db/patients';
 import validation from '../utils/validation';
 import date from '../utils/date';
@@ -18,11 +19,11 @@ const patientValidators = [
   // todo : do we html-escape here ? We already escape in templates.
   check('firstNames')
     .trim().not().isEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
   check('lastName')
     .trim().not().isEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier le nom du patient.'),
   oneOf(
     [
@@ -31,7 +32,7 @@ const patientValidators = [
       check('INE')
         .trim().isAlphanumeric()
         .isLength({ min: 1, max: 50 })
-        .customSanitizer((value, { req }) => req.sanitize(value)),
+        .customSanitizer(DOMPurify.sanitize),
     ],
     `Le numéro INE doit faire maximum 50 caractères alphanumériques \
 (chiffres ou lettres sans accents).
@@ -43,20 +44,20 @@ const patientValidators = [
       check('dateOfBirth').trim().isEmpty(),
       check('dateOfBirth')
         .trim().isDate({ format: date.formatFrenchDateForm })
-        .customSanitizer((value, { req }) => req.sanitize(value)),
+        .customSanitizer(DOMPurify.sanitize),
     ],
     `La date de naissance n'est pas valide, le format doit être JJ/MM/AAAA.
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`,
   ),
   check('institutionName')
     .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
+    .customSanitizer(DOMPurify.sanitize),
   check('doctorAddress')
     .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
+    .customSanitizer(DOMPurify.sanitize),
   check('doctorName')
     .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
+    .customSanitizer(DOMPurify.sanitize),
 ];
 
 const updateValidators = [
@@ -104,7 +105,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Ce patient n\'existe pas.', 404);
   }
 
-  let infoMessage = `Le patient ${patientFirstNames} ${patientLastName} a bien été modifié.`;
+  let infoMessage = `L'étudiant ${patientFirstNames} ${patientLastName} a bien été modifié.`;
   if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified
       || !doctorAddress) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
@@ -164,7 +165,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     doctorAddress,
     dateOfBirth,
   );
-  let infoMessage = `Le patient ${firstNames} ${lastName} a bien été créé.`;
+  let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
   if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress || !dateOfBirth) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
         + ' en cliquant le bouton "Modifier" du patient.';
@@ -195,7 +196,7 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 
   console.log(`Patient deleted ${patientId} by psy id ${psychologistId}`);
   res.json({
-    message: 'Le patient a bien été supprimé.',
+    message: "L'étudiant a bien été supprimé.",
   });
 };
 

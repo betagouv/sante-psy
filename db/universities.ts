@@ -64,7 +64,7 @@ const getAll = async (): Promise<University[]> => {
 const getAllOrderByName = async (): Promise<University[]> => {
   try {
     return db(universitiesTable)
-        .orderBy('name');
+        .orderByRaw('name collate "C"');
   } catch (err) {
     console.error('Impossible de récupérer les universités', err);
     throw new Error('Impossible de récupérer les universités');

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Table, Pagination, Button, Title } from '@dataesr/react-dsfr';
+import { Table, Button, Title } from '@dataesr/react-dsfr';
 
 import styles from './psyTable.cssmodule.scss';
 
@@ -36,7 +36,7 @@ const PsyTable = ({
               secondary
               size="sm"
               onClick={() => goToProfile(psychologist)}
-              className="fr-fi-arrow-right-line fr-float-right"
+              className="fr-fi-arrow-right-line"
             />
           </div>
           <div className="fr-hidden-xs fr-displayed-sm">
@@ -45,7 +45,8 @@ const PsyTable = ({
               secondary
               size="sm"
               onClick={() => goToProfile(psychologist)}
-              className="fr-fi-arrow-right-line fr-btn--icon-right fr-float-right"
+              icon="fr-fi-arrow-right-line"
+              iconPosition="right"
             >
               Voir le profil
             </Button>
@@ -112,16 +113,13 @@ const PsyTable = ({
             rowKey="dossierNumber"
             columns={columns}
             data={psychologists}
+            pagination
             page={currentPage}
             perPage={10}
-          />
-          <Pagination
-            currentPage={currentPage}
-            onClick={p => {
+            setPage={p => {
               setPage(p);
               table.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
             }}
-            pageCount={Math.ceil(psychologists.length / 10)}
             surrendingPages={surrendingPages}
           />
         </>

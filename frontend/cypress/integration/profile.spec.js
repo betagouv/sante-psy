@@ -1,3 +1,4 @@
+const { checkConvention } = require('../../src/services/conventionVerification');
 const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 const { selectNextCalendarDate } = require('./utils/calendar');
@@ -21,6 +22,7 @@ describe('Profile', () => {
 
     resetDB();
     loginAsDefault();
+    checkConvention();
 
     cy.visit('/psychologue/mon-profil');
     cy.wait('@config');
@@ -50,15 +52,18 @@ describe('Profile', () => {
   });
 
   describe('Update convention', () => {
-    it('should udpate existing convention info ', () => {
+    it('should update existing convention info ', () => {
       cy.get('[data-test-id="show-convention-form"]')
         .click();
       cy.get('[data-test-id="convention-form"]')
         .should('exist');
       cy.get('[data-test-id="convention-form-title"]')
         .should('exist');
-      cy.get('[data-test-id="convention-university-select"] > select')
-        .select('Angers');
+      cy.get('[data-test-id="convention-university-select"] input')
+        .click();
+      cy.get('[data-test-id="convention-university-select"] option')
+        .eq(2)
+        .click();
       cy.get('[data-test-id="signed-true"]')
         .click();
       cy.get('[data-test-id="update-convention-button"]')
@@ -84,8 +89,11 @@ describe('Profile', () => {
         .should('exist');
       cy.get('[data-test-id="convention-form-title"]')
         .should('not.exist');
-      cy.get('[data-test-id="convention-university-select"] > select')
-        .select('Aix-Marseille');
+      cy.get('[data-test-id="convention-university-select"] input')
+        .click();
+      cy.get('[data-test-id="convention-university-select"] option')
+        .eq(8)
+        .click();
       cy.get('[data-test-id="signed-false"]')
         .click();
       cy.get('[data-test-id="update-convention-button"]')
@@ -94,7 +102,7 @@ describe('Profile', () => {
       cy.get('[data-test-id="convention-form"]')
         .should('not.exist');
       cy.get('[data-test-id="convention-university-name"]')
-        .should('have.text', 'Je suis rattaché à l‘université de Aix-Marseille.');
+        .should('have.text', 'Je suis rattaché à l‘université de Bretagne Sud.');
       cy.get('[data-test-id="convention-signed"]')
         .should('have.text', 'La convention n‘est pas encore signée.');
       cy.get('[data-test-id="notification-success"] p')
@@ -113,7 +121,7 @@ describe('Profile', () => {
   });
 
   describe('Update profile', () => {
-    it('should udpate existing profile', () => {
+    it('should update existing profile', () => {
       cy.get('[data-test-id="show-profile-form-button"]')
         .click();
       cy.get('[data-test-id="edit-profile-form"]')
@@ -147,7 +155,7 @@ describe('Profile', () => {
           cy.wait('@activate');
 
           cy.get('[data-test-id="activePsy"]')
-            .should('have.text', 'Vos informations sont visibles sur l‘annuaire.');
+            .should('have.text', 'Mes informations sont visibles sur l‘annuaire.');
           cy.get('[data-test-id="inactivePsy"]')
             .should('not.exist');
           cy.get('[data-test-id="notification-success"] p')
@@ -162,14 +170,14 @@ describe('Profile', () => {
   describe('Suspend profile', () => {
     it('should say that your profile is suspended', () => {
       cy.get('[data-test-id="activePsy"]')
-        .should('have.text', 'Vos informations sont visibles sur l‘annuaire.');
+        .should('have.text', 'Mes informations sont visibles sur l‘annuaire.');
       cy.get('[data-test-id="inactivePsy"]')
         .should('not.exist');
 
       suspend().then(() => {
         cy.reload();
         cy.get('[data-test-id="inactivePsy"]')
-          .should('have.text', 'Vos informations ne sont pas visibles sur l‘annuaire.');
+          .should('have.text', 'Mes informations ne sont pas visibles sur l‘annuaire.');
         cy.get('[data-test-id="activePsy"]')
           .should('not.exist');
       });

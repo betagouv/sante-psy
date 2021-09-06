@@ -192,9 +192,22 @@ describe('DB Patients', () => {
   });
 
   describe('getAll', () => {
-    it('should return patients', async () => {
+    it('should return psy patients with not deleted appointments', async () => {
       const psy = await clean.insertOnePsy();
-      await dbPatients.insert(
+      const anotherPsy = await clean.insertOnePsy('another@mail.fr');
+      const patient = await dbPatients.insert(
+        firstNames,
+        lastName,
+        studentNumber,
+        institutionName,
+        isStudentStatusVerified,
+        hasPrescription,
+        psy.dossierNumber,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      );
+      const patient2 = await dbPatients.insert(
         firstNames,
         lastName,
         studentNumber,
@@ -207,8 +220,38 @@ describe('DB Patients', () => {
         dateOfBirth,
       );
 
-      const patients = await dbPatients.getAll(psy.dossierNumber);
-      expect(patients).to.have.length(1);
+      const anotherPatient = await dbPatients.insert(
+        firstNames,
+        lastName,
+        studentNumber,
+        institutionName,
+        isStudentStatusVerified,
+        hasPrescription,
+        anotherPsy.dossierNumber,
+        doctorName,
+        doctorAddress,
+        dateOfBirth,
+      );
+
+      await Promise.all([
+        clean.insertOneAppointment(patient.id, psy.dossierNumber),
+        clean.insertOneAppointment(patient.id, psy.dossierNumber),
+        clean.insertOneAppointment(patient.id, psy.dossierNumber, 10, 10, true),
+
+        clean.insertOneAppointment(anotherPatient.id, anotherPsy.dossierNumber),
+        clean.insertOneAppointment(anotherPatient.id, anotherPsy.dossierNumber),
+        clean.insertOneAppointment(anotherPatient.id, anotherPsy.dossierNumber),
+
+        clean.insertOneAppointment(patient2.id, psy.dossierNumber),
+        clean.insertOneAppointment(patient2.id, psy.dossierNumber),
+        clean.insertOneAppointment(patient2.id, psy.dossierNumber),
+      ]);
+
+      const patients = (await dbPatients.getAll(psy.dossierNumber))
+      .sort((a, b) => parseInt(a.appointmentsCount) - parseInt(b.appointmentsCount));
+      expect(patients).to.have.length(2);
+      patients[0].appointmentsCount.should.eq('2');
+      patients[1].appointmentsCount.should.eq('3');
     });
 
     it('should not return deleted patients', async () => {
