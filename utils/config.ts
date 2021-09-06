@@ -74,4 +74,5 @@ export default {
     key: process.env.CRISP_KEY,
     website: process.env.CRISP_WEBSITE,
   },
+  minScoreAddress: parseFloat(process.env.MIN_SCORE_ADDRESS || '0.55'),
 };

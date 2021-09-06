@@ -9,6 +9,8 @@ import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
 import string from '../utils/string';
+import getAddressCoordinates from '../services/getAddressCoordinates';
+import { Coordinates } from '../types/Coordinates';
 
 const getValidators = [
   param('psyId')
@@ -107,10 +109,20 @@ const update = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Departement invalide', 400);
   }
 
+  let coordinates : Coordinates;
+  const psychologist = await dbPsychologists.getById(req.user.psychologist);
+  if (psychologist && psychologist.address !== req.body.address) {
+    coordinates = await getAddressCoordinates(req.body.address);
+  }
+
   await dbPsychologists.update({
     ...req.body,
     dossierNumber: req.user.psychologist,
     region,
+    ...(coordinates && coordinates.longitude && coordinates.latitude && {
+      longitude: coordinates.longitude,
+      latitude: coordinates.latitude,
+    }),
   });
 
   res.json({

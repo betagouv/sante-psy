@@ -1,4 +1,5 @@
 import { assert, expect } from 'chai';
+import sinon from 'sinon';
 
 import dbUniversities from '../../db/universities';
 import dbPsychologists from '../../db/psychologists';
@@ -8,11 +9,25 @@ import { DossierState } from '../../types/DossierState';
 
 import dotEnv from 'dotenv';
 
+const getAddressCoordinates = require('../../services/getAddressCoordinates');
+
 dotEnv.config();
 
+const LONGITUDE_PARIS = 2.3488;
+const LATITUDE_PARIS = 48.85341;
+const LONGITUDE_MARSEILLE = 5.38107;
+const LATITUDE_MARSEILLE = 43.29695;
+
 describe('DB Psychologists', () => {
+  let getAddressCoordinatesStub;
+
   beforeEach(async () => {
     await clean.cleanAllUniversities();
+    getAddressCoordinatesStub = sinon.stub(getAddressCoordinates, 'default').returns();
+  });
+
+  afterEach(async () => {
+    getAddressCoordinatesStub.restore();
   });
 
   describe('upsertMany', () => {
@@ -110,6 +125,43 @@ describe('DB Psychologists', () => {
       const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
       updatedPsySPE.selfModified.should.eql(true);
       updatedPsySPE.firstNames.should.be.equal(newPsyDS.firstNames);
+    });
+
+    it('should set coordinates when inserting psychologist in PG', async () => {
+      const psy = clean.getOnePsy();
+      getAddressCoordinatesStub.returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS });
+
+      await dbPsychologists.upsertMany([psy]);
+
+      const savedPsy = await dbPsychologists.getById(psy.dossierNumber);
+      savedPsy.should.exist;
+      savedPsy.longitude.should.be.equal(LONGITUDE_PARIS);
+      savedPsy.latitude.should.be.equal(LATITUDE_PARIS);
+    });
+
+    it('should update psy coordinates if address changed', async () => {
+      getAddressCoordinatesStub
+        .onFirstCall().returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS })
+        .onSecondCall().returns({ longitude: LONGITUDE_MARSEILLE, latitude: LATITUDE_MARSEILLE });
+
+      // First save psy from DS
+      const psyDS = clean.getOnePsy();
+      await dbPsychologists.upsertMany([psyDS]);
+      const psySPE = await dbPsychologists.getById(psyDS.dossierNumber);
+      psySPE.address.should.be.equal(psyDS.address);
+      psySPE.longitude.should.be.equal(LONGITUDE_PARIS);
+      psySPE.latitude.should.be.equal(LATITUDE_PARIS);
+
+      // Update from DS (new address)
+      const newPsyDS = { ...psyDS };
+      newPsyDS.address = '1 rue du Pôle Nord';
+      await dbPsychologists.upsertMany([newPsyDS]);
+
+      // Assert that data changed are modified in SPE DB
+      const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
+      updatedPsySPE.address.should.be.equal('1 rue du Pôle Nord');
+      updatedPsySPE.longitude.should.be.equal(LONGITUDE_MARSEILLE);
+      updatedPsySPE.latitude.should.be.equal(LATITUDE_MARSEILLE);
     });
   });
 

@@ -47,7 +47,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
       <TextInput
         className="midlength-input"
         label="Adresse du cabinet"
-        hint="Adresse où se rendre pour le rendez-vous."
+        hint="Adresse où se rendre pour le rendez-vous. Pour indiquer plusieurs adresses, les séparer par un point virgule."
         data-test-id="psy-address-input"
         value={updatedPsychologist.address}
         onChange={e => changePsychologist(e.target.value, 'address')}

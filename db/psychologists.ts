@@ -7,8 +7,10 @@ import {
   editablePsyFields,
   nonEditablePsyFields,
 } from '../services/updatePsyFields';
+import getAddressCoordinates from '../services/getAddressCoordinates';
 import { Psychologist } from '../types/Psychologist';
 import db from './db';
+import { Coordinates } from '../types/Coordinates';
 
 const getAllAccepted = async (selectedData: string[]) : Promise<Psychologist[]> => {
   try {
@@ -64,7 +66,7 @@ const getAllActive = async (): Promise<Psychologist[]> => {
         .whereNot('archived', true)
         .where('state', DossierState.accepte)
         .andWhere('active', true)
-        .orderByRaw('RANDOM ()');
+        .orderByRaw('RANDOM()');
     return psychologists;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
@@ -114,10 +116,15 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
     try {
       const psyInDb = psychologists[psy.dossierNumber];
       if (!psyInDb) {
+        const coordinates = await getAddressCoordinates(psy.address);
         psychologistsToInsert.push({
           ...psy,
           languages: addFrenchLanguageIfMissing(psy.languages),
           assignedUniversityId: dbUniversities.getAssignedUniversityId(psy, universities),
+          ...(coordinates && coordinates.longitude && coordinates.latitude && {
+            longitude: coordinates.longitude,
+            latitude: coordinates.latitude,
+          }),
         });
         return Promise.resolve();
       }
@@ -131,10 +138,21 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
         });
       }
 
+      let coordinates : Coordinates;
+      if (psyInDb.address !== psy.address) {
+        coordinates = await getAddressCoordinates(psy.address);
+      }
+
       return db(psychologistsTable)
       .where({ dossierNumber: psy.dossierNumber })
       .update({
-        ...editablePsyFields(psy),
+        ...editablePsyFields({
+          ...psy,
+          ...(coordinates && coordinates.longitude && coordinates.latitude && {
+            longitude: coordinates.longitude,
+            latitude: coordinates.latitude,
+          }),
+        }),
         ...nonEditablePsyFields(psy),
         // assignedUniversityId, do not update assignedId on already existing psy
         updatedAt,
@@ -145,14 +163,11 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
     }
   });
 
-  if (psychologistsToInsert.length > 0) {
-    upsertArray.push(
-      db(psychologistsTable)
-    .insert(psychologistsToInsert),
-    );
-  }
-
   await Promise.all(upsertArray);
+
+  if (psychologistsToInsert.length > 0) {
+    await db(psychologistsTable).insert(psychologistsToInsert);
+  }
   console.log('UPSERT into PG : done');
 };
 

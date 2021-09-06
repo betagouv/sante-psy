@@ -34,14 +34,14 @@ jobs:
       run: npm run migrate
     - name: Seed DB
       run: npm run seed
-    - name: Run back tests
+    - name: Run unit tests
       run: npm run test:ci
       env:
         API_TOKEN: ${{ secrets.API_TOKEN }}
         DEMARCHES_SIMPLIFIEES_ID: ${{ secrets.DEMARCHES_SIMPLIFIEES_ID }}
     - name: Run app
       run: node dist/index.js &
-    - name: Integration tests
+    - name: Run integration tests
       run: npm --prefix frontend run cy:ci
     - name: Archive test results
       if: ${{ failure() }}

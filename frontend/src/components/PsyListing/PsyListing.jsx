@@ -6,6 +6,7 @@ import { observer } from 'mobx-react';
 import Page from 'components/Page/Page';
 
 import agent from 'services/agent';
+import utils from 'services/search';
 
 import { useStore } from 'stores/';
 
@@ -68,8 +69,6 @@ const PsyListing = () => {
     }
   };
 
-  const matchFilter = (value, filter) => value && value.toLowerCase().includes(filter.toLowerCase());
-
   const getFilteredPsychologists = () => {
     if (!psychologists) {
       return [];
@@ -87,23 +86,23 @@ const PsyListing = () => {
       }
 
       if (nameFilter && !(
-        matchFilter(psychologist.lastName, nameFilter)
-        || matchFilter(`${psychologist.lastName} ${psychologist.firstNames}`, nameFilter)
-        || matchFilter(`${psychologist.firstNames} ${psychologist.lastName}`, nameFilter)
+        utils.matchFilter(psychologist.lastName, nameFilter)
+        || utils.matchFilter(`${psychologist.lastName} ${psychologist.firstNames}`, nameFilter)
+        || utils.matchFilter(`${psychologist.firstNames} ${psychologist.lastName}`, nameFilter)
       )
       ) {
         return false;
       }
 
       if (addressIsDepartment) {
-        if (!matchFilter(psychologist.departement, addressFilter)) {
+        if (!utils.matchDepartment(psychologist.address, addressFilter)) {
           return false;
         }
       } else if (addressFilter
         && !(
-          matchFilter(psychologist.address, addressFilter)
-          || matchFilter(psychologist.departement, addressFilter)
-          || matchFilter(psychologist.region, addressFilter)
+          utils.matchZipCodeOrCity(psychologist.address, addressFilter)
+          || utils.matchFilter(psychologist.departement, addressFilter)
+          || utils.matchFilter(psychologist.region, addressFilter)
         )
       ) {
         return false;
