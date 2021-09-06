@@ -44,15 +44,8 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
   return updatedPsy;
 };
 
-const getAllActive = async (longitude: number = undefined, latitude: number = undefined): Promise<Psychologist[]> => {
+const getAllActive = async (): Promise<Psychologist[]> => {
   try {
-    let orderByRawValue = 'RANDOM()';
-    if (longitude && latitude) {
-      // Careful! Human convention is (lat, long) 
-      // but Cartesian coordinate convention is (long, lat)
-      orderByRawValue = `point(longitude, latitude) <@> point(${longitude}, ${latitude})`;
-    }
-
     const psychologists = db.column(
       'dossierNumber',
       'lastName',
@@ -73,7 +66,7 @@ const getAllActive = async (longitude: number = undefined, latitude: number = un
         .whereNot('archived', true)
         .where('state', DossierState.accepte)
         .andWhere('active', true)
-        .orderByRaw(orderByRawValue);
+        .orderByRaw('RANDOM()');
     return psychologists;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
