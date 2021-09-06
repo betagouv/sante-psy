@@ -1,3 +1,4 @@
+require('chai').should();
 const search = require('../src/services/search');
 
 describe('Search', () => {
