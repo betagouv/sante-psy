@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { HashLink } from 'react-router-hash-link';
 
-import { ButtonGroup, Callout, CalloutText } from '@dataesr/react-dsfr';
+import { Button, ButtonGroup, Callout, CalloutText } from '@dataesr/react-dsfr';
 import MonthPicker from 'components/Date/MonthPicker';
+import Notification from 'components/Notification/Notification';
 
 import agent from 'services/agent';
 import { formatMonth } from 'services/date';
+import billingInfoService from 'services/billingInfo';
 
+import { useStore } from 'stores/';
 import BillingTable from './BillingTable';
+import BillingInfo from './BillingInfo';
+import BillingHelper from './BillingHelper';
 
 import styles from './billing.cssmodule.scss';
 
@@ -17,7 +23,11 @@ const Billing = () => {
     month: new Date().getMonth() + 1,
   });
 
+  const { userStore: { user } } = useStore();
+
   const [valuesByDate, setValuesByDate] = useState({ appointments: {}, patients: {} });
+  const [fillInfo, setFillInfo] = useState(false);
+  const [billingInfo, setBillingInfo] = useState(billingInfoService.get());
 
   useEffect(() => {
     agent.Appointment.get().then(response => {
@@ -46,6 +56,7 @@ const Billing = () => {
         && appointmentDate.getMonth() === month.month - 1;
   });
 
+  const canGenerateBill = user.convention && user.convention.isConventionSigned;
   return (
     <>
       <Callout hasInfoIcon={false}>
@@ -61,15 +72,78 @@ const Billing = () => {
       </Callout>
       <div className="fr-my-2w">
         <h3>Générer ma facture</h3>
+        {!canGenerateBill && (
+        <Notification type="info">
+          Veuillez attendre la signature de votre convention avant d&lsquo;envoyer votre facture.
+          Renseignez le statut de votre convention dans la page
+          {' '}
+          <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
+        </Notification>
+        )}
         <div className={styles.monthPickerContainer}>
           Générer ma facture pour le mois de :
           <div className={styles.monthPicker}>
             <MonthPicker month={month} setMonth={setMonth} />
           </div>
         </div>
-
         {filteredDate.length > 0 ? (
           <>
+            <div className="fr-mb-2w">
+              {fillInfo && (
+                <BillingInfo
+                  billingInfo={billingInfo}
+                  setBillingInfo={setBillingInfo}
+                />
+              )}
+            </div>
+            <ButtonGroup className="fr-mb-2w" isInlineFrom="xs">
+              {fillInfo ? (
+                <Button
+                  secondary
+                  icon="fr-fi-close-line"
+                  onClick={() => {
+                    setBillingInfo(billingInfoService.get());
+                    setFillInfo(false);
+                  }}
+                >
+                  Annuler
+                </Button>
+              ) : (
+                <Button
+                  secondary
+                  icon="fr-fi-edit-line"
+                  onClick={() => setFillInfo(true)}
+                >
+                  Renseigner mes informations
+                </Button>
+              )}
+              {canGenerateBill ? (
+                <a
+                  className="fr-btn"
+                  href={`/psychologue/bill/${month.month}/${month.year}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => {
+                    setFillInfo(false);
+                    billingInfoService.save(billingInfo);
+                  }}
+                >
+                  <span className={classNames(styles.downloadIcon, 'fr-fi-file-download-line')} aria-hidden="true" />
+                  Télécharger/Imprimer
+                </a>
+              ) : (
+                <Button
+                  disabled
+                  icon="fr-fi-file-download-line"
+                >
+                  Télécharger/Imprimer
+                </Button>
+              )}
+            </ButtonGroup>
+            <BillingTable
+              filteredDate={filteredDate}
+              appointments={valuesByDate.appointments}
+            />
             <p className="fr-my-2w" data-test-id="bill-summary-text">
               En
               {` ${formatMonth(month)}`}
@@ -83,20 +157,10 @@ const Billing = () => {
                   .flatMap(date => valuesByDate.patients[date])
                   .filter((value, index, array) => array.indexOf(value) === index)
                   .length}
-               `}
+             `}
               </b>
               étudiants.
             </p>
-            <a
-              className="fr-btn fr-mb-2w"
-              href={`/psychologue/bill/${month.month}/${month.year}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span className="fr-fi-file-download-line" aria-hidden="true" />
-              Télécharger/Imprimer ma facture pré-remplie
-            </a>
-            <BillingTable filteredDate={filteredDate} appointments={valuesByDate.appointments} />
           </>
         ) : (
           <p className="fr-mb-2w">
@@ -105,67 +169,7 @@ const Billing = () => {
             , vous retrouverez ici votre récapitulatif de séances dans le but de créer vous même votre facture
           </p>
         )}
-        <h3>Les élements à apparaître sur votre facturation</h3>
-        <p className="fr-mb-1w">
-          Le nom des étudiants est couvert par le secret médical,
-          ne le communiquez pas sur la facture.
-          Le nombre d&lsquo;étudiant suffit.
-        </p>
-        <p className="fr-mb-1w">
-          Si le prestataire n’est pas assujetti à la TVA,
-          la facture doit comporter la mention «TVA non applicable, art.293 B du CGI »
-        </p>
-        <p className="fr-mb-1w">
-          Un doute sur le modèle de votre facture ?
-          Vous pouvez prendre exemple sur ce modèle qui contient tous les éléments requis pour votre remboursement :
-        </p>
-        <ButtonGroup isInlineFrom="xs" className="fr-my-2w">
-          <a
-            className="fr-btn fr-btn--secondary"
-            href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.pdf`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span className="fr-fi-file-download-line" aria-hidden="true" />
-            .pdf
-          </a>
-          <a
-            className="fr-btn fr-btn--secondary"
-            href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.docx`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span className="fr-fi-file-download-line" aria-hidden="true" />
-            Microsoft Word .docx
-          </a>
-          <a
-            className="fr-btn fr-btn--secondary"
-            href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.odt`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span className="fr-fi-file-download-line" aria-hidden="true" />
-            Libre Office .odt
-          </a>
-        </ButtonGroup>
-        <h3>Demander de l&lsquo;aide</h3>
-        <ButtonGroup isInlineFrom="xs">
-          <HashLink
-            className="fr-btn fr-btn--secondary"
-            to="/faq?section=psychologue#remboursement"
-          >
-            Consulter la Foire Aux Questions
-          </HashLink>
-          <a
-            className="fr-btn fr-btn--secondary"
-            href={`${__API__}/static/documents/tutoriel_choruspro_sante-psy-etudiant.pdf`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span className="fr-fi-file-download-line" aria-hidden="true" />
-            Tutoriel Chorus PRO
-          </a>
-        </ButtonGroup>
+        <BillingHelper />
       </div>
     </>
   );
