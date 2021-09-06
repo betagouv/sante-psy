@@ -121,7 +121,7 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
           ...psy,
           languages: addFrenchLanguageIfMissing(psy.languages),
           assignedUniversityId: dbUniversities.getAssignedUniversityId(psy, universities),
-          ...(coordinates && coordinates.longitude && coordinates.latitude && {
+          ...(coordinates && {
             longitude: coordinates.longitude,
             latitude: coordinates.latitude,
           }),
@@ -138,7 +138,7 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
         });
       }
 
-      let coordinates : Coordinates;
+      let coordinates : Coordinates|void;
       if (psyInDb.address !== psy.address) {
         coordinates = await getAddressCoordinates(psy.address);
       }
@@ -148,7 +148,7 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
       .update({
         ...editablePsyFields({
           ...psy,
-          ...(coordinates && coordinates.longitude && coordinates.latitude && {
+          ...(coordinates && {
             longitude: coordinates.longitude,
             latitude: coordinates.latitude,
           }),

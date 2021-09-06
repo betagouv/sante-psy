@@ -4,10 +4,10 @@ import config from '../utils/config';
 
 const ADDRESS_DELIMITER = ';';
 
-const getAddressCoordinates = async (address: string): Promise<Coordinates> => {
+const getAddressCoordinates = async (address: string): Promise<Coordinates|void> => {
   if (config.testEnvironment) {
     console.log('Request to api-adresse.data.gouv.fr bypassed because you are using a test environment');
-    return Promise.resolve({});
+    return Promise.resolve();
   }
 
   const firstAddress = address.split(ADDRESS_DELIMITER)[0];
@@ -30,11 +30,11 @@ const getAddressCoordinates = async (address: string): Promise<Coordinates> => {
       });
     }
     // Insufficient score
-    return Promise.resolve({});
+    return Promise.resolve();
   }
   // Not found
   console.debug(`"${firstAddress}" ; "" ; "0"`);
-  return Promise.resolve({});
+  return Promise.resolve();
 };
 
 export default getAddressCoordinates;
