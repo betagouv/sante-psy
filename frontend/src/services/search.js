@@ -19,7 +19,7 @@ const matchZipCodeOrCity = (address, filter) => {
   return !!res;
 };
 
-export default {
+module.exports = {
   ADDRESS_DELIMITER,
   matchFilter,
   matchDepartment,

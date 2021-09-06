@@ -1,4 +1,5 @@
-import search from '../services/search';
+const should = require('chai').should();
+const search = require('../src/services/search');
 
 describe('Search', () => {
   describe('matchFilter', () => {
