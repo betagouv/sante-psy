@@ -95,19 +95,23 @@ const Login = () => {
       <Section
         title="⚠️&nbsp;Problème d&lsquo;accès ?"
       >
-        <p>
-          Etes-vous bien enregistré via
-          {' '}
-          <a href={config.demarchesSimplifieesUrl} target="_blank" rel="noopener noreferrer">le formulaire d&lsquo;inscription</a>
-          {' '}
-          ?
-          Il se peut que votre compte ne soit pas encore validé.
-        </p>
-        <p>
-          L&lsquo;email à utiliser ici est le même que celui avec lequel vous avez fait votre candidature
-          pour participer au dispositif.
-          Il peut être différent de votre email de contact présenté dans l&lsquo;annuaire des psychologues.
-        </p>
+        <p>Pour rappel :</p>
+        <ul>
+          <li>
+            Veuillez indiquer l&lsquo;email utilisé lors de votre inscription
+            {' '}
+            <a href={config.demarchesSimplifieesUrl} target="_blank" rel="noopener noreferrer">en ligne</a>
+            . Il peut être différent de votre email de contact présenté dans l‘annuaire des psychologues.
+          </li>
+          <li>
+            Si vous ne recevez pas l&lsquo;email de connexion, pensez à vérifier vos spams et ajouter l&lsquo;adresse
+            {` "${config.contactEmail}" `}
+            à votre carnet d&lsquo;adresse email.
+          </li>
+          <li>
+            Si vous recevez l&lsquo;email de connexion mais le lien ne s&lsquo;ouvre pas, veuillez nous contacter.
+          </li>
+        </ul>
       </Section>
       <Mail />
     </Page>

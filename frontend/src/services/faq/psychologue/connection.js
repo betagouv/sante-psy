@@ -14,9 +14,8 @@ module.exports = config => [
   },
   {
     question: 'Je ne parviens pas à accéder à mon espace psychologue. Que puis-je faire ?',
-    answer: 'Pour vous connecter, vous devez vous rendre sur \
-    le site https://santepsy.etudiant.gouv.fr et dans la rubrique "je suis psychologue", \
-    cliquer sur le bouton "Déclarer mes séances". \
+    answer: 'Pour vous connecter, vous devez vous rendre sur la page \
+    <a href="/psychologue/login">Se connecter en tant que psychologue</a> \
     Vous serez redirigée sur une page de connexion sur laquelle vous allez devoir renseigner \
     votre adresse email personnelle, renseignée dans le formulaire d\'inscription déjà rempli, \
     et vous recevrez sur cette adresse, un mail de notre part avec un bouton sur lequel cliquer. \
