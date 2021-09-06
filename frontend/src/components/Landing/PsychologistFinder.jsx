@@ -18,7 +18,7 @@ const PsychologistFinder = () => {
           title="Trouver un psychologue"
           description="Je contacte un psychologue partenaire dans n&lsquo;importe quel département,
           peu importe mon école ou mon université d&lsquo;origine par téléphone,
-          email ou par son site web"
+          email ou par son site web."
           buttonText="Accéder à l&lsquo;annuaire des psychologues"
           buttonUrl="/trouver-un-psychologue"
         />

@@ -8,7 +8,7 @@ const UnderlinedTitle = ({ title, big, className, backgroundColor }) => {
 
   return (
     <div className={className}>
-      <h1 className={classNames(styles[style], styles[`${style}-${backgroundColor}`])}>
+      <h1 className={classNames(styles[style], styles[`${style}-${backgroundColor}`], { 'fr-h2': big })}>
         {title}
       </h1>
     </div>

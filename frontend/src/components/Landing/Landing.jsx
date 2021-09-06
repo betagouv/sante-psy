@@ -22,7 +22,7 @@ const Landing = () => {
       </div>
       <div className={styles.sectionLight}>
         <Section
-          title="Vous êtes psychologue ?"
+          title="Vous êtes psychologue ?"
           description="Vous souhaitez participer au programme d&lsquo;accompagnement
         psychologique des étudiants ? Merci !"
           buttonAlignment="left"
@@ -33,7 +33,7 @@ const Landing = () => {
       </div>
       <div className={styles.section}>
         <Section
-          title="Vous avez une question ?"
+          title="Vous avez une question ?"
           description="Retrouvez les réponses aux questions les plus fréquemment posées."
           buttonAlignment="right"
           buttonText="Consulter la foire aux questions"

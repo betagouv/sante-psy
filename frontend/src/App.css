@@ -41,6 +41,11 @@
   padding-bottom: 0 !important; /* overwrite DSFR default */
 }
 
+.fr-text--lead,
+.fr-text--lg {
+  margin-bottom: 2rem; /* overwrite DSFR default */
+}
+
 .red-text {
   color: var(--error);
 }

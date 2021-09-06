@@ -14,7 +14,7 @@ const StudentProcess = () => (
       backgroundColor="yellow"
       title="Étudiants, parlez de vos difficultés"
     />
-    <div className={styles.description}>Consultez un psychologue gratuitement</div>
+    <div className="fr-text--lead">Consultez un psychologue gratuitement</div>
     <Row className={styles.card}>
       <StudentCard
         index={1}
