@@ -1,12 +1,10 @@
 <%- include('header'); -%>
   <p>Bonjour ! 👋</p>
   <p>
-    <div>
-      Vous avez demandé un lien de connexion à la plateforme <%= appName %>.
-    </div>
-    <div>
-      Pour vous authentifier, cliquez sur le bouton ci-dessous dans <strong>l'heure qui suit</strong> la réception de ce message - ce bouton n'est utilisable qu'une seule fois.
-    </div>
+    Vous avez demandé un lien de connexion à la plateforme <%= appName %>.
+  </p>
+  <p>
+    Pour vous authentifier, cliquez sur le bouton ci-dessous dans <strong>l'heure qui suit</strong> la réception de ce message - ce bouton n'est utilisable qu'une seule fois.
   </p>
   <p>
     <a href="<%= loginUrlWithToken %>" class="loginButton">
@@ -14,14 +12,10 @@
     </a>
   </p>
   <br/>
-  <p>
-    <div>
-      Ca n'a pas marché pas en cliquant sur le bouton ?
-    </div>
-    <div>
-      <a title="Redemander un lien de connexion en cas de problème" href="<%= loginUrl %>">Redemander un lien de connexion ici</a> et au lieu de cliquer sur le bouton, essayez de copier ce lien et le coller dans votre navigateur :
-    </div>
-  </p>
+  <div>
+    Ça n'a pas marché en cliquant sur le bouton ?
+    <a title="Redemander un lien de connexion en cas de problème" href="<%= loginUrl %>">Redemander un lien de connexion ici</a> et au lieu de cliquer sur le bouton, essayez de copier ce lien et le coller dans votre navigateur :
+  </div>
   <p>
     <%= loginUrlWithToken %>
   </p>
