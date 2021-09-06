@@ -1,4 +1,3 @@
-const should = require('chai').should();
 const search = require('../src/services/search');
 
 describe('Search', () => {
@@ -12,7 +11,7 @@ describe('Search', () => {
       { value: 'Dupont', filter: 'Dupond', result: false },
     ];
 
-    tests.forEach((test) => {
+    tests.forEach(test => {
       it(`Should return ${test.result} for ${test.value} and ${test.filter}`, () => {
         const result = search.matchFilter(test.value, test.filter);
         result.should.equals(test.result);
@@ -31,7 +30,7 @@ describe('Search', () => {
       { address: '13 boulevard des capucines 75002 paris ; 25 rue du Vieux Pont 92000 Nanterre', filter: '20', result: false },
     ];
 
-    tests.forEach((test) => {
+    tests.forEach(test => {
       it(`Should return ${test.result} for ${test.address} and filter ${test.filter}`, () => {
         const result = search.matchDepartment(test.address, test.filter);
         result.should.equals(test.result);
@@ -56,7 +55,7 @@ describe('Search', () => {
       { address: 'rue du faubourg saint honoré 75008 paris ; 71 Avenue Jean Jaurès 93500 Pantin ', filter: 'faubourg', result: false },
     ];
 
-    tests.forEach((test) => {
+    tests.forEach(test => {
       it(`Should return ${test.result} for ${test.address} and filter ${test.filter}`, () => {
         const result = search.matchZipCodeOrCity(test.address, test.filter);
         result.should.equals(test.result);

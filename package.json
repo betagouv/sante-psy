@@ -25,7 +25,7 @@
     "start": "node dist/index.js",
     "test": "npm run test:backend && npm run test:frontend",
     "test:backend": "set TEST_ENVIRONMENT=true && ts-mocha --require @babel/register --exit test/** test/**/*",
-    "test:frontend": "npm --prefix frontend run test", 
+    "test:frontend": "npm --prefix frontend run test",
     "test:ci": "wait-on --timeout 60000 https://api-annuaire-sante.herokuapp.com/annuaire/annuaire.json?Identification+nationale+PP__in=0 && npm run test",
     "preinstall": "npx npm-force-resolutions",
     "prepublishOnly": "pinst --disable",
