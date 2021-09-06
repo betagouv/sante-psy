@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, Row, Col, TextInput } from '@dataesr/react-dsfr';
+import { Checkbox, Row, Col, TextInput, Button, Alert } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
 
 import agent from 'services/agent';
 import utils from 'services/search';
+import distance from 'services/distance';
 
 import { useStore } from 'stores/';
 
@@ -20,6 +21,8 @@ const PsyListing = () => {
   const { commonStore: { psychologists, setPsychologists } } = useStore();
   const query = new URLSearchParams(useLocation().search);
 
+  const [coords, setCoords] = useState();
+  const [geoAccessDenied, setGeoAccessDenied] = useState(false);
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
@@ -69,18 +72,54 @@ const PsyListing = () => {
     }
   };
 
+  const success = pos => {
+    console.debug('Geolocation retrieved');
+    const { longitude, latitude } = pos.coords;
+    setCoords({ longitude, latitude });
+    setGeoAccessDenied(false);
+  };
+
+  const errors = err => {
+    console.debug(err.message);
+    setGeoAccessDenied(true);
+  };
+
+  const getGeolocation = state => {
+    console.debug('Geolocation', state);
+    if (state === 'granted') {
+      navigator.geolocation.getCurrentPosition(success);
+    } else if (state === 'prompt') {
+      navigator.geolocation.getCurrentPosition(success, errors);
+    } else if (state === 'denied') {
+      setGeoAccessDenied(true);
+    }
+  };
+
+  const checkGeolocationPermission = () => {
+    console.debug('Geolocation permission check');
+    if (navigator.geolocation) {
+      navigator.permissions
+        .query({ name: 'geolocation' })
+        .then(result => {
+          getGeolocation(result.state);
+        });
+    } else {
+      console.warn('Geolocation unavailable');
+    }
+  };
+
   const getFilteredPsychologists = () => {
     if (!psychologists) {
       return [];
     }
     const departementFilter = +addressFilter;
     const addressIsDepartment = departementFilter
-    && (
-      (departementFilter > 0 && departementFilter < 96)
-    || (departementFilter > 970 && departementFilter < 977)
-    );
+      && (
+        (departementFilter > 0 && departementFilter < 96)
+        || (departementFilter > 970 && departementFilter < 977)
+      );
 
-    return psychologists.filter(psychologist => {
+    const filteredPsychologists = psychologists.filter(psychologist => {
       if (teleconsultation && !psychologist.teleconsultation) {
         return false;
       }
@@ -110,6 +149,12 @@ const PsyListing = () => {
 
       return true;
     });
+
+    if (coords && coords.longitude) {
+      console.debug("Sort by distance from", coords.longitude, coords.latitude);
+      return filteredPsychologists.sort((psyA, psyB) => distance.comparator(psyA, psyB, coords));
+    }
+    return filteredPsychologists;
   };
 
   const filteredPsychologists = getFilteredPsychologists();
@@ -145,12 +190,33 @@ const PsyListing = () => {
                 />
               </Col>
             </Row>
-            <Checkbox
-              value="teleconsultation"
-              onChange={e => { setTeleconsultation(e.target.checked); }}
-              label="Disponible en téléconsultation"
-              defaultChecked={teleconsultation}
-            />
+            <Row gutters>
+              <Col n="md-6 sm-12" className={styles.input}>
+                <Checkbox
+                  value="teleconsultation"
+                  onChange={e => { setTeleconsultation(e.target.checked); }}
+                  label="Disponible en téléconsultation"
+                  defaultChecked={teleconsultation}
+                />
+              </Col>
+              <Col n="md-6 sm-12" className={styles.input}>
+                <Button
+                  icon="fr-fi-search-line"
+                  onClick={checkGeolocationPermission}
+                >
+                  Rechercher autour de moi
+                </Button>
+                {geoAccessDenied && (
+                  <Alert
+                    className="fr-mt-1w"
+                    type="error"
+                    description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette
+                    fonctionnalité."
+                  />
+                )}
+              </Col>
+            </Row>
+
           </div>
           <PsyTable
             page={page}
