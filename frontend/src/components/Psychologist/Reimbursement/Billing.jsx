@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
+import { HashLink } from 'react-router-hash-link';
 
 import { Button, ButtonGroup, Callout, CalloutText } from '@dataesr/react-dsfr';
 import MonthPicker from 'components/Date/MonthPicker';
+import Notification from 'components/Notification/Notification';
 
 import agent from 'services/agent';
 import { formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 
+import { useStore } from 'stores/';
 import BillingTable from './BillingTable';
 import BillingInfo from './BillingInfo';
 import BillingHelper from './BillingHelper';
@@ -19,6 +22,8 @@ const Billing = () => {
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1,
   });
+
+  const { userStore: { user } } = useStore();
 
   const [valuesByDate, setValuesByDate] = useState({ appointments: {}, patients: {} });
   const [fillInfo, setFillInfo] = useState(false);
@@ -51,6 +56,7 @@ const Billing = () => {
         && appointmentDate.getMonth() === month.month - 1;
   });
 
+  const canGenerateBill = user.convention && user.convention.isConventionSigned;
   return (
     <>
       <Callout hasInfoIcon={false}>
@@ -66,15 +72,78 @@ const Billing = () => {
       </Callout>
       <div className="fr-my-2w">
         <h3>Générer ma facture</h3>
+        {!canGenerateBill && (
+        <Notification type="info">
+          Veuillez attendre la signature de votre convention avant d&lsquo;envoyer votre facture.
+          Renseignez le statut de votre convention dans la page
+          {' '}
+          <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
+        </Notification>
+        )}
         <div className={styles.monthPickerContainer}>
           Générer ma facture pour le mois de :
           <div className={styles.monthPicker}>
             <MonthPicker month={month} setMonth={setMonth} />
           </div>
         </div>
-
         {filteredDate.length > 0 ? (
           <>
+            <div className="fr-mb-2w">
+              {fillInfo && (
+                <BillingInfo
+                  billingInfo={billingInfo}
+                  setBillingInfo={setBillingInfo}
+                />
+              )}
+            </div>
+            <ButtonGroup className="fr-mb-2w" isInlineFrom="xs">
+              {fillInfo ? (
+                <Button
+                  secondary
+                  icon="fr-fi-close-line"
+                  onClick={() => {
+                    setBillingInfo(billingInfoService.get());
+                    setFillInfo(false);
+                  }}
+                >
+                  Annuler
+                </Button>
+              ) : (
+                <Button
+                  secondary
+                  icon="fr-fi-edit-line"
+                  onClick={() => setFillInfo(true)}
+                >
+                  Renseigner mes informations
+                </Button>
+              )}
+              {canGenerateBill ? (
+                <a
+                  className="fr-btn"
+                  href={`/psychologue/bill/${month.month}/${month.year}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => {
+                    setFillInfo(false);
+                    billingInfoService.save(billingInfo);
+                  }}
+                >
+                  <span className={classNames(styles.downloadIcon, 'fr-fi-file-download-line')} aria-hidden="true" />
+                  Télécharger/Imprimer
+                </a>
+              ) : (
+                <Button
+                  disabled
+                  icon="fr-fi-file-download-line"
+                >
+                  Télécharger/Imprimer
+                </Button>
+              )}
+            </ButtonGroup>
+            <BillingTable
+              filteredDate={filteredDate}
+              appointments={valuesByDate.appointments}
+            />
             <p className="fr-my-2w" data-test-id="bill-summary-text">
               En
               {` ${formatMonth(month)}`}
@@ -88,54 +157,10 @@ const Billing = () => {
                   .flatMap(date => valuesByDate.patients[date])
                   .filter((value, index, array) => array.indexOf(value) === index)
                   .length}
-               `}
+             `}
               </b>
               étudiants.
             </p>
-            <div className="fr-mb-2w">
-              {fillInfo ? (
-                <BillingInfo
-                  billingInfo={billingInfo}
-                  setBillingInfo={setBillingInfo}
-                />
-              ) : (
-                <Button
-                  secondary
-                  icon="fr-fi-edit-line"
-                  onClick={() => setFillInfo(true)}
-                >
-                  Remplir votre facture en ligne
-                </Button>
-              )}
-            </div>
-            <ButtonGroup className="fr-mb-2w" isInlineFrom="xs">
-              <a
-                className="fr-btn"
-                href={`/psychologue/bill/${month.month}/${month.year}`}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => billingInfoService.save(billingInfo)}
-              >
-                <span className={classNames(styles.downloadIcon, 'fr-fi-file-download-line')} aria-hidden="true" />
-                Télécharger/Imprimer
-              </a>
-              {fillInfo && (
-              <Button
-                secondary
-                icon="fr-fi-close-line"
-                onClick={() => {
-                  setBillingInfo(billingInfoService.get());
-                  setFillInfo(false);
-                }}
-              >
-                Annuler
-              </Button>
-              )}
-            </ButtonGroup>
-            <BillingTable
-              filteredDate={filteredDate}
-              appointments={valuesByDate.appointments}
-            />
           </>
         ) : (
           <p className="fr-mb-2w">

@@ -79,7 +79,7 @@ const Bill = () => {
       `${universityInfos.address || FULL_UNDERSCORE_LINE}`,
       'E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :',
       billingInfo.address1 || FULL_UNDERSCORE_LINE,
-      billingInfo.address2 || FULL_UNDERSCORE_LINE,
+      billingInfo.address1 ? billingInfo.address2 : FULL_UNDERSCORE_LINE,
       `Numéro du bon de commande de l’université (à demander à l’université) : ${
         billingInfo.orderNumber || '___________________'
       }`,
