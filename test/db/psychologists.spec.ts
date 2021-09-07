@@ -23,7 +23,7 @@ describe('DB Psychologists', () => {
 
   beforeEach(async () => {
     await clean.cleanAllUniversities();
-    getAddressCoordinatesStub = sinon.stub(getAddressCoordinates, 'default').returns();
+    getAddressCoordinatesStub = sinon.stub(getAddressCoordinates, 'default').returns(null);
   });
 
   afterEach(async () => {

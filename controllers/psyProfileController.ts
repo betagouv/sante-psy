@@ -119,7 +119,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     ...req.body,
     dossierNumber: req.user.psychologist,
     region,
-    ...(coordinates && coordinates.longitude && coordinates.latitude && {
+    ...(coordinates && {
       longitude: coordinates.longitude,
       latitude: coordinates.latitude,
     }),
