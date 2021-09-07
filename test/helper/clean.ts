@@ -106,7 +106,7 @@ const getOnePsy = (
   };
 };
 
-const getOneInactivePsy = (inactiveUntil?: Date): Psychologist => getOnePsy(
+const getOneInactivePsy = (inactiveUntil: Date = new Date()): Psychologist => getOnePsy(
   `inactive@${inactiveUntil}.fr`,
   DossierState.accepte,
   false,

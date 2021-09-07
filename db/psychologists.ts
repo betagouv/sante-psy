@@ -60,6 +60,8 @@ const getAllActive = async (): Promise<Psychologist[]> => {
       'teleconsultation',
       'languages',
       'description',
+      'longitude',
+      'latitude',
     )
         .select()
         .from(psychologistsTable)

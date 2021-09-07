@@ -188,7 +188,7 @@ describe('DB Psychologists', () => {
       const constructionPsy = clean.getOnePsy('construction@psy.fr');
       constructionPsy.state = DossierState.enConstruction;
       constructionPsy.lastName = 'ConstructionPsy';
-      const inactivePsy = clean.getOneInactivePsy(new Date());
+      const inactivePsy = clean.getOneInactivePsy();
       await dbPsychologists.upsertMany([activePsy, archivedPsy, constructionPsy, inactivePsy]);
 
       const shouldBeOne = await dbPsychologists.getAllActive();
@@ -465,7 +465,7 @@ describe('DB Psychologists', () => {
 
   describe('activate', () => {
     it('should activate psy and remove inactiveUntil date', async () => {
-      const inactivePsy = clean.getOneInactivePsy(new Date());
+      const inactivePsy = clean.getOneInactivePsy();
       await dbPsychologists.upsertMany([inactivePsy]);
 
       await dbPsychologists.activate(inactivePsy.dossierNumber);
