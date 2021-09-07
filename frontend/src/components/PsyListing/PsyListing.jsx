@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, Row, Col, TextInput, Button, Alert } from '@dataesr/react-dsfr';
+import { Checkbox, Row, Col, TextInput, SearchableSelect, Alert } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
@@ -41,6 +41,10 @@ const PsyListing = () => {
       setPage(1);
     }
 
+    if (addressFilter === AROUND_ME) {
+      checkGeolocationPermission();
+    }
+
     logSearchInMatomo();
   }, [nameFilter, addressFilter, teleconsultation]);
 
@@ -72,6 +76,10 @@ const PsyListing = () => {
     }
   };
 
+  // TODO refactor : extract following code
+  /* BEGIN */
+  const AROUND_ME = 'Autour de moi';
+
   const success = pos => {
     console.debug('Geolocation retrieved');
     const { longitude, latitude } = pos.coords;
@@ -96,28 +104,25 @@ const PsyListing = () => {
   };
 
   const checkGeolocationPermission = () => {
-    console.debug('Geolocation permission check');
-    if (navigator.geolocation) {
-      navigator.permissions
-        .query({ name: 'geolocation' })
-        .then(result => {
-          getGeolocation(result.state);
-        });
-    } else {
-      console.warn('Geolocation unavailable');
+    if (!coords) {
+      console.debug('Geolocation permission check');
+      if (navigator.geolocation) {
+        navigator.permissions
+          .query({ name: 'geolocation' })
+          .then(result => {
+            getGeolocation(result.state);
+          });
+      } else {
+        console.warn('Geolocation unavailable');
+      }
     }
   };
+  /* END */
 
   const getFilteredPsychologists = () => {
     if (!psychologists) {
       return [];
     }
-    const departementFilter = +addressFilter;
-    const addressIsDepartment = departementFilter
-      && (
-        (departementFilter > 0 && departementFilter < 96)
-        || (departementFilter > 970 && departementFilter < 977)
-      );
 
     const filteredPsychologists = psychologists.filter(psychologist => {
       if (teleconsultation && !psychologist.teleconsultation) {
@@ -132,6 +137,17 @@ const PsyListing = () => {
       ) {
         return false;
       }
+
+      if (addressFilter === AROUND_ME) {
+        return true;
+      }
+
+      const departementFilter = +addressFilter;
+      const addressIsDepartment = departementFilter
+        && (
+          (departementFilter > 0 && departementFilter < 96)
+          || (departementFilter > 970 && departementFilter < 977)
+        );
 
       if (addressIsDepartment) {
         if (!utils.matchDepartment(psychologist.address, addressFilter)) {
@@ -150,8 +166,8 @@ const PsyListing = () => {
       return true;
     });
 
-    if (coords && coords.longitude) {
-      console.debug("Sort by distance from", coords.longitude, coords.latitude);
+    if (coords && addressFilter === AROUND_ME) {
+      console.debug('Sort by distance from', coords.longitude, coords.latitude);
       return filteredPsychologists.sort((psyA, psyB) => distance.comparator(psyA, psyB, coords));
     }
     return filteredPsychologists;
@@ -182,11 +198,14 @@ const PsyListing = () => {
                 />
               </Col>
               <Col n="md-6 sm-12" className={styles.input}>
-                <TextInput
+                {/* TODO: allow to use any string value */}
+                {/* TODO: fix style => select-search-input needs margin-top: 0.5rem */}
+                <SearchableSelect
                   className="fr-mb-1w"
-                  value={addressFilter}
-                  onChange={e => setAddressFilter(e.target.value)}
+                  selected={addressFilter}
+                  onChange={e => setAddressFilter(e)}
                   label="Rechercher par ville, code postal ou région"
+                  options={[{ value: AROUND_ME, label: AROUND_ME }]}
                 />
               </Col>
             </Row>
@@ -200,13 +219,7 @@ const PsyListing = () => {
                 />
               </Col>
               <Col n="md-6 sm-12" className={styles.input}>
-                <Button
-                  icon="fr-fi-search-line"
-                  onClick={checkGeolocationPermission}
-                >
-                  Rechercher autour de moi
-                </Button>
-                {geoAccessDenied && (
+                {addressFilter === AROUND_ME && geoAccessDenied && (
                   <Alert
                     className="fr-mt-1w"
                     type="error"
