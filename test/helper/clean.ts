@@ -101,6 +101,8 @@ const getOnePsy = (
     active: !inactiveUntil,
     inactiveUntil,
     createdAt: new Date(),
+    longitude: null,
+    latitude: null,
   };
 };
 

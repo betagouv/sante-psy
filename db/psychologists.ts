@@ -138,7 +138,7 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
         });
       }
 
-      let coordinates : Coordinates|void;
+      let coordinates : Coordinates;
       if (psyInDb.address !== psy.address) {
         coordinates = await getAddressCoordinates(psy.address);
       }

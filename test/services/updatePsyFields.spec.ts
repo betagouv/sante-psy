@@ -98,6 +98,8 @@ describe('Update psy fields', () => {
         active: true,
         inactiveUntil: new Date(),
         createdAt: creationDate,
+        longitude: null,
+        latitude: null,
       };
 
       const editablePsy = updatePsyFields.editablePsyFields(psy);
