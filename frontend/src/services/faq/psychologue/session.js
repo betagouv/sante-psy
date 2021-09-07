@@ -33,4 +33,8 @@ module.exports = config => [
     question: "Mon étudiant n'a pas de carte d'étudiant. Que puis-je faire ?",
     answer: "Les étudiants doivent présenter un justificatif d'inscription en études supérieures : carte étudiante, certificat de scolarité ou autre document.",
   },
+  {
+    question: 'Quelle est la date prévue de fin du dispositif Santé Psy Étudiant ?',
+    answer: "Le dispositif se poursuit jusqu'au 31 décembre 2021. Si vous êtes psychologue, nous vous invitons à vous rapprocher de votre université de rattachement pour connaître les modalités de prolongation.",
+  },
 ];
