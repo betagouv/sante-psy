@@ -14,13 +14,13 @@ module.exports = config => [
   },
   {
     question: 'Je ne parviens pas à accéder à mon espace psychologue. Que puis-je faire ?',
-    answer: `Si vous rencontrez des problèmes de connexion : \
+    answer: `Si vous rencontrez des problèmes de connexion : \
     <ul>\
     <li>\
-    L'email n'est pas reconnu : assurez-vous que votre email de connexion correspond à celui utilisé lors de votre inscription. Il peut être différent de votre email de contact présenté dans l‘annuaire des psychologues.\
+    L'email n'est pas reconnu : assurez-vous que votre email de connexion correspond à celui utilisé lors de votre inscription. Il peut être différent de votre email de contact présenté dans l‘annuaire des psychologues.\
     </li>\
     <li>\
-    Si vous ne recevez pas l'email de connexion sur votre boite mail : vérifier vos spams et ajouter l'adresse ${config.contactEmail} à votre carnet d'adresse email. \
+    Si vous ne recevez pas l'email de connexion sur votre boite mail : vérifier vos spams et ajouter l'adresse ${config.contactEmail} à votre carnet d'adresse email. \
     </li>\
     <li>\
     Si vous recevez l'email de connexion mais le lien ne s'ouvre pas, veuillez nous contacter.\
