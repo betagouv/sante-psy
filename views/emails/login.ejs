@@ -1,25 +1,31 @@
 <%- include('header'); -%>
   <p>Bonjour ! 👋</p>
   <p>
-    Vous avez demandé un lien de connexion à la plateforme <%= appName %>.
+    Vous avez demandé un lien pour vous connecter à la plateforme <%= appName %>.
   </p>
   <p>
-    Pour vous authentifier, cliquez sur le bouton ci-dessous dans <strong>l'heure qui suit</strong> la réception de ce message - ce bouton n'est utilisable qu'une seule fois.
+    Vous pourrez acceder à votre espace psychologues en cliquant sur le bouton ci-dessous dans <strong>l'heure qui suit</strong> la réception de ce message.
+    Ce bouton n'est valable qu'une seule fois, pour vous reconnecter veuillez redemander un lien de connection.
   </p>
   <p>
     <a href="<%= loginUrlWithToken %>" class="loginButton">
       Me connecter
     </a>
   </p>
+  <p>
+    Une fois sur votre espace psychologue, vous pourrez déclarer vos séances, ajouter de nouveaux étudiants ainsi que gerer vos factures et informations personnelles et publiques.
+  </p>
   <br/>
   <div>
-    Ça n'a pas marché en cliquant sur le bouton ?
-    <a title="Redemander un lien de connexion en cas de problème" href="<%= loginUrl %>">Redemander un lien de connexion ici</a> et au lieu de cliquer sur le bouton, essayez de copier ce lien et le coller dans votre navigateur :
+    Si vous avez un message d'erreur en cliquant sur le bouton ? Vous pouvez
+    <a title="Redemander un lien de connexion en cas de problème" href="<%= loginUrl %>">redemander un lien de connexion ici</a> et au lieu de cliquer sur le bouton,
+    copier directement le lien ci-dessous et coller le dans la barre d'adresse de votre navigateur :
   </div>
   <p>
     <%= loginUrlWithToken %>
   </p>
   <p>
-    En cas de problème avec votre compte, n'hésitez pas à répondre à ce mail!
+    Et si cela ne fonctionne toujours pas, ou en cas d'autres questions ou problèmes avec votre compte,
+    n'hésitez pas à répondre à ce mail, notre équipe de support se fera un plaisir de vous aider !
   </p>
 <%- include('footer'); -%>
