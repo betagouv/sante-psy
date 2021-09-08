@@ -35,6 +35,6 @@ module.exports = config => [
   },
   {
     question: 'Quelle est la date prévue de fin du dispositif Santé Psy Étudiant\u00A0?',
-    answer: "Le dispositif se poursuit jusqu'au 31 décembre 2021. Si vous êtes psychologue, nous vous invitons à vous rapprocher de votre université de rattachement pour connaître les modalités de prolongation.",
+    answer: "Comme explicité dans votre convention, le dispositif continue sous sa forme actuelle jusqu'au 31 décembre 2021. Plus de détails à venir pour la suite de l'année scolaire 2021/2022.",
   },
 ];
