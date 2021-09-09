@@ -153,7 +153,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
     );
   }
 
-  const token = loginInformations.generateToken();
+  const token = loginInformations.generateToken(32);
   const loginUrl = loginInformations.generateLoginUrl();
   await sendLoginEmail(email, loginUrl, token);
   await saveToken(email, token);
