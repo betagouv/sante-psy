@@ -19,6 +19,7 @@ const NewAppointment = () => {
   const params = useParams();
   const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
+  const [patientValidation, setPatientValidation] = useState();
 
   const { commonStore: { setNotification } } = useStore();
 

@@ -64,20 +64,22 @@ const Login = () => {
           heures
         </p>
         <form onSubmit={login} id="login_form">
-          <Row alignItems="bottom">
+          <label>
+            Adresse email :
+            {' '}
+          </label>
+          <Row>
             <Col>
-              <label>
-                Adresse email :
-                {' '}
-                <TextInput
-                  ref={emailRef}
-                  className={styles.mailInput}
-                  data-test-id="email-input"
-                  value={email}
-                  type="email"
-                  onChange={e => setEmail(e.target.value)}
-                />
-              </label>
+              <TextInput
+                ref={emailRef}
+                className={styles.mailInput}
+                data-test-id="email-input"
+                value={email}
+                type="email"
+                onChange={e => setEmail(e.target.value)}
+                withAutoValidation
+                required
+              />
             </Col>
             <Col>
               <Button

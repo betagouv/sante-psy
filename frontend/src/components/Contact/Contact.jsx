@@ -10,11 +10,12 @@ import { useStore } from 'stores/';
 
 const Contact = () => {
   const [userType, setUserType] = useState();
-  const [name, setName] = useState();
-  const [firstName, setFirstName] = useState();
-  const [email, setEmail] = useState();
+  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [email, setEmail] = useState('');
   const [reason, setReason] = useState();
-  const [message, setMessage] = useState();
+  const [message, setMessage] = useState('');
+  const [reasonValidation, setReasonValidation] = useState();
 
   const { commonStore: { setNotification, config }, userStore: { user } } = useStore();
   const location = useLocation();
@@ -102,6 +103,7 @@ const Contact = () => {
           label="Nom"
           value={name}
           onChange={e => setName(e.target.value)}
+          withAutoValidation
         />
         <TextInput
           data-test-id="first-name-input"
@@ -109,6 +111,7 @@ const Contact = () => {
           label="Prenom"
           value={firstName}
           onChange={e => setFirstName(e.target.value)}
+          withAutoValidation
         />
         <TextInput
           data-test-id="email-input"
@@ -117,6 +120,7 @@ const Contact = () => {
           label="Email"
           value={email}
           onChange={e => setEmail(e.target.value)}
+          withAutoValidation
         />
         <Select
           data-test-id="reason-select"
@@ -134,6 +138,14 @@ const Contact = () => {
           ]}
           selected={reason}
           onChange={e => setReason(e.target.value)}
+          message={reasonValidation && reasonValidation.message}
+          messageType={reasonValidation && reasonValidation.status}
+          onBlur={e => {
+            setReasonValidation({
+              status: e.target.validity.valid ? 'valid' : 'error',
+              message: e.target.validationMessage,
+            });
+          }}
         />
         <TextInput
           data-test-id="message-input"
@@ -142,6 +154,7 @@ const Contact = () => {
           label="Message"
           value={message}
           onChange={e => setMessage(e.target.value)}
+          withAutoValidation
         />
         <Button
           data-test-id="submit-button"
