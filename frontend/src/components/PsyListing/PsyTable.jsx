@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Table, Button, Title } from '@dataesr/react-dsfr';
 
-import styles from './psyTable.cssmodule.scss';
-
 const PsyTable = ({
   page,
   setPage,
@@ -103,7 +101,7 @@ const PsyTable = ({
 
   const currentPage = Math.min(page, Math.ceil(psychologists.length / 10));
   return (
-    <div ref={table} className={styles.container}>
+    <div ref={table}>
       {psychologists.length > 0 ? (
         <>
           <Table
@@ -114,6 +112,7 @@ const PsyTable = ({
             columns={columns}
             data={psychologists}
             pagination
+            paginationPosition="center"
             page={currentPage}
             perPage={10}
             setPage={p => {
