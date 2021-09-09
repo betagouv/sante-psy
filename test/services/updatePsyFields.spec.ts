@@ -116,7 +116,6 @@ describe('Update psy fields', () => {
       });
 
       ['dossierNumber',
-        'assignedUniversityId',
         'isConventionSigned',
         'selfModified',
         'active',

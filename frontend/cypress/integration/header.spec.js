@@ -132,8 +132,7 @@ describe('Header Test', () => {
         .as('logout');
 
       resetDB();
-      loginAsDefault();
-      signConvention('Angers', true);
+      loginAsDefault().then(() => signConvention(true));
     });
 
     describe('On desktop', () => {

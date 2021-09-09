@@ -312,34 +312,26 @@ describe('DB Psychologists', () => {
 
   describe('updateConventionInfo', () => {
     it('should update conventionInfo', async () => {
-      const univName = 'Fake Uni';
-      const university = await dbUniversities.insertByName(univName);
       const psy = await clean.insertOnePsy();
       const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
-      expect(savedPsy.isConventionSigned).not.to.exist;
-      expect(savedPsy.assignedUniversityId).to.not.equal(university.id);
+      expect(savedPsy.isConventionSigned).to.be.false;
 
       await dbPsychologists.updateConventionInfo(
         savedPsy.dossierNumber,
-        university.id,
         true, // isConventionSigned
       );
 
       const updatedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
-
       expect(updatedPsy.isConventionSigned).to.equal(true);
-      expect(updatedPsy.assignedUniversityId).to.equal(university.id);
     });
 
     it('should not update conventionInfo if psychologistId is unknown', async () => {
-      const univUUID = '736bd860-3928-457e-9f40-3f367c36be30';
       const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0675';
 
       try {
         await dbPsychologists.updateConventionInfo(
           unknownPsyId,
-          univUUID,
           true, // isConventionSigned
         );
         expect.fail('updateConventionInfo should have thrown error');
@@ -360,7 +352,6 @@ describe('DB Psychologists', () => {
 
       await dbPsychologists.updateConventionInfo(
         savedPsy.dossierNumber,
-        university.id,
         isConventionSigned, // isConventionSigned
       );
 

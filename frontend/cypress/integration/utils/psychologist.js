@@ -17,23 +17,14 @@ const suspend = () => {
   });
 };
 
-const signConvention = (name, isSigned) => cy.request({
-  method: 'GET',
-  url: 'http://localhost:8080/api/universities',
-  headers: { 'xsrf-token': 'randomXSRFToken' },
-})
-  .then(response => {
-    const university = response.body.find(u => u.name === name);
-    setLoginInfo();
-    return cy.request({
-      method: 'POST',
-      url: `http://localhost:8080/api/psychologist/${getCurrentUser().dossierNumber}/convention`,
-      headers: { 'xsrf-token': 'randomXSRFToken' },
-      body: {
-        universityId: university.id,
-        isConventionSigned: isSigned,
-      },
-    });
+const signConvention = isSigned => {
+  setLoginInfo();
+  return cy.request({
+    method: 'POST',
+    url: `http://localhost:8080/api/psychologist/${getCurrentUser().dossierNumber}/convention`,
+    headers: { 'xsrf-token': 'randomXSRFToken' },
+    body: { isConventionSigned: isSigned },
   });
+};
 
 export default { removeConvention, signConvention, suspend };

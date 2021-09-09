@@ -20,23 +20,6 @@ describe('universitiesController', () => {
     await dbUniversities.upsertMany([university, university2]);
   });
 
-  it('should return all universities', async () => chai.request(app)
-        .get('/api/universities')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-        .set('xsrf-token', 'randomXSRFToken')
-        .then(async (res) => {
-          res.body.forEach((university) => {
-            university.should.have.all.keys('id', 'name');
-          });
-          res.body.should.eql([{
-            id: university.id,
-            name: university.name,
-          }, {
-            id: university2.id,
-            name: university2.name,
-          }]);
-        }));
-
   it('should return one university', async () => chai.request(app)
         .get(`/api/universities/${university.id}`)
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
