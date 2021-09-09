@@ -91,7 +91,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
               data-test-id="signed-true"
               label="Oui"
               value="true"
-              isDisabled={convention.universityId === noUniversityId.current}
+              disabled={convention.universityId === noUniversityId.current}
             />
             <Radio
               data-test-id="signed-false"
