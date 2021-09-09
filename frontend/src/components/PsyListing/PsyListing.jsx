@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, Row, Col, TextInput, Alert, Title, Button } from '@dataesr/react-dsfr';
+import { Checkbox, Row, Col, TextInput, Alert } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
@@ -17,6 +17,15 @@ import NoResultPsyTable from './NoResultPsyTable';
 
 import styles from './psyListing.cssmodule.scss';
 
+const AROUND_ME = 'Autour de moi';
+
+const geoStatusEnum = {
+  UNSUPPORTED: -2,
+  DENIED: -1,
+  UNKNOWN: 0,
+  GRANTED: 1,
+};
+
 let lastSearch;
 
 const PsyListing = () => {
@@ -24,7 +33,7 @@ const PsyListing = () => {
   const query = new URLSearchParams(useLocation().search);
 
   const [coords, setCoords] = useState();
-  const [geoAccessDenied, setGeoAccessDenied] = useState(false);
+  const [geoStatus, setGeoStatus] = useState(geoStatusEnum.UNKNOWN);
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
@@ -78,18 +87,14 @@ const PsyListing = () => {
     }
   };
 
-  // TODO refactor : extract following code
-  /* BEGIN */
-  const AROUND_ME = 'Autour de moi';
-
   const success = pos => {
     const { longitude, latitude } = pos.coords;
     setCoords({ longitude, latitude });
-    setGeoAccessDenied(false);
+    setGeoStatus(geoStatusEnum.GRANTED);
   };
 
   const errors = () => {
-    setGeoAccessDenied(true);
+    setGeoStatus(geoStatusEnum.DENIED);
   };
 
   const getGeolocation = state => {
@@ -98,7 +103,7 @@ const PsyListing = () => {
     } else if (state === 'prompt') {
       navigator.geolocation.getCurrentPosition(success, errors);
     } else if (state === 'denied') {
-      setGeoAccessDenied(true);
+      setGeoStatus(geoStatusEnum.DENIED);
     }
   };
 
@@ -111,11 +116,10 @@ const PsyListing = () => {
             getGeolocation(result.state);
           });
       } else {
-        console.debug('Geolocation unavailable');
+        setGeoStatus(geoStatusEnum.UNSUPPORTED);
       }
     }
   };
-  /* END */
 
   const getFilteredPsychologists = () => {
     if (!psychologists) {
@@ -214,12 +218,19 @@ const PsyListing = () => {
                 />
               </Col>
               <Col n="md-6 sm-12" className={styles.input}>
-                {addressFilter === AROUND_ME && geoAccessDenied && (
+                {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
                   <Alert
                     className="fr-mt-1w"
                     type="error"
                     description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette
                     fonctionnalité."
+                  />
+                )}
+                {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.UNSUPPORTED && (
+                  <Alert
+                    className="fr-mt-1w"
+                    type="error"
+                    description="Votre navigateur ne permet pas d'utiliser cette fonctionnalité."
                   />
                 )}
               </Col>
