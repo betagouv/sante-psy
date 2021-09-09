@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, Row, Col, TextInput, SearchableSelect, Alert } from '@dataesr/react-dsfr';
+import { Checkbox, Row, Col, TextInput, Alert, Title, Button } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
+import InputSelect from 'components/InputSelect/InputSelect';
 
 import agent from 'services/agent';
 import utils from 'services/search';
@@ -12,6 +13,7 @@ import distance from 'services/distance';
 import { useStore } from 'stores/';
 
 import PsyTable from './PsyTable';
+import NoResultPsyTable from './NoResultPsyTable';
 
 import styles from './psyListing.cssmodule.scss';
 
@@ -81,19 +83,16 @@ const PsyListing = () => {
   const AROUND_ME = 'Autour de moi';
 
   const success = pos => {
-    console.debug('Geolocation retrieved');
     const { longitude, latitude } = pos.coords;
     setCoords({ longitude, latitude });
     setGeoAccessDenied(false);
   };
 
-  const errors = err => {
-    console.debug(err.message);
+  const errors = () => {
     setGeoAccessDenied(true);
   };
 
   const getGeolocation = state => {
-    console.debug('Geolocation', state);
     if (state === 'granted') {
       navigator.geolocation.getCurrentPosition(success);
     } else if (state === 'prompt') {
@@ -105,7 +104,6 @@ const PsyListing = () => {
 
   const checkGeolocationPermission = () => {
     if (!coords) {
-      console.debug('Geolocation permission check');
       if (navigator.geolocation) {
         navigator.permissions
           .query({ name: 'geolocation' })
@@ -113,7 +111,7 @@ const PsyListing = () => {
             getGeolocation(result.state);
           });
       } else {
-        console.warn('Geolocation unavailable');
+        console.debug('Geolocation unavailable');
       }
     }
   };
@@ -167,7 +165,6 @@ const PsyListing = () => {
     });
 
     if (coords && addressFilter === AROUND_ME) {
-      console.debug('Sort by distance from', coords.longitude, coords.latitude);
       return filteredPsychologists.sort((psyA, psyB) => distance.comparator(psyA, psyB, coords));
     }
     return filteredPsychologists;
@@ -198,9 +195,7 @@ const PsyListing = () => {
                 />
               </Col>
               <Col n="md-6 sm-12" className={styles.input}>
-                {/* TODO: allow to use any string value */}
-                {/* TODO: fix style => select-search-input needs margin-top: 0.5rem */}
-                <SearchableSelect
+                <InputSelect
                   className="fr-mb-1w"
                   selected={addressFilter}
                   onChange={e => setAddressFilter(e)}
@@ -238,6 +233,7 @@ const PsyListing = () => {
             nameFilter={nameFilter}
             addressFilter={addressFilter}
             teleconsultation={teleconsultation}
+            noResult={<NoResultPsyTable noResultAction={() => setAddressFilter(AROUND_ME)} />}
           />
         </>
       )}

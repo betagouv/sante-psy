@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Table, Button, Title } from '@dataesr/react-dsfr';
+import { Table, Button } from '@dataesr/react-dsfr';
 
 import styles from './psyTable.cssmodule.scss';
 
@@ -11,6 +11,7 @@ const PsyTable = ({
   nameFilter,
   addressFilter,
   teleconsultation,
+  noResult,
 }) => {
   const [surrendingPages, setSurrendingPages] = useState(0);
   const history = useHistory();
@@ -119,11 +120,7 @@ const PsyTable = ({
             surrendingPages={surrendingPages}
           />
         </>
-      ) : (
-        <Title as="h4" look="h4">
-          Aucun résultat n&lsquo;a été trouvé, veuillez élargir votre champ de recherche ou rechercher autour de vous.
-        </Title>
-      )}
+      ) : noResult }
     </div>
   );
 };
