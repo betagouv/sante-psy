@@ -101,6 +101,8 @@ const getOnePsy = (
     active: !inactiveUntil,
     inactiveUntil,
     createdAt: new Date(),
+    longitude: null,
+    latitude: null,
   };
 };
 
@@ -165,6 +167,13 @@ const getOnePatient = (
   };
 };
 
+const getOneIncompletePatient = (index: number, psychologistId: string): Patient => ({
+  id: uuid.generateFromString(`patient-${psychologistId}-${index}`),
+  firstNames: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  psychologistId,
+});
+
 const getOneAppointment = (
   patientId: string, psychologistId: string, month = 3, day = 10, deleted = false,
 ): Appointment => {
@@ -176,6 +185,14 @@ const getOneAppointment = (
     patientId,
     deleted,
   };
+};
+
+const insertOneAppointment = async (
+  patientId: string, psychologistId: string, month = 3, day = 10, deleted = false,
+): Promise<Appointment> => {
+  const appointment = getOneAppointment(patientId, psychologistId, month, day, deleted);
+  await db(appointmentsTable).insert(appointment);
+  return appointment;
 };
 
 const getOneUniversity = (name: string) : University => ({
@@ -234,12 +251,14 @@ const cleanAllUniversities = async ():Promise<void> => {
 export default {
   getRandomInt,
   getOneAppointment,
+  getOneIncompletePatient,
   getOnePatient,
   getOneUniversity,
   getOnePsy,
-  insertOnePsy,
   getOneInactivePsy,
   getOnePsyDS,
+  insertOnePsy,
+  insertOneAppointment,
   cleanDataCursor,
   cleanDataToken,
   cleanAllPatients,

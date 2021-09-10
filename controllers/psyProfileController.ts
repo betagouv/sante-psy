@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-
 import { check, param, oneOf } from 'express-validator';
+import DOMPurify from '../services/sanitizer';
+
 import geo from '../utils/geo';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
@@ -8,6 +9,8 @@ import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
 import string from '../utils/string';
+import getAddressCoordinates from '../services/getAddressCoordinates';
+import { Coordinates } from '../types/Coordinates';
 
 const getValidators = [
   param('psyId')
@@ -47,28 +50,28 @@ const updateValidators = [
     .trim()
     .notEmpty()
     .withMessage('Vous devez spécifier un email valide.')
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .isEmail()
     .withMessage('Vous devez spécifier un email valide.'),
   check('address')
     .trim()
     .notEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage("Vous devez spécifier l'adresse de votre cabinet."),
   check('departement')
     .trim()
     .notEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier votre département.'),
   check('phone')
     .trim()
     .notEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier le téléphone du secrétariat.'),
   check('languages')
     .trim()
     .notEmpty()
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier les langues parlées.'),
   oneOf(
     [
@@ -76,20 +79,20 @@ const updateValidators = [
       check('email').trim().isEmpty(),
       check('email')
           .trim()
-          .customSanitizer((value, { req }) => req.sanitize(value))
+          .customSanitizer(DOMPurify.sanitize)
           .isEmail(),
     ], 'Vous devez spécifier un email valide.',
   ),
   check('description')
     .trim()
-    .customSanitizer((value, { req }) => req.sanitize(value)),
+    .customSanitizer(DOMPurify.sanitize),
   oneOf(
     [
       // Two valid possibilities : website is empty, or website is valid format.
       check('website').trim().isEmpty(),
       check('website')
             .trim()
-            .customSanitizer((value, { req }) => req.sanitize(value))
+            .customSanitizer(DOMPurify.sanitize)
             .isURL(),
     ], 'Vous devez spécifier une URL valide.',
   ),
@@ -106,10 +109,20 @@ const update = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Departement invalide', 400);
   }
 
+  let coordinates : Coordinates;
+  const psychologist = await dbPsychologists.getById(req.user.psychologist);
+  if (psychologist && psychologist.address !== req.body.address) {
+    coordinates = await getAddressCoordinates(req.body.address);
+  }
+
   await dbPsychologists.update({
     ...req.body,
     dossierNumber: req.user.psychologist,
     region,
+    ...(coordinates && {
+      longitude: coordinates.longitude,
+      latitude: coordinates.latitude,
+    }),
   });
 
   res.json({
@@ -134,7 +147,7 @@ const suspendValidators = [
   check('reason')
     .trim().not().isEmpty()
     .withMessage('Vous devez spécifier une raison.')
-    .customSanitizer((value, { req }) => req.sanitize(value))
+    .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier une raison.'),
 ];
 

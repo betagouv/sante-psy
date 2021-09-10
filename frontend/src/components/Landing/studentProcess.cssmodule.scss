@@ -1,13 +1,7 @@
-.description {
-    font-size: 30px;
-    line-height: 42px;
-    margin-bottom: 16px;
-}
-
 .card {
     justify-content: space-around;
-    padding: 16px 0px;
-    gap: 8px 24px;
+    padding-bottom: 24px;
+    gap: 24px;
 }
 
 .button {
@@ -16,6 +10,6 @@
 
 @media (min-width: 768px) {
     .card {
-        padding: 48px 64px;
+        padding-bottom: 64px;
     }
 }

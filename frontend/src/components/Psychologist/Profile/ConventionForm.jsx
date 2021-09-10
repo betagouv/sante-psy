@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, RadioGroup, Radio, Select, Alert } from '@dataesr/react-dsfr';
+import { Button, RadioGroup, Radio, SearchableSelect, Alert } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { useStore } from 'stores/';
@@ -25,7 +25,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
     setConvention({
       universityId: currentConvention ? currentConvention.universityId : '',
       isConventionSigned: checkDefaultValue
-        ? currentConvention && currentConvention.isConventionSigned
+        ? currentConvention && currentConvention.isConventionSigned === true
         : '',
     });
   }, [currentConvention]);
@@ -50,26 +50,25 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
   if (convention && convention.isConventionSigned !== '' && convention.isConventionSigned !== undefined) {
     defaultValueConventionSigned = convention.isConventionSigned ? 'true' : 'false';
   }
+
   return (
     <form data-test-id="convention-form" onSubmit={saveConvention}>
-      {convention && (
+      {convention && universities.length > 0 && (
         <>
-          <Select
-            className="midlength-input"
+          <SearchableSelect
+            className="midlength-select"
             data-test-id="convention-university-select"
             id="university"
             name="university"
             label="Quelle université vous a contacté pour signer la convention ?"
             selected={convention.universityId}
-            onChange={e => setConvention({ ...convention, universityId: e.target.value })}
+            onChange={e => setConvention({ ...convention, universityId: e })}
             required
-            options={universities
-              ? universities.map(university => ({
-                value: university.id,
-                label: university.name,
-                disabled: convention.isConventionSigned && university.id === noUniversityId.current,
-              }))
-              : []}
+            options={universities.map(university => ({
+              value: university.id,
+              label: university.name,
+              disabled: convention.isConventionSigned && university.id === noUniversityId.current,
+            }))}
           />
           {isSorbonne(convention.universityId) && (
             <Alert
@@ -86,12 +85,13 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
             value={defaultValueConventionSigned}
             onChange={value => setConvention({ ...convention, isConventionSigned: value === 'true' })}
             required
+            isInline
           >
             <Radio
               data-test-id="signed-true"
               label="Oui"
               value="true"
-              isDisabled={convention.universityId === noUniversityId.current}
+              disabled={convention.universityId === noUniversityId.current}
             />
             <Radio
               data-test-id="signed-false"
@@ -100,20 +100,18 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
             />
           </RadioGroup>
 
-          <div className="fr-my-5w">
-            <Button
-              submit
-              data-test-id="update-convention-button"
-              className="fr-fi-check-line fr-btn--icon-left"
-              disabled={
+          <Button
+            submit
+            data-test-id="update-convention-button"
+            icon="fr-fi-check-line"
+            disabled={
                 convention.isConventionSigned === ''
                 || convention.universityId === ''
                 || (convention.isConventionSigned && convention.universityId === noUniversityId.current)
               }
-            >
-              Enregistrer
-            </Button>
-          </div>
+          >
+            Enregistrer
+          </Button>
         </>
       )}
     </form>

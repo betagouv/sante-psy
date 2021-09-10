@@ -1,32 +1,31 @@
-<p>Bonjour ! 👋</p>
-
-<p>
-  Vous avez demandé un lien de connexion à la plateforme <%= appName %>.
-</p>
-<p>
-  Pour vous authentifier, cliquez sur le bouton ci-dessous dans <strong>l'heure qui suit</strong> la réception de ce message - ce bouton n'est utilisable qu'une seule fois.
-</p>
-
-<p>
-  <a href="<%= loginUrlWithToken %>" style="margin-bottom: 15px;background: #006be6;padding: 10px;border: none;border-radius: 3px;color: white;min-width: 280px;box-shadow: 1px 1px 2px 0px #333;cursor: pointer;">
-    Me connecter
-  </a>
-</p>
-
-<br/>
-
-<p>
-  Ca n'a pas marché pas en cliquant sur le bouton ?
- <p>
-   <a title="Redemander un lien de connexion en cas de problème" href="<%= loginUrl %>">Redemander un lien de connexion ici</a> et au lieu de cliquer sur le bouton, essayez de copier ce lien et le coller dans votre navigateur :
- </p>
-</p>
-<p>
-  <%= loginUrlWithToken %>
-</p>
-
-<br/>
-
-<p>En cas de problème avec votre compte, n'hésitez pas à répondre à ce mail</p>
-
-<p>L'équipe Santé Psy Étudiant</p>
+<%- include('header'); -%>
+  <p>Bonjour ! 👋</p>
+  <p>
+    Vous avez demandé un lien pour vous connecter à la plateforme <%= appName %>.
+  </p>
+  <p>
+    Vous pourrez accéder à votre espace psychologues en cliquant sur le bouton ci-dessous dans <strong>l'heure qui suit</strong> la réception de ce message.
+    Ce bouton n'est valable qu'une seule fois, pour vous reconnecter veuillez redemander un lien de connexion.
+  </p>
+  <p>
+    <a href="<%= loginUrlWithToken %>" class="loginButton">
+      Me connecter
+    </a>
+  </p>
+  <p>
+    Une fois sur votre espace psychologue, vous pourrez déclarer vos séances, ajouter de nouveaux étudiants ainsi que gérer vos factures et informations personnelles et publiques.
+  </p>
+  <br/>
+  <div>
+    Si vous avez un message d'erreur en cliquant sur le bouton, vous pouvez
+    <a title="Redemander un lien de connexion en cas de problème" href="<%= loginUrl %>">redemander un lien de connexion ici</a> et au lieu de cliquer sur le bouton,
+    copier directement le lien ci-dessous et coller le dans la barre d'adresse de votre navigateur :
+  </div>
+  <p>
+    <%= loginUrlWithToken %>
+  </p>
+  <p>
+    Et si cela ne fonctionne toujours pas, ou en cas d'autres questions ou problèmes avec votre compte,
+    n'hésitez pas à répondre à ce mail, notre équipe de support se fera un plaisir de vous aider !
+  </p>
+<%- include('footer'); -%>

@@ -1,11 +1,9 @@
 import React from 'react';
 
-import styles from './sectionTitle.cssmodule.scss';
-
 const SectionTitle = ({ children }) => (
-  <div className={styles.title}>
+  <h2>
     {children}
-  </div>
+  </h2>
 );
 
 export default SectionTitle;

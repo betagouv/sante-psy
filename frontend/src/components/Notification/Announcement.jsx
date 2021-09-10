@@ -1,7 +1,6 @@
 /* eslint-disable no-bitwise */
 import React from 'react';
 import { observer } from 'mobx-react';
-import classnames from 'classnames';
 
 import { useStore } from 'stores/';
 
@@ -45,7 +44,7 @@ const Announcement = () => {
   };
 
   return shouldDisplayAnnouncement() ? (
-    <div className={classnames('fr-container', { [styles.notification]: true })}>
+    <div className={{ [styles.notification]: true }}>
       <Notification message={config.announcement} onClose={onClose} type="info" />
     </div>
   ) : (

@@ -25,7 +25,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
         clean.getOnePatient(1, dossierNumber),
         clean.getOnePatient(2, dossierNumber),
         clean.getOnePatient(3, dossierNumber, ''), // incomplete patient's folder doctor
-        clean.getOnePatient(4, dossierNumber, 'doctorName', false), // incomplete patient's folder : date of birth
+        clean.getOneIncompletePatient(4, dossierNumber),
       ];
     });
   } else {

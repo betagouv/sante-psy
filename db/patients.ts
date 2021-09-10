@@ -1,5 +1,5 @@
 import date from '../utils/date';
-import { patientsTable } from './tables';
+import { appointmentsTable, patientsTable } from './tables';
 import db from './db';
 import { Patient } from '../types/Patient';
 import CustomError from '../utils/CustomError';
@@ -18,12 +18,17 @@ const getById = async (patientId: string, psychologistId: string): Promise<Patie
   }
 };
 
-const getAll = async (psychologistId: string): Promise<Patient[]> => {
+const getAll = async (psychologistId: string): Promise<(Patient & {appointmentsCount: string})[]> => {
   try {
-    const patientArray = await db(patientsTable)
-        .where('psychologistId', psychologistId)
-        .where('deleted', false)
-        .orderBy('lastName');
+    const patientArray = await db.select(`${patientsTable}.*`)
+        .from(patientsTable)
+        .joinRaw(`left join "${appointmentsTable}" on `
+        + `"${patientsTable}"."id" = "${appointmentsTable}"."patientId" and "${appointmentsTable}"."deleted" = false`)
+        .where(`${patientsTable}.psychologistId`, psychologistId)
+        .andWhere(`${patientsTable}.deleted`, false)
+        .count(`${appointmentsTable}.*`, { as: 'appointmentsCount' })
+        .groupBy(`${patientsTable}.id`)
+        .orderByRaw(`LOWER("${patientsTable}"."lastName"), LOWER("${patientsTable}"."firstNames")`);
     return patientArray;
   } catch (err) {
     console.error('Impossible de récupérer les patients', err);

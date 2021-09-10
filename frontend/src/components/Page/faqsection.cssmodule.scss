@@ -1,0 +1,13 @@
+.container {
+  color: var(--bf500);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0px 32px;
+  text-align: center;
+}
+
+.text {
+  text-align: left;
+}

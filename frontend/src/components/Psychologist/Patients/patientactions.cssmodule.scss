@@ -1,0 +1,12 @@
+.cell {
+  display: flex;
+  flex-wrap: wrap;   
+  flex-direction: column;
+  align-items: center;
+  align-items: flex-end;
+}
+
+.cell button {
+  margin: 4px;
+  width: 201px;
+}

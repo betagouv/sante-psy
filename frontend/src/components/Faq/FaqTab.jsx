@@ -61,7 +61,7 @@ const FaqTab = ({ type }) => {
         </SideMenu>
         <Col n="md-8 sm-12" className={styles.sections}>
           {items[type].sections.map((section, index) => (
-            <div ref={refs[index]} key={section.name} id={section.id ? section.id : null}>
+            <div ref={refs[index]} key={section.name} id={section.name}>
               <Title as="h2" look="h4">{section.title}</Title>
               <Accordion>
                 {faq[section.name](config)
@@ -81,7 +81,7 @@ const FaqTab = ({ type }) => {
                         dangerouslySetInnerHTML={{
                           __html: sanitizeHtml(item.answer,
                             {
-                              allowedTags: ['a', 'br'],
+                              allowedTags: ['a', 'br', 'ul', 'li'],
                               allowedAttributes: { a: ['href', 'target', 'rel'] },
                             }),
                         }}

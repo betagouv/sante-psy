@@ -104,6 +104,8 @@ describe('DS integration tests', () => {
     email: 'paul.burgun@beta.gouv.fr',
     address: '1 Rue Lecourbe 75015 Paris',
     departement: '2B - Haute-Corse',
+    longitude: null, // api-adresse.data.gouv.fr is mocked in test
+    latitude: null, // api-adresse.data.gouv.fr is mocked in test
     region: 'défaut',
     phone: '01 23 45 67 89',
     website: '',
@@ -127,6 +129,8 @@ describe('DS integration tests', () => {
     address: 'Traverse C Est Ici 13380 Plan-de-Cuques',
     departement: '99 - Etranger',
     region: 'défaut',
+    longitude: null, // api-adresse.data.gouv.fr is mocked in test
+    latitude: null, // api-adresse.data.gouv.fr is mocked in test
     phone: '01',
     website: '',
     teleconsultation: false,
