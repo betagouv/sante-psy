@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button } from '@dataesr/react-dsfr';
+import { Alert, Button, ButtonGroup } from '@dataesr/react-dsfr';
 
 import EditProfile from 'components/Psychologist/Profile/EditProfile';
 
@@ -26,17 +26,41 @@ const PsyProfile = () => {
   const viewProfilRef = useRef();
   const suspensionInfoRef = useRef();
 
-  const { commonStore: { setNotification }, userStore: { pullUser } } = useStore();
+  const { commonStore: { setNotification }, userStore: { pullUser, user } } = useStore();
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [psychologist, setPsychologist] = useState();
   const [editMode, setEditMode] = useState(false);
   const [suspensionMode, setSuspensionMode] = useState(false);
 
+  const getProfilIssues = psy => {
+    const profilIssues = [];
+    if (!psy.description || psy.description.length < 50) {
+      profilIssues.push('Votre présentation est trop courte.');
+    }
+
+    if (!psy.longitude || !psy.latitude) {
+      profilIssues.push('Votre adresse ne semble pas valide.');
+    }
+
+    const isWebsite = new RegExp('^(https?:\\/\\/)?' // protocol
+    + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
+    + '((\\d{1,3}\\.){3}\\d{1,3}))' // OR ip (v4) address
+    + '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' // port and path
+    + '(\\?[;&a-z\\d%_.~+=-]*)?' // query string
+    + '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+    if (!isWebsite.test(psy.website)) {
+      profilIssues.push('Votre site internet ne semble pas valide.');
+    }
+
+    return profilIssues;
+  };
+
   const loadPsychologist = () => {
     pullUser();
     agent.Psychologist.getProfile().then(response => {
-      setPsychologist(response);
+      const profilIssues = getProfilIssues(response);
+      setPsychologist({ ...response, profilIssues });
       setLoading(false);
     }).catch(() => {
       history.goBack();
@@ -109,15 +133,44 @@ const PsyProfile = () => {
             )
             : (
               <>
-                <Button
+                {psychologist.profilIssues.length > 0 && (
+                  <Alert
+                    data-test-id="incomplete-profile-alert"
+                    className="fr-mb-2w"
+                    type="info"
+                    title="Votre profil est incomplet"
+                    description={(
+                      <>
+                        Cela n&lsquo;est pas bloquant mais pourrait empecher les étudiants de vous contacter
+                        ou d&lsquo;identifier si vous repondez à leurs attentes.
+                        <ul>
+                          {psychologist.profilIssues.map(issue => <li key={issue}>{issue}</li>)}
+                        </ul>
+                      </>
+                  )}
+                  />
+                )}
+                <ButtonGroup
+                  isInlineFrom="xs"
                   className="fr-mb-1w"
-                  data-test-id="show-profile-form-button"
-                  title="Modify"
-                  icon="fr-fi-edit-line"
-                  onClick={() => setEditMode(true)}
                 >
-                  Modifier mes informations
-                </Button>
+                  <Button
+                    data-test-id="show-profile-form-button"
+                    title="Modify"
+                    icon="fr-fi-edit-line"
+                    onClick={() => setEditMode(true)}
+                  >
+                    Modifier mes informations
+                  </Button>
+                  <Button
+                    title="profil public"
+                    icon="fr-fi-arrow-right-line"
+                    secondary
+                    onClick={() => history.push(`/trouver-un-psychologue/${user.dossierNumber}`)}
+                  >
+                    Voir mon profil public
+                  </Button>
+                </ButtonGroup>
                 {informations.map(info => (
                   <p className="fr-mb-1v" key={info.label}>
                     <b>{`${info.label} :`}</b>

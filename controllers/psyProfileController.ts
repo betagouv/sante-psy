@@ -42,6 +42,8 @@ const get = async (req: Request, res: Response): Promise<void> => {
     languages: psychologist.languages,
     personalEmail: extraInfo ? psychologist.personalEmail : undefined,
     active: psychologist.active,
+    longitude: psychologist.longitude,
+    latitude: psychologist.latitude,
   });
 };
 
@@ -86,16 +88,9 @@ const updateValidators = [
   check('description')
     .trim()
     .customSanitizer(DOMPurify.sanitize),
-  oneOf(
-    [
-      // Two valid possibilities : website is empty, or website is valid format.
-      check('website').trim().isEmpty(),
-      check('website')
-            .trim()
-            .customSanitizer(DOMPurify.sanitize)
-            .isURL(),
-    ], 'Vous devez spécifier une URL valide.',
-  ),
+  check('website')
+    .trim()
+    .customSanitizer(DOMPurify.sanitize),
   check('teleconsultation')
     .isBoolean()
     .withMessage('Vous devez spécifier si vous proposez la téléconsultation.'),
@@ -119,10 +114,8 @@ const update = async (req: Request, res: Response): Promise<void> => {
     ...req.body,
     dossierNumber: req.user.psychologist,
     region,
-    ...(coordinates && {
-      longitude: coordinates.longitude,
-      latitude: coordinates.latitude,
-    }),
+    longitude: coordinates ? coordinates.longitude : null,
+    latitude: coordinates ? coordinates.latitude : null,
   });
 
   res.json({

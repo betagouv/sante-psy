@@ -29,6 +29,8 @@ describe('psyProfileController', () => {
         'description',
         'languages',
         'active',
+        'longitude',
+        'latitude',
       ];
 
       if (shouldBeComplete) {
@@ -344,20 +346,6 @@ describe('psyProfileController', () => {
         languages: 'Français, Anglais',
         personalEmail: 'perso',
       }, 'Vous devez spécifier un email valide.');
-    });
-
-    it('should refuse invalid website', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        phone: '01 02 03 04 05',
-        website: 'monwebsite',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier une URL valide.');
     });
 
     it('should refuse multiple invalid fields', async () => {
