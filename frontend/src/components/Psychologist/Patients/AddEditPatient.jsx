@@ -95,27 +95,27 @@ const AddEditPatient = () => {
             onChange={e => changePatient(e.target.value, 'lastName')}
             required
           />
-              <DatePicker
-                selected={patient.dateOfBirth}
-                dateFormat="dd/MM/yyyy"
-                minDate={maxPatientDateOfBirth}
-                maxDate={minPatientDateOfBirth}
-                onChange={
+          <DatePicker
+            selected={patient.dateOfBirth}
+            dateFormat="dd/MM/yyyy"
+            minDate={maxPatientDateOfBirth}
+            maxDate={minPatientDateOfBirth}
+            onChange={
                   date => changePatient(date, 'dateOfBirth')
                 }
-                peekNextMonth
-                showMonthDropdown
-                showYearDropdown
-                dropdownMode="select"
-                customInput={(
-                  <DateInput
-                    label={`Date de naissance (obligatoire uniquement pour vos patients enregistrés après le
+            peekNextMonth
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
+            customInput={(
+              <DateInput
+                label={`Date de naissance (obligatoire uniquement pour vos patients enregistrés après le
                     ${config.dateOfBirthDeploymentDate}
                     )`}
-                    dataTestId="new-appointment-date-input"
-                  />
-                )}
+                dataTestId="new-appointment-date-input"
               />
+                )}
+          />
           <TextInput
             className="midlength-input"
             label="Établissement scolaire de l'étudiant"
