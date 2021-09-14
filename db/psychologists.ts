@@ -310,6 +310,20 @@ const reactivate = async (): Promise<number> => db(psychologistsTable)
     .andWhere('inactiveUntil', '<=', (new Date()).toISOString())
     .update({ active: true, inactiveUntil: null });
 
+const inactive = async (
+  token: string,
+  reason: string,
+): Promise<void> => {
+  const psy = await db('inactive_token').where({ token }).first();
+  await suspend(psy.id, new Date('9999-12-31'), reason);
+};
+
+const active = async (
+  token: string,
+): Promise<void> => {
+  await db('inactive_token').update({ confirm: true }).where({ token });
+};
+
 export default {
   getAllActive,
   getById,
@@ -327,4 +341,6 @@ export default {
   getConventionInfo,
   updateConventionInfo,
   deleteConventionInfo,
+  inactive,
+  active,
 };

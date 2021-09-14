@@ -25,6 +25,8 @@ import { useStore } from 'stores/';
 
 import './colors.css';
 import './App.css';
+import InactiveProfile from 'components/Psychologist/Profile/InactiveProfile';
+import ActiveProfile from 'components/Psychologist/Profile/ActiveProfile';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
@@ -51,6 +53,8 @@ function App() {
         {!loading && (
         <React.Suspense fallback={<></>}>
           <Switch>
+            <Route exact path="/activation/:token" component={ActiveProfile} />
+            <Route exact path="/suspension/:token" component={InactiveProfile} />
             <Route exact path="/psychologue/logout" component={Logout} />
             <Route exact path="/psychologue/login/:token?" component={Login} />
             {user && <Route path="/psychologue/" component={PsychologistRouter} />}
