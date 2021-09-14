@@ -150,7 +150,7 @@ const getOnePatient = (
 ): Patient => {
   let dateOfBirth = null;
   if (useDateOfBirth) {
-    dateOfBirth = faker.date.past();
+    dateOfBirth = faker.date.past(11, '2010-09-14');
   }
   return {
     id: uuid.generateFromString(`patient-${psychologistId}-${index}`),
