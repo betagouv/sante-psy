@@ -2,8 +2,6 @@ import { assert } from 'chai';
 import dotEnv from 'dotenv';
 import dbUniversities from '../../db/universities';
 import create from '../helper/create';
-import seed from '../helper/fake_data';
-import db from '../../db/db';
 
 dotEnv.config();
 

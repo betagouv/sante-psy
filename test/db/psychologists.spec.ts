@@ -183,10 +183,10 @@ describe('DB Psychologists', () => {
   describe('getAllActive', () => {
     it('should only return not archived and accepted psychologists', async () => {
       const activePsy = create.getOnePsy();
-      const archivedPsy = create.getOnePsy('archived@psy.fr');
+      const archivedPsy = create.getOnePsy({ personalEmail: 'archived@psy.fr' });
       archivedPsy.archived = true;
       archivedPsy.lastName = 'ArchivedPsy';
-      const constructionPsy = create.getOnePsy('construction@psy.fr');
+      const constructionPsy = create.getOnePsy({ personalEmail: 'construction@psy.fr' });
       constructionPsy.state = DossierState.enConstruction;
       constructionPsy.lastName = 'ConstructionPsy';
       const inactivePsy = create.getOneInactivePsy(new Date());
@@ -265,25 +265,33 @@ describe('DB Psychologists', () => {
     });
 
     it('should return undefined if known email but not accepte state', async () => {
-      const psy = await create.insertOnePsy('loginemail@beta.gouv.fr', DossierState.sansSuite);
+      const psy = await create.insertOnePsy(
+        { personalEmail: 'loginemail@beta.gouv.fr', state: DossierState.sansSuite },
+      );
       const unknownPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
 
     it('should return undefined if known email but enConstruction state', async () => {
-      const psy = await create.insertOnePsy('loginemail@beta.gouv.fr', DossierState.enConstruction);
+      const psy = await create.insertOnePsy(
+        { personalEmail: 'loginemail@beta.gouv.fr', state: DossierState.enConstruction },
+      );
       const unknownPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
 
     it('should return undefined if known email but enInstruction state', async () => {
-      const psy = await create.insertOnePsy('loginemail@beta.gouv.fr', DossierState.enInstruction);
+      const psy = await create.insertOnePsy(
+        { personalEmail: 'loginemail@beta.gouv.fr', state: DossierState.enInstruction },
+      );
       const unknownPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
 
     it('should return undefined if known email but refusé state', async () => {
-      const psy = await create.insertOnePsy('loginemail@beta.gouv.fr', DossierState.refuse);
+      const psy = await create.insertOnePsy(
+        { personalEmail: 'loginemail@beta.gouv.fr', state: DossierState.refuse },
+      );
       const unknownPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       assert.isUndefined(unknownPsy);
     });
@@ -291,21 +299,25 @@ describe('DB Psychologists', () => {
 
   describe('getNotYetAcceptedByEmail', () => {
     it('should return a psy if we enter a known login email enConstruction', async () => {
-      const psy = await create.insertOnePsy('loginemail@beta.gouv.fr', DossierState.enConstruction);
+      const psy = await create.insertOnePsy(
+        { personalEmail: 'loginemail@beta.gouv.fr', state: DossierState.enConstruction },
+      );
       const result = await dbPsychologists.getNotYetAcceptedByEmail(psy.personalEmail);
       result.email.should.be.equal(psy.email);
       result.personalEmail.should.be.equal(psy.personalEmail);
     });
 
     it('should return a psy if we enter a known login email enInstruction', async () => {
-      const psy = await create.insertOnePsy('loginemail@beta.gouv.fr', DossierState.enInstruction);
+      const psy = await create.insertOnePsy(
+        { personalEmail: 'loginemail@beta.gouv.fr', state: DossierState.enInstruction },
+      );
       const result = await dbPsychologists.getNotYetAcceptedByEmail(psy.personalEmail);
       result.email.should.be.equal(psy.email);
       result.personalEmail.should.be.equal(psy.personalEmail);
     });
 
     it('should return undefined if we enter a known login email accepted', async () => {
-      const psy = await create.insertOnePsy('loginemail@beta.gouv.fr', DossierState.accepte);
+      const psy = await create.insertOnePsy({ personalEmail: 'loginemail@beta.gouv.fr', state: DossierState.accepte });
       const result = await dbPsychologists.getNotYetAcceptedByEmail(psy.personalEmail);
       assert.isUndefined(result);
     });
@@ -313,8 +325,6 @@ describe('DB Psychologists', () => {
 
   describe('updateConventionInfo', () => {
     it('should update conventionInfo', async () => {
-      const univName = 'Fake Uni';
-      const university = await dbUniversities.insertByName(univName);
       const psy = await create.insertOnePsy();
       const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       // Check that fields are not set pre-test
@@ -349,7 +359,7 @@ describe('DB Psychologists', () => {
       const univName = 'Fake Uni';
       const university = await dbUniversities.insertByName(univName);
       const isConventionSigned = true;
-      const psy = create.getOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, university.id);
+      const psy = create.getOnePsy({ assignedUniversityId: university.id });
       await dbPsychologists.upsertMany([psy]);
       const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
 
@@ -365,7 +375,7 @@ describe('DB Psychologists', () => {
     });
 
     it('should return undefined if no university is linked to the psy', async () => {
-      const psy = create.getOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, null);
+      const psy = create.getOnePsy({ assignedUniversityId: null });
       await dbPsychologists.upsertMany([psy]);
       const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
 
@@ -380,7 +390,7 @@ describe('DB Psychologists', () => {
     it('should update assignedUniversityId', async () => {
       const univName = 'Fake Uni';
       const university = await dbUniversities.insertByName(univName);
-      const psy = create.getOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, null);
+      const psy = create.getOnePsy({ assignedUniversityId: null });
       await dbPsychologists.upsertMany([psy]);
       const savedPsy = await dbPsychologists.getAcceptedByEmail(psy.personalEmail);
       // Check that fields are not set pre-test

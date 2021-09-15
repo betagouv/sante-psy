@@ -26,7 +26,7 @@ describe('DB Appointments', () => {
   describe('delete', () => {
     it('should change deleted boolean to true and update updatedAt field', async () => {
       const psy = await create.insertOnePsy();
-      const patientToInsert = create.getOnePatient(0, psy.dossierNumber);
+      const patientToInsert = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const patient = await dbPatients.insert(
         patientToInsert.firstNames,
         patientToInsert.lastName,
@@ -60,7 +60,7 @@ describe('DB Appointments', () => {
   describe('getAll', () => {
     it('should only return not deleted appointments for psy id', async () => {
       const psy = await create.insertOnePsy();
-      const patientToInsert = create.getOnePatient(0, psy.dossierNumber);
+      const patientToInsert = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const patient = await dbPatients.insert(
         patientToInsert.firstNames,
         patientToInsert.lastName,
@@ -88,9 +88,9 @@ describe('DB Appointments', () => {
 
     it('should only return psy id appointments', async () => {
       const psy = await create.insertOnePsy();
-      const anotherPsy = await create.insertOnePsy('another@beta.gouv.fr');
+      const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@beta.gouv.fr' });
 
-      const patientToInsert = create.getOnePatient(0, psy.dossierNumber);
+      const patientToInsert = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const patient = await dbPatients.insert(
         patientToInsert.firstNames,
         patientToInsert.lastName,

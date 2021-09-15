@@ -64,47 +64,72 @@ const getAddress = (): {address: string, departement: string, region: string} =>
   }
 };
 
+const getOneUniversity = (name: string) : University => ({
+  name,
+  id: uuid.generateFromString(`university-${name}`),
+  emailUniversity: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
+  emailSSU: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
+  siret: faker.helpers.replaceSymbols('##############'),
+  address: faker.address.streetAddress(),
+  postal_code: faker.address.zipCode('#####'),
+  city: faker.address.city(),
+});
+
 const getOnePsy = (
-  personalEmail = 'loginemail@beta.gouv.fr',
-  state = DossierState.accepte,
-  archived = false,
-  uniId: string = null,
-  inactiveUntil: Date | undefined = undefined,
+  psychologist: Partial<Psychologist> = {},
 ): Psychologist => {
-  const dossierNumber = uuid.generateFromString(`psychologist-${personalEmail}`);
+  const dossierNumber = uuid.generateFromString(
+    `psychologist-${psychologist.personalEmail || 'loginemail@beta.gouv.fr'}`,
+  );
   return {
     dossierNumber,
     firstNames: getFirstNames(),
     lastName: faker.name.lastName(),
-    archived,
-    state,
+    archived: false,
+    state: DossierState.accepte,
     adeli: `${getRandomInt()}829302942`,
     ...getAddress(),
     diploma: 'Psychologie clinique de la santé',
     phone: faker.phone.phoneNumber('0# ## ## ## ##'),
     email: faker.internet.exampleEmail(),
-    personalEmail,
+    personalEmail: 'loginemail@beta.gouv.fr',
     website: faker.internet.domainName() + faker.internet.domainSuffix(),
     teleconsultation: faker.datatype.boolean(),
     description: faker.lorem.paragraphs(2),
     // eslint-disable-next-line max-len
     training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
-    assignedUniversityId: uniId,
     languages: 'Français, Anglais, et Espagnol',
-    active: !inactiveUntil,
-    inactiveUntil,
+    isConventionSigned: false,
     createdAt: new Date(),
+    active: true,
     longitude: null,
     latitude: null,
+    ...psychologist,
   };
 };
 
+const insertOnePsy = async (
+  psychologist: Partial<Psychologist> = {},
+  withUniversity = true,
+): Promise<Psychologist> => {
+  let universityId = null;
+  if (withUniversity) {
+    const university = getOneUniversity(faker.company.companyName());
+    await dbUniversities.upsertMany([university]);
+    universityId = university.id;
+  }
+
+  const psy = getOnePsy({ ...psychologist, assignedUniversityId: universityId });
+  await dbPsychologists.upsertMany([psy]);
+  return psy;
+};
+
 const getOneInactivePsy = (inactiveUntil?: Date): Psychologist => getOnePsy(
-  `inactive@${inactiveUntil}.fr`,
-  DossierState.accepte,
-  false,
-  null,
-  inactiveUntil,
+  {
+    personalEmail: `inactive@${inactiveUntil}.fr`,
+    inactiveUntil,
+    active: !inactiveUntil,
+  },
 );
 
 const getOnePsyDS = (
@@ -137,85 +162,49 @@ const getOnePsyDS = (
 
 const getOnePatient = (
   index: number,
-  psychologistId: string,
-  doctorName = undefined,
-  useDateOfBirth = true,
-): Patient => {
-  let dateOfBirth = null;
-  if (useDateOfBirth) {
-    dateOfBirth = faker.date.past();
-  }
-  return {
-    id: uuid.generateFromString(`patient-${psychologistId}-${index}`),
-    firstNames: faker.name.firstName(),
-    lastName: faker.name.lastName(),
-    INE: faker.phone.phoneNumber('###########'),
-    institutionName: `${getRandomInt()} university`,
-    isStudentStatusVerified: true,
-    hasPrescription: true,
-    psychologistId,
-    doctorName: doctorName === undefined ? faker.name.lastName() : doctorName,
-    doctorAddress: faker.address.streetAddress(),
-    dateOfBirth,
-  };
-};
-
-const getOneIncompletePatient = (index: number, psychologistId: string): Patient => ({
-  id: uuid.generateFromString(`patient-${psychologistId}-${index}`),
+  patient: Partial<Patient> & {psychologistId: string},
+): Patient => ({
+  id: uuid.generateFromString(`patient-${patient.psychologistId}-${index}`),
   firstNames: faker.name.firstName(),
   lastName: faker.name.lastName(),
-  psychologistId,
+  INE: faker.phone.phoneNumber('###########'),
+  institutionName: `${getRandomInt()} university`,
+  isStudentStatusVerified: true,
+  hasPrescription: true,
+  doctorName: faker.name.lastName(),
+  doctorAddress: faker.address.streetAddress(),
+  dateOfBirth: faker.date.past(),
+  ...patient,
+});
+
+const getOneIncompletePatient = (
+  index: number,
+  patient: Partial<Patient> & {psychologistId: string},
+): Patient => ({
+  id: uuid.generateFromString(`patient-${patient.psychologistId}-${index}`),
+  firstNames: faker.name.firstName(),
+  lastName: faker.name.lastName(),
+  ...patient,
 });
 
 const getOneAppointment = (
-  patientId: string, psychologistId: string, month = 3, day = 10, deleted = false,
+  appointment: Partial<Appointment> & {patientId: string, psychologistId: string},
 ): Appointment => {
-  const myDate = new Date(2021, month, day).toISOString();
+  const myDate = new Date(2021, 3, 10).toISOString();
   return {
     id: uuid.generateRandom(),
-    psychologistId,
     appointmentDate: myDate,
-    patientId,
-    deleted,
+    deleted: false,
+    ...appointment,
   };
 };
 
 const insertOneAppointment = async (
-  patientId: string, psychologistId: string, month = 3, day = 10, deleted = false,
+  appointment: Partial<Appointment> & {patientId: string, psychologistId: string},
 ): Promise<Appointment> => {
-  const appointment = getOneAppointment(patientId, psychologistId, month, day, deleted);
-  await db(appointmentsTable).insert(appointment);
-  return appointment;
-};
-
-const getOneUniversity = (name: string) : University => ({
-  name,
-  id: uuid.generateFromString(`university-${name}`),
-  emailUniversity: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
-  emailSSU: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
-  siret: faker.helpers.replaceSymbols('##############'),
-  address: faker.address.streetAddress(),
-  postal_code: faker.address.zipCode('#####'),
-  city: faker.address.city(),
-});
-
-const insertOnePsy = async (
-  personalEmail = 'loginemail@beta.gouv.fr',
-  state = DossierState.accepte,
-  archived = false,
-  inactiveUntil = undefined,
-  withUniversity = true,
-): Promise<Psychologist> => {
-  let universityId = null;
-  if (withUniversity) {
-    const university = getOneUniversity(faker.company.companyName());
-    await dbUniversities.upsertMany([university]);
-    universityId = university.id;
-  }
-
-  const psy = getOnePsy(personalEmail, state, archived, universityId, inactiveUntil);
-  await dbPsychologists.upsertMany([psy]);
-  return psy;
+  const result = getOneAppointment(appointment);
+  await db(appointmentsTable).insert(result);
+  return result;
 };
 
 export default {

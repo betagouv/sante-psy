@@ -195,7 +195,7 @@ describe('DB Patients', () => {
   describe('getAll', () => {
     it('should return psy patients with not deleted appointments', async () => {
       const psy = await create.insertOnePsy();
-      const anotherPsy = await create.insertOnePsy('another@mail.fr');
+      const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@mail.fr' });
       const patient = await dbPatients.insert(
         firstNames,
         lastName,
@@ -235,17 +235,22 @@ describe('DB Patients', () => {
       );
 
       await Promise.all([
-        create.insertOneAppointment(patient.id, psy.dossierNumber),
-        create.insertOneAppointment(patient.id, psy.dossierNumber),
-        create.insertOneAppointment(patient.id, psy.dossierNumber, 10, 10, true),
+        create.insertOneAppointment({ patientId: patient.id, psychologistId: psy.dossierNumber }),
+        create.insertOneAppointment({ patientId: patient.id, psychologistId: psy.dossierNumber }),
+        create.insertOneAppointment({
+          patientId: patient.id,
+          psychologistId: psy.dossierNumber,
+          appointmentDate: new Date(2021, 10, 10).toISOString(),
+          deleted: true,
+        }),
 
-        create.insertOneAppointment(anotherPatient.id, anotherPsy.dossierNumber),
-        create.insertOneAppointment(anotherPatient.id, anotherPsy.dossierNumber),
-        create.insertOneAppointment(anotherPatient.id, anotherPsy.dossierNumber),
+        create.insertOneAppointment({ patientId: anotherPatient.id, psychologistId: anotherPsy.dossierNumber }),
+        create.insertOneAppointment({ patientId: anotherPatient.id, psychologistId: anotherPsy.dossierNumber }),
+        create.insertOneAppointment({ patientId: anotherPatient.id, psychologistId: anotherPsy.dossierNumber }),
 
-        create.insertOneAppointment(patient2.id, psy.dossierNumber),
-        create.insertOneAppointment(patient2.id, psy.dossierNumber),
-        create.insertOneAppointment(patient2.id, psy.dossierNumber),
+        create.insertOneAppointment({ patientId: patient2.id, psychologistId: psy.dossierNumber }),
+        create.insertOneAppointment({ patientId: patient2.id, psychologistId: psy.dossierNumber }),
+        create.insertOneAppointment({ patientId: patient2.id, psychologistId: psy.dossierNumber }),
       ]);
 
       const patients = (await dbPatients.getAll(psy.dossierNumber))

@@ -21,11 +21,11 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
       const dossierNumber = uuid.generateFromString(`psychologist-${mail}`);
       patientsByPsychologist[mail] = 5;
       return [
-        create.getOnePatient(0, dossierNumber),
-        create.getOnePatient(1, dossierNumber),
-        create.getOnePatient(2, dossierNumber),
-        create.getOnePatient(3, dossierNumber, ''), // incomplete patient's folder doctor
-        create.getOneIncompletePatient(4, dossierNumber),
+        create.getOnePatient(0, { psychologistId: dossierNumber }),
+        create.getOnePatient(1, { psychologistId: dossierNumber }),
+        create.getOnePatient(2, { psychologistId: dossierNumber }),
+        create.getOnePatient(3, { psychologistId: dossierNumber, doctorName: '' }),
+        create.getOneIncompletePatient(4, { psychologistId: dossierNumber }),
       ];
     });
   } else {
@@ -39,11 +39,13 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
       for (let i = 0; i < numberOfPatients; i++) {
         const random = faker.datatype.number();
         if (random % 20 === 0) {
-          patients.push(create.getOnePatient(i, dossierNumber, `doctor-${i}`, false));
+          patients.push(create.getOnePatient(i, {
+            psychologistId: dossierNumber, doctorName: `doctor-${i}`, dateOfBirth: null,
+          }));
         } else if (random % 11 === 0) {
-          patients.push(create.getOnePatient(i, dossierNumber, ''));
+          patients.push(create.getOnePatient(i, { psychologistId: dossierNumber, doctorName: '' }));
         } else {
-          patients.push(create.getOnePatient(i, dossierNumber));
+          patients.push(create.getOnePatient(i, { psychologistId: dossierNumber }));
         }
       }
       return patients;

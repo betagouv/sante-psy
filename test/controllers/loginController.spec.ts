@@ -253,12 +253,7 @@ describe('loginController', async () => {
           emailUniversity: 'monster@university.fr',
         },
       ]);
-      const psy = create.getOnePsy(
-        'loginemail@beta.gouv.fr',
-        DossierState.accepte,
-        false,
-        universityId,
-      );
+      const psy = create.getOnePsy({ assignedUniversityId: universityId });
       psy.isConventionSigned = true;
       await dbPsychologists.upsertMany([psy]);
 

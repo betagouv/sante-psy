@@ -507,7 +507,7 @@ describe('psyProfileController', () => {
 
     it('should return 403 if user token does not match the param', async () => {
       const loggedPsy = await create.insertOnePsy();
-      const targetPsy = await create.insertOnePsy('other@psy.fr');
+      const targetPsy = await create.insertOnePsy({ personalEmail: 'other@psy.fr' });
 
       return chai.request(app)
         .put(`/api/psychologist/${targetPsy.dossierNumber}`)
@@ -657,7 +657,7 @@ describe('psyProfileController', () => {
 
     it('should return 403 if user token does not match the param', async () => {
       const loggedPsy = await create.insertOnePsy();
-      const targetPsy = await create.insertOnePsy('other@psy.fr');
+      const targetPsy = await create.insertOnePsy({ personalEmail: 'other@psy.fr' });
 
       return chai.request(app)
         .post(`/api/psychologist/${targetPsy.dossierNumber}/activate`)
@@ -727,7 +727,7 @@ describe('psyProfileController', () => {
 
     it('should return 403 if user token does not match the param', async () => {
       const loggedPsy = await create.insertOnePsy();
-      const targetPsy = await create.insertOnePsy('other@psy.fr');
+      const targetPsy = await create.insertOnePsy({ personalEmail: 'other@psy.fr' });
 
       return chai.request(app)
         .post(`/api/psychologist/${targetPsy.dossierNumber}/suspend`)

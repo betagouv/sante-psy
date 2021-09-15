@@ -25,12 +25,15 @@ export const mails = [
 export const seed = async (knex: Knex): Promise<void> => {
   const psyList = [
     ...mails.map((mail, index) => create.getOnePsy(
-      mail, DossierState.accepte, false, uuid.generateFromString(`university-${universities[index + 1]}`),
+      {
+        personalEmail: mail,
+        assignedUniversityId: uuid.generateFromString(`university-${universities[index + 1]}`),
+      },
     )),
-    create.getOnePsy('archived@beta.gouv.fr', DossierState.accepte, true),
-    create.getOnePsy('empty@beta.gouv.fr', DossierState.accepte, false),
-    create.getOnePsy('construction@beta.gouv.fr', DossierState.enConstruction, false),
-    create.getOnePsy('refuse@beta.gouv.fr', DossierState.refuse, false),
+    create.getOnePsy({ personalEmail: 'archived@beta.gouv.fr', archived: true }),
+    create.getOnePsy({ personalEmail: 'empty@beta.gouv.fr' }),
+    create.getOnePsy({ personalEmail: 'construction@beta.gouv.fr', state: DossierState.enConstruction }),
+    create.getOnePsy({ personalEmail: 'refuse@beta.gouv.fr', state: DossierState.refuse }),
   ];
 
   await knex(psychologistsTable).insert(psyList);
