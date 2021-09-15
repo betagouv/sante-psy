@@ -1,11 +1,11 @@
-import clean from '../helper/clean';
+import create from '../helper/create';
 import getDiplomaErrors from '../../services/getDiplomaErrors';
 
 describe('getDiplomaErrors', () => {
   const DIPLOMA_ID = 'Q2hhbXAtMTYzOTE2OQ==';
 
   it('Should refuse empty diploma', () => {
-    const psychologist = clean.getOnePsyDS('2000', 'random');
+    const psychologist = create.getOnePsyDS('2000', 'random');
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
@@ -13,7 +13,7 @@ describe('getDiplomaErrors', () => {
   });
 
   it('Should refuse non year diploma', () => {
-    const psychologist = clean.getOnePsyDS('not a year', DIPLOMA_ID);
+    const psychologist = create.getOnePsyDS('not a year', DIPLOMA_ID);
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
@@ -21,7 +21,7 @@ describe('getDiplomaErrors', () => {
   });
 
   it('Should refuse recent diploma', () => {
-    const psychologist = clean.getOnePsyDS('2020', DIPLOMA_ID);
+    const psychologist = create.getOnePsyDS('2020', DIPLOMA_ID);
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
@@ -29,7 +29,7 @@ describe('getDiplomaErrors', () => {
   });
 
   it('Should accept old diploma', () => {
-    const psychologist = clean.getOnePsyDS('2000', DIPLOMA_ID);
+    const psychologist = create.getOnePsyDS('2000', DIPLOMA_ID);
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(0);

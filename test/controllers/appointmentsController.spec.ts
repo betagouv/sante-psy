@@ -2,6 +2,7 @@ import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import app from '../../index';
 import clean from '../helper/clean';
+import create from '../helper/create';
 import dbAppointments from '../../db/appointments';
 import dbPatients from '../../db/patients';
 import dbPsychologists from '../../db/psychologists';
@@ -13,19 +14,19 @@ describe('appointmentsController', () => {
 
   describe('create appointment', () => {
     beforeEach(async () => {
-      await clean.cleanAllPatients();
-      await clean.cleanAllAppointments();
+      await clean.patients();
+      await clean.appointments();
       return Promise.resolve();
     });
 
     afterEach(async () => {
-      await clean.cleanAllPatients();
-      await clean.cleanAllAppointments();
+      await clean.patients();
+      await clean.appointments();
       return Promise.resolve();
     });
 
     it('should create appointment', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
@@ -60,8 +61,8 @@ describe('appointmentsController', () => {
     });
 
     it('should not create appointment if patient id is not linked to psy id', async () => {
-      const psy = await clean.insertOnePsy();
-      const anotherPsy = await clean.insertOnePsy('another@email.fr');
+      const psy = await create.insertOnePsy();
+      const anotherPsy = await create.insertOnePsy('another@email.fr');
 
       const patient = await dbPatients.insert(
         'Ada',
@@ -97,7 +98,7 @@ describe('appointmentsController', () => {
     });
 
     it('should not create appointment if user not logged in', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
@@ -133,7 +134,7 @@ describe('appointmentsController', () => {
     let insertAppointmentStub;
 
     beforeEach(async () => {
-      await clean.cleanAllPatients();
+      await clean.patients();
       insertAppointmentStub = sinon.stub(dbAppointments, 'insert')
         .returns(Promise.resolve());
 
@@ -141,7 +142,7 @@ describe('appointmentsController', () => {
     });
 
     afterEach(async () => {
-      await clean.cleanAllPatients();
+      await clean.patients();
       insertAppointmentStub.restore();
       return Promise.resolve();
     });
@@ -224,19 +225,19 @@ describe('appointmentsController', () => {
 
   describe('delete appointment', () => {
     beforeEach(async () => {
-      await clean.cleanAllPatients();
-      await clean.cleanAllAppointments();
+      await clean.patients();
+      await clean.appointments();
       return Promise.resolve();
     });
 
     afterEach(async () => {
-      await clean.cleanAllPatients();
-      await clean.cleanAllAppointments();
+      await clean.patients();
+      await clean.appointments();
       return Promise.resolve();
     });
 
     const makeAppointment = async (psychologistId) => {
-      const psy = clean.getOnePsy();
+      const psy = create.getOnePsy();
       psy.dossierNumber = psychologistId;
       await dbPsychologists.upsertMany([psy]);
       // Insert an appointment and a patient
@@ -371,7 +372,7 @@ describe('appointmentsController', () => {
     });
 
     it('should not create appointment if diff in month > 4', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
@@ -408,7 +409,7 @@ describe('appointmentsController', () => {
     });
 
     it('should not create appointment if date before 21/03/21', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',

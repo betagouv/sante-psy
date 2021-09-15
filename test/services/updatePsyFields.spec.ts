@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import { DossierState } from '../../types/DossierState';
 import * as updatePsyFields from '../../services/updatePsyFields';
-import clean from '../helper/clean';
+import create from '../helper/create';
 
 describe('Update psy fields', () => {
   describe('addFrenchLanguageIfMissing', () => {
@@ -64,7 +64,7 @@ describe('Update psy fields', () => {
     });
 
     it('Editable psy fields should add french language', () => {
-      const psy = clean.getOnePsy();
+      const psy = create.getOnePsy();
       psy.languages = 'random stuff';
 
       updatePsyFields.editablePsyFields(psy);

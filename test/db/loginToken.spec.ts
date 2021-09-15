@@ -11,7 +11,7 @@ describe('DB Login token', () => {
   const token = '0Hj1xrlN6p4icK7TwC7YCr6vMLR0NXen';
   // Clean up all data
   beforeEach(async () => {
-    await clean.cleanDataToken();
+    await clean.dataToken();
   });
 
   describe('getByToken', () => {

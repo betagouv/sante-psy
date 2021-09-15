@@ -1,4 +1,4 @@
-import clean from '../helper/clean';
+import create from '../helper/create';
 
 import { DossierState } from '../../types/DossierState';
 import uuid from '../../utils/uuid';
@@ -24,13 +24,13 @@ export const mails = [
 
 export const seed = async (knex: Knex): Promise<void> => {
   const psyList = [
-    ...mails.map((mail, index) => clean.getOnePsy(
+    ...mails.map((mail, index) => create.getOnePsy(
       mail, DossierState.accepte, false, uuid.generateFromString(`university-${universities[index + 1]}`),
     )),
-    clean.getOnePsy('archived@beta.gouv.fr', DossierState.accepte, true),
-    clean.getOnePsy('empty@beta.gouv.fr', DossierState.accepte, false),
-    clean.getOnePsy('construction@beta.gouv.fr', DossierState.enConstruction, false),
-    clean.getOnePsy('refuse@beta.gouv.fr', DossierState.refuse, false),
+    create.getOnePsy('archived@beta.gouv.fr', DossierState.accepte, true),
+    create.getOnePsy('empty@beta.gouv.fr', DossierState.accepte, false),
+    create.getOnePsy('construction@beta.gouv.fr', DossierState.enConstruction, false),
+    create.getOnePsy('refuse@beta.gouv.fr', DossierState.refuse, false),
   ];
 
   await knex(psychologistsTable).insert(psyList);

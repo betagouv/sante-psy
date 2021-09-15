@@ -9,7 +9,7 @@ dotEnv.config();
 describe('DB Ds Api Cursor', () => {
   // Clean up all data
   beforeEach(async () => {
-    await clean.cleanDataCursor();
+    await clean.dataCursor();
   });
 
   describe('getLatestCursorSaved', () => {

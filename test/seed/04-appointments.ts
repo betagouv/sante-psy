@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import faker from 'faker';
-import clean from '../helper/clean';
+import create from '../helper/create';
 import uuid from '../../utils/uuid';
 import {
   appointmentsTable,
@@ -10,7 +10,7 @@ import { Appointment } from '../../types/Appointment';
 
 const getOneAppointmentPerMonth = (patient: {id: string, psychologistId: string}, day: number, deleted = false)
   : Appointment[] => [...Array(12).keys()]
-  .map((i) => clean.getOneAppointment(patient.id, patient.psychologistId, i, day, deleted));
+  .map((i) => create.getOneAppointment(patient.id, patient.psychologistId, i, day, deleted));
 
 // eslint-disable-next-line import/prefer-default-export
 export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
@@ -51,7 +51,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
       const result = [];
       for (let i = 0; i < nbOfAppointments; i++) {
         const date = faker.date.future();
-        result.push(clean.getOneAppointment(patient.id, patient.psychologistId, date.getMonth(), date.getDate()));
+        result.push(create.getOneAppointment(patient.id, patient.psychologistId, date.getMonth(), date.getDate()));
       }
       return result;
     });

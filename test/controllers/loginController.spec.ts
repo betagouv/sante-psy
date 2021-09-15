@@ -8,7 +8,7 @@ import dbLastConnection from '../../db/lastConnections';
 import dbPsychologists from '../../db/psychologists';
 import dbUniversities from '../../db/universities';
 import cookie from '../../utils/cookie';
-import clean from '../helper/clean';
+import create from '../helper/create';
 import { DossierState } from '../../types/DossierState';
 
 const sendEmail = require('../../utils/email');
@@ -253,7 +253,7 @@ describe('loginController', async () => {
           emailUniversity: 'monster@university.fr',
         },
       ]);
-      const psy = clean.getOnePsy(
+      const psy = create.getOnePsy(
         'loginemail@beta.gouv.fr',
         DossierState.accepte,
         false,
@@ -305,7 +305,7 @@ describe('loginController', async () => {
         .then(async (res) => res.body.should.be.empty));
 
     it('should return empty info if user does not have csrf', async () => {
-      const psy = clean.insertOnePsy();
+      const psy = create.insertOnePsy();
       return chai
         .request(app)
         .get('/api/connecteduser')
