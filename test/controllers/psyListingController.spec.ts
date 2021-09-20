@@ -1,8 +1,8 @@
 import chai, { expect } from 'chai';
 import app from '../../index';
 import clean from '../helper/clean';
+import create from '../helper/create';
 import dbPsychologists from '../../db/psychologists';
-import { DossierState } from '../../types/DossierState';
 
 describe('psyListingController', () => {
   let psyActive1;
@@ -11,12 +11,12 @@ describe('psyListingController', () => {
   let psyArchived;
 
   before(async () => {
-    await clean.cleanAllPsychologists();
+    await clean.psychologists();
 
-    psyActive1 = clean.getOnePsy('active1@beta.gouv.fr');
-    psyActive2 = clean.getOnePsy('active2@beta.gouv.fr');
-    psyInactive = clean.getOneInactivePsy();
-    psyArchived = clean.getOnePsy('archived@beta.gouv.fr', DossierState.accepte, true);
+    psyActive1 = create.getOnePsy({ personalEmail: 'active1@beta.gouv.fr' });
+    psyActive2 = create.getOnePsy({ personalEmail: 'active2@beta.gouv.fr' });
+    psyInactive = create.getOneInactivePsy();
+    psyArchived = create.getOnePsy({ personalEmail: 'archived@beta.gouv.fr', archived: true });
     await dbPsychologists.upsertMany([psyActive1, psyActive2, psyInactive, psyArchived]);
   });
 
