@@ -1,4 +1,11 @@
+const MAX_DISTANCE_KM = 2000;
+
+// Inspired from https://www.geodatasource.com/developers/javascript
 const distanceKm = (lat1, lon1, lat2, lon2) => {
+  if (!lat1 || !lon1 || !lat2 || !lon2) {
+    return MAX_DISTANCE_KM;
+  }
+
   if ((lat1 === lat2) && (lon1 === lon2)) {
     return 0;
   }
@@ -17,26 +24,4 @@ const distanceKm = (lat1, lon1, lat2, lon2) => {
   return dist * 1.609344;
 };
 
-const MAX_DISTANCE_KM = 2000;
-
-const comparator = (psyA, psyB, userPosition) => {
-  if (!userPosition || !userPosition.longitude) {
-    return 0;
-  }
-
-  let distanceA;
-  let distanceB;
-  if (!psyA.longitude) {
-    distanceA = MAX_DISTANCE_KM;
-  } else {
-    distanceA = distanceKm(userPosition.latitude, userPosition.longitude, psyA.latitude, psyA.longitude);
-  }
-  if (!psyB.longitude) {
-    distanceB = MAX_DISTANCE_KM;
-  } else {
-    distanceB = distanceKm(userPosition.latitude, userPosition.longitude, psyB.latitude, psyB.longitude);
-  }
-  return distanceA - distanceB;
-};
-
-module.exports = { comparator };
+module.exports = { distanceKm };

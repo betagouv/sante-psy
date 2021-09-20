@@ -169,7 +169,12 @@ const PsyListing = () => {
     });
 
     if (coords && addressFilter === AROUND_ME) {
-      return filteredPsychologists.sort((psyA, psyB) => distance.comparator(psyA, psyB, coords));
+      return filteredPsychologists
+        .map((psy) => ({
+          ...psy,
+          distance: distance.distanceKm(psy.latitude, psy.longitude, coords.longitude, coords.latitude)
+        }))
+        .sort((a, b) => a.distance - b.distance);
     }
     return filteredPsychologists;
   };
