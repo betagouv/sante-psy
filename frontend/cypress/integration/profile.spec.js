@@ -59,11 +59,6 @@ describe('Profile', () => {
         .should('exist');
       cy.get('[data-test-id="convention-form-title"]')
         .should('exist');
-      cy.get('[data-test-id="convention-university-select"] input')
-        .click();
-      cy.get('[data-test-id="convention-university-select"] option')
-        .eq(2)
-        .click();
       cy.get('[data-test-id="signed-true"]')
         .click();
       cy.get('[data-test-id="update-convention-button"]')
@@ -72,7 +67,7 @@ describe('Profile', () => {
       cy.get('[data-test-id="convention-form"]')
         .should('not.exist');
       cy.get('[data-test-id="convention-university-name"]')
-        .should('have.text', 'Je suis rattaché à l‘université de Angers.');
+        .should('have.text', 'Je suis rattaché à l‘université de Strasbourg (UNISTRA).');
       cy.get('[data-test-id="convention-signed"]')
         .should('have.text', 'La convention est signée.');
       cy.get('[data-test-id="notification-success"] p')
@@ -87,13 +82,6 @@ describe('Profile', () => {
       cy.reload();
       cy.get('[data-test-id="convention-form"]')
         .should('exist');
-      cy.get('[data-test-id="convention-form-title"]')
-        .should('not.exist');
-      cy.get('[data-test-id="convention-university-select"] input')
-        .click();
-      cy.get('[data-test-id="convention-university-select"] option')
-        .eq(8)
-        .click();
       cy.get('[data-test-id="signed-false"]')
         .click();
       cy.get('[data-test-id="update-convention-button"]')
@@ -102,7 +90,7 @@ describe('Profile', () => {
       cy.get('[data-test-id="convention-form"]')
         .should('not.exist');
       cy.get('[data-test-id="convention-university-name"]')
-        .should('have.text', 'Je suis rattaché à l‘université de Bretagne Sud.');
+        .should('have.text', 'Je suis rattaché à l‘université de Strasbourg (UNISTRA).');
       cy.get('[data-test-id="convention-signed"]')
         .should('have.text', 'La convention n‘est pas encore signée.');
       cy.get('[data-test-id="notification-success"] p')
