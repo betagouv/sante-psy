@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Table, Button, Title } from '@dataesr/react-dsfr';
+import { Table, Button } from '@dataesr/react-dsfr';
 
 const PsyTable = ({
   page,
@@ -9,6 +9,7 @@ const PsyTable = ({
   nameFilter,
   addressFilter,
   teleconsultation,
+  noResult,
 }) => {
   const [surrendingPages, setSurrendingPages] = useState(0);
   const history = useHistory();
@@ -55,11 +56,7 @@ const PsyTable = ({
   ];
 
   const goToProfile = psychologist => {
-    const searchPath = `?page=${
-      page}&name=${
-      nameFilter}&address=${
-      addressFilter}&teleconsultation=${
-      teleconsultation}`;
+    const searchPath = `?page=${page}&name=${nameFilter}&address=${addressFilter}&teleconsultation=${teleconsultation}`;
     if (history.location.search !== searchPath) {
       history.push(`/trouver-un-psychologue${searchPath}`);
     }
@@ -122,11 +119,7 @@ const PsyTable = ({
             surrendingPages={surrendingPages}
           />
         </>
-      ) : (
-        <Title as="h4" look="h4">
-          Aucun résultat n&lsquo;a été trouvé, veuillez élargir votre champ de recherche
-        </Title>
-      )}
+      ) : noResult }
     </div>
   );
 };

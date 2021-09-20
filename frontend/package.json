@@ -24,6 +24,7 @@
     "react-router-dom": "^5.3.0",
     "react-router-hash-link": "^2.4.3",
     "sanitize-html": "^2.4.0",
+    "uuid": "^8.3.2",
     "wait-on": "^6.0.0"
   },
   "devDependencies": {

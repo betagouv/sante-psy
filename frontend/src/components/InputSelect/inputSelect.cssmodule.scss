@@ -1,0 +1,43 @@
+.selectSearchInput {
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.selectSearchOptions {
+  background-color: var(--w);
+  box-shadow: 0px 0px 10px var(--g300);
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  max-height: 32vh;
+  overflow: scroll;
+  display: none;
+}
+
+.selectSearchOptions__visible {
+  display: inherit;
+}
+
+.selectSearchOption__disabled,
+.selectSearchOption {
+  padding: 8px 16px;
+  color: var(--bf500);
+}
+
+.selectSearchOption {
+  cursor: pointer;
+}
+
+.selectSearchOption__selected,
+.selectSearchOption:hover {
+  background-color: var(--block-color-hover);
+}
+
+.selectSearchOption__disabled {
+  cursor: not-allowed;
+  color: var(--g500);
+}
+
+.selectSearchOption__disabled:hover {
+  background-color: transparent;
+}

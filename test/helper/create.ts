@@ -152,7 +152,7 @@ const insertOnePsy = async (
   return psy;
 };
 
-const getOneInactivePsy = (inactiveUntil?: Date): Psychologist => getOnePsy(
+const getOneInactivePsy = (inactiveUntil: Date = new Date()): Psychologist => getOnePsy(
   {
     personalEmail: `inactive@${inactiveUntil}.fr`,
     inactiveUntil,

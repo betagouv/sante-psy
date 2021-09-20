@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, Row, Col, TextInput } from '@dataesr/react-dsfr';
+import { Checkbox, Row, Col, TextInput, Alert } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
+import InputSelect from 'components/InputSelect/InputSelect';
 
 import agent from 'services/agent';
 import utils from 'services/search';
+import distance from 'services/distance';
 
 import { useStore } from 'stores/';
 
 import PsyTable from './PsyTable';
+import NoResultPsyTable from './NoResultPsyTable';
 
 import styles from './psyListing.cssmodule.scss';
+
+const AROUND_ME = 'Autour de moi';
+
+const geoStatusEnum = {
+  UNSUPPORTED: -2,
+  DENIED: -1,
+  UNKNOWN: 0,
+  GRANTED: 1,
+};
 
 let lastSearch;
 
@@ -20,6 +32,8 @@ const PsyListing = () => {
   const { commonStore: { psychologists, setPsychologists } } = useStore();
   const query = new URLSearchParams(useLocation().search);
 
+  const [coords, setCoords] = useState();
+  const [geoStatus, setGeoStatus] = useState(geoStatusEnum.UNKNOWN);
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
@@ -36,6 +50,10 @@ const PsyListing = () => {
       setPage(query.get('page') || 1);
     } else {
       setPage(1);
+    }
+
+    if (addressFilter === AROUND_ME) {
+      checkGeolocationPermission();
     }
 
     logSearchInMatomo();
@@ -69,18 +87,46 @@ const PsyListing = () => {
     }
   };
 
+  const success = pos => {
+    const { longitude, latitude } = pos.coords;
+    setCoords({ longitude, latitude });
+    setGeoStatus(geoStatusEnum.GRANTED);
+  };
+
+  const errors = () => {
+    setGeoStatus(geoStatusEnum.DENIED);
+  };
+
+  const getGeolocation = state => {
+    if (state === 'granted') {
+      navigator.geolocation.getCurrentPosition(success);
+    } else if (state === 'prompt') {
+      navigator.geolocation.getCurrentPosition(success, errors);
+    } else if (state === 'denied') {
+      setGeoStatus(geoStatusEnum.DENIED);
+    }
+  };
+
+  const checkGeolocationPermission = () => {
+    if (!coords) {
+      if (navigator.geolocation) {
+        navigator.permissions
+          .query({ name: 'geolocation' })
+          .then(result => {
+            getGeolocation(result.state);
+          });
+      } else {
+        setGeoStatus(geoStatusEnum.UNSUPPORTED);
+      }
+    }
+  };
+
   const getFilteredPsychologists = () => {
     if (!psychologists) {
       return [];
     }
-    const departementFilter = +addressFilter;
-    const addressIsDepartment = departementFilter
-    && (
-      (departementFilter > 0 && departementFilter < 96)
-    || (departementFilter > 970 && departementFilter < 977)
-    );
 
-    return psychologists.filter(psychologist => {
+    const filteredPsychologists = psychologists.filter(psychologist => {
       if (teleconsultation && !psychologist.teleconsultation) {
         return false;
       }
@@ -93,6 +139,17 @@ const PsyListing = () => {
       ) {
         return false;
       }
+
+      if (addressFilter === AROUND_ME) {
+        return true;
+      }
+
+      const departementFilter = +addressFilter;
+      const addressIsDepartment = departementFilter
+        && (
+          (departementFilter > 0 && departementFilter < 96)
+          || (departementFilter > 970 && departementFilter < 977)
+        );
 
       if (addressIsDepartment) {
         if (!utils.matchDepartment(psychologist.address, addressFilter)) {
@@ -110,6 +167,16 @@ const PsyListing = () => {
 
       return true;
     });
+
+    if (coords && addressFilter === AROUND_ME) {
+      return filteredPsychologists
+        .map(psy => ({
+          ...psy,
+          distance: distance.distanceKm(psy.latitude, psy.longitude, coords.longitude, coords.latitude),
+        }))
+        .sort((a, b) => a.distance - b.distance);
+    }
+    return filteredPsychologists;
   };
 
   const filteredPsychologists = getFilteredPsychologists();
@@ -137,20 +204,43 @@ const PsyListing = () => {
                 />
               </Col>
               <Col n="md-6 sm-12" className={styles.input}>
-                <TextInput
+                <InputSelect
                   className="fr-mb-1w"
-                  value={addressFilter}
-                  onChange={e => setAddressFilter(e.target.value)}
+                  selected={addressFilter}
+                  onChange={e => setAddressFilter(e)}
                   label="Rechercher par ville, code postal ou région"
+                  options={[{ value: AROUND_ME, label: AROUND_ME }]}
                 />
               </Col>
             </Row>
-            <Checkbox
-              value="teleconsultation"
-              onChange={e => { setTeleconsultation(e.target.checked); }}
-              label="Disponible en téléconsultation"
-              defaultChecked={teleconsultation}
-            />
+            <Row gutters>
+              <Col n="md-6 sm-12" className={styles.input}>
+                <Checkbox
+                  value="teleconsultation"
+                  onChange={e => { setTeleconsultation(e.target.checked); }}
+                  label="Disponible en téléconsultation"
+                  defaultChecked={teleconsultation}
+                />
+              </Col>
+              <Col n="md-6 sm-12" className={styles.input}>
+                {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
+                  <Alert
+                    className="fr-mt-1w"
+                    type="error"
+                    description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette
+                    fonctionnalité."
+                  />
+                )}
+                {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.UNSUPPORTED && (
+                  <Alert
+                    className="fr-mt-1w"
+                    type="error"
+                    description="Votre navigateur ne permet pas d'utiliser cette fonctionnalité."
+                  />
+                )}
+              </Col>
+            </Row>
+
           </div>
           <PsyTable
             page={page}
@@ -159,6 +249,7 @@ const PsyListing = () => {
             nameFilter={nameFilter}
             addressFilter={addressFilter}
             teleconsultation={teleconsultation}
+            noResult={<NoResultPsyTable noResultAction={() => setAddressFilter(AROUND_ME)} />}
           />
         </>
       )}

@@ -469,7 +469,7 @@ describe('DB Psychologists', () => {
 
   describe('activate', () => {
     it('should activate psy and remove inactiveUntil date', async () => {
-      const inactivePsy = create.getOneInactivePsy(new Date());
+      const inactivePsy = create.getOneInactivePsy();
       await dbPsychologists.upsertMany([inactivePsy]);
 
       await dbPsychologists.activate(inactivePsy.dossierNumber);
