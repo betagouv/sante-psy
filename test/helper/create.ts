@@ -34,7 +34,13 @@ const getFirstNames = (): string => {
   return firstNames;
 };
 
-const getAddress = (): {address: string, departement: string, region: string} => {
+const getAddress = (): {
+  address: string,
+  departement: string,
+  region: string,
+  longitude: number,
+  latitude: number
+} => {
   const rand = faker.datatype.number() % 5;
   switch (rand) {
   case 0:
@@ -42,26 +48,50 @@ const getAddress = (): {address: string, departement: string, region: string} =>
       address: `${getRandomInt()} avenue de segur 75007 paris`,
       departement: '75 - Paris',
       region: 'Ile-de-France',
+      longitude: 2.308880,
+      latitude: 48.850570,
     };
   case 1:
     return {
       address: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
       departement: '33 - Gironde',
       region: 'Nouvelle-Aquitaine',
+      longitude: -0.575710,
+      latitude: 44.848660,
     };
   case 2:
     return {
       address: `${getRandomInt()} Boulevard Maréchal Foch 38100 Grenoble`,
       departement: '38 - Isère',
       region: 'Auvergne-Rhône-Alpes',
+      longitude: 5.720050,
+      latitude: 45.179540,
     };
   default:
     return {
       address: `${faker.address.streetAddress()} ${faker.address.zipCode('#####')} ${faker.address.city()}`,
       departement: '14 - Calvados',
       region: 'Normandie',
+      longitude: -0.073080,
+      latitude: 49.126301,
     };
   }
+};
+
+// faker can give address with accent wich are not considered as valid...
+const getFakeAddress = (): string => {
+  let website = '';
+  const isWebsite = new RegExp('^(https?:\\/\\/)?' // protocol
+  + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
+  + '((\\d{1,3}\\.){3}\\d{1,3}))' // OR ip (v4) address
+  + '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' // port and path
+  + '(\\?[;&a-z\\d%_.~+=-]*)?' // query string
+  + '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+  while (!isWebsite.test(website)) {
+    website = faker.internet.domainName() + faker.internet.domainSuffix();
+  }
+
+  return website;
 };
 
 const getOneUniversity = (name: string) : University => ({
@@ -88,12 +118,11 @@ const getOnePsy = (
     archived: false,
     state: DossierState.accepte,
     adeli: `${getRandomInt()}829302942`,
-    ...getAddress(),
     diploma: 'Psychologie clinique de la santé',
     phone: faker.phone.phoneNumber('0# ## ## ## ##'),
     email: faker.internet.exampleEmail(),
     personalEmail: 'loginemail@beta.gouv.fr',
-    website: faker.internet.domainName() + faker.internet.domainSuffix(),
+    website: getFakeAddress(),
     teleconsultation: faker.datatype.boolean(),
     description: faker.lorem.paragraphs(2),
     // eslint-disable-next-line max-len
@@ -102,9 +131,8 @@ const getOnePsy = (
     isConventionSigned: false,
     createdAt: new Date(),
     active: true,
-    longitude: null,
-    latitude: null,
     ...psychologist,
+    ...getAddress(),
   };
 };
 

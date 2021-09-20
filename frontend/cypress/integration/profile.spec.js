@@ -354,4 +354,32 @@ describe('Profile', () => {
       });
     });
   });
+
+  describe('Incomplete profile', () => {
+    it('should not display alert if profile is complete', () => {
+      cy.get('[data-test-id="incomplete-profile-alert"]')
+        .should('not.exist');
+    });
+    it('should display alert for all incomplete info', () => {
+      cy.get('[data-test-id="show-profile-form-button"]')
+        .click();
+      cy.get('[data-test-id="psy-address-input"] > input')
+        .clear()
+        .type('nimps...');
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .clear()
+        .type('doctolib');
+      cy.get('[data-test-id="psy-description-input"] > textarea')
+        .clear()
+        .type('cest court !');
+      cy.get('[data-test-id="save-profile-button"]')
+        .click();
+      cy.wait('@updateProfile');
+      cy.get('[data-test-id="incomplete-profile-alert"]')
+        .should('exist');
+      cy.get('[data-test-id="incomplete-profile-alert"]')
+        // eslint-disable-next-line max-len
+        .should('have.text', 'Votre profil est incompletCela n‘est pas bloquant mais pourrait empêcher les étudiants et étudiantes de vous contacter ou d‘identifier si vous repondez à leurs attentes.Votre présentation est trop courte.Votre adresse ne semble pas valide.Votre site internet ne semble pas valide.');
+    });
+  });
 });
