@@ -3,6 +3,7 @@ import db from '../../db/db';
 import dbAppointments from '../../db/appointments';
 import dbPatients from '../../db/patients';
 import clean from '../helper/clean';
+import create from '../helper/create';
 import { appointmentsTable } from '../../db/tables';
 
 import dotEnv from 'dotenv';
@@ -11,21 +12,21 @@ dotEnv.config();
 
 describe('DB Appointments', () => {
   beforeEach(async () => {
-    await clean.cleanAllPatients();
-    await clean.cleanAllPsychologists();
-    await clean.cleanAllAppointments();
+    await clean.patients();
+    await clean.psychologists();
+    await clean.appointments();
   });
 
   afterEach(async () => {
-    await clean.cleanAllPatients();
-    await clean.cleanAllPsychologists();
-    await clean.cleanAllAppointments();
+    await clean.patients();
+    await clean.psychologists();
+    await clean.appointments();
   });
 
   describe('delete', () => {
     it('should change deleted boolean to true and update updatedAt field', async () => {
-      const psy = await clean.insertOnePsy();
-      const patientToInsert = clean.getOnePatient(0, psy.dossierNumber);
+      const psy = await create.insertOnePsy();
+      const patientToInsert = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const patient = await dbPatients.insert(
         patientToInsert.firstNames,
         patientToInsert.lastName,
@@ -58,8 +59,8 @@ describe('DB Appointments', () => {
 
   describe('getAll', () => {
     it('should only return not deleted appointments for psy id', async () => {
-      const psy = await clean.insertOnePsy();
-      const patientToInsert = clean.getOnePatient(0, psy.dossierNumber);
+      const psy = await create.insertOnePsy();
+      const patientToInsert = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const patient = await dbPatients.insert(
         patientToInsert.firstNames,
         patientToInsert.lastName,
@@ -86,10 +87,10 @@ describe('DB Appointments', () => {
     });
 
     it('should only return psy id appointments', async () => {
-      const psy = await clean.insertOnePsy();
-      const anotherPsy = await clean.insertOnePsy('another@beta.gouv.fr');
+      const psy = await create.insertOnePsy();
+      const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@beta.gouv.fr' });
 
-      const patientToInsert = clean.getOnePatient(0, psy.dossierNumber);
+      const patientToInsert = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const patient = await dbPatients.insert(
         patientToInsert.firstNames,
         patientToInsert.lastName,

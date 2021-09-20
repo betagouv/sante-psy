@@ -1,4 +1,4 @@
-import clean from '../helper/clean';
+import create from '../helper/create';
 import getAdeliErrors from '../../services/getAdeliErrors';
 
 describe('getAdeliErrors', () => {
@@ -117,7 +117,7 @@ describe('getAdeliErrors', () => {
 
   useCases.forEach((useCase) => {
     it(`Should ${useCase.errors.length > 0 ? 'refuse' : 'accept'} ${useCase.psychologist.join()}`, () => {
-      const psychologist = clean.getOnePsyDS(...useCase.psychologist);
+      const psychologist = create.getOnePsyDS(...useCase.psychologist);
       const errors = getAdeliErrors(psychologist, adeliInfo);
       errors.length.should.equals(useCase.errors.length);
       useCase.errors.forEach((error, index) => error.should.equals(errors[index]));

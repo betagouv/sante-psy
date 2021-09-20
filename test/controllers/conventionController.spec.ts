@@ -1,19 +1,19 @@
 import chai from 'chai';
 import app from '../../index';
 import clean from '../helper/clean';
+import create from '../helper/create';
 import cookie from '../../utils/cookie';
 import dbPsychologists from '../../db/psychologists';
-import { DossierState } from '../../types/DossierState';
 
 describe('conventionController', () => {
   describe('update convention info', () => {
     afterEach(async () => {
-      await clean.cleanAllUniversities();
+      await clean.universities();
     });
 
     it('should NOT update convention info if user not logged in', async () => {
       const psyEmail = 'login@beta.gouv.fr';
-      const psy = await clean.insertOnePsy(psyEmail, DossierState.accepte, false);
+      const psy = await create.insertOnePsy({ personalEmail: psyEmail });
 
       return chai.request(app)
       .post(`/api/psychologist/${psy.dossierNumber}/convention`)
@@ -32,8 +32,8 @@ describe('conventionController', () => {
     it('should NOT update convention info if wrong user logged in', async () => {
       const targetPsyEmail = 'login@beta.gouv.fr';
       const connectedPsyEmail = 'connected@beta.gouv.fr';
-      const targetPsy = await clean.insertOnePsy(targetPsyEmail, DossierState.accepte, false);
-      const connectedPsy = await clean.insertOnePsy(connectedPsyEmail, DossierState.accepte, false);
+      const targetPsy = await create.insertOnePsy({ personalEmail: targetPsyEmail });
+      const connectedPsy = await create.insertOnePsy({ personalEmail: connectedPsyEmail });
 
       return chai.request(app)
       .post(`/api/psychologist/${targetPsy.dossierNumber}/convention`)
@@ -52,7 +52,7 @@ describe('conventionController', () => {
 
     it('should update convention info', async () => {
       const psyEmail = 'login@beta.gouv.fr';
-      const psy = await clean.insertOnePsy(psyEmail, DossierState.accepte, false);
+      const psy = await create.insertOnePsy({ personalEmail: psyEmail });
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).to.be.false;
 
@@ -74,7 +74,7 @@ describe('conventionController', () => {
 
     const failValidation = async (payload, errorMessage) => {
       const psyEmail = 'login@beta.gouv.fr';
-      const psy = await clean.insertOnePsy(psyEmail, DossierState.accepte, false);
+      const psy = await create.insertOnePsy({ personalEmail: psyEmail });
       // Check that the fields we are testing are unset before test
       chai.expect(psy.isConventionSigned).to.be.false;
 

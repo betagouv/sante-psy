@@ -1,8 +1,8 @@
 import chai from 'chai';
 import app from '../../index';
 import clean from '../helper/clean';
+import create from '../helper/create';
 import dbUniversities from '../../db/universities';
-import { DossierState } from '../../types/DossierState';
 import cookie from '../../utils/cookie';
 
 describe('universitiesController', () => {
@@ -11,12 +11,12 @@ describe('universitiesController', () => {
   let psy;
 
   beforeEach(async () => {
-    await clean.cleanAllUniversities();
+    await clean.universities();
 
-    psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, undefined, false);
+    psy = await create.insertOnePsy({ personalEmail: 'loginemail@beta.gouv.fr' }, false);
 
-    university = clean.getOneUniversity('Monster university');
-    university2 = clean.getOneUniversity('University of love');
+    university = create.getOneUniversity('Monster university');
+    university2 = create.getOneUniversity('University of love');
     await dbUniversities.upsertMany([university, university2]);
   });
 

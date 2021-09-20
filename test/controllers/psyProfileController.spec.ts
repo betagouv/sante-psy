@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import cookie from '../../utils/cookie';
 import app from '../../index';
 import clean from '../helper/clean';
+import create from '../helper/create';
 import dbPsychologists from '../../db/psychologists';
 
 const getAddressCoordinates = require('../../services/getAddressCoordinates');
@@ -11,7 +12,7 @@ const getAddressCoordinates = require('../../services/getAddressCoordinates');
 describe('psyProfileController', () => {
   describe('get psy profile', () => {
     afterEach(async () => {
-      await clean.cleanAllPsychologists();
+      await clean.psychologists();
     });
 
     const checkProfile = (actual, expected, shouldBeComplete) => {
@@ -56,7 +57,7 @@ describe('psyProfileController', () => {
     };
 
     it('should return basic info if user is not logged in', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
 
       return chai.request(app)
         .get(`/api/psychologist/${psy.dossierNumber}`)
@@ -67,7 +68,7 @@ describe('psyProfileController', () => {
     });
 
     it('should return basic info if user is logged in but ask for someone else', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
 
       return chai.request(app)
         .get(`/api/psychologist/${psy.dossierNumber}`)
@@ -80,7 +81,7 @@ describe('psyProfileController', () => {
     });
 
     it('should return full psy profile if connected', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
 
       return chai.request(app)
         .get(`/api/psychologist/${psy.dossierNumber}`)
@@ -375,7 +376,7 @@ describe('psyProfileController', () => {
     });
 
     const shouldPassUpdatePsyInputValidation = async (postData) => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
 
       const res = await chai.request(app)
       .put(`/api/psychologist/${psy.dossierNumber}`)
@@ -490,12 +491,12 @@ describe('psyProfileController', () => {
     });
 
     afterEach(async () => {
-      await clean.cleanAllPsychologists();
+      await clean.psychologists();
       getAddressCoordinatesStub.restore();
     });
 
     it('should return 401 if user is not logged in', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
 
       return chai.request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
@@ -505,8 +506,8 @@ describe('psyProfileController', () => {
     });
 
     it('should return 403 if user token does not match the param', async () => {
-      const loggedPsy = await clean.insertOnePsy();
-      const targetPsy = await clean.insertOnePsy('other@psy.fr');
+      const loggedPsy = await create.insertOnePsy();
+      const targetPsy = await create.insertOnePsy({ personalEmail: 'other@psy.fr' });
 
       return chai.request(app)
         .put(`/api/psychologist/${targetPsy.dossierNumber}`)
@@ -529,7 +530,7 @@ describe('psyProfileController', () => {
     });
 
     it('should do nothing if it does not exists', async () => {
-      const psy = clean.getOnePsy();
+      const psy = create.getOnePsy();
 
       return chai.request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
@@ -553,7 +554,7 @@ describe('psyProfileController', () => {
     });
 
     it('should update psy profile', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       const LONGITUDE_PARIS = 2.3488;
       const LATITUDE_PARIS = 48.85341;
       getAddressCoordinatesStub.returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS });
@@ -594,7 +595,7 @@ describe('psyProfileController', () => {
     });
 
     it('should ignore extra info on psy profile', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
 
       return chai.request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
@@ -644,7 +645,7 @@ describe('psyProfileController', () => {
     });
 
     it('should return 401 if user is not logged in', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
 
       return chai.request(app)
         .post(`/api/psychologist/${psy.dossierNumber}/activate`)
@@ -655,8 +656,8 @@ describe('psyProfileController', () => {
     });
 
     it('should return 403 if user token does not match the param', async () => {
-      const loggedPsy = await clean.insertOnePsy();
-      const targetPsy = await clean.insertOnePsy('other@psy.fr');
+      const loggedPsy = await create.insertOnePsy();
+      const targetPsy = await create.insertOnePsy({ personalEmail: 'other@psy.fr' });
 
       return chai.request(app)
         .post(`/api/psychologist/${targetPsy.dossierNumber}/activate`)
@@ -669,7 +670,7 @@ describe('psyProfileController', () => {
     });
 
     it('should activate psy', async () => {
-      const psy = clean.getOneInactivePsy();
+      const psy = create.getOneInactivePsy();
       await dbPsychologists.upsertMany([psy]);
 
       return chai.request(app)
@@ -714,7 +715,7 @@ describe('psyProfileController', () => {
     };
 
     it('should return 401 if user is not logged in', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
 
       return chai.request(app)
         .post(`/api/psychologist/${psy.dossierNumber}/suspend`)
@@ -725,8 +726,8 @@ describe('psyProfileController', () => {
     });
 
     it('should return 403 if user token does not match the param', async () => {
-      const loggedPsy = await clean.insertOnePsy();
-      const targetPsy = await clean.insertOnePsy('other@psy.fr');
+      const loggedPsy = await create.insertOnePsy();
+      const targetPsy = await create.insertOnePsy({ personalEmail: 'other@psy.fr' });
 
       return chai.request(app)
         .post(`/api/psychologist/${targetPsy.dossierNumber}/suspend`)
@@ -739,7 +740,7 @@ describe('psyProfileController', () => {
     });
 
     it('should suspend psy', async () => {
-      const psy = clean.getOneInactivePsy();
+      const psy = create.getOneInactivePsy();
       await dbPsychologists.upsertMany([psy]);
 
       const nextDate = new Date();

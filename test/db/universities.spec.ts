@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import dotEnv from 'dotenv';
 import dbUniversities from '../../db/universities';
-import clean from '../helper/clean';
+import create from '../helper/create';
 
 dotEnv.config();
 
@@ -18,7 +18,7 @@ describe('DB Universities', () => {
   describe('getAssignedUniversityId', () => {
     it('should get a assigned university based on departement number', async () => {
       const psy = {
-        ...clean.getOnePsy(),
+        ...create.getOnePsy(),
         departement: '30 - Gard',
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
       };
@@ -29,7 +29,7 @@ describe('DB Universities', () => {
     it('should get the same assigned university if already assigned', async () => {
       const alreadyAssignedUniId = 'alreadyAssignedUniId';
       const psy = {
-        ...clean.getOnePsy(),
+        ...create.getOnePsy(),
         departement: '30 - Gard',
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
         assignedUniversityId: alreadyAssignedUniId,
@@ -40,7 +40,7 @@ describe('DB Universities', () => {
 
     it('should get null if departement is unkwown', async () => {
       const psy = {
-        ...clean.getOnePsy(),
+        ...create.getOnePsy(),
         departement: 'pizza',
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
       };
@@ -51,7 +51,7 @@ describe('DB Universities', () => {
 
     it('should get null if uni name is unknown for department', async () => {
       const psy = {
-        ...clean.getOnePsy(),
+        ...create.getOnePsy(),
         departement: '100 - pizza', // 100 does not match any uni in our list
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
       };
