@@ -26,11 +26,11 @@ export type NonEditablePsychologist = {
 
 export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
     dossierNumber: string,
-    assignedUniversityId: string,
+    assignedUniversityId?: string,
     isConventionSigned?: boolean,
     selfModified?: boolean,
-    active: boolean,
-    inactiveUntil: Date,
+    active?: boolean,
+    inactiveUntil?: Date,
     updatedAt?: Date,
     createdAt: Date,
   };

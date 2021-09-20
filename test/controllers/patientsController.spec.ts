@@ -2,6 +2,7 @@ import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import app from '../../index';
 import clean from '../helper/clean';
+import create from '../helper/create';
 import cookie from '../../utils/cookie';
 import date from '../../utils/date';
 import dbPatients from '../../db/patients';
@@ -12,7 +13,7 @@ const doctorAddress = 'doctorAddress';
 const dateOfBirth = '20/01/1980';
 
 const makePatient = async (psychologistId) => {
-  const psy = clean.getOnePsy();
+  const psy = create.getOnePsy();
   psy.dossierNumber = psychologistId;
   await dbPsychologists.upsertMany([psy]);
   // Insert an appointment and a patient
@@ -41,12 +42,12 @@ describe('patientsController', () => {
     });
 
     afterEach(async () => {
-      await clean.cleanAllPatients();
+      await clean.patients();
       return Promise.resolve();
     });
 
     it('should create patient', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
 
       return chai.request(app)
         .post('/api/patients')
@@ -355,7 +356,7 @@ describe('patientsController', () => {
     });
 
     afterEach(async () => {
-      await clean.cleanAllPatients();
+      await clean.patients();
       return Promise.resolve();
     });
 
@@ -437,7 +438,7 @@ describe('patientsController', () => {
     });
 
     afterEach(async () => {
-      await clean.cleanAllPatients();
+      await clean.patients();
       return Promise.resolve();
     });
 
@@ -869,12 +870,12 @@ describe('patientsController', () => {
 
   describe('delete patient', () => {
     beforeEach(async () => {
-      await clean.cleanAllPatients();
+      await clean.patients();
       return Promise.resolve();
     });
 
     afterEach(async () => {
-      await clean.cleanAllPatients();
+      await clean.patients();
       return Promise.resolve();
     });
 

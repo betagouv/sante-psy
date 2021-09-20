@@ -170,9 +170,9 @@ const PsyListing = () => {
 
     if (coords && addressFilter === AROUND_ME) {
       return filteredPsychologists
-        .map((psy) => ({
+        .map(psy => ({
           ...psy,
-          distance: distance.distanceKm(psy.latitude, psy.longitude, coords.longitude, coords.latitude)
+          distance: distance.distanceKm(psy.latitude, psy.longitude, coords.longitude, coords.latitude),
         }))
         .sort((a, b) => a.distance - b.distance);
     }

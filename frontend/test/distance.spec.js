@@ -11,7 +11,6 @@ describe('Distance', () => {
     const result = distance.distanceKm(LATITUDE_PARIS, LONGITUDE_PARIS, LATITUDE_MARSEILLE, LONGITUDE_MARSEILLE);
     expect(result).to.be.greaterThan(0);
     expect(result).to.be.lessThan(2000);
-
   });
 
   it('Should return 0 if 2 same points', () => {

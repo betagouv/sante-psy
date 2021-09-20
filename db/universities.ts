@@ -42,29 +42,9 @@ const getById = async (universityId: string) : Promise<University> => {
   }
 };
 
-let noUniversityNow;
-const getNoUniversityNow = async (): Promise<University> => {
-  if (!noUniversityNow) {
-    noUniversityNow = db(universitiesTable)
-        .where({ name: '--- Aucune pour le moment' })
-        .first();
-  }
-  return noUniversityNow;
-};
-
 const getAll = async (): Promise<University[]> => {
   try {
     return db(universitiesTable);
-  } catch (err) {
-    console.error('Impossible de récupérer les universités', err);
-    throw new Error('Impossible de récupérer les universités');
-  }
-};
-
-const getAllOrderByName = async (): Promise<University[]> => {
-  try {
-    return db(universitiesTable)
-        .orderByRaw('name collate "C"');
   } catch (err) {
     console.error('Impossible de récupérer les universités', err);
     throw new Error('Impossible de récupérer les universités');
@@ -116,10 +96,8 @@ const getEmailsTo = (university: University): string | undefined => {
 
 export default {
   upsertMany,
-  getNoUniversityNow,
   getById,
   getAll,
-  getAllOrderByName,
   getAssignedUniversityId,
   getEmailsTo,
   insertByName,

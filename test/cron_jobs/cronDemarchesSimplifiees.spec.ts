@@ -8,6 +8,7 @@ import dbDsApiCursor from '../../db/dsApiCursor';
 import importDossier from '../../services/demarchesSimplifiees/importDossier';
 import cronDemarchesSimplifiees from '../../cron_jobs/cronDemarchesSimplifiees';
 import clean from '../helper/clean';
+import create from '../helper/create';
 import { DossierState } from '../../types/DossierState';
 
 const sendEmail = require('../../utils/email');
@@ -34,7 +35,7 @@ describe('Import Data from DS to PG', () => {
     // eslint-disable-next-line max-len
     const cursor = '{"id":1,"cursor":"test","createdAt":"2021-02-19T13:16:45.382Z","updatedAt":"2021-02-19T13:16:45.380Z"}';
     const dsApiData = {
-      psychologists: [clean.getOnePsy()],
+      psychologists: [create.getOnePsy()],
       cursor: 'test',
     };
     getLatestCursorSavedStub = sinon.stub(dbDsApiCursor, 'getLatestCursorSaved')
@@ -63,19 +64,19 @@ describe('checkForMultipleAcceptedDossiers', () => {
 
   beforeEach(async () => {
     sendMailStub = sinon.stub(sendEmail, 'default');
-    await clean.cleanAllPsychologists();
+    await clean.psychologists();
     return Promise.resolve();
   });
 
   afterEach(async () => {
-    await clean.cleanAllPsychologists();
+    await clean.psychologists();
     sendMailStub.restore();
     return Promise.resolve();
   });
 
   it('should notify if two accepted dossiers for the same person', async () => {
     // insert 2 psychologists, same data except uuid, with accepte state
-    const psy = clean.getOnePsy();
+    const psy = create.getOnePsy();
     psy.state = DossierState.accepte;
     psy.dossierNumber = '27172a9b-5081-4502-9022-b17510ba40a1';
     await dbPsychologists.upsertMany([psy]);
@@ -146,7 +147,7 @@ describe('DS integration tests', () => {
   };
 
   beforeEach(async () => {
-    await clean.cleanAllPsychologists();
+    await clean.psychologists();
   });
 
   const verifyPsy = async (id, expected, universityId = undefined) => {
