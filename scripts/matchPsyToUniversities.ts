@@ -1,5 +1,7 @@
+import db from '../db/db';
 import dbUniversities from '../db/universities';
 import dbPsychologists from '../db/psychologists';
+import { psychologistsTable } from '../db/tables';
 import department from '../utils/department';
 import departementToUniversityName from '../utils/departementToUniversityName';
 
@@ -18,13 +20,10 @@ const matchPsyToUni = async (dryRun): Promise<void> => {
     const statsNoDepartmentFound = [];
     const statsNoUniFound = [];
     const statsNoChange = [];
+
     const universities = await dbUniversities.getAll();
-    const psychologists = await dbPsychologists.getAllAccepted([
-      'personalEmail',
-      'dossierNumber',
-      'departement',
-      'assignedUniversityId',
-    ]);
+    const psychologists = await db.column('personalEmail', 'dossierNumber', 'departement', 'assignedUniversityId')
+      .select().from(psychologistsTable);
 
     const needToWait = psychologists
       .map((psy) => {
