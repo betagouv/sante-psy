@@ -106,8 +106,15 @@ const update = async (req: Request, res: Response): Promise<void> => {
 
   let coordinates : Coordinates;
   const psychologist = await dbPsychologists.getById(req.user.psychologist);
-  if (psychologist && psychologist.address !== req.body.address) {
-    coordinates = await getAddressCoordinates(req.body.address);
+  if (psychologist) {
+    if (psychologist.address !== req.body.address) {
+      coordinates = await getAddressCoordinates(req.body.address);
+    } else {
+      coordinates = {
+        longitude: psychologist.longitude,
+        latitude: psychologist.latitude,
+      };
+    }
   }
 
   await dbPsychologists.update({

@@ -83,7 +83,7 @@ const PublicPsychologistProfile = () => {
           secondary
           onClick={() => history.goBack()}
         >
-          Revenir à l&lsquo;annuaire
+          Retour
         </Button>
       </Row>
       {error && <Notification message={error} type="error" />}

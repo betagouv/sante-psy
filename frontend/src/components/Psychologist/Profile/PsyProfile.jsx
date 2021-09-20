@@ -141,8 +141,8 @@ const PsyProfile = () => {
                     title="Votre profil est incomplet"
                     description={(
                       <>
-                        Cela n&lsquo;est pas bloquant mais pourrait empecher les étudiants de vous contacter
-                        ou d&lsquo;identifier si vous repondez à leurs attentes.
+                        Cela n&lsquo;est pas bloquant mais pourrait empêcher les étudiants et étudiantes
+                        de vous contacter ou d&lsquo;identifier si vous repondez à leurs attentes.
                         <ul>
                           {psychologist.profilIssues.map(issue => <li key={issue}>{issue}</li>)}
                         </ul>

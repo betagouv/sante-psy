@@ -379,7 +379,7 @@ describe('Profile', () => {
         .should('exist');
       cy.get('[data-test-id="incomplete-profile-alert"]')
         // eslint-disable-next-line max-len
-        .should('have.text', 'Votre profil est incompletCela n‘est pas bloquant mais pourrait empecher les étudiants de vous contacter ou d‘identifier si vous repondez à leurs attentes.Votre présentation est trop courte.Votre adresse ne semble pas valide.Votre site internet ne semble pas valide.');
+        .should('have.text', 'Votre profil est incompletCela n‘est pas bloquant mais pourrait empêcher les étudiants et étudiantes de vous contacter ou d‘identifier si vous repondez à leurs attentes.Votre présentation est trop courte.Votre adresse ne semble pas valide.Votre site internet ne semble pas valide.');
     });
   });
 });
