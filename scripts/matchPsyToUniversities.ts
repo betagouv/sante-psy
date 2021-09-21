@@ -5,6 +5,8 @@ import { psychologistsTable } from '../db/tables';
 import department from '../utils/department';
 import departementToUniversityName from '../utils/departementToUniversityName';
 
+const DEPARTMENT_PREVIOUSLY_SPECIAL = ['75', '91', '94'];
+
 /**
  * Update psychologists assigned university according to their department
  * can be run and rerun again
@@ -18,6 +20,7 @@ const matchPsyToUni = async (dryRun): Promise<void> => {
   try {
     const statsAssignmentDone = [];
     const statsNoDepartmentFound = [];
+    const statsDepartmentPreviouslySpecial = [];
     const statsNoUniFound = [];
     const statsNoChange = [];
 
@@ -29,7 +32,12 @@ const matchPsyToUni = async (dryRun): Promise<void> => {
       .map((psy) => {
         const departement = department.getNumberFromString(psy.departement);
         if (!departement) {
-          statsNoDepartmentFound.push(psy.dossierNumber);
+          statsNoDepartmentFound.push(psy.personalEmail);
+          return Promise.resolve(0);
+        }
+
+        if (DEPARTMENT_PREVIOUSLY_SPECIAL.includes(departement)) {
+          statsDepartmentPreviouslySpecial.push(psy.personalEmail);
           return Promise.resolve(0);
         }
 
@@ -67,6 +75,7 @@ const matchPsyToUni = async (dryRun): Promise<void> => {
 
     console.log('\nAccepted psys:', psychologists.length);
     console.log('\nNo department found for', statsNoDepartmentFound.length, 'psys:', statsNoDepartmentFound);
+    console.log('\nNo university because previously special for', statsDepartmentPreviouslySpecial.length, 'psys');
     console.log('\nNo university found for', statsNoUniFound.length, 'psys');
     console.log('\nNo changes for', statsNoChange.length, 'psys');
     console.log('\nNew assignments done for', statsAssignmentDone.length, 'psys:', statsAssignmentDone);
