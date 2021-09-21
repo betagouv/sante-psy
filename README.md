@@ -198,11 +198,14 @@ ts-node scripts/insertAddressToUniversities.ts
 
 ### Ajout de la correspondance entre université et psychologues
 
-Pour gérer les cas particuliers, ce script applique les assignations du fichier `scripts/psyToUni.js`.
+Pour appliquer sur l'ensemble des psychologues acceptés en base, le script `scripts/matchPsyToUniversities.ts` assigne les universités en fonction du département (voir fichier `utils/departementToUniversityName.ts`)
+
+Pour gérer les cas particuliers, le script `scripts/matchSpecialPsyToUniversities.ts` applique les assignations du fichier `scripts/psyToUni.js`.
 
 L'option `--dry-run` permet de visualiser les changements sans qu'ils soient appliqués.
 
 ```bash
+ts-node scripts/matchPsyToUniversities.ts [--dry-run]
 ts-node scripts/matchSpecialPsyToUniversities.ts [--dry-run]
 ```
 
