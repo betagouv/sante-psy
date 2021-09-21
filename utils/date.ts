@@ -28,9 +28,8 @@ const toFormatDDMMYYYY = (date: Date): string => {
 
 const parseForm = (date: string): Date => {
   if (date) {
-    const [day, month, year] = date.split('/');
-    // year - month - day
-    return new Date(`${year}-${month}-${day}`);
+    // Convert DD/MM/YYYY date
+    return new Date(date.split('/').reverse().join('-'));
   }
   return null;
 };

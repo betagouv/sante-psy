@@ -7,10 +7,9 @@ import dbAppointments from '../../db/appointments';
 import dbPatients from '../../db/patients';
 import dbPsychologists from '../../db/psychologists';
 import cookie from '../../utils/cookie';
-import date from '../../utils/date';
 
 describe('appointmentsController', () => {
-  const dateOfBirth = date.parseForm('20/01/1980');
+  const dateOfBirth = new Date('1980/01/20');
 
   describe('create appointment', () => {
     beforeEach(async () => {

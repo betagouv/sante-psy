@@ -1,6 +1,5 @@
 import { assert, expect } from 'chai';
 import dbPatients from '../../db/patients';
-import date from '../../utils/date';
 import db from '../../db/db';
 import clean from '../helper/clean';
 import create from '../helper/create';
@@ -19,7 +18,7 @@ describe('DB Patients', () => {
   const hasPrescription = false;
   const doctorName = 'doctorName';
   const doctorAddress = 'doctorAddress';
-  const dateOfBirth = date.parseForm('20/01/1980');
+  const dateOfBirth = new Date('1980/01/20');
 
   async function testDataPatientsExist(lastName) {
     const exist = await db(patientsTable)

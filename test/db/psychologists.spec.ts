@@ -505,7 +505,9 @@ describe('DB Psychologists', () => {
       reasons[0].until.getMonth().should.be.equal(date.getMonth());
       reasons[0].until.getDate().should.be.equal(date.getDate());
       reasons[0].createdAt.should.be.at.least(now);
-      reasons[0].createdAt.should.be.at.most(new Date());
+      const after = new Date();
+      after.setSeconds(after.getSeconds() + 1);
+      reasons[0].createdAt.should.be.at.most(after);
     });
   });
 

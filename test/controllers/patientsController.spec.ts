@@ -484,7 +484,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].isStudentStatusVerified).to.equal(true);
           expect(patientsArray[0].hasPrescription).to.equal(true);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
-            date.parseForm(updatedDateOfBirth).getTime(),
+            new Date('1982/02/25').getTime(),
           );
 
           return Promise.resolve();
@@ -569,7 +569,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
-            date.parseForm(dateOfBirth).getTime(),
+            new Date('1980/01/20').getTime(),
           );
 
           return Promise.resolve();
@@ -608,7 +608,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
           expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
-            date.parseForm(dateOfBirth).getTime(),
+            new Date('1980/01/20').getTime(),
           );
 
           return Promise.resolve();
