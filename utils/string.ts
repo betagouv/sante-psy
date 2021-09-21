@@ -8,14 +8,6 @@ const simplify = (value: string) : string => value
 
 const areSimilar = (value1: string, value2: string): boolean => simplify(value1) === simplify(value2);
 
-const prefixUrl = (value: string) : string => {
-  if (value && value.replace(/ /g, '') !== '') {
-    return value.replace(/^(?!https?:\/\/)/, 'http://');
-  }
-  return undefined;
-};
-
 export default {
   areSimilar,
-  prefixUrl,
 };

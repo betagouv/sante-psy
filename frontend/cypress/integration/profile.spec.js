@@ -130,6 +130,49 @@ describe('Profile', () => {
           'Vos informations ont bien été mises à jour.',
         );
     });
+
+    it('should update existing profile with website override', () => {
+      cy.get('[data-test-id="show-profile-form-button"]')
+        .click();
+      cy.get('[data-test-id="edit-profile-form"]')
+        .should('exist');
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .clear()
+        .type('doctolib.fr')
+        .blur();
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .should(
+          'have.value',
+          'http://doctolib.fr',
+        );
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .clear()
+        .type('http://doctolib.fr')
+        .blur();
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .should(
+          'have.value',
+          'http://doctolib.fr',
+        );
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .clear()
+        .type('https://doctolib.fr')
+        .blur();
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .should(
+          'have.value',
+          'https://doctolib.fr',
+        );
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .clear()
+        .type('   ')
+        .blur();
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .should(
+          'have.value',
+          '   ',
+        );
+    });
   });
 
   describe('Reactivate profile', () => {
