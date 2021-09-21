@@ -1,5 +1,7 @@
+import db from '../db/db';
 import dbUniversities from '../db/universities';
 import dbPsychologists from '../db/psychologists';
+import { psychologistsTable } from '../db/tables';
 import psyToUni from './psyToUni';
 
 /**
@@ -20,11 +22,8 @@ const matchPsyToUni = async (dryRun): Promise<void> => {
     const statsNoPsyFound = [];
 
     const universities = await dbUniversities.getAll();
-    const psyFromDb = await dbPsychologists.getAllAccepted([
-      'personalEmail',
-      'dossierNumber',
-      'assignedUniversityId',
-    ]);
+    const psyFromDb = await db.column('personalEmail', 'dossierNumber', 'assignedUniversityId')
+      .select().from(psychologistsTable);
 
     Object.keys(psyToUni).forEach((psyFromFile) => {
       const psyFoundInDb = psyFromDb.find((psy) => psy.personalEmail === psyFromFile);
