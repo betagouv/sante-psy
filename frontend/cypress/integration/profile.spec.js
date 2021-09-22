@@ -59,11 +59,6 @@ describe('Profile', () => {
         .should('exist');
       cy.get('[data-test-id="convention-form-title"]')
         .should('exist');
-      cy.get('[data-test-id="convention-university-select"] input')
-        .click();
-      cy.get('[data-test-id="convention-university-select"] option')
-        .eq(2)
-        .click();
       cy.get('[data-test-id="signed-true"]')
         .click();
       cy.get('[data-test-id="update-convention-button"]')
@@ -72,7 +67,7 @@ describe('Profile', () => {
       cy.get('[data-test-id="convention-form"]')
         .should('not.exist');
       cy.get('[data-test-id="convention-university-name"]')
-        .should('have.text', 'Je suis rattaché à l‘université de Angers.');
+        .should('have.text', 'Je suis rattaché à l‘université de Strasbourg (UNISTRA).');
       cy.get('[data-test-id="convention-signed"]')
         .should('have.text', 'La convention est signée.');
       cy.get('[data-test-id="notification-success"] p')
@@ -87,13 +82,6 @@ describe('Profile', () => {
       cy.reload();
       cy.get('[data-test-id="convention-form"]')
         .should('exist');
-      cy.get('[data-test-id="convention-form-title"]')
-        .should('not.exist');
-      cy.get('[data-test-id="convention-university-select"] input')
-        .click();
-      cy.get('[data-test-id="convention-university-select"] option')
-        .eq(8)
-        .click();
       cy.get('[data-test-id="signed-false"]')
         .click();
       cy.get('[data-test-id="update-convention-button"]')
@@ -102,7 +90,7 @@ describe('Profile', () => {
       cy.get('[data-test-id="convention-form"]')
         .should('not.exist');
       cy.get('[data-test-id="convention-university-name"]')
-        .should('have.text', 'Je suis rattaché à l‘université de Bretagne Sud.');
+        .should('have.text', 'Je suis rattaché à l‘université de Strasbourg (UNISTRA).');
       cy.get('[data-test-id="convention-signed"]')
         .should('have.text', 'La convention n‘est pas encore signée.');
       cy.get('[data-test-id="notification-success"] p')
@@ -364,6 +352,34 @@ describe('Profile', () => {
         cy.wrap((new Date(response.request.body.date)).getMonth()).should('eq', nextCalendarDate.getMonth());
         cy.wrap((new Date(response.request.body.date)).getDate()).should('eq', nextCalendarDate.getDate());
       });
+    });
+  });
+
+  describe('Incomplete profile', () => {
+    it('should not display alert if profile is complete', () => {
+      cy.get('[data-test-id="incomplete-profile-alert"]')
+        .should('not.exist');
+    });
+    it('should display alert for all incomplete info', () => {
+      cy.get('[data-test-id="show-profile-form-button"]')
+        .click();
+      cy.get('[data-test-id="psy-address-input"] > input')
+        .clear()
+        .type('nimps...');
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .clear()
+        .type('doctolib');
+      cy.get('[data-test-id="psy-description-input"] > textarea')
+        .clear()
+        .type('cest court !');
+      cy.get('[data-test-id="save-profile-button"]')
+        .click();
+      cy.wait('@updateProfile');
+      cy.get('[data-test-id="incomplete-profile-alert"]')
+        .should('exist');
+      cy.get('[data-test-id="incomplete-profile-alert"]')
+        // eslint-disable-next-line max-len
+        .should('have.text', 'Votre profil est incompletCela n‘est pas bloquant mais pourrait empêcher les étudiants et étudiantes de vous contacter ou d‘identifier si vous repondez à leurs attentes.Votre présentation est trop courte.Votre adresse ne semble pas valide.Votre site internet ne semble pas valide.');
     });
   });
 });

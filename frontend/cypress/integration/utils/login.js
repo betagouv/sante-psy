@@ -19,12 +19,10 @@ const login = (psy, duration = 3600) => {
   setLoginInfo();
 };
 
-const loginAsDefault = (duration = 3600) => {
-  cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
-    .then(res => {
-      login(res.body.psy, duration);
-    });
-};
+const loginAsDefault = (duration = 3600) => cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
+  .then(res => {
+    login(res.body.psy, duration);
+  });
 
 const logout = () => {
   cy.get('[data-test-id="logout-link"]').click({ force: true });

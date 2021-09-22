@@ -60,6 +60,8 @@ const getAllActive = async (): Promise<Psychologist[]> => {
       'teleconsultation',
       'languages',
       'description',
+      'longitude',
+      'latitude',
     )
         .select()
         .from(psychologistsTable)
@@ -154,7 +156,6 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
           }),
         }),
         ...nonEditablePsyFields(psy),
-        // assignedUniversityId, do not update assignedId on already existing psy
         updatedAt,
       });
     } catch (err) {
@@ -205,7 +206,6 @@ const getNotYetAcceptedByEmail = async (email: string): Promise<Psychologist> =>
 
 const updateConventionInfo = async (
   psychologistId: string,
-  assignedUniversityId: string,
   isConventionSigned: boolean,
 ): Promise<number> => {
   const updated = await db(psychologistsTable)
@@ -213,7 +213,6 @@ const updateConventionInfo = async (
       dossierNumber: psychologistId,
     })
     .update({
-      assignedUniversityId,
       isConventionSigned,
       updatedAt: date.now(),
     });
@@ -237,7 +236,7 @@ const getConventionInfo = async (psychologistId: string)
 const deleteConventionInfo = async (email: string): Promise<number> => db
   .from(psychologistsTable)
   .update({
-    assignedUniversityId: null,
+    isConventionSigned: null,
   })
   .where('personalEmail', email);
 

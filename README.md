@@ -198,11 +198,14 @@ ts-node scripts/insertAddressToUniversities.ts
 
 ### Ajout de la correspondance entre université et psychologues
 
-Pour gérer les cas particuliers, ce script applique les assignations du fichier `scripts/psyToUni.js`.
+Pour appliquer sur l'ensemble des psychologues acceptés en base, le script `scripts/matchPsyToUniversities.ts` assigne les universités en fonction du département (voir fichier `utils/departementToUniversityName.ts`)
+
+Pour gérer les cas particuliers, le script `scripts/matchSpecialPsyToUniversities.ts` applique les assignations du fichier `scripts/psyToUni.js`.
 
 L'option `--dry-run` permet de visualiser les changements sans qu'ils soient appliqués.
 
 ```bash
+ts-node scripts/matchPsyToUniversities.ts [--dry-run]
 ts-node scripts/matchSpecialPsyToUniversities.ts [--dry-run]
 ```
 
@@ -222,8 +225,9 @@ Cette tache s'effectue en 3 étapes.
 
 #### Géneration du fichier de référence des institutions (en local)
 
-Apres avoir mis à jour le fichier `script/completeInstitutions.json` téléchargé en json depuis 
-[le site officiel](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-principaux-etablissements-enseignement-superieur/export/?disjunctive.type_d_etablissement&disjunctive.typologie_d_universites_et_assimiles), on récupere les noms des institutions avec:
+Apres avoir mis à jour le fichier `script/completeInstitutions.json` téléchargé en json depuis
+[le site officiel](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-principaux-etablissements-enseignement-superieur/export/?disjunctive.type_d_etablissement&disjunctive.typologie_d_universites_et_assimiles), on récupere les noms des institutions avec :
+
 ```bash
 ts-node scripts/createInstitutionNames.ts
 ```
@@ -231,6 +235,7 @@ ts-node scripts/createInstitutionNames.ts
 #### Récuperération des institutions rentrées par les psy (en local)
 
 Il faut récuperer la liste des noms d'institutions qu'on veut mettre à jour depuis métabase dans le fichier `script/patientsInstitution.json` et lancer:
+
 ```bash
 ts-node scripts/getCleanInstitutionsName.ts
 ```
@@ -241,6 +246,7 @@ Ceci crée un fichier `script/newPatientsInstitution.json`. Ce dernier est un di
 
 Une fois le fichier `script/newPatientsInstitution.json` créé, on le push sur le serveur (voir la section correspondante) on peut faire l'update en base.
 L'option `--dry-run` permet de visualiser les changements sans qu'ils soient appliqués.
+
 ```bash
 ts-node scripts/cleanPatientsInstitution.ts [--dry-run]
 ```

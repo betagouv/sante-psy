@@ -25,7 +25,10 @@ const Login = () => {
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    emailRef.current.focus();
+    // Not set when redirecting
+    if (emailRef.current) {
+      emailRef.current.focus();
+    }
   }, []);
 
   useEffect(() => {

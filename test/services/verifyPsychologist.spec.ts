@@ -1,5 +1,5 @@
 import sinon from 'sinon';
-import clean from '../helper/clean';
+import create from '../helper/create';
 import graphql from '../../services/demarchesSimplifiees/buildRequest';
 import verifyPsychologist from '../../services/demarchesSimplifiees/verifyPsychologist';
 
@@ -34,7 +34,7 @@ describe('verifyPsychologist', () => {
     getAdeliErrorsStub.returns([]);
     getDiplomaErrorsStub.returns([]);
 
-    const psyDS = clean.getOnePsyDS();
+    const psyDS = create.getOnePsyDS();
     const result = await verifyPsychologist(psyDS, {});
 
     result.should.equals(true);
@@ -50,7 +50,7 @@ describe('verifyPsychologist', () => {
     getAdeliErrorsStub.returns(['error 1', 'error 2']);
     getDiplomaErrorsStub.returns(['error 3', 'error 4']);
 
-    const psyDS = clean.getOnePsyDS();
+    const psyDS = create.getOnePsyDS();
     const result = await verifyPsychologist(psyDS, {});
 
     result.should.equals(false);

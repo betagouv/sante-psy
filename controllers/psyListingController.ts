@@ -18,6 +18,8 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
       address: psy.address,
       departement: psy.departement,
       region: psy.region,
+      longitude: psy.longitude,
+      latitude: psy.latitude,
     }))
     : psyList);
 };

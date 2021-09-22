@@ -1,8 +1,8 @@
 import chai from 'chai';
 import app from '../../index';
 import clean from '../helper/clean';
+import create from '../helper/create';
 import dbUniversities from '../../db/universities';
-import { DossierState } from '../../types/DossierState';
 import cookie from '../../utils/cookie';
 
 describe('universitiesController', () => {
@@ -11,31 +11,14 @@ describe('universitiesController', () => {
   let psy;
 
   beforeEach(async () => {
-    await clean.cleanAllUniversities();
+    await clean.universities();
 
-    psy = await clean.insertOnePsy('loginemail@beta.gouv.fr', DossierState.accepte, false, undefined, false);
+    psy = await create.insertOnePsy({ personalEmail: 'loginemail@beta.gouv.fr' }, false);
 
-    university = clean.getOneUniversity('Monster university');
-    university2 = clean.getOneUniversity('University of love');
+    university = create.getOneUniversity('Monster university');
+    university2 = create.getOneUniversity('University of love');
     await dbUniversities.upsertMany([university, university2]);
   });
-
-  it('should return all universities', async () => chai.request(app)
-        .get('/api/universities')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-        .set('xsrf-token', 'randomXSRFToken')
-        .then(async (res) => {
-          res.body.forEach((university) => {
-            university.should.have.all.keys('id', 'name');
-          });
-          res.body.should.eql([{
-            id: university.id,
-            name: university.name,
-          }, {
-            id: university2.id,
-            name: university2.name,
-          }]);
-        }));
 
   it('should return one university', async () => chai.request(app)
         .get(`/api/universities/${university.id}`)

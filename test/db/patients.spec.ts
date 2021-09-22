@@ -1,8 +1,8 @@
 import { assert, expect } from 'chai';
 import dbPatients from '../../db/patients';
-import date from '../../utils/date';
 import db from '../../db/db';
 import clean from '../helper/clean';
+import create from '../helper/create';
 import { patientsTable } from '../../db/tables';
 
 import dotEnv from 'dotenv';
@@ -18,7 +18,7 @@ describe('DB Patients', () => {
   const hasPrescription = false;
   const doctorName = 'doctorName';
   const doctorAddress = 'doctorAddress';
-  const dateOfBirth = date.parseForm('20/01/1980');
+  const dateOfBirth = new Date('1980/01/20');
   const tooOld = date.parseForm('20/01/1900');
   const tooYoung = date.parseForm('20/01/2017');
 
@@ -34,12 +34,12 @@ describe('DB Patients', () => {
 
   // Clean up all data
   afterEach(async () => {
-    await clean.cleanAllPatients();
+    await clean.patients();
   });
 
   describe('insert', () => {
     it('should insert one patient in PG', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       await dbPatients.insert(
         firstNames,
         lastName,
@@ -100,7 +100,7 @@ describe('DB Patients', () => {
     });
 
     it('should accept insert INE with more than 11 characters in PG', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       try {
         await dbPatients.insert(
           firstNames,
@@ -122,7 +122,7 @@ describe('DB Patients', () => {
     });
 
     it('should refuse insert for INE with more than 50 characters in PG', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       try {
         await dbPatients.insert(
           firstNames,
@@ -151,7 +151,7 @@ describe('DB Patients', () => {
     });
 
     it('should set deleted to false by default in PG', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       const insertedPatient = await dbPatients.insert(
         firstNames,
         lastName,
@@ -171,7 +171,7 @@ describe('DB Patients', () => {
 
   describe('update', () => {
     it('should Update one patient in PG', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       await dbPatients.insert(
         firstNames,
         lastName,
@@ -209,7 +209,7 @@ describe('DB Patients', () => {
 
   describe('delete', () => {
     it('should change deleted boolean to true and update updatedAt field', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       const patient = await dbPatients.insert(
         firstNames,
         lastName,
@@ -237,8 +237,8 @@ describe('DB Patients', () => {
 
   describe('getAll', () => {
     it('should return psy patients with not deleted appointments', async () => {
-      const psy = await clean.insertOnePsy();
-      const anotherPsy = await clean.insertOnePsy('another@mail.fr');
+      const psy = await create.insertOnePsy();
+      const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@mail.fr' });
       const patient = await dbPatients.insert(
         firstNames,
         lastName,
@@ -278,17 +278,22 @@ describe('DB Patients', () => {
       );
 
       await Promise.all([
-        clean.insertOneAppointment(patient.id, psy.dossierNumber),
-        clean.insertOneAppointment(patient.id, psy.dossierNumber),
-        clean.insertOneAppointment(patient.id, psy.dossierNumber, 10, 10, true),
+        create.insertOneAppointment({ patientId: patient.id, psychologistId: psy.dossierNumber }),
+        create.insertOneAppointment({ patientId: patient.id, psychologistId: psy.dossierNumber }),
+        create.insertOneAppointment({
+          patientId: patient.id,
+          psychologistId: psy.dossierNumber,
+          appointmentDate: new Date(2021, 10, 10).toISOString(),
+          deleted: true,
+        }),
 
-        clean.insertOneAppointment(anotherPatient.id, anotherPsy.dossierNumber),
-        clean.insertOneAppointment(anotherPatient.id, anotherPsy.dossierNumber),
-        clean.insertOneAppointment(anotherPatient.id, anotherPsy.dossierNumber),
+        create.insertOneAppointment({ patientId: anotherPatient.id, psychologistId: anotherPsy.dossierNumber }),
+        create.insertOneAppointment({ patientId: anotherPatient.id, psychologistId: anotherPsy.dossierNumber }),
+        create.insertOneAppointment({ patientId: anotherPatient.id, psychologistId: anotherPsy.dossierNumber }),
 
-        clean.insertOneAppointment(patient2.id, psy.dossierNumber),
-        clean.insertOneAppointment(patient2.id, psy.dossierNumber),
-        clean.insertOneAppointment(patient2.id, psy.dossierNumber),
+        create.insertOneAppointment({ patientId: patient2.id, psychologistId: psy.dossierNumber }),
+        create.insertOneAppointment({ patientId: patient2.id, psychologistId: psy.dossierNumber }),
+        create.insertOneAppointment({ patientId: patient2.id, psychologistId: psy.dossierNumber }),
       ]);
 
       const patients = (await dbPatients.getAll(psy.dossierNumber))
@@ -299,7 +304,7 @@ describe('DB Patients', () => {
     });
 
     it('should not return deleted patients', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       const patient = await dbPatients.insert(
         firstNames,
         lastName,

@@ -27,13 +27,13 @@ describe('ConventionModal', () => {
 
   describe('Basic display', () => {
     it('should not display modal convention is signed', () => {
-      signConvention('Angers', true).then(() => {
+      signConvention(true).then(() => {
         modalShouldExist(false);
       });
     });
 
     it('should display modal convention is not signed', () => {
-      signConvention('Angers', false).then(() => {
+      signConvention(false).then(() => {
         modalShouldExist(true);
       });
     });
@@ -75,15 +75,6 @@ describe('ConventionModal', () => {
       cy.get('[data-test-id="update-convention-button"]')
         .should('be.disabled');
 
-      cy.get('[data-test-id="convention-university-select"] input')
-        .click();
-      cy.get('[data-test-id="convention-university-select"] option')
-        .eq(2)
-        .click();
-
-      cy.get('[data-test-id="update-convention-button"]')
-        .should('be.disabled');
-
       cy.get('[data-test-id="signed-false"]')
         .click();
 
@@ -94,12 +85,6 @@ describe('ConventionModal', () => {
     it('should update convention and hide info', () => {
       cy.get('[data-test-id="update-convention-button"]')
         .should('be.disabled');
-
-      cy.get('[data-test-id="convention-university-select"] input')
-        .click();
-      cy.get('[data-test-id="convention-university-select"] option')
-        .eq(5)
-        .click();
 
       cy.get('[data-test-id="signed-false"]')
         .click();

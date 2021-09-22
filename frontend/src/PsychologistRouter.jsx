@@ -78,7 +78,7 @@ const PsychologistRouter = () => {
     >
       {modal}
       <Announcement />
-      {(!user.convention || !user.convention.universityId) && (
+      {user.convention && user.convention.isConventionSigned === null && (
         <Notification type="info">
           Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
           {' '}
