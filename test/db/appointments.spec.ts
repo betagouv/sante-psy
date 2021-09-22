@@ -39,7 +39,7 @@ describe('DB Appointments', () => {
         patientToInsert.doctorAddress,
         patientToInsert.dateOfBirth,
       );
-      await dbAppointments.insert(new Date('2021-06-01'), patient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2021-07-01'), patient.id, psy.dossierNumber);
 
       const appointmentsBeforeDelete = await db.from(appointmentsTable)
       .where('psychologistId', psy.dossierNumber)
