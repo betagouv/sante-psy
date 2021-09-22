@@ -15,11 +15,14 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
       firstNames: psy.firstNames,
       lastName: psy.lastName,
       teleconsultation: psy.teleconsultation,
-      address: psy.address,
       departement: psy.departement,
       region: psy.region,
+      address: psy.address,
       longitude: psy.longitude,
       latitude: psy.latitude,
+      otherAddress: psy.otherAddress,
+      otherLongitude: psy.otherLongitude,
+      otherLatitude: psy.otherLatitude,
     }))
     : psyList);
 };

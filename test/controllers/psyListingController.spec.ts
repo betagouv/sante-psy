@@ -37,11 +37,14 @@ describe('psyListingController', () => {
         'firstNames',
         'lastName',
         'teleconsultation',
-        'address',
         'departement',
         'region',
+        'address',
         'longitude',
         'latitude',
+        'otherAddress',
+        'otherLongitude',
+        'otherLatitude',
       ]);
     });
   });
@@ -63,17 +66,20 @@ describe('psyListingController', () => {
         'firstNames',
         'lastName',
         'teleconsultation',
-        'address',
         'departement',
         'region',
+        'address',
+        'longitude',
+        'latitude',
+        'otherAddress',
+        'otherLongitude',
+        'otherLatitude',
         'adeli',
         'description',
         'email',
         'languages',
         'phone',
         'website',
-        'longitude',
-        'latitude',
       ]);
     });
   });

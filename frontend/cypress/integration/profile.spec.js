@@ -360,12 +360,16 @@ describe('Profile', () => {
       cy.get('[data-test-id="incomplete-profile-alert"]')
         .should('not.exist');
     });
+
     it('should display alert for all incomplete info', () => {
       cy.get('[data-test-id="show-profile-form-button"]')
         .click();
       cy.get('[data-test-id="psy-address-input"] > input')
         .clear()
         .type('nimps...');
+      cy.get('[data-test-id="psy-other-address-input"] > input')
+        .clear()
+        .type('super nimps...');
       cy.get('[data-test-id="psy-website-input"] > input')
         .clear()
         .type('doctolib');
@@ -379,7 +383,7 @@ describe('Profile', () => {
         .should('exist');
       cy.get('[data-test-id="incomplete-profile-alert"]')
         // eslint-disable-next-line max-len
-        .should('have.text', 'Votre profil est incompletCela n‘est pas bloquant mais pourrait empêcher les étudiants et étudiantes de vous contacter ou d‘identifier si vous repondez à leurs attentes.Votre présentation est trop courte.Votre adresse ne semble pas valide.Votre site internet ne semble pas valide.');
+        .should('have.text', 'Votre profil est incompletCela n‘est pas bloquant mais pourrait empêcher les étudiants et étudiantes de vous contacter ou d‘identifier si vous repondez à leurs attentes.Votre présentation est trop courte.Votre site internet ne semble pas valide.L\'adresse nimps... ne semble pas valide.L\'adresse super nimps... ne semble pas valide.');
     });
   });
 });

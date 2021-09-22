@@ -9,8 +9,8 @@ import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
 import string from '../utils/string';
-import getAddressCoordinates from '../services/getAddressCoordinates';
 import { Coordinates } from '../types/Coordinates';
+import getAddressCoordinates from '../services/getAddressCoordinates';
 
 const getValidators = [
   param('psyId')
@@ -32,9 +32,6 @@ const get = async (req: Request, res: Response): Promise<void> => {
     firstNames: psychologist.firstNames,
     lastName: psychologist.lastName,
     email: psychologist.email,
-    address: psychologist.address,
-    departement: psychologist.departement,
-    region: psychologist.region,
     phone: psychologist.phone,
     website: string.prefixUrl(psychologist.website),
     teleconsultation: psychologist.teleconsultation,
@@ -42,8 +39,14 @@ const get = async (req: Request, res: Response): Promise<void> => {
     languages: psychologist.languages,
     personalEmail: extraInfo ? psychologist.personalEmail : undefined,
     active: psychologist.active,
+    address: psychologist.address,
     longitude: psychologist.longitude,
     latitude: psychologist.latitude,
+    otherAddress: psychologist.otherAddress,
+    otherLongitude: psychologist.otherLongitude,
+    otherLatitude: psychologist.otherLatitude,
+    departement: psychologist.departement,
+    region: psychologist.region,
   });
 };
 
@@ -60,6 +63,9 @@ const updateValidators = [
     .notEmpty()
     .customSanitizer(DOMPurify.sanitize)
     .withMessage("Vous devez spécifier l'adresse de votre cabinet."),
+  check('otherAddress')
+    .trim()
+    .customSanitizer(DOMPurify.sanitize),
   check('departement')
     .trim()
     .notEmpty()
@@ -98,13 +104,13 @@ const updateValidators = [
 
 const update = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
-
   const region = geo.departementToRegion[req.body.departement];
   if (!region) {
     throw new CustomError('Departement invalide', 400);
   }
 
   let coordinates : Coordinates;
+  let otherCoordinates : Coordinates;
   const psychologist = await dbPsychologists.getById(req.user.psychologist);
   if (psychologist) {
     if (psychologist.address !== req.body.address) {
@@ -115,6 +121,14 @@ const update = async (req: Request, res: Response): Promise<void> => {
         latitude: psychologist.latitude,
       };
     }
+    if (psychologist.otherAddress !== req.body.otherAddress) {
+      otherCoordinates = await getAddressCoordinates(req.body.otherAddress);
+    } else {
+      otherCoordinates = {
+        longitude: psychologist.otherLongitude,
+        latitude: psychologist.otherLatitude,
+      };
+    }
   }
 
   await dbPsychologists.update({
@@ -123,6 +137,8 @@ const update = async (req: Request, res: Response): Promise<void> => {
     region,
     longitude: coordinates ? coordinates.longitude : null,
     latitude: coordinates ? coordinates.latitude : null,
+    otherLongitude: otherCoordinates ? otherCoordinates.longitude : null,
+    otherLatitude: otherCoordinates ? otherCoordinates.latitude : null,
   });
 
   res.json({

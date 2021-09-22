@@ -14,17 +14,20 @@ export const addFrenchLanguageIfMissing = (languages: string): string => {
 
 export const editablePsyFields = (psy: Psychologist): EditablePsychologist => ({
   email: psy.email,
-  address: psy.address,
-  departement: psy.departement,
-  region: psy.region,
-  longitude: psy.longitude,
-  latitude: psy.latitude,
   phone: psy.phone,
   website: psy.website,
   description: psy.description,
   teleconsultation: psy.teleconsultation,
   languages: addFrenchLanguageIfMissing(psy.languages),
   personalEmail: psy.personalEmail,
+  departement: psy.departement,
+  region: psy.region,
+  address: psy.address,
+  longitude: psy.longitude,
+  latitude: psy.latitude,
+  otherAddress: psy.otherAddress,
+  otherLongitude: psy.otherLongitude,
+  otherLatitude: psy.otherLatitude,
 });
 
 export const nonEditablePsyFields = (psy: Psychologist): NonEditablePsychologist => ({

@@ -24,6 +24,8 @@ describe('parsePsychologists', () => {
         state: DossierState.accepte,
         adeli: '829302942',
         address: 'SSR CL AL SOLA 66110 MONTBOLO',
+        departement: '14 - Calvados',
+        region: 'Normandie',
         diploma: 'Psychologie clinique de la santé',
         phone: '0468396600',
         email: 'psychologue.test@beta.gouv.fr',
@@ -33,8 +35,6 @@ describe('parsePsychologists', () => {
         description,
         // eslint-disable-next-line max-len
         training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
-        departement: '14 - Calvados',
-        region: 'Normandie',
         languages: 'Français ,Anglais, et Espagnol',
       },
       {
@@ -45,6 +45,8 @@ describe('parsePsychologists', () => {
         state: DossierState.accepte,
         adeli: '829302942',
         address: 'SSR CL AL SOLA 66110 MONTBOLO',
+        departement: '14 - Calvados',
+        region: 'Normandie',
         phone: '0468396600',
         diploma: 'Psychologie clinique de la santé',
         email: 'psychologue.test@beta.gouv.fr',
@@ -54,8 +56,6 @@ describe('parsePsychologists', () => {
         description,
         // eslint-disable-next-line max-len
         training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
-        departement: '14 - Calvados',
-        region: 'Normandie',
         languages: 'Français ,Anglais, et Espagnol',
       },
     ];

@@ -152,12 +152,14 @@ const PsyListing = () => {
         );
 
       if (addressIsDepartment) {
-        if (!utils.matchDepartment(psychologist.address, addressFilter)) {
+        if (!utils.matchDepartment(psychologist.address, addressFilter)
+        && !utils.matchDepartment(psychologist.otherAddress, addressFilter)) {
           return false;
         }
       } else if (addressFilter
         && !(
           utils.matchZipCodeOrCity(psychologist.address, addressFilter)
+          || utils.matchZipCodeOrCity(psychologist.otherAddress, addressFilter)
           || utils.matchFilter(psychologist.departement, addressFilter)
           || utils.matchFilter(psychologist.region, addressFilter)
         )
