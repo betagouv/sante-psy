@@ -17,4 +17,11 @@ const selectNextCalendarDate = () => {
   return tomorrow;
 };
 
-export default { selectNextCalendarDate };
+const selectValidDateOfBirth = () => {
+  const youngStudentDate = new Date();
+  youngStudentDate.setFullYear(youngStudentDate.getFullYear() - 20);
+
+  // const yearToSelect = youngStudentDate.getFullYear();
+};
+
+export default { selectNextCalendarDate, selectValidDateOfBirth };

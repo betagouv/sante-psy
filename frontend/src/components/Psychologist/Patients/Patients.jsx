@@ -140,6 +140,7 @@ const Patients = () => {
         <Link
           to="/psychologue/nouvel-etudiant"
           className="fr-btn fr-fi-add-line fr-btn--icon-left"
+          data-test-id="add-new-etudiant"
         >
           Nouvel étudiant
         </Link>

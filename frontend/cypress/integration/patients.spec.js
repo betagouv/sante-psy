@@ -39,6 +39,37 @@ describe('Patient', () => {
     });
   });
 
+  describe('Create', () => {
+    it('should create an etudiant', () => {
+      cy.get('[data-test-id="add-new-etudiant"]')
+        .click();
+
+      cy.get('[data-test-id="etudiant-first-name-input"] > input')
+        .type('Damir');
+      cy.get('[data-test-id="etudiant-last-name-input"] > input')
+        .type('Sagadbekov');
+      cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
+        .type('My doctor');
+      cy.get('[data-test-id="add-patient-date-input"]')
+        .type('03/05/1996')
+      cy.get('[data-test-id="save-etudiant-button"]')
+        .click();
+
+      cy.get('[data-test-id="etudiant-table"] tr')
+        .should('have.length', 6);
+      cy.get('[data-test-id="etudiant-row-missing-info"]')
+        .should('have.length', 1);
+      cy.get('[data-test-id="etudiant-row-complete-info"]')
+        .should('have.length', 4);
+
+      cy.get('[data-test-id="notification-success"] p')
+        .should(
+          'have.text',
+          "L'étudiant Georges Moustaki a bien été modifié.",
+        );
+    });
+  });
+
   describe('Update', () => {
     it('should update existing etudiant and update completion info', () => {
       cy.get('[data-test-id="update-etudiant-button-large"]')

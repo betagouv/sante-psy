@@ -144,6 +144,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const { firstNames } = req.body;
   const { lastName } = req.body;
   const dateOfBirth = date.parseForm(req.body.dateOfBirth);
+  console.log(dateOfBirth, 'date danniverssaire');
   const { INE } = req.body;
   const { institutionName } = req.body;
   const { doctorName } = req.body;
@@ -151,6 +152,13 @@ const create = async (req: Request, res: Response): Promise<void> => {
   // Force to boolean beacause checkbox value send undefined when it's not checked
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
   const hasPrescription = Boolean(req.body.hasPrescription);
+
+  // const today = new Date();
+  // const hundredYear = new Date(today.setFullYear(today.getFullYear() - 100));
+  // console.log(hundredYear, '100 ans');
+  // const newToday = new Date();
+  // const tenYear = new Date(newToday.setFullYear(newToday.getFullYear() - 10));
+  // console.log(tenYear, '10 ans');
 
   const psychologistId = req.user.psychologist;
   await dbPatients.insert(
@@ -166,6 +174,14 @@ const create = async (req: Request, res: Response): Promise<void> => {
     dateOfBirth,
   );
   let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
+  // if (dateOfBirth.getFullYear() < hundredYear.getFullYear()) {
+  //   infoMessage += 'Votre étudiant ne peut avoir plus de 100 ans';
+  //   throw new CustomError('Votre étudiant ne peut avoir plus de 100 ans', 400);
+  // }
+  // if (dateOfBirth.getFullYear() > tenYear.getFullYear()) {
+  //   infoMessage += 'Votre étudiant ne peut avoir moins de 10 ans';
+  //   throw new CustomError('Votre étudiant ne peut avoir moins de 10 ans', 400);
+  // }
   if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress || !dateOfBirth) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
         + ' en cliquant le bouton "Modifier" du patient.';
