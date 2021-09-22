@@ -4,6 +4,7 @@ import db from '../../db/db';
 import clean from '../helper/clean';
 import create from '../helper/create';
 import { patientsTable } from '../../db/tables';
+import date from '../../utils/date';
 
 import dotEnv from 'dotenv';
 
@@ -58,7 +59,7 @@ describe('DB Patients', () => {
     });
 
     it('should not insert if age > 100', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       try {
         await dbPatients.insert(
           firstNames,
@@ -79,7 +80,7 @@ describe('DB Patients', () => {
     });
 
     it('should not insert if age < 10', async () => {
-      const psy = await clean.insertOnePsy();
+      const psy = await create.insertOnePsy();
       try {
         await dbPatients.insert(
           firstNames,

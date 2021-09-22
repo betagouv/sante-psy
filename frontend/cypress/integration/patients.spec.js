@@ -1,6 +1,7 @@
 const { checkConvention } = require('../../src/services/conventionVerification');
 const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
+const { selectValidDateOfBirth, selectInvalidDateOfBirth } = require('./utils/calendar');
 
 describe('Patient', () => {
   beforeEach(() => {
@@ -51,22 +52,41 @@ describe('Patient', () => {
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
         .type('My doctor');
       cy.get('[data-test-id="add-patient-date-input"]')
-        .type('03/05/1996')
+        .click();
+
+      selectValidDateOfBirth();
+
       cy.get('[data-test-id="save-etudiant-button"]')
         .click();
 
       cy.get('[data-test-id="etudiant-table"] tr')
-        .should('have.length', 6);
+        .should('have.length', 7);
       cy.get('[data-test-id="etudiant-row-missing-info"]')
-        .should('have.length', 1);
+        .should('have.length', 3);
       cy.get('[data-test-id="etudiant-row-complete-info"]')
-        .should('have.length', 4);
+        .should('have.length', 3);
 
       cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
-          "L'étudiant Georges Moustaki a bien été modifié.",
+          'L\'étudiant Damir Sagadbekov a bien été créé. Vous pourrez renseigner les champs manquants plus tard en cliquant le bouton "Modifier" du patient.',
         );
+    });
+
+    it('should not create an etudiant due to invalid date', () => {
+      cy.get('[data-test-id="add-new-etudiant"]')
+        .click();
+
+      cy.get('[data-test-id="etudiant-first-name-input"] > input')
+        .type('Wolve');
+      cy.get('[data-test-id="etudiant-last-name-input"] > input')
+        .type('Rine');
+      cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
+        .type('Professeur Xavier');
+      cy.get('[data-test-id="add-patient-date-input"]')
+        .click();
+
+      selectInvalidDateOfBirth();
     });
   });
 

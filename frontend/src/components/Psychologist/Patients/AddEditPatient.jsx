@@ -112,7 +112,7 @@ const AddEditPatient = () => {
                 label={`Date de naissance (obligatoire uniquement pour vos patients enregistrés après le
                     ${config.dateOfBirthDeploymentDate}
                     )`}
-                data-test-id="add-patient-date-input"
+                dataTestId="add-patient-date-input"
               />
                 )}
           />
