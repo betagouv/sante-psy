@@ -109,7 +109,7 @@ const PublicPsychologistProfile = () => {
               {psychologist.longitude && psychologist.latitude && (
               <MapContainer
                 center={[psychologist.latitude, psychologist.longitude]}
-                zoom={psychologist.otherLongitude && psychologist.otherLatitude ? 10 : 13}
+                zoom={psychologist.otherLongitude && psychologist.otherLatitude ? 5 : 13}
                 scrollWheelZoom={false}
                 className={styles.map}
               >
