@@ -8,7 +8,6 @@ import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
-import string from '../utils/string';
 import getAddressCoordinates from '../services/getAddressCoordinates';
 import { Coordinates } from '../types/Coordinates';
 
@@ -28,22 +27,39 @@ const get = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
   const extraInfo = tokenData && tokenData.psychologist === req.params.psyId;
 
+  const {
+    firstNames,
+    lastName,
+    email,
+    address,
+    departement,
+    region,
+    phone,
+    website,
+    teleconsultation,
+    description,
+    languages,
+    active,
+    longitude,
+    latitude,
+  } = psychologist;
+
   res.json({
-    firstNames: psychologist.firstNames,
-    lastName: psychologist.lastName,
-    email: psychologist.email,
-    address: psychologist.address,
-    departement: psychologist.departement,
-    region: psychologist.region,
-    phone: psychologist.phone,
-    website: string.prefixUrl(psychologist.website),
-    teleconsultation: psychologist.teleconsultation,
-    description: psychologist.description,
-    languages: psychologist.languages,
+    firstNames,
+    lastName,
+    email,
+    address,
+    departement,
+    region,
+    phone,
+    website,
+    teleconsultation,
+    description,
+    languages,
+    active,
+    longitude,
+    latitude,
     personalEmail: extraInfo ? psychologist.personalEmail : undefined,
-    active: psychologist.active,
-    longitude: psychologist.longitude,
-    latitude: psychologist.latitude,
   });
 };
 

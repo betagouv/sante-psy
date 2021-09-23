@@ -8,6 +8,7 @@ import Page from 'components/Page/Page';
 import Notification from 'components/Notification/Notification';
 
 import agent from 'services/agent';
+import string from 'services/string';
 import styles from './publicPsychologistProfile.cssmodule.scss';
 
 const fields = [
@@ -28,7 +29,7 @@ const fields = [
     custom: psychologist => (
       psychologist.website ? (
         <a
-          href={psychologist.website}
+          href={string.prefixUrl(psychologist.website)}
           target="_blank"
           rel="noopener noreferrer"
         >

@@ -46,8 +46,7 @@ describe('psyProfileController', () => {
       expect(actual.departement).to.eql(expected.departement);
       expect(actual.region).to.eql(expected.region);
       expect(actual.phone).to.eql(expected.phone);
-      // website url are not generated with protocol
-      expect(actual.website).to.eql(`http://${expected.website}`);
+      expect(actual.website).to.eql(expected.website);
       expect(actual.teleconsultation).to.eql(expected.teleconsultation);
       expect(actual.description).to.eql(expected.description);
       expect(actual.languages).to.eql(expected.languages);
