@@ -42,23 +42,29 @@ const get = async (req: Request, res: Response): Promise<void> => {
     active,
     longitude,
     latitude,
+    otherAddress,
+    otherLongitude,
+    otherLatitude,
   } = psychologist;
 
   res.json({
     firstNames,
     lastName,
     email,
-    address,
-    departement,
-    region,
     phone,
     website,
     teleconsultation,
     description,
     languages,
     active,
+    address,
     longitude,
     latitude,
+    otherAddress,
+    otherLongitude,
+    otherLatitude,
+    departement,
+    region,
     personalEmail: extraInfo ? psychologist.personalEmail : undefined,
   });
 };
@@ -76,6 +82,9 @@ const updateValidators = [
     .notEmpty()
     .customSanitizer(DOMPurify.sanitize)
     .withMessage("Vous devez spécifier l'adresse de votre cabinet."),
+  check('otherAddress')
+    .trim()
+    .customSanitizer(DOMPurify.sanitize),
   check('departement')
     .trim()
     .notEmpty()
@@ -96,9 +105,9 @@ const updateValidators = [
       // Two valid possibilities : email is empty, or email is valid format.
       check('email').trim().isEmpty(),
       check('email')
-          .trim()
-          .customSanitizer(DOMPurify.sanitize)
-          .isEmail(),
+        .trim()
+        .customSanitizer(DOMPurify.sanitize)
+        .isEmail(),
     ], 'Vous devez spécifier un email valide.',
   ),
   check('description')
@@ -114,13 +123,13 @@ const updateValidators = [
 
 const update = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
-
   const region = geo.departementToRegion[req.body.departement];
   if (!region) {
     throw new CustomError('Departement invalide', 400);
   }
 
-  let coordinates : Coordinates;
+  let coordinates: Coordinates;
+  let otherCoordinates: Coordinates;
   const psychologist = await dbPsychologists.getById(req.user.psychologist);
   if (psychologist) {
     if (psychologist.address !== req.body.address) {
@@ -131,6 +140,14 @@ const update = async (req: Request, res: Response): Promise<void> => {
         latitude: psychologist.latitude,
       };
     }
+    if (psychologist.otherAddress !== req.body.otherAddress) {
+      otherCoordinates = await getAddressCoordinates(req.body.otherAddress);
+    } else {
+      otherCoordinates = {
+        longitude: psychologist.otherLongitude,
+        latitude: psychologist.otherLatitude,
+      };
+    }
   }
 
   await dbPsychologists.update({
@@ -139,6 +156,8 @@ const update = async (req: Request, res: Response): Promise<void> => {
     region,
     longitude: coordinates ? coordinates.longitude : null,
     latitude: coordinates ? coordinates.latitude : null,
+    otherLongitude: otherCoordinates ? otherCoordinates.longitude : null,
+    otherLatitude: otherCoordinates ? otherCoordinates.latitude : null,
   });
 
   res.json({

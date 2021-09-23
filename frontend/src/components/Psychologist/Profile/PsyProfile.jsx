@@ -14,6 +14,7 @@ const informations = [
   { label: 'Département', key: 'departement' },
   { label: 'Région', key: 'region' },
   { label: 'Adresse du cabinet', key: 'address' },
+  { label: 'Autre adresse du cabinet', key: 'otherAddress' },
   { label: 'Téléphone du secrétariat', key: 'phone' },
   { label: 'Email de contact', key: 'email' },
   { label: 'Téléconsultation', key: psychologist => (psychologist.teleconsultation ? 'Oui' : 'Non') },
@@ -39,10 +40,6 @@ const PsyProfile = () => {
       profilIssues.push('Votre présentation est trop courte.');
     }
 
-    if (!psy.longitude || !psy.latitude) {
-      profilIssues.push('Votre adresse ne semble pas valide.');
-    }
-
     const isWebsite = new RegExp('^(https?:\\/\\/)?' // protocol
     + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
     + '((\\d{1,3}\\.){3}\\d{1,3}))' // OR ip (v4) address
@@ -51,6 +48,14 @@ const PsyProfile = () => {
     + '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
     if (!isWebsite.test(psy.website)) {
       profilIssues.push('Votre site internet ne semble pas valide.');
+    }
+
+    if (psy.address && (!psy.longitude || !psy.latitude)) {
+      profilIssues.push(`L'adresse ${psy.address} ne semble pas valide.`);
+    }
+
+    if (psy.otherAddress && (!psy.otherLongitude || !psy.otherLatitude)) {
+      profilIssues.push(`L'adresse ${psy.otherAddress} ne semble pas valide.`);
     }
 
     return profilIssues;
@@ -171,12 +176,15 @@ const PsyProfile = () => {
                     Voir mon profil public
                   </Button>
                 </ButtonGroup>
-                {informations.map(info => (
-                  <p className="fr-mb-1v" key={info.label}>
-                    <b>{`${info.label} :`}</b>
-                    {` ${typeof info.key === 'string' ? psychologist[info.key] : info.key(psychologist)}`}
-                  </p>
-                ))}
+                {informations.map(info => {
+                  const value = typeof info.key === 'string' ? psychologist[info.key] : info.key(psychologist);
+                  return value ? (
+                    <p className="fr-mb-1v" key={info.label}>
+                      <b>{`${info.label} : `}</b>
+                      {value}
+                    </p>
+                  ) : <></>;
+                })}
               </>
             )}
         </div>

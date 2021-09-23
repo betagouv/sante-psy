@@ -35,12 +35,12 @@ const getFirstNames = (): string => {
 };
 
 const getAddress = (): {
-  address: string,
-  departement: string,
-  region: string,
-  longitude: number,
-  latitude: number
-} => {
+    address: string,
+    departement: string,
+    region: string,
+    longitude: number,
+    latitude: number
+  } => {
   const rand = faker.datatype.number() % 5;
   switch (rand) {
   case 0:
@@ -111,6 +111,7 @@ const getOnePsy = (
   const dossierNumber = uuid.generateFromString(
     `psychologist-${psychologist.personalEmail || 'loginemail@beta.gouv.fr'}`,
   );
+
   return {
     dossierNumber,
     firstNames: getFirstNames(),
@@ -131,8 +132,8 @@ const getOnePsy = (
     isConventionSigned: false,
     createdAt: new Date(),
     active: true,
-    ...psychologist,
     ...getAddress(),
+    ...psychologist,
   };
 };
 

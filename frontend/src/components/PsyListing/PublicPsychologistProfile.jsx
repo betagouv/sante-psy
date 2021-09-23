@@ -13,6 +13,7 @@ import styles from './publicPsychologistProfile.cssmodule.scss';
 
 const fields = [
   { name: 'Adresse', value: 'address' },
+  { name: 'Autre adresse', value: 'otherAddress' },
   { name: 'Téléphone', value: 'phone' },
   { name: 'Adresse email', value: 'email' },
   { name: 'Langues parlées', value: 'languages' },
@@ -46,7 +47,6 @@ const PublicPsychologistProfile = () => {
   const { psyId } = useParams();
   const [error, setError] = useState();
   const [psychologist, setPsychologist] = useState();
-  const [coordinates, setCoordinates] = useState();
 
   useEffect(() => {
     setError();
@@ -56,20 +56,6 @@ const PublicPsychologistProfile = () => {
         setError('Impossible de trouver les informations pour ce psychologue');
       });
   }, [psyId]);
-
-  useEffect(() => {
-    setCoordinates();
-    if (psychologist) {
-      agent.Map.findAddress(psychologist.address).then(response => {
-        if (response.data.length > 0) {
-          setCoordinates({
-            lon: response.data[0].lon,
-            lat: response.data[0].lat,
-          });
-        }
-      });
-    }
-  }, [psychologist]);
 
   return (
     <Page
@@ -102,25 +88,28 @@ const PublicPsychologistProfile = () => {
           </Row>
           <Row className={styles.psyInfo}>
             <Col n="md-6 sm-12">
-              {fields.map(field => (
-                <div key={field.name} className={styles.field} data-test-id="psy-info">
-                  <div className={styles.fieldName}>
-                    {field.name}
+              {fields.map(field => {
+                const value = field.value ? psychologist[field.value] : field.custom(psychologist);
+                return value ? (
+                  <div key={field.name} className={styles.field} data-test-id="psy-info">
+                    <div className={styles.fieldName}>
+                      {field.name}
+                    </div>
+                    <div>
+                      {value}
+                    </div>
                   </div>
-                  <div>
-                    {field.value ? psychologist[field.value] : field.custom(psychologist)}
-                  </div>
-                </div>
-              ))}
+                ) : <></>;
+              })}
             </Col>
             <Col
               n="md-6 sm-12"
               className={styles.mapContainer}
             >
-              {coordinates && (
+              {psychologist.longitude && psychologist.latitude && (
               <MapContainer
-                center={[coordinates.lat, coordinates.lon]}
-                zoom={13}
+                center={[psychologist.latitude, psychologist.longitude]}
+                zoom={psychologist.otherLongitude && psychologist.otherLatitude ? 5 : 13}
                 scrollWheelZoom={false}
                 className={styles.map}
               >
@@ -128,7 +117,10 @@ const PublicPsychologistProfile = () => {
                   attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={[coordinates.lat, coordinates.lon]} />
+                <Marker position={[psychologist.latitude, psychologist.longitude]} />
+                {psychologist.otherLongitude && psychologist.otherLatitude && (
+                  <Marker position={[psychologist.otherLatitude, psychologist.otherLongitude]} />
+                )}
               </MapContainer>
               )}
             </Col>

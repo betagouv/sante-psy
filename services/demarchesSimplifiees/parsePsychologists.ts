@@ -1,6 +1,7 @@
 import uuid from '../../utils/uuid';
 import { getChampsFieldFromId } from '../champsAndAnnotations';
 import { DSPsychologist, Psychologist } from '../../types/Psychologist';
+import geo from '../../utils/geo';
 
 const parseTeleconsultation = (inputString: string): boolean => inputString === 'true';
 
@@ -22,7 +23,6 @@ const parseDossierMetadata = (dossier: DSPsychologist): Psychologist => {
     demandeur,
     usager,
     number,
-    groupeInstructeur,
     champs,
   } = dossier;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -34,8 +34,6 @@ const parseDossierMetadata = (dossier: DSPsychologist): Psychologist => {
   psy.firstNames = demandeur.prenom.trim();
 
   psy.personalEmail = usager.email.trim();
-
-  psy.region = groupeInstructeur.label;
 
   const champsToMap = [
     'departement',
@@ -50,14 +48,17 @@ const parseDossierMetadata = (dossier: DSPsychologist): Psychologist => {
     'teleconsultation',
     'training',
   ];
+
   champs.forEach((champ) => {
     const field = getChampsFieldFromId(champ.id);
     if (champsToMap.includes(field)) {
       psy[field] = champ.stringValue.trim();
     }
   });
+
   psy.teleconsultation = parseTeleconsultation(psy.teleconsultation);
   psy.training = parseTraining(psy.training);
+  psy.region = geo.departementToRegion[psy.departement];
 
   return psy;
 };

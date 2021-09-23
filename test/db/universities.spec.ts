@@ -22,6 +22,7 @@ describe('DB Universities', () => {
         departement: '30 - Gard',
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
       };
+
       const assignedUniId = dbUniversities.getAssignedUniversityId(psy, universities);
       assignedUniId.should.be.equal(uniId);
     });
@@ -34,6 +35,7 @@ describe('DB Universities', () => {
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
         assignedUniversityId: alreadyAssignedUniId,
       };
+
       const assignedUniId = dbUniversities.getAssignedUniversityId(psy, universities);
       assignedUniId.should.be.equal(alreadyAssignedUniId);
     });
@@ -44,6 +46,7 @@ describe('DB Universities', () => {
         departement: 'pizza',
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
       };
+
       const assignedUniId = dbUniversities.getAssignedUniversityId(psy, universities);
 
       assert.equal(assignedUniId, null);
@@ -55,6 +58,7 @@ describe('DB Universities', () => {
         departement: '100 - pizza', // 100 does not match any uni in our list
         dossierNumber: 'dd4d80e0-c2c4-50c5-94d7-a595c34ec81e',
       };
+
       const assignedUniId = dbUniversities.getAssignedUniversityId(psy, universities);
 
       assert.equal(assignedUniId, null);

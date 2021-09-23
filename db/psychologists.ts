@@ -46,23 +46,26 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
 
 const getAllActive = async (): Promise<Psychologist[]> => {
   try {
-    const psychologists = db.column(
+    const psychologists = db.select([
       'dossierNumber',
       'lastName',
       'adeli',
       'firstNames',
       'email',
-      'address',
-      'departement',
-      'region',
       'phone',
       'website',
       'teleconsultation',
       'languages',
       'description',
+      'address',
       'longitude',
       'latitude',
-    )
+      'otherAddress',
+      'otherLongitude',
+      'otherLatitude',
+      'departement',
+      'region',
+    ])
         .select()
         .from(psychologistsTable)
         .whereNot('archived', true)
@@ -140,7 +143,7 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
         });
       }
 
-      let coordinates : Coordinates;
+      let coordinates: Coordinates;
       if (psyInDb.address !== psy.address) {
         coordinates = await getAddressCoordinates(psy.address);
       }
@@ -169,6 +172,7 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
   if (psychologistsToInsert.length > 0) {
     await db(psychologistsTable).insert(psychologistsToInsert);
   }
+
   console.log('UPSERT into PG : done');
 };
 

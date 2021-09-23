@@ -270,6 +270,7 @@ describe('loginController', async () => {
             'email',
             'adeli',
             'address',
+            'otherAddress',
             'convention',
             'active',
           );
@@ -278,13 +279,13 @@ describe('loginController', async () => {
           res.body.lastName.should.equal(psy.lastName);
           res.body.email.should.equal(psy.email);
           res.body.adeli.should.equal(psy.adeli);
-          res.body.address.should.equal(psy.address);
           res.body.active.should.equal(psy.active);
           res.body.convention.should.eql({
             isConventionSigned: true,
             universityName: 'Monster university',
             universityId,
           });
+          res.body.address.should.equal(psy.address);
         });
     });
 

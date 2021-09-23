@@ -135,7 +135,6 @@ describe('DB Psychologists', () => {
       await dbPsychologists.upsertMany([psy]);
 
       const savedPsy = await dbPsychologists.getById(psy.dossierNumber);
-      savedPsy.should.exist;
       savedPsy.longitude.should.be.equal(LONGITUDE_PARIS);
       savedPsy.latitude.should.be.equal(LATITUDE_PARIS);
     });
@@ -147,6 +146,7 @@ describe('DB Psychologists', () => {
 
       // First save psy from DS
       const psyDS = create.getOnePsy();
+
       await dbPsychologists.upsertMany([psyDS]);
       const psySPE = await dbPsychologists.getById(psyDS.dossierNumber);
       psySPE.address.should.be.equal(psyDS.address);
@@ -439,6 +439,9 @@ describe('DB Psychologists', () => {
 
       expect(returnedPsy).to.exist;
       expect(returnedPsy.email).to.eql(psy.email);
+      expect(returnedPsy.address).to.eql(psy.address);
+      expect(returnedPsy.region).to.eql(psy.region);
+      expect(returnedPsy.departement).to.eql(psy.departement);
     });
   });
 

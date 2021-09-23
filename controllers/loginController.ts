@@ -76,7 +76,7 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
 
     if (psy) {
       const {
-        dossierNumber, firstNames, lastName, email, active, adeli, address,
+        dossierNumber, firstNames, lastName, email, active, adeli, address, otherAddress,
       } = psy;
       res.json({
         dossierNumber,
@@ -84,6 +84,7 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
         lastName,
         adeli,
         address,
+        otherAddress,
         email,
         convention,
         active,

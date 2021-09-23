@@ -76,6 +76,11 @@ describe('Update psy fields', () => {
       const psy = {
         email: 'email',
         address: 'adress',
+        longitude: null,
+        latitude: null,
+        otherAddress: 'otherAddress',
+        otherLongitude: null,
+        otherLatitude: null,
         departement: 'departement',
         region: 'region',
         phone: 'phone',
@@ -98,8 +103,6 @@ describe('Update psy fields', () => {
         active: true,
         inactiveUntil: new Date(),
         createdAt: creationDate,
-        longitude: null,
-        latitude: null,
       };
 
       const editablePsy = updatePsyFields.editablePsyFields(psy);

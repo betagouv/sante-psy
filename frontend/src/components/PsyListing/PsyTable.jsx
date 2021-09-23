@@ -25,6 +25,14 @@ const PsyTable = ({
     {
       name: 'address',
       label: 'Adresse',
+      render: psychologist => (psychologist.otherAddress
+        ? (
+          <>
+            <div>{psychologist.address}</div>
+            <div>{psychologist.otherAddress}</div>
+          </>
+        )
+        : psychologist.address),
     },
     {
       name: 'action',
