@@ -12,8 +12,8 @@ import string from 'services/string';
 import styles from './publicPsychologistProfile.cssmodule.scss';
 
 const fields = [
-  { name: 'Adresse', value: 'address' },
-  { name: 'Deuxième adresse', value: 'otherAddress' },
+  { name: 'Adresse du cabinet', value: 'address' },
+  { name: 'Adresse du deuxième cabinet', value: 'otherAddress' },
   { name: 'Téléphone', value: 'phone' },
   { name: 'Adresse email', value: 'email' },
   { name: 'Langues parlées', value: 'languages' },

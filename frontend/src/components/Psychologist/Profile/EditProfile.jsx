@@ -63,7 +63,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
       />
       <TextInput
         className="midlength-input"
-        label="Deuxième adresse du cabinet"
+        label="Adresse du deuxième cabinet"
         hint="Si vous avez un deuxième cabinet vous pouvez indiquer son adresse ici"
         data-test-id="psy-other-address-input"
         value={updatedPsychologist.otherAddress}
