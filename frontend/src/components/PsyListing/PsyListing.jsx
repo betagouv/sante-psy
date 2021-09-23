@@ -33,7 +33,9 @@ const PsyListing = () => {
   const query = new URLSearchParams(useLocation().search);
 
   const [coords, setCoords] = useState();
+  const [filteredPsychologists, setFilteredPsychologists] = useState([]);
   const [geoStatus, setGeoStatus] = useState(geoStatusEnum.UNKNOWN);
+  const [geoLoading, setGeoLoading] = useState(false);
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
@@ -58,6 +60,69 @@ const PsyListing = () => {
 
     logSearchInMatomo();
   }, [nameFilter, addressFilter, teleconsultation]);
+
+  useEffect(() => {
+    if (!psychologists) {
+      setFilteredPsychologists([]);
+      return;
+    }
+
+    const matchingFiltersPsychologists = psychologists.filter(psychologist => {
+      if (teleconsultation && !psychologist.teleconsultation) {
+        return false;
+      }
+
+      if (nameFilter && !(
+        utils.matchFilter(psychologist.lastName, nameFilter)
+        || utils.matchFilter(`${psychologist.lastName} ${psychologist.firstNames}`, nameFilter)
+        || utils.matchFilter(`${psychologist.firstNames} ${psychologist.lastName}`, nameFilter)
+      )
+      ) {
+        return false;
+      }
+
+      if (addressFilter === AROUND_ME) {
+        return true;
+      }
+
+      const departementFilter = +addressFilter;
+      const addressIsDepartment = departementFilter
+        && (
+          (departementFilter > 0 && departementFilter < 96)
+          || (departementFilter > 970 && departementFilter < 977)
+        );
+
+      if (addressIsDepartment) {
+        if (!utils.matchDepartment(psychologist.address, addressFilter)
+          && !utils.matchDepartment(psychologist.otherAddress, addressFilter)) {
+          return false;
+        }
+      } else if (addressFilter
+        && !(
+          utils.matchZipCodeOrCity(psychologist.address, addressFilter)
+          || utils.matchZipCodeOrCity(psychologist.otherAddress, addressFilter)
+          || utils.matchFilter(psychologist.departement, addressFilter)
+          || utils.matchFilter(psychologist.region, addressFilter)
+        )
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+
+    if (coords && addressFilter === AROUND_ME) {
+      setFilteredPsychologists(matchingFiltersPsychologists
+        .filter(psy => psy.latitude && psy.longitude)
+        .map(psy => ({
+          ...psy,
+          distance: distance.distanceKm(psy.latitude, psy.longitude, coords.latitude, coords.longitude),
+        }))
+        .sort((a, b) => a.distance - b.distance));
+    } else {
+      setFilteredPsychologists(matchingFiltersPsychologists);
+    }
+  }, [psychologists, nameFilter, addressFilter, teleconsultation, coords]);
 
   const logSearchInMatomo = () => {
     if (__MATOMO__) {
@@ -91,6 +156,7 @@ const PsyListing = () => {
     const { longitude, latitude } = pos.coords;
     setCoords({ longitude, latitude });
     setGeoStatus(geoStatusEnum.GRANTED);
+    setGeoLoading(false);
   };
 
   const errors = () => {
@@ -99,8 +165,10 @@ const PsyListing = () => {
 
   const getGeolocation = state => {
     if (state === 'granted') {
+      setGeoLoading(true);
       navigator.geolocation.getCurrentPosition(success);
     } else if (state === 'prompt') {
+      setGeoLoading(true);
       navigator.geolocation.getCurrentPosition(success, errors);
     } else if (state === 'denied') {
       setGeoStatus(geoStatusEnum.DENIED);
@@ -120,68 +188,6 @@ const PsyListing = () => {
       }
     }
   };
-
-  const getFilteredPsychologists = () => {
-    if (!psychologists) {
-      return [];
-    }
-
-    const filteredPsychologists = psychologists.filter(psychologist => {
-      if (teleconsultation && !psychologist.teleconsultation) {
-        return false;
-      }
-
-      if (nameFilter && !(
-        utils.matchFilter(psychologist.lastName, nameFilter)
-        || utils.matchFilter(`${psychologist.lastName} ${psychologist.firstNames}`, nameFilter)
-        || utils.matchFilter(`${psychologist.firstNames} ${psychologist.lastName}`, nameFilter)
-      )
-      ) {
-        return false;
-      }
-
-      if (addressFilter === AROUND_ME) {
-        return true;
-      }
-
-      const departementFilter = +addressFilter;
-      const addressIsDepartment = departementFilter
-        && (
-          (departementFilter > 0 && departementFilter < 96)
-          || (departementFilter > 970 && departementFilter < 977)
-        );
-
-      if (addressIsDepartment) {
-        if (!utils.matchDepartment(psychologist.address, addressFilter)
-        && !utils.matchDepartment(psychologist.otherAddress, addressFilter)) {
-          return false;
-        }
-      } else if (addressFilter
-        && !(
-          utils.matchZipCodeOrCity(psychologist.address, addressFilter)
-          || utils.matchZipCodeOrCity(psychologist.otherAddress, addressFilter)
-          || utils.matchFilter(psychologist.departement, addressFilter)
-          || utils.matchFilter(psychologist.region, addressFilter)
-        )
-      ) {
-        return false;
-      }
-
-      return true;
-    });
-
-    if (coords && addressFilter === AROUND_ME) {
-      return filteredPsychologists
-        .map(psy => ({
-          ...psy,
-          distance: distance.distanceKm(psy.latitude, psy.longitude, coords.longitude, coords.latitude),
-        }))
-        .sort((a, b) => a.distance - b.distance);
-    }
-    return filteredPsychologists;
-  };
-
-  const filteredPsychologists = getFilteredPsychologists();
 
   return (
     <Page
@@ -251,7 +257,15 @@ const PsyListing = () => {
             nameFilter={nameFilter}
             addressFilter={addressFilter}
             teleconsultation={teleconsultation}
-            noResult={<NoResultPsyTable noResultAction={() => setAddressFilter(AROUND_ME)} />}
+            noResult={(
+              <NoResultPsyTable
+                noResultAction={() => {
+                  setNameFilter('');
+                  setAddressFilter(AROUND_ME);
+                }}
+              />
+            )}
+            geoLoading={geoLoading}
           />
         </>
       )}

@@ -8,9 +8,8 @@ import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
-import string from '../utils/string';
-import { Coordinates } from '../types/Coordinates';
 import getAddressCoordinates from '../services/getAddressCoordinates';
+import { Coordinates } from '../types/Coordinates';
 
 const getValidators = [
   param('psyId')
@@ -28,25 +27,45 @@ const get = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
   const extraInfo = tokenData && tokenData.psychologist === req.params.psyId;
 
+  const {
+    firstNames,
+    lastName,
+    email,
+    address,
+    departement,
+    region,
+    phone,
+    website,
+    teleconsultation,
+    description,
+    languages,
+    active,
+    longitude,
+    latitude,
+    otherAddress,
+    otherLongitude,
+    otherLatitude,
+  } = psychologist;
+
   res.json({
-    firstNames: psychologist.firstNames,
-    lastName: psychologist.lastName,
-    email: psychologist.email,
-    phone: psychologist.phone,
-    website: string.prefixUrl(psychologist.website),
-    teleconsultation: psychologist.teleconsultation,
-    description: psychologist.description,
-    languages: psychologist.languages,
+    firstNames,
+    lastName,
+    email,
+    phone,
+    website,
+    teleconsultation,
+    description,
+    languages,
+    active,
+    address,
+    longitude,
+    latitude,
+    otherAddress,
+    otherLongitude,
+    otherLatitude,
+    departement,
+    region,
     personalEmail: extraInfo ? psychologist.personalEmail : undefined,
-    active: psychologist.active,
-    address: psychologist.address,
-    longitude: psychologist.longitude,
-    latitude: psychologist.latitude,
-    otherAddress: psychologist.otherAddress,
-    otherLongitude: psychologist.otherLongitude,
-    otherLatitude: psychologist.otherLatitude,
-    departement: psychologist.departement,
-    region: psychologist.region,
   });
 };
 
@@ -86,9 +105,9 @@ const updateValidators = [
       // Two valid possibilities : email is empty, or email is valid format.
       check('email').trim().isEmpty(),
       check('email')
-          .trim()
-          .customSanitizer(DOMPurify.sanitize)
-          .isEmail(),
+        .trim()
+        .customSanitizer(DOMPurify.sanitize)
+        .isEmail(),
     ], 'Vous devez spécifier un email valide.',
   ),
   check('description')
@@ -109,8 +128,8 @@ const update = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Departement invalide', 400);
   }
 
-  let coordinates : Coordinates;
-  let otherCoordinates : Coordinates;
+  let coordinates: Coordinates;
+  let otherCoordinates: Coordinates;
   const psychologist = await dbPsychologists.getById(req.user.psychologist);
   if (psychologist) {
     if (psychologist.address !== req.body.address) {

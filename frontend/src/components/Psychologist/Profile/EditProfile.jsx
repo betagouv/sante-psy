@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, RadioGroup, Radio, TextInput, SearchableSelect, ButtonGroup } from '@dataesr/react-dsfr';
 
+import string from 'services/string';
 import DEPARTEMENTS from 'services/departments';
 
 const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
@@ -14,6 +15,13 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
 
   const changePsychologist = (value, field) => {
     setUpdatedPsychologist({ ...updatedPsychologist, [field]: value });
+  };
+
+  const enrichWebsite = () => {
+    const prefixedWebsite = string.prefixUrl(updatedPsychologist.website);
+    if (prefixedWebsite) {
+      changePsychologist(prefixedWebsite, 'website');
+    }
   };
 
   return (
@@ -113,6 +121,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         data-test-id="psy-website-input"
         value={updatedPsychologist.website}
         onChange={e => changePsychologist(e.target.value, 'website')}
+        onBlur={enrichWebsite}
       />
       <TextInput
         className="midlength-input"
