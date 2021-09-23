@@ -139,6 +139,7 @@ const Contact = () => {
           data-test-id="message-input"
           required
           textarea
+          hint="Merci de ne fournir que les données personnelles strictement nécessaires au traitement de la demande. "
           label="Message"
           value={message}
           onChange={e => setMessage(e.target.value)}
