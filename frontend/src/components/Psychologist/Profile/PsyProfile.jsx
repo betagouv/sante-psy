@@ -14,7 +14,7 @@ const informations = [
   { label: 'Département', key: 'departement' },
   { label: 'Région', key: 'region' },
   { label: 'Adresse du cabinet', key: 'address' },
-  { label: 'Adresse du deuxième cabinet', key: 'otherAddress' },
+  { label: 'Autre adresse du cabinet', key: 'otherAddress' },
   { label: 'Téléphone du secrétariat', key: 'phone' },
   { label: 'Email de contact', key: 'email' },
   { label: 'Téléconsultation', key: psychologist => (psychologist.teleconsultation ? 'Oui' : 'Non') },
