@@ -12,7 +12,7 @@ import styles from './publicPsychologistProfile.cssmodule.scss';
 
 const fields = [
   { name: 'Adresse', value: 'address' },
-  { name: 'Autre adresse', value: 'otherAddress' },
+  { name: 'Deuxième adresse', value: 'otherAddress' },
   { name: 'Téléphone', value: 'phone' },
   { name: 'Adresse email', value: 'email' },
   { name: 'Langues parlées', value: 'languages' },
@@ -108,7 +108,7 @@ const PublicPsychologistProfile = () => {
               {psychologist.longitude && psychologist.latitude && (
               <MapContainer
                 center={[psychologist.latitude, psychologist.longitude]}
-                zoom={psychologist.otherLongitude && psychologist.otherLatitude ? 5 : 13}
+                zoom={psychologist.otherLongitude && psychologist.otherLatitude ? 10 : 13}
                 scrollWheelZoom={false}
                 className={styles.map}
               >
