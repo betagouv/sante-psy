@@ -44,6 +44,9 @@ const sendValidators = [
   check('user')
     .isIn(['étudiant', 'psychologue', 'autre-utilisateur'])
     .withMessage('Vous devez préciser qui vous êtes.'),
+  check('navigator')
+    .trim()
+    .customSanitizer(DOMPurify.sanitize),
 ];
 
 const send = async (req: Request, res: Response): Promise<void> => {
@@ -56,7 +59,7 @@ const send = async (req: Request, res: Response): Promise<void> => {
     await CrispClient.websiteConversations.updateMeta(config.crisp.website, creation.session_id, {
       nickname: `${req.body.firstName} ${req.body.name}`,
       email: req.body.email,
-      data: { email: req.body.email },
+      data: { email: req.body.email, navigator: req.body.navigator },
       segments: [req.body.reason, req.body.user],
     });
     await CrispClient.websiteConversations.sendMessage(config.crisp.website, creation.session_id, {
