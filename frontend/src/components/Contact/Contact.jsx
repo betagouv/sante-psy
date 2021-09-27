@@ -29,7 +29,9 @@ const Contact = () => {
 
   const submit = e => {
     e.preventDefault();
-    agent.Contact.send({ user: userType, name, firstName, email, reason, message })
+    agent.Contact.send(
+      { user: userType, name, firstName, email, reason, message, navigator: navigator.userAgent },
+    )
       .then(response => {
         setNotification(response, true, false);
       })
