@@ -1,0 +1,35 @@
+.tooltip {
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: rgb(51, 51, 51);
+    font-size: 16px;
+    max-width: 100%;
+    padding: 15px;
+    position: relative;
+    text-align: center;
+    width: 550px;
+}
+
+.title {
+    font-size: 18px;
+    margin: 0px;
+}
+
+.content {
+    padding: 24px 12px;
+    white-space: pre-wrap;
+}
+
+.footer {
+    display: flow-root;
+    margin-top: 16px;
+}
+
+.exitButton {
+    float: left;
+}
+
+.nextButton {
+    float: right;
+}

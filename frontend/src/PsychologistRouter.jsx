@@ -65,6 +65,7 @@ const PsychologistRouter = () => {
         return {
           title: 'Déclarer mes séances',
           description: 'La déclaration des séances en ligne est nécessaire à votre remboursement.',
+          tutorial: 'appointments',
         };
     }
   };

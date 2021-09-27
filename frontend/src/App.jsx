@@ -53,7 +53,7 @@ function App() {
           <Switch>
             <Route exact path="/psychologue/logout" component={Logout} />
             <Route exact path="/psychologue/login/:token?" component={Login} />
-            {user && <Route path="/psychologue/" component={PsychologistRouter} />}
+            <Route path="/psychologue/" component={PsychologistRouter} />
             <Route exact path="/trouver-un-psychologue" component={PsyListing} />
             <Route exact path="/trouver-un-psychologue/:psyId" component={PublicPsychologistProfile} />
             <Route exact path="/mentions-legales" component={LegalNotice} />

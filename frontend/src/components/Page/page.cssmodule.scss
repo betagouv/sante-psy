@@ -7,6 +7,7 @@
 }
 
 .container {
+  position: relative;
   background-color: var(--w);
   max-width: 800px;
   margin: auto;
@@ -23,6 +24,14 @@
 .sectionTitle {
   color: var(--bf500);
   text-align: center;
+}
+
+.tutorial {
+  color: var(--bf500);
+  position: absolute;
+  right: 32px;
+  top: 32px;
+  cursor: pointer;
 }
 
 @media (min-width: 768px) {

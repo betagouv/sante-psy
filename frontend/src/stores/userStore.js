@@ -15,6 +15,7 @@ export default class UserStore {
       setUser: action.bound,
       setXsrfToken: action.bound,
       deleteToken: action.bound,
+      seeTutorial: action.bound,
     });
 
     reaction(
@@ -50,5 +51,10 @@ export default class UserStore {
       this.user = null;
       this.xsrfToken = null;
     });
+  }
+
+  seeTutorial() {
+    this.user.hasSeenTutorial = true;
+    return agent.Psychologist.seeTutorial();
   }
 }
