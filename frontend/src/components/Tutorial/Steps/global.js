@@ -22,7 +22,7 @@ const steps = [
     placement: 'auto',
     target: '#appointments-table',
     shouldSkip: () => agent.Appointment.get().then(appointments => appointments.length > 0),
-    content: "Un récapitulatif de vos séances apparaîtra alors sur cette page, vous pouvez les modifier ou les supprimer en cas d'erreur.",
+    content: "Un récapitulatif de vos séances apparaîtra alors sur cette page, vous pourrez les supprimer et les recréer en cas d'erreur.",
   },
   {
     placement: 'auto',
