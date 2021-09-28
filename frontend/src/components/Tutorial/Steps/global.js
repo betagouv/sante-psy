@@ -3,7 +3,7 @@ const steps = [
     placement: 'center',
     target: 'body',
     title: 'Bienvenue sur votre espace psychologue',
-    content: 'Nous allons vous guider à travers les fonctionnalités de base du site. Cette démo durera environ 5 minutes, vous pouvez la passer et revenir dessus à tout moment!',
+    content: 'Nous allons vous guider à travers les fonctionnalités de base du site. Cette démo durera environ 2 minutes, vous pouvez la passer et revenir dessus à tout moment!',
   },
   {
     placement: 'center',
@@ -25,6 +25,47 @@ const steps = [
     placement: 'auto',
     target: '#appointment-month',
     content: 'Par soucis de lisibilité, nous vous montrons uniquement les séances du mois courant. Vous pouvez bien sur voir les autres séances grace à ce bouton.',
+  },
+  {
+    placement: 'auto',
+    target: '#billing-header',
+    content: "Une fois vos séances déclarées, vous pourrez générer vos factures depuis ce menu. Pensez à vérifier l'exactitude des informations déclarées. Les erreurs de déclaration peuvent entraîner des retards de paiement.",
+  },
+  {
+    placement: 'auto',
+    target: '#informations-header',
+    content: "Ce menu permet de gérér votre visibilité sur l'annuaire pour les étudiants.",
+    onClick: history => { history.push('/psychologue/mon-profil'); },
+  },
+  {
+    placement: 'auto',
+    target: '#convention-button',
+    content: "Ce bouton nous permet de suivre l'état de vôtre convention. Il est important de nous signaler quand celle ci est signée.",
+  },
+  {
+    placement: 'auto',
+    target: '#change-profil-button',
+    content: "Pour être visible sur l'annuaire (et être correctement référencé) : Pensez à compléter votre profil. La description permet aux étudiants de connaître vos spécialités, le cas échéant.",
+  },
+  {
+    placement: 'auto',
+    target: '#view-profil-button',
+    content: 'Pour voir ce à quoi les étudiants ont accès, vous pouvez cliquer sur ce bouton.',
+  },
+  {
+    placement: 'auto',
+    target: '#hide-profil-button',
+    content: "Enfin, si vous ne souhaitez plus être visible sur l'annuaire, veuillez cliquer ici.",
+  },
+  {
+    placement: 'center',
+    target: 'body',
+    content: "Ce tour est maintenant fini. Si vous avez la moindre question n'hesitez pas à nous contacter via le formulaire de contact.",
+  },
+  {
+    placement: 'center',
+    target: 'body',
+    content: 'Merci pour votre investissement dans le dispositif Santé Psy Étudiant.',
   },
 ];
 

@@ -27,6 +27,7 @@
 }
 
 .tutorial {
+  display: none;
   color: var(--bf500);
   position: absolute;
   right: 32px;
@@ -37,5 +38,11 @@
 @media (min-width: 768px) {
   .container {
     padding: 24px;
+  }
+}
+
+@media (min-width: 992px) {
+  .tutorial {
+    display: block;
   }
 }

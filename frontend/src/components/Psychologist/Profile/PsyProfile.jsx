@@ -160,6 +160,7 @@ const PsyProfile = () => {
                   className="fr-mb-1w"
                 >
                   <Button
+                    id="show-profile-form-button"
                     data-test-id="show-profile-form-button"
                     title="Modify"
                     icon="fr-fi-edit-line"
@@ -178,6 +179,7 @@ const PsyProfile = () => {
                     Voir mon profil public
                   </Button>
                   )}
+                  <div id="change-profil-button">
                 </ButtonGroup>
                 {informations.map(info => {
                   const value = typeof info.key === 'string' ? psychologist[info.key] : info.key(psychologist);

@@ -30,15 +30,17 @@ const PayingUniversity = () => {
       ) : (
         <>
           <h3>Statut de ma convention</h3>
-          <Button
-            className="fr-mb-1w"
-            data-test-id="show-convention-form"
-            onClick={() => { setShowForm(true); }}
-            icon="fr-fi-edit-line"
-          >
+          <div id="convention-button">
+            <Button
+              className="fr-mb-1w"
+              data-test-id="show-convention-form"
+              onClick={() => { setShowForm(true); }}
+              icon="fr-fi-edit-line"
+            >
 
-            Modifier le statut
-          </Button>
+              Modifier le statut
+            </Button>
+          </div>
           <div data-test-id="convention-university-name">
             Je suis rattaché à l&lsquo;université de
             {' '}

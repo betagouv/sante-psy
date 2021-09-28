@@ -82,7 +82,7 @@ const Billing = () => {
         )}
         <div className={styles.monthPickerContainer}>
           Générer ma facture pour le mois de :
-          <div className={styles.monthPicker}>
+          <div className={styles.monthPicker} id="billing-month">
             <MonthPicker month={month} setMonth={setMonth} />
           </div>
         </div>
@@ -109,13 +109,15 @@ const Billing = () => {
                   Annuler
                 </Button>
               ) : (
-                <Button
-                  secondary
-                  icon="fr-fi-edit-line"
-                  onClick={() => setFillInfo(true)}
-                >
-                  Renseigner mes informations
-                </Button>
+                <div id="billing-info">
+                  <Button
+                    secondary
+                    icon="fr-fi-edit-line"
+                    onClick={() => setFillInfo(true)}
+                  >
+                    Renseigner mes informations
+                  </Button>
+                </div>
               )}
               {canGenerateBill ? (
                 <a
