@@ -1,3 +1,5 @@
+import agent from 'services/agent';
+
 const steps = [
   {
     placement: 'center',
@@ -19,7 +21,14 @@ const steps = [
   {
     placement: 'auto',
     target: '#appointments-table',
-    content: "Un récapitulatif de vos séances apparaitra alors sur cette page, vous pouvez les modifier ou les supprimer en cas d'erreur.",
+    shouldSkip: () => agent.Appointment.get().then(appointments => appointments.length > 0),
+    content: "Un récapitulatif de vos séances apparaitra alors sur cette page, vous pouvez les supprimer et les recréer en cas d'erreur.",
+  },
+  {
+    placement: 'auto',
+    target: '#appointments-table',
+    shouldSkip: () => agent.Appointment.get().then(appointments => appointments.length === 0),
+    content: "Le tableau ci dessous montre les séances effectuées ce mois ci, vous pouvez les supprimer et les recréer en cas d'erreur.",
   },
   {
     placement: 'auto',
@@ -41,13 +50,13 @@ const steps = [
   {
     placement: 'auto',
     target: '#convention-form',
-    shouldSkip: user => user.convention,
+    shouldSkip: user => Promise.resolve(user.convention),
     content: "Il est important de nous signaler quand votre convention est signée. N'oubliez pas de mettre ce champs à jours.",
   },
   {
     placement: 'auto',
     target: '#convention-button',
-    shouldSkip: user => !user.convention || user.convention.isConventionSigned,
+    shouldSkip: user => Promise.resolve(!user.convention || user.convention.isConventionSigned),
     content: "Ce bouton nous permet de suivre l'état de vôtre convention. Il est important de nous signaler quand celle ci est signée.",
   },
   {

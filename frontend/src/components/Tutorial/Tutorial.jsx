@@ -39,6 +39,20 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const nextStep = (index, increment) => {
+    const nextIndex = increment(index);
+    const currentStep = steps[nextIndex];
+    if (currentStep.shouldSkip) {
+      return currentStep.shouldSkip(user).then(shouldSkip => {
+        if (shouldSkip) {
+          return nextStep(nextIndex, increment);
+        }
+        return nextIndex;
+      });
+    }
+    return Promise.resolve(nextIndex);
+  };
+
   const joyrideCallback = data => {
     const { action, type, index, step } = data;
     const finishedAction = [ACTIONS.CLOSE, ACTIONS.SKIP];
@@ -64,12 +78,7 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
       }
 
       const increment = i => (action === ACTIONS.NEXT ? i + 1 : i - 1);
-      let stepIndex = increment(index);
-      while (steps[stepIndex].shouldSkip && steps[stepIndex].shouldSkip(user)) {
-        stepIndex = increment(stepIndex);
-      }
-
-      setTutoStatus({ run: tutoStatus.run, stepIndex });
+      nextStep(index, increment).then(stepIndex => setTutoStatus({ run: tutoStatus.run, stepIndex }));
     }
   };
 
