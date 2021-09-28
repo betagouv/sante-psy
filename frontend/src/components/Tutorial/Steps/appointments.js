@@ -2,8 +2,8 @@ const steps = [
   {
     placement: 'center',
     target: 'body',
-    title: 'Declarer une séance',
-    content: "La page d'accueil vous permet de declarer et de visualiser vos séances.",
+    title: 'Déclarer une séance',
+    content: "La page d'accueil vous permet de déclarer et de visualiser vos séances.",
   },
   {
     placement: 'auto',
@@ -13,12 +13,12 @@ const steps = [
   {
     placement: 'auto',
     target: '#appointments-table',
-    content: "Un récapitulatif de vos séances apparaitra alors sur cette page, vous pouvez les modifier ou les supprimer en cas d'erreur.",
+    content: "Un récapitulatif de vos séances apparaîtra alors sur cette page, vous pouvez les modifier ou les supprimer en cas d'erreur.",
   },
   {
     placement: 'auto',
     target: '#appointment-month',
-    content: 'Par soucis de lisibilité, nous vous montrons uniquement les séances du mois courant. Vous pouvez bien sur voir les autres séances grace à ce bouton.',
+    content: 'Par soucis de lisibilité, nous vous montrons uniquement les séances du mois courant. Vous pouvez bien sûr voir les autres séances grâce à ce bouton.',
   },
 ];
 
