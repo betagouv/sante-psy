@@ -40,10 +40,17 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
   }, []);
 
   const joyrideCallback = data => {
-    const { action, status, type, index, step } = data;
+    const { action, type, index, step } = data;
     const finishedAction = [ACTIONS.CLOSE, ACTIONS.SKIP];
-    const finishedStatus = [STATUS.FINISHED];
-    if (finishedAction.includes(action) || finishedStatus.includes(status)) {
+    if (__MATOMO__) {
+      if (action === ACTIONS.START) {
+        _paq.push(['trackEvent', 'Tuto', user.hasSeenTutorial ? id : 'global', 'begin']);
+      }
+      if (action === ACTIONS.CLOSE) {
+        _paq.push(['trackEvent', 'Tuto', user.hasSeenTutorial ? id : 'global', 'end']);
+      }
+    }
+    if (finishedAction.includes(action)) {
       if (!user.hasSeenTutorial) {
         seeTutorial();
       }
