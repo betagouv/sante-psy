@@ -57,13 +57,16 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
       }
       setTutoStatus({ run: false, stepIndex: index });
     } else if (type === EVENTS.STEP_AFTER) {
-      if (step.onClick) {
-        step.onClick(history);
+      if (step.onNext && action === ACTIONS.NEXT) {
+        step.onNext(history);
+      } else if (step.onPrevious && action === ACTIONS.PREV) {
+        step.onPrevious(history);
       }
 
-      let stepIndex = index + 1;
+      const increment = i => (action === ACTIONS.NEXT ? i + 1 : i - 1);
+      let stepIndex = increment(index);
       while (steps[stepIndex].shouldSkip && steps[stepIndex].shouldSkip(user)) {
-        stepIndex++;
+        stepIndex = increment(stepIndex);
       }
 
       setTutoStatus({ run: tutoStatus.run, stepIndex });

@@ -1,10 +1,13 @@
 import React from 'react';
-import { Button } from '@dataesr/react-dsfr';
+import { Button, Icon } from '@dataesr/react-dsfr';
 
 import styles from './modal.cssmodule.scss';
 
-const Modal = ({ step, tooltipProps, closeProps, skipProps, primaryProps, backProps, isLastStep }) => (
+const Modal = ({ step, tooltipProps, closeProps, skipProps, primaryProps, backProps, isLastStep, index }) => (
   <div className={styles.tooltip} {...tooltipProps}>
+    <div {...skipProps} className={styles.closeButton}>
+      <Icon name="fr-fi-close-line" />
+    </div>
     {step.title && <h4 className={styles.title}>{step.title}</h4>}
     <div className={styles.content}>{step.content}</div>
     {!step.hideFooter && (
@@ -14,16 +17,13 @@ const Modal = ({ step, tooltipProps, closeProps, skipProps, primaryProps, backPr
         Fin
       </Button>
       )}
-      {step.showPrevious && (
-      <Button {...backProps}>
-        Précedent
-      </Button>
-      )}
-      {!isLastStep && !step.showPrevious && (
+      {!isLastStep && (
       <>
-        <Button {...skipProps} className={styles.exitButton} secondary>
-          Passer
-        </Button>
+        {index > 0 && (
+          <Button {...backProps} className={styles.backButton} secondary>
+            Précedent
+          </Button>
+        )}
         <Button {...primaryProps} className={styles.nextButton}>
           Suivant
         </Button>

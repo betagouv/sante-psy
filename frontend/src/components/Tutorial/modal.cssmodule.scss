@@ -26,10 +26,17 @@
     margin-top: 16px;
 }
 
-.exitButton {
+.backButton {
     float: left;
 }
 
 .nextButton {
     float: right;
+}
+
+.closeButton {
+    cursor: pointer;
+    position: absolute;
+    top: 12px;
+    right: 12px;
 }
