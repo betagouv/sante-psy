@@ -4,16 +4,19 @@ import db from '../db/db';
 import { psychologistsTable } from '../db/tables';
 import getAddressCoordinates from '../services/getAddressCoordinates';
 
-const delay = (ms = 1000) : Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms = 1000): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
 const insertCoordinatesToPsychologists = async (): Promise<void> => {
-  console.log('Adding location coordinates to all psychologists...');
+  console.log('Adding coordinates to psychologists without location...');
 
   try {
-    const allPsy = await db(psychologistsTable);
+    const allPsyWithoutCoordinates = await db(psychologistsTable)
+      .whereNull('longitude')
+      .orWhereNull('latitude');
 
-    for (let index = 0; index < allPsy.length; index++) {
-      const psy = allPsy[index];
+    const nbPsy = allPsyWithoutCoordinates.length;
+    for (let index = 0; index < nbPsy; index++) {
+      const psy = allPsyWithoutCoordinates[index];
 
       if (psy.address) {
         // To be compliant with limitation (50 requests per second)
