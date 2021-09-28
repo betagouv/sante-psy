@@ -50,6 +50,7 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
         _paq.push(['trackEvent', 'Tuto', user.hasSeenTutorial ? id : 'global', 'end']);
       }
     }
+
     if (finishedAction.includes(action)) {
       if (!user.hasSeenTutorial) {
         seeTutorial();
@@ -59,7 +60,13 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
       if (step.onClick) {
         step.onClick(history);
       }
-      setTutoStatus({ run: tutoStatus.run, stepIndex: index + 1 });
+
+      let stepIndex = index + 1;
+      while (steps[stepIndex].shouldSkip && steps[stepIndex].shouldSkip(user)) {
+        stepIndex++;
+      }
+
+      setTutoStatus({ run: tutoStatus.run, stepIndex });
     }
   };
 

@@ -39,7 +39,14 @@ const steps = [
   },
   {
     placement: 'auto',
+    target: '#convention-form',
+    shouldSkip: user => user.convention,
+    content: "Il est important de nous signaler quand votre convention est signée. N'oubliez pas de mettre ce champs à jours.",
+  },
+  {
+    placement: 'auto',
     target: '#convention-button',
+    shouldSkip: user => !user.convention || user.convention.isConventionSigned,
     content: "Ce bouton nous permet de suivre l'état de vôtre convention. Il est important de nous signaler quand celle ci est signée.",
   },
   {
