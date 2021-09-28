@@ -9,7 +9,7 @@ const steps = [
     placement: 'center',
     target: 'body',
     title: 'Declarer une séance',
-    content: "La page d'accueil vous permet de declarer vos séances.",
+    content: 'Cette page vous permet de declarer et de visualiser vos séances.',
   },
   {
     placement: 'auto',
@@ -66,9 +66,9 @@ const steps = [
     content: "Enfin, si vous ne souhaitez plus être visible sur l'annuaire, veuillez cliquer ici.",
   },
   {
-    placement: 'center',
-    target: 'body',
-    content: "Ce tour est maintenant fini. Si vous avez la moindre question n'hesitez pas à nous contacter via le formulaire de contact.",
+    placement: 'auto',
+    target: '#faq-button',
+    content: 'Ce tour est maintenant fini. Si vous avez la moindre question, consulter la foire aux questions',
   },
   {
     placement: 'center',

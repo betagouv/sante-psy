@@ -3,7 +3,7 @@ const steps = [
     placement: 'center',
     target: 'body',
     title: 'Declarer une séance',
-    content: "La page d'accueil vous permet de declarer vos séances.",
+    content: "La page d'accueil vous permet de declarer et de visualiser vos séances.",
   },
   {
     placement: 'auto',

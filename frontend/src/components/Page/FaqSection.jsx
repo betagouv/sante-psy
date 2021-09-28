@@ -19,6 +19,7 @@ const FaqSection = () => (
     <HashLink
       className="fr-btn fr-btn--lg fr-btn--secondary"
       to="/faq"
+      id="faq-button"
     >
       Consulter la foire aux questions
     </HashLink>
