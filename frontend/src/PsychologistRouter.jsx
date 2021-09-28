@@ -43,6 +43,7 @@ const PsychologistRouter = () => {
         return {
           title: 'Gérer mes étudiants',
           description: 'Veuillez enregistrer vos nouveaux étudiants afin de déclarer leurs séances pour procéder à vos remboursements.',
+          tutorial: 'students',
         };
       case 'nouvel-etudiant':
         return {

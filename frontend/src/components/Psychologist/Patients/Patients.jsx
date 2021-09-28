@@ -138,6 +138,7 @@ const Patients = () => {
       </Callout>
       <div className="fr-my-2w">
         <Link
+          id="new-student-button"
           to="/psychologue/nouvel-etudiant"
           className="fr-btn fr-fi-add-line fr-btn--icon-left"
         >
@@ -146,6 +147,7 @@ const Patients = () => {
       </div>
       <div
         ref={table}
+        id="students-table"
         className={classNames('fr-table', styles.table)}
       >
         {patients.length > 0 ? (
