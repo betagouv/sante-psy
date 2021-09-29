@@ -62,8 +62,8 @@ const AddEditPatient = () => {
   };
 
   const today = new Date();
-  const maxPatientDateOfBirth = new Date(today.setFullYear(today.getFullYear() - 100));
-  const minPatientDateOfBirth = new Date(today.setFullYear(today.getFullYear() + 90));
+  const minPatientDateOfBirth = new Date(today.setFullYear(today.getFullYear() - 100));
+  const maxPatientDateOfBirth = new Date(today.setFullYear(today.getFullYear() + 90));
 
   return (
     <div className="fr-my-2w">
@@ -101,8 +101,8 @@ const AddEditPatient = () => {
             <DatePicker
               selected={patient.dateOfBirth}
               dateFormat="dd/MM/yyyy"
-              minDate={maxPatientDateOfBirth}
-              maxDate={minPatientDateOfBirth}
+              minDate={minPatientDateOfBirth}
+              maxDate={maxPatientDateOfBirth}
               onChange={
                   date => changePatient(date, 'dateOfBirth')
                 }

@@ -2,7 +2,7 @@ import date from '../utils/date';
 import { appointmentsTable, patientsTable } from './tables';
 import db from './db';
 import { Patient } from '../types/Patient';
-import CustomError from '../utils/CustomError';
+// import CustomError from '../utils/CustomError';
 
 const getById = async (patientId: string, psychologistId: string): Promise<Patient> => {
   try {
@@ -36,10 +36,10 @@ const getAll = async (psychologistId: string): Promise<(Patient & {appointmentsC
   }
 };
 
-const today = new Date();
-const hundredYear = new Date(today.setFullYear(today.getFullYear() - 100));
-const newToday = new Date();
-const tenYear = new Date(newToday.setFullYear(newToday.getFullYear() - 10));
+// const today = new Date();
+// const hundredYear = new Date(today.setFullYear(today.getFullYear() - 100));
+// const newToday = new Date();
+// const tenYear = new Date(newToday.setFullYear(newToday.getFullYear() - 10));
 
 const insert = async (
   firstNames: string,
@@ -54,12 +54,12 @@ const insert = async (
   dateOfBirth?: Date,
 ): Promise<Patient> => {
   try {
-    if (dateOfBirth && dateOfBirth.getFullYear() < hundredYear.getFullYear()) {
-      throw new CustomError('Votre étudiant ne peut avoir plus de 100 ans', 400);
-    }
-    if (dateOfBirth && dateOfBirth.getFullYear() > tenYear.getFullYear()) {
-      throw new CustomError('Votre étudiant ne peut avoir moins de 10 ans', 400);
-    }
+    // if (dateOfBirth && dateOfBirth.getFullYear() < hundredYear.getFullYear()) {
+    //   throw new CustomError('Votre étudiant ne peut avoir plus de 100 ans', 400);
+    // }
+    // if (dateOfBirth && dateOfBirth.getFullYear() > tenYear.getFullYear()) {
+    //   throw new CustomError('Votre étudiant ne peut avoir moins de 10 ans', 400);
+    // }
     const patientsArray = await db(patientsTable).insert({
       firstNames,
       lastName,
