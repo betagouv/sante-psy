@@ -51,7 +51,7 @@ const formatFrenchDate = date => dateFormatter.format(date);
  */
 const formatDDMMYYYY = date => {
   if (date) {
-    return shortDateFormatter.format(date);
+    return shortDateFormatter.format(new Date(date));
   }
   return '';
 };

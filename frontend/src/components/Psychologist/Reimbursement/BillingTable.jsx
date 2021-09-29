@@ -8,7 +8,7 @@ const BillingTable = ({ filteredDate, appointments }) => {
     {
       name: 'date',
       label: 'Date des séances effectuées',
-      render: date => (date === 'total' ? 'Total' : formatDDMMYYYY(new Date(date))),
+      render: date => (date === 'total' ? 'Total' : formatDDMMYYYY(date)),
     },
     {
       name: 'appointment',

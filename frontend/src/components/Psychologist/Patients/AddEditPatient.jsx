@@ -51,8 +51,8 @@ const AddEditPatient = () => {
   const save = e => {
     e.preventDefault();
     const action = patientId
-      ? agent.Patient.update(patientId, { ...patient, dateOfBirth: formatDDMMYYYY(new Date(patient.dateOfBirth)) })
-      : agent.Patient.create({ ...patient, dateOfBirth: formatDDMMYYYY(new Date(patient.dateOfBirth)) });
+      ? agent.Patient.update(patientId, { ...patient, dateOfBirth: formatDDMMYYYY(patient.dateOfBirth) })
+      : agent.Patient.create({ ...patient, dateOfBirth: formatDDMMYYYY(patient.dateOfBirth) });
     action
       .then(response => {
         history.push('/psychologue/mes-etudiants');
@@ -95,27 +95,31 @@ const AddEditPatient = () => {
             onChange={e => changePatient(e.target.value, 'lastName')}
             required
           />
-          <DatePicker
-            selected={patient.dateOfBirth}
-            dateFormat="dd/MM/yyyy"
-            minDate={maxPatientDateOfBirth}
-            maxDate={minPatientDateOfBirth}
-            onChange={
+          <div
+            className="fr-mb-3w"
+          >
+            <DatePicker
+              selected={patient.dateOfBirth}
+              dateFormat="dd/MM/yyyy"
+              minDate={maxPatientDateOfBirth}
+              maxDate={minPatientDateOfBirth}
+              onChange={
                   date => changePatient(date, 'dateOfBirth')
                 }
-            peekNextMonth
-            showMonthDropdown
-            showYearDropdown
-            dropdownMode="select"
-            customInput={(
-              <DateInput
-                label={`Date de naissance (obligatoire uniquement pour vos patients enregistrés après le
+              peekNextMonth
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              customInput={(
+                <DateInput
+                  label={`Date de naissance (obligatoire uniquement pour vos patients enregistrés après le
                     ${config.dateOfBirthDeploymentDate}
                     )`}
-                dataTestId="add-patient-date-input"
-              />
+                  dataTestId="add-patient-date-input"
+                />
                 )}
-          />
+            />
+          </div>
           <TextInput
             className="midlength-input"
             label="Établissement scolaire de l'étudiant"

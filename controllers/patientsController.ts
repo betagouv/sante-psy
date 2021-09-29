@@ -144,7 +144,6 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const { firstNames } = req.body;
   const { lastName } = req.body;
   const dateOfBirth = date.parseForm(req.body.dateOfBirth);
-  console.log(dateOfBirth, 'date danniverssaire');
   const { INE } = req.body;
   const { institutionName } = req.body;
   const { doctorName } = req.body;
