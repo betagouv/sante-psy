@@ -38,6 +38,7 @@ const PsychologistRouter = () => {
         return {
           title: 'Nouvelle séance',
           description: 'Vous avez réalisé une séance avec un étudiant ou une étudiante. Renseignez-la sur cette page.',
+          tutorial: 'new-appointment',
         };
       case 'mes-etudiants':
         return {
@@ -49,6 +50,7 @@ const PsychologistRouter = () => {
         return {
           title: 'Nouvel étudiant',
           description: 'Déclarez un étudiant comme étant patient du dispositif Santé Psy Étudiant. Vous pourrez ensuite déclarer les séances réalisées avec cet étudiant.',
+          tutorial: 'new-student',
         };
       case 'modifier-etudiant':
         return { title: "Compléter les informations de l'étudiant" };

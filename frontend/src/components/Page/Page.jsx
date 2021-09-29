@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { observer } from 'mobx-react';
 import classnames from 'classnames';
 
 import {
@@ -10,6 +11,8 @@ import {
 } from '@dataesr/react-dsfr';
 
 import Tutorial from 'components/Tutorial/Tutorial';
+import { useStore } from 'stores/';
+
 import FaqSection from './FaqSection';
 import UnderlinedTitle from './UnderlinedTitle';
 
@@ -26,13 +29,14 @@ const Page = ({
   className = null,
   dataTestId = null,
 }) => {
+  const { userStore: { user } } = useStore();
   const [tutoStatus, setTutoStatus] = useState({ run: false, stepIndex: 0 });
   return (
     <>
       <Tutorial
         tutoStatus={tutoStatus}
         setTutoStatus={setTutoStatus}
-        id={tutorial}
+        id={user && !user.hasSeenTutorial ? 'global' : tutorial}
       >
         <Container
           spacing="py-4w"
@@ -70,4 +74,4 @@ const Page = ({
   );
 };
 
-export default Page;
+export default observer(Page);

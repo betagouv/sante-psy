@@ -16,15 +16,14 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
 
   useEffect(() => {
     if (user && !user.hasSeenTutorial) {
-      setSteps(getSteps('global'));
       setTutoStatus({ run: true, stepIndex: 0 });
       if (pathname !== '/psychologue/mes-seances') {
         history.push('/psychologue/mes-seances');
       }
-    } else {
-      setSteps(getSteps(id));
     }
   }, [user.hasSeenTutorial]);
+
+  useEffect(() => { setSteps(getSteps(id)); }, [id]);
 
   useEffect(() => {
     function handleResize() {
@@ -42,7 +41,7 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
   const nextStep = (index, increment) => {
     const nextIndex = increment(index);
     const currentStep = steps[nextIndex];
-    if (currentStep.shouldSkip) {
+    if (currentStep && currentStep.shouldSkip) {
       return currentStep.shouldSkip(user).then(shouldSkip => {
         if (shouldSkip) {
           return nextStep(nextIndex, increment);
@@ -78,7 +77,8 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
       }
 
       const increment = i => (action === ACTIONS.NEXT ? i + 1 : i - 1);
-      nextStep(index, increment).then(stepIndex => setTutoStatus({ run: tutoStatus.run, stepIndex }));
+      nextStep(index, increment)
+        .then(stepIndex => setTutoStatus({ run: stepIndex < steps.length ? tutoStatus.run : false, stepIndex }));
     }
   };
 
@@ -92,8 +92,7 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
         styles={{ overlay: { cursor: 'initial' } }}
         tooltipComponent={Modal}
         continuous
-        disableScrollParentFix
-        disableOverlayClose
+        scrollOffset={250}
       />
       {children}
     </>
