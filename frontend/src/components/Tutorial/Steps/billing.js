@@ -1,51 +1,98 @@
+import agent from 'services/agent';
+
 const steps = [
   {
     placement: 'center',
     target: 'body',
-    title: 'Bienvenue sur votre espace psychologue',
-    content: 'Nous allons vous guider à travers les fonctionnalités de base du site. Cette démo durera environ 5 minutes, vous pouvez la passer et revenir dessus à tout moment !',
+    title: 'Gérer mes facturations',
+    content: 'Cette page vous permet de gérér vos informations de facturations et de générer vos factures pour les Service de Santé Universitaire.',
   },
   {
-    placement: 'center',
-    target: 'body',
-    title: 'Déclarer une séance',
-    content: "La page d'accueil vous permet de declarer vos séances.",
+    placement: 'top-start',
+    target: '#no-convention-alert',
+    shouldSkip: user => Promise.resolve(user.convention && user.convention.isConventionSigned),
+    content: 'Avant de pouvoir acceder à vos informations de facturation, vous devez signer votre convention.',
   },
   {
-    placement: 'auto',
-    target: '#new-appointment-button',
-    content: "Pour ce faire, il suffit de cliquer sur ce bouton et de préciser la date de la séance ainsi que l'étudiant concerné.",
+    placement: 'top-start',
+    target: '#no-convention-alert',
+    shouldSkip: user => Promise.resolve(user.convention && user.convention.isConventionSigned),
+    content: 'Avant de pouvoir acceder à vos informations de facturation, vous devez signer votre convention.',
   },
   {
-    placement: 'auto',
-    target: '#appointments-table',
-    content: "Un récapitulatif de vos séances apparaîtra alors sur cette page, vous pouvez les modifier ou les supprimer en cas d'erreur.",
+    placement: 'top-start',
+    target: '#no-appointments',
+    shouldSkip: () => {
+      const now = new Date();
+      return agent.Appointment.get().then(appointments => appointments.some(appointment => {
+        const appointmentDate = new Date(appointment.appointmentDate);
+        return appointmentDate.getFullYear() === now.getFullYear()
+          && appointmentDate.getMonth() === now.getMonth();
+      }));
+    },
+    content: "Vous n'avez pas déclarer de séances pour ce mois ci, il n'y a donc pas de facture à generer. Commencez par declarer des séances depuis l'onglet dedier ou generez une facture pour un autre mois.",
   },
   {
-    placement: 'auto',
-    target: '#appointment-month',
-    content: 'Par soucis de lisibilité, nous vous montrons uniquement les séances du mois courant. Vous pouvez bien sûr voir les autres séances grâce à ce bouton.',
+    placement: 'top-start',
+    target: '#billing-table',
+    shouldSkip: () => {
+      const now = new Date();
+      return agent.Appointment.get().then(appointments => appointments.every(appointment => {
+        const appointmentDate = new Date(appointment.appointmentDate);
+        return appointmentDate.getFullYear() !== now.getFullYear()
+          || appointmentDate.getMonth() !== now.getMonth();
+      }));
+    },
+    content: 'Vous trouverez ici un tableau récapitulatif de vos séances avec les informations à faire apparaitre sur votre facture.',
   },
   {
-    placement: 'auto',
-    target: '#billing-header',
-    content: 'Une fois vos séances déclarées, vous pourrez générer votre facture depuis ce menu.',
-  },
-  {
-    placement: 'auto',
-    target: '#informations-header',
-    content: "Ce menu permet de gérer votre visibilité sur l'annuaire pour les étudiants",
-    onClick: history => { history.push('/psychologue/mon-profil'); },
-  },
-  {
-    placement: 'auto',
-    target: '#billing-month',
-    content: 'Par défaut, la facture est générée pour le mois courant, vous pouvez facturer les mois précédents grâce à ce bouton.',
-  },
-  {
-    placement: 'auto',
+    placement: 'top-start',
     target: '#billing-info',
-    content: 'Commencer par remplir les informations de facturations en cliquant sur ce bouton.',
+    shouldSkip: () => {
+      const now = new Date();
+      return agent.Appointment.get().then(appointments => appointments.every(appointment => {
+        const appointmentDate = new Date(appointment.appointmentDate);
+        return appointmentDate.getFullYear() !== now.getFullYear()
+          || appointmentDate.getMonth() !== now.getMonth();
+      }));
+    },
+    content: 'Pour obtenir une facture automatique la plus complete possible, nous vous invitons à remplir des informations complémentaire sur vous.',
+  },
+  {
+    placement: 'top-start',
+    target: '#billing-generation',
+    shouldSkip: (user) => {
+      if (!user.convention || !user.convention.isConventionSigned) {
+        return Promise.resolve(true);
+      }
+      const now = new Date();
+      return agent.Appointment.get().then(appointments => appointments.every(appointment => {
+        const appointmentDate = new Date(appointment.appointmentDate);
+        return appointmentDate.getFullYear() !== now.getFullYear()
+          || appointmentDate.getMonth() !== now.getMonth();
+      }));
+    },
+    content: 'Vous pouvez maintenant générer automatiquement une facture pré-remplie pour le mois séléctionné.',
+  },
+  {
+    placement: 'top-start',
+    target: '#billing-month',
+    content: "Vous pouvez acceder à vos factures précédentes via ce button. Attention, une fois votre facture envoyée à l'université, elle n'est plus modifiable.",
+  },
+  {
+    placement: 'top-start',
+    target: '#student-billing-info',
+    content: 'Pour préserver le secret médical, ne faites apparaire aucunes informations personnelles de vos étudiants sur la facture.',
+  },
+  {
+    placement: 'top-start',
+    target: '#tva-billing-info',
+    content: "Si vous n'êtes pas assujetti à la TVA, veuillez faire apparaitre explicitement ce message sur votre facture.",
+  },
+  {
+    placement: 'top-start',
+    target: '#faq-button',
+    content: "Et en cas de doute, plus d'informations sont disponibles sur la FAQ",
   },
 ];
 

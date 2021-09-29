@@ -53,16 +53,21 @@ const PsychologistRouter = () => {
           tutorial: 'new-student',
         };
       case 'modifier-etudiant':
-        return { title: "Compléter les informations de l'étudiant" };
+        return {
+          title: "Compléter les informations de l'étudiant",
+          tutorial: 'new-student',
+        };
       case 'mes-remboursements':
         return {
           title: 'Gérer mes facturations',
           description: 'Vous pouvez éditer et générer vos factures sur cet espace avant de les envoyer au Service de Santé Universitaire afin de vous faire rembourser.',
+          tutorial: 'billing',
         };
       case 'mon-profil':
         return {
           title: 'Mes informations',
           description: 'En tant que psychologue de Santé Psy Étudiant, vous avez la possibilité de gérer les informations au sein de notre annuaire.',
+          tutorial: 'profile',
         };
       default:
         return {

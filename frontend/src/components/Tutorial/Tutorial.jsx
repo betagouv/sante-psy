@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Joyride, { ACTIONS, STATUS, EVENTS } from 'react-joyride';
+import Joyride, { ACTIONS, EVENTS } from 'react-joyride';
 import { useHistory, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
