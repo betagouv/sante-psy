@@ -4,14 +4,12 @@ import React, { useEffect, useRef, useState } from 'react';
 const MetabaseAppEmbed = ({
   title = 'Metabase',
   className,
-  style = {},
   base = '',
   path = '/',
   onMessage,
   onLocationChange,
   onFrameChange,
   getAuthUrl,
-  fitHeight,
 }) => {
   // ref for the iframe HTML element
   const iframeEl = useRef(null);
@@ -19,7 +17,6 @@ const MetabaseAppEmbed = ({
   const src = useRef(`${base}${path}`);
   // ref for the current location, as reported via postMessage
   const location = useRef(null);
-  const [frame, setFrame] = useState();
 
   // setup postMessage listener
   useEffect(() => {
@@ -33,7 +30,6 @@ const MetabaseAppEmbed = ({
             onLocationChange(e.data.metabase.location);
           }
         } else if (e.data.metabase.type === 'frame') {
-          setFrame(e.data.metabase.frame);
           if (onFrameChange) {
             onFrameChange(e.data.metabase.frame);
           }
@@ -70,21 +66,12 @@ const MetabaseAppEmbed = ({
     src.current = getAuthUrl(src.current);
   }
 
-  const frameMode = frame && frame.mode;
-  let height;
-  if (frameMode === 'normal') {
-    height = frame.height;
-  } else if (frameMode === 'fit') {
-    height = fitHeight;
-  }
-
   return (
     <iframe
       ref={iframeEl}
       src={src.current}
       title={title}
       className={className}
-      style={{ border: 'none', width: '100%', height, ...style }}
     />
   );
 };

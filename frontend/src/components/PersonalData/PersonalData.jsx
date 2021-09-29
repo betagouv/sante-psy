@@ -4,6 +4,8 @@ import Page from 'components/Page/Page';
 import Mail from 'components/Footer/Mail';
 import Section from 'components/Page/Section';
 
+import styles from './personalData.cssmodule.scss';
+
 const PersonalData = () => (
   <Page
     title="Suivi d&#39;audience et vie privée"
@@ -20,7 +22,7 @@ const PersonalData = () => (
       </p>
       <iframe
         title="stats"
-        style={{ border: 0, height: 120, width: '100%' }}
+        className={styles.iframe}
         src="https://stats.data.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=&fontSize=&fontFamily=%22Marianne%22%2C%20arial%2C%20sans-serif"
       />
     </Section>
