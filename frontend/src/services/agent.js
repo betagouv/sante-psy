@@ -57,8 +57,6 @@ const Convention = {
     .post(`/psychologist/${store.userStore.user.dossierNumber}/convention`, convention),
 };
 
-const Map = { findAddress: address => axios.get(`https://nominatim.openstreetmap.org/search?q=${address}&format=json`) };
-
 const Patient = {
   create: patient => client.post('/patients/', patient),
   delete: id => client.delete(`/patients/${id}`),
@@ -93,7 +91,6 @@ export default {
   Config,
   Contact,
   Convention,
-  Map,
   Patient,
   Psychologist,
   Statistics,

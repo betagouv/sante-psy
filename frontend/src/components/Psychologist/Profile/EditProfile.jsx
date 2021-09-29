@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, RadioGroup, Radio, TextInput, SearchableSelect, ButtonGroup } from '@dataesr/react-dsfr';
 
+import string from 'services/string';
 import DEPARTEMENTS from 'services/departments';
 
 const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
@@ -14,6 +15,13 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
 
   const changePsychologist = (value, field) => {
     setUpdatedPsychologist({ ...updatedPsychologist, [field]: value });
+  };
+
+  const enrichWebsite = () => {
+    const prefixedWebsite = string.prefixUrl(updatedPsychologist.website);
+    if (prefixedWebsite) {
+      changePsychologist(prefixedWebsite, 'website');
+    }
   };
 
   return (
@@ -47,11 +55,19 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
       <TextInput
         className="midlength-input"
         label="Adresse du cabinet"
-        hint="Adresse où se rendre pour le rendez-vous. Pour indiquer plusieurs adresses, les séparer par un point virgule."
+        hint="Adresse où se rendre pour le rendez-vous."
         data-test-id="psy-address-input"
         value={updatedPsychologist.address}
         onChange={e => changePsychologist(e.target.value, 'address')}
         required
+      />
+      <TextInput
+        className="midlength-input"
+        label="Autre adresse du cabinet"
+        hint="Si vous avez un deuxième cabinet vous pouvez indiquer son adresse ici"
+        data-test-id="psy-other-address-input"
+        value={updatedPsychologist.otherAddress}
+        onChange={e => changePsychologist(e.target.value, 'otherAddress')}
       />
       <TextInput
         className="midlength-input"
@@ -105,6 +121,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         data-test-id="psy-website-input"
         value={updatedPsychologist.website}
         onChange={e => changePsychologist(e.target.value, 'website')}
+        onBlur={enrichWebsite}
       />
       <TextInput
         className="midlength-input"

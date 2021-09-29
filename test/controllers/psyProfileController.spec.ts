@@ -20,17 +20,20 @@ describe('psyProfileController', () => {
         'firstNames',
         'lastName',
         'email',
-        'address',
-        'departement',
-        'region',
         'phone',
         'website',
         'teleconsultation',
         'description',
         'languages',
         'active',
+        'address',
         'longitude',
         'latitude',
+        'otherAddress',
+        'otherLongitude',
+        'otherLatitude',
+        'departement',
+        'region',
       ];
 
       if (shouldBeComplete) {
@@ -38,20 +41,21 @@ describe('psyProfileController', () => {
       }
 
       expect(actual).to.be.an('object').that.has.all.keys(expectedKeys);
-
       expect(actual.firstNames).to.eql(expected.firstNames);
       expect(actual.lastName).to.eql(expected.lastName);
       expect(actual.email).to.eql(expected.email);
-      expect(actual.address).to.eql(expected.address);
-      expect(actual.departement).to.eql(expected.departement);
-      expect(actual.region).to.eql(expected.region);
       expect(actual.phone).to.eql(expected.phone);
-      // website url are not generated with protocol
-      expect(actual.website).to.eql(`http://${expected.website}`);
+      expect(actual.website).to.eql(expected.website);
       expect(actual.teleconsultation).to.eql(expected.teleconsultation);
       expect(actual.description).to.eql(expected.description);
       expect(actual.languages).to.eql(expected.languages);
       expect(actual.active).to.eql(expected.active);
+
+      expect(actual.address).to.eql(expected.address);
+      expect(actual.longitude).to.eql(expected.longitude);
+      expect(actual.latitude).to.eql(expected.latitude);
+      expect(actual.departement).to.eql(expected.departement);
+      expect(actual.region).to.eql(expected.region);
 
       if (shouldBeComplete) {
         expect(actual.personalEmail).to.eql(expected.personalEmail);
@@ -183,7 +187,7 @@ describe('psyProfileController', () => {
     it('should refuse whitespace address', async () => {
       await shouldFailUpdatePsyInputValidation({
         email: 'public@email.com',
-        address: '  ',
+        address: '      ',
         departement: '59 - Nord',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
@@ -443,6 +447,7 @@ describe('psyProfileController', () => {
       const postData = {
         email: 'public@email.com',
         address: '1 rue du Pôle Nord<div>',
+        otherAddress: '2 rue du Pôle Nord<div>',
         departement: '59 - Nord',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
@@ -461,7 +466,10 @@ describe('psyProfileController', () => {
           res.status.should.equal(200);
           sinon.assert.called(updatePsyStub);
           sinon.assert.calledWith(updatePsyStub, sinon.match({
+            ...postData,
             address: '1 rue du Pôle Nord<div></div>',
+            otherAddress: '2 rue du Pôle Nord<div></div>',
+            departement: '59 - Nord',
             description: 'Consultez un psychologue gratuitement',
             languages: 'Français, Anglais&lt;/',
           }));
@@ -545,8 +553,8 @@ describe('psyProfileController', () => {
       const psy = await create.insertOnePsy();
       const LONGITUDE_PARIS = 2.3488;
       const LATITUDE_PARIS = 48.85341;
-      getAddressCoordinatesStub.returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS });
 
+      getAddressCoordinatesStub.returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS });
       return chai.request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
@@ -555,6 +563,7 @@ describe('psyProfileController', () => {
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
           departement: '59 - Nord',
+          otherAddress: '2 rue du Pôle Sud',
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -568,11 +577,14 @@ describe('psyProfileController', () => {
 
           const updatedPsy = await dbPsychologists.getById(psy.dossierNumber);
           expect(updatedPsy.email).to.eql('public@email.com');
-          expect(updatedPsy.address).to.eql('1 rue du Pôle Nord');
           expect(updatedPsy.departement).to.eql('59 - Nord');
           expect(updatedPsy.region).to.eql('Hauts-de-France');
+          expect(updatedPsy.address).to.eql('1 rue du Pôle Nord');
           expect(updatedPsy.longitude).to.eql(LONGITUDE_PARIS);
           expect(updatedPsy.latitude).to.eql(LATITUDE_PARIS);
+          expect(updatedPsy.otherAddress).to.eql('2 rue du Pôle Sud');
+          expect(updatedPsy.otherLongitude).to.eql(LONGITUDE_PARIS);
+          expect(updatedPsy.otherLatitude).to.eql(LATITUDE_PARIS);
           expect(updatedPsy.phone).to.eql('01 02 03 04 05');
           expect(updatedPsy.website).to.eql('https://monwebsite.fr');
           expect(updatedPsy.description).to.eql('Consultez un psychologue gratuitement');
@@ -593,6 +605,7 @@ describe('psyProfileController', () => {
           email: 'public@email.com',
           address: '1 rue du Pôle Nord',
           departement: '59 - Nord',
+          region: 'La bas',
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -600,7 +613,6 @@ describe('psyProfileController', () => {
           languages: 'Français, Anglais',
           personalEmail: 'perso@email.com',
           // To Ignore:
-          region: 'La bas',
           dossierNumber: uuidv4(),
         })
         .then(async (res) => {

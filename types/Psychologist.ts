@@ -1,17 +1,21 @@
 import { DossierState } from './DossierState';
-import { Coordinates } from './Coordinates';
 
-export type EditablePsychologist = Coordinates & {
+export type EditablePsychologist = {
     email: string,
-    address: string,
-    departement: string,
-    region: string,
     phone: string,
     website: string,
     description: string,
     teleconsultation: boolean,
     languages: string,
     personalEmail: string,
+    address: string,
+    longitude?: number,
+    latitude?: number,
+    otherAddress?: string,
+    otherLongitude?: number,
+    otherLatitude?: number,
+    departement: string,
+    region: string,
   };
 
 export type NonEditablePsychologist = {

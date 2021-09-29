@@ -107,7 +107,10 @@ describe('DS integration tests', () => {
     departement: '2B - Haute-Corse',
     longitude: null, // api-adresse.data.gouv.fr is mocked in test
     latitude: null, // api-adresse.data.gouv.fr is mocked in test
-    region: 'défaut',
+    otherAddress: null,
+    otherLongitude: null,
+    otherLatitude: null,
+    region: 'Corse',
     phone: '01 23 45 67 89',
     website: '',
     teleconsultation: false,
@@ -129,9 +132,12 @@ describe('DS integration tests', () => {
     email: 'xavier.desoindre@beta.gouv.fr',
     address: 'Traverse C Est Ici 13380 Plan-de-Cuques',
     departement: '99 - Etranger',
-    region: 'défaut',
+    region: null, // not matching 99
     longitude: null, // api-adresse.data.gouv.fr is mocked in test
     latitude: null, // api-adresse.data.gouv.fr is mocked in test
+    otherAddress: null,
+    otherLongitude: null,
+    otherLatitude: null,
     phone: '01',
     website: '',
     teleconsultation: false,

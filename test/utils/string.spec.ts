@@ -1,5 +1,4 @@
 import string from '../../utils/string';
-import { expect } from 'chai';
 
 describe('String utils', () => {
   describe('Are similar', () => {
@@ -21,32 +20,6 @@ describe('String utils', () => {
         const result = string.areSimilar(test.value1, test.value2);
         result.should.equals(test.result);
       });
-    });
-  });
-
-  describe('Prefix URL', () => {
-    it('Should return undefined if value invalid', () => {
-      expect(string.prefixUrl(null)).to.be.undefined;
-      expect(string.prefixUrl('')).to.be.undefined;
-      expect(string.prefixUrl(' ')).to.be.undefined;
-      expect(string.prefixUrl(undefined)).to.be.undefined;
-    });
-
-    it('Should prefix url by https protocol if not there', () => {
-      string.prefixUrl('yakalelo.com').should.equals('http://yakalelo.com');
-      string.prefixUrl('www.yakalelo.com').should.equals('http://www.yakalelo.com');
-      string.prefixUrl('http.yakalelo.com').should.equals('http://http.yakalelo.com');
-      string.prefixUrl('http:yakalelo.com').should.equals('http://http:yakalelo.com');
-      string.prefixUrl('http:/yakalelo.com').should.equals('http://http:/yakalelo.com');
-    });
-
-    it('Should do nothing if http protocol already there', () => {
-      string.prefixUrl('http://www.yakalelo.com').should.equals('http://www.yakalelo.com');
-      string.prefixUrl('http:///www.yakalelo.com').should.equals('http:///www.yakalelo.com');
-    });
-
-    it('Should do nothing if https protocol already there', () => {
-      string.prefixUrl('https://www.yakalelo.com').should.equals('https://www.yakalelo.com');
     });
   });
 });

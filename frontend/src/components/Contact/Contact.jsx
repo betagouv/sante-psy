@@ -29,7 +29,9 @@ const Contact = () => {
 
   const submit = e => {
     e.preventDefault();
-    agent.Contact.send({ user: userType, name, firstName, email, reason, message })
+    agent.Contact.send(
+      { user: userType, name, firstName, email, reason, message, navigator: navigator.userAgent },
+    )
       .then(response => {
         setNotification(response, true, false);
       })
@@ -139,6 +141,7 @@ const Contact = () => {
           data-test-id="message-input"
           required
           textarea
+          hint="Merci de ne fournir que les données personnelles strictement nécessaires au traitement de la demande. "
           label="Message"
           value={message}
           onChange={e => setMessage(e.target.value)}

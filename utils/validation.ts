@@ -6,7 +6,7 @@ const checkErrors = (req: Request): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const allErrors = errors.array({ onlyFirstError: true }).map((error) => {
-      console.log('checkErrors form', error);
+      console.debug('checkErrors form', error);
       return error.msg;
     });
 

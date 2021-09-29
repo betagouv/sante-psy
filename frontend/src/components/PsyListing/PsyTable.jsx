@@ -10,6 +10,7 @@ const PsyTable = ({
   addressFilter,
   teleconsultation,
   noResult,
+  geoLoading,
 }) => {
   const [surrendingPages, setSurrendingPages] = useState(0);
   const history = useHistory();
@@ -24,6 +25,14 @@ const PsyTable = ({
     {
       name: 'address',
       label: 'Adresse',
+      render: psychologist => (psychologist.otherAddress
+        ? (
+          <>
+            <div>{psychologist.address}</div>
+            <div>{psychologist.otherAddress}</div>
+          </>
+        )
+        : psychologist.address),
     },
     {
       name: 'action',
@@ -88,6 +97,9 @@ const PsyTable = ({
   }, []);
 
   let title = 'Tous les résultats';
+  if (geoLoading) {
+    title = 'Chargement des psychologues autour de vous...';
+  } else
   if (nameFilter || addressFilter || teleconsultation) {
     if (psychologists.length === 1) {
       title = '1 résultat';
