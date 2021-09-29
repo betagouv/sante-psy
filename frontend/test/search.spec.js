@@ -54,4 +54,31 @@ describe('Search', () => {
       });
     });
   });
+
+  describe('matchName', () => {
+    const tests = [
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'jean', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'goldman', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'jacques', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'jean goldman', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'jacques goldman', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'jean jacques goldman', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'goldman jean', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'goldman jacques', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'j j g', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'j g', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'g j j', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'g j', result: true },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'marie', result: false },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'jeanne', result: false },
+      { psychologist: { firstNames: 'Jean Jacques', lastName: 'Goldman' }, filter: 'Goldo', result: false },
+    ];
+
+    tests.forEach(test => {
+      it(`Should return ${test.result} for ${test.psychologist} and filter ${test.filter}`, () => {
+        const result = search.matchName(test.psychologist, test.filter);
+        result.should.equals(test.result);
+      });
+    });
+  });
 });
