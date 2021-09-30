@@ -1,3 +1,5 @@
+import agent from 'services/agent';
+
 const steps = [
   {
     placement: 'center',
@@ -25,6 +27,7 @@ const steps = [
   {
     placement: 'top-start',
     target: '#view-profil-button',
+    shouldSkip: () => agent.Psychologist.getProfile().then(psychologist => !psychologist.active),
     content: 'Pour voir ce à quoi les étudiants ont accès, vous pouvez cliquer sur ce bouton.',
   },
   {
