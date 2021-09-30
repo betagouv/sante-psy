@@ -167,7 +167,9 @@ const PsyProfile = () => {
                   >
                     Modifier mes informations
                   </Button>
+                  {psychologist.active && (
                   <Button
+                    data-test-id="show-public-profile-button"
                     title="profil public"
                     icon="fr-fi-arrow-right-line"
                     secondary
@@ -175,6 +177,7 @@ const PsyProfile = () => {
                   >
                     Voir mon profil public
                   </Button>
+                  )}
                 </ButtonGroup>
                 {informations.map(info => {
                   const value = typeof info.key === 'string' ? psychologist[info.key] : info.key(psychologist);

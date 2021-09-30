@@ -200,6 +200,8 @@ describe('Profile', () => {
 
   describe('Suspend profile', () => {
     it('should say that your profile is suspended', () => {
+      cy.get('[data-test-id="show-public-profile-button"]')
+        .should('exist');
       cy.get('[data-test-id="activePsy"]')
         .should('have.text', 'Mes informations sont visibles sur l‘annuaire.');
       cy.get('[data-test-id="inactivePsy"]')
@@ -210,6 +212,8 @@ describe('Profile', () => {
         cy.get('[data-test-id="inactivePsy"]')
           .should('have.text', 'Mes informations ne sont pas visibles sur l‘annuaire.');
         cy.get('[data-test-id="activePsy"]')
+          .should('not.exist');
+        cy.get('[data-test-id="show-public-profile-button"]')
           .should('not.exist');
       });
     });
