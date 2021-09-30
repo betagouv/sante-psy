@@ -5,19 +5,13 @@ const steps = [
     placement: 'center',
     target: 'body',
     title: 'Gérer mes facturations',
-    content: 'Cette page vous permet de gérér vos informations de facturations et de générer vos factures pour les Service de Santé Universitaire.',
+    content: 'Cette page vous permet de gérér vos informations de facturation et de générer vos factures pour les Service de Santé Universitaire.',
   },
   {
     placement: 'top-start',
     target: '#no-convention-alert',
     shouldSkip: user => Promise.resolve(user.convention && user.convention.isConventionSigned),
-    content: 'Avant de pouvoir acceder à vos informations de facturation, vous devez signer votre convention.',
-  },
-  {
-    placement: 'top-start',
-    target: '#no-convention-alert',
-    shouldSkip: user => Promise.resolve(user.convention && user.convention.isConventionSigned),
-    content: 'Avant de pouvoir acceder à vos informations de facturation, vous devez signer votre convention.',
+    content: 'Avant de pouvoir accéder à vos informations de facturation, vous devez signer votre convention.',
   },
   {
     placement: 'top-start',
@@ -30,7 +24,7 @@ const steps = [
           && appointmentDate.getMonth() === now.getMonth();
       }));
     },
-    content: "Vous n'avez pas déclarer de séances pour ce mois ci, il n'y a donc pas de facture à generer. Commencez par declarer des séances depuis l'onglet dedier ou generez une facture pour un autre mois.",
+    content: "Vous n'avez pas déclarer de séances pour ce mois-ci, il n'y a donc pas de facture à generer. Commencez par déclarer des séances depuis l'onglet dédié ou générez une facture pour un autre mois.",
   },
   {
     placement: 'top-start',
@@ -43,7 +37,7 @@ const steps = [
           || appointmentDate.getMonth() !== now.getMonth();
       }));
     },
-    content: 'Vous trouverez ici un tableau récapitulatif de vos séances avec les informations à faire apparaitre sur votre facture.',
+    content: 'Vous trouverez ici un tableau récapitulatif de vos séances avec les informations à faire apparaître sur votre facture.',
   },
   {
     placement: 'top-start',
@@ -56,7 +50,7 @@ const steps = [
           || appointmentDate.getMonth() !== now.getMonth();
       }));
     },
-    content: 'Pour obtenir une facture automatique la plus complete possible, nous vous invitons à remplir des informations complémentaire sur vous.',
+    content: 'Pour obtenir une facture automatique la plus complète possible, nous vous invitons à remplir des informations complémentaires sur vous.',
   },
   {
     placement: 'top-start',
@@ -77,17 +71,17 @@ const steps = [
   {
     placement: 'top-start',
     target: '#billing-month',
-    content: "Vous pouvez acceder à vos factures précédentes via ce button. Attention, une fois votre facture envoyée à l'université, elle n'est plus modifiable.",
+    content: "Vous pouvez accéder à vos factures précédentes via ce button. Attention, une fois votre facture envoyée à l'université, elle n'est plus modifiable.",
   },
   {
     placement: 'top-start',
     target: '#student-billing-info',
-    content: 'Pour préserver le secret médical, ne faites apparaire aucunes informations personnelles de vos étudiants sur la facture.',
+    content: 'Pour préserver le secret médical, ne faites apparaître aucune information personnelle de vos étudiants sur la facture.',
   },
   {
     placement: 'top-start',
     target: '#tva-billing-info',
-    content: "Si vous n'êtes pas assujetti à la TVA, veuillez faire apparaitre explicitement ce message sur votre facture.",
+    content: "Si vous n'êtes pas assujetti à la TVA, veuillez faire apparaître explicitement ce message sur votre facture.",
   },
   {
     placement: 'top-start',

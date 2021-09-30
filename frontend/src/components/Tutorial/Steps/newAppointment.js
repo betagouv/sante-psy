@@ -13,7 +13,7 @@ const steps = [
   {
     placement: 'top-start',
     target: '#new-patient',
-    content: "Si c'est la première fois que vous voyez cet étudiant, commencez par l'ajouter à vos étudiant.",
+    content: "Si c'est la première fois que vous voyez cet étudiant, commencez par l'ajouter à vos étudiants.",
   },
   {
     placement: 'top-start',
@@ -23,7 +23,7 @@ const steps = [
   {
     placement: 'top-start',
     target: '#new-appointment-submit',
-    content: "Vous n'avez plus qu'à valider la séances. Et si vous vous êtes trompé, ne vous inquietez pas, la séance peut être supprimée et recréee.",
+    content: "Vous n'avez plus qu'à valider la séance. Et si vous vous êtes trompé, ne vous inquiétez pas, la séance peut être supprimée et recréée.",
   },
 ];
 

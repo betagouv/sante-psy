@@ -13,7 +13,7 @@ const steps = [
   {
     placement: 'top-start',
     target: '#other-informations',
-    content: "Vous pouvez passer le reste des informations si vous ne les avez pas, mais c'est dernière seront nécéssaire pour être rapidement remboursé.",
+    content: "Vous pouvez passer le reste des informations si vous ne les avez pas, mais ces dernières seront nécessaires pour être rapidement remboursé.",
   },
   {
     placement: 'top-start',

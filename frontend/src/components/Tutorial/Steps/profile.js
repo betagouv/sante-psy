@@ -3,7 +3,7 @@ const steps = [
     placement: 'center',
     target: 'body',
     title: 'Mes informations',
-    content: 'Depuis cette page, vous pouvez gérer vos informations personelles ainsi que ce que vous montrez aux étudiants',
+    content: "Depuis cette page, vous pouvez gérer vos informations personelles ainsi que les informations visibles sur l'annuaire",
   },
   {
     placement: 'top-start',
