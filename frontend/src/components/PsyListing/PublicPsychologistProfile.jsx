@@ -9,6 +9,8 @@ import Notification from 'components/Notification/Notification';
 
 import agent from 'services/agent';
 import string from 'services/string';
+import distance from 'services/distance';
+
 import styles from './publicPsychologistProfile.cssmodule.scss';
 
 const fields = [
@@ -57,6 +59,30 @@ const PublicPsychologistProfile = () => {
       });
   }, [psyId]);
 
+  const getZoomLevel = () => {
+    if (!psychologist.otherLongitude || !psychologist.otherLatitude) {
+      return 13;
+    }
+
+    const distanceKm = distance.distanceKm(
+      psychologist.latitude,
+      psychologist.longitude,
+      psychologist.otherLatitude,
+      psychologist.otherLongitude,
+    );
+
+    if (distanceKm < 5) {
+      return 13;
+    } if (distanceKm < 10) {
+      return 11;
+    } if (distanceKm < 40) {
+      return 9;
+    } if (distanceKm < 100) {
+      return 7;
+    }
+
+    return 5;
+  };
   return (
     <Page
       title="Profil psychologue"
@@ -109,7 +135,7 @@ const PublicPsychologistProfile = () => {
               {psychologist.longitude && psychologist.latitude && (
               <MapContainer
                 center={[psychologist.latitude, psychologist.longitude]}
-                zoom={psychologist.otherLongitude && psychologist.otherLatitude ? 5 : 13}
+                zoom={getZoomLevel()}
                 scrollWheelZoom={false}
                 className={styles.map}
               >
