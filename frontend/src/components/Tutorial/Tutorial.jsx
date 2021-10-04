@@ -15,13 +15,13 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
   const [steps, setSteps] = useState(getSteps(id));
 
   useEffect(() => {
-    if (user && !user.hasSeenTutorial) {
+    if (user && !user.hasSeenTutorial && !tutoStatus.run) {
       setTutoStatus({ run: true, stepIndex: 0 });
       if (pathname !== '/psychologue/mes-seances') {
         history.push('/psychologue/mes-seances');
       }
     }
-  }, [user.hasSeenTutorial]);
+  }, [user]);
 
   useEffect(() => { setSteps(getSteps(id)); }, [id]);
 
