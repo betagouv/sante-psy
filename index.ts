@@ -22,11 +22,22 @@ const app = express();
 // Desactivate debug log for production as they are a bit too verbose
 if (!config.activateDebug) {
   console.log('console.debug is not active - thanks to ACTIVATE_DEBUG_LOG env variable');
-  console.debug = (): void => {};
+  console.debug = (): void => { };
 }
 
 // HSTS is managed directly by scalingo => if we set it there it appears twice and can be misinterpreted
 app.use(helmet({ contentSecurityPolicy: false, hsts: false }));
+
+app.use((req, res, next) => {
+  res.setHeader(
+    'Permissions-Policy',
+    // Generated using https://www.permissionspolicy.com/
+    // All features were disabled
+    // eslint-disable-next-line max-len
+    'accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()',
+  );
+  next();
+});
 
 app.use(cspConfig);
 app.use(compression());
