@@ -28,14 +28,12 @@ if (!config.activateDebug) {
 // HSTS is managed directly by scalingo => if we set it there it appears twice and can be misinterpreted
 app.use(helmet({ contentSecurityPolicy: false, hsts: false }));
 
+// Feature list available at https://github.com/w3c/webappsec-permissions-policy/blob/main/features.md
 app.use((req, res, next) => {
-  res.setHeader(
-    'Permissions-Policy',
-    // Generated using https://www.permissionspolicy.com/
-    // All features were disabled except geolocalisation
-    // eslint-disable-next-line max-len
-    'geolocation=(self), accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()',
-  );
+  // Feature-Policy has been replaced by Permissions-Policy but it is still not widely supported
+  // see https://caniuse.com/permissions-policy
+  res.setHeader('Feature-Policy', "geolocation 'self'");
+  res.setHeader('Permissions-Policy', 'geolocation=(self)');
   next();
 });
 
