@@ -11,8 +11,8 @@ import dbPsychologists from '../../db/psychologists';
 const doctorName = 'doctorName';
 const doctorAddress = 'doctorAddress';
 const dateOfBirth = '20/01/1980';
-const tooOld = date.parseForm('20/01/1900');
-const tooYoung = date.parseForm('20/01/2017');
+const tooOld = '20/01/1900';
+const tooYoung = '20/01/2017';
 
 const makePatient = async (psychologistId) => {
   const psy = create.getOnePsy();
@@ -367,7 +367,7 @@ describe('patientsController', () => {
           hasPrescription: undefined,
           doctorName,
           doctorAddress,
-          tooOld,
+          dateOfBirth: tooOld,
         })
         .then(async (res) => {
           res.status.should.equal(400);
@@ -379,6 +379,7 @@ describe('patientsController', () => {
 
     it('should not insert if age < 10', async () => {
       const psy = await create.insertOnePsy();
+
       return chai.request(app)
           .post('/api/patients')
           .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
@@ -392,10 +393,10 @@ describe('patientsController', () => {
             hasPrescription: undefined,
             doctorName,
             doctorAddress,
-            tooYoung,
+            dateOfBirth: tooYoung,
           })
           .then(async (res) => {
-            res.status.should.equal(200);
+            res.status.should.equal(400);
             res.body.message.should.equal(
               'Votre étudiant ne peut avoir moins de 10 ans',
             );
