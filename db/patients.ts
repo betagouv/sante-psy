@@ -2,7 +2,6 @@ import date from '../utils/date';
 import { appointmentsTable, patientsTable } from './tables';
 import db from './db';
 import { Patient } from '../types/Patient';
-// import CustomError from '../utils/CustomError';
 
 const getById = async (patientId: string, psychologistId: string): Promise<Patient> => {
   try {
@@ -35,11 +34,6 @@ const getAll = async (psychologistId: string): Promise<(Patient & {appointmentsC
     throw new Error('Impossible de récupérer les patients');
   }
 };
-
-// const today = new Date();
-// const hundredYear = new Date(today.setFullYear(today.getFullYear() - 100));
-// const newToday = new Date();
-// const tenYear = new Date(newToday.setFullYear(newToday.getFullYear() - 10));
 
 const insert = async (
   firstNames: string,

@@ -11,8 +11,8 @@ import dbPsychologists from '../../db/psychologists';
 const doctorName = 'doctorName';
 const doctorAddress = 'doctorAddress';
 const dateOfBirth = '20/01/1980';
-const tooOld = '20/01/1900';
-const tooYoung = '20/01/2017';
+const patientTooOld = '20/01/1900';
+const patientTooYoung = '20/01/2017';
 
 const makePatient = async (psychologistId) => {
   const psy = create.getOnePsy();
@@ -367,7 +367,7 @@ describe('patientsController', () => {
           hasPrescription: undefined,
           doctorName,
           doctorAddress,
-          dateOfBirth: tooOld,
+          dateOfBirth: patientTooOld,
         })
         .then(async (res) => {
           res.status.should.equal(400);
@@ -393,7 +393,7 @@ describe('patientsController', () => {
             hasPrescription: undefined,
             doctorName,
             doctorAddress,
-            dateOfBirth: tooYoung,
+            dateOfBirth: patientTooYoung,
           })
           .then(async (res) => {
             res.status.should.equal(400);

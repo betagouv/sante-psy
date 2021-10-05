@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Button, TextInput, Checkbox } from '@dataesr/react-dsfr';
-import DatePicker from 'react-datepicker';
+import DatePicker, { CalendarContainer } from 'react-datepicker';
 import DateInput from 'components/Date/DateInput';
 
 import { useStore } from 'stores/';
@@ -61,20 +61,17 @@ const AddEditPatient = () => {
       .catch(() => window.scrollTo(0, 0));
   };
 
-  // const calendarContainer = ({ className, children }) => (
-  //   <div style={{ padding: '16px', background: '#216ba5', color: '#fff' }}>
-  //     <CalendarContainer className={className}>
-  //       <div style={{ background: '#f0f0f0' }}>
-  //         What is your favorite day?
-  //       </div>
-  //       <div style={{ position: 'relative' }}>{children}</div>
-  //     </CalendarContainer>
-  //   </div>
-  // );
+  const calendarContainer = ({ className, children }) => (
+    <div>
+      <CalendarContainer className={className}>
+        <div>{children}</div>
+      </CalendarContainer>
+    </div>
+  );
 
-  // const today = new Date();
-  // const minPatientDateOfBirth = new Date(today.setFullYear(today.getFullYear() - 100));
-  // const maxPatientDateOfBirth = new Date(today.setFullYear(today.getFullYear() + 90));
+  const today = new Date();
+  const minPatientDateOfBirth = new Date(today.setFullYear(today.getFullYear() - 100));
+  const maxPatientDateOfBirth = new Date(today.setFullYear(today.getFullYear() + 90));
 
   return (
     <div className="fr-my-2w">
@@ -112,8 +109,8 @@ const AddEditPatient = () => {
             <DatePicker
               selected={patient.dateOfBirth}
               dateFormat="dd/MM/yyyy"
-              // minDate={minPatientDateOfBirth}
-              // maxDate={maxPatientDateOfBirth}
+              minDate={minPatientDateOfBirth}
+              maxDate={maxPatientDateOfBirth}
               onChange={
                   date => changePatient(date, 'dateOfBirth')
                 }
@@ -121,20 +118,7 @@ const AddEditPatient = () => {
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
-              // popperModifiers={[
-              //   {
-              //     name: 'offset',
-              //     options: { offset: [70, 10] },
-              //   },
-              //   {
-              //     name: 'preventOverflow',
-              //     options: {
-              //       rootBoundary: 'viewport',
-              //       tether: true,
-              //       altAxis: true,
-              //     },
-              //   },
-              // ]}
+              calendarContainer={calendarContainer}
               customInput={(
                 <DateInput
                   label={`Date de naissance (obligatoire uniquement pour vos patients enregistrés après le
