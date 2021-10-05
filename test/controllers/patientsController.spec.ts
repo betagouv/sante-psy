@@ -11,6 +11,8 @@ import dbPsychologists from '../../db/psychologists';
 const doctorName = 'doctorName';
 const doctorAddress = 'doctorAddress';
 const dateOfBirth = '20/01/1980';
+const tooOld = date.parseForm('20/01/1900');
+const tooYoung = date.parseForm('20/01/2017');
 
 const makePatient = async (psychologistId) => {
   const psy = create.getOnePsy();
@@ -347,6 +349,57 @@ describe('patientsController', () => {
           sinon.assert.calledWith(insertPatientStub, ...expected);
           done();
         });
+    });
+
+    it('should not insert if age > 100', async () => {
+      const psy = await create.insertOnePsy();
+
+      return chai.request(app)
+        .post('/api/patients')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send({
+          lastName: 'Lovelace',
+          firstNames: 'Ada',
+          INE: '12345678901',
+          institutionName: 'test',
+          isStudentStatusVerified: undefined,
+          hasPrescription: undefined,
+          doctorName,
+          doctorAddress,
+          tooOld,
+        })
+        .then(async (res) => {
+          res.status.should.equal(400);
+          res.body.message.should.equal(
+            'Votre étudiant ne peut avoir plus de 100 ans',
+          );
+        });
+    });
+
+    it('should not insert if age < 10', async () => {
+      const psy = await create.insertOnePsy();
+      return chai.request(app)
+          .post('/api/patients')
+          .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+          .set('xsrf-token', 'randomXSRFToken')
+          .send({
+            lastName: 'Lovelace',
+            firstNames: 'Ada',
+            INE: '12345678901',
+            institutionName: 'test',
+            isStudentStatusVerified: undefined,
+            hasPrescription: undefined,
+            doctorName,
+            doctorAddress,
+            tooYoung,
+          })
+          .then(async (res) => {
+            res.status.should.equal(200);
+            res.body.message.should.equal(
+              'Votre étudiant ne peut avoir moins de 10 ans',
+            );
+          });
     });
   });
 

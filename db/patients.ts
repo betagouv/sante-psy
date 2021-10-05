@@ -54,12 +54,6 @@ const insert = async (
   dateOfBirth?: Date,
 ): Promise<Patient> => {
   try {
-    // if (dateOfBirth && dateOfBirth.getFullYear() < hundredYear.getFullYear()) {
-    //   throw new CustomError('Votre étudiant ne peut avoir plus de 100 ans', 400);
-    // }
-    // if (dateOfBirth && dateOfBirth.getFullYear() > tenYear.getFullYear()) {
-    //   throw new CustomError('Votre étudiant ne peut avoir moins de 10 ans', 400);
-    // }
     const patientsArray = await db(patientsTable).insert({
       firstNames,
       lastName,

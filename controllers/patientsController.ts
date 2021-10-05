@@ -154,8 +154,11 @@ const create = async (req: Request, res: Response): Promise<void> => {
 
   const today = new Date();
   const hundredYear = new Date(today.setFullYear(today.getFullYear() - 100));
+  console.log(hundredYear, '100 ANS !!!');
   const newToday = new Date();
   const tenYear = new Date(newToday.setFullYear(newToday.getFullYear() - 10));
+  console.log(tenYear, '10 ANS !!!');
+  console.log(dateOfBirth, 'MON ANNIVERSAIRE !!!');
 
   const psychologistId = req.user.psychologist;
   let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
