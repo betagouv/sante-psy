@@ -154,9 +154,10 @@ const AddEditPatient = () => {
           </div>
         </>
         )}
-        <div className="fr-my-5w" id="save-etudiant-button">
+        <div className="fr-my-5w">
           <Button
             submit
+            id="save-etudiant-button"
             data-test-id="save-etudiant-button"
             icon={button.icon}
           >

@@ -55,18 +55,18 @@ const steps = [
   },
   {
     placement: 'top-start',
-    target: '#convention-button',
+    target: '#show-convention-form',
     shouldSkip: user => Promise.resolve(!user.convention || user.convention.isConventionSigned),
     content: "Ce bouton nous permet de suivre l'état de votre convention. Il est important de nous signaler quand celle-ci est signée.",
   },
   {
     placement: 'top-start',
-    target: '#change-profil-button',
+    target: '#show-profile-form-button',
     content: "Pour être visible sur l'annuaire (et être correctement référencé) : pensez à compléter votre profil. La description permet aux étudiants de connaître vos spécialités, le cas échéant.",
   },
   {
     placement: 'top-start',
-    target: '#view-profil-button',
+    target: '#show-public-profile-button',
     content: 'Pour voir ce à quoi les étudiants ont accès, vous pouvez cliquer sur ce bouton.',
   },
   {

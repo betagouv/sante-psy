@@ -26,15 +26,14 @@ const BillingTable = ({ filteredDate, appointments }) => {
     },
   ];
   return (
-    <div id="billing-table">
-      <Table
-        data-test-id="billing-table"
-        caption="Tableau récapitulatif"
-        columns={columns}
-        data={filteredDate.concat(['total'])}
-        rowKey={x => x}
-      />
-    </div>
+    <Table
+      id="billing-table"
+      data-test-id="billing-table"
+      caption="Tableau récapitulatif"
+      columns={columns}
+      data={filteredDate.concat(['total'])}
+      rowKey={x => x}
+    />
   );
 };
 

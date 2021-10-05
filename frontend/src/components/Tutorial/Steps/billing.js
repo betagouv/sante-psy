@@ -55,7 +55,7 @@ const steps = [
   {
     placement: 'top-start',
     target: '#billing-generation',
-    shouldSkip: (user) => {
+    shouldSkip: user => {
       if (!user.convention || !user.convention.isConventionSigned) {
         return Promise.resolve(true);
       }

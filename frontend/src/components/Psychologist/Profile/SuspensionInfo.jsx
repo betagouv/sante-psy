@@ -37,20 +37,19 @@ const SuspensionInfo = ({
               déclarer vos séances. Vous pourrez reactiver votre compte à tout moment.
             </p>
           )}
-          <div id="hide-profil-button">
-            <Button
-              data-test-id={psychologist.active ? 'suspend-redirection-button' : 'activate-button'}
-              icon={psychologist.active ? 'fr-fi-eye-off-line' : 'fr-fi-eye-line'}
-              className="fr-mb-2w"
-              onClick={() => (psychologist.active
-                ? setSuspensionMode(true)
-                : activatePsychologist())}
-            >
-              {psychologist.active
-                ? "Retirer mes informations de l'annuaire"
-                : "Remettre mes informations de l'annuaire"}
-            </Button>
-          </div>
+          <Button
+            id="hide-profil-button"
+            data-test-id={psychologist.active ? 'suspend-redirection-button' : 'activate-button'}
+            icon={psychologist.active ? 'fr-fi-eye-off-line' : 'fr-fi-eye-line'}
+            className="fr-mb-2w"
+            onClick={() => (psychologist.active
+              ? setSuspensionMode(true)
+              : activatePsychologist())}
+          >
+            {psychologist.active
+              ? "Retirer mes informations de l'annuaire"
+              : "Remettre mes informations de l'annuaire"}
+          </Button>
         </>
       )}
   </>

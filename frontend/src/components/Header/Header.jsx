@@ -97,16 +97,18 @@ const Header = () => {
         <HeaderNav>
           {psychologistPage && user
             ? connectedItems.map(item => (
-              <div
+              <NavItem
                 id={item.id}
                 key={item.key}
-              >
-                <NavItem
-                  current={location.pathname && location.pathname.startsWith(item.link)}
-                  title={item.title}
-                  asLink={<Link data-test-id={item.key} to={item.link} />}
-                />
-              </div>
+                current={location.pathname && location.pathname.startsWith(item.link)}
+                title={item.title}
+                asLink={(
+                  <Link
+                    data-test-id={item.key}
+                    to={item.link}
+                  />
+                  )}
+              />
             )) : (
               defaultItems.map(item => (
                 <NavItem

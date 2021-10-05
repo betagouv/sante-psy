@@ -101,16 +101,15 @@ const NewAppointment = () => {
         onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
         required
       />
-      <div id="new-appointment-submit">
-        <Button
-          data-test-id="new-appointment-submit"
-          submit
-          icon="fr-fi-add-line"
-          className="fr-mt-4w"
-        >
-          Créer la séance
-        </Button>
-      </div>
+      <Button
+        id="new-appointment-submit"
+        data-test-id="new-appointment-submit"
+        submit
+        icon="fr-fi-add-line"
+        className="fr-mt-4w"
+      >
+        Créer la séance
+      </Button>
     </form>
   );
 };

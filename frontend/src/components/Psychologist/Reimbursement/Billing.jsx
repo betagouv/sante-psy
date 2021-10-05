@@ -111,15 +111,14 @@ const Billing = () => {
                   Annuler
                 </Button>
               ) : (
-                <div id="billing-info">
-                  <Button
-                    secondary
-                    icon="fr-fi-edit-line"
-                    onClick={() => setFillInfo(true)}
-                  >
-                    Renseigner mes informations
-                  </Button>
-                </div>
+                <Button
+                  id="billing-info"
+                  secondary
+                  icon="fr-fi-edit-line"
+                  onClick={() => setFillInfo(true)}
+                >
+                  Renseigner mes informations
+                </Button>
               )}
               {canGenerateBill ? (
                 <a
