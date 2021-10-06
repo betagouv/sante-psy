@@ -273,6 +273,7 @@ describe('loginController', async () => {
             'otherAddress',
             'convention',
             'active',
+            'hasSeenTutorial',
           );
           res.body.dossierNumber.should.equal(psy.dossierNumber);
           res.body.firstNames.should.equal(psy.firstNames);
