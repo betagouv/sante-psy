@@ -41,7 +41,7 @@ const selectValidDateOfBirth = () => {
   return youngStudentDate;
 };
 
-const selectInvalidDateOfBirth = () => {
+const checkIfSelected = () => {
   const tooYoungStudentDate = new Date();
   tooYoungStudentDate.setFullYear(tooYoungStudentDate.getFullYear() - 9);
 
@@ -53,4 +53,4 @@ const selectInvalidDateOfBirth = () => {
   return tooYoungStudentDate;
 };
 
-export default { selectNextCalendarDate, selectValidDateOfBirth, selectInvalidDateOfBirth };
+export default { selectNextCalendarDate, selectValidDateOfBirth, checkIfSelected };

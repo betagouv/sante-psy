@@ -161,11 +161,9 @@ const create = async (req: Request, res: Response): Promise<void> => {
   let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
 
   if (dateOfBirth && dateOfBirth.getFullYear() < hundredYear.getFullYear()) {
-    infoMessage += 'Votre étudiant ne peut avoir plus de 100 ans';
     throw new CustomError('Votre étudiant ne peut avoir plus de 100 ans', 400);
   }
   if (dateOfBirth && dateOfBirth.getFullYear() > tenYear.getFullYear()) {
-    infoMessage += 'Votre étudiant ne peut avoir moins de 10 ans';
     throw new CustomError('Votre étudiant ne peut avoir moins de 10 ans', 400);
   }
   await dbPatients.insert(

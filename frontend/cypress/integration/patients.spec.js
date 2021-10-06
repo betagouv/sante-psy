@@ -1,7 +1,7 @@
 const { checkConvention } = require('../../src/services/conventionVerification');
 const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
-const { selectValidDateOfBirth, selectInvalidDateOfBirth } = require('./utils/calendar');
+const { selectValidDateOfBirth, checkIfSelected } = require('./utils/calendar');
 
 describe('Patient', () => {
   beforeEach(() => {
@@ -86,7 +86,7 @@ describe('Patient', () => {
       cy.get('[data-test-id="add-patient-date-input"]')
         .click();
 
-      selectInvalidDateOfBirth();
+      checkIfSelected();
     });
   });
 

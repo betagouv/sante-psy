@@ -62,11 +62,9 @@ const AddEditPatient = () => {
   };
 
   const calendarContainer = ({ className, children }) => (
-    <div>
-      <CalendarContainer className={className}>
-        <div>{children}</div>
-      </CalendarContainer>
-    </div>
+    <CalendarContainer className={className}>
+      {children}
+    </CalendarContainer>
   );
 
   const today = new Date();
