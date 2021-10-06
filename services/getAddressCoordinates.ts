@@ -1,5 +1,5 @@
 import axios from 'axios/index';
-import { Coordinates } from '../types/Coordinates';
+import { Coordinates, CoordinatesAPI } from '../types/Coordinates';
 import config from '../utils/config';
 
 const ADDRESS_DELIMITER = ';';
@@ -12,7 +12,7 @@ const getAddressCoordinates = async (address: string): Promise<Coordinates> => {
 
   const firstAddress = address.split(ADDRESS_DELIMITER)[0];
   const url = encodeURI(`https://api-adresse.data.gouv.fr/search/?q=${firstAddress}&limit=1`);
-  const response = await axios.get(url)
+  const response = await axios.get<CoordinatesAPI>(url)
     .catch((error) => {
       console.log('error', error);
     });
