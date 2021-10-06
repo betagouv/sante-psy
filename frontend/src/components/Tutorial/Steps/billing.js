@@ -5,7 +5,7 @@ const steps = [
     placement: 'center',
     target: 'body',
     title: 'Gérer mes facturations',
-    content: 'Cette page vous permet de gérér vos informations de facturation et de générer vos factures pour les Service de Santé Universitaire.',
+    content: 'Cette page vous permet de gérér vos informations de facturation et de générer vos factures pour les Services de Santé Universitaire.',
   },
   {
     placement: 'top-start',
@@ -24,7 +24,7 @@ const steps = [
           && appointmentDate.getMonth() === now.getMonth();
       }));
     },
-    content: "Vous n'avez pas déclarer de séances pour ce mois-ci, il n'y a donc pas de facture à generer. Commencez par déclarer des séances depuis l'onglet dédié ou générez une facture pour un autre mois.",
+    content: "Vous n'avez pas déclarer de séances pour ce mois-ci, il n'y a donc pas de facture à générer. Commencez par déclarer des séances depuis l'onglet dédié ou générez une facture pour un autre mois.",
   },
   {
     placement: 'top-start',

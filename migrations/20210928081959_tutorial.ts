@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.table('psychologists', (table) => {
-    table.boolean('hasSeenTutorial');
+    table.boolean('hasSeenTutorial').notNullable().defaultTo(false);
   });
 }
 

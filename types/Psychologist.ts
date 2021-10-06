@@ -35,7 +35,7 @@ export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
     selfModified?: boolean,
     active?: boolean,
     inactiveUntil?: Date,
-    hasSeenTutorial?: boolean,
+    hasSeenTutorial: boolean,
     updatedAt?: Date,
     createdAt: Date,
   };

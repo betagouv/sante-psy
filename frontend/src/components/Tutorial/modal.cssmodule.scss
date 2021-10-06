@@ -1,8 +1,8 @@
 .tooltip {
-    background-color: rgb(255, 255, 255);
+    background-color: var(--w);
     border-radius: 5px;
     box-sizing: border-box;
-    color: rgb(51, 51, 51);
+    color: var(--bf500);
     font-size: 16px;
     max-width: 100%;
     padding: 15px;
