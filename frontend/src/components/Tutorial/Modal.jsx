@@ -21,7 +21,7 @@ const Modal = ({ step, tooltipProps, closeProps, skipProps, primaryProps, backPr
       <>
         {index > 0 && (
           <Button {...backProps} className={styles.backButton} secondary data-test-id="previous-step">
-            Précedent
+            Précédent
           </Button>
         )}
         <Button {...primaryProps} className={styles.nextButton} data-test-id="next-step">

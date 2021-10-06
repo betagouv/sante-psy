@@ -8,7 +8,7 @@ const steps = [
   {
     placement: 'top-start',
     target: '#new-appointment-button',
-    content: "Pour ce faire, il suffit de cliquer sur ce bouton et de preciser la date de la séance ainsi que l'étudiant concerné.",
+    content: "Pour ce faire, il suffit de cliquer sur ce bouton et de préciser la date de la séance ainsi que l'étudiant concerné.",
   },
   {
     placement: 'top-start',

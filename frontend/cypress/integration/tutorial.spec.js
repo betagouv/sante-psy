@@ -48,7 +48,7 @@ describe('Global tutorial', () => {
   });
 
   it('should display full tuto in both directions', () => {
-    checkAllSteps(12);
+    checkAllSteps(13);
     cy.reload();
     cy.wait('@connecteduser');
     cy.get('[data-test-id="next-step"]')

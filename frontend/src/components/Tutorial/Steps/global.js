@@ -16,7 +16,7 @@ const steps = [
   {
     placement: 'top-start',
     target: '#new-appointment-button',
-    content: "Pour ce faire, il suffit de cliquer sur ce bouton et de preciser la date de la séance ainsi que l'étudiant concerné.",
+    content: "Pour ce faire, il suffit de cliquer sur ce bouton et de préciser la date de la séance ainsi que l'étudiant concerné.",
   },
   {
     placement: 'top-start',
@@ -77,7 +77,12 @@ const steps = [
   {
     placement: 'top-start',
     target: '#faq-button',
-    content: 'Ce tour est maintenant fini. Si vous avez la moindre question, consulter la foire aux questions',
+    content: 'Ce tour est maintenant fini. Si vous avez la moindre question, consulter la foire aux questions.',
+  },
+  {
+    placement: 'bottom-end',
+    target: '#launch-tutorial',
+    content: 'Et vous pouvez retrouvez ces informations à tout moment sur chaque page en cliquant ici.',
   },
   {
     placement: 'center',
