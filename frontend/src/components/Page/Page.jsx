@@ -45,6 +45,7 @@ const Page = ({
           <div className={styles.container} data-test-id={dataTestId}>
             {tutorial && (
               <div
+                data-test-id="launch-tutorial"
                 className={styles.tutorial}
                 onClick={() => setTutoStatus({ run: true, stepIndex: 0 })}
               >
