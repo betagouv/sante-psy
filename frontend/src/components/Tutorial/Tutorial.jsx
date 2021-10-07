@@ -56,7 +56,7 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
     if (!user.hasSeenTutorial && id === 'global') {
       seeTutorial();
     }
-  }
+  };
 
   const joyrideCallback = data => {
     const { action, type, index, step } = data;
