@@ -36,7 +36,7 @@ const Page = ({
       <Tutorial
         tutoStatus={tutoStatus}
         setTutoStatus={setTutoStatus}
-        id={user && !user.hasSeenTutorial ? 'global' : tutorial}
+        id={(user && !user.hasSeenTutorial) ? 'global' : tutorial}
       >
         <Container
           spacing="py-4w"
