@@ -100,7 +100,7 @@ const InactiveProfile = () => {
                   .then(() => {
                     setDone({
                       title: "Vos informations ne sont plus visibles sur l'annuaire",
-                      description: 'Vous pouvez redevenir visible à tout moment sur votre espace psychologue',
+                      description: 'Vous pouvez redevenir visible à tout moment depuis votre espace psychologue dans la rubrique Mes informations',
                     });
                     window.scrollTo(0, 0);
                   })
