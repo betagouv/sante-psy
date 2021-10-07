@@ -67,6 +67,7 @@ const steps = [
   {
     placement: 'top-start',
     target: '#show-public-profile-button',
+    shouldSkip: () => agent.Psychologist.getProfile().then(psychologist => !psychologist.active),
     content: 'Pour voir ce à quoi les étudiants ont accès, vous pouvez cliquer sur ce bouton.',
   },
   {
