@@ -52,6 +52,12 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
     return Promise.resolve(nextIndex);
   };
 
+  const handleUserHasSeenTutorial = () => {
+    if (!user.hasSeenTutorial && id === 'global') {
+      seeTutorial();
+    }
+  }
+
   const joyrideCallback = data => {
     const { action, type, index, step } = data;
     const finishedAction = [ACTIONS.CLOSE, ACTIONS.SKIP];
@@ -65,9 +71,7 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
     }
 
     if (finishedAction.includes(action)) {
-      if (!user.hasSeenTutorial) {
-        seeTutorial();
-      }
+      handleUserHasSeenTutorial();
       setTutoStatus({ run: false, stepIndex: index });
     } else if (type === EVENTS.STEP_AFTER) {
       if (step.onNext && action === ACTIONS.NEXT) {
@@ -79,6 +83,9 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
       const increment = i => (action === ACTIONS.NEXT ? i + 1 : i - 1);
       nextStep(index, increment)
         .then(stepIndex => setTutoStatus({ run: stepIndex < steps.length ? tutoStatus.run : false, stepIndex }));
+    } else if (type === EVENTS.TARGET_NOT_FOUND || type === EVENTS.ERROR) {
+      // Consider user has seen tutorial in case of error to avoid blocking behavior
+      handleUserHasSeenTutorial();
     }
   };
 
