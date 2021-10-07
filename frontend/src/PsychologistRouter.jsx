@@ -38,33 +38,42 @@ const PsychologistRouter = () => {
         return {
           title: 'Nouvelle séance',
           description: 'Vous avez réalisé une séance avec un étudiant ou une étudiante. Renseignez-la sur cette page.',
+          tutorial: 'new-appointment',
         };
       case 'mes-etudiants':
         return {
           title: 'Gérer mes étudiants',
           description: 'Veuillez enregistrer vos nouveaux étudiants afin de déclarer leurs séances pour procéder à vos remboursements.',
+          tutorial: 'students',
         };
       case 'nouvel-etudiant':
         return {
           title: 'Nouvel étudiant',
           description: 'Déclarez un étudiant comme étant patient du dispositif Santé Psy Étudiant. Vous pourrez ensuite déclarer les séances réalisées avec cet étudiant.',
+          tutorial: 'new-student',
         };
       case 'modifier-etudiant':
-        return { title: "Compléter les informations de l'étudiant" };
+        return {
+          title: "Compléter les informations de l'étudiant",
+          tutorial: 'new-student',
+        };
       case 'mes-remboursements':
         return {
           title: 'Gérer mes facturations',
           description: 'Vous pouvez éditer et générer vos factures sur cet espace avant de les envoyer au Service de Santé Universitaire afin de vous faire rembourser.',
+          tutorial: 'billing',
         };
       case 'mon-profil':
         return {
           title: 'Mes informations',
           description: 'En tant que psychologue de Santé Psy Étudiant, vous avez la possibilité de gérer les informations au sein de notre annuaire.',
+          tutorial: 'profile',
         };
       default:
         return {
           title: 'Déclarer mes séances',
           description: 'La déclaration des séances en ligne est nécessaire à votre remboursement.',
+          tutorial: 'appointments',
         };
     }
   };

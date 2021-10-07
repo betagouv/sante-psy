@@ -160,6 +160,7 @@ const PsyProfile = () => {
                   className="fr-mb-1w"
                 >
                   <Button
+                    id="show-profile-form-button"
                     data-test-id="show-profile-form-button"
                     title="Modify"
                     icon="fr-fi-edit-line"
@@ -168,25 +169,30 @@ const PsyProfile = () => {
                     Modifier mes informations
                   </Button>
                   {psychologist.active && (
-                  <Button
-                    data-test-id="show-public-profile-button"
-                    title="profil public"
-                    icon="fr-fi-arrow-right-line"
-                    secondary
-                    onClick={() => history.push(`/trouver-un-psychologue/${user.dossierNumber}`)}
-                  >
-                    Voir mon profil public
-                  </Button>
+                    <Button
+                      id="show-public-profile-button"
+                      data-test-id="show-public-profile-button"
+                      title="profil public"
+                      icon="fr-fi-arrow-right-line"
+                      secondary
+                      onClick={() => history.push(`/trouver-un-psychologue/${user.dossierNumber}`)}
+                    >
+                      Voir mon profil public
+                    </Button>
                   )}
                 </ButtonGroup>
                 {informations.map(info => {
                   const value = typeof info.key === 'string' ? psychologist[info.key] : info.key(psychologist);
-                  return value ? (
-                    <p className="fr-mb-1v" key={info.label}>
-                      <b>{`${info.label} : `}</b>
-                      {value}
-                    </p>
-                  ) : <></>;
+                  return (
+                    <div key={info.label}>
+                      {value ? (
+                        <p className="fr-mb-1v">
+                          <b>{`${info.label} : `}</b>
+                          {value}
+                        </p>
+                      ) : <></>}
+                    </div>
+                  );
                 })}
               </>
             )}

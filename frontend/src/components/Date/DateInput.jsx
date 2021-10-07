@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 
-const DateInput = forwardRef(({ value, onClick, label, dataTestId, required }, ref) => (
+const DateInput = forwardRef(({ value, onClick, label, dataTestId, required, id }, ref) => (
   <div
     onClick={onClick}
     ref={ref}
@@ -13,10 +13,10 @@ const DateInput = forwardRef(({ value, onClick, label, dataTestId, required }, r
     </label>
     )}
     <input
+      id={id}
       data-test-id={dataTestId}
       className="fr-input"
       type="text"
-      id="date"
       name="date"
       required={required}
       autoComplete="off"

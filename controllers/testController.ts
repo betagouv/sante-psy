@@ -30,8 +30,14 @@ const removeConvention = async (req: Request, res: Response) : Promise<void> => 
   res.status(200).json('Convention removed');
 };
 
+const resetTutorial = async (req: Request, res: Response) : Promise<void> => {
+  await dbPsychologists.resetTutorial(req.params.email);
+  res.status(200).json('Tuto reseted');
+};
+
 export default {
   getPsychologist,
   resetDB,
   removeConvention,
+  resetTutorial,
 };

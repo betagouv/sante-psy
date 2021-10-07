@@ -14,6 +14,8 @@ router.post('/suspend',
   psyProfileController.suspendValidators,
   psyProfileController.suspend);
 
+router.put('/seeTutorial', psyProfileController.seeTutorial);
+
 router.put('/',
   psyProfileController.updateValidators,
   psyProfileController.update);

@@ -73,16 +73,18 @@ const Billing = () => {
       <div className="fr-my-2w">
         <h3>Générer ma facture</h3>
         {!canGenerateBill && (
-        <Notification type="info">
-          Veuillez attendre la signature de votre convention avant d&lsquo;envoyer votre facture.
-          Renseignez le statut de votre convention dans la page
-          {' '}
-          <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
-        </Notification>
+          <div id="no-convention-alert">
+            <Notification type="info">
+              Veuillez attendre la signature de votre convention avant d&lsquo;envoyer votre facture.
+              Renseignez le statut de votre convention dans la page
+              {' '}
+              <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
+            </Notification>
+          </div>
         )}
         <div className={styles.monthPickerContainer}>
           Générer ma facture pour le mois de :
-          <div className={styles.monthPicker}>
+          <div className={styles.monthPicker} id="billing-month">
             <MonthPicker month={month} setMonth={setMonth} />
           </div>
         </div>
@@ -110,6 +112,7 @@ const Billing = () => {
                 </Button>
               ) : (
                 <Button
+                  id="billing-info"
                   secondary
                   icon="fr-fi-edit-line"
                   onClick={() => setFillInfo(true)}
@@ -119,6 +122,7 @@ const Billing = () => {
               )}
               {canGenerateBill ? (
                 <a
+                  id="billing-generation"
                   className="fr-btn"
                   href={`/psychologue/bill/${month.month}/${month.year}`}
                   target="_blank"
@@ -163,7 +167,7 @@ const Billing = () => {
             </p>
           </>
         ) : (
-          <p className="fr-mb-2w">
+          <p className="fr-mb-2w" id="no-appointments">
             Vous n&lsquo;avez pas encore déclaré de séances pour le mois de
             {` ${formatMonth(month)}`}
             , vous retrouverez ici votre récapitulatif de séances dans le but de créer vous même votre facture

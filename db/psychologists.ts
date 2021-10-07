@@ -324,6 +324,32 @@ const active = async (
   await db('inactive_token').update({ confirm: true }).where({ token });
 };
 
+const resetTutorial = async (email: string): Promise<number> => {
+  try {
+    return db(psychologistsTable)
+      .where('personalEmail', email)
+      .update({
+        hasSeenTutorial: false,
+      });
+  } catch (err) {
+    console.error('Erreur de modification du psychologue', err);
+    throw new Error('Erreur de modification du psychologue');
+  }
+};
+
+const seeTutorial = async (dossierNumber: string): Promise<number> => {
+  try {
+    return db(psychologistsTable)
+      .where('dossierNumber', dossierNumber)
+      .update({
+        hasSeenTutorial: true,
+      });
+  } catch (err) {
+    console.error('Erreur de modification du psychologue', err);
+    throw new Error('Erreur de modification du psychologue');
+  }
+};
+
 export default {
   getAllActive,
   getById,
@@ -343,4 +369,6 @@ export default {
   deleteConventionInfo,
   inactive,
   active,
+  seeTutorial,
+  resetTutorial,
 };

@@ -80,6 +80,7 @@ const Appointments = () => {
       </Callout>
       <div className="fr-my-2w">
         <HashLink
+          id="new-appointment-button"
           to="/psychologue/nouvelle-seance"
           className="fr-btn fr-fi-add-line fr-btn--icon-left"
         >
@@ -91,24 +92,26 @@ const Appointments = () => {
       <div className="fr-mb-2w">
         Veuillez trouver ci-dessous vos séances déclarées pour le mois sélectionné :
         <div className="fr-mt-1w">
-          <MonthPicker month={month} setMonth={setMonth} />
+          <MonthPicker month={month} setMonth={setMonth} id="appointment-month" />
         </div>
       </div>
-      {filteredAppointments.length > 0 ? (
-        <Table
-          data-test-id="appointments-table"
-          columns={columns}
-          data={filteredAppointments}
-          rowKey="id"
-        />
-      ) : (
-        <div>
-          Vous n‘avez pas déclaré de séances pour le mois de
-          {' '}
-          { formatMonth(month) }
-          .
-        </div>
-      )}
+      <div id="appointments-table">
+        {filteredAppointments.length > 0 ? (
+          <Table
+            data-test-id="appointments-table"
+            columns={columns}
+            data={filteredAppointments}
+            rowKey="id"
+          />
+        ) : (
+          <div>
+            Vous n‘avez pas déclaré de séances pour le mois de
+            {' '}
+            { formatMonth(month) }
+            .
+          </div>
+        )}
+      </div>
     </>
   );
 };

@@ -101,6 +101,7 @@ describe('Update psy fields', () => {
         isConventionSigned: true,
         selfModified: true,
         active: true,
+        hasSeenTutorial: false,
         inactiveUntil: new Date(),
         createdAt: creationDate,
       };
@@ -123,6 +124,7 @@ describe('Update psy fields', () => {
         'selfModified',
         'active',
         'inactiveUntil',
+        'hasSeenTutorial',
       ].forEach((key) => {
         expect(editablePsy).to.not.have.own.property(key);
         expect(nonEditablePsy).to.not.have.own.property(key);

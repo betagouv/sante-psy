@@ -123,6 +123,7 @@ describe('DS integration tests', () => {
     personalEmail: 'paul.burgun@beta.gouv.fr',
     isConventionSigned: null,
     selfModified: false,
+    hasSeenTutorial: false,
   };
   const xavierId = '03ce077a-84c3-5035-9b27-f31a78a19b3a';
   const xavier = {
@@ -150,6 +151,7 @@ describe('DS integration tests', () => {
     personalEmail: 'xavier.desoindre@beta.gouv.fr',
     isConventionSigned: null,
     selfModified: false,
+    hasSeenTutorial: false,
   };
 
   beforeEach(async () => {

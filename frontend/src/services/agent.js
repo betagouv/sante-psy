@@ -77,6 +77,8 @@ const Psychologist = {
     .post(`/psychologist/${token}/active`),
   updateProfile: psychologist => client
     .put(`/psychologist/${store.userStore.user.dossierNumber}`, psychologist),
+  seeTutorial: () => client.put(`/psychologist/${store.userStore.user.dossierNumber}/seeTutorial`),
+
 };
 
 const Statistics = { getAll: () => client.get('/statistics') };

@@ -196,6 +196,14 @@ const suspend = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+const seeTutorial = async (req: Request, res: Response): Promise<void> => {
+  await dbPsychologists.seeTutorial(req.user.psychologist);
+
+  res.json({
+    message: 'Tutorial vu !',
+  });
+};
+
 export default {
   getValidators,
   updateValidators,
@@ -204,4 +212,5 @@ export default {
   update: asyncHelper(update),
   activate: asyncHelper(activate),
   suspend: asyncHelper(suspend),
+  seeTutorial: asyncHelper(seeTutorial),
 };

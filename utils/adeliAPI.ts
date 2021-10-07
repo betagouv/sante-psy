@@ -1,6 +1,6 @@
 import axios from 'axios/index';
 
-import { AdeliInfo } from '../types/AdeliInfo';
+import { AdeliAPI, AdeliInfo } from '../types/AdeliInfo';
 
 const client = axios.create({
   baseURL: 'https://api-annuaire-sante.herokuapp.com/annuaire',
@@ -17,7 +17,7 @@ const getAdeliInfo = (ids: string[]) : Promise<{[key: string]: AdeliInfo}> => {
   const validIds = preprocessIds(ids);
   const url = `annuaire.json?Identification+nationale+PP__in=${validIds.join('%2C')}`;
   console.debug(url);
-  return client.get(url).then((response) => {
+  return client.get<AdeliAPI>(url).then((response) => {
     const { columns } = response.data;
     const adeliInfoByIds = {};
     response.data.rows.forEach((row) => {
