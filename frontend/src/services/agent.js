@@ -71,6 +71,10 @@ const Psychologist = {
   getProfile: id => client.get(`/psychologist/${id || store.userStore.user.dossierNumber}`),
   suspend: (reason, date) => client
     .post(`/psychologist/${store.userStore.user.dossierNumber}/suspend`, { reason, date }),
+  inactive: (reason, token) => client
+    .post(`/psychologist/${token}/inactive`, { reason }),
+  active: token => client
+    .post(`/psychologist/${token}/active`),
   updateProfile: psychologist => client
     .put(`/psychologist/${store.userStore.user.dossierNumber}`, psychologist),
   seeTutorial: () => client.put(`/psychologist/${store.userStore.user.dossierNumber}/seeTutorial`),

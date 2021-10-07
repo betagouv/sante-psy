@@ -71,9 +71,24 @@ const SuspendProfile = ({ suspendPsychologist, cancelSuspension }) => {
           value="holidays"
         />
         <Radio
+          data-test-id="radio-reason-toofew"
+          label="Je ne reçois pas assez de demandes"
+          value="toofew"
+        />
+        <Radio
           data-test-id="radio-reason-toomuch"
           label="Je reçois trop de demandes"
           value="toomuch"
+        />
+        <Radio
+          data-test-id="radio-reason-connection"
+          label="Je n'arrive pas à me connecter"
+          value="connection"
+        />
+        <Radio
+          data-test-id="radio-reason-disagree"
+          label="Je ne suis plus en accord avec le dispositif"
+          value="disagree"
         />
         <Radio
           data-test-id="radio-reason-reimbursments"
