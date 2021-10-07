@@ -38,6 +38,7 @@ const SuspensionInfo = ({
             </p>
           )}
           <Button
+            id="hide-profil-button"
             data-test-id={psychologist.active ? 'suspend-redirection-button' : 'activate-button'}
             icon={psychologist.active ? 'fr-fi-eye-off-line' : 'fr-fi-eye-line'}
             className="fr-mb-2w"

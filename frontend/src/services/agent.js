@@ -73,6 +73,8 @@ const Psychologist = {
     .post(`/psychologist/${store.userStore.user.dossierNumber}/suspend`, { reason, date }),
   updateProfile: psychologist => client
     .put(`/psychologist/${store.userStore.user.dossierNumber}`, psychologist),
+  seeTutorial: () => client.put(`/psychologist/${store.userStore.user.dossierNumber}/seeTutorial`),
+
 };
 
 const Statistics = { getAll: () => client.get('/statistics') };

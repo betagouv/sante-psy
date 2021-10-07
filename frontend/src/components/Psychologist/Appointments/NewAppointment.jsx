@@ -47,42 +47,45 @@ const NewAppointment = () => {
 
   return (
     <form onSubmit={createNewAppointment} className="fr-my-2w">
-      {patients.length > 0 ? (
-        <SearchableSelect
-          className="midlength-select"
-          data-test-id="new-appointment-etudiant-input"
-          id="etudiants"
-          name="patientId"
-          label="Etudiant"
-          selected={patientId}
-          hint={(
-            <>
-              Votre étudiant n&lsquo;est pas dans la liste ?
-              {' '}
-              <HashLink to="/psychologue/nouvel-etudiant">Ajoutez un nouvel étudiant</HashLink>
-            </>
+      <div id="patients-list">
+        {patients.length > 0 ? (
+          <SearchableSelect
+            className="midlength-select"
+            data-test-id="new-appointment-etudiant-input"
+            id="etudiants"
+            name="patientId"
+            label="Etudiant"
+            selected={patientId}
+            hint={(
+              <>
+                Votre étudiant n&lsquo;est pas dans la liste ?
+                {' '}
+                <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">Ajoutez un nouvel étudiant</HashLink>
+              </>
               )}
-          onChange={e => { setPatientId(e); }}
-          required
-          options={allOptions}
-        />
-      ) : (
-        <Select
-          className="midlength-select"
-          label="Etudiant"
-          disabled
-          required
-          options={[]}
-          hint={(
-            <>
-              Vous n&lsquo;avez aucun étudiant dans votre liste!
-              {' '}
-              <HashLink to="/psychologue/nouvel-etudiant">Ajoutez un nouvel étudiant</HashLink>
-            </>
+            onChange={e => { setPatientId(e); }}
+            required
+            options={allOptions}
+          />
+        ) : (
+          <Select
+            className="midlength-select"
+            label="Etudiant"
+            disabled
+            required
+            options={[]}
+            hint={(
+              <>
+                Vous n&lsquo;avez aucun étudiant dans votre liste!
+                {' '}
+                <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">Ajoutez un nouvel étudiant</HashLink>
+              </>
           )}
-        />
-      )}
+          />
+        )}
+      </div>
       <DatePicker
+        id="new-appointment-date-input"
         className="date-picker"
         selected={date}
         minDate={beginningDate}
@@ -99,6 +102,7 @@ const NewAppointment = () => {
         required
       />
       <Button
+        id="new-appointment-submit"
         data-test-id="new-appointment-submit"
         submit
         icon="fr-fi-add-line"

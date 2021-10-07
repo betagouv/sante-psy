@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import Picker from 'react-month-picker';
 import { shortFrenchMonthNames, formatMonth } from 'services/date';
 
-const MonthPicker = ({ month, setMonth }) => {
+const MonthPicker = ({ month, setMonth, id }) => {
   const calendar = useRef(null);
 
   return (
@@ -14,6 +14,7 @@ const MonthPicker = ({ month, setMonth }) => {
       onChange={(y, m) => { setMonth({ month: m, year: y }); calendar.current.dismiss(); }}
     >
       <input
+        id={id}
         className="fr-input short-input"
         onChange={() => {}}
         onClick={() => calendar.current.show()}

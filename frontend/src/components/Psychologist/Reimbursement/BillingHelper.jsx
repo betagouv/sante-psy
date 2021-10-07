@@ -5,12 +5,12 @@ import { ButtonGroup } from '@dataesr/react-dsfr';
 const BillingHelper = () => (
   <>
     <h3>Les élements à apparaître sur votre facturation</h3>
-    <p className="fr-mb-1w">
+    <p className="fr-mb-1w" id="student-billing-info">
       Le nom des étudiants est couvert par le secret médical,
       ne le communiquez pas sur la facture.
       Le nombre d&lsquo;étudiant suffit.
     </p>
-    <p className="fr-mb-1w">
+    <p className="fr-mb-1w" id="tva-billing-info">
       Si le prestataire n’est pas assujetti à la TVA,
       la facture doit comporter la mention «TVA non applicable, art.293 B du CGI »
     </p>

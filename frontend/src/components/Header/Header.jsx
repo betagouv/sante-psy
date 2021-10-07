@@ -26,8 +26,8 @@ const defaultItems = [
 const connectedItems = [
   { key: 'header-connected-link-1', title: 'Déclarer mes séances', link: '/psychologue/mes-seances' },
   { key: 'header-connected-link-2', title: 'Gérer mes étudiants', link: '/psychologue/mes-etudiants' },
-  { key: 'header-connected-link-3', title: 'Gérer mes facturations', link: '/psychologue/mes-remboursements' },
-  { key: 'header-connected-link-4', title: 'Mes informations', link: '/psychologue/mon-profil' },
+  { key: 'header-connected-link-3', title: 'Gérer mes facturations', link: '/psychologue/mes-remboursements', id: 'billing-header' },
+  { key: 'header-connected-link-4', title: 'Mes informations', link: '/psychologue/mon-profil', id: 'informations-header' },
 ];
 
 const Header = () => {
@@ -98,10 +98,16 @@ const Header = () => {
           {psychologistPage && user
             ? connectedItems.map(item => (
               <NavItem
+                id={item.id}
                 key={item.key}
                 current={location.pathname && location.pathname.startsWith(item.link)}
                 title={item.title}
-                asLink={<Link data-test-id={item.key} to={item.link} />}
+                asLink={(
+                  <Link
+                    data-test-id={item.key}
+                    to={item.link}
+                  />
+                  )}
               />
             )) : (
               defaultItems.map(item => (

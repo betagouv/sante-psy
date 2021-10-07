@@ -1,0 +1,42 @@
+.tooltip {
+    background-color: var(--w);
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: var(--bf500);
+    font-size: 16px;
+    max-width: 100%;
+    padding: 15px;
+    position: relative;
+    text-align: center;
+    width: 550px;
+}
+
+.title {
+    font-size: 18px;
+    margin: 0px;
+}
+
+.content {
+    padding: 24px 12px;
+    white-space: pre-wrap;
+}
+
+.footer {
+    display: flow-root;
+    margin-top: 16px;
+}
+
+.backButton {
+    float: left;
+}
+
+.nextButton {
+    float: right;
+}
+
+.closeButton {
+    cursor: pointer;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}

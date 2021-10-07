@@ -5,3 +5,8 @@ export type AdeliInfo = {
     'Code profession': number,
     'Libellé profession': string,
 }
+
+export type AdeliAPI = {
+    columns: string[]
+    rows: string[][]
+}

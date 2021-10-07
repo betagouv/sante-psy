@@ -310,6 +310,32 @@ const reactivate = async (): Promise<number> => db(psychologistsTable)
     .andWhere('inactiveUntil', '<=', (new Date()).toISOString())
     .update({ active: true, inactiveUntil: null });
 
+const resetTutorial = async (email: string): Promise<number> => {
+  try {
+    return db(psychologistsTable)
+      .where('personalEmail', email)
+      .update({
+        hasSeenTutorial: false,
+      });
+  } catch (err) {
+    console.error('Erreur de modification du psychologue', err);
+    throw new Error('Erreur de modification du psychologue');
+  }
+};
+
+const seeTutorial = async (dossierNumber: string): Promise<number> => {
+  try {
+    return db(psychologistsTable)
+      .where('dossierNumber', dossierNumber)
+      .update({
+        hasSeenTutorial: true,
+      });
+  } catch (err) {
+    console.error('Erreur de modification du psychologue', err);
+    throw new Error('Erreur de modification du psychologue');
+  }
+};
+
 export default {
   getAllActive,
   getById,
@@ -327,4 +353,6 @@ export default {
   getConventionInfo,
   updateConventionInfo,
   deleteConventionInfo,
+  seeTutorial,
+  resetTutorial,
 };

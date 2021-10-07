@@ -132,6 +132,7 @@ const getOnePsy = (
     isConventionSigned: false,
     createdAt: new Date(),
     active: true,
+    hasSeenTutorial: true,
     ...getAddress(),
     ...psychologist,
   };

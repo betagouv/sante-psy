@@ -27,6 +27,7 @@ const BillingTable = ({ filteredDate, appointments }) => {
   ];
   return (
     <Table
+      id="billing-table"
       data-test-id="billing-table"
       caption="Tableau récapitulatif"
       columns={columns}

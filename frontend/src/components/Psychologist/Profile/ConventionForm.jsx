@@ -44,28 +44,29 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
             <b>{user.convention ? user.convention.universityName : ''}</b>
             .
           </legend>
-          <RadioGroup
-            name="convention"
-            legend="Avez-vous déjà signé la convention ?"
-            hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
+          <div id="convention-form">
+            <RadioGroup
+              name="convention"
+              legend="Avez-vous déjà signé la convention ?"
+              hint="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
             Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
-            value={defaultValueConventionSigned}
-            onChange={value => setConvention({ ...convention, isConventionSigned: value === 'true' })}
-            required
-            isInline
-          >
-            <Radio
-              data-test-id="signed-true"
-              label="Oui"
-              value="true"
-            />
-            <Radio
-              data-test-id="signed-false"
-              label="Non"
-              value="false"
-            />
-          </RadioGroup>
-
+              value={defaultValueConventionSigned}
+              onChange={value => setConvention({ ...convention, isConventionSigned: value === 'true' })}
+              required
+              isInline
+            >
+              <Radio
+                data-test-id="signed-true"
+                label="Oui"
+                value="true"
+              />
+              <Radio
+                data-test-id="signed-false"
+                label="Non"
+                value="false"
+              />
+            </RadioGroup>
+          </div>
           <Button
             submit
             data-test-id="update-convention-button"
