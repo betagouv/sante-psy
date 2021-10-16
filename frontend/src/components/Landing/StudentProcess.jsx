@@ -40,6 +40,7 @@ const StudentProcess = () => (
       href={`${__API__}/static/documents/parcours_etudiant_sante_psy_etudiant.pdf`}
       target="_blank"
       rel="noreferrer"
+      title="Parcours étudiant"
     >
       En savoir plus
     </a>

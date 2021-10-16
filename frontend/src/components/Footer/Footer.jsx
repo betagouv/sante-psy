@@ -26,7 +26,7 @@ const footerBottomLinks = [
     link: '/donnees-personnelles-et-gestion-des-cookies',
   },
   { key: 'footer-bottom-link-3', title: 'Mentions légales', link: '/mentions-legales' },
-  { key: 'footer-bottom-link-4', title: 'En savoir plus', link: '/faq' },
+  { key: 'footer-bottom-link-4', title: 'En savoir plus', link: '/faq', alt: 'FAQ' },
   { key: 'footer-bottom-link-5', title: 'Nos statistiques', link: '/stats' },
 ];
 
@@ -35,7 +35,6 @@ const FooterDescription = () => (
     Le code source est ouvert et les contributions sont bienvenues.
     {' '}
     <Link
-      title="Voir le code source"
       href="https://github.com/betagouv/sante-psy"
       target="_blank"
       rel="noopener noreferrer"
@@ -63,11 +62,12 @@ const Footer = () => {
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
+                  title={item.alt}
                 >
                   {item.title}
                 </Link>
               ) : (
-                <HashLink to={item.link}>
+                <HashLink title={item.alt} to={item.link}>
                   {item.title}
                 </HashLink>
               )}
