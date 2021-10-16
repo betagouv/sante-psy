@@ -12,6 +12,7 @@ import Footer from 'components/Footer/Footer';
 import Logout from 'components/Login/Logout';
 import Login from 'components/Login/Login';
 import Faq from 'components/Faq/Faq';
+import CGU from 'components/CGU/CGU';
 import LegalNotice from 'components/LegalNotice/LegalNotice';
 import PersonalData from 'components/PersonalData/PersonalData';
 import Statistics from 'components/Statistics/Statistics';
@@ -62,6 +63,7 @@ function App() {
             <Route exact path="/trouver-un-psychologue/:psyId" component={PublicPsychologistProfile} />
             <Route exact path="/mentions-legales" component={LegalNotice} />
             <Route exact path="/donnees-personnelles-et-gestion-des-cookies" component={PersonalData} />
+            <Route exact path="/cgu" component={CGU} />
             <Route exact path="/faq" component={Faq} />
             <Route exact path="/stats" component={Statistics} />
             <Route exact path="/contact" component={Contact} />
