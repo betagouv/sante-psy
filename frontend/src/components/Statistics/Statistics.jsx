@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 
 import { useStore } from 'stores/';
@@ -9,6 +9,11 @@ import styles from './statistics.cssmodule.scss';
 
 const Statistics = () => {
   const { commonStore: { config } } = useStore();
+
+  useEffect(() => {
+    document.title = 'Statistiques - Santé Psy Étudiant';
+  }, []);
+
   if (!config.statistics) {
     return <></>;
   }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
@@ -25,6 +25,10 @@ import './custom-date-picker.css';
 const PsychologistRouter = () => {
   const { userStore: { user } } = useStore();
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    document.title = `${getPageProps().title} - Santé Psy Étudiant`;
+  }, [pathname]);
 
   const hasSignedConvention = user.convention && user.convention.isConventionSigned;
   const modal = hasSignedConvention || !shouldCheckConventionAgain()

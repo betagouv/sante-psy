@@ -37,11 +37,8 @@ function App() {
   useEffect(() => {
     agent.Config.get().then(response => setConfig(response.data));
     pullUser().finally(() => setLoading(false));
-  }, []);
-
-  useEffect(() => {
     document.title = config.appName ? config.appName : __APPNAME__;
-  }, [config]);
+  }, []);
 
   return (
     <>
