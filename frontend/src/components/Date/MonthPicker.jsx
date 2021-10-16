@@ -15,6 +15,7 @@ const MonthPicker = ({ month, setMonth, id }) => {
     >
       <input
         id={id}
+        title="Mois sélectionné"
         className="fr-input short-input"
         onChange={() => {}}
         onClick={() => calendar.current.show()}

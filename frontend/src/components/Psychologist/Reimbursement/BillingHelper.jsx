@@ -52,6 +52,7 @@ const BillingHelper = () => (
       <HashLink
         className="fr-btn fr-btn--secondary"
         to="/faq?section=psychologue#remboursement"
+        title="Consulter la Foire Aux Questions sur les remboursements"
       >
         Consulter la Foire Aux Questions
       </HashLink>
