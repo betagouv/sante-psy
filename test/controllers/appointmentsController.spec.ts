@@ -25,7 +25,7 @@ describe('appointmentsController', () => {
     });
 
     it('should create appointment', async () => {
-      const psy = await create.insertOnePsy();
+      const psy = await create.insertOnePsy({ createdAt: new Date('2021-05-22') });
       const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
