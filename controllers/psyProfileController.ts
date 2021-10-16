@@ -45,11 +45,13 @@ const get = async (req: Request, res: Response): Promise<void> => {
     otherAddress,
     otherLongitude,
     otherLatitude,
+    useFirstNames,
+    useLastName,
   } = psychologist;
 
   res.json({
-    firstNames,
-    lastName,
+    firstNames: useFirstNames || firstNames,
+    lastName: useLastName || lastName,
     email,
     phone,
     website,

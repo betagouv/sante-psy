@@ -65,6 +65,8 @@ const getAllActive = async (): Promise<Psychologist[]> => {
       'otherLatitude',
       'departement',
       'region',
+      'useFirstNames',
+      'useLastName',
     ])
         .select()
         .from(psychologistsTable)

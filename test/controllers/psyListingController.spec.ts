@@ -13,8 +13,18 @@ describe('psyListingController', () => {
   before(async () => {
     await clean.psychologists();
 
-    psyActive1 = create.getOnePsy({ personalEmail: 'active1@beta.gouv.fr' });
-    psyActive2 = create.getOnePsy({ personalEmail: 'active2@beta.gouv.fr' });
+    psyActive1 = create.getOnePsy({
+      personalEmail: 'active1@beta.gouv.fr',
+      firstNames: 'Victor',
+      lastName: 'Hugo',
+    });
+    psyActive2 = create.getOnePsy({
+      personalEmail: 'active2@beta.gouv.fr',
+      firstNames: 'Amantine Aurore Lucile',
+      lastName: 'Dupin',
+      useFirstNames: 'George',
+      useLastName: 'Sand',
+    });
     psyInactive = create.getOneInactivePsy();
     psyArchived = create.getOnePsy({ personalEmail: 'archived@beta.gouv.fr', archived: true });
     await dbPsychologists.upsertMany([psyActive1, psyActive2, psyInactive, psyArchived]);
@@ -32,7 +42,9 @@ describe('psyListingController', () => {
         psyActive1.dossierNumber,
         psyActive2.dossierNumber,
       ]);
-      expect(res.body[0]).to.have.all.keys([
+
+      const resultPsyActive1 = res.body.find((p) => p.dossierNumber === psyActive1.dossierNumber);
+      expect(resultPsyActive1).to.have.all.keys([
         'dossierNumber',
         'firstNames',
         'lastName',
@@ -46,6 +58,26 @@ describe('psyListingController', () => {
         'otherLongitude',
         'otherLatitude',
       ]);
+      expect(resultPsyActive1.firstNames).to.equals('Victor');
+      expect(resultPsyActive1.lastName).to.equals('Hugo');
+
+      const resultPsyActive2 = res.body.find((p) => p.dossierNumber === psyActive2.dossierNumber);
+      expect(resultPsyActive2).to.have.all.keys([
+        'dossierNumber',
+        'firstNames',
+        'lastName',
+        'teleconsultation',
+        'departement',
+        'region',
+        'address',
+        'longitude',
+        'latitude',
+        'otherAddress',
+        'otherLongitude',
+        'otherLatitude',
+      ]);
+      expect(resultPsyActive2.firstNames).to.equals('George');
+      expect(resultPsyActive2.lastName).to.equals('Sand');
     });
   });
 
@@ -80,6 +112,8 @@ describe('psyListingController', () => {
         'languages',
         'phone',
         'website',
+        'useFirstNames',
+        'useLastName',
       ]);
     });
   });

@@ -21,6 +21,8 @@ export type EditablePsychologist = {
 export type NonEditablePsychologist = {
     firstNames: string,
     lastName: string,
+    useFirstNames?: string,
+    useLastName?: string,
     archived: boolean,
     state: DossierState,
     training: string,
