@@ -21,8 +21,6 @@ export type EditablePsychologist = {
 export type NonEditablePsychologist = {
     firstNames: string,
     lastName: string,
-    useFirstNames?: string,
-    useLastName?: string,
     archived: boolean,
     state: DossierState,
     training: string,
@@ -40,6 +38,8 @@ export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
     hasSeenTutorial: boolean,
     updatedAt?: Date,
     createdAt: Date,
+    useFirstNames?: string,
+    useLastName?: string,
   };
 
 export type DSPsychologist = {

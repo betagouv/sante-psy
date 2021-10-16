@@ -1,6 +1,7 @@
 import { assert, expect } from 'chai';
 import sinon from 'sinon';
-
+import db from '../../db/db';
+import { psychologistsTable } from '../../db/tables';
 import dbUniversities from '../../db/universities';
 import dbPsychologists from '../../db/psychologists';
 import dbSuspensionReasons from '../../db/suspensionReasons';
@@ -77,6 +78,31 @@ describe('DB Psychologists', () => {
       updatedPsySPE.firstNames.should.be.equal('New firstname');
       updatedPsySPE.region.should.be.equal('Bretagne');
       assert.isFalse(updatedPsySPE.selfModified);
+    });
+
+    it('should not update useFirstNames', async () => {
+      const psyDS = create.getOnePsy();
+
+      // First save psy from DS
+      await dbPsychologists.upsertMany([psyDS]);
+      const psySPE = await dbPsychologists.getById(psyDS.dossierNumber);
+      assert.isNull(psySPE.useFirstNames);
+      assert.isNull(psySPE.useLastName);
+
+      // Update from DB -> useFirstNames
+      await db(psychologistsTable)
+        .where('dossierNumber', psyDS.dossierNumber)
+        .update({ useFirstNames: 'My Little Name' });
+
+      // Update from DS -> new firstNames
+      const newPsyDS = { ...psyDS };
+      newPsyDS.firstNames = 'New firstname';
+      await dbPsychologists.upsertMany([newPsyDS]);
+
+      // Assert that firstNames changed but not useFirstNames
+      const updatedPsySPE = await dbPsychologists.getById(psyDS.dossierNumber);
+      updatedPsySPE.firstNames.should.be.equal('New firstname');
+      updatedPsySPE.useFirstNames.should.be.equal('My Little Name');
     });
 
     it('should not update region if self modified', async () => {

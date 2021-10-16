@@ -166,6 +166,8 @@ describe('DS integration tests', () => {
       inactiveUntil,
       active,
       assignedUniversityId,
+      useFirstNames,
+      useLastName,
       ...psy
     } = await dbPsychologists.getById(id);
 
