@@ -11,7 +11,7 @@ const PsychologistFinder = () => {
       <img
         className={styles.image}
         src={`/images/illustration_sante_psy${theme === 'dark' ? '_dm' : ''}.png`}
-        alt="" // decorative image
+        alt="" // Do not use alt for decorative image
       />
       <div className={styles.content}>
         <Section

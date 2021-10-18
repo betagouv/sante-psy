@@ -14,7 +14,7 @@ const Landing = () => {
 
   useEffect(() => {
     document.title = config.appName ? config.appName : __APPNAME__;
-  }, []);
+  }, [config]);
 
   return (
     <div className={classnames(styles.container, 'fr-container')} data-test-id="landingPageContainer">
