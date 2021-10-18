@@ -274,6 +274,7 @@ describe('loginController', async () => {
             'convention',
             'active',
             'hasSeenTutorial',
+            'createdAt',
           );
           res.body.dossierNumber.should.equal(psy.dossierNumber);
           res.body.firstNames.should.equal(psy.firstNames);

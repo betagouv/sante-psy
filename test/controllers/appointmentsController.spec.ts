@@ -25,7 +25,7 @@ describe('appointmentsController', () => {
     });
 
     it('should create appointment', async () => {
-      const psy = await create.insertOnePsy();
+      const psy = await create.insertOnePsy({ createdAt: new Date('2021-05-22') });
       const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
@@ -77,9 +77,9 @@ describe('appointmentsController', () => {
       );
 
       return chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: patient.id,
           date: new Date('09/02/2021'),
@@ -112,7 +112,7 @@ describe('appointmentsController', () => {
       );
 
       return chai.request(app)
-      .post('/api/appointments')
+        .post('/api/appointments')
         .send({
           patientId: patient.id,
           date: new Date('09/02/2021'),
@@ -148,9 +148,9 @@ describe('appointmentsController', () => {
 
     it('should refuse invalid patientId', (done) => {
       chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: 'not-a-uuid',
           date: new Date('09/02/2021'),
@@ -166,9 +166,9 @@ describe('appointmentsController', () => {
 
     it('should refuse empty patientId', (done) => {
       chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           // no patientId
           date: new Date('09/02/2021'),
@@ -188,9 +188,9 @@ describe('appointmentsController', () => {
         email: 'prenom.nom@beta.gouv.fr',
       };
       chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
@@ -206,9 +206,9 @@ describe('appointmentsController', () => {
 
     it('should refuse empty date', (done) => {
       chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           // no date
@@ -407,8 +407,9 @@ describe('appointmentsController', () => {
         });
     });
 
-    it('should not create appointment if date before 21/03/21', async () => {
-      const psy = await create.insertOnePsy();
+    it('should not create appointment if date before psychologist creation date', async () => {
+      const beginningDate = new Date('2021-03-22');
+      const psy = await create.insertOnePsy({ createdAt: beginningDate });
       const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
@@ -422,7 +423,6 @@ describe('appointmentsController', () => {
         dateOfBirth,
       );
 
-      const beginningDate = new Date('2021-03-22');
       const invalidDate = new Date(beginningDate.setMonth(beginningDate.getMonth() - 2));
 
       return chai.request(app)
@@ -435,7 +435,9 @@ describe('appointmentsController', () => {
         })
         .then(async (res) => {
           res.status.should.equal(400);
-          res.body.message.should.equal('La date de la séance doit être apres le 21 mars 2021');
+          res.body.message.should.equal(
+            "La date de la séance ne peut pas être antérieure à l'inscription au dispositif",
+          );
 
           const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(0);
