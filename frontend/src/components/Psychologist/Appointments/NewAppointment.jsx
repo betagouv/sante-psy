@@ -10,6 +10,7 @@ import agent from 'services/agent';
 import { convertLocalToUTCDate } from 'services/date';
 
 import { useStore } from 'stores/';
+import { observer } from 'mobx-react';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -20,7 +21,7 @@ const NewAppointment = () => {
   const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
 
-  const { commonStore: { setNotification } } = useStore();
+  const { commonStore: { setNotification }, userStore: { user } } = useStore();
 
   useEffect(() => {
     agent.Patient.get().then(setPatients);
@@ -35,7 +36,7 @@ const NewAppointment = () => {
     });
   };
 
-  const beginningDate = new Date('2021-03-22');
+  const beginningDate = new Date(user.createdAt);
   const today = new Date();
   const maxDate = new Date(today.setMonth(today.getMonth() + 4));
 
@@ -114,4 +115,4 @@ const NewAppointment = () => {
   );
 };
 
-export default NewAppointment;
+export default observer(NewAppointment);

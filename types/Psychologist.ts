@@ -38,6 +38,8 @@ export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
     hasSeenTutorial: boolean,
     updatedAt?: Date,
     createdAt: Date,
+    useFirstNames?: string,
+    useLastName?: string,
   };
 
 export type DSPsychologist = {

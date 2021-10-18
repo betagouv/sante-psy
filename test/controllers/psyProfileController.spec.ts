@@ -109,6 +109,18 @@ describe('psyProfileController', () => {
           res.body.message.should.equal('Vous devez spécifier un identifiant valide.');
         });
     });
+
+    it('should return use first and last names if exists', async () => {
+      const psy = await create.insertOnePsy({ useFirstNames: 'Georges', useLastName: 'Sand' });
+
+      return chai.request(app)
+        .get(`/api/psychologist/${psy.dossierNumber}`)
+        .then(async (res) => {
+          res.status.should.equal(200);
+          expect(res.body.firstNames).to.eql('Georges');
+          expect(res.body.lastName).to.eql('Sand');
+        });
+    });
   });
 
   describe('update psy profile - input validation', () => {

@@ -12,8 +12,8 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
   res.json(reduced
     ? psyList.map((psy) => ({
       dossierNumber: psy.dossierNumber,
-      firstNames: psy.firstNames,
-      lastName: psy.lastName,
+      firstNames: psy.useFirstNames || psy.firstNames,
+      lastName: psy.useLastName || psy.lastName,
       teleconsultation: psy.teleconsultation,
       departement: psy.departement,
       region: psy.region,
