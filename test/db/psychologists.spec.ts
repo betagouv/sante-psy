@@ -1,7 +1,5 @@
 import { assert, expect } from 'chai';
 import sinon from 'sinon';
-import db from '../../db/db';
-import { psychologistsTable } from '../../db/tables';
 import dbUniversities from '../../db/universities';
 import dbPsychologists from '../../db/psychologists';
 import dbSuspensionReasons from '../../db/suspensionReasons';
