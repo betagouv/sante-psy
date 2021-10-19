@@ -13,8 +13,8 @@ const Landing = () => {
   const { commonStore: { config } } = useStore();
 
   useEffect(() => {
-    document.title = config.appName ? config.appName : __APPNAME__;
-  }, [config]);
+    document.title = 'Santé Psy Étudiant';
+  }, []);
 
   return (
     <div className={classnames(styles.container, 'fr-container')} data-test-id="landingPageContainer">

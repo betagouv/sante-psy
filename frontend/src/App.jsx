@@ -38,7 +38,7 @@ function App() {
   useEffect(() => {
     agent.Config.get().then(response => setConfig(response.data));
     pullUser().finally(() => setLoading(false));
-    document.title = config.appName ? config.appName : __APPNAME__;
+    document.title = 'Santé Psy Étudiant';
   }, []);
 
   return (

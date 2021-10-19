@@ -104,7 +104,7 @@ const Bill = () => {
             Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
           </Logo>
           <Service
-            title={`${__APPNAME__}`}
+            title='Santé Psy Étudiant'
             description={`Facture ${formatMonth({ month, year })}`}
           />
         </HeaderBody>

@@ -12,7 +12,6 @@ module.exports = {
     _paq: false,
     __MATOMO__: false,
     __API__: false,
-    __APPNAME__: false,
   },
   parser: 'babel-eslint',
   parserOptions: {

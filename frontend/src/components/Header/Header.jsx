@@ -48,7 +48,7 @@ const Header = () => {
           </Logo>
           <Service
             asLink={<Link to="/" />}
-            title={`${__APPNAME__}${psychologistPage ? ' - Espace Psychologues' : ''}`}
+            title={`Santé Psy Étudiant${psychologistPage ? ' - Espace Psychologues' : ''}`}
             description="Accompagnement psychologique pour les étudiants"
           />
           <Tool>
