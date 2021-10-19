@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
+import { Alert, Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
 
 import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
@@ -57,6 +57,13 @@ const Login = () => {
       background="blue"
       textContent
     >
+      <Alert
+        className="fr-mb-2w"
+        type="error"
+        title="Certains emails n'arrivent pas à destination (en particulier pour les adresses
+            @sfr.fr, @free.fr, @laposte.net et @club-internet.fr). Si c'est votre cas, veuillez
+            réessayer de vous connecter dans quelques jours."
+      />
       <Section
         title="Me connecter"
       >
