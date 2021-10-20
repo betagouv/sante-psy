@@ -6,9 +6,10 @@ const mailTransport = nodemailer.createTransport({
   debug: config.mail.debug,
   host: config.mail.host,
   port: config.mail.port,
-  ignoreTLS: !config.isSecure,
-  requireTLS: config.isSecure,
-  secure: config.isSecure,
+  // ignoreTLS: !config.isSecure,
+  // requireTLS: config.isSecure,
+  // secure: config.isSecure,
+  secure: false,
   auth: {
     user: config.mail.auth.user,
     pass: config.mail.auth.pass,
