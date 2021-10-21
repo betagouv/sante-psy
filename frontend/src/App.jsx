@@ -32,7 +32,7 @@ import ActiveProfile from 'components/Psychologist/Profile/ActiveProfile';
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
 function App() {
-  const { commonStore: { setConfig, config }, userStore: { user, pullUser } } = useStore();
+  const { commonStore: { setConfig }, userStore: { user, pullUser } } = useStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
