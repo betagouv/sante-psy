@@ -125,7 +125,7 @@ const PublicPsychologistProfile = () => {
                       {value}
                     </div>
                   </div>
-                ) : <></>;
+                ) : null;
               })}
             </Col>
             <Col

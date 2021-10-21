@@ -32,17 +32,14 @@ import ActiveProfile from 'components/Psychologist/Profile/ActiveProfile';
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
 function App() {
-  const { commonStore: { setConfig, config }, userStore: { user, pullUser } } = useStore();
+  const { commonStore: { setConfig }, userStore: { user, pullUser } } = useStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     agent.Config.get().then(response => setConfig(response.data));
     pullUser().finally(() => setLoading(false));
+    document.title = 'Santé Psy Étudiant';
   }, []);
-
-  useEffect(() => {
-    document.title = config.appName ? config.appName : __APPNAME__;
-  }, [config]);
 
   return (
     <>

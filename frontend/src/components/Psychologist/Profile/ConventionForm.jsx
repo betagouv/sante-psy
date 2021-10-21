@@ -38,12 +38,12 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
     <form data-test-id="convention-form" onSubmit={saveConvention}>
       {convention && (
         <>
-          <legend className="fr-mb-1w">
+          <p className="fr-mb-1w">
             Vous êtes rattaché à l&lsquo;université de
             {' '}
             <b>{user.convention ? user.convention.universityName : ''}</b>
             .
-          </legend>
+          </p>
           <div id="convention-form">
             <RadioGroup
               name="convention"

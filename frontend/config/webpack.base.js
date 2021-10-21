@@ -87,9 +87,6 @@ const getConfig = () => ({
         'assets',
       ],
     }),
-    new webpack.DefinePlugin({
-      __APPNAME__: "'Santé Psy Étudiant'",
-    }),
   ],
   performance: {
     hints: 'warning',

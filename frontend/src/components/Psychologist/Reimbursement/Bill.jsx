@@ -61,7 +61,7 @@ const Bill = () => {
   const filteredDate = Object.keys(appointments).filter(date => {
     const appointmentDate = new Date(date);
     return appointmentDate.getFullYear() === parseInt(year, 10)
-        && appointmentDate.getMonth() === parseInt(month, 10) - 1;
+      && appointmentDate.getMonth() === parseInt(month, 10) - 1;
   });
 
   const getInfos = () => {
@@ -72,16 +72,14 @@ const Bill = () => {
       `Adresse du prestataire : ${user.address}`,
       `Email du prestataire : ${user.email}`,
       `Date de l'émission de la facture : ${formatFrenchDate(new Date())}`,
-      `Numéro de la facture : ${
-        billingInfo.billingNumber || '________________________________________________________________'
+      `Numéro de la facture : ${billingInfo.billingNumber || '________________________________________________________________'
       }`,
       `Nom et adresse de l'université : ${universityInfos.name || PARTIAL_UNDESCORE_LINE_UNI_NAME}`,
       `${universityInfos.address || FULL_UNDERSCORE_LINE}`,
       'E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :',
       billingInfo.address1 || FULL_UNDERSCORE_LINE,
       billingInfo.address1 ? billingInfo.address2 : FULL_UNDERSCORE_LINE,
-      `Numéro du bon de commande de l’université (à demander à l’université) : ${
-        billingInfo.orderNumber || '___________________'
+      `Numéro du bon de commande de l’université (à demander à l’université) : ${billingInfo.orderNumber || '___________________'
       }`,
     ];
   };
@@ -104,7 +102,7 @@ const Bill = () => {
             Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
           </Logo>
           <Service
-            title={`${__APPNAME__}`}
+            title="Santé Psy Étudiant"
             description={`Facture ${formatMonth({ month, year })}`}
           />
         </HeaderBody>

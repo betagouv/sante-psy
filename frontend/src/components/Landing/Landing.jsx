@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classnames from 'classnames';
 
 import { useStore } from 'stores/';
@@ -11,6 +11,10 @@ import Section from './Section';
 
 const Landing = () => {
   const { commonStore: { config } } = useStore();
+
+  useEffect(() => {
+    document.title = 'Santé Psy Étudiant';
+  }, []);
 
   return (
     <div className={classnames(styles.container, 'fr-container')} data-test-id="landingPageContainer">

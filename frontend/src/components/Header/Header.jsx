@@ -42,13 +42,13 @@ const Header = () => {
       <DSHeader>
         <HeaderBody>
           <Logo
-            asLink={<Link to="/" />}
+            asLink={<Link to="/" title="Revenir à l'accueil" />}
           >
             Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
           </Logo>
           <Service
             asLink={<Link to="/" />}
-            title={`${__APPNAME__}${psychologistPage ? ' - Espace Psychologues' : ''}`}
+            title={`Santé Psy Étudiant${psychologistPage ? ' - Espace Psychologues' : ''}`}
             description="Accompagnement psychologique pour les étudiants"
           />
           <Tool>
@@ -62,10 +62,10 @@ const Header = () => {
                   Paramètres d’affichage
                 </span>
               </ToolItem>
-              { user
+              {user
                 ? (
                   <>
-                    { psychologistPage ? (
+                    {psychologistPage ? (
                       <ToolItem asLink={<Link data-test-id="back-home-button" to="/" />}>
                         Revenir à l&lsquo;accueil
                       </ToolItem>
@@ -107,7 +107,7 @@ const Header = () => {
                     data-test-id={item.key}
                     to={item.link}
                   />
-                  )}
+                )}
               />
             )) : (
               defaultItems.map(item => (

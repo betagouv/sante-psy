@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 
@@ -31,6 +31,11 @@ const Page = ({
 }) => {
   const { userStore: { user } } = useStore();
   const [tutoStatus, setTutoStatus] = useState({ run: false, stepIndex: 0 });
+
+  useEffect(() => {
+    document.title = `${title} - Santé Psy Étudiant`;
+  }, []);
+
   return (
     <>
       <Tutorial
