@@ -64,6 +64,8 @@ export default {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS,
     },
+    secure: getBooleanEnv(process.env.MAIL_SECURE, 'false'),
+    requireTLS: getBooleanEnv(process.env.MAIL_REQUIRE_TLS, 'true'),
   },
   statistics: {
     base: process.env.METABASE_URL || 'https://stats.santepsyetudiant.beta.gouv.fr',
