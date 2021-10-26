@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { Registry } from 'knex/types/result';
 import { DossierState } from '../types/DossierState';
 import {
