@@ -323,6 +323,8 @@ const inactive = async (
 const active = async (
   token: string,
 ): Promise<void> => {
+  const psy = await db('inactive_token').where({ token }).first();
+  await activate(psy.id);
   await db('inactive_token').update({ confirm: true }).where({ token });
 };
 
