@@ -52,6 +52,9 @@ describe('Patient', () => {
       cy.get('[data-test-id="etudiant-last-name-input"] > input')
         .clear()
         .type('Moustaki');
+      cy.get('[data-test-id="etudiant-ine-input"] > input')
+        .clear()
+        .type('123456');
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
         .type('My doctor');
       cy.get('[data-test-id="save-etudiant-button"]')

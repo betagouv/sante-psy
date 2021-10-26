@@ -113,10 +113,11 @@ const AddEditPatient = () => {
             />
             <TextInput
               className="midlength-input"
+              data-test-id="etudiant-ine-input"
               label="Numéro INE de l'étudiant (optionnel)"
               hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
               value={patient.INE}
-              pattern="^[a-zA-Z0-9]{11,11}$"
+              pattern="^[a-zA-Z0-9]{1,11}$"
               onChange={e => changePatient(e.target.value, 'INE')}
             />
             <Checkbox
