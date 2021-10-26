@@ -1,4 +1,5 @@
-const matchFilter = (value, filter) => value && value.toLowerCase().includes(filter.trim().toLowerCase());
+const cleanValue = value => value.replace(/é/g, 'e').replace(/ç/g, 'c').trim().toLowerCase();
+const matchFilter = (value, filter) => value && cleanValue(value).includes(cleanValue(filter));
 
 const removeStreet = address => {
   if (!address) {

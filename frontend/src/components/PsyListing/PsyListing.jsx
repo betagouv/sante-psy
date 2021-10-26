@@ -37,6 +37,7 @@ const PsyListing = () => {
   const [geoStatus, setGeoStatus] = useState(geoStatusEnum.UNKNOWN);
   const [geoLoading, setGeoLoading] = useState(false);
   const [nameFilter, setNameFilter] = useState(query.get('name') || '');
+  const [languageFilter, setLanguageFilter] = useState(query.get('language') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
   const [page, setPage] = useState(0);
@@ -59,7 +60,7 @@ const PsyListing = () => {
     }
 
     logSearchInMatomo();
-  }, [nameFilter, addressFilter, teleconsultation]);
+  }, [nameFilter, addressFilter, teleconsultation, languageFilter]);
 
   useEffect(() => {
     if (!psychologists) {
@@ -104,6 +105,10 @@ const PsyListing = () => {
         return false;
       }
 
+      if (languageFilter && !utils.matchFilter(psychologist.languages, languageFilter)) {
+        return false;
+      }
+
       return true;
     });
 
@@ -118,7 +123,7 @@ const PsyListing = () => {
     } else {
       setFilteredPsychologists(matchingFiltersPsychologists);
     }
-  }, [psychologists, nameFilter, addressFilter, teleconsultation, coords]);
+  }, [psychologists, nameFilter, addressFilter, teleconsultation, languageFilter, coords]);
 
   const logSearchInMatomo = () => {
     if (__MATOMO__) {
@@ -135,6 +140,9 @@ const PsyListing = () => {
       }
       if (teleconsultation) {
         search += `teleconsultation=${teleconsultation};`;
+      }
+      if (languageFilter) {
+        search += `language=${languageFilter};`;
       }
 
       if (search) {
@@ -219,11 +227,11 @@ const PsyListing = () => {
             </Row>
             <Row gutters>
               <Col n="md-6 sm-12" className={styles.input}>
-                <Checkbox
-                  value="teleconsultation"
-                  onChange={e => { setTeleconsultation(e.target.checked); }}
-                  label="Disponible en téléconsultation"
-                  defaultChecked={teleconsultation}
+                <TextInput
+                  className="fr-mb-1w"
+                  value={languageFilter}
+                  onChange={e => setLanguageFilter(e.target.value)}
+                  label="Rechercher par langue parlée"
                 />
               </Col>
               <Col n="md-6 sm-12" className={styles.input}>
@@ -244,6 +252,16 @@ const PsyListing = () => {
                 )}
               </Col>
             </Row>
+            <Row gutters>
+              <Col n="md-6 sm-12" className={styles.input}>
+                <Checkbox
+                  value="teleconsultation"
+                  onChange={e => { setTeleconsultation(e.target.checked); }}
+                  label="Disponible en téléconsultation"
+                  defaultChecked={teleconsultation}
+                />
+              </Col>
+            </Row>
 
           </div>
           <PsyTable
@@ -252,6 +270,7 @@ const PsyListing = () => {
             psychologists={filteredPsychologists}
             nameFilter={nameFilter}
             addressFilter={addressFilter}
+            languageFilter={languageFilter}
             teleconsultation={teleconsultation}
             noResult={(
               <NoResultPsyTable

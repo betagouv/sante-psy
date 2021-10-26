@@ -8,6 +8,7 @@ const PsyTable = ({
   psychologists,
   nameFilter,
   addressFilter,
+  languageFilter,
   teleconsultation,
   noResult,
   geoLoading,
@@ -65,7 +66,7 @@ const PsyTable = ({
   ];
 
   const goToProfile = psychologist => {
-    const searchPath = `?page=${page}&name=${nameFilter}&address=${addressFilter}&teleconsultation=${teleconsultation}`;
+    const searchPath = `?page=${page}&name=${nameFilter}&address=${addressFilter}&teleconsultation=${teleconsultation}&language=${languageFilter}`;
     if (history.location.search !== searchPath) {
       history.push(`/trouver-un-psychologue${searchPath}`);
     }
@@ -100,7 +101,7 @@ const PsyTable = ({
   if (geoLoading) {
     title = 'Chargement des psychologues autour de vous...';
   } else
-  if (nameFilter || addressFilter || teleconsultation) {
+  if (nameFilter || addressFilter || teleconsultation || languageFilter) {
     if (psychologists.length === 1) {
       title = '1 résultat';
     } else {

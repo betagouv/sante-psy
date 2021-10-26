@@ -57,6 +57,7 @@ describe('psyListingController', () => {
         'otherAddress',
         'otherLongitude',
         'otherLatitude',
+        'languages',
       ]);
       expect(resultPsyActive1.firstNames).to.equals('Victor');
       expect(resultPsyActive1.lastName).to.equals('Hugo');
@@ -75,6 +76,7 @@ describe('psyListingController', () => {
         'otherAddress',
         'otherLongitude',
         'otherLatitude',
+        'languages',
       ]);
       expect(resultPsyActive2.firstNames).to.equals('George');
       expect(resultPsyActive2.lastName).to.equals('Sand');
