@@ -14,6 +14,37 @@ import { University } from '../../types/University';
 
 faker.locale = 'fr';
 
+const languages = [
+  'allemand ; anglais ; français',
+  'Anglais et français',
+  'Anglais et Français',
+  'Anglais, Francais',
+  'Anglais /français',
+  'Anglais ; Français',
+  'Anglais français espagnol',
+  'anglais français italien',
+  'Anglais français italien',
+  'ANGLAIS, FRANÇAIS, RUSSE , ROUMAIN',
+  'Anglais, Langue des signes française',
+  'anglais, portugais, français',
+  'anglais, russe et français',
+  'Arabe, français',
+  'arabe, français et anglais',
+  'Basque et français',
+  'Bilangue Français et anglais',
+  'Bilingue anglais français',
+  'en cours de formation langue des signes, français',
+  'espagnol et français',
+  'Espagnol et français',
+  'Espagnol, français',
+  'Espagnol, Français',
+  'ESPAGNOL - FRANçAIS',
+  'fraçais, arabe, langue des signes française LSF',
+  'Français, Anglais, Néerlandais',
+  'Français, Anglais, Néérlandais - parfaitement trilingue',
+  'Français, Anglais parlé, mais pas langue maternelle',
+];
+
 const getRandomInt = () : string => {
   const ourRandom = faker.datatype.number({ min: 1, max: 99 });
   if (ourRandom < 10) {
@@ -128,7 +159,7 @@ const getOnePsy = (
     description: faker.lorem.paragraphs(2),
     // eslint-disable-next-line max-len
     training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
-    languages: 'Français, Anglais, et Espagnol',
+    languages: faker.random.arrayElement(languages),
     isConventionSigned: false,
     createdAt: new Date(),
     active: true,

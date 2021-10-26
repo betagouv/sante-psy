@@ -10,6 +10,11 @@ describe('Search', () => {
       { value: 'Dupont', filter: ' ', result: true },
       { value: 'Dupont', filter: 'Martin', result: false },
       { value: 'Dupont', filter: 'Dupond', result: false },
+      { value: 'Français', filter: 'francais', result: true },
+      { value: 'francais', filter: 'Français', result: true },
+      { value: 'Suédois', filter: 'suedois', result: true },
+      { value: 'suedois', filter: 'Suédois', result: true },
+      { value: 'çéécee', filter: 'ceeçéé', result: true },
     ];
 
     tests.forEach(test => {
