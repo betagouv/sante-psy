@@ -18,7 +18,7 @@ const deactivateInactivePsy = async (dryRun: boolean): Promise<void> => {
       .andWhere('psychologists.state', 'accepte')
       .andWhere('psychologists.active', true)
       .andWhere('inactive_token.confirm', false)
-      .andWhereRaw('last_connections."at" IS NULL OR last_connections."at" < \'2021-08-07\'');
+      .andWhereRaw('(last_connections."at" IS NULL OR last_connections."at" < \'2021-08-07\')');
 
     console.log(`${inactivePsyList.length} inactive psychologists found`);
 
