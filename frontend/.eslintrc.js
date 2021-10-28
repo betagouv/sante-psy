@@ -13,7 +13,7 @@ module.exports = {
     __MATOMO__: false,
     __API__: false,
   },
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -43,6 +43,7 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'no-use-before-define': 'off',
     'no-only-tests/no-only-tests': 'error',
+    'no-irregular-whitespace': 'off',
     'object-curly-newline': ['error', {
       ObjectExpression: { multiline: true },
       ObjectPattern: { multiline: true },
