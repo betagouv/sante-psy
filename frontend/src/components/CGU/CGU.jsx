@@ -10,7 +10,7 @@ const CGU = () => {
   const { commonStore: { config } } = useStore();
   return (
     <Page
-      title="Conditions Généraltes d’Utilisation"
+      title="Conditions Générales d’Utilisation"
       background="blue"
       textContent
     >

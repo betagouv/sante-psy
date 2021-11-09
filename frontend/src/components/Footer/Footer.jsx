@@ -21,7 +21,7 @@ const footerBodyLinks = [
 const footerBottomLinks = [
   {
     key: 'footer-bottom-link-accessibility',
-    title: 'Accessibilité: non conforme',
+    title: 'Accessibilité : non conforme',
     link: '/mentions-legales#accessibilite',
   },
   {
@@ -31,7 +31,7 @@ const footerBottomLinks = [
   },
   { key: 'footer-bottom-link-legal', title: 'Mentions légales', link: '/mentions-legales' },
   { key: 'footer-bottom-link-cgu', title: "Conditions générales d'utilisation", link: '/cgu' },
-  { key: 'footer-bottom-link-faq', title: 'En savoir plus', link: '/faq', alt: 'FAQ' },
+  { key: 'footer-bottom-link-privacy', title: "Politique de confidentialité", link: '/politique-de-confidentialite' },
   { key: 'footer-bottom-link-stats', title: 'Nos statistiques', link: '/stats' },
 ];
 
