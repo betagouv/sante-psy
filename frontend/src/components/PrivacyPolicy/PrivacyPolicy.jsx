@@ -7,53 +7,54 @@ import Section from 'components/Page/Section';
 
 const dataConservation = [
   {
-    "Catégories de données": "Données d'inscription",
-    "Durée de conservation": "5 ans à compter de la dernière utilisation du compte"
+    'Catégories de données': "Données d'inscription",
+    'Durée de conservation': '5 ans à compter de la dernière utilisation du compte',
   },
   {
-    "Catégories de données": "Données relatives aux séances",
-    "Durée de conservation": "5 ans à compter de la dernière utilisation du compte"
+    'Catégories de données': 'Données relatives aux séances',
+    'Durée de conservation': '5 ans à compter de la dernière utilisation du compte',
   },
   {
-    "Catégories de données": "Données de contact",
-    "Durée de conservation": "5 ans à compter de l'écrit du message"
+    'Catégories de données': 'Données de contact',
+    'Durée de conservation': "5 ans à compter de l'écrit du message",
   },
   {
-    "Catégories de données": "Données de connexion",
-    "Durée de conservation": "Ces données sont conservées 12 mois, en application de la loi pour la confiance dans l'économie numérique n°2004-575 du 21 juin 2004 et de l'article 3 du décret n°2011-219 du 25 février 2011."
+    'Catégories de données': 'Données de connexion',
+    // eslint-disable-next-line max-len
+    'Durée de conservation': "Ces données sont conservées 12 mois, en application de la loi pour la confiance dans l'économie numérique n°2004-575 du 21 juin 2004 et de l'article 3 du décret n°2011-219 du 25 février 2011.",
   },
   {
-    "Catégories de données": "Cookies",
-    "Durée de conservation": "Ces données sont conservées 13 mois maximum."
+    'Catégories de données': 'Cookies',
+    'Durée de conservation': 'Ces données sont conservées 13 mois maximum.',
   },
-]
+];
 
 const dataSubcontractor = [
   {
-    "Partenaire": "Heroku",
-    "Pays": "Etats-Unis",
-    "Traitement réalisé": "Hébergeur",
-    "Garanties": <a href="https://www.salesforce.com/company/privacy" target="_blank" rel="noreferrer">https://www.salesforce.com/company/privacy</a>,
+    Partenaire: 'Heroku',
+    Pays: 'Etats-Unis',
+    'Traitement réalisé': 'Hébergeur',
+    Garanties: <a href="https://www.salesforce.com/company/privacy" target="_blank" rel="noreferrer">https://www.salesforce.com/company/privacy</a>,
   },
   {
-    "Partenaire": "Scalingo",
-    "Pays": "France",
-    "Traitement réalisé": "Hébergeur",
-    "Garanties":  <a href="https://scalingo.com/fr/privacy-policy" target="_blank" rel="noreferrer">https://scalingo.com/fr/privacy-policy</a>,
+    Partenaire: 'Scalingo',
+    Pays: 'France',
+    'Traitement réalisé': 'Hébergeur',
+    Garanties: <a href="https://scalingo.com/fr/privacy-policy" target="_blank" rel="noreferrer">https://scalingo.com/fr/privacy-policy</a>,
   },
   {
-    "Partenaire": "Crisp",
-    "Pays": "France",
-    "Traitement réalisé": "Messagerie",
-    "Garanties":  <a href="https://crisp.chat/fr/privacy/" target="_blank" rel="noreferrer">https://crisp.chat/fr/privacy/</a>,
+    Partenaire: 'Crisp',
+    Pays: 'France',
+    'Traitement réalisé': 'Messagerie',
+    Garanties: <a href="https://crisp.chat/fr/privacy/" target="_blank" rel="noreferrer">https://crisp.chat/fr/privacy/</a>,
   },
   {
-    "Partenaire": "Démarches simplifiées",
-    "Pays": "France",
-    "Traitement réalisé": "Dématérialisation de Démarches Administrative",
-    "Garanties":  <a href="https://doc.demarches-simplifiees.fr/cgu/cgu" target="_blank" rel="noreferrer">https://doc.demarches-simplifiees.fr/cgu/cgu</a>,
+    Partenaire: 'Démarches simplifiées',
+    Pays: 'France',
+    'Traitement réalisé': 'Dématérialisation de Démarches Administrative',
+    Garanties: <a href="https://doc.demarches-simplifiees.fr/cgu/cgu" target="_blank" rel="noreferrer">https://doc.demarches-simplifiees.fr/cgu/cgu</a>,
   },
-]
+];
 
 const PrivacyPolicy = () => {
   const { commonStore: { config } } = useStore();
@@ -92,7 +93,8 @@ const PrivacyPolicy = () => {
           Pour participer au dispositif Santé Psy Étudiant, les psychologues
           doivent obligatoirement en faire la demande en renseignant un
           formulaire au travers de &laquo; démarches simplifiées &raquo; (
-          <a href={config.demarchesSimplifieesUrl}
+          <a
+            href={config.demarchesSimplifieesUrl}
             target="_blank"
             rel="noreferrer"
           >
@@ -168,7 +170,7 @@ const PrivacyPolicy = () => {
           <li> Identifiant de connexion </li>
           <li>
             Logs de connexion (journaux d&lsquo;événements : date de demande
-            de connexion, date d'expiration du token)
+            de connexion, date d&lsquo;expiration du token)
           </li>
         </ul>
         <Title as="h3" look="h6">
@@ -213,7 +215,7 @@ const PrivacyPolicy = () => {
         </ul>
         <p>Ces fondements sont précisés ci-dessous :</p>
         <Title as="h3" look="h6">
-          Données d'inscription
+          Données d&lsquo;inscription
         </Title>
         <p>
           Ce traitement de données est nécessaire à l&lsquo;exercice
@@ -255,16 +257,16 @@ const PrivacyPolicy = () => {
           Données de connexion
         </Title>
         <p>
-          Ce traitement est nécessaire au respect d'une obligation légale à
+          Ce traitement est nécessaire au respect d&lsquo;une obligation légale à
           laquelle le responsable de traitement est soumis au sens de
-          l'article 6-c du Règlement (UE) 2016/679 du Parlement européen et du
+          l&lsquo;article 6-c du Règlement (UE) 2016/679 du Parlement européen et du
           Conseil du 27 avril 2016 relatif à la protection des personnes
-          physiques à l'égard du traitement des données à caractère personnel
+          physiques à l&lsquo;égard du traitement des données à caractère personnel
           et à la libre circulation de ces données.
         </p>
         <p>
-          L'obligation légale est posée par la loi LCEN n° 2004-575 du 21 juin 2004 pour la confiance
-          dans l'économie numérique et par les articles 1 et 3 du décret n°2011-219 du 25 février 2011.
+          L&lsquo;obligation légale est posée par la loi LCEN n° 2004-575 du 21 juin 2004 pour la confiance
+          dans l&lsquo;économie numérique et par les articles 1 et 3 du décret n°2011-219 du 25 février 2011.
         </p>
         <Title as="h3" look="h6">
           Cookies
@@ -293,9 +295,9 @@ const PrivacyPolicy = () => {
         <p>
           Ce consentement de la personne concernée pour
           une ou plusieurs finalités spécifiques constitue une base légale au
-          sens du RGPD et doit être entendu au sens de l'article 6-a du
+          sens du RGPD et doit être entendu au sens de l&lsquo;article 6-a du
           Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27
-          avril 2016 relatif à la protection des personnes physiques à l'égard
+          avril 2016 relatif à la protection des personnes physiques à l&lsquo;égard
           du traitement des données à caractère personnel et à la libre
           circulation de ces données.
         </p>
@@ -313,7 +315,7 @@ const PrivacyPolicy = () => {
       </Section>
       <Section title="Droit des personnes concernées">
         <p>
-          Selon la loi n° 78-17 du 6 janvier 1978 relative à l'informatique
+          Selon la loi n° 78-17 du 6 janvier 1978 relative à l&lsquo;informatique
           aux fichiers et aux libertés, vous disposez des droits suivants
           concernant vos données à caractère personnel :
         </p>
@@ -361,9 +363,12 @@ const PrivacyPolicy = () => {
         <p>Par voie postale :</p>
         <p>
           A l&lsquo;attention du ou de la Chargé(e) de mission sur le
-          dispositif Santé Psy Etudiant<br />
-          Sous-direction de la vie étudiante - DGESIP A2<br />
-          1 rue Descartes<br />
+          dispositif Santé Psy Etudiant
+          <br />
+          Sous-direction de la vie étudiante - DGESIP A2
+          <br />
+          1 rue Descartes
+          <br />
           75005 Paris
         </p>
         <p>
@@ -414,7 +419,7 @@ const PrivacyPolicy = () => {
       <Section title="Sous-traitants">
         <p>
           Certaines des données sont envoyées à des sous-traitants pour
-          réaliser certaines missions. Le responsable de traitement s'est
+          réaliser certaines missions. Le responsable de traitement s&lsquo;est
           assuré de la mise en œuvre par ses sous-traitants de garanties
           adéquates et du respect de conditions strictes de confidentialité,
           d&lsquo;usage et de protection des données.
@@ -461,9 +466,23 @@ const PrivacyPolicy = () => {
           les utilisateurs utilisent des navigateurs désactivant les cookies.
         </p>
         <p>
-          <strong>Nous utilisons pour cela Matomo</strong>, un outil de mesure d&lsquo;audience
-          web libre, paramétré pour être en conformité avec la recommandation
-          &laquo; Cookies &raquo; de la CNIL. Cela signifie que votre adresse IP, par
+          <strong>
+            Nous utilisons pour cela
+            {' '}
+            <a href="https://matomo.org/" target="_blank" rel="noopener noreferrer">Matomo</a>
+          </strong>
+          , un outil de mesure d&lsquo;audience web
+          {' '}
+          <a href="https://matomo.org/free-software/" target="_blank" rel="noopener noreferrer">libre</a>
+          , paramétré pour être en conformité avec la
+          {' '}
+          <a href="https://www.cnil.fr/fr/solutions-pour-la-mesure-daudience" target="_blank" rel="noopener noreferrer">recommandation « Cookies »</a>
+          {' '}
+          de la
+          {' '}
+          <abbr title="Commission Nationale de l'Informatique et des Libertés">CNIL</abbr>
+          .
+          Cela signifie que votre adresse IP, par
           exemple, est anonymisée avant d&lsquo;être enregistrée. Il est donc
           impossible d&lsquo;associer vos visites sur ce site à votre
           personne. Il convient d&lsquo;indiquer que :
@@ -481,16 +500,12 @@ const PrivacyPolicy = () => {
         <p>
           Pour refuser les cookies de Matomo directement sur notre
           plateforme :
-          {' '}
-          <a
-            href="https://santepsy.etudiant.gouv.fr/donnees-personnelles-et-gestion-des-cookies"
-            target="_blank"
-            rel="noreferrer"
-          >
-            https://santepsy.etudiant.gouv.fr/donnees-personnelles-et-gestion-des-cookies
-          </a>
-          {' '}
         </p>
+        <iframe
+          title="stats"
+          style={{ border: 0, height: 120, width: '100%' }}
+          src="https://stats.data.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=&fontSize=&fontFamily=%22Marianne%22%2C%20arial%2C%20sans-serif"
+        />
         <p>
           À tout moment, vous pouvez refuser l&lsquo;utilisation des cookies
           et désactiver le dépôt sur votre ordinateur en utilisant la fonction
@@ -524,8 +539,16 @@ const PrivacyPolicy = () => {
           </li>
         </ul>
       </Section>
+      <Section title="Je contribue à enrichir vos données, puis-je y accéder ?">
+        <p>
+          Bien sûr ! Les statistiques d’usage sont disponibles en accès libre sur
+          {' '}
+          <a target="_blank" rel="noopener noreferrer" href="https://stats.data.gouv.fr/index.php?module=CoreHome&action=index&date=yesterday&period=day&idSite=160#?idSite=160&period=day&date=yesterday&segment=&category=Dashboard_Dashboard&subcategory=1">stats.data.gouv.fr</a>
+          .
+        </p>
+      </Section>
     </Page>
   );
-}
+};
 
 export default PrivacyPolicy;

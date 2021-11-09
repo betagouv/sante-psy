@@ -15,7 +15,6 @@ import Faq from 'components/Faq/Faq';
 import CGU from 'components/CGU/CGU';
 import PrivacyPolicy from 'components/PrivacyPolicy/PrivacyPolicy';
 import LegalNotice from 'components/LegalNotice/LegalNotice';
-import PersonalData from 'components/PersonalData/PersonalData';
 import Statistics from 'components/Statistics/Statistics';
 import PsyListing from 'components/PsyListing/PsyListing';
 import PublicPsychologistProfile from 'components/PsyListing/PublicPsychologistProfile';
@@ -60,7 +59,6 @@ function App() {
             <Route exact path="/trouver-un-psychologue" component={PsyListing} />
             <Route exact path="/trouver-un-psychologue/:psyId" component={PublicPsychologistProfile} />
             <Route exact path="/mentions-legales" component={LegalNotice} />
-            <Route exact path="/donnees-personnelles-et-gestion-des-cookies" component={PersonalData} />
             <Route exact path="/cgu" component={CGU} />
             <Route exact path="/politique-de-confidentialite" component={PrivacyPolicy} />
             <Route exact path="/faq" component={Faq} />
