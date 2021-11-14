@@ -36,18 +36,19 @@ const Header = () => {
   const { userStore: { user } } = useStore();
 
   const psychologistPage = location.pathname.startsWith('/psychologue');
+  const studentPage = location.pathname.startsWith('/etudiant');
   return (
     <>
       <SwitchTheme isOpen={isOpen} setIsOpen={setIsOpen} />
       <DSHeader>
         <HeaderBody>
           <Logo
-            asLink={<Link to="/" title="Revenir à l'accueil" />}
+            asLink={<Link to={studentPage ? '/etudiant' : '/'} title="Revenir à l'accueil" />}
           >
             Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
           </Logo>
           <Service
-            asLink={<Link to="/" />}
+            asLink={<Link to={studentPage ? '/etudiant' : '/'} />}
             title={`Santé Psy Étudiant${psychologistPage ? ' - Espace Psychologues' : ''}`}
             description="Accompagnement psychologique pour les étudiants"
           />
@@ -87,13 +88,16 @@ const Header = () => {
                   </>
                 )
                 : (
+                  !studentPage && (
                   <ToolItem asLink={<Link data-test-id="login-button" to="/psychologue/login" />}>
                     Se connecter en tant que psychologue
                   </ToolItem>
+                  )
                 )}
             </ToolItemGroup>
           </Tool>
         </HeaderBody>
+        {!studentPage && (
         <HeaderNav>
           {psychologistPage && user
             ? connectedItems.map(item => (
@@ -119,6 +123,7 @@ const Header = () => {
                 />
               )))}
         </HeaderNav>
+        )}
       </DSHeader>
     </>
   );

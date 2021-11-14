@@ -4,6 +4,10 @@
     padding: 0;
 }
 
+.emptySection {
+    padding: 12px;
+}
+
 .section,
 .sectionLight,
 .sectionAlt {
@@ -20,6 +24,10 @@
 }
 
 @media (min-width: 768px) {
+    .emptySection {
+        padding: 32px;
+    }
+
     .section,
     .sectionLight,
     .sectionAlt {
