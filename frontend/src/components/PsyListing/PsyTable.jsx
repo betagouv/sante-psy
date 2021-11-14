@@ -57,7 +57,7 @@ const PsyTable = ({
               icon="fr-fi-arrow-right-line"
               iconPosition="right"
             >
-              Voir le profil
+              Voir les infos
             </Button>
           </div>
         </>

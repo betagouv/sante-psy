@@ -7,6 +7,7 @@ import StudentProcess from './StudentProcess';
 import Statistics from './Statistics';
 
 import styles from './landing.cssmodule.scss';
+
 import Section from './Section';
 
 const Landing = () => {

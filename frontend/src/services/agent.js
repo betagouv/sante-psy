@@ -89,6 +89,7 @@ const User = {
   getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),
   login: token => client.post('/psychologist/login', { token }),
   sendMail: email => client.post('/psychologist/sendMail', { email }),
+  sendStudentMail: email => clientWithoutErrorManagement.post('/student/sendMail', { email }),
   logout: () => client.post('/psychologist/logout'),
 };
 

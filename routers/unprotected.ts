@@ -26,6 +26,11 @@ router.post('/psychologist/sendMail',
   loginController.sendMail);
 router.post('/psychologist/login', speedLimiterLogin, loginController.login);
 
+router.post('/student/sendMail',
+  speedLimiterLogin,
+  contactController.mailValidator,
+  contactController.sendStudentMail);
+
 // prevent abuse for some rules
 const speedLimiter = slowDown({
   windowMs: 5 * 60 * 1000, // 5 minutes

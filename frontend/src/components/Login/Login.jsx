@@ -71,7 +71,6 @@ const Login = () => {
             <Col>
               <label>
                 Adresse email :
-                {' '}
                 <TextInput
                   ref={emailRef}
                   className={styles.mailInput}
