@@ -131,7 +131,7 @@ const Patients = () => {
   return (
     <>
       <Callout hasInfoIcon={false}>
-        <CalloutText className="fr-text">
+        <CalloutText size="md">
           Nous vous rappelons que vous pouvez recevoir des étudiants quel que soit leur département,
           écoles supérieures/universités ou lieu de résidence.
         </CalloutText>

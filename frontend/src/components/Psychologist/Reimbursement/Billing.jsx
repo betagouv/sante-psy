@@ -60,7 +60,7 @@ const Billing = () => {
   return (
     <>
       <Callout hasInfoIcon={false}>
-        <CalloutText className="fr-text">
+        <CalloutText size="md">
           À la fin de chaque mois, vous devez envoyer votre facture contenant vos séances réalisées
           à votre université de convention.
           <br />

@@ -73,7 +73,7 @@ const Appointments = () => {
   return (
     <>
       <Callout hasInfoIcon={false}>
-        <CalloutText className="fr-text">
+        <CalloutText size="md">
           Faîtes attention à vérifier l&lsquo;exactitude de vos déclarations afin d&lsquo;éviter l&lsquo;allongement de
           vos délais de remboursements.
         </CalloutText>
