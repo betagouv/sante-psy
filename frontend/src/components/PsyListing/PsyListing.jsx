@@ -197,8 +197,18 @@ const PsyListing = () => {
     <Page
       title="Trouver un psychologue"
       description={psychologists
-        ? `Il y a actuellement ${psychologists.length} partenaires du dispositif d‘accompagnement.
-      La liste est mise à jour quotidiennement, revenez la consulter si vous n‘avez pas pu trouver de psychologue.`
+        ? (
+          <>
+            Trouver le ou la psychologue qui vous convient parmi les
+            {` ${psychologists.length} `}
+            référencés.
+            Munissez-vous
+            {' '}
+            <b>obligatoirement</b>
+            {' '}
+            d’une lettre d’orientation de votre médecin lors du rendez-vous.`
+          </>
+        )
         : 'Chargement de la liste des psychologues'}
       background="yellow"
       dataTestId="psyListPage"
