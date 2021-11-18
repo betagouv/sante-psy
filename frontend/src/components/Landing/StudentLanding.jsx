@@ -22,10 +22,6 @@ const StudentLanding = () => {
     if (emailRef.current) {
       emailRef.current.focus();
     }
-
-    if (__PIXEL_ADS__) {
-      window.fbq('track', 'PageView');
-    }
   }, []);
 
   const trackEvent = () => {
