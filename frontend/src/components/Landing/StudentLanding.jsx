@@ -24,7 +24,7 @@ const StudentLanding = () => {
     }
 
     if (__PIXEL_ADS__) {
-      fbq('track', 'PageView');
+      window.fbq('track', 'PageView');
     }
   }, []);
 
@@ -33,10 +33,10 @@ const StudentLanding = () => {
       _paq.push(['trackEvent', 'Student', 'SendMail']);
     }
     if (__PIXEL_ADS__) {
-      fbq('track', 'Contact');
-      gtag('event', 'conversion', { 'send_to': 'AW-10803675495/0jD3CLHYqYMDEOeCzJ8o' });
+      window.fbq('track', 'Contact');
+      window.gtag('event', 'conversion', { send_to: 'AW-10803675495/0jD3CLHYqYMDEOeCzJ8o' });
     }
-  }
+  };
 
   const sendMail = e => {
     e.preventDefault();
