@@ -22,7 +22,21 @@ const StudentLanding = () => {
     if (emailRef.current) {
       emailRef.current.focus();
     }
+
+    if (__PIXEL_ADS__) {
+      fbq('track', 'PageView');
+    }
   }, []);
+
+  const trackEvent = () => {
+    if (__MATOMO__) {
+      _paq.push(['trackEvent', 'Student', 'SendMail']);
+    }
+    if (__PIXEL_ADS__) {
+      fbq('track', 'Contact');
+      gtag('event', 'conversion', { 'send_to': 'AW-10803675495/0jD3CLHYqYMDEOeCzJ8o' });
+    }
+  }
 
   const sendMail = e => {
     e.preventDefault();
@@ -31,6 +45,8 @@ const StudentLanding = () => {
       .catch(error => {
         setNotification(error.response.data, false, false);
       });
+
+    trackEvent();
   };
 
   return (

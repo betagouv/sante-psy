@@ -11,6 +11,7 @@ module.exports = {
   globals: {
     _paq: false,
     __MATOMO__: false,
+    __PIXEL_ADS__: false,
     __API__: false,
   },
   parser: '@babel/eslint-parser',
