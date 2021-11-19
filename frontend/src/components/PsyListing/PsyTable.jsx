@@ -113,25 +113,23 @@ const PsyTable = ({
   return (
     <div ref={table}>
       {psychologists.length > 0 ? (
-        <>
-          <Table
-            data-test-id="psy-table"
-            className="fr-mb-3w"
-            caption={title}
-            rowKey="dossierNumber"
-            columns={columns}
-            data={psychologists}
-            pagination
-            paginationPosition="center"
-            page={currentPage}
-            perPage={10}
-            setPage={p => {
-              setPage(p);
-              table.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
-            }}
-            surrendingPages={surrendingPages}
+        <Table
+          data-test-id="psy-table"
+          className="fr-mb-3w"
+          caption={title}
+          rowKey="dossierNumber"
+          columns={columns}
+          data={psychologists}
+          pagination
+          paginationPosition="center"
+          page={currentPage}
+          perPage={10}
+          setPage={p => {
+            setPage(p);
+            table.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+          }}
+          surrendingPages={surrendingPages}
           />
-        </>
       ) : noResult }
     </div>
   );

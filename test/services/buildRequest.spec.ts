@@ -23,7 +23,8 @@ describe('Build Request', () => {
 
     await buildRequest.addVerificationMessage(id, message);
 
-    sinon.assert.calledWith(executeMutationStub,
+    sinon.assert.calledWith(
+      executeMutationStub,
       sinon.match((query) => query.includes('mutation dossierModifierAnnotationText')),
       sinon.match({
         input: {
@@ -32,7 +33,8 @@ describe('Build Request', () => {
           annotationId: 'Q2hhbXAtMTY1NzQwNQ==',
           value: message,
         },
-      }));
+      }),
+    );
   });
 
   it('verifyDossier', async () => {
@@ -40,7 +42,8 @@ describe('Build Request', () => {
 
     await buildRequest.verifyDossier(id);
 
-    sinon.assert.calledWith(executeMutationStub,
+    sinon.assert.calledWith(
+      executeMutationStub,
       sinon.match((query) => query.includes('mutation dossierModifierAnnotationCheckbox')),
       sinon.match({
         input: {
@@ -49,7 +52,8 @@ describe('Build Request', () => {
           annotationId: 'Q2hhbXAtMTY1NzQwMw==',
           value: true,
         },
-      }));
+      }),
+    );
   });
 
   it('putDossierInInstruction', async () => {
@@ -57,14 +61,16 @@ describe('Build Request', () => {
 
     await buildRequest.putDossierInInstruction(id);
 
-    sinon.assert.calledWith(executeMutationStub,
+    sinon.assert.calledWith(
+      executeMutationStub,
       sinon.match((query) => query.includes('mutation dossierPasserEnInstruction')),
       sinon.match({
         input: {
           dossierId: id,
           instructeurId: INSTRUCTOR_ID,
         },
-      }));
+      }),
+    );
   });
 
   it('acceptPsychologist', async () => {
@@ -72,14 +78,16 @@ describe('Build Request', () => {
 
     await buildRequest.acceptPsychologist(id);
 
-    sinon.assert.calledWith(executeMutationStub,
+    sinon.assert.calledWith(
+      executeMutationStub,
       sinon.match((query) => query.includes('mutation dossierAccepter')),
       sinon.match({
         input: {
           dossierId: id,
           instructeurId: INSTRUCTOR_ID,
         },
-      }));
+      }),
+    );
   });
 
   it('sendMessageWithAttachment', async () => {
@@ -89,13 +97,15 @@ describe('Build Request', () => {
 
     await buildRequest.sendMessageWithAttachment(message, attachment, id);
 
-    sinon.assert.calledWith(executeMutationStub,
+    sinon.assert.calledWith(
+      executeMutationStub,
       sinon.match((query) => query.includes('mutation dossierEnvoyerMessage')),
       sinon.match({
         dossierId: id,
         instructeurId: INSTRUCTOR_ID,
         body: message,
         attachment,
-      }));
+      }),
+    );
   });
 });

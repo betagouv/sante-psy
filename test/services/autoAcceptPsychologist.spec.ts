@@ -30,16 +30,22 @@ describe('autoAcceptPsychologist', () => {
 
     await autoAcceptPsychologists();
 
-    sinon.assert.calledWith(uploadDocumentStub,
+    sinon.assert.calledWith(
+      uploadDocumentStub,
       sinon.match.string,
-      dossierId);
+      dossierId,
+    );
 
-    sinon.assert.calledWith(sendMessageWithAttachmentStub,
+    sinon.assert.calledWith(
+      sendMessageWithAttachmentStub,
       config.demarchesSimplifiees.autoAcceptMessage,
       FILE_ID,
-      dossierId);
+      dossierId,
+    );
 
-    sinon.assert.calledWith(acceptPsychologistStub,
-      dossierId);
+    sinon.assert.calledWith(
+      acceptPsychologistStub,
+      dossierId,
+    );
   });
 });

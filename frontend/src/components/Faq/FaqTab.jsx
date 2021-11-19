@@ -79,11 +79,13 @@ const FaqTab = ({ type }) => {
                         className={styles.answer}
                       // eslint-disable-next-line react/no-danger
                         dangerouslySetInnerHTML={{
-                          __html: sanitizeHtml(item.answer,
+                          __html: sanitizeHtml(
+                            item.answer,
                             {
                               allowedTags: ['a', 'br', 'ul', 'li'],
                               allowedAttributes: { a: ['href', 'target', 'rel'] },
-                            }),
+                            },
+                          ),
                         }}
                       />
                     </AccordionItem>

@@ -1,7 +1,7 @@
 import { EditablePsychologist, NonEditablePsychologist, Psychologist } from '../types/Psychologist';
 
 export const addFrenchLanguageIfMissing = (languages: string): string => {
-  const frenchRegexp = new RegExp(/fran[çc]ais/, 'g');
+  const frenchRegexp = /fran[çc]ais/g;
   const french = 'Français';
   if (!languages || languages.trim().length === 0) {
     return french;

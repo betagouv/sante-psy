@@ -39,7 +39,7 @@ const fields = [
           {psychologist.website}
         </a>
       )
-        : <></>
+        : null
     ),
   },
 ];

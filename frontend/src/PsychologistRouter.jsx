@@ -32,7 +32,7 @@ const PsychologistRouter = () => {
 
   const hasSignedConvention = user.convention && user.convention.isConventionSigned;
   const modal = hasSignedConvention || !shouldCheckConventionAgain()
-    ? <></>
+    ? null
     : <ConventionModal currentConvention={user.convention} />;
 
   const getPageProps = () => {

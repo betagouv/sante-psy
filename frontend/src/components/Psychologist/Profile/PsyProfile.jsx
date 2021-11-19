@@ -190,7 +190,7 @@ const PsyProfile = () => {
                           <b>{`${info.label} : `}</b>
                           {value}
                         </p>
-                      ) : <></>}
+                      ) : null}
                     </div>
                   );
                 })}

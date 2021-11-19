@@ -68,6 +68,7 @@ module.exports = {
       },
     ],
     'react/static-property-placement': 'off',
+    'react/function-component-definition': 'off',
   },
   settings: {
     'import/resolver': { webpack: { config: 'config/webpack.base.js' } },

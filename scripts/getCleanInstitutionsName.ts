@@ -22,8 +22,11 @@ patientsInstitution.map((institution) => institution.institutionName)
           };
         });
 
-fs.writeFileSync('newPatientsInstitution.json',
+fs.writeFileSync(
+  'newPatientsInstitution.json',
   JSON.stringify(
     universities,
-    null, 2,
-  ));
+    null,
+    2,
+  ),
+);

@@ -48,7 +48,7 @@ const Announcement = () => {
       <Notification message={config.announcement} onClose={onClose} type="info" />
     </div>
   ) : (
-    <></>
+    null
   );
 };
 

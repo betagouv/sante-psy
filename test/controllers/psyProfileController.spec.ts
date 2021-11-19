@@ -365,18 +365,20 @@ describe('psyProfileController', () => {
     });
 
     it('should refuse multiple invalid fields', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        phone: '',
-        website: 'http://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso',
-      },
-      'Vous devez spécifier un email valide. Vous devez spécifier le téléphone du secrétariat.');
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          phone: '',
+          website: 'http://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          languages: 'Français, Anglais',
+          personalEmail: 'perso',
+        },
+        'Vous devez spécifier un email valide. Vous devez spécifier le téléphone du secrétariat.',
+      );
     });
 
     const shouldPassUpdatePsyInputValidation = async (postData) => {

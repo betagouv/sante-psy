@@ -4,7 +4,7 @@ import db from '../db/db';
 import { psychologistsTable } from '../db/tables';
 import getAddressCoordinates from '../services/getAddressCoordinates';
 
-const delay = (ms = 1000): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms = 1000): Promise<void> => new Promise((resolve) => { setTimeout(resolve, ms); });
 
 const insertCoordinatesToPsychologists = async (): Promise<void> => {
   console.log('Adding coordinates to psychologists without location...');
