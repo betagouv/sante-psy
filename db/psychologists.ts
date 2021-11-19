@@ -230,12 +230,16 @@ const updateConventionInfo = async (
 
 const getConventionInfo = async (psychologistId: string)
   : Promise<{universityName: string, universityId: string, isConventionSigned: boolean}> => db.from(psychologistsTable)
-    .select(`${'universities'}.name as universityName`,
+    .select(
+      `${'universities'}.name as universityName`,
       `${'universities'}.id as universityId`,
-      `${psychologistsTable}.isConventionSigned`)
-    .innerJoin('universities',
+      `${psychologistsTable}.isConventionSigned`,
+    )
+    .innerJoin(
+      'universities',
       `${psychologistsTable}.assignedUniversityId`,
-      `${'universities'}.id`)
+      `${'universities'}.id`,
+    )
     .where(`${psychologistsTable}.dossierNumber`, psychologistId)
     .first();
 

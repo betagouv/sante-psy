@@ -15,7 +15,8 @@ const verifyPsychologist = async (psychologist: DSPsychologist, adeliInfo:{[key:
 
   if (errors.length === 0) {
     const verificationMessage = graphql.addVerificationMessage(
-      psychologist.id, `Dossier vérifié automatiquement le ${today}`,
+      psychologist.id,
+      `Dossier vérifié automatiquement le ${today}`,
     );
     const verifyDossier = graphql.verifyDossier(psychologist.id);
     const putDossierInInstruction = graphql.putDossierInInstruction(psychologist.id);
@@ -23,8 +24,10 @@ const verifyPsychologist = async (psychologist: DSPsychologist, adeliInfo:{[key:
     return true;
   }
 
-  await graphql.addVerificationMessage(psychologist.id,
-    `Le dossier n'a pas passé la vérification automatique le ${today} car ${errors}`);
+  await graphql.addVerificationMessage(
+    psychologist.id,
+    `Le dossier n'a pas passé la vérification automatique le ${today} car ${errors}`,
+  );
   return false;
 };
 

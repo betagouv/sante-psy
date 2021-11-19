@@ -89,10 +89,12 @@ describe('checkForMultipleAcceptedDossiers', () => {
     await cronDemarchesSimplifiees.checkForMultipleAcceptedDossiers();
 
     sinon.assert.called(sendMailStub);
-    sinon.assert.calledWith(sendMailStub,
+    sinon.assert.calledWith(
+      sendMailStub,
       sinon.match(config.teamEmail), // toEmail
       sinon.match.string, // subject : any
-      sinon.match(psy.personalEmail)); // body contains personalEmail
+      sinon.match(psy.personalEmail),
+    ); // body contains personalEmail
   });
 });
 

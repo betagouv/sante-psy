@@ -20,10 +20,12 @@ const speedLimiterLogin = slowDown({
   delayMs: 500, // begin adding 500ms of delay per request above 10:
 });
 
-router.post('/psychologist/sendMail',
+router.post(
+  '/psychologist/sendMail',
   speedLimiterLogin,
   loginController.emailValidators,
-  loginController.sendMail);
+  loginController.sendMail,
+);
 router.post('/psychologist/login', speedLimiterLogin, loginController.login);
 
 // prevent abuse for some rules

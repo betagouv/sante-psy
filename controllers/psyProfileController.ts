@@ -102,16 +102,14 @@ const updateValidators = [
     .notEmpty()
     .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier les langues parlées.'),
-  oneOf(
-    [
-      // Two valid possibilities : email is empty, or email is valid format.
-      check('email').trim().isEmpty(),
-      check('email')
+  oneOf([
+    // Two valid possibilities : email is empty, or email is valid format.
+    check('email').trim().isEmpty(),
+    check('email')
         .trim()
         .customSanitizer(DOMPurify.sanitize)
         .isEmail(),
-    ], 'Vous devez spécifier un email valide.',
-  ),
+  ], 'Vous devez spécifier un email valide.'),
   check('description')
     .trim()
     .customSanitizer(DOMPurify.sanitize),

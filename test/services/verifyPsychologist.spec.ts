@@ -39,9 +39,11 @@ describe('verifyPsychologist', () => {
 
     result.should.equals(true);
     sinon.assert.calledOnce(addVerificationMessageStub);
-    sinon.assert.calledWith(addVerificationMessageStub,
+    sinon.assert.calledWith(
+      addVerificationMessageStub,
       psyDS.id,
-      sinon.match((message) => message.startsWith('Dossier vérifié automatiquement le ')));
+      sinon.match((message) => message.startsWith('Dossier vérifié automatiquement le ')),
+    );
     sinon.assert.calledWith(verifyDossierStub, psyDS.id);
     sinon.assert.calledWith(putDossierInInstructionStub, psyDS.id);
   });
@@ -55,10 +57,12 @@ describe('verifyPsychologist', () => {
 
     result.should.equals(false);
     sinon.assert.calledOnce(addVerificationMessageStub);
-    sinon.assert.calledWith(addVerificationMessageStub,
+    sinon.assert.calledWith(
+      addVerificationMessageStub,
       psyDS.id,
       sinon.match((message) => message.startsWith('Le dossier n\'a pas passé la vérification automatique le ')
-      && message.endsWith('car error 3,error 4,error 1,error 2')));
+      && message.endsWith('car error 3,error 4,error 1,error 2')),
+    );
     sinon.assert.notCalled(verifyDossierStub);
     sinon.assert.notCalled(putDossierInInstructionStub);
   });

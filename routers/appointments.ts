@@ -5,11 +5,15 @@ import appointmentsController from '../controllers/appointmentsController';
 const router = express.Router();
 
 router.get('/', appointmentsController.getAll);
-router.post('/',
+router.post(
+  '/',
   appointmentsController.createValidators,
-  appointmentsController.create);
-router.delete('/:appointmentId',
+  appointmentsController.create,
+);
+router.delete(
+  '/:appointmentId',
   appointmentsController.deleteValidators,
-  appointmentsController.delete);
+  appointmentsController.delete,
+);
 
 export default router;

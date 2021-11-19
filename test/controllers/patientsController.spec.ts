@@ -651,132 +651,164 @@ describe('patientsController', () => {
 
     it('should refuse empty firstNames', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, patientId, {
+      shouldFailUpdatePatientInputValidation(
+        done,
+        patientId,
+        {
         // no firstNames
-        lastName: 'Nom',
-        INE: '1234567890A',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
-        doctorName,
-        doctorAddress,
-        dateOfBirth,
-      },
-      'Vous devez spécifier le.s prénom.s du patient.');
+          lastName: 'Nom',
+          INE: '1234567890A',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          hasPrescription: undefined,
+          doctorName,
+          doctorAddress,
+          dateOfBirth,
+        },
+        'Vous devez spécifier le.s prénom.s du patient.',
+      );
     });
 
     it('should refuse empty lastName', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, patientId, {
-        firstNames: 'Blou Blou',
-        // no lastName
-        INE: '1234567890A',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
-        doctorName,
-        doctorAddress,
-        dateOfBirth,
-      },
-      'Vous devez spécifier le nom du patient.');
+      shouldFailUpdatePatientInputValidation(
+        done,
+        patientId,
+        {
+          firstNames: 'Blou Blou',
+          // no lastName
+          INE: '1234567890A',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          hasPrescription: undefined,
+          doctorName,
+          doctorAddress,
+          dateOfBirth,
+        },
+        'Vous devez spécifier le nom du patient.',
+      );
     });
 
     it('should refuse whitespace firstNames', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, patientId, {
-        firstNames: '   ',
-        lastName: 'Nom',
-        INE: '1234567890A',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
-        doctorName,
-        doctorAddress,
-        dateOfBirth,
-      },
-      'Vous devez spécifier le.s prénom.s du patient.');
+      shouldFailUpdatePatientInputValidation(
+        done,
+        patientId,
+        {
+          firstNames: '   ',
+          lastName: 'Nom',
+          INE: '1234567890A',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          hasPrescription: undefined,
+          doctorName,
+          doctorAddress,
+          dateOfBirth,
+        },
+        'Vous devez spécifier le.s prénom.s du patient.',
+      );
     });
 
     it('should refuse whitespace lastName', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, patientId, {
-        firstNames: 'Blou Blou',
-        lastName: '   ',
-        INE: '1234567890A',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
-        doctorName,
-        doctorAddress,
-        dateOfBirth,
-      },
-      'Vous devez spécifier le nom du patient.');
+      shouldFailUpdatePatientInputValidation(
+        done,
+        patientId,
+        {
+          firstNames: 'Blou Blou',
+          lastName: '   ',
+          INE: '1234567890A',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          hasPrescription: undefined,
+          doctorName,
+          doctorAddress,
+          dateOfBirth,
+        },
+        'Vous devez spécifier le nom du patient.',
+      );
     });
 
     it('should refuse INE with non-aphanumeric chars', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, patientId, {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '1234567890à',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
-        doctorName,
-        doctorAddress,
-        dateOfBirth,
-      },
-      'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
-      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
+      shouldFailUpdatePatientInputValidation(
+        done,
+        patientId,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '1234567890à',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          hasPrescription: undefined,
+          doctorName,
+          doctorAddress,
+          dateOfBirth,
+        },
+        'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.',
+      );
     });
 
     it('should refuse validation with INE length > 50 chars', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, patientId, {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '1'.repeat(51),
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
-        doctorName,
-        doctorAddress,
-        dateOfBirth,
-      },
-      'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
-      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
+      shouldFailUpdatePatientInputValidation(
+        done,
+        patientId,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '1'.repeat(51),
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          hasPrescription: undefined,
+          doctorName,
+          doctorAddress,
+          dateOfBirth,
+        },
+        'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.',
+      );
     });
 
     it('should refuse if patientId is not valid uuid', (done) => {
-      shouldFailUpdatePatientInputValidation(done, 'not-a-valid-uuid', {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '12345678901',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
-        doctorName,
-        doctorAddress,
-        dateOfBirth,
-      },
-      'Ce patient n\'existe pas.');
+      shouldFailUpdatePatientInputValidation(
+        done,
+        'not-a-valid-uuid',
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '12345678901',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          hasPrescription: undefined,
+          doctorName,
+          doctorAddress,
+          dateOfBirth,
+        },
+        'Ce patient n\'existe pas.',
+      );
     });
 
     it('should refuse if dateOfBirth is not valid', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, patientId, {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '1234567890A',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
-        doctorName,
-        doctorAddress,
-        dateOfBirth: 'pizza time',
-      },
-      'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.\n'
-      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
+      shouldFailUpdatePatientInputValidation(
+        done,
+        patientId,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '1234567890A',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          hasPrescription: undefined,
+          doctorName,
+          doctorAddress,
+          dateOfBirth: 'pizza time',
+        },
+        'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.\n'
+      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.',
+      );
     });
 
     const shouldPassUpdatePatientInputValidation = (done, patientId, postData) => {

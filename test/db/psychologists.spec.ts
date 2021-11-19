@@ -227,9 +227,11 @@ describe('DB Psychologists', () => {
         'dossierNumber',
         'assignedUniversityId']);
       expect(result).to.have.length(1);
-      expect(result[0]).to.have.all.keys('personalEmail',
+      expect(result[0]).to.have.all.keys(
+        'personalEmail',
         'dossierNumber',
-        'assignedUniversityId');
+        'assignedUniversityId',
+      );
       expect(result[0].personalEmail).to.eql(psy.personalEmail);
       expect(result[0].dossierNumber).to.eql(psy.dossierNumber);
       expect(result[0].assignedUniversityId).to.eql(psy.assignedUniversityId);

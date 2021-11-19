@@ -10,7 +10,13 @@ import uploadDocument from './uploadDocument';
 import graphql from './buildRequest';
 
 const FILE = path.join(
-  __dirname, '..', '..', '..', 'static', 'documents', 'parcours_psychologue_sante_psy_etudiant.pdf',
+  __dirname,
+  '..',
+  '..',
+  '..',
+  'static',
+  'documents',
+  'parcours_psychologue_sante_psy_etudiant.pdf',
 );
 
 const sendAutoAcceptMessage = async (dossierId: string): Promise<void> => {
