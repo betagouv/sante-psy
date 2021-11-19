@@ -32,7 +32,7 @@ export default class UserStore {
 
   setUser = user => {
     this.user = { ...this.user, ...user };
-  }
+  };
 
   pullUser() {
     return agent.User.getConnected()

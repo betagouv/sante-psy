@@ -1,5 +1,5 @@
 // Code strongly inspired from https://developer.matomo.org/guides/spa-tracking
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const Matomo = () => {
@@ -16,7 +16,7 @@ const Matomo = () => {
 
     setPreviousURL(window.location.pathname);
   }, [location]);
-  return <></>;
+  return null;
 };
 
 export default Matomo;

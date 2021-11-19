@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useStore } from 'stores/';
 
@@ -11,7 +11,7 @@ const Logout = () => {
     history.push('/');
   });
 
-  return <></>;
+  return null;
 };
 
 export default Logout;

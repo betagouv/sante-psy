@@ -49,7 +49,7 @@ function App() {
       <ScrollToTop loading={loading} />
       <div id="contenu">
         {!loading && (
-        <React.Suspense fallback={<></>}>
+        <React.Suspense fallback={null}>
           <Switch>
             <Route exact path="/activation/:token" component={ActiveProfile} />
             <Route exact path="/suspension/:token" component={InactiveProfile} />

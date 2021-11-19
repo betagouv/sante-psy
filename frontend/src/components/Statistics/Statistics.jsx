@@ -15,7 +15,7 @@ const Statistics = () => {
   }, []);
 
   if (!config.statistics) {
-    return <></>;
+    return null;
   }
 
   return (

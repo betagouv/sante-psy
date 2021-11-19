@@ -18,6 +18,7 @@
 module.exports = on => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+  // eslint-disable-next-line default-param-last
   on('before:browser:launch', (browser = {}, launchOptions) => {
     if (browser.name === 'chrome') {
       launchOptions.args.push('--disable-dev-shm-usage');

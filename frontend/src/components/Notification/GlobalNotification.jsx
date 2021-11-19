@@ -27,7 +27,7 @@ const GlobalNotification = ({ className }) => {
     );
   }
 
-  return <></>;
+  return null;
 };
 
 export default observer(GlobalNotification);
