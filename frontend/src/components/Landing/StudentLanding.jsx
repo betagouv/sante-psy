@@ -86,7 +86,7 @@ const StudentLanding = () => {
       <div className={landingStyles.sectionAlt}>
         <div className={studentStyles.container}>
           <h1 className={studentStyles.title}>
-            <div>Étudiantes et étudiants,</div>
+            <div>Étudiants,</div>
             <div>
               Bénéficiez de
               {' '}
