@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { Button, TextInput } from '@dataesr/react-dsfr';
@@ -5,6 +6,7 @@ import { Button, TextInput } from '@dataesr/react-dsfr';
 import agent from 'services/agent';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import { useStore } from 'stores/';
+import trackAds from 'services/trackAds';
 import Statistics from './Statistics';
 
 import landingStyles from './landing.cssmodule.scss';
@@ -14,6 +16,8 @@ import StudentCards from './StudentCards';
 const StudentLanding = () => {
   const emailRef = useRef();
   const [email, setEmail] = useState('');
+  const [facebookConsent, setFacebookConsent] = useState(false);
+  const [googleAdsConsent, setGoogleAdsConsent] = useState(false);
   const { commonStore: { setNotification } } = useStore();
 
   useEffect(() => {
@@ -22,7 +26,49 @@ const StudentLanding = () => {
     if (emailRef.current) {
       emailRef.current.focus();
     }
+
+    if (__PIXEL_ADS__) {
+      // Inspired by https://developers.axeptio.eu/cookies/cookies-integration
+      trackAds.initAxeptio();
+
+      if (!window._axcb) {
+        window._axcb = [];
+      }
+      window._axcb.push(axeptio => {
+        axeptio.on('cookies:complete', choices => {
+          if (choices.facebook_pixel) {
+            console.debug('Consent given for facebook ads... launch script');
+            setFacebookConsent(true);
+            trackAds.initFacebookAds();
+          }
+          if (choices.Google_Ads) {
+            console.debug('Consent given for google ads... launch script');
+            setGoogleAdsConsent(true);
+            trackAds.initGoogleAds();
+          }
+        });
+
+        // See https:// developers.axeptio.eu/site-integration/special-cases-spa-or-react
+        axeptio.on('consent:saved', () => {
+          window.location.reload();
+        });
+      });
+    }
   }, []);
+
+  const trackEvent = () => {
+    if (__MATOMO__) {
+      _paq.push(['trackEvent', 'Student', 'SendMail']);
+    }
+    if (facebookConsent) {
+      console.debug('Track contact event on facebook ads');
+      trackAds.trackFacebookAds();
+    }
+    if (googleAdsConsent) {
+      console.debug('Send conversion event to google ads');
+      trackAds.trackGoogleAds();
+    }
+  };
 
   const sendMail = e => {
     e.preventDefault();
@@ -31,6 +77,8 @@ const StudentLanding = () => {
       .catch(error => {
         setNotification(error.response.data, false, false);
       });
+
+    trackEvent();
   };
 
   return (

@@ -29,6 +29,7 @@ module.exports = (apiUrl) => Object.assign({}, baseConfig, {
       new webpack.DefinePlugin({
         __API__: apiUrl,
         __MATOMO__: process.env.ACTIVATE_MATOMO,
+        __PIXEL_ADS__: process.env.ACTIVATE_PIXEL_ADS,
       }),
     ]),
 });
