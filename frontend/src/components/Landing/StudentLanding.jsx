@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { Button, TextInput } from '@dataesr/react-dsfr';
@@ -5,12 +6,12 @@ import { Button, TextInput } from '@dataesr/react-dsfr';
 import agent from 'services/agent';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import { useStore } from 'stores/';
+import trackAds from 'services/trackAds';
 import Statistics from './Statistics';
 
 import landingStyles from './landing.cssmodule.scss';
 import studentStyles from './studentProcess.cssmodule.scss';
 import StudentCards from './StudentCards';
-import trackAds from 'services/trackAds';
 
 const StudentLanding = () => {
   const emailRef = useRef();
@@ -28,29 +29,27 @@ const StudentLanding = () => {
 
     if (__PIXEL_ADS__) {
       // Inspired by https://developers.axeptio.eu/cookies/cookies-integration
-      var el = document.createElement('script');
-      el.setAttribute('src', '/scripts/axeptio.js');
-      el.setAttribute('async', true);
-      if (document.body !== null) {
-        document.body.appendChild(el);
-      }
+      trackAds.initAxeptio();
 
-      void 0 === window._axcb && (window._axcb = []);
-      window._axcb.push(function (axeptio) {
-        axeptio.on("cookies:complete", function (choices) {
+      if (!window._axcb) {
+        window._axcb = [];
+      }
+      window._axcb.push(axeptio => {
+        axeptio.on('cookies:complete', choices => {
           if (choices.facebook_pixel) {
-            console.debug("Consent given for facebook ads... launch script");
+            console.debug('Consent given for facebook ads... launch script');
             setFacebookConsent(true);
-            trackAds.initFacebookPixel();
+            trackAds.initFacebookAds();
           }
           if (choices.Google_Ads) {
-            console.debug("Consent given for google ads... launch script");
+            console.debug('Consent given for google ads... launch script');
             setGoogleAdsConsent(true);
             trackAds.initGoogleAds();
           }
         });
 
-        axeptio.on('consent:saved', choices => {
+        // See https:// developers.axeptio.eu/site-integration/special-cases-spa-or-react
+        axeptio.on('consent:saved', () => {
           window.location.reload();
         });
       });
@@ -62,12 +61,12 @@ const StudentLanding = () => {
       _paq.push(['trackEvent', 'Student', 'SendMail']);
     }
     if (facebookConsent) {
-      console.debug("Track contact event on facebook ads")
-      trackAds.trackFacebookAds()
+      console.debug('Track contact event on facebook ads');
+      trackAds.trackFacebookAds();
     }
     if (googleAdsConsent) {
-      console.debug("Send conversion event to google ads")
-      trackAds.trackGoogleAds()
+      console.debug('Send conversion event to google ads');
+      trackAds.trackGoogleAds();
     }
   };
 
