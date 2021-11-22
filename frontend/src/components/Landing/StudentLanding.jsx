@@ -10,10 +10,13 @@ import Statistics from './Statistics';
 import landingStyles from './landing.cssmodule.scss';
 import studentStyles from './studentProcess.cssmodule.scss';
 import StudentCards from './StudentCards';
+import trackAds from 'services/trackAds';
 
 const StudentLanding = () => {
   const emailRef = useRef();
   const [email, setEmail] = useState('');
+  const [facebookConsent, setFacebookConsent] = useState(false);
+  const [googleAdsConsent, setGoogleAdsConsent] = useState(false);
   const { commonStore: { setNotification } } = useStore();
 
   useEffect(() => {
@@ -22,15 +25,49 @@ const StudentLanding = () => {
     if (emailRef.current) {
       emailRef.current.focus();
     }
+
+    if (__PIXEL_ADS__) {
+      // Inspired by https://developers.axeptio.eu/cookies/cookies-integration
+      var el = document.createElement('script');
+      el.setAttribute('src', '/scripts/axeptio.js');
+      el.setAttribute('async', true);
+      if (document.body !== null) {
+        document.body.appendChild(el);
+      }
+
+      void 0 === window._axcb && (window._axcb = []);
+      window._axcb.push(function (axeptio) {
+        axeptio.on("cookies:complete", function (choices) {
+          if (choices.facebook_pixel) {
+            console.debug("Consent given for facebook ads... launch script");
+            setFacebookConsent(true);
+            trackAds.initFacebookPixel();
+          }
+          if (choices.Google_Ads) {
+            console.debug("Consent given for google ads... launch script");
+            setGoogleAdsConsent(true);
+            trackAds.initGoogleAds();
+          }
+        });
+
+        axeptio.on('consent:saved', choices => {
+          window.location.reload();
+        });
+      });
+    }
   }, []);
 
   const trackEvent = () => {
     if (__MATOMO__) {
       _paq.push(['trackEvent', 'Student', 'SendMail']);
     }
-    if (__PIXEL_ADS__) {
-      window.fbq('track', 'Contact');
-      window.gtag('event', 'conversion', { send_to: 'AW-10803675495/0jD3CLHYqYMDEOeCzJ8o' });
+    if (facebookConsent) {
+      console.debug("Track contact event on facebook ads")
+      trackAds.trackFacebookAds()
+    }
+    if (googleAdsConsent) {
+      console.debug("Send conversion event to google ads")
+      trackAds.trackGoogleAds()
     }
   };
 

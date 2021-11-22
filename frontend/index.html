@@ -8,51 +8,11 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
 
   <!-- Matomo -->
-  <script type="text/javascript">
-    var _paq = window._paq || [];
-    (function () {
-      var u = "https://stats.data.gouv.fr/";
-      _paq.push(['setTrackerUrl', u + 'matomo.php']);
-      _paq.push(['setSiteId', 160]);
-      _paq.push(['setCookieSameSite', 'None']);
-      _paq.push(['setSecureCookie', true]);
-      var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-      g.type = 'text/javascript'; g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
-    })();
-  </script>
-  <!-- End Matomo Code -->
+  <script src="/scripts/matomo.js" async></script>
 
   <!-- Leaflet -->
-  <link rel="stylesheet" href="/leaflet.css" />
-  <script src="/leaflet.js" async></script>
-  <!-- End Leaflet-->
-
-  <!-- Facebook Pixel Code -->
-  <script>
-    !function (f, b, e, v, n, t, s) {
-      if (f.fbq) return; n = f.fbq = function () {
-        n.callMethod ?
-          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-      };
-      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-      n.queue = []; t = b.createElement(e); t.async = !0;
-      t.src = v; s = b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t, s)
-    }(window, document, 'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '3078857952370640');
-  </script>
-  <!-- End Facebook Pixel Code -->
-
-  <!-- Global site tag (gtag.js) - Google Ads: 10803675495 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-10803675495"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'AW-10803675495');
-  </script>
-  <!-- End Global site tag -->
+  <link rel="stylesheet" href="/styles/leaflet.css" />
+  <script src="/scripts/leaflet.js" async></script>
 </head>
 
 <body>
