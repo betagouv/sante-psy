@@ -28,10 +28,12 @@ router.post(
 );
 router.post('/psychologist/login', speedLimiterLogin, loginController.login);
 
-router.post('/student/sendMail',
+router.post(
+  '/student/sendMail',
   speedLimiterLogin,
   contactController.mailValidator,
-  contactController.sendStudentMail);
+  contactController.sendStudentMail,
+);
 
 // prevent abuse for some rules
 const speedLimiter = slowDown({
