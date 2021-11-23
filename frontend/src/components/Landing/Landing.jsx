@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import classnames from 'classnames';
 
-import { Callout, CalloutText } from '@dataesr/react-dsfr';
+import { Callout, CalloutText, CalloutTitle } from '@dataesr/react-dsfr';
+import { HashLink } from 'react-router-hash-link';
 
 import { useStore } from 'stores/';
 import PsychologistFinder from './PsychologistFinder';
@@ -21,15 +22,16 @@ const Landing = () => {
 
   return (
     <div className={classnames(styles.container, 'fr-container')} data-test-id="landingPageContainer">
-      <div className={styles.sectionCallout}>
-        <Callout hasInfoIcon={false}>
-          {/* <CalloutTitle as="h3">Prolongation du dispositif</CalloutTitle> */}
-          <CalloutText size="md">
-            Prolongation du dispositif jusqu&lsquo;au 31 août 2022 donnant droit jusqu&lsquo;à 8 séances
-            sans avance de frais
-          </CalloutText>
-        </Callout>
-      </div>
+      <Callout hasInfoIcon={false}>
+        <CalloutTitle as="h3">Évolution du dispositif</CalloutTitle>
+        <CalloutText size="md">
+          Prolongation du dispositif jusqu&lsquo;au 31 août 2022 donnant droit jusqu&lsquo;à 8 séances
+          sans avance de frais. Pour plus d&lsquo;informations,
+          {' '}
+          <HashLink to="/faq">cliquez ici</HashLink>
+          .
+        </CalloutText>
+      </Callout>
       <div className={styles.sectionAlt}>
         <StudentProcess />
       </div>
