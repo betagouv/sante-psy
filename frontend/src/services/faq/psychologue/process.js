@@ -24,21 +24,6 @@ module.exports = config => [
     D’une façon générale, les établissements disposant d’un SSU sont invités à ouvrir autant que possible leur service aux écoles partenaires ou partageant le site.',
   },
   {
-    question: 'Qui doit renouveler les séances\u00A0? Faut-il nécessairement repasser chez le médecin\u00A0?',
-    answer: 'Au-delà d’un premier cycle de trois séances, l’étudiant peut être de nouveau orienté, \
-    obligatoirement par le médecin du service de santé universitaire ou le médecin généraliste, \
-    vers un psychologue pour un second cycle de trois séances au plus. \
-    Le passage par le médecin répond à la volonté d’inscrire l’étudiant dans un parcours de soin rigoureux.',
-  },
-  {
-    question: 'Si l’étudiant le souhaite, au-delà de la première consultation "d’orientation", peut-on lui proposer de continuer à le suivre pour les trois séances remboursées\u00A0?',
-    answer: 'L’étudiant qui a accès à la liste des psychologues participant au dispositif, \
-    choisit celui qu’il souhaite consulter et prend rendez-vous avec lui. Il revient au psychologue de déterminer, lors de la première consultation, \
-    si l’étudiant a besoin d’une, deux ou trois séances avec lui. Dans l’hypothèse où à l’issue des trois premières séances, \
-    le psychologue considère utile ou nécessaire d’envisager des consultations supplémentaires, \
-    il se rapproche du SSU ou du médecin généraliste qui seuls sont habilités à orienter l’étudiant vers un psychologue pour au plus trois séances supplémentaires.',
-  },
-  {
     question: 'Il est indiqué que les psychologues feront acte de candidature via un formulaire simplifié en ligne et \
     qu’une plateforme numérique permettra de déclarer le nombre de consultations effectuées. Serait-il possible d’y avoir accès ou bien est-ce réservé aux SSU\u00A0?',
     answer: 'C’est au psychologue de faire la déclaration des séances faites une fois qu’il est inscrit via le formulaire en ligne et \
