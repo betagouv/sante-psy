@@ -28,6 +28,7 @@ import './colors.css';
 import './App.css';
 import InactiveProfile from 'components/Psychologist/Profile/InactiveProfile';
 import ActiveProfile from 'components/Psychologist/Profile/ActiveProfile';
+import StudentLanding from 'components/Landing/StudentLanding';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
@@ -64,6 +65,7 @@ function App() {
             <Route exact path="/faq" component={Faq} />
             <Route exact path="/stats" component={Statistics} />
             <Route exact path="/contact" component={Contact} />
+            <Route exact path="/etudiant" component={StudentLanding} />
             <Route exact path="/" component={Landing} />
             <Route path="/psychologue/">
               <Redirect to="/psychologue/login" />

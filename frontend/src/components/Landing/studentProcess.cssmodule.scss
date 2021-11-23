@@ -1,15 +1,27 @@
-.card {
-    justify-content: space-around;
-    padding-bottom: 24px;
-    gap: 24px;
-}
-
 .button {
     background-color: var(--w);
 }
 
-@media (min-width: 768px) {
-    .card {
-        padding-bottom: 64px;
+.title {
+    margin-bottom: 2rem;
+}
+
+.blueBackground {
+    background-color: var(--bf500);
+    color: white;
+    padding: 0px 16px 6px 16px;
+    white-space: nowrap;
+}
+
+.email {
+    padding: 32px 0 64px 0;
+    label {
+        display: none;
+    }
+
+    input {
+        margin-top: 0 !important;
+        max-width: 500px;
+        margin: auto
     }
 }
