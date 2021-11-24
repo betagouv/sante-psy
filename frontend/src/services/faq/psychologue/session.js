@@ -15,7 +15,7 @@ module.exports = config => [
   {
     question: 'Qu\'est ce que les "chèques psy" (aussi appelé "pass santé psy")\u00A0?',
     answer: 'Le terme "chèque psy" est employé par la ministre de l\'Enseignement Supérieur et de la Recherche. \
-    Il indique l\'accès aux 3 séances renouvelable 1 fois par la lettre d\'orientation du médecin généraliste.',
+    Il indique l\'accès aux 8 séances par la lettre d\'orientation du médecin généraliste.',
   },
   {
     question: 'Je reçois trop de demande, comment faire\u00A0?',
@@ -36,5 +36,17 @@ module.exports = config => [
   {
     question: 'Quelle est la date prévue de fin du dispositif Santé Psy Étudiant\u00A0?',
     answer: "Comme explicité dans votre convention, le dispositif continue sous sa forme actuelle jusqu'au 31 décembre 2021. Plus de détails à venir pour la suite de l'année scolaire 2021/2022.",
+  },
+  {
+    question: 'Le dispositif s\'arrête-t-il au 31 décembre 2021 et jusqu\'à quand puis-je recevoir des étudiants\u00A0?',
+    answer: 'Le dispositif se poursuit sur l\'année universitaire 2021/2022 soit jusqu\'au 31 août 2022. Vous pouvez donc \
+    poursuivre votre suivi jusqu\'à cette date. L\'université vous tiendra informée des modalités de prolongation concernant \
+    votre convention.',
+  },
+  {
+    question: 'La lettre d\'orientation est-elle obligatoire\u00A0?',
+    answer: 'Oui la lettre d\'orientation est obligatoire pour démarrer les séances. Toutefois la lettre d\'orientation après \
+    la 3ème séance a été levée, de ce fait l\'étudiant peut directement poursuivre jusqu\'à 8 séances sans repasser par un \
+    médecin généraliste.',
   },
 ];
