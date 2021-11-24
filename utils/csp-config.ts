@@ -8,6 +8,7 @@ export default helmet.contentSecurityPolicy({
       'https://stats.data.gouv.fr/',
       // Matomo script hash
       "'sha256-4sJsjD6jok0r8RIemFeNZ1nEQfYv6qdzYIaUCTrSIhs='",
+      'https://static.axept.io/sdk-slim.js',
       'https://connect.facebook.net',
       'https://www.googletagmanager.com/',
     ],
@@ -15,7 +16,6 @@ export default helmet.contentSecurityPolicy({
       "'self'",
       'https://stats.data.gouv.fr/',
       'https://*.tile.openstreetmap.org/',
-      'https://www.facebook.com/',
       'data:',
     ],
     'frame-src': ['https://stats.santepsyetudiant.beta.gouv.fr'],
@@ -23,6 +23,7 @@ export default helmet.contentSecurityPolicy({
       "'self'",
       'https://nominatim.openstreetmap.org',
       'https://stats.data.gouv.fr/',
+      'https://client.axept.io/',
     ],
   },
 });
