@@ -10,12 +10,12 @@ export default helmet.contentSecurityPolicy({
       "'sha256-4sJsjD6jok0r8RIemFeNZ1nEQfYv6qdzYIaUCTrSIhs='",
       'https://connect.facebook.net',
       'https://www.googletagmanager.com/',
+      'https://static.axept.io/sdk-slim.js',
     ],
     'img-src': [
       "'self'",
       'https://stats.data.gouv.fr/',
       'https://*.tile.openstreetmap.org/',
-      'https://www.facebook.com/',
       'data:',
     ],
     'frame-src': ['https://stats.santepsyetudiant.beta.gouv.fr'],
