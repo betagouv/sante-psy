@@ -23,6 +23,7 @@ export default helmet.contentSecurityPolicy({
       "'self'",
       'https://nominatim.openstreetmap.org',
       'https://stats.data.gouv.fr/',
+      'https://client.axept.io/',
     ],
   },
 });
