@@ -21,7 +21,7 @@ const dataConservation = [
   {
     'Catégories de données': 'Données de connexion',
     // eslint-disable-next-line max-len
-    'Durée de conservation': "Ces données sont conservées 12 mois, en application de la loi pour la confiance dans l'économie numérique n°2004-575 du 21 juin 2004 et de l'article 3 du décret n°2011-219 du 25 février 2011.",
+    'Durée de conservation': "Ces données sont conservées 12 mois, en application de la loi pour la confiance dans l'économie numérique n°2004-575 du 21 juin 2004 et de l'article 1 du décret n° 2021-1363 du 20 octobre 2021.",
   },
   {
     'Catégories de données': 'Cookies',
@@ -53,6 +53,15 @@ const dataSubcontractor = [
     Pays: 'France',
     'Traitement réalisé': 'Dématérialisation de Démarches Administrative',
     Garanties: <a href="https://doc.demarches-simplifiees.fr/cgu/cgu" target="_blank" rel="noreferrer">https://doc.demarches-simplifiees.fr/cgu/cgu</a>,
+  },
+];
+
+const dataCookies = [
+  {
+    Cookies: 'Matomo',
+    'Traitement réalisé': 'Analyse statistique des activités',
+    'Base juridique': 'Article 82 de la loi n°78-17 du 6 janvier 1978 modifiée',
+    Garanties: <a href="https://fr.matomo.org/privacy-policy/" target="_blank" rel="noreferrer">https://fr.matomo.org/privacy-policy/</a>,
   },
 ];
 
@@ -266,7 +275,7 @@ const PrivacyPolicy = () => {
         </p>
         <p>
           L&lsquo;obligation légale est posée par la loi LCEN n° 2004-575 du 21 juin 2004 pour la confiance
-          dans l&lsquo;économie numérique et par les articles 1 et 3 du décret n°2011-219 du 25 février 2011.
+          dans l&lsquo;économie numérique et par l’article 1 du décret n° 2021-1363 du 20 octobre 2021.
         </p>
         <Title as="h3" look="h6">
           Cookies
@@ -465,13 +474,13 @@ const PrivacyPolicy = () => {
           conservés. La consultation du site n&lsquo;est pas affectée lorsque
           les utilisateurs utilisent des navigateurs désactivant les cookies.
         </p>
+        <Title as="h3" look="h6">
+          Quels sont les cookies et traceurs que nous utilisons ?
+        </Title>
+        <SimpleTable data={dataCookies} />
         <p>
-          <strong>
-            Nous utilisons pour cela
-            {' '}
-            <a href="https://matomo.org/" target="_blank" rel="noopener noreferrer">Matomo</a>
-          </strong>
-          , un outil de mesure d&lsquo;audience web
+          <a href="https://matomo.org/" target="_blank" rel="noopener noreferrer">Matomo</a>
+          est un outil de mesure d&lsquo;audience web
           {' '}
           <a href="https://matomo.org/free-software/" target="_blank" rel="noopener noreferrer">libre</a>
           , paramétré pour être en conformité avec la
@@ -485,7 +494,10 @@ const PrivacyPolicy = () => {
           Cela signifie que votre adresse IP, par
           exemple, est anonymisée avant d&lsquo;être enregistrée. Il est donc
           impossible d&lsquo;associer vos visites sur ce site à votre
-          personne. Il convient d&lsquo;indiquer que :
+          personne.
+        </p>
+        <p>
+          Il convient d&lsquo;indiquer que :
         </p>
         <ul className="fr-list">
           <li>
@@ -497,6 +509,51 @@ const PrivacyPolicy = () => {
             l&lsquo;internaute sur d&lsquo;autres sites.
           </li>
         </ul>
+        <p>
+          Vous pouvez accéder aux statistiques d’usage disponibles en accès libre sur
+          {' '}
+          <a target="_blank" rel="noopener noreferrer" href="https://stats.data.gouv.fr/index.php?module=CoreHome&action=index&date=yesterday&period=day&idSite=160#?idSite=160&period=day&date=yesterday&segment=&category=Dashboard_Dashboard&subcategory=1">stats.data.gouv.fr</a>
+          .
+        </p>
+        <Title as="h3" look="h6">
+          Qu’est-ce qui nous autorise à les déposer ?
+        </Title>
+        <p>
+          En application de l’article 5(3) de la directive 2002/58/CE modifiée
+          concernant le traitement des données à caractère personnel et la protection
+          de la vie privée dans le secteur des communications électroniques, transposée
+          à l’article 82 de la loi n°78-17 du 6 janvier 1978 relative à l’informatique,
+          aux fichiers et aux libertés, les traceurs ou cookies suivent deux régimes distincts.
+        </p>
+        <p>
+          Les cookies strictement nécessaires au service, ceux de publicité non personnalisée
+          ou ayant pour finalité exclusive de faciliter la communication par voie électronique
+          sont dispensés de consentement préalable au titre de l’article 82 de la loi n°78-17
+          du 6 janvier 1978.
+        </p>
+        <p>
+          Les autres cookies n’étant pas strictement nécessaires au service ou n’ayant pas
+          pour finalité exclusive de faciliter la communication par voie électronique doivent
+          être consenti par l’utilisateur.
+        </p>
+        <p>
+          Ce consentement de la personne concernée pour une ou plusieurs finalités spécifiques
+          constitue une base légale au sens du RGPD et doit être entendu au sens de l&lsquo;article
+          6-a du Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016
+          relatif à la protection des personnes physiques à l&lsquo;égard du traitement des données
+          à caractère personnel et à la libre circulation de ces données.
+        </p>
+
+        <Title as="h3" look="h6">
+          Durée de conservation
+        </Title>
+
+        Nous conservons les cookies pour une durée de 13 mois ou, le cas échéant dès le retrait du consentement.
+
+        <Title as="h3" look="h6">
+          Droit au retrait
+        </Title>
+
         <p>
           Pour refuser les cookies de Matomo directement sur notre
           plateforme :
@@ -538,14 +595,6 @@ const PrivacyPolicy = () => {
             </a>
           </li>
         </ul>
-      </Section>
-      <Section title="Je contribue à enrichir vos données, puis-je y accéder ?">
-        <p>
-          Bien sûr ! Les statistiques d’usage sont disponibles en accès libre sur
-          {' '}
-          <a target="_blank" rel="noopener noreferrer" href="https://stats.data.gouv.fr/index.php?module=CoreHome&action=index&date=yesterday&period=day&idSite=160#?idSite=160&period=day&date=yesterday&segment=&category=Dashboard_Dashboard&subcategory=1">stats.data.gouv.fr</a>
-          .
-        </p>
       </Section>
     </Page>
   );
