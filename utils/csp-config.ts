@@ -8,9 +8,9 @@ export default helmet.contentSecurityPolicy({
       'https://stats.data.gouv.fr/',
       // Matomo script hash
       "'sha256-4sJsjD6jok0r8RIemFeNZ1nEQfYv6qdzYIaUCTrSIhs='",
+      'https://static.axept.io/sdk-slim.js',
       'https://connect.facebook.net',
       'https://www.googletagmanager.com/',
-      'https://static.axept.io/sdk-slim.js',
     ],
     'img-src': [
       "'self'",
