@@ -40,11 +40,19 @@ const StudentLanding = () => {
             console.debug('Consent given for facebook ads... launch script');
             setFacebookConsent(true);
             trackAds.initFacebookAds();
+          } else {
+            console.debug('Consent refused for facebook ads... remove script');
+            setFacebookConsent(false);
+            trackAds.removeFacebookAds();
           }
           if (choices.Google_Ads) {
             console.debug('Consent given for google ads... launch script');
             setGoogleAdsConsent(true);
             trackAds.initGoogleAds();
+          } else {
+            console.debug('Consent refused for google ads... remove script');
+            setGoogleAdsConsent(false);
+            trackAds.removeGoogleAds();
           }
         });
 

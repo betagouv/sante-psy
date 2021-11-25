@@ -7,8 +7,8 @@
 /* eslint-disable no-unused-expressions */
 const initAxeptio = () => {
   window.axeptioSettings = {
-    clientId: '61967f3fde10ba10101a4ca3',
-    cookiesVersion: 'santé psy étudiants-base',
+    clientId: '619fa94adcbb4a6f8f3ca556',
+    cookiesVersion: 'V1.0',
   };
 
   (function (d, s) {
@@ -33,6 +33,12 @@ const initGoogleAds = () => {
   gtag('config', 'AW-10803675495');
 };
 
+const removeGoogleAds = () => {
+  if (window.dataLayer) {
+    delete (window.dataLayer);
+  }
+};
+
 const initFacebookAds = () => {
   !(function (f, b, e, v, n, t, s) {
     if (f.fbq) return; n = f.fbq = function () {
@@ -52,6 +58,12 @@ const initFacebookAds = () => {
   window.fbq('init', '3078857952370640');
 };
 
+const removeFacebookAds = () => {
+  if (window.fbq) {
+    delete (window.fbq);
+  }
+};
+
 const trackGoogleAds = () => {
   window.gtag('event', 'conversion', { send_to: 'AW-10803675495/0jD3CLHYqYMDEOeCzJ8o' });
 };
@@ -64,6 +76,8 @@ module.exports = {
   initAxeptio,
   initGoogleAds,
   initFacebookAds,
+  removeGoogleAds,
+  removeFacebookAds,
   trackGoogleAds,
   trackFacebookAds,
 };
