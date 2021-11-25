@@ -16,6 +16,7 @@ export default helmet.contentSecurityPolicy({
       "'self'",
       'https://stats.data.gouv.fr/',
       'https://*.tile.openstreetmap.org/',
+      'https://axeptio.imgix.net',
       'data:',
     ],
     'frame-src': ['https://stats.santepsyetudiant.beta.gouv.fr'],
