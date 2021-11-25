@@ -19,7 +19,7 @@ export default helmet.contentSecurityPolicy({
       'https://stats.data.gouv.fr/',
       'https://*.tile.openstreetmap.org/',
       'https://axeptio.imgix.net',
-      'https://www.google.com/s2/favicons',
+      'https://www.google.com/',
       'data:',
     ],
     'frame-src': ['https://stats.santepsyetudiant.beta.gouv.fr'],
