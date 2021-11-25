@@ -5,7 +5,6 @@ window.axeptioSettings = {
 
 (function(d, s) {
   var t = d.getElementsByTagName(s)[0], e = d.createElement(s);
-  // React specificity, see https://developers.axeptio.eu/sdk/integration-du-sdk
-  e.async = true; e.src = "//static.axept.io/sdk-slim.js"; 
+  e.async = true; e.src = "//static.axept.io/sdk.js"; 
   t.parentNode.insertBefore(e, t);
 })(document, "script");
