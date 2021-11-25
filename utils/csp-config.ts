@@ -11,6 +11,7 @@ export default helmet.contentSecurityPolicy({
       'https://static.axept.io/',
       'https://connect.facebook.net',
       'https://www.googletagmanager.com/',
+      'https://www.googleadservices.com/',
     ],
     'img-src': [
       "'self'",
