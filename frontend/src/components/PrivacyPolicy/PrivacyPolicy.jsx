@@ -25,7 +25,7 @@ const dataConservation = [
   },
   {
     'Catégories de données': 'Cookies',
-    'Durée de conservation': 'Ces données sont conservées 13 mois maximum.',
+    'Durée de conservation': 'Ces données sont conservées 13 mois maximum ou, le cas échéant dès le retrait du consentement.',
   },
 ];
 
@@ -515,40 +515,6 @@ const PrivacyPolicy = () => {
           <a target="_blank" rel="noopener noreferrer" href="https://stats.data.gouv.fr/index.php?module=CoreHome&action=index&date=yesterday&period=day&idSite=160#?idSite=160&period=day&date=yesterday&segment=&category=Dashboard_Dashboard&subcategory=1">stats.data.gouv.fr</a>
           .
         </p>
-        <Title as="h3" look="h6">
-          Qu’est-ce qui nous autorise à les déposer ?
-        </Title>
-        <p>
-          En application de l’article 5(3) de la directive 2002/58/CE modifiée
-          concernant le traitement des données à caractère personnel et la protection
-          de la vie privée dans le secteur des communications électroniques, transposée
-          à l’article 82 de la loi n°78-17 du 6 janvier 1978 relative à l’informatique,
-          aux fichiers et aux libertés, les traceurs ou cookies suivent deux régimes distincts.
-        </p>
-        <p>
-          Les cookies strictement nécessaires au service, ceux de publicité non personnalisée
-          ou ayant pour finalité exclusive de faciliter la communication par voie électronique
-          sont dispensés de consentement préalable au titre de l’article 82 de la loi n°78-17
-          du 6 janvier 1978.
-        </p>
-        <p>
-          Les autres cookies n’étant pas strictement nécessaires au service ou n’ayant pas
-          pour finalité exclusive de faciliter la communication par voie électronique doivent
-          être consenti par l’utilisateur.
-        </p>
-        <p>
-          Ce consentement de la personne concernée pour une ou plusieurs finalités spécifiques
-          constitue une base légale au sens du RGPD et doit être entendu au sens de l&lsquo;article
-          6-a du Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016
-          relatif à la protection des personnes physiques à l&lsquo;égard du traitement des données
-          à caractère personnel et à la libre circulation de ces données.
-        </p>
-
-        <Title as="h3" look="h6">
-          Durée de conservation
-        </Title>
-
-        Nous conservons les cookies pour une durée de 13 mois ou, le cas échéant dès le retrait du consentement.
 
         <Title as="h3" look="h6">
           Droit au retrait
