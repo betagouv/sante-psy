@@ -20,6 +20,7 @@ export default helmet.contentSecurityPolicy({
       'https://*.tile.openstreetmap.org/',
       'https://axeptio.imgix.net',
       'https://www.google.com/',
+      'https://www.google.fr/',
       'data:',
     ],
     'frame-src': ['https://stats.santepsyetudiant.beta.gouv.fr'],
