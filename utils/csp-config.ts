@@ -22,9 +22,10 @@ export default helmet.contentSecurityPolicy({
       'https://www.google.com/',
       'https://www.google.fr/',
       'https://www.facebook.com',
+      'https://googleads.g.doubleclick.net',
       'data:',
     ],
-    'frame-src': ['https://stats.santepsyetudiant.beta.gouv.fr'],
+    'frame-src': ['https://stats.santepsyetudiant.beta.gouv.fr', 'https://bid.g.doubleclick.net/'],
     'connect-src': [
       "'self'",
       'https://nominatim.openstreetmap.org',
