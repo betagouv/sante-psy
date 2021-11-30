@@ -21,6 +21,7 @@ export default helmet.contentSecurityPolicy({
       'https://axeptio.imgix.net',
       'https://www.google.com/',
       'https://www.google.fr/',
+      'https://www.facebook.com',
       'data:',
     ],
     'frame-src': ['https://stats.santepsyetudiant.beta.gouv.fr'],
