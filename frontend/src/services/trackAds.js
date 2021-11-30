@@ -19,6 +19,8 @@ const initAxeptio = () => {
   }(document, 'script'));
 };
 
+function gtag() { window.dataLayer.push(arguments); }
+
 const initGoogleAds = () => {
   const el = document.createElement('script');
   el.setAttribute('src', 'https://www.googletagmanager.com/gtag/js?id=AW-10803675495');
@@ -28,7 +30,7 @@ const initGoogleAds = () => {
   }
 
   window.dataLayer = window.dataLayer || [];
-  function gtag() { window.dataLayer.push(arguments); }
+
   gtag('js', new Date());
   gtag('config', 'AW-10803675495');
 };
@@ -65,7 +67,7 @@ const removeFacebookAds = () => {
 };
 
 const trackGoogleAds = () => {
-  window.gtag('event', 'conversion', { send_to: 'AW-10803675495/0jD3CLHYqYMDEOeCzJ8o' });
+  gtag('event', 'conversion', { send_to: 'AW-10803675495/0jD3CLHYqYMDEOeCzJ8o' });
 };
 
 const trackFacebookAds = () => {
