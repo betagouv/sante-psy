@@ -16,16 +16,17 @@ const dataConservation = [
   },
   {
     'Catégories de données': 'Données de contact',
-    'Durée de conservation': "5 ans à compter de l'écrit du message",
+    // eslint-disable-next-line max-len
+    'Durée de conservation': "5 ans à compter de l'écrit du message. S’agissant de la demande d’informations, l’adresse e-mail n’est pas stockée par Santé Psy Étudiant après l’envoi du courrier.",
   },
   {
     'Catégories de données': 'Données de connexion',
     // eslint-disable-next-line max-len
-    'Durée de conservation': "Ces données sont conservées 12 mois, en application de la loi pour la confiance dans l'économie numérique n°2004-575 du 21 juin 2004 et de l'article 3 du décret n°2011-219 du 25 février 2011.",
+    'Durée de conservation': "Ces données sont conservées 12 mois, en application de la loi pour la confiance dans l'économie numérique n°2004-575 du 21 juin 2004 et de l'article 1 du décret n° 2021-1363 du 20 octobre 2021.",
   },
   {
     'Catégories de données': 'Cookies',
-    'Durée de conservation': 'Ces données sont conservées 13 mois maximum.',
+    'Durée de conservation': 'Ces données sont conservées 13 mois maximum ou jusqu’au retrait du consentement.',
   },
 ];
 
@@ -53,6 +54,42 @@ const dataSubcontractor = [
     Pays: 'France',
     'Traitement réalisé': 'Dématérialisation de Démarches Administrative',
     Garanties: <a href="https://doc.demarches-simplifiees.fr/cgu/cgu" target="_blank" rel="noreferrer">https://doc.demarches-simplifiees.fr/cgu/cgu</a>,
+  },
+  {
+    Partenaire: 'Axeptio',
+    Pays: 'France',
+    'Traitement réalisé': 'Gestion des consentements cookies',
+    Garanties: <a href="https://www.axeptio.eu/en/terms" target="_blank" rel="noreferrer">https://www.axeptio.eu/en/terms</a>,
+  },
+];
+
+const dataCookies = [
+  {
+    Cookies: 'Google Ads',
+    'Traitement réalisé':
+  <>
+    <p>Outil de gestion de balises permettant de suivre et mesurer les publicités.</p>
+    <p>Il mesure l&lsquo;efficacité des campagnes sponsorisées.</p>
+  </>,
+    'Base juridique': 'Consentement',
+    Garanties: <a href="https://privacy.google.com/intl/fr_fr/businesses/compliance/#!?modal_active=none" target="_blank" rel="noreferrer">https://privacy.google.com/intl/fr_fr/businesses/compliance/#!?modal_active=none</a>,
+  },
+  {
+    Cookies: 'Facebook Cookie Pixel',
+    'Traitement réalisé':
+  <>
+    <p>Outil de gestion de balises permettant de suivre et mesurer les publicités.</p>
+    <p>Il identifie les visiteurs en provenance de publications Facebook.</p>
+  </>,
+    'Base juridique': 'Consentement',
+    Garanties: <a href="https://www.facebook.com/business/help/471978536642445?id=1205376682832142" target="_blank" rel="noreferrer">https://www.facebook.com/business/help/471978536642445?id=1205376682832142</a>,
+
+  },
+  {
+    Cookies: 'Matomo',
+    'Traitement réalisé': 'Analyse statistique des activités.',
+    'Base juridique': 'Article 82 de la loi n°78-17 du 6 janvier 1978 modifiée',
+    Garanties: <a href="https://fr.matomo.org/privacy-policy/" target="_blank" rel="noreferrer">https://fr.matomo.org/privacy-policy/</a>,
   },
 ];
 
@@ -161,6 +198,18 @@ const PrivacyPolicy = () => {
           libre &laquo; Message &raquo; de ne fournir que les donnes personnelles
           strictement nécessaires au traitement de la demande.
         </p>
+        <p>
+          L’e-mail est également collecté dans le cadre de la demande d’information
+          effectuée suite à l’arrivée sur la page
+          {' '}
+          <a
+            href="https://santepsy.etudiant.gouv.fr/etudiant"
+            target="_blank"
+            rel="noreferrer"
+          >
+            santepsy.etudiant.gouv.fr/etudiant
+          </a>
+        </p>
         <Title as="h3" look="h6">
           Données de connexion
         </Title>
@@ -179,7 +228,7 @@ const PrivacyPolicy = () => {
         <p>
           Les cookies collectés sont les cookies nécessaires au fonctionnement
           de la plateforme ainsi que ceux permettant d&lsquo;établir des
-          mesures statistiques.
+          mesures statistiques, et suivre les campagnes publicitaires réalisées.
         </p>
         <Title as="h3" look="h6">
           Autres données
@@ -266,7 +315,7 @@ const PrivacyPolicy = () => {
         </p>
         <p>
           L&lsquo;obligation légale est posée par la loi LCEN n° 2004-575 du 21 juin 2004 pour la confiance
-          dans l&lsquo;économie numérique et par les articles 1 et 3 du décret n°2011-219 du 25 février 2011.
+          dans l&lsquo;économie numérique et par l’article 1 du décret n° 2021-1363 du 20 octobre 2021.
         </p>
         <Title as="h3" look="h6">
           Cookies
@@ -301,13 +350,7 @@ const PrivacyPolicy = () => {
           du traitement des données à caractère personnel et à la libre
           circulation de ces données.
         </p>
-        <p>
-          En l&lsquo;occurrence Santé Psy Etudiant
-          n&lsquo;utilise pas de cookies nécessitant le consentement. En
-          effet, l&lsquo;outil utilisé est Matomo, un outil libre, paramétré
-          pour être en conformité avec la recommandation &laquo; Cookies &raquo; de la
-          CNIL.
-        </p>
+
       </Section>
       <Section title="Durée de conservation">
         <p>Les données à caractère personnel sont conservées :</p>
@@ -466,12 +509,30 @@ const PrivacyPolicy = () => {
           les utilisateurs utilisent des navigateurs désactivant les cookies.
         </p>
         <p>
-          <strong>
-            Nous utilisons pour cela
-            {' '}
-            <a href="https://matomo.org/" target="_blank" rel="noopener noreferrer">Matomo</a>
-          </strong>
-          , un outil de mesure d&lsquo;audience web
+          Nous utilisons différents types de cookies, certains nécessitant votre consentement.
+          Les cookies nécessitant votre consentement ne sont enregistrés que lors de votre visite
+          sur la page
+          {' '}
+          <a
+            href="https://santepsy.etudiant.gouv.fr/etudiant"
+            target="_blank"
+            rel="noreferrer"
+          >
+            santepsy.etudiant.gouv.fr/etudiant
+          </a>
+        </p>
+        <p>
+          Par ailleurs, la demande de renseignements supplémentaires effectuée après votre arrivée
+          sur la page mentionnée permet également de mesurer l’engagement et donc l’efficacité de
+          la campagne publicitaire en cours.
+        </p>
+        <Title as="h3" look="h6">
+          Quels sont les cookies et traceurs que nous utilisons ?
+        </Title>
+        <SimpleTable data={dataCookies} />
+        <p>
+          <a href="https://matomo.org/" target="_blank" rel="noopener noreferrer">Matomo</a>
+          est un outil de mesure d&lsquo;audience web
           {' '}
           <a href="https://matomo.org/free-software/" target="_blank" rel="noopener noreferrer">libre</a>
           , paramétré pour être en conformité avec la
@@ -485,7 +546,10 @@ const PrivacyPolicy = () => {
           Cela signifie que votre adresse IP, par
           exemple, est anonymisée avant d&lsquo;être enregistrée. Il est donc
           impossible d&lsquo;associer vos visites sur ce site à votre
-          personne. Il convient d&lsquo;indiquer que :
+          personne.
+        </p>
+        <p>
+          Il convient d&lsquo;indiquer que :
         </p>
         <ul className="fr-list">
           <li>
@@ -498,6 +562,17 @@ const PrivacyPolicy = () => {
           </li>
         </ul>
         <p>
+          Vous pouvez accéder aux statistiques d’usage disponibles en accès libre sur
+          {' '}
+          <a target="_blank" rel="noopener noreferrer" href="https://stats.data.gouv.fr/index.php?module=CoreHome&action=index&date=yesterday&period=day&idSite=160#?idSite=160&period=day&date=yesterday&segment=&category=Dashboard_Dashboard&subcategory=1">stats.data.gouv.fr</a>
+          .
+        </p>
+
+        <Title as="h3" look="h6">
+          Droit au retrait
+        </Title>
+
+        <p>
           Pour refuser les cookies de Matomo directement sur notre
           plateforme :
         </p>
@@ -506,6 +581,18 @@ const PrivacyPolicy = () => {
           style={{ border: 0, height: 120, width: '100%' }}
           src="https://stats.data.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=&fontSize=&fontFamily=%22Marianne%22%2C%20arial%2C%20sans-serif"
         />
+        <p>
+          Vous pouvez également refuser l’utilisation des cookies nécessitant votre consentement
+          au travers de la bannière de cookies d’Axeptio présente sur la page suivante :
+          {' '}
+          <a
+            href="https://santepsy.etudiant.gouv.fr/etudiant"
+            target="_blank"
+            rel="noreferrer"
+          >
+            santepsy.etudiant.gouv.fr/etudiant
+          </a>
+        </p>
         <p>
           À tout moment, vous pouvez refuser l&lsquo;utilisation des cookies
           et désactiver le dépôt sur votre ordinateur en utilisant la fonction
@@ -538,14 +625,6 @@ const PrivacyPolicy = () => {
             </a>
           </li>
         </ul>
-      </Section>
-      <Section title="Je contribue à enrichir vos données, puis-je y accéder ?">
-        <p>
-          Bien sûr ! Les statistiques d’usage sont disponibles en accès libre sur
-          {' '}
-          <a target="_blank" rel="noopener noreferrer" href="https://stats.data.gouv.fr/index.php?module=CoreHome&action=index&date=yesterday&period=day&idSite=160#?idSite=160&period=day&date=yesterday&segment=&category=Dashboard_Dashboard&subcategory=1">stats.data.gouv.fr</a>
-          .
-        </p>
       </Section>
     </Page>
   );
