@@ -16,7 +16,8 @@ const dataConservation = [
   },
   {
     'Catégories de données': 'Données de contact',
-    'Durée de conservation': "5 ans à compter de l'écrit du message",
+    // eslint-disable-next-line max-len
+    'Durée de conservation': "5 ans à compter de l'écrit du message. S’agissant de la demande d’informations, l’adresse e-mail n’est pas stockée par Santé Psy Étudiant après l’envoi du courrier.",
   },
   {
     'Catégories de données': 'Données de connexion',
@@ -25,7 +26,7 @@ const dataConservation = [
   },
   {
     'Catégories de données': 'Cookies',
-    'Durée de conservation': 'Ces données sont conservées 13 mois maximum ou, le cas échéant dès le retrait du consentement.',
+    'Durée de conservation': 'Ces données sont conservées 13 mois maximum ou jusqu’au retrait du consentement.',
   },
 ];
 
@@ -54,12 +55,39 @@ const dataSubcontractor = [
     'Traitement réalisé': 'Dématérialisation de Démarches Administrative',
     Garanties: <a href="https://doc.demarches-simplifiees.fr/cgu/cgu" target="_blank" rel="noreferrer">https://doc.demarches-simplifiees.fr/cgu/cgu</a>,
   },
+  {
+    Partenaire: 'Axeptio',
+    Pays: 'France',
+    'Traitement réalisé': 'Gestion des consentements cookies',
+    Garanties: <a href="https://www.axeptio.eu/en/terms" target="_blank" rel="noreferrer">https://www.axeptio.eu/en/terms</a>,
+  },
 ];
 
 const dataCookies = [
   {
+    Cookies: 'Google Ads',
+    'Traitement réalisé':
+  <>
+    <p>Outil de gestion de balises permettant de suivre et mesurer les publicités.</p>
+    <p>Il mesure l&lsquo;efficacité des campagnes sponsorisées.</p>
+  </>,
+    'Base juridique': 'Consentement',
+    Garanties: <a href="https://privacy.google.com/intl/fr_fr/businesses/compliance/#!?modal_active=none" target="_blank" rel="noreferrer">https://privacy.google.com/intl/fr_fr/businesses/compliance/#!?modal_active=none</a>,
+  },
+  {
+    Cookies: 'Facebook Cookie Pixel',
+    'Traitement réalisé':
+  <>
+    <p>Outil de gestion de balises permettant de suivre et mesurer les publicités.</p>
+    <p>Il identifie les visiteurs en provenance de publications Facebook.</p>
+  </>,
+    'Base juridique': 'Consentement',
+    Garanties: <a href="https://www.facebook.com/business/help/471978536642445?id=1205376682832142" target="_blank" rel="noreferrer">https://www.facebook.com/business/help/471978536642445?id=1205376682832142</a>,
+
+  },
+  {
     Cookies: 'Matomo',
-    'Traitement réalisé': 'Analyse statistique des activités',
+    'Traitement réalisé': 'Analyse statistique des activités.',
     'Base juridique': 'Article 82 de la loi n°78-17 du 6 janvier 1978 modifiée',
     Garanties: <a href="https://fr.matomo.org/privacy-policy/" target="_blank" rel="noreferrer">https://fr.matomo.org/privacy-policy/</a>,
   },
@@ -170,6 +198,18 @@ const PrivacyPolicy = () => {
           libre &laquo; Message &raquo; de ne fournir que les donnes personnelles
           strictement nécessaires au traitement de la demande.
         </p>
+        <p>
+          L’e-mail est également collecté dans le cadre de la demande d’information
+          effectuée suite à l’arrivée sur la page
+          {' '}
+          <a
+            href="https://santepsy.etudiant.gouv.fr/etudiant"
+            target="_blank"
+            rel="noreferrer"
+          >
+            santepsy.etudiant.gouv.fr/etudiant
+          </a>
+        </p>
         <Title as="h3" look="h6">
           Données de connexion
         </Title>
@@ -188,7 +228,7 @@ const PrivacyPolicy = () => {
         <p>
           Les cookies collectés sont les cookies nécessaires au fonctionnement
           de la plateforme ainsi que ceux permettant d&lsquo;établir des
-          mesures statistiques.
+          mesures statistiques, et suivre les campagnes publicitaires réalisées.
         </p>
         <Title as="h3" look="h6">
           Autres données
@@ -310,13 +350,7 @@ const PrivacyPolicy = () => {
           du traitement des données à caractère personnel et à la libre
           circulation de ces données.
         </p>
-        <p>
-          En l&lsquo;occurrence Santé Psy Etudiant
-          n&lsquo;utilise pas de cookies nécessitant le consentement. En
-          effet, l&lsquo;outil utilisé est Matomo, un outil libre, paramétré
-          pour être en conformité avec la recommandation &laquo; Cookies &raquo; de la
-          CNIL.
-        </p>
+
       </Section>
       <Section title="Durée de conservation">
         <p>Les données à caractère personnel sont conservées :</p>
@@ -474,6 +508,24 @@ const PrivacyPolicy = () => {
           conservés. La consultation du site n&lsquo;est pas affectée lorsque
           les utilisateurs utilisent des navigateurs désactivant les cookies.
         </p>
+        <p>
+          Nous utilisons différents types de cookies, certains nécessitant votre consentement.
+          Les cookies nécessitant votre consentement ne sont enregistrés que lors de votre visite
+          sur la page
+          {' '}
+          <a
+            href="https://santepsy.etudiant.gouv.fr/etudiant"
+            target="_blank"
+            rel="noreferrer"
+          >
+            santepsy.etudiant.gouv.fr/etudiant
+          </a>
+        </p>
+        <p>
+          Par ailleurs, la demande de renseignements supplémentaires effectuée après votre arrivée
+          sur la page mentionnée permet également de mesurer l’engagement et donc l’efficacité de
+          la campagne publicitaire en cours.
+        </p>
         <Title as="h3" look="h6">
           Quels sont les cookies et traceurs que nous utilisons ?
         </Title>
@@ -529,6 +581,18 @@ const PrivacyPolicy = () => {
           style={{ border: 0, height: 120, width: '100%' }}
           src="https://stats.data.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=&fontSize=&fontFamily=%22Marianne%22%2C%20arial%2C%20sans-serif"
         />
+        <p>
+          Vous pouvez également refuser l’utilisation des cookies nécessitant votre consentement
+          au travers de la bannière de cookies d’Axeptio présente sur la page suivante :
+          {' '}
+          <a
+            href="https://santepsy.etudiant.gouv.fr/etudiant"
+            target="_blank"
+            rel="noreferrer"
+          >
+            santepsy.etudiant.gouv.fr/etudiant
+          </a>
+        </p>
         <p>
           À tout moment, vous pouvez refuser l&lsquo;utilisation des cookies
           et désactiver le dépôt sur votre ordinateur en utilisant la fonction
