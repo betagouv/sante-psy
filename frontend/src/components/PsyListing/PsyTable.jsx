@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Table, Button } from '@dataesr/react-dsfr';
 
 const PsyTable = ({
@@ -14,7 +14,8 @@ const PsyTable = ({
   geoLoading,
 }) => {
   const [surrendingPages, setSurrendingPages] = useState(0);
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
   const table = useRef(null);
 
   const columns = [
@@ -67,10 +68,10 @@ const PsyTable = ({
 
   const goToProfile = psychologist => {
     const searchPath = `?page=${page}&name=${nameFilter}&address=${addressFilter}&teleconsultation=${teleconsultation}&language=${languageFilter}`;
-    if (history.location.search !== searchPath) {
-      history.push(`/trouver-un-psychologue${searchPath}`);
+    if (location.search !== searchPath) {
+      navigate(`/trouver-un-psychologue${searchPath}`);
     }
-    history.push(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
+    navigate(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
   };
 
   const updateSurrendingPages = () => {
@@ -129,7 +130,7 @@ const PsyTable = ({
             table.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
           }}
           surrendingPages={surrendingPages}
-          />
+        />
       ) : noResult }
     </div>
   );

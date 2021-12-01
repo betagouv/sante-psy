@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button, Col, Row } from '@dataesr/react-dsfr';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
@@ -45,7 +45,7 @@ const fields = [
 ];
 
 const PublicPsychologistProfile = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { psyId } = useParams();
   const [error, setError] = useState();
   const [psychologist, setPsychologist] = useState();
@@ -94,7 +94,7 @@ const PublicPsychologistProfile = () => {
         <Button
           className="fr-mb-3w"
           secondary
-          onClick={() => history.goBack()}
+          onClick={() => navigate(-1)}
         >
           Retour
         </Button>

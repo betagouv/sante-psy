@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { observer } from 'mobx-react';
 
@@ -9,12 +9,14 @@ import Notification from './Notification';
 
 const GlobalNotification = ({ className }) => {
   const { commonStore: { notification, setNotification } } = useStore();
-  const history = useHistory();
   const location = useLocation();
 
-  useEffect(() => history.listen(() => {
-    setNotification(null);
-  }), [history]);
+  useEffect(
+    () => {
+      setNotification((location.state && location.state.notification) || null);
+    },
+    [location],
+  );
 
   if (notification && notification.message
     && (location.pathname.startsWith('/psychologue') || !notification.displayOnlyOnPsyPages)) {

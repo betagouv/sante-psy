@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button, TextInput, Checkbox } from '@dataesr/react-dsfr';
 
 import { useStore } from 'stores/';
@@ -8,8 +8,8 @@ import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
 
 const AddEditPatient = () => {
-  const history = useHistory();
-  const { commonStore: { config, setNotification } } = useStore();
+  const navigate = useNavigate();
+  const { commonStore: { config } } = useStore();
   const { patientId } = useParams();
   const [patient, setPatient] = useState();
 
@@ -53,8 +53,7 @@ const AddEditPatient = () => {
       : agent.Patient.create(patient);
     action
       .then(response => {
-        history.push('/psychologue/mes-etudiants');
-        setNotification(response);
+        navigate('/psychologue/mes-etudiants', { state: { notification: response } });
       })
       .catch(() => window.scrollTo(0, 0));
   };

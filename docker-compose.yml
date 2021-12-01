@@ -41,7 +41,7 @@ services:
       always # trick to be sure our app is always up, even when it has started before PG 
 
   react: 
-    image: node:14
+    image: node:16
     build: ./frontend
     working_dir: /app/frontend
     command: sh -c "npm run dev"

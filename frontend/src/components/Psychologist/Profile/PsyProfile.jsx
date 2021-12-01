@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Alert, Button, ButtonGroup } from '@dataesr/react-dsfr';
 
 import EditProfile from 'components/Psychologist/Profile/EditProfile';
@@ -28,7 +28,7 @@ const PsyProfile = () => {
   const suspensionInfoRef = useRef();
 
   const { commonStore: { setNotification }, userStore: { pullUser, user } } = useStore();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [psychologist, setPsychologist] = useState();
   const [editMode, setEditMode] = useState(false);
@@ -68,7 +68,7 @@ const PsyProfile = () => {
       setPsychologist({ ...response, profilIssues });
       setLoading(false);
     }).catch(() => {
-      history.goBack();
+      navigate(-1);
     });
   };
 
@@ -175,7 +175,7 @@ const PsyProfile = () => {
                       title="profil public"
                       icon="fr-fi-arrow-right-line"
                       secondary
-                      onClick={() => history.push(`/trouver-un-psychologue/${user.dossierNumber}`)}
+                      onClick={() => navigate(`/trouver-un-psychologue/${user.dossierNumber}`)}
                     >
                       Voir mon profil public
                     </Button>

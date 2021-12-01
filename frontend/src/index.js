@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { configure } from 'mobx';
 import { Observer } from 'mobx-react';
@@ -20,10 +20,10 @@ ReactDOM.render(
     {() => (
       <React.StrictMode>
         <BrowserRouter>
-          <Switch>
-            <Route exact path="/psychologue/bill/:month/:year" component={Bill} />
-            <Route path="/" component={App} />
-          </Switch>
+          <Routes>
+            <Route exact path="/psychologue/bill/:month/:year" element={<Bill />} />
+            <Route path="/*" element={<App />} />
+          </Routes>
         </BrowserRouter>
       </React.StrictMode>
     )}

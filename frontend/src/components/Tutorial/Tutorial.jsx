@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Joyride, { ACTIONS, EVENTS } from 'react-joyride';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import { useStore } from 'stores/';
@@ -9,7 +9,7 @@ import Modal from './Modal';
 import getSteps from './Steps';
 
 const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const { userStore: { user, seeTutorial } } = useStore();
   const [steps, setSteps] = useState(getSteps(id));
@@ -18,7 +18,7 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
     if (user && !user.hasSeenTutorial && !tutoStatus.run) {
       setTutoStatus({ run: true, stepIndex: 0 });
       if (pathname !== '/psychologue/mes-seances') {
-        history.push('/psychologue/mes-seances');
+        navigate('/psychologue/mes-seances');
       }
     }
   }, [user]);
@@ -75,9 +75,9 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
       setTutoStatus({ run: false, stepIndex: index });
     } else if (type === EVENTS.STEP_AFTER) {
       if (step.onNext && action === ACTIONS.NEXT) {
-        step.onNext(history);
+        step.onNext(navigate);
       } else if (step.onPrevious && action === ACTIONS.PREV) {
-        step.onPrevious(history);
+        step.onPrevious(navigate);
       }
 
       const increment = i => (action === ACTIONS.NEXT ? i + 1 : i - 1);
