@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
 import { Button, SearchableSelect, Select } from '@dataesr/react-dsfr';
@@ -15,7 +15,7 @@ import { observer } from 'mobx-react';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const NewAppointment = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [date, setDate] = useState();
   const params = useParams();
   const [patientId, setPatientId] = useState(params.patientId);
@@ -31,8 +31,7 @@ const NewAppointment = () => {
     e.preventDefault();
     setNotification({});
     agent.Appointment.add(patientId, date).then(response => {
-      history.push('/psychologue/mes-seances');
-      setNotification(response);
+      navigate('/psychologue/mes-seances', { state: { notification: response } });
     });
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@dataesr/react-dsfr';
 import classnames from 'classnames';
 
@@ -24,12 +24,12 @@ const ShrinkableButton = props => (
 );
 
 const PatientActions = ({ patient, deletePatient }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <div className={styles.cell}>
       <ShrinkableButton
         data-test-id="appointment-etudiant-button"
-        onClick={() => history.push(`/psychologue/nouvelle-seance/${patient.id}`)}
+        onClick={() => navigate(`/psychologue/nouvelle-seance/${patient.id}`)}
         size="sm"
         icon="fr-fi-calendar-line"
         aria-label="Déclarer une séance"
@@ -38,7 +38,7 @@ const PatientActions = ({ patient, deletePatient }) => {
       </ShrinkableButton>
       <ShrinkableButton
         data-test-id="update-etudiant-button"
-        onClick={() => history.push(`/psychologue/modifier-etudiant/${patient.id}`)}
+        onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
         secondary
         size="sm"
         icon="fr-fi-edit-line"

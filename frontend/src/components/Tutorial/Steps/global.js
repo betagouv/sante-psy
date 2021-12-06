@@ -44,8 +44,8 @@ const steps = [
     placement: 'bottom-start',
     target: '#informations-header',
     content: "Ce menu permet de gérer votre visibilité sur l'annuaire pour les étudiants.",
-    onNext: history => { history.push('/psychologue/mon-profil'); },
-    onPrevious: history => { history.push('/psychologue/mes-seances'); },
+    onNext: navigate => { navigate('/psychologue/mon-profil'); },
+    onPrevious: navigate => { navigate('/psychologue/mes-seances'); },
   },
   {
     placement: 'top-start',

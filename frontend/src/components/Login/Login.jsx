@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Redirect, useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
 
@@ -20,7 +20,7 @@ const Login = () => {
   } = useStore();
   const emailRef = useRef();
   const { token } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
 
@@ -36,20 +36,22 @@ const Login = () => {
       agent.User.login(token)
         .then(xsrfToken => {
           setXsrfToken(xsrfToken).then(() => {
-            history.push('/psychologue/mes-seances');
+            navigate('/psychologue/mes-seances');
           });
         });
     }
   }, [token]);
 
+  useEffect(() => {
+    if (user && !token) {
+      navigate('/psychologue/mes-seances');
+    }
+  }, [user, token]);
+
   const login = e => {
     e.preventDefault();
     agent.User.sendMail(email).then(setNotification);
   };
-
-  if (user && !token) {
-    return <Redirect to="/psychologue/mes-seances" />;
-  }
 
   return (
     <Page

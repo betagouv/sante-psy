@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
 
@@ -108,18 +108,17 @@ const PsychologistRouter = () => {
         </Notification>
       )}
       <GlobalNotification className="fr-my-2w" />
-      <Switch>
-        <Route exact path="/psychologue/mes-seances" component={Appointments} />
-        <Route exact path="/psychologue/nouvelle-seance/:patientId?" component={NewAppointment} />
-        <Route exact path="/psychologue/mes-etudiants" component={Patients} />
-        <Route exact path="/psychologue/nouvel-etudiant" component={AddEditPatient} />
-        <Route exact path="/psychologue/modifier-etudiant/:patientId" component={AddEditPatient} />
-        <Route exact path="/psychologue/mes-remboursements" component={Billing} />
-        <Route path="/psychologue/mon-profil" component={PsyProfile} />
-        <Route path="/psychologue/">
-          <Redirect to="/psychologue/mes-seances" />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route exact path="/mes-seances" element={<Appointments />} />
+        <Route exact path="/nouvelle-seance" element={<NewAppointment />} />
+        <Route exact path="/nouvelle-seance/:patientId" element={<NewAppointment />} />
+        <Route exact path="/mes-etudiants" element={<Patients />} />
+        <Route exact path="/nouvel-etudiant" element={<AddEditPatient />} />
+        <Route exact path="/modifier-etudiant/:patientId" element={<AddEditPatient />} />
+        <Route exact path="/mes-remboursements" element={<Billing />} />
+        <Route path="/mon-profil" element={<PsyProfile />} />
+        <Route path="/*" element={<Navigate to="/psychologue/mes-seances" />} />
+      </Routes>
     </Page>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
@@ -51,29 +51,29 @@ function App() {
       <div id="contenu">
         {!loading && (
         <React.Suspense fallback={null}>
-          <Switch>
-            <Route exact path="/activation/:token" component={ActiveProfile} />
-            <Route exact path="/suspension/:token" component={InactiveProfile} />
-            <Route exact path="/psychologue/logout" component={Logout} />
-            <Route exact path="/psychologue/login/:token?" component={Login} />
-            {user && <Route path="/psychologue/" component={PsychologistRouter} />}
-            <Route exact path="/trouver-un-psychologue" component={PsyListing} />
-            <Route exact path="/trouver-un-psychologue/:psyId" component={PublicPsychologistProfile} />
-            <Route exact path="/mentions-legales" component={LegalNotice} />
-            <Route exact path="/cgu" component={CGU} />
-            <Route exact path="/politique-de-confidentialite" component={PrivacyPolicy} />
-            <Route exact path="/faq" component={Faq} />
-            <Route exact path="/stats" component={Statistics} />
-            <Route exact path="/contact" component={Contact} />
-            <Route exact path="/etudiant" component={StudentLanding} />
-            <Route exact path="/" component={Landing} />
-            <Route path="/psychologue/">
-              <Redirect to="/psychologue/login" />
-            </Route>
-            <Route path="/">
-              <Redirect to={user ? '/psychologue/mes-seances' : '/'} />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route exact path="/activation/:token" element={<ActiveProfile />} />
+            <Route exact path="/suspension/:token" element={<InactiveProfile />} />
+            <Route exact path="/psychologue/logout" element={<Logout />} />
+            <Route exact path="/psychologue/login/:token" element={<Login />} />
+            <Route exact path="/psychologue/login/" element={<Login />} />
+            <Route exact path="/trouver-un-psychologue" element={<PsyListing />} />
+            <Route exact path="/trouver-un-psychologue/:psyId" element={<PublicPsychologistProfile />} />
+            <Route exact path="/mentions-legales" element={<LegalNotice />} />
+            <Route exact path="/cgu" element={<CGU />} />
+            <Route exact path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
+            <Route exact path="/faq" element={<Faq />} />
+            <Route exact path="/stats" element={<Statistics />} />
+            <Route exact path="/contact" element={<Contact />} />
+            <Route exact path="/etudiant" element={<StudentLanding />} />
+            <Route exact path="/" element={<Landing />} />
+            <Route
+              path="/psychologue/*"
+              element={user
+                ? <PsychologistRouter /> : <Navigate to="/psychologue/login" />}
+            />
+            <Route path="/*" element={<Navigate to={user ? '/psychologue/mes-seances' : '/'} />} />
+          </Routes>
         </React.Suspense>
         )}
       </div>
