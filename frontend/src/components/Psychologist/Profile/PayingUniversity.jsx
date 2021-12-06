@@ -9,7 +9,7 @@ const PayingUniversity = () => {
   const [showForm, setShowForm] = useState();
 
   useEffect(() => {
-    setShowForm(user.convention.isConventionSigned === null);
+    setShowForm(!user.convention || user.convention.isConventionSigned === null);
   }, [user]);
 
   return (
