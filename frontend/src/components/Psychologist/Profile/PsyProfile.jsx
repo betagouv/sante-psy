@@ -46,7 +46,7 @@ const PsyProfile = () => {
     + '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' // port and path
     + '(\\?[;&a-z\\d%_.~+=-]*)?' // query string
     + '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-    if (!isWebsite.test(psy.website)) {
+    if (psy.website && !isWebsite.test(psy.website)) {
       profilIssues.push('Votre site internet ne semble pas valide.');
     }
 
