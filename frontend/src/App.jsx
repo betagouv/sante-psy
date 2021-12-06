@@ -57,7 +57,6 @@ function App() {
             <Route exact path="/psychologue/logout" element={<Logout />} />
             <Route exact path="/psychologue/login/:token" element={<Login />} />
             <Route exact path="/psychologue/login/" element={<Login />} />
-            {user && <Route path="/psychologue/*" element={<PsychologistRouter />} />}
             <Route exact path="/trouver-un-psychologue" element={<PsyListing />} />
             <Route exact path="/trouver-un-psychologue/:psyId" element={<PublicPsychologistProfile />} />
             <Route exact path="/mentions-legales" element={<LegalNotice />} />
@@ -68,8 +67,12 @@ function App() {
             <Route exact path="/contact" element={<Contact />} />
             <Route exact path="/etudiant" element={<StudentLanding />} />
             <Route exact path="/" element={<Landing />} />
-            <Route path="/psychologue/" element={<Navigate to="/psychologue/login" />} />
-            <Route path="/" element={<Navigate to={user ? '/psychologue/mes-seances' : '/'} />} />
+            <Route
+              path="/psychologue/*"
+              element={user
+                ? <PsychologistRouter /> : <Navigate to="/psychologue/login" />}
+            />
+            <Route path="/*" element={<Navigate to={user ? '/psychologue/mes-seances' : '/'} />} />
           </Routes>
         </React.Suspense>
         )}

@@ -42,15 +42,16 @@ const Login = () => {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (user && !token) {
+      navigate('/psychologue/mes-seances');
+    }
+  }, [user, token]);
+
   const login = e => {
     e.preventDefault();
     agent.User.sendMail(email).then(setNotification);
   };
-
-  if (user && !token) {
-    navigate('/psychologue/mes-seances');
-    return null;
-  }
 
   return (
     <Page
