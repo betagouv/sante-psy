@@ -64,6 +64,7 @@ const send = async (req: Request, res: Response): Promise<void> => {
     console.log('ce message aurait été envoyé... si vous etiez en prod...', req.body);
   } else {
     const creation = await CrispClient.websiteConversations.create(config.crisp.website);
+    console.log('Send the following message to crisp:', req.body);
     await CrispClient.websiteConversations.updateMeta(config.crisp.website, creation.session_id, {
       nickname: `${req.body.firstName} ${req.body.name}`,
       email: req.body.email,
