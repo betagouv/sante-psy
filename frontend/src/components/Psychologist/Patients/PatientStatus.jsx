@@ -12,6 +12,7 @@ const PatientStatus = ({ hasFolderCompleted, missingInfo }) => (
         icon={hasFolderCompleted ? 'fr-fi-check-line' : 'fr-fi-alert-line'}
         iconPosition="left"
         size="sm"
+        as="span"
       />
     </div>
     <div className="fr-col-4 fr-col-xl-5 fr-hidden-xs fr-displayed-sm">
@@ -21,6 +22,7 @@ const PatientStatus = ({ hasFolderCompleted, missingInfo }) => (
         icon={hasFolderCompleted ? 'fr-fi-check-line' : 'fr-fi-alert-line'}
         iconPosition="left"
         size="sm"
+        as="span"
       >
         {hasFolderCompleted
           ? 'Dossier complet'

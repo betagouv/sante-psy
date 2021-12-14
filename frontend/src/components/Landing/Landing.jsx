@@ -23,7 +23,7 @@ const Landing = () => {
   return (
     <div className={classnames(styles.container, 'fr-container')} data-test-id="landingPageContainer">
       <Callout hasInfoIcon={false}>
-        <CalloutTitle as="h3">Évolution du dispositif</CalloutTitle>
+        <CalloutTitle size="md">Évolution du dispositif</CalloutTitle>
         <CalloutText size="md">
           Prolongation du dispositif jusqu&lsquo;au 31 août 2022 donnant droit jusqu&lsquo;à 8 séances
           sans avance de frais. Pour plus d&lsquo;informations,

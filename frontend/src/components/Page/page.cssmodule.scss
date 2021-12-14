@@ -8,7 +8,7 @@
 
 .container {
   position: relative;
-  background-color: var(--w);
+  background: var(--grey-1000-75);
   max-width: 800px;
   margin: auto;
   padding: 24px 8px;
@@ -16,19 +16,19 @@
 }
 
 .textContainer {
-  color: var(--bf500);
+  color: var(--text-title-blue-france);
   margin-top: 40px;
   overflow-wrap: anywhere;
 }
 
 .sectionTitle {
-  color: var(--bf500);
+  color: var(--text-title-blue-france);
   text-align: center;
 }
 
 .tutorial {
   display: none;
-  color: var(--bf500);
+  color: var(--text-title-blue-france);
   position: absolute;
   right: 32px;
   top: 32px;

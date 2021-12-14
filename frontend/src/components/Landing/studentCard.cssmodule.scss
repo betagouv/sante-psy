@@ -2,9 +2,9 @@
     text-align: center;
     width: 294px;
     min-height: 412px;
-    border: 1px solid var(--bf500);
+    border: 1px solid var(--blue-france-sun-113-625);
     border-radius: 4px;
-    background: var(--w);
+    background: var(--grey-1000-75);
     box-shadow: 0 2px 7px 0 rgba(0,0,0,0.21);
     padding: 24px;
 }
@@ -29,4 +29,8 @@
     width: 80px;
     height: 91px;
     margin: 16px;
+}
+
+.title {
+    color: var(--text-title-blue-france);
 }

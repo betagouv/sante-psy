@@ -1,5 +1,4 @@
 .container {
-  color: var(--bf500);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -10,4 +9,5 @@
 
 .text {
   text-align: left;
+  color: var(--text-title-blue-france);
 }

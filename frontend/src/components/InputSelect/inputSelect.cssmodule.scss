@@ -4,10 +4,10 @@
 }
 
 .selectSearchOptions {
-  background-color: var(--w);
-  box-shadow: 0px 0px 10px var(--g300);
+  background-color: var(--grey-1000-75);
+  box-shadow: 0px 0px 10px var(--grey-950);
   position: absolute;
-  z-index: 10;
+  z-index: 100;
   width: 100%;
   max-height: 32vh;
   overflow: scroll;
@@ -21,7 +21,7 @@
 .selectSearchOption__disabled,
 .selectSearchOption {
   padding: 8px 16px;
-  color: var(--bf500);
+  color: var(--text-title-blue-france);
 }
 
 .selectSearchOption {
@@ -30,12 +30,12 @@
 
 .selectSearchOption__selected,
 .selectSearchOption:hover {
-  background-color: var(--block-color-hover);
+  background-color: var(--grey-925-125);
 }
 
 .selectSearchOption__disabled {
   cursor: not-allowed;
-  color: var(--g500);
+  color: var(--grey-425);
 }
 
 .selectSearchOption__disabled:hover {

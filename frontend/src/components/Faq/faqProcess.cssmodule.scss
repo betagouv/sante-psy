@@ -1,5 +1,5 @@
 .label {
-  color: var(--bf500);
+  color: var(--text-title-blue-france);
   font-weight: bold;
   text-align: center;
 }
@@ -7,4 +7,7 @@
 .link {
   width: max-content;
   margin: 4px 8px;
+  a {
+    box-shadow: 0 0 0 1px var(--border-action-high-blue-france);
+  }
 }

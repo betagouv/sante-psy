@@ -19,52 +19,62 @@ const BillingHelper = () => (
       Vous pouvez prendre exemple sur ce modèle qui contient tous les éléments requis pour votre remboursement :
     </p>
     <ButtonGroup isInlineFrom="xs" className="fr-my-2w">
-      <a
-        className="fr-btn fr-btn--secondary"
-        href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.pdf`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        <span className="fr-fi-file-download-line" aria-hidden="true" />
-        .pdf
-      </a>
-      <a
-        className="fr-btn fr-btn--secondary"
-        href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.docx`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        <span className="fr-fi-file-download-line" aria-hidden="true" />
-        Microsoft Word .docx
-      </a>
-      <a
-        className="fr-btn fr-btn--secondary"
-        href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.odt`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        <span className="fr-fi-file-download-line" aria-hidden="true" />
-        Libre Office .odt
-      </a>
+      <div className="button-secondary-container">
+        <a
+          className="fr-btn fr-btn--secondary"
+          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.pdf`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span className="fr-fi-file-download-line" aria-hidden="true" />
+          .pdf
+        </a>
+      </div>
+      <div className="button-secondary-container">
+        <a
+          className="fr-btn fr-btn--secondary"
+          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.docx`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span className="fr-fi-file-download-line" aria-hidden="true" />
+          Microsoft Word .docx
+        </a>
+      </div>
+      <div className="button-secondary-container">
+        <a
+          className="fr-btn fr-btn--secondary"
+          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.odt`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span className="fr-fi-file-download-line" aria-hidden="true" />
+          Libre Office .odt
+        </a>
+      </div>
     </ButtonGroup>
     <h3>Demander de l&lsquo;aide</h3>
     <ButtonGroup isInlineFrom="xs">
-      <HashLink
-        className="fr-btn fr-btn--secondary"
-        to="/faq?section=psychologue#remboursement"
-        title="Consulter la Foire Aux Questions sur les remboursements"
-      >
-        Consulter la Foire Aux Questions
-      </HashLink>
-      <a
-        className="fr-btn fr-btn--secondary"
-        href={`${__API__}/static/documents/tutoriel_choruspro_sante-psy-etudiant.pdf`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        <span className="fr-fi-file-download-line" aria-hidden="true" />
-        Tutoriel Chorus PRO
-      </a>
+      <div className="button-secondary-container">
+        <HashLink
+          className="fr-btn fr-btn--secondary"
+          to="/faq?section=psychologue#remboursement"
+          title="Consulter la Foire Aux Questions sur les remboursements"
+        >
+          Consulter la Foire Aux Questions
+        </HashLink>
+      </div>
+      <div className="button-secondary-container">
+        <a
+          className="fr-btn fr-btn--secondary"
+          href={`${__API__}/static/documents/tutoriel_choruspro_sante-psy-etudiant.pdf`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span className="fr-fi-file-download-line" aria-hidden="true" />
+          Tutoriel Chorus PRO
+        </a>
+      </div>
     </ButtonGroup>
   </>
 );

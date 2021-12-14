@@ -1,5 +1,6 @@
 .button {
-    background-color: var(--w);
+    background-color: var(--grey-1000-75);
+    box-shadow: 0 0 0 1px var(--border-action-high-blue-france);
 }
 
 .title {
@@ -7,7 +8,6 @@
 }
 
 .blueBackground {
-    background-color: var(--bf500);
     color: white;
     padding: 0px 16px 6px 16px;
     white-space: nowrap;

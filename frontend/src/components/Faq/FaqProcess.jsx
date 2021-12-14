@@ -11,15 +11,19 @@ const FaqProcess = ({ label, links }) => (
     </Row>
     <ButtonGroup isInlineFrom="xs" align="center">
       {links.map(link => (
-        <a
+        <div
+          className={styles.link}
           key={link.title}
-          className={classnames('fr-btn fr-btn--secondary', styles.link)}
-          href={`${__API__}${link.href}`}
-          target="_blank"
-          rel="noreferrer"
         >
-          {link.title}
-        </a>
+          <a
+            className={classnames('fr-btn fr-btn--secondary')}
+            href={`${__API__}${link.href}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {link.title}
+          </a>
+        </div>
       ))}
     </ButtonGroup>
   </>

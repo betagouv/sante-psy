@@ -1,5 +1,5 @@
 .react-datepicker {
-  background-color: var(--w);
+  background-color: var(--grey-1000-75);
 }
 
 .react-datepicker__header {
@@ -12,11 +12,13 @@
 .react-datepicker__day-name,
 .react-datepicker__day,
 .react-datepicker__time-name {
-  color: var(--bf500);
+  color: var(--text-title-blue-france);
 }
-
+.react-datepicker__navigation:hover {
+  background-image: none !important;
+}
 .react-datepicker__navigation *::before {
-  border-color: var(--bf500);
+  border-color: var(--text-title-blue-france);
 }
 
 .react-datepicker__navigation:hover *::before {
@@ -39,8 +41,8 @@
 .react-datepicker__year-text--selected,
 .react-datepicker__year-text--in-selecting-range,
 .react-datepicker__year-text--in-range {
-  background-color: var(--bf500);
-  color: var(--w-bf500);
+  background-color: var(--text-title-blue-france);
+  color: var(--blue-france-950-100);
 
   &:hover{
     background-image: linear-gradient(0deg, var(--button-color-hover),var(--button-color-hover));
