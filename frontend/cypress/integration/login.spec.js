@@ -91,30 +91,6 @@ describe('Login', () => {
 
       cy.reload();
       cy.location('pathname').should('eq', '/psychologue/login');
-      cy.get('[data-test-id="notification-error"] p')
-        .should(
-          'have.text',
-          'Votre session a expiré, veuillez vous reconnecter.',
-        );
-    });
-
-    it('Should display error message on token expiration', () => {
-      loginAsDefault(1);
-      // We explicitely wait for token to expire
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(1000);
-      cy.visit('/psychologue/login');
-      cy.location('pathname').should('eq', '/psychologue/login');
-      // message is displayed
-      cy.get('[data-test-id="notification-error"] p')
-        .should(
-          'have.text',
-          'Votre session a expiré, veuillez vous reconnecter.',
-        );
-      cy.reload();
-      // message is never shown after reload
-      cy.get('[data-test-id="notification-error"] p')
-        .should('not.exist');
     });
   });
 
