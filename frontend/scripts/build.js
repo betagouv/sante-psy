@@ -5,7 +5,6 @@ process.on('unhandledRejection', err => {
   throw err;
 });
 
-const chalk = require('chalk');
 const webpack = require('webpack');
 const parseArgs = require('minimist');
 const printBuildError = require('react-dev-utils/printBuildError');
@@ -28,11 +27,11 @@ console.log('Create build...');
 const compiler = webpack(config(`'${apiUrl}'`));
 compiler.run((err, stats) => {
   if (err) {
-    console.log(chalk.red('Failed to compile.\n'));
+    console.log('Failed to compile.');
     printBuildError(err);
     process.exit(1);
   }
-  console.log(chalk.green('Compiled successfully.\n'));
+  console.log('Compiled successfully.');
   console.log(stats.toString({ colors: true }));
   if (!args.env || !args.env.PRODANALYSER) {
     process.exit();
