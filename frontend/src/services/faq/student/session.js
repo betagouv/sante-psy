@@ -21,8 +21,7 @@ module.exports = () => [
   },
   {
     question: 'À combien de séances ai-je droit\u00A0?',
-    answer: 'Désormais un étudiant peut bénéficier de 6 jusqu\'à 8 séances selon l\'appréciation du psychologue. La \
-    lettre d\'orientation après 3 séances a été levée.',
+    answer: 'Un étudiant peut bénéficier jusqu\'à 8 séances au maximum du début du dispositif à la fin de celui-ci.',
   },
   {
     question: 'J\'ai bénéficié du dispositif sur l\'année universitaire 2020/2021, puis-je de nouveau en bénéficier\u00A0?',
