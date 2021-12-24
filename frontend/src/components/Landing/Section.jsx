@@ -3,7 +3,6 @@ import React from 'react';
 import { HashLink } from 'react-router-hash-link';
 
 import styles from './section.cssmodule.scss';
-import SectionTitle from './SectionTitle';
 
 const Section = ({
   title,
@@ -16,7 +15,7 @@ const Section = ({
 }) => (
   <div className={classNames(styles.container, styles[buttonAlignment])}>
     <div className={styles.text}>
-      <SectionTitle>{title}</SectionTitle>
+      <h2 className={styles.text}>{title}</h2>
       <div className="fr-text--lead">
         {description}
       </div>
@@ -32,12 +31,14 @@ const Section = ({
           {buttonText}
         </a>
       ) : (
-        <HashLink
-          className={classNames('fr-btn fr-btn--lg', { 'fr-btn--secondary': buttonSecondary })}
-          to={buttonUrl}
-        >
-          {buttonText}
-        </HashLink>
+        <div className={classNames({ 'button-secondary-container': buttonSecondary })}>
+          <HashLink
+            className={classNames('fr-btn fr-btn--lg', { 'fr-btn--secondary': buttonSecondary })}
+            to={buttonUrl}
+          >
+            {buttonText}
+          </HashLink>
+        </div>
       )
     )}
   </div>

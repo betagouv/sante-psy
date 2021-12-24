@@ -1,8 +1,8 @@
 .tooltip {
-    background-color: var(--w);
+    background-color: var(--grey-1000-75);
     border-radius: 5px;
     box-sizing: border-box;
-    color: var(--bf500);
+    color: var(--text-title-blue-france);
     font-size: 16px;
     max-width: 100%;
     padding: 15px;
@@ -13,7 +13,8 @@
 
 .title {
     font-size: 18px;
-    margin: 0px;
+    margin: 0px;  
+    color: var(--text-title-blue-france);
 }
 
 .content {

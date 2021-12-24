@@ -1,14 +1,15 @@
 .bigTitle,
 .title {
   display: inline;
+  color: var(--text-title-blue-france);
 }
 
 .title {
-  box-shadow: inset 0 -2px var(--w), inset 0 -12px var(--yellow);
+  box-shadow: inset 0 -2px var(--grey-1000-75), inset 0 -12px var(--yellow);
 }
 
 .bigTitle {
-  box-shadow: inset 0 -5px var(--w), inset 0 -17px var(--yellow);
+  box-shadow: inset 0 -5px var(--grey-1000-75), inset 0 -17px var(--yellow);
 }
 
 .bigTitle-yellow {

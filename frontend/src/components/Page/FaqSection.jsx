@@ -16,13 +16,15 @@ const FaqSection = () => (
         Retrouvez les réponses aux questions les plus fréquemment posées.
       </div>
     </div>
-    <HashLink
-      className="fr-btn fr-btn--lg fr-btn--secondary"
-      to="/faq"
-      id="faq-button"
-    >
-      Consulter la foire aux questions
-    </HashLink>
+    <div className="button-secondary-container">
+      <HashLink
+        className="fr-btn fr-btn--lg fr-btn--secondary"
+        to="/faq"
+        id="faq-button"
+      >
+        Consulter la foire aux questions
+      </HashLink>
+    </div>
   </Container>
 );
 

@@ -10,8 +10,8 @@
 }
 
 :root[data-fr-theme=dark] {
-    --bg-yellow: var(--beige);  
-    --bg-blue: var(--beige);
+    --bg-yellow: #2a2a2a;  
+    --bg-blue: #2a2a2a;
     --yellow: #344f4b;
     --green: #9ed8b4;
     --tag-green: #008169;

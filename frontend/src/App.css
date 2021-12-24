@@ -69,6 +69,10 @@
   resize: vertical;
 }
 
+.button-secondary-container a{
+  box-shadow: 0 0 0 1px var(--border-action-high-blue-france);
+}
+
 /* overwrite DSFR default */
 @media (min-width: 48em) {
   .faqPage .fr-tabs__panel {
