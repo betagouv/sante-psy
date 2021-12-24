@@ -73,6 +73,10 @@
   box-shadow: 0 0 0 1px var(--border-action-high-blue-france);
 }
 
+.__floater__open {
+  z-index: 3500 !important;
+}
+
 /* overwrite DSFR default */
 @media (min-width: 48em) {
   .faqPage .fr-tabs__panel {
