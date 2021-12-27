@@ -20,11 +20,6 @@ module.exports = () => [
     Nous vous invitons à consulter les questions concernant la procédure de facturation.",
   },
   {
-    question: "Que faire lorsqu'un étudiant du dispositif, annule sa consultation\u00A0?",
-    answer: "Lorsqu'un étudiant annule sa consultation, le remboursement n'est malheureusement pas comptabilisé, \
-    seules les séances effectuées doivent être déclarées. Le paiement n'étant effectué qu'après un service fait.",
-  },
-  {
     question: "Je suis psychologue mais je n'ai jamais effectué de facture, comment faire\u00A0?",
     answer: 'Lorsque vous déclarez vos séances, vous avez accès sur votre espace psychologue \
     à un modèle de facture disponible qui contient tous les éléments requis pour votre remboursement.',
