@@ -35,7 +35,7 @@ module.exports = config => [
   },
   {
     question: 'Quelle est la date prévue de fin du dispositif Santé Psy Étudiant\u00A0?',
-    answer: "Comme explicité dans votre convention, le dispositif continue sous sa forme actuelle jusqu'au 31 décembre 2021. Plus de détails à venir pour la suite de l'année scolaire 2021/2022.",
+    answer: "Le dispositif Santé Psy Étudiant est prévu jusqu'au 31 août 2022. Dans cette période de transition vers un dispositif de droit commun, vous pouvez donc poursuivre vos suivis jusqu'à cette date.",
   },
   {
     question: 'Le dispositif s\'arrête-t-il au 31 décembre 2021 et jusqu\'à quand puis-je recevoir des étudiants\u00A0?',
@@ -48,5 +48,12 @@ module.exports = config => [
     answer: 'Oui la lettre d\'orientation est obligatoire pour démarrer les séances. Toutefois la lettre d\'orientation après \
     la 3ème séance a été levée, de ce fait l\'étudiant peut directement poursuivre jusqu\'à 8 séances sans repasser par un \
     médecin généraliste.',
+  },
+  {
+    question: 'Que faire lorsqu\'un étudiant annule sa consultation\u00A0?',
+    answer: 'Lorsqu\'un étudiant annule sa consultation, le remboursement n\'est malheureusement pas comptabilisé, \
+    seules les séances effectuées doivent être déclarées. Le paiement n\'étant effectué qu\'après un service fait. \
+    Toutefois, vous pouvez prévenir l\'étudiant qu\'en cas de séance non honorée et sans excuse valable, \
+    vous pouvez vous réserver le droit de refuser l\'étudiant.',
   },
 ];

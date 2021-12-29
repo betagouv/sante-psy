@@ -18,6 +18,7 @@ const Login = () => {
     commonStore: { config, setNotification },
     userStore: { user, setXsrfToken },
   } = useStore();
+
   const emailRef = useRef();
   const { token } = useParams();
   const navigate = useNavigate();
@@ -35,15 +36,13 @@ const Login = () => {
     if (token) {
       agent.User.login(token)
         .then(xsrfToken => {
-          setXsrfToken(xsrfToken).then(() => {
-            navigate('/psychologue/mes-seances');
-          });
+          setXsrfToken(xsrfToken);
         });
     }
   }, [token]);
 
   useEffect(() => {
-    if (user && !token) {
+    if (user) {
       navigate('/psychologue/mes-seances');
     }
   }, [user, token]);

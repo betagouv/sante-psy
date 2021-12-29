@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, Row, Col, TextInput, Alert } from '@dataesr/react-dsfr';
+import { Checkbox, Row, Col, TextInput, Alert, Callout, CalloutText } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
@@ -206,16 +206,22 @@ const PsyListing = () => {
             {' '}
             <b>obligatoirement</b>
             {' '}
-            d’une lettre d’orientation de votre médecin lors du rendez-vous.`
+            d’une lettre d’orientation de votre médecin lors du rendez-vous.
           </>
         )
         : 'Chargement de la liste des psychologues'}
       background="yellow"
       dataTestId="psyListPage"
     >
+      <Callout hasInfoIcon={false}>
+        <CalloutText size="md">
+          En cas de séance non honorée et sans excuse valable,
+          le psychologue peut se réserver le droit de refuser un étudiant.
+        </CalloutText>
+      </Callout>
       {psychologists && (
         <>
-          <div className="fr-pb-6w">
+          <div className="fr-pb-6w fr-mt-2w">
             <Row gutters>
               <Col n="md-6 sm-12" className={styles.input}>
                 <TextInput
