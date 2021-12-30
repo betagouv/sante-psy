@@ -20,14 +20,8 @@ module.exports = () => [
     psychologues partenaires si vous en ressentez le besoin.',
   },
   {
-    question: 'À combien de séances ai-je droit\u00A0?',
-    answer: 'Un étudiant peut bénéficier jusqu\'à 8 séances au maximum du début du dispositif à la fin de celui-ci.',
-  },
-  {
-    question: 'J\'ai bénéficié du dispositif sur l\'année universitaire 2020/2021, puis-je de nouveau en bénéficier\u00A0?',
-    answer: 'L\'accès aux 8 séances est renouvelé selon l\'année universitaire. De ce fait, un étudiant qui a bénéficié du \
-    dispositif avant le 31 août 2021, peut bénéficier des 8 séances en psychologie sur l\'année universitaire 2021/2022. \
-    Toutefois, s\'il a bénéficié de plusieurs séances après le 31 août 2021, les séances sont à décompter.',
+    question: 'J\'ai bénéficié du dispositif sur l\'année 2020/2021, puis-je de nouveau en bénéficier\u00A0? À combien de séances ai-je droit\u00A0?',
+    answer: 'Un étudiant peut bénéficier jusqu\'à 8 séances au maximum du début du dispositif à la fin de celui-ci soit jusqu\'au 31 août 2022.',
   },
   {
     question: 'La lettre d\'orientation est-elle obligatoire\u00A0?',
