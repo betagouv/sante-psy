@@ -13,7 +13,7 @@ const getOneAppointmentPerMonth = (patient: {id: string, psychologistId: string}
   .map((i) => create.getOneAppointment({
     patientId: patient.id,
     psychologistId: patient.psychologistId,
-    appointmentDate: new Date(2021, i, day).toISOString(),
+    appointmentDate: new Date(2022, i, day).toISOString(),
     deleted,
   }));
 
