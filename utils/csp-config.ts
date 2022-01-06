@@ -25,7 +25,11 @@ export default helmet.contentSecurityPolicy({
       'https://googleads.g.doubleclick.net',
       'data:',
     ],
-    'frame-src': ['https://stats.santepsyetudiant.beta.gouv.fr', 'https://bid.g.doubleclick.net/'],
+    'frame-src': [
+      'https://santepsy-metabase.osc-secnum-fr1.scalingo.io',
+      'https://stats.santepsyetudiant.beta.gouv.fr',
+      'https://bid.g.doubleclick.net/',
+    ],
     'connect-src': [
       "'self'",
       'https://nominatim.openstreetmap.org',
