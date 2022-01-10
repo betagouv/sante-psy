@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { observer } from 'mobx-react';
 import classnames from 'classnames';
 
 import { Callout, CalloutText, CalloutTitle } from '@dataesr/react-dsfr';
@@ -66,4 +67,4 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+export default observer(Landing);
