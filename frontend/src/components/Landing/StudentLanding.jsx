@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import classnames from 'classnames';
 import { Button, TextInput } from '@dataesr/react-dsfr';
 
@@ -14,10 +15,12 @@ import studentStyles from './studentProcess.cssmodule.scss';
 import StudentCards from './StudentCards';
 
 const StudentLanding = () => {
+  const [searchParams] = useSearchParams();
   const emailRef = useRef();
   const [email, setEmail] = useState('');
   const [facebookConsent, setFacebookConsent] = useState(false);
   const [googleAdsConsent, setGoogleAdsConsent] = useState(false);
+  const [error, setError] = useState();
   const { commonStore: { setNotification } } = useStore();
 
   useEffect(() => {
@@ -67,26 +70,37 @@ const StudentLanding = () => {
   const trackEvent = () => {
     if (__MATOMO__) {
       _paq.push(['trackEvent', 'Student', 'SendMail']);
+      const from = searchParams.get('from');
+      if (from) {
+        console.debug(`Track contact event from ${from}`);
+        _paq.push(['trackEvent', from, 'SendMail']);
+      }
     }
+
     if (facebookConsent) {
       console.debug('Track contact event on facebook ads');
       trackAds.trackFacebookAds();
     }
+
     if (googleAdsConsent) {
       console.debug('Send conversion event to google ads');
       trackAds.trackGoogleAds();
     }
   };
 
-  const sendMail = e => {
-    e.preventDefault();
-    agent.User.sendStudentMail(email)
-      .then(notification => setNotification(notification.data, true, false))
-      .catch(error => {
-        setNotification(error.response.data, false, false);
-      });
-
-    trackEvent();
+  const sendMail = event => {
+    event.preventDefault();
+    if (email) {
+      setError(null);
+      agent.User.sendStudentMail(email)
+        .then(notification => setNotification(notification.data, true, false))
+        .catch(e => {
+          setNotification(e.response.data, false, false);
+        });
+      trackEvent();
+    } else {
+      setError("L'email est obligatoire");
+    }
   };
 
   return (
@@ -112,6 +126,7 @@ const StudentLanding = () => {
               value={email}
               onChange={e => setEmail(e.target.value)}
               type="email"
+              messageType={error ? 'error' : null}
             />
             <Button size="lg" submit>
               Recevoir plus d&lsquo;informations
