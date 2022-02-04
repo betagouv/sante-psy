@@ -4,6 +4,12 @@ import { TextInput } from '@dataesr/react-dsfr';
 const BillingInfo = ({ billingInfo, setBillingInfo }) => (
   <>
     <TextInput
+      label="Numéro SIRET"
+      hint="Il est composé de 14 chiffres."
+      value={billingInfo.siret}
+      onChange={e => setBillingInfo({ ...billingInfo, siret: e.target.value })}
+    />
+    <TextInput
       label="Numéro de la facture"
       value={billingInfo.billingNumber}
       onChange={e => setBillingInfo({ ...billingInfo, billingNumber: e.target.value })}
