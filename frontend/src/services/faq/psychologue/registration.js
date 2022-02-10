@@ -14,8 +14,8 @@ module.exports = () => [
   },
   {
     question: "J'ai un numéro Adeli mais pas de numéro SIRET, puis-je rejoindre le dispositif\u00A0?",
-    answer: "Le numéro Adeli est obligatoire pour être éligible au dispositif. \
+    answer: 'Le numéro Adeli est obligatoire pour être éligible au dispositif. \
     Le numéro SIRET n\'est pas un critère d\'éligibilité mais reste obligatoire pour établir vos factures. \
-    Il est donc nécessaire que vous ayez à disposition ces deux informations.",
+    Il est donc nécessaire que vous ayez à disposition ces deux informations.',
   },
 ];

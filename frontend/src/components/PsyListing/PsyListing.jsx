@@ -199,7 +199,7 @@ const PsyListing = () => {
       description={psychologists
         ? (
           <>
-            Trouver le ou la psychologue qui vous convient parmi les
+            Trouvez le ou la psychologue qui vous convient parmi les
             {` ${psychologists.length} `}
             référencés.
             Munissez-vous
@@ -215,12 +215,17 @@ const PsyListing = () => {
     >
       <Callout hasInfoIcon={false}>
         <CalloutText size="md">
-          En cas de séance non honorée et sans excuse valable,
-          le psychologue peut se réserver le droit de refuser un étudiant.
-          <br /><br />
-          Nous vous rappelons que dans le cadre du dispositif, l&lsquo;étudiant n&lsquo;a 
-          aucune avance de frais à prévoir. Le psychologue ne doit en aucun cas demander un 
-          complément financier ou une avance à l&lsquo;étudiant.
+          <ul>
+            <li>
+              En cas de séance non honorée et sans excuse valable,
+              le psychologue peut se réserver le droit de refuser un étudiant.
+            </li>
+            <li>
+              L&lsquo;étudiant n&lsquo;a
+              aucune avance de frais à prévoir. Le psychologue ne doit en aucun cas demander un
+              complément financier ou une avance à l&lsquo;étudiant.
+            </li>
+          </ul>
         </CalloutText>
       </Callout>
       {psychologists && (
