@@ -3,6 +3,7 @@ const get = () => {
   return defaultBillingInfo
     ? JSON.parse(defaultBillingInfo)
     : {
+      siret: '',
       billingNumber: '',
       address1: '',
       address2: '',
