@@ -13,6 +13,7 @@ import Statistics from './Statistics';
 import landingStyles from './landing.cssmodule.scss';
 import studentStyles from './studentProcess.cssmodule.scss';
 import StudentCards from './StudentCards';
+import FollowInstagram from './FollowInstagram';
 
 const StudentLanding = () => {
   const [searchParams] = useSearchParams();
@@ -138,6 +139,9 @@ const StudentLanding = () => {
       </div>
       <div className={landingStyles.section}>
         <Statistics />
+      </div>
+      <div className={landingStyles.sectionLight}>
+        <FollowInstagram />
       </div>
     </div>
   );
