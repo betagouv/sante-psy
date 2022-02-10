@@ -31,7 +31,6 @@ const Section = ({
           rel="noreferrer"
         >
           {buttonText}
-          {' '}
           {buttonIcon && <Icon name={buttonIcon} iconPosition="right" />}
         </a>
       ) : (
