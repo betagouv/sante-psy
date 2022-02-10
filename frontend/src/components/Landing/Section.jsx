@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { HashLink } from 'react-router-hash-link';
+import { Icon } from '@dataesr/react-dsfr';
 
 import styles from './section.cssmodule.scss';
 
@@ -10,6 +11,7 @@ const Section = ({
   buttonText,
   buttonUrl,
   buttonUrlExternal,
+  buttonIcon,
   buttonSecondary,
   buttonAlignment,
 }) => (
@@ -29,6 +31,7 @@ const Section = ({
           rel="noreferrer"
         >
           {buttonText}
+          {buttonIcon && <Icon name={buttonIcon} iconPosition="right" />}
         </a>
       ) : (
         <div className={classNames({ 'button-secondary-container': buttonSecondary })}>
