@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-unresolved
+import { Registry } from 'knex/types/result';
 import { Appointment } from '../types/Appointment';
 import { Patient } from '../types/Patient';
 import date from '../utils/date';
@@ -53,7 +55,19 @@ const deleteOne = async (appointmentId: string, psychologistId: string): Promise
   }
 };
 
+const countByPatient = async (patientId: string): Promise<Registry[]> => {
+  try {
+    return db(appointmentsTable)
+    .where({ deleted: false, patientId })
+    .countDistinct('id');
+  } catch (err) {
+    console.error('Impossible de récupérer les appointments', err);
+    throw new Error('Impossible de récupérer les appointments');
+  }
+};
+
 export default {
+  countByPatient,
   getAll,
   insert,
   delete: deleteOne,

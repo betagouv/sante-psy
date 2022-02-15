@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { assert } from 'chai';
 import db from '../../db/db';
 import dbAppointments from '../../db/appointments';
@@ -115,6 +116,57 @@ describe('DB Appointments', () => {
       assert.equal(output[0].psychologistId, psy.dossierNumber);
       assert.equal(output[1].psychologistId, psy.dossierNumber);
       assert.equal(output[2].psychologistId, psy.dossierNumber);
+    });
+  });
+
+  describe('countByPatient', () => {
+    it('should count all non deleted appointments of a patient', async () => {
+      const psy = await create.insertOnePsy();
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const patient2 = create.getOnePatient(1, { psychologistId: psy.dossierNumber });
+      const patientWithAppointments = await dbPatients.insert(
+        patient1.firstNames,
+        patient1.lastName,
+        patient1.INE,
+        patient1.institutionName,
+        patient1.isStudentStatusVerified,
+        patient1.hasPrescription,
+        psy.dossierNumber,
+        patient1.doctorName,
+        patient1.doctorAddress,
+        patient1.dateOfBirth,
+      );
+      const otherPatient = await dbPatients.insert(
+        patient2.firstNames,
+        patient2.lastName,
+        patient2.INE,
+        patient2.institutionName,
+        patient2.isStudentStatusVerified,
+        patient2.hasPrescription,
+        psy.dossierNumber,
+        patient2.doctorName,
+        patient2.doctorAddress,
+        patient2.dateOfBirth,
+      );
+      const toDelete = await dbAppointments.insert(
+        new Date('2021-03-01'),
+        patientWithAppointments.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(new Date('2021-03-01'), patientWithAppointments.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2021-03-01'), patientWithAppointments.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2021-03-01'), patientWithAppointments.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2021-03-01'), otherPatient.id, psy.dossierNumber);
+
+      await dbAppointments.delete(toDelete.id, psy.dossierNumber);
+
+      const count = await dbAppointments.countByPatient(patientWithAppointments.id);
+      assert.equal(count[0].count, 3);
+    });
+
+    it('should return 0 for non existing patient', async () => {
+      const count = await dbAppointments.countByPatient(uuidv4());
+      assert.equal(count[0].count, 0);
     });
   });
 });

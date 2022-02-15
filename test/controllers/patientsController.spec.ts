@@ -6,6 +6,7 @@ import create from '../helper/create';
 import cookie from '../../utils/cookie';
 import date from '../../utils/date';
 import dbPatients from '../../db/patients';
+import dbAppointments from '../../db/appointments';
 import dbPsychologists from '../../db/psychologists';
 
 const doctorName = 'doctorName';
@@ -948,7 +949,7 @@ describe('patientsController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(404);
-          res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
+          res.body.message.should.equal('Vous devez spécifier un étudiant à supprimer.');
           // Patient is not deleted
           const patientsArray = await dbPatients.getAll(anotherPsyId);
           expect(patientsArray).to.have.length(1);
@@ -970,7 +971,31 @@ describe('patientsController', () => {
       .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(400);
-          res.body.message.should.equal('Vous devez spécifier un patient à supprimer.');
+          res.body.message.should.equal('Vous devez spécifier un étudiant à supprimer.');
+
+          // Patient is not deleted
+          const patientsArray = await dbPatients.getAll(psy.dossierNumber);
+          expect(patientsArray).to.have.length(1);
+
+          return Promise.resolve();
+        });
+    });
+
+    it('should refuse patient with appointments', async () => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'prenom.nom@beta.gouv.fr',
+      };
+      const patient = await makePatient(psy.dossierNumber);
+      await dbAppointments.insert(new Date('2022-01-01'), patient.id, psy.dossierNumber);
+
+      return chai.request(app)
+      .delete(`/api/patients/${patient.id}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+        .then(async (res) => {
+          res.status.should.equal(400);
+          res.body.message.should.equal('Vous ne pouvez pas supprimer un étudiant avec des séances.');
 
           // Patient is not deleted
           const patientsArray = await dbPatients.getAll(psy.dossierNumber);

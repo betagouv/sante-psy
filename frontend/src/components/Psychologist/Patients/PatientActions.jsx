@@ -49,6 +49,8 @@ const PatientActions = ({ patient, deletePatient }) => {
       <ShrinkableButton
         data-test-id="delete-etudiant-button"
         onClick={deletePatient}
+        disabled={patient.appointmentsCount !== '0'}
+        title={patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : ''}
         secondary
         size="sm"
         icon="fr-fi-delete-line"
