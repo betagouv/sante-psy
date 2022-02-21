@@ -94,7 +94,10 @@ const StudentLanding = () => {
     if (email) {
       setError(null);
       agent.User.sendStudentMail(email)
-        .then(notification => setNotification(notification.data, true, false))
+        .then(notification => {
+          setEmail('');
+          setNotification(notification.data, true, false);
+        })
         .catch(e => {
           setNotification(e.response.data, false, false);
         });

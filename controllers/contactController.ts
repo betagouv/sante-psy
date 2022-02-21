@@ -4,6 +4,7 @@ import DOMPurify from '../services/sanitizer';
 import { check } from 'express-validator';
 import Crisp from 'node-crisp-api';
 
+import dbStudents from '../db/students';
 import validation from '../utils/validation';
 import asyncHelper from '../utils/async-helper';
 import config from '../utils/config';
@@ -95,6 +96,7 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
     // eslint-disable-next-line max-len
     message: 'Nous vous avons envoyé un mail avec toutes les informations sur le dispositif. Pensez à verifier vos spams et n\'hesitez pas à nous contacter en cas de problèmes',
   });
+  dbStudents.insert(req.body.email);
 };
 
 export default {
