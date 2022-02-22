@@ -3,6 +3,7 @@ import { check, oneOf } from 'express-validator';
 import DOMPurify from '../services/sanitizer';
 
 import dbPatients from '../db/patients';
+import dbAppointments from '../db/appointments';
 import validation from '../utils/validation';
 import date from '../utils/date';
 import asyncHelper from '../utils/async-helper';
@@ -179,7 +180,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
 const deleteValidators = [
   check('patientId')
     .isUUID()
-    .withMessage('Vous devez spécifier un patient à supprimer.'),
+    .withMessage('Vous devez spécifier un étudiant à supprimer.'),
 ];
 
 const deleteOne = async (req: Request, res: Response): Promise<void> => {
@@ -187,11 +188,18 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 
   const { patientId } = req.params;
   const psychologistId = req.user.psychologist;
+
+  const patientAppointment = await dbAppointments.countByPatient(patientId);
+
+  if (patientAppointment[0].count > 0) {
+    throw new CustomError('Vous ne pouvez pas supprimer un étudiant avec des séances.', 400);
+  }
+
   const deleted = await dbPatients.delete(patientId, psychologistId);
 
   if (deleted === 0) {
     console.log(`Patient ${patientId} not deleted by probably other psy id ${psychologistId}`);
-    throw new CustomError('Vous devez spécifier un patient à supprimer.', 404);
+    throw new CustomError('Vous devez spécifier un étudiant à supprimer.', 404);
   }
 
   console.log(`Patient deleted ${patientId} by psy id ${psychologistId}`);
