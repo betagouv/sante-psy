@@ -211,6 +211,7 @@ describe('Header Test', () => {
           cy.get('[data-test-id="my-space-button"]').should('not.exist');
           cy.get('[data-test-id="back-home-button"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/');
+          cy.get('@close-burger-menu').click();
         });
 
         cy.get('@open-burger-menu').click();
@@ -219,6 +220,7 @@ describe('Header Test', () => {
           cy.get('[data-test-id="back-home-button"]').should('not.exist');
           cy.get('[data-test-id="my-space-button"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/psychologue/mes-seances');
+          cy.get('@close-burger-menu').click();
         });
 
         cy.get('@open-burger-menu').click();
@@ -227,6 +229,7 @@ describe('Header Test', () => {
           cy.get('[data-test-id="logout-link"]').should('be.visible').click();
           cy.wait('@logout');
           cy.location('pathname').should('eq', '/');
+          cy.get('@close-burger-menu').click();
         });
       });
 

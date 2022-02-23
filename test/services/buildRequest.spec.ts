@@ -1,5 +1,5 @@
 import sinon from 'sinon';
-import faker from 'faker';
+import faker from '@faker-js/faker';
 import graphql from '../../utils/sendGraphQLRequest';
 import buildRequest from '../../services/demarchesSimplifiees/buildRequest';
 import config from '../../utils/config';

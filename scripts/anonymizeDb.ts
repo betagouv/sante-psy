@@ -1,4 +1,4 @@
-import faker from 'faker';
+import faker from '@faker-js/faker';
 import config from '../utils/config';
 import { psychologistsTable } from '../db/tables';
 import db from '../db/db';
