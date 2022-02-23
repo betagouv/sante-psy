@@ -26,7 +26,7 @@ const sendStudentsMail = async () : Promise<void> => {
   const results = await students.getAllMailBetween(from, to);
 
   await Promise.all(results.map((email) => send(email)));
-  console.log(`${results.length} mail send`);
+  console.log(`${results.length} mails sent`);
 };
 
 export default { sendStudentsMail };
