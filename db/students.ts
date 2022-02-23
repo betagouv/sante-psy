@@ -3,15 +3,7 @@ import db from './db';
 
 const insert = async (email: string): Promise<void> => {
   try {
-    const existingMail = await db
-      .from(studentsTable)
-      .where(`${studentsTable}.email`, email);
-
-    if (existingMail.length === 0) {
-      await db(studentsTable).insert({
-        email,
-      });
-    }
+    await db(studentsTable).insert({ email }).onConflict('email').ignore();
   } catch (err) {
     console.error('Erreur de sauvegarde du mail', err);
     throw new Error('Erreur de sauvegarde du mail');
