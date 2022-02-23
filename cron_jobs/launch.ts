@@ -1,6 +1,7 @@
 import cronDemarchesSimplifiees from './cronDemarchesSimplifiees';
 import cronUniversityPayments from './cronUniversityPayments';
 import cronPsychologists from './cronPsychologists';
+import cronStudents from './cronStudents';
 
 const runJob = async (job): Promise<void> => {
   await job();
@@ -14,6 +15,7 @@ if (process.argv.length < 3) {
 }
 
 const cronJobs = {
+  sendStudentsMail: cronStudents.sendStudentsMail,
   sendSummaryMail: cronUniversityPayments.sendSummaryToUniversities,
   importLatestDataFromDS: cronDemarchesSimplifiees.importLatestDataFromDSToPG,
   importEveryDataFromDS: cronDemarchesSimplifiees.importEveryDataFromDSToPG,

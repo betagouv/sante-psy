@@ -7,6 +7,7 @@ import {
   universitiesTable,
   suspensionReasonsTable,
   lastConnectionsTable,
+  studentsTable,
 } from '../../db/tables';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -20,4 +21,5 @@ export const seed = async (knex: Knex): Promise<void> => {
   await knex(patientsTable).del();
   await knex(psychologistsTable).del();
   await knex(universitiesTable).del();
+  await knex(studentsTable).del();
 };

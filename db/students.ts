@@ -10,6 +10,19 @@ const insert = async (email: string): Promise<void> => {
   }
 };
 
+const getAllMailBetween = async (from: Date, to: Date): Promise<string[]> => {
+  try {
+    return db.column('email')
+    .select()
+    .from(studentsTable)
+    .whereBetween('createdAt', [from, to]);
+  } catch (err) {
+    console.error('Erreur lors de la récuperation des étudiants', err);
+    throw new Error('Erreur lors de la récuperation des étudiants');
+  }
+};
+
 export default {
   insert,
+  getAllMailBetween,
 };

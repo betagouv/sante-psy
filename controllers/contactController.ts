@@ -85,7 +85,7 @@ const send = async (req: Request, res: Response): Promise<void> => {
 const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   const team = ['Lina', 'Vikie', 'Valentin', 'Sandrine', 'Xavier'];
   const random = Math.floor(Math.random() * 5);
-  const html = await ejs.renderFile('./views/emails/studentMail.ejs', {
+  const html = await ejs.renderFile('./views/emails/studentMail-1.ejs', {
     signature: `${team[random]} de `,
     faq: `${config.hostnameWithProtocol}/faq`,
     parcours: `${config.hostnameWithProtocol}/static/documents/parcours_etudiant_sante_psy_etudiant.pdf`,

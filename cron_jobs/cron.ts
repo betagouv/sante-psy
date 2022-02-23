@@ -2,6 +2,7 @@ import cron from 'cron';
 import cronDemarchesSimplifiees from './cronDemarchesSimplifiees';
 import cronUniversityPayments from './cronUniversityPayments';
 import cronPsychologists from './cronPsychologists';
+import cronStudents from './cronStudents';
 import config from '../utils/config';
 import sentry from '../utils/sentry';
 
@@ -46,6 +47,14 @@ const jobs = [
     timeZone: 'Europe/Paris',
     isActive: config.feature.checkMultipleFiles,
     name: 'checkForMultipleAcceptedDossiers',
+  },
+  {
+    cronTime: '0 10 * * *', // every day at 10am
+    onTick: cronStudents.sendStudentsMail,
+    start: true,
+    timeZone: 'Europe/Paris',
+    isActive: true,
+    name: 'sendStudentsMail',
   },
   {
     cronTime: '0 12 * * 3', // Every wednesday at noon
