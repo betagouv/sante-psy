@@ -1,14 +1,11 @@
 import { Request, Response } from 'express';
-import ejs from 'ejs';
 import DOMPurify from '../services/sanitizer';
 import { check } from 'express-validator';
 import Crisp from 'node-crisp-api';
 
-import dbStudents from '../db/students';
 import validation from '../utils/validation';
 import asyncHelper from '../utils/async-helper';
 import config from '../utils/config';
-import sendEmail from '../utils/email';
 
 const CrispClient = new Crisp();
 
@@ -52,12 +49,6 @@ const sendValidators = [
     .customSanitizer(DOMPurify.sanitize),
 ];
 
-const mailValidator = [
-  check('email')
-    .isEmail()
-    .withMessage('Vous devez spécifier un email valide.'),
-];
-
 const send = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
@@ -82,26 +73,7 @@ const send = async (req: Request, res: Response): Promise<void> => {
   res.json({ message: 'Votre message a bien été envoyé. Nous reviendrons vers vous rapidement.' });
 };
 
-const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
-  const team = ['Lina', 'Vikie', 'Valentin', 'Sandrine', 'Xavier'];
-  const random = Math.floor(Math.random() * 5);
-  const html = await ejs.renderFile('./views/emails/studentMail-1.ejs', {
-    signature: `${team[random]} de `,
-    faq: `${config.hostnameWithProtocol}/faq`,
-    parcours: `${config.hostnameWithProtocol}/static/documents/parcours_etudiant_sante_psy_etudiant.pdf`,
-  });
-  await sendEmail(req.body.email, `Les informations concernant ${config.appName}`, html);
-
-  res.json({
-    // eslint-disable-next-line max-len
-    message: 'Nous vous avons envoyé un mail avec toutes les informations sur le dispositif. Pensez à verifier vos spams et n\'hesitez pas à nous contacter en cas de problèmes',
-  });
-  dbStudents.insert(req.body.email);
-};
-
 export default {
   sendValidators,
-  mailValidator,
   send: asyncHelper(send),
-  sendStudentMail: asyncHelper(sendStudentMail),
 };

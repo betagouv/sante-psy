@@ -89,9 +89,14 @@ const User = {
   getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),
   login: token => client.post('/psychologist/login', { token }),
   sendMail: email => client.post('/psychologist/sendMail', { email }),
-  sendStudentMail: email => clientWithoutErrorManagement.post('/student/sendMail', { email }),
   logout: () => client.post('/psychologist/logout'),
 };
+
+const Student = { 
+  sendMail: email => clientWithoutErrorManagement.post('/student/sendMail', { email }),
+  saveAnswer: data => client.post('/student/saveAnswer', data)
+};
+
 
 export default {
   Appointment,
@@ -103,4 +108,5 @@ export default {
   Statistics,
   University,
   User,
+  Student
 };
