@@ -26,10 +26,17 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
 };
 
 const answerValidator = [
-  check('id').isUUID().withMessage('Votre identifiant est invalide.'),
-  check('letter', 'Vous devez spécifier un booléen').optional().isBoolean(),
-  check('appointment', 'Vous devez spécifier un booléen').optional().isBoolean(),
-  check('referral', 'Vous devez spécifier un nombre entre 1 et 5').optional().isInt({ min: 1, max: 5 }),
+  check('id', 'Votre identifiant est invalide.')
+    .isUUID(),
+  check('letter', 'Vous devez spécifier un booléen')
+    .optional({ nullable: true })
+    .isBoolean(),
+  check('appointment', 'Vous devez spécifier un booléen')
+    .optional({ nullable: true })
+    .isBoolean(),
+  check('referral', 'Vous devez spécifier un nombre entre 1 et 5')
+    .optional({ nullable: true })
+    .isInt({ min: 1, max: 5 }),
   oneOf([
     check('letter').exists(),
     check('appointment').exists(),
@@ -43,7 +50,15 @@ const saveAnswer = async (req: Request, res: Response): Promise<void> => {
   const {
     id, letter, appointment, referral,
   } = req.body;
-  dbStudents.updateById(id, { letter, appointment, referral });
+
+  dbStudents.updateById(
+    id,
+    {
+      letter: letter == null ? undefined : letter,
+      appointment: appointment == null ? undefined : appointment,
+      referral: referral == null ? undefined : referral,
+    },
+  );
 
   res.json({ message: 'Réponse enregistrée' });
 };

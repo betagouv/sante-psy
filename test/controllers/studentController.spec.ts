@@ -38,20 +38,33 @@ describe('studentController', () => {
     it('should succeed with valid letter answer', async () => successValidation({
       id: uuidv4(),
       letter: true,
+      appointment: null,
+      referral: null,
     }));
 
     it('should succeed with valid appointment answer', async () => successValidation({
       id: uuidv4(),
+      letter: null,
       appointment: false,
+      referral: null,
     }));
 
     it('should succeed with valid referral answer', async () => successValidation({
       id: uuidv4(),
+      letter: null,
+      appointment: null,
       referral: 4,
     }));
 
     it('should fail if id is not sent', async () => {
       await failValidation({
+        letter: true,
+      }, 'Votre identifiant est invalide.');
+    });
+
+    it('should fail if id is null', async () => {
+      await failValidation({
+        id: null,
         letter: true,
       }, 'Votre identifiant est invalide.');
     });
