@@ -1,87 +1,57 @@
-import ejs from 'ejs';
 import students from '../db/students';
-import config from '../utils/config';
-import sendEmail from '../utils/email';
+import { sendMail2, sendMail3, sendMail4 } from '../services/studentMails';
 
-const sendJ3 = async (mail: string): Promise<void> => {
-  const team = ['Lina', 'Vikie', 'Valentin', 'Sandrine', 'Xavier'];
-  const random = Math.floor(Math.random() * 5);
-  const html = await ejs.renderFile('./views/emails/studentMail-2.ejs', {
-    signature: `${team[random]} de `,
-    site: `${config.hostnameWithProtocol}`,
-    contact: `${config.hostnameWithProtocol}/contact`,
-  });
-  return sendEmail(mail, `Les informations concernant ${config.appName}`, html);
-};
-
-const sendJ10 = async (mail: string): Promise<void> => {
-  const team = ['Lina', 'Vikie', 'Valentin', 'Sandrine', 'Xavier'];
-  const random = Math.floor(Math.random() * 5);
-  const token = '123'; // TODO get token from email
-  const html = await ejs.renderFile('./views/emails/studentMail-3.ejs', {
-    signature: `${team[random]} de `,
-    faq: `${config.hostnameWithProtocol}/faq`,
-    letter: `${config.hostnameWithProtocol}/enregistrement/${token}?letter=`,
-  });
-  return sendEmail(mail, `Les informations concernant ${config.appName}`, html);
-};
-
-const sendJ30 = async (mail: string): Promise<void> => {
-  const team = ['Lina', 'Vikie', 'Valentin', 'Sandrine', 'Xavier'];
-  const random = Math.floor(Math.random() * 5);
-  const token = '123'; // TODO get token from email
-  const html = await ejs.renderFile('./views/emails/studentMail-4.ejs', {
-    signature: `${team[random]} de `,
-    faq: `${config.hostnameWithProtocol}/faq`,
-    appointment: `${config.hostnameWithProtocol}/enregistrement/${token}?appointment=`,
-    referral: `${config.hostnameWithProtocol}/enregistrement/${token}?referral=`,
-  });
-  return sendEmail(mail, `Les informations concernant ${config.appName}`, html);
-};
-
-const sendStudentsMailJ3 = async (): Promise<void> => {
+const getDates = (days: number): { from: Date, to: Date } => {
   const now = new Date();
   const from = new Date();
   const to = new Date();
-  from.setDate(now.getDate() - 3);
-  to.setDate(now.getDate() - 3);
+  from.setDate(now.getDate() - days);
+  to.setDate(now.getDate() - days);
   from.setHours(0, 0, 0, 0);
   to.setHours(23, 59, 59, 999);
-
-  const results = await students.getAllMailBetween(from, to);
-
-  await Promise.all(results.map((email) => sendJ3(email)));
-  console.log(`${results.length} mails sent`);
+  return { from, to };
 };
 
-const sendStudentsMailJ10 = async (): Promise<void> => {
-  const now = new Date();
-  const from = new Date();
-  const to = new Date();
-  from.setDate(now.getDate() - 3);
-  to.setDate(now.getDate() - 3);
-  from.setHours(0, 0, 0, 0);
-  to.setHours(23, 59, 59, 999);
+const sendStudentsMailJ3 = async (): Promise<boolean> => {
+  try {
+    const { from, to } = getDates(3);
+    const results = await students.getAllCreatedBetween(from, to);
 
-  const results = await students.getAllMailBetween(from, to);
-
-  await Promise.all(results.map((email) => sendJ10(email)));
-  console.log(`${results.length} mails sent`);
+    await Promise.all(results.map((student) => sendMail2(student)));
+    console.log(`${results.length} mails sent`);
+    return true;
+  } catch (err) {
+    console.error('ERROR: Could not send students mail J+3.', err);
+    return false;
+  }
 };
 
-const sendStudentsMailJ30 = async (): Promise<void> => {
-  const now = new Date();
-  const from = new Date();
-  const to = new Date();
-  from.setDate(now.getDate() - 3);
-  to.setDate(now.getDate() - 3);
-  from.setHours(0, 0, 0, 0);
-  to.setHours(23, 59, 59, 999);
+const sendStudentsMailJ10 = async (): Promise<boolean> => {
+  try {
+    const { from, to } = getDates(10);
+    const results = await students.getAllCreatedBetween(from, to);
 
-  const results = await students.getAllMailBetween(from, to);
+    await Promise.all(results.map((student) => sendMail3(student)));
+    console.log(`${results.length} mails sent`);
+    return true;
+  } catch (err) {
+    console.error('ERROR: Could not send students mail J+10.', err);
+    return false;
+  }
+};
 
-  await Promise.all(results.map((email) => sendJ30(email)));
-  console.log(`${results.length} mails sent`);
+const sendStudentsMailJ30 = async (): Promise<boolean> => {
+  try {
+    const { from, to } = getDates(30);
+    const results = await students.getAllCreatedBetween(from, to);
+
+    await Promise.all(results.map((student) => sendMail4(student)));
+    console.log(`${results.length} mails sent`);
+    return true;
+  } catch (err) {
+    console.error('ERROR: Could not send students mail J+30.', err);
+    return false;
+  }
 };
 
 export default { sendStudentsMailJ3, sendStudentsMailJ10, sendStudentsMailJ30 };

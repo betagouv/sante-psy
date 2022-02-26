@@ -1,11 +1,9 @@
 import { Request, Response } from 'express';
-import ejs from 'ejs';
 import { check, oneOf } from 'express-validator';
 import dbStudents from '../db/students';
 import asyncHelper from '../utils/async-helper';
-import config from '../utils/config';
-import sendEmail from '../utils/email';
 import validation from '../utils/validation';
+import { sendMail1 } from '../services/studentMails';
 
 const mailValidator = [
   check('email')
@@ -16,20 +14,15 @@ const mailValidator = [
 const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
-  const team = ['Lina', 'Vikie', 'Valentin', 'Sandrine', 'Xavier'];
-  const random = Math.floor(Math.random() * 5);
-  const html = await ejs.renderFile('./views/emails/studentMail-1.ejs', {
-    signature: `${team[random]} de `,
-    faq: `${config.hostnameWithProtocol}/faq`,
-    parcours: `${config.hostnameWithProtocol}/static/documents/parcours_etudiant_sante_psy_etudiant.pdf`,
-  });
-  await sendEmail(req.body.email, `Les informations concernant ${config.appName}`, html);
+  const { email } = req.body;
+  await sendMail1(email);
 
   res.json({
     // eslint-disable-next-line max-len
     message: 'Nous vous avons envoyé un mail avec toutes les informations sur le dispositif. Pensez à verifier vos spams et n\'hesitez pas à nous contacter en cas de problèmes',
   });
-  dbStudents.insert(req.body.email);
+
+  dbStudents.insert(email);
 };
 
 const answerValidator = [

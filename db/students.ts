@@ -12,11 +12,9 @@ const insert = async (email: string): Promise<void> => {
   }
 };
 
-const getAllMailBetween = async (from: Date, to: Date): Promise<string[]> => {
+const getAllCreatedBetween = async (from: Date, to: Date): Promise<Student[]> => {
   try {
-    return db.column('email')
-    .select()
-    .from(studentsTable)
+    return db.from(studentsTable)
     .whereBetween('createdAt', [from, to]);
   } catch (err) {
     console.error('Erreur lors de la récuperation des étudiants', err);
@@ -40,6 +38,6 @@ const updateById = async (id: string, student: Partial<Student>): Promise<void> 
 
 export default {
   insert,
-  getAllMailBetween,
+  getAllCreatedBetween,
   updateById,
 };
