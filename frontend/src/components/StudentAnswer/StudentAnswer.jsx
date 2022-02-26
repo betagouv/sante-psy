@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import Page from 'components/Page/Page';
 import agent from 'services/agent';
 
@@ -12,10 +12,10 @@ const StudentAnswer = () => {
       id,
       letter: searchParams.get('letter'),
       appointment: searchParams.get('appointment'),
-      referral: searchParams.get('referral')
+      referral: searchParams.get('referral'),
     });
   }, []);
-  
+
   return (
     <Page
       background="blue"

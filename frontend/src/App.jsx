@@ -29,6 +29,7 @@ import './App.css';
 import InactiveProfile from 'components/Psychologist/Profile/InactiveProfile';
 import ActiveProfile from 'components/Psychologist/Profile/ActiveProfile';
 import StudentLanding from 'components/Landing/StudentLanding';
+import StudentAnswer from 'components/StudentAnswer/StudentAnswer';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 

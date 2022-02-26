@@ -92,11 +92,10 @@ const User = {
   logout: () => client.post('/psychologist/logout'),
 };
 
-const Student = { 
+const Student = {
   sendMail: email => clientWithoutErrorManagement.post('/student/sendMail', { email }),
-  saveAnswer: data => client.post('/student/saveAnswer', data)
+  saveAnswer: data => client.post('/student/saveAnswer', data),
 };
-
 
 export default {
   Appointment,
@@ -108,5 +107,5 @@ export default {
   Statistics,
   University,
   User,
-  Student
+  Student,
 };
