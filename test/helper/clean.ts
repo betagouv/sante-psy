@@ -7,6 +7,7 @@ import {
   universitiesTable,
   suspensionReasonsTable,
   lastConnectionsTable,
+  studentsTable,
 } from '../../db/tables';
 import db from '../../db/db';
 
@@ -19,6 +20,10 @@ const appointments = async (): Promise<void> => { await db(appointmentsTable).de
 const patients = async (): Promise<void> => {
   await appointments();
   await db(patientsTable).del();
+};
+
+const students = async (): Promise<void> => {
+  await db(studentsTable).del();
 };
 
 const psychologists = async ():Promise<void> => {
@@ -40,4 +45,5 @@ export default {
   appointments,
   psychologists,
   universities,
+  students,
 };

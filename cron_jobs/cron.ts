@@ -2,6 +2,7 @@ import cron from 'cron';
 import cronDemarchesSimplifiees from './cronDemarchesSimplifiees';
 import cronUniversityPayments from './cronUniversityPayments';
 import cronPsychologists from './cronPsychologists';
+import cronStudents from './cronStudents';
 import config from '../utils/config';
 import sentry from '../utils/sentry';
 
@@ -20,7 +21,7 @@ const jobs = [
     start: true,
     timeZone: 'Europe/Paris',
     isActive: config.feature.sendSummary,
-    name: 'Send monthly appoitment summaries to universities',
+    name: 'Send monthly appointment summaries to universities',
   },
   {
     cronTime: '*/5 * * * *', // every 5 minutes
@@ -46,6 +47,30 @@ const jobs = [
     timeZone: 'Europe/Paris',
     isActive: config.feature.checkMultipleFiles,
     name: 'checkForMultipleAcceptedDossiers',
+  },
+  {
+    cronTime: '0 10 * * *', // every day at 10am
+    onTick: cronStudents.sendStudentsMailJ3,
+    start: true,
+    timeZone: 'Europe/Paris',
+    isActive: true,
+    name: 'Send mail to students after 3 days',
+  },
+  {
+    cronTime: '5 10 * * *', // every day at 10:05am
+    onTick: cronStudents.sendStudentsMailJ10,
+    start: true,
+    timeZone: 'Europe/Paris',
+    isActive: true,
+    name: 'Send mail to students after 10 days',
+  },
+  {
+    cronTime: '10 10 * * *', // every day at 10:10am
+    onTick: cronStudents.sendStudentsMailJ30,
+    start: true,
+    timeZone: 'Europe/Paris',
+    isActive: true,
+    name: 'Send mail to students after 1 month',
   },
   {
     cronTime: '0 12 * * 3', // Every wednesday at noon

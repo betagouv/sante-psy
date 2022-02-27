@@ -93,7 +93,7 @@ const StudentLanding = () => {
     event.preventDefault();
     if (email) {
       setError(null);
-      agent.User.sendStudentMail(email)
+      agent.Student.sendMail(email)
         .then(notification => {
           setEmail('');
           setNotification(notification.data, true, false);

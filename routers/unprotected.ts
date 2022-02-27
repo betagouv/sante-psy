@@ -10,6 +10,7 @@ import config from '../utils/config';
 import psyProfileController from '../controllers/psyProfileController';
 import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
+import studentController from '../controllers/studentController';
 
 const router = express.Router();
 
@@ -31,8 +32,15 @@ router.post('/psychologist/login', speedLimiterLogin, loginController.login);
 router.post(
   '/student/sendMail',
   speedLimiterLogin,
-  contactController.mailValidator,
-  contactController.sendStudentMail,
+  studentController.mailValidator,
+  studentController.sendStudentMail,
+);
+
+router.post(
+  '/student/saveAnswer',
+  speedLimiterLogin,
+  studentController.answerValidator,
+  studentController.saveAnswer,
 );
 
 // prevent abuse for some rules
