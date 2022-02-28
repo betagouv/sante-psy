@@ -172,8 +172,6 @@ describe('DS integration tests', () => {
       useLastName,
       ...psy
     } = await dbPsychologists.getById(id);
-
-    console.log(assignedUniversityId);
     psy.should.eql(expected);
     if (universityId) {
       assignedUniversityId.should.equals(universityId);
@@ -181,7 +179,8 @@ describe('DS integration tests', () => {
   };
 
   it('should import all data from DS', async () => {
-    await cronDemarchesSimplifiees.importEveryDataFromDSToPG();
+    const result = await cronDemarchesSimplifiees.importEveryDataFromDSToPG();
+    result.should.be.true;
 
     await verifyPsy(paulId, paul);
     await verifyPsy(xavierId, xavier);
@@ -213,7 +212,8 @@ describe('DS integration tests', () => {
       assignedUniversityId: xavierUniversity.id,
     }]);
 
-    await cronDemarchesSimplifiees.importEveryDataFromDSToPG();
+    const result = await cronDemarchesSimplifiees.importEveryDataFromDSToPG();
+    result.should.be.true;
 
     await verifyPsy(paulId, paul, paulUniversity.id);
     await verifyPsy(xavierId, {
