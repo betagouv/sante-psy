@@ -47,5 +47,5 @@ describe('autoAcceptPsychologist', () => {
       acceptPsychologistStub,
       dossierId,
     );
-  });
+  }).timeout(30000);
 });
