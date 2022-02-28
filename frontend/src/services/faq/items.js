@@ -8,19 +8,23 @@ const items = {
         title: 'Parcours étudiant',
       },
       {
-        href: '/static/documents/flyer_etudiants_fr.pdf',
+        href: '/static/documents/flyer_student_fr.pdf',
         title: 'Voir le dépliant étudiant',
       },
       {
-        href: '/static/documents/flyer_etudiants_en.pdf',
+        href: '/static/documents/flyer_student_en.pdf',
         title: 'See the student flyer',
       },
       {
-        href: '/static/documents/flyer_etudiants_sp.pdf',
+        href: '/static/documents/flyer_student_sp.pdf',
         title: 'Ver el folleto del estudiante',
       },
+      // {
+      //   href: '/static/documents/flyer_student_ar.pdf',
+      //   title: '',
+      // },
       {
-        href: '/static/documents/flyer_etudiants_zn.pdf',
+        href: '/static/documents/flyer_student_zn.pdf',
         title: '见学生传单',
       },
     ],
