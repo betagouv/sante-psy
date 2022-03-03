@@ -100,21 +100,21 @@ describe('studentController', () => {
       await failValidation({
         id: uuidv4(),
         referral: true,
-      }, 'Vous devez spécifier un nombre entre 1 et 5');
+      }, 'Vous devez spécifier un nombre entre 1 et 3');
     });
 
     it('should fail if referral is sent as a negative number', async () => {
       await failValidation({
         id: uuidv4(),
         referral: -2,
-      }, 'Vous devez spécifier un nombre entre 1 et 5');
+      }, 'Vous devez spécifier un nombre entre 1 et 3');
     });
 
     it('should fail if referral is sent as a big number', async () => {
       await failValidation({
         id: uuidv4(),
-        referral: 100,
-      }, 'Vous devez spécifier un nombre entre 1 et 5');
+        referral: 5,
+      }, 'Vous devez spécifier un nombre entre 1 et 3');
     });
   });
 });
