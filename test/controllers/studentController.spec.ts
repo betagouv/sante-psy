@@ -53,7 +53,7 @@ describe('studentController', () => {
       id: uuidv4(),
       letter: null,
       appointment: null,
-      referral: 4,
+      referral: 2,
     }));
 
     it('should fail if id is not sent', async () => {
