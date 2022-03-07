@@ -28,32 +28,32 @@ const StudentAnswer = () => {
   }, []);
 
   return (
-    <Page background="blue" description="Merci d'avoir pris le temps de répondre :)">
+    <Page title="" background="blue" description="Merci d'avoir pris le temps de répondre 🙂">
       {searchParams.get('appointment')
         && (
-        <>
-          <Text>Recommanderais-tu Santé Psy Étudiant à d’autres étudiants et étudiantes&nbsp;?</Text>
-          <Row className={styles.votes}>
-            <Vote
-              background={selected === 1 ? 'blue' : null}
-              image="bad"
-              label="Non"
-              onClick={() => onClick(1)}
-            />
-            <Vote
-              background={selected === 2 ? 'blue' : null}
-              image="medium"
-              label="Moyen"
-              onClick={() => onClick(2)}
-            />
-            <Vote
-              background={selected === 3 ? 'blue' : null}
-              image="good"
-              label="Oui"
-              onClick={() => onClick(3)}
-            />
-          </Row>
-        </>
+          <>
+            <Text className={styles.question}>Recommanderais-tu Santé Psy Étudiant à d’autres étudiants et étudiantes&nbsp;?</Text>
+            <Row className={styles.votes}>
+              <Vote
+                background={selected === 1 ? 'blue' : null}
+                image="bad"
+                label="Non"
+                onClick={() => onClick(1)}
+              />
+              <Vote
+                background={selected === 2 ? 'blue' : null}
+                image="medium"
+                label="Moyen"
+                onClick={() => onClick(2)}
+              />
+              <Vote
+                background={selected === 3 ? 'blue' : null}
+                image="good"
+                label="Oui"
+                onClick={() => onClick(3)}
+              />
+            </Row>
+          </>
         )}
     </Page>
   );
