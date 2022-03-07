@@ -20,7 +20,7 @@ describe('studentController', () => {
       .send(payload)
       .then(async (res) => {
         res.status.should.equal(200);
-        res.body.message.should.equal('Réponse enregistrée');
+        res.body.message.should.equal('Votre réponse a bien été prise en compte.');
 
         sinon.assert.called(updateStudentStub);
       });
