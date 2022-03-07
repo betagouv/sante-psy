@@ -1,21 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { useStore } from 'stores/';
 import { Row, Text } from '@dataesr/react-dsfr';
 import Page from 'components/Page/Page';
 import Vote from 'components/StudentAnswer/Vote';
+import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
 import styles from './studentAnswer.cssmodule.scss';
 
 const StudentAnswer = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
+  const { commonStore: { setNotification } } = useStore();
   const [selected, setSelected] = useState();
 
   const onClick = referral => {
     setSelected(referral);
+    setNotification({});
     agent.Student.saveAnswer({
       id,
       referral,
+    }).then(notification => {
+      setNotification(notification.data, true, false);
+    })
+    .catch(e => {
+      setNotification(e.response.data, false, false);
     });
   };
 
@@ -53,6 +62,7 @@ const StudentAnswer = () => {
                 onClick={() => onClick(3)}
               />
             </Row>
+            <GlobalNotification />
           </>
         )}
     </Page>

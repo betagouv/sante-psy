@@ -60,7 +60,7 @@ const saveAnswer = async (req: Request, res: Response): Promise<void> => {
     },
   );
 
-  res.json({ message: 'Réponse enregistrée' });
+  res.json({ message: 'Votre réponse a bien été prise en compte.' });
 };
 
 export default {
