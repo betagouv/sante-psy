@@ -17,15 +17,13 @@ const StudentAnswer = () => {
   const onClick = referral => {
     setSelected(referral);
     setNotification({});
-    agent.Student.saveAnswer({
-      id,
-      referral,
-    }).then(notification => {
-      setNotification(notification.data, true, false);
-    })
-    .catch(e => {
-      setNotification(e.response.data, false, false);
-    });
+    agent.Student.saveAnswer({ id, referral })
+      .then(notification => {
+        setNotification(notification.data, true, false);
+      })
+      .catch(e => {
+        setNotification(e.response.data, false, false);
+      });
   };
 
   useEffect(() => {
@@ -41,7 +39,9 @@ const StudentAnswer = () => {
       {searchParams.get('appointment')
         && (
           <>
-            <Text className={styles.question}>Recommanderais-tu Santé Psy Étudiant à d’autres étudiants et étudiantes&nbsp;?</Text>
+            <Text className={styles.question}>
+              Recommanderais-tu Santé Psy Étudiant à d’autres étudiants et étudiantes&nbsp;?
+            </Text>
             <Row className={styles.votes}>
               <Vote
                 background={selected === 1 ? 'blue' : null}
