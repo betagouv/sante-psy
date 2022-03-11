@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useStore } from 'stores/';
-import { Row, Text } from '@dataesr/react-dsfr';
+import { ButtonGroup, Button, Text } from '@dataesr/react-dsfr';
 import Page from 'components/Page/Page';
-import Vote from 'components/StudentAnswer/Vote';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
 import styles from './studentAnswer.cssmodule.scss';
@@ -12,13 +11,14 @@ const StudentAnswer = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const { commonStore: { setNotification } } = useStore();
-  const [selected, setSelected] = useState();
+  const [success, setSuccess] = useState(false);
 
   const onClick = referral => {
-    setSelected(referral);
+    setSuccess(false);
     setNotification({});
     agent.Student.saveAnswer({ id, referral })
       .then(notification => {
+        setSuccess(true);
         setNotification(notification.data, true, false);
       })
       .catch(e => {
@@ -36,33 +36,18 @@ const StudentAnswer = () => {
 
   return (
     <Page title="" background="blue" description="Merci d'avoir pris le temps de répondre 🙂">
-      {searchParams.get('appointment')
+      <GlobalNotification />
+      {searchParams.get('appointment') && !success
         && (
           <>
             <Text className={styles.question}>
               Recommanderais-tu Santé Psy Étudiant à d’autres étudiants et étudiantes&nbsp;?
             </Text>
-            <Row className={styles.votes}>
-              <Vote
-                background={selected === 1 ? 'blue' : null}
-                image="bad"
-                label="Non"
-                onClick={() => onClick(1)}
-              />
-              <Vote
-                background={selected === 2 ? 'blue' : null}
-                image="medium"
-                label="Moyen"
-                onClick={() => onClick(2)}
-              />
-              <Vote
-                background={selected === 3 ? 'blue' : null}
-                image="good"
-                label="Oui"
-                onClick={() => onClick(3)}
-              />
-            </Row>
-            <GlobalNotification />
+            <ButtonGroup align="center" isInlineFrom="md">
+              <Button icon="ri-emotion-unhappy-line" onClick={() => onClick(1)}>Non</Button>
+              <Button icon="ri-emotion-normal-line" onClick={() => onClick(2)}>Moyen</Button>
+              <Button icon="ri-emotion-happy-line" onClick={() => onClick(3)}>Oui</Button>
+            </ButtonGroup>
           </>
         )}
     </Page>
