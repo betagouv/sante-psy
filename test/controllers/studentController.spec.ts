@@ -20,7 +20,7 @@ describe('studentController', () => {
       .send(payload)
       .then(async (res) => {
         res.status.should.equal(200);
-        res.body.message.should.equal('Réponse enregistrée');
+        res.body.message.should.equal('Votre réponse a bien été prise en compte.');
 
         sinon.assert.called(updateStudentStub);
       });
@@ -53,7 +53,7 @@ describe('studentController', () => {
       id: uuidv4(),
       letter: null,
       appointment: null,
-      referral: 4,
+      referral: 2,
     }));
 
     it('should fail if id is not sent', async () => {
@@ -100,21 +100,21 @@ describe('studentController', () => {
       await failValidation({
         id: uuidv4(),
         referral: true,
-      }, 'Vous devez spécifier un nombre entre 1 et 5');
+      }, 'Vous devez spécifier un nombre entre 1 et 3');
     });
 
     it('should fail if referral is sent as a negative number', async () => {
       await failValidation({
         id: uuidv4(),
         referral: -2,
-      }, 'Vous devez spécifier un nombre entre 1 et 5');
+      }, 'Vous devez spécifier un nombre entre 1 et 3');
     });
 
     it('should fail if referral is sent as a big number', async () => {
       await failValidation({
         id: uuidv4(),
-        referral: 100,
-      }, 'Vous devez spécifier un nombre entre 1 et 5');
+        referral: 5,
+      }, 'Vous devez spécifier un nombre entre 1 et 3');
     });
   });
 });

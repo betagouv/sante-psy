@@ -41,7 +41,6 @@ const sendMail4 = async (student: Student): Promise<void> => {
     signature: getSignature(),
     faq: `${config.hostnameWithProtocol}/faq`,
     appointment: `${config.hostnameWithProtocol}/enregistrement/${student.id}?appointment=`,
-    referral: `${config.hostnameWithProtocol}/enregistrement/${student.id}?referral=`,
   });
   return sendEmail(student.email, 'Tout se passe bien pour toi ?', html);
 };

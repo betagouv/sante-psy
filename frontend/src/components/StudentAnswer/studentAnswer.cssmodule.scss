@@ -1,0 +1,15 @@
+.question {
+  text-align: center;
+}
+
+.votes {
+  justify-content: center;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+
+@media (min-width: 768px) {
+  .votes {
+      padding-bottom: 32px;
+  }
+}

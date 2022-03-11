@@ -34,9 +34,9 @@ const answerValidator = [
   check('appointment', 'Vous devez spécifier un booléen')
     .optional({ nullable: true })
     .isBoolean(),
-  check('referral', 'Vous devez spécifier un nombre entre 1 et 5')
+  check('referral', 'Vous devez spécifier un nombre entre 1 et 3')
     .optional({ nullable: true })
-    .isInt({ min: 1, max: 5 }),
+    .isInt({ min: 1, max: 3 }),
   oneOf([
     check('letter').exists(),
     check('appointment').exists(),
@@ -60,7 +60,7 @@ const saveAnswer = async (req: Request, res: Response): Promise<void> => {
     },
   );
 
-  res.json({ message: 'Réponse enregistrée' });
+  res.json({ message: 'Votre réponse a bien été prise en compte.' });
 };
 
 export default {

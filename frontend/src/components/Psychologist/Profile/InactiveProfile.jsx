@@ -24,6 +24,7 @@ const InactiveProfile = () => {
 
   return (
     <Page
+      title="Merci"
       background="blue"
     >
       {done ? (
