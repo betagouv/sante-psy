@@ -16,9 +16,17 @@ const sendStudentsMailJ3 = async (): Promise<boolean> => {
   try {
     const { from, to } = getDates(3);
     const results = await students.getAllCreatedBetween(from, to);
+    const n = results.length;
+    console.log(`Students J+3: sending ${n} mails...`);
 
-    await Promise.all(results.map((student) => sendMail2(student)));
-    console.log(`${results.length} mails sent`);
+    for (let i = 0; i < n; i++) {
+      const student = results[i];
+      // eslint-disable-next-line no-await-in-loop
+      await sendMail2(student)
+        .catch((err) => console.error('Students J+3: error sending mail to', student.id, err));
+    }
+
+    console.log('Students J+3: done');
     return true;
   } catch (err) {
     console.error('ERROR: Could not send students mail J+3.', err);
@@ -30,9 +38,17 @@ const sendStudentsMailJ10 = async (): Promise<boolean> => {
   try {
     const { from, to } = getDates(10);
     const results = await students.getAllCreatedBetween(from, to);
+    const n = results.length;
+    console.log(`Students J+10: sending ${n} mails...`);
 
-    await Promise.all(results.map((student) => sendMail3(student)));
-    console.log(`${results.length} mails sent`);
+    for (let i = 0; i < n; i++) {
+      const student = results[i];
+      // eslint-disable-next-line no-await-in-loop
+      await sendMail3(student)
+        .catch((err) => console.error('Students J+10: error sending mail to', student.id, err));
+    }
+
+    console.log('Students J+10: done');
     return true;
   } catch (err) {
     console.error('ERROR: Could not send students mail J+10.', err);
@@ -44,9 +60,17 @@ const sendStudentsMailJ30 = async (): Promise<boolean> => {
   try {
     const { from, to } = getDates(30);
     const results = await students.getAllCreatedBetween(from, to);
+    const n = results.length;
+    console.log(`Students J+30: sending ${n} mails...`);
 
-    await Promise.all(results.map((student) => sendMail4(student)));
-    console.log(`${results.length} mails sent`);
+    for (let i = 0; i < n; i++) {
+      const student = results[i];
+      // eslint-disable-next-line no-await-in-loop
+      await sendMail4(student)
+        .catch((err) => console.error('Students J+30: error sending mail to', student.id, err));
+    }
+
+    console.log('Students J+30: done');
     return true;
   } catch (err) {
     console.error('ERROR: Could not send students mail J+30.', err);
