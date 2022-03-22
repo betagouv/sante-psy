@@ -1,21 +1,19 @@
 import { Request, Response } from 'express';
 import {
-  getUniversityCount, getAppointmentCount, getAvailablePsychologistCount, getPatientCount,
+  getAppointmentCount, getAvailablePsychologistCount, getPatientCount,
 } from '../db/statistics';
 import asyncHelper from '../utils/async-helper';
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
-  const university = getUniversityCount();
   const appointments = getAppointmentCount();
   const psychologist = getAvailablePsychologistCount();
   const patients = getPatientCount();
 
   const [
-    universityCount,
     appointmentsCount,
     psychologistCount,
     patientsCount,
-  ] = await Promise.all([university, appointments, psychologist, patients]);
+  ] = await Promise.all([appointments, psychologist, patients]);
   res.json([
     {
       label: 'Séances réalisées',
@@ -28,10 +26,6 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
     {
       label: 'Psychologues disponibles',
       value: psychologistCount[0].count,
-    },
-    {
-      label: 'Universités partenaires',
-      value: universityCount[0].count,
     },
   ]);
 };

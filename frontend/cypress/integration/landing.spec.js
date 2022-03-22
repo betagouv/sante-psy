@@ -15,8 +15,6 @@ describe('Landing Page Test', () => {
   it('shows statistics', () => {
     cy.visit('/');
     cy.wait('@statistics');
-    cy.get('[data-test-id="statistic-Universités partenaires"]').should('exist');
-    cy.get('[data-test-id="statistic-Universités partenaires-value"]').should('have.text', 11);
     cy.get('[data-test-id="statistic-Séances réalisées"]').should('exist');
     cy.get('[data-test-id="statistic-Séances réalisées-value"]').should('have.text', 156);
     cy.get('[data-test-id="statistic-Psychologues disponibles"]').should('exist');
