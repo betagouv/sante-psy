@@ -8,9 +8,6 @@ import {
 } from './tables';
 import db from './db';
 
-const getUniversityCount = (): Promise<Registry[]> => db(psychologistsTable)
-    .countDistinct('assignedUniversityId');
-
 const getAvailablePsychologistCount = (): Promise<Registry[]> => db(psychologistsTable)
     .where({
       state: DossierState.accepte,
@@ -28,7 +25,6 @@ const getAppointmentCount = () : Promise<Registry[]> => db(appointmentsTable)
     .countDistinct('id');
 
 export {
-  getUniversityCount,
   getAppointmentCount,
   getAvailablePsychologistCount,
   getPatientCount,
