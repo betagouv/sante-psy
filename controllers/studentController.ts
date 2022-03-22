@@ -60,7 +60,20 @@ const saveAnswer = async (req: Request, res: Response): Promise<void> => {
     },
   );
 
-  res.json({ message: 'Votre réponse a bien été prise en compte.' });
+  res.json({ message: 'Ta réponse a bien été prise en compte.' });
+};
+
+const unregister = async (req: Request, res: Response): Promise<void> => {
+  const { studentId } = req.params;
+
+  dbStudents.updateById(
+    studentId,
+    {
+      createdAt: new Date('2999-12-31'),
+    },
+  );
+
+  res.send('Ok');
 };
 
 export default {
@@ -68,4 +81,5 @@ export default {
   sendStudentMail: asyncHelper(sendStudentMail),
   answerValidator,
   saveAnswer: asyncHelper(saveAnswer),
+  unregister,
 };
