@@ -119,7 +119,7 @@ describe('studentController', () => {
   });
 
   describe('unregister', () => {
-    it('Should set createdAt to a futur date', async () => {
+    it('Should set email to null', async () => {
       chai.request(app)
       .delete('/api/student/123')
       .then(async (res) => {
