@@ -7,7 +7,9 @@ const StudentUnregister = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    agent.Student.unregister(id);
+    if (id) {
+        agent.Student.unregister(id);
+    }
   }, []);
 
   return (

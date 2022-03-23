@@ -23,7 +23,7 @@ const sendMail2 = async (student: Student): Promise<void> => {
     signature: getSignature(),
     site: `${config.hostnameWithProtocol}`,
     contact: `${config.hostnameWithProtocol}/contact`,
-    unregister: `${config.hostnameWithProtocol}/desincription/${student.id}`,
+    unregister: `${config.hostnameWithProtocol}/desinscription/${student.id}`,
   });
   return sendEmail(student.email, 'Comment te sens-tu en ce moment ?', html);
 };
@@ -33,7 +33,7 @@ const sendMail3 = async (student: Student): Promise<void> => {
     signature: getSignature(),
     faq: `${config.hostnameWithProtocol}/faq`,
     letter: `${config.hostnameWithProtocol}/enregistrement/${student.id}?letter=`,
-    unregister: `${config.hostnameWithProtocol}/desincription/${student.id}`,
+    unregister: `${config.hostnameWithProtocol}/desinscription/${student.id}`,
   });
   return sendEmail(student.email, 'On vient prendre de tes nouvelles !', html);
 };
@@ -43,7 +43,7 @@ const sendMail4 = async (student: Student): Promise<void> => {
     signature: getSignature(),
     faq: `${config.hostnameWithProtocol}/faq`,
     appointment: `${config.hostnameWithProtocol}/enregistrement/${student.id}?appointment=`,
-    unregister: `${config.hostnameWithProtocol}/desincription/${student.id}`,
+    unregister: `${config.hostnameWithProtocol}/desinscription/${student.id}`,
   });
   return sendEmail(student.email, 'Tout se passe bien pour toi ?', html);
 };
