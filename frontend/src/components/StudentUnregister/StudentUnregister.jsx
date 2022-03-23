@@ -8,7 +8,7 @@ const StudentUnregister = () => {
 
   useEffect(() => {
     if (id) {
-        agent.Student.unregister(id);
+      agent.Student.unregister(id);
     }
   }, []);
 
@@ -21,7 +21,7 @@ const StudentUnregister = () => {
           <div>Ta demande a bien été prise en compte ✅</div>
           <div>Tu ne recevras plus d&lsquo;email de Santé Psy Étudiant 🙂</div>
         </>
-)}
+      )}
     />
   );
 };
