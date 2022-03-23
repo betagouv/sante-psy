@@ -15,7 +15,7 @@ const getDates = (days: number): { from: Date, to: Date } => {
 const sendStudentsMailJ3 = async (): Promise<boolean> => {
   try {
     const { from, to } = getDates(3);
-    const results = await students.getAllCreatedBetween(from, to);
+    const results = await students.getAllCreatedBetweenWithEmail(from, to);
     const n = results.length;
     console.log(`Students J+3: sending ${n} mails...`);
 
@@ -37,7 +37,7 @@ const sendStudentsMailJ3 = async (): Promise<boolean> => {
 const sendStudentsMailJ10 = async (): Promise<boolean> => {
   try {
     const { from, to } = getDates(10);
-    const results = await students.getAllCreatedBetween(from, to);
+    const results = await students.getAllCreatedBetweenWithEmail(from, to);
     const n = results.length;
     console.log(`Students J+10: sending ${n} mails...`);
 
@@ -59,7 +59,7 @@ const sendStudentsMailJ10 = async (): Promise<boolean> => {
 const sendStudentsMailJ30 = async (): Promise<boolean> => {
   try {
     const { from, to } = getDates(30);
-    const results = await students.getAllCreatedBetween(from, to);
+    const results = await students.getAllCreatedBetweenWithEmail(from, to);
     const n = results.length;
     console.log(`Students J+30: sending ${n} mails...`);
 

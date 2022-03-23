@@ -5,22 +5,22 @@ import dbStudents from '../../db/students';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('studentController', () => {
+  let updateStudentStub;
+  beforeEach(() => {
+    updateStudentStub = sinon.stub(dbStudents, 'updateById');
+  });
+
+  afterEach(() => {
+    updateStudentStub.restore();
+  });
+
   describe('saveAnswer', () => {
-    let updateStudentStub;
-    beforeEach(() => {
-      updateStudentStub = sinon.stub(dbStudents, 'updateById');
-    });
-
-    afterEach(() => {
-      updateStudentStub.restore();
-    });
-
     const successValidation = async (payload) => chai.request(app)
       .post('/api/student/saveAnswer')
       .send(payload)
       .then(async (res) => {
         res.status.should.equal(200);
-        res.body.message.should.equal('Votre réponse a bien été prise en compte.');
+        res.body.message.should.equal('Ta réponse a bien été prise en compte.');
 
         sinon.assert.called(updateStudentStub);
       });
@@ -115,6 +115,19 @@ describe('studentController', () => {
         id: uuidv4(),
         referral: 5,
       }, 'Vous devez spécifier un nombre entre 1 et 3');
+    });
+  });
+
+  describe('unregister', () => {
+    it('Should set email to null', async () => {
+      chai.request(app)
+      .delete('/api/student/123')
+      .then(async (res) => {
+        res.status.should.equal(200);
+        res.body.should.equal('Ok');
+
+        sinon.assert.calledWith(updateStudentStub, '123', { email: null });
+      });
     });
   });
 });

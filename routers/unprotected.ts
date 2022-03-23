@@ -43,6 +43,12 @@ router.post(
   studentController.saveAnswer,
 );
 
+router.delete(
+  '/student/:studentId',
+  speedLimiterLogin,
+  studentController.unregister,
+);
+
 // prevent abuse for some rules
 const speedLimiter = slowDown({
   windowMs: 5 * 60 * 1000, // 5 minutes
