@@ -69,7 +69,7 @@ const unregister = async (req: Request, res: Response): Promise<void> => {
   dbStudents.updateById(
     studentId,
     {
-      createdAt: new Date('2999-12-31'),
+      email: null,
     },
   );
 

@@ -126,7 +126,7 @@ describe('studentController', () => {
         res.status.should.equal(200);
         res.body.should.equal('Ok');
 
-        sinon.assert.calledWith(updateStudentStub, '123', { createdAt: new Date('2999-12-31') });
+        sinon.assert.calledWith(updateStudentStub, '123', { email: null });
       });
     });
   });
