@@ -26,7 +26,11 @@ if (!config.activateDebug) {
 }
 
 // HSTS is managed directly by scalingo => if we set it there it appears twice and can be misinterpreted
-app.use(helmet({ contentSecurityPolicy: false, hsts: false }));
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+  hsts: false,
+}));
 
 app.use((req, res, next) => {
   // Feature-Policy has been replaced by Permissions-Policy but it is still not widely supported
