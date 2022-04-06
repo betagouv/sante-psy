@@ -4,6 +4,7 @@ export type Student = {
   letter: boolean,
   appointment: boolean,
   referral: number,
+  source: string,
   createdAt: Date,
   updatedAt?: Date
 }

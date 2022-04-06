@@ -24,6 +24,8 @@ const StudentLanding = () => {
   const [error, setError] = useState();
   const { commonStore: { setNotification } } = useStore();
 
+  const from = searchParams.get('from');
+
   useEffect(() => {
     document.title = 'Santé Psy Étudiant';
     // Not set when redirecting
@@ -71,7 +73,6 @@ const StudentLanding = () => {
   const trackEvent = () => {
     if (__MATOMO__) {
       _paq.push(['trackEvent', 'Student', 'SendMail']);
-      const from = searchParams.get('from');
       if (from) {
         console.debug(`Track contact event from ${from}`);
         _paq.push(['trackEvent', from, 'SendMail']);
@@ -93,7 +94,7 @@ const StudentLanding = () => {
     event.preventDefault();
     if (email) {
       setError(null);
-      agent.Student.sendMail(email)
+      agent.Student.sendMail(email, from)
         .then(notification => {
           setEmail('');
           setNotification(notification.data, true, false);
