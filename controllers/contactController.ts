@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import DOMPurify from '../services/sanitizer';
 import { check } from 'express-validator';
-import Crisp from 'node-crisp-api';
+import Crisp from 'crisp-api';
 
 import validation from '../utils/validation';
 import asyncHelper from '../utils/async-helper';
@@ -55,14 +55,20 @@ const send = async (req: Request, res: Response): Promise<void> => {
   if (config.testEnvironment) {
     console.log('ce message aurait été envoyé... si vous etiez en prod...', req.body);
   } else {
-    const creation = await CrispClient.websiteConversations.create(config.crisp.website);
-    await CrispClient.websiteConversations.updateMeta(config.crisp.website, creation.session_id, {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore: https://github.com/crisp-im/node-crisp-api/issues/40
+    const creation = await CrispClient.website.createNewConversation(config.crisp.website);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore: https://github.com/crisp-im/node-crisp-api/issues/40
+    await CrispClient.website.updateConversationMetas(config.crisp.website, creation.session_id, {
       nickname: `${req.body.firstName} ${req.body.name}`,
       email: req.body.email,
       data: { email: req.body.email, navigator: req.body.navigator },
       segments: [req.body.reason, req.body.user],
     });
-    await CrispClient.websiteConversations.sendMessage(config.crisp.website, creation.session_id, {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore: https://github.com/crisp-im/node-crisp-api/issues/40
+    await CrispClient.website.sendMessageInConversation(config.crisp.website, creation.session_id, {
       type: 'text',
       from: 'user',
       origin: 'urn:sante-psy-etudiants',
