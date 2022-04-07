@@ -44,9 +44,9 @@ describe('studentController', () => {
         sinon.assert.notCalled(sendMailStub);
       });
 
-    it.only('should succeed with valid email and source', async () => successValidation({
+    it('should succeed with valid email and source', async () => successValidation({
       email: 'test@test.fr',
-      source: 123,
+      source: 'instagram',
     }));
 
     it('should succeed with valid email and undefined source', async () => successValidation({
