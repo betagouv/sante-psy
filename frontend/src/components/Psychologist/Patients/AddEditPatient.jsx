@@ -124,7 +124,7 @@ const AddEditPatient = () => {
               defaultChecked={patient.hasPrescription}
               label="J'ai vérifié que les séances ont bien été prescrites
                 par un médecin ou un Service de Santé Universitaire"
-              hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
+              hint="L'étudiant m'a présenté une lettre ou ordonnance médicale"
               value="hasPrescription"
               onChange={e => changePatient(e.target.checked, 'hasPrescription')}
             />
@@ -132,7 +132,7 @@ const AddEditPatient = () => {
               className="fr-input-group"
               defaultChecked={patient.isStudentStatusVerified}
               label="J'ai vérifié le statut étudiant"
-              hint="L'étudiant m'a présenté une lettre ou ordonnance médicale"
+              hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
               value="isStudentStatusVerified"
               onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
             />
