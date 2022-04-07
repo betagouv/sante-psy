@@ -5,9 +5,13 @@ import { studentsTable } from '../../db/tables';
 // eslint-disable-next-line import/prefer-default-export
 export const seed = async (knex: Knex): Promise<void> => {
   const students = [...Array(50).keys()].map((i) => {
+    let source: string;
+    if (i % 4 === 0) {
+      source = `source-${i}`;
+    }
     const createdAt = new Date();
     createdAt.setDate(createdAt.getDate() - i);
-    return { email: faker.internet.email(), createdAt };
+    return { email: faker.internet.email(), source, createdAt };
   });
 
   await knex(studentsTable).insert(students);

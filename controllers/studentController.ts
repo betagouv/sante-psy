@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { check, oneOf } from 'express-validator';
+import DOMPurify from '../services/sanitizer';
 import dbStudents from '../db/students';
 import asyncHelper from '../utils/async-helper';
 import validation from '../utils/validation';
@@ -9,12 +10,14 @@ const mailValidator = [
   check('email')
     .isEmail()
     .withMessage('Vous devez spécifier un email valide.'),
+  check('source')
+    .customSanitizer(DOMPurify.sanitize),
 ];
 
 const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
-  const { email } = req.body;
+  const { email, source } = req.body;
   await sendMail1(email);
 
   res.json({
@@ -22,7 +25,7 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
     message: 'Nous vous avons envoyé un mail avec toutes les informations sur le dispositif. Pensez à verifier vos spams et n\'hesitez pas à nous contacter en cas de problèmes',
   });
 
-  dbStudents.insert(email);
+  dbStudents.insert(email, source);
 };
 
 const answerValidator = [

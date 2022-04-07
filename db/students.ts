@@ -3,9 +3,9 @@ import db from './db';
 import date from '../utils/date';
 import { Student } from '../types/Student';
 
-const insert = async (email: string): Promise<void> => {
+const insert = async (email: string, source: string): Promise<void> => {
   try {
-    await db(studentsTable).insert({ email }).onConflict('email').ignore();
+    await db(studentsTable).insert({ email, source }).onConflict('email').ignore();
   } catch (err) {
     console.error('Erreur de sauvegarde du mail', err);
     throw new Error('Erreur de sauvegarde du mail');

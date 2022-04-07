@@ -93,7 +93,7 @@ const User = {
 };
 
 const Student = {
-  sendMail: email => clientWithoutErrorManagement.post('/student/sendMail', { email }),
+  sendMail: (email, source) => clientWithoutErrorManagement.post('/student/sendMail', { email, source }),
   saveAnswer: data => clientWithoutErrorManagement.post('/student/saveAnswer', data),
   unregister: id => clientWithoutErrorManagement.delete(`/student/${id}`),
 };
