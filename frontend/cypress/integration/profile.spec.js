@@ -114,7 +114,7 @@ describe('Profile', () => {
         .click();
       cy.get('[data-test-id="edit-profile-form"]')
         .should('exist');
-      cy.get('[data-test-id="psy-personal-email-input"] > input')
+      cy.get('[data-test-id="psy-personal-email-input"] > div > input')
         .clear()
         .type('new@beta.gouv.fr');
       cy.get('[data-test-id="teleConsultation-true"]')
@@ -136,38 +136,38 @@ describe('Profile', () => {
         .click();
       cy.get('[data-test-id="edit-profile-form"]')
         .should('exist');
-      cy.get('[data-test-id="psy-website-input"] > input')
+      cy.get('[data-test-id="psy-website-input"] > div > input')
         .clear()
         .type('doctolib.fr')
         .blur();
-      cy.get('[data-test-id="psy-website-input"] > input')
+      cy.get('[data-test-id="psy-website-input"] > div > input')
         .should(
           'have.value',
           'http://doctolib.fr',
         );
-      cy.get('[data-test-id="psy-website-input"] > input')
+      cy.get('[data-test-id="psy-website-input"] > div > input')
         .clear()
         .type('http://doctolib.fr')
         .blur();
-      cy.get('[data-test-id="psy-website-input"] > input')
+      cy.get('[data-test-id="psy-website-input"] > div > input')
         .should(
           'have.value',
           'http://doctolib.fr',
         );
-      cy.get('[data-test-id="psy-website-input"] > input')
+      cy.get('[data-test-id="psy-website-input"] > div > input')
         .clear()
         .type('https://doctolib.fr')
         .blur();
-      cy.get('[data-test-id="psy-website-input"] > input')
+      cy.get('[data-test-id="psy-website-input"] > div > input')
         .should(
           'have.value',
           'https://doctolib.fr',
         );
-      cy.get('[data-test-id="psy-website-input"] > input')
+      cy.get('[data-test-id="psy-website-input"] > div > input')
         .clear()
         .type('   ')
         .blur();
-      cy.get('[data-test-id="psy-website-input"] > input')
+      cy.get('[data-test-id="psy-website-input"] > div > input')
         .should(
           'have.value',
           '   ',
@@ -411,13 +411,13 @@ describe('Profile', () => {
     it('should display alert for all incomplete info', () => {
       cy.get('[data-test-id="show-profile-form-button"]')
         .click();
-      cy.get('[data-test-id="psy-address-input"] > input')
+      cy.get('[data-test-id="psy-address-input"] > div > input')
         .clear()
         .type('nimps...');
-      cy.get('[data-test-id="psy-other-address-input"] > input')
+      cy.get('[data-test-id="psy-other-address-input"] > div > input')
         .clear()
         .type('super nimps...');
-      cy.get('[data-test-id="psy-website-input"] > input')
+      cy.get('[data-test-id="psy-website-input"] > div > input')
         .clear()
         .type('doctolib');
       cy.get('[data-test-id="psy-description-input"] > textarea')
