@@ -69,7 +69,7 @@ const rateLimiter = rateLimit({
 });
 app.use(rateLimiter);
 
-app.get('/debug-sentry', (req, res) => {
+app.get('/debug-sentry', () => {
   throw new Error('My first Sentry error!');
 });
 
