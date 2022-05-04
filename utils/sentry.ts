@@ -4,7 +4,7 @@ import { Express } from 'express';
 import config from './config';
 
 /**
- * @see https://sentry.io/betagouv-f7/sante-psy-prod/getting-started/node-express/
+ * @see https://docs.sentry.io/platforms/node/guides/express/
  */
 const initCaptureConsole = (): void => {
   const logLevel = ['error'];
