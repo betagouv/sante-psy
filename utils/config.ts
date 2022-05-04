@@ -23,6 +23,7 @@ export default {
   announcement: process.env.ANNOUNCEMENT || '',
   port: process.env.PORT || 8080,
   teamEmail: process.env.TEAM_EMAIL || 'equipe-santepsyetudiants@beta.gouv.fr',
+  sendingEmail: process.env.SENDING_EMAIL || 'contact@santepsyetudiant.beta.gouv.fr',
   contactEmail,
   databaseUrl: process.env.DATABASE_URL,
   dateOfBirthDeploymentDate: process.env.DATE_OF_BIRTH_FEATURE_DATE || '20/04/2021',
