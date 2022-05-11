@@ -20,7 +20,8 @@ const send = (toEmail: string, subject: string, html: string, ccEmail = '', bccE
     to: toEmail, // Comma separated list or an array
     cc: ccEmail, // Comma separated list or an array
     bcc: bccEmail, // Comma separated list or an array
-    from: `${config.appName} <${config.contactEmail}>`,
+    from: `${config.appName} <${config.sendingEmail}>`,
+    replyTo: config.contactEmail,
     subject,
     html,
     text: html.replace(/<(?:.|\n)*?>/gm, ''),
