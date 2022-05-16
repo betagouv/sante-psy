@@ -1,4 +1,4 @@
-import testDossiers from '../dossier.json';
+import { dossier } from '../dossier';
 import uuid from '../../utils/uuid';
 import { DossierState } from '../../types/DossierState';
 import parsePsychologists from '../../services/demarchesSimplifiees/parsePsychologists';
@@ -9,7 +9,7 @@ dotEnv.config();
 
 describe('parsePsychologists', () => {
   it('should return an array of psychologists from a JSON', async () => {
-    const apiResponse = testDossiers;
+    const apiResponse = dossier;
 
     // @ts-expect-error => test
     const output = parsePsychologists(apiResponse);
