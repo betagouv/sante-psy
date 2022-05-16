@@ -81,14 +81,12 @@ describe('Appointments', () => {
 
   describe('Suspended profile', () => {
     it('should display warning if psy is suspended', () => {
-      cy.get('[data-test-id="notification-info"] button')
-        .click();
       suspend().then(() => {
         cy.reload();
-        cy.get('[data-test-id="notification-info"] p')
+        cy.get('[data-test-id="notification-warning"] p')
           .should(
             'have.text',
-            'Votre profil n‘est plus visible dans l‘annuaire. Pour que les étudiants puissent vous contacter, rendez vous sur la page Mes informations.',
+            'Votre profil n‘est plus visible dans l‘annuaire. En cette période d\'examens, les demandes d\'étudiants sont en constante augmentation, nous sollicitons donc votre participation. Pour que les étudiants puissent vous contacter, rendez vous sur la page Mes informations.',
           );
       });
     });
