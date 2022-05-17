@@ -38,10 +38,8 @@ module.exports = config => [
     answer: "Le dispositif Santé Psy Étudiant est prévu jusqu'au 31 août 2022. Dans cette période de transition vers un dispositif de droit commun, vous pouvez donc poursuivre vos suivis jusqu'à cette date.",
   },
   {
-    question: 'Le dispositif s\'arrête-t-il au 31 décembre 2021 et jusqu\'à quand puis-je recevoir des étudiants\u00A0?',
-    answer: 'Le dispositif se poursuit sur l\'année universitaire 2021/2022 soit jusqu\'au 31 août 2022. Vous pouvez donc \
-    poursuivre votre suivi jusqu\'à cette date. L\'université vous tiendra informée des modalités de prolongation concernant \
-    votre convention.',
+    question: 'Le dispositif s\'arrête-t-il au 31 août 2022\u00A0? Jusqu\'à quelle date puis-je recevoir des étudiants\u00A0?',
+    answer: 'Le dispositif est prévu jusqu\'au 31 août 2022. Vous pouvez donc poursuivre votre suivi avec les étudiants jusqu\'à cette date',
   },
   {
     question: 'La lettre d\'orientation est-elle obligatoire\u00A0?',
