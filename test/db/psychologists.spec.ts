@@ -502,16 +502,15 @@ describe('DB Psychologists', () => {
       psy.selfModified.should.be.equal(false);
       psy.inactiveUntil.should.be.eql(date);
 
-      const reasons = await dbSuspensionReasons.getByPsychologist(activePsy.dossierNumber);
-      reasons.length.should.be.equal(1);
-      reasons[0].reason.should.be.equal('because i say so');
-      reasons[0].until.getFullYear().should.be.equal(date.getFullYear());
-      reasons[0].until.getMonth().should.be.equal(date.getMonth());
-      reasons[0].until.getDate().should.be.equal(date.getDate());
-      reasons[0].createdAt.should.be.at.least(now);
+      const reason = await dbSuspensionReasons.getByPsychologist(activePsy.dossierNumber);
+      reason.reason.should.be.equal('because i say so');
+      reason.until.getFullYear().should.be.equal(date.getFullYear());
+      reason.until.getMonth().should.be.equal(date.getMonth());
+      reason.until.getDate().should.be.equal(date.getDate());
+      reason.createdAt.should.be.at.least(now);
       const after = new Date();
       after.setSeconds(after.getSeconds() + 1);
-      reasons[0].createdAt.should.be.at.most(after);
+      reason.createdAt.should.be.at.most(after);
     });
   });
 

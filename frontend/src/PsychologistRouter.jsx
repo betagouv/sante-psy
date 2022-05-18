@@ -16,6 +16,7 @@ import GlobalNotification from 'components/Notification/GlobalNotification';
 import Billing from 'components/Psychologist/Reimbursement/Billing';
 
 import { shouldCheckConventionAgain } from 'services/conventionVerification';
+import { getInactiveMessage } from 'services/inactive';
 import { useStore } from './stores';
 
 import 'react-month-picker/css/month-picker.css';
@@ -99,9 +100,10 @@ const PsychologistRouter = () => {
         </Notification>
       )}
       {user && !user.active && (
-        <Notification type="info">
+        <Notification type="warning">
           Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire.
-          Pour que les étudiants puissent vous contacter, rendez vous sur la page
+          {' '}
+          {getInactiveMessage(user)}
           {' '}
           <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
           .

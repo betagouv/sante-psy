@@ -4,6 +4,7 @@ import { check } from 'express-validator';
 import ejs from 'ejs';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
+import dbSuspensions from '../db/suspensionReasons';
 import dbLoginToken from '../db/loginToken';
 import dbLastConnection from '../db/lastConnections';
 import date from '../utils/date';
@@ -75,8 +76,18 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
     const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
 
     if (psy) {
+      const inactiveReason = psy.active ? undefined : (await dbSuspensions.getByPsychologist(psy.dossierNumber)).reason;
       const {
-        dossierNumber, firstNames, lastName, email, active, adeli, address, otherAddress, hasSeenTutorial, createdAt,
+        dossierNumber,
+        firstNames,
+        lastName,
+        email,
+        active,
+        adeli,
+        address,
+        otherAddress,
+        hasSeenTutorial,
+        createdAt,
       } = psy;
       res.json({
         dossierNumber,
@@ -90,6 +101,7 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
         active,
         hasSeenTutorial,
         createdAt,
+        inactiveReason,
       });
 
       return;
