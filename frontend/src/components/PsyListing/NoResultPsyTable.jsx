@@ -1,16 +1,34 @@
 import React from 'react';
-import { Text } from '@dataesr/react-dsfr';
+import { Alert } from '@dataesr/react-dsfr';
 
-const NoResultPsyTable = ({ noResultAction }) => (
-  <Text size="lg">
-    Aucun résultat n&lsquo;a été trouvé, veuillez élargir votre champ de recherche ou
-    <button
-      type="button"
-      onClick={noResultAction}
-      className="fr-link fr-link--lg fr-fi-arrow-right-line fr-link--icon-left"
-    >
-      rechercher autour de vous
-    </button>
-  </Text>
+const NoResultPsyTable = ({ noResult = false, searchAroundMe, searchWithTeleconsultation }) => (
+  <Alert
+    title=""
+    description={(
+      <>
+        {noResult ? "Aucun résultat n'a été trouvé, veuillez" : 'Peu de résultats ont été trouvés, vous pouvez'}
+        {' '}
+        élargir votre champ de recherche en recherchant
+        {' '}
+        <button
+          type="button"
+          onClick={searchAroundMe}
+          className="fr-link fr-fi-arrow-right-line fr-link--icon-left"
+        >
+          autour de vous
+        </button>
+        {' '}
+        ou
+        {' '}
+        <button
+          type="button"
+          onClick={searchWithTeleconsultation}
+          className="fr-link fr-fi-arrow-right-line fr-link--icon-left"
+        >
+          en téléconsultation
+        </button>
+      </>
+    )}
+  />
 );
 export default NoResultPsyTable;

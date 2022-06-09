@@ -283,7 +283,7 @@ const PsyListing = () => {
                   value="teleconsultation"
                   onChange={e => { setTeleconsultation(e.target.checked); }}
                   label="Disponible en téléconsultation"
-                  defaultChecked={teleconsultation}
+                  checked={teleconsultation}
                 />
               </Col>
             </Row>
@@ -297,16 +297,23 @@ const PsyListing = () => {
             addressFilter={addressFilter}
             languageFilter={languageFilter}
             teleconsultation={teleconsultation}
-            noResult={(
-              <NoResultPsyTable
-                noResultAction={() => {
-                  setNameFilter('');
-                  setAddressFilter(AROUND_ME);
-                }}
-              />
-            )}
             geoLoading={geoLoading}
           />
+          {filteredPsychologists && filteredPsychologists.length < 8
+            && (
+            <NoResultPsyTable
+              noResult={filteredPsychologists.length === 0}
+              searchAroundMe={() => {
+                setNameFilter('');
+                setAddressFilter(AROUND_ME);
+              }}
+              searchWithTeleconsultation={() => {
+                setNameFilter('');
+                setAddressFilter(null);
+                setTeleconsultation(true);
+              }}
+            />
+            )}
         </>
       )}
     </Page>
