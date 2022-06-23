@@ -24,10 +24,13 @@ const Landing = () => {
   return (
     <div className={classnames(styles.container, 'fr-container')} data-test-id="landingPageContainer">
       <Callout hasInfoIcon={false}>
-        <CalloutTitle size="md">Évolution du dispositif</CalloutTitle>
+        <CalloutTitle size="md">Prolongation du dispositif à la rentrée 2022</CalloutTitle>
         <CalloutText size="md">
-          Prolongation du dispositif jusqu&lsquo;au 31 août 2022 donnant droit jusqu&lsquo;à 8 séances
-          sans avance de frais. Pour plus d&lsquo;informations,
+          En raison des élections présidentielles et des changements de cabinets ministériels
+          qui ont ralenti l&lsquo;intégration du dispositif au dispositif général Mon Psy,
+          Santé Psy Étudiant se prolonge au moins jusqu&lsquo;au 31 octobre 2022.
+          Les séances peuvent donc être effectuées jusqu&lsquo;à cette date.
+          Pour plus d&lsquo;informations,
           {' '}
           <HashLink to="/faq">cliquez ici</HashLink>
           .

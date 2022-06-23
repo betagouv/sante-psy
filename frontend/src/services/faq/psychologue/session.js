@@ -38,8 +38,8 @@ module.exports = config => [
     answer: "Le dispositif Santé Psy Étudiant est prévu jusqu'au 31 août 2022. Dans cette période de transition vers un dispositif de droit commun, vous pouvez donc poursuivre vos suivis jusqu'à cette date.",
   },
   {
-    question: 'Le dispositif s\'arrête-t-il au 31 août 2022\u00A0? Jusqu\'à quelle date puis-je recevoir des étudiants\u00A0?',
-    answer: 'Le dispositif est prévu jusqu\'au 31 août 2022. Vous pouvez donc poursuivre votre suivi avec les étudiants jusqu\'à cette date',
+    question: "Jusqu'à quelle date puis-je recevoir des étudiants\u00A0?",
+    answer: "En raison des élections présidentielles et des changements de cabinets ministériels qui ont ralenti l'intégration du dispositif au dispositif général Mon Psy, Santé Psy Étudiant se prolonge au moins jusqu'au 31 octobre 2022. Les séances peuvent donc être effectuées jusqu'à cette date.",
   },
   {
     question: 'La lettre d\'orientation est-elle obligatoire\u00A0?',
