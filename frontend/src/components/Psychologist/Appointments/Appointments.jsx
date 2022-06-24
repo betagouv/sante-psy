@@ -74,8 +74,15 @@ const Appointments = () => {
     <>
       <Callout hasInfoIcon={false}>
         <CalloutText size="md">
-          Faîtes attention à vérifier l&lsquo;exactitude de vos déclarations afin d&lsquo;éviter l&lsquo;allongement de
-          vos délais de remboursements.
+          <span style={{ fontWeight: 'bold' }}>
+            Le dispositif se prolonge au moins jusqu&lsquo;au 31 octobre 2022.
+          </span>
+          <br />
+          Vous pouvez recevoir des étudiants jusqu&lsquo;à cette date.
+          <br />
+          <br />
+          Nous vous invitons à vérifier l&lsquo;exactitude de
+          vos déclarations afin d&lsquo;éviter tout délai de remboursement supplémentaire.
         </CalloutText>
       </Callout>
       <div className="fr-my-2w">
