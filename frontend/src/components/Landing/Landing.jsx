@@ -28,7 +28,7 @@ const Landing = () => {
         <CalloutText size="md">
           En raison des élections présidentielles et des changements de cabinets ministériels
           qui ont ralenti l&lsquo;intégration du dispositif au dispositif général Mon Psy,
-          Santé Psy Étudiant se prolonge au moins jusqu&lsquo;au 31 octobre 2022.
+          Santé Psy Étudiant se prolonge au moins jusqu&lsquo;au 31 décembre 2022.
           Les séances peuvent donc être effectuées jusqu&lsquo;à cette date.
           Pour plus d&lsquo;informations,
           {' '}

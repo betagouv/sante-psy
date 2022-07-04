@@ -75,7 +75,7 @@ const Appointments = () => {
       <Callout hasInfoIcon={false}>
         <CalloutText size="md">
           <span style={{ fontWeight: 'bold' }}>
-            Le dispositif se prolonge au moins jusqu&lsquo;au 31 octobre 2022.
+            Le dispositif se prolonge au moins jusqu&lsquo;au 31 décembre 2022.
           </span>
           <br />
           Vous pouvez recevoir des étudiants jusqu&lsquo;à cette date.
