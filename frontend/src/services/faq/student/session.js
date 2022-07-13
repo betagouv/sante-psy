@@ -19,8 +19,8 @@ module.exports = () => [
     answer: 'Dans le cadre du dispositif, vous pouvez à tout moment changer de psychologue dans la liste de nos psychologues partenaires si vous en ressentez le besoin. Il suffit de vous munir de vos justificatifs (dont votre lettre d\'orientation) à présenter au nouveau psychologue partenaire.',
   },
   {
-    question: 'J\'ai bénéficié du dispositif sur l\'année 2020/2021, puis-je de nouveau en bénéficier\u00A0? À combien de séances ai-je droit\u00A0?',
-    answer: 'Un étudiant peut bénéficier jusqu\'à 8 séances au maximum du début du dispositif à la fin de celui-ci soit jusqu\'au 31 août 2022.',
+    question: 'J\'ai bénéficié du dispositif sur l\'année 2021/2022, puis-je de nouveau en bénéficier sur l\'année 2022/2023\u00A0?',
+    answer: 'Un étudiant peut bénéficier jusqu\'à 8 séances au maximum par année. Si le besoin de poursuivre est identifié par le psychologue et sous réserve que l\'étudiant justifie de son statut sur l\'année 2022/2023, le renouvellement est possible.',
   },
   {
     question: 'La lettre d\'orientation est-elle obligatoire\u00A0?',
