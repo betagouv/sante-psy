@@ -8,7 +8,7 @@ import {
 } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
-import { formatFrenchDate, formatMonth } from 'services/date';
+import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 
 import { useParams } from 'react-router-dom';
@@ -59,7 +59,7 @@ const Bill = () => {
   }, [appointments, user]);
 
   const filteredDate = Object.keys(appointments).filter(date => {
-    const appointmentDate = new Date(date);
+    const appointmentDate = utcDate(date);
     return appointmentDate.getFullYear() === parseInt(year, 10)
       && appointmentDate.getMonth() === parseInt(month, 10) - 1;
   });

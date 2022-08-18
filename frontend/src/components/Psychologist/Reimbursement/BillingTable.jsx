@@ -1,14 +1,14 @@
 import { Table } from '@dataesr/react-dsfr';
 import React from 'react';
 
-import { formatDDMMYYYY } from 'services/date';
+import { formatDDMMYYYY, utcDate } from 'services/date';
 
 const BillingTable = ({ filteredDate, appointments }) => {
   const columns = [
     {
       name: 'date',
       label: 'Date des séances effectuées',
-      render: date => (date === 'total' ? 'Total' : formatDDMMYYYY(new Date(date))),
+      render: date => (date === 'total' ? 'Total' : formatDDMMYYYY(utcDate(date))),
     },
     {
       name: 'appointment',

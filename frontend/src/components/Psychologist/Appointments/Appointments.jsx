@@ -5,7 +5,7 @@ import { Button, Table, Callout, CalloutText } from '@dataesr/react-dsfr';
 import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
-import { formatFrenchDate, formatMonth } from 'services/date';
+import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
 
 import { useStore } from 'stores/';
 
@@ -35,13 +35,13 @@ const Appointments = () => {
   };
 
   const filteredAppointments = appointments.filter(appointment => {
-    const appointmentDate = new Date(appointment.appointmentDate);
+    const appointmentDate = utcDate(appointment.appointmentDate);
     return appointmentDate.getFullYear() === month.year
         && appointmentDate.getMonth() === month.month - 1;
   });
 
   const columns = [
-    { name: 'date', label: 'Date', render: ({ appointmentDate }) => formatFrenchDate(new Date(appointmentDate)) },
+    { name: 'date', label: 'Date', render: ({ appointmentDate }) => formatFrenchDate(utcDate(appointmentDate)) },
     { name: 'student', label: 'Étudiant', render: ({ firstNames, lastName }) => `${firstNames} ${lastName}` },
     {
       name: 'actions',

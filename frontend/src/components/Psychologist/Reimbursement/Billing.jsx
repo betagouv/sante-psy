@@ -7,7 +7,7 @@ import MonthPicker from 'components/Date/MonthPicker';
 import Notification from 'components/Notification/Notification';
 
 import agent from 'services/agent';
-import { formatMonth } from 'services/date';
+import { formatMonth, utcDate } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 
 import { useStore } from 'stores/';
@@ -51,7 +51,7 @@ const Billing = () => {
   }, []);
 
   const filteredDate = Object.keys(valuesByDate.appointments).filter(date => {
-    const appointmentDate = new Date(date);
+    const appointmentDate = utcDate(date);
     return appointmentDate.getFullYear() === month.year
         && appointmentDate.getMonth() === month.month - 1;
   });
