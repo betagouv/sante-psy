@@ -46,6 +46,18 @@ const shortDateFormatter = new Intl.DateTimeFormat('fr-FR', {
 
 const formatFrenchDate = date => dateFormatter.format(date);
 
+const utcDate = dateString => {
+  const date = new Date(dateString);
+  return new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    0,
+    0,
+    0,
+  );
+};
+
 /**
  * used to display date in editPatient
  */
@@ -70,12 +82,14 @@ const convertLocalToUTCDate = date => {
     return date;
   }
   let dateUTC = new Date(date);
-  dateUTC = new Date(Date.UTC(dateUTC.getFullYear(), dateUTC.getMonth(), dateUTC.getDate()));
+  dateUTC = new Date(
+    Date.UTC(dateUTC.getFullYear(), dateUTC.getMonth(), dateUTC.getDate()),
+  );
   return dateUTC;
 };
 
 const formatMonth = m => {
-  if (m && m.year && m.month) return (`${longFrenchMonthNames[m.month - 1]} ${m.year}`);
+  if (m && m.year && m.month) return `${longFrenchMonthNames[m.month - 1]} ${m.year}`;
   return '?';
 };
 
@@ -86,4 +100,5 @@ export {
   convertLocalToUTCDate,
   formatMonth,
   shortFrenchMonthNames,
+  utcDate,
 };

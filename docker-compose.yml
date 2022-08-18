@@ -14,8 +14,8 @@ services:
       MAILDEV_INCOMING_USER: mailuser
       MAILDEV_INCOMING_PASS: mailpassword
     ports:
-      - "1080:80"
-      - "1025:25"
+      - "1080:1080"
+      - "1025:1025"
 
   web:
     build: .
