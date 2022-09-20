@@ -20,7 +20,7 @@ module.exports = () => [
   },
   {
     question: 'J\'ai bénéficié du dispositif sur l\'année 2021/2022, puis-je de nouveau en bénéficier sur l\'année 2022/2023\u00A0?',
-    answer: 'Un étudiant peut bénéficier jusqu\'à 8 séances au maximum par année. Si le besoin de poursuivre est identifié par le psychologue et sous réserve que l\'étudiant justifie de son statut sur l\'année 2022/2023, le renouvellement est possible.',
+    answer: "Le renouvellement d'un cycle de 8 séances est possible à partir de septembre 2022. Pour cela, l'étudiant doit toutefois solliciter une nouvelle lettre d'orientation auprès de son médecin généraliste. Il doit également toujours être étudiant sur l'année universitaire 2022/2023.",
   },
   {
     question: 'La lettre d\'orientation est-elle obligatoire\u00A0?',

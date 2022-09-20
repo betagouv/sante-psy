@@ -1,6 +1,6 @@
 /* eslint-disable no-multi-str */
 /* eslint-disable max-len */
-module.exports = config => [
+module.exports = () => [
   {
     question: "Puis-je recevoir des étudiants d'autres universités et/ou de départements\u00A0?",
     answer: "Oui, vous avez la possibilité de prendre des étudiants quel que soit \
@@ -18,12 +18,6 @@ module.exports = config => [
     Il indique l\'accès aux 8 séances par la lettre d\'orientation du médecin généraliste.',
   },
   {
-    question: 'Je reçois trop de demande, comment faire\u00A0?',
-    answer: `Vous êtes en droit de refuser des étudiants si vous ne pouvez pas répondre à toutes les demandes. \
-    Vous pouvez également être temporairement retiré de l'annuaire publique des psychologues partenaires. \
-    Pour cela, envoyez nous un email à <a href="mailto:${config.contactEmail}">${config.contactEmail}</a> nous le précisant.`,
-  },
-  {
     question: 'Quelles informations dois-je vérifier auprès du étudiant lors de la séance\u00A0?',
     answer: 'Lors de chaque séance, vous devez renseigner les identités du médecin adresseur et de l’étudiant tout en confirmant que la séance a eu lieu. \
     Cette information permet au SSU de suivre la situation de l’étudiant concerné et à l’administration de l’établissement \
@@ -35,17 +29,11 @@ module.exports = config => [
   },
   {
     question: 'Quelle est la date prévue de fin du dispositif Santé Psy Étudiant\u00A0?',
-    answer: "Le dispositif Santé Psy Étudiant est prévu jusqu'au 31 août 2022. Dans cette période de transition vers un dispositif de droit commun, vous pouvez donc poursuivre vos suivis jusqu'à cette date.",
+    answer: "Le dispositif Santé Psy Étudiant est reconduit sur l'année universitaire 2022/2023. Dans cette période de transition vers un dispositif de droit commun, le renouvellement d'un cycle de 8 séances est autorisé à partir de septembre 2022.",
   },
   {
-    question: "Jusqu'à quelle date puis-je recevoir des étudiants\u00A0?",
-    answer: "En raison des élections présidentielles et des changements de cabinets ministériels qui ont ralenti l'intégration du dispositif au dispositif général Mon Psy, Santé Psy Étudiant se prolonge au moins jusqu'au 31 décembre 2022. Les séances peuvent donc être effectuées jusqu'à cette date.",
-  },
-  {
-    question: 'La lettre d\'orientation est-elle obligatoire\u00A0?',
-    answer: 'Oui la lettre d\'orientation est obligatoire pour démarrer les séances. Toutefois la lettre d\'orientation après \
-    la 3ème séance a été levée, de ce fait l\'étudiant peut directement poursuivre jusqu\'à 8 séances sans repasser par un \
-    médecin généraliste.',
+    question: "La lettre d'orientation est-elle obligatoire\u00A0? Qu'en est-il en cas de renouvellement\u00A0?",
+    answer: "Oui, la lettre d'orientation est obligatoire pour démarrer les séances. Après avoir effectué son cycle de 8 séances, l'étudiant doit toutefois solliciter une nouvelle lettre d'orientation auprès de son médecin généraliste (et présenter son justificatif étudiant sur l'année universitaire 2022/2023).",
   },
   {
     question: 'Que faire lorsqu\'un étudiant annule sa consultation\u00A0?',
@@ -54,4 +42,10 @@ module.exports = config => [
     Toutefois, vous pouvez prévenir l\'étudiant qu\'en cas de séance non honorée et sans excuse valable, \
     vous pouvez vous réserver le droit de refuser l\'étudiant.',
   },
+  {
+    question: "Je reçois beaucoup de demande d'étudiants, je souhaite ne plus être affiché dans la liste publique des psychologues partenaires, \
+    tout en restant dans le dispositif, est-ce possible\u00A0?",
+    answer: "Dans le cas d'une forte demande ou d'indisponibilité de votre part, vous avez la possibilité de vous retirer temporairement de l'annuaire public depuis votre espace psychologue (onglet \"Mes informations\"). Votre demande sera automatiquement prise en compte. Vous gardez l'accès à votre espace psychologue dans le cas de remboursements en cours ou si vous souhaitez de nouveau rejoindre le dispositif.",
+  },
+
 ];
