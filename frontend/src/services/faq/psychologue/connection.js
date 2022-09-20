@@ -7,10 +7,9 @@ module.exports = config => [
     Une fois cela établi, si votre problème persiste, envoyez-nous un email à <a href="mailto:${config.contactEmail}">${config.contactEmail}</a>`,
   },
   {
-    question: 'Je souhaite modifier des informations sur mon espace. Comment puis-je faire\u00A0?',
-    answer: `Pour modifier vos informations, envoyez-nous un email à <a href="mailto:${config.contactEmail}">${config.contactEmail}</a> \
-    pour repasser votre dossier "en construction". Sachez toutefois que pendant ce temps, \
-    vous n’apparaîtrez plus sur l'annuaire, et vous ne pourrez pas déclarer vos séances. Une fois les modifications effectuées,nous vous invitons à nous renvoyer un email de confirmation afin de réactiver votre dossier.`,
+    question: 'Je souhaite modifier des informations sur mon espace psychologue. Comment puis-je faire\u00A0?',
+    answer: `Pour modifier vos informations, envoyez-nous un email à <a href="mailto:${config.contactEmail}">${config.contactEmail}</a>. \
+    Si toutefois, vous souhaitez modifier vos informations visibles sur l'annuaire des psychologues partenaires, il suffit de vous connecter sur votre espace psychologue. Onglet "Mes informations" > "Modifier mes informations"> Cliquez ensuite sur le bouton bleu "Valider mes informations" (votre demande sera automatiquement prise en compte).`,
   },
   {
     question: 'Je ne parviens pas à accéder à mon espace psychologue. Que puis-je faire\u00A0?',

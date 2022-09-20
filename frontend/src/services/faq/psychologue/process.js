@@ -23,16 +23,4 @@ module.exports = config => [
     Si l’étudiant n’a pas accès à un SSU, il peut se rendre chez un médecin généraliste qui l’orientera en cas de besoin vers un psychologue partenaire du dispositif.\
     D’une façon générale, les établissements disposant d’un SSU sont invités à ouvrir autant que possible leur service aux écoles partenaires ou partageant le site.',
   },
-  {
-    question: 'Il est indiqué que les psychologues feront acte de candidature via un formulaire simplifié en ligne et \
-    qu’une plateforme numérique permettra de déclarer le nombre de consultations effectuées. Serait-il possible d’y avoir accès ou bien est-ce réservé aux SSU\u00A0?',
-    answer: 'C’est au psychologue de faire la déclaration des séances faites une fois qu’il est inscrit via le formulaire en ligne et \
-    que son dossier est accepté.  Cette déclaration se fait sur la plateforme Santé Psy Étudiant, dans l’espace personnel du psychologue une fois le dossier accepté.',
-  },
-  {
-    question: "Je reçois beaucoup de demande d'étudiants, je souhaite ne plus être affiché dans la liste publique des psychologues partenaires, \
-    tout en restant dans le dispositif, est-ce possible\u00A0?",
-    answer: 'Vous avez la possibilité de vous inscrire sur la plateforme et ainsi faire bénéficier les étudiants de séances dans le cadre du dispositif. \
-    Dans le cas d’une forte demande des étudiants, vous avez la possibilité de refuser par manque de disponibilités lorsqu’un étudiant vous contacte ou éventuellement de l’orienter vers un autre psychologue du dispositif.',
-  },
 ];
