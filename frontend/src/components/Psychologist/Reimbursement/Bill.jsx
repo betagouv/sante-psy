@@ -100,7 +100,7 @@ const Bill = () => {
       <DSHeader>
         <HeaderBody>
           <Logo>
-            Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
+            Ministère de l&lsquo;Enseignement Supérieur et de la Recherche
           </Logo>
           <Service
             title="Santé Psy Étudiant"

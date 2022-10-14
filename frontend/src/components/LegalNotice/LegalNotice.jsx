@@ -36,8 +36,8 @@ const LegalNotice = () => {
       </Section>
       <Section title="Directeur de la publication">
         <span>
-          MINISTÈRE DE L&lsquo;ENSEIGNEMENT SUPÉRIEUR,
-          DE LA RECHERCHE ET DE L&lsquo;INNOVATION
+          MINISTÈRE DE L&lsquo;ENSEIGNEMENT SUPÉRIEUR
+          ET DE LA RECHERCHE
         </span>
         <p>1 rue Descartes - 75231 Paris cedex 05</p>
       </Section>

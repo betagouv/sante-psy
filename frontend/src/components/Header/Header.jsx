@@ -45,7 +45,7 @@ const Header = () => {
           <Logo
             asLink={<Link to={studentPage ? '/etudiant' : '/'} title="Revenir à l'accueil" />}
           >
-            Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
+            Ministère de l&lsquo;Enseignement Supérieur et de la Recherche
           </Logo>
           <Service
             asLink={<Link to={studentPage ? '/etudiant' : '/'} />}
