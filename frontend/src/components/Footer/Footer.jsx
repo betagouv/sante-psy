@@ -53,7 +53,7 @@ const Footer = () => {
       <DSFooter>
         <FooterBody description={<FooterDescription />}>
           <Logo href="https://www.enseignementsup-recherche.gouv.fr/">
-            Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Innovation
+            Ministère de l&lsquo;Enseignement Supérieur et de la Recherche
           </Logo>
           { footerBodyLinks.map(item => (
             <FooterBodyItem key={item.key}>
