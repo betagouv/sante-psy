@@ -32,6 +32,7 @@ const items = {
       { title: 'Éligibilité', name: 'eligibility' },
       { title: 'Paiement', name: 'payment' },
       { title: 'Séance', name: 'session' },
+      { title: 'Déroulé', name: 'process' },
     ],
   },
   psychologue: {
