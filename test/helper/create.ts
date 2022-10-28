@@ -1,4 +1,4 @@
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import { DSPsychologist, Psychologist } from '../../types/Psychologist';
 import { Patient } from '../../types/Patient';
 import { Appointment } from '../../types/Appointment';
@@ -159,7 +159,7 @@ const getOnePsy = (
     description: faker.lorem.paragraphs(2),
     // eslint-disable-next-line max-len
     training: '["Connaissance et pratique des outils diagnostic psychologique","Connaissance des troubles psychopathologiques du jeune adulte : dépressions","risques suicidaires","addictions","comportements à risque","troubles alimentaires","décompensation schizophrénique","psychoses émergeantes ainsi qu’une pratique de leur repérage","Connaissance et pratique des dispositifs d’accompagnement psychologique et d’orientation (CMP...)"]',
-    languages: faker.random.arrayElement(languages),
+    languages: faker.helpers.arrayElement(languages),
     isConventionSigned: false,
     createdAt: new Date(),
     active: true,

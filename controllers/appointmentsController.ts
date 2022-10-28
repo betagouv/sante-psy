@@ -23,7 +23,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { patientId } = req.body;
-  const psyId = req.user.psychologist;
+  const psyId = req.auth.psychologist;
   const date = new Date(req.body.date);
   const today = new Date();
   const limitDate = new Date(today.setMonth(today.getMonth() + 4));
@@ -61,7 +61,7 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { appointmentId } = req.params;
-  const psychologistId = req.user.psychologist;
+  const psychologistId = req.auth.psychologist;
   const deletedAppointment = await dbAppointments.delete(appointmentId, psychologistId);
   if (deletedAppointment === 0) {
     console.log(
@@ -79,7 +79,7 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
-  const psychologistId = req.user.psychologist;
+  const psychologistId = req.auth.psychologist;
   const appointments = await dbAppointments.getAll(psychologistId);
 
   res.json(appointments);

@@ -63,37 +63,34 @@ const Header = () => {
                   Paramètres d’affichage
                 </span>
               </ToolItem>
-              {user
-                ? (
-                  <>
-                    {psychologistPage ? (
-                      <ToolItem asLink={<Link data-test-id="back-home-button" to="/" />}>
-                        Revenir à l&lsquo;accueil
-                      </ToolItem>
-                    ) : (
-                      <ToolItem asLink={<Link data-test-id="my-space-button" to="/psychologue/mes-seances" />}>
-                        Accéder à mon espace
-                      </ToolItem>
-                    )}
-                    <ToolItem
-                      asLink={(
-                        <Link
-                          data-test-id="logout-link"
-                          to="/psychologue/logout"
-                        />
+              {user && psychologistPage && (
+              <ToolItem asLink={<Link data-test-id="back-home-button" to="/" />}>
+                Revenir à l&lsquo;accueil
+              </ToolItem>
+              )}
+              {user && !psychologistPage && (
+              <ToolItem asLink={<Link data-test-id="my-space-button" to="/psychologue/mes-seances" />}>
+                Accéder à mon espace
+              </ToolItem>
+              )}
+
+              {!user && !studentPage && (
+              <ToolItem asLink={<Link data-test-id="login-button" to="/psychologue/login" />}>
+                Se connecter en tant que psychologue
+              </ToolItem>
+              )}
+              {user && (
+                <ToolItem
+                  asLink={(
+                    <Link
+                      data-test-id="logout-link"
+                      to="/psychologue/logout"
+                    />
                       )}
-                    >
-                      Déconnexion
-                    </ToolItem>
-                  </>
-                )
-                : (
-                  !studentPage && (
-                  <ToolItem asLink={<Link data-test-id="login-button" to="/psychologue/login" />}>
-                    Se connecter en tant que psychologue
-                  </ToolItem>
-                  )
-                )}
+                >
+                  Déconnexion
+                </ToolItem>
+              )}
             </ToolItemGroup>
           </Tool>
         </HeaderBody>

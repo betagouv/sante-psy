@@ -1,12 +1,13 @@
-import axios from 'axios/index';
-import Qs from 'qs';
+import axios from 'axios';
+import { parse, stringify } from 'qs';
 import { store } from 'stores/';
 
 const createClient = () => {
   const simpleClient = axios.create({
     baseURL: `${__API__}/api`,
-    paramsSerializer(params) {
-      return Qs.stringify(params, { arrayFormat: 'repeat' });
+    paramsSerializer: {
+      encode: parse,
+      serialize: stringify,
     },
     withCredentials: true,
   });

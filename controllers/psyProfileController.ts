@@ -130,7 +130,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
 
   let coordinates: Coordinates;
   let otherCoordinates: Coordinates;
-  const psychologist = await dbPsychologists.getById(req.user.psychologist);
+  const psychologist = await dbPsychologists.getById(req.auth.psychologist);
   if (psychologist) {
     if (psychologist.address !== req.body.address) {
       coordinates = await getAddressCoordinates(req.body.address);
@@ -152,7 +152,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
 
   await dbPsychologists.update({
     ...req.body,
-    dossierNumber: req.user.psychologist,
+    dossierNumber: req.auth.psychologist,
     region,
     longitude: coordinates ? coordinates.longitude : null,
     latitude: coordinates ? coordinates.latitude : null,
@@ -166,7 +166,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
 };
 
 const activate = async (req: Request, res: Response): Promise<void> => {
-  await dbPsychologists.activate(req.user.psychologist);
+  await dbPsychologists.activate(req.auth.psychologist);
 
   res.json({
     message: 'Vos informations sont de nouveau visibles sur l\'annuaire.',
@@ -189,7 +189,7 @@ const suspendValidators = [
 const suspend = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
-  await dbPsychologists.suspend(req.user.psychologist, req.body.date, req.body.reason);
+  await dbPsychologists.suspend(req.auth.psychologist, req.body.date, req.body.reason);
 
   res.json({
     message: 'Vos informations ne sont plus visibles sur l\'annuaire.',
@@ -197,7 +197,7 @@ const suspend = async (req: Request, res: Response): Promise<void> => {
 };
 
 const seeTutorial = async (req: Request, res: Response): Promise<void> => {
-  await dbPsychologists.seeTutorial(req.user.psychologist);
+  await dbPsychologists.seeTutorial(req.auth.psychologist);
 
   res.json({
     message: 'Tutorial vu !',

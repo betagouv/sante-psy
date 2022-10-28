@@ -1,4 +1,4 @@
-import axios from 'axios/index';
+import axios from 'axios';
 import { Coordinates, CoordinatesAPI } from '../types/Coordinates';
 import config from '../utils/config';
 

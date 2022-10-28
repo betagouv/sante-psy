@@ -13,9 +13,11 @@ export const checkXsrf = (req: Request, cookieXsrfToken: string): boolean => {
 };
 
 const xsrfProtection = (req: Request, res: Response, next: NextFunction): void => {
-  const cookieXsrfToken = req.user.xsrfToken;
-  if (checkXsrf(req, cookieXsrfToken)) {
-    return next();
+  if (req.auth) {
+    const cookieXsrfToken = req.auth.xsrfToken;
+    if (checkXsrf(req, cookieXsrfToken)) {
+      return next();
+    }
   }
 
   throw new CustomError('Bad XSRF token', 401);

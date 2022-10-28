@@ -1,4 +1,4 @@
-import axios from 'axios/index';
+import axios from 'axios';
 
 import { AdeliAPI, AdeliInfo } from '../types/AdeliInfo';
 
