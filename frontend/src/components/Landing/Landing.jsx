@@ -24,7 +24,7 @@ const Landing = () => {
   return (
     <div className={classnames(styles.container, 'fr-container')} data-test-id="landingPageContainer">
       <Callout hasInfoIcon={false}>
-        <CalloutTitle size="md">Prolongation du dispositif à la rentrée 2022</CalloutTitle>
+        <CalloutTitle size="md">Prolongation du dispositif</CalloutTitle>
         <CalloutText size="md">
           En raison des élections présidentielles et des changements de cabinets ministériels
           qui ont ralenti l&lsquo;intégration du dispositif au dispositif général Mon Psy,

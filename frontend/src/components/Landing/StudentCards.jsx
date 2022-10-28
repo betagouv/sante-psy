@@ -10,7 +10,7 @@ const StudentCards = () => (
       index={1}
       title="Consultez un médecin"
       image="doctor"
-      description="Consultez un médecin généraliste pour établir votre lettre d’orientation"
+      description="Consulter le médecin généraliste de votre choix pour établir votre lettre d'orientation pour établir votre lettre d’orientation"
     />
     <StudentCard
       index={2}

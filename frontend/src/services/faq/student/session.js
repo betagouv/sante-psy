@@ -27,10 +27,4 @@ module.exports = () => [
     answer: 'Oui la lettre d\'orientation est obligatoire pour démarrer les séances. Une seule lettre d\'orientation suffit pour bénéficier jusqu\'à 8 séances. \
     Il n\'y a pas de mention obligatoire prévue si ce n\'est le "besoin d\'un suivi psychologique" constaté par le médecin généraliste.',
   },
-  {
-    question: 'Je n\'ai pas de médecin généraliste, que faire ?',
-    answer: 'La consultation chez un médecin généraliste est obligatoire. \
-    Vous avez la possibilité de consulter un médecin généraliste au sein du Service de Santé Universitaire (SSU) le plus proche de chez vous, habilité à recevoir des étudiants ou tout autre médecin généraliste extérieur, sur doctolib par exemple. \
-    Veuillez noter que le médecin généraliste n\'est pas nécessairement votre médecin traitant.',
-  },
 ];
