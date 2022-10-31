@@ -46,7 +46,7 @@ describe('ConventionModal', () => {
 
     it('should display modal if no convention and not checked since a month', () => {
       const lastCheckDate = new Date();
-      lastCheckDate.setMonth(lastCheckDate.getMonth() - 1);
+      lastCheckDate.setDate(lastCheckDate.getDate() - 31);
       window.localStorage.setItem('conventionAnswer', lastCheckDate);
       removeConvention('login@beta.gouv.fr').then(() => {
         modalShouldExist(true);
