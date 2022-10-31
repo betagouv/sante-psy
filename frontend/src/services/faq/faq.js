@@ -11,6 +11,7 @@ const doctor = require('./doctor');
 const eligibility = require('./student/eligibility');
 const payment = require('./student/payment');
 const session = require('./student/session');
+const studentProcess = require('./student/process');
 
 module.exports = {
   agreement,
@@ -26,4 +27,5 @@ module.exports = {
   reimbursement,
   retractation,
   session,
+  studentProcess,
 };

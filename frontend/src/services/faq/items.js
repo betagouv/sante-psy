@@ -31,8 +31,8 @@ const items = {
     sections: [
       { title: 'Éligibilité', name: 'eligibility' },
       { title: 'Paiement', name: 'payment' },
+      { title: 'Déroulé', name: 'studentProcess' },
       { title: 'Séance', name: 'session' },
-      { title: 'Déroulé', name: 'process' },
     ],
   },
   psychologue: {
