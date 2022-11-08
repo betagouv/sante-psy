@@ -26,8 +26,7 @@ const Landing = () => {
       <Callout hasInfoIcon={false}>
         <CalloutTitle size="md">Prolongation du dispositif</CalloutTitle>
         <CalloutText size="md">
-          En raison des élections présidentielles et des changements de cabinets ministériels
-          qui ont ralenti l&lsquo;intégration du dispositif au dispositif général Mon Psy,
+          En attendant sa future intégration au dispositif général Mon Psy,
           Santé Psy Étudiant se prolonge au moins jusqu&lsquo;au 31 décembre 2022.
           Les séances peuvent donc être effectuées jusqu&lsquo;à cette date.
           Pour plus d&lsquo;informations,
