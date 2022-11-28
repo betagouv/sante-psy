@@ -1,5 +1,5 @@
 import { Knex } from 'knex';
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import { studentsTable } from '../../db/tables';
 
 // eslint-disable-next-line import/prefer-default-export

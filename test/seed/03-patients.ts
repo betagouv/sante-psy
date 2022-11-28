@@ -1,5 +1,5 @@
 import { Knex } from 'knex';
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import create from '../helper/create';
 import { mails } from './02-psychologists';
 import uuid from '../../utils/uuid';

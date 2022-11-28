@@ -1,5 +1,5 @@
 import express from 'express';
-import expressJWT from 'express-jwt';
+import { expressjwt } from 'express-jwt';
 
 import psychologistRouter from './psychologist';
 import patientsRouter from './patients';
@@ -16,7 +16,7 @@ import config from '../utils/config';
 
 const router = express.Router();
 
-router.use(expressJWT({
+router.use(expressjwt({
   secret: config.secret,
   algorithms: ['HS256'],
   getToken: (req) => {

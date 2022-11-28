@@ -16,7 +16,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
 
   const { isConventionSigned } = req.body;
 
-  const psychologistId = req.user.psychologist;
+  const psychologistId = req.auth.psychologist;
   await dbPsychologists.updateConventionInfo(psychologistId, isConventionSigned);
   const convention = await dbPsychologists.getConventionInfo(psychologistId);
   res.json({

@@ -1,6 +1,6 @@
 declare namespace Express {
     interface Request {
-        user: {
+        auth: {
             psychologist: string,
             xsrfToken: string,
             exp: number

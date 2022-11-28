@@ -79,15 +79,18 @@ const Footer = () => {
             <FooterLink
               key="theme"
               onClick={() => setIsOpen(true)}
-            >
-              <span
-                className="fr-fi-theme-fill fr-link--icon-left"
-                aria-controls="fr-theme-modal"
-                data-fr-opened={isOpen}
-              >
-                Paramètres d’affichage
-              </span>
-            </FooterLink>
+              asLink={(
+                <button type="button">
+                  <span
+                    className="fr-fi-theme-fill fr-link--icon-left"
+                    aria-controls="fr-theme-modal"
+                    data-fr-opened={isOpen}
+                  >
+                    Paramètres d’affichage
+                  </span>
+                </button>
+)}
+            />
           )].concat(footerBottomLinks.map(item => (
             <FooterLink
               key={item.key}

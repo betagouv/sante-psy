@@ -37,8 +37,6 @@ services:
       - .:/app
     depends_on: # https://docs.docker.com/compose/startup-order/
       - db
-    restart: # https://docs.docker.com/compose/compose-file/compose-file-v3/#restart
-      always # trick to be sure our app is always up, even when it has started before PG 
 
   react: 
     image: node:16

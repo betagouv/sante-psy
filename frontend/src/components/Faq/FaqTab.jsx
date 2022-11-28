@@ -45,6 +45,7 @@ const FaqTab = ({ type }) => {
           {items[type].sections.map((section, index) => (
             <SideMenuLink
               key={section.title}
+              href="/faq"
               onClick={() => {
                 refs[index].current.scrollIntoView();
                 setActiveSection(section);

@@ -1,4 +1,4 @@
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import config from '../utils/config';
 import { psychologistsTable } from '../db/tables';
 import db from '../db/db';
@@ -19,7 +19,7 @@ const fakeAddress = () : string => `${faker.address.streetAddress()} ${faker.add
 const fakePhone = () : string => faker.phone.phoneNumber('0# ## ## ## ##');
 
 // eslint-disable-next-line max-len
-const fakeWebsite = (real: string) : string => (real ? faker.helpers.randomize([faker.internet.domainName(), faker.internet.url()]) : real);
+const fakeWebsite = (real: string) : string => (real ? `${faker.internet.domainName()}.fr` : real);
 
 const anonymizeDb = async (): Promise<void> => {
   if (config.hostnameWithProtocol.startsWith(PROD_HOSTNAME)) {
