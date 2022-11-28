@@ -35,7 +35,7 @@ const PayingUniversity = () => {
             id="show-convention-form"
             data-test-id="show-convention-form"
             onClick={() => { setShowForm(true); }}
-            icon="fr-fi-edit-line"
+            icon="ri-edit-line"
           >
 
             Modifier le statut

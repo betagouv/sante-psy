@@ -2,11 +2,12 @@ import React from 'react';
 import { Highlight, Button } from '@dataesr/react-dsfr';
 
 const PatientActionsLegend = () => (
-  <Highlight className="fr-displayed-xs fr-hidden-md">
+  <Highlight className="fr-unhidden fr-hidden-md">
     <Button
       disabled
       size="sm"
-      className="fr-fi-calendar-line fr-mb-1w fr-mr-1w"
+      icon="ri-calendar-line"
+      className="fr-mb-1w fr-mr-1w"
     />
     Déclarer une séance
     <br />
@@ -14,7 +15,8 @@ const PatientActionsLegend = () => (
       secondary
       disabled
       size="sm"
-      className="fr-fi-edit-line fr-mb-1w fr-mr-1w"
+      icon="ri-edit-line"
+      className="fr-mb-1w fr-mr-1w"
     />
     Modifier
     <br />
@@ -22,7 +24,8 @@ const PatientActionsLegend = () => (
       secondary
       disabled
       size="sm"
-      className="fr-fi-delete-line fr-mb-1w fr-mr-1w"
+      icon="ri-delete-bin-line"
+      className="fr-mb-1w fr-mr-1w"
     />
     Supprimer
   </Highlight>

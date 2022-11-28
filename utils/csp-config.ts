@@ -14,6 +14,10 @@ export default helmet.contentSecurityPolicy({
       'https://www.googleadservices.com/',
       'https://googleads.g.doubleclick.net',
     ],
+    'script-src-attr': [
+      "'self'",
+      "'unsafe-inline'",
+    ],
     'img-src': [
       "'self'",
       'https://stats.data.gouv.fr/',

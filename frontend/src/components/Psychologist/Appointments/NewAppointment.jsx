@@ -105,7 +105,7 @@ const NewAppointment = () => {
         id="new-appointment-submit"
         data-test-id="new-appointment-submit"
         submit
-        icon="fr-fi-add-line"
+        icon="ri-add-line"
         className="fr-mt-4w"
       >
         Créer la séance
