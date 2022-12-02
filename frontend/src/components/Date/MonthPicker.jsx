@@ -7,7 +7,7 @@ const MonthPicker = ({ month, setMonth, id }) => {
 
   return (
     <Picker
-      years={{ min: { year: 2021, month: 3 }, max: { year: 2022, month: 12 } }}
+      years={{ min: { year: 2021, month: 3 }, max: { year: 2023, month: 12 } }}
       ref={calendar}
       value={month}
       lang={shortFrenchMonthNames}
