@@ -29,7 +29,7 @@ module.exports = () => [
   },
   {
     question: 'Quelle est la date prévue de fin du dispositif Santé Psy Étudiant\u00A0?',
-    answer: "Le dispositif Santé Psy Étudiant est prévu jusqu'au 31 décembre 2022. En attendant l'intégration au dispositif général MonPsy, le renouvellement d'un cycle de 8 séances est autorisé depuis septembre 2022.",
+    answer: "Le dispositif Santé Psy Étudiant est prolongé sur 2023. Dans cette période de transition vers un dispositif de droit commun, le renouvellement d'un cycle de 8 séances est autorisé à partir de septembre 2022 pour les étudiants ayant effectué un premier cycle sur l'année 2021/2022.",
   },
   {
     question: "La lettre d'orientation est-elle obligatoire\u00A0? Qu'en est-il en cas de renouvellement\u00A0?",

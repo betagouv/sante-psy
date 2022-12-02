@@ -75,15 +75,16 @@ const Appointments = () => {
       <Callout hasInfoIcon={false}>
         <CalloutText size="md">
           <span style={{ fontWeight: 'bold' }}>
-            Le dispositif Santé Psy Étudiant est reconduit sur l&lsquo;année universitaire 2022/2023.
+            Le dispositif Santé Psy Étudiant est prolongé sur 2023..
           </span>
           <br />
-          Dans cette période de transition vers un dispositif de droit commun, le renouvellement d&lsquo;un cycle de 8 séances est autorisé à partir de septembre 2022.
-          {' '}
-          <br />
+          Dans cette période de transition vers un dispositif de droit commun, le renouvellement d&lsquo;un cycle de 8 séances est autorisé à partir de septembre 2022 pour les étudiants ayant effectué un premier cycle sur l&lsquo;année 2021/2022.
           <br />
           <br />
           Nous vous invitons à vérifier l&lsquo;exactitude de vos déclarations afin d&lsquo;éviter tout délai de remboursement supplémentaire.
+          <br />
+          <br />
+          Nous vous rappelons que dans le cadre du dispositif, il est strictement interdit de demander aux étudiants une avance de frais ou un complément.
         </CalloutText>
       </Callout>
       <div className="fr-my-2w">
