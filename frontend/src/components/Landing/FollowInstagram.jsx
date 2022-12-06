@@ -1,5 +1,6 @@
 import React from 'react';
 import Section from './Section';
+import '@gouvfr/dsfr/dist/utility/icons/icons-logo/icons-logo.min.css';
 
 const FollowInstagram = () => (
   <Section

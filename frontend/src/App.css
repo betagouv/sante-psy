@@ -6,16 +6,8 @@
   max-width: 10rem;
 }
 
-.fr-checkbox-group .fr-hint-text{
-  margin: -12px 0 0 32px;
-}
-
 .fr-fieldset__legend {
   font-weight: normal;
-}
-
-.fr-fieldset .fr-hint-text {
-  margin-top: -16px;
 }
 
 .midlength-select,

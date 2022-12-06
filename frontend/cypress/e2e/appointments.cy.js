@@ -105,7 +105,7 @@ describe('Appointments', () => {
       cy.get('[data-test-id="new-appointment-etudiant-input"] input')
         .click();
 
-      cy.get('[data-test-id="new-appointment-etudiant-input"] option')
+      cy.get('[data-test-id="new-appointment-etudiant-input"] div')
         .eq(1)
         .click();
 

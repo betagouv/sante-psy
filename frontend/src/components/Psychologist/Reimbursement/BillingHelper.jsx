@@ -26,7 +26,7 @@ const BillingHelper = () => (
           target="_blank"
           rel="noreferrer"
         >
-          <span className="fr-fi-file-download-line" aria-hidden="true" />
+          <span className="ri-file-download-line" aria-hidden="true" />
           .pdf
         </a>
       </div>
@@ -37,7 +37,7 @@ const BillingHelper = () => (
           target="_blank"
           rel="noreferrer"
         >
-          <span className="fr-fi-file-download-line" aria-hidden="true" />
+          <span className="ri-file-download-line" aria-hidden="true" />
           Microsoft Word .docx
         </a>
       </div>
@@ -48,7 +48,7 @@ const BillingHelper = () => (
           target="_blank"
           rel="noreferrer"
         >
-          <span className="fr-fi-file-download-line" aria-hidden="true" />
+          <span className="ri-file-download-line" aria-hidden="true" />
           Libre Office .odt
         </a>
       </div>
@@ -71,7 +71,7 @@ const BillingHelper = () => (
           target="_blank"
           rel="noreferrer"
         >
-          <span className="fr-fi-file-download-line" aria-hidden="true" />
+          <span className="ri-file-download-line" aria-hidden="true" />
           Tutoriel Chorus PRO
         </a>
       </div>

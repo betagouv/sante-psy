@@ -102,7 +102,7 @@ const Billing = () => {
               {fillInfo ? (
                 <Button
                   secondary
-                  icon="fr-fi-close-line"
+                  icon="ri-close-line"
                   onClick={() => {
                     setBillingInfo(billingInfoService.get());
                     setFillInfo(false);
@@ -114,7 +114,7 @@ const Billing = () => {
                 <Button
                   id="billing-info"
                   secondary
-                  icon="fr-fi-edit-line"
+                  icon="ri-edit-line"
                   onClick={() => setFillInfo(true)}
                 >
                   Renseigner mes informations
@@ -132,13 +132,13 @@ const Billing = () => {
                     billingInfoService.save(billingInfo);
                   }}
                 >
-                  <span className={classNames(styles.downloadIcon, 'fr-fi-file-download-line')} aria-hidden="true" />
+                  <span className={classNames(styles.downloadIcon, 'ri-file-download-line')} aria-hidden="true" />
                   Télécharger/Imprimer
                 </a>
               ) : (
                 <Button
                   disabled
-                  icon="fr-fi-file-download-line"
+                  icon="ri-file-download-line"
                 >
                   Télécharger/Imprimer
                 </Button>

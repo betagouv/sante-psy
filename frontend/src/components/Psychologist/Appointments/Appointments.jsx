@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
-import { Button, Table, Callout, CalloutText } from '@dataesr/react-dsfr';
+import { Button, Table, Callout, CalloutText, Icon } from '@dataesr/react-dsfr';
 
 import MonthPicker from 'components/Date/MonthPicker';
 
@@ -53,7 +53,8 @@ const Appointments = () => {
             onClick={() => deleteAppointment(appointment.id)}
             secondary
             size="sm"
-            className="fr-fi-delete-line fr-displayed-xs fr-hidden-sm fr-float-right"
+            icon="ri-delete-bin-line"
+            className="fr-unhidden fr-hidden-sm fr-float-right"
             aria-label="Supprimer"
           />
           <Button
@@ -61,7 +62,8 @@ const Appointments = () => {
             secondary
             size="sm"
             onClick={() => deleteAppointment(appointment.id)}
-            className="fr-fi-delete-line fr-btn--icon-left fr-hidden-xs fr-displayed-sm fr-float-right"
+            icon="ri-delete-bin-line"
+            className="fr-hidden fr-unhidden-sm fr-float-right"
           >
             Supprimer
           </Button>
@@ -91,9 +93,10 @@ const Appointments = () => {
         <HashLink
           id="new-appointment-button"
           to="/psychologue/nouvelle-seance"
-          className="fr-btn fr-fi-add-line fr-btn--icon-left"
+          className="fr-btn"
         >
           <div data-test-id="new-appointment-button">
+            <Icon size="md" name="ri-add-line" />
             Nouvelle séance
           </div>
         </HashLink>

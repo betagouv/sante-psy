@@ -1,24 +1,23 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@dataesr/react-dsfr';
-import classnames from 'classnames';
 
+import classNames from 'classnames';
 import styles from './patientactions.cssmodule.scss';
 
-const ShrinkableButton = props => (
+const ShrinkableButton = ({ children, ...props }) => (
   <>
     <Button
       {...props}
       data-test-id={props['data-test-id'] ? `${props['data-test-id']}-small` : undefined}
-      className={classnames(props.icon, 'fr-displayed-xs fr-hidden-md')}
+      className={classNames(styles.button, 'fr-unhidden fr-hidden-md')}
     />
     <Button
       {...props}
       data-test-id={props['data-test-id'] ? `${props['data-test-id']}-large` : undefined}
-      icon={props.icon}
-      className="fr-hidden-xs fr-displayed-md"
+      className={classNames(styles.largeButton, 'fr-hidden fr-unhidden-md')}
     >
-      {props.children}
+      {children}
     </Button>
   </>
 );
@@ -31,7 +30,7 @@ const PatientActions = ({ patient, deletePatient }) => {
         data-test-id="appointment-etudiant-button"
         onClick={() => navigate(`/psychologue/nouvelle-seance/${patient.id}`)}
         size="sm"
-        icon="fr-fi-calendar-line"
+        icon="ri-calendar-line"
         aria-label="Déclarer une séance"
       >
         Déclarer une séance
@@ -41,7 +40,7 @@ const PatientActions = ({ patient, deletePatient }) => {
         onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
         secondary
         size="sm"
-        icon="fr-fi-edit-line"
+        icon="ri-edit-line"
         aria-label={!patient.hasFolderCompleted ? 'Compléter' : 'Modifier'}
       >
         { !patient.hasFolderCompleted ? 'Compléter' : 'Modifier'}
@@ -53,7 +52,7 @@ const PatientActions = ({ patient, deletePatient }) => {
         title={patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : ''}
         secondary
         size="sm"
-        icon="fr-fi-delete-line"
+        icon="ri-delete-bin-line"
         aria-label="Supprimer"
       >
         Supprimer

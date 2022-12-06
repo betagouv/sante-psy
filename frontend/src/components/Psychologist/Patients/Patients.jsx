@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Table, Callout, CalloutText } from '@dataesr/react-dsfr';
+import { Table, Callout, CalloutText, Icon } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { parseDateForm } from 'services/date';
@@ -140,8 +140,9 @@ const Patients = () => {
         <Link
           id="new-student-button"
           to="/psychologue/nouvel-etudiant"
-          className="fr-btn fr-fi-add-line fr-btn--icon-left"
+          className="fr-btn"
         >
+          <Icon size="md" name="ri-add-line" />
           Nouvel étudiant
         </Link>
       </div>

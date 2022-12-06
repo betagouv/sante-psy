@@ -173,7 +173,7 @@ const PsyProfile = () => {
                     id="show-profile-form-button"
                     data-test-id="show-profile-form-button"
                     title="Modify"
-                    icon="fr-fi-edit-line"
+                    icon="ri-edit-line"
                     onClick={() => setEditMode(true)}
                   >
                     Modifier mes informations

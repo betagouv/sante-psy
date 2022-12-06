@@ -41,7 +41,7 @@ const PsyTable = ({
       label: '',
       render: psychologist => (
         <>
-          <div className="fr-displayed-xs fr-hidden-sm">
+          <div className="fr-unhidden fr-hidden-sm">
             <Button
               secondary
               size="sm"
@@ -49,7 +49,7 @@ const PsyTable = ({
               className="fr-fi-arrow-right-line"
             />
           </div>
-          <div className="fr-hidden-xs fr-displayed-sm">
+          <div className="fr-hidden fr-unhidden-sm">
             <Button
               data-test-id="psy-table-row-profil-button"
               secondary
