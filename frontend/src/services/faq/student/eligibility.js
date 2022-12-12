@@ -46,4 +46,10 @@ module.exports = () => [
     L‘ensemble des psychologues participant au dispositif sont cependant uniquement localisés en France, \
     mais plusieurs permettent la téléconsultation.',
   },
+  {
+    question: 'Je ne suis pas éligible au dispositif Santé Psy Étudiant, que puis-je faire\u00A0?',
+    answer: 'Comme toute personne à partir de 3 ans, vous pouvez bénéficier du dispositif MonParcoursPsy permettant \
+    l‘accès jusqu‘à 8 séances par an. Pour plus d‘informations, \
+    <a href="https://monparcourspsy.sante.gouv.fr" target="_blank" rel="noopener noreferrer">cliquez ici</a>.',
+  },
 ];
