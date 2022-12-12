@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Button, ButtonGroup, Callout, CalloutText, CalloutTitle } from '@dataesr/react-dsfr';
+import { Alert, Button, ButtonGroup } from '@dataesr/react-dsfr';
 
 import EditProfile from 'components/Psychologist/Profile/EditProfile';
 

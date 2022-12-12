@@ -2,9 +2,6 @@ import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 
-import { Callout, CalloutText, CalloutTitle } from '@dataesr/react-dsfr';
-import { HashLink } from 'react-router-hash-link';
-
 import { useStore } from 'stores/';
 import PsychologistFinder from './PsychologistFinder';
 import StudentProcess from './StudentProcess';
@@ -23,18 +20,6 @@ const Landing = () => {
 
   return (
     <div className={classnames(styles.container, 'fr-container')} data-test-id="landingPageContainer">
-      <Callout hasInfoIcon={false}>
-        <CalloutTitle size="md">Prolongation du dispositif</CalloutTitle>
-        <CalloutText size="md">
-          En attendant sa future intégration au dispositif général Mon Psy,
-          Santé Psy Étudiant se prolonge sur 2023.
-          Les séances peuvent donc être effectuées jusqu&lsquo;à cette date.
-          Pour plus d&lsquo;informations,
-          {' '}
-          <HashLink to="/faq">cliquez ici</HashLink>
-          .
-        </CalloutText>
-      </Callout>
       <div className={styles.sectionAlt}>
         <StudentProcess />
       </div>
