@@ -4,8 +4,9 @@ import { observer } from 'mobx-react';
 
 import { useStore } from 'stores/';
 
+import classNames from 'classnames';
+import sanitizeHtml from 'sanitize-html';
 import Notification from './Notification';
-
 import styles from './announcement.cssmodule.scss';
 
 const Announcement = () => {
@@ -44,8 +45,21 @@ const Announcement = () => {
   };
 
   return shouldDisplayAnnouncement() ? (
-    <div className={styles.notification}>
-      <Notification message={config.announcement} onClose={onClose} type="info" />
+    <div className={classNames('fr-container', styles.notification)}>
+      <Notification onClose={onClose} type="info">
+        <div
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: sanitizeHtml(
+              config.announcement,
+              {
+                allowedTags: ['a', 'br'],
+                allowedAttributes: { a: ['href', 'target', 'rel'] },
+              },
+            ),
+          }}
+        />
+      </Notification>
     </div>
   ) : (
     null
