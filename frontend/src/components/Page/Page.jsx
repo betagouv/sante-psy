@@ -29,6 +29,7 @@ const Page = ({
   tutorial,
   className = null,
   dataTestId = null,
+  withNotification = false,
 }) => {
   const { userStore: { user } } = useStore();
   const [tutoStatus, setTutoStatus] = useState({ run: false, stepIndex: 0 });
@@ -39,7 +40,7 @@ const Page = ({
 
   return (
     <>
-      <Announcement />
+      {withNotification && <Announcement />}
       <Tutorial
         tutoStatus={tutoStatus}
         setTutoStatus={setTutoStatus}
