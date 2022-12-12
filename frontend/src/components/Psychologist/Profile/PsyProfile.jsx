@@ -120,16 +120,6 @@ const PsyProfile = () => {
 
   return (
     <>
-      <Callout hasInfoIcon={false}>
-        <CalloutTitle>
-          Vous prévoyez des congés ?
-        </CalloutTitle>
-        <CalloutText size="md">
-          N&lsquo;oubliez pas de vous retirer temporairement de l&lsquo;annuaire public pour ne pas être sollicité(e)
-          par les étudiants sur cette période.
-          Vous pouvez à tout moment réapparaître sur l&lsquo;annuaire depuis cette page.
-        </CalloutText>
-      </Callout>
       <PayingUniversity />
       {!loading && (
       <>
