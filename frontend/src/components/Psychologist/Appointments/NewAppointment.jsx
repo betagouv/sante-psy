@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
-import { Button, SearchableSelect, Select } from '@dataesr/react-dsfr';
+import { Alert, Button, Checkbox, SearchableSelect, Select } from '@dataesr/react-dsfr';
 
 import DateInput from 'components/Date/DateInput';
 
@@ -14,18 +14,28 @@ import { observer } from 'mobx-react';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
+const MAX_APPOINTMENT = 16;
+
 const NewAppointment = () => {
   const navigate = useNavigate();
   const [date, setDate] = useState();
   const params = useParams();
   const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
+  const [understand, setUnderstand] = useState(false);
 
-  const { commonStore: { setNotification }, userStore: { user } } = useStore();
+  const {
+    commonStore: { setNotification },
+    userStore: { user },
+  } = useStore();
 
   useEffect(() => {
     agent.Patient.get().then(setPatients);
   }, []);
+
+  const patient = useMemo(() => patients && patients.find(p => p.id === patientId), [patients, patientId]);
+
+  const tooMuchAppointments = useMemo(() => patient && patient.appointmentsCount > MAX_APPOINTMENT, [patient]);
 
   const createNewAppointment = e => {
     e.preventDefault();
@@ -39,10 +49,19 @@ const NewAppointment = () => {
   const today = new Date();
   const maxDate = new Date(today.setMonth(today.getMonth() + 4));
 
-  const patientsMap = patients.map(patient => (
-    { value: patient.id, label: `${patient.lastName} ${patient.firstNames}` }
-  ));
-  const defaultString = [{ value: '', label: '--- Selectionner un étudiant', disabled: true, hidden: true }];
+  const patientsMap = patients.map(p => ({
+    value: p.id,
+    label: `${p.lastName} ${p.firstNames}`,
+  }));
+
+  const defaultString = [
+    {
+      value: '',
+      label: '--- Selectionner un étudiant',
+      disabled: true,
+      hidden: true,
+    },
+  ];
   const allOptions = defaultString.concat(patientsMap);
 
   return (
@@ -60,10 +79,14 @@ const NewAppointment = () => {
               <>
                 Votre étudiant n&lsquo;est pas dans la liste ?
                 {' '}
-                <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">Ajoutez un nouvel étudiant</HashLink>
+                <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">
+                  Ajoutez un nouvel étudiant
+                </HashLink>
               </>
-              )}
-            onChange={e => { setPatientId(e); }}
+            )}
+            onChange={e => {
+              setPatientId(e);
+            }}
             required
             options={allOptions}
           />
@@ -78,9 +101,11 @@ const NewAppointment = () => {
               <>
                 Vous n&lsquo;avez aucun étudiant dans votre liste!
                 {' '}
-                <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">Ajoutez un nouvel étudiant</HashLink>
+                <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">
+                  Ajoutez un nouvel étudiant
+                </HashLink>
               </>
-          )}
+            )}
           />
         )}
       </div>
@@ -101,12 +126,29 @@ const NewAppointment = () => {
         onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
         required
       />
+      {tooMuchAppointments && (
+      <Alert
+        className="fr-mt-2w"
+        description={(
+          <>
+            Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.
+            <Checkbox
+              className="fr-mt-1w"
+              data-test-id="new-appointment-understand"
+              label="J'ai conscience que seules 16 séances (inclus renouvellement) seront prises en charge par l'université."
+              onChange={e => setUnderstand(e.target.checked)}
+            />
+          </>
+        )}
+      />
+      )}
       <Button
         id="new-appointment-submit"
         data-test-id="new-appointment-submit"
         submit
         icon="ri-add-line"
         className="fr-mt-4w"
+        disabled={tooMuchAppointments && !understand}
       >
         Créer la séance
       </Button>

@@ -6,14 +6,10 @@ const { removeConvention, suspend } = require('./utils/psychologist');
 
 describe('Appointments', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/appointments')
-      .as('appointments');
-    cy.intercept('POST', '/api/appointments')
-      .as('createAppointment');
-    cy.intercept('DELETE', '/api/appointments/*')
-      .as('deleteAppointment');
-    cy.intercept('GET', '/api/config')
-      .as('config');
+    cy.intercept('GET', '/api/appointments').as('appointments');
+    cy.intercept('POST', '/api/appointments').as('createAppointment');
+    cy.intercept('DELETE', '/api/appointments/*').as('deleteAppointment');
+    cy.intercept('GET', '/api/config').as('config');
 
     resetDB();
     loginAsDefault();
@@ -26,8 +22,10 @@ describe('Appointments', () => {
 
   describe('Display', () => {
     it('should get appointments', () => {
-      cy.get('[data-test-id="appointments-table"] tr')
-        .should('have.length', 14);
+      cy.get('[data-test-id="appointments-table"] tr').should(
+        'have.length',
+        14,
+      );
     });
 
     it('should display default announcement only once', () => {
@@ -37,19 +35,15 @@ describe('Appointments', () => {
           'have.text',
           '(Docker-compose variable) Very important announcement.',
         );
-      cy.get('[data-test-id="notification-info"] button')
-        .click();
-      cy.get('[data-test-id="notification-info"] p')
-        .should('not.exist');
+      cy.get('[data-test-id="notification-info"] button').click();
+      cy.get('[data-test-id="notification-info"] p').should('not.exist');
       cy.reload();
-      cy.get('[data-test-id="notification-info"] p')
-        .should('not.exist');
+      cy.get('[data-test-id="notification-info"] p').should('not.exist');
     });
 
     it('should display convention reminder only when no convention', () => {
       // Only error message is the announcement
-      cy.get('[data-test-id="notification-info"]')
-        .should('have.length', 1);
+      cy.get('[data-test-id="notification-info"]').should('have.length', 1);
       removeConvention('login@beta.gouv.fr');
       cy.reload();
       // Now we have both
@@ -69,13 +63,14 @@ describe('Appointments', () => {
         .first()
         .click();
       cy.wait('@deleteAppointment');
-      cy.get('[data-test-id="appointments-table"] tr')
-        .should('have.length', 13);
-      cy.get('[data-test-id="notification-success"] p')
-        .should(
-          'have.text',
-          'La séance a bien été supprimée.',
-        );
+      cy.get('[data-test-id="appointments-table"] tr').should(
+        'have.length',
+        13,
+      );
+      cy.get('[data-test-id="notification-success"] p').should(
+        'have.text',
+        'La séance a bien été supprimée.',
+      );
     });
   });
 
@@ -83,39 +78,37 @@ describe('Appointments', () => {
     it('should display warning if psy is suspended', () => {
       suspend().then(() => {
         cy.reload();
-        cy.get('[data-test-id="notification-warning"] p')
-          .should(
-            'have.text',
-            'Votre profil n‘est plus visible dans l‘annuaire. En cette période d\'examens, les demandes d\'étudiants sont en constante augmentation, nous sollicitons donc votre participation. Pour que les étudiants puissent vous contacter, rendez vous sur la page Mes informations.',
-          );
+        cy.get('[data-test-id="notification-warning"] p').should(
+          'have.text',
+          "Votre profil n‘est plus visible dans l‘annuaire. En cette période d'examens, les demandes d'étudiants sont en constante augmentation, nous sollicitons donc votre participation. Pour que les étudiants puissent vous contacter, rendez vous sur la page Mes informations.",
+        );
       });
     });
   });
 
   describe('New', () => {
     it('should create a new appointments', () => {
-      cy.get('[data-test-id="new-appointment-button"]')
-        .click();
+      cy.get('[data-test-id="new-appointment-button"]').click();
 
-      cy.get('[data-test-id="new-appointment-date-input"]')
-        .click();
+      cy.get('[data-test-id="new-appointment-date-input"]').click();
 
       selectNextCalendarDate();
 
-      cy.get('[data-test-id="new-appointment-etudiant-input"] input')
-        .click();
+      cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
 
       cy.get('[data-test-id="new-appointment-etudiant-input"] div')
         .eq(1)
         .click();
 
-      cy.get('[data-test-id="new-appointment-submit"]')
-        .click();
+      cy.get('[data-test-id="new-appointment-submit"]').should('be.disabled');
+
+      cy.get('[data-test-id="new-appointment-understand"]').click();
+
+      cy.get('[data-test-id="new-appointment-submit"]').click();
 
       cy.wait('@createAppointment');
       cy.location('pathname').should('eq', '/psychologue/mes-seances');
-      cy.get('[data-test-id="notification-success"] p')
-        .should('exist');
+      cy.get('[data-test-id="notification-success"] p').should('exist');
     });
   });
 });
