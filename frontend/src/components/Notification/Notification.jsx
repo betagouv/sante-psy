@@ -6,7 +6,7 @@ const Notification = ({ message, type, onClose, children, className }) => (
   <div data-test-id={`notification-${type}`} className={className || 'fr-my-2w'}>
     <Alert
       type={type}
-      title={message || children}
+      description={message || children}
       closable
       onClose={onClose}
     />

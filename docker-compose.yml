@@ -24,7 +24,7 @@ services:
       - .env
     environment:
       DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
-      ANNOUNCEMENT: "(Docker-compose variable) Very important announcement."
+      ANNOUNCEMENT: "Vous souhaitez rejoindre le réseau des psychologues partenaires du dispositif général MonParcoursPsy ? <a href=\"https://www.demarches-simplifiees.fr/commencer/monpsy\" target=\"_blank\" rel=\"noopener noreferrer\">Cliquer ici</a><br />MonParcoursPsy concerne toute la population à partir de 3 ans."
       SECRET_LOGS: "production_value_should_be_set_in_.env"
       SECRET: "production_value_should_be_set_in_.env"
       HOSTNAME_WITH_PROTOCOL: "http://localhost:3000"

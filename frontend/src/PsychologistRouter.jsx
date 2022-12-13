@@ -3,7 +3,6 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
 
-import Announcement from 'components/Notification/Announcement';
 import Appointments from 'components/Psychologist/Appointments/Appointments';
 import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
 import Patients from 'components/Psychologist/Patients/Patients';
@@ -91,23 +90,22 @@ const PsychologistRouter = () => {
       withNotification
     >
       {modal}
-      <Announcement />
       {user.convention && user.convention.isConventionSigned === null && (
-        <Notification type="info">
-          Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
-          {' '}
-          <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
-        </Notification>
+      <Notification type="info">
+        Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
+        {' '}
+        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
+      </Notification>
       )}
       {user && !user.active && (
-        <Notification type="warning">
-          Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire.
-          {' '}
-          {getInactiveMessage(user)}
-          {' '}
-          <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
-          .
-        </Notification>
+      <Notification type="warning">
+        Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire.
+        {' '}
+        {getInactiveMessage(user)}
+        {' '}
+        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
+        .
+      </Notification>
       )}
       <GlobalNotification className="fr-my-2w" />
       <Routes>
