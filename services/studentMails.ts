@@ -55,7 +55,7 @@ const sendMailDoctorAppointment = async (student: Student): Promise<void> => {
     doctorAppointment: `${config.hostnameWithProtocol}/enregistrement/${student.id}?doctorAppointment=`,
     unregister: `${config.hostnameWithProtocol}/desinscription/${student.id}`,
   });
-  return sendEmail(student.email, 'As-tu pu rencontrer un médecin ?', html);
+  return sendEmail(student.email, 'As-tu réussi à rencontrer un médecin ?', html);
 };
 
 const sendMailDoctorAppointment2 = async (student: Student): Promise<void> => {
