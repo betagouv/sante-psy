@@ -48,9 +48,31 @@ const sendMail4 = async (student: Student): Promise<void> => {
   return sendEmail(student.email, 'Tout se passe bien pour toi ?', html);
 };
 
+const sendMailDoctorAppointment = async (student: Student): Promise<void> => {
+  const html = await ejs.renderFile('./views/emails/studentMail-doctorAppointment.ejs', {
+    signature: getSignature(),
+    faq: `${config.hostnameWithProtocol}/faq`,
+    doctorAppointment: `${config.hostnameWithProtocol}/enregistrement/${student.id}?doctorAppointment=`,
+    unregister: `${config.hostnameWithProtocol}/desinscription/${student.id}`,
+  });
+  return sendEmail(student.email, 'As-tu pu rencontrer un médecin ?', html);
+};
+
+const sendMailDoctorAppointment2 = async (student: Student): Promise<void> => {
+  const html = await ejs.renderFile('./views/emails/studentMail-doctorAppointment-2.ejs', {
+    signature: getSignature(),
+    faq: `${config.hostnameWithProtocol}/faq`,
+    doctorAppointment: `${config.hostnameWithProtocol}/enregistrement/${student.id}?doctorAppointment2=`,
+    unregister: `${config.hostnameWithProtocol}/desinscription/${student.id}`,
+  });
+  return sendEmail(student.email, 'Tout se passe bien pour toi ?', html);
+};
+
 export {
   sendMail1,
   sendMail2,
   sendMail3,
   sendMail4,
+  sendMailDoctorAppointment,
+  sendMailDoctorAppointment2,
 };

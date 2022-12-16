@@ -31,6 +31,8 @@ const StudentAnswer = () => {
       id,
       letter: searchParams.get('letter'),
       appointment: searchParams.get('appointment'),
+      doctorAppointment: searchParams.get('doctorAppointment'),
+      doctorAppointment2: searchParams.get('doctorAppointment2'),
     });
   }, []);
 

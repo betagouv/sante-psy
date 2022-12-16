@@ -3,6 +3,8 @@ export type Student = {
   email: string,
   letter: boolean,
   appointment: boolean,
+  doctorAppointment: boolean,
+  doctorAppointment2: boolean,
   referral: number,
   source: string,
   createdAt: Date,
