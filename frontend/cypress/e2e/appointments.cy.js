@@ -96,13 +96,17 @@ describe('Appointments', () => {
 
       cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
 
-      cy.get('[data-test-id="new-appointment-etudiant-input"] div')
-        .eq(1)
+      cy.get('[data-test-id="new-appointment-etudiant-input"] div div')
+        .eq(2)
         .click();
 
-      cy.get('[data-test-id="new-appointment-submit"]').should('be.disabled');
-
-      cy.get('[data-test-id="new-appointment-understand"]').click();
+      cy.get('[data-test-id="new-appointment-submit"]')
+        .invoke('attr', 'disabled')
+        .then(disabled => {
+          if (disabled) {
+            cy.get('[data-test-id="new-appointment-understand"]').click();
+          }
+        });
 
       cy.get('[data-test-id="new-appointment-submit"]').click();
 
