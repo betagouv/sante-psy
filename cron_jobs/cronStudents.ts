@@ -1,5 +1,11 @@
 import students from '../db/students';
-import { sendMail2, sendMail3, sendMail4 } from '../services/studentMails';
+import {
+  sendMail2,
+  sendMail3,
+  sendMail4,
+  sendMailDoctorAppointment,
+  sendMailDoctorAppointment2,
+} from '../services/studentMails';
 
 const getDates = (days: number): { from: Date, to: Date } => {
   const now = new Date();
@@ -22,8 +28,7 @@ const sendStudentsMailJ3 = async (): Promise<boolean> => {
     for (let i = 0; i < n; i++) {
       const student = results[i];
       // eslint-disable-next-line no-await-in-loop
-      await sendMail2(student)
-        .catch((err) => console.error('Students J+3: error sending mail to', student.id, err));
+      await sendMail2(student).catch((err) => console.error('Students J+3: error sending mail to', student.id, err));
     }
 
     console.log('Students J+3: done');
@@ -44,8 +49,7 @@ const sendStudentsMailJ10 = async (): Promise<boolean> => {
     for (let i = 0; i < n; i++) {
       const student = results[i];
       // eslint-disable-next-line no-await-in-loop
-      await sendMail3(student)
-        .catch((err) => console.error('Students J+10: error sending mail to', student.id, err));
+      await sendMail3(student).catch((err) => console.error('Students J+10: error sending mail to', student.id, err));
     }
 
     console.log('Students J+10: done');
@@ -66,8 +70,7 @@ const sendStudentsMailJ30 = async (): Promise<boolean> => {
     for (let i = 0; i < n; i++) {
       const student = results[i];
       // eslint-disable-next-line no-await-in-loop
-      await sendMail4(student)
-        .catch((err) => console.error('Students J+30: error sending mail to', student.id, err));
+      await sendMail4(student).catch((err) => console.error('Students J+30: error sending mail to', student.id, err));
     }
 
     console.log('Students J+30: done');
@@ -78,4 +81,64 @@ const sendStudentsMailJ30 = async (): Promise<boolean> => {
   }
 };
 
-export default { sendStudentsMailJ3, sendStudentsMailJ10, sendStudentsMailJ30 };
+const sendStudentsMailDoctorAppointment = async (): Promise<boolean> => {
+  try {
+    const results = await students.getAllWithoutDoctorAppointment();
+    const n = results.length;
+    console.log(`Students DoctorAppointment: sending ${n} mails...`);
+
+    for (let i = 0; i < n; i++) {
+      const student = results[i];
+      // eslint-disable-next-line no-await-in-loop
+      await sendMailDoctorAppointment(student).catch((err) => console.error(
+        'Students DoctorAppointment: error sending mail to',
+        student.id,
+        err,
+      ));
+    }
+
+    console.log('Students DoctorAppointment: done');
+    return true;
+  } catch (err) {
+    console.error(
+      'ERROR: Could not send students mail DoctorAppointment.',
+      err,
+    );
+    return false;
+  }
+};
+
+const sendStudentsMailDoctorAppointment2 = async (): Promise<boolean> => {
+  try {
+    const results = await students.getAllWithoutDoctorAppointment();
+    const n = results.length;
+    console.log(`Students DoctorAppointment2: sending ${n} mails...`);
+
+    for (let i = 0; i < n; i++) {
+      const student = results[i];
+      // eslint-disable-next-line no-await-in-loop
+      await sendMailDoctorAppointment2(student).catch((err) => console.error(
+        'Students DoctorAppointment2: error sending mail to',
+        student.id,
+        err,
+      ));
+    }
+
+    console.log('Students DoctorAppointment2: done');
+    return true;
+  } catch (err) {
+    console.error(
+      'ERROR: Could not send students mail DoctorAppointment2.',
+      err,
+    );
+    return false;
+  }
+};
+
+export default {
+  sendStudentsMailJ3,
+  sendStudentsMailJ10,
+  sendStudentsMailJ30,
+  sendStudentsMailDoctorAppointment,
+  sendStudentsMailDoctorAppointment2,
+};

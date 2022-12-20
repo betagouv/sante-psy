@@ -7,11 +7,8 @@ import validation from '../utils/validation';
 import { sendMail1 } from '../services/studentMails';
 
 const mailValidator = [
-  check('email')
-    .isEmail()
-    .withMessage('Vous devez spécifier un email valide.'),
-  check('source')
-    .customSanitizer(DOMPurify.sanitize),
+  check('email').isEmail().withMessage('Vous devez spécifier un email valide.'),
+  check('source').customSanitizer(DOMPurify.sanitize),
 ];
 
 const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
@@ -22,15 +19,14 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
 
   res.json({
     // eslint-disable-next-line max-len
-    message: 'Nous vous avons envoyé un mail avec toutes les informations sur le dispositif. Pensez à verifier vos spams et n\'hesitez pas à nous contacter en cas de problèmes',
+    message: "Nous vous avons envoyé un mail avec toutes les informations sur le dispositif. Pensez à verifier vos spams et n'hesitez pas à nous contacter en cas de problèmes",
   });
 
   dbStudents.insert(email, source);
 };
 
 const answerValidator = [
-  check('id', 'Votre identifiant est invalide.')
-    .isUUID(),
+  check('id', 'Votre identifiant est invalide.').isUUID(),
   check('letter', 'Vous devez spécifier un booléen')
     .optional({ nullable: true })
     .isBoolean(),
@@ -38,30 +34,40 @@ const answerValidator = [
     .optional({ nullable: true })
     .isBoolean(),
   check('referral', 'Vous devez spécifier un nombre entre 1 et 3')
-    .optional({ nullable: true })
-    .isInt({ min: 1, max: 3 }),
-  oneOf([
-    check('letter').exists(),
-    check('appointment').exists(),
-    check('referral').exists(),
-  ], 'Une et une seule réponse doit être envoyée'),
+      .optional({ nullable: true })
+      .isInt({ min: 1, max: 3 }),
+  check('doctorAppointment', 'Vous devez spécifier un booléen')
+            .optional({ nullable: true })
+            .isBoolean(),
+  check('doctorAppointment2', 'Vous devez spécifier un booléen')
+                  .optional({ nullable: true })
+                  .isBoolean(),
+  oneOf(
+    [
+      check('letter').exists(),
+      check('appointment').exists(),
+      check('referral').exists(),
+      check('doctorAppointment').exists(),
+      check('doctorAppointment2').exists(),
+    ],
+    'Une et une seule réponse doit être envoyée',
+  ),
 ];
 
 const saveAnswer = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const {
-    id, letter, appointment, referral,
+    id, letter, appointment, referral, doctorAppointment, doctorAppointment2,
   } = req.body;
 
-  dbStudents.updateById(
-    id,
-    {
-      letter: letter == null ? undefined : letter,
-      appointment: appointment == null ? undefined : appointment,
-      referral: referral == null ? undefined : referral,
-    },
-  );
+  dbStudents.updateById(id, {
+    letter: letter == null ? undefined : letter,
+    appointment: appointment == null ? undefined : appointment,
+    referral: referral == null ? undefined : referral,
+    doctorAppointment: doctorAppointment == null ? undefined : doctorAppointment,
+    doctorAppointment2: doctorAppointment2 == null ? undefined : doctorAppointment2,
+  });
 
   res.json({ message: 'Ta réponse a bien été prise en compte.' });
 };
@@ -69,12 +75,9 @@ const saveAnswer = async (req: Request, res: Response): Promise<void> => {
 const unregister = async (req: Request, res: Response): Promise<void> => {
   const { studentId } = req.params;
 
-  dbStudents.updateById(
-    studentId,
-    {
-      email: null,
-    },
-  );
+  dbStudents.updateById(studentId, {
+    email: null,
+  });
 
   res.send('Ok');
 };

@@ -18,10 +18,13 @@ const cronJobs = {
   sendStudentsMailJ3: cronStudents.sendStudentsMailJ3,
   sendStudentsMailJ10: cronStudents.sendStudentsMailJ10,
   sendStudentsMailJ30: cronStudents.sendStudentsMailJ30,
+  sendStudentsMailDoctorAppointment:
+    cronStudents.sendStudentsMailDoctorAppointment,
   sendSummaryMail: cronUniversityPayments.sendSummaryToUniversities,
   importLatestDataFromDS: cronDemarchesSimplifiees.importLatestDataFromDSToPG,
   importEveryDataFromDS: cronDemarchesSimplifiees.importEveryDataFromDSToPG,
-  checkForMultipleAcceptedDossiers: cronDemarchesSimplifiees.checkForMultipleAcceptedDossiers,
+  checkForMultipleAcceptedDossiers:
+    cronDemarchesSimplifiees.checkForMultipleAcceptedDossiers,
   autoAcceptPsychologists: cronDemarchesSimplifiees.autoAcceptPsychologists,
   autoVerifyPsychologists: cronDemarchesSimplifiees.autoVerifyPsychologists,
   reactivatePsychologists: cronPsychologists.reactivatePsychologists,
