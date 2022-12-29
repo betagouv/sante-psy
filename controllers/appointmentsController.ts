@@ -16,13 +16,16 @@ const createValidators = [
   check('patientId')
     .isUUID()
     .withMessage('Vous devez spécifier un patient pour la séance.'),
+  check('renewal')
+    .isBoolean()
+    .withMessage("Vous devez confirmer que c'est un renouvellement."),
 ];
 
 const create = async (req: Request, res: Response): Promise<void> => {
   // Todo : test case where patient id does not exist
   validation.checkErrors(req);
 
-  const { patientId } = req.body;
+  const { patientId, renewal } = req.body;
   const psyId = req.auth.psychologist;
   const date = new Date(req.body.date);
   const today = new Date();
@@ -45,6 +48,9 @@ const create = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('La date de la séance doit être dans moins de 4 mois', 400);
   }
 
+  if (renewal) {
+    await dbPatient.renew(patientId, psyId);
+  }
   await dbAppointments.insert(date, patientId, psyId);
   console.log(`Appointment created for patient id ${patientId} by psy id ${psyId}`);
 
