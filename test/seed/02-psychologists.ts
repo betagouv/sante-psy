@@ -10,15 +10,11 @@ import { Knex } from 'knex';
 
 export const mails = [
   'login@beta.gouv.fr',
-  'estelle.comment@beta.gouv.fr',
-  'emeline.merliere@beta.gouv.fr',
-  'paul.leclercq@beta.gouv.fr',
-  'julien.dauphant@beta.gouv.fr',
   'xavier.desoindre@beta.gouv.fr',
   'sandrine.ricardo@beta.gouv.fr',
   'paul.burgun@beta.gouv.fr',
   'lina.cham@beta.gouv.fr',
-  'valentin.brel@beta.gouv.fr',
+  'kevin.njock@beta.gouv.fr',
   'vikie.ache@beta.gouv.fr',
 ];
 

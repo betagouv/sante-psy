@@ -4,7 +4,7 @@ import config from '../utils/config';
 import sendEmail from '../utils/email';
 
 const getSignature = (): string => {
-  const team = ['Lina', 'Vikie', 'Valentin', 'Sandrine', 'Xavier'];
+  const team = ['Lina', 'Vikie', 'Kévin', 'Sandrine', 'Xavier'];
   const random = Math.floor(Math.random() * 5);
   return `${team[random]} de `;
 };
