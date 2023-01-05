@@ -7,6 +7,7 @@ import dbPsychologists from '../../db/psychologists';
 import dbUniversities from '../../db/universities';
 import {
   appointmentsTable,
+  psychologistsTable,
 } from '../../db/tables';
 import { DossierState } from '../../types/DossierState';
 import db from '../../db/db';
@@ -182,6 +183,14 @@ const insertOnePsy = async (
 
   const psy = getOnePsy({ ...psychologist, assignedUniversityId: universityId });
   await dbPsychologists.upsertMany([psy]);
+
+  // Hack to force createdAt update
+  if (psychologist.createdAt) {
+    await db(psychologistsTable)
+      .where('dossierNumber', psy.dossierNumber)
+      .update({ createdAt: psychologist.createdAt });
+  }
+
   return psy;
 };
 

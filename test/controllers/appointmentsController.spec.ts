@@ -46,6 +46,7 @@ describe('appointmentsController', () => {
         .send({
           patientId: patient.id,
           date: new Date('2021-06-27'),
+          renewal: false,
         })
         .then(async (res) => {
           res.status.should.equal(200);
@@ -83,6 +84,7 @@ describe('appointmentsController', () => {
         .send({
           patientId: patient.id,
           date: new Date('09/02/2021'),
+          renewal: false,
         })
         .then(async (res) => {
           res.status.should.equal(500);
@@ -116,11 +118,90 @@ describe('appointmentsController', () => {
         .send({
           patientId: patient.id,
           date: new Date('09/02/2021'),
+          renewal: false,
         })
         .then(async (res) => {
           res.status.should.equal(401);
 
           // Appointment not created
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(0);
+
+          return Promise.resolve();
+        });
+    });
+
+    it('should not create appointment if diff in month > 4', async () => {
+      const psy = await create.insertOnePsy();
+      const patient = await dbPatients.insert(
+        'Ada',
+        'Lovelace',
+        '12345678901',
+        '42',
+        false,
+        false,
+        psy.dossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        dateOfBirth,
+      );
+
+      const todayDate = new Date();
+      const newDatePlus5month = new Date(todayDate.setMonth(todayDate.getMonth() + 5));
+
+      return chai.request(app)
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send({
+          patientId: patient.id,
+          date: newDatePlus5month,
+          renewal: false,
+        })
+        .then(async (res) => {
+          res.status.should.equal(400);
+          res.body.message.should.equal('La date de la séance doit être dans moins de 4 mois');
+
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(0);
+
+          return Promise.resolve();
+        });
+    });
+
+    it('should not create appointment if date before psychologist creation date', async () => {
+      const beginningDate = new Date('2021-03-22');
+      const psy = await create.insertOnePsy({ createdAt: beginningDate });
+      const patient = await dbPatients.insert(
+        'Ada',
+        'Lovelace',
+        '12345678901',
+        '42',
+        false,
+        false,
+        psy.dossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        dateOfBirth,
+      );
+
+      const invalidDate = new Date(beginningDate.setMonth(beginningDate.getMonth() - 2));
+
+      return chai.request(app)
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send({
+          patientId: patient.id,
+          date: invalidDate,
+          renewal: false,
+        })
+        .then(async (res) => {
+          res.status.should.equal(400);
+          res.body.message.should.equal(
+            "La date de la séance ne peut pas être antérieure à l'inscription au dispositif",
+          );
+
           const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(0);
 
@@ -154,6 +235,7 @@ describe('appointmentsController', () => {
         .send({
           patientId: 'not-a-uuid',
           date: new Date('09/02/2021'),
+          renewal: false,
         })
         .end((err, res) => {
           res.status.should.equal(400);
@@ -172,6 +254,7 @@ describe('appointmentsController', () => {
         .send({
           // no patientId
           date: new Date('09/02/2021'),
+          renewal: false,
         })
         .end((err, res) => {
           res.status.should.equal(400);
@@ -194,6 +277,7 @@ describe('appointmentsController', () => {
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           date: '09/02/2021',
+          renewal: false,
         })
         .end((err, res) => {
           res.status.should.equal(400);
@@ -212,6 +296,7 @@ describe('appointmentsController', () => {
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
           // no date
+          renewal: false,
         })
         .end((err, res) => {
           res.status.should.equal(400);
@@ -365,82 +450,6 @@ describe('appointmentsController', () => {
 
           const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);
-
-          return Promise.resolve();
-        });
-    });
-
-    it('should not create appointment if diff in month > 4', async () => {
-      const psy = await create.insertOnePsy();
-      const patient = await dbPatients.insert(
-        'Ada',
-        'Lovelace',
-        '12345678901',
-        '42',
-        false,
-        false,
-        psy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
-
-      const todayDate = new Date();
-      const newDatePlus5month = new Date(todayDate.setMonth(todayDate.getMonth() + 5));
-
-      return chai.request(app)
-        .post('/api/appointments')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-        .set('xsrf-token', 'randomXSRFToken')
-        .send({
-          patientId: patient.id,
-          date: newDatePlus5month,
-        })
-        .then(async (res) => {
-          res.status.should.equal(400);
-          res.body.message.should.equal('La date de la séance doit être dans moins de 4 mois');
-
-          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
-          expect(appointmentArray).to.have.length(0);
-
-          return Promise.resolve();
-        });
-    });
-
-    it('should not create appointment if date before psychologist creation date', async () => {
-      const beginningDate = new Date('2021-03-22');
-      const psy = await create.insertOnePsy({ createdAt: beginningDate });
-      const patient = await dbPatients.insert(
-        'Ada',
-        'Lovelace',
-        '12345678901',
-        '42',
-        false,
-        false,
-        psy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
-
-      const invalidDate = new Date(beginningDate.setMonth(beginningDate.getMonth() - 2));
-
-      return chai.request(app)
-        .post('/api/appointments')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-        .set('xsrf-token', 'randomXSRFToken')
-        .send({
-          patientId: patient.id,
-          date: invalidDate,
-        })
-        .then(async (res) => {
-          res.status.should.equal(400);
-          res.body.message.should.equal(
-            "La date de la séance ne peut pas être antérieure à l'inscription au dispositif",
-          );
-
-          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
-          expect(appointmentArray).to.have.length(0);
 
           return Promise.resolve();
         });
