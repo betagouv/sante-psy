@@ -16,7 +16,7 @@ const fakeEmail = (real: string) : string => (real ? faker.internet.exampleEmail
 // eslint-disable-next-line max-len
 const fakeAddress = () : string => `${faker.address.streetAddress()} ${faker.address.zipCode('#####')} ${faker.address.city()}`;
 
-const fakePhone = () : string => faker.phone.phoneNumber('0# ## ## ## ##');
+const fakePhone = () : string => faker.phone.number('0# ## ## ## ##');
 
 // eslint-disable-next-line max-len
 const fakeWebsite = (real: string) : string => (real ? `${faker.internet.domainName()}.fr` : real);
