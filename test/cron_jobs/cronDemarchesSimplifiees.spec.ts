@@ -106,13 +106,13 @@ describe('DS integration tests', () => {
     lastName: 'Burgun',
     email: 'paul.burgun@beta.gouv.fr',
     address: '1 Rue Lecourbe 75015 Paris',
-    departement: '75 - Paris',
+    departement: '2B - Haute-Corse',
     longitude: null, // api-adresse.data.gouv.fr is mocked in test
     latitude: null, // api-adresse.data.gouv.fr is mocked in test
     otherAddress: null,
     otherLongitude: null,
     otherLatitude: null,
-    region: 'Ile-de-France',
+    region: 'Corse',
     phone: '01 23 45 67 89',
     website: '',
     teleconsultation: false,
