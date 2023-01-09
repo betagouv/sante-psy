@@ -11,5 +11,6 @@ export type Patient = {
     doctorAddress?: string,
     dateOfBirth?: Date | null,
     deleted?: boolean,
-    updatedAt?: Date
+    updatedAt?: Date,
+    renewed?: boolean
 }

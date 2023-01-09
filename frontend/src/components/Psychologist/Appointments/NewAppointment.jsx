@@ -15,6 +15,7 @@ import { observer } from 'mobx-react';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const MAX_APPOINTMENT = 16;
+const RENEWAL_LIMIT = 8;
 
 const NewAppointment = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const NewAppointment = () => {
   const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
   const [understand, setUnderstand] = useState(false);
+  const [renewal, setRenewal] = useState(false);
 
   const {
     commonStore: { setNotification },
@@ -36,11 +38,15 @@ const NewAppointment = () => {
   const patient = useMemo(() => patients && patients.find(p => p.id === patientId), [patients, patientId]);
 
   const tooMuchAppointments = useMemo(() => patient && patient.appointmentsCount > MAX_APPOINTMENT, [patient]);
+  const askForRenewal = useMemo(
+    () => patient && !patient.renewed && patient.appointmentsCount > RENEWAL_LIMIT,
+    [patient],
+  );
 
   const createNewAppointment = e => {
     e.preventDefault();
     setNotification({});
-    agent.Appointment.add(patientId, date).then(response => {
+    agent.Appointment.add(patientId, date, renewal).then(response => {
       navigate('/psychologue/mes-seances', { state: { notification: response } });
     });
   };
@@ -117,30 +123,32 @@ const NewAppointment = () => {
         maxDate={maxDate}
         dateFormat="dd/MM/yyyy"
         showPopperArrow={false}
-        customInput={(
-          <DateInput
-            label="Date de la séance"
-            dataTestId="new-appointment-date-input"
-          />
-        )}
+        customInput={<DateInput label="Date de la séance" dataTestId="new-appointment-date-input" />}
         onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
         required
       />
       {tooMuchAppointments && (
-      <Alert
-        className="fr-mt-2w"
-        description={(
-          <>
-            Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.
-            <Checkbox
-              className="fr-mt-1w"
-              data-test-id="new-appointment-understand"
-              label="J'ai conscience que seules 16 séances (inclus renouvellement) seront prises en charge par l'université."
-              onChange={e => setUnderstand(e.target.checked)}
-            />
-          </>
-        )}
-      />
+        <Alert
+          className="fr-mt-2w"
+          description={(
+            <>
+              Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.
+              <Checkbox
+                className="fr-mt-1w"
+                data-test-id="new-appointment-understand"
+                label="J'ai conscience que seules 16 séances (inclus renouvellement) seront prises en charge par l'université."
+                onChange={e => setUnderstand(e.target.checked)}
+              />
+            </>
+          )}
+        />
+      )}
+      {askForRenewal && (
+        <Checkbox
+          data-test-id="new-appointment-renewal"
+          label="Il s'agit d'un renouvellement. Je confirme avoir vérifié l'éligibilité de l'étudiant ainsi que sa nouvelle lettre d'orientation."
+          onChange={e => setRenewal(e.target.checked)}
+        />
       )}
       <Button
         id="new-appointment-submit"
@@ -148,7 +156,7 @@ const NewAppointment = () => {
         submit
         icon="ri-add-line"
         className="fr-mt-4w"
-        disabled={tooMuchAppointments && !understand}
+        disabled={(tooMuchAppointments && !understand) || (askForRenewal && !renewal)}
       >
         Créer la séance
       </Button>

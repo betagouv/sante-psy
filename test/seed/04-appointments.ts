@@ -8,14 +8,17 @@ import {
 import { getPatientsByPsychologist } from './03-patients';
 import { Appointment } from '../../types/Appointment';
 
-const getOneAppointmentPerMonth = (patient: {id: string, psychologistId: string}, day: number, deleted = false)
-  : Appointment[] => [...Array(12).keys()]
-  .map((i) => create.getOneAppointment({
-    patientId: patient.id,
-    psychologistId: patient.psychologistId,
-    appointmentDate: new Date(2022, i, day).toISOString(),
-    deleted,
-  }));
+const getOneAppointmentPerMonth = (patient: { id: string, psychologistId: string }, day: number, deleted = false)
+  : Appointment[] => {
+  const currentYear = new Date().getFullYear();
+  return [...Array(12).keys()]
+    .map((i) => create.getOneAppointment({
+      patientId: patient.id,
+      psychologistId: patient.psychologistId,
+      appointmentDate: new Date(currentYear, i, day).toISOString(),
+      deleted,
+    }));
+};
 
 // eslint-disable-next-line import/prefer-default-export
 export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {

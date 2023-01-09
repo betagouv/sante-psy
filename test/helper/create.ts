@@ -7,6 +7,7 @@ import dbPsychologists from '../../db/psychologists';
 import dbUniversities from '../../db/universities';
 import {
   appointmentsTable,
+  psychologistsTable,
 } from '../../db/tables';
 import { DossierState } from '../../types/DossierState';
 import db from '../../db/db';
@@ -151,7 +152,7 @@ const getOnePsy = (
     state: DossierState.accepte,
     adeli: `${getRandomInt()}829302942`,
     diploma: 'Psychologie clinique de la santé',
-    phone: faker.phone.phoneNumber('0# ## ## ## ##'),
+    phone: faker.phone.number('0# ## ## ## ##'),
     email: faker.internet.exampleEmail(),
     personalEmail: 'loginemail@beta.gouv.fr',
     website: getFakeAddress(),
@@ -175,13 +176,21 @@ const insertOnePsy = async (
 ): Promise<Psychologist> => {
   let universityId = null;
   if (withUniversity) {
-    const university = getOneUniversity(faker.company.companyName());
+    const university = getOneUniversity(faker.company.name());
     await dbUniversities.upsertMany([university]);
     universityId = university.id;
   }
 
   const psy = getOnePsy({ ...psychologist, assignedUniversityId: universityId });
   await dbPsychologists.upsertMany([psy]);
+
+  // Hack to force createdAt update
+  if (psychologist.createdAt) {
+    await db(psychologistsTable)
+      .where('dossierNumber', psy.dossierNumber)
+      .update({ createdAt: psychologist.createdAt });
+  }
+
   return psy;
 };
 
@@ -228,7 +237,7 @@ const getOnePatient = (
   id: uuid.generateFromString(`patient-${patient.psychologistId}-${index}`),
   firstNames: faker.name.firstName(),
   lastName: faker.name.lastName(),
-  INE: faker.phone.phoneNumber('###########'),
+  INE: faker.phone.number('###########'),
   institutionName: `${getRandomInt()} university`,
   isStudentStatusVerified: true,
   hasPrescription: true,

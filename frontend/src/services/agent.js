@@ -44,7 +44,7 @@ clientWithoutErrorManagement.interceptors.response.use(
 );
 
 const Appointment = {
-  add: (patientId, date) => client.post('/appointments/', { patientId, date }),
+  add: (patientId, date, renewal) => client.post('/appointments/', { patientId, date, renewal }),
   delete: id => client.delete(`/appointments/${id}`),
   get: () => client.get('/appointments'),
 };
