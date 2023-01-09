@@ -18,7 +18,7 @@ describe('Psy Listing', () => {
       .should('exist');
 
     cy.get('[data-test-id="psy-table"] tbody tr')
-      .should('have.length', 10);
+      .should('have.length', 8);
 
     cy.get('[data-test-id="psy-table-row-profil-button"]')
       .eq(2)

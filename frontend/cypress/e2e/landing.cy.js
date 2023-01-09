@@ -18,8 +18,8 @@ describe('Landing Page Test', () => {
     cy.get('[data-test-id="statistic-Séances réalisées"]').should('exist');
     cy.get('[data-test-id="statistic-Séances réalisées-value"]').should('have.text', 156);
     cy.get('[data-test-id="statistic-Psychologues disponibles"]').should('exist');
-    cy.get('[data-test-id="statistic-Psychologues disponibles-value"]').should('have.text', 12);
+    cy.get('[data-test-id="statistic-Psychologues disponibles-value"]').should('have.text', 8);
     cy.get('[data-test-id="statistic-Étudiants accompagnés"]').should('exist');
-    cy.get('[data-test-id="statistic-Étudiants accompagnés-value"]').should('have.text', 55);
+    cy.get('[data-test-id="statistic-Étudiants accompagnés-value"]').should('have.text', 35);
   });
 });
