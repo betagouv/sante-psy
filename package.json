@@ -74,7 +74,7 @@
     "intl": "^1.2.5",
     "jsdom": "^20.0.3",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^2.3.0",
+    "knex": "^2.4.0",
     "mime-types": "^2.1.35",
     "nodemailer": "^6.8.0",
     "pg": "^8.8.0",
