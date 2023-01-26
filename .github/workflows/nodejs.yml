@@ -30,4 +30,28 @@ jobs:
       run: npm run ejslint -- --quiet
     - name: Front linter
       run: npm --prefix frontend run lint -- --quiet
-    
+    - name: Migrate DB
+      run: npm run migrate
+    - name: Seed DB
+      run: npm run seed
+    - name: Run unit tests
+      run: npm run test:ci
+      env:
+        API_TOKEN: ${{ secrets.API_TOKEN }}
+        DEMARCHES_SIMPLIFIEES_ID: ${{ secrets.DEMARCHES_SIMPLIFIEES_ID }}
+    - name: Run app
+      run: node dist/index.js &
+    - name: Run integration tests
+      run: npm --prefix frontend run cy:ci
+    - name: Archive test results
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: cypress
+        retention-days: 1
+        path: |
+          frontend/cypress/screenshots
+          frontend/cypress/videos
+    - name: Stop DB
+      run: docker-compose down
+      if: ${{ always() }}
