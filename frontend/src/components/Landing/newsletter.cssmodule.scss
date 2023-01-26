@@ -1,0 +1,25 @@
+.container {
+  margin: auto;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+  background-color: white;
+  gap: 32px;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.separator {
+  border-right: solid 1px #E5E5E5;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.form :global .fr-input-group {
+  margin-bottom: 0;
+  width: 328px;
+}

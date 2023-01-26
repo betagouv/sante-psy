@@ -1,7 +1,32 @@
+.title {
+  font-size: 64px;
+  line-height: 72px;
+  width: 50%;
+}
+
+.description {
+  font-size: 24px;
+  line-height: 41px;
+  width: 50%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  max-width: 1236px;
+  margin-top: 128px;
+  margin-bottom: 64px;
+}
+
+.separator {
+  border-top: solid 1px white;
+}
+
 .content {
-    justify-content: space-around;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 32px;
-    margin-top: 24px;
+  margin-bottom: 128px;
+  margin-top: 64px;
+  justify-content: space-around;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
 }

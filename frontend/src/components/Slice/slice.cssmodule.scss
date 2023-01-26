@@ -1,0 +1,74 @@
+@import 'src/variables.scss';
+
+.container,
+.secondary,
+.white {
+  display: flex;
+}
+
+.reverse {
+  flex-direction: row-reverse;
+}
+
+.button {
+  width: fit-content;
+  background-color: white;
+  margin-bottom: 16px;
+}
+
+.container {
+  background-color: $primary-color;
+  color: white;
+  h2 {
+    color: white;
+  }
+
+  b {
+    color: $primary-text-color;
+  }
+}
+
+.white,
+.secondary {
+  color: black;
+  h2 b {
+    display: inline;
+    box-shadow: inset 0 -2px var(--grey-1000-75), inset 0 -12px $primary-text-color;
+  }
+}
+
+.white {
+  background-color: white;
+}
+
+.secondary {
+  background-color: $secondary-color;
+}
+
+.content {
+  flex-grow: 1;
+  margin: auto;
+  padding: 0 64px;
+}
+
+.title {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 63px;
+  margin-bottom: 32px;
+}
+
+.description {
+  font-size: 28px;
+  line-height: 40px;
+  margin-bottom: 32px;
+}
+
+.hint {
+  font-size: 18px;
+  line-height: 23px;
+}
+
+.image {
+  width: 50%;
+}
