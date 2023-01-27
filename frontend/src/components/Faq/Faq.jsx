@@ -11,7 +11,7 @@ import items from 'services/faq/items';
 
 import { useStore } from 'stores/';
 
-const Faq = () => {
+const Faq = ({ simplified }) => {
   const tabsRef = useRef(null);
   const [smallText, setSmallText] = useState(false);
 
@@ -58,17 +58,19 @@ const Faq = () => {
       textContent
     >
       <div ref={tabsRef}>
-        <h1>Foire aux questions</h1>
+        <h1>{simplified ? 'Questions fréquentes' : 'Foire aux questions'}</h1>
         <Tabs defaultActiveTab={getDefaultTab()}>
           <Tab label={smallText ? 'Étudiant' : 'Je suis étudiant'}>
-            <FaqTab type="etudiant" />
+            <FaqTab type="etudiant" simplified={simplified} />
           </Tab>
           <Tab label={smallText ? 'Psychologue' : 'Je suis psychologue'}>
-            <FaqTab type="psychologue" />
+            <FaqTab type="psychologue" simplified={simplified} />
           </Tab>
+          {!simplified && (
           <Tab label={smallText ? 'Médecin' : 'Je suis médecin'}>
-            <FaqTab type="medecin" />
+            <FaqTab type="medecin" simplified={simplified} />
           </Tab>
+          )}
         </Tabs>
       </div>
     </Page>

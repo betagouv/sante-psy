@@ -82,7 +82,7 @@ const Landing = () => {
           </>
         )}
       />
-      <Faq />
+      <Faq simplified/>
       <Slice
         color="white"
         imageSrc="/images/communaute.png"

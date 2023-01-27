@@ -17,7 +17,7 @@ import items from 'services/faq/items';
 
 import styles from './faqTab.cssmodule.scss';
 
-const FaqTab = ({ type }) => {
+const FaqTab = ({ type, simplified }) => {
   const { commonStore: { config } } = useStore();
 
   const onOpenQuestion = item => {
@@ -33,6 +33,7 @@ const FaqTab = ({ type }) => {
           <Accordion>
             {items[type].sections.flatMap(section => (
               faq[section.name](config)
+                .filter(item => !simplified || item.frequent)
                 .map(item => (
                   <AccordionItem
                     onClick={close => {
@@ -63,6 +64,7 @@ const FaqTab = ({ type }) => {
         </Col>
       </Row>
       <FaqProcess
+        simplified={simplified}
         links={items[type].links}
       />
     </div>
