@@ -240,7 +240,7 @@ const PrivacyPolicy = () => {
           l&lsquo;utilisateur décide d&lsquo;activer la localisation sur la
           recherche dans l&lsquo;annuaire des psychologues. En effet, cette
           donnée n&lsquo;est pas collectée ni conservée par Santé Psy
-          Etudiant, qui ne peut donc pas la relier à un utilisateur. La donnée
+          Étudiant, qui ne peut donc pas la relier à un utilisateur. La donnée
           est traitée directement sur le navigateur de l&lsquo;utilisateur
           après avoir exprimé son consentement.
         </p>

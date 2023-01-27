@@ -12,6 +12,7 @@ import Announcement from 'components/Notification/Announcement';
 import { useStore } from 'stores/';
 
 import Statistics from 'components/Landing/Statistics';
+import classNames from 'classnames';
 import FaqSection from './FaqSection';
 
 import styles from './page.cssmodule.scss';
@@ -40,6 +41,8 @@ const Page = ({
   tutorial,
   breadCrumbs,
   currentBreadCrumb,
+  withoutHeader,
+  className,
   dataTestId = null,
   withNotification = false,
 }) => {
@@ -58,7 +61,8 @@ const Page = ({
         setTutoStatus={setTutoStatus}
         id={user && !user.hasSeenTutorial ? 'global' : tutorial}
       >
-        <div className={styles.background} data-test-id={dataTestId}>
+        <div className={classNames(className, styles.background)} data-test-id={dataTestId}>
+          {!withoutHeader && (
           <div className={styles.header}>
             {tutorial && (
             <div
@@ -73,31 +77,28 @@ const Page = ({
             </div>
             )}
             {breadCrumbs && (
-              <Breadcrumb>
-                {breadCrumbs.map(breadCrumb => (
-                  <BreadcrumbItem
-                    className={styles.previousBreadCrumb}
-                    key={breadCrumb.label}
-                    href={breadCrumb.href}
-                  >
-                    {breadCrumb.label}
-                  </BreadcrumbItem>
-                ))}
+            <Breadcrumb>
+              {breadCrumbs.map(breadCrumb => (
                 <BreadcrumbItem
-                  className={styles.currentBreadCrumb}
+                  className={styles.previousBreadCrumb}
+                  key={breadCrumb.label}
+                  href={breadCrumb.href}
                 >
-                  {currentBreadCrumb || getNodeText(title)}
+                  {breadCrumb.label}
                 </BreadcrumbItem>
-              </Breadcrumb>
+              ))}
+              <BreadcrumbItem
+                className={styles.currentBreadCrumb}
+              >
+                {currentBreadCrumb || getNodeText(title)}
+              </BreadcrumbItem>
+            </Breadcrumb>
             )}
             <h1 className={styles.title}>{title}</h1>
             {description && <p className={styles.description}>{description}</p>}
           </div>
-          <div className={styles.container}>
-            {textContent
-              ? <div className={styles.textContainer}>{children}</div>
-              : children}
-          </div>
+          )}
+          <div className={textContent ? styles.textContainer : styles.container}>{children}</div>
         </div>
         {withContact && <FaqSection />}
         {withStats && <Statistics />}

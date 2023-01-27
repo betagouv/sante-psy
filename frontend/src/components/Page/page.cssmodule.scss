@@ -33,8 +33,9 @@
 }
 
 .textContainer {
-  color: var(--text-title-blue-france);
-  margin-top: 40px;
+  max-width: 1200px;
+  margin: auto;
+  padding: 24px;
   overflow-wrap: anywhere;
 }
 
