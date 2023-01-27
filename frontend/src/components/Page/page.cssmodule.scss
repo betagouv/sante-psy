@@ -1,18 +1,35 @@
-.yellow {
-  background-color: var(--bg-yellow);
+@import 'src/variables.scss';
+
+.background {
+  background-color: $secondary-color;
+  padding-bottom: 64px;
 }
 
-.blue {
-  background-color: var(--bg-blue);
+.header {
+  background-color: $primary-color;
+  padding: 32px 32px 96px 32px;
+  margin-bottom: -48px;
+  >* {
+    max-width: 1200px;
+    margin: auto;
+  }
 }
 
 .container {
+  background-color: white;
+  max-width: 1200px;
+  padding: 24px;
   position: relative;
-  background: var(--grey-1000-75);
-  max-width: 800px;
   margin: auto;
-  padding: 24px 8px;
   box-shadow: 0 2px 7px 0 rgba(0,0,0,0.21);
+}
+
+.previousBreadCrumb {
+  color: #CACAFB;
+}
+
+.currentBreadCrumb a {
+  color: white !important;
 }
 
 .textContainer {
@@ -21,9 +38,21 @@
   overflow-wrap: anywhere;
 }
 
-.sectionTitle {
-  color: var(--text-title-blue-france);
-  text-align: center;
+.title {
+  color: white;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 65px;
+  margin-bottom: 12px;
+  b {
+    color: $primary-text-color;
+  }
+}
+
+.description {
+  color: white;
+  font-size: 28px;
+  line-height: 40px;
 }
 
 .tutorial {
@@ -33,12 +62,6 @@
   right: 32px;
   top: 32px;
   cursor: pointer;
-}
-
-@media (min-width: 768px) {
-  .container {
-    padding: 24px;
-  }
 }
 
 @media (min-width: 992px) {

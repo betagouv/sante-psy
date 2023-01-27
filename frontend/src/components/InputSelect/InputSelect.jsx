@@ -11,6 +11,7 @@ const InputSelect = ({
   options,
   selected,
   onChange,
+  placeholder,
 }) => {
   const selectId = useRef(id || uuidv4());
   const optionsRef = useRef([]);
@@ -112,6 +113,7 @@ const InputSelect = ({
           onBlur={onInternalBlur}
           onKeyDown={onInternalKeyDown}
           value={internalLabel}
+          placeholder={placeholder}
         />
         <div
           ref={optionsContainerRef}
@@ -132,7 +134,7 @@ const InputSelect = ({
                 className={classNames(
                   styles.selectSearchOption,
                   !option.disabled && refCount === arrowSelected ? styles.selectSearchOption__selected : null,
-                  option.disabled ? styles.styles.selectSearchOption__disabled : null,
+                  option.disabled ? styles.selectSearchOption__disabled : null,
                 )}
                 disabled={option.disabled || false}
                 hidden={option.hidden || false}
