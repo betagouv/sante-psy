@@ -16,7 +16,6 @@ const Newsletter = () => {
         })
         .catch(e => {
           setNotification({ type: 'error', message: e.response.data });
-          setNotification(e.response.data, false, false);
         });
     }
   };

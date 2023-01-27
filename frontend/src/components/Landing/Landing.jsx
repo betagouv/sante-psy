@@ -33,7 +33,7 @@ const Landing = () => {
             {' '}
             <b>8 séances gratuites</b>
             {' '}
-            avec une psychologue partenaire
+            avec un psychologue partenaire
           </>
         )}
         buttonLink="/trouver-un-psychologue"
@@ -91,8 +91,6 @@ const Landing = () => {
             Rejoignez la communauté
             {' '}
             <b>Santé Psy Etudiant</b>
-            {' '}
-            ?
           </>
         )}
         description={(

@@ -29,9 +29,15 @@ const StudentCards = () => (
     />
     <StudentCard
       index={3}
-      title="Bénéficiez d’un suivi"
+      title="Bénéficiez de vos 8 séances gratuites"
       image="followup"
-      description="Prenez rendez-vous et bénéficiez jusqu’à 8 séances sans avance de frais"
+      description={(
+        <>
+          <b>sans avance de frais</b>
+          {' '}
+          de votre part
+        </>
+)}
     />
   </Row>
 );
