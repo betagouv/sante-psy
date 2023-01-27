@@ -11,6 +11,7 @@ import Tutorial from 'components/Tutorial/Tutorial';
 import Announcement from 'components/Notification/Announcement';
 import { useStore } from 'stores/';
 
+import Statistics from 'components/Landing/Statistics';
 import FaqSection from './FaqSection';
 
 import styles from './page.cssmodule.scss';
@@ -35,6 +36,7 @@ const Page = ({
   children,
   textContent,
   withContact,
+  withStats,
   tutorial,
   breadCrumbs,
   currentBreadCrumb,
@@ -98,6 +100,7 @@ const Page = ({
           </div>
         </div>
         {withContact && <FaqSection />}
+        {withStats && <Statistics />}
       </Tutorial>
     </>
   );

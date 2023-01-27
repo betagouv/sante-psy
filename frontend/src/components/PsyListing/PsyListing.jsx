@@ -195,6 +195,7 @@ const PsyListing = () => {
 
   return (
     <Page
+      withStats
       breadCrumbs={[{ href: '/', label: 'Accueil' }]}
       title={(
         <>
