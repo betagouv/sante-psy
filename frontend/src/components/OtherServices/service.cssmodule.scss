@@ -1,0 +1,41 @@
+.services {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: -24px
+}
+
+.service {
+  position: relative;
+  background-color: white;
+  display: flex;
+  max-width: 550px;
+}
+
+.serviceContent {
+  padding: 32px;
+}
+
+.name {
+  margin: 16px 0 12px 0;
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+}
+
+.description,
+.title {
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.title {
+  margin-bottom: 0;
+  font-weight: 700;
+}
+
+.button {
+  position: absolute;
+  bottom: 32px;
+}

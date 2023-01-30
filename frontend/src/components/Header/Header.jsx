@@ -16,22 +16,23 @@ import {
 import { useStore } from 'stores/';
 
 const defaultItems = [
-  { key: 'header-default-link-1', title: 'Comment ça marche ?', link: '/' },
-  { key: 'header-default-link-3', title: 'Foire aux questions', link: '/faq' },
-  { key: 'header-default-link-4', title: 'Nous contacter', link: '/contact' },
+  { title: 'Comment ça marche ?', link: '/' },
+  { title: 'Foire aux questions', link: '/faq' },
+  { title: 'Nous contacter', link: '/contact' },
+  { title: 'Autres services', link: '/autres-services' },
 ];
 
 const connectedItems = [
-  { key: 'header-connected-link-1', title: 'Déclarer mes séances', link: '/psychologue/mes-seances' },
-  { key: 'header-connected-link-2', title: 'Gérer mes étudiants', link: '/psychologue/mes-etudiants' },
+  { title: 'Déclarer mes séances', link: '/psychologue/mes-seances' },
+  { title: 'Gérer mes étudiants', link: '/psychologue/mes-etudiants' },
   {
-    key: 'header-connected-link-3',
+
     title: 'Gérer mes facturations',
     link: '/psychologue/mes-remboursements',
     id: 'billing-header',
   },
   {
-    key: 'header-connected-link-4',
+
     title: 'Mes informations',
     link: '/psychologue/mon-profil',
     id: 'informations-header',
@@ -90,18 +91,18 @@ const Header = () => {
           ? connectedItems.map(item => (
             <NavItem
               id={item.id}
-              key={item.key}
+              key={item.title}
               current={location.pathname && location.pathname.startsWith(item.link)}
               title={item.title}
-              asLink={<Link data-test-id={item.key} to={item.link} />}
+              asLink={<Link data-test-id={item.title} to={item.link} />}
             />
           ))
           : defaultItems.map(item => (
             <NavItem
-              key={item.key}
+              key={item.title}
               current={location.pathname && location.pathname === item.link}
               title={item.title}
-              asLink={<Link data-test-id={item.key} to={item.link} />}
+              asLink={<Link data-test-id={item.title} to={item.link} />}
             />
           ))}
       </HeaderNav>

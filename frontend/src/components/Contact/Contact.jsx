@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button, Select, TextInput, RadioGroup, Radio, Row, Col } from '@dataesr/react-dsfr';
+import { Button, Select, TextInput, RadioGroup, Radio } from '@dataesr/react-dsfr';
 
 import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
