@@ -77,10 +77,9 @@ const Page = ({
             </div>
             )}
             {breadCrumbs && (
-            <Breadcrumb>
+            <Breadcrumb className={styles.breadCrumbs}>
               {breadCrumbs.map(breadCrumb => (
                 <BreadcrumbItem
-                  className={styles.previousBreadCrumb}
                   key={breadCrumb.label}
                   href={breadCrumb.href}
                 >
