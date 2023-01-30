@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, Row, Col, TextInput, Alert, Callout, CalloutText } from '@dataesr/react-dsfr';
+import { Checkbox, Row, Col, TextInput, Alert } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';

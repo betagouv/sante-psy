@@ -4,12 +4,9 @@ const { signConvention } = require('./utils/psychologist');
 
 describe('Header Test', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/config')
-      .as('config');
-    cy.intercept('GET', '/api/connecteduser')
-      .as('connectedUser');
-    cy.intercept('GET', '/api/statistics')
-      .as('statistics');
+    cy.intercept('GET', '/api/config').as('config');
+    cy.intercept('GET', '/api/connecteduser').as('connectedUser');
+    cy.intercept('GET', '/api/statistics').as('statistics');
   });
 
   describe('User NOT connected', () => {
@@ -34,19 +31,16 @@ describe('Header Test', () => {
 
       it('should display correct nav items', () => {
         // Connected nav is not present
-        cy.get('[data-test-id="header-connected-link-1"]').should('not.exist');
-        cy.get('[data-test-id="header-connected-link-2"]').should('not.exist');
-        cy.get('[data-test-id="header-connected-link-3"]').should('not.exist');
-        cy.get('[data-test-id="header-connected-link-4"]').should('not.exist');
+        cy.get('[data-test-id="Comment ça marche ?"]').should('not.exist');
+        cy.get('[data-test-id="Foire aux questions"]').should('not.exist');
+        cy.get('[data-test-id="Nous contacter"]').should('not.exist');
 
         // Public nav is visible and works
-        cy.get('[data-test-id="header-default-link-2"]').should('be.visible').click();
-        cy.location('pathname').should('eq', '/trouver-un-psychologue');
 
-        cy.get('[data-test-id="header-default-link-3"]').should('be.visible').click();
+        cy.get('[data-test-id="Foire aux questions"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/faq');
 
-        cy.get('[data-test-id="header-default-link-1"]').should('be.visible').click();
+        cy.get('[data-test-id="Comment ça marche ?"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/');
       });
     });
@@ -86,9 +80,8 @@ describe('Header Test', () => {
 
       it('should display correct nav items', () => {
         // Public nav items not visible
-        cy.get('[data-test-id="header-default-link-1"]').should('not.be.visible');
-        cy.get('[data-test-id="header-default-link-2"]').should('not.be.visible');
-        cy.get('[data-test-id="header-default-link-3"]').should('not.be.visible');
+        cy.get('[data-test-id="Comment ça marche ?"]').should('not.be.visible');
+        cy.get('[data-test-id="Foire aux questions"]').should('not.be.visible');
 
         cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
         cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
@@ -99,25 +92,24 @@ describe('Header Test', () => {
           cy.get('@close-burger-menu').should('be.visible');
 
           // Connected nav is not present
-          cy.get('[data-test-id="header-connected-link-1"]').should('not.exist');
-          cy.get('[data-test-id="header-connected-link-2"]').should('not.exist');
-          cy.get('[data-test-id="header-connected-link-3"]').should('not.exist');
-          cy.get('[data-test-id="header-connected-link-4"]').should('not.exist');
+          cy.get('[data-test-id="Déclarer mes séances"]').should('not.exist');
+          cy.get('[data-test-id="Gérer mes étudiants"]').should('not.exist');
+          cy.get('[data-test-id="Gérer mes facturations"]').should('not.exist');
+          cy.get('[data-test-id="Mes informations"]').should('not.exist');
 
           // Public nav is visible and works
-          cy.get('[data-test-id="header-default-link-2"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/trouver-un-psychologue');
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="header-default-link-3"]').should('be.visible').click();
+          cy.get('[data-test-id="Foire aux questions"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/faq');
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="header-default-link-1"]').should('be.visible').click();
+          cy.get('[data-test-id="Comment ça marche ?"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/');
         });
       });
@@ -126,10 +118,8 @@ describe('Header Test', () => {
 
   describe('User connected', () => {
     beforeEach(() => {
-      cy.intercept('GET', '/api/appointments')
-        .as('appointments');
-      cy.intercept('POST', '/api/psychologist/logout')
-        .as('logout');
+      cy.intercept('GET', '/api/appointments').as('appointments');
+      cy.intercept('POST', '/api/psychologist/logout').as('logout');
 
       resetDB();
       loginAsDefault().then(() => signConvention(true));
@@ -164,21 +154,20 @@ describe('Header Test', () => {
 
       it('should display correct nav items', () => {
         // Public nav is not present
-        cy.get('[data-test-id="header-default-link-1"]').should('not.exist');
-        cy.get('[data-test-id="header-default-link-2"]').should('not.exist');
-        cy.get('[data-test-id="header-default-link-3"]').should('not.exist');
+        cy.get('[data-test-id="Comment ça marche ?"]').should('not.exist');
+        cy.get('[data-test-id="Foire aux questions"]').should('not.exist');
 
         // Connected nav is visible and works
-        cy.get('[data-test-id="header-connected-link-2"]').should('be.visible').click();
+        cy.get('[data-test-id="Gérer mes étudiants"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/psychologue/mes-etudiants');
 
-        cy.get('[data-test-id="header-connected-link-3"]').should('be.visible').click();
+        cy.get('[data-test-id="Gérer mes facturations"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/psychologue/mes-remboursements');
 
-        cy.get('[data-test-id="header-connected-link-4"]').should('be.visible').click();
+        cy.get('[data-test-id="Mes informations"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/psychologue/mon-profil');
 
-        cy.get('[data-test-id="header-connected-link-1"]').should('be.visible').click();
+        cy.get('[data-test-id="Déclarer mes séances"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/psychologue/mes-seances');
       });
     });
@@ -235,7 +224,7 @@ describe('Header Test', () => {
 
       it('should display correct nav items', () => {
         // Connected actions are not visible
-        cy.get('[data-test-id="header-connected-link-2"]').should('not.be.visible');
+        cy.get('[data-test-id="Gérer mes étudiants"]').should('not.be.visible');
 
         cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
         cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
@@ -246,30 +235,29 @@ describe('Header Test', () => {
           cy.get('@close-burger-menu').should('be.visible');
 
           // Public nav is not present
-          cy.get('[data-test-id="header-default-link-1"]').should('not.exist');
-          cy.get('[data-test-id="header-default-link-2"]').should('not.exist');
-          cy.get('[data-test-id="header-default-link-3"]').should('not.exist');
+          cy.get('[data-test-id="Comment ça marche ?"]').should('not.exist');
+          cy.get('[data-test-id="Foire aux questions"]').should('not.exist');
 
           // Connected nav is visible and works
-          cy.get('[data-test-id="header-connected-link-2"]').should('be.visible').click();
+          cy.get('[data-test-id="Gérer mes étudiants"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/psychologue/mes-etudiants');
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="header-connected-link-3"]').should('be.visible').click();
+          cy.get('[data-test-id="Gérer mes facturations"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/psychologue/mes-remboursements');
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="header-connected-link-4"]').should('be.visible').click();
+          cy.get('[data-test-id="Mes informations"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/psychologue/mon-profil');
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="header-connected-link-1"]').should('be.visible').click();
+          cy.get('[data-test-id="Déclarer mes séances"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/psychologue/mes-seances');
         });
       });
