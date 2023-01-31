@@ -24,6 +24,8 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
       otherLongitude: psy.otherLongitude,
       otherLatitude: psy.otherLatitude,
       languages: psy.languages,
+      email: psy.email,
+      phone: psy.phone,
     }))
     : psyList);
 };

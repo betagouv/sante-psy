@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Table, Button } from '@dataesr/react-dsfr';
+import { Table, Button, Pagination, Icon, Badge } from '@dataesr/react-dsfr';
+import styles from './psyTable.cssmodule.scss';
 
 const PsyTable = ({
   page,
@@ -110,27 +111,68 @@ const PsyTable = ({
     }
   }
 
+  const pageCount = Math.ceil(psychologists.length / 10);
   const currentPage = Math.min(page, Math.ceil(psychologists.length / 10));
   return (
     <div ref={table}>
       {psychologists.length > 0 ? (
-        <Table
-          data-test-id="psy-table"
-          className="fr-mb-3w"
-          caption={title}
-          rowKey="dossierNumber"
-          columns={columns}
-          data={psychologists}
-          pagination
-          paginationPosition="center"
-          page={currentPage}
-          perPage={10}
-          setPage={p => {
-            setPage(p);
-            table.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
-          }}
-          surrendingPages={surrendingPages}
-        />
+        <div className={styles.table}>
+          { psychologists.map(psychologist => (
+            <div className={styles.box} key={psychologist.dossierNumber}>
+              <div className={styles.personnalInfo}>
+                <Icon className={styles.userIcon} name="ri-user-line" size="2x" />
+                <div>
+                  <h6>
+                    {psychologist.lastName.toUpperCase()}
+                    {' '}
+                    {psychologist.firstNames}
+                  </h6>
+                  <div className={styles.personnalInfo}>
+                    <div>
+                      <Icon name="ri-map-pin-2-fill" size="lg" />
+                      <span>{psychologist.address}</span>
+                      {psychologist.otherAddress && <span>{psychologist.otherAddress}</span>}
+                    </div>
+                    {psychologist.teleconsultation && (
+                    <>
+                      <div className={styles.separator} />
+                      <Badge
+                        icon="ri-webcam-fill"
+                        text="Téléconsultation disponible"
+                        colorFamily="green-bourgeon"
+                      />
+                    </>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.contactInfo}>
+                <div
+                  onClick={() => { window.location.href = `mailto:${psychologist.email}`; }}
+                >
+                  <Icon name="ri-mail-fill" size="2x" />
+                </div>
+                <div className={styles.bigSeparator} />
+                <div
+                  onClick={() => { window.location.href = `tel:${psychologist.phone}`; }}
+                >
+                  <Icon name="ri-phone-fill" size="2x" />
+                </div>
+                <Button
+                  secondary
+                  onClick={() => goToProfile(psychologist)}
+                >
+                  Plus d&lsquo;info
+                </Button>
+              </div>
+            </div>
+          ))}
+          <Pagination
+            currentPage={currentPage}
+            surrendingPages={surrendingPages}
+            pageCount={pageCount}
+          />
+        </div>
       ) : noResult }
     </div>
   );

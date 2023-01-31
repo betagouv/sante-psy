@@ -1,0 +1,46 @@
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.box {
+  padding: 32px;
+  border: solid 1px #E5E5E5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userIcon {
+  color: #929292;
+}
+
+.name {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.contactInfo,
+.personnalInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.contactInfo {
+  color: var(--text-title-blue-france);  
+  span {
+    cursor: pointer;
+  }
+}
+
+.bigSeparator,
+.separator {
+  height: 16px;
+  border-right: solid 1px #E5E5E5;
+}
+
+.bigSeparator {
+  height: 56px;
+}
