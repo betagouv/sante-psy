@@ -45,10 +45,18 @@
   background-color: $secondary-color;
 }
 
+.onlyContent,
 .content {
   flex-grow: 1;
   margin: auto;
   padding: 0 64px;
+}
+
+.onlyContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 64px auto;
 }
 
 .title {

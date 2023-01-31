@@ -7,8 +7,6 @@ import { useStore } from 'stores/index';
 import StudentProcess from './StudentProcess';
 import Statistics from './Statistics';
 
-import styles from './landing.cssmodule.scss';
-
 import Newsletter from './Newsletter';
 
 const Landing = () => {
@@ -18,7 +16,7 @@ const Landing = () => {
   }, []);
 
   return (
-    <div className={styles.container} data-test-id="landingPageContainer">
+    <div data-test-id="landingPageContainer">
       <Slice
         imageSrc="/images/landing.png"
         title={(
@@ -102,7 +100,7 @@ const Landing = () => {
             Au programme : conseils, témoignages et accompagnement autour de la santé psychologique des étudiants.
           </>
         )}
-        buttonLink="/trouver-un-psychologue"
+        buttonLink="https://www.instagram.com/sante_psyetudiant/?hl=fr"
         buttonIcon="ri-instagram-line"
         buttonText="Santé Psy Etudiant sur Instagram"
       />

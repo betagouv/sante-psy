@@ -4,11 +4,22 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './slice.cssmodule.scss';
 
-const Slice = ({ color, title, description, buttonText, buttonLink, buttonIcon, hint, imageSrc, reverse, children }) => {
+const Slice = ({
+  color,
+  title,
+  description,
+  buttonText,
+  buttonLink,
+  buttonIcon,
+  hint,
+  imageSrc,
+  reverse,
+  children,
+}) => {
   const navigate = useNavigate();
   return (
     <div className={classNames(color ? styles[color] : styles.container, reverse ? styles.reverse : '')}>
-      <div className={styles.content}>
+      <div className={imageSrc ? styles.content : styles.onlyContent}>
         {title && (
         <h2 className={styles.title}>
           {title}
