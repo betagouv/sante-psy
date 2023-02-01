@@ -78,6 +78,10 @@ const PsyListing = () => {
         return false;
       }
 
+      if (languageFilter && !utils.matchFilter(psychologist.languages, languageFilter)) {
+        return false;
+      }
+
       if (addressFilter === AROUND_ME) {
         return true;
       }
@@ -102,10 +106,6 @@ const PsyListing = () => {
           || utils.matchFilter(psychologist.region, addressFilter)
         )
       ) {
-        return false;
-      }
-
-      if (languageFilter && !utils.matchFilter(psychologist.languages, languageFilter)) {
         return false;
       }
 
