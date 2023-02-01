@@ -12,12 +12,12 @@ import { Psychologist } from '../types/Psychologist';
 import db from './db';
 import { Coordinates } from '../types/Coordinates';
 
-const getAllAccepted = async (selectedData: string[]) : Promise<Psychologist[]> => {
+const getAllAccepted = async (selectedData: string[]): Promise<Psychologist[]> => {
   try {
     const psychologists = db.column(...selectedData)
-        .select()
-        .from(psychologistsTable)
-        .where('state', DossierState.accepte);
+      .select()
+      .from(psychologistsTable)
+      .where('state', DossierState.accepte);
     return psychologists;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
@@ -44,40 +44,52 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
   return updatedPsy;
 };
 
+const allActivePsychologistRequest = db.select([
+  'dossierNumber',
+  'lastName',
+  'adeli',
+  'firstNames',
+  'email',
+  'phone',
+  'website',
+  'teleconsultation',
+  'languages',
+  'description',
+  'address',
+  'longitude',
+  'latitude',
+  'city',
+  'postcode',
+  'otherAddress',
+  'otherLongitude',
+  'otherLatitude',
+  'otherCity',
+  'otherPostcode',
+  'departement',
+  'region',
+  'useFirstNames',
+  'useLastName',
+])
+  .select()
+  .from(psychologistsTable)
+  .whereNot('archived', true)
+  .where('state', DossierState.accepte)
+  .andWhere('active', true);
+
 const getAllActive = async (): Promise<Psychologist[]> => {
   try {
-    const psychologists = db.select([
-      'dossierNumber',
-      'lastName',
-      'adeli',
-      'firstNames',
-      'email',
-      'phone',
-      'website',
-      'teleconsultation',
-      'languages',
-      'description',
-      'address',
-      'longitude',
-      'latitude',
-      'city',
-      'postcode',
-      'otherAddress',
-      'otherLongitude',
-      'otherLatitude',
-      'otherCity',
-      'otherPostcode',
-      'departement',
-      'region',
-      'useFirstNames',
-      'useLastName',
-    ])
-        .select()
-        .from(psychologistsTable)
-        .whereNot('archived', true)
-        .where('state', DossierState.accepte)
-        .andWhere('active', true)
-        .orderByRaw('RANDOM()');
+    return allActivePsychologistRequest;
+  } catch (err) {
+    console.error('Impossible de récupérer les psychologistes', err);
+    throw new Error('Impossible de récupérer les psychologistes');
+  }
+};
+
+const getAllActiveByAvailability = async (isVeryAvailable: boolean): Promise<Psychologist[]> => {
+  try {
+    const psychologists = allActivePsychologistRequest
+      .andWhere('isVeryAvailable', isVeryAvailable)
+      .orderByRaw('RANDOM()');
     return psychologists;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
@@ -85,7 +97,7 @@ const getAllActive = async (): Promise<Psychologist[]> => {
   }
 };
 
-const getByIds = async (ids: string[]): Promise<{[key: string]: Psychologist}> => {
+const getByIds = async (ids: string[]): Promise<{ [key: string]: Psychologist }> => {
   try {
     const groupById = {};
     const psychologists = await db(psychologistsTable)
@@ -144,11 +156,11 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
 
       if (psyInDb.selfModified) {
         return db(psychologistsTable)
-        .where({ dossierNumber: psy.dossierNumber })
-        .update({
-          ...nonEditablePsyFields(psy),
-          updatedAt,
-        });
+          .where({ dossierNumber: psy.dossierNumber })
+          .update({
+            ...nonEditablePsyFields(psy),
+            updatedAt,
+          });
       }
 
       let coordinates: Coordinates;
@@ -157,20 +169,20 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
       }
 
       return db(psychologistsTable)
-      .where({ dossierNumber: psy.dossierNumber })
-      .update({
-        ...editablePsyFields({
-          ...psy,
-          ...(coordinates && {
-            longitude: coordinates.longitude,
-            latitude: coordinates.latitude,
-            city: coordinates.city,
-            postcode: coordinates.postcode,
+        .where({ dossierNumber: psy.dossierNumber })
+        .update({
+          ...editablePsyFields({
+            ...psy,
+            ...(coordinates && {
+              longitude: coordinates.longitude,
+              latitude: coordinates.latitude,
+              city: coordinates.city,
+              postcode: coordinates.postcode,
+            }),
           }),
-        }),
-        ...nonEditablePsyFields(psy),
-        updatedAt,
-      });
+          ...nonEditablePsyFields(psy),
+          updatedAt,
+        });
     } catch (err) {
       console.error(`Error to insert ${psy}`, err);
       return Promise.resolve();
@@ -187,17 +199,17 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
 };
 
 const countByArchivedAndState = async ()
-  : Promise<{count: number, archived: boolean, state: DossierState}[]> => db(psychologistsTable)
-  .select('archived', 'state')
-  .count('*')
-  .groupBy('archived', 'state');
+  : Promise<{ count: number, archived: boolean, state: DossierState }[]> => db(psychologistsTable)
+    .select('archived', 'state')
+    .count('*')
+    .groupBy('archived', 'state');
 
 const countAcceptedByPersonalEmail = async ()
-  : Promise<{count: number, personalEmail: string, state: DossierState}[]> => db(psychologistsTable)
-.select('personalEmail', 'state')
-.where('state', DossierState.accepte)
-.count('*')
-.groupBy('personalEmail', 'state');
+  : Promise<{ count: number, personalEmail: string, state: DossierState }[]> => db(psychologistsTable)
+    .select('personalEmail', 'state')
+    .where('state', DossierState.accepte)
+    .count('*')
+    .groupBy('personalEmail', 'state');
 
 const getAcceptedByEmail = async (email: string): Promise<Psychologist> => db(psychologistsTable)
   .where('state', DossierState.accepte)
@@ -236,20 +248,23 @@ const updateConventionInfo = async (
   return updated;
 };
 
-const getConventionInfo = async (psychologistId: string)
-  : Promise<{universityName: string, universityId: string, isConventionSigned: boolean}> => db.from(psychologistsTable)
-    .select(
-      `${'universities'}.name as universityName`,
-      `${'universities'}.id as universityId`,
-      `${psychologistsTable}.isConventionSigned`,
-    )
-    .innerJoin(
-      'universities',
-      `${psychologistsTable}.assignedUniversityId`,
-      `${'universities'}.id`,
-    )
-    .where(`${psychologistsTable}.dossierNumber`, psychologistId)
-    .first();
+const getConventionInfo = async (psychologistId: string): Promise<{
+  universityName: string,
+  universityId: string,
+  isConventionSigned: boolean
+}> => db.from(psychologistsTable)
+  .select(
+    `${'universities'}.name as universityName`,
+    `${'universities'}.id as universityId`,
+    `${psychologistsTable}.isConventionSigned`,
+  )
+  .innerJoin(
+    'universities',
+    `${psychologistsTable}.assignedUniversityId`,
+    `${'universities'}.id`,
+  )
+  .where(`${psychologistsTable}.dossierNumber`, psychologistId)
+  .first();
 
 const deleteConventionInfo = async (email: string): Promise<number> => db
   .from(psychologistsTable)
@@ -293,36 +308,36 @@ const suspend = async (
   reason: string,
 ): Promise<void> => db.transaction((trx) => {
   const updateRequest = db(psychologistsTable)
-      .transacting(trx)
-      .where({ dossierNumber })
-      .update({
-        active: false,
-        inactiveUntil,
-      });
+    .transacting(trx)
+    .where({ dossierNumber })
+    .update({
+      active: false,
+      inactiveUntil,
+    });
   const createRequest = db(suspensionReasonsTable)
-      .transacting(trx)
-      .insert({
-        psychologistId: dossierNumber,
-        reason,
-        until: inactiveUntil,
-      });
+    .transacting(trx)
+    .insert({
+      psychologistId: dossierNumber,
+      reason,
+      until: inactiveUntil,
+    });
 
   Promise.all([updateRequest, createRequest])
-      .then(() => {
-        trx.commit();
-        console.log(`Psychologue ${dossierNumber} suspendu jusqu'au ${inactiveUntil}`);
-      })
-      .catch((err) => {
-        trx.rollback();
-        console.error('Erreur de suspension du psychologue', err);
-        throw new Error('Erreur de suspension du psychologue');
-      });
+    .then(() => {
+      trx.commit();
+      console.log(`Psychologue ${dossierNumber} suspendu jusqu'au ${inactiveUntil}`);
+    })
+    .catch((err) => {
+      trx.rollback();
+      console.error('Erreur de suspension du psychologue', err);
+      throw new Error('Erreur de suspension du psychologue');
+    });
 });
 
 const reactivate = async (): Promise<number> => db(psychologistsTable)
-    .where({ active: false })
-    .andWhere('inactiveUntil', '<=', (new Date()).toISOString())
-    .update({ active: true, inactiveUntil: null });
+  .where({ active: false })
+  .andWhere('inactiveUntil', '<=', (new Date()).toISOString())
+  .update({ active: true, inactiveUntil: null });
 
 const inactive = async (
   token: string,
@@ -367,6 +382,7 @@ const seeTutorial = async (dossierNumber: string): Promise<number> => {
 };
 
 export default {
+  getAllActiveByAvailability,
   getAllActive,
   getById,
   getAcceptedByEmail,

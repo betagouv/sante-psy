@@ -44,6 +44,7 @@ export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
     createdAt: Date,
     useFirstNames?: string,
     useLastName?: string,
+    isVeryAvailable?: boolean,
   };
 
 export type DSPsychologist = {
