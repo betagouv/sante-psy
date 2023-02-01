@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import classnames from 'classnames';
 import { Button, TextInput } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
@@ -10,7 +9,6 @@ import { useStore } from 'stores/';
 import trackAds from 'services/trackAds';
 import Statistics from './Statistics';
 
-import landingStyles from './landing.cssmodule.scss';
 import studentStyles from './studentProcess.cssmodule.scss';
 import StudentCards from './StudentCards';
 import FollowInstagram from './FollowInstagram';
@@ -109,8 +107,8 @@ const StudentLanding = () => {
   };
 
   return (
-    <div className={classnames(landingStyles.container, 'fr-container')} data-test-id="landingPageContainer">
-      <div className={landingStyles.sectionAlt}>
+    <div className="fr-container" data-test-id="landingPageContainer">
+      <div>
         <div className={studentStyles.container}>
           <h1 className={studentStyles.title}>
             <div>Étudiants,</div>
@@ -141,10 +139,10 @@ const StudentLanding = () => {
           <StudentCards />
         </div>
       </div>
-      <div className={landingStyles.section}>
+      <div>
         <Statistics />
       </div>
-      <div className={landingStyles.sectionLight}>
+      <div>
         <FollowInstagram />
       </div>
     </div>
