@@ -248,23 +248,24 @@ const updateConventionInfo = async (
   return updated;
 };
 
-const getConventionInfo = async (psychologistId: string): Promise<{
-  universityName: string,
-  universityId: string,
-  isConventionSigned: boolean
-}> => db.from(psychologistsTable)
-  .select(
-    `${'universities'}.name as universityName`,
-    `${'universities'}.id as universityId`,
-    `${psychologistsTable}.isConventionSigned`,
-  )
-  .innerJoin(
-    'universities',
-    `${psychologistsTable}.assignedUniversityId`,
-    `${'universities'}.id`,
-  )
-  .where(`${psychologistsTable}.dossierNumber`, psychologistId)
-  .first();
+const getConventionInfo = async (psychologistId: string)
+  : Promise<{
+    universityName: string,
+    universityId: string,
+    isConventionSigned: boolean
+  }> => db.from(psychologistsTable)
+    .select(
+      `${'universities'}.name as universityName`,
+      `${'universities'}.id as universityId`,
+      `${psychologistsTable}.isConventionSigned`,
+    )
+    .innerJoin(
+      'universities',
+      `${psychologistsTable}.assignedUniversityId`,
+      `${'universities'}.id`,
+    )
+    .where(`${psychologistsTable}.dossierNumber`, psychologistId)
+    .first();
 
 const deleteConventionInfo = async (email: string): Promise<number> => db
   .from(psychologistsTable)
