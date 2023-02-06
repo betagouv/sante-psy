@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, Row, Col, TextInput, Alert } from '@dataesr/react-dsfr';
+import { Checkbox, Row, TextInput, Alert } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
@@ -223,68 +223,59 @@ const PsyListing = () => {
       {psychologists && (
         <>
           <div className="fr-pb-6w fr-mt-2w">
-            <Row gutters>
-              <Col n="lg-3 md-6 sm-12">
+            <div className={styles.filters}>
+              <div className={styles.number}>
                 <b>
                   {filteredPsychologists.length}
                   {' '}
                   résultats
                 </b>
-              </Col>
-              <Col n="lg-3 md-6 sm-12" className={styles.input}>
+              </div>
+              <div className={styles.input}>
                 <TextInput
-                  className="fr-mb-1w"
                   value={nameFilter}
                   onChange={e => setNameFilter(e.target.value)}
                   placeholder="Rechercher par nom"
                 />
-              </Col>
-              <Col n="lg-3 md-6 sm-12" className={styles.input}>
+              </div>
+              <div className={styles.input}>
                 <InputSelect
-                  className="fr-mb-1w"
                   selected={addressFilter}
                   onChange={e => setAddressFilter(e)}
                   placeholder="Ville, code postal ou région"
                   options={[{ value: AROUND_ME, label: AROUND_ME }]}
                 />
-              </Col>
-            </Row>
-            <Row gutters>
-              <Col n="lg-3 md-6 sm-12" className={styles.input}>
+              </div>
+              <div className={styles.input}>
                 <TextInput
-                  className="fr-mb-1w"
                   value={languageFilter}
                   onChange={e => setLanguageFilter(e.target.value)}
                   placeholder="Langue parlée"
                 />
-              </Col>
-              <Col n="lg-4 md-6 sm-12" className={styles.input}>
-                {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
-                  <Alert
-                    className="fr-mt-1w"
-                    type="error"
-                    description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette
+              </div>
+              <Checkbox
+                value="teleconsultation"
+                onChange={e => { setTeleconsultation(e.target.checked); }}
+                label="Téléconsultation"
+                checked={teleconsultation}
+              />
+            </div>
+            <Row>
+              {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
+              <Alert
+                className="fr-mt-2w"
+                type="error"
+                description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette
                     fonctionnalité."
-                  />
-                )}
-                {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.UNSUPPORTED && (
-                  <Alert
-                    className="fr-mt-1w"
-                    type="error"
-                    description="Votre navigateur ne permet pas d'utiliser cette fonctionnalité."
-                  />
-                )}
-              </Col>
-            </Row>
-            <Row gutters>
-              <Col n="md-6 sm-12" className={styles.input}>
-                <Checkbox
-                  value="teleconsultation"
-                  onChange={e => { setTeleconsultation(e.target.checked); }}
-                  label="Téléconsultation"
-                  checked={teleconsultation}
-                />
-              </Col>
+              />
+              )}
+              {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.UNSUPPORTED && (
+              <Alert
+                className="fr-mt-1w"
+                type="error"
+                description="Votre navigateur ne permet pas d'utiliser cette fonctionnalité."
+              />
+              )}
             </Row>
           </div>
           {!window.localStorage.getItem('alert-psy-listing') && (

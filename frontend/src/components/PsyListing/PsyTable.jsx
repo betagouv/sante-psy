@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Pagination, Icon, Badge } from '@dataesr/react-dsfr';
 import styles from './psyTable.cssmodule.scss';
@@ -50,13 +50,18 @@ const PsyTable = ({
     return () => window.removeEventListener('resize', updateSurrendingPages);
   }, []);
 
+  const pagedPsychologists = useMemo(() => {
+    const start = (page - 1) * 10;
+    return psychologists.slice(start, start + 10);
+  }, [psychologists, page]);
+
   const pageCount = Math.ceil(psychologists.length / 10);
   const currentPage = Math.min(page, Math.ceil(psychologists.length / 10));
   return (
     <div ref={table}>
       {psychologists.length > 0 ? (
         <div className={styles.table}>
-          { psychologists.map(psychologist => (
+          { pagedPsychologists.map(psychologist => (
             <div className={styles.box} key={psychologist.dossierNumber}>
               <div className={styles.personnalInfo}>
                 <Icon className={styles.userIcon} name="ri-user-line" size="2x" />
