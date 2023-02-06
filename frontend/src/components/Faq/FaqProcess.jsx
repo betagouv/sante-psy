@@ -5,7 +5,7 @@ import { ButtonGroup, Icon } from '@dataesr/react-dsfr';
 import styles from './faqProcess.cssmodule.scss';
 
 const FaqProcess = ({ links, simplified }) => (
-  <ButtonGroup isInlineFrom="xs" align="center" className="fr-mt-6w">
+  <ButtonGroup isInlineFrom="xs" align="center" className="fr-mt-2w">
     {simplified ? (
       <div
         className={styles.link}

@@ -30,35 +30,42 @@ const FaqTab = ({ type, simplified }) => {
     <div data-test-id={`tabpanel-${type}`}>
       <Row spacing="mt-3w">
         <Col className={styles.sections}>
-          <Accordion>
-            {items[type].sections.flatMap(section => (
-              faq[section.name](config)
-                .filter(item => !simplified || item.frequent)
-                .map(item => (
-                  <AccordionItem
-                    onClick={close => {
-                      if (!close) {
-                        onOpenQuestion(item);
-                      }
-                    }}
-                    title={item.question}
-                    key={item.question}
-                  >
-                    <div
-                      className={styles.answer}
+          <Accordion className={simplified ? 'fr-mb-4w' : ''}>
+            {items[type].sections.map(section => (
+              <>
+                {!simplified && <h4>{section.title}</h4>}
+                <Accordion className={simplified ? '' : 'fr-mb-4w'}>
+                  {
+                    faq[section.name](config)
+                      .filter(item => !simplified || item.frequent)
+                      .map(item => (
+                        <AccordionItem
+                          onClick={close => {
+                            if (!close) {
+                              onOpenQuestion(item);
+                            }
+                          }}
+                          title={item.question}
+                          key={item.question}
+                        >
+                          <div
+                            className={styles.answer}
                       // eslint-disable-next-line react/no-danger
-                      dangerouslySetInnerHTML={{
-                        __html: sanitizeHtml(
-                          item.answer,
-                          {
-                            allowedTags: ['a', 'br', 'ul', 'li'],
-                            allowedAttributes: { a: ['href', 'target', 'rel'] },
-                          },
-                        ),
-                      }}
-                    />
-                  </AccordionItem>
-                ))
+                            dangerouslySetInnerHTML={{
+                              __html: sanitizeHtml(
+                                item.answer,
+                                {
+                                  allowedTags: ['a', 'br', 'ul', 'li'],
+                                  allowedAttributes: { a: ['href', 'target', 'rel'] },
+                                },
+                              ),
+                            }}
+                          />
+                        </AccordionItem>
+                      ))
+                  }
+                </Accordion>
+              </>
             ))}
           </Accordion>
         </Col>
