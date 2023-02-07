@@ -4,10 +4,8 @@
 .secondary,
 .white {
   display: flex;
-}
-
-.reverse {
-  flex-direction: row-reverse;
+  flex-direction: column-reverse;
+  justify-content: center;
 }
 
 .button {
@@ -19,6 +17,7 @@
 .container {
   background-color: $primary-color;
   color: white;
+
   h2 {
     color: white;
   }
@@ -31,44 +30,64 @@
 .white,
 .secondary {
   color: black;
-  h2 b {
-    display: inline;
-    box-shadow: inset 0 -9px var(--grey-1000-75), inset 0 -21px $primary-text-color;
-  }
 }
 
 .white {
   background-color: white;
+
+  h2 b {
+    display: inline;
+    box-shadow: inset 0 -9px white, inset 0 -21px $primary-text-color;
+  }
 }
 
 .secondary {
   background-color: $secondary-color;
+
+  h2 b {
+    display: inline;
+    box-shadow: inset 0 -9px $secondary-color, inset 0 -21px $primary-text-color;
+  }
 }
 
 .onlyContent,
 .content {
   flex-grow: 1;
   margin: auto;
-  padding: 0 64px;
+  padding: 32px 16px;
 }
 
 .onlyContent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 64px auto;
+  margin: auto;
 }
 
 .title {
-  font-size: 56px;
+  font-size: 40px;
   font-weight: 700;
-  line-height: 63px;
+  line-height: 48px;
   margin-bottom: 32px;
 }
 
+.centerText {
+  text-align: center;
+
+  .title {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .button {
+    margin: auto;
+    margin-bottom: 16px;
+  }
+}
+
 .description {
-  font-size: 28px;
-  line-height: 40px;
+  font-size: 20px;
+  line-height: 32px;
   margin-bottom: 32px;
 }
 
@@ -78,5 +97,61 @@
 }
 
 .image {
-  width: 50%;
+  width: 100%;
+}
+
+@media (min-width: 769px) {
+
+  .container,
+  .secondary,
+  .white {
+    flex-direction: row;
+  }
+
+  .reverse {
+    flex-direction: row-reverse;
+  }
+
+  .onlyContent,
+  .content {
+    padding: 0 64px;
+  }
+
+  .onlyContent {
+    margin: 64px auto;
+  }
+
+  .title {
+    font-size: 56px;
+    line-height: 63px;
+  }
+
+  .description {
+    font-size: 28px;
+    line-height: 40px;
+  }
+
+  .hint {
+    font-size: 18px;
+    line-height: 23px;
+  }
+
+  .centerText {
+    text-align: left;
+
+    .title {
+      font-size: 56px;
+      line-height: 63px;
+    }
+
+    .button {
+      margin: 0;
+      margin-bottom: 16px;
+    }
+  }
+
+
+  .image {
+    width: 50%;
+  }
 }

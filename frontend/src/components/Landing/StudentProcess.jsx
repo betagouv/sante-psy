@@ -6,6 +6,7 @@ import StudentCards from './StudentCards';
 const StudentProcess = () => (
   <Slice
     color="secondary"
+    centerText
     title={(
       <>
         Échangez

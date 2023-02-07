@@ -15,20 +15,27 @@ const Slice = ({
   imageSrc,
   reverse,
   children,
+  centerText = false,
 }) => {
   const navigate = useNavigate();
   return (
-    <div className={classNames(color ? styles[color] : styles.container, reverse ? styles.reverse : '')}>
+    <div
+      className={classNames(
+        color ? styles[color] : styles.container,
+        reverse ? styles.reverse : '',
+        centerText ? styles.centerText : '',
+      )}
+    >
       <div className={imageSrc ? styles.content : styles.onlyContent}>
         {title && (
-        <h2 className={styles.title}>
-          {title}
-        </h2>
+          <h2 className={styles.title}>
+            {title}
+          </h2>
         )}
         {description && (
-        <div className={styles.description}>
-          {description}
-        </div>
+          <div className={styles.description}>
+            {description}
+          </div>
         )}
         {buttonText && buttonLink && (
           <div className={styles.button}>

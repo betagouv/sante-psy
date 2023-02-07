@@ -52,6 +52,7 @@ const Landing = () => {
         color="white"
         reverse
         imageSrc="/images/teleconsultation.png"
+        centerText
         title={(
           <>
             Avez-vous pensé à
@@ -84,6 +85,7 @@ const Landing = () => {
       <Slice
         color="white"
         imageSrc="/images/communaute.png"
+        centerText
         title={(
           <>
             Rejoignez la communauté
@@ -106,6 +108,7 @@ const Landing = () => {
       />
       <Slice
         color="secondary"
+        centerText
         title={(
           <>
             Besoin d’
@@ -128,6 +131,7 @@ const Landing = () => {
       </Slice>
       <Slice
         imageSrc="/images/demarches-simplifiees.png"
+        reverse
         title={(
           <>
             Vous êtes
@@ -146,7 +150,7 @@ const Landing = () => {
             {' '}
             <b>3 minutes</b>
           </>
-)}
+        )}
       />
     </div>
   );
