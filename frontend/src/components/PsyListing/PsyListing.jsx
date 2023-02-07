@@ -205,18 +205,7 @@ const PsyListing = () => {
         </>
       )}
       description={psychologists
-        ? (
-          <>
-            Trouvez le ou la psychologue qui vous convient parmi les
-            {` ${psychologists.length} `}
-            référencés.
-            Munissez-vous
-            {' '}
-            <b>obligatoirement</b>
-            {' '}
-            d’une lettre d’orientation de votre médecin lors du rendez-vous.
-          </>
-        )
+        ? 'Parmi plus de 1 000 psychologues partenaires partout en France'
         : 'Chargement de la liste des psychologues'}
       dataTestId="psyListPage"
     >
@@ -228,7 +217,7 @@ const PsyListing = () => {
                 <b>
                   {filteredPsychologists.length}
                   {' '}
-                  résultats
+                  {filteredPsychologists.length === 1 ? 'résultat' : 'résultats'}
                 </b>
               </div>
               <div className={styles.input}>
