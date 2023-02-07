@@ -71,7 +71,9 @@ const getAddress = (): {
     departement: string,
     region: string,
     longitude: number,
-    latitude: number
+    latitude: number,
+    city: string,
+    postcode: string,
   } => {
   const rand = faker.datatype.number() % 5;
   switch (rand) {
@@ -82,6 +84,8 @@ const getAddress = (): {
       region: 'Ile-de-France',
       longitude: 2.308880,
       latitude: 48.850570,
+      city: null,
+      postcode: null,
     };
   case 1:
     return {
@@ -90,6 +94,8 @@ const getAddress = (): {
       region: 'Nouvelle-Aquitaine',
       longitude: -0.575710,
       latitude: 44.848660,
+      city: null,
+      postcode: null,
     };
   case 2:
     return {
@@ -98,6 +104,8 @@ const getAddress = (): {
       region: 'Auvergne-Rhône-Alpes',
       longitude: 5.720050,
       latitude: 45.179540,
+      city: null,
+      postcode: null,
     };
   default:
     return {
@@ -106,6 +114,8 @@ const getAddress = (): {
       region: 'Normandie',
       longitude: -0.073080,
       latitude: 49.126301,
+      city: null,
+      postcode: null,
     };
   }
 };

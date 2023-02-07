@@ -11,9 +11,13 @@ export type EditablePsychologist = {
     address: string,
     longitude?: number,
     latitude?: number,
+    city: string,
+    postcode: string,
     otherAddress?: string,
     otherLongitude?: number,
     otherLatitude?: number,
+    otherCity?: string,
+    otherPostcode?: string,
     departement: string,
     region: string,
   };

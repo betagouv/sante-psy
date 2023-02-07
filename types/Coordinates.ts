@@ -1,6 +1,8 @@
 export type Coordinates = {
   longitude: number,
-  latitude: number
+  latitude: number,
+  city: string,
+  postcode: string
 }
 
 export type CoordinatesAPI = {
@@ -10,7 +12,9 @@ export type CoordinatesAPI = {
     },
     properties: {
       score: number,
-      label: string
+      label: string,
+      city: string,
+      postcode: string
     },
   }[],
 }
