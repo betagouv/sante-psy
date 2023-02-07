@@ -109,9 +109,13 @@ describe('DS integration tests', () => {
     departement: '2B - Haute-Corse',
     longitude: null, // api-adresse.data.gouv.fr is mocked in test
     latitude: null, // api-adresse.data.gouv.fr is mocked in test
+    city: null,
+    postcode: null,
     otherAddress: null,
     otherLongitude: null,
     otherLatitude: null,
+    otherCity: null,
+    otherPostcode: null,
     region: 'Corse',
     phone: '01 23 45 67 89',
     website: '',
@@ -138,9 +142,13 @@ describe('DS integration tests', () => {
     region: null, // not matching 99
     longitude: null, // api-adresse.data.gouv.fr is mocked in test
     latitude: null, // api-adresse.data.gouv.fr is mocked in test
+    city: null,
+    postcode: null,
     otherAddress: null,
     otherLongitude: null,
     otherLatitude: null,
+    otherCity: null,
+    otherPostcode: null,
     phone: '01',
     website: '',
     teleconsultation: false,

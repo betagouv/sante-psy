@@ -25,9 +25,13 @@ export const editablePsyFields = (psy: Psychologist): EditablePsychologist => ({
   address: psy.address,
   longitude: psy.longitude,
   latitude: psy.latitude,
+  city: psy.city,
+  postcode: psy.postcode,
   otherAddress: psy.otherAddress,
   otherLongitude: psy.otherLongitude,
   otherLatitude: psy.otherLatitude,
+  otherCity: psy.otherCity,
+  otherPostcode: psy.otherPostcode,
 });
 
 export const nonEditablePsyFields = (psy: Psychologist): NonEditablePsychologist => ({

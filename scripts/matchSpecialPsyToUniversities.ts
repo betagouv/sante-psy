@@ -3,6 +3,7 @@ import dbUniversities from '../db/universities';
 import dbPsychologists from '../db/psychologists';
 import { psychologistsTable } from '../db/tables';
 import psyToUni from './psyToUni';
+import { DossierState } from '../types/DossierState';
 
 /**
  * Update a list of special psy from a excel sheet to match them with a university
@@ -23,7 +24,8 @@ const matchPsyToUni = async (dryRun): Promise<void> => {
 
     const universities = await dbUniversities.getAll();
     const psyFromDb = await db.column('personalEmail', 'dossierNumber', 'assignedUniversityId')
-      .select().from(psychologistsTable);
+      .select().from(psychologistsTable)
+      .where('state', DossierState.accepte);
 
     Object.keys(psyToUni).forEach((psyFromFile) => {
       const psyFoundInDb = psyFromDb.find((psy) => psy.personalEmail === psyFromFile);

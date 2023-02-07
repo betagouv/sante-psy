@@ -29,9 +29,13 @@ describe('psyProfileController', () => {
         'address',
         'longitude',
         'latitude',
+        'city',
+        'postcode',
         'otherAddress',
         'otherLongitude',
         'otherLatitude',
+        'otherCity',
+        'otherPostcode',
         'departement',
         'region',
       ];
