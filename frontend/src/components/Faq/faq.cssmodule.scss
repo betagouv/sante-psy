@@ -1,0 +1,16 @@
+.simplifiedTitle {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+  margin: 24px 0;
+  text-align: center;
+}
+
+
+@media (min-width: 769px) {
+  .simplifiedTitle {
+    font-size: 56px;
+    line-height: 63px;
+    margin: 64px auto;
+  }
+}

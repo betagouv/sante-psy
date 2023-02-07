@@ -72,17 +72,20 @@ const PsyTable = ({
                   </h6>
                   <div className={styles.personnalInfo}>
                     <div>
-                      <Icon className='fr-mr-1w' name="ri-map-pin-2-fill" size="lg" />
-                      <span>{
-                        psychologist.city 
-                        ? `${psychologist.city} • ${psychologist.postcode}` 
-                        : psychologist.address
-                      }</span>
-                      {psychologist.otherCity && psychologist.otherCity !== psychologist.city && <>
-                          <span className={styles.separator} />
-                          <span>{`${psychologist.otherCity} • ${psychologist.otherPostcode}`}</span>
-                        </>
+                      <Icon className="fr-mr-1w" name="ri-map-pin-2-fill" size="lg" />
+                      <span>
+                        {
+                        psychologist.city
+                          ? `${psychologist.city} • ${psychologist.postcode}`
+                          : psychologist.address
                       }
+                      </span>
+                      {psychologist.otherCity && psychologist.otherCity !== psychologist.city && (
+                      <>
+                        <span className={styles.separator} />
+                        <span>{`${psychologist.otherCity} • ${psychologist.otherPostcode}`}</span>
+                      </>
+                      )}
                     </div>
                     {psychologist.teleconsultation && (
                     <>

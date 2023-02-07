@@ -7,16 +7,18 @@ const StudentProcess = () => (
   <Slice
     color="secondary"
     centerText
+    centerTitle
     title={(
       <>
         Échangez
         {' '}
         <b>gratuitement</b>
+        <br />
         {' '}
         avec un psychologue
       </>
     )}
-    description="Comment ça marche ?"
+    description="Comment ça marche&#x00A0;?"
   >
     <StudentCards />
   </Slice>

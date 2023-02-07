@@ -26,7 +26,7 @@ const footerBottomLinks = [
   { key: 'footer-bottom-link-legal', title: 'Mentions légales', link: '/mentions-legales' },
   { key: 'footer-bottom-link-cgu', title: "Conditions générales d'utilisation", link: '/cgu' },
   { key: 'footer-bottom-link-privacy', title: 'Politique de confidentialité', link: '/politique-de-confidentialite' },
-  { key: 'footer-bottom-link-stats', title: 'Nos statistiques', link: '/stats' },
+  { key: 'footer-bottom-link-stats', title: 'Statistiques', link: '/stats' },
 ];
 
 const FooterDescription = () => (

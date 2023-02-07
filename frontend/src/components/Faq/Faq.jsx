@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react';
+import classNames from 'classnames';
 
 import { Tabs, Tab } from '@dataesr/react-dsfr';
 
@@ -10,6 +11,8 @@ import FaqTab from 'components/Faq/FaqTab';
 import items from 'services/faq/items';
 
 import { useStore } from 'stores/';
+
+import styles from './faq.cssmodule.scss';
 
 const Faq = ({ simplified }) => {
   const tabsRef = useRef(null);
@@ -58,7 +61,9 @@ const Faq = ({ simplified }) => {
       textContent
     >
       <div ref={tabsRef}>
-        <h1>{simplified ? 'Questions fréquentes' : 'Foire aux questions'}</h1>
+        <h1 className={classNames(simplified ? styles.simplifiedTitle : '')}>
+          {simplified ? 'Questions fréquentes' : 'Foire aux questions'}
+        </h1>
         <Tabs defaultActiveTab={getDefaultTab()}>
           <Tab label={smallText ? 'Étudiant' : 'Je suis étudiant'}>
             <FaqTab type="etudiant" simplified={simplified} />
@@ -67,9 +72,9 @@ const Faq = ({ simplified }) => {
             <FaqTab type="psychologue" simplified={simplified} />
           </Tab>
           {!simplified && (
-          <Tab label={smallText ? 'Médecin' : 'Je suis médecin'}>
-            <FaqTab type="medecin" simplified={simplified} />
-          </Tab>
+            <Tab label={smallText ? 'Médecin' : 'Je suis médecin'}>
+              <FaqTab type="medecin" simplified={simplified} />
+            </Tab>
           )}
         </Tabs>
       </div>

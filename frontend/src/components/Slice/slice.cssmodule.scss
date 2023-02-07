@@ -37,7 +37,7 @@
 
   h2 b {
     display: inline;
-    box-shadow: inset 0 -9px white, inset 0 -21px $primary-text-color;
+    box-shadow: inset 0 -4px white, inset 0 -14px $primary-text-color;
   }
 }
 
@@ -46,7 +46,7 @@
 
   h2 b {
     display: inline;
-    box-shadow: inset 0 -9px $secondary-color, inset 0 -21px $primary-text-color;
+    box-shadow: inset 0 -4px $secondary-color, inset 0 -14px $primary-text-color;
   }
 }
 
@@ -85,6 +85,10 @@
   }
 }
 
+.centerTitle {
+  text-align: center;
+}
+
 .description {
   font-size: 20px;
   line-height: 32px;
@@ -108,13 +112,29 @@
     flex-direction: row;
   }
 
+  .white {
+    h2 b {
+      box-shadow: inset 0 -9px white, inset 0 -21px $primary-text-color;
+    }
+  }
+  
+  .secondary {
+    h2 b {
+      box-shadow: inset 0 -9px $secondary-color, inset 0 -21px $primary-text-color;
+    }
+  }
+
   .reverse {
     flex-direction: row-reverse;
   }
 
   .onlyContent,
   .content {
-    padding: 0 64px;
+    padding: 0;
+  }
+
+  .content {
+    max-width: 600px;
   }
 
   .onlyContent {
@@ -129,6 +149,7 @@
   .description {
     font-size: 28px;
     line-height: 40px;
+    max-width: 800px;
   }
 
   .hint {
@@ -149,7 +170,6 @@
       margin-bottom: 16px;
     }
   }
-
 
   .image {
     width: 50%;

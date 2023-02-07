@@ -11,11 +11,13 @@ const Slice = ({
   buttonText,
   buttonLink,
   buttonIcon,
+  buttonSecondary,
   hint,
   imageSrc,
   reverse,
   children,
-  centerText = false,
+  centerText,
+  centerTitle,
 }) => {
   const navigate = useNavigate();
   return (
@@ -28,7 +30,7 @@ const Slice = ({
     >
       <div className={imageSrc ? styles.content : styles.onlyContent}>
         {title && (
-          <h2 className={styles.title}>
+          <h2 className={classNames(styles.title, centerTitle ? styles.centerTitle : '')}>
             {title}
           </h2>
         )}
@@ -40,7 +42,7 @@ const Slice = ({
         {buttonText && buttonLink && (
           <div className={styles.button}>
             <Button
-              secondary={!color}
+              secondary={!color || buttonSecondary}
               icon={buttonIcon}
               onClick={() => navigate(buttonLink)}
             >

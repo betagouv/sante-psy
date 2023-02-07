@@ -2,25 +2,19 @@
 
 .bigContainer,
 .container {
-    text-align: center;
-    width: 384px;
-    height: 603px;
-    border: 1px solid var(--blue-france-sun-113-625);
-    border-radius: 4px;
-    background: var(--grey-1000-75);
-    box-shadow: 0 2px 7px 0 rgba(0,0,0,0.21);
-    padding: 24px;
-
-    b {
-      color: black;
-      box-shadow: unset;
-    }
-}
-
-.bigContainer {
-  width: 400px;
+  text-align: center;
+  width: 345px;
   height: fit-content;
-  padding: 64px 32px;
+  border: 1px solid var(--blue-france-sun-113-625);
+  border-radius: 4px;
+  background: var(--grey-1000-75);
+  box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.21);
+  padding: 24px;
+
+  b {
+    color: black;
+    box-shadow: unset;
+  }
 }
 
 .index {
@@ -36,7 +30,7 @@
 }
 
 .image {
-    margin: 32px auto;
+  margin: 32px auto;
 }
 
 .bigTitle,
@@ -47,7 +41,7 @@
   margin-bottom: 12px;
 }
 
-.bigTitle{
+.bigTitle {
   font-size: 40px;
   line-height: 48px;
   margin-bottom: 40px;
@@ -62,4 +56,19 @@
 .hint {
   font-size: 14px;
   line-height: 18px;
+}
+
+@media (min-width: 769px) {
+
+  .bigContainer,
+  .container {
+    width: 384px;
+    height: 603px;
+  }
+
+  .bigContainer {
+    width: 400px;
+    height: fit-content;
+    padding: 64px 32px;
+  }
 }

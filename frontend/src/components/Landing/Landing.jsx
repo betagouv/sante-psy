@@ -22,7 +22,7 @@ const Landing = () => {
         title={(
           <>
             <div><b>Étudiants, étudiantes</b></div>
-            Besoin d’une oreille attentive ?
+            Besoin d’une oreille attentive&#x00A0;?
           </>
         )}
         description={(
@@ -58,8 +58,7 @@ const Landing = () => {
             Avez-vous pensé à
             {' '}
             <b>téléconsulter</b>
-            {' '}
-            ?
+            &#x00A0;?
           </>
         )}
         description={(
@@ -99,12 +98,14 @@ const Landing = () => {
             {' '}
             <b>8 000 abonnés sur Instagram.</b>
             {' '}
-            Au programme : conseils, témoignages et accompagnement autour de la santé psychologique des étudiants.
+            Au programme&#x00A0;: conseils, témoignages et accompagnement
+            autour de la santé psychologique des étudiants.
           </>
         )}
         buttonLink="https://www.instagram.com/sante_psyetudiant/?hl=fr"
         buttonIcon="ri-instagram-line"
         buttonText="Santé Psy Etudiant sur Instagram"
+        buttonSecondary
       />
       <Slice
         color="secondary"
@@ -113,8 +114,7 @@ const Landing = () => {
           <>
             Besoin d’
             <b>en savoir plus</b>
-            {' '}
-            ?
+            &#x00A0;?
           </>
         )}
         description={(
@@ -137,8 +137,7 @@ const Landing = () => {
             Vous êtes
             {' '}
             <b>psychologue</b>
-            {' '}
-            ?
+            &#x00A0;?
           </>
         )}
         description="Rejoignez le programme d‘accompagnement psychologique des étudiants"
