@@ -60,9 +60,13 @@ const getAllActive = async (): Promise<Psychologist[]> => {
       'address',
       'longitude',
       'latitude',
+      'city',
+      'postcode',
       'otherAddress',
       'otherLongitude',
       'otherLatitude',
+      'otherCity',
+      'otherPostcode',
       'departement',
       'region',
       'useFirstNames',
@@ -131,6 +135,8 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
           ...(coordinates && {
             longitude: coordinates.longitude,
             latitude: coordinates.latitude,
+            city: coordinates.city,
+            postcode: coordinates.postcode,
           }),
         });
         return Promise.resolve();
@@ -158,6 +164,8 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
           ...(coordinates && {
             longitude: coordinates.longitude,
             latitude: coordinates.latitude,
+            city: coordinates.city,
+            postcode: coordinates.postcode,
           }),
         }),
         ...nonEditablePsyFields(psy),

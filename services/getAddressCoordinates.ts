@@ -20,13 +20,17 @@ const getAddressCoordinates = async (address: string): Promise<Coordinates> => {
   if (response && response.data.features && response.data.features.length > 0) {
     const feature = response.data.features[0];
     const [longitude, latitude] = feature.geometry.coordinates;
-    const { score, label } = feature.properties;
+    const {
+      score, label, postcode, city,
+    } = feature.properties;
     console.debug(`"${firstAddress}" ; "${label}" ; "${score}"`);
 
     if (score > config.minScoreAddress) {
       return Promise.resolve({
         longitude,
         latitude,
+        postcode,
+        city,
       });
     }
     // Insufficient score

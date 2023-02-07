@@ -42,9 +42,13 @@ const get = async (req: Request, res: Response): Promise<void> => {
     active,
     longitude,
     latitude,
+    city,
+    postcode,
     otherAddress,
     otherLongitude,
     otherLatitude,
+    otherCity,
+    otherPostcode,
     useFirstNames,
     useLastName,
   } = psychologist;
@@ -62,9 +66,13 @@ const get = async (req: Request, res: Response): Promise<void> => {
     address,
     longitude,
     latitude,
+    city,
+    postcode,
     otherAddress,
     otherLongitude,
     otherLatitude,
+    otherCity,
+    otherPostcode,
     departement,
     region,
     personalEmail: extraInfo ? psychologist.personalEmail : undefined,
@@ -138,6 +146,8 @@ const update = async (req: Request, res: Response): Promise<void> => {
       coordinates = {
         longitude: psychologist.longitude,
         latitude: psychologist.latitude,
+        city: psychologist.city,
+        postcode: psychologist.postcode,
       };
     }
     if (psychologist.otherAddress !== req.body.otherAddress) {
@@ -146,6 +156,9 @@ const update = async (req: Request, res: Response): Promise<void> => {
       otherCoordinates = {
         longitude: psychologist.otherLongitude,
         latitude: psychologist.otherLatitude,
+        city: psychologist.otherCity,
+        postcode: psychologist.otherPostcode,
+
       };
     }
   }
@@ -156,8 +169,12 @@ const update = async (req: Request, res: Response): Promise<void> => {
     region,
     longitude: coordinates ? coordinates.longitude : null,
     latitude: coordinates ? coordinates.latitude : null,
+    city: coordinates ? coordinates.city : null,
+    postcode: coordinates ? coordinates.postcode : null,
     otherLongitude: otherCoordinates ? otherCoordinates.longitude : null,
     otherLatitude: otherCoordinates ? otherCoordinates.latitude : null,
+    otherCity: otherCoordinates ? otherCoordinates.city : null,
+    otherPostcode: otherCoordinates ? otherCoordinates.postcode : null,
   });
 
   res.json({
