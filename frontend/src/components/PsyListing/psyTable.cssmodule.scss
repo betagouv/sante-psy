@@ -34,10 +34,10 @@
 .personnalInfo {
   display: flex;
   align-items: center;
-  gap: 16px;
 }
 
 .contactInfo {
+  gap: 16px;
   color: var(--text-title-blue-france);  
   span {
     cursor: pointer;
@@ -48,6 +48,9 @@
 .separator {
   height: 16px;
   border-right: solid 1px #E5E5E5;
+}
+.separator {
+  margin: 0 8px;
 }
 
 .bigSeparator {
