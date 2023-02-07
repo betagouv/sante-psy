@@ -278,15 +278,11 @@ const PsyListing = () => {
               )}
             </Row>
           </div>
-          {!window.localStorage.getItem('alert-psy-listing') && (
           <Alert
             type="warning"
             title="Vous n‘avez aucune avance de frais à prévoir"
             description="Le psychologue ne doit en aucun cas vous demander un complément financier ou une avance."
-            closable
-            onClose={() => window.localStorage.setItem('alert-psy-listing', 'closed')}
           />
-          )}
           <PsyTable
             page={page}
             setPage={setPage}

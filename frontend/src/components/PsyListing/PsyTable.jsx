@@ -11,7 +11,6 @@ const PsyTable = ({
   addressFilter,
   languageFilter,
   teleconsultation,
-  noResult,
 }) => {
   const [surrendingPages, setSurrendingPages] = useState(0);
   const navigate = useNavigate();
@@ -59,7 +58,7 @@ const PsyTable = ({
   const currentPage = Math.min(page, Math.ceil(psychologists.length / 10));
   return (
     <div ref={table}>
-      {psychologists.length > 0 ? (
+      {psychologists.length > 0 && (
         <div className={styles.table}>
           { pagedPsychologists.map(psychologist => (
             <div className={styles.box} key={psychologist.dossierNumber}>
@@ -118,7 +117,7 @@ const PsyTable = ({
             onClick={setPage}
           />
         </div>
-      ) : noResult }
+      ) }
     </div>
   );
 };
