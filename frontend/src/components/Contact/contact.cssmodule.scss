@@ -5,11 +5,12 @@
 
   div {
     flex-grow: 1;
-    max-width: calc(50% - 16px);
+    width: calc(50% - 16px);
     min-width: 320px;
   }
 
   .fullWidthInput {
     max-width: 100%;
+    min-width: 100%;
   }
 }
