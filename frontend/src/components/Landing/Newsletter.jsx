@@ -24,7 +24,7 @@ const Newsletter = () => {
       ? <Alert type={notification.type} title={notification.message} />
       : (
         <div className={styles.container}>
-          <img src="/images/newsletter.svg" alt="Newsletter" />
+          <img src="/images/newsletter.svg" alt="Newsletter" className={styles.logo} />
           <div className={styles.separator} />
           <form
             className={styles.form}
