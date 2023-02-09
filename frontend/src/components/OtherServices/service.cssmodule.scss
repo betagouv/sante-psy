@@ -10,7 +10,8 @@
   position: relative;
   background-color: white;
   display: flex;
-  max-width: 550px;
+  flex-direction: column;
+  max-width: 460px;
 }
 
 .serviceContent {
@@ -35,7 +36,14 @@
   font-weight: 700;
 }
 
-.button {
-  position: absolute;
-  bottom: 32px;
+@media (min-width: 769px) {
+  .service {
+    flex-direction: row;
+    max-width: 550px;
+  }
+
+  .button {
+    position: absolute;
+    bottom: 32px;
+  }
 }
