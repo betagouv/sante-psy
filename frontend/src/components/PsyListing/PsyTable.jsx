@@ -70,7 +70,7 @@ const PsyTable = ({
                     {' '}
                     {psychologist.firstNames}
                   </h6>
-                  <div className={styles.personnalInfo}>
+                  <div className={styles.addressInfo}>
                     <div>
                       <Icon className="fr-mr-1w" name="ri-map-pin-2-fill" size="lg" />
                       <span>
@@ -89,8 +89,9 @@ const PsyTable = ({
                     </div>
                     {psychologist.teleconsultation && (
                     <>
-                      <div className={styles.separator} />
+                      <div className={styles.optionalSeparator} />
                       <Badge
+                        className={styles.badge}
                         icon="ri-webcam-fill"
                         text="Téléconsultation disponible"
                         colorFamily="green-bourgeon"
@@ -100,6 +101,7 @@ const PsyTable = ({
                   </div>
                 </div>
               </div>
+              <div className={styles.horizontalSeparator} />
               <div className={styles.contactInfo}>
                 <div
                   onClick={() => { window.location.href = `mailto:${psychologist.email}`; }}

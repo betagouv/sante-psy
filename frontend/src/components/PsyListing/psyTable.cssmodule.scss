@@ -12,13 +12,10 @@
   padding: 32px;
   border: solid 1px #E5E5E5;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.columnBox {
   flex-direction: column;
   align-items: flex-start;
+  justify-content: space-between;
+  gap: 0 16px;
 }
 
 .userIcon {
@@ -31,28 +28,75 @@
 }
 
 .contactInfo,
-.personnalInfo {
+.personnalInfo,
+.addressInfo {
   display: flex;
-  align-items: center;
+}
+
+.addressInfo {
+  flex-direction: column;
+  gap: 16px 0;
 }
 
 .contactInfo {
   gap: 16px;
   color: var(--text-title-blue-france);  
+  align-items: center;
   span {
     cursor: pointer;
   }
 }
 
+.horizontalSeparator {
+  border-top: solid 1px #E5E5E5;
+  width: 100%;
+  margin: 32px 0;
+}
+
 .bigSeparator,
+.optionalSeparator,
 .separator {
-  height: 16px;
   border-right: solid 1px #E5E5E5;
 }
+
+.optionalSeparator,
 .separator {
   margin: 0 8px;
 }
 
+.optionalSeparator {
+  display: none;
+}
+
 .bigSeparator {
   height: 56px;
+}
+
+.badge {
+  flex-shrink: 0;
+}
+
+@media (min-width: 769px) {
+  .box {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .horizontalSeparator {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .personnalInfo {
+    align-items: center;
+  }  
+
+  .addressInfo {
+    flex-direction: row;
+  }
+
+  .optionalSeparator {
+    display: block;
+  }
 }
