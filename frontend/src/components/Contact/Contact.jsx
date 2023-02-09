@@ -146,17 +146,19 @@ const Contact = () => {
             selected={reason}
             onChange={e => setReason(e.target.value)}
           />
+          <TextInput
+            data-test-id="message-input"
+            className={styles.fullWidthInput}
+            required
+            textarea
+            hint="Merci de ne fournir que les données personnelles strictement nécessaires au traitement de la demande. "
+            label="Message"
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+          />
         </div>
-        <TextInput
-          data-test-id="message-input"
-          required
-          textarea
-          hint="Merci de ne fournir que les données personnelles strictement nécessaires au traitement de la demande. "
-          label="Message"
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-        />
         <Button
+          className="fr-mt-4w"
           data-test-id="submit-button"
           submit
         >
