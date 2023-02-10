@@ -1,13 +1,25 @@
 .container {
-    font-size: 24px;
-    line-height: 23px;
+    font-size: 20px;
+    line-height: 28px;
     text-align: center;
 }
 
 .value {
-  font-size: 56px;
-  line-height: 90px;
+  font-size: 48px;
+  line-height: 56px;
     b {
       color: white;
     }
+}
+
+@media (min-width: 769px) {
+  .container {
+    font-size: 24px;
+    line-height: 23px;
+  }
+
+  .value {
+    font-size: 56px;
+    line-height: 63px;
+  }  
 }

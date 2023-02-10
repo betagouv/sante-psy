@@ -6,7 +6,7 @@
 
 .header {
   background-color: $primary-color;
-  padding: 32px 32px 96px 32px;
+  padding: 16px 16px 96px 16px;
   margin-bottom: -48px;
   >* {
     max-width: 1200px;
@@ -75,6 +75,10 @@
 }
 
 @media (min-width: 769px) {
+  .header {
+    padding: 32px 32px 96px 32px;
+  }
+
   .background {
     padding-bottom: 64px;
   }
