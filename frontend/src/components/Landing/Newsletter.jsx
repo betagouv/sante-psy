@@ -11,8 +11,8 @@ const Newsletter = () => {
     event.preventDefault();
     if (email) {
       agent.Student.sendMail(email)
-        .then(data => {
-          setNotification({ type: 'success', message: data });
+        .then(response => {
+          setNotification({ type: 'success', message: response.data.message });
         })
         .catch(e => {
           setNotification({ type: 'error', message: e.response.data });
@@ -21,7 +21,7 @@ const Newsletter = () => {
   };
   return (
     notification
-      ? <Alert type={notification.type} title={notification.message} />
+      ? <Alert className={styles.alert} type={notification.type} title={notification.message} />
       : (
         <div className={styles.container}>
           <img src="/images/newsletter.svg" alt="Newsletter" className={styles.logo} />

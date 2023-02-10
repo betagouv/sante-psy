@@ -11,9 +11,10 @@ const CGU = () => {
   return (
     <Page
       title="Conditions Générales d’Utilisation"
-      background="blue"
+      withoutHeader
       textContent
     >
+      <h1>Conditions Générales d’Utilisation</h1>
       <p>
         Les présentes conditions générales d’utilisation (dites « CGU ») fixent le cadre juridique du dispositif
         « Santé Psy Étudiant » définissent les conditions d’accès et d’utilisation des services par l’Utilisateur.

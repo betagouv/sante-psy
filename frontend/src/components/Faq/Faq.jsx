@@ -57,6 +57,7 @@ const Faq = ({ simplified }) => {
       title="FAQ"
       className="faqPage"
       dataTestId="faqPage"
+      breadCrumbs={!simplified && [{ href: '/', label: 'Accueil' }]}
       withoutHeader
       textContent
     >

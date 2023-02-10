@@ -40,7 +40,7 @@ const Landing = () => {
           <>
             Plus de
             {' '}
-            <b>35 000 étudiants</b>
+            <b>40 000 étudiants</b>
             {' '}
             déjà accompagnés
           </>
@@ -88,7 +88,7 @@ const Landing = () => {
         title={(
           <>
             Rejoignez la communauté
-            {' '}
+            <br />
             <b>Santé Psy Etudiant</b>
           </>
         )}

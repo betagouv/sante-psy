@@ -3,8 +3,7 @@
 }
 
 .input {
-  width: 20%;
-  min-width: 270px;
+  width: 100%;
 }
 
 .filters {
@@ -18,5 +17,12 @@
   padding: 0 !important;
   &::before {
     margin-top: 0 !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .input {
+    width: 20%;
+    min-width: 270px;
   }
 }

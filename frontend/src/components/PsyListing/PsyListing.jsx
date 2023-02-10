@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, Row, TextInput, Alert } from '@dataesr/react-dsfr';
+import { Checkbox, TextInput, Alert } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
@@ -205,7 +205,7 @@ const PsyListing = () => {
         </>
       )}
       description={psychologists
-        ? 'Parmi plus de 1 000 psychologues partenaires partout en France'
+        ? 'Parmi plus de 1 200 psychologues partenaires partout en France'
         : 'Chargement de la liste des psychologues'}
       dataTestId="psyListPage"
     >
@@ -249,23 +249,21 @@ const PsyListing = () => {
                 checked={teleconsultation}
               />
             </div>
-            <Row>
-              {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
+            {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
               <Alert
                 className="fr-mt-2w"
                 type="error"
                 description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette
                     fonctionnalité."
               />
-              )}
-              {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.UNSUPPORTED && (
+            )}
+            {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.UNSUPPORTED && (
               <Alert
                 className="fr-mt-1w"
                 type="error"
                 description="Votre navigateur ne permet pas d'utiliser cette fonctionnalité."
               />
-              )}
-            </Row>
+            )}
           </div>
           <Alert
             type="warning"

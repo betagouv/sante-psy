@@ -18,23 +18,26 @@ const FaqProcess = ({ links, simplified }) => (simplified ? (
   </div>
 )
   : (
-    <ButtonGroup isInlineFrom="xs" align="center" className="fr-mt-2w">
-      {links.map(link => (
-        <div
-          className={styles.link}
-          key={link.title}
-        >
-          <a
-            className={classnames('fr-btn fr-btn--secondary')}
-            href={`${__API__}${link.href}`}
-            target="_blank"
-            rel="noreferrer"
+    <>
+      <h4>Supports téléchargeables</h4>
+      <ButtonGroup isInlineFrom="xs" align="left" className="fr-mt-2w">
+        {links.map(link => (
+          <div
+            className={styles.link}
+            key={link.title}
           >
-            {link.title}
-          </a>
-        </div>
-      ))}
-    </ButtonGroup>
+            <a
+              className={classnames('fr-btn fr-btn--secondary')}
+              href={`${__API__}${link.href}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {link.title}
+            </a>
+          </div>
+        ))}
+      </ButtonGroup>
+    </>
   ));
 
 export default FaqProcess;

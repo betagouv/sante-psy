@@ -44,7 +44,13 @@ const Slice = ({
             <Button
               secondary={!color || buttonSecondary}
               icon={buttonIcon}
-              onClick={() => navigate(buttonLink)}
+              onClick={() => {
+                if (buttonLink.startsWith('/')) {
+                  navigate(buttonLink);
+                } else {
+                  window.open(buttonLink, '_blank');
+                }
+              }}
             >
               {buttonText}
             </Button>

@@ -132,7 +132,7 @@ const Contact = () => {
           <Select
             data-test-id="reason-select"
             required
-            label="Motif"
+            label="Sujet"
             options={[
               { value: '', label: '- Selectionner la raison de votre message -', disabled: true, hidden: true },
               { value: 'éligibilité', label: 'Éligibilité' },
@@ -162,7 +162,7 @@ const Contact = () => {
           data-test-id="submit-button"
           submit
         >
-          Envoyer un message
+          Envoyer
         </Button>
       </form>
     </Page>

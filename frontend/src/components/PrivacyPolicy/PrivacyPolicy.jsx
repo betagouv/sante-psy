@@ -99,9 +99,10 @@ const PrivacyPolicy = () => {
   return (
     <Page
       title="Politique de confidentialité"
-      background="blue"
+      withoutHeader
       textContent
     >
+      <h1>Politique de confidentialité</h1>
       <Section title="Traitement des données à caractère personnel">
         <p>
           Le présent site Santé Psy Étudiant est à l&lsquo;initiative de

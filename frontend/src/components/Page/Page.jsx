@@ -13,6 +13,7 @@ import { useStore } from 'stores/';
 
 import Statistics from 'components/Landing/Statistics';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 import FaqSection from './FaqSection';
 
 import styles from './page.cssmodule.scss';
@@ -53,6 +54,24 @@ const Page = ({
     document.title = `${getNodeText(title)} - Santé Psy Étudiant`;
   }, []);
 
+  const breadCrumbsComponent = breadCrumbs ? (
+    <Breadcrumb className={withoutHeader ? styles.breadCrumbsWithoutHeader : styles.breadCrumbs}>
+      {breadCrumbs.map(breadCrumb => (
+        <BreadcrumbItem
+          key={breadCrumb.label}
+          asLink={<Link to={breadCrumb.href} />}
+        >
+          {breadCrumb.label}
+        </BreadcrumbItem>
+      ))}
+      <BreadcrumbItem
+        className={styles.currentBreadCrumb}
+      >
+        {currentBreadCrumb || getNodeText(title)}
+      </BreadcrumbItem>
+    </Breadcrumb>
+  ) : null;
+
   return (
     <>
       {withNotification && <Announcement />}
@@ -63,41 +82,28 @@ const Page = ({
       >
         <div className={classNames(className, styles.background)} data-test-id={dataTestId}>
           {!withoutHeader && (
-          <div className={styles.header}>
-            {tutorial && (
-            <div
-              id="launch-tutorial"
-              data-test-id="launch-tutorial"
-              className={styles.tutorial}
-              onClick={() => setTutoStatus({ run: true, stepIndex: 0 })}
-            >
-              <Icon
-                name="fr-fi-information-fill"
-              />
-            </div>
-            )}
-            {breadCrumbs && (
-            <Breadcrumb className={styles.breadCrumbs}>
-              {breadCrumbs.map(breadCrumb => (
-                <BreadcrumbItem
-                  key={breadCrumb.label}
-                  href={breadCrumb.href}
-                >
-                  {breadCrumb.label}
-                </BreadcrumbItem>
-              ))}
-              <BreadcrumbItem
-                className={styles.currentBreadCrumb}
+            <div className={styles.header}>
+              {tutorial && (
+              <div
+                id="launch-tutorial"
+                data-test-id="launch-tutorial"
+                className={styles.tutorial}
+                onClick={() => setTutoStatus({ run: true, stepIndex: 0 })}
               >
-                {currentBreadCrumb || getNodeText(title)}
-              </BreadcrumbItem>
-            </Breadcrumb>
-            )}
-            <h1 className={styles.title}>{title}</h1>
-            {description && <p className={styles.description}>{description}</p>}
-          </div>
+                <Icon
+                  name="fr-fi-information-fill"
+                />
+              </div>
+              )}
+              {breadCrumbsComponent}
+              <h1 className={styles.title}>{title}</h1>
+              {description && <p className={styles.description}>{description}</p>}
+            </div>
           )}
-          <div className={textContent ? styles.textContainer : styles.container}>{children}</div>
+          <div className={textContent ? styles.textContainer : styles.container}>
+            {withoutHeader && breadCrumbsComponent}
+            {children}
+          </div>
         </div>
         {withContact && <FaqSection />}
         {withStats && <Statistics />}
