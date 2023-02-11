@@ -61,7 +61,6 @@ const Login = () => {
           <b>Psychologues</b>
         </>
 )}
-      background="blue"
     >
       <Section
         title="Me connecter"

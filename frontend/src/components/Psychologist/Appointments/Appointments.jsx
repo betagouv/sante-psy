@@ -96,7 +96,7 @@ const Appointments = () => {
           className="fr-btn"
         >
           <div data-test-id="new-appointment-button">
-            <Icon size="md" name="ri-add-line" />
+            <Icon name="ri-add-line" />
             Nouvelle séance
           </div>
         </HashLink>

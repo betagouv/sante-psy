@@ -5,6 +5,7 @@
 }
 
 .header {
+  position: relative;
   background-color: $primary-color;
   padding: 16px 16px 96px 16px;
   margin-bottom: -48px;
@@ -61,7 +62,7 @@
 
 .tutorial {
   display: none;
-  color: var(--text-title-blue-france);
+  color: white;
   position: absolute;
   right: 32px;
   top: 32px;

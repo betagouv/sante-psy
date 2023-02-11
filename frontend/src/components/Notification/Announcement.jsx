@@ -47,7 +47,7 @@ const Announcement = () => {
   return shouldDisplayAnnouncement() ? (
     <div className={classNames('fr-container', styles.notification)}>
       <Notification onClose={onClose} type="info">
-        <div
+        <span
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
             __html: sanitizeHtml(

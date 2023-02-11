@@ -15,7 +15,7 @@ const NoResultPsyTable = ({ noResult = false, searchAroundMe, searchWithTelecons
         </h6>
       </div>
     </div>
-    <ButtonGroup className="fr-ml-6w" isInlineFrom="xs" align="flex-start">
+    <ButtonGroup className="fr-ml-6w" isInlineFrom="xs" align="left">
       <Button secondary icon="ri-map-pin-line" onClick={searchAroundMe}>Autour de vous</Button>
       <Button secondary icon="ri-computer-line" onClick={searchWithTeleconsultation}>Téléconsultation</Button>
     </ButtonGroup>

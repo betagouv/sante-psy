@@ -95,7 +95,6 @@ const PublicPsychologistProfile = () => {
       currentBreadCrumb={psychologist && `${psychologist.firstNames} ${psychologist.lastName.toUpperCase()}`}
       title={<b>Psychologue</b>}
       description={psychologist && `${psychologist.firstNames} ${psychologist.lastName.toUpperCase()}`}
-      background="yellow"
       dataTestId="publicPsyProfilePage"
     >
       {error && <Notification message={error} type="error" />}

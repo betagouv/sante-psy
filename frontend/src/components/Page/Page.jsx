@@ -8,7 +8,6 @@ import {
 } from '@dataesr/react-dsfr';
 
 import Tutorial from 'components/Tutorial/Tutorial';
-import Announcement from 'components/Notification/Announcement';
 import { useStore } from 'stores/';
 
 import Statistics from 'components/Landing/Statistics';
@@ -45,7 +44,6 @@ const Page = ({
   withoutHeader,
   className,
   dataTestId = null,
-  withNotification = false,
 }) => {
   const { userStore: { user } } = useStore();
   const [tutoStatus, setTutoStatus] = useState({ run: false, stepIndex: 0 });
@@ -73,42 +71,39 @@ const Page = ({
   ) : null;
 
   return (
-    <>
-      {withNotification && <Announcement />}
-      <Tutorial
-        tutoStatus={tutoStatus}
-        setTutoStatus={setTutoStatus}
-        id={user && !user.hasSeenTutorial ? 'global' : tutorial}
-      >
-        <div className={classNames(className, styles.background)} data-test-id={dataTestId}>
-          {!withoutHeader && (
-            <div className={styles.header}>
-              {tutorial && (
-              <div
-                id="launch-tutorial"
-                data-test-id="launch-tutorial"
-                className={styles.tutorial}
-                onClick={() => setTutoStatus({ run: true, stepIndex: 0 })}
-              >
-                <Icon
-                  name="fr-fi-information-fill"
-                />
-              </div>
-              )}
-              {breadCrumbsComponent}
-              <h1 className={styles.title}>{title}</h1>
-              {description && <p className={styles.description}>{description}</p>}
-            </div>
-          )}
-          <div className={textContent ? styles.textContainer : styles.container}>
-            {withoutHeader && breadCrumbsComponent}
-            {children}
+    <Tutorial
+      tutoStatus={tutoStatus}
+      setTutoStatus={setTutoStatus}
+      id={user && !user.hasSeenTutorial ? 'global' : tutorial}
+    >
+      <div className={classNames(className, styles.background)} data-test-id={dataTestId}>
+        {!withoutHeader && (
+        <div className={styles.header}>
+          {tutorial && (
+          <div
+            id="launch-tutorial"
+            data-test-id="launch-tutorial"
+            className={styles.tutorial}
+            onClick={() => setTutoStatus({ run: true, stepIndex: 0 })}
+          >
+            <Icon
+              name="fr-fi-information-fill"
+            />
           </div>
+          )}
+          {breadCrumbsComponent}
+          <h1 className={styles.title}>{title}</h1>
+          {description && <p className={styles.description}>{description}</p>}
         </div>
-        {withContact && <FaqSection />}
-        {withStats && <Statistics />}
-      </Tutorial>
-    </>
+        )}
+        <div className={textContent ? styles.textContainer : styles.container}>
+          {withoutHeader && breadCrumbsComponent}
+          {children}
+        </div>
+      </div>
+      {withContact && <FaqSection />}
+      {withStats && <Statistics />}
+    </Tutorial>
   );
 };
 

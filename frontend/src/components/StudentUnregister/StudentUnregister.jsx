@@ -15,7 +15,6 @@ const StudentUnregister = () => {
   return (
     <Page
       title=""
-      background="blue"
       description={(
         <>
           <div>Ta demande a bien été prise en compte ✅</div>
