@@ -68,12 +68,3 @@
 .__floater__open {
   z-index: 3500 !important;
 }
-
-.faqPage .fr-tabs {
-  background-color: white;
-}
-
-.faqPage .fr-tabs__list {
-  background-color: #fbf3f0;
-  padding-bottom: 0;
-}

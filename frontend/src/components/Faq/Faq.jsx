@@ -14,6 +14,8 @@ import { useStore } from 'stores/';
 
 import styles from './faq.cssmodule.scss';
 
+const BREAKPOINT_SM = 600;
+
 const Faq = ({ simplified }) => {
   const tabsRef = useRef(null);
   const [smallText, setSmallText] = useState(false);
@@ -36,7 +38,7 @@ const Faq = ({ simplified }) => {
   const getLabel = () => {
     if (tabsRef.current) {
       const { width } = tabsRef.current.getBoundingClientRect();
-      if (width < 600) {
+      if (width < BREAKPOINT_SM) {
         return setSmallText(true);
       }
     }
@@ -55,13 +57,12 @@ const Faq = ({ simplified }) => {
   return (
     <Page
       title="FAQ"
-      className="faqPage"
       dataTestId="faqPage"
       breadCrumbs={!simplified && [{ href: '/', label: 'Accueil' }]}
       withoutHeader
       textContent
     >
-      <div ref={tabsRef}>
+      <div className={styles.faq} ref={tabsRef}>
         <h1 className={classNames(simplified ? styles.simplifiedTitle : '')}>
           {simplified ? 'Questions fréquentes' : 'Foire aux questions'}
         </h1>

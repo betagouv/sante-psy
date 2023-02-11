@@ -55,7 +55,7 @@ const PsyTable = ({
   }, [psychologists, page]);
 
   const pageCount = Math.ceil(psychologists.length / 10);
-  const currentPage = Math.min(page, Math.ceil(psychologists.length / 10));
+  const currentPage = Math.min(page, pageCount);
   return (
     <div ref={table}>
       {psychologists.length > 0 && (
@@ -118,7 +118,7 @@ const PsyTable = ({
                   secondary
                   onClick={() => goToProfile(psychologist)}
                 >
-                  Plus d&lsquo;info
+                  Plus d&lsquo;infos
                 </Button>
               </div>
             </div>
