@@ -68,7 +68,7 @@ const Header = () => {
             )}
             {!user && !studentPage && (
               <ToolItem
-                asLink={<Link data-test-id="login-button" to="/trouver-un-psychologue" />}
+                asLink={<Link to="/trouver-un-psychologue" />}
                 icon="ri-search-line"
               >
                 Trouver un psychologue

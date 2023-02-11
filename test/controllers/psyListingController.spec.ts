@@ -62,6 +62,8 @@ describe('psyListingController', () => {
         'otherCity',
         'otherPostcode',
         'languages',
+        'email',
+        'phone',
       ]);
       expect(resultPsyActive1.firstNames).to.equals('Victor');
       expect(resultPsyActive1.lastName).to.equals('Hugo');
@@ -85,6 +87,8 @@ describe('psyListingController', () => {
         'otherCity',
         'otherPostcode',
         'languages',
+        'email',
+        'phone',
       ]);
       expect(resultPsyActive2.firstNames).to.equals('George');
       expect(resultPsyActive2.lastName).to.equals('Sand');

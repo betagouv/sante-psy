@@ -105,7 +105,6 @@
 }
 
 @media (min-width: 769px) {
-
   .container,
   .secondary,
   .white {
@@ -126,11 +125,6 @@
 
   .reverse {
     flex-direction: row-reverse;
-  }
-
-  .onlyContent,
-  .content {
-    padding: 0;
   }
 
   .content {

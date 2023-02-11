@@ -31,9 +31,10 @@ describe('Header Test', () => {
 
       it('should display correct nav items', () => {
         // Connected nav is not present
-        cy.get('[data-test-id="Comment ça marche ?"]').should('not.exist');
-        cy.get('[data-test-id="Foire aux questions"]').should('not.exist');
-        cy.get('[data-test-id="Nous contacter"]').should('not.exist');
+        cy.get('[data-test-id="Déclarer mes séances"]').should('not.exist');
+        cy.get('[data-test-id="Gérer mes étudiants"]').should('not.exist');
+        cy.get('[data-test-id="Gérer mes facturations"]').should('not.exist');
+        cy.get('[data-test-id="Mes informations"]').should('not.exist');
 
         // Public nav is visible and works
 
@@ -98,7 +99,8 @@ describe('Header Test', () => {
           cy.get('[data-test-id="Mes informations"]').should('not.exist');
 
           // Public nav is visible and works
-          cy.location('pathname').should('eq', '/trouver-un-psychologue');
+          cy.get('[data-test-id="Foire aux questions"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/faq');
         });
 
         cy.get('@open-burger-menu').click();
@@ -200,7 +202,7 @@ describe('Header Test', () => {
           cy.get('[data-test-id="my-space-button"]').should('not.exist');
           cy.get('[data-test-id="back-home-button"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/');
-          cy.get('@close-burger-menu').click();
+          cy.get('@close-burger-menu').should('not.be.visible');
         });
 
         cy.get('@open-burger-menu').click();
@@ -209,7 +211,7 @@ describe('Header Test', () => {
           cy.get('[data-test-id="back-home-button"]').should('not.exist');
           cy.get('[data-test-id="my-space-button"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/psychologue/mes-seances');
-          cy.get('@close-burger-menu').click();
+          cy.get('@close-burger-menu').should('not.be.visible');
         });
 
         cy.get('@open-burger-menu').click();
@@ -218,7 +220,7 @@ describe('Header Test', () => {
           cy.get('[data-test-id="logout-link"]').should('be.visible').click();
           cy.wait('@logout');
           cy.location('pathname').should('eq', '/');
-          cy.get('@close-burger-menu').click();
+          cy.get('@close-burger-menu').should('not.be.visible');
         });
       });
 

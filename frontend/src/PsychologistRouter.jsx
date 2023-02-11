@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';

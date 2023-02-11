@@ -59,9 +59,9 @@ const PsyTable = ({
   return (
     <div ref={table}>
       {psychologists.length > 0 && (
-        <div className={styles.table}>
+        <div className={styles.table} data-test-id="psy-table">
           { pagedPsychologists.map(psychologist => (
-            <div className={styles.box} key={psychologist.dossierNumber}>
+            <div className={styles.box} key={psychologist.dossierNumber} data-test-id="psy-row">
               <div className={styles.personnalInfo}>
                 <Icon className={styles.userIcon} name="ri-user-line" size="2x" />
                 <div>
@@ -115,6 +115,7 @@ const PsyTable = ({
                   <Icon name="ri-phone-fill" size="2x" />
                 </div>
                 <Button
+                  data-test-id="psy-table-row-profil-button"
                   secondary
                   onClick={() => goToProfile(psychologist)}
                 >

@@ -56,7 +56,7 @@ const PublicPsychologistProfile = () => {
     <>
       <div className={styles.separator} />
       <h5>Langues parlées</h5>
-      <div>
+      <div data-test-id="psy-info">
         {psychologist.languages}
       </div>
       {psychologist.longitude && psychologist.latitude && (
@@ -80,8 +80,8 @@ const PublicPsychologistProfile = () => {
       )}
       <h5>{psychologist.otherAddress ? 'Adresses' : 'Adress'}</h5>
       <div>
-        <div>{psychologist.address}</div>
-        <div>{psychologist.otherAddress}</div>
+        <div data-test-id="psy-info">{psychologist.address}</div>
+        <div data-test-id="psy-info">{psychologist.otherAddress}</div>
       </div>
     </>
   );
@@ -101,7 +101,7 @@ const PublicPsychologistProfile = () => {
       {psychologist && (
         <div className={styles.psyInfo}>
           <div className={styles.column}>
-            <h3 className={styles.title}>Présentation</h3>
+            <h3 className={styles.title} data-test-id="psy-info">Présentation</h3>
             <div>
               {psychologist.description}
             </div>
