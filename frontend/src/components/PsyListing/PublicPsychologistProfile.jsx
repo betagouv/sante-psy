@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Col, Row } from '@dataesr/react-dsfr';
+import { Alert, Badge, Button } from '@dataesr/react-dsfr';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 import Page from 'components/Page/Page';
@@ -38,19 +38,28 @@ const getZoomLevel = psychologist => {
   return 5;
 };
 
-const leftFields = [
-  { name: 'Présentation', value: 'description' },
-  {
-    name: 'Disponibilité de téléconsultation',
-    custom: psychologist => (
-      psychologist.teleconsultation
-        ? 'Téléconsultation possible'
-        : 'Pas de téléconsultation possible'
-    ),
-  },
-  { name: 'Langues parlées', value: 'languages' },
-  {
-    custom: psychologist => psychologist.longitude && psychologist.latitude && (
+const PublicPsychologistProfile = () => {
+  const { psyId } = useParams();
+  const [error, setError] = useState();
+  const [psychologist, setPsychologist] = useState();
+
+  useEffect(() => {
+    setError();
+    agent.Psychologist.getProfile(psyId)
+      .then(setPsychologist)
+      .catch(() => {
+        setError('Impossible de trouver les informations pour ce psychologue');
+      });
+  }, [psyId]);
+
+  const otherInfo = psychologist && (
+    <>
+      <div className={styles.separator} />
+      <h5>Langues parlées</h5>
+      <div>
+        {psychologist.languages}
+      </div>
+      {psychologist.longitude && psychologist.latitude && (
       <div className={styles.mapContainer}>
         <MapContainer
           center={[psychologist.latitude, psychologist.longitude]}
@@ -68,45 +77,14 @@ const leftFields = [
           )}
         </MapContainer>
       </div>
-    ),
-  },
-  { name: 'Adresse', value: 'address' },
-  { name: 'Autre adresse', value: 'otherAddress' },
-];
-
-const rightFields = [
-  { name: 'Téléphone', value: 'phone' },
-  { name: 'Adresse email', value: 'email' },
-  {
-    name: 'Site web',
-    custom: psychologist => (
-      psychologist.website ? (
-        <a
-          href={string.prefixUrl(psychologist.website)}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {psychologist.website}
-        </a>
-      )
-        : null
-    ),
-  },
-];
-
-const PublicPsychologistProfile = () => {
-  const { psyId } = useParams();
-  const [error, setError] = useState();
-  const [psychologist, setPsychologist] = useState();
-
-  useEffect(() => {
-    setError();
-    agent.Psychologist.getProfile(psyId)
-      .then(setPsychologist)
-      .catch(() => {
-        setError('Impossible de trouver les informations pour ce psychologue');
-      });
-  }, [psyId]);
+      )}
+      <h5>{psychologist.otherAddress ? 'Adresses' : 'Adress'}</h5>
+      <div>
+        <div>{psychologist.address}</div>
+        <div>{psychologist.otherAddress}</div>
+      </div>
+    </>
+  );
 
   return (
     <Page
@@ -122,45 +100,82 @@ const PublicPsychologistProfile = () => {
     >
       {error && <Notification message={error} type="error" />}
       {psychologist && (
-        <Row className={styles.psyInfo}>
-          <Col n="md-6 sm-12">
-            {leftFields.map(field => {
-              const value = field.value ? psychologist[field.value] : field.custom(psychologist);
-              return value ? (
-                <div key={field.name} className={styles.field} data-test-id="psy-info">
-                  {field.name && (
-                  <div className={styles.fieldName}>
-                    {field.name}
-                  </div>
-                  )}
-                  <div>
-                    {value}
-                  </div>
-                </div>
-              ) : null;
-            })}
-          </Col>
-          <Col
-            n="md-6 sm-12"
-          >
+        <div className={styles.psyInfo}>
+          <div className={styles.column}>
+            <h3 className={styles.title}>Présentation</h3>
+            <div>
+              {psychologist.description}
+            </div>
+            {psychologist.teleconsultation && (
+              <>
+                <div className={styles.separator} />
+                <h5>Consultation à distance</h5>
+                <Badge
+                  icon="ri-webcam-fill"
+                  text="Téléconsultation disponible"
+                  colorFamily="green-bourgeon"
+                />
+              </>
+            )}
+            <div className={styles.displayDesktop}>{otherInfo}</div>
+          </div>
+          <div className={styles.columnSeparator} />
+          <div className={styles.column}>
             <h3>Contacter le psychologue</h3>
-            {rightFields.map(field => {
-              const value = field.value ? psychologist[field.value] : field.custom(psychologist);
-              return value ? (
-                <div key={field.name} className={styles.field} data-test-id="psy-info">
-                  {field.name && (
-                  <div className={styles.fieldName}>
-                    {field.name}
-                  </div>
-                  )}
-                  <div>
-                    {value}
-                  </div>
-                </div>
-              ) : null;
-            })}
-          </Col>
-        </Row>
+            <div className={styles.optionalSeparator} />
+            {psychologist.phone && (
+            <div className={styles.contactInfo}>
+              <div>
+                <h5>Téléphone</h5>
+                {psychologist.phone}
+              </div>
+              <Button
+                secondary
+                onClick={() => { window.location.href = `tel:${psychologist.phone}`; }}
+                icon="ri-phone-fill"
+              />
+            </div>
+            )}
+            {psychologist.email && (
+            <div className={styles.contactInfo}>
+              <div>
+                <h5>E-mail</h5>
+                {psychologist.email}
+              </div>
+              <Button
+                secondary
+                onClick={() => { window.location.href = `mailto:${psychologist.email}`; }}
+                icon="ri-mail-fill"
+              />
+            </div>
+            )}
+            {psychologist.website && (
+            <div className={styles.contactInfo}>
+              <div>
+                <h5>Site web</h5>
+                <a
+                  href={string.prefixUrl(psychologist.website)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {psychologist.website}
+                </a>
+              </div>
+              <Button
+                secondary
+                onClick={() => { window.open(string.prefixUrl(psychologist.website), '_blank'); }}
+                icon="ri-link"
+              />
+            </div>
+            )}
+            <Alert
+              type="warning"
+              title="Vous n‘avez aucune avance de frais à prévoir"
+              description="Le psychologue ne doit en aucun cas vous demander un complément financier ou une avance."
+            />
+            <div className={styles.displayMobile}>{otherInfo}</div>
+          </div>
+        </div>
       )}
     </Page>
   );
