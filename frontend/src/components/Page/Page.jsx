@@ -50,7 +50,7 @@ const Page = ({
 
   useEffect(() => {
     document.title = `${getNodeText(title)} - Santé Psy Étudiant`;
-  }, []);
+  }, [title]);
 
   const breadCrumbsComponent = breadCrumbs ? (
     <Breadcrumb className={withoutHeader ? styles.breadCrumbsWithoutHeader : styles.breadCrumbs}>

@@ -27,10 +27,6 @@ const PsychologistRouter = () => {
   const { userStore: { user } } = useStore();
   const { pathname } = useLocation();
 
-  useEffect(() => {
-    document.title = `${getPageProps().title} - Santé Psy Étudiant`;
-  }, [pathname]);
-
   const hasSignedConvention = user.convention && user.convention.isConventionSigned;
   const modal = hasSignedConvention || !shouldCheckConventionAgain()
     ? null
