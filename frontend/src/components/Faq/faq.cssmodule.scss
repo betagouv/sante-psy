@@ -15,6 +15,25 @@
   text-align: center;
 }
 
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 32px;
+  padding: 32px;
+  margin-top: 32px;
+  background-color: white;
+  box-shadow: inset 0 -1px 0 0 var(--border-default-grey);
+}
+
+.text {
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 700;
+}
+
 
 @media (min-width: 769px) {
   .simplifiedTitle {
