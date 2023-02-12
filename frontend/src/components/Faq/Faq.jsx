@@ -63,7 +63,7 @@ const Faq = ({ simplified }) => {
       textContent
     >
       <div className={styles.faq} ref={tabsRef}>
-        <h1 className={classNames(simplified ? styles.simplifiedTitle : '')}>
+        <h1 className={classNames(simplified ? styles.simplifiedTitle : 'secondaryPageTitle')}>
           {simplified ? 'Questions fréquentes' : 'Foire aux questions'}
         </h1>
         <Tabs defaultActiveTab={getDefaultTab()}>

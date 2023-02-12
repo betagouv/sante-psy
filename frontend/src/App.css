@@ -68,3 +68,17 @@
 .__floater__open {
   z-index: 3500 !important;
 }
+
+.secondaryPageTitle {
+  font-size: 32px;
+  line-height: 40px;
+  margin: 16px 0;
+}
+
+@media (min-width: 769px) {
+  .secondaryPageTitle {
+    font-size: 2.5rem;
+    line-height: 3rem;
+    margin: 24px 0;
+  }
+}

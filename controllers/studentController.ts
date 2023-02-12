@@ -19,7 +19,7 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
 
   res.json({
     // eslint-disable-next-line max-len
-    message: "Nous vous avons envoyé un mail avec toutes les informations sur le dispositif. Pensez à verifier vos spams et n'hesitez pas à nous contacter en cas de problèmes",
+    message: "Nous vous avons envoyé un mail avec toutes les informations sur le dispositif. Pensez à verifier vos spams et n'hésitez pas à nous contacter en cas de problèmes.",
   });
 
   dbStudents.insert(email, source);

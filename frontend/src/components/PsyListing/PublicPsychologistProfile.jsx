@@ -78,7 +78,7 @@ const PublicPsychologistProfile = () => {
         </MapContainer>
       </div>
       )}
-      <h5>{psychologist.otherAddress ? 'Adresses' : 'Adress'}</h5>
+      <h5>{psychologist.otherAddress ? 'Adresses' : 'Adresse'}</h5>
       <div>
         <div data-test-id="psy-info">{psychologist.address}</div>
         <div data-test-id="psy-info">{psychologist.otherAddress}</div>
