@@ -71,7 +71,7 @@ const Landing = () => {
             depuis votre ordinateur ou votre mobile
           </>
         )}
-        buttonLink="/trouver-un-psychologue"
+        buttonLink="/trouver-un-psychologue?teleconsultation=true"
         buttonText="Trouver un psychologue"
         hint={(
           <>
