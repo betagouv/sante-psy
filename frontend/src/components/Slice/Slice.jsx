@@ -13,6 +13,7 @@ const Slice = ({
   buttonIcon,
   buttonSecondary,
   hint,
+  images,
   imageSrc,
   reverse,
   children,
@@ -28,7 +29,7 @@ const Slice = ({
         centerText ? styles.centerText : '',
       )}
     >
-      <div className={imageSrc ? styles.content : styles.onlyContent}>
+      <div className={(images || imageSrc) ? styles.content : styles.onlyContent}>
         {title && (
           <h2 className={classNames(styles.title, centerTitle ? styles.centerTitle : '')}>
             {title}
@@ -60,6 +61,7 @@ const Slice = ({
         {children}
       </div>
       {imageSrc && <img className={styles.image} src={imageSrc} alt="" />}
+      {images}
     </div>
   );
 };

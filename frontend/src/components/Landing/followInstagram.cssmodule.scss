@@ -1,0 +1,20 @@
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  max-width: 50%;
+  a {
+    width: 50%;
+    max-width: 420px;
+    background-image: unset;
+
+    img {
+      width: 100%
+    }
+  }
+  
+  [target=_blank]:after {
+    display: none;  
+  }
+}

@@ -1,11 +1,19 @@
 import React from 'react';
 import '@gouvfr/dsfr/dist/utility/icons/icons-logo/icons-logo.min.css';
 import Slice from 'components/Slice/Slice';
+import styles from './followInstagram.cssmodule.scss';
 
 const FollowInstagram = () => (
   <Slice
     color="white"
-    imageSrc="/images/communaute.png"
+    images={(
+      <div className={styles.images}>
+        <a href="https://www.instagram.com/p/CoDGlRYoJBn" target="_blank" rel="noreferrer"><img src="/images/communaute-tl.jpg" alt="Prends soin de ta santé mentale" /></a>
+        <a href="https://www.instagram.com/p/Cc2dPYBD3M8" target="_blank" rel="noreferrer"><img src="/images/communaute-tr.jpg" alt="Anxiété lié aux examens" /></a>
+        <a href="https://www.instagram.com/p/Cj-lUoOIiqv" target="_blank" rel="noreferrer"><img src="/images/communaute-bl.jpg" alt="Déprime ou dépression" /></a>
+        <a href="https://www.instagram.com/p/CaxrMELroEb" target="_blank" rel="noreferrer"><img src="/images/communaute-br.jpg" alt="Noholito" /></a>
+      </div>
+    )}
     centerText
     title={(
       <>
