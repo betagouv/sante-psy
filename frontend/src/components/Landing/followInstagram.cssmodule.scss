@@ -3,10 +3,11 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
-  max-width: 50%;
+  
   a {
     width: 50%;
     max-width: 420px;
+    line-height: 0;
     background-image: unset;
 
     img {
@@ -16,5 +17,11 @@
   
   [target=_blank]:after {
     display: none;  
+  }
+}
+
+@media (min-width: 769px) {
+  .images {
+    max-width: 50%;
   }
 }
