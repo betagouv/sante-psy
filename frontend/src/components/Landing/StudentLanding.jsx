@@ -20,23 +20,23 @@ const StudentLanding = () => {
   return (
     <div data-test-id="landingPageContainer">
       <Slice
-        color="secondary"
         centerText
         title={(
           <>
-            Étudiantes, étudiants,
+            <b>Étudiantes, étudiants,</b>
             <br />
             Bénéficiez de
             {' '}
             <b>8 séances gratuites</b>
             <div>
-              avec un psychologue.
+              avec un psychologue
             </div>
           </>
         )}
       >
         <Newsletter withTracking emailRef={emailRef} />
-        <div className="fr-mt-4w" />
+      </Slice>
+      <Slice color="secondary">
         <StudentCards />
       </Slice>
       <Statistics />
