@@ -22,7 +22,8 @@ const Landing = () => {
         imageSrc="/images/landing.png"
         title={(
           <>
-            <div><b>Étudiants, étudiantes</b></div>
+            <b>Étudiants, étudiantes</b>
+            <br />
             Besoin d’une oreille attentive&#x00A0;?
           </>
         )}
