@@ -61,7 +61,7 @@
   resize: vertical;
 }
 
-.button-secondary-container a{
+.button-secondary-container a {
   box-shadow: 0 0 0 1px var(--border-action-high-blue-france);
 }
 
@@ -69,10 +69,16 @@
   z-index: 3500 !important;
 }
 
-/* overwrite DSFR default */
-@media (min-width: 48em) {
-  .faqPage .fr-tabs__panel {
-    padding: 0; 
-    outline-offset: 0;
+.secondaryPageTitle {
+  font-size: 32px;
+  line-height: 40px;
+  margin: 16px 0;
+}
+
+@media (min-width: 769px) {
+  .secondaryPageTitle {
+    font-size: 2.5rem;
+    line-height: 3rem;
+    margin: 24px 0;
   }
 }

@@ -8,9 +8,11 @@ const Statistic = ({ value, description }) => (
       data-test-id={`statistic-${description}-value`}
       className={styles.value}
     >
-      {value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}
+      <b>{(Math.floor(value / 1000) * 1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}</b>
+      {' '}
+      +
     </div>
-    <div>{description}</div>
+    <div><b>{description}</b></div>
   </div>
 );
 

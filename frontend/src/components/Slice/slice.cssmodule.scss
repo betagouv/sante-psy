@@ -1,0 +1,172 @@
+@import 'src/variables.scss';
+
+.container,
+.secondary,
+.white {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+}
+
+.button {
+  width: fit-content;
+  background-color: white;
+  margin-bottom: 16px;
+}
+
+.container {
+  background-color: $primary-color;
+  color: white;
+
+  h2 {
+    color: white;
+  }
+
+  b {
+    color: $primary-text-color;
+  }
+}
+
+.white,
+.secondary {
+  color: black;
+}
+
+.white {
+  background-color: white;
+
+  h2 b {
+    display: inline;
+    box-shadow: inset 0 -4px white, inset 0 -14px $primary-text-color;
+  }
+}
+
+.secondary {
+  background-color: $secondary-color;
+
+  h2 b {
+    display: inline;
+    box-shadow: inset 0 -4px $secondary-color, inset 0 -14px $primary-text-color;
+  }
+}
+
+.onlyContent,
+.content {
+  flex-grow: 1;
+  margin: auto;
+  padding: 32px 16px;
+}
+
+.onlyContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+
+.title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 48px;
+  margin-bottom: 32px;
+}
+
+.centerText {
+  text-align: center;
+
+  .title {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .button {
+    margin: auto;
+    margin-bottom: 16px;
+  }
+}
+
+.centerTitle {
+  text-align: center;
+}
+
+.description {
+  font-size: 20px;
+  line-height: 32px;
+  margin-bottom: 32px;
+}
+
+.hint {
+  font-size: 18px;
+  line-height: 23px;
+}
+
+.image {
+  object-fit: cover;
+  width: 100%;
+}
+
+@media (min-width: 769px) {
+  .container,
+  .secondary,
+  .white {
+    flex-direction: row;
+  }
+
+  .white {
+    h2 b {
+      box-shadow: inset 0 -9px white, inset 0 -21px $primary-text-color;
+    }
+  }
+  
+  .secondary {
+    h2 b {
+      box-shadow: inset 0 -9px $secondary-color, inset 0 -21px $primary-text-color;
+    }
+  }
+
+  .reverse {
+    flex-direction: row-reverse;
+  }
+
+  .content {
+    max-width: 620px;
+  }
+
+  .onlyContent {
+    margin: 64px auto;
+  }
+
+  .title {
+    font-size: 56px;
+    line-height: 63px;
+  }
+
+  .description {
+    font-size: 28px;
+    line-height: 40px;
+    max-width: 800px;
+  }
+
+  .hint {
+    font-size: 18px;
+    line-height: 23px;
+  }
+
+  .centerText {
+    text-align: left;
+
+    .title {
+      font-size: 56px;
+      line-height: 63px;
+    }
+
+    .button {
+      margin: 0;
+      margin-bottom: 16px;
+    }
+  }
+
+  .image {
+    width: 50%;
+  }
+}

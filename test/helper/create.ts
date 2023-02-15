@@ -74,6 +74,11 @@ const getAddress = (): {
     latitude: number,
     city: string,
     postcode: string,
+    otherAddress?: string,
+    otherLongitude?: number,
+    otherLatitude?: number,
+    otherCity?: string,
+    otherPostcode?: string,
   } => {
   const rand = faker.datatype.number() % 5;
   switch (rand) {
@@ -84,8 +89,8 @@ const getAddress = (): {
       region: 'Ile-de-France',
       longitude: 2.308880,
       latitude: 48.850570,
-      city: null,
-      postcode: null,
+      city: 'paris',
+      postcode: '75007',
     };
   case 1:
     return {
@@ -94,8 +99,13 @@ const getAddress = (): {
       region: 'Nouvelle-Aquitaine',
       longitude: -0.575710,
       latitude: 44.848660,
-      city: null,
-      postcode: null,
+      city: 'Bordeaux',
+      postcode: '33000',
+      otherAddress: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
+      otherLongitude: -0.575810,
+      otherLatitude: 44.848460,
+      otherCity: 'Bordeaux',
+      otherPostcode: '33000',
     };
   case 2:
     return {
@@ -104,8 +114,13 @@ const getAddress = (): {
       region: 'Auvergne-Rhône-Alpes',
       longitude: 5.720050,
       latitude: 45.179540,
-      city: null,
-      postcode: null,
+      city: 'Grenoble',
+      postcode: '38100',
+      otherAddress: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
+      otherLongitude: -0.575810,
+      otherLatitude: 44.848460,
+      otherCity: 'Bordeaux',
+      otherPostcode: '33000',
     };
   default:
     return {

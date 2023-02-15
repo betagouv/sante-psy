@@ -16,16 +16,16 @@
 @media (min-width: 936px) {
     .left,
     .right {
-        .text {
-            text-align: left;
-        }
+      .text {
+          text-align: left;
+      }
     }
 
     .left {
-        flex-direction: row-reverse;
+      flex-direction: row-reverse;
     }
 
     .right {
-        flex-direction: row;
+      flex-direction: row;
     }
 }

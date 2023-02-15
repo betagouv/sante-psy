@@ -11,7 +11,6 @@ const ActiveProfile = () => {
   }, []);
   return (
     <Page
-      background="blue"
       title="Merci"
       description="Nous avons bien pris en compte votre réponse et vous remercions pour votre investissement !"
     />

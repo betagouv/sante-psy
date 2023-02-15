@@ -37,8 +37,9 @@ const StudentAnswer = () => {
   }, []);
 
   return (
-    <Page title="" background="blue" description="Merci d'avoir pris le temps de répondre 🙂">
+    <Page withoutHeader textContent>
       <GlobalNotification />
+      <h1>Merci d&lsquo;avoir pris le temps de répondre 🙂</h1>
       {searchParams.get('appointment') && !success
         && (
           <>

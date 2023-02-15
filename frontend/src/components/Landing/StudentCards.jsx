@@ -8,21 +8,36 @@ const StudentCards = () => (
   <Row className={styles.card}>
     <StudentCard
       index={1}
-      title="Consultez un médecin"
+      title="Consultez un médecin généraliste"
       image="doctor"
-      description="Consulter le médecin généraliste de votre choix pour établir votre lettre d'orientation"
+      description={(
+        <>
+          pour établir votre
+          {' '}
+          <b>lettre d&lsquo;orientation*</b>
+        </>
+      )}
+      hint="* ordonnance donnant droit au suivi psychologique"
     />
     <StudentCard
       index={2}
+      big
       title="Choisissez un psychologue"
       image="psychologist"
-      description="Choisissez dans la liste des psychologues partenaires celui ou celle qui vous convient"
+      buttonText="Choisir un psychologue"
+      buttonLink="/trouver-un-psychologue"
     />
     <StudentCard
       index={3}
-      title="Bénéficiez d’un suivi"
+      title="Bénéficiez de vos 8 séances gratuites"
       image="followup"
-      description="Prenez rendez-vous et bénéficiez jusqu’à 8 séances sans avance de frais"
+      description={(
+        <>
+          <b>sans avance de frais</b>
+          {' '}
+          de votre part
+        </>
+)}
     />
   </Row>
 );

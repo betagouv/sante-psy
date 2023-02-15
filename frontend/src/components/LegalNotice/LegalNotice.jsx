@@ -13,9 +13,10 @@ const LegalNotice = () => {
   return (
     <Page
       title="Mentions légales"
-      background="blue"
+      withoutHeader
       textContent
     >
+      <h1 className="secondaryPageTitle">Mentions légales</h1>
       <Section title="Éditeur de la Plateforme">
         <p>
           La Plateforme

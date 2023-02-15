@@ -1,30 +1,27 @@
 import React from 'react';
-import classnames from 'classnames';
 
-import UnderlinedTitle from 'components/Page/UnderlinedTitle';
-
-import styles from './studentProcess.cssmodule.scss';
+import Slice from 'components/Slice/Slice';
 import StudentCards from './StudentCards';
 
 const StudentProcess = () => (
-  <div className={styles.container}>
-    <UnderlinedTitle
-      big
-      backgroundColor="yellow"
-      title="Étudiants, parlez de vos difficultés"
-    />
-    <div className="fr-text--lead">Consultez un psychologue gratuitement</div>
+  <Slice
+    color="secondary"
+    centerText
+    centerTitle
+    title={(
+      <>
+        Échangez
+        {' '}
+        <b>gratuitement</b>
+        <br />
+        {' '}
+        avec un psychologue
+      </>
+    )}
+    description="Comment ça marche&#x00A0;?"
+  >
     <StudentCards />
-    <a
-      className={classnames(styles.button, 'fr-btn fr-btn--lg fr-btn--secondary')}
-      href={`${__API__}/static/documents/parcours_etudiant_sante_psy_etudiant.pdf`}
-      target="_blank"
-      rel="noreferrer"
-      title="Parcours étudiant"
-    >
-      En savoir plus
-    </a>
-  </div>
+  </Slice>
 );
 
 export default StudentProcess;

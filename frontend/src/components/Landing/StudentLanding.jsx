@@ -1,30 +1,13 @@
-/* eslint-disable no-console */
-import React, { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import classnames from 'classnames';
-import { Button, TextInput } from '@dataesr/react-dsfr';
-
-import agent from 'services/agent';
-import GlobalNotification from 'components/Notification/GlobalNotification';
-import { useStore } from 'stores/';
-import trackAds from 'services/trackAds';
+import React, { useEffect, useRef } from 'react';
+import Slice from 'components/Slice/Slice';
 import Statistics from './Statistics';
 
-import landingStyles from './landing.cssmodule.scss';
-import studentStyles from './studentProcess.cssmodule.scss';
 import StudentCards from './StudentCards';
 import FollowInstagram from './FollowInstagram';
+import Newsletter from './Newsletter';
 
 const StudentLanding = () => {
-  const [searchParams] = useSearchParams();
   const emailRef = useRef();
-  const [email, setEmail] = useState('');
-  const [facebookConsent, setFacebookConsent] = useState(false);
-  const [googleAdsConsent, setGoogleAdsConsent] = useState(false);
-  const [error, setError] = useState();
-  const { commonStore: { setNotification } } = useStore();
-
-  const from = searchParams.get('from');
 
   useEffect(() => {
     document.title = 'Santé Psy Étudiant';
@@ -32,121 +15,32 @@ const StudentLanding = () => {
     if (emailRef.current) {
       emailRef.current.focus();
     }
-
-    if (__PIXEL_ADS__) {
-      // Inspired by https://developers.axeptio.eu/cookies/cookies-integration
-      trackAds.initAxeptio();
-
-      if (!window._axcb) {
-        window._axcb = [];
-      }
-      window._axcb.push(axeptio => {
-        axeptio.on('cookies:complete', choices => {
-          if (choices.facebook_pixel) {
-            console.debug('Consent given for facebook ads... launch script');
-            setFacebookConsent(true);
-            trackAds.initFacebookAds();
-          } else {
-            console.debug('Consent refused for facebook ads... remove script');
-            setFacebookConsent(false);
-            trackAds.removeFacebookAds();
-          }
-          if (choices.Google_Ads) {
-            console.debug('Consent given for google ads... launch script');
-            setGoogleAdsConsent(true);
-            trackAds.initGoogleAds();
-          } else {
-            console.debug('Consent refused for google ads... remove script');
-            setGoogleAdsConsent(false);
-            trackAds.removeGoogleAds();
-          }
-        });
-
-        // See https:// developers.axeptio.eu/site-integration/special-cases-spa-or-react
-        axeptio.on('consent:saved', () => {
-          window.location.reload();
-        });
-      });
-    }
   }, []);
 
-  const trackEvent = () => {
-    if (__MATOMO__) {
-      _paq.push(['trackEvent', 'Student', 'SendMail']);
-      if (from) {
-        console.debug(`Track contact event from ${from}`);
-        _paq.push(['trackEvent', from, 'SendMail']);
-      }
-    }
-
-    if (facebookConsent) {
-      console.debug('Track contact event on facebook ads');
-      trackAds.trackFacebookAds();
-    }
-
-    if (googleAdsConsent) {
-      console.debug('Send conversion event to google ads');
-      trackAds.trackGoogleAds();
-    }
-  };
-
-  const sendMail = event => {
-    event.preventDefault();
-    if (email) {
-      setError(null);
-      agent.Student.sendMail(email, from)
-        .then(notification => {
-          setEmail('');
-          setNotification(notification.data, true, false);
-        })
-        .catch(e => {
-          setNotification(e.response.data, false, false);
-        });
-      trackEvent();
-    } else {
-      setError("L'email est obligatoire");
-    }
-  };
-
   return (
-    <div className={classnames(landingStyles.container, 'fr-container')} data-test-id="landingPageContainer">
-      <div className={landingStyles.sectionAlt}>
-        <div className={studentStyles.container}>
-          <h1 className={studentStyles.title}>
-            <div>Étudiants,</div>
+    <div data-test-id="landingPageContainer">
+      <Slice
+        centerText
+        title={(
+          <>
+            <b>Étudiantes, étudiants,</b>
+            <br />
+            Bénéficiez de
+            {' '}
+            <b>8 séances gratuites</b>
             <div>
-              Bénéficiez de
-              {' '}
-              <span className={studentStyles.blueBackground}>8 séances gratuites</span>
-              <div>
-                avec un psychologue.
-              </div>
+              avec un psychologue
             </div>
-          </h1>
-          <form onSubmit={sendMail} className={studentStyles.email}>
-            <TextInput
-              ref={emailRef}
-              label="Votre email"
-              placeholder="Votre email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              type="email"
-              messageType={error ? 'error' : null}
-            />
-            <Button size="lg" submit>
-              Recevoir plus d&lsquo;informations
-            </Button>
-            <GlobalNotification />
-          </form>
-          <StudentCards />
-        </div>
-      </div>
-      <div className={landingStyles.section}>
-        <Statistics />
-      </div>
-      <div className={landingStyles.sectionLight}>
-        <FollowInstagram />
-      </div>
+          </>
+        )}
+      >
+        <Newsletter withTracking emailRef={emailRef} />
+      </Slice>
+      <Slice color="secondary">
+        <StudentCards />
+      </Slice>
+      <Statistics />
+      <FollowInstagram />
     </div>
   );
 };

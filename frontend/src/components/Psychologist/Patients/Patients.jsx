@@ -142,7 +142,7 @@ const Patients = () => {
           to="/psychologue/nouvel-etudiant"
           className="fr-btn"
         >
-          <Icon size="md" name="ri-add-line" />
+          <Icon name="ri-add-line" />
           Nouvel étudiant
         </Link>
       </div>

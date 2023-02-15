@@ -54,9 +54,13 @@ const Login = () => {
 
   return (
     <Page
-      title="Espace Psychologues"
-      background="blue"
-      textContent
+      title={(
+        <>
+          Espace
+          {' '}
+          <b>Psychologues</b>
+        </>
+)}
     >
       <Section
         title="Me connecter"

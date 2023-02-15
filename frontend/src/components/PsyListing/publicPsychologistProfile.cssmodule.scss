@@ -1,26 +1,96 @@
-.psyName {
-  font-size: 24px;
-  font-weight: bold;
-  padding-bottom: 24px;
-}
-
 .psyInfo {
-  gap: 16px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px 40px;
+
+  h5 {
+    margin-bottom: 8px;
+  }
 }
 
-.field {
-  padding: 8px 0px;
-}
-
-.fieldName {
-  font-weight: bold;
+.title {
+  font-size: 22px;
+  line-height: 28px;
 }
 
 .mapContainer {
+  margin: 32px 0;
   width: 100%;
 }
 
 .map {
   width: 100%;
   min-height: 500px;
+  a {
+    background-image: unset !important;
+  }
+  a:hover {
+    background-color: var(--background-default-grey-hover) !important;
+  }
+}
+
+.column {
+  width: 100%;
+}
+
+.columnSeparator {
+  border-top: solid 1px #E5E5E5;
+}
+
+.optionalSeparator,
+.separator {
+  border-top: solid 1px #E5E5E5;
+  margin: 32px 0;
+}
+
+.optionalSeparator {
+  display: none;
+}
+
+.contactInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.displayDesktop {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .title {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .psyInfo {
+    flex-direction: row;
+  }  
+
+  .column {
+    width: 50%;
+    padding: 24px 40px;
+  }
+
+  .columnSeparator {
+    display: none;
+  }
+
+  .optionalSeparator {
+    display: block;
+  }
+
+  .map {
+    width: calc(100% + 128px);
+    margin-left: -64px;
+  }  
+
+  .displayDesktop {
+    display: block;
+  }
+
+  .displayMobile {
+    display: none;
+  }
 }

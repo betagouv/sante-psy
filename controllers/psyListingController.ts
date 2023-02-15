@@ -28,6 +28,8 @@ const getAllActive = async (req: Request, res: Response, reduced: boolean): Prom
       otherCity: psy.otherCity,
       otherPostcode: psy.otherPostcode,
       languages: psy.languages,
+      email: psy.email,
+      phone: psy.phone,
     }))
     : psyList);
 };

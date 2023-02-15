@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, Row, Col, TextInput, Alert, Callout, CalloutText } from '@dataesr/react-dsfr';
+import { Checkbox, TextInput, Alert } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
@@ -195,100 +195,81 @@ const PsyListing = () => {
 
   return (
     <Page
-      title="Trouver un psychologue"
+      withStats
+      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
+      title={(
+        <>
+          Trouver un
+          {' '}
+          <b>psychologue</b>
+        </>
+      )}
       description={psychologists
-        ? (
-          <>
-            Trouvez le ou la psychologue qui vous convient parmi les
-            {` ${psychologists.length} `}
-            référencés.
-            Munissez-vous
-            {' '}
-            <b>obligatoirement</b>
-            {' '}
-            d’une lettre d’orientation de votre médecin lors du rendez-vous.
-          </>
-        )
+        ? 'Parmi plus de 1 200 psychologues partenaires partout en France'
         : 'Chargement de la liste des psychologues'}
-      background="yellow"
       dataTestId="psyListPage"
     >
-      <Callout hasInfoIcon={false}>
-        <CalloutText size="md">
-          <ul>
-            <li>
-              En cas de séance non honorée et sans excuse valable,
-              le psychologue peut se réserver le droit de refuser un étudiant.
-            </li>
-            <li>
-              L&lsquo;étudiant n&lsquo;a
-              aucune avance de frais à prévoir. Le psychologue ne doit en aucun cas demander un
-              complément financier ou une avance à l&lsquo;étudiant.
-            </li>
-          </ul>
-        </CalloutText>
-      </Callout>
       {psychologists && (
         <>
           <div className="fr-pb-6w fr-mt-2w">
-            <Row gutters>
-              <Col n="md-6 sm-12" className={styles.input}>
+            <div className={styles.filters}>
+              <div className={styles.number}>
+                <b>
+                  {filteredPsychologists.length}
+                  {' '}
+                  {filteredPsychologists.length === 1 ? 'résultat' : 'résultats'}
+                </b>
+              </div>
+              <div className={styles.input}>
                 <TextInput
-                  className="fr-mb-1w"
                   value={nameFilter}
                   onChange={e => setNameFilter(e.target.value)}
-                  label="Rechercher par nom"
+                  placeholder="Rechercher par nom"
                 />
-              </Col>
-              <Col n="md-6 sm-12" className={styles.input}>
+              </div>
+              <div className={styles.input}>
                 <InputSelect
-                  className="fr-mb-1w"
                   selected={addressFilter}
                   onChange={e => setAddressFilter(e)}
-                  label="Rechercher par ville, code postal ou région"
+                  placeholder="Ville, code postal ou région"
                   options={[{ value: AROUND_ME, label: AROUND_ME }]}
                 />
-              </Col>
-            </Row>
-            <Row gutters>
-              <Col n="md-6 sm-12" className={styles.input}>
+              </div>
+              <div className={styles.input}>
                 <TextInput
-                  className="fr-mb-1w"
                   value={languageFilter}
                   onChange={e => setLanguageFilter(e.target.value)}
-                  label="Rechercher par langue parlée"
+                  placeholder="Langue parlée"
                 />
-              </Col>
-              <Col n="md-6 sm-12" className={styles.input}>
-                {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
-                  <Alert
-                    className="fr-mt-1w"
-                    type="error"
-                    description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette
+              </div>
+              <Checkbox
+                value="teleconsultation"
+                onChange={e => { setTeleconsultation(e.target.checked); }}
+                label="Téléconsultation"
+                checked={teleconsultation}
+              />
+            </div>
+            {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
+              <Alert
+                className="fr-mt-2w"
+                type="error"
+                description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette
                     fonctionnalité."
-                  />
-                )}
-                {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.UNSUPPORTED && (
-                  <Alert
-                    className="fr-mt-1w"
-                    type="error"
-                    description="Votre navigateur ne permet pas d'utiliser cette fonctionnalité."
-                  />
-                )}
-              </Col>
-            </Row>
-            <Row gutters>
-              <Col n="md-6 sm-12" className={styles.input}>
-                <Checkbox
-                  value="teleconsultation"
-                  onChange={e => { setTeleconsultation(e.target.checked); }}
-                  label="Disponible en téléconsultation"
-                  checked={teleconsultation}
-                />
-              </Col>
-            </Row>
-
+              />
+            )}
+            {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.UNSUPPORTED && (
+              <Alert
+                className="fr-mt-1w"
+                type="error"
+                description="Votre navigateur ne permet pas d'utiliser cette fonctionnalité."
+              />
+            )}
           </div>
+          <Alert
+            type="warning"
+            title="Vous n‘avez aucune avance de frais à prévoir"
+            description="Le psychologue ne doit en aucun cas vous demander un complément financier ou une avance."
+          />
           <PsyTable
             page={page}
             setPage={setPage}
@@ -314,6 +295,10 @@ const PsyListing = () => {
               }}
             />
             )}
+          <Alert
+            title="Attention, en cas de séance non honorée et sans excuse valable"
+            description="Le psychologue peut se réserver le droit de refuser un étudiant"
+          />
         </>
       )}
     </Page>

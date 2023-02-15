@@ -7,6 +7,7 @@ import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
+import styles from './contact.cssmodule.scss';
 
 const Contact = () => {
   const [userType, setUserType] = useState();
@@ -61,7 +62,15 @@ const Contact = () => {
 
   return (
     <Page
-      title="Nous contacter"
+      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
+      currentBreadCrumb="Nous contacter"
+      title={(
+        <>
+          Contacter
+          {' '}
+          <b>Santé Psy Étudiant</b>
+        </>
+      )}
       description={(
         <>
           Ma question ne figure pas dans la
@@ -71,7 +80,6 @@ const Contact = () => {
           je peux contacter le support.
         </>
       )}
-      background="blue"
       className="contactPage"
     >
       <GlobalNotification />
@@ -98,59 +106,63 @@ const Contact = () => {
             value="autre-utilisateur"
           />
         </RadioGroup>
-        <TextInput
-          data-test-id="name-input"
-          required
-          label="Nom"
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
-        <TextInput
-          data-test-id="first-name-input"
-          required
-          label="Prenom"
-          value={firstName}
-          onChange={e => setFirstName(e.target.value)}
-        />
-        <TextInput
-          data-test-id="email-input"
-          required
-          type="email"
-          label="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-        <Select
-          data-test-id="reason-select"
-          required
-          label="Motif"
-          options={[
-            { value: '', label: '- Selectionner la raison de votre message -', disabled: true, hidden: true },
-            { value: 'éligibilité', label: 'Éligibilité' },
-            { value: 'convention', label: 'Convention' },
-            { value: 'remboursement', label: 'Remboursement' },
-            { value: 'rétractation', label: 'Rétractation' },
-            { value: 'connexion', label: 'Problème de connexion' },
-            { value: 'presse', label: 'Presse/communication' },
-            { value: 'autre-raison', label: 'Autre' },
-          ]}
-          selected={reason}
-          onChange={e => setReason(e.target.value)}
-        />
-        <TextInput
-          data-test-id="message-input"
-          required
-          textarea
-          hint="Merci de ne fournir que les données personnelles strictement nécessaires au traitement de la demande. "
-          label="Message"
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-        />
+        <div className={styles.line}>
+          <TextInput
+            data-test-id="name-input"
+            required
+            label="Nom"
+            value={name}
+            onChange={e => setName(e.target.value)}
+          />
+          <TextInput
+            data-test-id="first-name-input"
+            required
+            label="Prenom"
+            value={firstName}
+            onChange={e => setFirstName(e.target.value)}
+          />
+          <TextInput
+            data-test-id="email-input"
+            required
+            type="email"
+            label="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
+          <Select
+            data-test-id="reason-select"
+            required
+            label="Sujet"
+            options={[
+              { value: '', label: '- Selectionner la raison de votre message -', disabled: true, hidden: true },
+              { value: 'éligibilité', label: 'Éligibilité' },
+              { value: 'convention', label: 'Convention' },
+              { value: 'remboursement', label: 'Remboursement' },
+              { value: 'rétractation', label: 'Rétractation' },
+              { value: 'connexion', label: 'Problème de connexion' },
+              { value: 'presse', label: 'Presse/communication' },
+              { value: 'autre-raison', label: 'Autre' },
+            ]}
+            selected={reason}
+            onChange={e => setReason(e.target.value)}
+          />
+          <TextInput
+            data-test-id="message-input"
+            className={styles.fullWidthInput}
+            required
+            textarea
+            hint="Merci de ne fournir que les données personnelles strictement nécessaires au traitement de la demande. "
+            label="Message"
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+          />
+        </div>
         <Button
+          className="fr-mt-4w"
           data-test-id="submit-button"
           submit
         >
-          Envoyer un message
+          Envoyer
         </Button>
       </form>
     </Page>

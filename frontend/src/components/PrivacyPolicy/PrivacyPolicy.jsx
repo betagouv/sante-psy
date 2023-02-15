@@ -99,9 +99,10 @@ const PrivacyPolicy = () => {
   return (
     <Page
       title="Politique de confidentialité"
-      background="blue"
+      withoutHeader
       textContent
     >
+      <h1 className="secondaryPageTitle">Politique de confidentialité</h1>
       <Section title="Traitement des données à caractère personnel">
         <p>
           Le présent site Santé Psy Étudiant est à l&lsquo;initiative de
@@ -240,7 +241,7 @@ const PrivacyPolicy = () => {
           l&lsquo;utilisateur décide d&lsquo;activer la localisation sur la
           recherche dans l&lsquo;annuaire des psychologues. En effet, cette
           donnée n&lsquo;est pas collectée ni conservée par Santé Psy
-          Etudiant, qui ne peut donc pas la relier à un utilisateur. La donnée
+          Étudiant, qui ne peut donc pas la relier à un utilisateur. La donnée
           est traitée directement sur le navigateur de l&lsquo;utilisateur
           après avoir exprimé son consentement.
         </p>

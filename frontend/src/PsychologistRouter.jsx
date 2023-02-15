@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { observer } from 'mobx-react';
 
+import Announcement from 'components/Notification/Announcement';
 import Appointments from 'components/Psychologist/Appointments/Appointments';
 import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
 import Patients from 'components/Psychologist/Patients/Patients';
@@ -26,10 +27,6 @@ const PsychologistRouter = () => {
   const { userStore: { user } } = useStore();
   const { pathname } = useLocation();
 
-  useEffect(() => {
-    document.title = `${getPageProps().title} - Santé Psy Étudiant`;
-  }, [pathname]);
-
   const hasSignedConvention = user.convention && user.convention.isConventionSigned;
   const modal = hasSignedConvention || !shouldCheckConventionAgain()
     ? null
@@ -40,42 +37,86 @@ const PsychologistRouter = () => {
     switch (page) {
       case 'nouvelle-seance':
         return {
-          title: 'Nouvelle séance',
+          title: (
+            <>
+              Nouvelle
+              {' '}
+              <b>séance</b>
+            </>
+          ),
           description: 'Vous avez réalisé une séance avec un étudiant ou une étudiante. Renseignez-la sur cette page.',
           tutorial: 'new-appointment',
         };
       case 'mes-etudiants':
         return {
-          title: 'Gérer mes étudiants',
+          title: (
+            <>
+              Gérer mes
+              {' '}
+              <b>étudiants</b>
+            </>
+          ),
           description: 'Veuillez enregistrer vos nouveaux étudiants afin de déclarer leurs séances pour procéder à vos remboursements.',
           tutorial: 'students',
         };
       case 'nouvel-etudiant':
         return {
-          title: 'Nouvel étudiant',
+          title: (
+            <>
+              Nouvel
+              {' '}
+              <b>étudiant</b>
+            </>
+          ),
           description: 'Déclarez un étudiant comme étant patient du dispositif Santé Psy Étudiant. Vous pourrez ensuite déclarer les séances réalisées avec cet étudiant.',
           tutorial: 'new-student',
         };
       case 'modifier-etudiant':
         return {
-          title: "Compléter les informations de l'étudiant",
+          title: (
+            <>
+              Compléter
+              {' '}
+              <b>les informations</b>
+              {' '}
+              de l&lsquo;étudiant
+            </>
+          ),
           tutorial: 'new-student',
         };
       case 'mes-remboursements':
         return {
-          title: 'Gérer mes facturations',
+          title: (
+            <>
+              Gérer mes
+              {' '}
+              <b>facturations</b>
+            </>
+          ),
           description: 'Vous pouvez éditer et générer vos factures sur cet espace avant de les envoyer au Service de Santé Universitaire afin de vous faire rembourser.',
           tutorial: 'billing',
         };
       case 'mon-profil':
         return {
-          title: 'Mes informations',
+          title: (
+            <>
+              Mes
+              {' '}
+              <b>informations</b>
+            </>
+          ),
           description: 'En tant que psychologue de Santé Psy Étudiant, vous avez la possibilité de gérer les informations au sein de notre annuaire.',
           tutorial: 'profile',
         };
       default:
         return {
-          title: 'Déclarer mes séances',
+          title: (
+            <>
+              Déclarer mes
+              {' '}
+              <b>séances</b>
+            </>
+          ),
           description: 'La déclaration des séances en ligne est nécessaire à votre remboursement.',
           tutorial: 'appointments',
         };
@@ -85,10 +126,9 @@ const PsychologistRouter = () => {
   return (
     <Page
       {...getPageProps()}
-      background="blue"
       withContact
-      withNotification
     >
+      <Announcement />
       {modal}
       {user.convention && user.convention.isConventionSigned === null && (
       <Notification type="info">
