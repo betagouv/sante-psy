@@ -44,7 +44,7 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
   return updatedPsy;
 };
 
-const allActivePsychologistRequest = db.select([
+const selectFields = (): string[] => [
   'dossierNumber',
   'lastName',
   'adeli',
@@ -69,16 +69,16 @@ const allActivePsychologistRequest = db.select([
   'region',
   'useFirstNames',
   'useLastName',
-])
-  .select()
-  .from(psychologistsTable)
-  .whereNot('archived', true)
-  .where('state', DossierState.accepte)
-  .andWhere('active', true);
+];
 
 const getAllActive = async (): Promise<Psychologist[]> => {
   try {
-    return allActivePsychologistRequest;
+    return db.select(selectFields())
+      .select()
+      .from(psychologistsTable)
+      .whereNot('archived', true)
+      .where('state', DossierState.accepte)
+      .andWhere('active', true);
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
     throw new Error('Impossible de récupérer les psychologistes');
@@ -87,7 +87,12 @@ const getAllActive = async (): Promise<Psychologist[]> => {
 
 const getAllActiveByAvailability = async (isVeryAvailable: boolean): Promise<Psychologist[]> => {
   try {
-    const psychologists = allActivePsychologistRequest
+    const psychologists = db.select(selectFields())
+      .select()
+      .from(psychologistsTable)
+      .whereNot('archived', true)
+      .where('state', DossierState.accepte)
+      .andWhere('active', true)
       .andWhere('isVeryAvailable', isVeryAvailable)
       .orderByRaw('RANDOM()');
     return psychologists;
