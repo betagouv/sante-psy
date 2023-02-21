@@ -178,6 +178,7 @@ describe('DS integration tests', () => {
       assignedUniversityId,
       useFirstNames,
       useLastName,
+      isVeryAvailable,
       ...psy
     } = await dbPsychologists.getById(id);
     psy.should.eql(expected);
