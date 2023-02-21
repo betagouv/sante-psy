@@ -27,3 +27,16 @@ describe('Prefix URL', () => {
     string.prefixUrl('https://www.yakalelo.com').should.equals('https://www.yakalelo.com');
   });
 });
+
+describe('Display statistics', () => {
+  it('Should return undefined if value invalid', () => {
+    string.displayStatistic('1').should.equals('1');
+    string.displayStatistic('12').should.equals('12');
+    string.displayStatistic('123').should.equals('120');
+    string.displayStatistic('1234').should.equals('1 200');
+    string.displayStatistic('12345').should.equals('12 000');
+    string.displayStatistic('123456').should.equals('120 000');
+    string.displayStatistic('1234567').should.equals('1 200 000');
+    string.displayStatistic('12345678').should.equals('12 000 000');
+  });
+});

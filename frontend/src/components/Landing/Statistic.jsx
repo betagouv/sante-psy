@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { displayStatistic } from 'services/string';
 import styles from './statistic.cssmodule.scss';
 
 const Statistic = ({ value, description }) => (
@@ -8,7 +9,7 @@ const Statistic = ({ value, description }) => (
       data-test-id={`statistic-${description}-value`}
       className={styles.value}
     >
-      <b>{(Math.floor(value / 1000) * 1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}</b>
+      <b>{displayStatistic(value)}</b>
       {' '}
       +
     </div>
