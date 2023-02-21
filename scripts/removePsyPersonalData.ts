@@ -17,6 +17,7 @@ const removePsyPersonalData = async (dossierNumber: string): Promise<void> => {
     if (psychologist.active && psychologist.archived) {
       console.log('Psychologist is still displayed in public list!');
       console.log('Help: archive the dossier in DS or ask him/her to deactivate his/her account');
+      process.exit(1);
     }
 
     const erasedData = '-';
