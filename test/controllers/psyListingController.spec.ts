@@ -67,6 +67,8 @@ describe('psyListingController', () => {
         'otherCity',
         'otherPostcode',
         'languages',
+        'email',
+        'phone',
       ];
       expect(resultPsyActive1).to.have.all.keys(expectedKeys);
       expect(resultPsyActive2).to.have.all.keys(expectedKeys);
