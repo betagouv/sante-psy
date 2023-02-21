@@ -14,9 +14,9 @@ const StudentUnregister = () => {
 
   return (
     <Slice
-    color="secondary"
-    centerText
-    centerTitle
+      color="secondary"
+      centerText
+      centerTitle
       description={(
         <>
           <div>Ta demande a bien été prise en compte ✅</div>

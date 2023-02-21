@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useStore } from 'stores/';
-import { ButtonGroup, Button, Text } from '@dataesr/react-dsfr';
+import { ButtonGroup, Button } from '@dataesr/react-dsfr';
 import Slice from 'components/Slice/Slice';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
@@ -56,7 +56,7 @@ const StudentAnswer = () => {
             </ButtonGroup>
           </>
         )}
-        <GlobalNotification />
+      <GlobalNotification />
     </Slice>
   );
 };
