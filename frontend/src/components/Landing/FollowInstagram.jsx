@@ -26,7 +26,7 @@ const FollowInstagram = () => (
       <>
         Déjà plus de
         {' '}
-        <b>8 000 abonnés sur Instagram.</b>
+        <b>9 000 abonnés sur Instagram.</b>
         {' '}
         Au programme&#x00A0;: conseils, témoignages et accompagnement
         autour de la santé psychologique des étudiants.

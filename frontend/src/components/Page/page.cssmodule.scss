@@ -15,6 +15,11 @@
   }
 }
 
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+}
+
 .container {
   background-color: white;
   max-width: 1200px;
@@ -63,9 +68,6 @@
 .tutorial {
   display: none;
   color: white;
-  position: absolute;
-  right: 32px;
-  top: 32px;
   cursor: pointer;
 }
 

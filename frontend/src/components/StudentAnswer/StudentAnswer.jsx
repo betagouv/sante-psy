@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useStore } from 'stores/';
-import { ButtonGroup, Button, Text } from '@dataesr/react-dsfr';
-import Page from 'components/Page/Page';
+import { ButtonGroup, Button } from '@dataesr/react-dsfr';
+import Slice from 'components/Slice/Slice';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
 import styles from './studentAnswer.cssmodule.scss';
@@ -37,15 +37,18 @@ const StudentAnswer = () => {
   }, []);
 
   return (
-    <Page withoutHeader textContent>
-      <GlobalNotification />
-      <h1>Merci d&lsquo;avoir pris le temps de répondre 🙂</h1>
+    <Slice
+      color="secondary"
+      centerText
+      centerTitle
+      description={(<b>Merci d&lsquo;avoir pris le temps de répondre 🙂</b>)}
+    >
       {searchParams.get('appointment') && !success
         && (
           <>
-            <Text className={styles.question}>
+            <div className={styles.question}>
               Recommanderais-tu Santé Psy Étudiant à d’autres étudiants et étudiantes&nbsp;?
-            </Text>
+            </div>
             <ButtonGroup align="center" isInlineFrom="md">
               <Button icon="ri-emotion-unhappy-line" onClick={() => onClick(1)}>Non</Button>
               <Button icon="ri-emotion-normal-line" onClick={() => onClick(2)}>Moyen</Button>
@@ -53,7 +56,8 @@ const StudentAnswer = () => {
             </ButtonGroup>
           </>
         )}
-    </Page>
+      <GlobalNotification />
+    </Slice>
   );
 };
 
