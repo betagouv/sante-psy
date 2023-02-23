@@ -4,10 +4,11 @@ import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 
 const getAllActive = async (req: Request, res: Response, reduced: boolean): Promise<void> => {
-  const time = `getting all active psychologists from Postgres (query id #${Math.random().toString()})`;
-  console.time(time);
-  const psyList = await dbPsychologists.getAllActive();
-  console.timeEnd(time);
+  const [veryAvailablePsys, notVeryAvailablePsys] = await Promise.all([
+    dbPsychologists.getAllActiveByAvailability(true),
+    dbPsychologists.getAllActiveByAvailability(false),
+  ]);
+  const psyList = veryAvailablePsys.concat(notVeryAvailablePsys);
 
   res.json(reduced
     ? psyList.map((psy) => ({
