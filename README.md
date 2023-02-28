@@ -1,4 +1,4 @@
-# Santé Psy | <https://santepsyetudiants.beta.gouv.fr/>
+# Santé Psy Étudiant | <https://santepsy.etudiant.gouv.fr/>
 
 Accompagnement psychologique pour les étudiants
 
