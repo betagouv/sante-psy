@@ -281,24 +281,25 @@ const PsyListing = () => {
             geoLoading={geoLoading}
           />
           {filteredPsychologists && filteredPsychologists.length < 8
-            && (
-            <NoResultPsyTable
-              noResult={filteredPsychologists.length === 0}
-              searchAroundMe={() => {
-                setNameFilter('');
-                setAddressFilter(AROUND_ME);
-              }}
-              searchWithTeleconsultation={() => {
-                setNameFilter('');
-                setAddressFilter(null);
-                setTeleconsultation(true);
-              }}
-            />
+            ? (
+              <NoResultPsyTable
+                noResult={filteredPsychologists.length === 0}
+                searchAroundMe={() => {
+                  setNameFilter('');
+                  setAddressFilter(AROUND_ME);
+                }}
+                searchWithTeleconsultation={() => {
+                  setNameFilter('');
+                  setAddressFilter(null);
+                  setTeleconsultation(true);
+                }}
+              />
+            ) : (
+              <Alert
+                title="Attention, en cas de séance non honorée et sans excuse valable"
+                description="Le psychologue peut se réserver le droit de refuser un étudiant"
+              />
             )}
-          <Alert
-            title="Attention, en cas de séance non honorée et sans excuse valable"
-            description="Le psychologue peut se réserver le droit de refuser un étudiant"
-          />
         </>
       )}
     </Page>
