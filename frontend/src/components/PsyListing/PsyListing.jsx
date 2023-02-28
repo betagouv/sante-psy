@@ -280,8 +280,8 @@ const PsyListing = () => {
             teleconsultation={teleconsultation}
             geoLoading={geoLoading}
           />
-          {filteredPsychologists && filteredPsychologists.length < 8 ?
-            (
+          {filteredPsychologists && filteredPsychologists.length < 8
+            ? (
               <NoResultPsyTable
                 noResult={filteredPsychologists.length === 0}
                 searchAroundMe={() => {
@@ -299,8 +299,7 @@ const PsyListing = () => {
                 title="Attention, en cas de séance non honorée et sans excuse valable"
                 description="Le psychologue peut se réserver le droit de refuser un étudiant"
               />
-            )
-          }
+            )}
         </>
       )}
     </Page>
