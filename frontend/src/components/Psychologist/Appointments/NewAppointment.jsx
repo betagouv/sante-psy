@@ -37,9 +37,9 @@ const NewAppointment = () => {
 
   const patient = useMemo(() => patients && patients.find(p => p.id === patientId), [patients, patientId]);
 
-  const tooMuchAppointments = useMemo(() => patient && patient.appointmentsCount > MAX_APPOINTMENT, [patient]);
+  const tooMuchAppointments = useMemo(() => patient && patient.count >= MAX_APPOINTMENT, [patient]);
   const askForRenewal = useMemo(
-    () => patient && !patient.renewed && patient.appointmentsCount > RENEWAL_LIMIT,
+    () => patient && !patient.renewed && patient.count >= RENEWAL_LIMIT,
     [patient],
   );
 

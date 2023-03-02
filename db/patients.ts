@@ -17,17 +17,31 @@ const getById = async (patientId: string, psychologistId: string): Promise<Patie
   }
 };
 
-const getAll = async (psychologistId: string): Promise<(Patient & {appointmentsCount: string})[]> => {
+const startCurrentUnivYear = (): string => {
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  if (currentMonth < 6) {
+    return `${currentYear - 1}-09-01`;
+  }
+  return `${currentYear}-09-01`;
+};
+
+const getAll = async (psychologistId: string): Promise<(Patient & { appointmentsCount: string })[]> => {
   try {
     const patientArray = await db.select(`${patientsTable}.*`)
-        .from(patientsTable)
-        .joinRaw(`left join "${appointmentsTable}" on `
+      .from(patientsTable)
+      .joinRaw(`left join "${appointmentsTable}" on `
         + `"${patientsTable}"."id" = "${appointmentsTable}"."patientId" and "${appointmentsTable}"."deleted" = false`)
-        .where(`${patientsTable}.psychologistId`, psychologistId)
-        .andWhere(`${patientsTable}.deleted`, false)
-        .count(`${appointmentsTable}.*`, { as: 'appointmentsCount' })
-        .groupBy(`${patientsTable}.id`)
-        .orderByRaw(`LOWER("${patientsTable}"."lastName"), LOWER("${patientsTable}"."firstNames")`);
+      .where(`${patientsTable}.psychologistId`, psychologistId)
+      .andWhere(`${patientsTable}.deleted`, false)
+      .count(`${appointmentsTable}.*`, { as: 'appointmentsCount' })
+      .count(db.raw(
+        `DISTINCT CASE WHEN ${appointmentsTable}."appointmentDate" > '${startCurrentUnivYear()}' 
+        THEN ${appointmentsTable}.id 
+        END`,
+      ))
+      .groupBy(`${patientsTable}.id`)
+      .orderByRaw(`LOWER("${patientsTable}"."lastName"), LOWER("${patientsTable}"."firstNames")`);
     return patientArray;
   } catch (err) {
     console.error('Impossible de récupérer les patients', err);
@@ -70,9 +84,9 @@ const insert = async (
 const renew = async (id: string, psychologistId: string): Promise<number> => {
   try {
     return await db(patientsTable)
-    .where('id', id)
-    .where('psychologistId', psychologistId)
-    .update({ renewed: true });
+      .where('id', id)
+      .where('psychologistId', psychologistId)
+      .update({ renewed: true });
   } catch (err) {
     console.error('Erreur de modification du patient', err);
     throw new Error('Erreur de modification du patient');
