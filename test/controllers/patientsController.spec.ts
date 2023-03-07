@@ -73,7 +73,7 @@ describe('patientsController', () => {
           res.body[0].doctorAddress.should.equal(myPatient.doctorAddress);
           res.body[0].dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
           res.body[0].appointmentsCount.should.equal('2');
-          res.body[0].count.should.equal('1');
+          res.body[0].appointmentsYearCount.should.equal('1');
 
           return Promise.resolve();
         });

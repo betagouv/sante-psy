@@ -29,18 +29,20 @@ const startCurrentUnivYear = (): string => {
 
 const getAll = async (psychologistId: string): Promise<(Patient & { appointmentsCount: string })[]> => {
   try {
-    const patientArray = await db.select(`${patientsTable}.*`)
+    const patientArray = await db.select(
+      db.raw(`${patientsTable}.*, 
+      COUNT(
+        DISTINCT CASE WHEN ${appointmentsTable}."appointmentDate" > '${startCurrentUnivYear()}' 
+        THEN ${appointmentsTable}.id 
+        END
+      ) as "appointmentsYearCount"`),
+    )
       .from(patientsTable)
       .joinRaw(`left join "${appointmentsTable}" on `
         + `"${patientsTable}"."id" = "${appointmentsTable}"."patientId" and "${appointmentsTable}"."deleted" = false`)
       .where(`${patientsTable}.psychologistId`, psychologistId)
       .andWhere(`${patientsTable}.deleted`, false)
       .count(`${appointmentsTable}.*`, { as: 'appointmentsCount' })
-      .count(db.raw(
-        `DISTINCT CASE WHEN ${appointmentsTable}."appointmentDate" > '${startCurrentUnivYear()}' 
-        THEN ${appointmentsTable}.id 
-        END`,
-      ))
       .groupBy(`${patientsTable}.id`)
       .orderByRaw(`LOWER("${patientsTable}"."lastName"), LOWER("${patientsTable}"."firstNames")`);
     return patientArray;
