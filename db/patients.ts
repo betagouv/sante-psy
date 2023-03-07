@@ -28,10 +28,11 @@ const startCurrentUnivYear = (): string => {
 };
 
 const getAll = async (psychologistId: string): Promise<(Patient &
-  { appointmentsCount: string, appointmentsYearCount: string })[]> => {
+{ appointmentsCount: string, appointmentsYearCount: string })[]> => {
   try {
-    const patientArray = await db.select(
-      db.raw(`${patientsTable}.*, 
+    const patientArray = await db.select(`${patientsTable}.*`)
+    .select(
+      db.raw(`
       COUNT(
         DISTINCT CASE WHEN ${appointmentsTable}."appointmentDate" > '${startCurrentUnivYear()}' 
         THEN ${appointmentsTable}.id 
