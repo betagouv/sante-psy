@@ -37,6 +37,49 @@ const makePatient = async (psychologistId) => {
 };
 
 describe('patientsController', () => {
+  describe('get all patients', () => {
+    beforeEach(async (done) => {
+      done();
+    });
+
+    afterEach(async () => {
+      await clean.patients();
+      return Promise.resolve();
+    });
+
+    it('should get all patients', async () => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      };
+      const myPatient = await makePatient(psy.dossierNumber);
+      await dbAppointments.insert(new Date('2021-04-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(), myPatient.id, psy.dossierNumber);
+
+      return chai.request(app)
+        .get('/api/patients')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .then(async (res) => {
+          expect(res.status).to.equal(200);
+          res.status.should.equal(200);
+
+          res.body.length.should.equal(1);
+          res.body[0].firstNames.should.equal(myPatient.firstNames);
+          res.body[0].lastName.should.equal(myPatient.lastName);
+          res.body[0].id.should.equal(myPatient.id);
+          res.body[0].institutionName.should.equal(myPatient.institutionName);
+          res.body[0].doctorName.should.equal(myPatient.doctorName);
+          res.body[0].doctorAddress.should.equal(myPatient.doctorAddress);
+          res.body[0].dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
+          res.body[0].appointmentsCount.should.equal('2');
+          res.body[0].appointmentsYearCount.should.equal('1');
+
+          return Promise.resolve();
+        });
+    });
+  });
+
   describe('create patient', () => {
     beforeEach(async (done) => {
       done();
