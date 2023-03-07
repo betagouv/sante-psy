@@ -27,7 +27,8 @@ const startCurrentUnivYear = (): string => {
   return `${currentYear}-09-01`;
 };
 
-const getAll = async (psychologistId: string): Promise<(Patient & { appointmentsCount: string })[]> => {
+const getAll = async (psychologistId: string): Promise<(Patient &
+  { appointmentsCount: string, appointmentsYearCount: string })[]> => {
   try {
     const patientArray = await db.select(
       db.raw(`${patientsTable}.*, 
