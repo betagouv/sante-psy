@@ -20,7 +20,8 @@ module.exports = () => [
   },
   {
     question: 'J\'ai bénéficié du dispositif sur l\'année 2021/2022, puis-je de nouveau en bénéficier sur l\'année 2022/2023\u00A0?',
-    answer: "Le renouvellement d'un cycle de 8 séances est possible à partir de septembre 2022. Pour cela, l'étudiant doit toutefois solliciter une nouvelle lettre d'orientation auprès de son médecin généraliste. Il doit également toujours être étudiant sur l'année universitaire 2022/2023.",
+    answer: "Un étudiant peut bénéficier d'un cycle de 8 séances maximum par année universitaire. Si l'étudiant a bénéficié du dispositif sur l'année universitaire 2021/2022, il peut de nouveau en bénéficier sur l'année 2022/2023 sous réserve qu'il soit toujours étudiant sur la période de suivi et en sollicitant une nouvelle lettre d'orientation auprès de son médecin généraliste. \
+    À noter, qu'il ne peut y avoir qu'une seule lettre d'orientation par année universitaire.",
   },
   {
     question: 'La lettre d\'orientation est-elle obligatoire\u00A0?',
