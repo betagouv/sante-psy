@@ -37,7 +37,7 @@ const Appointments = () => {
   const filteredAppointments = appointments.filter(appointment => {
     const appointmentDate = utcDate(appointment.appointmentDate);
     return appointmentDate.getFullYear() === month.year
-        && appointmentDate.getMonth() === month.month - 1;
+      && appointmentDate.getMonth() === month.month - 1;
   });
 
   const columns = [
@@ -77,16 +77,22 @@ const Appointments = () => {
       <Callout hasInfoIcon={false}>
         <CalloutText size="md">
           <span style={{ fontWeight: 'bold' }}>
-            Le dispositif Santé Psy Étudiant est prolongé sur 2023..
+            Rappel des conditions de remboursement
           </span>
-          <br />
-          Dans cette période de transition vers un dispositif de droit commun, le renouvellement d&lsquo;un cycle de 8 séances est autorisé à partir de septembre 2022 pour les étudiants ayant effectué un premier cycle sur l&lsquo;année 2021/2022.
-          <br />
-          <br />
-          Nous vous invitons à vérifier l&lsquo;exactitude de vos déclarations afin d&lsquo;éviter tout délai de remboursement supplémentaire.
-          <br />
-          <br />
-          Nous vous rappelons que dans le cadre du dispositif, il est strictement interdit de demander aux étudiants une avance de frais ou un complément.
+          <ul>
+            <li>
+              Les étudiants peuvent bénéficier jusqu&lsquo;à 8 séances
+              <b>maximum</b>
+              {' '}
+              prises en charge par année universitaire soit sur 2022/2023.
+            </li>
+            <li>
+              Nous vous rappelons que dans le cadre du dispositif, il est strictement interdit de demander aux étudiants une avance de frais ou un complément.
+            </li>
+            <li>
+              Nous vous invitons à vérifier l&lsquo;exactitude de vos déclarations afin d&lsquo;éviter tout délai de remboursement supplémentaire.
+            </li>
+          </ul>
         </CalloutText>
       </Callout>
       <div className="fr-my-2w">
@@ -119,7 +125,7 @@ const Appointments = () => {
           <div>
             Vous n‘avez pas déclaré de séances pour le mois de
             {' '}
-            { formatMonth(month) }
+            {formatMonth(month)}
             .
           </div>
         )}
