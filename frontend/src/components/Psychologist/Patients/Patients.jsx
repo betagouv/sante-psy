@@ -86,8 +86,9 @@ const Patients = () => {
     const missingInfo = getMissingInfo(patient);
     return {
       ...patient,
-      hasFolderCompleted: missingInfo.length === 0,
+      hasTooMuchAppointment: patient.appointmentsYearCount > RENEWAL_LIMIT,
       missingInfo,
+      currentYear,
     };
   });
 
@@ -118,14 +119,6 @@ const Patients = () => {
     columns.push({
       name: 'appointmentsYearCount',
       label: `Séances ${currentYear}`,
-      render: patient => (
-        <>
-          {patient.appointmentsYearCount}
-          {' '}
-          {patient.appointmentsYearCount > RENEWAL_LIMIT
-            && <Icon name="ri-alert-line" title="Excès de séances" size="lg" />}
-        </>
-      ),
       sortable: true,
     });
     columns.push({ name: 'appointmentsCount', label: 'Séances total', sortable: true });
