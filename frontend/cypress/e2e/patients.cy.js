@@ -27,14 +27,14 @@ describe('Patient', () => {
       cy.get('[data-test-id="etudiant-table"] tr')
         .should('have.length', 6);
       cy.get('[data-test-id="etudiant-row-missing-info"]')
-        .should('have.length', 2);
+        .should('have.length', 4);
       cy.get('[data-test-id="etudiant-row-complete-info"]')
-        .should('have.length', 3);
+        .should('have.length', 1);
       cy.get('[data-test-id="etudiant-table"] td')
         .eq(1)
         .should(
           'have.text',
-          'Informations manquantes : nom du docteur, établissement scolaire, adresse du docteur, date de naissance, statut étudiant, orientation médicale',
+          'Informations manquantes : nom du docteur, établissement scolaire, adresse du docteur, date de naissance, statut étudiant, orientation médicale.',
         );
     });
   });
@@ -63,9 +63,9 @@ describe('Patient', () => {
       cy.get('[data-test-id="etudiant-table"] tr')
         .should('have.length', 6);
       cy.get('[data-test-id="etudiant-row-missing-info"]')
-        .should('have.length', 1);
-      cy.get('[data-test-id="etudiant-row-complete-info"]')
         .should('have.length', 4);
+      cy.get('[data-test-id="etudiant-row-complete-info"]')
+        .should('have.length', 1);
 
       cy.get('[data-test-id="notification-success"] p')
         .should(
