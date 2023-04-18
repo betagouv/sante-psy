@@ -93,6 +93,16 @@ const formatMonth = m => {
   return '?';
 };
 
+const currentUnivYear = () => {
+  const SEPTEMBER = 8;
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  if (currentMonth < SEPTEMBER) {
+    return `${currentYear - 1}/${currentYear}`;
+  }
+  return `${currentYear}/${currentYear + 1}`;
+};
+
 export {
   formatFrenchDate,
   formatDDMMYYYY,
@@ -101,4 +111,5 @@ export {
   formatMonth,
   shortFrenchMonthNames,
   utcDate,
+  currentUnivYear,
 };
