@@ -5,9 +5,9 @@ import classNames from 'classnames';
 import { Table, Callout, CalloutText, Icon } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
-import { parseDateForm } from 'services/date';
-
+import { currentUnivYear, parseDateForm } from 'services/date';
 import { useStore } from 'stores/';
+import { RENEWAL_LIMIT } from '../Appointments/NewAppointment';
 
 import PatientActionsLegend from './PatientActionsLegend';
 import PatientActions from './PatientActions';
@@ -21,6 +21,8 @@ const Patients = () => {
   const [patients, setPatients] = useState([]);
   const [seeAppointments, setSeeAppointments] = useState(true);
   const table = useRef(null);
+
+  const currentYear = currentUnivYear();
 
   const updateAppointentsColumns = () => {
     if (table.current) {
@@ -84,8 +86,9 @@ const Patients = () => {
     const missingInfo = getMissingInfo(patient);
     return {
       ...patient,
-      hasFolderCompleted: missingInfo.length === 0,
+      hasTooMuchAppointment: patient.appointmentsYearCount > RENEWAL_LIMIT,
       missingInfo,
+      currentYear,
     };
   });
 
@@ -113,7 +116,12 @@ const Patients = () => {
       sort: (a, b) => a.missingInfo.length - b.missingInfo.length,
     }];
   if (seeAppointments) {
-    columns.push({ name: 'appointmentsCount', label: 'Séances', sortable: true });
+    columns.push({
+      name: 'appointmentsYearCount',
+      label: `Séances ${currentYear}`,
+      sortable: true,
+    });
+    columns.push({ name: 'appointmentsCount', label: 'Séances total', sortable: true });
   }
   columns.push(
     {

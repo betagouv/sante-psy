@@ -82,6 +82,7 @@ const Appointments = () => {
           <ul>
             <li>
               Les étudiants peuvent bénéficier jusqu&lsquo;à 8 séances
+              {' '}
               <b>maximum</b>
               {' '}
               prises en charge par année universitaire soit sur 2022/2023.

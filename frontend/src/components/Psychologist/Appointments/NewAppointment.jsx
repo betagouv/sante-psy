@@ -15,7 +15,7 @@ import { observer } from 'mobx-react';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const MAX_APPOINTMENT = 16;
-const RENEWAL_LIMIT = 8;
+export const RENEWAL_LIMIT = 8;
 
 const NewAppointment = () => {
   const navigate = useNavigate();
@@ -136,7 +136,7 @@ const NewAppointment = () => {
               <Checkbox
                 className="fr-mt-1w"
                 data-test-id="new-appointment-understand"
-                label="J'ai conscience que seules 16 séances (inclus renouvellement) seront prises en charge par l'université."
+                label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances (inclus renouvellement) seront prises en charge par l'université.`}
                 onChange={e => setUnderstand(e.target.checked)}
               />
             </>
