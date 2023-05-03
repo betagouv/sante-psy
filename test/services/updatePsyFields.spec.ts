@@ -108,6 +108,7 @@ describe('Update psy fields', () => {
         hasSeenTutorial: false,
         inactiveUntil: new Date(),
         createdAt: creationDate,
+        acceptationDate: null,
       };
 
       const editablePsy = updatePsyFields.editablePsyFields(psy);

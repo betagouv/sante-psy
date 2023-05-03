@@ -30,6 +30,7 @@ export type NonEditablePsychologist = {
     training: string,
     adeli: string,
     diploma: string,
+    acceptationDate: Date,
   };
 
 export type Psychologist = NonEditablePsychologist & EditablePsychologist & {
@@ -71,4 +72,8 @@ export type DSPsychologist = {
     id: string,
     stringValue: string,
   }[],
+  traitements: {
+    state: DossierState,
+    dateTraitement: Date
+  }[]
 }

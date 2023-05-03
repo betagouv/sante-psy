@@ -8,6 +8,10 @@ export const dossier = [
       label: 'Normandie',
     },
     state: 'accepte',
+    traitements: [
+      { sate: 'osef', dateTraitement: new Date() },
+      { state: 'accepte', dateTraitement: new Date('2020-01-02') },
+    ],
     champs: [
       {
         id: 'Q2hhbXAtMTY1OTUxMw==',
@@ -106,6 +110,7 @@ export const dossier = [
       label: 'Normandie',
     },
     state: 'accepte',
+    traitements: [],
     champs: [
       {
         id: 'Q2hhbXAtMTY1OTUxMw==',

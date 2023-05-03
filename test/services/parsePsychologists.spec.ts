@@ -23,6 +23,7 @@ describe('parsePsychologists', () => {
         archived: false,
         state: DossierState.accepte,
         adeli: '829302942',
+        acceptationDate: new Date('2020-01-02'),
         address: 'SSR CL AL SOLA 66110 MONTBOLO',
         departement: '14 - Calvados',
         region: 'Normandie',

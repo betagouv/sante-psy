@@ -189,6 +189,7 @@ const getOnePsy = (
     isConventionSigned: false,
     createdAt: new Date(),
     active: true,
+    acceptationDate: null,
     hasSeenTutorial: true,
     ...getAddress(),
     ...psychologist,
@@ -245,6 +246,7 @@ const getOnePsyDS = (
   },
   messages: [],
   annotations: [],
+  traitements: [],
   champs: [{
     id: champId,
     stringValue: champValue,
