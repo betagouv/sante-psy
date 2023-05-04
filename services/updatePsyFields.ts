@@ -42,6 +42,7 @@ export const nonEditablePsyFields = (psy: Psychologist): NonEditablePsychologist
   training: psy.training,
   adeli: psy.adeli,
   diploma: psy.diploma,
+  acceptationDate: psy.acceptationDate,
 });
 
 export default {

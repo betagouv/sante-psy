@@ -232,6 +232,10 @@ const requestPsychologist = async (afterCursor: string | undefined): Promise<DSR
                   prenom
                 }
               }
+              traitements {
+                state
+                dateTraitement
+              }
           }
         }
       }

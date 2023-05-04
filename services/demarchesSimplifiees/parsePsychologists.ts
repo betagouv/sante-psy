@@ -2,6 +2,7 @@ import uuid from '../../utils/uuid';
 import { getChampsFieldFromId } from '../champsAndAnnotations';
 import { DSPsychologist, Psychologist } from '../../types/Psychologist';
 import geo from '../../utils/geo';
+import { DossierState } from '../../types/DossierState';
 
 const parseTeleconsultation = (inputString: string): boolean => inputString === 'true';
 
@@ -24,6 +25,7 @@ const parseDossierMetadata = (dossier: DSPsychologist): Psychologist => {
     usager,
     number,
     champs,
+    traitements,
   } = dossier;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const psy: any = { state, archived };
@@ -59,6 +61,11 @@ const parseDossierMetadata = (dossier: DSPsychologist): Psychologist => {
   psy.teleconsultation = parseTeleconsultation(psy.teleconsultation);
   psy.training = parseTraining(psy.training);
   psy.region = geo.departementToRegion[psy.departement];
+
+  const acceptation = traitements.find((traitement) => traitement.state === DossierState.accepte);
+  if (acceptation) {
+    psy.acceptationDate = acceptation.dateTraitement;
+  }
 
   return psy;
 };
