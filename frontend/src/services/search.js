@@ -6,7 +6,7 @@ const removeStreet = address => {
     return '';
   }
   const res = address.split(/(?=[0-9]{5})/);
-  return res.length > 1 ? res[res.length - 1] : '';
+  return res.length > 1 ? res[res.length - 1] : res[0];
 };
 
 const matchDepartment = (address, filter) => !!removeStreet(address).startsWith(filter);
