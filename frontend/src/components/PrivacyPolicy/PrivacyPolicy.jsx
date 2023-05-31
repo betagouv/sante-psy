@@ -138,7 +138,7 @@ const PrivacyPolicy = () => {
           >
             cliquez ici pour accéder au formulaire
           </a>
-          ). Le service de santé universitaire (SSU) le
+          ). Le service de santé étudiante (SSE) le
           plus proche du lieu d&lsquo;exercice procédera à l&lsquo;examen de
           la demande.
         </p>

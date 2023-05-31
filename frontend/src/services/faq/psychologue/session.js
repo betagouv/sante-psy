@@ -24,7 +24,7 @@ module.exports = () => [
     question: 'Quelles informations dois-je vérifier auprès du étudiant lors de la séance\u00A0?',
     answer:
       'Lors de chaque séance, vous devez renseigner les identités du médecin adresseur et de l’étudiant tout en confirmant que la séance a eu lieu. \
-    Cette information permet au SSU de suivre la situation de l’étudiant concerné et à l’administration de l’établissement \
+    Cette information permet au SSE de suivre la situation de l’étudiant concerné et à l’administration de l’établissement \
     (qui n’a pas accès aux informations concernant l’étudiant) de s’assurer du service fait qui permet de déclencher le paiement.',
     frequent: true,
   },

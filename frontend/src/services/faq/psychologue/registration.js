@@ -9,7 +9,7 @@ module.exports = () => [
   {
     question: 'Pourquoi ma candidature a été refusée\u00A0?',
     answer: "Lorsque votre dossier est refusé, vous recevez un email précisant le motif. \
-    Il se peut que vous ne répondez pas aux critères d'ancienneté, de diplôme, que le SSU\u00A0/ l'Université de votre territoire \
+    Il se peut que vous ne répondez pas aux critères d'ancienneté, de diplôme, que le SSE\u00A0/ l'Université de votre territoire \
     ne peut plus recevoir de demandes par exemple dans le cas où les psychologues dans votre région\u00A0/ département couvrent largement les besoins estimés.",
   },
   {

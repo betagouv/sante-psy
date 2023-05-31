@@ -63,7 +63,7 @@ const CGU = () => {
           effectuer des recherches par nom, ville, code postal ou région.
         </p>
         <p>
-          Après consultation d’un médecin généraliste (du service de santé universitaire ou extérieur) et de
+          Après consultation d’un médecin généraliste (du service de santé étudiante ou extérieur) et de
           l’obtention d’une lettre d&lsquo;orientation, l’Utilisateur étudiant a le droit à 3 séances renouvelables 1
           fois. Il peut prendre rendez-vous avec un des psychologues référencés en contactant le professionnel au
           travers des moyens de contact renseignés sur le référentiel.
@@ -76,8 +76,8 @@ const CGU = () => {
       </Section>
       <Section title="Article 5 - Fonctionnalités réservées aux Utilisateurs psychologues">
         <p>
-          Les psychologues partenaires du dispositif sont agréés par les services de santé universitaire (SSU) et
-          signent une convention avec l’établissement dont dépend le SSU qui les a agréés. Cette convention précise
+          Les psychologues partenaires du dispositif sont agréés par les services de santé étudiante (SSE) et
+          signent une convention avec l’établissement dont dépend le SSE qui les a agréés. Cette convention précise
           les modalités de paiement des séances réalisées dans le cadre du dispositif.
         </p>
         <p>
@@ -95,13 +95,13 @@ const CGU = () => {
           >
             cliquez ici pour accéder au formulaire
           </a>
-          ). Le service de santé universitaire (SSU) le plus proche du lieu d’exercice procédera à
+          ). Le service de santé étudiante (SSE) le plus proche du lieu d’exercice procédera à
           l’examen de la demande.
         </p>
         <p>
           Si elle est conforme aux critères retenus, la demande sera agréée et le psychologue sera invité(e) à
-          signer une convention avec l’université à laquelle le SSU est rattaché. Les coordonnées seront publiées
-          sur la liste des psychologues participant au dispositif. Les étudiants orientés, par le SSU ou un médecin
+          signer une convention avec l’université à laquelle le SSE est rattaché. Les coordonnées seront publiées
+          sur la liste des psychologues participant au dispositif. Les étudiants orientés, par le SSE ou un médecin
           généraliste, vers un psychologue choisiront parmi celles et ceux inscrits sur cette liste et prendront
           directement rendez-vous avec celle ou celui qu’ils ont choisi(e).
         </p>

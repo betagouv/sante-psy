@@ -24,7 +24,7 @@ module.exports = () => [
     question: 'Comment se passe le remboursement\u00A0? Quel délai\u00A0?',
     answer:
       'Les psychologues partenaires du dispositif sont agréés par les services de \
-    santé universitaire (SSU) et signent une convention avec l’établissement dont dépend le SSU qui les a agréés. \
+    santé étudiante (SSE) et signent une convention avec l’établissement dont dépend le SSE qui les a agréés. \
     Cette convention précise les modalités de paiement des séances réalisées dans le cadre du dispositif. \
     Ces séances sont déclarées par les psychologues sur une plateforme dédiée. \
     Cette déclaration va déclencher les opérations de paiement prises en charge par les \

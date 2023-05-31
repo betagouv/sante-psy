@@ -123,7 +123,7 @@ const AddEditPatient = () => {
               className="fr-input-group"
               defaultChecked={patient.hasPrescription}
               label="J'ai vérifié que les séances ont bien été prescrites
-                par un médecin ou un Service de Santé Universitaire"
+                par un médecin ou un Service de Santé Étudiante"
               hint="L'étudiant m'a présenté une lettre ou ordonnance médicale"
               value="hasPrescription"
               onChange={e => changePatient(e.target.checked, 'hasPrescription')}
@@ -139,14 +139,14 @@ const AddEditPatient = () => {
             <TextInput
               className="midlength-input"
               data-test-id="etudiant-doctor-name-input"
-              label="Médecin ou Service de Santé Universitaire qui a orienté cet étudiant"
-              hint="Exemple : Annie Benahmou ou SSU Rennes 1"
+              label="Médecin ou Service de Santé Étudiante qui a orienté cet étudiant"
+              hint="Exemple : Annie Benahmou ou SSE Rennes 1"
               value={patient.doctorName}
               onChange={e => changePatient(e.target.value, 'doctorName')}
             />
             <TextInput
               className="midlength-input"
-              label="Ville et/ou code postal du médecin ou Service de Santé Universitaire"
+              label="Ville et/ou code postal du médecin ou Service de Santé Étudiante"
               hint="Exemple : 97400 Saint-Denis"
               value={patient.doctorAddress}
               onChange={e => changePatient(e.target.value, 'doctorAddress')}

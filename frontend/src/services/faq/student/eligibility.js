@@ -19,13 +19,13 @@ module.exports = () => [
     frequent: true,
   },
   {
-    question: 'Je ne connais pas mon Service de Santé Universitaire. Que faire\u00A0?',
+    question: 'Je ne connais pas mon Service de Santé Étudiante. Que faire\u00A0?',
     answer:
-      "Vous n'êtes pas obligé de passer par un SSU\u00A0: \
+      "Vous n'êtes pas obligé de passer par un SSE\u00A0: \
     vous pouvez consulter votre médecin traitant ou un médecin généraliste, \
     qui vous orientera vers un psychologue partenaire du dispositif. \
     Vous pouvez aussi consulter le site de votre université ou école, ou téléphoner, \
-    pour trouver si vous dépendez d'un SSU.",
+    pour trouver si vous dépendez d'un SSE.",
   },
   {
     question: 'J’ai déjà un suivi. Puis-je cependant bénéficier du dispositif\u00A0?',

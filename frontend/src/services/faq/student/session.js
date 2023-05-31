@@ -5,7 +5,7 @@ module.exports = () => [
     question: 'Puis-je aller voir directement le/la psychologue\u00A0?',
     answer: 'Dans le cadre du dispositif Santé Psy Étudiant, \
     vous ne pouvez pas aller voir directement un psychologue\u00A0; vous devez consulter un médecin \
-    du service de santé universitaire ou un médecin généraliste \
+    du service de santé étudiante ou un médecin généraliste \
     qui vous orientera vers un psychologue partenaire de la démarche.',
   },
   {
