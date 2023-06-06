@@ -16,7 +16,7 @@ const Newsletter = ({ emailRef, withTracking }) => {
 
   useEffect(() => {
     if (withTracking && __PIXEL_ADS__) {
-    // Inspired by https://developers.axeptio.eu/cookies/cookies-integration
+      // Inspired by https://developers.axeptio.eu/cookies/cookies-integration
       trackAds.initAxeptio();
 
       if (!window._axcb) {
@@ -88,24 +88,27 @@ const Newsletter = ({ emailRef, withTracking }) => {
       ? <Alert className={styles.alert} type={notification.type} title={notification.message} />
       : (
         <div className={styles.container}>
-          <img src="/images/newsletter.svg" alt="Newsletter" className={styles.logo} />
-          <div className={styles.separator} />
-          <form
-            className={styles.form}
-            onSubmit={onSubmit}
-          >
-            <TextInput
-              ref={emailRef}
-              placeholder="Votre e-mail"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-            />
-            <Button
-              submit
+          <span>Vous souhaitez en savoir plus et être accompagné sur les premières étapes&nbsp;:</span>
+          <div className={styles.innercontainer}>
+            <img src="/images/newsletter.svg" alt="Newsletter" className={styles.logo} />
+            <div className={styles.separator} />
+            <form
+              className={styles.form}
+              onSubmit={onSubmit}
             >
-              Suivez le guide
-            </Button>
-          </form>
+              <TextInput
+                ref={emailRef}
+                placeholder="Votre e-mail"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+              />
+              <Button
+                submit
+              >
+                Suivez le guide
+              </Button>
+            </form>
+          </div>
         </div>
       )
   );
