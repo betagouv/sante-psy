@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, Pagination, Icon, Badge } from '@dataesr/react-dsfr';
+import { useLocation } from 'react-router-dom';
+import { Link, Pagination, Icon, Badge } from '@dataesr/react-dsfr';
 import styles from './psyTable.cssmodule.scss';
 
 const PsyTable = ({
@@ -13,16 +13,15 @@ const PsyTable = ({
   teleconsultation,
 }) => {
   const [surrendingPages, setSurrendingPages] = useState(0);
-  const navigate = useNavigate();
   const location = useLocation();
   const table = useRef(null);
 
   const goToProfile = psychologist => {
     const searchPath = `?page=${page}&name=${nameFilter}&address=${addressFilter}&teleconsultation=${teleconsultation}&language=${languageFilter}`;
     if (location.search !== searchPath) {
-      navigate(`/trouver-un-psychologue${searchPath}`);
+      return `/trouver-un-psychologue${searchPath}`;
     }
-    navigate(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
+    return `/trouver-un-psychologue/${psychologist.dossierNumber}`;
   };
 
   const updateSurrendingPages = () => {
@@ -114,13 +113,14 @@ const PsyTable = ({
                 >
                   <Icon name="ri-phone-fill" size="2x" />
                 </div>
-                <Button
+                <Link
                   data-test-id="psy-table-row-profil-button"
-                  secondary
-                  onClick={() => goToProfile(psychologist)}
+                  href={goToProfile(psychologist)}
+                  target="_blank"
+                  className="fr-btn fr-btn--secondary"
                 >
                   Plus d&lsquo;infos
-                </Button>
+                </Link>
               </div>
             </div>
           ))}
