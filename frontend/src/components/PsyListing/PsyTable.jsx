@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Link, Pagination, Icon, Badge } from '@dataesr/react-dsfr';
 import styles from './psyTable.cssmodule.scss';
 
@@ -13,15 +13,16 @@ const PsyTable = ({
   teleconsultation,
 }) => {
   const [surrendingPages, setSurrendingPages] = useState(0);
+  const navigate = useNavigate();
   const location = useLocation();
   const table = useRef(null);
 
   const goToProfile = psychologist => {
     const searchPath = `?page=${page}&name=${nameFilter}&address=${addressFilter}&teleconsultation=${teleconsultation}&language=${languageFilter}`;
     if (location.search !== searchPath) {
-      return `/trouver-un-psychologue${searchPath}`;
+      navigate(`/trouver-un-psychologue${searchPath}`);
     }
-    return `/trouver-un-psychologue/${psychologist.dossierNumber}`;
+    navigate(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
   };
 
   const updateSurrendingPages = () => {
@@ -115,8 +116,8 @@ const PsyTable = ({
                 </div>
                 <Link
                   data-test-id="psy-table-row-profil-button"
-                  href={goToProfile(psychologist)}
-                  target="_blank"
+                  href={`/trouver-un-psychologue/${psychologist.dossierNumber}`}
+                  onClick={() => goToProfile(psychologist)}
                   className="fr-btn fr-btn--secondary"
                 >
                   Plus d&lsquo;infos
