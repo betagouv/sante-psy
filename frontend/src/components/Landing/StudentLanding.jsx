@@ -20,6 +20,7 @@ const StudentLanding = () => {
   return (
     <div data-test-id="landingPageContainer">
       <Slice
+        centerTitle
         centerText
         title={(
           <>
