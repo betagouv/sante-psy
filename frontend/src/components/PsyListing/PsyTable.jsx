@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, Pagination, Icon, Badge } from '@dataesr/react-dsfr';
+import { Link, Pagination, Icon, Badge } from '@dataesr/react-dsfr';
 import styles from './psyTable.cssmodule.scss';
 
 const PsyTable = ({
@@ -114,13 +114,14 @@ const PsyTable = ({
                 >
                   <Icon name="ri-phone-fill" size="2x" />
                 </div>
-                <Button
+                <Link
                   data-test-id="psy-table-row-profil-button"
-                  secondary
+                  href={`/trouver-un-psychologue/${psychologist.dossierNumber}`}
                   onClick={() => goToProfile(psychologist)}
+                  className="fr-btn fr-btn--secondary"
                 >
                   Plus d&lsquo;infos
-                </Button>
+                </Link>
               </div>
             </div>
           ))}
