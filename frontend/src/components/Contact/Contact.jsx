@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Button, Select, TextInput, RadioGroup, Radio } from '@dataesr/react-dsfr';
-import classNames from 'classnames';
 import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
@@ -148,9 +147,10 @@ const Contact = () => {
           />
           <TextInput
             data-test-id="message-input"
-            className={classNames(styles.fullWidthInput, styles.textareaMoreLines)}
+            className={styles.fullWidthInput}
             required
             textarea
+            rows="5"
             hint="Merci de ne fournir que les données personnelles strictement nécessaires au traitement de la demande. "
             label="Message"
             value={message}
