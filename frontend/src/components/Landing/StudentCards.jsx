@@ -8,7 +8,7 @@ const StudentCards = () => (
   <Row className={styles.card}>
     <StudentCard
       index={1}
-      title="Consultez un médecin généraliste"
+      title="Consultez un médecin généraliste ou le médecin de votre SSE"
       image="doctor"
       description={(
         <>

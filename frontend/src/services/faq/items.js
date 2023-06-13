@@ -69,8 +69,8 @@ const items = {
         title: 'Voir le dépliant médecin',
       },
       {
-        href: '/static/documents/flyer_ssu.pdf',
-        title: 'Voir le dépliant SSU',
+        href: '/static/documents/flyer_sse.pdf',
+        title: 'Voir le dépliant SSE',
       },
     ],
     sections: [

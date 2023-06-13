@@ -93,7 +93,7 @@ const PsychologistRouter = () => {
               <b>facturations</b>
             </>
           ),
-          description: 'Vous pouvez éditer et générer vos factures sur cet espace avant de les envoyer au Service de Santé Universitaire afin de vous faire rembourser.',
+          description: 'Vous pouvez éditer et générer vos factures sur cet espace avant de les envoyer au Service de Santé Étudiante afin de vous faire rembourser.',
           tutorial: 'billing',
         };
       case 'mon-profil':

@@ -7,18 +7,18 @@ module.exports = config => [
       souhaitent bénéficier du dispositif d’accompagnement. Quelles démarches dois-je effectuer\u00A0?',
     answer: `Pour participer au dispositif Santé Psy Étudiant, les psychologues doivent en faire la demande en renseignant un formulaire \
       <a href="${config.demarchesSimplifieesUrl}" target="_blank" rel="noopener noreferrer">(cliquez ici pour accéder au formulaire)</a>. \
-      Le service de santé universitaire (SSU) le plus proche de votre lieu d’exercice procédera à l’examen de votre demande. \
+      Le service de santé étudiante (SSE) le plus proche de votre lieu d’exercice procédera à l’examen de votre demande. \
       Si elle est conforme aux critères retenus, votre demande sera agréée et vous serez invité(e) à signer une convention \
       (destinée à définir les conditions de votre participation au dispositif et les modalités de règlement des consultations effectuées) \
-      avec l’université à laquelle le SSU est rattaché. Vos coordonnées seront publiées sur la liste des psychologues participant au dispositif. \
-      Les étudiants orientés, par le SSU ou un médecin généraliste, vers un psychologue choisiront \
+      avec l’université à laquelle le SSE est rattaché. Vos coordonnées seront publiées sur la liste des psychologues participant au dispositif. \
+      Les étudiants orientés, par le SSE ou un médecin généraliste, vers un psychologue choisiront \
       parmi celles et ceux inscrits sur cette liste et prendront directement rendez-vous avec celle ou celui qu’ils ont choisi(e).`,
     frequent: true,
   },
   {
     question: 'Puis-je proposer ma participation au dispositif uniquement par consultations vidéo\u00A0?',
     answer:
-      'Dans ce cas, votre demande sera examinée par le service médical universitaire (SSU) \
+      'Dans ce cas, votre demande sera examinée par le service médical étudiant (SSE) \
       proche de votre lieu d’exercice qui déterminera, avec le concours de la fédération française des psychologues et de psychologie, \
       si l’offre exclusive de téléconsultation que vous proposez convient.',
   },
@@ -40,7 +40,7 @@ module.exports = config => [
     question: 'Je ne dispose pas de numéro Adeli mais d’un numéro SIRET. Puis-je participer au dispositif\u00A0?',
     answer:
       'Le numéro ADELI est obligatoire car il permet d’attester que son détenteur est autorisé à faire usage du titre de psychologue. \
-      Il constitue donc pour les services de santé universitaire une garantie importante préalable à l’agrément, \
+      Il constitue donc, pour les services de santé étudiante, une garantie importante préalable à l’agrément, \
       complémentaire aux trois années d’expérience requises. Le numéro SIRET n’offre pas une telle garantie.',
   },
   {
