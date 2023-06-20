@@ -35,7 +35,7 @@ const StudentLanding = () => {
           </>
         )}
       >
-        <Newsletter withTracking emailRef={emailRef} />
+        <Newsletter withTracking withText emailRef={emailRef} />
       </Slice>
       <Slice color="secondary">
         <StudentCards />

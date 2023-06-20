@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import agent from 'services/agent';
 import styles from './newsletter.cssmodule.scss';
 
-const Newsletter = ({ emailRef, withTracking }) => {
+const Newsletter = ({ emailRef, withTracking, withText }) => {
   const searchParams = useLocation().search;
   const [email, setEmail] = useState('');
   const [notification, setNotification] = useState();
@@ -88,7 +88,7 @@ const Newsletter = ({ emailRef, withTracking }) => {
       ? <Alert className={styles.alert} type={notification.type} title={notification.message} />
       : (
         <div className={styles.container}>
-          <span>Vous souhaitez en savoir plus et être accompagné sur les premières étapes&nbsp;:</span>
+          {withText && <span>Vous souhaitez en savoir plus et être accompagné sur les premières étapes&nbsp;:</span>}
           <div className={styles.innercontainer}>
             <img src="/images/newsletter.svg" alt="Newsletter" className={styles.logo} />
             <div className={styles.separator} />
