@@ -1,18 +1,18 @@
 import { Alert, Button, TextInput } from '@dataesr/react-dsfr';
 import trackAds from 'services/trackAds';
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import agent from 'services/agent';
 import styles from './newsletter.cssmodule.scss';
 
 const Newsletter = ({ emailRef, withTracking }) => {
-  const [searchParams] = useSearchParams();
+  const searchParams = useLocation().search;
   const [email, setEmail] = useState('');
   const [notification, setNotification] = useState();
   const [facebookConsent, setFacebookConsent] = useState(false);
   const [googleAdsConsent, setGoogleAdsConsent] = useState(false);
 
-  const from = searchParams.get('from');
+  const from = new URLSearchParams(searchParams).get('from');
 
   useEffect(() => {
     if (withTracking && __PIXEL_ADS__) {
@@ -52,7 +52,7 @@ const Newsletter = ({ emailRef, withTracking }) => {
     event.preventDefault();
     if (email) {
       trackEvent();
-      agent.Student.sendMail(email)
+      agent.Student.sendMail(email, from)
         .then(response => {
           setNotification({ type: 'success', message: response.data.message });
         })
