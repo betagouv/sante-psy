@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import { URL } from 'url';
-import autoAcceptMessage from './configDS/autoAcceptMessage';
 
 dotenv.config();
 
