@@ -34,7 +34,7 @@ export default {
     id: process.env.DEMARCHES_SIMPLIFIEES_ID,
     url: process.env.DEMARCHES_SIMPLIFIEES_URL,
     autoAcceptDepartments: process.env.DEMARCHES_SIMPLIFIEES_AUTO_ACCEPT_DEPARTMENTS || [],
-    autoAcceptMessage: autoAcceptMessage(contactEmail),
+    waitingForConventionDepartments: process.env.DEMARCHES_SIMPLIFIEES_WAITING_FOR_CONVENTION_DEPARTMENTS || [],
     instructor: process.env.DEMARCHES_SIMPLIFIEES_INSTRUCTOR,
     champs: process.env.DEMARCHES_SIMPLIFIEES_CHAMPS,
     annotations: process.env.DEMARCHES_SIMPLIFIEES_ANNOTATIONS,
