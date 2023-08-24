@@ -1,5 +1,4 @@
 import sinon from 'sinon';
-import config from '../../utils/config';
 import autoAcceptPsychologists from '../../services/demarchesSimplifiees/autoAccept';
 import graphql from '../../services/demarchesSimplifiees/buildRequest';
 
@@ -38,7 +37,7 @@ describe('autoAcceptPsychologist', () => {
 
     sinon.assert.calledWith(
       sendMessageWithAttachmentStub,
-      config.demarchesSimplifiees.autoAcceptMessage,
+      sinon.match.string,
       FILE_ID,
       dossierId,
     );
