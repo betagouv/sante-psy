@@ -140,28 +140,12 @@ Avec [le scalingo CLI](https://doc.scalingo.com/cli) et le nom de l'app sur scal
 scalingo -a APP_NAME pgsql-console
 ```
 
-On peut insérer des données comme ceci :
+### Créer un compte psychologue de test
 
 ```sql
 INSERT INTO public.psychologists
-("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, teleconsultation, description, languages, training, diploma, "createdAt", "updatedAt", archived, state, "personalEmail")
-VALUES('77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli', 'firstname', 'lastname', 'publicemail@beta.gouv.fr', '', '', '', '', '', false, 'accfzfz', '', '[]', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'private.email@beta.gouv.fr');
-```
-
-Autre solution : utiliser le code Node au lieu de SQL.
-
-```bash
-scalingo -a APP_NAME run node
-```
-
-Puis une fois la console node ouverte :
-
-```js
-const dbPsychologists = require('./db/psychologists')
-
-let psy = { 'dossierNumber': '77356ab0-349b-4980-899f-bad2ce87e2f1', 'adeli': 123, firstNames: 'Stevie', 'lastName': 'Wonder', 'email': 'meetwithstevie@wonder.com', archived: true, state: 'accepte', personalEmail: 'stevie@wonder.com'}
-
-dbPsychologists.upsertMany([psy])
+("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, teleconsultation, description, languages, training, diploma, "createdAt", "updatedAt", archived, state, "personalEmail", "assignedUniversityId", "active")
+VALUES(uuid_generate_v4(), '123456789', 'Prénom', 'Nom', 'publicemail@beta.gouv.fr', '', '', '', '', '', false, 'Ceci est ma description', '', '[]', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'prenom.nom@beta.gouv.fr', '78522ec3-7c2f-4a5d-88cd-0a6678ee0135', true);
 ```
 
 ### Affichage d'une annonce
