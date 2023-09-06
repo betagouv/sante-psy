@@ -14,8 +14,7 @@ import { observer } from 'mobx-react';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-const MAX_APPOINTMENT = 16;
-export const RENEWAL_LIMIT = 8;
+export const MAX_APPOINTMENT = 8;
 
 const NewAppointment = () => {
   const navigate = useNavigate();
@@ -24,7 +23,6 @@ const NewAppointment = () => {
   const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
   const [understand, setUnderstand] = useState(false);
-  const [renewal, setRenewal] = useState(false);
 
   const {
     commonStore: { setNotification },
@@ -35,18 +33,14 @@ const NewAppointment = () => {
     agent.Patient.get().then(setPatients);
   }, []);
 
-  const patient = useMemo(() => patients && patients.find(p => p.id === patientId), [patients, patientId]);
+  const patient = useMemo(() => patients?.find(p => p.id === patientId), [patients, patientId]);
 
   const tooMuchAppointments = useMemo(() => patient && patient.appointmentsYearCount >= MAX_APPOINTMENT, [patient]);
-  const askForRenewal = useMemo(
-    () => patient && !patient.renewed && patient.appointmentsYearCount >= RENEWAL_LIMIT,
-    [patient],
-  );
 
   const createNewAppointment = e => {
     e.preventDefault();
     setNotification({});
-    agent.Appointment.add(patientId, date, renewal).then(response => {
+    agent.Appointment.add(patientId, date).then(response => {
       navigate('/psychologue/mes-seances', { state: { notification: response } });
     });
   };
@@ -105,7 +99,7 @@ const NewAppointment = () => {
             options={[]}
             hint={(
               <>
-                Vous n&lsquo;avez aucun étudiant dans votre liste!
+                Vous n&lsquo;avez aucun étudiant dans votre liste !
                 {' '}
                 <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">
                   Ajoutez un nouvel étudiant
@@ -136,18 +130,11 @@ const NewAppointment = () => {
               <Checkbox
                 className="fr-mt-1w"
                 data-test-id="new-appointment-understand"
-                label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances (inclus renouvellement) seront prises en charge par l'université.`}
+                label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances seront prises en charge par année universitaire.`}
                 onChange={e => setUnderstand(e.target.checked)}
               />
             </>
           )}
-        />
-      )}
-      {askForRenewal && (
-        <Checkbox
-          data-test-id="new-appointment-renewal"
-          label="Il s'agit d'un renouvellement. Je confirme avoir vérifié l'éligibilité de l'étudiant ainsi que sa nouvelle lettre d'orientation."
-          onChange={e => setRenewal(e.target.checked)}
         />
       )}
       <Button
@@ -156,7 +143,7 @@ const NewAppointment = () => {
         submit
         icon="ri-add-line"
         className="fr-mt-4w"
-        disabled={(tooMuchAppointments && !understand) || (askForRenewal && !renewal)}
+        disabled={tooMuchAppointments && !understand}
       >
         Créer la séance
       </Button>

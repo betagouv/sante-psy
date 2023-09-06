@@ -86,18 +86,6 @@ const insert = async (
   }
 };
 
-const renew = async (id: string, psychologistId: string): Promise<number> => {
-  try {
-    return await db(patientsTable)
-      .where('id', id)
-      .where('psychologistId', psychologistId)
-      .update({ renewed: true });
-  } catch (err) {
-    console.error('Erreur de modification du patient', err);
-    throw new Error('Erreur de modification du patient');
-  }
-};
-
 const update = async (
   id: string,
   firstNames: string,
@@ -159,5 +147,4 @@ export default {
   insert,
   update,
   delete: deleteOne,
-  renew,
 };
