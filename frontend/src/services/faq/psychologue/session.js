@@ -34,14 +34,9 @@ module.exports = () => [
       "Les étudiants doivent présenter un justificatif d'inscription en études supérieures\u00A0: carte étudiante, certificat de scolarité ou autre document.",
   },
   {
-    question: 'Quelle est la date prévue de fin du dispositif Santé Psy Étudiant\u00A0?',
-    answer:
-      "Le dispositif Santé Psy Étudiant est prolongé sur 2023. Dans cette période de transition vers un dispositif de droit commun, le renouvellement d'un cycle de 8 séances est autorisé à partir de septembre 2022 pour les étudiants ayant effectué un premier cycle sur l'année 2021/2022.",
-  },
-  {
     question: "La lettre d'orientation est-elle obligatoire\u00A0? Qu'en est-il en cas de renouvellement\u00A0?",
     answer:
-      "Oui, la lettre d'orientation est obligatoire pour démarrer les séances. Après avoir effectué son cycle de 8 séances, l'étudiant doit toutefois solliciter une nouvelle lettre d'orientation auprès de son médecin généraliste (et présenter son justificatif étudiant sur l'année universitaire 2022/2023).",
+      "Oui, la lettre d'orientation est obligatoire pour démarrer les séances. Après avoir effectué son cycle de 8 séances, l'étudiant doit toutefois solliciter une nouvelle lettre d'orientation auprès d'un médecin généraliste (et présenter son justificatif étudiant valable sur l'année universitaire en cours).",
   },
   {
     question: "Que faire lorsqu'un étudiant annule sa consultation\u00A0?",
@@ -61,7 +56,7 @@ module.exports = () => [
   {
     question: 'Le renouvellement de séances est-il possible\u00A0? Sous quelles conditions\u00A0?',
     answer:
-      "En effet, depuis septembre 2022, le renouvellement d'un cycle de 8 séances est possible. Un nouveau cycle peut être entamé sur l’année universitaire suivante sous réserve du passage chez un médecin généraliste afin d’établir une nouvelle lettre d’orientation et la présentation d’un justificatif étudiant valable sur l'année 2022/2023. Pour le psychologue, la procédure de déclaration en ligne reste inchangée.",
+      "Le renouvellement d'un cycle de 8 séances est possible. Un nouveau cycle peut être entamé sur l’année universitaire suivante sous réserve du passage chez un médecin généraliste afin d’établir une nouvelle lettre d’orientation et la présentation d’un justificatif étudiant valable sur l'année universitaire en cours. Pour le psychologue, la procédure de déclaration en ligne reste inchangée.",
     frequent: true,
   },
 ];

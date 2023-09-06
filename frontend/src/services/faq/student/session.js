@@ -19,8 +19,8 @@ module.exports = () => [
     answer: 'Dans le cadre du dispositif, vous pouvez à tout moment changer de psychologue dans la liste de nos psychologues partenaires si vous en ressentez le besoin. Il suffit de vous munir de vos justificatifs (dont votre lettre d\'orientation) à présenter au nouveau psychologue partenaire.',
   },
   {
-    question: 'J\'ai bénéficié du dispositif sur l\'année 2021/2022, puis-je de nouveau en bénéficier sur l\'année 2022/2023\u00A0?',
-    answer: "Un étudiant peut bénéficier d'un cycle de 8 séances maximum par année universitaire. Si l'étudiant a bénéficié du dispositif sur l'année universitaire 2021/2022, il peut de nouveau en bénéficier sur l'année 2022/2023 sous réserve qu'il soit toujours étudiant sur la période de suivi et en sollicitant une nouvelle lettre d'orientation auprès de son médecin généraliste. \
+    question: 'J\'ai déjà bénéficié du dispositif, puis-je de nouveau en bénéficier\u00A0?',
+    answer: "Un étudiant peut bénéficier d'un cycle de 8 séances maximum par année universitaire. Si l'étudiant a déjà bénéficié du dispositif, il peut de nouveau en bénéficier sur l'année universitaire suivante, sous réserve qu'il soit toujours étudiant sur la période de suivi et en sollicitant une nouvelle lettre d'orientation auprès d'un médecin généraliste. \
     À noter, qu'il ne peut y avoir qu'une seule lettre d'orientation par année universitaire.",
   },
   {

@@ -85,7 +85,7 @@ const Appointments = () => {
               {' '}
               <b>maximum</b>
               {' '}
-              prises en charge par année universitaire soit sur 2022/2023.
+              prises en charge par année universitaire (du 1er septembre au 31 août de l&lsquo;année suivante).
             </li>
             <li>
               Nous vous rappelons que dans le cadre du dispositif, il est strictement interdit de demander aux étudiants une avance de frais ou un complément.
