@@ -12,5 +12,5 @@ export type Patient = {
     dateOfBirth?: Date | null,
     deleted?: boolean,
     updatedAt?: Date,
-    renewed?: boolean
+    renewed?: boolean // Deprecated: used on 2022/2023 only
 }

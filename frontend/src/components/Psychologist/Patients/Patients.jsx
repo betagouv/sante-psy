@@ -7,7 +7,7 @@ import { Table, Callout, CalloutText, Icon } from '@dataesr/react-dsfr';
 import agent from 'services/agent';
 import { currentUnivYear, parseDateForm } from 'services/date';
 import { useStore } from 'stores/';
-import { RENEWAL_LIMIT } from '../Appointments/NewAppointment';
+import { MAX_APPOINTMENT } from '../Appointments/NewAppointment';
 
 import PatientActionsLegend from './PatientActionsLegend';
 import PatientActions from './PatientActions';
@@ -55,15 +55,15 @@ const Patients = () => {
 
     const missingInfo = [];
 
-    if (!patient.doctorName || !patient.doctorName.trim()) {
+    if (!patient.doctorName?.trim()) {
       missingInfo.push(DOCTOR_NAME);
     }
 
-    if (!patient.institutionName || !patient.institutionName.trim()) {
+    if (!patient.institutionName?.trim()) {
       missingInfo.push(INSTITUTION_NAME);
     }
 
-    if (!patient.doctorAddress || !patient.doctorAddress.trim()) {
+    if (!patient.doctorAddress?.trim()) {
       missingInfo.push(DOCTOR_ADDRESS);
     }
 
@@ -86,7 +86,7 @@ const Patients = () => {
     const missingInfo = getMissingInfo(patient);
     return {
       ...patient,
-      hasTooMuchAppointment: patient.appointmentsYearCount > RENEWAL_LIMIT,
+      hasTooMuchAppointment: patient.appointmentsYearCount > MAX_APPOINTMENT,
       missingInfo,
       currentYear,
     };
