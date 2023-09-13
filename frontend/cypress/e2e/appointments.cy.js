@@ -104,7 +104,6 @@ describe('Appointments', () => {
         .invoke('attr', 'disabled')
         .then(disabled => {
           if (disabled) {
-            cy.get('[data-test-id="new-appointment-renewal"]').click();
             cy.get('[data-test-id="new-appointment-submit"]')
               .invoke('attr', 'disabled')
               .then(d => {
