@@ -50,6 +50,8 @@ describe('Search', () => {
       { address: 'rue du faubourg saint honoré 75008 paris', filter: ' pari', result: true },
       { address: 'rue du faubourg saint honoré 75008 paris', filter: 'Marseille', result: false },
       { address: 'rue du faubourg saint honoré 75008 paris', filter: 'faubourg', result: false },
+      { address: "Rue 59650 Villeneuve-d'Ascq", filter: "Villeneuve d'As", result: true },
+      { address: "Avenue, 59650 Villeneuve d'Ascq", filter: "Villeneuve d'As", result: true },
     ];
 
     tests.forEach(test => {
