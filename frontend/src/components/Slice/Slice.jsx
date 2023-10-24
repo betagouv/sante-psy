@@ -8,6 +8,7 @@ const Slice = ({
   color,
   title,
   description,
+  descriptionDataTestId,
   buttonText,
   buttonLink,
   buttonIcon,
@@ -36,7 +37,7 @@ const Slice = ({
           </h2>
         )}
         {description && (
-          <div className={styles.description}>
+          <div className={styles.description} data-test-id={descriptionDataTestId}>
             {description}
           </div>
         )}
