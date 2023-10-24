@@ -8,6 +8,7 @@ describe('Landing Page Test', () => {
     cy.visit('/');
     cy.wait('@config');
     cy.get('[data-test-id="landingPageContainer"]').should('exist');
+    cy.get('[data-test-id="followInstagramDescription"]').should($desc => expect($desc).to.contain('16 000'));
   });
 
   it('shows statistics', () => {
