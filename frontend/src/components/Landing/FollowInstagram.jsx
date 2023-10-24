@@ -1,10 +1,10 @@
 import React from 'react';
+import { observer } from 'mobx-react';
+import { useStore } from 'stores/';
+
 import '@gouvfr/dsfr/dist/utility/icons/icons-logo/icons-logo.min.css';
 import Slice from 'components/Slice/Slice';
 import styles from './followInstagram.cssmodule.scss';
-
-import { observer } from 'mobx-react';
-import { useStore } from 'stores/';
 
 const FollowInstagram = () => {
   const { commonStore: { config } } = useStore();
@@ -32,7 +32,11 @@ const FollowInstagram = () => {
         <>
           Déjà plus de
           {' '}
-          <b>{config?.statistics?.nbInstaFollower || '16 000'} abonnés sur Instagram.</b>
+          <b>
+            {config?.statistics?.nbInstaFollower || '16 000'}
+            {' '}
+            abonnés sur Instagram.
+          </b>
           {' '}
           Au programme&#x00A0;: conseils, témoignages et accompagnement
           autour de la santé psychologique des étudiants.
@@ -45,6 +49,6 @@ const FollowInstagram = () => {
       buttonSecondary
     />
   );
-}
+};
 
 export default observer(FollowInstagram);
