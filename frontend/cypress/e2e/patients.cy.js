@@ -103,7 +103,7 @@ describe('Patient', () => {
       cy.get('[data-test-id="etudiant-renewal-tag"]')
         .should(
           'have.text',
-          "Renouvellement",
+          'Renouvellement',
         );
       cy.get('[data-test-id="etudiant-letter-input"]')
         .click();

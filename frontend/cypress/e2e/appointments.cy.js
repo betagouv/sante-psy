@@ -92,8 +92,9 @@ describe('Appointments', () => {
       cy.get('[data-test-id="new-appointment-date-input"]').click();
       selectNextCalendarDate();
       cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
-      cy.get('[data-test-id="new-appointment-etudiant-input"] div div')
-        .eq(0).find('>div').eq(5).click();
+      cy.get('[data-test-id="new-appointment-etudiant-input"] div div').eq(0)
+        .find('>div').eq(5)
+        .click();
       cy.get('[data-test-id="new-appointment-submit"]').should('be.disabled');
 
       cy.get('[data-test-id="complete-student-link"]').click();
