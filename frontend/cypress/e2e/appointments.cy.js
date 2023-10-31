@@ -87,6 +87,27 @@ describe('Appointments', () => {
   });
 
   describe('New', () => {
+    it('should display warning if letter is missing for new year', () => {
+      cy.get('[data-test-id="new-appointment-button"]').click();
+      cy.get('[data-test-id="new-appointment-date-input"]').click();
+      selectNextCalendarDate();
+      cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
+      cy.get('[data-test-id="new-appointment-etudiant-input"] div div')
+        .eq(0).find('>div').eq(5).click();
+      cy.get('[data-test-id="new-appointment-submit"]').should('be.disabled');
+
+      cy.get('[data-test-id="complete-student-link"]').click();
+      cy.location('pathname').should('to.match', /^\/psychologue\/modifier-etudiant*/);
+      cy.get('[data-test-id="etudiant-letter-input"]').click();
+      cy.get('[data-test-id="save-etudiant-button"]').click();
+
+      cy.location('pathname').should('to.match', /^\/psychologue\/nouvelle-seance*/);
+      cy.get('[data-test-id="notification-success"] p').should('exist');
+      cy.get('[data-test-id="new-appointment-etudiant-input"]').should('not.be.empty');
+      cy.get('[data-test-id="new-appointment-date-input"]').should('not.be.empty');
+      cy.get('[data-test-id="new-appointment-submit"]').should('not.be.disabled');
+    });
+
     it('should create a new appointments', () => {
       cy.get('[data-test-id="new-appointment-button"]').click();
 

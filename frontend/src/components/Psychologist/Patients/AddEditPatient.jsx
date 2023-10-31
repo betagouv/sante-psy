@@ -105,6 +105,7 @@ const AddEditPatient = () => {
               />
               <TextInput
                 className="midlength-input"
+                data-test-id="etudiant-birth-date-input"
                 label={`Date de naissance (obligatoire uniquement pour vos étudiants enregistrés après le
                 ${config.dateOfBirthDeploymentDate})`}
                 hint="Format JJ/MM/AAAA, par exemple : 25/01/1987"
@@ -118,6 +119,7 @@ const AddEditPatient = () => {
             <div id="other-informations">
               <TextInput
                 className="midlength-input"
+                data-test-id="etudiant-school-input"
                 label="Établissement scolaire de l'étudiant"
                 hint="Exemple : Université de Rennes ou ENSAE"
                 value={patient.institutionName}
@@ -134,6 +136,7 @@ const AddEditPatient = () => {
               />
               <Checkbox
                 className="fr-input-group"
+                data-test-id="etudiant-status-input"
                 defaultChecked={patient.isStudentStatusVerified}
                 label="J'ai vérifié le statut étudiant"
                 hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
@@ -142,7 +145,7 @@ const AddEditPatient = () => {
               />
               {patientId && !patient.hasPrescription && (
                 <Tag
-                  data-test-id="etudiant-renouvellement-tag"
+                  data-test-id="etudiant-renewal-tag"
                   className={styles.incomplete}
                   icon="ri-alert-line"
                   iconPosition="left"
@@ -154,6 +157,7 @@ const AddEditPatient = () => {
               )}
               <Checkbox
                 className="fr-input-group"
+                data-test-id="etudiant-letter-input"
                 defaultChecked={patient.hasPrescription}
                 label={`J'ai vérifié que les séances ont bien été orientées
                 par un médecin ou un Service de Santé Étudiante pour ${currentYear}`}
@@ -171,6 +175,7 @@ const AddEditPatient = () => {
               />
               <TextInput
                 className="midlength-input"
+                data-test-id="etudiant-doctor-location-input"
                 label="Ville et/ou code postal du médecin ou Service de Santé Étudiante"
                 hint="Exemple : 97400 Saint-Denis"
                 value={patient.doctorAddress}

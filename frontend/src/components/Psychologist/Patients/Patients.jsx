@@ -146,6 +146,7 @@ const Patients = () => {
       </Callout>
       <div className="fr-my-2w">
         <Link
+          data-test-id="new-student-button"
           id="new-student-button"
           to="/psychologue/nouvel-etudiant"
           className="fr-btn"

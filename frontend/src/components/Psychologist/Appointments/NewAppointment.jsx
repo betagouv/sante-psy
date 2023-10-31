@@ -173,7 +173,7 @@ const NewAppointment = () => {
           {currentYear}
           .
           {' '}
-          <HashLink to={`/psychologue/modifier-etudiant/${patient.id}?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}>Compléter les informations</HashLink>
+          <HashLink data-test-id="complete-student-link" to={`/psychologue/modifier-etudiant/${patient.id}?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}>Compléter les informations</HashLink>
           <br />
           Les informations de l&lsquo;étudiant sont disponibles dans la catégorie &quot;Gérer mes étudiants&quot;
         </Notification>
