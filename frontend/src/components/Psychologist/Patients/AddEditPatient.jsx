@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Button, TextInput, Checkbox, Tag } from '@dataesr/react-dsfr';
 
 import { useStore } from 'stores/';
@@ -11,8 +11,12 @@ import styles from './addEditPatient.cssmodule.scss';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
+  const { search } = useLocation();
   const { commonStore: { config } } = useStore();
   const { patientId } = useParams();
+  const appointmentDate = new URLSearchParams(search).get('appointmentDate');
+  const addAppointment = new URLSearchParams(search).get('addAppointment');
+
   const [patient, setPatient] = useState();
 
   const currentYear = currentUnivYear();
@@ -57,7 +61,13 @@ const AddEditPatient = () => {
       : agent.Patient.create(patient);
     action
       .then(response => {
-        navigate('/psychologue/mes-etudiants', { state: { notification: response } });
+        if (appointmentDate) {
+          navigate(`/psychologue/nouvelle-seance/${patientId}?date=${appointmentDate}`, { state: { notification: response } });
+        } else if (addAppointment) {
+          navigate(`/psychologue/nouvelle-seance/${patientId}`, { state: { notification: response } });
+        } else {
+          navigate('/psychologue/mes-etudiants', { state: { notification: response } });
+        }
       })
       .catch(() => window.scrollTo(0, 0));
   };

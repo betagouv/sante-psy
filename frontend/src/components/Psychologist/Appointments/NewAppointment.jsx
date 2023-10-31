@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
 import { Alert, Button, Checkbox, SearchableSelect, Select } from '@dataesr/react-dsfr';
@@ -8,7 +8,7 @@ import Notification from 'components/Notification/Notification';
 import DateInput from 'components/Date/DateInput';
 
 import agent from 'services/agent';
-import { convertLocalToUTCDate, currentUnivYear } from 'services/date';
+import { convertLocalToUTCDate, currentUnivYear, formatDDMMYYYY, parseDateForm } from 'services/date';
 
 import { useStore } from 'stores/';
 import { observer } from 'mobx-react';
@@ -19,6 +19,8 @@ export const MAX_APPOINTMENT = 8;
 
 const NewAppointment = () => {
   const navigate = useNavigate();
+  const { search } = useLocation();
+  const queryDate = new URLSearchParams(search).get('date');
   const [date, setDate] = useState();
   const params = useParams();
   const [patientId, setPatientId] = useState(params.patientId);
@@ -31,6 +33,12 @@ const NewAppointment = () => {
   } = useStore();
 
   useEffect(() => {
+    if (queryDate) {
+      const parsedDate = parseDateForm(queryDate);
+      if (parsedDate instanceof Date && !Number.isNaN(parsedDate)) {
+        setDate(parsedDate);
+      }
+    }
     agent.Patient.get().then(setPatients);
   }, []);
 
@@ -85,7 +93,7 @@ const NewAppointment = () => {
                 <>
                   Votre étudiant n&lsquo;est pas dans la liste ?
                   {' '}
-                  <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">
+                  <HashLink to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`} id="new-patient">
                     Ajoutez un nouvel étudiant
                   </HashLink>
                 </>
@@ -107,7 +115,7 @@ const NewAppointment = () => {
                 <>
                   Vous n&lsquo;avez aucun étudiant dans votre liste !
                   {' '}
-                  <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">
+                  <HashLink to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`} id="new-patient">
                     Ajoutez un nouvel étudiant
                   </HashLink>
                 </>
@@ -128,15 +136,16 @@ const NewAppointment = () => {
           required
         />
         {tooMuchAppointments && (
-          <><Alert
-            className="fr-mt-2w"
-            description={(
-              <>
-                Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.
+          <>
+            <Alert
+              className="fr-mt-2w"
+              description={(
+                <>
+                  Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.
 
-              </>
-            )}
-          />
+                </>
+              )}
+            />
             <Checkbox
               className="fr-mt-1w"
               data-test-id="new-appointment-understand"
@@ -164,7 +173,7 @@ const NewAppointment = () => {
           {currentYear}
           .
           {' '}
-          <HashLink to={`/psychologue/modifier-etudiant/${patient.id}`}>Compléter les informations</HashLink>
+          <HashLink to={`/psychologue/modifier-etudiant/${patient.id}?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}>Compléter les informations</HashLink>
           <br />
           Les informations de l&lsquo;étudiant sont disponibles dans la catégorie &quot;Gérer mes étudiants&quot;
         </Notification>
