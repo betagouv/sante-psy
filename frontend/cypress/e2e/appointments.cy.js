@@ -93,7 +93,7 @@ describe('Appointments', () => {
       selectNextCalendarDate();
       cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
       cy.get('[data-test-id="new-appointment-etudiant-input"] div div').eq(0)
-        .find('>div').eq(5)
+        .find('>div').eq(4)
         .click();
       cy.get('[data-test-id="new-appointment-submit"]').should('be.disabled');
 

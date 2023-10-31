@@ -55,7 +55,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
     appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1));
   } else {
     appointmentList = patientList.flatMap((patient) => {
-      const nbOfAppointments = faker.datatype.number(8);
+      const nbOfAppointments = faker.datatype.number(10);
       const result = [];
       for (let i = 0; i < nbOfAppointments; i++) {
         result.push(create.getOneAppointment({
