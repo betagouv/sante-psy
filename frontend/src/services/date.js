@@ -103,9 +103,7 @@ const currentUnivYear = () => {
   return `${currentYear}/${currentYear + 1}`;
 };
 
-const endYearOfCurrentUnivYear = () => {
-  return parseInt(currentUnivYear().split('/')[1]);
-}
+const endYearOfCurrentUnivYear = () => parseInt(currentUnivYear().split('/')[1], 10);
 
 export {
   formatFrenchDate,
