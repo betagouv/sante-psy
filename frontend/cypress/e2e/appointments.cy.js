@@ -1,4 +1,5 @@
 const { checkConvention } = require('../../src/services/conventionVerification');
+const { formatDDMMYYYY } = require('../../src/services/date');
 const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 const { selectNextCalendarDate } = require('./utils/calendar');
@@ -119,6 +120,28 @@ describe('Appointments', () => {
       cy.wait('@createAppointment');
       cy.location('pathname').should('eq', '/psychologue/mes-seances');
       cy.get('[data-test-id="notification-success"] p').should('exist');
+    });
+
+    it('should display warning if letter is missing for new year', () => {
+      cy.get('[data-test-id="new-appointment-button"]').click();
+      cy.get('[data-test-id="new-appointment-date-input"]').click();
+      const nextCalendarDate = selectNextCalendarDate();
+      cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
+      cy.get('[data-test-id="new-appointment-etudiant-input"] div div').eq(0)
+        .find('>div').contains('Patient Arenouvelé')
+        .click();
+      cy.get('[data-test-id="new-appointment-submit"]').should('be.disabled');
+
+      cy.get('[data-test-id="complete-student-link"]').click();
+      cy.location('pathname').should('to.match', /^\/psychologue\/modifier-etudiant*/);
+      cy.get('[data-test-id="etudiant-letter-input"]').click();
+      cy.get('[data-test-id="save-etudiant-button"]').click();
+
+      cy.location('pathname').should('to.match', /^\/psychologue\/nouvelle-seance*/);
+      cy.get('[data-test-id="notification-success"] p').should('exist');
+      cy.get('[data-test-id="new-appointment-etudiant-input"]').should('not.be.empty');
+      cy.get('[data-test-id="new-appointment-date-input"]').should('have.value', formatDDMMYYYY(nextCalendarDate));
+      cy.get('[data-test-id="new-appointment-submit"]').should('not.be.disabled');
     });
   });
 });

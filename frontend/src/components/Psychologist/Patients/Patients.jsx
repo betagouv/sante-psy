@@ -51,7 +51,7 @@ const Patients = () => {
     const DOCTOR_ADDRESS = 'adresse du docteur';
     const BIRTH_DATE = 'date de naissance';
     const STUDENT_STATUS = 'statut étudiant';
-    const PRESCRIPTION = 'orientation médicale';
+    const PRESCRIPTION = 'renouvellement';
 
     const missingInfo = [];
 
@@ -146,6 +146,7 @@ const Patients = () => {
       </Callout>
       <div className="fr-my-2w">
         <Link
+          data-test-id="new-student-button"
           id="new-student-button"
           to="/psychologue/nouvel-etudiant"
           className="fr-btn"

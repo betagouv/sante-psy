@@ -1,13 +1,13 @@
 import React, { useRef } from 'react';
 import Picker from 'react-month-picker';
-import { shortFrenchMonthNames, formatMonth } from 'services/date';
+import { shortFrenchMonthNames, formatMonth, endYearOfCurrentUnivYear } from 'services/date';
 
 const MonthPicker = ({ month, setMonth, id }) => {
   const calendar = useRef(null);
 
   return (
     <Picker
-      years={{ min: { year: 2021, month: 3 }, max: { year: 2023, month: 12 } }}
+      years={{ min: { year: 2021, month: 3 }, max: { year: endYearOfCurrentUnivYear(), month: 12 } }}
       ref={calendar}
       value={month}
       lang={shortFrenchMonthNames}

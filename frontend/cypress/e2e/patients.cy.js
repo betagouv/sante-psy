@@ -34,7 +34,49 @@ describe('Patient', () => {
         .eq(1)
         .should(
           'have.text',
-          'Informations manquantes : nom du docteur, établissement scolaire, adresse du docteur, date de naissance, statut étudiant, orientation médicale.',
+          'Informations manquantes : nom du docteur, établissement scolaire, adresse du docteur, date de naissance, statut étudiant, renouvellement.',
+        );
+    });
+  });
+
+  describe('Add', () => {
+    it('should add etudiant', () => {
+      cy.get('[data-test-id="new-student-button"]')
+        .click();
+
+      cy.get('[data-test-id="etudiant-first-name-input"] > input')
+        .type('Titi');
+      cy.get('[data-test-id="etudiant-last-name-input"] > input')
+        .type('Toto');
+      cy.get('[data-test-id="etudiant-birth-date-input"] > input')
+        .type('01/01/2001');
+      cy.get('[data-test-id="etudiant-school-input"] > input')
+        .type('Université de Rennes');
+      cy.get('[data-test-id="etudiant-ine-input"] > input')
+        .type('01020304');
+      cy.get('[data-test-id="etudiant-status-input"]')
+        .click();
+      cy.get('[data-test-id="etudiant-renouvellement-tag"]').should('not.exist');
+      cy.get('[data-test-id="etudiant-letter-input"]')
+        .click();
+      cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
+        .type('Dr Dupont');
+      cy.get('[data-test-id="etudiant-doctor-location-input"] > input')
+        .type('Saint-Denis');
+      cy.get('[data-test-id="save-etudiant-button"]')
+        .click();
+
+      cy.get('[data-test-id="etudiant-table"] tr')
+        .should('have.length', 7);
+      cy.get('[data-test-id="etudiant-row-missing-info"]')
+        .should('have.length', 4);
+      cy.get('[data-test-id="etudiant-row-complete-info"]')
+        .should('have.length', 2);
+
+      cy.get('[data-test-id="notification-success"] p')
+        .should(
+          'have.text',
+          "L'étudiant Titi Toto a bien été créé.",
         );
     });
   });
@@ -55,6 +97,18 @@ describe('Patient', () => {
       cy.get('[data-test-id="etudiant-ine-input"] > input')
         .clear()
         .type('123456');
+
+      cy.get('[data-test-id="etudiant-letter-input"]')
+        .click();
+      cy.get('[data-test-id="etudiant-renewal-tag"]')
+        .should(
+          'have.text',
+          'Renouvellement',
+        );
+      cy.get('[data-test-id="etudiant-letter-input"]')
+        .click();
+      cy.get('[data-test-id="etudiant-renouvellement-tag"]').should('not.exist');
+
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
         .type('My doctor');
       cy.get('[data-test-id="save-etudiant-button"]')
