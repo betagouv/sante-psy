@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import Mail from 'components/Footer/Mail';
 
@@ -44,44 +43,6 @@ const LegalNotice = () => {
       </Section>
       <Section title="Hébergement de la Plateforme">
         Ce site est hébergé en propre par Scalingo SAS, 15 avenue du Rhin, 67100 Strasbourg, France.
-      </Section>
-      <Section id="accessibilite" title="Accessibilité">
-        <p>
-          La conformité aux normes d’accessibilité numérique est un objectif ultérieur.
-          En attendant, nous tâchons de rendre ce site
-          accessible à toutes et à tous :
-        </p>
-        <ul className="fr-list">
-          <li>Utilisation de composants accessibles (design system de l&lsquo;État)</li>
-          <li>Respect des bonnes pratiques (Pilida, Opquast...)</li>
-          <li>Tests manuels</li>
-        </ul>
-      </Section>
-      <Section title="Signaler un dysfonctionnement">
-        <p>
-          Si vous rencontrez un défaut d’accessibilité vous empêchant d’accéder à un contenu
-          ou une fonctionnalité du site, merci de nous en faire part en
-          {' '}
-          <Link to="/contact">
-            nous contactant
-          </Link>
-          .
-        </p>
-        <p>
-          Si vous n’obtenez pas de réponse rapide de notre part,
-          vous êtes en droit de faire parvenir vos doléances ou une demande de saisine au Défenseur des droits.
-        </p>
-      </Section>
-      <Section title="En savoir plus">
-        Pour en savoir plus sur la politique d’accessibilité numérique de l’État :
-        {' '}
-        <a
-          href="http://references.modernisation.gouv.fr/accessibilite-numerique"
-          target="_blank"
-          rel="noreferrer"
-        >
-          http://references.modernisation.gouv.fr/accessibilite-numerique
-        </a>
       </Section>
       <Section title="Sécurité">
         Le site est protégé par un certificat électronique,
