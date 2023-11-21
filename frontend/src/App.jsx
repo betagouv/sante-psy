@@ -13,6 +13,7 @@ import Logout from 'components/Login/Logout';
 import Login from 'components/Login/Login';
 import Faq from 'components/Faq/Faq';
 import CGU from 'components/CGU/CGU';
+import AccessibilityDeclaration from 'components/AccessibilityDeclaration/AccessibilityDeclaration';
 import PrivacyPolicy from 'components/PrivacyPolicy/PrivacyPolicy';
 import LegalNotice from 'components/LegalNotice/LegalNotice';
 import Statistics from 'components/Statistics/Statistics';
@@ -54,34 +55,35 @@ function App() {
       <ScrollToTop loading={loading} />
       <div id="contenu">
         {!loading && (
-        <React.Suspense fallback={null}>
-          <Routes>
-            <Route exact path="/activation/:token" element={<ActiveProfile />} />
-            <Route exact path="/suspension/:token" element={<InactiveProfile />} />
-            <Route exact path="/psychologue/logout" element={<Logout />} />
-            <Route exact path="/psychologue/login/:token" element={<Login />} />
-            <Route exact path="/psychologue/login/" element={<Login />} />
-            <Route exact path="/trouver-un-psychologue" element={<PsyListing />} />
-            <Route exact path="/trouver-un-psychologue/:psyId" element={<PublicPsychologistProfile />} />
-            <Route exact path="/mentions-legales" element={<LegalNotice />} />
-            <Route exact path="/cgu" element={<CGU />} />
-            <Route exact path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
-            <Route exact path="/faq" element={<Faq />} />
-            <Route exact path="/stats" element={<Statistics />} />
-            <Route exact path="/contact" element={<Contact />} />
-            <Route exact path="/autres-services" element={<OtherServices />} />
-            <Route exact path="/etudiant" element={<StudentLanding />} />
-            <Route exact path="/enregistrement/:id" element={<StudentAnswer />} />
-            <Route exact path="/desinscription/:id" element={<StudentUnregister />} />
-            <Route exact path="/" element={<Landing />} />
-            <Route
-              path="/psychologue/*"
-              element={user
-                ? <PsychologistRouter /> : <Navigate to="/psychologue/login" />}
-            />
-            <Route path="/*" element={<Navigate to={user ? '/psychologue/mes-seances' : '/'} />} />
-          </Routes>
-        </React.Suspense>
+          <React.Suspense fallback={null}>
+            <Routes>
+              <Route exact path="/activation/:token" element={<ActiveProfile />} />
+              <Route exact path="/suspension/:token" element={<InactiveProfile />} />
+              <Route exact path="/psychologue/logout" element={<Logout />} />
+              <Route exact path="/psychologue/login/:token" element={<Login />} />
+              <Route exact path="/psychologue/login/" element={<Login />} />
+              <Route exact path="/trouver-un-psychologue" element={<PsyListing />} />
+              <Route exact path="/trouver-un-psychologue/:psyId" element={<PublicPsychologistProfile />} />
+              <Route exact path="/mentions-legales" element={<LegalNotice />} />
+              <Route exact path="/declaration-accessibilite" element={<AccessibilityDeclaration />} />
+              <Route exact path="/cgu" element={<CGU />} />
+              <Route exact path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
+              <Route exact path="/faq" element={<Faq />} />
+              <Route exact path="/stats" element={<Statistics />} />
+              <Route exact path="/contact" element={<Contact />} />
+              <Route exact path="/autres-services" element={<OtherServices />} />
+              <Route exact path="/etudiant" element={<StudentLanding />} />
+              <Route exact path="/enregistrement/:id" element={<StudentAnswer />} />
+              <Route exact path="/desinscription/:id" element={<StudentUnregister />} />
+              <Route exact path="/" element={<Landing />} />
+              <Route
+                path="/psychologue/*"
+                element={user
+                  ? <PsychologistRouter /> : <Navigate to="/psychologue/login" />}
+              />
+              <Route path="/*" element={<Navigate to={user ? '/psychologue/mes-seances' : '/'} />} />
+            </Routes>
+          </React.Suspense>
         )}
       </div>
       <Footer />
