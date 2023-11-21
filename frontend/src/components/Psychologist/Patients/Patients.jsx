@@ -51,7 +51,7 @@ const Patients = () => {
     const DOCTOR_ADDRESS = 'adresse du docteur';
     const BIRTH_DATE = 'date de naissance';
     const STUDENT_STATUS = 'statut étudiant';
-    const PRESCRIPTION = 'renouvellement';
+    const PRESCRIPTION = 'orientation médicale';
 
     const missingInfo = [];
 
