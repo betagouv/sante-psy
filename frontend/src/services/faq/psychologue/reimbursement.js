@@ -15,12 +15,6 @@ module.exports = () => [
     answer: 'À ce stade, il n’est prévu aucune mesure particulière.',
   },
   {
-    question: 'Pourquoi les consultations sont-elles fixées à 45 minutes\u00A0?',
-    answer:
-      'La durée des séances ainsi que, par ailleurs, les critères relatifs au diplôme ou à \
-    l’expérience ont été établis avec le concours de la fédération française des psychologues et de psychologie.',
-  },
-  {
     question: 'Comment se passe le remboursement\u00A0? Quel délai\u00A0?',
     answer:
       'Les psychologues partenaires du dispositif sont agréés par les services de \
