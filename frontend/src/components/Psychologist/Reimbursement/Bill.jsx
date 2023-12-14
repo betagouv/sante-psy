@@ -23,6 +23,7 @@ const Bill = () => {
   const { month, year } = useParams();
   const [user, setUser] = useState({});
   const [appointments, setAppointments] = useState([]);
+  const [billInfos, setBillInfos] = useState([]);
   const [universityInfos, setUniversityInfos] = useState({ name: undefined, address: undefined });
 
   useEffect(() => {
@@ -56,7 +57,8 @@ const Bill = () => {
     if (Object.keys(appointments).length > 0 && Object.keys(user).length > 0) {
       window.print();
     }
-  }, [appointments, user]);
+    setBillInfos(getInfos());
+  }, [appointments, user, billInfos]);
 
   const filteredDate = Object.keys(appointments).filter(date => {
     const appointmentDate = utcDate(date);
@@ -109,7 +111,7 @@ const Bill = () => {
         </HeaderBody>
       </DSHeader>
       <div className={styles.content}>
-        {getInfos().map(info => (
+        {billInfos.map(info => (
           <div className={styles.info}>
             {info}
           </div>
