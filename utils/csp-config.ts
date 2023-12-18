@@ -5,7 +5,7 @@ export default helmet.contentSecurityPolicy({
     ...helmet.contentSecurityPolicy.getDefaultDirectives(),
     'script-src': [
       "'self'",
-      'https://stats.data.gouv.fr/',
+      'https://stats.beta.gouv.fr/',
       // Matomo script hash
       "'sha256-sqjiu0yVEwRFwPjX2fpBsUHfmtb6Cd2U2U+ip0KXg4c='",
       'https://static.axept.io/',
@@ -20,7 +20,7 @@ export default helmet.contentSecurityPolicy({
     ],
     'img-src': [
       "'self'",
-      'https://stats.data.gouv.fr/',
+      'https://stats.beta.gouv.fr/',
       'https://*.tile.openstreetmap.org/',
       'https://axeptio.imgix.net',
       'https://www.google.com/',
@@ -37,7 +37,7 @@ export default helmet.contentSecurityPolicy({
     'connect-src': [
       "'self'",
       'https://nominatim.openstreetmap.org',
-      'https://stats.data.gouv.fr/',
+      'https://stats.beta.gouv.fr/',
       'https://client.axept.io/',
     ],
   },
