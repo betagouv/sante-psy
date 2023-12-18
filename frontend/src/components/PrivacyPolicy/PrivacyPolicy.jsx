@@ -565,7 +565,7 @@ const PrivacyPolicy = () => {
         <p>
           Vous pouvez accéder aux statistiques d’usage disponibles en accès libre sur
           {' '}
-          <a target="_blank" rel="noopener noreferrer" href="https://stats.beta.gouv.fr/index.php?module=CoreHome&action=index&date=yesterday&period=day&idSite=76#?idSite=76&period=day&date=yesterday&segment=&category=Dashboard_Dashboard&subcategory=1">stats.beta.gouv.fr</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://stats.data.gouv.fr/index.php?module=CoreHome&action=index&date=yesterday&period=day&idSite=160#?idSite=160&period=day&date=yesterday&segment=&category=Dashboard_Dashboard&subcategory=1">stats.data.gouv.fr</a>
           .
         </p>
 
@@ -580,7 +580,7 @@ const PrivacyPolicy = () => {
         <iframe
           title="stats"
           style={{ border: 0, height: 120, width: '100%' }}
-          src="https://stats.beta.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=&fontSize=&fontFamily=%22Marianne%22%2C%20arial%2C%20sans-serif"
+          src="https://stats.data.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=&fontSize=&fontFamily=%22Marianne%22%2C%20arial%2C%20sans-serif"
         />
         <p>
           Vous pouvez également refuser l’utilisation des cookies nécessitant votre consentement
