@@ -6,6 +6,9 @@
 .content {
     margin: 32px auto;
     width: 750px;
+    @media print {
+        page-break-inside: avoid;
+    }
 }
 
 .info {

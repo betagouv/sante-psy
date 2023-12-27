@@ -1,3 +1,5 @@
+import { Patient } from './Patient';
+
 export type Appointment = {
     id: string,
     psychologistId: string,
@@ -5,3 +7,5 @@ export type Appointment = {
     patientId: string,
     deleted: boolean
 }
+
+export type AppointmentWithPatient = Appointment & Patient;

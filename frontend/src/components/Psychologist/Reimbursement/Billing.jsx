@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { HashLink } from 'react-router-hash-link';
 
@@ -6,14 +6,14 @@ import { Button, ButtonGroup, Callout, CalloutText } from '@dataesr/react-dsfr';
 import MonthPicker from 'components/Date/MonthPicker';
 import Notification from 'components/Notification/Notification';
 
-import agent from 'services/agent';
-import { formatMonth, utcDate } from 'services/date';
+import { formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
-
+import billingDataService from 'services/billingData';
 import { useStore } from 'stores/';
 import BillingTable from './BillingTable';
 import BillingInfo from './BillingInfo';
 import BillingHelper from './BillingHelper';
+import useAppointmentsByDate from './commonEffect';
 
 import styles from './billing.cssmodule.scss';
 
@@ -25,47 +25,15 @@ const Billing = () => {
 
   const { userStore: { user } } = useStore();
 
-  const [valuesByDate, setValuesByDate] = useState({
-    appointments: {},
-    patients: {},
-  });
+  const [valuesByDate, setValuesByDate] = useState({ appointments: {}, firstAppointments: {}, patients: {} });
   const [fillInfo, setFillInfo] = useState(false);
   const [billingInfo, setBillingInfo] = useState(billingInfoService.get());
   const [universityHasBillingAddress, setUniversityHasBillingAddress] = useState(false);
 
-  useEffect(() => {
-    agent.Appointment.get().then(response => {
-      const appointmentsByDate = {};
-      const patientsByDate = {};
-      response.forEach(appointment => {
-        const existingAppointments = appointmentsByDate[appointment.appointmentDate];
-        appointmentsByDate[appointment.appointmentDate] = existingAppointments ? existingAppointments + 1 : 1;
-        const existingPatients = patientsByDate[appointment.appointmentDate];
-        if (existingPatients) {
-          existingPatients.push(appointment.patientId);
-        } else {
-          patientsByDate[appointment.appointmentDate] = [appointment.patientId];
-        }
-      });
-      setValuesByDate({
-        appointments: appointmentsByDate,
-        patients: patientsByDate,
-      });
-    });
-    if (user.convention.universityId) {
-      agent.University.getOne(user.convention.universityId).then(university => {
-        if (university.billingAddress) {
-          setUniversityHasBillingAddress(true);
-        }
-      });
-    }
-  }, []);
+  useAppointmentsByDate(setValuesByDate, true);
 
-  const filteredDate = Object.keys(valuesByDate.appointments).filter(date => {
-    const appointmentDate = utcDate(date);
-    return appointmentDate.getFullYear() === month.year && appointmentDate.getMonth() === month.month - 1;
-  });
-
+  const filteredDates = billingDataService.getFilteredDates(valuesByDate.appointments, month.month, month.year);
+  const filteredFirstDates = billingDataService.getFilteredDates(valuesByDate.firstAppointments, month.month, month.year);
   const canGenerateBill = user.convention && user.convention.isConventionSigned;
   return (
     <>
@@ -98,7 +66,7 @@ const Billing = () => {
             <MonthPicker month={month} setMonth={setMonth} />
           </div>
         </div>
-        {filteredDate.length > 0 ? (
+        {filteredDates.length > 0 ? (
           <>
             <div className="fr-mb-2w">
               {fillInfo && (
@@ -147,21 +115,29 @@ const Billing = () => {
                 </Button>
               )}
             </ButtonGroup>
-            <BillingTable filteredDate={filteredDate} appointments={valuesByDate.appointments} />
+            <BillingTable
+              filteredDates={filteredDates}
+              filteredFirstDates={filteredFirstDates}
+              appointments={valuesByDate.appointments}
+              firstAppointments={valuesByDate.firstAppointments}
+            />
             <p className="fr-my-2w" data-test-id="bill-summary-text">
               En
               {` ${formatMonth(month)}`}
               , vous avez effectué
               <b>
-                {` ${filteredDate.reduce((accumulator, date) => accumulator + valuesByDate.appointments[date], 0)} `}
+                {` ${billingDataService.getTotal(filteredDates, valuesByDate.appointments)} `}
               </b>
-              séances auprès de
+              séances, dont
               <b>
-                {` ${
-                  filteredDate
-                    .flatMap(date => valuesByDate.patients[date])
-                    .filter((value, index, array) => array.indexOf(value) === index).length
-                }
+                {` ${billingDataService.getTotal(filteredFirstDates, valuesByDate.firstAppointments)} `}
+              </b>
+              premières séances, auprès de
+              <b>
+                {` ${filteredDates
+                  .flatMap(date => valuesByDate.patients[date])
+                  .filter((value, index, array) => array.indexOf(value) === index)
+                  .length}
              `}
               </b>
               étudiants.

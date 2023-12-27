@@ -39,10 +39,21 @@ const getDatePlusOneHour = (): string => {
   return new Date(expirationDate.setHours(expirationDate.getHours() + 1)).toISOString();
 };
 
+const getUTCDate = (date: Date) : Date => new Date(Date.UTC(
+  date.getUTCFullYear(),
+  date.getUTCMonth(),
+  date.getUTCDate(),
+  date.getUTCHours(),
+  date.getUTCMinutes(),
+  date.getUTCSeconds(),
+  date.getUTCMilliseconds(),
+));
+
 export default {
   formatFrenchDateForm: 'DD/MM/YYYY',
   formatFrenchDate: dateFormatter.format,
   getDatePlusOneHour,
+  getUTCDate,
   toFormatDDMMYYYY,
   parseForm,
   now,

@@ -7,11 +7,18 @@ import dbAppointments from '../../db/appointments';
 import dbPatients from '../../db/patients';
 import dbPsychologists from '../../db/psychologists';
 import cookie from '../../utils/cookie';
+import { Psychologist } from '../../types/Psychologist';
+import extractFirstAppointments from '../../utils/appointments';
 
 describe('appointmentsController', () => {
   const dateOfBirth = new Date('1980/01/20');
 
   describe('create appointment', () => {
+    let psy: Psychologist;
+    before(async () => {
+      // Créer le psy une seule fois avant l'exécution des tests
+      psy = await create.insertOnePsy({ createdAt: new Date('2021-05-22') });
+    });
     beforeEach(async () => {
       await clean.patients();
       await clean.appointments();
@@ -24,8 +31,7 @@ describe('appointmentsController', () => {
       return Promise.resolve();
     });
 
-    it('should create appointment', async () => {
-      const psy = await create.insertOnePsy({ createdAt: new Date('2021-05-22') });
+    it('should create appointments', async () => {
       const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
@@ -58,6 +64,81 @@ describe('appointmentsController', () => {
 
           return Promise.resolve();
         });
+    });
+
+    it('should get firsts appointments', async () => {
+      const patient1 = await dbPatients.insert(
+        'Lore',
+        'Edamame',
+        '10987654321',
+        '42',
+        false,
+        false,
+        psy.dossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        dateOfBirth,
+      );
+
+      const patient2 = await dbPatients.insert(
+        'Ada',
+        'Lovelace',
+        '12345678901',
+        '42',
+        false,
+        false,
+        psy.dossierNumber,
+        'Dr Docteur',
+        'adresse du docteur',
+        dateOfBirth,
+      );
+
+      const res1 = await chai.request(app)
+      .post('/api/appointments')
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .send({
+        patientId: patient1.id,
+        date: new Date('2024-01-03'),
+        renewal: false,
+      });
+
+      const res2 = await chai.request(app)
+      .post('/api/appointments')
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .send({
+        patientId: patient2.id,
+        date: new Date('2024-02-03'),
+        renewal: false,
+      });
+
+      const res3 = await chai.request(app)
+      .post('/api/appointments')
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .send({
+        patientId: patient2.id,
+        date: new Date('2023-12-28'),
+        renewal: false,
+      });
+
+      res1.status.should.equal(200);
+      res2.status.should.equal(200);
+      res3.status.should.equal(200);
+
+      const appointmentArray = await dbAppointments.getAll(
+        psy.dossierNumber,
+        [{ column: 'patientId' }, { column: 'appointmentDate' }],
+      );
+
+      expect(appointmentArray).to.have.length(3);
+      expect(appointmentArray[0].psychologistId).to.equal(psy.dossierNumber);
+
+      const firstAppointmentsArray = extractFirstAppointments(appointmentArray);
+      expect(firstAppointmentsArray).to.have.length(2);
+
+      return Promise.resolve();
     });
 
     it('should not create appointment if patient id is not linked to psy id', async () => {

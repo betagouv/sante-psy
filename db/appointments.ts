@@ -1,18 +1,28 @@
 // eslint-disable-next-line import/no-unresolved
 import { Registry } from 'knex/types/result';
-import { Appointment } from '../types/Appointment';
-import { Patient } from '../types/Patient';
+import { Appointment, AppointmentWithPatient } from '../types/Appointment';
 import date from '../utils/date';
 import { appointmentsTable, patientsTable } from './tables';
 import db from './db';
 
-const getAll = async (psychologistId: string): Promise<(Appointment & Patient)[]> => {
+type OrderByColumn = {
+  column: string;
+  order?: 'asc' | 'desc';
+};
+
+const getAll = async (psychologistId: string, orderBy: OrderByColumn[] = []): Promise<AppointmentWithPatient[]> => {
   try {
-    const appointmentArray = await db.from(patientsTable)
-    .innerJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
-    .where(`${appointmentsTable}.psychologistId`, psychologistId)
-    .whereNot(`${appointmentsTable}.deleted`, true)
-    .orderBy('appointmentDate', 'desc');
+    const query = db.from(patientsTable)
+      .innerJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
+      .where(`${appointmentsTable}.psychologistId`, psychologistId)
+      .whereNot(`${appointmentsTable}.deleted`, true);
+
+    orderBy.forEach((order) => {
+      query.orderBy(order.column, order.order || 'asc');
+    });
+
+    const appointmentArray = await query;
+
     return appointmentArray;
   } catch (err) {
     console.error('Impossible de récupérer les appointments', err);
