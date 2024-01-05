@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextInput } from '@dataesr/react-dsfr';
 
-const BillingInfo = ({ billingInfo, setBillingInfo }) => (
+const BillingInfo = ({ billingInfo, setBillingInfo, universityHasBillingAddress }) => (
   <>
     <TextInput
       label="Numéro SIRET"
@@ -14,15 +14,19 @@ const BillingInfo = ({ billingInfo, setBillingInfo }) => (
       value={billingInfo.billingNumber}
       onChange={e => setBillingInfo({ ...billingInfo, billingNumber: e.target.value })}
     />
-    <TextInput
-      label="E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :"
-      value={billingInfo.address1}
-      onChange={e => setBillingInfo({ ...billingInfo, address1: e.target.value })}
-    />
-    <TextInput
-      value={billingInfo.address2}
-      onChange={e => setBillingInfo({ ...billingInfo, address2: e.target.value })}
-    />
+    {!universityHasBillingAddress && (
+      <>
+        <TextInput
+          label="E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :"
+          value={billingInfo.address1}
+          onChange={(e) => setBillingInfo({ ...billingInfo, address1: e.target.value })}
+        />
+        <TextInput
+          value={billingInfo.address2}
+          onChange={(e) => setBillingInfo({ ...billingInfo, address2: e.target.value })}
+        />
+      </>
+    )}
     <TextInput
       label="Numéro du bon de commande de l’université (à demander à l’université) :"
       value={billingInfo.orderNumber}

@@ -22,12 +22,13 @@ const Billing = () => {
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1,
   });
-
+  
   const { userStore: { user } } = useStore();
-
+  
   const [valuesByDate, setValuesByDate] = useState({ appointments: {}, patients: {} });
   const [fillInfo, setFillInfo] = useState(false);
   const [billingInfo, setBillingInfo] = useState(billingInfoService.get());
+  const [universityHasBillingAddress, setUniversityHasBillingAddress] = useState(false);
 
   useEffect(() => {
     agent.Appointment.get().then(response => {
@@ -48,6 +49,14 @@ const Billing = () => {
         patients: patientsByDate,
       });
     });
+    if (user.convention.universityId) {
+      agent.University.getOne(user.convention.universityId).then(university => {
+        if (university.billingAddress) {
+          setUniversityHasBillingAddress(true);
+          console.log(universityHasBillingAddress)
+        }
+      });
+    }
   }, []);
 
   const filteredDate = Object.keys(valuesByDate.appointments).filter(date => {
@@ -95,6 +104,7 @@ const Billing = () => {
                 <BillingInfo
                   billingInfo={billingInfo}
                   setBillingInfo={setBillingInfo}
+                  universityHasBillingAddress={universityHasBillingAddress}
                 />
               )}
             </div>
