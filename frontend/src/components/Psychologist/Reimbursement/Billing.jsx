@@ -23,9 +23,7 @@ const Billing = () => {
     month: new Date().getMonth() + 1,
   });
 
-  const {
-    userStore: { user },
-  } = useStore();
+  const { userStore: { user } } = useStore();
 
   const [valuesByDate, setValuesByDate] = useState({
     appointments: {},
@@ -88,7 +86,9 @@ const Billing = () => {
           <div id="no-convention-alert">
             <Notification type="info">
               Veuillez attendre la signature de votre convention avant d&lsquo;envoyer votre facture. Renseignez le
-              statut de votre convention dans la page <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
+              statut de votre convention dans la page
+              {' '}
+              <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
             </Notification>
           </div>
         )}
@@ -150,7 +150,8 @@ const Billing = () => {
             <BillingTable filteredDate={filteredDate} appointments={valuesByDate.appointments} />
             <p className="fr-my-2w" data-test-id="bill-summary-text">
               En
-              {` ${formatMonth(month)}`}, vous avez effectué
+              {` ${formatMonth(month)}`}
+              , vous avez effectué
               <b>
                 {` ${filteredDate.reduce((accumulator, date) => accumulator + valuesByDate.appointments[date], 0)} `}
               </b>
@@ -169,7 +170,8 @@ const Billing = () => {
         ) : (
           <p className="fr-mb-2w" id="no-appointments">
             Vous n&lsquo;avez pas encore déclaré de séances pour le mois de
-            {` ${formatMonth(month)}`}, vous retrouverez ici votre récapitulatif de séances dans le but de créer vous
+            {` ${formatMonth(month)}`}
+            , vous retrouverez ici votre récapitulatif de séances dans le but de créer vous
             même votre facture
           </p>
         )}

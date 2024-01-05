@@ -73,8 +73,7 @@ const Bill = () => {
     if (universityInfos.billingAddress) {
       billingAddress = universityInfos.billingAddress;
     } else if (billingInfo.address1) {
-      billingAddress =
-        billingInfo.address1 + '\n' + (billingInfo.address2 ? billingInfo.address2 : FULL_UNDERSCORE_LINE);
+      billingAddress = `${billingInfo.address1}\n${billingInfo.address2 ? billingInfo.address2 : FULL_UNDERSCORE_LINE}`;
     } else {
       billingAddress = FULL_UNDERSCORE_LINE;
     }
