@@ -25,7 +25,7 @@ describe('universitiesController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.should.have.all.keys('name', 'siret', 'address', 'postal_code', 'city');
+          res.body.should.have.all.keys('name', 'siret', 'address', 'postal_code', 'city', 'billingAddress');
           res.body.should.eql({
             name: university.name,
             siret: university.siret,
