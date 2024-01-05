@@ -26,6 +26,7 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
     address: university.address,
     postal_code: university.postal_code,
     city: university.city,
+    billingAddress: university.billingAddress,
   });
 };
 
