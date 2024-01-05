@@ -32,6 +32,7 @@ describe('universitiesController', () => {
             address: university.address,
             postal_code: university.postal_code,
             city: university.city,
+            billingAddress: university.billingAddress,
           });
         }));
 
