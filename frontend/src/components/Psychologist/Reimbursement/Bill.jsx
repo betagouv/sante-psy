@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import {
-  Header as DSHeader,
-  HeaderBody,
-  Logo,
-  Service,
-} from '@dataesr/react-dsfr';
+import { Header as DSHeader, HeaderBody, Logo, Service } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
@@ -23,7 +18,11 @@ const Bill = () => {
   const { month, year } = useParams();
   const [user, setUser] = useState({});
   const [appointments, setAppointments] = useState([]);
-  const [universityInfos, setUniversityInfos] = useState({ name: undefined, address: undefined, billingAddress: undefined });
+  const [universityInfos, setUniversityInfos] = useState({
+    name: undefined,
+    address: undefined,
+    billingAddress: undefined,
+  });
 
   useEffect(() => {
     agent.Appointment.get().then(response => {
@@ -36,7 +35,7 @@ const Bill = () => {
     });
     agent.User.getConnected().then(response => {
       setUser(response.data);
-      
+
       const { universityId } = response.data.convention;
       if (universityId) {
         agent.University.getOne(universityId).then(university => {
@@ -44,7 +43,8 @@ const Bill = () => {
             setUniversityInfos({
               name: university.name,
               address: [university.address || '', university.postal_code || '', university.city || '']
-                .filter(x => x).join(' '),
+                .filter(x => x)
+                .join(' '),
               billingAddress: university.billingAddress,
             });
           }
@@ -61,8 +61,9 @@ const Bill = () => {
 
   const filteredDate = Object.keys(appointments).filter(date => {
     const appointmentDate = utcDate(date);
-    return appointmentDate.getFullYear() === parseInt(year, 10)
-      && appointmentDate.getMonth() === parseInt(month, 10) - 1;
+    return (
+      appointmentDate.getFullYear() === parseInt(year, 10) && appointmentDate.getMonth() === parseInt(month, 10) - 1
+    );
   });
 
   const getInfos = () => {
@@ -72,11 +73,12 @@ const Bill = () => {
     if (universityInfos.billingAddress) {
       billingAddress = universityInfos.billingAddress;
     } else if (billingInfo.address1) {
-      billingAddress = billingInfo.address1 + '\n' + (billingInfo.address2 ? billingInfo.address2 : FULL_UNDERSCORE_LINE);
+      billingAddress =
+        billingInfo.address1 + '\n' + (billingInfo.address2 ? billingInfo.address2 : FULL_UNDERSCORE_LINE);
     } else {
       billingAddress = FULL_UNDERSCORE_LINE;
     }
-    
+
     return [
       `Nom, prénom du prestataire : ${user.lastName} ${user.firstNames}`,
       `Numéro SIRET : ${billingInfo.siret || '___________________'}`,
@@ -109,20 +111,13 @@ const Bill = () => {
       {/* TODO: fix print view (by using styles.header?) */}
       <DSHeader>
         <HeaderBody>
-          <Logo>
-            Ministère de l&lsquo;Enseignement Supérieur et de la Recherche
-          </Logo>
-          <Service
-            title="Santé Psy Étudiant"
-            description={`Facture ${formatMonth({ month, year })}`}
-          />
+          <Logo>Ministère de l&lsquo;Enseignement Supérieur et de la Recherche</Logo>
+          <Service title="Santé Psy Étudiant" description={`Facture ${formatMonth({ month, year })}`} />
         </HeaderBody>
       </DSHeader>
       <div className={styles.content}>
         {getInfos().map(info => (
-          <div className={styles.info}>
-            {info}
-          </div>
+          <div className={styles.info}>{info}</div>
         ))}
       </div>
       <div className={styles.content}>
@@ -130,9 +125,7 @@ const Bill = () => {
       </div>
       <div className={styles.content}>
         {getFooter().map(info => (
-          <div className={styles.info}>
-            {info}
-          </div>
+          <div className={styles.info}>{info}</div>
         ))}
       </div>
     </>
