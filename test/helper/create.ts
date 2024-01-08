@@ -151,13 +151,13 @@ const getFakeAddress = (): string => {
   return website;
 };
 
-const getBillingAddress = (): string | undefined => {
+const getBillingAddress = (): string | null => {
   const shouldHaveBillingAddress = Math.random() < 0.1;
 
   return shouldHaveBillingAddress
     // eslint-disable-next-line max-len
     ? `Service facturier - ${faker.address.streetAddress()} ${faker.address.zipCode('#####')} ${faker.address.city()}`
-    : undefined;
+    : null;
 };
 
 const getOneUniversity = (name: string) : University => ({
