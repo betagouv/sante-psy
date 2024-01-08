@@ -21,7 +21,7 @@ describe('getDiplomaErrors', () => {
   });
 
   it('Should refuse recent diploma', () => {
-    const psychologist = create.getOnePsyDS('2020', DIPLOMA_ID);
+    const psychologist = create.getOnePsyDS('2021', DIPLOMA_ID);
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
