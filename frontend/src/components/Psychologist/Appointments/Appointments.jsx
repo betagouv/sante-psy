@@ -81,17 +81,24 @@ const Appointments = () => {
           </span>
           <ul>
             <li>
-              Les étudiants peuvent bénéficier jusqu&lsquo;à 8 séances
               {' '}
-              <b>maximum</b>
+              <b>8 séances maximum</b>
               {' '}
-              prises en charge par année universitaire (du 1er septembre au 31 août de l&lsquo;année suivante).
+              prises en charge par étudiant par année universitaire
             </li>
             <li>
-              Nous vous rappelons que dans le cadre du dispositif, il est strictement interdit de demander aux étudiants une avance de frais ou un complément.
+              Année universitaire : du
+              {' '}
+              <b>1er septembre au 31 août</b>
+              {' '}
+              de l'année suivante
             </li>
             <li>
-              Nous vous invitons à vérifier l&lsquo;exactitude de vos déclarations afin d&lsquo;éviter tout délai de remboursement supplémentaire.
+              Nous vous rappelons que dans le cadre du dispositif, il est strictement 
+              {' '}
+              <b>interdit de demander aux étudiants une avance de frais</b>
+              {' '}
+              ou un complément.
             </li>
           </ul>
         </CalloutText>
