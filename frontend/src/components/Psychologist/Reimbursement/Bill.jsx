@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 import BillingTable from './BillingTable';
 
 import styles from './bill.cssmodule.scss';
-import useAppointmentsByDate from './commonEffect';
+import useAppointmentsByDate from './hooks/appointmentsByDate';
 
 const Bill = () => {
   const FULL_UNDERSCORE_LINE = '_____________________________________________________________________________________';

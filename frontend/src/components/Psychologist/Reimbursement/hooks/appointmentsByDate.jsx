@@ -45,40 +45,6 @@ const useAppointmentsByDate = (updateValuesByDate, withPatients = false) => {
 
         updateValuesByDate(updateData);
       });
-    // agent.Appointment.get().then(response => {
-    //   const appointmentsByDate = {};
-    //   const patientsByDate = {};
-
-    //   response.forEach(appointment => {
-    //     const existingValue = appointmentsByDate[appointment.appointmentDate];
-    //     appointmentsByDate[appointment.appointmentDate] = existingValue ? existingValue + 1 : 1;
-
-    //     const existingPatients = patientsByDate[appointment.appointmentDate];
-    //     if (existingPatients) {
-    //       existingPatients.push(appointment.patientId);
-    //     } else {
-    //       patientsByDate[appointment.appointmentDate] = [appointment.patientId];
-    //     }
-    //   });
-    //   agent.Appointment.getFirstAppointments().then(firstAppointments => {
-    //     const firstAppointmentsByDate = {};
-    //     firstAppointments.forEach(appointment => {
-    //       const existingValue = firstAppointmentsByDate[appointment.appointmentDate];
-    //       firstAppointmentsByDate[appointment.appointmentDate] = existingValue ? existingValue + 1 : 1;
-    //     });
-
-    //     const updateData = {
-    //       appointments: appointmentsByDate,
-    //       firstAppointments: firstAppointmentsByDate,
-    //     };
-
-    //     if (withPatients) {
-    //       updateData.patients = patientsByDate;
-    //     }
-
-    //     updateValuesByDate(updateData);
-    //   });
-    // });
   }, [updateValuesByDate]);
 
   useEffect(() => {

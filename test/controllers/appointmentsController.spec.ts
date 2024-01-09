@@ -8,7 +8,7 @@ import dbPatients from '../../db/patients';
 import dbPsychologists from '../../db/psychologists';
 import cookie from '../../utils/cookie';
 import { Psychologist } from '../../types/Psychologist';
-import extractFirstAppointments from '../../utils/appointments';
+import extractFirstAppointments from '../../services/appointments';
 
 describe('appointmentsController', () => {
   const dateOfBirth = new Date('1980/01/20');
@@ -16,7 +16,6 @@ describe('appointmentsController', () => {
   describe('create appointment', () => {
     let psy: Psychologist;
     before(async () => {
-      // Créer le psy une seule fois avant l'exécution des tests
       psy = await create.insertOnePsy({ createdAt: new Date('2021-05-22') });
     });
     beforeEach(async () => {
@@ -67,78 +66,44 @@ describe('appointmentsController', () => {
     });
 
     it('should get firsts appointments', async () => {
-      const patient1 = await dbPatients.insert(
-        'Lore',
-        'Edamame',
-        '10987654321',
-        '42',
-        false,
-        false,
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await dbPatients.insert(
+        patient1.firstNames,
+        patient1.lastName,
+        patient1.INE,
+        patient1.institutionName,
+        patient1.isStudentStatusVerified,
+        patient1.hasPrescription,
         psy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
+        patient1.doctorName,
+        patient1.doctorAddress,
+        patient1.dateOfBirth,
       );
-
-      const patient2 = await dbPatients.insert(
-        'Ada',
-        'Lovelace',
-        '12345678901',
-        '42',
-        false,
-        false,
+      const patient2 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbpatient2 = await dbPatients.insert(
+        patient2.firstNames,
+        patient2.lastName,
+        patient2.INE,
+        patient2.institutionName,
+        patient2.isStudentStatusVerified,
+        patient2.hasPrescription,
         psy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
+        patient2.doctorName,
+        patient2.doctorAddress,
+        patient2.dateOfBirth,
       );
+      await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-02-03'), dbpatient2.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-12-28'), dbpatient2.id, psy.dossierNumber);
 
-      const res1 = await chai.request(app)
-      .post('/api/appointments')
+      return chai.request(app)
+      .get('/api/appointments/first')
       .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
       .set('xsrf-token', 'randomXSRFToken')
-      .send({
-        patientId: patient1.id,
-        date: new Date('2024-01-03'),
-        renewal: false,
+      .then(async (res) => {
+        expect(res.body).to.have.length(2);
+        return Promise.resolve();
       });
-
-      const res2 = await chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
-      .send({
-        patientId: patient2.id,
-        date: new Date('2024-02-03'),
-        renewal: false,
-      });
-
-      const res3 = await chai.request(app)
-      .post('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
-      .set('xsrf-token', 'randomXSRFToken')
-      .send({
-        patientId: patient2.id,
-        date: new Date('2023-12-28'),
-        renewal: false,
-      });
-
-      res1.status.should.equal(200);
-      res2.status.should.equal(200);
-      res3.status.should.equal(200);
-
-      const appointmentArray = await dbAppointments.getAll(
-        psy.dossierNumber,
-        [{ column: 'patientId' }, { column: 'appointmentDate' }],
-      );
-
-      expect(appointmentArray).to.have.length(3);
-      expect(appointmentArray[0].psychologistId).to.equal(psy.dossierNumber);
-
-      const firstAppointmentsArray = extractFirstAppointments(appointmentArray);
-      expect(firstAppointmentsArray).to.have.length(2);
-
-      return Promise.resolve();
     });
 
     it('should not create appointment if patient id is not linked to psy id', async () => {

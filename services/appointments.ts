@@ -1,8 +1,8 @@
 import { AppointmentWithPatient } from '../types/Appointment';
-import dateUtils from './date';
+import dateUtils from '../utils/date';
 
 const extractFirstAppointments = (appointments: AppointmentWithPatient[]): AppointmentWithPatient[] => {
-  const startCycle = new Date('2024-01-01T00:00:00Z');
+  const START_CYCLE_DATE = new Date('2024-01-01T00:00:00Z');
   const SEPTEMBER = 8;
   const DECEMBER = 11;
   const firstAppointmentsByPatient = {};
@@ -18,7 +18,7 @@ const extractFirstAppointments = (appointments: AppointmentWithPatient[]): Appoi
       firstAppointmentsByPatient[cycle] = {};
     }
 
-    if (!firstAppointmentsByPatient[cycle][appointment.patientId] && appointmentDate > startCycle) {
+    if (!firstAppointmentsByPatient[cycle][appointment.patientId] && appointmentDate > START_CYCLE_DATE) {
       firstAppointmentsByPatient[cycle][appointment.patientId] = true;
       return true;
     }

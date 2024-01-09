@@ -13,7 +13,7 @@ import { useStore } from 'stores/';
 import BillingTable from './BillingTable';
 import BillingInfo from './BillingInfo';
 import BillingHelper from './BillingHelper';
-import useAppointmentsByDate from './commonEffect';
+import useAppointmentsByDate from './hooks/appointmentsByDate';
 
 import styles from './billing.cssmodule.scss';
 

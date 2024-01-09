@@ -6,7 +6,7 @@ import dbPatient from '../db/patients';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
-import extractFirstAppointments from '../utils/appointments';
+import extractFirstAppointments from '../services/appointments';
 import dateUtils from '../utils/date';
 import validation from '../utils/validation';
 
