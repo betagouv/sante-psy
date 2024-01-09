@@ -8,7 +8,6 @@ import dbPatients from '../../db/patients';
 import dbPsychologists from '../../db/psychologists';
 import cookie from '../../utils/cookie';
 import { Psychologist } from '../../types/Psychologist';
-import extractFirstAppointments from '../../services/appointments';
 
 describe('appointmentsController', () => {
   const dateOfBirth = new Date('1980/01/20');
