@@ -76,7 +76,7 @@ const Appointments = () => {
     <>
       <Callout hasInfoIcon={false}>
         <CalloutText size="md">
-          <span style={{ fontSize: '24px', fontWeight: 'bold' }}>
+          <span style={{ fontWeight: 'bold' }}>
             Rappel des conditions de remboursement
           </span>
           <ul>
