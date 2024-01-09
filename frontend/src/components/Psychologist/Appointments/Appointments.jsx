@@ -91,10 +91,10 @@ const Appointments = () => {
               {' '}
               <b>1er septembre au 31 août</b>
               {' '}
-              de l'année suivante
+              de l&apos;année suivante
             </li>
             <li>
-              Nous vous rappelons que dans le cadre du dispositif, il est strictement 
+              Nous vous rappelons que dans le cadre du dispositif, il est strictement
               {' '}
               <b>interdit de demander aux étudiants une avance de frais</b>
               {' '}
