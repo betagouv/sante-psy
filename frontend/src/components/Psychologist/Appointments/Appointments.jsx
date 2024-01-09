@@ -76,12 +76,11 @@ const Appointments = () => {
     <>
       <Callout hasInfoIcon={false}>
         <CalloutText size="md">
-          <span style={{ fontWeight: 'bold' }}>
+          <span style={{ fontSize: '24px', fontWeight: 'bold' }}>
             Rappel des conditions de remboursement
           </span>
           <ul>
             <li>
-              {' '}
               <b>8 séances maximum</b>
               {' '}
               prises en charge par étudiant par année universitaire
