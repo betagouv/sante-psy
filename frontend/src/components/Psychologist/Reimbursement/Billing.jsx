@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { HashLink } from 'react-router-hash-link';
 
@@ -31,6 +31,16 @@ const Billing = () => {
   const [universityHasBillingAddress, setUniversityHasBillingAddress] = useState(false);
 
   useAppointmentsByDate(setValuesByDate, true);
+
+  useEffect(() => {
+    if (user.convention.universityId) {
+      agent.University.getOne(user.convention.universityId).then(university => {
+        if (university.billingAddress) {
+          setUniversityHasBillingAddress(true);
+        }
+      });
+    }
+  });
 
   const filteredDates = billingDataService.getFilteredDates(valuesByDate.appointments, month.month, month.year);
   const filteredFirstDates = billingDataService.getFilteredDates(valuesByDate.firstAppointments, month.month, month.year);
