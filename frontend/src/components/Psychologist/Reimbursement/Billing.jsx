@@ -6,6 +6,7 @@ import { Button, ButtonGroup, Callout, CalloutText } from '@dataesr/react-dsfr';
 import MonthPicker from 'components/Date/MonthPicker';
 import Notification from 'components/Notification/Notification';
 
+import agent from 'services/agent';
 import { formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 import billingDataService from 'services/billingData';
