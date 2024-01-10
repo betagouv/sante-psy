@@ -25,9 +25,13 @@ const Billing = () => {
 
   const { userStore: { user } } = useStore();
 
-  const [valuesByDate, setValuesByDate] = useState({ appointments: {}, patients: {} });
+  const [valuesByDate, setValuesByDate] = useState({
+    appointments: {},
+    patients: {},
+  });
   const [fillInfo, setFillInfo] = useState(false);
   const [billingInfo, setBillingInfo] = useState(billingInfoService.get());
+  const [universityHasBillingAddress, setUniversityHasBillingAddress] = useState(false);
 
   useEffect(() => {
     agent.Appointment.get().then(response => {
@@ -48,12 +52,18 @@ const Billing = () => {
         patients: patientsByDate,
       });
     });
+    if (user.convention.universityId) {
+      agent.University.getOne(user.convention.universityId).then(university => {
+        if (university.billingAddress) {
+          setUniversityHasBillingAddress(true);
+        }
+      });
+    }
   }, []);
 
   const filteredDate = Object.keys(valuesByDate.appointments).filter(date => {
     const appointmentDate = utcDate(date);
-    return appointmentDate.getFullYear() === month.year
-        && appointmentDate.getMonth() === month.month - 1;
+    return appointmentDate.getFullYear() === month.year && appointmentDate.getMonth() === month.month - 1;
   });
 
   const canGenerateBill = user.convention && user.convention.isConventionSigned;
@@ -61,11 +71,11 @@ const Billing = () => {
     <>
       <Callout hasInfoIcon={false}>
         <CalloutText size="md">
-          À la fin de chaque mois, vous devez envoyer votre facture contenant vos séances réalisées
-          à votre université de convention.
+          À la fin de chaque mois, vous devez envoyer votre facture contenant vos séances réalisées à votre université
+          de convention.
           <br />
-          Les modalités d&lsquo;envoi sont précisées par l&lsquo;université lors de l&lsquo;établissement de
-          votre convention (Chorus pro, email ou voie postale).
+          Les modalités d&lsquo;envoi sont précisées par l&lsquo;université lors de l&lsquo;établissement de votre
+          convention (Chorus pro, email ou voie postale).
           <br />
           L&lsquo;université se chargera du remboursement, dans les 30 jours après la réception de cette facture.
         </CalloutText>
@@ -75,8 +85,8 @@ const Billing = () => {
         {!canGenerateBill && (
           <div id="no-convention-alert">
             <Notification type="info">
-              Veuillez attendre la signature de votre convention avant d&lsquo;envoyer votre facture.
-              Renseignez le statut de votre convention dans la page
+              Veuillez attendre la signature de votre convention avant d&lsquo;envoyer votre facture. Renseignez le
+              statut de votre convention dans la page
               {' '}
               <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
             </Notification>
@@ -95,6 +105,7 @@ const Billing = () => {
                 <BillingInfo
                   billingInfo={billingInfo}
                   setBillingInfo={setBillingInfo}
+                  universityHasBillingAddress={universityHasBillingAddress}
                 />
               )}
             </div>
@@ -111,12 +122,7 @@ const Billing = () => {
                   Annuler
                 </Button>
               ) : (
-                <Button
-                  id="billing-info"
-                  secondary
-                  icon="ri-edit-line"
-                  onClick={() => setFillInfo(true)}
-                >
+                <Button id="billing-info" secondary icon="ri-edit-line" onClick={() => setFillInfo(true)}>
                   Renseigner mes informations
                 </Button>
               )}
@@ -136,18 +142,12 @@ const Billing = () => {
                   Télécharger/Imprimer
                 </a>
               ) : (
-                <Button
-                  disabled
-                  icon="ri-file-download-line"
-                >
+                <Button disabled icon="ri-file-download-line">
                   Télécharger/Imprimer
                 </Button>
               )}
             </ButtonGroup>
-            <BillingTable
-              filteredDate={filteredDate}
-              appointments={valuesByDate.appointments}
-            />
+            <BillingTable filteredDate={filteredDate} appointments={valuesByDate.appointments} />
             <p className="fr-my-2w" data-test-id="bill-summary-text">
               En
               {` ${formatMonth(month)}`}
@@ -157,10 +157,11 @@ const Billing = () => {
               </b>
               séances auprès de
               <b>
-                {` ${filteredDate
-                  .flatMap(date => valuesByDate.patients[date])
-                  .filter((value, index, array) => array.indexOf(value) === index)
-                  .length}
+                {` ${
+                  filteredDate
+                    .flatMap(date => valuesByDate.patients[date])
+                    .filter((value, index, array) => array.indexOf(value) === index).length
+                }
              `}
               </b>
               étudiants.
@@ -170,7 +171,8 @@ const Billing = () => {
           <p className="fr-mb-2w" id="no-appointments">
             Vous n&lsquo;avez pas encore déclaré de séances pour le mois de
             {` ${formatMonth(month)}`}
-            , vous retrouverez ici votre récapitulatif de séances dans le but de créer vous même votre facture
+            , vous retrouverez ici votre récapitulatif de séances dans le but de créer vous
+            même votre facture
           </p>
         )}
         <BillingHelper />

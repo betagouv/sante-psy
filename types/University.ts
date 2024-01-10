@@ -7,4 +7,5 @@ export type University = {
     address?: string,
     postal_code?: string,
     city?: string,
+    billingAddress?: string,
 }

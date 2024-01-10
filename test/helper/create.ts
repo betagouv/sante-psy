@@ -151,6 +151,15 @@ const getFakeAddress = (): string => {
   return website;
 };
 
+const getBillingAddress = (): string | null => {
+  const shouldHaveBillingAddress = Math.random() < 0.1;
+
+  return shouldHaveBillingAddress
+    // eslint-disable-next-line max-len
+    ? `Service facturier - ${faker.address.streetAddress()} ${faker.address.zipCode('#####')} ${faker.address.city()}`
+    : null;
+};
+
 const getOneUniversity = (name: string) : University => ({
   name,
   id: uuid.generateFromString(`university-${name}`),
@@ -160,6 +169,7 @@ const getOneUniversity = (name: string) : University => ({
   address: faker.address.streetAddress(),
   postal_code: faker.address.zipCode('#####'),
   city: faker.address.city(),
+  billingAddress: getBillingAddress(),
 });
 
 const getOnePsy = (
