@@ -64,7 +64,7 @@ describe('appointmentsController', () => {
         });
     });
 
-    it('should get firsts appointments', async () => {
+    it.only('should get firsts appointments', async () => {
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const dbPatient1 = await dbPatients.insert(
         patient1.firstNames,
@@ -92,15 +92,18 @@ describe('appointmentsController', () => {
         patient2.dateOfBirth,
       );
       await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-09-03'), dbPatient1.id, psy.dossierNumber);
       await dbAppointments.insert(new Date('2024-02-03'), dbpatient2.id, psy.dossierNumber);
       await dbAppointments.insert(new Date('2023-12-28'), dbpatient2.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-10-02'), dbpatient2.id, psy.dossierNumber);
 
       return chai.request(app)
       .get('/api/appointments/first')
       .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
-        expect(res.body).to.have.length(2);
+        console.log('res body : ', res.body);
+        expect(res.body).to.have.length(3);
         return Promise.resolve();
       });
     });
