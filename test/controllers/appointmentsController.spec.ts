@@ -64,7 +64,7 @@ describe('appointmentsController', () => {
         });
     });
 
-    it.only('should get firsts appointments', async () => {
+    it('should get firsts appointments', async () => {
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const dbPatient1 = await dbPatients.insert(
         patient1.firstNames,
