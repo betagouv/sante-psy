@@ -102,7 +102,6 @@ describe('appointmentsController', () => {
       .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
-        console.log('res body : ', res.body);
         expect(res.body).to.have.length(3);
         return Promise.resolve();
       });
