@@ -37,7 +37,7 @@ const Bill = () => {
       const { universityId } = response.data.convention;
       if (universityId) {
         agent.University.getOne(universityId).then(university => {
-          if (university && (university.address || university.postal_code || university.city)) {
+          if (university && (university.address || university.postal_code || university.city || university.billingAddress)) {
             setUniversityInfos({
               name: university.name,
               address: [university.address || '', university.postal_code || '', university.city || '']
