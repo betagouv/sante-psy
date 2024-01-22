@@ -47,6 +47,7 @@ const Appointment = {
   add: (patientId, date) => client.post('/appointments/', { patientId, date }),
   delete: id => client.delete(`/appointments/${id}`),
   get: () => client.get('/appointments'),
+  getFirstAppointments: () => client.get('/appointments/first'),
 };
 
 const Config = { get: () => clientWithoutErrorManagement.get('/config') };

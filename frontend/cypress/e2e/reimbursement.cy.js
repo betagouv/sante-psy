@@ -21,7 +21,7 @@ describe('Reimbursement', () => {
   describe('Display reimbursements', () => {
     it('should display reimbursements', () => {
       cy.get('[data-test-id="bill-summary-text"]')
-        .contains('vous avez effectué 13 séances auprès de 3 étudiants');
+        .contains('vous avez effectué 13 séances, dont 2 premières séances, auprès de 3 étudiants');
 
       cy.get('[data-test-id="billing-table"] tr')
         .should('have.length', 8);
@@ -29,15 +29,23 @@ describe('Reimbursement', () => {
       cy.get('[data-test-id="billing-table"] td')
         .eq(1).should('have.text', '1');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(2).should('have.text', '30€');
+        .eq(2).should('have.text', '0');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(13).should('have.text', '3');
+        .eq(3).should('have.text', '30€');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(14).should('have.text', '90€');
+        .eq(13).should('have.text', '2');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(19).should('have.text', '13');
+        .eq(14).should('have.text', '0');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(20).should('have.text', '390€');
+        .eq(15).should('have.text', '60€');
+      cy.get('[data-test-id="billing-table"] td')
+        .eq(17).should('have.text', '3');
+      cy.get('[data-test-id="billing-table"] td')
+        .eq(18).should('have.text', '2');
+      cy.get('[data-test-id="billing-table"] td')
+        .eq(19).should('have.text', '110€');
+      cy.get('[data-test-id="billing-table"] td')
+        .eq(27).should('have.text', '410€');
     });
   });
 });

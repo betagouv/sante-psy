@@ -3,36 +3,34 @@ import React, { useState, useEffect } from 'react';
 import { Header as DSHeader, HeaderBody, Logo, Service } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
-import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
+import { formatFrenchDate, formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
-
+import billingDataService from 'services/billingData';
 import { useParams } from 'react-router-dom';
 import BillingTable from './BillingTable';
 
 import styles from './bill.cssmodule.scss';
+import useAppointmentsByDate from './hooks/appointmentsByDate';
 
 const Bill = () => {
   const FULL_UNDERSCORE_LINE = '_____________________________________________________________________________________';
   const PARTIAL_UNDESCORE_LINE_UNI_NAME = '________________________________________________________';
 
   const { month, year } = useParams();
+  const parsedMonth = parseInt(month, 10);
+  const parsedYear = parseInt(year, 10);
   const [user, setUser] = useState({});
-  const [appointments, setAppointments] = useState([]);
+
+  const [valuesByDate, setValuesByDate] = useState({ appointments: {}, firstAppointments: {} });
   const [universityInfos, setUniversityInfos] = useState({
     name: undefined,
     address: undefined,
     billingAddress: undefined,
   });
 
+  useAppointmentsByDate(setValuesByDate);
+
   useEffect(() => {
-    agent.Appointment.get().then(response => {
-      const appointmentsByDate = {};
-      response.forEach(appointment => {
-        const existingValue = appointmentsByDate[appointment.appointmentDate];
-        appointmentsByDate[appointment.appointmentDate] = existingValue ? existingValue + 1 : 1;
-      });
-      setAppointments(appointmentsByDate);
-    });
     agent.User.getConnected().then(response => {
       setUser(response.data);
 
@@ -54,17 +52,10 @@ const Bill = () => {
   }, []);
 
   useEffect(() => {
-    if (Object.keys(appointments).length > 0 && Object.keys(user).length > 0 && universityInfos.name !== undefined) {
+    if (Object.keys(valuesByDate).length > 0 && Object.keys(user).length > 0 && universityInfos.name !== undefined) {
       window.print();
     }
-  }, [appointments, user, universityInfos]);
-
-  const filteredDate = Object.keys(appointments).filter(date => {
-    const appointmentDate = utcDate(date);
-    return (
-      appointmentDate.getFullYear() === parseInt(year, 10) && appointmentDate.getMonth() === parseInt(month, 10) - 1
-    );
-  });
+  }, [valuesByDate, user, universityInfos]);
 
   const getInfos = () => {
     const billingInfo = billingInfoService.get();
@@ -105,6 +96,9 @@ const Bill = () => {
     ];
   };
 
+  const filteredDates = billingDataService.getFilteredDates(valuesByDate.appointments, parsedMonth, parsedYear);
+  const filteredFirstDates = billingDataService.getFilteredDates(valuesByDate.firstAppointments, parsedMonth, parsedYear);
+
   return (
     <>
       {/* TODO: fix print view (by using styles.header?) */}
@@ -120,7 +114,11 @@ const Bill = () => {
         ))}
       </div>
       <div className={styles.content}>
-        <BillingTable filteredDate={filteredDate} appointments={appointments} />
+        <BillingTable
+          filteredFirstDates={filteredFirstDates}
+          firstAppointments={valuesByDate.firstAppointments}
+          filteredDates={filteredDates}
+          appointments={valuesByDate.appointments} />
       </div>
       <div className={styles.content}>
         {getFooter().map(info => (
