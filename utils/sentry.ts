@@ -15,6 +15,7 @@ const initCaptureConsole = (): void => {
     integrations: [
       new sentryIntegrations.CaptureConsole({ levels: logLevel }),
     ],
+    tracesSampleRate: parseFloat(process.env.SENTRY_TRACE_SAMPLE_RATE),
   });
 };
 
