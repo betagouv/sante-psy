@@ -23,10 +23,12 @@ const StudentCard = ({ big, index, title, description, hint, image, buttonLink, 
       <img className={styles.image} src={`/images/${image}.svg`} alt={image} />
       <h2 className={big ? styles.bigTitle : styles.title}>{title}</h2>
       {description && <div className={styles.description}>{description}</div>}
-      {buttonLink && buttonText && <Button className={styles.button} onClick={navigateToPathOrUrl}>
+      {buttonLink && buttonText && (
+      <Button className={styles.button} onClick={navigateToPathOrUrl}>
         {buttonIcon && <Icon name={buttonIcon} size="lg" />}
         {buttonText}
-      </Button>}
+      </Button>
+      )}
       {hint && <div className={styles.hint}>{hint}</div>}
     </div>
   );

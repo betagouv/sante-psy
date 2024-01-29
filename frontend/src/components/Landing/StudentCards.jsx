@@ -28,7 +28,7 @@ const StudentCards = () => (
       big
       title="Choisissez un psychologue"
       image="psychologist"
-      buttonIcon="ri-chat-1-line"  
+      buttonIcon="ri-chat-1-line"
       buttonText="Trouver un psychologue"
       buttonLink="/trouver-un-psychologue"
     />
@@ -44,7 +44,7 @@ const StudentCards = () => (
           de votre part
         </>
 )}
-      buttonIcon="ri-information-line"      
+      buttonIcon="ri-information-line"
       buttonText="Foire aux questions"
       buttonLink="/faq"
     />
