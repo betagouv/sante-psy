@@ -4,9 +4,9 @@
 .container {
   text-align: center;
   width: 345px;
-  height: fit-content;
+  height: 770px;
   border: 1px solid var(--blue-france-sun-113-625);
-  border-radius: 4px;
+  border-radius: 50px;
   background: var(--grey-1000-75);
   box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.21);
   padding: 24px;
@@ -50,12 +50,12 @@
 .description {
   font-size: 18px;
   line-height: 23px;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
 }
 
 .hint {
+  margin-top: 24px;
   font-size: 14px;
-  line-height: 18px;
 }
 
 @media (min-width: 769px) {
@@ -63,12 +63,10 @@
   .bigContainer,
   .container {
     width: 384px;
-    height: 603px;
   }
 
   .bigContainer {
     width: 400px;
-    height: fit-content;
     padding: 64px 32px;
   }
 }
