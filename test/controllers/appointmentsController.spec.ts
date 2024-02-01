@@ -593,4 +593,129 @@ describe('appointmentsController', () => {
       });
     });
   });
+
+  describe('get appointments with badges', () => {
+    let psy: Psychologist;
+    before(async () => {
+      psy = await create.insertOnePsy({ createdAt: new Date('2021-05-22') });
+    });
+    beforeEach(async () => {
+      await clean.patients();
+      await clean.appointments();
+      return Promise.resolve();
+    });
+
+    afterEach(async () => {
+      await clean.patients();
+      await clean.appointments();
+      return Promise.resolve();
+    });
+
+    it('should have appointment with a specific badge for the 1st appointment', async () => {
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await dbPatients.insert(
+        patient1.firstNames,
+        patient1.lastName,
+        patient1.INE,
+        patient1.institutionName,
+        patient1.isStudentStatusVerified,
+        patient1.hasPrescription,
+        psy.dossierNumber,
+        patient1.doctorName,
+        patient1.doctorAddress,
+        patient1.dateOfBirth,
+      );
+
+      await dbAppointments.insert(new Date('2023-11-03'), dbPatient1.id, psy.dossierNumber);
+
+      return chai.request(app)
+      .get('/api/appointments')
+      .query({ includeBadges: true })
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then(async (res) => {
+        expect(res.body).to.have.length(1);
+        expect(res.body[0].badge).to.eql('first');
+        return Promise.resolve();
+      });
+    });
+
+    it('should have appointment with a specific badge on the 8th appointment date', async () => {
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await dbPatients.insert(
+        patient1.firstNames,
+        patient1.lastName,
+        patient1.INE,
+        patient1.institutionName,
+        patient1.isStudentStatusVerified,
+        patient1.hasPrescription,
+        psy.dossierNumber,
+        patient1.doctorName,
+        patient1.doctorAddress,
+        patient1.dateOfBirth,
+      );
+
+      await dbAppointments.insert(new Date('2023-09-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-10-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-11-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-12-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-02-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-03-03'), dbPatient1.id, psy.dossierNumber);
+      const appointmentBadgeMax = await dbAppointments.insert(new Date('2024-04-03'), dbPatient1.id, psy.dossierNumber);
+
+      return chai.request(app)
+      .get('/api/appointments')
+      .query({ includeBadges: true })
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then(async (res) => {
+        expect(res.body).to.have.length(8);
+        expect(new Date(res.body[0].appointmentDate)).to.eql(appointmentBadgeMax.appointmentDate);
+        expect(res.body[0].badge).to.eql('max');
+        return Promise.resolve();
+      });
+    });
+
+    it('should have appointment with a specific badge when excedeed eight appointments', async () => {
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await dbPatients.insert(
+        patient1.firstNames,
+        patient1.lastName,
+        patient1.INE,
+        patient1.institutionName,
+        patient1.isStudentStatusVerified,
+        patient1.hasPrescription,
+        psy.dossierNumber,
+        patient1.doctorName,
+        patient1.doctorAddress,
+        patient1.dateOfBirth,
+      );
+
+      await dbAppointments.insert(new Date('2023-09-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-10-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-11-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-12-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-02-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-03-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-04-03'), dbPatient1.id, psy.dossierNumber);
+      const appointment9 = await dbAppointments.insert(new Date('2024-05-03'), dbPatient1.id, psy.dossierNumber);
+      const appointment10 = await dbAppointments.insert(new Date('2024-06-03'), dbPatient1.id, psy.dossierNumber);
+
+      return chai.request(app)
+      .get('/api/appointments')
+      .query({ includeBadges: true })
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then(async (res) => {
+        expect(res.body).to.have.length(10);
+        expect(new Date(res.body[1].appointmentDate)).to.eql(appointment9.appointmentDate);
+        expect(new Date(res.body[0].appointmentDate)).to.eql(appointment10.appointmentDate);
+        expect(res.body[1].badge).to.eql('exceeded');
+        expect(res.body[0].badge).to.eql('exceeded');
+        return Promise.resolve();
+      });
+    });
+  });
 });

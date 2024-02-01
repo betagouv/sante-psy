@@ -4,8 +4,10 @@ const { resetDB } = require('./utils/db');
 
 describe('Reimbursement', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/appointments')
-      .as('appointments');
+    cy.intercept({
+      method: 'GET',
+      pathname: '/api/appointments',
+    }).as('appointments');
     cy.intercept('GET', '/api/config')
       .as('config');
 
