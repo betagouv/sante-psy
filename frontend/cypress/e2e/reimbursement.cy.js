@@ -4,10 +4,16 @@ const { resetDB } = require('./utils/db');
 
 describe('Reimbursement', () => {
   beforeEach(() => {
+    cy.clock(new Date(2024, 0, 1).getTime());
+
     cy.intercept({
       method: 'GET',
       pathname: '/api/appointments',
     }).as('appointments');
+    cy.intercept({
+      method: 'GET',
+      pathname: '/api/appointments/first',
+    }).as('appointmentsFirst');
     cy.intercept('GET', '/api/config')
       .as('config');
 
@@ -18,6 +24,7 @@ describe('Reimbursement', () => {
     cy.visit('/psychologue/mes-remboursements');
     cy.wait('@config');
     cy.wait('@appointments');
+    cy.wait('@appointmentsFirst');
   });
 
   describe('Display reimbursements', () => {
