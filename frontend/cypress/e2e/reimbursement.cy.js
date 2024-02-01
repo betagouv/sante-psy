@@ -4,6 +4,8 @@ const { resetDB } = require('./utils/db');
 
 describe('Reimbursement', () => {
   beforeEach(() => {
+    cy.clock(new Date(2024, 0, 1).getTime());
+
     cy.intercept('GET', '/api/appointments')
       .as('appointments');
     cy.intercept('GET', '/api/config')
