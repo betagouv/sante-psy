@@ -25,6 +25,7 @@ services:
     environment:
       DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
       ANNOUNCEMENT: "(Docker-compose variable) Very important announcement."
+      PUBLIC_ANNOUNCEMENT: "(Docker-compose variable) Very important public announcement."
       SECRET_LOGS: "production_value_should_be_set_in_.env"
       SECRET: "production_value_should_be_set_in_.env"
       HOSTNAME_WITH_PROTOCOL: "http://localhost:3000"

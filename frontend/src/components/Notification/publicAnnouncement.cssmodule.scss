@@ -1,0 +1,15 @@
+@import 'src/variables.scss';
+
+.announcementContainer {
+    display: flex;
+    width: 100%; 
+    background-color: $primary-color;
+    text-align: center;
+    justify-content: center;
+    padding-top: 0.50rem;
+    padding-bottom: 0.50rem;
+    .announcementContent {
+        width: 50%;
+        color: $secondary-color;
+    }
+}
