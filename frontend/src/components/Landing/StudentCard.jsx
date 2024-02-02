@@ -9,12 +9,12 @@ const StudentCard = ({ big, index, title, description, hint, image, buttonLink, 
 
   const navigateToPathOrUrl = () => {
     if (buttonLink.startsWith('http')) {
-      window.location.href = buttonLink;
+      window.open(buttonLink, '_blank');
     } else {
       navigate(buttonLink);
     }
   };
-
+  
   return (
     <div className={big ? styles.bigContainer : styles.container}>
       <div className={styles.index}>
