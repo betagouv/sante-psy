@@ -14,7 +14,7 @@ const StudentCard = ({ big, index, title, description, hint, image, buttonLink, 
       navigate(buttonLink);
     }
   };
-  
+
   return (
     <div className={big ? styles.bigContainer : styles.container}>
       <div className={styles.index}>
