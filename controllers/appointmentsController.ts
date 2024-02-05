@@ -7,6 +7,7 @@ import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import extractFirstAppointments from '../services/appointments';
+import getAppointmentBadges from '../services/getBadges';
 import dateUtils from '../utils/date';
 import validation from '../utils/validation';
 
@@ -80,9 +81,17 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
+  const includeBadges = req.query.includeBadges === 'true';
   const psychologistId = req.auth.psychologist;
+  if (includeBadges) {
+    const appointments = await dbAppointments.getAll(
+      psychologistId,
+      [{ column: 'patientId' }, { column: 'appointmentDate' }],
+    );
+    const appointmentsWithBadges = getAppointmentBadges(appointments);
+    res.json(appointmentsWithBadges);
+  }
   const appointments = await dbAppointments.getAll(psychologistId, [{ column: 'appointmentDate', order: 'desc' }]);
-
   res.json(appointments);
 };
 

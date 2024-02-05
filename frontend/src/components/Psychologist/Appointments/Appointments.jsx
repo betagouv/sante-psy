@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
-import { Button, Table, Callout, CalloutText, Icon } from '@dataesr/react-dsfr';
+import { Button, Table, Callout, CalloutText, Icon, Badge } from '@dataesr/react-dsfr';
 
 import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
-import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
+import { formatFrenchDate, formatMonth, utcDate, getUnivYear } from 'services/date';
 
 import { useStore } from 'stores/';
 
@@ -20,7 +20,7 @@ const Appointments = () => {
   const { commonStore: { setNotification } } = useStore();
 
   useEffect(() => {
-    agent.Appointment.get()
+    agent.Appointment.get({ includeBadges: true })
       .then(response => {
         setAppointments(response);
       });
@@ -40,8 +40,54 @@ const Appointments = () => {
       && appointmentDate.getMonth() === month.month - 1;
   });
 
+  const generateBadgeStyles = (badge, appointmentDate) => {
+    let univYear = null;
+    if (badge === 'exceeded') {
+      univYear = getUnivYear(appointmentDate);
+    }
+    const badgeStyles = {
+      first: {
+        text: '1re séance',
+        severity: 'info',
+        icon: 'fr-icon-info-fill fr-icon--sm',
+      },
+      max: {
+        text: 'Maximum de séances atteint',
+        severity: 'warning',
+        icon: 'fr-icon-warning-fill fr-icon--sm',
+      },
+      exceeded: {
+        text: `Excès de séances ${univYear}`,
+        severity: 'warning',
+        icon: 'fr-icon-warning-fill fr-icon--sm',
+      },
+    };
+    return badgeStyles[badge];
+  };
+
+  const renderBadge = ({ badge, appointmentDate }) => {
+    if (!badge) {
+      return null;
+    }
+
+    const { icon, text, severity } = generateBadgeStyles(badge, appointmentDate);
+
+    return (
+      <Badge
+        icon={icon}
+        text={text}
+        type={severity}
+      />
+    );
+  };
+
   const columns = [
     { name: 'date', label: 'Date', render: ({ appointmentDate }) => formatFrenchDate(utcDate(appointmentDate)) },
+    {
+      name: 'badge',
+      label: '',
+      render: renderBadge,
+    },
     { name: 'student', label: 'Étudiant', render: ({ firstNames, lastName }) => `${firstNames} ${lastName}` },
     {
       name: 'actions',
