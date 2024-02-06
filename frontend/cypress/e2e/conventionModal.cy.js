@@ -16,8 +16,10 @@ describe('ConventionModal', () => {
       .as('config');
     cy.intercept('GET', '/api/connecteduser')
       .as('user');
-    cy.intercept('GET', '/api/appointments')
-      .as('appointments');
+    cy.intercept({
+      method: 'GET',
+      pathname: '/api/appointments',
+    }).as('appointments');
     cy.intercept('POST', '/api/psychologist/*/convention')
       .as('updateConvention');
 

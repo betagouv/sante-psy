@@ -103,6 +103,17 @@ const currentUnivYear = () => {
   return `${currentYear}/${currentYear + 1}`;
 };
 
+const getUnivYear = date => {
+  const SEPTEMBER = 8;
+  const dateUtc = utcDate(date);
+  const currentMonth = dateUtc.getMonth();
+  const currentYear = dateUtc.getFullYear();
+  if (currentMonth < SEPTEMBER) {
+    return `${currentYear - 1}/${currentYear}`;
+  }
+  return `${currentYear}/${currentYear + 1}`;
+};
+
 const endYearOfCurrentUnivYear = () => parseInt(currentUnivYear().split('/')[1], 10);
 
 export {
@@ -114,5 +125,6 @@ export {
   shortFrenchMonthNames,
   utcDate,
   currentUnivYear,
+  getUnivYear,
   endYearOfCurrentUnivYear,
 };

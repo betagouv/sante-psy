@@ -120,7 +120,10 @@ describe('Header Test', () => {
 
   describe('User connected', () => {
     beforeEach(() => {
-      cy.intercept('GET', '/api/appointments').as('appointments');
+      cy.intercept({
+        method: 'GET',
+        pathname: '/api/appointments',
+      }).as('appointments');
       cy.intercept('POST', '/api/psychologist/logout').as('logout');
 
       resetDB();

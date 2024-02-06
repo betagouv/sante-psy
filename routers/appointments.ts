@@ -4,6 +4,11 @@ import appointmentsController from '../controllers/appointmentsController';
 
 const router = express.Router();
 
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 router.get('/', appointmentsController.getAll);
 router.get('/first', appointmentsController.getFirstAppointments);
 router.post(

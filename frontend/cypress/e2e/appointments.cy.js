@@ -6,7 +6,10 @@ const { removeConvention, suspend } = require('./utils/psychologist');
 
 describe('Appointments', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/appointments').as('appointments');
+    cy.intercept({
+      method: 'GET',
+      pathname: '/api/appointments',
+    }).as('appointments');
     cy.intercept('POST', '/api/appointments').as('createAppointment');
     cy.intercept('DELETE', '/api/appointments/*').as('deleteAppointment');
     cy.intercept('GET', '/api/config').as('config');
