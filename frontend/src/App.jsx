@@ -33,6 +33,7 @@ import ActiveProfile from 'components/Psychologist/Profile/ActiveProfile';
 import StudentLanding from 'components/Landing/StudentLanding';
 import StudentAnswer from 'components/StudentAnswer/StudentAnswer';
 import OtherServices from 'components/OtherServices/OtherServices';
+import PublicAnnouncement from 'components/Notification/PublicAnnouncement';
 import StudentUnregister from './components/StudentUnregister/StudentUnregister';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
@@ -51,6 +52,7 @@ function App() {
     <>
       {__MATOMO__ && <Matomo />}
       <Skiplinks />
+      <PublicAnnouncement />
       <Header />
       <ScrollToTop loading={loading} />
       <div id="contenu">

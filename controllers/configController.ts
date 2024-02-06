@@ -8,6 +8,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
     contactEmail: config.contactEmail,
     demarchesSimplifieesUrl: config.demarchesSimplifiees.url,
     announcement: config.announcement,
+    publicAnnouncement: config.publicAnnouncement,
     dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
     sessionDuration: config.sessionDurationHours,
     statistics: config.statistics,

@@ -7,6 +7,7 @@ describe('configController', () => {
         .then(async (res) => {
           res.body.should.eql({
             announcement: '(Docker-compose variable) Very important announcement.',
+            publicAnnouncement: '(Docker-compose variable) Very important public announcement.',
             appName: 'Santé Psy Étudiant',
             contactEmail: 'contact-santepsyetudiants@beta.gouv.fr',
             dateOfBirthDeploymentDate: '20/04/2021',

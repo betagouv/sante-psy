@@ -20,6 +20,7 @@ export default {
   appName: 'Santé Psy Étudiant',
   activateDebug: getBooleanEnv(process.env.ACTIVATE_DEBUG_LOG, 'false'),
   announcement: process.env.ANNOUNCEMENT || '',
+  publicAnnouncement: process.env.PUBLIC_ANNOUNCEMENT || '',
   port: process.env.PORT || 8080,
   teamEmail: process.env.TEAM_EMAIL || 'equipe-santepsyetudiants@beta.gouv.fr',
   sendingEmail: process.env.SENDING_EMAIL || 'contact@santepsyetudiant.beta.gouv.fr',
