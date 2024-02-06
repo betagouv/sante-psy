@@ -8,27 +8,33 @@ const StudentCards = () => (
   <Row className={styles.card}>
     <StudentCard
       index={1}
-      title="Consultez un médecin généraliste ou le médecin de votre SSE"
+      big
+      title="Consultez un médecin généraliste"
       image="doctor"
       description={(
         <>
-          pour établir votre
+          pour établir une
           {' '}
-          <b>lettre d&lsquo;orientation*</b>
+          <b>lettre d&lsquo;orientation</b>
         </>
       )}
-      hint="* ordonnance donnant droit au suivi psychologique"
+      buttonIcon="ri-calendar-todo-line"
+      buttonText="Prendre rendez-vous"
+      buttonLink="https://www.doctolib.fr"
+      hint="ou un Service de santé étudiante"
     />
     <StudentCard
       index={2}
       big
       title="Choisissez un psychologue"
       image="psychologist"
-      buttonText="Choisir un psychologue"
+      buttonIcon="ri-search-line"
+      buttonText="Trouver un psychologue"
       buttonLink="/trouver-un-psychologue"
     />
     <StudentCard
       index={3}
+      big
       title="Bénéficiez de vos 8 séances gratuites"
       image="followup"
       description={(
@@ -38,6 +44,9 @@ const StudentCards = () => (
           de votre part
         </>
 )}
+      buttonIcon="ri-information-line"
+      buttonText="Foire aux questions"
+      buttonLink="/faq"
     />
   </Row>
 );
