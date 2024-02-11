@@ -1,23 +1,25 @@
 import { useEffect, useCallback } from 'react';
 import agent from 'services/agent';
+import appointmentBadges from 'src/utils/badges';
 
 const useAppointmentsByDate = (updateValuesByDate, withPatients = false) => {
   const fetchData = useCallback(() => {
-    Promise.all([
-      agent.Appointment.get(),
-      agent.Appointment.getFirstAppointments(),
-    ])
-      .then(results => {
-        const appointments = results[0];
-        const firstAppointments = results[1];
+    agent.Appointment.get({ includeBadges: true, isBillingPurposes: true })
+      .then(result => {
+        const appointments = result;
 
         const appointmentsByDate = {};
-        const firstAppointmentsByDate = {};
         const patientsByDate = {};
 
         appointments.forEach(appointment => {
-          const existingValue = appointmentsByDate[appointment.appointmentDate];
-          appointmentsByDate[appointment.appointmentDate] = existingValue ? existingValue + 1 : 1;
+          if (!appointmentsByDate[appointment.appointmentDate]) {
+            appointmentsByDate[appointment.appointmentDate] = {};
+          }
+          if (appointment.badge === appointmentBadges.max) {
+            appointment.badge = appointmentBadges.other;
+          }
+          const existingValue = appointmentsByDate[appointment.appointmentDate][appointment.badge];
+          appointmentsByDate[appointment.appointmentDate][appointment.badge] = existingValue ? existingValue + 1 : 1;
 
           if (withPatients) {
             const existingPatients = patientsByDate[appointment.appointmentDate];
@@ -29,15 +31,7 @@ const useAppointmentsByDate = (updateValuesByDate, withPatients = false) => {
           }
         });
 
-        firstAppointments.forEach(appointment => {
-          const existingValue = firstAppointmentsByDate[appointment.appointmentDate];
-          firstAppointmentsByDate[appointment.appointmentDate] = existingValue ? existingValue + 1 : 1;
-        });
-
-        const updateData = {
-          appointments: appointmentsByDate,
-          firstAppointments: firstAppointmentsByDate,
-        };
+        const updateData = { appointments: appointmentsByDate };
 
         if (withPatients) {
           updateData.patients = patientsByDate;

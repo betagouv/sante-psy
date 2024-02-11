@@ -46,7 +46,7 @@ clientWithoutErrorManagement.interceptors.response.use(
 const Appointment = {
   add: (patientId, date) => client.post('/appointments/', { patientId, date }),
   delete: id => client.delete(`/appointments/${id}`),
-  get: (options = { includeBadges: false }) => client.get('/appointments', { params: options }),
+  get: (options = { includeBadges: false, isBillingPurposes: false }) => client.get('/appointments', { params: options }),
   getFirstAppointments: () => client.get('/appointments/first'),
 };
 

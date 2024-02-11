@@ -11,6 +11,7 @@ import { formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 import billingDataService from 'services/billingData';
 import { useStore } from 'stores/';
+import appointmentBadges from 'src/utils/badges';
 import BillingTable from './BillingTable';
 import BillingInfo from './BillingInfo';
 import BillingHelper from './BillingHelper';
@@ -44,7 +45,6 @@ const Billing = () => {
   });
 
   const filteredDates = billingDataService.getFilteredDates(valuesByDate.appointments, month.month, month.year);
-  const filteredFirstDates = billingDataService.getFilteredDates(valuesByDate.firstAppointments, month.month, month.year);
   const canGenerateBill = user.convention && user.convention.isConventionSigned;
   return (
     <>
@@ -128,9 +128,7 @@ const Billing = () => {
             </ButtonGroup>
             <BillingTable
               filteredDates={filteredDates}
-              filteredFirstDates={filteredFirstDates}
               appointments={valuesByDate.appointments}
-              firstAppointments={valuesByDate.firstAppointments}
             />
             <p className="fr-my-2w" data-test-id="bill-summary-text">
               En
@@ -141,7 +139,7 @@ const Billing = () => {
               </b>
               séances, dont
               <b>
-                {` ${billingDataService.getTotal(filteredFirstDates, valuesByDate.firstAppointments)} `}
+                {` ${billingDataService.getBadgeTotal(filteredDates, valuesByDate.appointments, appointmentBadges.first)} `}
               </b>
               premières séances, auprès de
               <b>

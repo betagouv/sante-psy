@@ -1,7 +1,11 @@
 import { AppointmentWithPatient } from '../types/Appointment';
 import dateUtils from '../utils/date';
+import appointmentBadges from '../utils/badges';
 
-const getAppointmentBadges = (appointments: AppointmentWithPatient[]): AppointmentWithPatient[] => {
+const getAppointmentBadges = (appointments: AppointmentWithPatient[], isBillingPurposes = false)
+: AppointmentWithPatient[] => {
+  const START_CYCLE_DATE = new Date('2023-09-01T00:00:00Z');
+  const START_FIRST_DATE = new Date('2024-01-01T00:00:00Z');
   const appointmentsWithStatus = [];
   const appointmentsCountByPatient = {};
 
@@ -17,13 +21,17 @@ const getAppointmentBadges = (appointments: AppointmentWithPatient[]): Appointme
       appointmentsCountByPatient[cycle][appointment.patientId] = 1;
     }
 
-    let badge = null;
+    let badge = appointmentBadges.other;
     if (appointmentsCountByPatient[cycle][appointment.patientId] === 1) {
-      badge = 'first';
+      if (!isBillingPurposes) {
+        badge = appointmentBadges.first;
+      } else if (!(appointmentDate >= START_CYCLE_DATE && appointmentDate <= START_FIRST_DATE)) {
+        badge = appointmentBadges.first;
+      }
     } else if (appointmentsCountByPatient[cycle][appointment.patientId] === 8) {
-      badge = 'max';
+      badge = appointmentBadges.max;
     } else if (appointmentsCountByPatient[cycle][appointment.patientId] > 8) {
-      badge = 'exceeded';
+      badge = appointmentBadges.exceeded;
     }
 
     appointmentsWithStatus.push({

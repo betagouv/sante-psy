@@ -83,6 +83,7 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const includeBadges = req.query.includeBadges === 'true';
+  const isBillingPurposes = req.query.isBillingPurposes === 'true';
   const psychologistId = req.auth.psychologist;
   let appointments: AppointmentWithPatient[] = [];
   if (includeBadges) {

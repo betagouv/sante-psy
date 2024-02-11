@@ -8,6 +8,7 @@ import dbPatients from '../../db/patients';
 import dbPsychologists from '../../db/psychologists';
 import cookie from '../../utils/cookie';
 import { Psychologist } from '../../types/Psychologist';
+import appointmentBadges from '../../utils/badges';
 
 describe('appointmentsController', () => {
   const dateOfBirth = new Date('1980/01/20');
@@ -635,7 +636,67 @@ describe('appointmentsController', () => {
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(1);
-        expect(res.body[0].badge).to.eql('first');
+        expect(res.body[0].badge).to.eql(appointmentBadges.first);
+        return Promise.resolve();
+      });
+    });
+
+    it('shouldn\'t have appointments with 1st badge before january 2024 when billing purposes', async () => {
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await dbPatients.insert(
+        patient1.firstNames,
+        patient1.lastName,
+        patient1.INE,
+        patient1.institutionName,
+        patient1.isStudentStatusVerified,
+        patient1.hasPrescription,
+        psy.dossierNumber,
+        patient1.doctorName,
+        patient1.doctorAddress,
+        patient1.dateOfBirth,
+      );
+
+      await dbAppointments.insert(new Date('2023-11-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
+
+      return chai.request(app)
+      .get('/api/appointments')
+      .query({ includeBadges: true, isBillingPurposes: true })
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then(async (res) => {
+        expect(res.body).to.have.length(2);
+        expect(res.body[0].badge).to.not.eql(appointmentBadges.first);
+        expect(res.body[1].badge).to.not.eql(appointmentBadges.first);
+        return Promise.resolve();
+      });
+    });
+
+    it('should have appointments with 1st badge after january 2024 when billing purposes', async () => {
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await dbPatients.insert(
+        patient1.firstNames,
+        patient1.lastName,
+        patient1.INE,
+        patient1.institutionName,
+        patient1.isStudentStatusVerified,
+        patient1.hasPrescription,
+        psy.dossierNumber,
+        patient1.doctorName,
+        patient1.doctorAddress,
+        patient1.dateOfBirth,
+      );
+
+      await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
+
+      return chai.request(app)
+      .get('/api/appointments')
+      .query({ includeBadges: true, isBillingPurposes: true })
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then(async (res) => {
+        expect(res.body).to.have.length(1);
+        expect(res.body[0].badge).to.eql(appointmentBadges.first);
         return Promise.resolve();
       });
     });
@@ -672,7 +733,7 @@ describe('appointmentsController', () => {
       .then(async (res) => {
         expect(res.body).to.have.length(8);
         expect(new Date(res.body[0].appointmentDate)).to.eql(appointmentBadgeMax.appointmentDate);
-        expect(res.body[0].badge).to.eql('max');
+        expect(res.body[0].badge).to.eql(appointmentBadges.max);
         return Promise.resolve();
       });
     });
@@ -712,8 +773,8 @@ describe('appointmentsController', () => {
         expect(res.body).to.have.length(10);
         expect(new Date(res.body[1].appointmentDate)).to.eql(appointment9.appointmentDate);
         expect(new Date(res.body[0].appointmentDate)).to.eql(appointment10.appointmentDate);
-        expect(res.body[1].badge).to.eql('exceeded');
-        expect(res.body[0].badge).to.eql('exceeded');
+        expect(res.body[1].badge).to.eql(appointmentBadges.exceeded);
+        expect(res.body[0].badge).to.eql(appointmentBadges.exceeded);
         return Promise.resolve();
       });
     });

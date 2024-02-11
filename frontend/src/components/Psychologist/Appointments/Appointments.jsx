@@ -6,6 +6,7 @@ import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
 import { formatFrenchDate, formatMonth, utcDate, getUnivYear } from 'services/date';
+import appointmentBadges from 'src/utils/badges';
 
 import { useStore } from 'stores/';
 
@@ -45,7 +46,7 @@ const Appointments = () => {
   const generateBadgeStyles = (badge, appointmentDate) => {
     console.log('DEBUG - generateBadgeStyles');
     let univYear = null;
-    if (badge === 'exceeded') {
+    if (badge === appointmentBadges.exceeded) {
       univYear = getUnivYear(appointmentDate);
     }
     const badgeStyles = {
@@ -69,7 +70,7 @@ const Appointments = () => {
   };
 
   const renderBadge = ({ badge, appointmentDate }) => {
-    if (!badge) {
+    if (!badge || badge === appointmentBadges.other) {
       return null;
     }
     console.log('DEBUG - renderBadge');

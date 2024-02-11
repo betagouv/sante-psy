@@ -3,9 +3,11 @@ import React from 'react';
 
 import { formatDDMMYYYY, utcDate } from 'services/date';
 import billingDataService from 'services/billingData';
+import appointmentBadges from 'src/utils/badges';
 
 const FIRST_APPOINTMENT_TTC = 40;
 const NEXT_APPOINTMENT_TTC = 30;
+const EXCEEDED_APPOINTMENT_TTC = 0;
 
 const boldContent = content => (
   <div style={{ fontWeight: 'bold' }}>
@@ -13,10 +15,17 @@ const boldContent = content => (
   </div>
 );
 
-const BillingTable = ({ filteredFirstDates, firstAppointments, filteredDates, appointments }) => {
-  const totalAppointments = billingDataService.getTotal(filteredDates, appointments);
-  const totalFirstAppointments = billingDataService.getTotal(filteredFirstDates, firstAppointments);
+const getTotalForAllBadges = (appointments, date) => {
+  let total = 0;
+  for (const badge in appointments[date]) {
+    total += appointments[date][badge];
+  }
+  return total;
+};
 
+const BillingTable = ({ filteredDates, appointments }) => {
+  const totalAppointmentsByBadges = billingDataService.getTotalForAllBadges(filteredDates, appointments);
+  const totalAllBadges = Object.values(totalAppointmentsByBadges).reduce((total, value) => total + value, 0);
   const columns = [
     {
       name: 'date',
@@ -26,12 +35,12 @@ const BillingTable = ({ filteredFirstDates, firstAppointments, filteredDates, ap
     {
       name: 'appointment',
       label: 'Nombre de séances réalisées',
-      render: date => (date === 'total' ? boldContent(totalAppointments) : appointments[date]),
+      render: date => (date === 'total' ? boldContent(totalAllBadges) : getTotalForAllBadges(appointments, date)),
     },
     {
       name: 'firstAppointment',
       label: 'Dont premières séances',
-      render: date => (date === 'total' ? boldContent(totalFirstAppointments) : firstAppointments[date] || 0),
+      render: date => (date === 'total' ? boldContent(totalAppointmentsByBadges[appointmentBadges.first]) : appointments[date][appointmentBadges.first] || 0),
     },
     {
       name: 'total',
@@ -39,17 +48,22 @@ const BillingTable = ({ filteredFirstDates, firstAppointments, filteredDates, ap
       render: date => {
         let nbAppointments = 0;
         let nbFirstAppointments = 0;
+        let nbAppointmentsExceeded = 0;
+
         if (date === 'total') {
-          nbFirstAppointments = totalFirstAppointments;
-          nbAppointments = totalAppointments;
+          nbFirstAppointments = totalAppointmentsByBadges[appointmentBadges.first];
+          nbAppointmentsExceeded = totalAppointmentsByBadges[appointmentBadges.exceeded];
+          nbAppointments = totalAppointmentsByBadges[appointmentBadges.other];
         } else {
-          nbFirstAppointments = firstAppointments[date] || 0;
-          nbAppointments = appointments[date];
+          nbFirstAppointments = appointments[date][appointmentBadges.first] || 0;
+          nbAppointmentsExceeded = appointments[date][appointmentBadges.exceeded] || 0;
+          nbAppointments = appointments[date][appointmentBadges.other] || 0;
         }
 
-        const totalAmountAppointments = (nbAppointments - nbFirstAppointments) * NEXT_APPOINTMENT_TTC;
+        const totalAmountAppointments = nbAppointments * NEXT_APPOINTMENT_TTC;
         const totalAmountFirstAppointments = nbFirstAppointments * FIRST_APPOINTMENT_TTC;
-        const totalAmount = `${totalAmountAppointments + totalAmountFirstAppointments}€`;
+        const totalAmountExceededAppointments = nbAppointmentsExceeded * EXCEEDED_APPOINTMENT_TTC;
+        const totalAmount = `${totalAmountAppointments + totalAmountFirstAppointments + totalAmountExceededAppointments}€`;
 
         return date === 'total' ? boldContent(totalAmount) : totalAmount;
       },
