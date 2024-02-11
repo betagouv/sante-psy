@@ -26,7 +26,6 @@ const informations = [
 const PsyProfile = () => {
   const viewProfilRef = useRef();
   const suspensionInfoRef = useRef();
-  const didMount = useRef(true);
   const { commonStore: { setNotification, setPsychologists }, userStore: { pullUser, user } } = useStore();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
