@@ -26,8 +26,8 @@ const informations = [
 const PsyProfile = () => {
   const viewProfilRef = useRef();
   const suspensionInfoRef = useRef();
-
-  const { commonStore: { setNotification }, userStore: { pullUser, user } } = useStore();
+  const didMount = useRef(true);
+  const { commonStore: { setNotification, setPsychologists }, userStore: { pullUser, user } } = useStore();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [psychologist, setPsychologist] = useState();
@@ -83,8 +83,13 @@ const PsyProfile = () => {
         loadPsychologist();
         setNotification(response);
         viewProfilRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        updatePsyList();
       })
       .catch(() => window.scrollTo(0, 0));
+  };
+
+  const updatePsyList = () => {
+    agent.Psychologist.find().then(setPsychologists);
   };
 
   const cancelEditProfile = () => {
@@ -98,6 +103,7 @@ const PsyProfile = () => {
         setSuspensionMode(false);
         loadPsychologist();
         setNotification(response);
+        updatePsyList();
         suspensionInfoRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
       })
       .catch(() => window.scrollTo(0, 0));
@@ -109,6 +115,7 @@ const PsyProfile = () => {
         setSuspensionMode(false);
         loadPsychologist();
         setNotification(response);
+        updatePsyList();
       })
       .catch(() => window.scrollTo(0, 0));
   };
