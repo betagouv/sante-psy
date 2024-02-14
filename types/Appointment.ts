@@ -5,7 +5,8 @@ export type Appointment = {
     psychologistId: string,
     appointmentDate: string,
     patientId: string,
-    deleted: boolean
+    deleted: boolean,
+    badge?: string,
 }
 
 export type AppointmentWithPatient = Appointment & Patient;
