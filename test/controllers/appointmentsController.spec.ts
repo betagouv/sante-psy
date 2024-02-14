@@ -49,12 +49,12 @@ describe('appointmentsController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: patient.id,
-          date: new Date('2021-06-27'),
+          date: new Date('2023-11-27'),
           renewal: false,
         })
         .then(async (res) => {
           res.status.should.equal(200);
-          res.body.message.should.equal('La séance du dimanche 27 juin 2021 a bien été créée.');
+          res.body.message.should.equal('La séance du lundi 27 novembre 2023 a bien été créée.');
 
           const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);
