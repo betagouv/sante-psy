@@ -10,6 +10,7 @@ import extractFirstAppointments from '../services/appointments';
 import getAppointmentBadges from '../services/getBadges';
 import dateUtils from '../utils/date';
 import validation from '../utils/validation';
+import { AppointmentWithPatient } from '../types/Appointment';
 
 const createValidators = [
   check('date')
@@ -83,19 +84,20 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const includeBadges = req.query.includeBadges === 'true';
   const psychologistId = req.auth.psychologist;
+  let appointments: AppointmentWithPatient[] = [];
   if (includeBadges) {
-    const appointments = await dbAppointments.getAll(
+    const appointmentsWithoutBadges = await dbAppointments.getAll(
       psychologistId,
       [{ column: 'patientId' }, { column: 'appointmentDate' }],
     );
-    const appointmentsWithBadges = getAppointmentBadges(appointments);
-    console.log('DEBUG - appointmentsWithBadges lenght : ', appointmentsWithBadges.length);
-    res.json(appointmentsWithBadges);
-  } else {
-    const appointments = await dbAppointments.getAll(psychologistId, [{ column: 'appointmentDate', order: 'desc' }]);
+    appointments = getAppointmentBadges(appointmentsWithoutBadges);
     console.log('DEBUG - appointmentsWithBadges lenght : ', appointments.length);
-    res.json(appointments);
+  } else {
+    appointments = await dbAppointments.getAll(psychologistId, [{ column: 'appointmentDate', order: 'desc' }]);
+    console.log('DEBUG - appointmentsWithBadges lenght : ', appointments.length);
   }
+  res.type('application/json');
+  res.json(appointments);
 };
 
 const getFirstAppointments = async (req: Request, res: Response): Promise<void> => {
