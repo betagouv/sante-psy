@@ -89,9 +89,11 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
       [{ column: 'patientId' }, { column: 'appointmentDate' }],
     );
     const appointmentsWithBadges = getAppointmentBadges(appointments);
+    console.log('DEBUG - appointmentsWithBadges lenght : ', appointmentsWithBadges.length);
     res.json(appointmentsWithBadges);
   } else {
     const appointments = await dbAppointments.getAll(psychologistId, [{ column: 'appointmentDate', order: 'desc' }]);
+    console.log('DEBUG - appointmentsWithBadges lenght : ', appointments.length);
     res.json(appointments);
   }
 };
