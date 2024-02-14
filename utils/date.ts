@@ -58,6 +58,12 @@ const getUnivYear = (date: Date) : string => {
   return cycle;
 };
 
+const subtractDays = (date: Date, days: number) : Date => {
+  date.setDate(date.getDate() - days);
+
+  return date;
+};
+
 export default {
   formatFrenchDateForm: 'DD/MM/YYYY',
   formatFrenchDate: dateFormatter.format,
@@ -67,4 +73,5 @@ export default {
   parseForm,
   now,
   getUnivYear,
+  subtractDays,
 };
