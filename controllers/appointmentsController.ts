@@ -90,9 +90,10 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
     );
     const appointmentsWithBadges = getAppointmentBadges(appointments);
     res.json(appointmentsWithBadges);
+  } else {
+    const appointments = await dbAppointments.getAll(psychologistId, [{ column: 'appointmentDate', order: 'desc' }]);
+    res.json(appointments);
   }
-  const appointments = await dbAppointments.getAll(psychologistId, [{ column: 'appointmentDate', order: 'desc' }]);
-  res.json(appointments);
 };
 
 const getFirstAppointments = async (req: Request, res: Response): Promise<void> => {
