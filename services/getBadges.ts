@@ -34,11 +34,13 @@ const getAppointmentBadges = (appointments: AppointmentWithPatient[], isBillingP
       badge = appointmentBadges.exceeded;
     }
 
-    appointmentsWithStatus.push({
-      ...appointment,
-      badge,
-    });
-
+    // Exclude exceeded appointments from bill
+    if (!isBillingPurposes || (isBillingPurposes && badge !== appointmentBadges.exceeded)) {
+      appointmentsWithStatus.push({
+        ...appointment,
+        badge,
+      });
+    }
     appointmentsCountByPatient[cycle][appointment.patientId]++;
   });
 

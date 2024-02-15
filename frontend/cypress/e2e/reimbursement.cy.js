@@ -10,9 +10,9 @@ describe('Reimbursement', () => {
       method: 'GET',
       pathname: '/api/appointments',
       query: {
-        includeBadges: 'true', 
-        isBillingPurposes: 'true'
-      }
+        includeBadges: 'true',
+        isBillingPurposes: 'true',
+      },
     }).as('appointments');
     cy.intercept('GET', '/api/config')
       .as('config');
