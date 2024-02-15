@@ -9,11 +9,11 @@ describe('Reimbursement', () => {
     cy.intercept({
       method: 'GET',
       pathname: '/api/appointments',
+      query: {
+        includeBadges: 'true', 
+        isBillingPurposes: 'true'
+      }
     }).as('appointments');
-    cy.intercept({
-      method: 'GET',
-      pathname: '/api/appointments/first',
-    }).as('appointmentsFirst');
     cy.intercept('GET', '/api/config')
       .as('config');
 
@@ -24,7 +24,6 @@ describe('Reimbursement', () => {
     cy.visit('/psychologue/mes-remboursements');
     cy.wait('@config');
     cy.wait('@appointments');
-    cy.wait('@appointmentsFirst');
   });
 
   describe('Display reimbursements', () => {
