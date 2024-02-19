@@ -1,6 +1,5 @@
 import { useEffect, useCallback } from 'react';
 import agent from 'services/agent';
-import appointmentBadges from 'src/utils/badges';
 
 const useAppointmentsByDate = (updateValuesByDate, month, withPatients = false) => {
   const fetchData = useCallback(month => {
