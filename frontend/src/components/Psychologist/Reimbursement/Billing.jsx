@@ -32,7 +32,7 @@ const Billing = () => {
   const [billingInfo, setBillingInfo] = useState(billingInfoService.get());
   const [universityHasBillingAddress, setUniversityHasBillingAddress] = useState(false);
 
-  useAppointmentsByDate(setValuesByDate, true);
+  useAppointmentsByDate(setValuesByDate, month, true);
 
   useEffect(() => {
     if (user.convention.universityId) {

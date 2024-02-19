@@ -1,13 +1,10 @@
 import { utcDate } from 'services/date';
 import appointmentBadges from 'src/utils/badges';
 
-const getFilteredDates = (valuesByDate, month, year) => {
-  console.log('valuesByDate', valuesByDate);
-  return Object.keys(valuesByDate).filter(date => {
-    const appointmentDate = utcDate(date);
-    return appointmentDate.getFullYear() === year && appointmentDate.getMonth() === month - 1;
-  });
-};
+const getFilteredDates = (valuesByDate, month, year) => Object.keys(valuesByDate).filter(date => {
+  const appointmentDate = utcDate(date);
+  return appointmentDate.getFullYear() === year && appointmentDate.getMonth() === month - 1;
+});
 
 const getTotal = (filteredDates, valuesByDate) => filteredDates.reduce((accumulator, date) => {
   const dateValues = valuesByDate[date];

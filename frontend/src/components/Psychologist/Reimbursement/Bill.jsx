@@ -28,7 +28,7 @@ const Bill = () => {
     billingAddress: undefined,
   });
 
-  useAppointmentsByDate(setValuesByDate);
+  useAppointmentsByDate(setValuesByDate, month);
 
   useEffect(() => {
     agent.User.getConnected().then(response => {

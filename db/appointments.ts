@@ -10,10 +10,20 @@ type OrderByColumn = {
   order?: 'asc' | 'desc';
 };
 
-const getAll = async (psychologistId: string, orderBy: OrderByColumn[] = []): Promise<AppointmentWithPatient[]> => {
+const getAll = async (
+  psychologistId: string,
+  period: { startDate: Date, endDate: Date },
+  orderBy: OrderByColumn[] = [],
+):
+Promise<AppointmentWithPatient[]> => {
   try {
     const query = db.from(patientsTable)
       .innerJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
+      .whereRaw(
+        `
+        ${appointmentsTable}."appointmentDate" BETWEEN ? AND ?`,
+        [period.startDate, period.endDate],
+      )
       .where(`${appointmentsTable}.psychologistId`, psychologistId)
       .where('appointmentDate', '>=', date.subtractDays(new Date(), 6 * 30))
       .whereNot(`${appointmentsTable}.deleted`, true);

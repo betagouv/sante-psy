@@ -2,9 +2,9 @@ import { useEffect, useCallback } from 'react';
 import agent from 'services/agent';
 import appointmentBadges from 'src/utils/badges';
 
-const useAppointmentsByDate = (updateValuesByDate, withPatients = false) => {
-  const fetchData = useCallback(() => {
-    agent.Appointment.get({ includeBadges: true, isBillingPurposes: true })
+const useAppointmentsByDate = (updateValuesByDate, month, withPatients = false) => {
+  const fetchData = useCallback(month => {
+    agent.Appointment.get({ isBillingPurposes: true, month: month.month, year: month.year })
       .then(result => {
         const appointments = result;
 
@@ -14,9 +14,6 @@ const useAppointmentsByDate = (updateValuesByDate, withPatients = false) => {
         appointments.forEach(appointment => {
           if (!appointmentsByDate[appointment.appointmentDate]) {
             appointmentsByDate[appointment.appointmentDate] = {};
-          }
-          if (appointment.badge === appointmentBadges.max) {
-            appointment.badge = appointmentBadges.other;
           }
           const existingValue = appointmentsByDate[appointment.appointmentDate][appointment.badge];
           appointmentsByDate[appointment.appointmentDate][appointment.badge] = existingValue ? existingValue + 1 : 1;
@@ -42,8 +39,8 @@ const useAppointmentsByDate = (updateValuesByDate, withPatients = false) => {
   }, [updateValuesByDate]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchData(month);
+  }, [fetchData, month]);
 };
 
 export default useAppointmentsByDate;

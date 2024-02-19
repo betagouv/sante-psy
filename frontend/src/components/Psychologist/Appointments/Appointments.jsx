@@ -21,12 +21,12 @@ const Appointments = () => {
   const { commonStore: { setNotification } } = useStore();
 
   useEffect(() => {
-    agent.Appointment.get({ includeBadges: true })
+    agent.Appointment.get({ month: month.month, year: month.year })
       .then(response => {
         console.log('DEBUG - appointmentsWithBadges response : ', response);
         setAppointments(response);
       });
-  }, []);
+  }, [month]);
 
   const deleteAppointment = appointmentId => {
     setNotification({});
@@ -59,6 +59,11 @@ const Appointments = () => {
         text: 'Maximum de séances atteint',
         severity: 'warning',
         icon: 'fr-icon-warning-fill fr-icon--sm',
+      },
+      before_max: {
+        text: 'Avant-dernière séance',
+        severity: 'info',
+        icon: 'fr-icon-info-fill fr-icon--sm',
       },
       exceeded: {
         text: `Excès de séances ${univYear}`,

@@ -5,7 +5,6 @@ import appointmentsController from '../controllers/appointmentsController';
 const router = express.Router();
 
 router.get('/', appointmentsController.getAll);
-router.get('/first', appointmentsController.getFirstAppointments);
 router.post(
   '/',
   appointmentsController.createValidators,

@@ -6,7 +6,6 @@ import dbPatient from '../db/patients';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
-import extractFirstAppointments from '../services/appointments';
 import getAppointmentBadges from '../services/getBadges';
 import dateUtils from '../utils/date';
 import validation from '../utils/validation';
@@ -82,42 +81,34 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
-  const includeBadges = req.query.includeBadges === 'true';
-  const isBillingPurposes = req.query.isBillingPurposes === 'true';
-  const psychologistId = req.auth.psychologist;
-  let appointments: AppointmentWithPatient[] = [];
-  if (includeBadges) {
-    const appointmentsWithoutBadges = await dbAppointments.getAll(
-      psychologistId,
-      [{ column: 'patientId' }, { column: 'appointmentDate' }],
-    );
-    appointments = getAppointmentBadges(appointmentsWithoutBadges);
-    console.log('DEBUG - appointmentsWithBadges lenght : ', appointments.length);
-  } else {
-    appointments = await dbAppointments.getAll(psychologistId, [{ column: 'appointmentDate', order: 'desc' }]);
-    console.log('DEBUG - appointmentsWithBadges lenght : ', appointments.length);
-  }
-  res.type('application/json');
-  res.json(appointments);
-};
+  const { isBillingPurposes, year, month } = req.query;
+  const SEPTEMBER = 8;
+  const DECEMBER = 11;
 
-const getFirstAppointments = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.psychologist;
+  const selectedYear = parseInt(year.toString());
+  const selectedMonth = parseInt(month.toString());
+  const startYear = (selectedMonth >= SEPTEMBER && selectedMonth <= DECEMBER) ? selectedYear : selectedYear - 1;
+
+  const startDate = dateUtils.getUTCDate(new Date(startYear, 8));
+  const endDate = dateUtils.getUTCDate(new Date(selectedYear, selectedMonth));
+
+  const dateRange = { startDate, endDate };
+  const selectedPeriod = { year: selectedYear, month: selectedMonth };
+
   const appointments = await dbAppointments.getAll(
     psychologistId,
+    dateRange,
     [{ column: 'patientId' }, { column: 'appointmentDate' }],
   );
-  const firstAppointments = extractFirstAppointments(appointments);
-
-  res.json(firstAppointments);
+  const appointmentsWithBadges = getAppointmentBadges(appointments, selectedPeriod, isBillingPurposes === 'true');
+  res.json(appointmentsWithBadges);
 };
 
 export default {
-  extractFirstAppointments,
   createValidators,
   deleteValidators,
   create: asyncHelper(create),
   getAll: asyncHelper(getAll),
-  getFirstAppointments: asyncHelper(getFirstAppointments),
   delete: asyncHelper(deleteOne),
 };
