@@ -9,7 +9,6 @@ import CustomError from '../utils/CustomError';
 import getAppointmentBadges from '../services/getBadges';
 import dateUtils from '../utils/date';
 import validation from '../utils/validation';
-import { AppointmentWithPatient } from '../types/Appointment';
 
 const createValidators = [
   check('date')
