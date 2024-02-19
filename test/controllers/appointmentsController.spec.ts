@@ -631,7 +631,6 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .query({ includeBadges: true })
       .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
@@ -661,7 +660,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .query({ includeBadges: true, isBillingPurposes: true })
+      .query({ isBillingPurposes: true })
       .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
@@ -691,7 +690,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .query({ includeBadges: true, isBillingPurposes: true })
+      .query({ isBillingPurposes: true })
       .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
@@ -727,7 +726,6 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .query({ includeBadges: true })
       .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
@@ -766,7 +764,6 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .query({ includeBadges: true })
       .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {

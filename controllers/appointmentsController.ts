@@ -82,26 +82,31 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const { isBillingPurposes, year, month } = req.query;
-  const SEPTEMBER = 8;
-  const DECEMBER = 11;
-
   const psychologistId = req.auth.psychologist;
-  const selectedYear = parseInt(year.toString());
-  const selectedMonth = parseInt(month.toString());
-  const startYear = (selectedMonth >= SEPTEMBER && selectedMonth <= DECEMBER) ? selectedYear : selectedYear - 1;
+  let dateRange = null;
+  let selectedPeriod = null;
+  if (year && month) {
+    // get date range from september to selected month
+    const SEPTEMBER = 8;
+    const DECEMBER = 11;
 
-  const startDate = dateUtils.getUTCDate(new Date(startYear, 8));
-  const endDate = dateUtils.getUTCDate(new Date(selectedYear, selectedMonth));
+    const selectedYear = parseInt(year.toString());
+    const selectedMonth = parseInt(month.toString());
+    const startYear = (selectedMonth >= SEPTEMBER && selectedMonth <= DECEMBER) ? selectedYear : selectedYear - 1;
 
-  const dateRange = { startDate, endDate };
-  const selectedPeriod = { year: selectedYear, month: selectedMonth };
+    const startDate = dateUtils.getUTCDate(new Date(startYear, 8));
+    const endDate = dateUtils.getUTCDate(new Date(selectedYear, selectedMonth));
 
+    dateRange = { startDate, endDate };
+    selectedPeriod = { year: selectedYear, month: selectedMonth };
+  }
   const appointments = await dbAppointments.getAll(
     psychologistId,
     dateRange,
     [{ column: 'patientId' }, { column: 'appointmentDate' }],
   );
   const appointmentsWithBadges = getAppointmentBadges(appointments, selectedPeriod, isBillingPurposes === 'true');
+
   res.json(appointmentsWithBadges);
 };
 

@@ -4,7 +4,7 @@ import appointmentBadges from '../utils/badges';
 
 const getAppointmentBadges = (
   appointments: AppointmentWithPatient[],
-  period: { month: number, year: number },
+  period?: { month: number, year: number },
   isBillingPurposes = false,
 )
 : AppointmentWithPatient[] => {
@@ -17,7 +17,7 @@ const getAppointmentBadges = (
     const appointmentDate = dateUtils.getUTCDate(new Date(appointment.appointmentDate));
     const cycle = dateUtils.getUnivYear(appointmentDate);
     const currentmonth = appointmentDate.getMonth() + 1;
-    const isInPeriod = currentmonth === period.month;
+    const isInPeriod = period ? currentmonth === period.month : true;
 
     if (!appointmentsCountByPatient[cycle]) {
       appointmentsCountByPatient[cycle] = {};

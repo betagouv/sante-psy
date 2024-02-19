@@ -10,7 +10,8 @@ describe('Reimbursement', () => {
       method: 'GET',
       pathname: '/api/appointments',
       query: {
-        includeBadges: 'true',
+        month: 1,
+        year: 2024,
         isBillingPurposes: 'true',
       },
     }).as('appointments');
