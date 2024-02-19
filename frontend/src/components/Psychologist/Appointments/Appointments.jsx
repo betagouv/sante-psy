@@ -23,7 +23,6 @@ const Appointments = () => {
   useEffect(() => {
     agent.Appointment.get({ month: month.month, year: month.year })
       .then(response => {
-        console.log('DEBUG - appointmentsWithBadges response : ', response);
         setAppointments(response);
       });
   }, [month]);
@@ -37,14 +36,12 @@ const Appointments = () => {
   };
 
   const filteredAppointments = appointments.filter(appointment => {
-    console.log('DEBUG - in filter');
     const appointmentDate = utcDate(appointment.appointmentDate);
     return appointmentDate.getFullYear() === month.year
       && appointmentDate.getMonth() === month.month - 1;
   });
 
   const generateBadgeStyles = (badge, appointmentDate) => {
-    console.log('DEBUG - generateBadgeStyles');
     let univYear = null;
     if (badge === appointmentBadges.exceeded) {
       univYear = getUnivYear(appointmentDate);
@@ -78,7 +75,6 @@ const Appointments = () => {
     if (!badge || badge === appointmentBadges.other) {
       return null;
     }
-    console.log('DEBUG - renderBadge');
     const { icon, text, severity } = generateBadgeStyles(badge, appointmentDate);
 
     return (
