@@ -2,8 +2,8 @@ import { useEffect, useCallback } from 'react';
 import agent from 'services/agent';
 
 const useAppointmentsByDate = (updateValuesByDate, month, withPatients = false) => {
-  const fetchData = useCallback(month => {
-    agent.Appointment.get({ isBillingPurposes: true, month: month.month, year: month.year })
+  const fetchData = useCallback(selectedMonth => {
+    agent.Appointment.get({ isBillingPurposes: true, month: selectedMonth.month, year: selectedMonth.year })
       .then(result => {
         const appointments = result;
 
