@@ -79,4 +79,5 @@ export default {
     website: process.env.CRISP_WEBSITE,
   },
   minScoreAddress: parseFloat(process.env.MIN_SCORE_ADDRESS || '0.55'),
+  apiIneToken: process.env.API_INE_TOKEN,
 };
