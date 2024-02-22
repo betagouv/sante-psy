@@ -7,7 +7,6 @@ import appointmentBadges from 'src/utils/badges';
 
 const FIRST_APPOINTMENT_TTC = 40;
 const NEXT_APPOINTMENT_TTC = 30;
-const EXCEEDED_APPOINTMENT_TTC = 0;
 
 const boldContent = content => (
   <div style={{ fontWeight: 'bold' }}>
@@ -48,22 +47,18 @@ const BillingTable = ({ filteredDates, appointments }) => {
       render: date => {
         let nbAppointments = 0;
         let nbFirstAppointments = 0;
-        let nbAppointmentsExceeded = 0;
 
         if (date === 'total') {
           nbFirstAppointments = totalAppointmentsByBadges[appointmentBadges.first];
-          nbAppointmentsExceeded = totalAppointmentsByBadges[appointmentBadges.exceeded];
           nbAppointments = totalAppointmentsByBadges[appointmentBadges.other];
         } else {
           nbFirstAppointments = appointments[date][appointmentBadges.first] || 0;
-          nbAppointmentsExceeded = appointments[date][appointmentBadges.exceeded] || 0;
           nbAppointments = appointments[date][appointmentBadges.other] || 0;
         }
 
         const totalAmountAppointments = nbAppointments * NEXT_APPOINTMENT_TTC;
         const totalAmountFirstAppointments = nbFirstAppointments * FIRST_APPOINTMENT_TTC;
-        const totalAmountExceededAppointments = nbAppointmentsExceeded * EXCEEDED_APPOINTMENT_TTC;
-        const totalAmount = `${totalAmountAppointments + totalAmountFirstAppointments + totalAmountExceededAppointments}€`;
+        const totalAmount = `${totalAmountAppointments + totalAmountFirstAppointments}€`;
 
         return date === 'total' ? boldContent(totalAmount) : totalAmount;
       },
