@@ -6,6 +6,7 @@ import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
 import { formatFrenchDate, formatMonth, utcDate, getUnivYear } from 'services/date';
+import appointmentBadges from 'src/utils/badges';
 
 import { useStore } from 'stores/';
 
@@ -20,12 +21,11 @@ const Appointments = () => {
   const { commonStore: { setNotification } } = useStore();
 
   useEffect(() => {
-    agent.Appointment.get({ includeBadges: true })
+    agent.Appointment.get({ month: month.month, year: month.year })
       .then(response => {
-        console.log('DEBUG - appointmentsWithBadges response : ', response);
         setAppointments(response);
       });
-  }, []);
+  }, [month]);
 
   const deleteAppointment = appointmentId => {
     setNotification({});
@@ -36,16 +36,14 @@ const Appointments = () => {
   };
 
   const filteredAppointments = appointments.filter(appointment => {
-    console.log('DEBUG - in filter');
     const appointmentDate = utcDate(appointment.appointmentDate);
     return appointmentDate.getFullYear() === month.year
       && appointmentDate.getMonth() === month.month - 1;
   });
 
   const generateBadgeStyles = (badge, appointmentDate) => {
-    console.log('DEBUG - generateBadgeStyles');
     let univYear = null;
-    if (badge === 'exceeded') {
+    if (badge === appointmentBadges.exceeded) {
       univYear = getUnivYear(appointmentDate);
     }
     const badgeStyles = {
@@ -59,6 +57,11 @@ const Appointments = () => {
         severity: 'warning',
         icon: 'fr-icon-warning-fill fr-icon--sm',
       },
+      before_max: {
+        text: 'Avant-dernière séance',
+        severity: 'info',
+        icon: 'fr-icon-info-fill fr-icon--sm',
+      },
       exceeded: {
         text: `Excès de séances ${univYear}`,
         severity: 'warning',
@@ -69,10 +72,9 @@ const Appointments = () => {
   };
 
   const renderBadge = ({ badge, appointmentDate }) => {
-    if (!badge) {
+    if (!badge || badge === appointmentBadges.other) {
       return null;
     }
-    console.log('DEBUG - renderBadge');
     const { icon, text, severity } = generateBadgeStyles(badge, appointmentDate);
 
     return (

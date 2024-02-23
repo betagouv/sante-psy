@@ -46,8 +46,7 @@ clientWithoutErrorManagement.interceptors.response.use(
 const Appointment = {
   add: (patientId, date) => client.post('/appointments/', { patientId, date }),
   delete: id => client.delete(`/appointments/${id}`),
-  get: (options = { includeBadges: false }) => client.get('/appointments', { params: options }),
-  getFirstAppointments: () => client.get('/appointments/first'),
+  get: (options = { month: new Date().getMonth() + 1, year: new Date().getFullYear(), isBillingPurposes: false }) => client.get('/appointments', { params: options }),
 };
 
 const Config = { get: () => clientWithoutErrorManagement.get('/config') };

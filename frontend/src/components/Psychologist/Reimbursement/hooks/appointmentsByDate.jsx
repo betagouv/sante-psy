@@ -1,23 +1,21 @@
 import { useEffect, useCallback } from 'react';
 import agent from 'services/agent';
 
-const useAppointmentsByDate = (updateValuesByDate, withPatients = false) => {
-  const fetchData = useCallback(() => {
-    Promise.all([
-      agent.Appointment.get(),
-      agent.Appointment.getFirstAppointments(),
-    ])
-      .then(results => {
-        const appointments = results[0];
-        const firstAppointments = results[1];
+const useAppointmentsByDate = (updateValuesByDate, month, withPatients = false) => {
+  const fetchData = useCallback(selectedMonth => {
+    agent.Appointment.get({ isBillingPurposes: true, month: selectedMonth.month, year: selectedMonth.year })
+      .then(result => {
+        const appointments = result;
 
         const appointmentsByDate = {};
-        const firstAppointmentsByDate = {};
         const patientsByDate = {};
 
         appointments.forEach(appointment => {
-          const existingValue = appointmentsByDate[appointment.appointmentDate];
-          appointmentsByDate[appointment.appointmentDate] = existingValue ? existingValue + 1 : 1;
+          if (!appointmentsByDate[appointment.appointmentDate]) {
+            appointmentsByDate[appointment.appointmentDate] = {};
+          }
+          const existingValue = appointmentsByDate[appointment.appointmentDate][appointment.badge];
+          appointmentsByDate[appointment.appointmentDate][appointment.badge] = existingValue ? existingValue + 1 : 1;
 
           if (withPatients) {
             const existingPatients = patientsByDate[appointment.appointmentDate];
@@ -29,15 +27,7 @@ const useAppointmentsByDate = (updateValuesByDate, withPatients = false) => {
           }
         });
 
-        firstAppointments.forEach(appointment => {
-          const existingValue = firstAppointmentsByDate[appointment.appointmentDate];
-          firstAppointmentsByDate[appointment.appointmentDate] = existingValue ? existingValue + 1 : 1;
-        });
-
-        const updateData = {
-          appointments: appointmentsByDate,
-          firstAppointments: firstAppointmentsByDate,
-        };
+        const updateData = { appointments: appointmentsByDate };
 
         if (withPatients) {
           updateData.patients = patientsByDate;
@@ -48,8 +38,8 @@ const useAppointmentsByDate = (updateValuesByDate, withPatients = false) => {
   }, [updateValuesByDate]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchData(month);
+  }, [fetchData, month]);
 };
 
 export default useAppointmentsByDate;

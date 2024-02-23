@@ -28,7 +28,7 @@ const Bill = () => {
     billingAddress: undefined,
   });
 
-  useAppointmentsByDate(setValuesByDate);
+  useAppointmentsByDate(setValuesByDate, month);
 
   useEffect(() => {
     agent.User.getConnected().then(response => {
@@ -97,7 +97,6 @@ const Bill = () => {
   };
 
   const filteredDates = billingDataService.getFilteredDates(valuesByDate.appointments, parsedMonth, parsedYear);
-  const filteredFirstDates = billingDataService.getFilteredDates(valuesByDate.firstAppointments, parsedMonth, parsedYear);
 
   return (
     <>
@@ -115,8 +114,6 @@ const Bill = () => {
       </div>
       <div className={styles.content}>
         <BillingTable
-          filteredFirstDates={filteredFirstDates}
-          firstAppointments={valuesByDate.firstAppointments}
           filteredDates={filteredDates}
           appointments={valuesByDate.appointments} />
       </div>
