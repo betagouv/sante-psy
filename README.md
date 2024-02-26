@@ -144,8 +144,8 @@ scalingo -a APP_NAME pgsql-console
 
 ```sql
 INSERT INTO public.psychologists
-("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, teleconsultation, description, languages, training, diploma, "createdAt", "updatedAt", archived, state, "personalEmail", "assignedUniversityId", "active")
-VALUES(uuid_generate_v4(), '123456789', 'Prénom', 'Nom', 'publicemail@beta.gouv.fr', '', '', '', '', '', false, 'Ceci est ma description', '', '[]', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'prenom.nom@beta.gouv.fr', '78522ec3-7c2f-4a5d-88cd-0a6678ee0135', true);
+("dossierNumber", adeli, "firstNames", "lastName", email, address, departement, region, phone, website, appointmentLink, teleconsultation, description, languages, training, diploma, "createdAt", "updatedAt", archived, state, "personalEmail", "assignedUniversityId", "active")
+VALUES(uuid_generate_v4(), '123456789', 'Prénom', 'Nom', 'publicemail@beta.gouv.fr', '', '', '', '', '', '', false, 'Ceci est ma description', '', '[]', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, false, 'accepte', 'prenom.nom@beta.gouv.fr', '78522ec3-7c2f-4a5d-88cd-0a6678ee0135', true);
 ```
 
 ### Affichage d'une annonce

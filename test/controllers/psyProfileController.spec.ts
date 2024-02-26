@@ -22,6 +22,7 @@ describe('psyProfileController', () => {
         'email',
         'phone',
         'website',
+        'appointmentLink',
         'teleconsultation',
         'description',
         'languages',
@@ -50,6 +51,7 @@ describe('psyProfileController', () => {
       expect(actual.email).to.eql(expected.email);
       expect(actual.phone).to.eql(expected.phone);
       expect(actual.website).to.eql(expected.website);
+      expect(actual.appointmentLink).to.eql(expected.appointmentLink);
       expect(actual.teleconsultation).to.eql(expected.teleconsultation);
       expect(actual.description).to.eql(expected.description);
       expect(actual.languages).to.eql(expected.languages);
@@ -428,6 +430,21 @@ describe('psyProfileController', () => {
       });
     });
 
+    it('should pass validation when appointmentLink is missing', async () => {
+      await shouldPassUpdatePsyInputValidation({
+        email: 'public@email.com',
+        address: '1 rue du Pôle Nord',
+        departement: '59 - Nord',
+        phone: '01 02 03 04 05',
+        website: 'https://monwebsite.fr',
+        appointmentLink: '',
+        description: 'Consultez un psychologue gratuitement',
+        teleconsultation: true,
+        languages: 'Français, Anglais',
+        personalEmail: 'perso@email.com',
+      });
+    });
+
     it('should pass validation when description is missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: 'public@email.com',
@@ -584,6 +601,7 @@ describe('psyProfileController', () => {
           otherAddress: '2 rue du Pôle Sud',
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
+          appointmentLink: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
           teleconsultation: true,
           languages: 'Français, Anglais',
@@ -605,6 +623,7 @@ describe('psyProfileController', () => {
           expect(updatedPsy.otherLatitude).to.eql(LATITUDE_PARIS);
           expect(updatedPsy.phone).to.eql('01 02 03 04 05');
           expect(updatedPsy.website).to.eql('https://monwebsite.fr');
+          expect(updatedPsy.appointmentLink).to.eql('https://monwebsite.fr');
           expect(updatedPsy.description).to.eql('Consultez un psychologue gratuitement');
           expect(updatedPsy.teleconsultation).to.eql(true);
           expect(updatedPsy.languages).to.eql('Français, Anglais');

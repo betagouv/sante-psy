@@ -191,6 +191,7 @@ const getOnePsy = (
     email: faker.internet.exampleEmail(),
     personalEmail: 'loginemail@beta.gouv.fr',
     website: getFakeAddress(),
+    appointmentLink: getFakeAddress(),
     teleconsultation: faker.datatype.boolean(),
     description: faker.lorem.paragraphs(2),
     // eslint-disable-next-line max-len

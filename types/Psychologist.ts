@@ -4,6 +4,7 @@ export type EditablePsychologist = {
     email: string,
     phone: string,
     website: string,
+    appointmentLink: string,
     description: string,
     teleconsultation: boolean,
     languages: string,

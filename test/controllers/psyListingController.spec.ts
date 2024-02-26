@@ -110,6 +110,7 @@ describe('psyListingController', () => {
         'languages',
         'phone',
         'website',
+        'appointmentLink',
         'useFirstNames',
         'useLastName',
       ]);

@@ -16,6 +16,7 @@ export const editablePsyFields = (psy: Psychologist): EditablePsychologist => ({
   email: psy.email,
   phone: psy.phone,
   website: psy.website,
+  appointmentLink: psy.appointmentLink,
   description: psy.description,
   teleconsultation: psy.teleconsultation,
   languages: addFrenchLanguageIfMissing(psy.languages),

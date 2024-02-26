@@ -85,7 +85,6 @@ const PublicPsychologistProfile = () => {
       </div>
     </>
   );
-
   return (
     <Page
       breadCrumbs={[
@@ -166,6 +165,30 @@ const PublicPsychologistProfile = () => {
                 icon="ri-link"
               />
             </div>
+            )}
+            {psychologist.appointmentLink && (
+              <div className={styles.contactInfo}>
+                <div>
+                  <h5>Prendre rendez-vous</h5>
+                  <p>Directement en ligne</p>
+                </div>
+                {window.innerWidth <= 769 ? (
+                  <Button
+                    secondary
+                    onClick={() => { window.open(string.prefixUrl(psychologist.appointmentLink), '_blank'); }}
+                    icon="ri-calendar-fill"
+                  >
+                    RDV
+                  </Button>
+                ) : (
+                  <Button
+                    secondary
+                    onClick={() => { window.open(string.prefixUrl(psychologist.appointmentLink), '_blank'); }}
+                  >
+                    Prendre rendez-vous
+                  </Button>
+                )}
+              </div>
             )}
             <Alert
               type="warning"
