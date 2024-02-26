@@ -89,6 +89,7 @@ describe('Update psy fields', () => {
         region: 'region',
         phone: 'phone',
         website: 'website',
+        appointmentLink: 'appointmentLink',
         description: 'description',
         teleconsultation: true,
         languages: 'francais',
