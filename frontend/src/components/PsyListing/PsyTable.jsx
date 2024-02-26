@@ -120,7 +120,7 @@ const PsyTable = ({
                   onClick={() => goToProfile(psychologist)}
                   className="fr-btn fr-btn--secondary"
                 >
-                  Plus d&lsquo;infos
+                  Prendre rendez-vous
                 </Link>
               </div>
             </div>
