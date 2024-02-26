@@ -20,6 +20,7 @@ const informations = [
   { label: 'Téléconsultation', key: psychologist => (psychologist.teleconsultation ? 'Oui' : 'Non') },
   { label: 'Langues parlées', key: 'languages' },
   { label: 'Site web professionnel', key: 'website' },
+  { label: 'Site web pour prendre rendez-vous', key: 'appointmentLink' },
   { label: 'Paragraphe de présentation', key: 'description' },
 ];
 
@@ -47,6 +48,10 @@ const PsyProfile = () => {
     + '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
     if (psy.website && !isWebsite.test(psy.website)) {
       profilIssues.push('Votre site internet ne semble pas valide.');
+    }
+
+    if (psy.appointmentLink && !isWebsite.test(psy.appointmentLink)) {
+      profilIssues.push('Votre site internet de prise de rendez-vous ne semble pas valide.');
     }
 
     if (psy.address && (!psy.longitude || !psy.latitude)) {

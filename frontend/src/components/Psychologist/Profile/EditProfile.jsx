@@ -24,6 +24,13 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
     }
   };
 
+  const enrichAppointmentLink = () => {
+    const prefixedAppointmentLink = string.prefixUrl(updatedPsychologist.appointmentLink);
+    if (prefixedAppointmentLink) {
+      changePsychologist(prefixedAppointmentLink, 'appointmentLink');
+    }
+  };
+
   return (
     <form data-test-id="edit-profile-form" onSubmit={save}>
       <p className="fr-text--sm fr-mb-3w">
@@ -122,6 +129,15 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         value={updatedPsychologist.website}
         onChange={e => changePsychologist(e.target.value, 'website')}
         onBlur={enrichWebsite}
+      />
+      <TextInput
+        className="midlength-input"
+        label="Site web pour prendre rendez-vous"
+        hint="Site sur lequel l'étudiant pourra prendre rendez-vous avec vous."
+        data-test-id="psy-appointmentLink-input"
+        value={updatedPsychologist.appointmentLink}
+        onChange={e => changePsychologist(e.target.value, 'appointmentLink')}
+        onBlur={enrichAppointmentLink}
       />
       <TextInput
         className="midlength-input"
