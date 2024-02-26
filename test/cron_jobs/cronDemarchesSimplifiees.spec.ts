@@ -98,7 +98,7 @@ describe('checkForMultipleAcceptedDossiers', () => {
   });
 });
 
-describe('DS integration tests', () => {
+describe.only('DS integration tests', () => {
   const paulId = '036e3a85-24bf-5915-9db0-a189bec8e7f6';
   const paul = {
     adeli: '1234567890',
@@ -119,6 +119,7 @@ describe('DS integration tests', () => {
     region: 'Corse',
     phone: '01 23 45 67 89',
     website: '',
+    appointmentLink: '',
     teleconsultation: false,
     description: 'Test',
     languages: 'Français',
@@ -152,6 +153,7 @@ describe('DS integration tests', () => {
     otherPostcode: null,
     phone: '01',
     website: '',
+    appointmentLink: '',
     teleconsultation: false,
     description: '',
     languages: 'Français',
