@@ -35,7 +35,7 @@ const Billing = () => {
   useAppointmentsByDate(setValuesByDate, month, true);
 
   useEffect(() => {
-    if (user.convention.universityId) {
+    if (user.convention && user.convention.universityId) {
       agent.University.getOne(user.convention.universityId).then(university => {
         if (university.billingAddress) {
           setUniversityHasBillingAddress(true);
