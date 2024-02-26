@@ -52,6 +52,7 @@ const selectFields = (): string[] => [
   'email',
   'phone',
   'website',
+  'appointmentLink',
   'teleconsultation',
   'languages',
   'description',

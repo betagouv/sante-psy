@@ -36,6 +36,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
     region,
     phone,
     website,
+    appointmentLink,
     teleconsultation,
     description,
     languages,
@@ -59,6 +60,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
     email,
     phone,
     website,
+    appointmentLink,
     teleconsultation,
     description,
     languages,
@@ -122,6 +124,9 @@ const updateValidators = [
     .trim()
     .customSanitizer(DOMPurify.sanitize),
   check('website')
+    .trim()
+    .customSanitizer(DOMPurify.sanitize),
+  check('appointmentLink')
     .trim()
     .customSanitizer(DOMPurify.sanitize),
   check('teleconsultation')

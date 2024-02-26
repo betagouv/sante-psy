@@ -41,6 +41,7 @@ const removePsyPersonalData = async (dossierNumber: string): Promise<void> => {
         otherLatitude: null,
         phone: erasedData,
         website: erasedData,
+        appointmentLink: erasedData,
         description: erasedData,
         personalEmail: erasedData,
         useFirstNames: erasedData,
