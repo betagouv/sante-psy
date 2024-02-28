@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button, Select, TextInput, RadioGroup, Radio, Icon } from '@dataesr/react-dsfr';
+import { Button, TextInput, Icon } from '@dataesr/react-dsfr';
 import Page from 'components/Page/Page';
-import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
-import { useStore } from 'stores/';
 import styles from './studentEligibility.cssmodule.scss';
 import classNames from 'classnames';
-import eligibility from 'services/faq/psychologue/eligibility';
 
 const StudentEligibility = () => {
   const [INE, setINE] = useState('');
@@ -21,20 +18,20 @@ const StudentEligibility = () => {
   const submit = e => {
     e.preventDefault();
     setIsLoading(true);
-    agent.Eligibility.get({ine: INE}).then(response => {
-        setIsEligible(response);
-        setShowEligibility(true);
-        setIsLoading(false);
+    agent.Eligibility.get({ ine: INE }).then(response => {
+      setIsEligible(response);
+      setShowEligibility(true);
+      setIsLoading(false);
     }).catch((e) => {
-        if (e.response.data && e.response.data.message) {
-            setErrorMessage(e.response.data.message);
-            setError(true);
-        }
-        setIsLoading(false);
+      if (e.response.data && e.response.data.message) {
+        setErrorMessage(e.response.data.message);
+        setError(true);
+      }
+      setIsLoading(false);
     })
   };
 
-  const onChange =(ine) => {
+  const onChange = (ine) => {
     setError(false);
     setErrorMessage('');
     setShowEligibility(false);
@@ -45,38 +42,37 @@ const StudentEligibility = () => {
 
   const eligibilityMessage = () => {
     if (isEligible) {
-        return (
-            <div className={classNames(styles.eligibilityMessage, styles.eligibilityMessage_valid)}>
-                  <Icon
-                    name="ri-checkbox-circle-fill"
-                    size="lg"
-                    color="#18753c"
-                    iconPosition="left"
-                    >
-                        <p>Vous êtes éligible au dispositif</p>
-                    </Icon>
-                    
-            </div>
-        )
-    } else {    
-        return (
-            <div className={classNames(styles.eligibilityMessage, styles.eligibilityMessage_error)}>
-                <Icon
-                    name="ri-close-circle-fill"
-                    size="lg"
-                    color="#ce0500"
-                    iconPosition="left"
-                >
-                    <p>Numéro INE inconnu ou non éligible au dispositif</p>
-                </Icon>
-                    <ul>
-                        <li>Contacter le service de santé de votre établissement.</li>
-                        <li>Consultez la Foire au questions.</li>
-                        <li>Ou contactez-nous pour vérifier votre éligibilité.</li>
-                    </ul>
-                
-            </div>
-        )
+      return (
+        <div className={classNames(styles.eligibilityMessage, styles.eligibilityMessage_valid)}>
+          <Icon
+            name="ri-checkbox-circle-fill"
+            size="lg"
+            color="#18753c"
+            iconPosition="left"
+          >
+            <p>Vous êtes éligible au dispositif</p>
+          </Icon>
+
+        </div>
+      )
+    } else {
+      return (
+        <div className={classNames(styles.eligibilityMessage, styles.eligibilityMessage_error)}>
+          <Icon
+            name="ri-close-circle-fill"
+            size="lg"
+            color="#ce0500"
+            iconPosition="left"
+          >
+            <p>Numéro INE inconnu ou non éligible au dispositif</p>
+          </Icon>
+          <ul>
+            <li>Contacter le service de santé de votre établissement.</li>
+            <li>Consultez <Link to="/faq">la Foire au questions</Link><Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right"/></li>
+            <li>Ou <Link state={{ ine: INE }} to="/eligibilite/contact">contactez-nous pour vérifier votre éligibilité</Link><Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right"/></li>
+          </ul>
+        </div>
+      )
     }
   }
 
@@ -91,13 +87,13 @@ const StudentEligibility = () => {
       )}
       description={(
         <>
-        Vous êtes étudiant, et vous souhaitez prendre part au dispositif ? Vérifier que vous êtes éligible
+          Vous êtes étudiant, et vous souhaitez prendre part au dispositif ? Vérifier que vous êtes éligible
         </>
       )}
       className={styles.page}
     >
       <h2 className={styles.title}>
-        Condition d'éligibilité 
+        Condition d'éligibilité
       </h2>
       <p>
         Le dispositif Santé Psy Étudiant est accessible à tous les étudiants inscrits dans un établissement d'enseignement supérieur reconnu par
@@ -108,25 +104,24 @@ const StudentEligibility = () => {
         ou bien encore le lieu de résidence de l'étudiant.
       </p>
 
-        <form onSubmit={submit}>
-            <div className={styles.formContainer}>
-                <div>
-                    <TextInput
-                        className={styles.input}
-                        data-test-id="ine-input"
-                        label="Numéro INE"
-                        value={INE}
-                       // required
-                        hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
-                        messageType={error ? 'error' : ''}
-                        message={errorMessage}
-                        onChange={e => onChange(e.target.value)}
-                    />
-                    <Button data-test-id="check-ine-button" disabled={isLoading} submit>Vérifier</Button>
-                </div>
-                {showEligibility && <span className={styles.text}>{eligibilityMessage()}</span>}
-            </div>
-        </form>
+      <form onSubmit={submit}>
+        <div className={styles.formContainer}>
+          <div>
+            <TextInput
+              className={styles.input}
+              data-test-id="ine-input"
+              label="Numéro INE"
+              value={INE}
+              hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
+              messageType={error ? 'error' : ''}
+              message={errorMessage}
+              onChange={e => onChange(e.target.value)}
+            />
+            <Button data-test-id="check-ine-button" disabled={isLoading} submit>Vérifier</Button>
+          </div>
+          {showEligibility && <span className={styles.text}>{eligibilityMessage()}</span>}
+        </div>
+      </form>
     </Page>
   );
 };

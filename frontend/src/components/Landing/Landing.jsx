@@ -36,8 +36,8 @@ const Landing = () => {
             avec un psychologue partenaire
           </>
         )}
-        buttonLink="/trouver-un-psychologue"
-        buttonText="Choisissez un psychologue"
+        buttonLink="/eligibilite"
+        buttonText="Vérifier mon éligibilité"
         hint={(
           <>
             Plus de

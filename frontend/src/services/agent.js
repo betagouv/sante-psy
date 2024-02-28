@@ -58,9 +58,10 @@ const Convention = {
     .post(`/psychologist/${store.userStore.user.dossierNumber}/convention`, convention),
 };
 
-//const Eligibility = { get: INE => client.get(`/eligibility/${INE}`) };
-
-const Eligibility = { get: (options = { INE: '' }) => client.get('/eligibility', { params: options }) };
+const Eligibility = { 
+  get: (options = { INE: '' }) => client.get('/eligibility', { params: options }),
+  send: message => client.post('/eligibility/contact', message)
+};
 
 const Patient = {
   create: patient => client.post('/patients/', patient),

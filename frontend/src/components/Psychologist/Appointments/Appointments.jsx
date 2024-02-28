@@ -75,6 +75,7 @@ const Appointments = () => {
     if (!badge || badge === appointmentBadges.other) {
       return null;
     }
+
     const { icon, text, severity } = generateBadgeStyles(badge, appointmentDate);
 
     return (

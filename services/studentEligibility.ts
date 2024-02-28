@@ -1,6 +1,7 @@
 import axios from 'axios';
 import config from '../utils/config';
 import CustomError from '../utils/CustomError';
+import { Inscription } from '../types/Eligibility';
 
 const getStudentEligibility = async (ine: string): Promise<boolean> => {
   let isStudentEligible = false;
@@ -13,12 +14,13 @@ const getStudentEligibility = async (ine: string): Promise<boolean> => {
     },
   };
 
-  const url = encodeURI('https://staging.particulier.api.gouv.fr/api/v2/etudiants');
+  const url = encodeURI(config.apiIneUrl);
+
   const response = await axios.get(url, requestConfig)
         .catch((error) => {
           const { status } = error.response;
           console.log('Error checking student eligibility with API INE : ', error);
-          if (status !== 404) {
+          if (status !== 404 && status !== 400) {
             throw new CustomError(
               'Une erreur s\'est produite lors de la vérification de l\'éligibilité',
               error.response.status,
@@ -29,7 +31,7 @@ const getStudentEligibility = async (ine: string): Promise<boolean> => {
   if (response && response.data) {
     isStudentEligible = (response.data.ine && response.data.ine === ine);
     if (!isStudentEligible) {
-      response.data.inscriptions.forEach((inscription) => {
+      response.data.inscriptions.forEach((inscription: Inscription) => {
         if (inscription.statut === 'inscrit') {
           isStudentEligible = true;
         }

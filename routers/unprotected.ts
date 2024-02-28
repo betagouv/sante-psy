@@ -76,4 +76,5 @@ router.post('/contact', contactController.sendValidators, contactController.send
 router.post('/psychologist/:token/inactive', psyInactiveController.suspendValidators, psyInactiveController.suspend);
 router.post('/psychologist/:token/active', psyInactiveController.activate);
 router.get('/eligibility', eligibilityController.getValidators, eligibilityController.get);
+router.post('/eligibility/contact', eligibilityController.sendValidators, eligibilityController.send);
 export default router;

@@ -9,6 +9,14 @@ const StudentCards = () => (
     <StudentCard
       index={1}
       big
+      title="Vérifier votre éligibilité"
+      image="psychologist"
+      buttonText="Éligibilité"
+      buttonLink="/eligibilite"
+    />
+    <StudentCard
+      index={2}
+      big
       title="Consultez un médecin généraliste"
       image="doctor"
       description={(
@@ -24,29 +32,13 @@ const StudentCards = () => (
       hint="ou un Service de santé étudiante"
     />
     <StudentCard
-      index={2}
+      index={3}
       big
       title="Choisissez un psychologue"
       image="psychologist"
       buttonIcon="ri-search-line"
       buttonText="Trouver un psychologue"
       buttonLink="/trouver-un-psychologue"
-    />
-    <StudentCard
-      index={3}
-      big
-      title="Bénéficiez de vos 8 séances gratuites"
-      image="followup"
-      description={(
-        <>
-          <b>sans avance de frais</b>
-          {' '}
-          de votre part
-        </>
-)}
-      buttonIcon="ri-information-line"
-      buttonText="Foire aux questions"
-      buttonLink="/faq"
     />
   </Row>
 );
