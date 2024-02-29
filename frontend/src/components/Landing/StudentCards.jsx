@@ -35,7 +35,7 @@ const StudentCards = () => (
       index={3}
       big
       title="Choisissez un psychologue"
-      image="psychologist"
+      image="followup"
       buttonIcon="ri-search-line"
       buttonText="Trouver un psychologue"
       buttonLink="/trouver-un-psychologue"
