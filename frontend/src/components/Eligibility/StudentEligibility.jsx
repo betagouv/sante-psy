@@ -100,15 +100,15 @@ const StudentEligibility = () => {
       className={styles.page}
     >
       <h2 className={styles.title}>
-        Condition d'éligibilité
+        Condition d&apos;éligibilité
       </h2>
       <p>
-        Le dispositif Santé Psy Étudiant est accessible à tous les étudiants inscrits dans un établissement d'enseignement supérieur reconnu par
-        le Ministère de l'Enseignement supérieur et de la Recherche (ou un ministère en lien avec celui-ci)
+        Le dispositif Santé Psy Étudiant est accessible à tous les étudiants inscrits dans un établissement d&apos;enseignement supérieur reconnu par
+        le Ministère de l&apos;Enseignement supérieur et de la Recherche (ou un ministère en lien avec celui-ci)
       </p>
       <p>
-        Il concerne tout type d'établissement qu'il soit public ou privé, quel que soit le lieu de scolarité, le statut de l'école / université
-        ou bien encore le lieu de résidence de l'étudiant.
+        Il concerne tout type d&apos;établissement qu&apos;il soit public ou privé, quel que soit le lieu de scolarité, le statut de l&apos;école / université
+        ou bien encore le lieu de résidence de l&apos;étudiant.
       </p>
 
       <form onSubmit={submit}>
