@@ -195,6 +195,10 @@ const PublicPsychologistProfile = () => {
               title="Vous n‘avez aucune avance de frais à prévoir"
               description="Le psychologue ne doit en aucun cas vous demander un complément financier ou une avance."
             />
+            <Alert
+              title="Attention, en cas de séance non honorée et sans excuse valable"
+              description="Le psychologue peut se réserver le droit de refuser un étudiant"
+            />
             <div className={styles.displayMobile}>{otherInfo}</div>
           </div>
         </div>
