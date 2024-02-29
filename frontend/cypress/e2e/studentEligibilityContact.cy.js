@@ -1,5 +1,3 @@
-const { loginAsDefault } = require('./utils/login');
-
 describe('Student eligibility contact', () => {
   beforeEach(() => {
     cy.intercept('POST', '/api/eligibilite/contact')

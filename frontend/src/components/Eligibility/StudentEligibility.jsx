@@ -22,9 +22,9 @@ const StudentEligibility = () => {
       setIsEligible(response);
       setShowEligibility(true);
       setIsLoading(false);
-    }).catch(e => {
-      if (e.response.data && e.response.data.message) {
-        setErrorMessage(e.response.data.message);
+    }).catch(err => {
+      if (err.response.data && err.response.data.message) {
+        setErrorMessage(err.response.data.message);
         setError(true);
       }
       setIsLoading(false);

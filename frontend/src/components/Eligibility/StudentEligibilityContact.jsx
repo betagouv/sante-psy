@@ -14,7 +14,7 @@ const StudentEligibilityContact = () => {
   const [establishment, setEstablishment] = useState('');
   const [email, setEmail] = useState('');
 
-  const { commonStore: { setNotification } } = useStore();
+  const { commonStore: { setNotification, config } } = useStore();
   const location = useLocation();
 
   useEffect(() => {
