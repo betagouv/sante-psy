@@ -4,8 +4,8 @@ import { observer } from 'mobx-react';
 import { Button, TextInput, Icon } from '@dataesr/react-dsfr';
 import Page from 'components/Page/Page';
 import agent from 'services/agent';
-import styles from './studentEligibility.cssmodule.scss';
 import classNames from 'classnames';
+import styles from './studentEligibility.cssmodule.scss';
 
 const StudentEligibility = () => {
   const [INE, setINE] = useState('');
@@ -22,23 +22,23 @@ const StudentEligibility = () => {
       setIsEligible(response);
       setShowEligibility(true);
       setIsLoading(false);
-    }).catch((e) => {
+    }).catch(e => {
       if (e.response.data && e.response.data.message) {
         setErrorMessage(e.response.data.message);
         setError(true);
       }
       setIsLoading(false);
-    })
+    });
   };
 
-  const onChange = (ine) => {
+  const onChange = ine => {
     setError(false);
     setErrorMessage('');
     setShowEligibility(false);
     setIsEligible(false);
     setINE(ine);
     setIsLoading(false);
-  }
+  };
 
   const eligibilityMessage = () => {
     if (isEligible) {
@@ -54,27 +54,34 @@ const StudentEligibility = () => {
           </Icon>
 
         </div>
-      )
-    } else {
-      return (
-        <div className={classNames(styles.eligibilityMessage, styles.eligibilityMessage_error)}>
-          <Icon
-            name="ri-close-circle-fill"
-            size="lg"
-            color="#ce0500"
-            iconPosition="left"
-          >
-            <p>Numéro INE inconnu ou non éligible au dispositif</p>
-          </Icon>
-          <ul>
-            <li>Contacter le service de santé de votre établissement.</li>
-            <li>Consultez <Link to="/faq">la Foire au questions</Link><Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right"/></li>
-            <li>Ou <Link state={{ ine: INE }} to="/eligibilite/contact">contactez-nous pour vérifier votre éligibilité</Link><Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right"/></li>
-          </ul>
-        </div>
-      )
+      );
     }
-  }
+    return (
+      <div className={classNames(styles.eligibilityMessage, styles.eligibilityMessage_error)}>
+        <Icon
+          name="ri-close-circle-fill"
+          size="lg"
+          color="#ce0500"
+          iconPosition="left"
+          >
+          <p>Numéro INE inconnu ou non éligible au dispositif</p>
+        </Icon>
+        <ul>
+          <li>Contacter le service de santé de votre établissement.</li>
+          <li>
+            Consultez
+            <Link to="/faq">la Foire au questions</Link>
+            <Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" />
+          </li>
+          <li>
+            Ou
+            <Link state={{ ine: INE }} to="/eligibilite/contact">contactez-nous pour vérifier votre éligibilité</Link>
+            <Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" />
+          </li>
+        </ul>
+      </div>
+    );
+  };
 
   return (
     <Page

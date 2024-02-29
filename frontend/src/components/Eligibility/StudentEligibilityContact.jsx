@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button, Select, TextInput, RadioGroup, Radio, Icon } from '@dataesr/react-dsfr';
+import { Button, TextInput } from '@dataesr/react-dsfr';
 import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
 import styles from './studentEligibility.cssmodule.scss';
-import classNames from 'classnames';
-import eligibility from 'services/faq/psychologue/eligibility';
 
 const StudentEligibilityContact = () => {
   const [INE, setINE] = useState('');
@@ -70,42 +68,43 @@ const StudentEligibilityContact = () => {
       )}
       description={(
         <>
-        Connaître mon éligibilité
+          Connaître mon éligibilité
         </>
       )}
     >
-        <form className={styles.contactForm} onSubmit={submit}>
-            <TextInput
-                className={styles.input}
-                data-test-id="ine-input"
-                label="INE"
-                value={INE}
-                onChange={e => setINE(e.target.value)}
+      <GlobalNotification />
+      <form className={styles.contactForm} onSubmit={submit}>
+        <TextInput
+          className={styles.input}
+          data-test-id="ine-input"
+          label="INE"
+          value={INE}
+          onChange={e => setINE(e.target.value)}
             />
-            <TextInput
-              data-test-id="formation-input"
-              required
-              label="Nom de la formation ou du diplôme"
-              value={formation}
-              onChange={e => setFormation(e.target.value)}
+        <TextInput
+          data-test-id="formation-input"
+          required
+          label="Nom de la formation ou du diplôme"
+          value={formation}
+          onChange={e => setFormation(e.target.value)}
             />
-            <TextInput
-              data-test-id="establishment-input"
-              required
-              label="Nom de l'établissement"
-              value={establishment}
-              onChange={e => setEstablishment(e.target.value)}
+        <TextInput
+          data-test-id="establishment-input"
+          required
+          label="Nom de l'établissement"
+          value={establishment}
+          onChange={e => setEstablishment(e.target.value)}
             />
-            <TextInput
-              data-test-id="email-input"
-              required
-              type="email"
-              label="Email pour vous répondre"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+        <TextInput
+          data-test-id="email-input"
+          required
+          type="email"
+          label="Email pour vous répondre"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
             />
-            <Button data-test-id="eligibility-send-button" submit>Envoyer ma demande</Button>
-        </form>
+        <Button data-test-id="eligibility-send-button" submit>Envoyer ma demande</Button>
+      </form>
     </Page>
   );
 };
