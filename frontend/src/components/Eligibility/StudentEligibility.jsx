@@ -70,11 +70,13 @@ const StudentEligibility = () => {
           <li>Contacter le service de santé de votre établissement.</li>
           <li>
             Consultez
+            {' '}
             <Link to="/faq">la Foire au questions</Link>
             <Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" />
           </li>
           <li>
             Ou
+            {' '}
             <Link state={{ ine: INE }} to="/eligibilite/contact">contactez-nous pour vérifier votre éligibilité</Link>
             <Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" />
           </li>
