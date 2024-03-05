@@ -42,7 +42,7 @@ const Landing = () => {
           <>
             Plus de
             {' '}
-            <b>40 000 étudiants</b>
+            <b>62 000 étudiants</b>
             {' '}
             déjà accompagnés
           </>
