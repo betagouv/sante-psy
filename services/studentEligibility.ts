@@ -18,12 +18,18 @@ const getStudentEligibility = async (ine: string): Promise<boolean> => {
 
   const response = await axios.get(url, requestConfig)
         .catch((error) => {
-          const { status } = error.response;
           console.log('Error checking student eligibility with API INE : ', error);
-          if (status !== 404 && status !== 400) {
+          if (error.response && error.response.status) {
+            const { status } = error.response;
+            if (status !== 404 && status !== 400) {
+              throw new CustomError(
+                'Une erreur s\'est produite lors de la vérification de l\'éligibilité',
+                error.response.status,
+              );
+            }
+          } else {
             throw new CustomError(
               'Une erreur s\'est produite lors de la vérification de l\'éligibilité',
-              error.response.status,
             );
           }
         });

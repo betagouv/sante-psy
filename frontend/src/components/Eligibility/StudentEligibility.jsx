@@ -67,11 +67,11 @@ const StudentEligibility = () => {
           <p>Numéro INE inconnu ou non éligible au dispositif</p>
         </Icon>
         <ul>
-          <li>Contacter le service de santé de votre établissement.</li>
+          <li>Contactez le service de santé de votre établissement.</li>
           <li>
             Consultez
             {' '}
-            <Link to="/faq">la Foire au questions</Link>
+            <Link to="/faq">la Foire aux questions</Link>
             <Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" />
           </li>
           <li>

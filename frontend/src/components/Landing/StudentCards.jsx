@@ -11,7 +11,8 @@ const StudentCards = () => (
       big
       title="Vérifier votre éligibilité"
       image="psychologist"
-      buttonText="Éligibilité"
+      buttonIcon="ri-user-search-fill"
+      buttonText="Vérifiez votre éligibilité"
       buttonLink="/eligibilite"
     />
     <StudentCard
