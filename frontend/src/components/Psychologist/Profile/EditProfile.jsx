@@ -124,7 +124,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
       <TextInput
         className="midlength-input"
         label="Site web professionnel"
-        hint="Site sur lequel l'étudiant pourra trouver plus d'info sur votre cabinet ou vos services."
+        hint="Site sur lequel l'étudiant pourra trouver plus d'infos sur votre cabinet ou vos services."
         data-test-id="psy-website-input"
         value={updatedPsychologist.website}
         onChange={e => changePsychologist(e.target.value, 'website')}
