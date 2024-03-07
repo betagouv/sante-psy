@@ -14,7 +14,9 @@ type DoctolibPsy = {
   lienDoctolib: string,
 }
 
-const matchDoctolibToDb = (doctolibName: string, dbName: string): boolean => dbName.toLowerCase().includes(doctolibName.toLowerCase());
+const simplifyName = (name: string): string => name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+const matchDoctolibToDb = (doctolibName: string, dbName: string): boolean => simplifyName(dbName).includes(simplifyName(doctolibName));
 
 const insertDoctolibLinkToPsy = async (doctolibPsys: unknown[]): Promise<void> => {
   console.log(
@@ -29,18 +31,18 @@ const insertDoctolibLinkToPsy = async (doctolibPsys: unknown[]): Promise<void> =
         continue;
       }
       const matchingPsys = psysDb
-      .filter((psyDb) => matchDoctolibToDb(doctolibPsy.nom, psyDb.lastName))
-      .filter((psyDb) => matchDoctolibToDb(doctolibPsy.prenom, psyDb.firstNames));
+      .filter((psyDb) => matchDoctolibToDb(doctolibPsy.nom, psyDb.lastName) || (psyDb.useLastName && matchDoctolibToDb(doctolibPsy.nom, psyDb.useLastName)))
+      .filter((psyDb) => matchDoctolibToDb(doctolibPsy.prenom, psyDb.firstNames) || (psyDb.useFirstNames && matchDoctolibToDb(doctolibPsy.prenom, psyDb.useFirstNames)));
 
       if (matchingPsys.length === 0) {
         console.warn(
-          `Couldn't find corresponding psy for psy ${doctolibPsy.prenom} ${doctolibPsy.nom} of excel`,
+          `Couldn't find corresponding psy for psy n° ${doctolibPsy.id} of excel`,
         );
         continue;
       }
 
       if (matchingPsys.length > 1) {
-        console.warn(`Multiple matches found for ${doctolibPsy.prenom} ${doctolibPsy.nom}`);
+        console.warn(`Multiple matches found for psy n° ${doctolibPsy.id}. Please check it besides.`);
         continue;
       }
 
