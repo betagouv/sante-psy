@@ -31,6 +31,7 @@ const insertDoctolibLinkToPsy = async (doctolibPsys: unknown[]): Promise<void> =
         continue;
       }
       const matchingPsys = psysDb
+      .filter((psyDb) => psyDb.state === 'accepte')
       .filter((psyDb) => matchDoctolibToDb(doctolibPsy.nom, psyDb.lastName) || (psyDb.useLastName && matchDoctolibToDb(doctolibPsy.nom, psyDb.useLastName)))
       .filter((psyDb) => matchDoctolibToDb(doctolibPsy.prenom, psyDb.firstNames) || (psyDb.useFirstNames && matchDoctolibToDb(doctolibPsy.prenom, psyDb.useFirstNames)));
 
