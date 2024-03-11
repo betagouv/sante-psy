@@ -1,0 +1,53 @@
+.contactForm {
+  width: 40%;
+}
+
+.title {
+  font-size: 22px;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 200px;
+
+  .text {
+    flex-grow: 1;
+  }
+
+  .input {
+    input {
+      width: 90%;
+    }
+  }
+
+  .eligibilityMessage {
+    font-size: 12px;
+      p {
+        font-size: 12px;
+      }
+    &_valid {
+      color: #18753c;
+      padding-top: 2%;
+    }
+    &_error {
+      color: #ce0500;
+      padding-top: 15%;
+      ul {
+        padding-left: 10%;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .formContainer {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .contactForm {
+    width: 100%;
+  }
+}
