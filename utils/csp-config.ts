@@ -14,6 +14,8 @@ export default helmet.contentSecurityPolicy({
       'https://www.googleadservices.com/',
       'https://googleads.g.doubleclick.net',
       'https://*.crisp.chat',
+      // Crisp chat script hash
+      "'sha256-t4VtNIUiuBKi5VJfKaIxe2Ww1/6O3gae/Qtmhx4B0uE='",
     ],
     'script-src-attr': [
       "'self'",
