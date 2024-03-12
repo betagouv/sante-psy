@@ -7,7 +7,7 @@ export default helmet.contentSecurityPolicy({
       "'self'",
       'https://stats.beta.gouv.fr/',
       // Matomo script hash
-      "'sha256-sqjiu0yVEwRFwPjX2fpBsUHfmtb6Cd2U2U+ip0KXg4c='",
+      "'sha256-t4VtNIUiuBKi5VJfKaIxe2Ww1/6O3gae/Qtmhx4B0uE='",
       'https://static.axept.io/',
       'https://connect.facebook.net',
       'https://www.googletagmanager.com/',
