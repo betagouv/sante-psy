@@ -13,6 +13,7 @@ export default helmet.contentSecurityPolicy({
       'https://www.googletagmanager.com/',
       'https://www.googleadservices.com/',
       'https://googleads.g.doubleclick.net',
+      'https://client.crisp.chat',
     ],
     'script-src-attr': [
       "'self'",
