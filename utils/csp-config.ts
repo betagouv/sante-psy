@@ -35,6 +35,7 @@ export default helmet.contentSecurityPolicy({
       'https://santepsy-metabase.osc-secnum-fr1.scalingo.io',
       'https://stats.santepsyetudiant.beta.gouv.fr',
       'https://bid.g.doubleclick.net/',
+      'https://game.crisp.chat',
     ],
     'connect-src': [
       "'self'",
@@ -42,6 +43,19 @@ export default helmet.contentSecurityPolicy({
       'https://stats.beta.gouv.fr/',
       'https://client.axept.io/',
       'wss://client.relay.crisp.chat',
+      'https://client.crisp.chat',
+      'https://storage.crisp.chat',
+      'wss://stream.relay.crisp.chat',
+    ],
+    'font-src': [
+      "'self'",
+      'https://client.crisp.chat',
+    ],
+    'media-src': [
+      'https://client.crisp.chat',
+    ],
+    'style-src': [
+      "'unsafe-inline'",
       'https://client.crisp.chat',
     ],
   },
