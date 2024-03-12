@@ -7,13 +7,13 @@ export default helmet.contentSecurityPolicy({
       "'self'",
       'https://stats.beta.gouv.fr/',
       // Matomo script hash
-      "'sha256-t4VtNIUiuBKi5VJfKaIxe2Ww1/6O3gae/Qtmhx4B0uE='",
+      "'sha256-sqjiu0yVEwRFwPjX2fpBsUHfmtb6Cd2U2U+ip0KXg4c='",
       'https://static.axept.io/',
       'https://connect.facebook.net',
       'https://www.googletagmanager.com/',
       'https://www.googleadservices.com/',
       'https://googleads.g.doubleclick.net',
-      'https://client.crisp.chat',
+      'https://*.crisp.chat',
     ],
     'script-src-attr': [
       "'self'",
@@ -28,6 +28,7 @@ export default helmet.contentSecurityPolicy({
       'https://www.google.fr/',
       'https://www.facebook.com',
       'https://googleads.g.doubleclick.net',
+      'https://*.crisp.chat',
       'data:',
     ],
     'frame-src': [
@@ -40,6 +41,8 @@ export default helmet.contentSecurityPolicy({
       'https://nominatim.openstreetmap.org',
       'https://stats.beta.gouv.fr/',
       'https://client.axept.io/',
+      'wss://client.relay.crisp.chat',
+      'https://client.crisp.chat',
     ],
   },
 });
