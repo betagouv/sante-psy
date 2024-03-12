@@ -49,16 +49,5 @@ export default helmet.contentSecurityPolicy({
       'https://storage.crisp.chat',
       'wss://stream.relay.crisp.chat',
     ],
-    'font-src': [
-      "'self'",
-      'https://client.crisp.chat',
-    ],
-    'media-src': [
-      'https://client.crisp.chat',
-    ],
-    'style-src': [
-      "'unsafe-inline'",
-      'https://client.crisp.chat',
-    ],
   },
 });
