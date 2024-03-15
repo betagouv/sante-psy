@@ -4,7 +4,7 @@ import { Button, TextInput, Checkbox, Tag } from '@dataesr/react-dsfr';
 
 import { useStore } from 'stores/';
 
-import { formatDDMMYYYY, currentUnivYear } from 'services/date';
+import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
 
 import styles from './addEditPatient.cssmodule.scss';
@@ -19,8 +19,6 @@ const AddEditPatient = () => {
 
   const [patient, setPatient] = useState();
 
-  const currentYear = currentUnivYear();
-
   useEffect(() => {
     if (patientId) {
       agent.Patient.getOne(patientId).then(response => {
@@ -28,6 +26,9 @@ const AddEditPatient = () => {
           ...response,
           dateOfBirth: response.dateOfBirth
             ? formatDDMMYYYY(new Date(response.dateOfBirth))
+            : '',
+          dateOfPrescription: response.dateOfPrescription
+            ? formatDDMMYYYY(new Date(response.dateOfPrescription))
             : '',
         });
       });
@@ -37,6 +38,8 @@ const AddEditPatient = () => {
         dateOfBirth: '',
         doctorAddress: '',
         doctorName: '',
+        doctorEmail: '',
+        dateOfPrescription: '',
         firstNames: '',
         hasPrescription: false,
         institutionName: '',
@@ -87,6 +90,7 @@ const AddEditPatient = () => {
         {patient && (
           <>
             <div id="mandatory-informations">
+              <h2>Dossier étudiant</h2>
               <TextInput
                 className="midlength-input fr-mt-3w"
                 data-test-id="etudiant-first-name-input"
@@ -106,16 +110,17 @@ const AddEditPatient = () => {
               <TextInput
                 className="midlength-input"
                 data-test-id="etudiant-birth-date-input"
-                label={`Date de naissance (obligatoire uniquement pour vos étudiants enregistrés après le
-                ${config.dateOfBirthDeploymentDate})`}
+                label="Date de naissance"
                 hint="Format JJ/MM/AAAA, par exemple : 25/01/1987"
                 value={patient.dateOfBirth}
                 type="text"
                 onChange={e => changePatient(e.target.value, 'dateOfBirth')}
                 pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
                 placeholder="JJ/MM/AAAA"
+                required={!patientId}
               />
             </div>
+            <br />
             <div id="other-informations">
               <TextInput
                 className="midlength-input"
@@ -138,48 +143,71 @@ const AddEditPatient = () => {
                 className="fr-input-group"
                 data-test-id="etudiant-status-input"
                 defaultChecked={patient.isStudentStatusVerified}
-                label="J'ai vérifié le statut étudiant"
+                label="J'ai bien vérifié le statut étudiant"
                 hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
                 value="isStudentStatusVerified"
                 onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
               />
               {patientId && !patient.hasPrescription && (
-                <Tag
-                  data-test-id="etudiant-renewal-tag"
-                  className={styles.incomplete}
-                  icon="ri-alert-line"
-                  iconPosition="left"
-                  size="sm"
-                  as="span"
+                <>
+                  <Tag
+                    data-test-id="etudiant-renewal-tag"
+                    className={styles.incomplete}
+                    icon="ri-alert-line"
+                    iconPosition="left"
+                    size="sm"
+                    as="span"
                 >
-                  Renouvellement
-                </Tag>
+                    Renouvellement
+                  </Tag>
+                  <br />
+                </>
               )}
+              <h2>Lettre d&apos;orientation</h2>
               <Checkbox
                 className="fr-input-group"
                 data-test-id="etudiant-letter-input"
                 defaultChecked={patient.hasPrescription}
                 label={`J'ai vérifié que les séances ont bien été orientées
-                par un médecin ou un Service de Santé Étudiante pour ${currentYear}`}
-                hint="L'étudiant m'a présenté une lettre ou ordonnance médicale"
+                par un médecin`}
+                hint="L’étudiant m’a bien présenté la lettre d’orientation rédigée par son médecin, pour l’année en cours"
                 value="hasPrescription"
                 onChange={e => changePatient(e.target.checked, 'hasPrescription')}
               />
               <TextInput
                 className="midlength-input"
                 data-test-id="etudiant-doctor-name-input"
-                label="Médecin ou Service de Santé Étudiante qui a orienté cet étudiant"
-                hint="Exemple : Annie Benahmou ou SSE Rennes 1"
+                label="Nom, prénom du médecin"
+                hint="Exemple : Annie Benahmou"
                 value={patient.doctorName}
                 onChange={e => changePatient(e.target.value, 'doctorName')}
               />
               <TextInput
                 className="midlength-input"
                 data-test-id="etudiant-doctor-location-input"
-                label="Ville et/ou code postal du médecin ou Service de Santé Étudiante"
+                label="Ville / code postal du médecin"
                 hint="Exemple : 97400 Saint-Denis"
                 value={patient.doctorAddress}
                 onChange={e => changePatient(e.target.value, 'doctorAddress')}
+              />
+              <TextInput
+                className="midlength-input"
+                data-test-id="etudiant-doctor-email-input"
+                label="Email du médecin"
+                hint="Il servira si vous souhaitez participer au suivi de l’étudiant par le médecin"
+                value={patient.doctorEmail}
+                onChange={e => changePatient(e.target.value, 'doctorEmail')}
+              />
+              <TextInput
+                className="midlength-input"
+                data-test-id="etudiant-prescription-date-input"
+                label={'Date de la lettre d\'orientation'}
+                hint="Format JJ/MM/AAAA, par exemple : 01/01/2024"
+                value={patient.dateOfPrescription}
+                type="text"
+                onChange={e => changePatient(e.target.value, 'dateOfPrescription')}
+                pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
+                placeholder="JJ/MM/AAAA"
               />
             </div>
           </>
