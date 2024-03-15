@@ -63,6 +63,10 @@ describe('Patient', () => {
         .type('Dr Dupont');
       cy.get('[data-test-id="etudiant-doctor-location-input"] > input')
         .type('Saint-Denis');
+      cy.get('[data-test-id="etudiant-doctor-email-input"] > input')
+        .type('email@email.comfr');
+      cy.get('[data-test-id="etudiant-prescription-date-input"] > input')
+        .type('01/01/2001');
       cy.get('[data-test-id="save-etudiant-button"]')
         .click();
 

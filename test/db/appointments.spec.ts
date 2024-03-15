@@ -8,8 +8,27 @@ import create from '../helper/create';
 import { appointmentsTable } from '../../db/tables';
 
 import dotEnv from 'dotenv';
+import { Patient } from '../../types/Patient';
+import { Psychologist } from '../../types/Psychologist';
 
 dotEnv.config();
+
+async function insertPatientToDb(patientToInsert: Patient, psy: Psychologist) {
+  return dbPatients.insert(
+    patientToInsert.firstNames,
+    patientToInsert.lastName,
+    patientToInsert.INE,
+    patientToInsert.institutionName,
+    patientToInsert.isStudentStatusVerified,
+    patientToInsert.hasPrescription,
+    psy.dossierNumber,
+    patientToInsert.doctorName,
+    patientToInsert.doctorAddress,
+    patientToInsert.doctorEmail,
+    patientToInsert.dateOfBirth,
+    patientToInsert.dateOfPrescription,
+  );
+}
 
 describe('DB Appointments', () => {
   beforeEach(async () => {
@@ -28,18 +47,7 @@ describe('DB Appointments', () => {
     it('should change deleted boolean to true and update updatedAt field', async () => {
       const psy = await create.insertOnePsy();
       const patientToInsert = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
-      const patient = await dbPatients.insert(
-        patientToInsert.firstNames,
-        patientToInsert.lastName,
-        patientToInsert.INE,
-        patientToInsert.institutionName,
-        patientToInsert.isStudentStatusVerified,
-        patientToInsert.hasPrescription,
-        psy.dossierNumber,
-        patientToInsert.doctorName,
-        patientToInsert.doctorAddress,
-        patientToInsert.dateOfBirth,
-      );
+      const patient = await insertPatientToDb(patientToInsert, psy);
       await dbAppointments.insert(new Date('2021-03-01'), patient.id, psy.dossierNumber);
 
       const appointmentsBeforeDelete = await db.from(appointmentsTable)
@@ -62,18 +70,7 @@ describe('DB Appointments', () => {
     it('should only return not deleted appointments for psy id', async () => {
       const psy = await create.insertOnePsy();
       const patientToInsert = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
-      const patient = await dbPatients.insert(
-        patientToInsert.firstNames,
-        patientToInsert.lastName,
-        patientToInsert.INE,
-        patientToInsert.institutionName,
-        patientToInsert.isStudentStatusVerified,
-        patientToInsert.hasPrescription,
-        psy.dossierNumber,
-        patientToInsert.doctorName,
-        patientToInsert.doctorAddress,
-        patientToInsert.dateOfBirth,
-      );
+      const patient = await insertPatientToDb(patientToInsert, psy);
       const toDelete = await dbAppointments.insert(new Date('2023-11-01'), patient.id, psy.dossierNumber);
       await dbAppointments.insert(new Date('2023-11-02'), patient.id, psy.dossierNumber);
       await dbAppointments.insert(new Date('2023-11-03'), patient.id, psy.dossierNumber);
@@ -102,7 +99,9 @@ describe('DB Appointments', () => {
         psy.dossierNumber,
         patientToInsert.doctorName,
         patientToInsert.doctorAddress,
+        patientToInsert.doctorEmail,
         patientToInsert.dateOfBirth,
+        patientToInsert.dateOfPrescription,
       );
 
       await dbAppointments.insert(new Date('2023-11-02'), patient.id, psy.dossierNumber);
@@ -124,30 +123,8 @@ describe('DB Appointments', () => {
       const psy = await create.insertOnePsy();
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const patient2 = create.getOnePatient(1, { psychologistId: psy.dossierNumber });
-      const patientWithAppointments = await dbPatients.insert(
-        patient1.firstNames,
-        patient1.lastName,
-        patient1.INE,
-        patient1.institutionName,
-        patient1.isStudentStatusVerified,
-        patient1.hasPrescription,
-        psy.dossierNumber,
-        patient1.doctorName,
-        patient1.doctorAddress,
-        patient1.dateOfBirth,
-      );
-      const otherPatient = await dbPatients.insert(
-        patient2.firstNames,
-        patient2.lastName,
-        patient2.INE,
-        patient2.institutionName,
-        patient2.isStudentStatusVerified,
-        patient2.hasPrescription,
-        psy.dossierNumber,
-        patient2.doctorName,
-        patient2.doctorAddress,
-        patient2.dateOfBirth,
-      );
+      const patientWithAppointments = await insertPatientToDb(patient1, psy);
+      const otherPatient = await insertPatientToDb(patient2, psy);
       const toDelete = await dbAppointments.insert(
         new Date('2021-03-01'),
         patientWithAppointments.id,
