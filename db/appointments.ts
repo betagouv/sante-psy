@@ -20,7 +20,6 @@ Promise<AppointmentWithPatient[]> => {
     const query = db.from(patientsTable)
       .innerJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
       .where(`${appointmentsTable}.psychologistId`, psychologistId)
-      .where('appointmentDate', '>=', date.subtractDays(new Date(), 6 * 30))
       .whereNot(`${appointmentsTable}.deleted`, true);
 
     if (period) {

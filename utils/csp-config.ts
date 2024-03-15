@@ -13,6 +13,9 @@ export default helmet.contentSecurityPolicy({
       'https://www.googletagmanager.com/',
       'https://www.googleadservices.com/',
       'https://googleads.g.doubleclick.net',
+      'https://*.crisp.chat',
+      // Crisp chat script hash
+      "'sha256-t4VtNIUiuBKi5VJfKaIxe2Ww1/6O3gae/Qtmhx4B0uE='",
     ],
     'script-src-attr': [
       "'self'",
@@ -27,18 +30,24 @@ export default helmet.contentSecurityPolicy({
       'https://www.google.fr/',
       'https://www.facebook.com',
       'https://googleads.g.doubleclick.net',
+      'https://*.crisp.chat',
       'data:',
     ],
     'frame-src': [
       'https://santepsy-metabase.osc-secnum-fr1.scalingo.io',
       'https://stats.santepsyetudiant.beta.gouv.fr',
       'https://bid.g.doubleclick.net/',
+      'https://game.crisp.chat',
     ],
     'connect-src': [
       "'self'",
       'https://nominatim.openstreetmap.org',
       'https://stats.beta.gouv.fr/',
       'https://client.axept.io/',
+      'wss://client.relay.crisp.chat',
+      'https://client.crisp.chat',
+      'https://storage.crisp.chat',
+      'wss://stream.relay.crisp.chat',
     ],
   },
 });
