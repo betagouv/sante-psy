@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Button, TextInput, Checkbox, Tag } from '@dataesr/react-dsfr';
 
-import { useStore } from 'stores/';
-
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
 
@@ -12,7 +10,6 @@ import styles from './addEditPatient.cssmodule.scss';
 const AddEditPatient = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
-  const { commonStore: { config } } = useStore();
   const { patientId } = useParams();
   const appointmentDate = new URLSearchParams(search).get('appointmentDate');
   const addAppointment = new URLSearchParams(search).get('addAppointment');
