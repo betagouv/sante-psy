@@ -37,7 +37,7 @@ import PublicAnnouncement from 'components/Notification/PublicAnnouncement';
 import StudentUnregister from './components/StudentUnregister/StudentUnregister';
 import StudentEligibility from './components/Eligibility/StudentEligibility';
 import StudentEligibilityContact from './components/Eligibility/StudentEligibilityContact';
-
+import LiveChat from 'components/LiveChat/LiveChat';
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
 function App() {
@@ -57,6 +57,7 @@ function App() {
       <PublicAnnouncement />
       <Header />
       <ScrollToTop loading={loading} />
+      <LiveChat />
       <div id="contenu">
         {!loading && (
           <React.Suspense fallback={null}>

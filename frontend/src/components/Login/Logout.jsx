@@ -7,6 +7,7 @@ const Logout = () => {
   const { userStore: { deleteToken } } = useStore();
 
   useEffect(() => {
+    $crisp.push(["do", "session:reset"])
     deleteToken();
     navigate('/');
   });
