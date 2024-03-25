@@ -31,7 +31,7 @@ const LiveChat = () => {
     }
   };
 
-  const loadCrisp = () => new Promise((resolve) => {
+  const loadCrisp = () => new Promise(resolve => {
     if (window.$crisp) {
       resolve();
     } else {
