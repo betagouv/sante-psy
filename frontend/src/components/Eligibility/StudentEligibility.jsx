@@ -71,13 +71,19 @@ const StudentEligibility = () => {
           <li>
             Consultez
             {' '}
-            <Link to="/faq">la Foire aux questions<Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" /></Link>
+            <Link to="/faq">
+              la Foire aux questions
+              <Icon className={styles.redirectIcon} name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" />
+            </Link>
           </li>
           <li>
             Ou
             {' '}
-            <Link state={{ ine: INE }} to="/eligibilite/contact">contactez-nous pour vérifier votre éligibilité<Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" /></Link>
-            
+            <Link state={{ ine: INE }} to="/eligibilite/contact">
+              contactez-nous pour vérifier votre éligibilité
+              <Icon className={styles.redirectIcon} name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" />
+            </Link>
+
           </li>
         </ul>
       </div>
