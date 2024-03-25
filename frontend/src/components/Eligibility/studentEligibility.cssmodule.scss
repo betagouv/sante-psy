@@ -11,6 +11,7 @@
   flex-direction: row;
   align-items: center;
   height: 200px;
+  margin-bottom: 20px;
 
   .text {
     flex-grow: 1;
@@ -38,6 +39,12 @@
         padding-left: 10%;
       }
     }
+  }
+
+  .redirectIcon {
+    margin-left: 0.5rem;
+    margin-top: 0.45rem;
+    position: absolute;
   }
 }
 
