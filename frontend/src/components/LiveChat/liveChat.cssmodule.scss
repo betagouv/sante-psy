@@ -25,10 +25,20 @@
   color: grey;
   height: 20px;
   width: 20px;
+  background-color: none;
+  --hover-tint:none;
 
   span {
     font-size: 1rem;
   }
 }
+
+.closeButton:hover,
+.closeButton:active {
+  color: initial;
+  background-color: initial;
+  border-color: initial;
+}
+
 
   
