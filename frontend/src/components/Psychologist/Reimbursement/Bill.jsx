@@ -70,7 +70,7 @@ const Bill = () => {
     }
 
     return [
-      `Nom, prénom du prestataire : ${user.lastName} ${user.firstNames}`,
+      `Nom, prénom du prestataire : ${user.useLastName || user.lastName} ${user.useFirstNames || user.firstNames}`,
       `Numéro SIRET : ${billingInfo.siret || '___________________'}`,
       `Numéro ADELI : ${user.adeli}`,
       `Adresse du prestataire : ${user.address}`,
