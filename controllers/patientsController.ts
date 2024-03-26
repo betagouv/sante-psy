@@ -53,17 +53,35 @@ const patientValidators = [
   check('institutionName')
     .trim()
     .customSanitizer(DOMPurify.sanitize),
-  check('doctorAddress')
-    .trim()
-    .customSanitizer(DOMPurify.sanitize),
-  check('doctorName')
-    .trim()
-    .customSanitizer(DOMPurify.sanitize),
-  check('doctorEmail')
-    .trim()
-    .isEmail()
-    .withMessage('Vous devez spécifier un email valide.')
-    .customSanitizer(DOMPurify.sanitize),
+
+  // all following prescriptions infos are optionnal so two
+  // valid option: field is empty or check if has the right format
+  oneOf(
+    [
+      check('doctorAddress').trim().isEmpty(),
+      check('doctorAddress')
+      .trim()
+      .customSanitizer(DOMPurify.sanitize),
+    ],
+  ),
+  oneOf(
+    [
+      check('doctorName').trim().isEmpty(),
+      check('doctorName')
+      .trim()
+      .customSanitizer(DOMPurify.sanitize),
+    ],
+  ),
+  oneOf(
+    [
+      check('doctorEmail').trim().isEmpty(),
+      check('doctorEmail')
+      .trim()
+      .isEmail()
+      .withMessage('Vous devez spécifier un email valide.')
+      .customSanitizer(DOMPurify.sanitize),
+    ],
+  ),
   oneOf(
     [
       check('dateOfPrescription').trim().isEmpty(),
