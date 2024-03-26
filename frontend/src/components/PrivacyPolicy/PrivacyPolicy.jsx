@@ -236,6 +236,7 @@ const PrivacyPolicy = () => (
       </p>
       <SimpleTable data={dataCookies} />
       <p>Nous utilisons également l’outil de mesure d’audience Matomo, configuré en mode “exempté” et ne nécessitant pas le recueil de votre consentement conformément aux recommandations de la CNIL.</p>
+      <iframe title="Matomo opt-out" style={{ border: 'none', width: '90%' }} src="https://stats.beta.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=2f3b6c&fontSize=16px&fontFamily=sans-serif"></iframe>
       <p>
         Pour aller plus loin, vous pouvez consulter les fiches proposées par
         la Commission Nationale de l’Informatique et des Libertés
