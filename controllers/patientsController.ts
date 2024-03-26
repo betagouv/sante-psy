@@ -90,7 +90,7 @@ const patientValidators = [
           .customSanitizer(DOMPurify.sanitize),
     ],
     `La date de prescription n'est pas valide, le format doit être JJ/MM/AAAA.
-      Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`,
+    Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`,
   ),
 ];
 
