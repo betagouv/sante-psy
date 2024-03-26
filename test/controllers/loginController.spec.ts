@@ -267,6 +267,8 @@ describe('loginController', async () => {
             'dossierNumber',
             'firstNames',
             'lastName',
+            'useFirstNames',
+            'useLastName',
             'email',
             'adeli',
             'address',
@@ -279,6 +281,8 @@ describe('loginController', async () => {
           res.body.dossierNumber.should.equal(psy.dossierNumber);
           res.body.firstNames.should.equal(psy.firstNames);
           res.body.lastName.should.equal(psy.lastName);
+          res.body.useFirstNames.should.equal(psy.useFirstNames);
+          res.body.useLastName.should.equal(psy.useLastName);
           res.body.email.should.equal(psy.email);
           res.body.adeli.should.equal(psy.adeli);
           res.body.active.should.equal(psy.active);
