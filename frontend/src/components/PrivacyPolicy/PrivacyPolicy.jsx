@@ -212,7 +212,7 @@ const PrivacyPolicy = () => (
         opérationnelles nécessaires afin d’assurer la sécurité et la
         confidentialité des données telles que le chiffrement et le
         cloisonnement des accès. Des audits et analyses de code sont
-        également effectuées.
+        également effectués.
       </p>
       <p>
         En ce sens les données introduites par le psychologue pour générer
