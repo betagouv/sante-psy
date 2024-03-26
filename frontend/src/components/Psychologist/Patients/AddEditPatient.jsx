@@ -99,7 +99,7 @@ const AddEditPatient = () => {
       <form onSubmit={save}>
         {patient && (
           <>
-            <div>
+            <div id="mandatory-informations">
               <section className={styles.studentSectionTitle}>
                 <h2>Dossier étudiant</h2>
                 {!areStudentInfosFilled()

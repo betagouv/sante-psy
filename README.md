@@ -82,6 +82,12 @@ docker-compose up
 cd frontend
 npm run cy:run
 ```
+ou
+
+```bash
+npm run cy:open
+```
+pour visualiser et simuler les tests sur un navigateur
 
 #### Back
 
