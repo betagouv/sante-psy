@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
-import { Button, Table, Callout, CalloutText, Icon, Badge } from '@dataesr/react-dsfr';
+import { Button, Table, Callout, CalloutText, Icon } from '@dataesr/react-dsfr';
 
 import MonthPicker from 'components/Date/MonthPicker';
 

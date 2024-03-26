@@ -5,6 +5,7 @@ import { Button, TextInput, Checkbox, Tag } from '@dataesr/react-dsfr';
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
 
+import { renderBadge } from 'components/Badges/generateBadges';
 import styles from './addEditPatient.cssmodule.scss';
 
 const AddEditPatient = () => {
@@ -62,7 +63,10 @@ const AddEditPatient = () => {
     action
       .then(response => {
         if (appointmentDate) {
-          navigate(`/psychologue/nouvelle-seance/${patientId}?date=${appointmentDate}`, { state: { notification: response } });
+          navigate(
+            `/psychologue/nouvelle-seance/${patientId}?date=${appointmentDate}`,
+            { state: { notification: response } },
+          );
         } else if (addAppointment) {
           navigate(`/psychologue/nouvelle-seance/${patientId}`, { state: { notification: response } });
         } else {
@@ -72,22 +76,46 @@ const AddEditPatient = () => {
       .catch(() => window.scrollTo(0, 0));
   };
 
+  const areStudentInfosFilled = () => (
+    patient
+      && patient.firstNames
+      && patient.lastName
+      && patient.dateOfBirth
+      && patient.institutionName
+      && patient.INE
+  );
+
+  const arePrescriptionInfosFilled = () => (
+    patient
+      && patient.doctorAddress
+      && patient.doctorName
+      && patient.doctorEmail
+      && patient.dateOfPrescription
+      && patient.hasPrescription
+  );
+
   return (
     <div className="fr-my-2w">
       <form onSubmit={save}>
         <p className="fr-text--sm fr-mb-1v">
           Les champs avec une astérisque (
           <span className="red-text">*</span>
-          ) sont obligatoires.
+          )
+          sont obligatoires.
         </p>
         <p className="fr-text--sm fr-mb-1v">
-          S&lsquo;il vous manque des champs non-obligatoires,
-          vous pourrez y revenir plus tard pour compléter le dossier.
+          S&lsquo;il vous manque des champs non-obligatoires, vous pourrez y
+          revenir plus tard pour compléter le dossier.
         </p>
         {patient && (
           <>
             <div id="mandatory-informations">
-              <h2>Dossier étudiant</h2>
+              <div>
+                <h2>Dossier étudiant</h2>
+                {!areStudentInfosFilled()
+                  ? renderBadge({ badge: 'student_infos' })
+                  : ''}
+              </div>
               <TextInput
                 className="midlength-input fr-mt-3w"
                 data-test-id="etudiant-first-name-input"
@@ -154,13 +182,18 @@ const AddEditPatient = () => {
                     iconPosition="left"
                     size="sm"
                     as="span"
-                >
+                  >
                     Renouvellement
                   </Tag>
                   <br />
                 </>
               )}
-              <h2>Lettre d&apos;orientation</h2>
+              <div>
+                <h2>Lettre d&apos;orientation</h2>
+                {!arePrescriptionInfosFilled()
+                  ? renderBadge({ badge: 'prescription_infos' })
+                  : ''}
+              </div>
               <Checkbox
                 className="fr-input-group"
                 data-test-id="etudiant-letter-input"
@@ -198,7 +231,7 @@ const AddEditPatient = () => {
               <TextInput
                 className="midlength-input"
                 data-test-id="etudiant-prescription-date-input"
-                label={'Date de la lettre d\'orientation'}
+                label={"Date de la lettre d'orientation"}
                 hint="Format JJ/MM/AAAA, par exemple : 01/01/2024"
                 value={patient.dateOfPrescription}
                 type="text"

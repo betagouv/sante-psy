@@ -1,47 +1,47 @@
-import React from "react";
-import { getUnivYear } from "services/date";
-import { Badge } from "@dataesr/react-dsfr";
-import appointmentBadges from "src/utils/badges";
+import React from 'react';
+import { getUnivYear } from 'services/date';
+import { Badge } from '@dataesr/react-dsfr';
+import appointmentBadges from 'src/utils/badges';
 
 const generateBadgeStyles = (badge, appointmentDate) => {
   let univYear = null;
   if (
-    appointmentDate &&
-    badge === appointmentBadges.exceeded &&
     appointmentDate
+    && badge === appointmentBadges.exceeded
+    && appointmentDate
   ) {
     univYear = getUnivYear(appointmentDate);
   }
   const badgeStyles = {
     first: {
-      text: "1re séance",
-      severity: "info",
-      icon: "fr-icon-info-fill fr-icon--sm",
+      text: '1re séance',
+      severity: 'info',
+      icon: 'fr-icon-info-fill fr-icon--sm',
     },
     max: {
-      text: "Maximum de séances atteint",
-      severity: "warning",
-      icon: "fr-icon-warning-fill fr-icon--sm",
+      text: 'Maximum de séances atteint',
+      severity: 'warning',
+      icon: 'fr-icon-warning-fill fr-icon--sm',
     },
     before_max: {
-      text: "Avant-dernière séance",
-      severity: "info",
-      icon: "fr-icon-info-fill fr-icon--sm",
+      text: 'Avant-dernière séance',
+      severity: 'info',
+      icon: 'fr-icon-info-fill fr-icon--sm',
     },
     exceeded: {
-      text: `Excès de séances ${univYear ? univYear : ""}`,
-      severity: "warning",
-      icon: "fr-icon-warning-fill fr-icon--sm",
+      text: `Excès de séances ${univYear || ''}`,
+      severity: 'warning',
+      icon: 'fr-icon-warning-fill fr-icon--sm',
     },
     student_infos: {
-      text: "Dossier étudiant à compléter",
-      severity: "info",
-      icon: "fr-icon-info-fill fr-icon--sm",
+      text: 'Dossier étudiant à compléter',
+      severity: 'info',
+      icon: 'fr-icon-info-fill fr-icon--sm',
     },
     prescription_infos: {
       text: "Lettre d'orientation à compléter",
-      severity: "new",
-      icon: "fr-icon-warning-fill fr-icon--sm",
+      severity: 'new',
+      icon: 'fr-icon-warning-fill fr-icon--sm',
     },
   };
   return badgeStyles[badge];
