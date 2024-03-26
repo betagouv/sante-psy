@@ -36,7 +36,7 @@ const getStudentEligibility = async (ine: string): Promise<boolean> => {
 
   if (response && response.data) {
     isStudentEligible = (response.data.ine && response.data.ine === ine);
-    if (!isStudentEligible && response.data.inscriptions.length > 0) {
+    if (!isStudentEligible && (response.data.inscriptions && response.data.inscriptions.length > 0)) {
       response.data.inscriptions.forEach((inscription: Inscription) => {
         if (inscription.statut === 'inscrit') {
           isStudentEligible = true;
