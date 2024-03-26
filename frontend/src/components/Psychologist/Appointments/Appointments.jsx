@@ -5,8 +5,8 @@ import { Button, Table, Callout, CalloutText, Icon, Badge } from '@dataesr/react
 import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
-import { formatFrenchDate, formatMonth, utcDate, getUnivYear } from 'services/date';
-import appointmentBadges from 'src/utils/badges';
+import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
+import { renderBadge } from 'components/Badges/generateBadges';
 
 import { useStore } from 'stores/';
 
@@ -40,52 +40,6 @@ const Appointments = () => {
     return appointmentDate.getFullYear() === month.year
       && appointmentDate.getMonth() === month.month - 1;
   });
-
-  const generateBadgeStyles = (badge, appointmentDate) => {
-    let univYear = null;
-    if (badge === appointmentBadges.exceeded) {
-      univYear = getUnivYear(appointmentDate);
-    }
-    const badgeStyles = {
-      first: {
-        text: '1re séance',
-        severity: 'info',
-        icon: 'fr-icon-info-fill fr-icon--sm',
-      },
-      max: {
-        text: 'Maximum de séances atteint',
-        severity: 'warning',
-        icon: 'fr-icon-warning-fill fr-icon--sm',
-      },
-      before_max: {
-        text: 'Avant-dernière séance',
-        severity: 'info',
-        icon: 'fr-icon-info-fill fr-icon--sm',
-      },
-      exceeded: {
-        text: `Excès de séances ${univYear}`,
-        severity: 'warning',
-        icon: 'fr-icon-warning-fill fr-icon--sm',
-      },
-    };
-    return badgeStyles[badge];
-  };
-
-  const renderBadge = ({ badge, appointmentDate }) => {
-    if (!badge || badge === appointmentBadges.other) {
-      return null;
-    }
-
-    const { icon, text, severity } = generateBadgeStyles(badge, appointmentDate);
-
-    return (
-      <Badge
-        icon={icon}
-        text={text}
-        type={severity}
-      />
-    );
-  };
 
   const columns = [
     { name: 'date', label: 'Date', render: ({ appointmentDate }) => formatFrenchDate(utcDate(appointmentDate)) },
