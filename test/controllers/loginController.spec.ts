@@ -253,7 +253,11 @@ describe('loginController', async () => {
           emailUniversity: 'monster@university.fr',
         },
       ]);
-      const psy = create.getOnePsy({ assignedUniversityId: universityId });
+      const psy = create.getOnePsy({
+        assignedUniversityId: universityId,
+        useFirstNames: 'George',
+        useLastName: 'Sand',
+      });
       psy.isConventionSigned = true;
       await dbPsychologists.upsertMany([psy]);
 
