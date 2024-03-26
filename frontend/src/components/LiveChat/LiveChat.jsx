@@ -14,7 +14,7 @@ const LiveChat = () => {
       if (window.$crisp) {
         $crisp.push(['do', 'chat:open']);
         setOpen(true);
-        if (user.email) {
+        if (user && user.email) {
           $crisp.push(['set', 'user:email', user.email]);
           $crisp.push(['set', 'session:event', [[['psychologist-scenario']]]]);
           $crisp.push(['set', 'session:segments', [['psychologist']]]);
