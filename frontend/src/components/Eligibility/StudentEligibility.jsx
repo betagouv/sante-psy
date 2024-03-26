@@ -71,14 +71,19 @@ const StudentEligibility = () => {
           <li>
             Consultez
             {' '}
-            <Link to="/faq">la Foire aux questions</Link>
-            <Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" />
+            <Link to="/faq">
+              la Foire aux questions
+              <Icon className={styles.redirectIcon} name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" />
+            </Link>
           </li>
           <li>
             Ou
             {' '}
-            <Link state={{ ine: INE }} to="/eligibilite/contact">contactez-nous pour vérifier votre éligibilité</Link>
-            <Icon name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" />
+            <Link state={{ ine: INE }} to="/eligibilite/contact">
+              contactez-nous pour vérifier votre éligibilité
+              <Icon className={styles.redirectIcon} name="ri-arrow-right-circle-fill" size="lg" iconPosition="right" />
+            </Link>
+
           </li>
         </ul>
       </div>
@@ -96,7 +101,7 @@ const StudentEligibility = () => {
       )}
       description={(
         <>
-          Vous êtes étudiant, et vous souhaitez prendre part au dispositif ? Vérifier que vous êtes éligible
+          Vous êtes étudiant, vérifiez que vous êtes éligible
         </>
       )}
       className={styles.page}
