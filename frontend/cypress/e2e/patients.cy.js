@@ -34,7 +34,7 @@ describe('Patient', () => {
         .eq(1)
         .should(
           'have.text',
-          'nom du docteur, établissement scolaire, adresse du docteur, email du docteur, date de la lettre d\'orientation, date de naissance, statut étudiant, orientation médicale.',
+          'Informations manquantes : nom du docteur, établissement scolaire, adresse du docteur, email du docteur, date de la lettre d\'orientation, date de naissance, statut étudiant, orientation médicale.',
         );
     });
   });
