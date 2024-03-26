@@ -41,7 +41,7 @@ const generateBadgeStyles = (badge, appointmentDate) => {
     prescription_infos: {
       text: "Lettre d'orientation à compléter",
       severity: 'new',
-      icon: 'fr-icon-warning-fill fr-icon--sm',
+      icon: 'fr-icon-info-fill fr-icon--sm',
     },
   };
   return badgeStyles[badge];

@@ -97,25 +97,25 @@ const AddEditPatient = () => {
   return (
     <div className="fr-my-2w">
       <form onSubmit={save}>
-        <p className="fr-text--sm fr-mb-1v">
-          Les champs avec une astérisque (
-          <span className="red-text">*</span>
-          )
-          sont obligatoires.
-        </p>
-        <p className="fr-text--sm fr-mb-1v">
-          S&lsquo;il vous manque des champs non-obligatoires, vous pourrez y
-          revenir plus tard pour compléter le dossier.
-        </p>
         {patient && (
           <>
-            <div id="mandatory-informations">
-              <div>
+            <div>
+              <section className={styles.studentSectionTitle}>
                 <h2>Dossier étudiant</h2>
                 {!areStudentInfosFilled()
                   ? renderBadge({ badge: 'student_infos' })
                   : ''}
-              </div>
+              </section>
+              <p className="fr-text--sm fr-mb-1v">
+                Les champs avec une astérisque (
+                <span className="red-text">*</span>
+                )
+                sont obligatoires.
+              </p>
+              <p className="fr-text--sm fr-mb-1v">
+                S&lsquo;il vous manque des champs non-obligatoires, vous pourrez y
+                revenir plus tard pour compléter le dossier.
+              </p>
               <TextInput
                 className="midlength-input fr-mt-3w"
                 data-test-id="etudiant-first-name-input"
@@ -188,12 +188,19 @@ const AddEditPatient = () => {
                   <br />
                 </>
               )}
-              <div>
+              <section className={styles.studentSectionTitle}>
                 <h2>Lettre d&apos;orientation</h2>
                 {!arePrescriptionInfosFilled()
                   ? renderBadge({ badge: 'prescription_infos' })
                   : ''}
-              </div>
+              </section>
+              <p className="fr-text--sm fr-mb-1v">
+                Historique
+              </p>
+              <ul className="fr-text--sm fr-mb-1v">
+                <li>2022-2023 : DUPONT George, 75000 Paris, Date de la lettre 29/09/2022</li>
+                <li>2021-2022 : DUPONT George, 75000 Paris, Date de la lettre 18/01/2021</li>
+              </ul>
               <Checkbox
                 className="fr-input-group"
                 data-test-id="etudiant-letter-input"
