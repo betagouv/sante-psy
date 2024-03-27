@@ -237,7 +237,9 @@ const PrivacyPolicy = () => (
       <SimpleTable data={dataCookies} />
       <p>
         Vous pouvez à tout moment accepter, refuser ou revenir sur votre consentement concernant le dépôt de cookies via le bandeau mis à disposition sur la page concernée
+        {' '}
         <a href="https://santepsy.etudiant.gouv.fr/etudiant" target="_blank" rel="noreferrer">santepsy.etudiant.gouv.fr/etudiant</a>
+        {' '}
       </p>
       <p>Nous utilisons également l’outil de mesure d’audience Matomo, configuré en mode “exempté” et ne nécessitant pas le recueil de votre consentement conformément aux recommandations de la CNIL.</p>
       <iframe title="Matomo opt-out" style={{ border: 'none', width: '90%' }} src="https://stats.beta.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=2f3b6c&fontSize=16px&fontFamily=sans-serif" />
