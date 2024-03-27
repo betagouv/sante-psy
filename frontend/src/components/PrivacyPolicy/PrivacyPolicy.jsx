@@ -235,9 +235,12 @@ const PrivacyPolicy = () => (
         Ce consentement de la personne concernée pour une ou plusieurs finalités spécifiques constitue une base légale au sens du RGPD et doit être entendu au sens de l’article 6-a du Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 relatif à la protection des personnes physiques à l’égard du traitement des données à caractère personnel et à la libre circulation de ces données.
       </p>
       <SimpleTable data={dataCookies} />
-      <p>Vous pouvez à tout moment accepter, refuser ou revenir sur votre consentement concernant le dépôt de cookies via le bandeau mis à disposition sur la page concernée <a href="https://santepsy.etudiant.gouv.fr/etudiant" target="_blank" rel="noreferrer">santepsy.etudiant.gouv.fr/etudiant</a></p>
+      <p>
+        Vous pouvez à tout moment accepter, refuser ou revenir sur votre consentement concernant le dépôt de cookies via le bandeau mis à disposition sur la page concernée
+        <a href="https://santepsy.etudiant.gouv.fr/etudiant" target="_blank" rel="noreferrer">santepsy.etudiant.gouv.fr/etudiant</a>
+      </p>
       <p>Nous utilisons également l’outil de mesure d’audience Matomo, configuré en mode “exempté” et ne nécessitant pas le recueil de votre consentement conformément aux recommandations de la CNIL.</p>
-      <iframe title="Matomo opt-out" style={{ border: 'none', width: '90%' }} src="https://stats.beta.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=2f3b6c&fontSize=16px&fontFamily=sans-serif"></iframe>
+      <iframe title="Matomo opt-out" style={{ border: 'none', width: '90%' }} src="https://stats.beta.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=2f3b6c&fontSize=16px&fontFamily=sans-serif" />
       <p>
         Pour aller plus loin, vous pouvez consulter les fiches proposées par
         la Commission Nationale de l’Informatique et des Libertés
