@@ -1,22 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Table, Callout, CalloutText, Icon } from '@dataesr/react-dsfr';
+import { Table, Callout, CalloutText, Icon, Button } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { currentUnivYear, parseDateForm } from 'services/date';
 import { useStore } from 'stores/';
 import { MAX_APPOINTMENT } from '../Appointments/NewAppointment';
 
-import PatientActionsLegend from './PatientActionsLegend';
-import PatientActions from './PatientActions';
 import PatientStatus from './PatientStatus';
 
 import styles from './patients.cssmodule.scss';
 
+// todo:
+// check test après suppression patientActions
+
 const Patients = () => {
   const { commonStore: { config, setNotification } } = useStore();
+  const navigate = useNavigate();
 
   const [patients, setPatients] = useState([]);
   const [seeAppointments, setSeeAppointments] = useState(true);
@@ -103,14 +105,29 @@ const Patients = () => {
   const columns = [
     {
       name: 'name',
-      label: 'Nom',
+      label: 'Étudiant',
       render: patient => `${patient.lastName.toUpperCase()} ${patient.firstNames}`,
       sortable: true,
       sort: (a, b) => (`${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`),
     },
     {
+      name: 'update-etudiant-button',
+      render: patient => (
+      <Button
+        data-test-id="update-etudiant-button"
+        // mettre ancre dossier étudiant
+        onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
+        secondary
+        size="sm"
+        icon="ri-folder-line"
+        aria-label="Dossier de l'étudiant"
+        title="Dossier de l'étudiant"
+      />
+      ),
+    },
+    {
       name: 'status',
-      label: 'Statut',
+      label: 'Information',
       render: PatientStatus,
       sortable: true,
       sort: (a, b) => a.missingInfo.length - b.missingInfo.length,
@@ -118,23 +135,41 @@ const Patients = () => {
   if (seeAppointments) {
     columns.push({
       name: 'appointmentsYearCount',
-      label: `Séances ${currentYear}`,
+      label: `Total séances ${currentYear}`,
       sortable: true,
     });
-    columns.push({ name: 'appointmentsCount', label: 'Séances total', sortable: true });
+    columns.push({ name: 'appointmentsCount', label: 'Total séances', sortable: true });
   }
-  columns.push(
-    {
-      name: 'actions',
-      label: '',
-      render: patient => (
-        <PatientActions
-          patient={patient}
-          deletePatient={() => deletePatient(patient.id)}
-        />
-      ),
-    },
-  );
+  columns.push({
+    name: 'appointment-etudiant-button',
+    label: 'Déclarer une séance',
+    render: patient => (
+      <Button
+        data-test-id="appointment-etudiant-button"
+        onClick={() => navigate(`/psychologue/nouvelle-seance/${patient.id}`)}
+        size="sm"
+        icon="ri-calendar-line"
+        aria-label="Déclarer une séance"
+        title="Déclarer une séance"
+      />
+    ),
+  },
+  {
+    name: 'delete-etudiant-button',
+    label: "Supprimer l'étudiant",
+    render: patient => (
+      <Button
+        data-test-id="delete-etudiant-button"
+        onClick={deletePatient}
+        disabled={patient.appointmentsCount !== '0'}
+        title={patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : ''}
+        secondary
+        size="sm"
+        icon="ri-delete-bin-line"
+        aria-label="Supprimer"
+      />
+    ),
+  });
 
   return (
     <>
@@ -162,7 +197,6 @@ const Patients = () => {
       >
         {patients.length > 0 ? (
           <>
-            <PatientActionsLegend />
             <Table
               data-test-id="etudiant-table"
               columns={columns}
