@@ -173,34 +173,12 @@ const AddEditPatient = () => {
                 value="isStudentStatusVerified"
                 onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
               />
-              {patientId && !patient.hasPrescription && (
-                <>
-                  <Tag
-                    data-test-id="etudiant-renewal-tag"
-                    className={styles.incomplete}
-                    icon="ri-alert-line"
-                    iconPosition="left"
-                    size="sm"
-                    as="span"
-                  >
-                    Renouvellement
-                  </Tag>
-                  <br />
-                </>
-              )}
               <section className={styles.studentSectionTitle}>
                 <h2>Lettre d&apos;orientation</h2>
                 {!arePrescriptionInfosFilled()
                   ? renderBadge({ badge: 'prescription_infos' })
                   : ''}
               </section>
-              <p className="fr-text--sm fr-mb-1v">
-                Historique
-              </p>
-              <ul className="fr-text--sm fr-mb-1v">
-                <li>2022-2023 : DUPONT George, 75000 Paris, Date de la lettre 29/09/2022</li>
-                <li>2021-2022 : DUPONT George, 75000 Paris, Date de la lettre 18/01/2021</li>
-              </ul>
               <Checkbox
                 className="fr-input-group"
                 data-test-id="etudiant-letter-input"
