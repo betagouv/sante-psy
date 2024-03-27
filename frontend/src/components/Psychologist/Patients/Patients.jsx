@@ -14,6 +14,9 @@ import PatientStatus from './PatientStatus';
 import styles from './patients.cssmodule.scss';
 import { arePrescriptionInfosFilled, areStudentInfosFilled } from './AddEditPatient';
 
+// todo:
+// check test après suppression patientActions
+
 const Patients = () => {
   const { commonStore: { setNotification } } = useStore();
   const [patients, setPatients] = useState([]);
@@ -124,6 +127,7 @@ const Patients = () => {
     });
     columns.push({ name: 'appointmentsCount', label: 'Total séances', sortable: true });
   }
+
   columns.push(
     {
       name: 'appointment-etudiant-button',
