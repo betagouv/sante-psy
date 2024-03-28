@@ -53,12 +53,45 @@ const patientValidators = [
   check('institutionName')
     .trim()
     .customSanitizer(DOMPurify.sanitize),
-  check('doctorAddress')
-    .trim()
-    .customSanitizer(DOMPurify.sanitize),
-  check('doctorName')
-    .trim()
-    .customSanitizer(DOMPurify.sanitize),
+
+  // all following prescriptions infos are optionnal so two
+  // valid option: field is empty or check if has the right format
+  oneOf(
+    [
+      check('doctorAddress').trim().isEmpty(),
+      check('doctorAddress')
+      .trim()
+      .customSanitizer(DOMPurify.sanitize),
+    ],
+  ),
+  oneOf(
+    [
+      check('doctorName').trim().isEmpty(),
+      check('doctorName')
+      .trim()
+      .customSanitizer(DOMPurify.sanitize),
+    ],
+  ),
+  oneOf(
+    [
+      check('doctorEmail').trim().isEmpty(),
+      check('doctorEmail')
+      .trim()
+      .isEmail()
+      .withMessage('Vous devez spécifier un email valide.')
+      .customSanitizer(DOMPurify.sanitize),
+    ],
+  ),
+  oneOf(
+    [
+      check('dateOfPrescription').trim().isEmpty(),
+      check('dateOfPrescription')
+          .trim().isDate({ format: date.formatFrenchDateForm })
+          .customSanitizer(DOMPurify.sanitize),
+    ],
+    `La date de prescription n'est pas valide, le format doit être JJ/MM/AAAA.
+    Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`,
+  ),
 ];
 
 const updateValidators = [
@@ -80,8 +113,10 @@ const update = async (req: Request, res: Response): Promise<void> => {
   const dateOfBirth = date.parseForm(req.body.dateOfBirth);
   const patientINE = req.body.INE;
   const patientInstitutionName = req.body.institutionName;
-  const { doctorName } = req.body;
-  const { doctorAddress } = req.body;
+  const {
+    doctorName, doctorAddress, doctorEmail,
+  } = req.body;
+  const dateOfPrescription = date.parseForm(req.body.dateOfPrescription);
   // Force to boolean beacause checkbox value send undefined when it's not checked
   const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
   const patientHasPrescription = Boolean(req.body.hasPrescription);
@@ -98,7 +133,9 @@ const update = async (req: Request, res: Response): Promise<void> => {
     psychologistId,
     doctorName,
     doctorAddress,
+    doctorEmail,
     dateOfBirth,
+    dateOfPrescription,
   );
 
   if (updated === 0) {
@@ -108,7 +145,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
 
   let infoMessage = `L'étudiant ${patientFirstNames} ${patientLastName} a bien été modifié.`;
   if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified
-      || !doctorAddress) {
+      || !doctorAddress || !doctorEmail || !dateOfBirth || !dateOfPrescription) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
         + ' en cliquant le bouton "Modifier" du patient.';
   }
@@ -147,8 +184,10 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const dateOfBirth = date.parseForm(req.body.dateOfBirth);
   const { INE } = req.body;
   const { institutionName } = req.body;
-  const { doctorName } = req.body;
-  const { doctorAddress } = req.body;
+  const {
+    doctorName, doctorAddress, doctorEmail,
+  } = req.body;
+  const dateOfPrescription = date.parseForm(req.body.dateOfPrescription);
   // Force to boolean beacause checkbox value send undefined when it's not checked
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
   const hasPrescription = Boolean(req.body.hasPrescription);
@@ -164,10 +203,13 @@ const create = async (req: Request, res: Response): Promise<void> => {
     psychologistId,
     doctorName,
     doctorAddress,
+    doctorEmail,
     dateOfBirth,
+    dateOfPrescription,
   );
   let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
-  if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress || !dateOfBirth) {
+  if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress
+    || !doctorEmail || !dateOfPrescription) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
         + ' en cliquant le bouton "Modifier" du patient.';
   }

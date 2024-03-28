@@ -12,6 +12,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
     dateOfBirthDeploymentDate: config.dateOfBirthDeploymentDate,
     sessionDuration: config.sessionDurationHours,
     statistics: config.statistics,
+    crispWebsite: config.crisp.website,
   });
 };
 

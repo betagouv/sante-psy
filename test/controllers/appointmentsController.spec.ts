@@ -9,9 +9,26 @@ import dbPsychologists from '../../db/psychologists';
 import cookie from '../../utils/cookie';
 import { Psychologist } from '../../types/Psychologist';
 import appointmentBadges from '../../utils/badges';
+import { Patient } from '../../types/Patient';
 
 describe('appointmentsController', () => {
   const dateOfBirth = new Date('1980/01/20');
+
+  async function patientInfoToInsert(psy) {
+    return dbPatients.insert(
+      'Ada',
+      'Lovelace',
+      '12345678901',
+      '42',
+      false,
+      false,
+      psy.dossierNumber,
+      'Dr Docteur',
+      'adresse du docteur',
+      'email@email.comfr',
+      dateOfBirth,
+    );
+  }
 
   describe('create appointment', () => {
     let psy: Psychologist;
@@ -31,18 +48,7 @@ describe('appointmentsController', () => {
     });
 
     it('should create appointments', async () => {
-      const patient = await dbPatients.insert(
-        'Ada',
-        'Lovelace',
-        '12345678901',
-        '42',
-        false,
-        false,
-        psy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
+      const patient = await patientInfoToInsert(psy);
 
       return chai.request(app)
         .post('/api/appointments')
@@ -68,19 +74,7 @@ describe('appointmentsController', () => {
     it('should not create appointment if patient id is not linked to psy id', async () => {
       const psy = await create.insertOnePsy();
       const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@email.fr' });
-
-      const patient = await dbPatients.insert(
-        'Ada',
-        'Lovelace',
-        '12345678901',
-        '42',
-        false,
-        false,
-        anotherPsy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
+      const patient = await patientInfoToInsert(anotherPsy);
 
       return chai.request(app)
         .post('/api/appointments')
@@ -105,18 +99,7 @@ describe('appointmentsController', () => {
 
     it('should not create appointment if user not logged in', async () => {
       const psy = await create.insertOnePsy();
-      const patient = await dbPatients.insert(
-        'Ada',
-        'Lovelace',
-        '12345678901',
-        '42',
-        false,
-        false,
-        psy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
+      const patient = await patientInfoToInsert(psy);
 
       return chai.request(app)
         .post('/api/appointments')
@@ -138,18 +121,7 @@ describe('appointmentsController', () => {
 
     it('should not create appointment if diff in month > 4', async () => {
       const psy = await create.insertOnePsy();
-      const patient = await dbPatients.insert(
-        'Ada',
-        'Lovelace',
-        '12345678901',
-        '42',
-        false,
-        false,
-        psy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
+      const patient = await patientInfoToInsert(psy);
 
       const todayDate = new Date();
       const newDatePlus5month = new Date(todayDate.setMonth(todayDate.getMonth() + 5));
@@ -177,18 +149,7 @@ describe('appointmentsController', () => {
     it('should not create appointment if date before psychologist creation date', async () => {
       const beginningDate = new Date('2021-03-22');
       const psy = await create.insertOnePsy({ createdAt: beginningDate });
-      const patient = await dbPatients.insert(
-        'Ada',
-        'Lovelace',
-        '12345678901',
-        '42',
-        false,
-        false,
-        psy.dossierNumber,
-        'Dr Docteur',
-        'adresse du docteur',
-        dateOfBirth,
-      );
+      const patient = await patientInfoToInsert(psy);
 
       const invalidDate = new Date(beginningDate.setMonth(beginningDate.getMonth() - 2));
 
@@ -340,6 +301,7 @@ describe('appointmentsController', () => {
         psychologistId,
         'Dr Docteur',
         'adresse du docteur',
+        'email@email.comfr',
         dateOfBirth,
       );
       const appointment = await dbAppointments.insert(new Date(), patient.id, psychologistId);
@@ -461,6 +423,22 @@ describe('appointmentsController', () => {
     });
   });
 
+  async function insertPatientInfoInDb(patient1: Patient, psy: Psychologist) {
+    return dbPatients.insert(
+      patient1.firstNames,
+      patient1.lastName,
+      patient1.INE,
+      patient1.institutionName,
+      patient1.isStudentStatusVerified,
+      patient1.hasPrescription,
+      psy.dossierNumber,
+      patient1.doctorName,
+      patient1.doctorAddress,
+      patient1.doctorEmail,
+      patient1.dateOfBirth,
+      patient1.dateOfPrescription,
+    );
+  }
   describe('get appointments with badges', () => {
     let psy: Psychologist;
     before(async () => {
@@ -480,18 +458,7 @@ describe('appointmentsController', () => {
 
     it('should have appointment with a specific badge for the 1st appointment', async () => {
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
-      const dbPatient1 = await dbPatients.insert(
-        patient1.firstNames,
-        patient1.lastName,
-        patient1.INE,
-        patient1.institutionName,
-        patient1.isStudentStatusVerified,
-        patient1.hasPrescription,
-        psy.dossierNumber,
-        patient1.doctorName,
-        patient1.doctorAddress,
-        patient1.dateOfBirth,
-      );
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
 
       await dbAppointments.insert(new Date('2023-11-03'), dbPatient1.id, psy.dossierNumber);
 
@@ -508,18 +475,7 @@ describe('appointmentsController', () => {
 
     it('shouldn\'t have appointments with 1st badge before january 2024 when billing purposes', async () => {
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
-      const dbPatient1 = await dbPatients.insert(
-        patient1.firstNames,
-        patient1.lastName,
-        patient1.INE,
-        patient1.institutionName,
-        patient1.isStudentStatusVerified,
-        patient1.hasPrescription,
-        psy.dossierNumber,
-        patient1.doctorName,
-        patient1.doctorAddress,
-        patient1.dateOfBirth,
-      );
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
 
       await dbAppointments.insert(new Date('2023-11-03'), dbPatient1.id, psy.dossierNumber);
       await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
@@ -539,18 +495,7 @@ describe('appointmentsController', () => {
 
     it('should have appointments with 1st badge after january 2024 when billing purposes', async () => {
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
-      const dbPatient1 = await dbPatients.insert(
-        patient1.firstNames,
-        patient1.lastName,
-        patient1.INE,
-        patient1.institutionName,
-        patient1.isStudentStatusVerified,
-        patient1.hasPrescription,
-        psy.dossierNumber,
-        patient1.doctorName,
-        patient1.doctorAddress,
-        patient1.dateOfBirth,
-      );
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
 
       await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
 
@@ -568,18 +513,7 @@ describe('appointmentsController', () => {
 
     it('should have appointment with a specific badge on the before max appointment date', async () => {
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
-      const dbPatient1 = await dbPatients.insert(
-        patient1.firstNames,
-        patient1.lastName,
-        patient1.INE,
-        patient1.institutionName,
-        patient1.isStudentStatusVerified,
-        patient1.hasPrescription,
-        psy.dossierNumber,
-        patient1.doctorName,
-        patient1.doctorAddress,
-        patient1.dateOfBirth,
-      );
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
 
       await dbAppointments.insert(new Date('2023-09-03'), dbPatient1.id, psy.dossierNumber);
       await dbAppointments.insert(new Date('2023-10-03'), dbPatient1.id, psy.dossierNumber);
@@ -610,18 +544,7 @@ describe('appointmentsController', () => {
 
     it('should have appointment with a specific badge on the 8th appointment date', async () => {
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
-      const dbPatient1 = await dbPatients.insert(
-        patient1.firstNames,
-        patient1.lastName,
-        patient1.INE,
-        patient1.institutionName,
-        patient1.isStudentStatusVerified,
-        patient1.hasPrescription,
-        psy.dossierNumber,
-        patient1.doctorName,
-        patient1.doctorAddress,
-        patient1.dateOfBirth,
-      );
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
 
       await dbAppointments.insert(new Date('2023-09-03'), dbPatient1.id, psy.dossierNumber);
       await dbAppointments.insert(new Date('2023-10-03'), dbPatient1.id, psy.dossierNumber);
@@ -646,18 +569,7 @@ describe('appointmentsController', () => {
 
     it('should have appointment with a specific badge when excedeed eight appointments', async () => {
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
-      const dbPatient1 = await dbPatients.insert(
-        patient1.firstNames,
-        patient1.lastName,
-        patient1.INE,
-        patient1.institutionName,
-        patient1.isStudentStatusVerified,
-        patient1.hasPrescription,
-        psy.dossierNumber,
-        patient1.doctorName,
-        patient1.doctorAddress,
-        patient1.dateOfBirth,
-      );
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
 
       await dbAppointments.insert(new Date('2023-09-03'), dbPatient1.id, psy.dossierNumber);
       await dbAppointments.insert(new Date('2023-10-03'), dbPatient1.id, psy.dossierNumber);

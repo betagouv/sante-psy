@@ -18,6 +18,8 @@ describe('DB Patients', () => {
   const hasPrescription = false;
   const doctorName = 'doctorName';
   const doctorAddress = 'doctorAddress';
+  const doctorEmail = '';
+  const dateOfPrescription = new Date();
   const dateOfBirth = new Date('1980/01/20');
 
   async function testDataPatientsExist(lastName) {
@@ -48,7 +50,9 @@ describe('DB Patients', () => {
         psy.dossierNumber,
         doctorName,
         doctorAddress,
+        doctorEmail,
         dateOfBirth,
+        dateOfPrescription,
       );
 
       const exist = await testDataPatientsExist(lastName);
@@ -68,7 +72,9 @@ describe('DB Patients', () => {
           psy.dossierNumber,
           doctorName,
           doctorAddress,
+          doctorEmail,
           dateOfBirth,
+          dateOfPrescription,
         );
         const exist = await testDataPatientsExist(lastName);
         exist.should.be.equal(true);
@@ -90,7 +96,9 @@ describe('DB Patients', () => {
           psy.dossierNumber,
           doctorName,
           doctorAddress,
+          doctorEmail,
           dateOfBirth,
+          dateOfPrescription,
         );
         assert.fail('insert patient should have failed');
       } catch (error) {
@@ -118,7 +126,9 @@ describe('DB Patients', () => {
         psy.dossierNumber,
         doctorName,
         doctorAddress,
+        doctorEmail,
         dateOfBirth,
+        dateOfPrescription,
       );
 
       expect(insertedPatient.deleted).equal(false);
@@ -138,7 +148,9 @@ describe('DB Patients', () => {
         psy.dossierNumber,
         doctorName,
         doctorAddress,
+        doctorEmail,
         dateOfBirth,
+        dateOfPrescription,
       );
 
       const newLastName = 'NewName';
@@ -156,7 +168,9 @@ describe('DB Patients', () => {
         psy.dossierNumber,
         doctorName,
         doctorAddress,
+        doctorEmail,
         dateOfBirth,
+        dateOfPrescription,
       );
       const newPatient = await dbPatients.getById(oldPatient.id, psy.dossierNumber);
       expect(newPatient.lastName).equal(newLastName);
@@ -176,7 +190,9 @@ describe('DB Patients', () => {
         psy.dossierNumber,
         doctorName,
         doctorAddress,
+        doctorEmail,
         dateOfBirth,
+        dateOfPrescription,
       );
 
       const patientBeforeDelete = await dbPatients.getById(patient.id, psy.dossierNumber);
@@ -205,7 +221,9 @@ describe('DB Patients', () => {
         psy.dossierNumber,
         doctorName,
         doctorAddress,
+        doctorEmail,
         dateOfBirth,
+        dateOfPrescription,
       );
       const patient2 = await dbPatients.insert(
         firstNames,
@@ -217,7 +235,9 @@ describe('DB Patients', () => {
         psy.dossierNumber,
         doctorName,
         doctorAddress,
+        doctorEmail,
         dateOfBirth,
+        dateOfPrescription,
       );
 
       const anotherPatient = await dbPatients.insert(
@@ -230,7 +250,9 @@ describe('DB Patients', () => {
         anotherPsy.dossierNumber,
         doctorName,
         doctorAddress,
+        doctorEmail,
         dateOfBirth,
+        dateOfPrescription,
       );
 
       await Promise.all([
@@ -271,7 +293,9 @@ describe('DB Patients', () => {
         psy.dossierNumber,
         doctorName,
         doctorAddress,
+        doctorEmail,
         dateOfBirth,
+        dateOfPrescription,
       );
       await dbPatients.delete(patient.id, psy.dossierNumber);
 
