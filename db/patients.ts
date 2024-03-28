@@ -64,7 +64,9 @@ const insert = async (
   psychologistId?: string,
   doctorName?: string,
   doctorAddress?: string,
+  doctorEmail?: string,
   dateOfBirth?: Date,
+  dateOfPrescription?: Date,
 ): Promise<Patient> => {
   try {
     const patientsArray = await db(patientsTable).insert({
@@ -77,7 +79,9 @@ const insert = async (
       psychologistId,
       doctorName,
       doctorAddress,
+      doctorEmail,
       dateOfBirth,
+      dateOfPrescription,
     }).returning('*');
     return patientsArray[0];
   } catch (err) {
@@ -97,7 +101,9 @@ const update = async (
   psychologistId: string,
   doctorName: string,
   doctorAddress: string,
+  doctorEmail: string,
   dateOfBirth: Date,
+  dateOfPrescription: Date,
 ): Promise<number> => {
   try {
     return await db(patientsTable)
@@ -113,7 +119,9 @@ const update = async (
         psychologistId,
         doctorName,
         doctorAddress,
+        doctorEmail,
         dateOfBirth,
+        dateOfPrescription,
         updatedAt: date.now(),
       });
   } catch (err) {

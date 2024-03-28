@@ -49,6 +49,8 @@ const Patients = () => {
     const DOCTOR_NAME = 'nom du docteur';
     const INSTITUTION_NAME = 'établissement scolaire';
     const DOCTOR_ADDRESS = 'adresse du docteur';
+    const DOCTOR_EMAIL = 'email du docteur';
+    const PRESCRIPTION_DATE = "date de la lettre d'orientation";
     const BIRTH_DATE = 'date de naissance';
     const STUDENT_STATUS = 'statut étudiant';
     const PRESCRIPTION = 'orientation médicale';
@@ -65,6 +67,14 @@ const Patients = () => {
 
     if (!patient.doctorAddress?.trim()) {
       missingInfo.push(DOCTOR_ADDRESS);
+    }
+
+    if (!patient.doctorEmail?.trim()) {
+      missingInfo.push(DOCTOR_EMAIL);
+    }
+
+    if (!patient.dateOfPrescription) {
+      missingInfo.push(PRESCRIPTION_DATE);
     }
 
     if (!patient.dateOfBirth && new Date(patient.createdAt) > parseDateForm(config.dateOfBirthDeploymentDate)) {

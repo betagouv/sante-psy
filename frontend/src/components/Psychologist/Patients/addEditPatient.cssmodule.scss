@@ -1,3 +1,18 @@
 .incomplete {
-    background-color: var(--tag-orange);
+  background-color: var(--tag-orange);
+}
+
+.studentSectionTitle {
+  background-color: #c9c9e9;
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  margin: 48px -24px 24px;
+}
+
+.studentSectionTitle h2 {
+  color: #51519c;
+  font-size: 24px;
+  margin: 0;
+  margin-right: 24px;
 }

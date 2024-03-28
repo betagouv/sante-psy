@@ -281,7 +281,9 @@ const getOnePatient = (
   hasPrescription: true,
   doctorName: faker.name.lastName(),
   doctorAddress: faker.address.streetAddress(),
+  doctorEmail: faker.internet.exampleEmail(),
   dateOfBirth: faker.date.past(),
+  dateOfPrescription: faker.date.past(),
   ...patient,
 });
 

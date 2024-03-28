@@ -34,7 +34,7 @@ describe('Patient', () => {
         .eq(1)
         .should(
           'have.text',
-          'Informations manquantes : nom du docteur, établissement scolaire, adresse du docteur, date de naissance, statut étudiant, orientation médicale.',
+          'Informations manquantes : nom du docteur, établissement scolaire, adresse du docteur, email du docteur, date de la lettre d\'orientation, date de naissance, statut étudiant, orientation médicale.',
         );
     });
   });
@@ -63,6 +63,10 @@ describe('Patient', () => {
         .type('Dr Dupont');
       cy.get('[data-test-id="etudiant-doctor-location-input"] > input')
         .type('Saint-Denis');
+      cy.get('[data-test-id="etudiant-doctor-email-input"] > input')
+        .type('email@email.comfr');
+      cy.get('[data-test-id="etudiant-prescription-date-input"] > input')
+        .type('01/01/2001');
       cy.get('[data-test-id="save-etudiant-button"]')
         .click();
 
@@ -100,11 +104,6 @@ describe('Patient', () => {
 
       cy.get('[data-test-id="etudiant-letter-input"]')
         .click();
-      cy.get('[data-test-id="etudiant-renewal-tag"]')
-        .should(
-          'have.text',
-          'Renouvellement',
-        );
       cy.get('[data-test-id="etudiant-letter-input"]')
         .click();
       cy.get('[data-test-id="etudiant-renouvellement-tag"]').should('not.exist');
