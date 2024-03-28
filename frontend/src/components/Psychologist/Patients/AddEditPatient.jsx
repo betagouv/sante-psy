@@ -5,7 +5,7 @@ import { Button, TextInput, Checkbox } from '@dataesr/react-dsfr';
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
 
-import { renderBadge } from 'components/Badges/generateBadges';
+import renderBadge from 'components/Badges/generateBadges';
 import styles from './addEditPatient.cssmodule.scss';
 
 const AddEditPatient = () => {

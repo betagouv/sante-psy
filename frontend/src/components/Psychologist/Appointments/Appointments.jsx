@@ -6,7 +6,7 @@ import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
 import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
-import { renderBadge } from 'components/Badges/generateBadges';
+import renderBadge from 'components/Badges/generateBadges';
 
 import { useStore } from 'stores/';
 

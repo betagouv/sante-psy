@@ -47,7 +47,7 @@ const generateBadgeStyles = (badge, appointmentDate) => {
   return badgeStyles[badge];
 };
 
-export const renderBadge = ({ badge, appointmentDate }) => {
+const renderBadge = ({ badge, appointmentDate }) => {
   if (!badge || badge === appointmentBadges.other) {
     return null;
   }
