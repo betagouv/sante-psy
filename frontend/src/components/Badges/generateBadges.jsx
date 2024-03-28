@@ -8,7 +8,6 @@ const generateBadgeStyles = (badge, appointmentDate) => {
   if (
     appointmentDate
     && badge === appointmentBadges.exceeded
-    && appointmentDate
   ) {
     univYear = getUnivYear(appointmentDate);
   }
