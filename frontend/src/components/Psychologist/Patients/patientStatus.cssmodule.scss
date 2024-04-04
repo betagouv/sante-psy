@@ -1,20 +1,4 @@
-.incomplete {
-    background-color: var(--tag-orange);
-}
-
-.complete {
-    background-color: var(--tag-green);
-}
-
-.big {
-    [class*=fr-fi-]:before {
-        font-size: inherit;
-        margin-left: 4px;
-    }
-}
-
-.small {
-    span {
-        margin-right: 0 !important;
-    }
+.badgeWrapper {
+    display: flex;
+    flex-wrap: wrap;
 }
