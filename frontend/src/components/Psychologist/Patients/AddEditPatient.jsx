@@ -8,6 +8,23 @@ import agent from 'services/agent';
 import renderBadge from 'components/Badges/generateBadges';
 import styles from './addEditPatient.cssmodule.scss';
 
+export const areStudentInfosFilled = patient => (
+  patient
+    && patient.firstNames
+    && patient.lastName
+    && patient.dateOfBirth
+    && patient.institutionName
+    && patient.INE
+);
+
+export const arePrescriptionInfosFilled = patient => (
+  patient
+    && patient.doctorAddress
+    && patient.doctorName
+    && patient.doctorEmail
+    && patient.dateOfPrescription
+    && patient.hasPrescription
+);
 const AddEditPatient = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -76,24 +93,6 @@ const AddEditPatient = () => {
       .catch(() => window.scrollTo(0, 0));
   };
 
-  const areStudentInfosFilled = () => (
-    patient
-      && patient.firstNames
-      && patient.lastName
-      && patient.dateOfBirth
-      && patient.institutionName
-      && patient.INE
-  );
-
-  const arePrescriptionInfosFilled = () => (
-    patient
-      && patient.doctorAddress
-      && patient.doctorName
-      && patient.doctorEmail
-      && patient.dateOfPrescription
-      && patient.hasPrescription
-  );
-
   return (
     <div className="fr-my-2w">
       <form onSubmit={save}>
@@ -102,7 +101,7 @@ const AddEditPatient = () => {
             <div id="mandatory-informations">
               <section className={styles.studentSectionTitle}>
                 <h2>Dossier étudiant</h2>
-                {!areStudentInfosFilled()
+                {!areStudentInfosFilled(patient)
                   ? renderBadge({ badge: 'student_infos' })
                   : ''}
               </section>
@@ -175,7 +174,7 @@ const AddEditPatient = () => {
               />
               <section className={styles.studentSectionTitle}>
                 <h2>Lettre d&apos;orientation</h2>
-                {!arePrescriptionInfosFilled()
+                {!arePrescriptionInfosFilled(patient)
                   ? renderBadge({ badge: 'prescription_infos' })
                   : ''}
               </section>
