@@ -5,19 +5,17 @@ import classNames from 'classnames';
 import { Table, Callout, CalloutText, Icon, Button } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
-import { currentUnivYear, parseDateForm } from 'services/date';
+import { currentUnivYear } from 'services/date';
 import { useStore } from 'stores/';
 import { MAX_APPOINTMENT } from '../Appointments/NewAppointment';
 
 import PatientStatus from './PatientStatus';
 
 import styles from './patients.cssmodule.scss';
-
-// todo:
-// check test après suppression patientActions
+import { arePrescriptionInfosFilled, areStudentInfosFilled } from './AddEditPatient';
 
 const Patients = () => {
-  const { commonStore: { config, setNotification } } = useStore();
+  const { commonStore: { setNotification } } = useStore();
   const navigate = useNavigate();
 
   const [patients, setPatients] = useState([]);
@@ -48,56 +46,20 @@ const Patients = () => {
   }, [table]);
 
   const getMissingInfo = patient => {
-    const DOCTOR_NAME = 'nom du docteur';
-    const INSTITUTION_NAME = 'établissement scolaire';
-    const DOCTOR_ADDRESS = 'adresse du docteur';
-    const DOCTOR_EMAIL = 'email du docteur';
-    const PRESCRIPTION_DATE = "date de la lettre d'orientation";
-    const BIRTH_DATE = 'date de naissance';
-    const STUDENT_STATUS = 'statut étudiant';
-    const PRESCRIPTION = 'orientation médicale';
+    const missingInfo = {};
 
-    const missingInfo = [];
-
-    if (!patient.doctorName?.trim()) {
-      missingInfo.push(DOCTOR_NAME);
-    }
-
-    if (!patient.institutionName?.trim()) {
-      missingInfo.push(INSTITUTION_NAME);
-    }
-
-    if (!patient.doctorAddress?.trim()) {
-      missingInfo.push(DOCTOR_ADDRESS);
-    }
-
-    if (!patient.doctorEmail?.trim()) {
-      missingInfo.push(DOCTOR_EMAIL);
-    }
-
-    if (!patient.dateOfPrescription) {
-      missingInfo.push(PRESCRIPTION_DATE);
-    }
-
-    if (!patient.dateOfBirth && new Date(patient.createdAt) > parseDateForm(config.dateOfBirthDeploymentDate)) {
-      missingInfo.push(BIRTH_DATE);
-    }
-
-    if (!patient.isStudentStatusVerified) {
-      missingInfo.push(STUDENT_STATUS);
-    }
-
-    if (!patient.hasPrescription) {
-      missingInfo.push(PRESCRIPTION);
-    }
+    missingInfo.missingStudentInfo = !areStudentInfosFilled(patient);
+    missingInfo.missingPrescriptionInfo = !arePrescriptionInfosFilled(patient);
 
     return missingInfo;
   };
 
   const extendedPatients = patients.map(patient => {
     const missingInfo = getMissingInfo(patient);
+
     return {
       ...patient,
+      hasReachedMaxAppointment: patient.appointmentsYearCount === MAX_APPOINTMENT.toString(),
       hasTooMuchAppointment: patient.appointmentsYearCount > MAX_APPOINTMENT,
       missingInfo,
       currentYear,
@@ -123,15 +85,14 @@ const Patients = () => {
     {
       name: 'update-etudiant-button',
       render: patient => (
-      <Button
-        data-test-id="update-etudiant-button"
-        // mettre ancre dossier étudiant
-        onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
-        secondary
-        size="sm"
-        icon="ri-folder-line"
-        aria-label="Dossier de l'étudiant"
-        title="Dossier de l'étudiant"
+        <Button
+          data-test-id="update-etudiant-button"
+          onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
+          secondary
+          size="sm"
+          icon="ri-folder-line"
+          aria-label="Dossier de l'étudiant"
+          title="Dossier de l'étudiant"
       />
       ),
     },
@@ -150,36 +111,38 @@ const Patients = () => {
     });
     columns.push({ name: 'appointmentsCount', label: 'Total séances', sortable: true });
   }
-  columns.push({
-    name: 'appointment-etudiant-button',
-    label: 'Déclarer une séance',
-    render: patient => (
-      <Button
-        data-test-id="appointment-etudiant-button"
-        onClick={() => navigate(`/psychologue/nouvelle-seance/${patient.id}`)}
-        size="sm"
-        icon="ri-calendar-line"
-        aria-label="Déclarer une séance"
-        title="Déclarer une séance"
+  columns.push(
+    {
+      name: 'appointment-etudiant-button',
+      label: 'Déclarer une séance',
+      render: patient => (
+        <Button
+          data-test-id="appointment-etudiant-button"
+          onClick={() => navigate(`/psychologue/nouvelle-seance/${patient.id}`)}
+          size="sm"
+          icon="ri-calendar-line"
+          aria-label="Déclarer une séance"
+          title="Déclarer une séance"
       />
-    ),
-  },
-  {
-    name: 'delete-etudiant-button',
-    label: "Supprimer l'étudiant",
-    render: patient => (
-      <Button
-        data-test-id="delete-etudiant-button"
-        onClick={deletePatient}
-        disabled={patient.appointmentsCount !== '0'}
-        title={patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : ''}
-        secondary
-        size="sm"
-        icon="ri-delete-bin-line"
-        aria-label="Supprimer"
+      ),
+    },
+    {
+      name: 'delete-etudiant-button',
+      label: "Supprimer l'étudiant",
+      render: patient => (
+        <Button
+          data-test-id="delete-etudiant-button"
+          onClick={deletePatient}
+          disabled={patient.appointmentsCount !== '0'}
+          title={patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : ''}
+          secondary
+          size="sm"
+          icon="ri-delete-bin-line"
+          aria-label="Supprimer"
       />
-    ),
-  });
+      ),
+    },
+  );
 
   return (
     <>
@@ -206,14 +169,12 @@ const Patients = () => {
         className={classNames('fr-table', styles.table)}
       >
         {patients.length > 0 ? (
-          <>
-            <Table
-              data-test-id="etudiant-table"
-              columns={columns}
-              data={extendedPatients.sort((a, b) => b.missingInfo.length - a.missingInfo.length)}
-              rowKey="id"
+          <Table
+            data-test-id="etudiant-table"
+            columns={columns}
+            data={extendedPatients.sort((a, b) => b.missingInfo.length - a.missingInfo.length)}
+            rowKey="id"
             />
-          </>
         ) : (<span>Vous n‘avez pas encore déclaré d&lsquo;étudiants.</span>)}
       </div>
     </>
