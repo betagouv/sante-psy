@@ -13,7 +13,6 @@ import PatientStatus from './PatientStatus';
 
 import styles from './patients.cssmodule.scss';
 import { arePrescriptionInfosFilled, areStudentInfosFilled } from './AddEditPatient';
-
 // todo:
 // check test après suppression patientActions
 
