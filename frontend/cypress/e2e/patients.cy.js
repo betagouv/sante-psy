@@ -114,14 +114,10 @@ describe('Patient', () => {
 
   describe('Remove', () => {
     it('should remove etudiant with incomplete info and notify user', () => {
-      cy.get('[data-test-id="delete-etudiant-button"]')
-        .each($button => {
-          if (!$button.prop('disabled')) {
-            cy.wrap($button).click();
-            cy.wait('@deleteEtudiants');
-          }
-          return false;
-        });
+      cy.get('[data-test-id="delete-etudiant-button"]:not([disabled])')
+        .first()
+        .click()
+        .wait('@deleteEtudiants');
       cy.get('[data-test-id="etudiant-table"] tr')
         .should('have.length', 5);
       cy.get('[data-test-id="notification-success"] p')
