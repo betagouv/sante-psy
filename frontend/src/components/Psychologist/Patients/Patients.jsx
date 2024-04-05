@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
@@ -15,8 +15,8 @@ import styles from './patients.cssmodule.scss';
 import { arePrescriptionInfosFilled, areStudentInfosFilled } from './AddEditPatient';
 
 const Patients = () => {
-  const [patients, setPatients] = useState([]);
   const { commonStore: { setNotification } } = useStore();
+  const [patients, setPatients] = useState([]);
   const navigate = useNavigate();
 
   const [seeAppointments, setSeeAppointments] = useState(true);
@@ -99,7 +99,14 @@ const Patients = () => {
     {
       name: 'status',
       label: 'Information',
-      render: PatientStatus,
+      render: patient => (
+        <PatientStatus
+          missingInfo={patient.missingInfo}
+          hasReachedMaxAppointment={patient.hasReachedMaxAppointment}
+          hasTooMuchAppointment={patient.hasTooMuchAppointment}
+          currentYear={patient.currentYear}
+        />
+      ),
       sortable: true,
       sort: (a, b) => a.missingInfo.length - b.missingInfo.length,
     }];
