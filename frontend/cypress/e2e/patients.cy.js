@@ -112,14 +112,14 @@ describe('Patient', () => {
     });
   });
 
-  describe.only('Remove', () => {
+  describe('Remove', () => {
     it('should remove etudiant with incomplete info and notify user', () => {
       cy.get('[data-test-id="delete-etudiant-button"]:not([disabled])')
         .first()
         .click()
         .wait('@deleteEtudiants');
       cy.get('[data-test-id="etudiant-table"] tr')
-        .should('have.length', 6);
+        .should('have.length', 5);
       cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
