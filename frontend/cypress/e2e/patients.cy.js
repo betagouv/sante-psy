@@ -107,7 +107,7 @@ describe('Patient', () => {
       cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
-          `L'étudiant Georges Moustaki a bien été modifié. Vous pourrez renseigner les champs manquants plus tard en cliquant le bouton "Modifier" du patient.`,
+          'L\'étudiant Georges Moustaki a bien été modifié. Vous pourrez renseigner les champs manquants plus tard en cliquant le bouton "Modifier" du patient.',
         );
     });
   });
@@ -119,7 +119,6 @@ describe('Patient', () => {
           if (!$button.prop('disabled')) {
             cy.wrap($button).click();
             cy.wait('@deleteEtudiants');
-            return false;
           }
         });
       cy.get('[data-test-id="etudiant-table"] tr')

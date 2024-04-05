@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
@@ -68,7 +68,7 @@ const Patients = () => {
   const deletePatient = patientId => {
     setNotification({});
     agent.Patient.delete(patientId).then(response => {
-      const filteredPatients = patients.filter(patient => patient.id !== patientId)
+      const filteredPatients = patients.filter(patient => patient.id !== patientId);
       setPatients(filteredPatients);
       setNotification(response);
     });
