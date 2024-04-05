@@ -15,10 +15,10 @@ import styles from './patients.cssmodule.scss';
 import { arePrescriptionInfosFilled, areStudentInfosFilled } from './AddEditPatient';
 
 const Patients = () => {
+  const [patients, setPatients] = useState([]);
   const { commonStore: { setNotification } } = useStore();
   const navigate = useNavigate();
 
-  const [patients, setPatients] = useState([]);
   const [seeAppointments, setSeeAppointments] = useState(true);
   const table = useRef(null);
 
@@ -65,12 +65,12 @@ const Patients = () => {
       currentYear,
     };
   });
-
   const deletePatient = patientId => {
     setNotification({});
     agent.Patient.delete(patientId).then(response => {
+      const filteredPatients = patients.filter(patient => patient.id !== patientId)
+      setPatients(filteredPatients);
       setNotification(response);
-      setPatients(patients.filter(patient => patient.id !== patientId));
     });
   };
 
@@ -132,7 +132,7 @@ const Patients = () => {
       render: patient => (
         <Button
           data-test-id="delete-etudiant-button"
-          onClick={deletePatient}
+          onClick={() => deletePatient(patient.id)}
           disabled={patient.appointmentsCount !== '0'}
           title={patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : ''}
           secondary

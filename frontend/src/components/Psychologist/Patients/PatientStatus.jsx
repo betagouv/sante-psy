@@ -8,7 +8,7 @@ const PatientStatus = ({ missingInfo, hasReachedMaxAppointment, hasTooMuchAppoin
   const isCompleted = !missingInfo.missingPrescriptionInfo && !missingInfo.missingStudentInfo && !hasTooMuchAppointment;
 
   return (
-    <div className={styles.badgeWrapper}>
+    <div className={styles.badgeWrapper} data-test-id="etudiant-badges">
       {missingInfo.missingStudentInfo && renderBadge({ badge: 'student_infos', isSmallScreen })}
       {missingInfo.missingPrescriptionInfo && renderBadge({ badge: 'prescription_infos', isSmallScreen })}
       {hasReachedMaxAppointment && renderBadge({ badge: 'max', isSmallScreen })}
