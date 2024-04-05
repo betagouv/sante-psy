@@ -120,6 +120,7 @@ describe('Patient', () => {
             cy.wrap($button).click();
             cy.wait('@deleteEtudiants');
           }
+          return false;
         });
       cy.get('[data-test-id="etudiant-table"] tr')
         .should('have.length', 5);
