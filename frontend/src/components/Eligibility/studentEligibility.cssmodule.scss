@@ -1,60 +1,106 @@
-.contactForm {
-  width: 40%;
-}
-
-.title {
-  font-size: 22px;
-}
-
 .formContainer {
+  padding: 48px;
+}
+
+.formContainer h2 {
+  font-size: 28px;
+  color: #51519C;
+  margin-top: 64px;
+}
+
+.eligibilityInput {
+  display: inline-flex;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.eligibilityMessage {
+  font-size: 12px;
+    p {
+      font-size: 12px;
+    }
+  &_valid {
+    color: #18753c;
+  }
+  &_error {
+    color: #ce0500;
+  }
+}
+
+.text {
+  align-self: flex-end;
+  padding-bottom: 8px;
+}
+
+.borderedList {
+  border-radius: 36px;
+  border: 1px solid #000091;
+  padding: 32px 64px;
+}
+
+.borderedList button,
+.borderedList button:hover {
+  color: #000091;
+  box-shadow: none;
+  cursor: pointer;
+  background-color: white;
+  padding-bottom: 0px;
+}
+
+.borderedList a::after {
+  display: none;
+}
+
+.searchSchoolSection {
+  margin-top: 16px;
   display: flex;
-  flex-direction: row;
+}
+
+.searchIcon {
+  font-size: 24px;
+  margin: 8px;
+}
+
+.searchbar {
+  width: 481px;
+}
+
+.podcastSection {
+  display: flex;
   align-items: center;
-  height: 200px;
-  margin-bottom: 20px;
+}
 
-  .text {
-    flex-grow: 1;
-  }
+.podcastSection img {
+  margin-top: -16px;
+}
 
-  .input {
-    input {
-      width: 90%;
-    }
-  }
-
-  .eligibilityMessage {
-    font-size: 12px;
-      p {
-        font-size: 12px;
-      }
-    &_valid {
-      color: #18753c;
-      padding-top: 2%;
-    }
-    &_error {
-      color: #ce0500;
-      padding-top: 15%;
-      ul {
-        padding-left: 10%;
-      }
-    }
-  }
-
-  .redirectIcon {
-    margin-left: 0.5rem;
-    margin-top: 0.45rem;
-    position: absolute;
-  }
+.podcastText {
+  margin: 24px;
 }
 
 @media (max-width: 768px) {
   .formContainer {
     flex-direction: column;
-    height: auto;
   }
 
-  .contactForm {
-    width: 100%;
+  .formContainer h2 {
+    margin-top: 32px;
+  }
+
+  .eligibilityInput {
+    flex-direction: column;
+  }
+
+  .text {
+    align-self: flex-start;
+    padding-bottom: 0px;
+  }
+
+  .podcastSection {
+    flex-direction: column;
+  }
+
+  .podcastSection img {
+    margin-top: 48px;
   }
 }
