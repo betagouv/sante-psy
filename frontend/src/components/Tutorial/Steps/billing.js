@@ -1,4 +1,18 @@
 import agent from 'services/agent';
+import appointmentBadges from 'src/utils/badges';
+
+const noAppointmentsInPeriod = async () => {
+  const now = new Date();
+  return agent.Appointment.get({isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear()}).then(appointments => {
+    const noAppointments = appointments.every(appointment => {
+      const appointmentDate = new Date(appointment.appointmentDate);
+      return appointmentDate.getFullYear() !== now.getFullYear()
+        || appointmentDate.getMonth() !== now.getMonth();
+    });
+    const allAppointmentsExceededBadge = appointments.every(appointment => appointment.badge === appointmentBadges.exceeded);
+    return noAppointments || allAppointmentsExceededBadge;
+  });
+}
 
 const steps = [
   {
@@ -18,10 +32,10 @@ const steps = [
     target: '#no-appointments',
     shouldSkip: () => {
       const now = new Date();
-      return agent.Appointment.get().then(appointments => appointments.some(appointment => {
+      return agent.Appointment.get({isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear()}).then(appointments => appointments.some(appointment => {
         const appointmentDate = new Date(appointment.appointmentDate);
         return appointmentDate.getFullYear() === now.getFullYear()
-          && appointmentDate.getMonth() === now.getMonth();
+          && appointmentDate.getMonth() === now.getMonth() && appointment.badge !== appointmentBadges.exceeded;
       }));
     },
     content: "Vous n'avez pas déclarer de séances pour ce mois-ci, il n'y a donc pas de facture à générer. Commencez par déclarer des séances depuis l'onglet dédié ou générez une facture pour un autre mois.",
@@ -29,27 +43,13 @@ const steps = [
   {
     placement: 'top-start',
     target: '#billing-table',
-    shouldSkip: () => {
-      const now = new Date();
-      return agent.Appointment.get().then(appointments => appointments.every(appointment => {
-        const appointmentDate = new Date(appointment.appointmentDate);
-        return appointmentDate.getFullYear() !== now.getFullYear()
-          || appointmentDate.getMonth() !== now.getMonth();
-      }));
-    },
+    shouldSkip: () => noAppointmentsInPeriod(),
     content: 'Vous trouverez ici un tableau récapitulatif de vos séances avec les informations à faire apparaître sur votre facture.',
   },
   {
     placement: 'top-start',
     target: '#billing-info',
-    shouldSkip: () => {
-      const now = new Date();
-      return agent.Appointment.get().then(appointments => appointments.every(appointment => {
-        const appointmentDate = new Date(appointment.appointmentDate);
-        return appointmentDate.getFullYear() !== now.getFullYear()
-          || appointmentDate.getMonth() !== now.getMonth();
-      }));
-    },
+    shouldSkip: () => noAppointmentsInPeriod(),
     content: 'Pour obtenir une facture automatique la plus complète possible, nous vous invitons à remplir des informations complémentaires sur vous.',
   },
   {
@@ -59,12 +59,7 @@ const steps = [
       if (!user.convention || !user.convention.isConventionSigned) {
         return Promise.resolve(true);
       }
-      const now = new Date();
-      return agent.Appointment.get().then(appointments => appointments.every(appointment => {
-        const appointmentDate = new Date(appointment.appointmentDate);
-        return appointmentDate.getFullYear() !== now.getFullYear()
-          || appointmentDate.getMonth() !== now.getMonth();
-      }));
+      return noAppointmentsInPeriod();
     },
     content: 'Vous pouvez maintenant générer automatiquement une facture pré-remplie pour le mois séléctionné.',
   },
