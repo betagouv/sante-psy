@@ -76,7 +76,7 @@ const tutorials = [
   { page: 'mes-remboursements', steps: 6 },
   { page: 'mon-profil', steps: 4 },
 ];
-describe.only('Other tutorials', () => {
+describe('Other tutorials', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/connecteduser')
       .as('connecteduser');
