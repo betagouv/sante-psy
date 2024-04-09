@@ -3,7 +3,7 @@ import appointmentBadges from 'src/utils/badges';
 
 const noAppointmentsInPeriod = async () => {
   const now = new Date();
-  return agent.Appointment.get({isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear()}).then(appointments => {
+  return agent.Appointment.get({ isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear() }).then(appointments => {
     const noAppointments = appointments.every(appointment => {
       const appointmentDate = new Date(appointment.appointmentDate);
       return appointmentDate.getFullYear() !== now.getFullYear()
@@ -12,7 +12,7 @@ const noAppointmentsInPeriod = async () => {
     const allAppointmentsExceededBadge = appointments.every(appointment => appointment.badge === appointmentBadges.exceeded);
     return noAppointments || allAppointmentsExceededBadge;
   });
-}
+};
 
 const steps = [
   {
@@ -32,7 +32,7 @@ const steps = [
     target: '#no-appointments',
     shouldSkip: () => {
       const now = new Date();
-      return agent.Appointment.get({isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear()}).then(appointments => appointments.some(appointment => {
+      return agent.Appointment.get({ isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear() }).then(appointments => appointments.some(appointment => {
         const appointmentDate = new Date(appointment.appointmentDate);
         return appointmentDate.getFullYear() === now.getFullYear()
           && appointmentDate.getMonth() === now.getMonth() && appointment.badge !== appointmentBadges.exceeded;
