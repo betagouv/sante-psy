@@ -104,7 +104,6 @@ const StudentEligibility = () => {
           </p>
           <div>
             <h2>J&apos;indique mon numéro INE</h2>
-            {/* <p>inscription 2023-2024</p> */}
             <div className={styles.eligibilityInput}>
               <TextInput
                 className="midlength-input"
@@ -182,7 +181,6 @@ const StudentEligibility = () => {
                   de votre
                   établissement.
                   <Button
-                    className={styles.linkButton}
                     secondary
                     onClick={() => {
                       window.open(
@@ -194,6 +192,7 @@ const StudentEligibility = () => {
                   />
                 </li>
                 <li>
+                  <img src="images/human-cooperation.png" className={styles.holdingHandIcon} alt="trois mains qui s'entrecroisent" />
                   Consultez les autres services d&apos;aides en santé mentale.
                   <Button
                     secondary
@@ -224,7 +223,7 @@ const StudentEligibility = () => {
                   <Button
                     secondary
                     onClick={() => {
-                      navigate('/eligibility/contact');
+                      navigate('/eligibilite/contact');
                     }}
                     icon="ri-link"
                   />

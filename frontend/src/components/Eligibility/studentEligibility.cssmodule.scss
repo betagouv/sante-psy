@@ -65,6 +65,11 @@
   width: 481px;
 }
 
+.holdingHandIcon {
+  position: absolute;
+  right: 10%;
+}
+
 .podcastSection {
   display: flex;
   align-items: center;
@@ -78,13 +83,35 @@
   margin: 24px;
 }
 
-@media (max-width: 768px) {
+.contactForm {
+  width: 40%;
+}
+
+@media (max-width: 900px) {
   .formContainer {
     flex-direction: column;
   }
 
   .formContainer h2 {
     margin-top: 32px;
+  }
+
+  .borderedList {
+    padding-right: 40px;
+    padding-left: 56px;
+  }
+
+  .borderedList button {
+    display: block;
+    padding-left: 0px;
+  }
+
+  .searchbar {
+    padding: 0px;
+  }
+
+  .searchIcon {
+    display: none;
   }
 
   .eligibilityInput {
@@ -94,6 +121,10 @@
   .text {
     align-self: flex-start;
     padding-bottom: 0px;
+  }
+
+  .holdingHandIcon {
+    display: none;
   }
 
   .podcastSection {
