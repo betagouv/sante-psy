@@ -3,14 +3,16 @@ import renderBadge from 'components/Badges/generateBadges';
 import useScreenSize from 'src/utils/useScreenSize';
 import styles from './patientStatus.cssmodule.scss';
 
-const PatientStatus = ({ missingInfo, hasReachedMaxAppointment, hasTooMuchAppointment, currentYear }) => {
+const PatientStatus = ({ patient }) => {
+  const { missingInfo, hasReachedMaxAppointment, hasTooMuchAppointment, currentYear } = patient;
+  const { missingStudentInfo, missingPrescriptionInfo } = missingInfo;
   const isSmallScreen = useScreenSize();
-  const isCompleted = !missingInfo.missingPrescriptionInfo && !missingInfo.missingStudentInfo && !hasTooMuchAppointment;
+  const isCompleted = !missingPrescriptionInfo && !missingStudentInfo && !hasTooMuchAppointment;
 
   return (
     <div className={styles.badgeWrapper} data-test-id="etudiant-badges">
-      {missingInfo.missingStudentInfo && renderBadge({ badge: 'student_infos', isSmallScreen })}
-      {missingInfo.missingPrescriptionInfo && renderBadge({ badge: 'prescription_infos', isSmallScreen })}
+      {missingStudentInfo && renderBadge({ badge: 'student_infos', isSmallScreen })}
+      {missingPrescriptionInfo && renderBadge({ badge: 'prescription_infos', isSmallScreen })}
       {hasReachedMaxAppointment && renderBadge({ badge: 'max', isSmallScreen })}
       {hasTooMuchAppointment && renderBadge({ badge: 'exceeded', appointmentDate: currentYear, isSmallScreen })}
       {isCompleted && renderBadge({ badge: 'completed', isSmallScreen })}

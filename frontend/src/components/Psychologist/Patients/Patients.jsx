@@ -101,10 +101,7 @@ const Patients = () => {
       label: 'Information',
       render: patient => (
         <PatientStatus
-          missingInfo={patient.missingInfo}
-          hasReachedMaxAppointment={patient.hasReachedMaxAppointment}
-          hasTooMuchAppointment={patient.hasTooMuchAppointment}
-          currentYear={patient.currentYear}
+          patient={patient}
         />
       ),
       sortable: true,
