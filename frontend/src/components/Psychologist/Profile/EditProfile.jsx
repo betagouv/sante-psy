@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, RadioGroup, Radio, TextInput, SearchableSelect, ButtonGroup } from '@dataesr/react-dsfr';
 
 import string from 'services/string';
-import DEPARTEMENTS from 'services/departments';
+import DEPARTEMENTS from 'src/utils/departments';
 
 const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
   const [updatedPsychologist, setUpdatedPsychologist] = useState(psychologist);

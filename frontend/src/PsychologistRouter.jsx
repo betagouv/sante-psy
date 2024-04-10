@@ -16,7 +16,7 @@ import GlobalNotification from 'components/Notification/GlobalNotification';
 import Billing from 'components/Psychologist/Reimbursement/Billing';
 
 import { shouldCheckConventionAgain } from 'services/conventionVerification';
-import { getInactiveMessage } from 'services/inactive';
+import { getInactiveMessage } from './utils/inactive';
 import { useStore } from './stores';
 
 import 'react-month-picker/css/month-picker.css';
