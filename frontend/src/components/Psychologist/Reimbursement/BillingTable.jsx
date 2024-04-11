@@ -26,6 +26,7 @@ const BillingTable = ({ filteredDates, appointments }) => {
   const totalAppointmentsByBadges = billingDataService.getTotalForAllBadges(filteredDates, appointments);
   const totalAllBadges = Object.values(totalAppointmentsByBadges).reduce((total, value) => total + value, 0);
   const badges = getBadgeInfos();
+
   const columns = [
     {
       name: 'date',

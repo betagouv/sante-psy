@@ -7,6 +7,7 @@ import styles from './generateBadges.cssmodule.scss';
 const renderBadge = ({ badge, univYear, appointmentDate, isSmallScreen = false }) => {
   const badgeUnivYear = univYear ?? getUnivYear(appointmentDate);
   const badges = getBadgeInfos(isSmallScreen, badgeUnivYear);
+
   if (!badge || badge === badges.other.key) {
     return null;
   }
