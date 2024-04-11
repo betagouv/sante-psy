@@ -7,6 +7,7 @@ import agent from 'services/agent';
 
 import renderBadge from 'components/Badges/generateBadges';
 import styles from './addEditPatient.cssmodule.scss';
+import allBadges from 'src/utils/badges';
 
 export const areStudentInfosFilled = patient => (
   patient
@@ -33,6 +34,8 @@ const AddEditPatient = () => {
   const addAppointment = new URLSearchParams(search).get('addAppointment');
 
   const [patient, setPatient] = useState();
+
+  const badges = allBadges();
 
   useEffect(() => {
     if (patientId) {
@@ -102,7 +105,7 @@ const AddEditPatient = () => {
               <section className={styles.studentSectionTitle}>
                 <h2>Dossier étudiant</h2>
                 {!areStudentInfosFilled(patient)
-                  ? renderBadge({ badge: 'student_infos' })
+                  ? renderBadge({ badge: badges.student_infos.key })
                   : ''}
               </section>
               <p className="fr-text--sm fr-mb-1v">
@@ -175,7 +178,7 @@ const AddEditPatient = () => {
               <section className={styles.studentSectionTitle}>
                 <h2>Lettre d&apos;orientation</h2>
                 {!arePrescriptionInfosFilled(patient)
-                  ? renderBadge({ badge: 'prescription_infos' })
+                  ? renderBadge({ badge: badges.prescription_infos.key })
                   : ''}
               </section>
               <Checkbox

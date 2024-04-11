@@ -25,6 +25,7 @@ const getTotalForAllBadges = (appointments, date) => {
 const BillingTable = ({ filteredDates, appointments }) => {
   const totalAppointmentsByBadges = billingDataService.getTotalForAllBadges(filteredDates, appointments);
   const totalAllBadges = Object.values(totalAppointmentsByBadges).reduce((total, value) => total + value, 0);
+  const badges = allBadges();
   const columns = [
     {
       name: 'date',
@@ -39,7 +40,7 @@ const BillingTable = ({ filteredDates, appointments }) => {
     {
       name: 'firstAppointment',
       label: 'Dont premières séances',
-      render: date => (date === 'total' ? boldContent(totalAppointmentsByBadges[allBadges().first.key]) : appointments[date][allBadges().first.key] || 0),
+      render: date => (date === 'total' ? boldContent(totalAppointmentsByBadges[badges.first.key]) : appointments[date][badges.first.key] || 0),
     },
     {
       name: 'total',
@@ -49,12 +50,12 @@ const BillingTable = ({ filteredDates, appointments }) => {
         let nbFirstAppointments = 0;
 
         if (date === 'total') {
-          nbFirstAppointments = totalAppointmentsByBadges[allBadges().first.key];
+          nbFirstAppointments = totalAppointmentsByBadges[badges.first.key];
           console.log(nbFirstAppointments);
-          nbAppointments = totalAppointmentsByBadges[allBadges().other.key];
+          nbAppointments = totalAppointmentsByBadges[badges.other.key];
         } else {
-          nbFirstAppointments = appointments[date][allBadges().first.key] || 0;
-          nbAppointments = appointments[date][allBadges().other.key] || 0;
+          nbFirstAppointments = appointments[date][badges.first.key] || 0;
+          nbAppointments = appointments[date][badges.other.key] || 0;
         }
 
         const totalAmountAppointments = nbAppointments * NEXT_APPOINTMENT_TTC;
