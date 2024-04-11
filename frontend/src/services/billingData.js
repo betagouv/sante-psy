@@ -1,5 +1,5 @@
 import { utcDate } from 'services/date';
-import appointmentBadges from 'src/utils/badges';
+import allBadges from 'src/utils/badges';
 
 const getFilteredDates = (valuesByDate, month, year) => Object.keys(valuesByDate).filter(date => {
   const appointmentDate = utcDate(date);
@@ -20,7 +20,7 @@ const getBadgeTotal = (filteredDates, valuesByDate, badge) => filteredDates.redu
 
 const getTotalForAllBadges = (filteredDates, valuesByDate) => {
   const totals = {};
-  Object.keys(appointmentBadges).forEach(badge => {
+  Object.keys(allBadges()).forEach(badge => {
     totals[badge] = 0;
   });
 

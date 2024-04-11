@@ -11,7 +11,7 @@ import { formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 import billingDataService from 'services/billingData';
 import { useStore } from 'stores/';
-import appointmentBadges from 'src/utils/badges';
+import allBadges from 'src/utils/badges';
 import BillingTable from './BillingTable';
 import BillingInfo from './BillingInfo';
 import BillingHelper from './BillingHelper';
@@ -139,7 +139,7 @@ const Billing = () => {
               </b>
               séances, dont
               <b>
-                {` ${billingDataService.getBadgeTotal(filteredDates, valuesByDate.appointments, appointmentBadges.first)} `}
+                {` ${billingDataService.getBadgeTotal(filteredDates, valuesByDate.appointments, allBadges().first)} `}
               </b>
               premières séances, auprès de
               <b>
