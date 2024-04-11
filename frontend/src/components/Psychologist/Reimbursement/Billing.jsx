@@ -139,7 +139,7 @@ const Billing = () => {
               </b>
               séances, dont
               <b>
-                {` ${billingDataService.getBadgeTotal(filteredDates, valuesByDate.appointments, allBadges().first)} `}
+                {` ${billingDataService.getBadgeTotal(filteredDates, valuesByDate.appointments, allBadges().first.key)} `}
               </b>
               premières séances, auprès de
               <b>

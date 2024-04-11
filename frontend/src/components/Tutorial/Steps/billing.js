@@ -35,7 +35,7 @@ const steps = [
       return agent.Appointment.get({ isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear() }).then(appointments => appointments.some(appointment => {
         const appointmentDate = new Date(appointment.appointmentDate);
         return appointmentDate.getFullYear() === now.getFullYear()
-          && appointmentDate.getMonth() === now.getMonth() && appointment.badge !== allBadges().exceeded;
+          && appointmentDate.getMonth() === now.getMonth() && appointment.badge !== allBadges().exceeded.key;
       }));
     },
     content: "Vous n'avez pas déclarer de séances pour ce mois-ci, il n'y a donc pas de facture à générer. Commencez par déclarer des séances depuis l'onglet dédié ou générez une facture pour un autre mois.",
