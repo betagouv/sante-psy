@@ -11,7 +11,6 @@ type OrderByColumn = {
 };
 
 const getAll = async (
-  psychologistId: string,
   period?: { startDate: Date, endDate: Date },
   orderBy: OrderByColumn[] = [],
 ):
@@ -19,23 +18,77 @@ Promise<AppointmentWithPatient[]> => {
   try {
     const query = db.from(patientsTable)
       .innerJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
-      .where(`${appointmentsTable}.psychologistId`, psychologistId)
       .whereNot(`${appointmentsTable}.deleted`, true);
 
+    // Get from specific period
     if (period) {
-      // Si period existe, utiliser whereRaw avec les dates de début et de fin fournies
       query.whereRaw(
         `${appointmentsTable}."appointmentDate" BETWEEN ? AND ?`,
         [period.startDate, period.endDate],
       );
     }
 
+    // Add univYear to results
+    query.select(
+      db.raw(`
+        CASE 
+            WHEN EXTRACT(MONTH FROM ${appointmentsTable}."appointmentDate") < 9 
+            THEN CONCAT(EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate") - 1, 
+            '-', EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate"))
+            ELSE CONCAT(EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate"), 
+            '-', EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate") + 1)
+        END AS "univYear",
+        ${patientsTable}.*,
+        ${appointmentsTable}.*
+      `),
+    );
+
+    // Order
     orderBy.forEach((order) => {
       query.orderBy(order.column, order.order || 'asc');
     });
 
     const appointmentArray = await query;
 
+    return appointmentArray;
+  } catch (err) {
+    console.error('Impossible de récupérer les appointments', err);
+    throw new Error('Impossible de récupérer les appointments');
+  }
+};
+
+const getByPatientId = async (
+  patientId: string,
+  orderBy: OrderByColumn[] = [],
+):
+Promise<AppointmentWithPatient[]> => {
+  try {
+    const query = db.from(patientsTable)
+      .leftJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
+      .where(`${appointmentsTable}.patientId`, patientId)
+      .whereNot(`${appointmentsTable}.deleted`, true);
+
+    // Add univYear to results
+    query.select(
+      db.raw(`
+        CASE 
+            WHEN EXTRACT(MONTH FROM ${appointmentsTable}."appointmentDate") < 9 
+            THEN CONCAT(EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate") - 1, 
+            '-', EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate"))
+            ELSE CONCAT(EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate"), 
+            '-', EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate") + 1)
+        END AS "univYear",
+        ${patientsTable}.*,
+        ${appointmentsTable}.*
+      `),
+    );
+
+    // Order
+    orderBy.forEach((order) => {
+      query.orderBy(order.column, order.order || 'asc');
+    });
+
+    const appointmentArray = await query;
     return appointmentArray;
   } catch (err) {
     console.error('Impossible de récupérer les appointments', err);
@@ -92,6 +145,7 @@ const countByPatient = async (patientId: string): Promise<Registry[]> => {
 export default {
   countByPatient,
   getAll,
+  getByPatientId,
   insert,
   delete: deleteOne,
 };

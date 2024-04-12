@@ -8,11 +8,13 @@ import validation from '../utils/validation';
 import date from '../utils/date';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
+import { getPatientWithBadges } from '../services/getBadges';
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.psychologist;
   const patients = await dbPatients.getAll(psychologistId);
-  res.json(patients);
+  const patientsWithBadges = getPatientWithBadges(patients);
+  res.json(patientsWithBadges);
 };
 
 // Validators we reuse for editPatient and createPatient
@@ -167,13 +169,14 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
   const { patientId } = req.params;
   const psychologistId = req.auth.psychologist;
   const patient = await dbPatients.getById(patientId, psychologistId);
+  const patientWithBadges = getPatientWithBadges([patient]);
 
   if (!patient) {
     throw new CustomError('Ce patient n\'existe pas. Vous ne pouvez pas le modifier.', 404);
   }
 
   console.debug(`Rendering getEditPatient for ${patientId}`);
-  res.json(patient);
+  res.json(patientWithBadges);
 };
 
 const create = async (req: Request, res: Response): Promise<void> => {

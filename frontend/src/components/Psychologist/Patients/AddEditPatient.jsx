@@ -8,6 +8,7 @@ import agent from 'services/agent';
 import renderBadge from 'components/Badges/generateBadges';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './addEditPatient.cssmodule.scss';
+import PatientAppointments from './PatientAppointments';
 
 export const areStudentInfosFilled = patient => (
   patient
@@ -96,6 +97,7 @@ const AddEditPatient = () => {
 
   return (
     <div className="fr-my-2w">
+      <PatientAppointments patientId={patientId}/>
       <form onSubmit={save}>
         {patient && (
           <>

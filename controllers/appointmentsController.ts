@@ -6,9 +6,12 @@ import dbPatient from '../db/patients';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
-import getAppointmentBadges from '../services/getBadges';
+import { getAppointmentWithBadges } from '../services/getBadges';
 import dateUtils from '../utils/date';
 import validation from '../utils/validation';
+import { AppointmentByYear } from '../types/Appointment';
+import _ from 'lodash';
+import appointmentsType from '../utils/appointmentsType';
 
 const createValidators = [
   check('date')
@@ -100,13 +103,44 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
     selectedPeriod = { year: selectedYear, month: selectedMonth };
   }
   const appointments = await dbAppointments.getAll(
-    psychologistId,
     dateRange,
     [{ column: 'patientId' }, { column: 'appointmentDate' }],
   );
-  const appointmentsWithBadges = getAppointmentBadges(appointments, selectedPeriod, isBillingPurposes === 'true');
 
-  res.json(appointmentsWithBadges);
+  let type = appointmentsType.all;
+
+  if (isBillingPurposes) {
+    type = appointmentsType.billing;
+  } else if (selectedPeriod) {
+    type = appointmentsType.appointment;
+  }
+  const appointmentsWithBadges = getAppointmentWithBadges(appointments, type, selectedPeriod, null);
+
+  const psychologistAppointments = appointmentsWithBadges
+  .filter((appointment) => appointment.psychologistId === psychologistId);
+
+  res.json(psychologistAppointments);
+};
+
+const getByPatientId = async (req: Request, res: Response): Promise<void> => {
+  const psychologistId = req.auth.psychologist;
+  const { patientId } = req.params;
+
+  const appointments = await dbAppointments.getByPatientId(
+    patientId,
+    [{ column: 'appointmentDate' }],
+  );
+  const appointmentsWithBadges = getAppointmentWithBadges(
+    appointments,
+    appointmentsType.appointment,
+    null,
+    psychologistId,
+  );
+
+  const appointmentsByYear: AppointmentByYear = _.groupBy(appointmentsWithBadges, 'univYear') as AppointmentByYear;
+
+  console.log('appointmentsByYear : ', appointmentsByYear);
+  res.json(appointmentsByYear);
 };
 
 export default {
@@ -114,5 +148,6 @@ export default {
   deleteValidators,
   create: asyncHelper(create),
   getAll: asyncHelper(getAll),
+  getByPatientId: asyncHelper(getByPatientId),
   delete: asyncHelper(deleteOne),
 };

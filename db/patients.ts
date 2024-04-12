@@ -27,6 +27,16 @@ const startCurrentUnivYear = (): string => {
   return `${currentYear}-09-01`;
 };
 
+const endCurrentUnivYear = (): string => {
+  const SEPTEMBER = 8;
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  if (currentMonth < SEPTEMBER) {
+    return `${currentYear}-09-01`;
+  }
+  return `${currentYear + 1}-09-01`;
+};
+
 const getAll = async (psychologistId: string): Promise<(Patient &
 { appointmentsCount: string, appointmentsYearCount: string })[]> => {
   try {
@@ -34,7 +44,8 @@ const getAll = async (psychologistId: string): Promise<(Patient &
     .select(
       db.raw(`
       COUNT(
-        DISTINCT CASE WHEN ${appointmentsTable}."appointmentDate" > '${startCurrentUnivYear()}' 
+        DISTINCT CASE WHEN ${appointmentsTable}."appointmentDate" > '${startCurrentUnivYear()}'
+        AND ${appointmentsTable}."appointmentDate" < '${endCurrentUnivYear()}'
         THEN ${appointmentsTable}.id 
         END
       ) as "appointmentsYearCount"`),
