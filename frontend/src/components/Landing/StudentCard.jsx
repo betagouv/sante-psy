@@ -18,7 +18,7 @@ const StudentCard = ({ big, index, title, description, hint, image, buttonLink, 
   return (
     <div className={big ? styles.bigContainer : styles.container}>
       <div className={styles.index}>
-        <span id={anchor && anchor.index === index ? anchor.text : undefined}>{index}</span>
+        <span id={anchor || undefined}>{index}</span>
       </div>
       <img className={styles.image} src={`/images/${image}.svg`} alt={image} />
       <h2 className={big ? styles.bigTitle : styles.title}>{title}</h2>
