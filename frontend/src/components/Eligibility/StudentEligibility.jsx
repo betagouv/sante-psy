@@ -16,6 +16,12 @@ const StudentEligibility = () => {
   const [showEligibility, setShowEligibility] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [selectedEligibleSchool, setSelectedEligibleSchool] = useState(false);
+
+  const handleSelectedEligibleSchool = selectedSchool => {
+    setSelectedEligibleSchool(selectedSchool);
+    setIsEligible(selectedSchool);
+  };
 
   const submit = e => {
     e.preventDefault();
@@ -144,10 +150,15 @@ const StudentEligibility = () => {
                         value: school,
                         label: school,
                       }))}
+                      selected={selectedEligibleSchool}
+                      onChange={handleSelectedEligibleSchool}
                       className={styles.searchbar}
                     />
                     <Icon name="ri-search-line" className={styles.searchIcon} />
                   </section>
+                  {selectedEligibleSchool && (
+                    <span className={styles.text}>{eligibilityMessage()}</span>
+                  )}
                 </li>
                 <li>Je suis étudiant en BTS : je suis éligible.</li>
               </ol>
@@ -157,7 +168,7 @@ const StudentEligibility = () => {
               </p>
               <Button
                 disabled={isLoading}
-                onClick={() => navigate('/#step-prescription-letter')}
+                onClick={() => navigate('/#anchor-prescription-letter')}
               >
                 Étape suivante
                 <Icon name="ri-arrow-right-s-fill" />

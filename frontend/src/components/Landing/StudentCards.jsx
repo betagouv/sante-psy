@@ -31,7 +31,7 @@ const StudentCards = () => (
       buttonText="Prendre rendez-vous"
       buttonLink="https://www.doctolib.fr"
       hint="ou un Service de santé étudiante"
-      id="step-prescription-letter"
+      anchor="anchor-prescription-letter"
     />
     <StudentCard
       index={3}
