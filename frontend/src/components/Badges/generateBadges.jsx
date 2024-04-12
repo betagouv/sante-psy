@@ -1,12 +1,12 @@
 import React from 'react';
 import { getUnivYear } from 'services/date';
 import { Badge } from '@dataesr/react-dsfr';
-import allBadges from 'src/utils/badges';
+import getBadgeInfos from 'src/utils/badges';
 import styles from './generateBadges.cssmodule.scss';
 
 const renderBadge = ({ badge, univYear, appointmentDate, isSmallScreen = false }) => {
   const badgeUnivYear = univYear ?? getUnivYear(appointmentDate);
-  const badges = allBadges(isSmallScreen, badgeUnivYear);
+  const badges = getBadgeInfos(isSmallScreen, badgeUnivYear);
   if (!badge || badge === badges.other.key) {
     return null;
   }

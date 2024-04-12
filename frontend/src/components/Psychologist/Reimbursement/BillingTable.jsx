@@ -3,7 +3,7 @@ import React from 'react';
 
 import { formatDDMMYYYY, utcDate } from 'services/date';
 import billingDataService from 'services/billingData';
-import allBadges from 'src/utils/badges';
+import getBadgeInfos from 'src/utils/badges';
 
 const FIRST_APPOINTMENT_TTC = 40;
 const NEXT_APPOINTMENT_TTC = 30;
@@ -25,7 +25,7 @@ const getTotalForAllBadges = (appointments, date) => {
 const BillingTable = ({ filteredDates, appointments }) => {
   const totalAppointmentsByBadges = billingDataService.getTotalForAllBadges(filteredDates, appointments);
   const totalAllBadges = Object.values(totalAppointmentsByBadges).reduce((total, value) => total + value, 0);
-  const badges = allBadges();
+  const badges = getBadgeInfos();
   const columns = [
     {
       name: 'date',

@@ -1,6 +1,7 @@
 import agent from 'services/agent';
-import allBadges from 'src/utils/badges';
+import getBadgeInfos from 'src/utils/badges';
 
+const badges = getBadgeInfos();
 const noAppointmentsInPeriod = async () => {
   const now = new Date();
   return agent.Appointment.get({ isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear() }).then(appointments => {
@@ -9,7 +10,7 @@ const noAppointmentsInPeriod = async () => {
       return appointmentDate.getFullYear() !== now.getFullYear()
         || appointmentDate.getMonth() !== now.getMonth();
     });
-    const allAppointmentsExceededBadge = appointments.every(appointment => appointment.badge === allBadges().exceeded.key);
+    const allAppointmentsExceededBadge = appointments.every(appointment => appointment.badge === badges.exceeded.key);
     return noAppointments || allAppointmentsExceededBadge;
   });
 };
@@ -35,7 +36,7 @@ const steps = [
       return agent.Appointment.get({ isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear() }).then(appointments => appointments.some(appointment => {
         const appointmentDate = new Date(appointment.appointmentDate);
         return appointmentDate.getFullYear() === now.getFullYear()
-          && appointmentDate.getMonth() === now.getMonth() && appointment.badge !== allBadges().exceeded.key;
+          && appointmentDate.getMonth() === now.getMonth() && appointment.badge !== badges.exceeded.key;
       }));
     },
     content: "Vous n'avez pas déclarer de séances pour ce mois-ci, il n'y a donc pas de facture à générer. Commencez par déclarer des séances depuis l'onglet dédié ou générez une facture pour un autre mois.",

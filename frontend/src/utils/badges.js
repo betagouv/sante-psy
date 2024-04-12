@@ -1,4 +1,4 @@
-const allBadges = (isSmallScreen, univYear) => ({
+const getBadgeInfos = (isSmallScreen, univYear) => ({
   first: {
     key: 'first',
     text: '1re séance',
@@ -44,4 +44,4 @@ const allBadges = (isSmallScreen, univYear) => ({
   other: { key: 'other' },
 });
 
-export default allBadges;
+export default getBadgeInfos;

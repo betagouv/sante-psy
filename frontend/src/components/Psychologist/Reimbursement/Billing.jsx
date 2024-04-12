@@ -11,7 +11,7 @@ import { formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 import billingDataService from 'services/billingData';
 import { useStore } from 'stores/';
-import allBadges from 'src/utils/badges';
+import getBadgeInfos from 'src/utils/badges';
 import BillingTable from './BillingTable';
 import BillingInfo from './BillingInfo';
 import BillingHelper from './BillingHelper';
@@ -44,6 +44,7 @@ const Billing = () => {
     }
   });
 
+  const badges = getBadgeInfos();
   const filteredDates = billingDataService.getFilteredDates(valuesByDate.appointments, month.month, month.year);
   const canGenerateBill = user.convention && user.convention.isConventionSigned;
   return (
@@ -139,7 +140,7 @@ const Billing = () => {
               </b>
               séances, dont
               <b>
-                {` ${billingDataService.getBadgeTotal(filteredDates, valuesByDate.appointments, allBadges().first.key)} `}
+                {` ${billingDataService.getBadgeTotal(filteredDates, valuesByDate.appointments, badges.first.key)} `}
               </b>
               premières séances, auprès de
               <b>

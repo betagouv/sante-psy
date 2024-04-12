@@ -1,14 +1,14 @@
 import React from 'react';
 import renderBadge from 'components/Badges/generateBadges';
 import useScreenSize from 'src/utils/useScreenSize';
+import getBadgeInfos from 'src/utils/badges';
 import styles from './patientStatus.cssmodule.scss';
-import allBadges from 'src/utils/badges';
 
 const PatientStatus = ({ patient }) => {
   const { missingInfo, hasReachedMaxAppointment, hasTooMuchAppointment, currentYear } = patient;
   const { missingStudentInfo, missingPrescriptionInfo } = missingInfo;
   const isSmallScreen = useScreenSize();
-  const badges = allBadges();
+  const badges = getBadgeInfos();
   const isCompleted = !missingPrescriptionInfo && !missingStudentInfo && !hasTooMuchAppointment;
 
   return (
