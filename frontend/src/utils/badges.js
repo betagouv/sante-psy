@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 const getBadgeInfos = (isSmallScreen, univYear) => ({
-=======
-const allBadges = (isSmallScreen, univYear) => ({
->>>>>>> e40b2a9 (feat(badges): update badges organisation)
   first: {
     key: 'first',
     text: '1re séance',

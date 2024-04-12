@@ -8,7 +8,6 @@ import agent from 'services/agent';
 import renderBadge from 'components/Badges/generateBadges';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './addEditPatient.cssmodule.scss';
-import allBadges from 'src/utils/badges';
 
 export const areStudentInfosFilled = patient => (
   patient
