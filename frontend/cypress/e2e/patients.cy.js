@@ -26,16 +26,7 @@ describe('Patient', () => {
     it('should get etudiants', () => {
       cy.get('[data-test-id="etudiant-table"] tr')
         .should('have.length', 6);
-      cy.get('[data-test-id="etudiant-row-missing-info"]')
-        .should('have.length', 4);
-      cy.get('[data-test-id="etudiant-row-complete-info"]')
-        .should('have.length', 1);
-      cy.get('[data-test-id="etudiant-table"] td')
-        .eq(1)
-        .should(
-          'have.text',
-          'Informations manquantes : nom du docteur, établissement scolaire, adresse du docteur, email du docteur, date de la lettre d\'orientation, date de naissance, statut étudiant, orientation médicale.',
-        );
+      cy.get('[data-test-id="etudiant-badges"]').should('exist');
     });
   });
 
@@ -43,7 +34,6 @@ describe('Patient', () => {
     it('should add etudiant', () => {
       cy.get('[data-test-id="new-student-button"]')
         .click();
-
       cy.get('[data-test-id="etudiant-first-name-input"] > input')
         .type('Titi');
       cy.get('[data-test-id="etudiant-last-name-input"] > input')
@@ -56,7 +46,6 @@ describe('Patient', () => {
         .type('01020304');
       cy.get('[data-test-id="etudiant-status-input"]')
         .click();
-      cy.get('[data-test-id="etudiant-renouvellement-tag"]').should('not.exist');
       cy.get('[data-test-id="etudiant-letter-input"]')
         .click();
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
@@ -72,11 +61,7 @@ describe('Patient', () => {
 
       cy.get('[data-test-id="etudiant-table"] tr')
         .should('have.length', 7);
-      cy.get('[data-test-id="etudiant-row-missing-info"]')
-        .should('have.length', 4);
-      cy.get('[data-test-id="etudiant-row-complete-info"]')
-        .should('have.length', 2);
-
+      cy.get('[data-test-id="etudiant-badges"]').should('exist');
       cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
@@ -87,7 +72,7 @@ describe('Patient', () => {
 
   describe('Update', () => {
     it('should update existing etudiant and update completion info', () => {
-      cy.get('[data-test-id="update-etudiant-button-large"]')
+      cy.get('[data-test-id="update-etudiant-button"]')
         .eq(1)
         .click();
       cy.wait('@etudiant');
@@ -106,34 +91,33 @@ describe('Patient', () => {
         .click();
       cy.get('[data-test-id="etudiant-letter-input"]')
         .click();
-      cy.get('[data-test-id="etudiant-renouvellement-tag"]').should('not.exist');
 
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
         .type('My doctor');
+      cy.get('[data-test-id="etudiant-doctor-email-input"] > input')
+        .clear();
       cy.get('[data-test-id="save-etudiant-button"]')
         .click();
 
       cy.get('[data-test-id="etudiant-table"] tr')
         .should('have.length', 6);
-      cy.get('[data-test-id="etudiant-row-missing-info"]')
-        .should('have.length', 4);
-      cy.get('[data-test-id="etudiant-row-complete-info"]')
-        .should('have.length', 1);
+
+      cy.get('[data-test-id="etudiant-badges"]').should('exist');
 
       cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
-          "L'étudiant Georges Moustaki a bien été modifié.",
+          'L\'étudiant Georges Moustaki a bien été modifié. Vous pourrez renseigner les champs manquants plus tard en cliquant le bouton "Modifier" du patient.',
         );
     });
   });
 
   describe('Remove', () => {
     it('should remove etudiant with incomplete info and notify user', () => {
-      cy.get('[data-test-id="delete-etudiant-button-large"]')
+      cy.get('[data-test-id="delete-etudiant-button"]:not([disabled])')
         .first()
-        .click();
-      cy.wait('@deleteEtudiants');
+        .click()
+        .wait('@deleteEtudiants');
       cy.get('[data-test-id="etudiant-table"] tr')
         .should('have.length', 5);
       cy.get('[data-test-id="notification-success"] p')

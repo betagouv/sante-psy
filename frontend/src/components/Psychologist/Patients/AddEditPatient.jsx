@@ -6,8 +6,26 @@ import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
 
 import renderBadge from 'components/Badges/generateBadges';
+import getBadgeInfos from 'src/utils/badges';
 import styles from './addEditPatient.cssmodule.scss';
 
+export const areStudentInfosFilled = patient => (
+  patient
+    && patient.firstNames
+    && patient.lastName
+    && patient.dateOfBirth
+    && patient.institutionName
+    && patient.INE
+);
+
+export const arePrescriptionInfosFilled = patient => (
+  patient
+    && patient.doctorAddress
+    && patient.doctorName
+    && patient.doctorEmail
+    && patient.dateOfPrescription
+    && patient.hasPrescription
+);
 const AddEditPatient = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -16,6 +34,8 @@ const AddEditPatient = () => {
   const addAppointment = new URLSearchParams(search).get('addAppointment');
 
   const [patient, setPatient] = useState();
+
+  const badges = getBadgeInfos();
 
   useEffect(() => {
     if (patientId) {
@@ -76,24 +96,6 @@ const AddEditPatient = () => {
       .catch(() => window.scrollTo(0, 0));
   };
 
-  const areStudentInfosFilled = () => (
-    patient
-      && patient.firstNames
-      && patient.lastName
-      && patient.dateOfBirth
-      && patient.institutionName
-      && patient.INE
-  );
-
-  const arePrescriptionInfosFilled = () => (
-    patient
-      && patient.doctorAddress
-      && patient.doctorName
-      && patient.doctorEmail
-      && patient.dateOfPrescription
-      && patient.hasPrescription
-  );
-
   return (
     <div className="fr-my-2w">
       <form onSubmit={save}>
@@ -102,8 +104,8 @@ const AddEditPatient = () => {
             <div id="mandatory-informations">
               <section className={styles.studentSectionTitle}>
                 <h2>Dossier étudiant</h2>
-                {!areStudentInfosFilled()
-                  ? renderBadge({ badge: 'student_infos' })
+                {!areStudentInfosFilled(patient)
+                  ? renderBadge({ badge: badges.student_infos.key })
                   : ''}
               </section>
               <p className="fr-text--sm fr-mb-1v">
@@ -175,8 +177,8 @@ const AddEditPatient = () => {
               />
               <section className={styles.studentSectionTitle}>
                 <h2>Lettre d&apos;orientation</h2>
-                {!arePrescriptionInfosFilled()
-                  ? renderBadge({ badge: 'prescription_infos' })
+                {!arePrescriptionInfosFilled(patient)
+                  ? renderBadge({ badge: badges.prescription_infos.key })
                   : ''}
               </section>
               <Checkbox

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { formatDDMMYYYY, utcDate } from 'services/date';
 import billingDataService from 'services/billingData';
-import appointmentBadges from 'src/utils/badges';
+import getBadgeInfos from 'src/utils/badges';
 
 const FIRST_APPOINTMENT_TTC = 40;
 const NEXT_APPOINTMENT_TTC = 30;
@@ -25,6 +25,7 @@ const getTotalForAllBadges = (appointments, date) => {
 const BillingTable = ({ filteredDates, appointments }) => {
   const totalAppointmentsByBadges = billingDataService.getTotalForAllBadges(filteredDates, appointments);
   const totalAllBadges = Object.values(totalAppointmentsByBadges).reduce((total, value) => total + value, 0);
+  const badges = getBadgeInfos();
   const columns = [
     {
       name: 'date',
@@ -39,7 +40,7 @@ const BillingTable = ({ filteredDates, appointments }) => {
     {
       name: 'firstAppointment',
       label: 'Dont premières séances',
-      render: date => (date === 'total' ? boldContent(totalAppointmentsByBadges[appointmentBadges.first]) : appointments[date][appointmentBadges.first] || 0),
+      render: date => (date === 'total' ? boldContent(totalAppointmentsByBadges[badges.first.key]) : appointments[date][badges.first.key] || 0),
     },
     {
       name: 'total',
@@ -49,11 +50,12 @@ const BillingTable = ({ filteredDates, appointments }) => {
         let nbFirstAppointments = 0;
 
         if (date === 'total') {
-          nbFirstAppointments = totalAppointmentsByBadges[appointmentBadges.first];
-          nbAppointments = totalAppointmentsByBadges[appointmentBadges.other];
+          nbFirstAppointments = totalAppointmentsByBadges[badges.first.key];
+          console.log(nbFirstAppointments);
+          nbAppointments = totalAppointmentsByBadges[badges.other.key];
         } else {
-          nbFirstAppointments = appointments[date][appointmentBadges.first] || 0;
-          nbAppointments = appointments[date][appointmentBadges.other] || 0;
+          nbFirstAppointments = appointments[date][badges.first.key] || 0;
+          nbAppointments = appointments[date][badges.other.key] || 0;
         }
 
         const totalAmountAppointments = nbAppointments * NEXT_APPOINTMENT_TTC;

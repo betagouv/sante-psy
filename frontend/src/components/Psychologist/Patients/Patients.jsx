@@ -1,24 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Table, Callout, CalloutText, Icon } from '@dataesr/react-dsfr';
+import { Table, Callout, CalloutText, Icon, Button } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
-import { currentUnivYear, parseDateForm } from 'services/date';
+import { currentUnivYear } from 'services/date';
 import { useStore } from 'stores/';
 import { MAX_APPOINTMENT } from '../Appointments/NewAppointment';
 
-import PatientActionsLegend from './PatientActionsLegend';
-import PatientActions from './PatientActions';
 import PatientStatus from './PatientStatus';
 
 import styles from './patients.cssmodule.scss';
+import { arePrescriptionInfosFilled, areStudentInfosFilled } from './AddEditPatient';
 
 const Patients = () => {
-  const { commonStore: { config, setNotification } } = useStore();
-
+  const { commonStore: { setNotification } } = useStore();
   const [patients, setPatients] = useState([]);
+  const navigate = useNavigate();
+
   const [seeAppointments, setSeeAppointments] = useState(true);
   const table = useRef(null);
 
@@ -46,102 +46,104 @@ const Patients = () => {
   }, [table]);
 
   const getMissingInfo = patient => {
-    const DOCTOR_NAME = 'nom du docteur';
-    const INSTITUTION_NAME = 'établissement scolaire';
-    const DOCTOR_ADDRESS = 'adresse du docteur';
-    const DOCTOR_EMAIL = 'email du docteur';
-    const PRESCRIPTION_DATE = "date de la lettre d'orientation";
-    const BIRTH_DATE = 'date de naissance';
-    const STUDENT_STATUS = 'statut étudiant';
-    const PRESCRIPTION = 'orientation médicale';
+    const missingInfo = {};
 
-    const missingInfo = [];
-
-    if (!patient.doctorName?.trim()) {
-      missingInfo.push(DOCTOR_NAME);
-    }
-
-    if (!patient.institutionName?.trim()) {
-      missingInfo.push(INSTITUTION_NAME);
-    }
-
-    if (!patient.doctorAddress?.trim()) {
-      missingInfo.push(DOCTOR_ADDRESS);
-    }
-
-    if (!patient.doctorEmail?.trim()) {
-      missingInfo.push(DOCTOR_EMAIL);
-    }
-
-    if (!patient.dateOfPrescription) {
-      missingInfo.push(PRESCRIPTION_DATE);
-    }
-
-    if (!patient.dateOfBirth && new Date(patient.createdAt) > parseDateForm(config.dateOfBirthDeploymentDate)) {
-      missingInfo.push(BIRTH_DATE);
-    }
-
-    if (!patient.isStudentStatusVerified) {
-      missingInfo.push(STUDENT_STATUS);
-    }
-
-    if (!patient.hasPrescription) {
-      missingInfo.push(PRESCRIPTION);
-    }
+    missingInfo.missingStudentInfo = !areStudentInfosFilled(patient);
+    missingInfo.missingPrescriptionInfo = !arePrescriptionInfosFilled(patient);
 
     return missingInfo;
   };
 
   const extendedPatients = patients.map(patient => {
     const missingInfo = getMissingInfo(patient);
+
     return {
       ...patient,
+      hasReachedMaxAppointment: patient.appointmentsYearCount === MAX_APPOINTMENT.toString(),
       hasTooMuchAppointment: patient.appointmentsYearCount > MAX_APPOINTMENT,
       missingInfo,
       currentYear,
     };
   });
-
   const deletePatient = patientId => {
     setNotification({});
     agent.Patient.delete(patientId).then(response => {
+      const filteredPatients = patients.filter(patient => patient.id !== patientId);
+      setPatients(filteredPatients);
       setNotification(response);
-      setPatients(patients.filter(patient => patient.id !== patientId));
     });
   };
 
   const columns = [
     {
       name: 'name',
-      label: 'Nom',
+      label: 'Étudiant',
       render: patient => `${patient.lastName.toUpperCase()} ${patient.firstNames}`,
       sortable: true,
       sort: (a, b) => (`${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`),
     },
     {
+      name: 'update-etudiant-button',
+      render: patient => (
+        <Button
+          data-test-id="update-etudiant-button"
+          onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
+          secondary
+          size="sm"
+          icon="ri-folder-line"
+          aria-label="Dossier de l'étudiant"
+          title="Dossier de l'étudiant"
+      />
+      ),
+    },
+    {
       name: 'status',
-      label: 'Statut',
-      render: PatientStatus,
+      label: 'Information',
+      render: patient => (
+        <PatientStatus
+          patient={patient}
+        />
+      ),
       sortable: true,
       sort: (a, b) => a.missingInfo.length - b.missingInfo.length,
     }];
   if (seeAppointments) {
     columns.push({
       name: 'appointmentsYearCount',
-      label: `Séances ${currentYear}`,
+      label: `Total séances ${currentYear}`,
       sortable: true,
     });
-    columns.push({ name: 'appointmentsCount', label: 'Séances total', sortable: true });
+    columns.push({ name: 'appointmentsCount', label: 'Total séances', sortable: true });
   }
   columns.push(
     {
-      name: 'actions',
-      label: '',
+      name: 'appointment-etudiant-button',
+      label: 'Déclarer une séance',
       render: patient => (
-        <PatientActions
-          patient={patient}
-          deletePatient={() => deletePatient(patient.id)}
-        />
+        <Button
+          data-test-id="appointment-etudiant-button"
+          onClick={() => navigate(`/psychologue/nouvelle-seance/${patient.id}`)}
+          size="sm"
+          icon="ri-calendar-line"
+          aria-label="Déclarer une séance"
+          title="Déclarer une séance"
+      />
+      ),
+    },
+    {
+      name: 'delete-etudiant-button',
+      label: "Supprimer l'étudiant",
+      render: patient => (
+        <Button
+          data-test-id="delete-etudiant-button"
+          onClick={() => deletePatient(patient.id)}
+          disabled={patient.appointmentsCount !== '0'}
+          title={patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : ''}
+          secondary
+          size="sm"
+          icon="ri-delete-bin-line"
+          aria-label="Supprimer"
+      />
       ),
     },
   );
@@ -171,15 +173,12 @@ const Patients = () => {
         className={classNames('fr-table', styles.table)}
       >
         {patients.length > 0 ? (
-          <>
-            <PatientActionsLegend />
-            <Table
-              data-test-id="etudiant-table"
-              columns={columns}
-              data={extendedPatients.sort((a, b) => b.missingInfo.length - a.missingInfo.length)}
-              rowKey="id"
+          <Table
+            data-test-id="etudiant-table"
+            columns={columns}
+            data={extendedPatients.sort((a, b) => b.missingInfo.length - a.missingInfo.length)}
+            rowKey="id"
             />
-          </>
         ) : (<span>Vous n‘avez pas encore déclaré d&lsquo;étudiants.</span>)}
       </div>
     </>
