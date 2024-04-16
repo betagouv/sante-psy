@@ -14,6 +14,4 @@ export type Appointment = {
 
 export type AppointmentWithPatient = Appointment & Patient;
 
-export type AppointmentsType = 'appointment' | 'billing' | 'patient';
-
 export interface AppointmentByYear {[univYear: string]: Appointment[]}

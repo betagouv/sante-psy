@@ -439,6 +439,25 @@ describe('appointmentsController', () => {
       patient1.dateOfPrescription,
     );
   }
+
+  async function updatePatientInfoInDb(patient1: Patient, psy: Psychologist) {
+    return dbPatients.update(
+      patient1.id,
+      patient1.firstNames,
+      patient1.lastName,
+      patient1.INE,
+      patient1.institutionName,
+      patient1.isStudentStatusVerified,
+      patient1.hasPrescription,
+      psy.dossierNumber,
+      patient1.doctorName,
+      patient1.doctorAddress,
+      patient1.doctorEmail,
+      patient1.dateOfBirth,
+      patient1.dateOfPrescription,
+    );
+  }
+
   describe('get appointments with badges', () => {
     let psy: Psychologist;
     before(async () => {
@@ -468,7 +487,7 @@ describe('appointmentsController', () => {
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(1);
-        expect(res.body[0].badge).to.eql(appointmentBadges.first);
+        expect(res.body[0].badges).to.includes(appointmentBadges.first);
         return Promise.resolve();
       });
     });
@@ -487,8 +506,8 @@ describe('appointmentsController', () => {
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(2);
-        expect(res.body[0].badge).to.not.eql(appointmentBadges.first);
-        expect(res.body[1].badge).to.not.eql(appointmentBadges.first);
+        expect(res.body[0].badges).to.not.includes(appointmentBadges.first);
+        expect(res.body[1].badges).to.not.includes(appointmentBadges.first);
         return Promise.resolve();
       });
     });
@@ -506,7 +525,7 @@ describe('appointmentsController', () => {
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(1);
-        expect(res.body[0].badge).to.eql(appointmentBadges.first);
+        expect(res.body[0].badges).to.includes(appointmentBadges.first);
         return Promise.resolve();
       });
     });
@@ -536,8 +555,8 @@ describe('appointmentsController', () => {
         expect(res.body).to.have.length(8);
         expect(new Date(res.body[0].appointmentDate)).to.eql(appointmentBadgeMax.appointmentDate);
         expect(new Date(res.body[1].appointmentDate)).to.eql(appointmentBadgeBeforeMax.appointmentDate);
-        expect(res.body[0].badge).to.eql(appointmentBadges.max);
-        expect(res.body[1].badge).to.eql(appointmentBadges.before_max);
+        expect(res.body[0].badges).to.includes(appointmentBadges.max);
+        expect(res.body[1].badges).to.includes(appointmentBadges.before_max);
         return Promise.resolve();
       });
     });
@@ -562,7 +581,7 @@ describe('appointmentsController', () => {
       .then(async (res) => {
         expect(res.body).to.have.length(8);
         expect(new Date(res.body[0].appointmentDate)).to.eql(appointmentBadgeMax.appointmentDate);
-        expect(res.body[0].badge).to.eql(appointmentBadges.max);
+        expect(res.body[0].badges).to.includes(appointmentBadges.max);
         return Promise.resolve();
       });
     });
@@ -590,8 +609,8 @@ describe('appointmentsController', () => {
         expect(res.body).to.have.length(10);
         expect(new Date(res.body[1].appointmentDate)).to.eql(appointment9.appointmentDate);
         expect(new Date(res.body[0].appointmentDate)).to.eql(appointment10.appointmentDate);
-        expect(res.body[1].badge).to.eql(appointmentBadges.exceeded);
-        expect(res.body[0].badge).to.eql(appointmentBadges.exceeded);
+        expect(res.body[1].badges).to.includes(appointmentBadges.exceeded);
+        expect(res.body[0].badges).to.includes(appointmentBadges.exceeded);
         return Promise.resolve();
       });
     });

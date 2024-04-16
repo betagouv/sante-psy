@@ -1,0 +1,11 @@
+.newAppointmentWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 5%;
+}
+
+@media (max-width: 768px) {
+  .newAppointmentWrapper {
+    flex-direction: column;
+  }
+}

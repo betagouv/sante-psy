@@ -1,14 +1,13 @@
-import { AppointmentWithPatient, AppointmentsType } from '../types/Appointment';
+import { AppointmentWithPatient } from '../types/Appointment';
 import dateUtils from '../utils/date';
 import appointmentBadges from '../utils/badges';
-import appointmentsType from '../utils/appointmentsType';
 import { Patient } from '../types/Patient';
 
 const arePrescriptionInfosFilled = (appointment: AppointmentWithPatient | Patient) : boolean => {
   const {
-    doctorAddress, doctorName, doctorEmail, dateOfPrescription, hasPrescription,
+    doctorAddress, doctorName, dateOfPrescription, hasPrescription,
   } = appointment;
-  return !!doctorAddress && !!doctorName && !!doctorEmail && !!dateOfPrescription && !!hasPrescription;
+  return !!doctorAddress && !!doctorName && !!dateOfPrescription && !!hasPrescription;
 };
 
 const areStudentInfosFilled = (appointment: AppointmentWithPatient | Patient) : boolean => {
@@ -19,6 +18,8 @@ const areStudentInfosFilled = (appointment: AppointmentWithPatient | Patient) : 
 };
 
 const getPatientBadges = (patient: AppointmentWithPatient | Patient): string[] => {
+  const MAX_APPOINTMENT = 8;
+  const appointmentsYearCount = parseInt(patient.appointmentsYearCount);
   const badges = [];
 
   if (!areStudentInfosFilled(patient)) {
@@ -27,7 +28,17 @@ const getPatientBadges = (patient: AppointmentWithPatient | Patient): string[] =
   if (!arePrescriptionInfosFilled(patient)) {
     badges.push(appointmentBadges.prescription_infos);
   }
+  if (appointmentsYearCount === MAX_APPOINTMENT) {
+    badges.push(appointmentBadges.max);
+  } else if (appointmentsYearCount > MAX_APPOINTMENT) {
+    badges.push(appointmentBadges.exceeded);
+  } else if (appointmentsYearCount === MAX_APPOINTMENT - 1) {
+    badges.push(appointmentBadges.before_max);
+  }
 
+  if (badges.length === 0) {
+    badges.push(appointmentBadges.completed);
+  }
   return badges;
 };
 
@@ -48,7 +59,7 @@ const getPatientWithBadges = (
 
 const getAppointmentWithBadges = (
   appointments: AppointmentWithPatient[],
-  type: AppointmentsType,
+  isBillingPurposes: boolean,
   period?: { month: number, year: number },
   psychologistId?: string,
 )
@@ -57,7 +68,6 @@ const getAppointmentWithBadges = (
   const START_FIRST_DATE = new Date('2024-01-01T00:00:00Z');
   const appointmentsWithBadges = [];
   const appointmentsCountByPatient = {};
-  const isBillingPurposes = type === appointmentsType.billing;
 
   appointments.forEach((appointment) => {
     const appointmentDate = dateUtils.getUTCDate(new Date(appointment.appointmentDate));
@@ -78,43 +88,32 @@ const getAppointmentWithBadges = (
 
     const appointmentCount = appointmentsCountByPatient[cycle][appointment.patientId];
 
-    switch (type) {
-    case appointmentsType.billing:
+    if (isBillingPurposes) {
       if (appointmentCount === 1) {
-        if (appointmentDate >= START_CYCLE_DATE && appointmentDate <= START_FIRST_DATE) {
+        if (!(appointmentDate >= START_CYCLE_DATE && appointmentDate <= START_FIRST_DATE)) {
           badges.push(appointmentBadges.first);
         }
       } else if (appointmentCount > 8) {
         badges.push(appointmentBadges.exceeded);
       }
-      break;
-
-    case appointmentsType.appointment:
+    } else {
       if (psychologistId && appointment.psychologistId !== psychologistId) {
         badges.push(appointmentBadges.other_psychologist);
       }
       if (appointmentCount === 1) {
         badges.push(appointmentBadges.first);
-      } else if (appointmentCount === 7 && !isBillingPurposes) {
+      } else if (appointmentCount === 7) {
         badges.push(appointmentBadges.before_max);
-      } else if (appointmentCount === 8 && !isBillingPurposes) {
+      } else if (appointmentCount === 8) {
         badges.push(appointmentBadges.max);
       } else if (appointmentCount > 8) {
         badges.push(appointmentBadges.exceeded);
       }
-      break;
-
-    case appointmentsType.patient:
-      badges.concat(getPatientBadges(appointment));
-      break;
-
-    default:
-      break;
     }
 
     // Exclude exceeded appointments from bill and return selected month appointments only
     if ((!isBillingPurposes || (isBillingPurposes
-      && !badges[appointmentsType.billing].includes(appointmentBadges.exceeded))) && isInPeriod) {
+      && !badges.includes(appointmentBadges.exceeded))) && isInPeriod) {
       appointmentsWithBadges.push({
         ...appointment,
         badges,

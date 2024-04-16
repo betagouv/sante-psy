@@ -7,6 +7,7 @@ const appointmentBadges = {
   prescription_infos: 'prescription_infos',
   student_infos: 'student_infos',
   other: 'other',
+  completed: 'completed',
 };
 
 export default appointmentBadges;

@@ -6,7 +6,7 @@ import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
 import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
-import renderBadge from 'components/Badges/generateBadges';
+import Badges from 'components/Badges/Badges';
 
 import { useStore } from 'stores/';
 
@@ -46,7 +46,7 @@ const Appointments = () => {
     {
       name: 'badge',
       label: '',
-      render: renderBadge,
+      render: appointment => <Badges badges={appointment.badges} univYear={appointment.univYear} />,
     },
     { name: 'student', label: 'Étudiant', render: ({ firstNames, lastName }) => `${firstNames} ${lastName}` },
     {

@@ -11,7 +11,6 @@ import dateUtils from '../utils/date';
 import validation from '../utils/validation';
 import { AppointmentByYear } from '../types/Appointment';
 import _ from 'lodash';
-import appointmentsType from '../utils/appointmentsType';
 
 const createValidators = [
   check('date')
@@ -107,14 +106,12 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
     [{ column: 'patientId' }, { column: 'appointmentDate' }],
   );
 
-  let type = appointmentsType.all;
-
-  if (isBillingPurposes) {
-    type = appointmentsType.billing;
-  } else if (selectedPeriod) {
-    type = appointmentsType.appointment;
-  }
-  const appointmentsWithBadges = getAppointmentWithBadges(appointments, type, selectedPeriod, null);
+  const appointmentsWithBadges = getAppointmentWithBadges(
+    appointments,
+    isBillingPurposes === 'true',
+    selectedPeriod,
+    null,
+  );
 
   const psychologistAppointments = appointmentsWithBadges
   .filter((appointment) => appointment.psychologistId === psychologistId);
@@ -132,14 +129,12 @@ const getByPatientId = async (req: Request, res: Response): Promise<void> => {
   );
   const appointmentsWithBadges = getAppointmentWithBadges(
     appointments,
-    appointmentsType.appointment,
+    false,
     null,
     psychologistId,
   );
 
   const appointmentsByYear: AppointmentByYear = _.groupBy(appointmentsWithBadges, 'univYear') as AppointmentByYear;
-
-  console.log('appointmentsByYear : ', appointmentsByYear);
   res.json(appointmentsByYear);
 };
 

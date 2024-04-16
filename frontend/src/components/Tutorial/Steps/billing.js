@@ -10,7 +10,7 @@ const noAppointmentsInPeriod = async () => {
       return appointmentDate.getFullYear() !== now.getFullYear()
         || appointmentDate.getMonth() !== now.getMonth();
     });
-    const allAppointmentsExceededBadge = appointments.every(appointment => appointment.badge === badges.exceeded.key);
+    const allAppointmentsExceededBadge = appointments.every(appointment => appointment.badges.includes(badges.exceeded.key));
     return noAppointments || allAppointmentsExceededBadge;
   });
 };
