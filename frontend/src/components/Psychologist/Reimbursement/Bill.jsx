@@ -92,6 +92,8 @@ const Bill = () => {
     return [
       'À régler sur le compte bancaire ci-dessous (RIB / IBAN) :',
       billingInfo.iban ? billingInfo.iban : FULL_UNDERSCORE_LINE,
+      `Si le prestataire n’est pas assujetti à la TVA, la facture doit comporter la mention «TVA non applicable, art.
+      293 B du CGI »`,
       'Délai de paiement : 30 jours à réception de facture',
     ];
   };
