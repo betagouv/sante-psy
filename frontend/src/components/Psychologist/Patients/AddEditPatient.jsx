@@ -22,7 +22,6 @@ export const arePrescriptionInfosFilled = patient => (
   patient
     && patient.doctorAddress
     && patient.doctorName
-    && patient.dateOfPrescription
     && patient.hasPrescription
 );
 const AddEditPatient = () => {
@@ -217,7 +216,7 @@ const AddEditPatient = () => {
               <TextInput
                 className="midlength-input"
                 data-test-id="etudiant-prescription-date-input"
-                label={"Date de la lettre d'orientation"}
+                label={"Date de la lettre d'orientation (optionnel)"}
                 hint="Format JJ/MM/AAAA, par exemple : 01/01/2024"
                 value={patient.dateOfPrescription}
                 type="text"
