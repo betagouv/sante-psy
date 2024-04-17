@@ -55,7 +55,7 @@ const getAll = async (psychologistId: string): Promise<(Patient &
               .from(patientsTable)
               .where('INE', patient.INE)
               .andWhere('deleted', false);
-          });
+          }).andWhere('deleted', false);
 
       const appointmentsYearCountQuery = db.countDistinct('id')
           .from(appointmentsTable)
@@ -66,7 +66,7 @@ const getAll = async (psychologistId: string): Promise<(Patient &
               .andWhere('deleted', false)
               .andWhereRaw(`"appointmentDate" > '${startCurrentUnivYear()}'`)
               .andWhereRaw(`"appointmentDate" < '${endCurrentUnivYear()}'`);
-          });
+          }).andWhere('deleted', false);
 
       const [appointmentsCountResult, appointmentsYearCountResult] = await Promise.all([
         appointmentsCountQuery.first(),

@@ -63,7 +63,6 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
 
   const renderTable = () => (
     <Table
-      data-test-id="etudiant-seances-list"
       columns={columns}
       data={dataWithIndex}
       fixedHeader
