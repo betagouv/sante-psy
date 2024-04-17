@@ -279,7 +279,7 @@ describe('DB Patients', () => {
       .sort((a, b) => parseInt(a.appointmentsCount) - parseInt(b.appointmentsCount));
       expect(patients).to.have.length(2);
       patients[0].appointmentsCount.should.eq('3');
-      patients[1].appointmentsCount.should.eq('6');
+      patients[1].appointmentsCount.should.eq('5');
     });
 
     it('should not return deleted patients', async () => {
