@@ -78,22 +78,31 @@ const Patients = () => {
     {
       name: 'name',
       label: 'Étudiant',
-      render: patient => `${patient.lastName.toUpperCase()} ${patient.firstNames}`,
+      render: patient => (
+        <div className={styles.clickableElement} onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}>
+          <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
+          {patient.lastName.toUpperCase()}
+          {' '}
+          {patient.firstNames}
+        </div>
+      ),
       sortable: true,
       sort: (a, b) => (`${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`),
     },
     {
       name: 'update-etudiant-button',
       render: patient => (
-        <Button
-          data-test-id="update-etudiant-button"
-          onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
-          secondary
-          size="sm"
-          icon="ri-folder-line"
-          aria-label="Dossier de l'étudiant"
-          title="Dossier de l'étudiant"
-      />
+        <div className={styles.clickableElement}>
+          <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
+          <Button
+            data-test-id="update-etudiant-button"
+            onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
+            secondary
+            size="sm"
+            icon="ri-folder-line"
+            aria-label="Dossier de l'étudiant"
+          />
+        </div>
       ),
     },
     {
@@ -120,30 +129,34 @@ const Patients = () => {
       name: 'appointment-etudiant-button',
       label: 'Déclarer une séance',
       render: patient => (
-        <Button
-          data-test-id="appointment-etudiant-button"
-          onClick={() => navigate(`/psychologue/nouvelle-seance/${patient.id}`)}
-          size="sm"
-          icon="ri-calendar-line"
-          aria-label="Déclarer une séance"
-          title="Déclarer une séance"
-      />
+        <div className={styles.clickableElement}>
+          <span className={styles.tooltip}>Déclarer une séance</span>
+          <Button
+            data-test-id="appointment-etudiant-button"
+            onClick={() => navigate(`/psychologue/nouvelle-seance/${patient.id}`)}
+            size="sm"
+            icon="ri-calendar-line"
+            aria-label="Déclarer une séance"
+          />
+        </div>
       ),
     },
     {
       name: 'delete-etudiant-button',
       label: "Supprimer l'étudiant",
       render: patient => (
-        <Button
-          data-test-id="delete-etudiant-button"
-          onClick={() => deletePatient(patient.id)}
-          disabled={patient.appointmentsCount !== '0'}
-          title={patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : ''}
-          secondary
-          size="sm"
-          icon="ri-delete-bin-line"
-          aria-label="Supprimer"
-      />
+        <div className={styles.clickableElement}>
+          <span className={styles.tooltip}>{patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : 'Supprimer'}</span>
+          <Button
+            data-test-id="delete-etudiant-button"
+            onClick={() => deletePatient(patient.id)}
+            disabled={patient.appointmentsCount !== '0'}
+            secondary
+            size="sm"
+            icon="ri-delete-bin-line"
+            aria-label="Supprimer"
+          />
+        </div>
       ),
     },
   );
