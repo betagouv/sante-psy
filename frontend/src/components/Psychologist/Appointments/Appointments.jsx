@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
-import { Button, Table, Callout, CalloutText, Icon } from '@dataesr/react-dsfr';
+import { Button, Table, Callout, CalloutText, Icon, TextInput } from '@dataesr/react-dsfr';
 
 import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
 import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
 import Badges from 'components/Badges/Badges';
-
 import { useStore } from 'stores/';
+import styles from './appointments.cssmodule.scss';
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
+  const [filteredAppointments, setfilteredAppointments] = useState([]);
+  const [filteredMonthAppointments, setFilteredMonthApointments] = useState([]);
 
   const [month, setMonth] = useState({
     year: new Date().getFullYear(),
@@ -27,6 +29,10 @@ const Appointments = () => {
       });
   }, [month]);
 
+  useEffect(() => {
+    setFilteredMonthApointments(getFilteredMonthAppointments());
+  }, [appointments, filteredAppointments]);
+
   const deleteAppointment = appointmentId => {
     setNotification({});
     agent.Appointment.delete(appointmentId).then(response => {
@@ -35,20 +41,68 @@ const Appointments = () => {
     });
   };
 
-  const filteredAppointments = appointments.filter(appointment => {
-    const appointmentDate = utcDate(appointment.appointmentDate);
-    return appointmentDate.getFullYear() === month.year
-      && appointmentDate.getMonth() === month.month - 1;
-  });
+  const handleSearch = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const newFilteredAppointments = appointments.filter(patient => patient.lastName.toLowerCase().includes(e.target.value.toLowerCase())
+      || patient.firstNames.toLowerCase().includes(e.target.value.toLowerCase()));
+    setfilteredAppointments(newFilteredAppointments);
+  };
+  const handleSearchClick = e => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const getFilteredMonthAppointments = () => {
+    const showAppointments = filteredAppointments.length > 0 ? filteredAppointments : appointments;
+    return showAppointments.filter(appointment => {
+      const appointmentDate = utcDate(appointment.appointmentDate);
+      return appointmentDate.getFullYear() === month.year
+        && appointmentDate.getMonth() === month.month - 1;
+    });
+  };
+
+  const sortAppointmentsByDate = (a, b) => {
+    const dateA = new Date(a.appointmentDate);
+    const dateB = new Date(b.appointmentDate);
+
+    if (dateA < dateB) {
+      return -1;
+    }
+    if (dateA > dateB) {
+      return 1;
+    }
+    return 0;
+  };
 
   const columns = [
-    { name: 'date', label: 'Date', render: ({ appointmentDate }) => formatFrenchDate(utcDate(appointmentDate)) },
+    {
+      name: 'date',
+      label: 'Date',
+      render: ({ appointmentDate }) => formatFrenchDate(utcDate(appointmentDate)),
+      sortable: true,
+      sort: (a, b) => sortAppointmentsByDate(a, b),
+    },
     {
       name: 'badge',
       label: '',
       render: appointment => <Badges badges={appointment.badges} univYear={appointment.univYear} />,
     },
-    { name: 'student', label: 'Étudiant', render: ({ firstNames, lastName }) => `${firstNames} ${lastName}` },
+    {
+      name: 'student',
+      label: (
+        <div>
+          Étudiant
+          <TextInput
+            onClick={handleSearchClick}
+            onChange={handleSearch}
+            placeholder="Rechercher"
+            className={styles.filter}
+        />
+        </div>
+      ),
+      render: ({ firstNames, lastName }) => `${firstNames} ${lastName}`,
+    },
     {
       name: 'actions',
       label: '',
@@ -127,11 +181,11 @@ const Appointments = () => {
         </div>
       </div>
       <div id="appointments-table">
-        {filteredAppointments.length > 0 ? (
+        {filteredMonthAppointments.length > 0 ? (
           <Table
             data-test-id="appointments-table"
             columns={columns}
-            data={filteredAppointments}
+            data={filteredMonthAppointments}
             rowKey="id"
           />
         ) : (

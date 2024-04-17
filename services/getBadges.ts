@@ -5,9 +5,9 @@ import { Patient } from '../types/Patient';
 
 const arePrescriptionInfosFilled = (appointment: AppointmentWithPatient | Patient) : boolean => {
   const {
-    doctorAddress, doctorName, dateOfPrescription, hasPrescription,
+    doctorAddress, doctorName, hasPrescription,
   } = appointment;
-  return !!doctorAddress && !!doctorName && !!dateOfPrescription && !!hasPrescription;
+  return !!doctorAddress && !!doctorName && !!hasPrescription;
 };
 
 const areStudentInfosFilled = (appointment: AppointmentWithPatient | Patient) : boolean => {

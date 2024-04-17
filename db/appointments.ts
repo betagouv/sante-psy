@@ -74,6 +74,20 @@ const getAll = async (
       );
     }
 
+    query.select(
+      db.raw(`
+        CASE 
+            WHEN EXTRACT(MONTH FROM ${appointmentsTable}."appointmentDate") < 9 
+            THEN CONCAT(EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate") - 1, 
+            '-', EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate"))
+            ELSE CONCAT(EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate"), 
+            '-', EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate") + 1)
+        END AS "univYear",
+        ${patientsTable}.*,
+        ${appointmentsTable}.*
+      `),
+    );
+
     orderBy.forEach((order) => {
       query.orderBy(order.column, order.order || 'asc');
     });
