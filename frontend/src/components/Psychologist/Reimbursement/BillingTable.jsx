@@ -52,7 +52,6 @@ const BillingTable = ({ filteredDates, appointments }) => {
 
         if (date === 'total') {
           nbFirstAppointments = totalAppointmentsByBadges[badges.first.key];
-          console.log(nbFirstAppointments);
           nbAppointments = totalAppointmentsByBadges[badges.other.key];
         } else {
           nbFirstAppointments = appointments[date][badges.first.key] || 0;

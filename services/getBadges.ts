@@ -79,14 +79,14 @@ const getAppointmentWithBadges = (
       appointmentsCountByPatient[cycle] = {};
     }
 
-    if (!appointmentsCountByPatient[cycle][appointment.patientId]) {
-      appointmentsCountByPatient[cycle][appointment.patientId] = 1;
+    if (!appointmentsCountByPatient[cycle][appointment.INE]) {
+      appointmentsCountByPatient[cycle][appointment.INE] = 1;
     }
 
     // We don't need before_max and max badges on bill.
     const badges = [];
 
-    const appointmentCount = appointmentsCountByPatient[cycle][appointment.patientId];
+    const appointmentCount = appointmentsCountByPatient[cycle][appointment.INE];
 
     if (isBillingPurposes) {
       if (appointmentCount === 1) {
@@ -120,7 +120,7 @@ const getAppointmentWithBadges = (
       });
     }
 
-    appointmentsCountByPatient[cycle][appointment.patientId]++;
+    appointmentsCountByPatient[cycle][appointment.INE]++;
   });
 
   const orderedAppointmentsWithBadges = appointmentsWithBadges.sort(

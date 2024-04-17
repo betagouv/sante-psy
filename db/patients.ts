@@ -38,27 +38,51 @@ const endCurrentUnivYear = (): string => {
 };
 
 const getAll = async (psychologistId: string): Promise<(Patient &
-{ appointmentsCount: string, appointmentsYearCount: string })[]> => {
+  { appointmentsCount: string, appointmentsYearCount: string })[]> => {
   try {
-    const patientArray = await db.select(`${patientsTable}.*`)
-    .select(
-      db.raw(`
-      COUNT(
-        DISTINCT CASE WHEN ${appointmentsTable}."appointmentDate" > '${startCurrentUnivYear()}'
-        AND ${appointmentsTable}."appointmentDate" < '${endCurrentUnivYear()}'
-        THEN ${appointmentsTable}.id 
-        END
-      ) as "appointmentsYearCount"`),
-    )
-      .from(patientsTable)
-      .joinRaw(`left join "${appointmentsTable}" on `
-        + `"${patientsTable}"."id" = "${appointmentsTable}"."patientId" and "${appointmentsTable}"."deleted" = false`)
-      .where(`${patientsTable}.psychologistId`, psychologistId)
-      .andWhere(`${patientsTable}.deleted`, false)
-      .count(`${appointmentsTable}.*`, { as: 'appointmentsCount' })
-      .groupBy(`${patientsTable}.id`)
-      .orderByRaw(`LOWER("${patientsTable}"."lastName"), LOWER("${patientsTable}"."firstNames")`);
-    return patientArray;
+    // Get all patients of psychologist
+    const patients = await db.select('*')
+        .from(patientsTable)
+        .where('psychologistId', psychologistId)
+        .andWhere('deleted', false);
+
+    // Count the appointments taking in acount each patients sharing the same INE
+    const patientsDataPromises = patients.map(async (patient) => {
+      const appointmentsCountQuery = db.countDistinct('id')
+          .from(appointmentsTable)
+          .whereIn('patientId', function () {
+            this.select('id')
+              .from(patientsTable)
+              .where('INE', patient.INE)
+              .andWhere('deleted', false);
+          });
+
+      const appointmentsYearCountQuery = db.countDistinct('id')
+          .from(appointmentsTable)
+          .whereIn('patientId', function () {
+            this.select('id')
+              .from(patientsTable)
+              .where('INE', patient.INE)
+              .andWhere('deleted', false)
+              .andWhereRaw(`"appointmentDate" > '${startCurrentUnivYear()}'`)
+              .andWhereRaw(`"appointmentDate" < '${endCurrentUnivYear()}'`);
+          });
+
+      const [appointmentsCountResult, appointmentsYearCountResult] = await Promise.all([
+        appointmentsCountQuery.first(),
+        appointmentsYearCountQuery.first(),
+      ]);
+
+      return {
+        ...patient,
+        appointmentsCount: appointmentsCountResult ? appointmentsCountResult.count : '0',
+        appointmentsYearCount: appointmentsYearCountResult ? appointmentsYearCountResult.count : '0',
+      };
+    });
+
+    const patientsData = await Promise.all(patientsDataPromises);
+
+    return patientsData;
   } catch (err) {
     console.error('Impossible de récupérer les patients', err);
     throw new Error('Impossible de récupérer les patients');

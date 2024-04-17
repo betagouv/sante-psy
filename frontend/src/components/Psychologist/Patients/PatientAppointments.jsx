@@ -72,7 +72,7 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
       className={styles.tableAppointments}
     />
   );
-  
+
   const columns = [
     {
       name: 'number',
@@ -108,46 +108,46 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
   ];
 
   return (
-<div  data-test-id="etudiant-seances-list">
-  {dataWithIndex.length > 0 ? (
-    <>
-      {isSmallScreen && showCreateButton && (
-        <Button
-          className={styles.smallCreateButton}
-          icon="ri-add-line"
-          size="sm"
-          onClick={() => navigate('/psychologue/nouvelle-seance')}
+    <div data-test-id="etudiant-seances-list">
+      {dataWithIndex.length > 0 ? (
+        <>
+          {isSmallScreen && showCreateButton && (
+          <Button
+            className={styles.smallCreateButton}
+            icon="ri-add-line"
+            size="sm"
+            onClick={() => navigate('/psychologue/nouvelle-seance')}
         >
-          Déclarer une séance
-        </Button>
-      )}
-      <h3 className={styles.title}>Séances</h3>
-      <div className={!isSmallScreen ? styles.tabsContainer : ''}>
-        <Tabs
-          onChange={handleTabChange}
-          className={styles.tabs}
+            Déclarer une séance
+          </Button>
+          )}
+          <h3 className={styles.title}>Séances</h3>
+          <div className={!isSmallScreen ? styles.tabsContainer : ''}>
+            <Tabs
+              onChange={handleTabChange}
+              className={styles.tabs}
         >
-          {univYears.map(univYear => (
-            <Tab
-              key={univYear}
-              id={univYear}
-              label={univYear}
-              isActive={selectedYear === univYear}
-              className={styles.tabYear}
+              {univYears.map(univYear => (
+                <Tab
+                  key={univYear}
+                  id={univYear}
+                  label={univYear}
+                  isActive={selectedYear === univYear}
+                  className={styles.tabYear}
             />
-          ))}
-        </Tabs>
-        {!isSmallScreen && showCreateButton && renderDeclareSessionButton()}
-      </div>
-      {selectedYear && renderTable()}
-    </>
-  ) : (
-    <div className={styles.noAppointmentsWrapper}>
-      <h3 className={styles.noAppointmentsTitle}>Pas de séances déclarées</h3>
-      {showCreateButton && renderDeclareSessionButton()}
+              ))}
+            </Tabs>
+            {!isSmallScreen && showCreateButton && renderDeclareSessionButton()}
+          </div>
+          {selectedYear && renderTable()}
+        </>
+      ) : (
+        <div className={styles.noAppointmentsWrapper}>
+          <h3 className={styles.noAppointmentsTitle}>Pas de séances déclarées</h3>
+          {showCreateButton && renderDeclareSessionButton()}
+        </div>
+      )}
     </div>
-  )}
-</div>
   );
 };
 

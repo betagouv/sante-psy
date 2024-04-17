@@ -10,17 +10,63 @@ type OrderByColumn = {
   order?: 'asc' | 'desc';
 };
 
+const compareAppointments = (a, b): number => {
+  // Comparer les INE
+  if (a.INE < b.INE) return -1;
+  if (a.INE > b.INE) return 1;
+
+  // Si les INE sont les mêmes, comparer les dates de rendez-vous
+  if (a.appointmentDate < b.appointmentDate) return -1;
+  if (a.appointmentDate > b.appointmentDate) return 1;
+
+  return 0;
+};
+
+const getRelatedINEAppointments = async (
+  appointments: AppointmentWithPatient[],
+  period?: { startDate: Date, endDate: Date },
+): Promise<AppointmentWithPatient[]> => {
+  try {
+    const INEList = appointments.map((appointment) => appointment.INE);
+    const existingAppointmentIds = new Set(appointments.map((appointment) => appointment.id));
+
+    let query = db.from(patientsTable)
+      .innerJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
+      .whereIn(`${patientsTable}.INE`, INEList)
+      .whereNot(`${appointmentsTable}.deleted`, true)
+      .whereNotIn(`${appointmentsTable}.id`, Array.from(existingAppointmentIds));
+
+    // Ajout de la condition relative à la période si period est défini
+    if (period) {
+      query = query.whereRaw(
+        `${appointmentsTable}."appointmentDate" BETWEEN ? AND ?`,
+        [period.startDate, period.endDate],
+      );
+    }
+
+    const relatedAppointments = await query;
+
+    appointments.push(...relatedAppointments);
+    appointments.sort(compareAppointments);
+
+    return appointments;
+  } catch (err) {
+    console.error('Impossible de récupérer les rendez-vous avec les patients', err);
+    throw new Error('Impossible de récupérer les rendez-vous avec les patients');
+  }
+};
+
 const getAll = async (
+  psychologistId: string,
   period?: { startDate: Date, endDate: Date },
   orderBy: OrderByColumn[] = [],
-):
-Promise<AppointmentWithPatient[]> => {
+): Promise<AppointmentWithPatient[]> => {
   try {
     const query = db.from(patientsTable)
-      .innerJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
-      .whereNot(`${appointmentsTable}.deleted`, true);
+    .innerJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
+    .where(`${appointmentsTable}.psychologistId`, psychologistId)
+    .whereNot(`${appointmentsTable}.deleted`, true);
 
-    // Get from specific period
     if (period) {
       query.whereRaw(
         `${appointmentsTable}."appointmentDate" BETWEEN ? AND ?`,
@@ -28,32 +74,16 @@ Promise<AppointmentWithPatient[]> => {
       );
     }
 
-    // Add univYear to results
-    query.select(
-      db.raw(`
-        CASE 
-            WHEN EXTRACT(MONTH FROM ${appointmentsTable}."appointmentDate") < 9 
-            THEN CONCAT(EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate") - 1, 
-            '-', EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate"))
-            ELSE CONCAT(EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate"), 
-            '-', EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate") + 1)
-        END AS "univYear",
-        ${patientsTable}.*,
-        ${appointmentsTable}.*
-      `),
-    );
-
-    // Order
     orderBy.forEach((order) => {
       query.orderBy(order.column, order.order || 'asc');
     });
 
-    const appointmentArray = await query;
+    const appointments = await query;
 
-    return appointmentArray;
+    return appointments;
   } catch (err) {
-    console.error('Impossible de récupérer les appointments', err);
-    throw new Error('Impossible de récupérer les appointments');
+    console.error('Impossible de récupérer les rendez-vous avec les patients', err);
+    throw new Error('Impossible de récupérer les rendez-vous avec les patients');
   }
 };
 
@@ -65,7 +95,14 @@ Promise<AppointmentWithPatient[]> => {
   try {
     const query = db.from(patientsTable)
       .leftJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
-      .where(`${appointmentsTable}.patientId`, patientId)
+      .where(function () {
+        this.where(`${appointmentsTable}.patientId`, patientId)
+          .orWhere(`${patientsTable}.INE`, function () {
+            this.select('INE')
+              .from(patientsTable)
+              .where('id', patientId);
+          });
+      })
       .whereNot(`${appointmentsTable}.deleted`, true);
 
     // Add univYear to results
@@ -144,6 +181,7 @@ const countByPatient = async (patientId: string): Promise<Registry[]> => {
 
 export default {
   countByPatient,
+  getRelatedINEAppointments,
   getAll,
   getByPatientId,
   insert,

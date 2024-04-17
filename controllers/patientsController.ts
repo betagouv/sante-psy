@@ -169,11 +169,12 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
   const { patientId } = req.params;
   const psychologistId = req.auth.psychologist;
   const patient = await dbPatients.getById(patientId, psychologistId);
-  const patientWithBadges = getPatientWithBadges([patient])[0];
 
   if (!patient) {
     throw new CustomError('Ce patient n\'existe pas. Vous ne pouvez pas le modifier.', 404);
   }
+
+  const patientWithBadges = getPatientWithBadges([patient])[0];
 
   console.debug(`Rendering getEditPatient for ${patientId}`);
   res.json(patientWithBadges);

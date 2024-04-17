@@ -440,24 +440,6 @@ describe('appointmentsController', () => {
     );
   }
 
-  async function updatePatientInfoInDb(patient1: Patient, psy: Psychologist) {
-    return dbPatients.update(
-      patient1.id,
-      patient1.firstNames,
-      patient1.lastName,
-      patient1.INE,
-      patient1.institutionName,
-      patient1.isStudentStatusVerified,
-      patient1.hasPrescription,
-      psy.dossierNumber,
-      patient1.doctorName,
-      patient1.doctorAddress,
-      patient1.doctorEmail,
-      patient1.dateOfBirth,
-      patient1.dateOfPrescription,
-    );
-  }
-
   describe('get appointments with badges', () => {
     let psy: Psychologist;
     before(async () => {

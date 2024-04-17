@@ -89,7 +89,7 @@ describe('Appointments', () => {
     });
   });
 
-  describe.only('New', () => {
+  describe('New', () => {
     it('should create a new appointments', () => {
       cy.get('[data-test-id="new-appointment-button"]').click();
 
@@ -102,7 +102,7 @@ describe('Appointments', () => {
       cy.get('[data-test-id="new-appointment-etudiant-input"] div div')
         .eq(2)
         .click();
-      
+
       cy.get('[data-test-id="etudiant-seances-list"] tr')
         .should('have.length', 41);
       cy.get('[data-test-id="etudiant-badges"]').should('exist');

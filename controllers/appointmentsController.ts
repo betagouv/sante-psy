@@ -88,23 +88,24 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
   let selectedPeriod = null;
   if (year && month) {
     // get date range from september to selected month
-    const SEPTEMBER = 8;
-    const DECEMBER = 11;
+    const SEPTEMBER = 9;
+    const DECEMBER = 12;
 
     const selectedYear = parseInt(year.toString());
     const selectedMonth = parseInt(month.toString());
     const startYear = (selectedMonth >= SEPTEMBER && selectedMonth <= DECEMBER) ? selectedYear : selectedYear - 1;
-
     const startDate = dateUtils.getUTCDate(new Date(startYear, 8));
     const endDate = dateUtils.getUTCDate(new Date(selectedYear, selectedMonth));
 
     dateRange = { startDate, endDate };
     selectedPeriod = { year: selectedYear, month: selectedMonth };
   }
-  const appointments = await dbAppointments.getAll(
+  const psychologistaAppointments = await dbAppointments.getAll(
+    psychologistId,
     dateRange,
     [{ column: 'patientId' }, { column: 'appointmentDate' }],
   );
+  const appointments = await dbAppointments.getRelatedINEAppointments(psychologistaAppointments, dateRange);
 
   const appointmentsWithBadges = getAppointmentWithBadges(
     appointments,

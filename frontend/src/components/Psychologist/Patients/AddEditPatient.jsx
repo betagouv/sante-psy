@@ -48,7 +48,7 @@ const AddEditPatient = () => {
         institutionName: '',
         isStudentStatusVerified: false,
         lastName: '',
-        badges: []
+        badges: [],
       });
     }
   }, [patientId]);
