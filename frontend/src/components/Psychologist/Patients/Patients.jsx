@@ -143,7 +143,7 @@ const Patients = () => {
     {
       name: 'status',
       label: (
-        <div>
+        <div className={styles.informationColumn}>
           Information
           {' '}
           <Select
@@ -170,15 +170,18 @@ const Patients = () => {
       name: 'appointments-list-button',
       label: 'Liste des séances',
       render: patient => (
-        <Button
-          data-test-id="seances-etudiant-button"
-          onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
-          secondary
-          size="sm"
-          icon="ri-list-unordered"
-          aria-label="Liste des séances"
-          title="Liste des séances"
-      />
+        <div className={styles.clickableElement}>
+          <span className={styles.tooltip}>Liste des séances</span>
+          <Button
+            data-test-id="seances-etudiant-button"
+            onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
+            secondary
+            size="sm"
+            icon="ri-list-unordered"
+            aria-label="Liste des séances"
+            title="Liste des séances"
+          />
+        </div>
       ),
     },
     {

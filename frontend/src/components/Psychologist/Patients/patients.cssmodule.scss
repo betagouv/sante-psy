@@ -62,5 +62,22 @@
 
     select {
         box-shadow: none;
+        width: 30%;
+    }
+}
+
+.informationColumn {
+    width: 300px;
+}
+
+@media (max-width: 768px) {
+    .informationColumn {
+        width: 100%;
+    }
+
+    .filter {
+        select {
+            width: 100%;
+        }
     }
 }
