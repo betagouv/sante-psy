@@ -26,6 +26,11 @@ const StudentEligibility = () => {
   const submit = e => {
     e.preventDefault();
     setIsLoading(true);
+
+    if (__MATOMO__) {
+      _paq.push(['trackEvent', 'Student', 'checkEligibility']);
+    }
+
     agent.Eligibility.get({ ine: INE })
       .then(response => {
         setIsEligible(response);
