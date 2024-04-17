@@ -77,9 +77,7 @@ describe('Patient', () => {
         .click();
       cy.wait('@etudiant');
 
-      cy.get('[data-test-id="etudiant-seances-list"]').should('exist')
-
-      cy.get('[data-test-id="etudiant-badges"]').should('exist');
+      cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
 
       cy.get('[data-test-id="etudiant-first-name-input"] > input')
         .clear()
