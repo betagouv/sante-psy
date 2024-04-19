@@ -46,6 +46,13 @@ const StudentEligibility = () => {
       });
   };
 
+  const handleNextStep = () => {
+    if (__MATOMO__) {
+      _paq.push(['trackEvent', 'Student', 'nextStepEligibility']);
+    }
+    navigate('/#anchor-prescription-letter');
+  }
+
   const onChange = ine => {
     setError(false);
     setErrorMessage('');
@@ -173,7 +180,7 @@ const StudentEligibility = () => {
               </p>
               <Button
                 disabled={isLoading}
-                onClick={() => navigate('/#anchor-prescription-letter')}
+                onClick={handleNextStep}
               >
                 Étape suivante
                 <Icon name="ri-arrow-right-s-fill" />
