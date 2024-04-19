@@ -51,7 +51,7 @@ const StudentEligibility = () => {
       _paq.push(['trackEvent', 'Student', 'nextStepEligibility']);
     }
     navigate('/#anchor-prescription-letter');
-  }
+  };
 
   const onChange = ine => {
     setError(false);
