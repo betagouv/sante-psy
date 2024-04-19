@@ -23,7 +23,6 @@ const getOneAppointmentPerMonth = (patient: { id: string, psychologistId: string
 // eslint-disable-next-line import/prefer-default-export
 export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
   const patientsByPsychologist = getPatientsByPsychologist();
-  console.log('patientsByPsychologist : ', patientsByPsychologist);
   const patientList = Object.keys(patientsByPsychologist)
     .flatMap((psychologist) => {
       const dossierNumber = uuid.generateFromString(`psychologist-${psychologist}`);
@@ -32,7 +31,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
         psychologistId: dossierNumber,
       }));
     });
-  console.log('patientList : ', patientList[7]);
+
   let appointmentList;
   if (fixedValues) {
     appointmentList = [];

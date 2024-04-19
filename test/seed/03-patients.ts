@@ -27,7 +27,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
         firstNames: 'SharedPatient2',
         INE: '280324352792',
         index: [0, 1],
-      }
+      },
     ];
     patientList = mails
       .filter((mail) => mail !== 'empty@beta.gouv.fr')
