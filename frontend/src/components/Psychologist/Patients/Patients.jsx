@@ -168,7 +168,7 @@ const Patients = () => {
         colorFamily="blue-cumulus"
       >
         <CalloutTitle>
-          Bienvenue sur votre nouveau tableau de suivi étudiants
+          Bienvenue sur votre nouveau tableau de suivi des étudiants
         </CalloutTitle>
         <CalloutText size="md">
           Si les alertes apparaissent pour d’anciens étudiants, nous admettons que vous ne pouvez pas tout remplir à nouveau.
