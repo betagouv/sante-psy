@@ -26,6 +26,11 @@ const StudentEligibility = () => {
   const submit = e => {
     e.preventDefault();
     setIsLoading(true);
+
+    if (__MATOMO__) {
+      _paq.push(['trackEvent', 'Student', 'checkEligibility']);
+    }
+
     agent.Eligibility.get({ ine: INE })
       .then(response => {
         setIsEligible(response);
@@ -39,6 +44,13 @@ const StudentEligibility = () => {
         }
         setIsLoading(false);
       });
+  };
+
+  const handleNextStep = () => {
+    if (__MATOMO__) {
+      _paq.push(['trackEvent', 'Student', 'nextStepEligibility']);
+    }
+    navigate('/#anchor-prescription-letter');
   };
 
   const onChange = ine => {
@@ -168,7 +180,7 @@ const StudentEligibility = () => {
               </p>
               <Button
                 disabled={isLoading}
-                onClick={() => navigate('/#anchor-prescription-letter')}
+                onClick={handleNextStep}
               >
                 Étape suivante
                 <Icon name="ri-arrow-right-s-fill" />
