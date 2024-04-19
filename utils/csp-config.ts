@@ -48,6 +48,7 @@ export default helmet.contentSecurityPolicy({
       'https://client.crisp.chat',
       'https://storage.crisp.chat',
       'wss://stream.relay.crisp.chat',
+      'https://cdn.jsdelivr.net',
     ],
   },
 });
