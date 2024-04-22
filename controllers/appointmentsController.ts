@@ -126,6 +126,7 @@ const getByPatientId = async (req: Request, res: Response): Promise<void> => {
 
   const appointments = await dbAppointments.getByPatientId(
     patientId,
+    true,
     [{ column: 'appointmentDate' }],
   );
   const appointmentsWithBadges = getAppointmentWithBadges(

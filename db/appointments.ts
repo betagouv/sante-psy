@@ -103,21 +103,27 @@ const getAll = async (
 
 const getByPatientId = async (
   patientId: string,
+  relatedINEAppointments = false,
   orderBy: OrderByColumn[] = [],
 ):
 Promise<AppointmentWithPatient[]> => {
   try {
     const query = db.from(patientsTable)
       .leftJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
-      .where(function () {
+      .whereNot(`${appointmentsTable}.deleted`, true);
+
+    if (relatedINEAppointments) {
+      query.where(function () {
         this.where(`${appointmentsTable}.patientId`, patientId)
           .orWhere(`${patientsTable}.INE`, function () {
             this.select('INE')
               .from(patientsTable)
               .where('id', patientId);
           });
-      })
-      .whereNot(`${appointmentsTable}.deleted`, true);
+      });
+    } else {
+      query.where(`${appointmentsTable}.patientId`, patientId);
+    }
 
     // Add univYear to results
     query.select(

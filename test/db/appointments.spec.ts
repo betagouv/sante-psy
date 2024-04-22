@@ -146,4 +146,91 @@ describe('DB Appointments', () => {
       assert.equal(count[0].count, 0);
     });
   });
+
+  describe('getByPatientId', () => {
+    it('should get all non deleted appointments of a patient', async () => {
+      const psy = await create.insertOnePsy();
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const patient2 = create.getOnePatient(1, { psychologistId: psy.dossierNumber });
+      const patientWithAppointments = await insertPatientToDb(patient1, psy);
+      const otherPatient = await insertPatientToDb(patient2, psy);
+      const toDelete = await dbAppointments.insert(
+        new Date('2021-03-01'),
+        patientWithAppointments.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(new Date('2021-03-01'), patientWithAppointments.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2021-03-01'), patientWithAppointments.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2021-03-01'), patientWithAppointments.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2021-03-01'), otherPatient.id, psy.dossierNumber);
+
+      await dbAppointments.delete(toDelete.id, psy.dossierNumber);
+
+      const appointments = await dbAppointments.getByPatientId(patientWithAppointments.id);
+      assert.equal(appointments.length, 3);
+    });
+
+    it('should get all non deleted appointments of a patient with same INE related appointments', async () => {
+      const psy = await create.insertOnePsy();
+      const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@beta.gouv.fr' });
+      const patient = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const patientWithAppointments = await insertPatientToDb(patient, psy);
+      const sharedINEPatient = create.getOnePatient(1, {
+        lastName: patientWithAppointments.lastName,
+        firstNames: patientWithAppointments.firstNames,
+        INE: patientWithAppointments.INE,
+        psychologistId: anotherPsy.dossierNumber,
+      });
+      const patientWithSameINE = await insertPatientToDb(sharedINEPatient, anotherPsy);
+      const toDelete = await dbAppointments.insert(
+        new Date('2021-03-01'),
+        patientWithAppointments.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(new Date('2021-03-01'), patientWithAppointments.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2021-03-01'), patientWithAppointments.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2021-03-01'), patientWithSameINE.id, anotherPsy.dossierNumber);
+      await dbAppointments.insert(new Date('2021-03-01'), patientWithSameINE.id, anotherPsy.dossierNumber);
+
+      await dbAppointments.delete(toDelete.id, psy.dossierNumber);
+
+      const appointments = await dbAppointments.getByPatientId(patientWithAppointments.id, true);
+      assert.equal(appointments.length, 4);
+    });
+  });
+
+  describe('getRelatedINEAppointments', () => {
+    it(
+      'should get all non deleted psychologist appointments with INE related appointments for each patients',
+      async () => {
+        const psy = await create.insertOnePsy();
+        const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@beta.gouv.fr' });
+        const patient = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+        const patientWithAppointments = await insertPatientToDb(patient, psy);
+        const sharedINEPatient = create.getOnePatient(1, {
+          lastName: patientWithAppointments.lastName,
+          firstNames: patientWithAppointments.firstNames,
+          INE: patientWithAppointments.INE,
+          psychologistId: anotherPsy.dossierNumber,
+        });
+        const patientWithSameINE = await insertPatientToDb(sharedINEPatient, anotherPsy);
+        const toDelete = await dbAppointments.insert(
+          new Date('2021-03-01'),
+          patientWithAppointments.id,
+          psy.dossierNumber,
+        );
+        await dbAppointments.insert(new Date('2021-03-01'), patientWithAppointments.id, psy.dossierNumber);
+        await dbAppointments.insert(new Date('2021-03-01'), patientWithAppointments.id, psy.dossierNumber);
+        await dbAppointments.insert(new Date('2021-03-01'), patientWithSameINE.id, anotherPsy.dossierNumber);
+        await dbAppointments.insert(new Date('2021-03-01'), patientWithSameINE.id, anotherPsy.dossierNumber);
+
+        await dbAppointments.delete(toDelete.id, psy.dossierNumber);
+
+        const appointments = await dbAppointments.getAll(psy.dossierNumber);
+        assert.equal(appointments.length, 2);
+        const appointementsWithRelated = await dbAppointments.getRelatedINEAppointments(appointments);
+        assert.equal(appointementsWithRelated.length, 4);
+      },
+    );
+  });
 });
