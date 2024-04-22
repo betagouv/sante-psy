@@ -113,7 +113,7 @@ const Patients = () => {
         </div>
       ),
       render: patient => (
-        <div className={styles.clickableElement} onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}>
+        <div className={styles.clickableElement} onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`)}>
           <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
           {patient.lastName.toUpperCase()}
           {' '}
