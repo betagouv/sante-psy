@@ -7,9 +7,9 @@ import agent from 'services/agent';
 
 import { renderBadge } from 'components/Badges/Badges';
 import getBadgeInfos from 'src/utils/badges';
+import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
 import styles from './addEditPatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
-import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
@@ -84,151 +84,149 @@ const AddEditPatient = () => {
 
   return (
     <div className="fr-my-2w">
-      <ScrollToTop loading={!!patient}/>
+      <ScrollToTop loading={!!patient} />
       {patient && (
-        <>
-          <form onSubmit={save}>
-            <div id="mandatory-informations">
-              <section id="anchor-student-file" className={styles.studentSectionTitle}>
-                <h2>Dossier étudiant</h2>
-                {patient.badges.includes(badges.student_infos.key)
-                  ? renderBadge({ badge: badges.student_infos.key })
-                  : ''}
-              </section>
-              <p className="fr-text--sm fr-mb-1v">
-                Les champs avec une astérisque (
-                <span className="red-text">*</span>
-                )
-                sont obligatoires.
-              </p>
-              <p className="fr-text--sm fr-mb-1v">
-                S&lsquo;il vous manque des champs non-obligatoires, vous pourrez y
-                revenir plus tard pour compléter le dossier.
-              </p>
-              <TextInput
-                className="midlength-input fr-mt-3w"
-                data-test-id="etudiant-first-name-input"
-                label="Prénoms"
-                value={patient.firstNames}
-                onChange={e => changePatient(e.target.value, 'firstNames')}
-                required
+        <form onSubmit={save}>
+          <div id="mandatory-informations">
+            <section id="anchor-student-file" className={styles.studentSectionTitle}>
+              <h2>Dossier étudiant</h2>
+              {patient.badges.includes(badges.student_infos.key)
+                ? renderBadge({ badge: badges.student_infos.key })
+                : ''}
+            </section>
+            <p className="fr-text--sm fr-mb-1v">
+              Les champs avec une astérisque (
+              <span className="red-text">*</span>
+              )
+              sont obligatoires.
+            </p>
+            <p className="fr-text--sm fr-mb-1v">
+              S&lsquo;il vous manque des champs non-obligatoires, vous pourrez y
+              revenir plus tard pour compléter le dossier.
+            </p>
+            <TextInput
+              className="midlength-input fr-mt-3w"
+              data-test-id="etudiant-first-name-input"
+              label="Prénoms"
+              value={patient.firstNames}
+              onChange={e => changePatient(e.target.value, 'firstNames')}
+              required
               />
-              <TextInput
-                className="midlength-input"
-                data-test-id="etudiant-last-name-input"
-                label="Nom"
-                value={patient.lastName}
-                onChange={e => changePatient(e.target.value, 'lastName')}
-                required
+            <TextInput
+              className="midlength-input"
+              data-test-id="etudiant-last-name-input"
+              label="Nom"
+              value={patient.lastName}
+              onChange={e => changePatient(e.target.value, 'lastName')}
+              required
               />
-              <TextInput
-                className="midlength-input"
-                data-test-id="etudiant-birth-date-input"
-                label="Date de naissance"
-                hint="Format JJ/MM/AAAA, par exemple : 25/01/1987"
-                value={patient.dateOfBirth}
-                type="text"
-                onChange={e => changePatient(e.target.value, 'dateOfBirth')}
-                pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
-                placeholder="JJ/MM/AAAA"
-                required={!patientId}
+            <TextInput
+              className="midlength-input"
+              data-test-id="etudiant-birth-date-input"
+              label="Date de naissance"
+              hint="Format JJ/MM/AAAA, par exemple : 25/01/1987"
+              value={patient.dateOfBirth}
+              type="text"
+              onChange={e => changePatient(e.target.value, 'dateOfBirth')}
+              pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
+              placeholder="JJ/MM/AAAA"
+              required={!patientId}
               />
+          </div>
+          <br />
+          <div id="other-informations">
+            <TextInput
+              className="midlength-input"
+              data-test-id="etudiant-school-input"
+              label="Établissement scolaire de l'étudiant"
+              hint="Exemple : Université de Rennes ou ENSAE"
+              value={patient.institutionName}
+              onChange={e => changePatient(e.target.value, 'institutionName')}
+              />
+            <TextInput
+              className="midlength-input"
+              data-test-id="etudiant-ine-input"
+              label="Numéro INE de l'étudiant (optionnel)"
+              hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
+              value={patient.INE}
+              pattern="^[a-zA-Z0-9]{1,11}$"
+              onChange={e => changePatient(e.target.value, 'INE')}
+              />
+            <Checkbox
+              className="fr-input-group"
+              data-test-id="etudiant-status-input"
+              defaultChecked={patient.isStudentStatusVerified}
+              label="J'ai bien vérifié le statut étudiant"
+              hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
+              value="isStudentStatusVerified"
+              onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
+              />
+            <div id="anchor-student-list" className={styles.patientAppointments}>
+              <PatientAppointments patientId={patientId} />
             </div>
-            <br />
-            <div id="other-informations">
-              <TextInput
-                className="midlength-input"
-                data-test-id="etudiant-school-input"
-                label="Établissement scolaire de l'étudiant"
-                hint="Exemple : Université de Rennes ou ENSAE"
-                value={patient.institutionName}
-                onChange={e => changePatient(e.target.value, 'institutionName')}
-              />
-              <TextInput
-                className="midlength-input"
-                data-test-id="etudiant-ine-input"
-                label="Numéro INE de l'étudiant (optionnel)"
-                hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
-                value={patient.INE}
-                pattern="^[a-zA-Z0-9]{1,11}$"
-                onChange={e => changePatient(e.target.value, 'INE')}
-              />
-              <Checkbox
-                className="fr-input-group"
-                data-test-id="etudiant-status-input"
-                defaultChecked={patient.isStudentStatusVerified}
-                label="J'ai bien vérifié le statut étudiant"
-                hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
-                value="isStudentStatusVerified"
-                onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
-              />
-              <div id="anchor-student-list" className={styles.patientAppointments}>
-                <PatientAppointments patientId={patientId} />
-              </div>
-              <section className={styles.studentSectionTitle}>
-                <h2>Lettre d&apos;orientation</h2>
-                {patient.badges.includes(badges.prescription_infos.key)
-                  ? renderBadge({ badge: badges.prescription_infos.key })
-                  : ''}
-              </section>
-              <Checkbox
-                className="fr-input-group"
-                data-test-id="etudiant-letter-input"
-                defaultChecked={patient.hasPrescription}
-                label={`J'ai vérifié que les séances ont bien été orientées
+            <section className={styles.studentSectionTitle}>
+              <h2>Lettre d&apos;orientation</h2>
+              {patient.badges.includes(badges.prescription_infos.key)
+                ? renderBadge({ badge: badges.prescription_infos.key })
+                : ''}
+            </section>
+            <Checkbox
+              className="fr-input-group"
+              data-test-id="etudiant-letter-input"
+              defaultChecked={patient.hasPrescription}
+              label={`J'ai vérifié que les séances ont bien été orientées
                 par un médecin`}
-                hint="L’étudiant m’a bien présenté la lettre d’orientation rédigée par son médecin, pour l’année en cours"
-                value="hasPrescription"
-                onChange={e => changePatient(e.target.checked, 'hasPrescription')}
+              hint="L’étudiant m’a bien présenté la lettre d’orientation rédigée par son médecin, pour l’année en cours"
+              value="hasPrescription"
+              onChange={e => changePatient(e.target.checked, 'hasPrescription')}
               />
-              <TextInput
-                className="midlength-input"
-                data-test-id="etudiant-doctor-name-input"
-                label="Nom, prénom du médecin"
-                hint="Exemple : Annie Benahmou"
-                value={patient.doctorName}
-                onChange={e => changePatient(e.target.value, 'doctorName')}
+            <TextInput
+              className="midlength-input"
+              data-test-id="etudiant-doctor-name-input"
+              label="Nom, prénom du médecin"
+              hint="Exemple : Annie Benahmou"
+              value={patient.doctorName}
+              onChange={e => changePatient(e.target.value, 'doctorName')}
               />
-              <TextInput
-                className="midlength-input"
-                data-test-id="etudiant-doctor-location-input"
-                label="Ville / code postal du médecin"
-                hint="Exemple : 97400 Saint-Denis"
-                value={patient.doctorAddress}
-                onChange={e => changePatient(e.target.value, 'doctorAddress')}
+            <TextInput
+              className="midlength-input"
+              data-test-id="etudiant-doctor-location-input"
+              label="Ville / code postal du médecin"
+              hint="Exemple : 97400 Saint-Denis"
+              value={patient.doctorAddress}
+              onChange={e => changePatient(e.target.value, 'doctorAddress')}
               />
-              <TextInput
-                className="midlength-input"
-                data-test-id="etudiant-doctor-email-input"
-                label="Email du médecin (optionnel)"
-                hint="Il servira si vous souhaitez participer au suivi de l’étudiant par le médecin"
-                value={patient.doctorEmail}
-                onChange={e => changePatient(e.target.value, 'doctorEmail')}
+            <TextInput
+              className="midlength-input"
+              data-test-id="etudiant-doctor-email-input"
+              label="Email du médecin (optionnel)"
+              hint="Il servira si vous souhaitez participer au suivi de l’étudiant par le médecin"
+              value={patient.doctorEmail}
+              onChange={e => changePatient(e.target.value, 'doctorEmail')}
               />
-              <TextInput
-                className="midlength-input"
-                data-test-id="etudiant-prescription-date-input"
-                label={"Date de la lettre d'orientation (optionnel)"}
-                hint="Format JJ/MM/AAAA, par exemple : 01/01/2024"
-                value={patient.dateOfPrescription}
-                type="text"
-                onChange={e => changePatient(e.target.value, 'dateOfPrescription')}
-                pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
-                placeholder="JJ/MM/AAAA"
+            <TextInput
+              className="midlength-input"
+              data-test-id="etudiant-prescription-date-input"
+              label={"Date de la lettre d'orientation (optionnel)"}
+              hint="Format JJ/MM/AAAA, par exemple : 01/01/2024"
+              value={patient.dateOfPrescription}
+              type="text"
+              onChange={e => changePatient(e.target.value, 'dateOfPrescription')}
+              pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
+              placeholder="JJ/MM/AAAA"
               />
-            </div>
-            <div className="fr-my-5w">
-              <Button
-                submit
-                id="save-etudiant-button"
-                data-test-id="save-etudiant-button"
-                icon={button.icon}
+          </div>
+          <div className="fr-my-5w">
+            <Button
+              submit
+              id="save-etudiant-button"
+              data-test-id="save-etudiant-button"
+              icon={button.icon}
               >
-                {button.text}
-              </Button>
-            </div>
-          </form>
-        </>
+              {button.text}
+            </Button>
+          </div>
+        </form>
       )}
     </div>
   );
