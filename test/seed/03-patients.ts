@@ -97,7 +97,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
           };
 
           if (sharedPatients.length > 0) {
-            if (random % 10 === 0) {
+            if (random % 15 === 0) {
               const randomIndex = Math.floor(Math.random() * sharedPatients.length);
               patientData.INE = sharedPatients[randomIndex].INE;
               patientData.firstNames = sharedPatients[randomIndex].firstNames;
@@ -114,7 +114,10 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
           }
 
           patients.push(create.getOnePatient(i, patientData));
-          selectedPatients.push(patients[patients.length - 1]);
+
+          if (sharedPatients.length === 0) {
+            selectedPatients.push(patients[patients.length - 1]);
+          }
         }
         if (sharedPatients.length === 0) {
           const numberOfSelectedPatients = Math.floor(Math.random() * selectedPatients.length) + 1;

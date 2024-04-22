@@ -174,7 +174,7 @@ const Patients = () => {
           <span className={styles.tooltip}>Liste des séances</span>
           <Button
             data-test-id="seances-etudiant-button"
-            onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
+            onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}/#anchor-student-list`)}
             secondary
             size="sm"
             icon="ri-list-unordered"

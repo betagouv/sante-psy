@@ -7,9 +7,9 @@ import agent from 'services/agent';
 
 import { renderBadge } from 'components/Badges/Badges';
 import getBadgeInfos from 'src/utils/badges';
-import classNames from 'classnames';
 import styles from './addEditPatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
+import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
@@ -84,18 +84,9 @@ const AddEditPatient = () => {
 
   return (
     <div className="fr-my-2w">
+      <ScrollToTop loading={!!patient}/>
       {patient && (
         <>
-          <section>
-            <h2 className={styles.listTitle}>{`${patient.firstNames} ${patient.lastName}`}</h2>
-            <p className={classNames(styles.listSubTitle, 'fr-text--sm fr-mb-1v')}>
-              Suivi de l&apos;étudiant
-            </p>
-            <div className={styles.patientAppointments}>
-              <PatientAppointments patientId={patientId} />
-            </div>
-          </section>
-
           <form onSubmit={save}>
             <div id="mandatory-informations">
               <section id="anchor-student-file" className={styles.studentSectionTitle}>
@@ -171,6 +162,9 @@ const AddEditPatient = () => {
                 value="isStudentStatusVerified"
                 onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
               />
+              <div id="anchor-student-list" className={styles.patientAppointments}>
+                <PatientAppointments patientId={patientId} />
+              </div>
               <section className={styles.studentSectionTitle}>
                 <h2>Lettre d&apos;orientation</h2>
                 {patient.badges.includes(badges.prescription_infos.key)
