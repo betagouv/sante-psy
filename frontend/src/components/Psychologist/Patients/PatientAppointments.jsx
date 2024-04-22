@@ -6,6 +6,7 @@ import { useStore } from 'stores/';
 import Badges from 'components/Badges/Badges';
 import useScreenSize from 'src/utils/useScreenSize';
 import { useNavigate } from 'react-router-dom';
+import { currentUnivYear } from 'services/date';
 import styles from './patientAppointments.cssmodule.scss';
 
 const PatientAppointments = ({ showCreateButton = true, patientId }) => {
@@ -13,18 +14,19 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
   const [patientAppointments, setPatientAppointments] = useState({});
   const [dataWithIndex, setDataWithIndex] = useState([]);
   const [univYears, setUnivYears] = useState([]);
-  const [selectedYear, setSelectedYear] = useState(univYears[0]);
+
   const isSmallScreen = useScreenSize();
   const navigate = useNavigate();
+
+  const currentYear = currentUnivYear('-');
+  const [selectedYear, setSelectedYear] = useState(currentYear);
 
   useEffect(() => {
     if (patientId) {
       agent.Appointment.getByPatientId(patientId)
         .then(response => {
-          const years = Object.keys(response).reverse();
           setPatientAppointments(response);
           setUnivYears(Object.keys(response).reverse());
-          setSelectedYear(years[0]);
         });
     }
   }, [patientId]);
@@ -123,17 +125,19 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
           <h3 className={styles.title}>Séances</h3>
           <div className={!isSmallScreen ? styles.tabsContainer : ''}>
             <Tabs
+              defaultActiveTab={univYears.indexOf(selectedYear)}
               onChange={handleTabChange}
               className={styles.tabs}
         >
-              {univYears.map(univYear => (
+              {univYears.map((univYear, index) => (
                 <Tab
                   key={univYear}
                   id={univYear}
                   label={univYear}
+                  index={index}
                   isActive={selectedYear === univYear}
                   className={styles.tabYear}
-            />
+                />
               ))}
             </Tabs>
             {!isSmallScreen && showCreateButton && renderDeclareSessionButton()}
