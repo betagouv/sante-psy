@@ -35,6 +35,8 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
   let appointmentList;
   if (fixedValues) {
     appointmentList = [];
+    // Add appointments to the first psychologist.
+
     // Patient 0 => One appointment deleted
     appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[0], 10, true));
     // Patient 1 => 3 appointements => 5 10 and 15
@@ -53,6 +55,13 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
     appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1));
     appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1));
     appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1));
+
+    // Add appointments to another psychologist, it's shared patient with the first psychologist.
+
+    // Patient 1 => 1 appointments => 12
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[6], 12));
+    // Patient 2 => 1 appointments => 22
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[7], 22));
   } else {
     appointmentList = patientList.flatMap((patient) => {
       const nbOfAppointments = faker.datatype.number(10);

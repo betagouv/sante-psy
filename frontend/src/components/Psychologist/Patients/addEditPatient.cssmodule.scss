@@ -12,7 +12,28 @@
 
 .studentSectionTitle h2 {
   color: #51519c;
-  font-size: 24px;
   margin: 0;
   margin-right: 24px;
+}
+
+.listTitle {
+  color:#5F5F62;
+  font-size: 2.2rem;
+  margin-top: 40px;
+}
+
+.listSubTitle {
+  color:#9795BF;
+  padding-bottom:60px;
+  font-size: 1.3rem !important;
+}
+
+.patientAppointments {
+  width: 70%;
+}
+
+@media (max-width: 768px) {
+  .patientAppointments {
+      width: 100%;
+  }
 }

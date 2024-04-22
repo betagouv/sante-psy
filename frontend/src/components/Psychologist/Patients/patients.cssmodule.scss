@@ -42,3 +42,42 @@
     visibility: visible;
     opacity: 1;
 }
+
+.tableAppointments {
+    width: 80%;
+    max-height: 560px;
+    overflow-y: auto;
+}
+
+.badgesColumn {
+    width: 80%;
+}
+
+.filter {
+    input, select {
+        font-size: 0.8rem;
+        padding-left: 0;
+        line-height: 1rem;
+    }
+
+    select {
+        box-shadow: none;
+        width: 30%;
+    }
+}
+
+.informationColumn {
+    width: 300px;
+}
+
+@media (max-width: 768px) {
+    .informationColumn {
+        width: 100%;
+    }
+
+    .filter {
+        select {
+            width: 100%;
+        }
+    }
+}

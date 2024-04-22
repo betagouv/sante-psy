@@ -15,25 +15,64 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
   patientsByPsychologist = {};
   let patientList;
   if (fixedValues) {
+    const sharedPatients = [
+      {
+        lastName: 'Maxime',
+        firstNames: 'SharedPatient1',
+        INE: '09393352792',
+        index: [0, 1],
+      },
+      {
+        lastName: 'Laure',
+        firstNames: 'SharedPatient2',
+        INE: '280324352792',
+        index: [0, 1],
+      },
+    ];
     patientList = mails
       .filter((mail) => mail !== 'empty@beta.gouv.fr')
-      .flatMap((mail) => {
+      .flatMap((mail, index) => {
         const dossierNumber = uuid.generateFromString(`psychologist-${mail}`);
         patientsByPsychologist[mail] = 5;
-        return [
-          create.getOnePatient(0, { psychologistId: dossierNumber }),
-          create.getOnePatient(1, { psychologistId: dossierNumber }),
-          create.getOnePatient(2, { psychologistId: dossierNumber }),
-          create.getOnePatient(3, { psychologistId: dossierNumber, doctorName: '' }),
-          create.getOneIncompletePatient(4, {
+        const sharedPatientsForPsychologist = sharedPatients.filter(
+          (sharedPatient) => sharedPatient.index.includes(index),
+        );
+        let patients = [];
+        patients.push(create.getOnePatient(0, {
+          psychologistId: dossierNumber,
+          doctorName: '',
+        }));
+
+        // Add shared patients with same INE for psychologist matching index.
+        patients = patients.concat(
+          sharedPatientsForPsychologist.map((sharedPatient, i) => create.getOnePatient(i + patients.length, {
             psychologistId: dossierNumber,
-            lastName: 'Patient',
-            firstNames: 'Arenouvelé',
-            hasPrescription: false,
-          }),
-        ];
+            lastName: sharedPatient.lastName,
+            firstNames: sharedPatient.firstNames,
+            INE: sharedPatient.INE,
+          })),
+        );
+
+        patients.push(create.getOneIncompletePatient(patients.length, {
+          psychologistId: dossierNumber,
+          lastName: 'Patient',
+          firstNames: 'Arenouvelé',
+          hasPrescription: false,
+        }));
+
+        const remainingPatientCount = 5 - patients.length;
+
+        for (let i = 0; i < remainingPatientCount; i++) {
+          patients.push(
+            create.getOnePatient(i + patients.length, {
+              psychologistId: dossierNumber,
+            }),
+          );
+        }
+        return patients;
       });
   } else {
+    const sharedPatients = [];
     patientList = mails
       .filter((mail) => mail !== 'empty@beta.gouv.fr')
       .flatMap((mail) => {
@@ -41,18 +80,52 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
         const numberOfPatients = faker.datatype.number({ min: 1, max: 25 });
         patientsByPsychologist[mail] = numberOfPatients;
         const patients = [];
+        const selectedPatients = [];
+
         for (let i = 0; i < numberOfPatients; i++) {
           const random = faker.datatype.number();
+
+          const patientData: {
+            psychologistId: string,
+            INE?: string,
+            doctorName?: string,
+            dateOfBirth?: Date,
+            firstNames?: string,
+            lastName?: string
+          } = {
+            psychologistId: dossierNumber,
+          };
+
+          if (sharedPatients.length > 0) {
+            if (random % 10 === 0) {
+              const randomIndex = Math.floor(Math.random() * sharedPatients.length);
+              patientData.INE = sharedPatients[randomIndex].INE;
+              patientData.firstNames = sharedPatients[randomIndex].firstNames;
+              patientData.lastName = sharedPatients[randomIndex].lastName;
+              sharedPatients.splice(randomIndex, 1);
+            }
+          }
+
           if (random % 20 === 0) {
-            patients.push(create.getOnePatient(i, {
-              psychologistId: dossierNumber, doctorName: `doctor-${i}`, dateOfBirth: null,
-            }));
+            patientData.doctorName = `doctor-${i}`;
+            patientData.dateOfBirth = null;
           } else if (random % 11 === 0) {
-            patients.push(create.getOnePatient(i, { psychologistId: dossierNumber, doctorName: '' }));
-          } else {
-            patients.push(create.getOnePatient(i, { psychologistId: dossierNumber }));
+            patientData.doctorName = '';
+          }
+
+          patients.push(create.getOnePatient(i, patientData));
+          selectedPatients.push(patients[patients.length - 1]);
+        }
+        if (sharedPatients.length === 0) {
+          const numberOfSelectedPatients = Math.floor(Math.random() * selectedPatients.length) + 1;
+
+          for (let i = 0; i < numberOfSelectedPatients; i++) {
+            const randomIndex = Math.floor(Math.random() * selectedPatients.length);
+            sharedPatients.push(selectedPatients[randomIndex]);
+            selectedPatients.splice(randomIndex, 1);
           }
         }
+
         return patients;
       });
   }

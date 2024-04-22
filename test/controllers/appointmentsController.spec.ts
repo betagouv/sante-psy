@@ -439,6 +439,7 @@ describe('appointmentsController', () => {
       patient1.dateOfPrescription,
     );
   }
+
   describe('get appointments with badges', () => {
     let psy: Psychologist;
     before(async () => {
@@ -468,7 +469,7 @@ describe('appointmentsController', () => {
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(1);
-        expect(res.body[0].badge).to.eql(appointmentBadges.first);
+        expect(res.body[0].badges).to.includes(appointmentBadges.first);
         return Promise.resolve();
       });
     });
@@ -487,8 +488,8 @@ describe('appointmentsController', () => {
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(2);
-        expect(res.body[0].badge).to.not.eql(appointmentBadges.first);
-        expect(res.body[1].badge).to.not.eql(appointmentBadges.first);
+        expect(res.body[0].badges).to.not.includes(appointmentBadges.first);
+        expect(res.body[1].badges).to.not.includes(appointmentBadges.first);
         return Promise.resolve();
       });
     });
@@ -506,7 +507,7 @@ describe('appointmentsController', () => {
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(1);
-        expect(res.body[0].badge).to.eql(appointmentBadges.first);
+        expect(res.body[0].badges).to.includes(appointmentBadges.first);
         return Promise.resolve();
       });
     });
@@ -536,8 +537,8 @@ describe('appointmentsController', () => {
         expect(res.body).to.have.length(8);
         expect(new Date(res.body[0].appointmentDate)).to.eql(appointmentBadgeMax.appointmentDate);
         expect(new Date(res.body[1].appointmentDate)).to.eql(appointmentBadgeBeforeMax.appointmentDate);
-        expect(res.body[0].badge).to.eql(appointmentBadges.max);
-        expect(res.body[1].badge).to.eql(appointmentBadges.before_max);
+        expect(res.body[0].badges).to.includes(appointmentBadges.max);
+        expect(res.body[1].badges).to.includes(appointmentBadges.before_max);
         return Promise.resolve();
       });
     });
@@ -562,7 +563,7 @@ describe('appointmentsController', () => {
       .then(async (res) => {
         expect(res.body).to.have.length(8);
         expect(new Date(res.body[0].appointmentDate)).to.eql(appointmentBadgeMax.appointmentDate);
-        expect(res.body[0].badge).to.eql(appointmentBadges.max);
+        expect(res.body[0].badges).to.includes(appointmentBadges.max);
         return Promise.resolve();
       });
     });
@@ -590,8 +591,129 @@ describe('appointmentsController', () => {
         expect(res.body).to.have.length(10);
         expect(new Date(res.body[1].appointmentDate)).to.eql(appointment9.appointmentDate);
         expect(new Date(res.body[0].appointmentDate)).to.eql(appointment10.appointmentDate);
-        expect(res.body[1].badge).to.eql(appointmentBadges.exceeded);
-        expect(res.body[0].badge).to.eql(appointmentBadges.exceeded);
+        expect(res.body[1].badges).to.includes(appointmentBadges.exceeded);
+        expect(res.body[0].badges).to.includes(appointmentBadges.exceeded);
+        return Promise.resolve();
+      });
+    });
+
+    it('should count patient appointments with another psy when attribute badges', async () => {
+      const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@email.fr' });
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
+
+      const sharedINEPatient = create.getOnePatient(1, {
+        lastName: patient1.lastName,
+        firstNames: patient1.firstNames,
+        INE: patient1.INE,
+        psychologistId: anotherPsy.dossierNumber,
+      });
+      const patientWithSameINE = await insertPatientInfoInDb(sharedINEPatient, anotherPsy);
+
+      await dbAppointments.insert(new Date('2023-09-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-10-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-11-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-12-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-02-03'), patientWithSameINE.id, anotherPsy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-03-03'), patientWithSameINE.id, anotherPsy.dossierNumber);
+      const appointment8 = await dbAppointments.insert(new Date('2024-04-03'), dbPatient1.id, psy.dossierNumber);
+      const appointment9 = await dbAppointments.insert(new Date('2024-05-03'), dbPatient1.id, psy.dossierNumber);
+
+      return chai.request(app)
+      .get('/api/appointments')
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then(async (res) => {
+        expect(res.body).to.have.length(7);
+        expect(new Date(res.body[1].appointmentDate)).to.eql(appointment8.appointmentDate);
+        expect(new Date(res.body[0].appointmentDate)).to.eql(appointment9.appointmentDate);
+        expect(res.body[1].badges).to.includes(appointmentBadges.max);
+        expect(res.body[0].badges).to.includes(appointmentBadges.exceeded);
+        return Promise.resolve();
+      });
+    });
+
+    it('should have appointment with a specific badge when appointment with another psy', async () => {
+      const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@email.fr' });
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
+
+      const sharedINEPatient = create.getOnePatient(1, {
+        lastName: patient1.lastName,
+        firstNames: patient1.firstNames,
+        INE: patient1.INE,
+        psychologistId: anotherPsy.dossierNumber,
+      });
+      const patientWithSameINE = await insertPatientInfoInDb(sharedINEPatient, anotherPsy);
+
+      await dbAppointments.insert(new Date('2023-09-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-10-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-11-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-12-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
+      const appointment6 = await dbAppointments.insert(
+        new Date('2024-02-03'),
+        patientWithSameINE.id,
+        anotherPsy.dossierNumber,
+      );
+      const appointment7 = await dbAppointments.insert(
+        new Date('2024-03-03'),
+        patientWithSameINE.id,
+        anotherPsy.dossierNumber,
+      );
+      await dbAppointments.insert(new Date('2024-04-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-05-03'), dbPatient1.id, psy.dossierNumber);
+
+      return chai.request(app)
+      .get(`/api/appointments/${dbPatient1.id}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then(async (res) => {
+        const patientAppointments = res.body['2023-2024'];
+        expect(patientAppointments).to.have.length(9);
+        expect(new Date(patientAppointments[3].appointmentDate)).to.eql(appointment6.appointmentDate);
+        expect(new Date(patientAppointments[2].appointmentDate)).to.eql(appointment7.appointmentDate);
+        expect(patientAppointments[3].badges).to.includes(appointmentBadges.other_psychologist);
+        expect(patientAppointments[2].badges).to.includes(appointmentBadges.other_psychologist);
+        return Promise.resolve();
+      });
+    });
+
+    it('should have patient appointments sorted by scholar years', async () => {
+      const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@email.fr' });
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
+
+      const sharedINEPatient = create.getOnePatient(1, {
+        lastName: patient1.lastName,
+        firstNames: patient1.firstNames,
+        INE: patient1.INE,
+        psychologistId: anotherPsy.dossierNumber,
+      });
+      const patientWithSameINE = await insertPatientInfoInDb(sharedINEPatient, anotherPsy);
+
+      await dbAppointments.insert(new Date('2023-09-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-10-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-11-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-12-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-02-03'), patientWithSameINE.id, anotherPsy.dossierNumber);
+
+      await dbAppointments.insert(new Date('2024-09-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-10-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2025-04-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2025-08-03'), patientWithSameINE.id, anotherPsy.dossierNumber);
+
+      return chai.request(app)
+      .get(`/api/appointments/${dbPatient1.id}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then(async (res) => {
+        const patientAppointments1 = res.body['2023-2024'];
+        const patientAppointments2 = res.body['2024-2025'];
+        expect(patientAppointments1).to.have.length(6);
+        expect(patientAppointments2).to.have.length(4);
         return Promise.resolve();
       });
     });

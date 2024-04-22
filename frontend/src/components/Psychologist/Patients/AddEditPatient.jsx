@@ -5,25 +5,12 @@ import { Button, TextInput, Checkbox } from '@dataesr/react-dsfr';
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
 
-import renderBadge from 'components/Badges/generateBadges';
+import { renderBadge } from 'components/Badges/Badges';
 import getBadgeInfos from 'src/utils/badges';
+import classNames from 'classnames';
 import styles from './addEditPatient.cssmodule.scss';
+import PatientAppointments from './PatientAppointments';
 
-export const areStudentInfosFilled = patient => (
-  patient
-    && patient.firstNames
-    && patient.lastName
-    && patient.dateOfBirth
-    && patient.institutionName
-    && patient.INE
-);
-
-export const arePrescriptionInfosFilled = patient => (
-  patient
-    && patient.doctorAddress
-    && patient.doctorName
-    && patient.hasPrescription
-);
 const AddEditPatient = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -61,6 +48,7 @@ const AddEditPatient = () => {
         institutionName: '',
         isStudentStatusVerified: false,
         lastName: '',
+        badges: [],
       });
     }
   }, [patientId]);
@@ -96,13 +84,23 @@ const AddEditPatient = () => {
 
   return (
     <div className="fr-my-2w">
-      <form onSubmit={save}>
-        {patient && (
-          <>
+      {patient && (
+        <>
+          <section>
+            <h2 className={styles.listTitle}>{`${patient.firstNames} ${patient.lastName}`}</h2>
+            <p className={classNames(styles.listSubTitle, 'fr-text--sm fr-mb-1v')}>
+              Suivi de l&apos;étudiant
+            </p>
+            <div className={styles.patientAppointments}>
+              <PatientAppointments patientId={patientId} />
+            </div>
+          </section>
+
+          <form onSubmit={save}>
             <div id="mandatory-informations">
-              <section className={styles.studentSectionTitle}>
+              <section id="anchor-student-file" className={styles.studentSectionTitle}>
                 <h2>Dossier étudiant</h2>
-                {!areStudentInfosFilled(patient)
+                {patient.badges.includes(badges.student_infos.key)
                   ? renderBadge({ badge: badges.student_infos.key })
                   : ''}
               </section>
@@ -175,7 +173,7 @@ const AddEditPatient = () => {
               />
               <section className={styles.studentSectionTitle}>
                 <h2>Lettre d&apos;orientation</h2>
-                {!arePrescriptionInfosFilled(patient)
+                {patient.badges.includes(badges.prescription_infos.key)
                   ? renderBadge({ badge: badges.prescription_infos.key })
                   : ''}
               </section>
@@ -225,19 +223,19 @@ const AddEditPatient = () => {
                 placeholder="JJ/MM/AAAA"
               />
             </div>
-          </>
-        )}
-        <div className="fr-my-5w">
-          <Button
-            submit
-            id="save-etudiant-button"
-            data-test-id="save-etudiant-button"
-            icon={button.icon}
-          >
-            {button.text}
-          </Button>
-        </div>
-      </form>
+            <div className="fr-my-5w">
+              <Button
+                submit
+                id="save-etudiant-button"
+                data-test-id="save-etudiant-button"
+                icon={button.icon}
+              >
+                {button.text}
+              </Button>
+            </div>
+          </form>
+        </>
+      )}
     </div>
   );
 };

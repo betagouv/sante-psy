@@ -2,27 +2,27 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Table, Callout, CalloutText, Icon, Button, CalloutTitle } from '@dataesr/react-dsfr';
+import { Table, Callout, CalloutText, Icon, Button, Select, TextInput, CalloutTitle } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { currentUnivYear } from 'services/date';
 import { useStore } from 'stores/';
-import { MAX_APPOINTMENT } from '../Appointments/NewAppointment';
-
-import PatientStatus from './PatientStatus';
-
+import getBadgeInfos from 'src/utils/badges';
 import styles from './patients.cssmodule.scss';
-import { arePrescriptionInfosFilled, areStudentInfosFilled } from './AddEditPatient';
+import Badges from '../../Badges/Badges';
 
 const Patients = () => {
   const { commonStore: { setNotification } } = useStore();
   const [patients, setPatients] = useState([]);
   const navigate = useNavigate();
-
+  const [filterBadgeValue, setFilterBadgeValue] = useState('');
+  const [filteredPatients, setfilteredPatients] = useState([]);
+  const [filterOptions, setfilterOptions] = useState([]);
   const [seeAppointments, setSeeAppointments] = useState(true);
   const table = useRef(null);
 
   const currentYear = currentUnivYear();
+  const badgeInfo = getBadgeInfos(true, currentYear);
 
   const updateAppointentsColumns = () => {
     if (table.current) {
@@ -35,8 +35,24 @@ const Patients = () => {
     }
   };
 
+  const renderFilterOptions = () => {
+    const uniqueBadges = patients
+      .flatMap(patient => patient.badges)
+      .filter((value, index, array) => array.indexOf(value) === index);
+
+    const uniqueBadgesOptions = uniqueBadges.map(badge => (
+      { label: badgeInfo[badge].text, value: badge }
+    ));
+    uniqueBadgesOptions.splice(0, 0, { label: 'Tous', value: 'all' });
+
+    return uniqueBadgesOptions;
+  };
+
   useEffect(() => {
-    agent.Patient.get().then(setPatients);
+    agent.Patient.get().then(response => {
+      setPatients(response);
+    });
+
     window.addEventListener('resize', updateAppointentsColumns);
     return () => window.removeEventListener('resize', updateAppointentsColumns);
   }, []);
@@ -45,39 +61,57 @@ const Patients = () => {
     updateAppointentsColumns();
   }, [table]);
 
-  const getMissingInfo = patient => {
-    const missingInfo = {};
+  useEffect(() => {
+    setfilterOptions(renderFilterOptions());
+  }, [patients]);
 
-    missingInfo.missingStudentInfo = !areStudentInfosFilled(patient);
-    missingInfo.missingPrescriptionInfo = !arePrescriptionInfosFilled(patient);
-
-    return missingInfo;
-  };
-
-  const extendedPatients = patients.map(patient => {
-    const missingInfo = getMissingInfo(patient);
-
-    return {
-      ...patient,
-      hasReachedMaxAppointment: patient.appointmentsYearCount === MAX_APPOINTMENT.toString(),
-      hasTooMuchAppointment: patient.appointmentsYearCount > MAX_APPOINTMENT,
-      missingInfo,
-      currentYear,
-    };
-  });
   const deletePatient = patientId => {
     setNotification({});
     agent.Patient.delete(patientId).then(response => {
-      const filteredPatients = patients.filter(patient => patient.id !== patientId);
-      setPatients(filteredPatients);
+      const newFilteredPatients = patients.filter(patient => patient.id !== patientId);
+      setPatients(newFilteredPatients);
       setNotification(response);
     });
+  };
+
+  const handleFilterChange = badgeType => {
+    if (badgeType.target.value === 'all') {
+      setFilterBadgeValue('');
+      setfilteredPatients(patients);
+      return;
+    }
+    setFilterBadgeValue(badgeType.target.value);
+    const newFilteredPatients = patients.filter(patient => patient.badges.includes(badgeType.target.value));
+    setfilteredPatients(newFilteredPatients);
+  };
+
+  const handleSearch = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    setFilterBadgeValue('');
+    const newFilteredPatients = patients.filter(patient => patient.lastName.toLowerCase().includes(e.target.value.toLowerCase())
+      || patient.firstNames.toLowerCase().includes(e.target.value.toLowerCase()));
+    setfilteredPatients(newFilteredPatients);
+  };
+  const handleSearchClick = e => {
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   const columns = [
     {
       name: 'name',
-      label: 'Étudiant',
+      label: (
+        <div>
+          Étudiant
+          <TextInput
+            onClick={handleSearchClick}
+            onChange={handleSearch}
+            placeholder="Rechercher"
+            className={styles.filter}
+        />
+        </div>
+      ),
       render: patient => (
         <div className={styles.clickableElement} onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}>
           <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
@@ -96,25 +130,31 @@ const Patients = () => {
           <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
           <Button
             data-test-id="update-etudiant-button"
-            onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
+            onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`)}
             secondary
             size="sm"
             icon="ri-folder-line"
             aria-label="Dossier de l'étudiant"
+            title="Dossier de l'étudiant"
           />
         </div>
       ),
     },
     {
       name: 'status',
-      label: 'Information',
-      render: patient => (
-        <PatientStatus
-          patient={patient}
-        />
+      label: (
+        <div className={styles.informationColumn}>
+          Information
+          {' '}
+          <Select
+            onChange={handleFilterChange}
+            options={filterOptions}
+            selected={filterBadgeValue}
+            className={styles.filter}
+          />
+        </div>
       ),
-      sortable: true,
-      sort: (a, b) => a.missingInfo.length - b.missingInfo.length,
+      render: patient => <Badges badges={patient.badges} univYear={currentYear} />,
     }];
   if (seeAppointments) {
     columns.push({
@@ -124,7 +164,26 @@ const Patients = () => {
     });
     columns.push({ name: 'appointmentsCount', label: 'Total séances', sortable: true });
   }
+
   columns.push(
+    {
+      name: 'appointments-list-button',
+      label: 'Liste des séances',
+      render: patient => (
+        <div className={styles.clickableElement}>
+          <span className={styles.tooltip}>Liste des séances</span>
+          <Button
+            data-test-id="seances-etudiant-button"
+            onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}`)}
+            secondary
+            size="sm"
+            icon="ri-list-unordered"
+            aria-label="Liste des séances"
+            title="Liste des séances"
+          />
+        </div>
+      ),
+    },
     {
       name: 'appointment-etudiant-button',
       label: 'Déclarer une séance',
@@ -201,7 +260,7 @@ const Patients = () => {
           <Table
             data-test-id="etudiant-table"
             columns={columns}
-            data={extendedPatients.sort((a, b) => b.missingInfo.length - a.missingInfo.length)}
+            data={filteredPatients.length > 0 ? filteredPatients : patients}
             rowKey="id"
             />
         ) : (<span>Vous n‘avez pas encore déclaré d&lsquo;étudiants.</span>)}

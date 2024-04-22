@@ -1,0 +1,9 @@
+.badgeWrapper {
+    display: flex;
+    flex-wrap: wrap;
+
+    .badge {
+        margin: 4px;
+        font-size: .7rem !important;
+    }
+}

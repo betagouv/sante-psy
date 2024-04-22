@@ -47,6 +47,7 @@ const Appointment = {
   add: (patientId, date) => client.post('/appointments/', { patientId, date }),
   delete: id => client.delete(`/appointments/${id}`),
   get: (options = { month: new Date().getMonth() + 1, year: new Date().getFullYear(), isBillingPurposes: false }) => client.get('/appointments', { params: options }),
+  getByPatientId: id => client.get(`/appointments/${id}`),
 };
 
 const Config = { get: () => clientWithoutErrorManagement.get('/config') };

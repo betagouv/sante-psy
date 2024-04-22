@@ -13,6 +13,7 @@ describe('DB Patients', () => {
   const firstNames = 'Harry James';
   const lastName = 'Potter';
   const studentNumber = '12345678901';
+  const anotherStudentNumber = '10987654321';
   const institutionName = 'Pouldard';
   const isStudentStatusVerified = false;
   const hasPrescription = false;
@@ -208,7 +209,7 @@ describe('DB Patients', () => {
   });
 
   describe('getAll', () => {
-    it('should return psy patients with not deleted appointments', async () => {
+    it('should return psy patients with not deleted appointments And count related INE appointments', async () => {
       const psy = await create.insertOnePsy();
       const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@mail.fr' });
       const patient = await dbPatients.insert(
@@ -228,7 +229,7 @@ describe('DB Patients', () => {
       const patient2 = await dbPatients.insert(
         firstNames,
         lastName,
-        studentNumber,
+        anotherStudentNumber,
         institutionName,
         isStudentStatusVerified,
         hasPrescription,
@@ -277,8 +278,8 @@ describe('DB Patients', () => {
       const patients = (await dbPatients.getAll(psy.dossierNumber))
       .sort((a, b) => parseInt(a.appointmentsCount) - parseInt(b.appointmentsCount));
       expect(patients).to.have.length(2);
-      patients[0].appointmentsCount.should.eq('2');
-      patients[1].appointmentsCount.should.eq('3');
+      patients[0].appointmentsCount.should.eq('3');
+      patients[1].appointmentsCount.should.eq('5');
     });
 
     it('should not return deleted patients', async () => {

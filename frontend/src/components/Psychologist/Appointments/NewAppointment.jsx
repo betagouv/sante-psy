@@ -13,6 +13,8 @@ import { useStore } from 'stores/';
 import { observer } from 'mobx-react';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import PatientAppointments from '../Patients/PatientAppointments';
+import styles from './newAppointment.cssmodule.scss';
 
 export const MAX_APPOINTMENT = 8;
 
@@ -72,63 +74,64 @@ const NewAppointment = () => {
   const allOptions = defaultString.concat(patientsMap);
 
   return (
-    <form onSubmit={createNewAppointment} className="fr-my-2w">
-      <div id="patients-list">
-        {patients.length > 0 ? (
-          <SearchableSelect
-            className="midlength-select"
-            data-test-id="new-appointment-etudiant-input"
-            id="etudiants"
-            name="patientId"
-            label="Etudiant"
-            selected={patientId}
-            hint={(
-              <>
-                Votre étudiant n&lsquo;est pas dans la liste ?
-                {' '}
-                <HashLink to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`} id="new-patient">
-                  Ajoutez un nouvel étudiant
-                </HashLink>
-              </>
-            )}
-            onChange={e => {
-              setPatientId(e);
-            }}
-            required
-            options={allOptions}
-          />
-        ) : (
-          <Select
-            className="midlength-select"
-            label="Etudiant"
-            disabled
-            required
-            options={[]}
-            hint={(
-              <>
-                Vous n&lsquo;avez aucun étudiant dans votre liste !
-                {' '}
-                <HashLink to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`} id="new-patient">
-                  Ajoutez un nouvel étudiant
-                </HashLink>
-              </>
-            )}
-          />
-        )}
-      </div>
-      <DatePicker
-        id="new-appointment-date-input"
-        className="date-picker"
-        selected={date}
-        minDate={beginningDate}
-        maxDate={maxDate}
-        dateFormat="dd/MM/yyyy"
-        showPopperArrow={false}
-        customInput={<DateInput label="Date de la séance" dataTestId="new-appointment-date-input" />}
-        onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
-        required
-      />
-      {tooMuchAppointments && (
+    <div className={styles.newAppointmentWrapper}>
+      <form onSubmit={createNewAppointment} className="fr-my-2w">
+        <div id="patients-list">
+          {patients.length > 0 ? (
+            <SearchableSelect
+              className="midlength-select"
+              data-test-id="new-appointment-etudiant-input"
+              id="etudiants"
+              name="patientId"
+              label="Etudiant"
+              selected={patientId}
+              hint={(
+                <>
+                  Votre étudiant n&lsquo;est pas dans la liste ?
+                  {' '}
+                  <HashLink to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`} id="new-patient">
+                    Ajoutez un nouvel étudiant
+                  </HashLink>
+                </>
+              )}
+              onChange={e => {
+                setPatientId(e);
+              }}
+              required
+              options={allOptions}
+            />
+          ) : (
+            <Select
+              className="midlength-select"
+              label="Etudiant"
+              disabled
+              required
+              options={[]}
+              hint={(
+                <>
+                  Vous n&lsquo;avez aucun étudiant dans votre liste !
+                  {' '}
+                  <HashLink to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`} id="new-patient">
+                    Ajoutez un nouvel étudiant
+                  </HashLink>
+                </>
+              )}
+            />
+          )}
+        </div>
+        <DatePicker
+          id="new-appointment-date-input"
+          className="date-picker"
+          selected={date}
+          minDate={beginningDate}
+          maxDate={maxDate}
+          dateFormat="dd/MM/yyyy"
+          showPopperArrow={false}
+          customInput={<DateInput label="Date de la séance" dataTestId="new-appointment-date-input" />}
+          onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
+          required
+        />
+        {tooMuchAppointments && (
         <>
           <Alert
             className="fr-mt-2w"
@@ -137,27 +140,30 @@ const NewAppointment = () => {
                 Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.
 
               </>
-            )}
-          />
+              )}
+            />
           <Checkbox
             className="fr-mt-1w"
             data-test-id="new-appointment-understand"
             label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances seront prises en charge par année universitaire.`}
             onChange={e => setUnderstand(e.target.checked)}
-          />
+            />
         </>
-      )}
-      <Button
-        id="new-appointment-submit"
-        data-test-id="new-appointment-submit"
-        submit
-        icon="ri-add-line"
-        className="fr-mt-4w"
-        disabled={(tooMuchAppointments && !understand)}
-      >
-        Créer la séance
-      </Button>
-    </form>
+        )}
+        <Button
+          id="new-appointment-submit"
+          data-test-id="new-appointment-submit"
+          submit
+          icon="ri-add-line"
+          className="fr-mt-4w"
+          disabled={(tooMuchAppointments && !understand)}
+        >
+          Créer la séance
+        </Button>
+      </form>
+      { patientId && <PatientAppointments showCreateButton={false} patientId={patientId} />}
+    </div>
+
   );
 };
 

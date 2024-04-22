@@ -6,7 +6,12 @@ export type Appointment = {
     appointmentDate: string,
     patientId: string,
     deleted: boolean,
-    badge?: string,
+    updatedAt?: string,
+    createdAt?: string,
+    badges?: [],
+    univYear?: string,
 }
 
 export type AppointmentWithPatient = Appointment & Patient;
+
+export interface AppointmentByYear {[univYear: string]: Appointment[]}

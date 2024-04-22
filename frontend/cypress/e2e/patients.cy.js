@@ -77,6 +77,15 @@ describe('Patient', () => {
         .click();
       cy.wait('@etudiant');
 
+      cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
+      cy.get('[data-test-id="etudiant-seances-list"] tr')
+        .should('have.length', 33);
+
+      cy.get('[data-test-id="etudiant-seances-list"] ul li button')
+        .eq(1).click();
+      cy.get('[data-test-id="etudiant-seances-list"] tr')
+        .should('have.length', 17);
+
       cy.get('[data-test-id="etudiant-first-name-input"] > input')
         .clear()
         .type('Georges');

@@ -21,6 +21,7 @@ const getBadgeTotal = (filteredDates, valuesByDate, badge) => filteredDates.redu
 const getTotalForAllBadges = (filteredDates, valuesByDate) => {
   const badges = getBadgeInfos();
   const totals = {};
+
   Object.keys(badges).forEach(badge => {
     totals[badge] = 0;
   });

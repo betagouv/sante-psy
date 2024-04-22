@@ -13,7 +13,7 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
   },
   before_max: {
     key: 'before_max',
-    text: 'Avant-dernière séance',
+    text: isSmallScreen ? 'Avant-dernière' : 'Avant-dernière séance',
     severity: 'info',
     icon: 'fr-icon-info-fill fr-icon--sm',
   },
@@ -22,6 +22,13 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
     text: isSmallScreen ? 'Excès' : `Excès de séances ${univYear}`,
     severity: 'warning',
     icon: 'fr-icon-warning-fill fr-icon--sm',
+  },
+  other_psychologist: {
+    key: 'other_psychologist',
+    text: isSmallScreen ? 'Autre psy' : 'Autre psychologue',
+    severity: 'info',
+    icon: 'fr-icon-info-fill fr-icon--sm',
+    className: 'fr-badge--purple-glycine',
   },
   student_infos: {
     key: 'student_infos',

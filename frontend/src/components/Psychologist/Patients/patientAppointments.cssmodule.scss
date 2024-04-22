@@ -1,0 +1,68 @@
+
+.title {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+}
+
+.noAppointmentsTitle {
+    font-size: 1.2rem;
+    color:#5F5F62;
+}
+
+.noAppointmentsWrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10%;
+    height: 100%;
+
+    .createButton {
+        margin-left: 0;
+    }
+}
+
+.tableAppointments {
+    max-height: 560px;
+    overflow-y: auto;
+    --table-offset: 0;
+
+    thead {
+        z-index:2;
+    }
+}
+
+.tabYear {
+    padding: 0;
+}
+
+.tabs {
+    ul {
+        padding-left: 0;
+    }
+    
+    button {
+        margin-left: 0;
+    }
+}
+
+.tabsContainer {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row;
+}
+  
+.createButton {
+    margin-bottom: 0.8em;
+    margin-left: auto;
+}
+
+.smallCreateButton {
+    margin-bottom: 0.5em;
+}
+
+@media (max-width: 768px) {
+    .noAppointmentsWrapper {
+        flex-direction: column;
+    }
+}
