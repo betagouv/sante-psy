@@ -152,7 +152,7 @@ const Billing = () => {
               </b>
               étudiants.
             </p>
-            <p>La première séance par cycle avec un étudiant est facturée 40€, les suivantes à 30€.</p>
+            <p>À partir du 1er janvier 2024, la première séance par cycle avec un étudiant est facturée 40€, les suivantes à 30€.</p>
           </>
         ) : (
           <p className="fr-mb-2w" id="no-appointments">
