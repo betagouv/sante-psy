@@ -161,9 +161,11 @@ const AddEditPatient = () => {
               value="isStudentStatusVerified"
               onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
               />
-            <div id="anchor-student-list" className={styles.patientAppointments}>
-              <PatientAppointments patientId={patientId} />
-            </div>
+            {patientId && (
+              <div id="anchor-student-list" className={styles.patientAppointments}>
+                <PatientAppointments patientId={patientId} />
+              </div>
+            )}
             <section className={styles.studentSectionTitle}>
               <h2>Lettre d&apos;orientation</h2>
               {patient.badges.includes(badges.prescription_infos.key)
