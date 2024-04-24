@@ -28,7 +28,7 @@ const getRelatedINEAppointments = async (
 ): Promise<AppointmentWithPatient[]> => {
   try {
     const INEList = appointments.reduce((acc, appointment) => {
-      if (appointment.INE.trim() !== '') {
+      if (appointment.INE && appointment.INE.trim() !== '') {
         acc.push(appointment.INE);
       }
       return acc;

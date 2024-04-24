@@ -54,7 +54,7 @@ const getAll = async (psychologistId: string): Promise<(Patient &
             this.select('id')
               .from(patientsTable)
               .where(function () {
-                if (patient.INE.trim() !== '') {
+                if (patient.INE && patient.INE.trim() !== '') {
                   this.where('INE', patient.INE);
                 } else {
                   this.where('id', patient.id);
@@ -70,7 +70,7 @@ const getAll = async (psychologistId: string): Promise<(Patient &
             this.select('id')
               .from(patientsTable)
               .where(function () {
-                if (patient.INE.trim() !== '') {
+                if (patient.INE && patient.INE.trim() !== '') {
                   this.where('INE', patient.INE);
                 } else {
                   this.where('id', patient.id);
