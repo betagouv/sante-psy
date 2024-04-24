@@ -65,6 +65,35 @@ const Patients = () => {
     setfilterOptions(renderFilterOptions());
   }, [patients]);
 
+  const actionOptions = [
+    { label: '', value: '' },
+    { label: 'Dossier', value: 'student_file' },
+    { label: 'Séances', value: 'appointment_list' },
+    { label: 'Déclarer', value: 'appointment_create' },
+    { label: 'Supprimer', value: 'delete_student' },
+  ];
+
+  const onChangeAction = (e, patientId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    switch (e.target.value) {
+      case 'student_file':
+        navigate(`/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`);
+        break;
+      case 'appointment_list':
+        navigate(`/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`);
+        break;
+      case 'appointment_create':
+        navigate(`/psychologue/nouvelle-seance/${patientId}`);
+        break;
+      case 'delete_student':
+        deletePatient(patientId);
+        break;
+      default:
+        break;
+    }
+  };
+
   const deletePatient = patientId => {
     setNotification({});
     agent.Patient.delete(patientId).then(response => {
@@ -96,6 +125,24 @@ const Patients = () => {
   const handleSearchClick = e => {
     e.preventDefault();
     e.stopPropagation();
+  };
+
+  const convertToMobileView = () => {
+    columns.splice(1, 1);
+    columns.splice(2, 5);
+    columns.push({
+      name: 'select-action',
+      label: 'Actions',
+      render: patient => (
+        <Select
+          selected={null}
+          onChange={e => { onChangeAction(e, patient.id); }}
+          options={actionOptions}
+          className={styles.selectAction}
+        />
+      ),
+    });
+    return columns;
   };
 
   const columns = [
@@ -155,17 +202,13 @@ const Patients = () => {
         </div>
       ),
       render: patient => <Badges badges={patient.badges} univYear={currentYear} />,
-    }];
-  if (seeAppointments) {
-    columns.push({
+    },
+    {
       name: 'appointmentsYearCount',
       label: `Total séances ${currentYear}`,
       sortable: true,
-    });
-    columns.push({ name: 'appointmentsCount', label: 'Total séances', sortable: true });
-  }
-
-  columns.push(
+    },
+    { name: 'appointmentsCount', label: 'Total séances', sortable: true },
     {
       name: 'appointments-list-button',
       label: 'Liste des séances',
@@ -218,7 +261,7 @@ const Patients = () => {
         </div>
       ),
     },
-  );
+  ];
 
   return (
     <>
@@ -259,7 +302,7 @@ const Patients = () => {
         {patients.length > 0 ? (
           <Table
             data-test-id="etudiant-table"
-            columns={columns}
+            columns={seeAppointments ? columns : convertToMobileView(columns)}
             data={filteredPatients.length > 0 ? filteredPatients : patients}
             rowKey="id"
             />
