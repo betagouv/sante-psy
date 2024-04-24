@@ -25,8 +25,13 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
     if (patientId) {
       agent.Appointment.getByPatientId(patientId)
         .then(response => {
+          const years = Object.keys(response).reverse();
           setPatientAppointments(response);
-          setUnivYears(Object.keys(response).reverse());
+          setUnivYears(years);
+
+          if (!years.includes(currentYear)) {
+            setSelectedYear(years[0]);
+          }
         });
     }
   }, [patientId]);

@@ -27,7 +27,13 @@ const getRelatedINEAppointments = async (
   period?: { startDate: Date, endDate: Date },
 ): Promise<AppointmentWithPatient[]> => {
   try {
-    const INEList = appointments.map((appointment) => appointment.INE);
+    const INEList = appointments.reduce((acc, appointment) => {
+      if (appointment.INE.trim() !== '') {
+        acc.push(appointment.INE);
+      }
+      return acc;
+    }, []);
+
     const existingAppointmentIds = new Set(appointments.map((appointment) => appointment.id));
 
     let query = db.from(patientsTable)

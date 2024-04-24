@@ -124,9 +124,10 @@ const getByPatientId = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.psychologist;
   const { patientId } = req.params;
 
+  const patient = await dbPatient.getById(patientId, psychologistId);
   const appointments = await dbAppointments.getByPatientId(
     patientId,
-    true,
+    patient.INE.trim() !== '',
     [{ column: 'appointmentDate' }],
   );
   const appointmentsWithBadges = getAppointmentWithBadges(

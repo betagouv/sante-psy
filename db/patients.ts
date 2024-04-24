@@ -53,20 +53,34 @@ const getAll = async (psychologistId: string): Promise<(Patient &
           .whereIn('patientId', function () {
             this.select('id')
               .from(patientsTable)
-              .where('INE', patient.INE)
+              .where(function () {
+                if (patient.INE.trim() !== '') {
+                  this.where('INE', patient.INE);
+                } else {
+                  this.where('id', patient.id);
+                }
+              })
               .andWhere('deleted', false);
-          }).andWhere('deleted', false);
+          })
+          .andWhere('deleted', false);
 
       const appointmentsYearCountQuery = db.countDistinct('id')
           .from(appointmentsTable)
           .whereIn('patientId', function () {
             this.select('id')
               .from(patientsTable)
-              .where('INE', patient.INE)
+              .where(function () {
+                if (patient.INE.trim() !== '') {
+                  this.where('INE', patient.INE);
+                } else {
+                  this.where('id', patient.id);
+                }
+              })
               .andWhere('deleted', false)
               .andWhereRaw(`"appointmentDate" > '${startCurrentUnivYear()}'`)
               .andWhereRaw(`"appointmentDate" < '${endCurrentUnivYear()}'`);
-          }).andWhere('deleted', false);
+          })
+          .andWhere('deleted', false);
 
       const [appointmentsCountResult, appointmentsYearCountResult] = await Promise.all([
         appointmentsCountQuery.first(),
