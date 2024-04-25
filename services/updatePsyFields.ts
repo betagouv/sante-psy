@@ -13,6 +13,7 @@ export const addFrenchLanguageIfMissing = (languages: string): string => {
 };
 
 export const editablePsyFields = (psy: Psychologist): EditablePsychologist => ({
+  title: psy.title,
   email: psy.email,
   phone: psy.phone,
   website: psy.website,
@@ -43,6 +44,7 @@ export const nonEditablePsyFields = (psy: Psychologist): NonEditablePsychologist
   training: psy.training,
   adeli: psy.adeli,
   diploma: psy.diploma,
+  diplomaYear: psy.diplomaYear,
   acceptationDate: psy.acceptationDate,
 });
 

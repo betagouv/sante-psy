@@ -109,6 +109,7 @@ const getDossiersWithAnnotationsAndMessages = (cursor: string, state: DossierSta
             ... on PersonnePhysique {
               nom
               prenom
+              civilite
             }
           }
         }
