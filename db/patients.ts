@@ -48,49 +48,35 @@ const getAll = async (psychologistId: string): Promise<(Patient &
 
     // Count the appointments taking in acount each patients sharing the same INE
     const patientsDataPromises = patients.map(async (patient) => {
-      const appointmentsCountQuery = db.countDistinct('id')
-          .from(appointmentsTable)
-          .whereIn('patientId', function () {
-            this.select('id')
-              .from(patientsTable)
-              .where(function () {
-                if (patient.INE && patient.INE.trim() !== '') {
-                  this.where('INE', patient.INE);
-                } else {
-                  this.where('id', patient.id);
-                }
-              })
-              .andWhere('deleted', false);
+      const appointmentsData = await db.select('id', 'appointmentDate')
+      .from(appointmentsTable)
+      .whereIn('patientId', function () {
+        this.select('id')
+          .from(patientsTable)
+          .where(function () {
+            if (patient.INE && patient.INE.trim() !== '') {
+              this.where('INE', patient.INE);
+            } else {
+              this.where('id', patient.id);
+            }
           })
           .andWhere('deleted', false);
+      })
+      .andWhere('deleted', false);
 
-      const appointmentsYearCountQuery = db.countDistinct('id')
-          .from(appointmentsTable)
-          .whereIn('patientId', function () {
-            this.select('id')
-              .from(patientsTable)
-              .where(function () {
-                if (patient.INE && patient.INE.trim() !== '') {
-                  this.where('INE', patient.INE);
-                } else {
-                  this.where('id', patient.id);
-                }
-              })
-              .andWhere('deleted', false)
-              .andWhereRaw(`"appointmentDate" > '${startCurrentUnivYear()}'`)
-              .andWhereRaw(`"appointmentDate" < '${endCurrentUnivYear()}'`);
-          })
-          .andWhere('deleted', false);
+      const appointmentsDataCurrentUnivYear = appointmentsData.filter((appointment) => {
+        const startUnivYear = date.getUTCDate(new Date(startCurrentUnivYear()));
+        const endUnivYear = date.getUTCDate(new Date(endCurrentUnivYear()));
+        const appointmentDate = date.getUTCDate(new Date(appointment.appointmentDate));
+        return appointmentDate >= startUnivYear && appointmentDate <= endUnivYear;
+      });
 
-      const [appointmentsCountResult, appointmentsYearCountResult] = await Promise.all([
-        appointmentsCountQuery.first(),
-        appointmentsYearCountQuery.first(),
-      ]);
-
+      const appointmentsCountResult = appointmentsData ? appointmentsData.length : '0';
+      const appointmentsYearCountResult = appointmentsDataCurrentUnivYear ? appointmentsDataCurrentUnivYear.length : '';
       return {
         ...patient,
-        appointmentsCount: appointmentsCountResult ? appointmentsCountResult.count : '0',
-        appointmentsYearCount: appointmentsYearCountResult ? appointmentsYearCountResult.count : '0',
+        appointmentsCount: appointmentsCountResult,
+        appointmentsYearCount: appointmentsYearCountResult,
       };
     });
 
