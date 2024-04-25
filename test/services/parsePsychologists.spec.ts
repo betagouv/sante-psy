@@ -18,6 +18,7 @@ describe('parsePsychologists', () => {
     const result = [
       {
         dossierNumber: uuid.getUuidDossierNumber(1),
+        civilite: 'M',
         lastName: 'Last',
         firstNames: 'First',
         archived: false,
@@ -28,6 +29,7 @@ describe('parsePsychologists', () => {
         departement: '14 - Calvados',
         region: 'Normandie',
         diploma: 'Psychologie clinique de la santé',
+        diplomaYear: '05 février 2002',
         phone: '0468396600',
         email: 'psychologue.test@beta.gouv.fr',
         personalEmail: 'loginemail@beta.gouv.fr',
@@ -40,6 +42,7 @@ describe('parsePsychologists', () => {
       },
       {
         dossierNumber: uuid.getUuidDossierNumber(2),
+        civilite: 'M',
         lastName: '2ème',
         firstNames: 'Personne',
         archived: false,
@@ -50,6 +53,7 @@ describe('parsePsychologists', () => {
         region: 'Normandie',
         phone: '0468396600',
         diploma: 'Psychologie clinique de la santé',
+        diplomaYear: '05 février 2002',
         email: 'psychologue.test@beta.gouv.fr',
         personalEmail: 'loginEmail2@beta.gouv.fr',
         website: 'beta.gouv.fr',

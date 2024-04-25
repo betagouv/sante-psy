@@ -89,6 +89,7 @@ describe('psyListingController', () => {
       ]);
       expect(res.body[0]).to.have.all.keys([
         'dossierNumber',
+        'title',
         'firstNames',
         'lastName',
         'teleconsultation',

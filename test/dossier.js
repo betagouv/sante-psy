@@ -100,9 +100,9 @@ export const dossier = [
       },
     ],
     demandeur: {
-      civilite: 'M',
       nom: 'Last',
       prenom: 'First',
+      civilite: 'M',
     },
     usager: {
       email: 'loginemail@beta.gouv.fr',
@@ -204,9 +204,9 @@ export const dossier = [
       },
     ],
     demandeur: {
-      civilite: 'M',
       nom: '2ème',
       prenom: 'Personne',
+      civilite: 'M',
     },
     usager: {
       email: 'loginEmail2@beta.gouv.fr',

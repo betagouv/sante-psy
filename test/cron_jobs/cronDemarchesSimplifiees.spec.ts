@@ -102,6 +102,7 @@ describe('DS integration tests', () => {
   const paulId = '036e3a85-24bf-5915-9db0-a189bec8e7f6';
   const paul = {
     adeli: '1234567890',
+    title: 'M',
     firstNames: 'Paul',
     lastName: 'Burgun',
     email: 'paul.burgun@beta.gouv.fr',
@@ -125,6 +126,7 @@ describe('DS integration tests', () => {
     languages: 'Français',
     training: ['Connaissance et pratique des outils diagnostic psychologique'],
     diploma: 'Psychologue',
+    diplomaYear: '05 février 2002',
     archived: false,
     state: DossierState.accepte,
     personalEmail: 'paul.burgun@beta.gouv.fr',
@@ -136,6 +138,7 @@ describe('DS integration tests', () => {
   const xavierId = '03ce077a-84c3-5035-9b27-f31a78a19b3a';
   const xavier = {
     adeli: '123456789',
+    title: 'M',
     firstNames: 'Xavier',
     lastName: 'Dsdr',
     email: 'xavier.desoindre@beta.gouv.fr',
@@ -159,6 +162,7 @@ describe('DS integration tests', () => {
     languages: 'Français',
     training: ['Connaissance et pratique des outils diagnostic psychologique'],
     diploma: 'T',
+    diplomaYear: '05 février 2002',
     archived: false,
     state: DossierState.accepte,
     personalEmail: 'xavier.desoindre@beta.gouv.fr',

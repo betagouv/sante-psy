@@ -228,9 +228,9 @@ const requestPsychologist = async (afterCursor: string | undefined): Promise<DSR
               }
               demandeur {
                 ... on PersonnePhysique {
-                  civilite
                   nom
                   prenom
+                  civilite
                 }
               }
               traitements {
