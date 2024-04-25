@@ -11,4 +11,8 @@ export default {
     directory: './test/seed',
     extension: 'ts',
   },
+  pool: {
+    min: 2,
+    max: 10,
+  },
 };
