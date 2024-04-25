@@ -71,8 +71,11 @@ const getAll = async (psychologistId: string): Promise<(Patient &
         return appointmentDate >= startUnivYear && appointmentDate <= endUnivYear;
       });
 
-      const appointmentsCountResult = appointmentsData ? appointmentsData.length : '0';
-      const appointmentsYearCountResult = appointmentsDataCurrentUnivYear ? appointmentsDataCurrentUnivYear.length : '';
+      const appointmentsCountResult = appointmentsData
+        ? appointmentsData.length.toString() : '0';
+      const appointmentsYearCountResult = appointmentsDataCurrentUnivYear
+        ? appointmentsDataCurrentUnivYear.length.toString() : '0';
+
       return {
         ...patient,
         appointmentsCount: appointmentsCountResult,
