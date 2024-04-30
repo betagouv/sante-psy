@@ -57,15 +57,15 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
     });
   };
 
-  const renderDeclareSessionButton = () => (
-    <Button
-      className={styles.createButton}
-      icon="ri-add-line"
-      size="sm"
-      onClick={() => navigate('/psychologue/nouvelle-seance')}
-    >
-      Déclarer une séance
-    </Button>
+  const renderDeclareSessionButton = () => showCreateButton && (
+  <Button
+    className={isSmallScreen ? styles.smallCreateButton : styles.createButton}
+    icon="ri-add-line"
+    size="sm"
+    onClick={() => navigate(`/psychologue/nouvelle-seance/${patientId}`)}
+      >
+    Déclarer une séance
+  </Button>
   );
 
   const renderTable = () => (
@@ -117,16 +117,7 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
     <div data-test-id="etudiant-seances-list">
       {dataWithIndex.length > 0 ? (
         <>
-          {isSmallScreen && showCreateButton && (
-          <Button
-            className={styles.smallCreateButton}
-            icon="ri-add-line"
-            size="sm"
-            onClick={() => navigate('/psychologue/nouvelle-seance')}
-        >
-            Déclarer une séance
-          </Button>
-          )}
+          {isSmallScreen && renderDeclareSessionButton()}
           <h3 className={styles.title}>Séances</h3>
           <div className={!isSmallScreen ? styles.tabsContainer : ''}>
             <Tabs
@@ -145,14 +136,14 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
                 />
               ))}
             </Tabs>
-            {!isSmallScreen && showCreateButton && renderDeclareSessionButton()}
+            {!isSmallScreen && renderDeclareSessionButton()}
           </div>
           {selectedYear && renderTable()}
         </>
       ) : (
         <div className={styles.noAppointmentsWrapper}>
           <h3 className={styles.noAppointmentsTitle}>Pas de séances déclarées</h3>
-          {showCreateButton && renderDeclareSessionButton()}
+          {renderDeclareSessionButton()}
         </div>
       )}
     </div>

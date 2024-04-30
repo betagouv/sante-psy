@@ -2,6 +2,17 @@
   display: flex;
   flex-direction: row;
   gap: 5%;
+
+  form {
+    z-index: 3;
+  } 
+  
+  
+}
+
+.datePicker {
+  z-index: 2;
+  margin-top: 30px;
 }
 
 @media (max-width: 768px) {
