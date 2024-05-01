@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button, TextInput, Checkbox } from '@dataesr/react-dsfr';
+import { Button, TextInput, Checkbox, Highlight } from '@dataesr/react-dsfr';
 
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
@@ -70,11 +70,11 @@ const AddEditPatient = () => {
       .then(response => {
         if (appointmentDate) {
           navigate(
-            `/psychologue/nouvelle-seance/${patientId}?date=${appointmentDate}`,
+            `/psychologue/nouvelle-seance/${patientId ? patientId : response.patientId}?date=${appointmentDate}`,
             { state: { notification: response } },
           );
         } else if (addAppointment) {
-          navigate(`/psychologue/nouvelle-seance/${patientId}`, { state: { notification: response } });
+          navigate(`/psychologue/nouvelle-seance/${patientId ? patientId : response.patientId}`, { state: { notification: response } });
         } else {
           navigate('/psychologue/mes-etudiants', { state: { notification: response } });
         }
