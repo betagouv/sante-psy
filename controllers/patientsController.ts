@@ -197,7 +197,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const hasPrescription = Boolean(req.body.hasPrescription);
 
   const psychologistId = req.auth.psychologist;
-  await dbPatients.insert(
+  const addedPatient = await dbPatients.insert(
     firstNames,
     lastName,
     INE,
@@ -220,6 +220,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
   console.log(`Patient created by psy id ${psychologistId}`);
   res.json({
     message: infoMessage,
+    patientId: addedPatient.id,
   });
 };
 

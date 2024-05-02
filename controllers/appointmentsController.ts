@@ -121,10 +121,16 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getByPatientId = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+
   const psychologistId = req.auth.psychologist;
   const { patientId } = req.params;
 
   const patient = await dbPatient.getById(patientId, psychologistId);
+  if (!patient) {
+    throw new CustomError('Ce patient n\'existe pas', 404);
+  }
+
   const appointments = await dbAppointments.getByPatientId(
     patientId,
     patient.INE.trim() !== '',

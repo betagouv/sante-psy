@@ -70,11 +70,11 @@ const AddEditPatient = () => {
       .then(response => {
         if (appointmentDate) {
           navigate(
-            `/psychologue/nouvelle-seance/${patientId}?date=${appointmentDate}`,
+            `/psychologue/nouvelle-seance/${patientId || response.patientId}?date=${appointmentDate}`,
             { state: { notification: response } },
           );
         } else if (addAppointment) {
-          navigate(`/psychologue/nouvelle-seance/${patientId}`, { state: { notification: response } });
+          navigate(`/psychologue/nouvelle-seance/${patientId || response.patientId}`, { state: { notification: response } });
         } else {
           navigate('/psychologue/mes-etudiants', { state: { notification: response } });
         }
