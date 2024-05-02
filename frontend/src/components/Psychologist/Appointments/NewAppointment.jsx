@@ -121,7 +121,7 @@ const NewAppointment = () => {
         </div>
         <DatePicker
           id="new-appointment-date-input"
-          className={styles.datePicker}
+          className="date-picker"
           selected={date}
           minDate={beginningDate}
           maxDate={maxDate}
