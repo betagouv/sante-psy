@@ -23,6 +23,7 @@ const defaultItems = [
 ];
 
 const connectedItems = [
+  { title: 'Tableau de bord', link: '/psychologue/tableau-de-bord' },
   { title: 'Déclarer mes séances', link: '/psychologue/mes-seances' },
   { title: 'Gérer mes étudiants', link: '/psychologue/mes-etudiants' },
   {

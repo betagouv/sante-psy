@@ -28,8 +28,8 @@ import { useStore } from 'stores/';
 import './colors.css';
 import './App.css';
 
-import InactiveProfile from 'components/Psychologist/Profile/InactiveProfile';
-import ActiveProfile from 'components/Psychologist/Profile/ActiveProfile';
+import InactiveProfile from 'components/Psychologist/PsyDashboard/InactiveProfile';
+import ActiveProfile from 'components/Psychologist/PsyDashboard/ActiveProfile';
 import StudentLanding from 'components/Landing/StudentLanding';
 import StudentAnswer from 'components/StudentAnswer/StudentAnswer';
 import OtherServices from 'components/OtherServices/OtherServices';

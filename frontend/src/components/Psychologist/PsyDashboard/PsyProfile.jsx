@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Button, ButtonGroup } from '@dataesr/react-dsfr';
 
-import EditProfile from 'components/Psychologist/Profile/EditProfile';
+import EditProfile from 'components/Psychologist/PsyDashboard/EditProfile';
 
 import agent from 'services/agent';
 

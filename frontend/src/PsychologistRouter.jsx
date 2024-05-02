@@ -8,7 +8,7 @@ import Appointments from 'components/Psychologist/Appointments/Appointments';
 import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
 import Patients from 'components/Psychologist/Patients/Patients';
 import AddEditPatient from 'components/Psychologist/Patients/AddEditPatient';
-import PsyProfile from 'components/Psychologist/Profile/PsyProfile';
+import PsyProfile from 'components/Psychologist/PsyDashboard/PsyProfile';
 import Page from 'components/Page/Page';
 import Notification from 'components/Notification/Notification';
 import ConventionModal from 'components/Psychologist/Appointments/ConventionModal';
@@ -149,6 +149,7 @@ const PsychologistRouter = () => {
       )}
       <GlobalNotification className="fr-my-2w" />
       <Routes>
+        <Route exact path="/tableau-de-bord" element={<PsyProfile />} />
         <Route exact path="/mes-seances" element={<Appointments />} />
         <Route exact path="/nouvelle-seance" element={<NewAppointment />} />
         <Route exact path="/nouvelle-seance/:patientId" element={<NewAppointment />} />
