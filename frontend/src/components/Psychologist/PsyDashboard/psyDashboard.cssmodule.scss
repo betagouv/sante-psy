@@ -1,0 +1,55 @@
+// version mobile à gérer !!!
+
+// .psyDashboard {
+//   padding: 48px;
+// }
+
+.psyDashboardCard, .psyDashboardDescription {
+  display: flex;
+  border: 1px solid #D9D9D9;
+  border-radius: 20px;
+  padding: 24px;
+  width: 80%;
+  margin-bottom: 24px;
+}
+
+.psyPersonIcon {
+  width: 80px;
+}
+
+.psyDashboardCard button {
+  font-size: 14px;
+  padding: 6px;
+  margin: 0px 24px 8px 0px;
+}
+
+.psyDashboardCardSecondColumn p {
+  margin: 4px;
+}
+
+.psyDashboardCardFirstColumn, .psyDashboardCardSecondColumn {
+  display: flex;
+  flex-direction: column;
+  margin-right: 88px;
+  justify-content: end;
+}
+
+.psyDashboardConvention, .psyDashboardAvailability {
+  width: 300px;
+  display: inline-flex;
+  vertical-align: middle;
+  justify-content: space-evenly;
+  margin-right: 16px;
+}
+
+.psyDashboardConvention img, .psyDashboardAvailability img {
+  width: 20px;
+}
+
+.psyDashboardAvailability p {
+  margin: 0px;
+}
+
+.psyDashboardDescription {
+  flex-direction: column;
+}
