@@ -34,7 +34,7 @@ const parseDossierMetadata = (dossier: DSPsychologist): Psychologist => {
 
   psy.lastName = demandeur.nom.trim();
   psy.firstNames = demandeur.prenom.trim();
-  psy.civilite = demandeur.civilite.trim();
+  psy.title = demandeur.civilite.trim();
 
   psy.personalEmail = usager.email.trim();
 

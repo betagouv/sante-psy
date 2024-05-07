@@ -51,6 +51,7 @@ describe('psyListingController', () => {
 
       const expectedKeys = [
         'dossierNumber',
+        'title',
         'firstNames',
         'lastName',
         'teleconsultation',
@@ -69,6 +70,8 @@ describe('psyListingController', () => {
         'languages',
         'email',
         'phone',
+        'diploma',
+        'diplomaYear',
       ];
       expect(resultPsyActive1).to.have.all.keys(expectedKeys);
       expect(resultPsyActive2).to.have.all.keys(expectedKeys);
@@ -114,6 +117,8 @@ describe('psyListingController', () => {
         'appointmentLink',
         'useFirstNames',
         'useLastName',
+        'diploma',
+        'diplomaYear',
       ]);
     });
   });

@@ -18,7 +18,7 @@ describe('parsePsychologists', () => {
     const result = [
       {
         dossierNumber: uuid.getUuidDossierNumber(1),
-        civilite: 'M',
+        title: 'M',
         lastName: 'Last',
         firstNames: 'First',
         archived: false,
@@ -42,7 +42,7 @@ describe('parsePsychologists', () => {
       },
       {
         dossierNumber: uuid.getUuidDossierNumber(2),
-        civilite: 'M',
+        title: 'M',
         lastName: '2ème',
         firstNames: 'Personne',
         archived: false,
