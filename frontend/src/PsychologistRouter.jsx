@@ -157,7 +157,7 @@ const PsychologistRouter = () => {
         <Route exact path="/nouvel-etudiant" element={<AddEditPatient />} />
         <Route exact path="/modifier-etudiant/:patientId" element={<AddEditPatient />} />
         <Route exact path="/mes-remboursements" element={<Billing />} />
-        <Route path="/mon-profil" element={<PsyProfile />} />
+        {/* <Route path="/mon-profil" element={<PsyProfile />} /> */}
         <Route path="/*" element={<Navigate to="/psychologue/mes-seances" />} />
       </Routes>
     </Page>
