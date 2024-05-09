@@ -4,7 +4,7 @@ import clean from '../helper/clean';
 import create from '../helper/create';
 import dbPsychologists from '../../db/psychologists';
 
-describe.only('psyListingController', () => {
+describe('psyListingController', () => {
   let psyActive1;
   let psyActive2;
   let psyInactive;
