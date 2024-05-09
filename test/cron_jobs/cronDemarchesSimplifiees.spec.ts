@@ -162,7 +162,7 @@ describe('DS integration tests', () => {
     languages: 'Français',
     training: ['Connaissance et pratique des outils diagnostic psychologique'],
     diploma: 'T',
-    diplomaYear: '2008',
+    diplomaYear: '1992',
     archived: false,
     state: DossierState.accepte,
     personalEmail: 'xavier.desoindre@beta.gouv.fr',

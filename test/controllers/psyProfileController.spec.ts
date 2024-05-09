@@ -17,13 +17,16 @@ describe('psyProfileController', () => {
 
     const checkProfile = (actual, expected, shouldBeComplete) => {
       const expectedKeys = [
-        'dossierNumber',
-        'title',
         'firstNames',
         'lastName',
+        'email',
+        'phone',
+        'website',
+        'appointmentLink',
         'teleconsultation',
-        'departement',
-        'region',
+        'description',
+        'languages',
+        'active',
         'address',
         'longitude',
         'latitude',
@@ -34,11 +37,8 @@ describe('psyProfileController', () => {
         'otherLatitude',
         'otherCity',
         'otherPostcode',
-        'languages',
-        'email',
-        'phone',
-        'diploma',
-        'diplomaYear',
+        'departement',
+        'region',
       ];
 
       if (shouldBeComplete) {

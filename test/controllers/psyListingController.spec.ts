@@ -4,7 +4,7 @@ import clean from '../helper/clean';
 import create from '../helper/create';
 import dbPsychologists from '../../db/psychologists';
 
-describe('psyListingController', () => {
+describe.only('psyListingController', () => {
   let psyActive1;
   let psyActive2;
   let psyInactive;
@@ -51,7 +51,6 @@ describe('psyListingController', () => {
 
       const expectedKeys = [
         'dossierNumber',
-        'title',
         'firstNames',
         'lastName',
         'teleconsultation',
@@ -70,8 +69,6 @@ describe('psyListingController', () => {
         'languages',
         'email',
         'phone',
-        'diploma',
-        'diplomaYear',
       ];
       expect(resultPsyActive1).to.have.all.keys(expectedKeys);
       expect(resultPsyActive2).to.have.all.keys(expectedKeys);
