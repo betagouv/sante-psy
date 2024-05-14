@@ -25,6 +25,7 @@ const removePsyPersonalData = async (dossierNumber: string): Promise<void> => {
       .where({ dossierNumber })
       .update({
         selfModified: true,
+        title: erasedData,
         firstNames: erasedData,
         lastName: erasedData,
         adeli: erasedData,
@@ -41,6 +42,8 @@ const removePsyPersonalData = async (dossierNumber: string): Promise<void> => {
         otherLatitude: null,
         phone: erasedData,
         website: erasedData,
+        diploma: erasedData,
+        diplomaYear: erasedData,
         appointmentLink: erasedData,
         description: erasedData,
         personalEmail: erasedData,

@@ -109,6 +109,7 @@ const getDossiersWithAnnotationsAndMessages = (cursor: string, state: DossierSta
             ... on PersonnePhysique {
               nom
               prenom
+              civilite
             }
           }
         }
@@ -227,9 +228,9 @@ const requestPsychologist = async (afterCursor: string | undefined): Promise<DSR
               }
               demandeur {
                 ... on PersonnePhysique {
-                  civilite
                   nom
                   prenom
+                  civilite
                 }
               }
               traitements {

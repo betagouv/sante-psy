@@ -1,6 +1,7 @@
 import { DossierState } from './DossierState';
 
 export type EditablePsychologist = {
+    title: string,
     email: string,
     phone: string,
     website: string,
@@ -31,6 +32,7 @@ export type NonEditablePsychologist = {
     training: string,
     adeli: string,
     diploma: string,
+    diplomaYear: string,
     acceptationDate: Date,
   };
 
@@ -63,6 +65,7 @@ export type DSPsychologist = {
   demandeur: {
     nom: string,
     prenom: string,
+    civilite: string,
   },
   messages: string[],
   annotations: {
