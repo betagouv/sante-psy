@@ -1,0 +1,176 @@
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 200px;
+  padding: 48px;
+}
+
+.secondStepContainer {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: auto;
+  gap: 5rem;
+}
+
+
+.eligibilityInput {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.eligibilityMessage {
+  font-size: 12px;
+    p {
+      font-size: 12px;
+    }
+  &_valid {
+    color: #18753c;
+  }
+  &_error {
+    color: #ce0500;
+  }
+}
+
+.text {
+  align-self: flex-end;
+  padding-bottom: 8px;
+}
+
+.imageList {
+  margin-left: 20px;
+  width: 100px;
+  height: 100px;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.containerList {
+  display: flex;
+  align-items: center; /* Centrer verticalement */
+  justify-content: center; /* Centrer horizontalement */
+  border-radius: 36px;
+  border: 1px solid #000091;
+  padding: 32px 64px;
+}
+
+.borderedList {
+  border-radius: 36px;
+  border: 1px solid #000091;
+  padding: 32px 64px;
+}
+
+.containerList button,
+.containerList button:hover {
+  color: #000091;
+  box-shadow: none;
+  cursor: pointer;
+  background-color: white;
+  padding-bottom: 0px;
+}
+
+.containerList a::after {
+  display: none;
+}
+
+.searchSchoolSection {
+  margin-top: 16px;
+  display: flex;
+}
+
+.searchIcon {
+  font-size: 24px;
+  margin: 8px;
+}
+
+.searchbar {
+  width: 481px;
+}
+
+.podcastSection {
+  display: flex;
+  align-items: center;
+}
+
+.podcastSection img {
+  margin-top: -16px;
+}
+
+.podcastText {
+  margin: 24px;
+}
+
+.contactForm {
+  width: 40%;
+}
+
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    padding: 30px;
+    gap: 50px;
+  }
+
+  .secondStepContainer {
+    width: 100%;
+    padding: 30px;
+  }
+
+  .containerList {
+    padding: 12px 24px;
+
+    .imageList {
+      display: none;
+    }
+
+    button {
+      display: block;
+      padding-left: 0px;
+    }
+  }
+
+  .borderedList {
+    padding-right: 30px;
+    padding-left: 45px;
+  }
+
+  .borderedList button {
+    display: block;
+    padding-left: 0px;
+  }
+
+  .searchbar {
+    padding: 0px;
+  }
+
+  .searchIcon {
+    display: none;
+  }
+
+  .eligibilityInput {
+    flex-direction: column;
+  }
+
+  .text {
+    align-self: flex-start;
+    padding-bottom: 0px;
+  }
+
+  .holdingHandIcon {
+    display: none;
+  }
+
+  .podcastSection {
+    flex-direction: column;
+  }
+
+  .podcastSection img {
+    margin-top: 48px;
+  }
+}

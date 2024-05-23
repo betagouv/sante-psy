@@ -9,6 +9,9 @@ import Statistics from './Statistics';
 
 import Newsletter from './Newsletter';
 import FollowInstagram from './FollowInstagram';
+import styles from './landing.cssmodule.scss';
+import StudentEligibilityTunnel from 'components/Eligibility/StudentEligibilityTunnel';
+import MozaicInstagram from './MosaicInstagram';
 
 const Landing = () => {
   const { commonStore: { config } } = useStore();
@@ -17,39 +20,78 @@ const Landing = () => {
   }, []);
 
   return (
-    <div data-test-id="landingPageContainer">
+    <div data-test-id="landingPageContainer" className={styles.landing}>
       <Slice
-        imageSrc="/images/landing.png"
+        customStyle={{container: styles.firstSlice}}
+        imageSrc="/images/landing-2.png"
         title={(
           <>
-            <b>Étudiants, étudiantes</b>
-            <br />
-            Besoin d’une oreille attentive&#x00A0;?
+          Étudiants, bénéficiez de <br/> 8 séances <b>avec un psychologue</b> sans avance de frais
+          </>
+        )}
+      />
+    
+      <StudentEligibilityTunnel />
+    
+      {/* <MozaicInstagram/> */}
+      {/* <StudentProcess /> */}
+      <Statistics />
+      <Slice
+        color="white"
+        customStyle={{container: styles.secondSlice, content: styles.content}}
+        buttonSecondary={true}
+        buttonIcon="ri-instagram-line"
+        centerText
+        Component={MozaicInstagram}
+        title={(
+          <>
+            Rejoignez la communauté Instagram
+            {' '}
+            <b>Santé Psy Étudiant</b>
+            &#x00A0;
           </>
         )}
         description={(
           <>
-            Bénéficiez de
-            {' '}
-            <b>8 séances gratuites</b>
-            {' '}
-            avec un psychologue partenaire
+            <b>{config?.statistics?.nbInstaFollower || '21,5k'}</b> abonnés <br/>
+            Conseils<br/>
+            Témoignages<br/>
+            Podcasts<br/>
           </>
         )}
-        buttonLink="/eligibilite"
-        buttonText="Vérifier mon éligibilité"
-        hint={(
+        buttonLink="https://www.instagram.com/sante_psyetudiant/?hl=fr"
+        buttonText="Santé Psy Étudiant"
+      />
+
+      <Slice
+        color="white"
+        customStyle={{container: styles.thirdSlice}}
+        reverse
+        buttonSecondary={true}
+        buttonIcon="ri-instagram-line"
+        centerText
+        imageSrc="/images/kaavan.png"
+        //Component={MozaicInstagram}
+        title={(
           <>
-            Plus de
-            {' '}
-            <b>62 000 étudiants</b>
-            {' '}
-            déjà accompagnés
+            <b>Podcast</b> sur la santé mentale
+          </>
+        )}
+        buttonLink="https://www.instagram.com/kaavan_podcast/"
+        buttonText="Kaavan podcast"
+      />
+
+      <Slice
+        customStyle={{container: styles.fourthSlide, content: styles.content}}
+        title={(
+          <>
+            Professionnels de santé,
+            Psychologues, 
+            <b> Comment orienter les étudiants ?</b>
           </>
         )}
       />
-      <StudentProcess />
-      <Statistics />
+      
       <Slice
         color="white"
         reverse

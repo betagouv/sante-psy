@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './slice.cssmodule.scss';
 
 const Slice = ({
+  customStyle,
   color,
   title,
   description,
@@ -16,6 +17,7 @@ const Slice = ({
   hint,
   images,
   imageSrc,
+  Component,
   reverse,
   children,
   centerText,
@@ -28,9 +30,10 @@ const Slice = ({
         color ? styles[color] : styles.container,
         reverse ? styles.reverse : '',
         centerText ? styles.centerText : '',
+        (customStyle && customStyle.container) ? customStyle.container : ''
       )}
     >
-      <div className={(images || imageSrc) ? styles.content : styles.onlyContent}>
+      <div className={classNames((images || imageSrc || Component) ? styles.content : styles.onlyContent, (customStyle && customStyle.content) ? customStyle.content : '')}>
         {title && (
           <h2 className={classNames(styles.title, centerTitle ? styles.centerTitle : '')}>
             {title}
@@ -63,6 +66,7 @@ const Slice = ({
       </div>
       {imageSrc && <img className={styles.image} src={imageSrc} alt="" />}
       {images}
+      {Component && <div className={styles.component}><Component /></div>}
     </div>
   );
 };

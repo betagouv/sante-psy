@@ -1,0 +1,38 @@
+
+.container {
+  display: flex;
+  flex-direction: row;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  gap: 5rem;
+  //justify-content: center;
+  padding-left: 120px;
+
+  p { 
+    line-height: 30px;
+    padding-bottom: 20px;
+  }
+  
+
+  h2 {
+    font-size: 28px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+  
+  
+}
+@media (max-width: 900px) {
+ .container {
+  flex-direction: column;
+  padding-left: 30px;
+  padding-right: 30px;
+  gap:2rem;
+
+  .image {
+    align-self: center;
+  }
+ }
+}
