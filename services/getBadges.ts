@@ -10,11 +10,11 @@ const arePrescriptionInfosFilled = (appointment: AppointmentWithPatient | Patien
   return !!doctorAddress && !!doctorName && !!hasPrescription;
 };
 
-const areStudentInfosFilled = (appointment: AppointmentWithPatient | Patient) : boolean => {
+const areStudentINEFilled = (appointment: AppointmentWithPatient | Patient) : boolean => {
   const {
-    firstNames, lastName, dateOfBirth, institutionName, INE,
+    INE,
   } = appointment;
-  return !!firstNames && !!lastName && !!dateOfBirth && !!institutionName && !!INE;
+  return !!INE;
 };
 
 const getPatientBadges = (patient: AppointmentWithPatient | Patient): string[] => {
@@ -22,8 +22,8 @@ const getPatientBadges = (patient: AppointmentWithPatient | Patient): string[] =
   const appointmentsYearCount = parseInt(patient.appointmentsYearCount);
   const badges = [];
 
-  if (!areStudentInfosFilled(patient)) {
-    badges.push(appointmentBadges.student_infos);
+  if (!areStudentINEFilled(patient)) {
+    badges.push(appointmentBadges.student_ine);
   }
   if (!arePrescriptionInfosFilled(patient)) {
     badges.push(appointmentBadges.prescription_infos);

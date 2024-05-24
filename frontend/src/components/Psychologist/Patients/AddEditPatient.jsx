@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button, TextInput, Checkbox } from '@dataesr/react-dsfr';
+import { Button, TextInput, Checkbox, Highlight } from '@dataesr/react-dsfr';
 
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
@@ -10,6 +10,7 @@ import getBadgeInfos from 'src/utils/badges';
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
 import styles from './addEditPatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
+import classNames from 'classnames';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
@@ -90,8 +91,8 @@ const AddEditPatient = () => {
           <div id="mandatory-informations">
             <section id="anchor-student-file" className={styles.studentSectionTitle}>
               <h2>Dossier étudiant</h2>
-              {patient.badges.includes(badges.student_infos.key)
-                ? renderBadge({ badge: badges.student_infos.key })
+              {patient.badges.includes(badges.student_ine.key)
+                ? renderBadge({ badge: badges.student_ine.key })
                 : ''}
             </section>
             <p className="fr-text--sm fr-mb-1v">
@@ -142,16 +143,22 @@ const AddEditPatient = () => {
               hint="Exemple : Université de Rennes ou ENSAE"
               value={patient.institutionName}
               onChange={e => changePatient(e.target.value, 'institutionName')}
-              />
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-ine-input"
-              label="Numéro INE de l'étudiant (optionnel)"
-              hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
-              value={patient.INE}
-              pattern="^[a-zA-Z0-9]{1,11}$"
-              onChange={e => changePatient(e.target.value, 'INE')}
-              />
+            />
+            <div className={styles.ineWrapper}>
+              <TextInput
+                className={classNames(styles.ineInput,"midlength-input")}
+                data-test-id="etudiant-ine-input"
+                label="Numéro INE de l'étudiant (optionnel)"
+                hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
+                value={patient.INE}
+                pattern="^[a-zA-Z0-9]{11}$"
+                onChange={e => changePatient(e.target.value, 'INE')}
+                />
+
+              <Highlight size="lg">
+                Bien qu'optionnel, l'INE vous permettra de suivre les séances réalisées ailleurs et donc d'assurer votre remboursement.
+              </Highlight>
+            </div>
             <Checkbox
               className="fr-input-group"
               data-test-id="etudiant-status-input"

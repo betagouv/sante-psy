@@ -9,12 +9,18 @@ import date from '../utils/date';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { getPatientWithBadges } from '../services/getBadges';
+import { Patient } from '../types/Patient';
+
+const sortData = (a: Patient, b: Patient) : number => (
+  `${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`);
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.psychologist;
   const patients = await dbPatients.getAll(psychologistId);
   const patientsWithBadges = getPatientWithBadges(patients);
-  res.json(patientsWithBadges);
+
+  const sortedData = patientsWithBadges.sort(sortData);
+  res.json(sortedData);
 };
 
 // Validators we reuse for editPatient and createPatient
@@ -34,7 +40,7 @@ const patientValidators = [
       check('INE').trim().isEmpty(),
       check('INE')
         .trim().isAlphanumeric()
-        .isLength({ min: 1, max: 50 })
+        .isLength({ min: 11, max: 11 })
         .customSanitizer(DOMPurify.sanitize),
     ],
     `Le numéro INE doit faire maximum 50 caractères alphanumériques \
@@ -80,9 +86,9 @@ const patientValidators = [
       check('doctorEmail')
       .trim()
       .isEmail()
-      .withMessage('Vous devez spécifier un email valide.')
       .customSanitizer(DOMPurify.sanitize),
     ],
+    'Vous devez spécifier un email valide.',
   ),
   oneOf(
     [
