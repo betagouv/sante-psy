@@ -5,7 +5,6 @@ import StudentEligibilityStepTwo from './StudentEligibilityStepTwo.jsx';
 import StudentEligibilityStepThree from './StudentEligibilityStepThree.jsx';
 
 const StudentEligibilityTunnel = () => {
-  const STEPS = 3;
   const [currentStep, setCurrentStep] = useState(1);
 
   const handleNextStep = () => {
@@ -15,10 +14,9 @@ const StudentEligibilityTunnel = () => {
 
   return (
     <>
-     <StudentEligibilityStepThree onStepChange={handleNextStep} />
-      {/* {currentStep === 1 && <StudentEligibilityStepOne onStepChange={handleNextStep} />}
-      {currentStep === 2 && <StudentEligibilityStepTwo onStepChange={handleNextStep} />} */}
-      {/*{currentStep === 3 && <StudentEligibilityStepThree />} */}
+      {currentStep === 1 && <StudentEligibilityStepOne onStepChange={handleNextStep} />}
+      {currentStep === 2 && <StudentEligibilityStepTwo onStepChange={handleNextStep} />}
+      {currentStep === 3 && <StudentEligibilityStepThree/>}
 
     </>
   );

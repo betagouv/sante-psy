@@ -5,7 +5,7 @@ import styles from './studentEligibilityStepThree.cssmodule.scss';
 import { Button, Icon, TextInput } from '@dataesr/react-dsfr';
 import { useNavigate } from 'react-router-dom';
 
-const StudentEligibilityStepThree = ({handleNextStep}) => {
+const StudentEligibilityStepThree = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [address, setAddress] = useState('');
@@ -35,9 +35,8 @@ const StudentEligibilityStepThree = ({handleNextStep}) => {
                 data-test-id="search-psychologist-input"
                 onChange={handleChange}
               />
-              <Button icon="ri-arrow-right-s-line" data-test-id="search-psychologist-button" disabled={isLoading} secondary submit />
+              <Button icon="ri-arrow-right-line" data-test-id="search-psychologist-button" disabled={isLoading} secondary submit />
             </div>
-            
         </form>
       </div>
     </section>

@@ -13,7 +13,7 @@ const Statistic = ({ value, description }) => (
       {' '}
       +
     </div>
-    <div><b>{description}</b></div>
+    <div><b><span>{description}</span></b></div>
   </div>
 );
 

@@ -16,7 +16,7 @@ const Statistics = () => {
     <Slice>
       <div className={styles.header}>
         <div className={styles.title}>
-          <b>Santé Psy Étudiant</b>
+          <span><b>Santé Psy Étudiant</b></span>
           {' '}
           à votre écoute
         </div>

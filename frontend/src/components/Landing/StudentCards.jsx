@@ -8,18 +8,20 @@ const StudentCards = () => (
   <Row className={styles.card}>
     <StudentCard
       index={1}
-      big
-      title="Vérifier votre éligibilité"
-      image="psychologist"
+      cardSize='lg'
+      titleSize='lg'
+      title={<b>Vérifier votre éligibilité</b>}
+      image="psychologist.svg"
       buttonIcon="ri-user-search-fill"
       buttonText="Vérifiez votre éligibilité"
       buttonLink="/eligibilite"
     />
     <StudentCard
       index={2}
-      big
-      title="Consultez un médecin généraliste"
-      image="doctor"
+      cardSize='lg'
+      titleSize='lg'
+      title={<b>Consultez un médecin généraliste</b>}
+      image="doctor.svg"
       description={(
         <>
           pour établir une
@@ -35,9 +37,10 @@ const StudentCards = () => (
     />
     <StudentCard
       index={3}
-      big
-      title="Choisissez un psychologue"
-      image="followup"
+      cardSize='lg'
+      titleSize='lg'
+      title={<b>Choisissez un psychologue</b>}
+      image="followup.svg"
       buttonIcon="ri-search-line"
       buttonText="Trouver un psychologue"
       buttonLink="/trouver-un-psychologue"

@@ -1,5 +1,3 @@
-import GlobalNotification from 'components/Notification/GlobalNotification';
-import Page from 'components/Page/Page';
 import React, { useEffect, useState } from 'react';
 import Service from './Service';
 import styles from './service.cssmodule.scss';
@@ -18,20 +16,6 @@ const OtherServices = () => {
   }, []);
 
   return (
-    <Page
-      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
-      currentBreadCrumb="Autres services"
-      title={(
-        <>
-          Autres services
-          {' '}
-          <b>à votre écoute</b>
-        </>
-    )}
-      description="Vous n’êtes pas éligible au dispositif Santé Psy Etudiant ? Voici d’autres services à votre écoute."
-      textContent
-    >
-      <GlobalNotification />
       <div className={styles.services}>
         <Service
           image={small ? '/images/nightline-small.jpg' : '/images/nightline.png'}
@@ -66,7 +50,6 @@ const OtherServices = () => {
           link="https://monparcourspsy.sante.gouv.fr/"
         />
       </div>
-    </Page>
   );
 };
 

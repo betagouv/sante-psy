@@ -1,10 +1,7 @@
 @import 'src/variables.scss';
 
-.bigContainer,
 .container {
   text-align: center;
-  width: 345px;
-  height: 770px;
   border: 1px solid var(--blue-france-sun-113-625);
   border-radius: 50px;
   background: var(--grey-1000-75);
@@ -15,6 +12,21 @@
     color: black;
     box-shadow: unset;
   }
+}
+
+.largeCard {
+  width: 345px;
+  height: 770px;
+}
+
+.mediumCard {
+  width: 241.5px;
+  height: 562px;
+}
+
+.smallCard {
+  width: 172.5px;
+  height: 385px;
 }
 
 .index {
@@ -33,18 +45,26 @@
   margin: 32px auto;
 }
 
-.bigTitle,
 .title {
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 36px;
-  margin-bottom: 12px;
+  font-weight: normal;
 }
 
-.bigTitle {
+.largeTitle {
   font-size: 40px;
   line-height: 48px;
   margin-bottom: 40px;
+}
+
+.mediumTitle {
+  font-size: 28px;
+  line-height: 36px;
+  margin-bottom: 20px;
+}
+
+.smallTitle {
+  font-size: 20px;
+  line-height: 28px;
+  margin-bottom: 10px;
 }
 
 .description {
@@ -60,13 +80,23 @@
 
 @media (min-width: 769px) {
 
-  .bigContainer,
-  .container {
-    width: 384px;
-  }
+  // .bigContainer,
+  // .container {
+  //   width: 384px;
+  // }
 
-  .bigContainer {
+  .largeCard {
     width: 400px;
     padding: 64px 32px;
+  }
+
+  .mediumCard {
+    width: 353px;
+    padding: 45px 22px;
+  }
+  
+  .smallCard {
+    width: 200px;
+    padding: 32px 16px;
   }
 }

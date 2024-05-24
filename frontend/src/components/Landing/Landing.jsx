@@ -12,6 +12,8 @@ import FollowInstagram from './FollowInstagram';
 import styles from './landing.cssmodule.scss';
 import StudentEligibilityTunnel from 'components/Eligibility/StudentEligibilityTunnel';
 import MozaicInstagram from './MosaicInstagram';
+import PsychologistCards from './PsychologistCards';
+import OtherServices from 'components/OtherServices/OtherServices';
 
 const Landing = () => {
   const { commonStore: { config } } = useStore();
@@ -26,7 +28,7 @@ const Landing = () => {
         imageSrc="/images/landing-2.png"
         title={(
           <>
-          Étudiants, bénéficiez de <br/> 8 séances <b>avec un psychologue</b> sans avance de frais
+          Étudiants, bénéficiez de <br/> <b>8 séances</b> <span class="colored">avec un psychologue</span> <b>sans avance de frais</b>
           </>
         )}
       />
@@ -44,12 +46,12 @@ const Landing = () => {
         centerText
         Component={MozaicInstagram}
         title={(
-          <>
+          <b>
             Rejoignez la communauté Instagram
             {' '}
-            <b>Santé Psy Étudiant</b>
+            <span>Santé Psy Étudiant</span>
             &#x00A0;
-          </>
+          </b>
         )}
         description={(
           <>
@@ -71,7 +73,6 @@ const Landing = () => {
         buttonIcon="ri-instagram-line"
         centerText
         imageSrc="/images/kaavan.png"
-        //Component={MozaicInstagram}
         title={(
           <>
             <b>Podcast</b> sur la santé mentale
@@ -85,14 +86,34 @@ const Landing = () => {
         customStyle={{container: styles.fourthSlide, content: styles.content}}
         title={(
           <>
-            Professionnels de santé,
-            Psychologues, 
+            Professionnels de santé,<br/>
+            <span>Psychologues</span>,<br/>
             <b> Comment orienter les étudiants ?</b>
           </>
         )}
       />
       
+      <Slice color="white">
+        <PsychologistCards/> 
+      </Slice> 
       <Slice
+        customStyle={{container: styles.fifthSlide, content: styles.content}}
+        title={(
+            <b>
+              Autres services
+              {' '}
+              <span>à votre écoute</span>
+            </b>
+        )}
+        description="Vous n’êtes pas éligible au dispositif Santé Psy Etudiant ? Voici d’autres services à votre écoute."
+      />
+      <Slice 
+        customStyle={{container: styles.sixthSlide}}
+        color="white"
+      >
+        <OtherServices/> 
+      </Slice> 
+      {/* <Slice
         color="white"
         reverse
         imageSrc="/images/teleconsultation.png"
@@ -169,7 +190,7 @@ const Landing = () => {
             <b>3 minutes</b>
           </>
         )}
-      />
+      /> */}
     </div>
   );
 };

@@ -4,8 +4,11 @@ import StepBanner from './StepBanner';
 import styles from './studentEligibilityStepTwo.cssmodule.scss';
 import { Button, Icon } from '@dataesr/react-dsfr';
 
-const StudentEligibilityStepTwo = ({handleNextStep}) => {
+const StudentEligibilityStepTwo = ({onStepChange}) => {
 
+  const handleNextStep = () => {
+    onStepChange();
+  };
 
   return (
     <section aria-labelledby="step-banner-title">

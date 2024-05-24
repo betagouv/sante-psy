@@ -28,7 +28,6 @@ const StepBanner = ({number, text, buttonText, buttonIcon, buttonLink}) => {
         secondary
         className={styles.button}
         onClick={navigateToPathOrUrl}
-
       >
         {buttonText}
       </Button>
