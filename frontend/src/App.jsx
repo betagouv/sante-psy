@@ -38,6 +38,7 @@ import LiveChat from 'components/LiveChat/LiveChat';
 import StudentUnregister from './components/StudentUnregister/StudentUnregister';
 import StudentEligibility from './components/Eligibility/StudentEligibility';
 import StudentEligibilityContact from './components/Eligibility/StudentEligibilityContact';
+import AccessibilityActionPlan from 'components/AccessibilityDeclaration/AccessibilityActionPlan';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
@@ -72,6 +73,7 @@ function App() {
               <Route exact path="/trouver-un-psychologue/:psyId" element={<PublicPsychologistProfile />} />
               <Route exact path="/mentions-legales" element={<LegalNotice />} />
               <Route exact path="/declaration-accessibilite" element={<AccessibilityDeclaration />} />
+              <Route exact path="/declaration-accessibilite/plan-action" element={<AccessibilityActionPlan />} />
               <Route exact path="/cgu" element={<CGU />} />
               <Route exact path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
               <Route exact path="/faq" element={<Faq />} />

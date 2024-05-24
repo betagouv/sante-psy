@@ -5,6 +5,8 @@ import Section from 'components/Page/Section';
 
 const AccessibilityDeclaration = () => (
   <Page
+    breadCrumbs={[{ href: '/', label: 'Accueil' }]}
+    currentBreadCrumb="Déclaration d'accessibilité"
     title="Déclaration d'accessibilité"
     withoutHeader
     textContent
@@ -13,7 +15,7 @@ const AccessibilityDeclaration = () => (
     <p>
       Établie le
       {' '}
-      <span>17 novembre 2023</span>
+      <span>24 mai 2024</span>
       {/* no space */}
       .
     </p>
@@ -23,9 +25,17 @@ const AccessibilityDeclaration = () => (
       s’engage à rendre son service accessible, conformément à l’article 47 de la loi n° 2005-102 du 11 février 2005.
     </p>
     <p>
+      À cette fin, nous mettons en œuvre la stratégie et les actions
+      suivantes&nbsp;:
+    </p>
+    <ul>
+      <li><a href="https://beta.gouv.fr/accessibilite/schema-pluriannuel">Schéma pluriannuel</a></li>
+      <li><a href="https://santepsy.etudiant.gouv.fr/declaration-accessibilite/plan-action">Plan d'action 2024</a></li>
+    </ul>
+    <p>
       Cette déclaration d’accessibilité s’applique à
       {' '}
-      <strong>Santé Psy Etudiant</strong>
+      <strong>Santé Psy Étudiant</strong>
       {' '}
       <span>(https://santepsy.etudiant.gouv.fr/)</span>
       {/* no space */}
@@ -47,15 +57,10 @@ const AccessibilityDeclaration = () => (
         {' '}
         <span>Le site n’a encore pas été audité.</span>
       </p>
-    </Section>
-    <Section title="Résultats des tests">
       <p>
-        L’audit de conformité réalisé révèle que 87% des critères sont respectés.
+        En raison des évolutions continues de notre plateforme, avec des fonctionnalités en cours de développement et de modifications fréquentes, il n'est actuellement pas possible d'effectuer un audit d'accessibilité complet. Nous nous engageons à réaliser cet audit une fois la phase de développement stabilisée.
       </p>
     </Section>
-
-    <Section title="Contenus non accessibles" />
-
     <Section title="Amélioration et contact">
       <p>
         Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable de
@@ -114,7 +119,7 @@ const AccessibilityDeclaration = () => (
     <p>
       Cette déclaration d’accessibilité a été créé le
       {' '}
-      <span>17 novembre 2023</span>
+      <span>24 mai 2024</span>
       {' '}
       grâce au
       {' '}
