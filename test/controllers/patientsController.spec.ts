@@ -314,8 +314,8 @@ describe('patientsController', () => {
         });
     };
 
-    it('should pass INE with length not 11 chars', (done) => {
-      shouldPassCreatePatientInputValidation(done, {
+    it('shouldn\'t pass INE with length not 11 chars', (done) => {
+      shouldFailCreatePatientInputValidation(done, {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '1234567890AA',
@@ -327,7 +327,8 @@ describe('patientsController', () => {
         doctorEmail,
         dateOfBirth,
         dateOfPrescription,
-      });
+      }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
 
     it('should pass validation when all fields are correct', (done) => {
@@ -954,9 +955,9 @@ describe('patientsController', () => {
       });
     });
 
-    it('should pass validation with INE length not 11 chars', (done) => {
+    it('shouldn\t pass validation with INE length not 11 chars', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldPassUpdatePatientInputValidation(done, patientId, {
+      shouldFailUpdatePatientInputValidation(done, patientId, {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '1234567890AA',
@@ -965,7 +966,8 @@ describe('patientsController', () => {
         hasPrescription: undefined,
         doctorName,
         doctorAddress,
-      });
+      }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
 
     it('should pass validation when INE is missing', (done) => {
