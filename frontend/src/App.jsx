@@ -13,6 +13,7 @@ import Logout from 'components/Login/Logout';
 import Login from 'components/Login/Login';
 import Faq from 'components/Faq/Faq';
 import CGU from 'components/CGU/CGU';
+import AccessibilityActionPlan from 'components/AccessibilityDeclaration/AccessibilityActionPlan';
 import AccessibilityDeclaration from 'components/AccessibilityDeclaration/AccessibilityDeclaration';
 import PrivacyPolicy from 'components/PrivacyPolicy/PrivacyPolicy';
 import LegalNotice from 'components/LegalNotice/LegalNotice';
@@ -38,7 +39,6 @@ import LiveChat from 'components/LiveChat/LiveChat';
 import StudentUnregister from './components/StudentUnregister/StudentUnregister';
 import StudentEligibility from './components/Eligibility/StudentEligibility';
 import StudentEligibilityContact from './components/Eligibility/StudentEligibilityContact';
-import AccessibilityActionPlan from 'components/AccessibilityDeclaration/AccessibilityActionPlan';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
