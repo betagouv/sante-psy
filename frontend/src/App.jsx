@@ -13,6 +13,7 @@ import Logout from 'components/Login/Logout';
 import Login from 'components/Login/Login';
 import Faq from 'components/Faq/Faq';
 import CGU from 'components/CGU/CGU';
+import AccessibilityActionPlan from 'components/AccessibilityDeclaration/AccessibilityActionPlan';
 import AccessibilityDeclaration from 'components/AccessibilityDeclaration/AccessibilityDeclaration';
 import PrivacyPolicy from 'components/PrivacyPolicy/PrivacyPolicy';
 import LegalNotice from 'components/LegalNotice/LegalNotice';
@@ -72,6 +73,7 @@ function App() {
               <Route exact path="/trouver-un-psychologue/:psyId" element={<PublicPsychologistProfile />} />
               <Route exact path="/mentions-legales" element={<LegalNotice />} />
               <Route exact path="/declaration-accessibilite" element={<AccessibilityDeclaration />} />
+              <Route exact path="/declaration-accessibilite/plan-action" element={<AccessibilityActionPlan />} />
               <Route exact path="/cgu" element={<CGU />} />
               <Route exact path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
               <Route exact path="/faq" element={<Faq />} />
