@@ -30,7 +30,7 @@ const AccessibilityDeclaration = () => (
     </p>
     <ul>
       <li><a href="https://beta.gouv.fr/accessibilite/schema-pluriannuel">Schéma pluriannuel</a></li>
-      <li><a href="https://santepsy.etudiant.gouv.fr/declaration-accessibilite/plan-action">Plan d'action 2024</a></li>
+      <li><a href="https://santepsy.etudiant.gouv.fr/declaration-accessibilite/plan-action">Plan d’action 2024</a></li>
     </ul>
     <p>
       Cette déclaration d’accessibilité s’applique à
@@ -58,7 +58,7 @@ const AccessibilityDeclaration = () => (
         <span>Le site n’a encore pas été audité.</span>
       </p>
       <p>
-        En raison des évolutions continues de notre plateforme, avec des fonctionnalités en cours de développement et de modifications fréquentes, il n'est actuellement pas possible d'effectuer un audit d'accessibilité complet. Nous nous engageons à réaliser cet audit une fois la phase de développement stabilisée.
+        En raison des évolutions continues de notre plateforme, avec des fonctionnalités en cours de développement et de modifications fréquentes, il n’est actuellement pas possible d’effectuer un audit d’accessibilité complet. Nous nous engageons à réaliser cet audit une fois la phase de développement stabilisée.
       </p>
     </Section>
     <Section title="Amélioration et contact">
