@@ -8,9 +8,9 @@ import agent from 'services/agent';
 import { renderBadge } from 'components/Badges/Badges';
 import getBadgeInfos from 'src/utils/badges';
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
+import classNames from 'classnames';
 import styles from './addEditPatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
-import classNames from 'classnames';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
@@ -146,7 +146,7 @@ const AddEditPatient = () => {
             />
             <div className={styles.ineWrapper}>
               <TextInput
-                className={classNames(styles.ineInput,"midlength-input")}
+                className={classNames(styles.ineInput, 'midlength-input')}
                 data-test-id="etudiant-ine-input"
                 label="Numéro INE de l'étudiant (optionnel)"
                 hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
@@ -156,7 +156,7 @@ const AddEditPatient = () => {
                 />
 
               <Highlight size="lg">
-                Bien qu'optionnel, l'INE vous permettra de suivre les séances réalisées ailleurs et donc d'assurer votre remboursement.
+                Bien qu’optionnel, l’INE vous permettra de suivre les séances réalisées ailleurs et donc d’assurer votre remboursement.
               </Highlight>
             </div>
             <Checkbox
