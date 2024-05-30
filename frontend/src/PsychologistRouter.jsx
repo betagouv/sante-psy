@@ -8,16 +8,18 @@ import Appointments from 'components/Psychologist/Appointments/Appointments';
 import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
 import Patients from 'components/Psychologist/Patients/Patients';
 import AddEditPatient from 'components/Psychologist/Patients/AddEditPatient';
-import PsyProfile from 'components/Psychologist/PsyDashboard/PsyProfile';
+import PsyProfile from 'components/Psychologist/PsyDashboard/PsyDashboard';
 import Page from 'components/Page/Page';
 import Notification from 'components/Notification/Notification';
 import ConventionModal from 'components/Psychologist/Appointments/ConventionModal';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import Billing from 'components/Psychologist/Reimbursement/Billing';
+import ConventionForm from 'components/Psychologist/PsyDashboard/ConventionForm';
+import SuspendProfile from 'components/Psychologist/PsyDashboard/SuspendProfile';
 
 import { shouldCheckConventionAgain } from 'services/conventionVerification';
-import { getInactiveMessage } from './utils/inactive';
 import { useStore } from './stores';
+import { getInactiveMessage } from './utils/inactive';
 
 import 'react-month-picker/css/month-picker.css';
 import './custom-month-picker.css';
@@ -96,13 +98,13 @@ const PsychologistRouter = () => {
           description: 'Vous pouvez éditer et générer vos factures sur cet espace avant de les envoyer au Service de Santé Étudiante afin de vous faire rembourser.',
           tutorial: 'billing',
         };
-      case 'mon-profil':
+      case 'tableau-de-bord':
         return {
           title: (
             <>
-              Mes
+              Tableau de
               {' '}
-              <b>informations</b>
+              <b>bord</b>
             </>
           ),
           description: 'En tant que psychologue de Santé Psy Étudiant, vous avez la possibilité de gérer les informations au sein de notre annuaire.',
@@ -134,7 +136,7 @@ const PsychologistRouter = () => {
       <Notification type="info">
         Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
         {' '}
-        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
+        <HashLink to="/psychologue/ma-convention">Ma convention</HashLink>
       </Notification>
       )}
       {user && !user.active && (
@@ -143,7 +145,8 @@ const PsychologistRouter = () => {
         {' '}
         {getInactiveMessage(user)}
         {' '}
-        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
+        {/* est-ce bien le bon nom ? */}
+        <HashLink to="/psychologue/ma-disponibilite">Ma disponibilité</HashLink>
         .
       </Notification>
       )}
@@ -157,8 +160,9 @@ const PsychologistRouter = () => {
         <Route exact path="/nouvel-etudiant" element={<AddEditPatient />} />
         <Route exact path="/modifier-etudiant/:patientId" element={<AddEditPatient />} />
         <Route exact path="/mes-remboursements" element={<Billing />} />
-        {/* <Route path="/mon-profil" element={<PsyProfile />} /> */}
-        <Route path="/*" element={<Navigate to="/psychologue/mes-seances" />} />
+        <Route exact path="/ma-convention" element={<ConventionForm />} />
+        <Route exact path="/ma-disponibilite" element={<SuspendProfile />} />
+        <Route path="/*" element={<Navigate to="/psychologue/tableau-de-bord" />} />
       </Routes>
     </Page>
   );

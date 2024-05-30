@@ -1,8 +1,5 @@
+@import 'src/variables.scss';
 // version mobile à gérer !!!
-
-// .psyDashboard {
-//   padding: 48px;
-// }
 
 .psyDashboardCard, .psyDashboardDescription {
   display: flex;
@@ -20,11 +17,15 @@
 .psyDashboardCard button {
   font-size: 14px;
   padding: 6px;
-  margin: 0px 24px 8px 0px;
+  margin: 6px 24px 6px 0px;
+}
+
+.buttonEdit {
+  box-shadow: none;
 }
 
 .psyDashboardCardSecondColumn p {
-  margin: 4px;
+  margin: 5px;
 }
 
 .psyDashboardCardFirstColumn, .psyDashboardCardSecondColumn {
@@ -34,22 +35,35 @@
   justify-content: end;
 }
 
-.psyDashboardConvention, .psyDashboardAvailability {
-  width: 300px;
-  display: inline-flex;
-  vertical-align: middle;
-  justify-content: space-evenly;
+.psyDashboardConvention, .psyDashboardAvailability, .psyDashboardConvention:disabled, .psyDashboardConvention[disabled] {
+  width: 400px;
   margin-right: 16px;
+  box-shadow: none;
+  color : var(--text-title-blue-france);;
 }
 
 .psyDashboardConvention img, .psyDashboardAvailability img {
   width: 20px;
+  margin-right: 16px;
 }
 
-.psyDashboardAvailability p {
-  margin: 0px;
+.psyDashboardConvention span, .psyDashboardAvailability span {
+  display: flex;
+  text-align: left;
 }
 
 .psyDashboardDescription {
   flex-direction: column;
+}
+
+.inactiveTexts {
+  display: flex;
+  flex-direction: column;
+}
+
+.inactiveSubtext {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #666666;
 }
