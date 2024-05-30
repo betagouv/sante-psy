@@ -4,8 +4,8 @@ const steps = [
   {
     placement: 'center',
     target: 'body',
-    title: 'Mes informations',
-    content: "Depuis cette page, vous pouvez gérer vos informations personelles ainsi que les informations visibles sur l'annuaire",
+    title: 'Tableau de bord',
+    content: "Depuis cette page, vous pouvez gérer vos informations personnelles ainsi que votre visibilité sur l'annuaire",
   },
   {
     placement: 'top-start',

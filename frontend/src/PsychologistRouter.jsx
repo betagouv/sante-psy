@@ -8,7 +8,7 @@ import Appointments from 'components/Psychologist/Appointments/Appointments';
 import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
 import Patients from 'components/Psychologist/Patients/Patients';
 import AddEditPatient from 'components/Psychologist/Patients/AddEditPatient';
-import PsyProfile from 'components/Psychologist/PsyDashboard/PsyDashboard';
+import PsyProfile from 'components/Psychologist/PsyDashboard/PsyProfile';
 import Page from 'components/Page/Page';
 import Notification from 'components/Notification/Notification';
 import ConventionModal from 'components/Psychologist/Appointments/ConventionModal';

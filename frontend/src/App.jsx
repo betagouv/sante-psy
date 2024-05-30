@@ -89,7 +89,7 @@ function App() {
                 element={user
                   ? <PsychologistRouter /> : <Navigate to="/psychologue/login" />}
               />
-              <Route path="/*" element={<Navigate to={user ? '/psychologue/mes-seances' : '/'} />} />
+              <Route path="/*" element={<Navigate to={user ? '/psychologue/tableau-de-bord' : '/'} />} />
             </Routes>
           </React.Suspense>
         )}
