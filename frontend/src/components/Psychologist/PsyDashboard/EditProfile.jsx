@@ -3,6 +3,7 @@ import { Button, RadioGroup, Radio, TextInput, SearchableSelect, ButtonGroup } f
 
 import string from 'services/string';
 import DEPARTEMENTS from 'src/utils/departments';
+import styles from './psyDashboard.cssmodule.scss';
 
 const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
   const [updatedPsychologist, setUpdatedPsychologist] = useState(psychologist);
@@ -140,7 +141,8 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         onBlur={enrichAppointmentLink}
       />
       <TextInput
-        className="midlength-input"
+        className={styles.descriptionInput}
+        id="description-input"
         textarea
         label="Paragraphe de présentation"
         hint="Ex : &ldquo;Je propose du suivi pour les jeunes adultes, en particulier pour la gestion du stress et

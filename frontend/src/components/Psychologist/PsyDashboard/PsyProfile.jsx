@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Icon } from '@dataesr/react-dsfr';
-
-import EditProfile from 'components/Psychologist/PsyDashboard/EditProfile';
-
+import { HashLink } from 'react-router-hash-link';
 import agent from 'services/agent';
-
 import { useStore } from 'stores';
 
-import { HashLink } from 'react-router-hash-link';
+import { Button, Icon } from '@dataesr/react-dsfr';
+import EditProfile from 'components/Psychologist/PsyDashboard/EditProfile';
+
 import PsyCardInfo from './PsyCardInfo';
 import styles from './psyDashboard.cssmodule.scss';
 
@@ -223,20 +221,20 @@ const PsyProfile = () => {
           <section className={styles.psyDashboardDescription}>
             <b>Description : </b>
             <p>
-              &quot;
               {psychologist.description}
-              &quot;
             </p>
             <Button
               secondary
               title="Modify"
               icon="ri-edit-line"
-              onClick={() => setEditMode(true)}
+              onClick={() => {
+                setEditMode(true);
+                document.getElementById('description-input').scrollIntoView({ behavior: 'smooth' });
+              }}
               className={styles.buttonEdit}
                 >
               Modifier
             </Button>
-            {/* ancre jusqu'à la description */}
           </section>
         </div>
       )

@@ -58,6 +58,10 @@
   display: none;
 }
 
+.descriptionInput {
+  white-space: pre-line;
+}
+
 @media (min-width: 769px) {
   .title {
     font-size: 28px;

@@ -56,6 +56,23 @@
   flex-direction: column;
 }
 
+.psyDashboardDescription p {
+  white-space: pre-line;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.descriptionInput {
+  textarea {
+    width: 25rem;
+    height: 15rem;
+  }
+}
+
 .inactiveTexts {
   display: flex;
   flex-direction: column;
