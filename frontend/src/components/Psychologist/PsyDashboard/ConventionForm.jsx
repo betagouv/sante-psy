@@ -3,19 +3,17 @@ import { Button, RadioGroup, Radio } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { useStore } from 'stores/';
+import { useNavigate } from 'react-router-dom';
 
-const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultValue }) => {
+const ConventionForm = ({ onConventionUpdated = () => {} }) => {
   const [convention, setConvention] = useState();
+  const navigate = useNavigate();
 
   const { commonStore: { setNotification }, userStore: { setUser, user } } = useStore();
 
   useEffect(() => {
-    setConvention({
-      isConventionSigned: checkDefaultValue
-        ? currentConvention && currentConvention.isConventionSigned === true
-        : '',
-    });
-  }, [currentConvention]);
+    setConvention({ isConventionSigned: user.convention ? user.convention.isConventionSigned : '' });
+  }, [user.convention]);
 
   const saveConvention = e => {
     e.preventDefault();
@@ -26,6 +24,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
         setNotification(response);
         setUser({ convention: response.convention });
         onConventionUpdated();
+        navigate('/psychologue/tableau-de-bord');
       });
   };
 
@@ -38,6 +37,7 @@ const ConventionForm = ({ currentConvention, onConventionUpdated, checkDefaultVa
     <form data-test-id="convention-form" onSubmit={saveConvention}>
       {convention && (
         <>
+          <h3>Modifier le statut de ma convention</h3>
           <p className="fr-mb-1w">
             Vous êtes rattaché à l&lsquo;université de
             {' '}

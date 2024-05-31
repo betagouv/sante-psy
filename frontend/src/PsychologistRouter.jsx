@@ -37,6 +37,30 @@ const PsychologistRouter = () => {
   const getPageProps = () => {
     const page = pathname.split('/')[2];
     switch (page) {
+      case 'ma-convention':
+        return {
+          title: (
+            <>
+              Ma
+              {' '}
+              <b>convention</b>
+            </>
+          ),
+          description: 'Vous avez la possibilité de gérer le statut de votre convention.',
+        };
+        case 'ma-disponibilite':
+          return {
+            title: (
+              <>
+                Mon
+                {' '}
+                <b>statut</b>
+                {' '}
+                Annuaire
+              </>
+            ),
+            description: "Vous avez la possibilité de gérer votre visibilité dans l'Annuaire pour les étudiants.",
+          };
       case 'nouvelle-seance':
         return {
           title: (

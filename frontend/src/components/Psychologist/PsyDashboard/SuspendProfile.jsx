@@ -1,12 +1,27 @@
 import React, { useState } from 'react';
-import { TextInput, RadioGroup, Radio, Button, ButtonGroup } from '@dataesr/react-dsfr';
+import {
+  TextInput,
+  RadioGroup,
+  Radio,
+  Button,
+  ButtonGroup,
+} from '@dataesr/react-dsfr';
 import DatePicker from 'react-datepicker';
+import agent from 'services/agent';
 
 import DateInput from 'components/Date/DateInput';
 
 import { convertLocalToUTCDate } from 'services/date';
+import { useStore } from 'stores/index';
+import { useNavigate } from 'react-router-dom';
 
-const SuspendProfile = ({ suspendPsychologist, cancelSuspension }) => {
+const SuspendProfile = () => {
+  const {
+    commonStore: { setNotification, setPsychologists },
+    userStore: { user },
+  } = useStore();
+  const navigate = useNavigate();
+
   const [reason, setReason] = useState();
   const [duration, setDuration] = useState();
   const [displayDate, setDisplayDate] = useState(false);
@@ -32,6 +47,34 @@ const SuspendProfile = ({ suspendPsychologist, cancelSuspension }) => {
     }
   };
 
+  const suspendPsychologist = () => {
+    agent.Psychologist.suspend(getReason(), calculateSuspensionDate())
+      .then(response => {
+        setNotification(response);
+        updatePsyList();
+        navigate('/psychologue/tableau-de-bord');
+      })
+      .catch(() => window.scrollTo(0, 0));
+  };
+
+  const activatePsychologist = () => {
+    agent.Psychologist.activate()
+      .then(response => {
+        setNotification(response);
+        updatePsyList();
+        navigate('/psychologue/tableau-de-bord');
+      })
+      .catch(() => window.scrollTo(0, 0));
+  };
+
+  const cancelSuspension = () => {
+    navigate('/psychologue/tableau-de-bord');
+  };
+
+  const updatePsyList = () => {
+    agent.Psychologist.find().then(setPsychologists);
+  };
+
   const getReason = () => (reason === 'other' ? `Autre: ${otherReason}` : reason);
 
   const selectReason = value => {
@@ -48,135 +91,136 @@ const SuspendProfile = ({ suspendPsychologist, cancelSuspension }) => {
     }
   };
 
-  const canValidate = reason
-  && duration
-  && (reason !== 'other' || otherReason.trim() !== '')
-  && (duration !== 'other' || date);
-
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   return (
     <>
-      <RadioGroup
-        legend="Pourquoi voulez vous retirer vos informations ?"
-        ariaLabel="raison"
-        name="reason"
-        value={reason}
-        onChange={selectReason}
-      >
-        <Radio
-          data-test-id="radio-reason-holidays"
-          label="Je pars en vacances"
-          value="holidays"
-        />
-        <Radio
-          data-test-id="radio-reason-toofew"
-          label="Je ne reçois pas assez de demandes"
-          value="toofew"
-        />
-        <Radio
-          data-test-id="radio-reason-toomuch"
-          label="Je reçois trop de demandes"
-          value="toomuch"
-        />
-        <Radio
-          data-test-id="radio-reason-connection"
-          label="Je n'arrive pas à me connecter"
-          value="connection"
-        />
-        <Radio
-          data-test-id="radio-reason-disagree"
-          label="Je ne suis plus en accord avec le dispositif"
-          value="disagree"
-        />
-        <Radio
-          data-test-id="radio-reason-reimbursments"
-          label="Je suis en attente de mes remboursements"
-          value="reimbursments"
-        />
-        <Radio
-          data-test-id="radio-reason-convention"
-          label="Je suis en attente de ma convention"
-          value="convention"
-        />
-        <Radio
-          data-test-id="radio-reason-other"
-          label="Autre"
-          onChange={e => {
-            setReason('other');
-            setDisplayReason(e.target.checked);
-          }}
-          value="other"
-        />
-        {displayReason && (
-          <TextInput
-            data-test-id="radio-reason-other-input"
-            required
-            value={otherReason}
-            onChange={e => setOtherReason(e.target.value)}
-            textarea
-          />
-        )}
-      </RadioGroup>
-      <RadioGroup
-        legend="Pour combien de temps voulez vous retirer vos informations ?"
-        ariaLabel="durée"
-        value={duration}
-        onChange={selectDuration}
-      >
-        <Radio
-          data-test-id="radio-duration-week"
-          label="1 semaine"
-          value="week"
-        />
-        <Radio
-          data-test-id="radio-duration-month"
-          label="1 mois"
-          value="month"
-        />
-        <Radio
-          data-test-id="radio-duration-forever"
-          label="Je souhaite retirer mes informations définitivement"
-          value="forever"
-        />
-        <Radio
-          data-test-id="radio-duration-other"
-          label="Autre"
-          onChange={e => {
-            setDuration('other');
-            setDisplayDate(e.target.checked);
-          }}
-          value="other"
-        />
-        {displayDate && (
-          <DatePicker
-            selected={date}
-            minDate={tomorrow}
-            dateFormat="dd/MM/yyyy"
-            customInput={(
-              <DateInput
-                dataTestId="radio-duration-other-input"
+      <h3>Statut de mon compte</h3>
+      {user.active && (
+        <>
+          <RadioGroup
+            legend="Pourquoi voulez vous retirer vos informations ?"
+            ariaLabel="raison"
+            name="reason"
+            value={reason}
+            onChange={selectReason}
+          >
+            <Radio
+              data-test-id="radio-reason-holidays"
+              label="Je pars en vacances"
+              value="holidays"
+            />
+            <Radio
+              data-test-id="radio-reason-toofew"
+              label="Je ne reçois pas assez de demandes"
+              value="toofew"
+            />
+            <Radio
+              data-test-id="radio-reason-toomuch"
+              label="Je reçois trop de demandes"
+              value="toomuch"
+            />
+            <Radio
+              data-test-id="radio-reason-connection"
+              label="Je n'arrive pas à me connecter"
+              value="connection"
+            />
+            <Radio
+              data-test-id="radio-reason-disagree"
+              label="Je ne suis plus en accord avec le dispositif"
+              value="disagree"
+            />
+            <Radio
+              data-test-id="radio-reason-reimbursments"
+              label="Je suis en attente de mes remboursements"
+              value="reimbursments"
+            />
+            <Radio
+              data-test-id="radio-reason-convention"
+              label="Je suis en attente de ma convention"
+              value="convention"
+            />
+            <Radio
+              data-test-id="radio-reason-other"
+              label="Autre"
+              onChange={e => {
+                setReason('other');
+                setDisplayReason(e.target.checked);
+              }}
+              value="other"
+            />
+            {displayReason && (
+              <TextInput
+                data-test-id="radio-reason-other-input"
+                required
+                value={otherReason}
+                onChange={e => setOtherReason(e.target.value)}
+                textarea
               />
-                )}
-            onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
-          />
-        )}
-      </RadioGroup>
+            )}
+          </RadioGroup>
+          <RadioGroup
+            legend="Pour combien de temps voulez vous retirer vos informations ?"
+            ariaLabel="durée"
+            value={duration}
+            onChange={selectDuration}
+          >
+            <Radio
+              data-test-id="radio-duration-week"
+              label="1 semaine"
+              value="week"
+            />
+            <Radio
+              data-test-id="radio-duration-month"
+              label="1 mois"
+              value="month"
+            />
+            <Radio
+              data-test-id="radio-duration-forever"
+              label="Je souhaite retirer mes informations définitivement"
+              value="forever"
+            />
+            <Radio
+              data-test-id="radio-duration-other"
+              label="Autre"
+              onChange={e => {
+                setDuration('other');
+                setDisplayDate(e.target.checked);
+              }}
+              value="other"
+            />
+            {displayDate && (
+              <DatePicker
+                selected={date}
+                minDate={tomorrow}
+                dateFormat="dd/MM/yyyy"
+                customInput={
+                  <DateInput dataTestId="radio-duration-other-input" />
+                }
+                onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
+              />
+            )}
+          </RadioGroup>
+        </>
+      )}
       <ButtonGroup isInlineFrom="xs">
         <Button
-          data-test-id="suspend-button"
-          icon="fr-fi-eye-off-line"
-          onClick={() => suspendPsychologist(getReason(), calculateSuspensionDate())}
-          disabled={!canValidate}
+          id="hide-profil-button"
+          data-test-id={
+            user.active ? 'suspend-redirection-button' : 'activate-button'
+          }
+          icon={user.active ? 'fr-fi-eye-off-line' : 'fr-fi-eye-line'}
+          className="fr-mb-2w"
+          onClick={() => (user.active
+            ? suspendPsychologist()
+            : activatePsychologist())}
         >
-          Retirer mes informations de l&lsquo;annuaire
+          {user.active
+            ? "Retirer mes informations de l'annuaire"
+            : "Remettre mes informations de l'annuaire"}
         </Button>
-        <Button
-          onClick={cancelSuspension}
-          secondary
-          icon="fr-fi-close-line"
-        >
+        <Button onClick={cancelSuspension} secondary icon="fr-fi-close-line">
           Annuler
         </Button>
       </ButtonGroup>

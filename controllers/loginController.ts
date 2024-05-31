@@ -77,6 +77,8 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
 
     if (psy) {
       const inactiveReason = psy.active ? undefined : (await dbSuspensions.getByPsychologist(psy.dossierNumber)).reason;
+      // eslint-disable-next-line max-len
+      const inactiveUntil = psy.active ? undefined : (await dbSuspensions.getByPsychologist(psy.dossierNumber)).until;
       const {
         dossierNumber,
         firstNames,
@@ -106,6 +108,7 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
         hasSeenTutorial,
         createdAt,
         inactiveReason,
+        inactiveUntil,
       });
 
       return;
