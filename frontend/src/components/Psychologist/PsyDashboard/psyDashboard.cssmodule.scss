@@ -84,3 +84,33 @@
   line-height: 20px;
   color: #666666;
 }
+
+@media (max-width: 950px) {
+  .psyDashboardCard {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .psyDashboardCard button {
+    font-size: 14px;
+    margin: 6px 24px 6px 0px;
+  }
+
+  .psyDashboardCardFirstColumn, .psyDashboardCardSecondColumn {
+    margin-right: 8px;
+  }
+
+  .psyDashboardConvention, .psyDashboardAvailability, .psyDashboardConvention:disabled, .psyDashboardConvention[disabled] {
+    width: 100%;
+  }
+
+  .psyDashboardDescription p {
+    -webkit-line-clamp: 4;
+  }
+}
+
+@media (max-width: 425px) {
+  .psyDashboardCard, .psyDashboardDescription {
+    width: 100%;
+  }
+}
