@@ -4,9 +4,10 @@ import { HashLink } from 'react-router-hash-link';
 import agent from 'services/agent';
 import { useStore } from 'stores';
 
-import { Button, Icon } from '@dataesr/react-dsfr';
+import { Alert, Button, Icon } from '@dataesr/react-dsfr';
 import EditProfile from 'components/Psychologist/PsyDashboard/EditProfile';
 
+import { formatStringToDDMMYYYY } from 'services/date';
 import PsyCardInfo from './PsyCardInfo';
 import styles from './psyDashboard.cssmodule.scss';
 
@@ -23,12 +24,6 @@ const PsyProfile = () => {
   const greenCircleIcon = '/images/icon-available-psy.svg';
   const orangeCircleIcon = '/images/icon-unavailable-psy.svg';
   const redCircleIcon = '/images/icon-invisible-psy.svg';
-
-  const formatDate = isoDate => {
-    const date = new Date(isoDate);
-    const options = { year: 'numeric', month: 'long', day: '2-digit' };
-    return date.toLocaleDateString('fr-FR', options);
-  };
 
   const getProfilIssues = psy => {
     const profilIssues = [];
@@ -114,7 +109,7 @@ const PsyProfile = () => {
         <span>
           <img src={redCircleIcon} alt="red circle" />
           <span className={styles.inactiveTexts}>
-            <p>Invisible dans l&lsquo;annuaire</p>
+            <p>Invisible dans l&apos;annuaire</p>
             <p className={styles.inactiveSubtext}>
               Les étudiants ne peuvent plus vous voir dans l&apos;annuaire
             </p>
@@ -130,12 +125,12 @@ const PsyProfile = () => {
             <p>
               <b>Indisponible</b>
               {' '}
-              dans l&lsquo;annuaire
+              dans l&apos;annuaire
             </p>
             <p className={styles.inactiveSubtext}>
               Date de fin :
               {' '}
-              {formatDate(user.inactiveUntil)}
+              {formatStringToDDMMYYYY(user.inactiveUntil)}
             </p>
           </span>
         </>
@@ -144,101 +139,118 @@ const PsyProfile = () => {
     return (
       <span>
         <img src={greenCircleIcon} alt="green circle" />
-        <p>Disponible dans l&lsquo;annuaire</p>
+        <p>
+          <b>Disponible</b>
+          {' '}
+          dans l&apos;annuaire
+        </p>
       </span>
     );
   };
 
   return (
-    !loading && (
-      editMode ? (
-        <EditProfile
-          psychologist={psychologist}
-          updatePsy={updatePsy}
-          cancelEditProfile={cancelEditProfile}
-            />
-      ) : (
-        <div className={styles.psyDashboard}>
-          <div className="fr-my-2w">
-            <HashLink
-              id="new-appointment-button"
-              to="/psychologue/nouvelle-seance"
-              className="fr-btn"
-                >
-              <div data-test-id="new-appointment-button">
-                <Icon name="ri-add-line" />
-                Déclarer une séance
-              </div>
-            </HashLink>
-          </div>
-          <PsyCardInfo
-            psychologist={psychologist}
-            onEditMode={handleEditMode}
-              />
-          <section className={styles.psyDashboardCard}>
-            <Button
-              id="show-convention-form"
-              data-test-id="show-convention-form"
-              secondary
-              className={styles.psyDashboardConvention}
-              onClick={() => navigate('/psychologue/ma-convention')}
-              icon={
-                    !user.convention.isConventionSigned ? 'ri-edit-line' : ''
-                  }
-              iconPosition="right"
-              disabled={user.convention.isConventionSigned}
-                >
-              {user.convention && user.convention.isConventionSigned ? (
-                <span>
-                  <img src={greenCircleIcon} alt="green circle" />
-                  <p>
-                    Convention :&nbsp;
-                    <b>Signée</b>
-                  </p>
-                </span>
-              ) : (
-                <span>
-                  <img src={redCircleIcon} alt="red circle" />
-                  <p>
-                    Convention :&nbsp;
-                    <b>Pas encore signée</b>
-                  </p>
-                </span>
-              )}
-            </Button>
-            <Button
-              secondary
-              className={styles.psyDashboardAvailability}
-              onClick={() => navigate('/psychologue/ma-disponibilite/')}
-              icon="ri-edit-line"
-              iconPosition="right"
-              id="show-availability-form"
-              data-test-id="show-availability-form"
-                >
-              {renderPsychologistAvailability()}
-            </Button>
-          </section>
-          <section className={styles.psyDashboardDescription}>
-            <b>Description : </b>
-            <p>
-              {psychologist.description}
-            </p>
-            <Button
-              secondary
-              title="Modify"
-              icon="ri-edit-line"
-              onClick={() => {
-                setEditMode(true);
-                document.getElementById('description-input').scrollIntoView({ behavior: 'smooth' });
-              }}
-              className={styles.buttonEdit}
-                >
-              Modifier
-            </Button>
-          </section>
+    !loading
+    && (editMode ? (
+      <EditProfile
+        psychologist={psychologist}
+        updatePsy={updatePsy}
+        cancelEditProfile={cancelEditProfile}
+      />
+    ) : (
+      <div className={styles.psyDashboard}>
+        {psychologist.profilIssues.length > 0 && (
+          <Alert
+            data-test-id="incomplete-profile-alert"
+            className="fr-mb-2w"
+            type="info"
+            title="Votre profil est incomplet"
+            description={(
+              <>
+                Cela n&lsquo;est pas bloquant mais pourrait empêcher les
+                étudiants et étudiantes de vous contacter ou d&lsquo;identifier
+                si vous repondez à leurs attentes.
+                <ul>
+                  {psychologist.profilIssues.map(issue => (
+                    <li key={issue}>{issue}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+          />
+        )}
+        <div className="fr-my-2w">
+          <HashLink
+            id="new-appointment-button"
+            to="/psychologue/nouvelle-seance"
+            className="fr-btn"
+          >
+            <div data-test-id="new-appointment-button">
+              <Icon name="ri-add-line" />
+              Déclarer une séance
+            </div>
+          </HashLink>
         </div>
-      )
-    )
+        <PsyCardInfo psychologist={psychologist} onEditMode={handleEditMode} />
+        <section className={styles.psyDashboardCard}>
+          <Button
+            id="show-convention-form"
+            data-test-id="show-convention-form"
+            secondary
+            className={styles.psyDashboardConvention}
+            onClick={() => navigate('/psychologue/ma-convention')}
+            icon={!user.convention.isConventionSigned ? 'ri-edit-line' : ''}
+            iconPosition="right"
+          >
+            {user.convention && user.convention.isConventionSigned ? (
+              <span>
+                <img src={greenCircleIcon} alt="green circle" />
+                <p>
+                  Convention :
+                  <b> Signée</b>
+                </p>
+              </span>
+            ) : (
+              <span>
+                <img src={redCircleIcon} alt="red circle" />
+                <p>
+                  Convention :
+                  <b> Pas encore signée</b>
+                </p>
+              </span>
+            )}
+          </Button>
+          <Button
+            secondary
+            className={styles.psyDashboardAvailability}
+            onClick={() => navigate('/psychologue/ma-disponibilite/')}
+            icon="ri-edit-line"
+            iconPosition="right"
+            id="show-availability-form"
+            data-test-id="show-availability-form"
+          >
+            {renderPsychologistAvailability()}
+          </Button>
+        </section>
+        <section className={styles.psyDashboardDescription}>
+          <b>Description : </b>
+          <p>{psychologist.description}</p>
+          <Button
+            secondary
+            title="Modify"
+            icon="ri-edit-line"
+            onClick={() => {
+              setEditMode(true);
+              document
+                .getElementById('psy-description-input')
+                .scrollIntoView({ behavior: 'smooth' });
+            }}
+            className={styles.buttonEdit}
+          >
+            Modifier
+          </Button>
+        </section>
+      </div>
+    ))
   );
 };
 

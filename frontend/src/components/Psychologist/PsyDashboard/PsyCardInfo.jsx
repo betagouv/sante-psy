@@ -72,6 +72,7 @@ const PsyCardInfo = ({ psychologist, onEditMode }) => {
           secondary
           className={styles.buttonEdit}
           id="show-profile-form-button"
+          data-test-id="show-profile-form-button"
           title="Modify"
           icon="ri-edit-line"
           onClick={() => onEditMode(true)}

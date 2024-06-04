@@ -142,7 +142,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
       />
       <TextInput
         className={styles.descriptionInput}
-        id="description-input"
+        id="psy-description-input"
         textarea
         label="Paragraphe de présentation"
         hint="Ex : &ldquo;Je propose du suivi pour les jeunes adultes, en particulier pour la gestion du stress et

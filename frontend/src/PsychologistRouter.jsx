@@ -48,19 +48,19 @@ const PsychologistRouter = () => {
           ),
           description: 'Vous avez la possibilité de gérer le statut de votre convention.',
         };
-        case 'ma-disponibilite':
-          return {
-            title: (
-              <>
-                Mon
-                {' '}
-                <b>statut</b>
-                {' '}
-                Annuaire
-              </>
-            ),
-            description: "Vous avez la possibilité de gérer votre visibilité dans l'Annuaire pour les étudiants.",
-          };
+      case 'ma-disponibilite':
+        return {
+          title: (
+            <>
+              Mon
+              {' '}
+              <b>statut</b>
+              {' '}
+              Annuaire
+            </>
+          ),
+          description: "Vous avez la possibilité de gérer votre visibilité dans l'Annuaire pour les étudiants.",
+        };
       case 'nouvelle-seance':
         return {
           title: (
@@ -132,6 +132,7 @@ const PsychologistRouter = () => {
             </>
           ),
           description: 'En tant que psychologue de Santé Psy Étudiant, vous avez la possibilité de gérer les informations au sein de notre annuaire.',
+          // à modifier dans commit tuto
           tutorial: 'profile',
         };
       default:
@@ -169,7 +170,6 @@ const PsychologistRouter = () => {
         {' '}
         {getInactiveMessage(user)}
         {' '}
-        {/* est-ce bien le bon nom ? */}
         <HashLink to="/psychologue/ma-disponibilite">Ma disponibilité</HashLink>
         .
       </Notification>
@@ -184,7 +184,7 @@ const PsychologistRouter = () => {
         <Route exact path="/nouvel-etudiant" element={<AddEditPatient />} />
         <Route exact path="/modifier-etudiant/:patientId" element={<AddEditPatient />} />
         <Route exact path="/mes-remboursements" element={<Billing />} />
-        <Route exact path="/ma-convention" element={<ConventionForm />} />
+        <Route exact path="/ma-convention" element={<ConventionForm checkDefaultValue />} />
         <Route exact path="/ma-disponibilite" element={<SuspendProfile />} />
         <Route path="/*" element={<Navigate to="/psychologue/tableau-de-bord" />} />
       </Routes>

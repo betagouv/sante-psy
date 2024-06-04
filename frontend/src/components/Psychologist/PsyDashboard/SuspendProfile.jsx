@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 
 const SuspendProfile = () => {
   const {
-    commonStore: { setNotification, setPsychologists },
+    commonStore: { setPsychologists },
     userStore: { user },
   } = useStore();
   const navigate = useNavigate();
@@ -50,9 +50,8 @@ const SuspendProfile = () => {
   const suspendPsychologist = () => {
     agent.Psychologist.suspend(getReason(), calculateSuspensionDate())
       .then(response => {
-        setNotification(response);
         updatePsyList();
-        navigate('/psychologue/tableau-de-bord');
+        navigate('/psychologue/tableau-de-bord', { state: { notification: response } });
       })
       .catch(() => window.scrollTo(0, 0));
   };
@@ -60,9 +59,8 @@ const SuspendProfile = () => {
   const activatePsychologist = () => {
     agent.Psychologist.activate()
       .then(response => {
-        setNotification(response);
         updatePsyList();
-        navigate('/psychologue/tableau-de-bord');
+        navigate('/psychologue/tableau-de-bord', { state: { notification: response } });
       })
       .catch(() => window.scrollTo(0, 0));
   };
@@ -83,6 +81,10 @@ const SuspendProfile = () => {
       setReason(value);
     }
   };
+
+  const canValidate = reason && duration
+  && (reason !== 'other' || otherReason.trim() !== '')
+  && (duration !== 'other' || date !== undefined);
 
   const selectDuration = value => {
     if (value !== 'other') {
@@ -207,6 +209,7 @@ const SuspendProfile = () => {
       <ButtonGroup isInlineFrom="xs">
         <Button
           id="hide-profil-button"
+          disabled={user.active && !canValidate}
           data-test-id={
             user.active ? 'suspend-redirection-button' : 'activate-button'
           }

@@ -4,7 +4,7 @@ import { Modal, ModalTitle, ModalContent } from '@dataesr/react-dsfr';
 import { checkConvention } from 'services/conventionVerification';
 import ConventionForm from '../PsyDashboard/ConventionForm';
 
-const ConventionModal = ({ currentConvention }) => {
+const ConventionModal = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   const saveResult = () => {
@@ -42,7 +42,6 @@ const ConventionModal = ({ currentConvention }) => {
           .
         </div>
         <ConventionForm
-          currentConvention={currentConvention}
           onConventionUpdated={saveResult}
         />
       </ModalContent>
