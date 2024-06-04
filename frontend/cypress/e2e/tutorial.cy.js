@@ -74,7 +74,7 @@ const tutorials = [
   { page: 'mes-etudiants', steps: 3 },
   { page: 'nouvel-etudiant', steps: 3 },
   { page: 'mes-remboursements', steps: 6 },
-  { page: 'mon-profil', steps: 4 },
+  { page: 'tableau-de-bord', steps: 3 },
 ];
 describe('Other tutorials', () => {
   beforeEach(() => {
