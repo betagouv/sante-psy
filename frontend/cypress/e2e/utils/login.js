@@ -25,7 +25,7 @@ const loginAsDefault = (duration = 3600) => cy.request('http://localhost:8080/te
   });
 
 const logout = () => {
-  cy.get('[data-test-id="logout-link"]').click({ force: true });
+  cy.get('[data-test-id="logout-link"]').should('be.visible').click({ force: true });
 };
 
 export default {

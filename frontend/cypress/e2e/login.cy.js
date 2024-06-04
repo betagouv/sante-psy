@@ -64,6 +64,7 @@ describe('Login', () => {
               cy.wait('@login');
               cy.wait('@connectedUser');
               cy.wait('@connectedUser');
+              cy.wait(2000);
               logout();
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');
