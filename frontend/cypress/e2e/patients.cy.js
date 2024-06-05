@@ -72,11 +72,10 @@ describe('Patient', () => {
 
   describe('Update', () => {
     it('should update existing etudiant and update completion info', () => {
-
       cy.contains('[data-test-id="etudiant-name"]', 'LAURE')
-      .parents('tr')
-      .find('[data-test-id="update-etudiant-button"]')
-      .click();
+        .parents('tr')
+        .find('[data-test-id="update-etudiant-button"]')
+        .click();
 
       cy.wait('@etudiant');
 
