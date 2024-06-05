@@ -17,6 +17,7 @@ import { useStore } from 'stores/';
 
 const defaultItems = [
   { title: 'Comment ça marche ?', link: '/' },
+  { title: 'Rejoindre le dispositif', link: '/rejoindre' },
   { title: 'Foire aux questions', link: '/faq' },
   { title: 'Nous contacter', link: '/contact' },
   { title: 'Autres services', link: '/autres-services' },

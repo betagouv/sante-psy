@@ -107,7 +107,6 @@ const StudentEligibility = () => {
       currentBreadCrumb="Éligibilité"
       title={<>Éligibilité</>}
       description={<>Vous êtes étudiant, vérifiez que vous êtes éligible</>}
-      className={styles.page}
     >
       <form onSubmit={submit}>
         <div className={styles.formContainer}>

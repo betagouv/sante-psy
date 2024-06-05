@@ -1,24 +1,8 @@
 @import 'src/variables.scss';
 
+
 .landing {
-    .firstSlice, .secondSlice, .thirdSlice, .fourthSlide {
-        padding: 48px;
-
-        img {
-            margin:auto;
-            max-width: 400px;
-            height: auto;
-        }
-    }
-
-    .secondSlice {
-        margin-bottom: 50px;
-        .content {
-            max-width: 700px
-        }
-    }
-
-    .firstSlice {
+    .topSlice {
         height: 280px;
         padding: 0;
 
@@ -30,80 +14,14 @@
             margin:0;
             margin-right: 15%;
             height: auto;
+            max-width: 400px;
         }
-    }
-
-    .fourthSlide {
-        height: 280px;
-        padding: 0;
-
-        h2 {
-            font-size: 32px;
-            width: 50%;
-        }
-
-        .content {
-            margin:0;
-            align-items: flex-start;
-            margin-left: 310px;
-        }
-    }
-
-    .fifthSlide {
-        height: 280px;
-        padding: 0;
-
-        h2 {
-            font-size: 32px;
-            width: 50%;
-        }
-
-        .content {
-            margin:0;
-            align-items: flex-start;
-            margin-left: 310px;
-        }
-    }
-
-    .sixthSlide {
-        max-width: 1200px;
-        margin: auto;
-        padding: 16px;
-        overflow-wrap: anywhere;
     }
 }
 
-// .firstSlice {
-//     height: 280px;
-
-//     h2 {
-//         font-size: 32px;
-//     }
-    
-//     img {
-//         max-width: 400px;
-//         margin-right: 15%;
-//         height: auto;
-//     }
-// }
-
-// .secondSlice {
-//     margin-bottom: 50px;
-//     .content {
-//         max-width: 700px
-//     }
-// }
-
-// .thirdSlice {
-//     img {
-//         max-width: 400px;
-//         margin:auto;
-//     }
-// }
-
 @media (max-width: 900px) {
     .landing  {
-        .firstSlice {
+        .topSlice {
             height: 100%;
     
             h2 {

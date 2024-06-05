@@ -1,0 +1,56 @@
+@import 'src/variables.scss';
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 32px;
+    line-height: 65px;  
+    color:#5F5F62;
+    padding: 32px 0 96px 0;
+
+    .title {
+        h1 {
+            color:#5F5F62;
+            font-weight: 400;
+            font-size: 56px;
+           
+        }
+        p {
+            font-size: 28px;
+        }
+        span {
+            color: $primary-color;
+        }
+    }
+    
+    .headerButton {
+        display: flex;
+        justify-content: space-between;
+        height: 50px;
+    }
+}
+
+.accordion {
+    background-color: $secondary-color;
+
+}
+.accordionHeader {
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+    align-items: center;
+    
+    .stepNumber {
+        font-size: 56px;
+    }
+}
+
+.page {
+    background-color: white;
+
+    .textContainer {
+        max-width: none;
+    }
+}

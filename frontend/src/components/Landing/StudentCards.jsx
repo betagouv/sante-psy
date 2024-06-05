@@ -2,11 +2,11 @@ import React from 'react';
 import { Row } from '@dataesr/react-dsfr';
 
 import styles from './studentCards.cssmodule.scss';
-import StudentCard from './StudentCard';
+import Card from './Card';
 
 const StudentCards = () => (
   <Row className={styles.card}>
-    <StudentCard
+    <Card
       index={1}
       cardSize='lg'
       titleSize='lg'
@@ -16,7 +16,7 @@ const StudentCards = () => (
       buttonText="Vérifiez votre éligibilité"
       buttonLink="/eligibilite"
     />
-    <StudentCard
+    <Card
       index={2}
       cardSize='lg'
       titleSize='lg'
@@ -35,7 +35,7 @@ const StudentCards = () => (
       hint="ou un Service de santé étudiante"
       anchor="anchor-prescription-letter"
     />
-    <StudentCard
+    <Card
       index={3}
       cardSize='lg'
       titleSize='lg'

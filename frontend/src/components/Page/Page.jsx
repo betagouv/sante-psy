@@ -42,6 +42,7 @@ const Page = ({
   breadCrumbs,
   currentBreadCrumb,
   withoutHeader,
+  withoutBorder,
   className,
   dataTestId = null,
 }) => {

@@ -38,6 +38,8 @@ import LiveChat from 'components/LiveChat/LiveChat';
 import StudentUnregister from './components/StudentUnregister/StudentUnregister';
 import StudentEligibility from './components/Eligibility/StudentEligibility';
 import StudentEligibilityContact from './components/Eligibility/StudentEligibilityContact';
+import HowToJoin from 'components/HowToJoin/HowToJoin';
+import Steps from 'components/HowToJoin/Steps';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
@@ -74,6 +76,10 @@ function App() {
               <Route exact path="/declaration-accessibilite" element={<AccessibilityDeclaration />} />
               <Route exact path="/cgu" element={<CGU />} />
               <Route exact path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
+              <Route exact path="/rejoindre" element={<HowToJoin />} />
+              <Route exact path="/rejoindre/etudiant" element={<Steps type="student" />} />
+              <Route exact path="/rejoindre/psychologue" element={<Steps  type="psychologist"/>} />
+              <Route exact path="/rejoindre/medecin" element={<Steps type="doctor"/>} />
               <Route exact path="/faq" element={<Faq />} />
               <Route exact path="/stats" element={<Statistics />} />
               <Route exact path="/contact" element={<Contact />} />

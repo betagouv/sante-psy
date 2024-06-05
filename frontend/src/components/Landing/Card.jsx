@@ -2,12 +2,12 @@ import React from 'react';
 import { Button, Icon } from '@dataesr/react-dsfr';
 import { useNavigate } from 'react-router-dom';
 
-import styles from './studentCard.cssmodule.scss';
+import styles from './card.cssmodule.scss';
 import classNames from 'classnames';
 
 const allowedSizes = ['sm', 'md', 'lg'];
 
-const StudentCard = ({ cardSize = 'md', titleSize = 'md', index, title, description, hint, image, buttonLink, buttonText, buttonIcon, buttonSecondary, anchor }) => {
+const Card = ({ cardSize = 'md', titleSize = 'md', index, title, description, hint, image, buttonLink, buttonText, buttonIcon, buttonSecondary, anchor }) => {
   const navigate = useNavigate();
 
   const navigateToPathOrUrl = () => {
@@ -55,4 +55,4 @@ const StudentCard = ({ cardSize = 'md', titleSize = 'md', index, title, descript
   );
 };
 
-export default StudentCard;
+export default Card;
