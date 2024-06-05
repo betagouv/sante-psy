@@ -121,7 +121,7 @@ const PsyProfile = () => {
   return (
     !loading
     && (
-      <div className={styles.psyDashboard}>
+      <div className={styles.psyDashboard} data-test-id="dashboard">
         {psychologist.profilIssues.length > 0 && (
           <Alert
             data-test-id="incomplete-profile-alert"

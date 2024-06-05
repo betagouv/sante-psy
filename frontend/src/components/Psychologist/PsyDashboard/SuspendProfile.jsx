@@ -208,7 +208,6 @@ const SuspendProfile = () => {
       )}
       <ButtonGroup isInlineFrom="xs">
         <Button
-          id="hide-profil-button"
           disabled={user.active && !canValidate}
           data-test-id={
             user.active ? 'suspend-redirection-button' : 'activate-button'
