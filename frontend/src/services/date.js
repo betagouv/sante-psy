@@ -68,6 +68,14 @@ const formatDDMMYYYY = date => {
   return '';
 };
 
+const formatStringToDDMMYYYY = stringDate => {
+  const date = new Date(stringDate);
+  if (!date.getTime()) {
+    return ''; // handle invalid dates
+  }
+  return formatDDMMYYYY(date);
+};
+
 const parseDateForm = date => {
   if (date) {
     const [day, month, year] = date.split('/');
@@ -127,4 +135,5 @@ export {
   currentUnivYear,
   getUnivYear,
   endYearOfCurrentUnivYear,
+  formatStringToDDMMYYYY,
 };
