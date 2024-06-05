@@ -32,6 +32,16 @@
   width: 70%;
 }
 
+.ineWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .ineInput {
+    width: 60%;
+  }
+}
+
 @media (max-width: 768px) {
   .patientAppointments {
       width: 100%;

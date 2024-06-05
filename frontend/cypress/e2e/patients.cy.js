@@ -43,7 +43,7 @@ describe('Patient', () => {
       cy.get('[data-test-id="etudiant-school-input"] > input')
         .type('Université de Rennes');
       cy.get('[data-test-id="etudiant-ine-input"] > input')
-        .type('01020304');
+        .type('010203045LL');
       cy.get('[data-test-id="etudiant-status-input"]')
         .click();
       cy.get('[data-test-id="etudiant-letter-input"]')
@@ -79,12 +79,12 @@ describe('Patient', () => {
 
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
       cy.get('[data-test-id="etudiant-seances-list"] tr')
-        .should('have.length', 33);
+        .should('have.length', 49);
 
       cy.get('[data-test-id="etudiant-seances-list"] ul li button')
         .eq(1).click();
       cy.get('[data-test-id="etudiant-seances-list"] tr')
-        .should('have.length', 17);
+        .should('have.length', 25);
 
       cy.get('[data-test-id="etudiant-first-name-input"] > input')
         .clear()
@@ -94,7 +94,7 @@ describe('Patient', () => {
         .type('Moustaki');
       cy.get('[data-test-id="etudiant-ine-input"] > input')
         .clear()
-        .type('123456');
+        .type('010203045ML');
 
       cy.get('[data-test-id="etudiant-letter-input"]')
         .click();

@@ -30,9 +30,9 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
     icon: 'fr-icon-info-fill fr-icon--sm',
     className: 'fr-badge--purple-glycine',
   },
-  student_infos: {
-    key: 'student_infos',
-    text: isSmallScreen ? 'Dossier' : 'Dossier étudiant à compléter',
+  student_ine: {
+    key: 'student_ine',
+    text: isSmallScreen ? 'INE' : 'numéro INE absent',
     severity: 'info',
     icon: 'fr-icon-info-fill fr-icon--sm',
   },
