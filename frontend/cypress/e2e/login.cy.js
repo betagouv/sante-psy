@@ -64,7 +64,7 @@ describe('Login', () => {
               cy.wait('@login');
               cy.wait('@connectedUser');
               cy.wait('@connectedUser');
-              cy.get('[data-test-id="dashboard"]').should('be.visible')
+              cy.get('[data-test-id="dashboard"]').should('be.visible');
               logout();
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');

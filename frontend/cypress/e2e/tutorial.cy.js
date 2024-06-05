@@ -8,15 +8,15 @@ const checkAllSteps = numberOfSteps => {
   for (let i = 0; i < numberOfSteps - 1; i++) {
     cy.wait(100);
     cy.get('[data-test-id="next-step"]')
-    .click();
-    console.log(i)
+      .click();
+    console.log(i);
   }
-  
+
   // go back to the begining
   for (let i = 0; i < numberOfSteps - 1; i++) {
     cy.wait(100);
     cy.get('[data-test-id="previous-step"]')
-    .click();
+      .click();
   }
 
   cy.get('[data-test-id="previous-step"]')
