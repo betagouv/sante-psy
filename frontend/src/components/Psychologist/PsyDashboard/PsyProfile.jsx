@@ -5,21 +5,16 @@ import agent from 'services/agent';
 import { useStore } from 'stores';
 
 import { Alert, Button, Icon } from '@dataesr/react-dsfr';
-import EditProfile from 'components/Psychologist/PsyDashboard/EditProfile';
 
 import { formatStringToDDMMYYYY } from 'services/date';
 import PsyCardInfo from './PsyCardInfo';
 import styles from './psyDashboard.cssmodule.scss';
 
 const PsyProfile = () => {
-  const {
-    commonStore: { setNotification, setPsychologists },
-    userStore: { pullUser, user },
-  } = useStore();
+  const { userStore: { pullUser, user } } = useStore();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [psychologist, setPsychologist] = useState();
-  const [editMode, setEditMode] = useState(false);
 
   const greenCircleIcon = '/images/icon-available-psy.svg';
   const orangeCircleIcon = '/images/icon-unavailable-psy.svg';
@@ -78,31 +73,6 @@ const PsyProfile = () => {
     loadPsychologist();
   }, []);
 
-  const updatePsy = updatedPsychologist => {
-    agent.Psychologist.updateProfile(updatedPsychologist)
-      .then(response => {
-        setEditMode(false);
-        loadPsychologist();
-        setNotification(response);
-        updatePsyList();
-        window.scrollTo(0, 0);
-      })
-      .catch(() => window.scrollTo(0, 0));
-  };
-
-  const updatePsyList = () => {
-    agent.Psychologist.find().then(setPsychologists);
-  };
-
-  const cancelEditProfile = () => {
-    setEditMode(false);
-    window.scrollTo(0, 0);
-  };
-
-  const handleEditMode = value => {
-    setEditMode(value);
-  };
-
   const renderPsychologistAvailability = () => {
     if (user.inactiveUntil && user.inactiveUntil.startsWith('9999')) {
       return (
@@ -150,13 +120,7 @@ const PsyProfile = () => {
 
   return (
     !loading
-    && (editMode ? (
-      <EditProfile
-        psychologist={psychologist}
-        updatePsy={updatePsy}
-        cancelEditProfile={cancelEditProfile}
-      />
-    ) : (
+    && (
       <div className={styles.psyDashboard}>
         {psychologist.profilIssues.length > 0 && (
           <Alert
@@ -190,7 +154,7 @@ const PsyProfile = () => {
             </div>
           </HashLink>
         </div>
-        <PsyCardInfo psychologist={psychologist} onEditMode={handleEditMode} />
+        <PsyCardInfo psychologist={psychologist} />
         <section className={styles.psyDashboardCard}>
           <Button
             id="show-convention-form"
@@ -238,20 +202,14 @@ const PsyProfile = () => {
             secondary
             title="Modify"
             icon="ri-edit-line"
-            onClick={() => {
-              setEditMode(true);
-              document
-                .getElementById('psy-description-input')
-                .scrollIntoView({ behavior: 'smooth' });
-            }}
+            onClick={() => navigate('/psychologue/modifier-profil', { state: { psychologist } })}
             className={styles.buttonEdit}
           >
             Modifier
           </Button>
         </section>
       </div>
-    ))
-  );
+    ));
 };
 
 export default PsyProfile;

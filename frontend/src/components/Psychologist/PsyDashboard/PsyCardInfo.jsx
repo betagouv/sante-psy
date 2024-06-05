@@ -6,7 +6,7 @@ import { useStore } from 'stores/index';
 
 import styles from './psyDashboard.cssmodule.scss';
 
-const PsyCardInfo = ({ psychologist, onEditMode }) => {
+const PsyCardInfo = ({ psychologist }) => {
   const navigate = useNavigate();
   const { userStore: { user } } = useStore();
 
@@ -75,7 +75,9 @@ const PsyCardInfo = ({ psychologist, onEditMode }) => {
           data-test-id="show-profile-form-button"
           title="Modify"
           icon="ri-edit-line"
-          onClick={() => onEditMode(true)}
+          onClick={() => {
+            navigate('/psychologue/modifier-profil/');
+          }}
           hasBorder="false"
           >
           Modifier

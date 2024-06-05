@@ -1,32 +1,73 @@
 import React, { useEffect, useState } from 'react';
 import { Button, RadioGroup, Radio, TextInput, SearchableSelect, ButtonGroup } from '@dataesr/react-dsfr';
-
+import { useLocation, useNavigate } from 'react-router-dom';
+import agent from 'services/agent';
 import string from 'services/string';
 import DEPARTEMENTS from 'src/utils/departments';
+import { useStore } from 'stores/index';
 import styles from './psyDashboard.cssmodule.scss';
 
-const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
-  const [updatedPsychologist, setUpdatedPsychologist] = useState(psychologist);
-  useEffect(() => { setUpdatedPsychologist(psychologist); }, [psychologist]);
+const EditProfile = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { commonStore: { setPsychologists } } = useStore();
+  const [psychologist, setPsychologist] = useState(location.state?.psychologist || {
+    personalEmail: '',
+    departement: '',
+    address: '',
+    otherAddress: '',
+    phone: '',
+    email: '',
+    teleconsultation: false,
+    languages: '',
+    website: '',
+    appointmentLink: '',
+    description: '',
+  });
 
-  const save = e => {
+  useEffect(() => {
+    const loadPsychologist = async () => {
+      try {
+        const response = await agent.Psychologist.getProfile();
+        setPsychologist(response);
+      } catch (error) {
+        console.error('Failed to load psychologist profile', error);
+      }
+    };
+
+    if (!location.state?.psychologist) {
+      loadPsychologist();
+    }
+  }, [location.state?.psychologist]);
+
+  const save = async e => {
     e.preventDefault();
-    updatePsy(updatedPsychologist);
+    try {
+      const response = await agent.Psychologist.updateProfile(psychologist);
+      updatePsyList();
+      navigate('/psychologue/tableau-de-bord', { state: { notification: response } });
+    } catch (error) {
+      console.error('Failed to update psychologist profile', error);
+    }
+  };
+
+  const updatePsyList = () => {
+    agent.Psychologist.find().then(setPsychologists);
   };
 
   const changePsychologist = (value, field) => {
-    setUpdatedPsychologist({ ...updatedPsychologist, [field]: value });
+    setPsychologist(prev => ({ ...prev, [field]: value }));
   };
 
   const enrichWebsite = () => {
-    const prefixedWebsite = string.prefixUrl(updatedPsychologist.website);
+    const prefixedWebsite = string.prefixUrl(psychologist.website);
     if (prefixedWebsite) {
       changePsychologist(prefixedWebsite, 'website');
     }
   };
 
   const enrichAppointmentLink = () => {
-    const prefixedAppointmentLink = string.prefixUrl(updatedPsychologist.appointmentLink);
+    const prefixedAppointmentLink = string.prefixUrl(psychologist.appointmentLink);
     if (prefixedAppointmentLink) {
       changePsychologist(prefixedAppointmentLink, 'appointmentLink');
     }
@@ -45,7 +86,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         hint="Adresse non communiquée sur l'annuaire, utilisée uniquement pour la réception de mail provenant de
              Santé Psy Étudiant."
         data-test-id="psy-personal-email-input"
-        value={updatedPsychologist.personalEmail}
+        value={psychologist.personalEmail}
         onChange={e => changePsychologist(e.target.value, 'personalEmail')}
         type="email"
         required
@@ -55,8 +96,8 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         label="Votre département"
         field="departement"
         data-test-id="psy-departement-select"
-        selected={updatedPsychologist.departement}
-        onChange={e => { changePsychologist(e, 'departement'); }}
+        selected={psychologist.departement}
+        onChange={e => changePsychologist(e, 'departement')}
         options={DEPARTEMENTS.map(departement => ({ value: departement, label: departement }))}
         required
       />
@@ -65,7 +106,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         label="Adresse du cabinet"
         hint="Adresse où se rendre pour le rendez-vous."
         data-test-id="psy-address-input"
-        value={updatedPsychologist.address}
+        value={psychologist.address}
         onChange={e => changePsychologist(e.target.value, 'address')}
         required
       />
@@ -74,7 +115,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         label="Autre adresse du cabinet"
         hint="Si vous avez un deuxième cabinet vous pouvez indiquer son adresse ici"
         data-test-id="psy-other-address-input"
-        value={updatedPsychologist.otherAddress}
+        value={psychologist.otherAddress}
         onChange={e => changePsychologist(e.target.value, 'otherAddress')}
       />
       <TextInput
@@ -82,7 +123,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         label="Téléphone du secrétariat"
         hint="Numéro auquel prendre rendez-vous."
         data-test-id="psy-phone-input"
-        value={updatedPsychologist.phone}
+        value={psychologist.phone}
         onChange={e => changePsychologist(e.target.value, 'phone')}
         required
       />
@@ -91,34 +132,27 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         label="Email de contact"
         hint="Adresse email à laquelle prendre rendez-vous ou poser des questions."
         data-test-id="psy-email-input"
-        value={updatedPsychologist.email}
+        value={psychologist.email}
         onChange={e => changePsychologist(e.target.value, 'email')}
         type="email"
       />
       <RadioGroup
-        value={updatedPsychologist.teleconsultation ? 'true' : 'false'}
+        value={psychologist.teleconsultation ? 'true' : 'false'}
         onChange={value => changePsychologist(value, 'teleconsultation')}
         legend="Proposez-vous de la téléconsultation ?"
         hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
         required
         isInline
       >
-        <Radio
-          data-test-id="teleConsultation-true"
-          label="Oui"
-          value="true"
-        />
-        <Radio
-          label="Non"
-          value="false"
-        />
+        <Radio data-test-id="teleConsultation-true" label="Oui" value="true" />
+        <Radio label="Non" value="false" />
       </RadioGroup>
       <TextInput
         className="midlength-input"
         label="Langues parlées"
-        hint="Exemple : &ldquo;Français, Anglais&rdquo;"
+        hint="Exemple : “Français, Anglais”"
         data-test-id="psy-languages-input"
-        value={updatedPsychologist.languages}
+        value={psychologist.languages}
         onChange={e => changePsychologist(e.target.value, 'languages')}
         required
       />
@@ -127,7 +161,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         label="Site web professionnel"
         hint="Site sur lequel l'étudiant pourra trouver plus d'infos sur votre cabinet ou vos services."
         data-test-id="psy-website-input"
-        value={updatedPsychologist.website}
+        value={psychologist.website}
         onChange={e => changePsychologist(e.target.value, 'website')}
         onBlur={enrichWebsite}
       />
@@ -136,7 +170,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         label="Site web pour prendre rendez-vous"
         hint="Site sur lequel l'étudiant pourra prendre rendez-vous avec vous."
         data-test-id="psy-appointmentLink-input"
-        value={updatedPsychologist.appointmentLink}
+        value={psychologist.appointmentLink}
         onChange={e => changePsychologist(e.target.value, 'appointmentLink')}
         onBlur={enrichAppointmentLink}
       />
@@ -148,7 +182,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
         hint="Ex : &ldquo;Je propose du suivi pour les jeunes adultes, en particulier pour la gestion du stress et
             de l'anxiété.&rdquo;"
         data-test-id="psy-description-input"
-        value={updatedPsychologist.description}
+        value={psychologist.description}
         onChange={e => changePsychologist(e.target.value, 'description')}
       />
       <ButtonGroup isInlineFrom="xs">
@@ -160,7 +194,7 @@ const EditProfile = ({ psychologist, updatePsy, cancelEditProfile }) => {
           Valider les modifications
         </Button>
         <Button
-          onClick={cancelEditProfile}
+          onClick={() => navigate('/psychologue/tableau-de-bord/')}
           secondary
           icon="fr-fi-close-line"
         >
