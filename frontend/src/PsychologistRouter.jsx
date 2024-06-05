@@ -16,6 +16,7 @@ import GlobalNotification from 'components/Notification/GlobalNotification';
 import Billing from 'components/Psychologist/Reimbursement/Billing';
 import ConventionForm from 'components/Psychologist/PsyDashboard/ConventionForm';
 import SuspendProfile from 'components/Psychologist/PsyDashboard/SuspendProfile';
+import EditProfile from 'components/Psychologist/PsyDashboard/EditProfile';
 
 import { shouldCheckConventionAgain } from 'services/conventionVerification';
 import { useStore } from './stores';
@@ -37,8 +38,24 @@ const PsychologistRouter = () => {
   const getPageProps = () => {
     const page = pathname.split('/')[2];
     switch (page) {
+      case 'modifier-profil':
+        return {
+          breadCrumbs: [{ href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' }],
+          currentBreadCrumb: 'Modifier mon profil',
+          title: (
+            <>
+              Mes
+              {' '}
+              <b>informations</b>
+              {' '}
+              Annuaire
+            </>
+          ),
+        };
       case 'ma-convention':
         return {
+          breadCrumbs: [{ href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' }],
+          currentBreadCrumb: 'Ma convention',
           title: (
             <>
               Ma
@@ -50,6 +67,8 @@ const PsychologistRouter = () => {
         };
       case 'ma-disponibilite':
         return {
+          breadCrumbs: [{ href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' }],
+          currentBreadCrumb: 'Ma disponibilité',
           title: (
             <>
               Mon
@@ -177,6 +196,7 @@ const PsychologistRouter = () => {
       <GlobalNotification className="fr-my-2w" />
       <Routes>
         <Route exact path="/tableau-de-bord" element={<PsyProfile />} />
+        <Route exact path="/modifier-profil" element={<EditProfile />} />
         <Route exact path="/mes-seances" element={<Appointments />} />
         <Route exact path="/nouvelle-seance" element={<NewAppointment />} />
         <Route exact path="/nouvelle-seance/:patientId" element={<NewAppointment />} />

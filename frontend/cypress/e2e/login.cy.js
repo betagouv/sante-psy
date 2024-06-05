@@ -64,7 +64,7 @@ describe('Login', () => {
               cy.wait('@login');
               cy.wait('@connectedUser');
               cy.wait('@connectedUser');
-              cy.wait(2000);
+              cy.get('[data-test-id="show-convention-form"]').should('be.visible')
               logout();
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');
