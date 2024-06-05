@@ -32,7 +32,7 @@ const steps = [
   },
   {
     placement: 'top-start',
-    target: '#hide-profil-button',
+    target: '#show-availability-form',
     content: "Enfin, si vous ne souhaitez plus être visible sur l'annuaire, veuillez cliquer ici.",
   },
 ];

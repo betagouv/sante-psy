@@ -151,8 +151,7 @@ const PsychologistRouter = () => {
             </>
           ),
           description: 'En tant que psychologue de Santé Psy Étudiant, vous avez la possibilité de gérer les informations au sein de notre annuaire.',
-          // à modifier dans commit tuto
-          tutorial: 'profile',
+          tutorial: 'dashboard',
         };
       default:
         return {

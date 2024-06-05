@@ -24,7 +24,7 @@ const defaultItems = [
 
 const connectedItems = [
   { title: 'Tableau de bord', link: '/psychologue/tableau-de-bord', id: 'dashboard-header' },
-  { title: 'Déclarer mes séances', link: '/psychologue/mes-seances' },
+  { title: 'Déclarer mes séances', link: '/psychologue/mes-seances', id: 'appointments-header' },
   { title: 'Gérer mes étudiants', link: '/psychologue/mes-etudiants' },
   {
 

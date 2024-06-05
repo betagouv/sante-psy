@@ -2,7 +2,7 @@ import appointmentsSteps from './appointments';
 import newAppointmentSteps from './newAppointment';
 import studentsSteps from './students';
 import newStudentsSteps from './newStudent';
-import profileSteps from './profile';
+import dashboardSteps from './dashboard';
 import billingSteps from './billing';
 import globalSteps from './global';
 
@@ -16,8 +16,8 @@ const getSteps = id => {
       return studentsSteps;
     case 'new-student':
       return newStudentsSteps;
-    case 'profile':
-      return profileSteps;
+    case 'dashboard':
+      return dashboardSteps;
     case 'billing':
       return billingSteps;
     default:
