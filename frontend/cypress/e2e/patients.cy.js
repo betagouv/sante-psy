@@ -72,9 +72,12 @@ describe('Patient', () => {
 
   describe('Update', () => {
     it('should update existing etudiant and update completion info', () => {
-      cy.get('[data-test-id="update-etudiant-button"]')
-        .eq(1)
-        .click();
+
+      cy.contains('[data-test-id="etudiant-name"]', 'LAURE')
+      .parents('tr')
+      .find('[data-test-id="update-etudiant-button"]')
+      .click();
+
       cy.wait('@etudiant');
 
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
