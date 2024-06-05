@@ -17,13 +17,13 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
   if (fixedValues) {
     const sharedPatients = [
       {
-        lastName: 'Maxime',
+        lastName: 'Aaron',
         firstNames: 'SharedPatient1',
         INE: '09393352792',
         index: [0, 1],
       },
       {
-        lastName: 'Laure',
+        lastName: 'Beatrice',
         firstNames: 'SharedPatient2',
         INE: '280324352792',
         index: [0, 1],
