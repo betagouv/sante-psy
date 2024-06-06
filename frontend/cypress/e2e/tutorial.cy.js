@@ -34,7 +34,7 @@ const checkAllSteps = numberOfSteps => {
     .click();
 };
 
-describe('Global tutorial', () => {
+describe.only('Global tutorial', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/connecteduser')
       .as('connecteduser');
@@ -44,7 +44,7 @@ describe('Global tutorial', () => {
     checkConvention();
     resetTutorial();
 
-    cy.visit('/psychologue/mes-seances');
+    cy.visit('/psychologue/tableau-de-bord');
     cy.wait('@connecteduser');
   });
 
