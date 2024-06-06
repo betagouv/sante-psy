@@ -140,11 +140,11 @@ const PsyProfile = () => {
       )}
       <div className="fr-my-2w">
         <HashLink
-          id="profile-new-appointment-button"
+          id="new-appointment-button"
           to="/psychologue/nouvelle-seance"
           className="fr-btn"
         >
-          <div data-test-id="profile-new-appointment-button">
+          <div data-test-id="new-appointment-button">
             <Icon name="ri-add-line" />
             Déclarer une séance
           </div>
