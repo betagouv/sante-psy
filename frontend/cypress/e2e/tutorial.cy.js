@@ -44,7 +44,7 @@ describe('Global tutorial', () => {
     checkConvention();
     resetTutorial();
 
-    cy.visit('/psychologue/mes-seances');
+    cy.visit('/psychologue/tableau-de-bord');
     cy.wait('@connecteduser');
   });
 
