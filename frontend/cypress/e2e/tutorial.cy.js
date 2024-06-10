@@ -9,7 +9,6 @@ const checkAllSteps = numberOfSteps => {
     cy.wait(100);
     cy.get('[data-test-id="next-step"]')
       .click();
-    console.log(i);
   }
 
   // go back to the begining
