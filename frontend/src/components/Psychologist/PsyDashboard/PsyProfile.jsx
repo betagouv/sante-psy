@@ -13,7 +13,7 @@ import styles from './psyDashboard.cssmodule.scss';
 const PsyProfile = () => {
   const { userStore: { pullUser, user } } = useStore();
   const navigate = useNavigate();
-  const [psychologist, setPsychologist] = useState();
+  const [psychologist, setPsychologist] = useState({ profilIssues: [], description: '' });
 
   const greenCircleIcon = '/images/icon-available-psy.svg';
   const orangeCircleIcon = '/images/icon-unavailable-psy.svg';
@@ -118,7 +118,7 @@ const PsyProfile = () => {
 
   return (
     <div className={styles.psyDashboard} data-test-id="dashboard">
-      {psychologist && psychologist.profilIssues.length > 0 && (
+      {psychologist.profilIssues.length > 0 && (
         <Alert
           data-test-id="incomplete-profile-alert"
           className="fr-mb-2w"
@@ -150,7 +150,7 @@ const PsyProfile = () => {
           </div>
         </HashLink>
       </div>
-      {psychologist && <PsyCardInfo psychologist={psychologist} />}
+      <PsyCardInfo psychologist={psychologist} />
       <section className={styles.psyDashboardCard}>
         <Button
           id="show-convention-form"
@@ -193,7 +193,7 @@ const PsyProfile = () => {
       </section>
       <section className={styles.psyDashboardDescription}>
         <b>Description : </b>
-        <p>{psychologist && psychologist.description}</p>
+        <p>{psychologist.description}</p>
         <Button
           secondary
           title="Modify"
