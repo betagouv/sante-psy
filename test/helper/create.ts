@@ -138,12 +138,8 @@ const getAddress = (): {
 // faker can give address with accent wich are not considered as valid...
 const getFakeAddress = (): string => {
   let website = '';
-  const isWebsite = new RegExp('^(https?:\\/\\/)?' // protocol
-  + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
-  + '((\\d{1,3}\\.){3}\\d{1,3}))' // OR ip (v4) address
-  + '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' // port and path
-  + '(\\?[;&a-z\\d%_.~+=-]*)?' // query string
-  + '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+  // eslint-disable-next-line max-len
+  const isWebsite = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
   while (!isWebsite.test(website)) {
     website = faker.internet.domainName() + faker.internet.domainSuffix();
   }
