@@ -1,3 +1,8 @@
+@import 'src/tooltip.scss';
+
+.grayedRow {
+    color: #999;
+}
 
 .title {
     font-size: 1.2rem;
@@ -23,12 +28,26 @@
 }
 
 .tableAppointments {
+    @include tooltip;
     max-height: 560px;
     overflow-y: auto;
     --table-offset: 0;
 
     thead {
         z-index:2;
+    }
+
+    .clickableElement {
+        padding-left: 10px;
+        .tooltip {
+            color: black;
+        }
+    }
+
+    .date {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
 }
 

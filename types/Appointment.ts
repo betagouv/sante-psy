@@ -15,3 +15,9 @@ export type Appointment = {
 export type AppointmentWithPatient = Appointment & Patient;
 
 export interface AppointmentByYear {[univYear: string]: Appointment[]}
+
+export type AppointmentInfo = {
+    date: Date,
+    badges: string[],
+    count: number,
+}

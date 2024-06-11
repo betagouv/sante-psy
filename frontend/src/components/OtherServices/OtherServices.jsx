@@ -62,7 +62,7 @@ const OtherServices = () => {
           logo="/images/monparcourspsy-logo.png"
           name="MonSoutienPsy"
           title="En parler, c'est déjà se soigner."
-          description="Pour tout le monde, à partir de 3 ans. 8 séances par an chez un(e) psychologue"
+          description="Pour tout le monde, à partir de 3 ans. 12 séances par an chez un(e) psychologue"
           link="https://www.ameli.fr/assure/remboursements/rembourse/remboursement-seance-psychologue-mon-soutien-psy"
         />
       </div>

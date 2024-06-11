@@ -53,7 +53,7 @@ const Announcement = () => {
             __html: sanitizeHtml(
               config.announcement,
               {
-                allowedTags: ['a', 'br'],
+                allowedTags: ['a', 'br', 'ul', 'li', 'b'],
                 allowedAttributes: { a: ['href', 'target', 'rel'] },
               },
             ),

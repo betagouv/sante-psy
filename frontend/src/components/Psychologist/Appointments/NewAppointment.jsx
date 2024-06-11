@@ -16,7 +16,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import PatientAppointments from '../Patients/PatientAppointments';
 import styles from './newAppointment.cssmodule.scss';
 
-export const MAX_APPOINTMENT = 8;
+export const MAX_APPOINTMENT = 12;
 
 const NewAppointment = () => {
   const navigate = useNavigate();
@@ -44,8 +44,7 @@ const NewAppointment = () => {
   }, []);
 
   const patient = useMemo(() => patients?.find(p => p.id === patientId), [patients, patientId]);
-
-  const tooMuchAppointments = useMemo(() => patient && patient.appointmentsYearCount >= MAX_APPOINTMENT, [patient]);
+  const tooMuchAppointments = useMemo(() => patient && patient.countedAppointments >= MAX_APPOINTMENT, [patient]);
   const createNewAppointment = e => {
     e.preventDefault();
     setNotification({});
@@ -76,6 +75,13 @@ const NewAppointment = () => {
   return (
     <div className={styles.newAppointmentWrapper}>
       <form onSubmit={createNewAppointment} className="fr-my-2w">
+      <div className={styles.message}>
+          Vous pouvez ajouter
+          <ul>
+            <li>jusqu'à 12 séances depuis le 15 juin 2024.</li>
+            <li>jusqu'à 8 séances avant le 15 juin 2024.</li>
+          </ul>
+      </div>
         <div id="patients-list">
           {patients.length > 0 ? (
             <SearchableSelect

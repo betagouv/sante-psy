@@ -64,11 +64,29 @@ const getAll = async (psychologistId: string): Promise<(Patient &
       })
       .andWhere('deleted', false);
 
+      const START_NEW_RULES = new Date('2024-06-15T00:00:00Z');
+      const MAX_APPOINTMENT_OLD = 8;
+      let countedAppointments = 0;
+      let countOldRules = 0;
+
       const appointmentsDataCurrentUnivYear = appointmentsData.filter((appointment) => {
         const startUnivYear = date.getUTCDate(new Date(startCurrentUnivYear()));
         const endUnivYear = date.getUTCDate(new Date(endCurrentUnivYear()));
         const appointmentDate = date.getUTCDate(new Date(appointment.appointmentDate));
-        return appointmentDate >= startUnivYear && appointmentDate <= endUnivYear;
+
+        // NEW RULE UPDATE: newRuleCount doesn't count exceeded appointment when max was 8.
+        if (appointmentDate >= startUnivYear && appointmentDate <= endUnivYear) {
+          if (appointmentDate < START_NEW_RULES) {
+            countOldRules++;
+            if (countOldRules <= MAX_APPOINTMENT_OLD) {
+              countedAppointments++;
+            }
+          } else {
+            countedAppointments++;
+          }
+          return true;
+        }
+        return false;
       });
 
       const appointmentsCountResult = appointmentsData
@@ -80,6 +98,7 @@ const getAll = async (psychologistId: string): Promise<(Patient &
         ...patient,
         appointmentsCount: appointmentsCountResult,
         appointmentsYearCount: appointmentsYearCountResult,
+        countedAppointments,
       };
     });
 

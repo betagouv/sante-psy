@@ -20,12 +20,12 @@ module.exports = () => [
   },
   {
     question: 'J\'ai déjà bénéficié du dispositif, puis-je de nouveau en bénéficier\u00A0?',
-    answer: "Un étudiant peut bénéficier d'un cycle de 8 séances maximum par année universitaire. Si l'étudiant a déjà bénéficié du dispositif, il peut de nouveau en bénéficier sur l'année universitaire suivante, sous réserve qu'il soit toujours étudiant sur la période de suivi et en sollicitant une nouvelle lettre d'orientation auprès d'un médecin généraliste. \
+    answer: "Un étudiant peut bénéficier d'un cycle de 12 séances maximum par année universitaire. Si l'étudiant a déjà bénéficié du dispositif, il peut de nouveau en bénéficier sur l'année universitaire suivante, sous réserve qu'il soit toujours étudiant sur la période de suivi et en sollicitant une nouvelle lettre d'orientation auprès d'un médecin généraliste. \
     À noter, qu'il ne peut y avoir qu'une seule lettre d'orientation par année universitaire.",
   },
   {
     question: 'La lettre d\'orientation est-elle obligatoire\u00A0?',
-    answer: 'Oui la lettre d\'orientation est obligatoire pour démarrer les séances. Une seule lettre d\'orientation suffit pour bénéficier jusqu\'à 8 séances. \
+    answer: 'Oui la lettre d\'orientation est obligatoire pour démarrer les séances. Une seule lettre d\'orientation suffit pour bénéficier jusqu\'à 12 séances. \
     Il n\'y a pas de mention obligatoire prévue si ce n\'est le "besoin d\'un suivi psychologique" constaté par le médecin généraliste.',
   },
 ];

@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { Table, Tabs, Tab, Button } from '@dataesr/react-dsfr';
+import { Table, Tabs, Tab, Button, Icon } from '@dataesr/react-dsfr';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
 import Badges from 'components/Badges/Badges';
 import useScreenSize from 'src/utils/useScreenSize';
 import { useNavigate } from 'react-router-dom';
 import { currentUnivYear } from 'services/date';
+import getBadgeInfos from 'src/utils/badges';
 import styles from './patientAppointments.cssmodule.scss';
 
 const PatientAppointments = ({ showCreateButton = true, patientId }) => {
   const { commonStore: { setNotification } } = useStore();
+
   const [patientAppointments, setPatientAppointments] = useState({});
   const [dataWithIndex, setDataWithIndex] = useState([]);
   const [univYears, setUnivYears] = useState([]);
+  const currentYear = currentUnivYear('-');
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [showTooltip, setShowTooltip] = useState(null);
 
   const isSmallScreen = useScreenSize();
   const navigate = useNavigate();
+  const badges = getBadgeInfos();
 
-  const currentYear = currentUnivYear('-');
-  const [selectedYear, setSelectedYear] = useState(currentYear);
+  
 
   useEffect(() => {
     if (patientId) {
@@ -38,8 +43,19 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
 
   useEffect(() => {
     if (selectedYear && patientAppointments[selectedYear]) {
-      const newDataWithIndex = patientAppointments[selectedYear].map((item, index) => ({ ...item, index: patientAppointments[selectedYear].length - index }));
-      setDataWithIndex(newDataWithIndex);
+      const originalArray = patientAppointments[selectedYear];
+      const reversedArray = originalArray.slice().reverse();
+  
+      let lastIndex = 0;
+      const indexedArray = reversedArray.map((item) => {
+        let currentIndex = item.badges.includes(badges.inactive.key) && item.badges.includes(badges.exceeded.key) ? '-' : ++lastIndex;
+        return { ...item, index: currentIndex };
+      });
+  
+      // Restaurer l'ordre original
+      const originalOrderIndexedArray = indexedArray.slice().reverse();
+  
+      setDataWithIndex(originalOrderIndexedArray);
     } else {
       setDataWithIndex([]);
     }
@@ -68,50 +84,88 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
   </Button>
   );
 
-  const renderTable = () => (
-    <Table
-      columns={columns}
-      data={dataWithIndex}
-      fixedHeader
-      noScroll={dataWithIndex.length <= 8}
-      rowKey={x => x}
-      className={styles.tableAppointments}
-    />
-  );
+  const handleIconClick = (id) => {
+    if (showTooltip === id) {
+      setShowTooltip(null);
+    } else {
+      setShowTooltip(id);
+    }
+  };
 
-  const columns = [
-    {
-      name: 'number',
-      label: 'n°',
-      render: appointment => appointment.index,
-    },
-    {
-      name: 'date',
-      label: 'Dates des séances effectuées',
-      render: appointment => new Date(appointment.appointmentDate).toLocaleDateString(),
-    },
-    {
-      name: 'badges',
-      label: '',
-      render: appointment => <Badges badges={appointment.badges} univYear={selectedYear} />,
-    },
-    {
-      name: 'actions',
-      label: '',
-      render: appointment => (
-        <Button
-          data-test-id="delete-appointment-button-small"
-          onClick={() => deleteAppointment(appointment.id)}
-          secondary
-          size="sm"
-          icon="ri-delete-bin-line"
-          className="fr-float-right"
-          aria-label="Supprimer"
-          disabled={appointment.badges && appointment.badges.includes('other_psychologist')}
+  const renderRow = (appointment) => {
+    const isInactive = appointment.badges && appointment.badges.includes(badges.inactive.key)
+    const isInactiveRow = isInactive && appointment.badges.includes(badges.exceeded.key);
+    const rowClass = isInactiveRow ? styles.grayedRow : '';
+
+    return (
+      <tr key={appointment.id} className={rowClass}>
+        <td>{appointment.index}</td>
+        <td className={styles.date}>
+          <div>{new Date(appointment.appointmentDate).toLocaleDateString()}</div>
+          {appointment.badges.includes(badges.switch_rule_notice.key) &&
+            <div 
+              className={styles.clickableElement}
+              onClick={() => handleIconClick(appointment.id)}
+            >
+              <Icon
+                name="ri-information-line"
+                size="lg"
+                color="#000091"
+                iconPosition="right"
+                
+              />
+              {showTooltip === appointment.id && (
+                <span className={styles.tooltip}>
+                  {badges.switch_rule_notice.tooltip}
+                </span>
+              )}
+            </div>
+          }
+        </td>
+        <td data-column="badges">
+          <Badges badges={appointment.badges} univYear={selectedYear} />
+        </td>
+        <td>
+          <Button
+            data-test-id="delete-appointment-button-small"
+            onClick={() => deleteAppointment(appointment.id)}
+            secondary
+            size="sm"
+            icon="ri-delete-bin-line"
+            className="fr-float-right"
+            aria-label="Supprimer"
+            disabled={appointment.badges && appointment.badges.includes(badges.other_psychologist.key)}
           />
-      ),
-    },
-  ];
+        </td>
+      </tr>
+    );
+  };
+
+
+  const renderTable = () => (
+    <div className={`${"fr-table fr-table--bordered"} ${styles.tableAppointments}`}>
+      <table>
+          <thead>
+            <tr>
+                <th scope="col">n°</th>
+                <th scope="col">Dates des séances effectuées</th>
+                {/* <th scope="col" className={styles.notice}>
+                  <span className="fr-hidden">Notice</span>  
+                </th> */}
+                <th scope="col">
+                  <span className="fr-hidden">Badges</span>  
+                </th>
+                <th scope="col">
+                  <span className="fr-hidden">Actions</span>
+                </th>
+            </tr>
+          </thead>
+          <tbody>
+              {dataWithIndex.map(appointment => renderRow(appointment))}
+          </tbody>
+      </table>
+    </div>
+  );
 
   return (
     <div data-test-id="etudiant-seances-list">

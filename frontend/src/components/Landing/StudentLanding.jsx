@@ -28,7 +28,7 @@ const StudentLanding = () => {
             <br />
             Bénéficiez de
             {' '}
-            <b>8 séances gratuites</b>
+            <b>12 séances gratuites</b>
             <div>
               avec un psychologue
             </div>

@@ -8,6 +8,9 @@ const appointmentBadges = {
   student_ine: 'student_ine',
   other: 'other',
   completed: 'completed',
+  new_rules: 'new_rules',
+  switch_rule_notice: 'switch_rule_notice',
+  inactive: 'inactive',
 };
 
 export default appointmentBadges;

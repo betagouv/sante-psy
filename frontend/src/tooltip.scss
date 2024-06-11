@@ -1,0 +1,58 @@
+@mixin tooltip {
+    .hoverElement {
+        cursor: pointer;
+        position: relative;
+        display: inline-block;
+    }
+
+    .clickableElement {
+        cursor: pointer;
+        position: relative;
+        display: inline-block;
+
+        .tooltip {
+            visibility: visible;
+            z-index: 10;
+            opacity: 1;
+        }
+    }
+    
+    .tooltip {
+        visibility: hidden;
+        width: max-content;
+        max-width: 290px;
+        text-align: center;
+        padding: 5px;
+        position: absolute;
+        z-index: 10;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 14px;
+        line-height: 16px;
+        border-bottom: 1px solid var(--light-border-default-grey, #DDD);
+        background: var(--light-background-elevation-overlap-grey, #FFF);
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    }
+    
+    .tooltip::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: white transparent transparent transparent;
+    }
+    
+    .hoverElement:hover .tooltip {
+        visibility: visible;
+        z-index:10;
+        opacity: 1;
+    }
+
+}
+

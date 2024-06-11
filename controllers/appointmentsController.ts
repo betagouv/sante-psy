@@ -95,7 +95,7 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
     const selectedMonth = parseInt(month.toString());
     const startYear = (selectedMonth >= SEPTEMBER && selectedMonth <= DECEMBER) ? selectedYear : selectedYear - 1;
     const startDate = dateUtils.getUTCDate(new Date(startYear, 8));
-    const endDate = dateUtils.getUTCDate(new Date(selectedYear, selectedMonth));
+    const endDate = dateUtils.getUTCDate(new Date(selectedYear, selectedMonth + 1));
 
     dateRange = { startDate, endDate };
     selectedPeriod = { year: selectedYear, month: selectedMonth };

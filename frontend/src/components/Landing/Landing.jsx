@@ -31,7 +31,7 @@ const Landing = () => {
           <>
             Bénéficiez de
             {' '}
-            <b>8 séances gratuites</b>
+            <b>12 séances gratuites</b>
             {' '}
             avec un psychologue partenaire
           </>
@@ -98,7 +98,7 @@ const Landing = () => {
           <>
             Recevez toute l’information nécessaire par e-mail pour bénéficier des
             {' '}
-            <b>8 séances gratuites</b>
+            <b>12 séances gratuites</b>
             {' '}
             avec un psychologue
           </>
