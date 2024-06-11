@@ -75,13 +75,13 @@ const NewAppointment = () => {
   return (
     <div className={styles.newAppointmentWrapper}>
       <form onSubmit={createNewAppointment} className="fr-my-2w">
-      <div className={styles.message}>
+        <div className={styles.message}>
           Vous pouvez ajouter
           <ul>
-            <li>jusqu'à 12 séances depuis le 15 juin 2024.</li>
-            <li>jusqu'à 8 séances avant le 15 juin 2024.</li>
+            <li>jusqu‘à 12 séances depuis le 15 juin 2024.</li>
+            <li>jusqu‘à 8 séances avant le 15 juin 2024.</li>
           </ul>
-      </div>
+        </div>
         <div id="patients-list">
           {patients.length > 0 ? (
             <SearchableSelect

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { Table, Tabs, Tab, Button, Icon } from '@dataesr/react-dsfr';
+import { Tabs, Tab, Button, Icon } from '@dataesr/react-dsfr';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
 import Badges from 'components/Badges/Badges';
@@ -24,8 +24,6 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
   const navigate = useNavigate();
   const badges = getBadgeInfos();
 
-  
-
   useEffect(() => {
     if (patientId) {
       agent.Appointment.getByPatientId(patientId)
@@ -45,16 +43,16 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
     if (selectedYear && patientAppointments[selectedYear]) {
       const originalArray = patientAppointments[selectedYear];
       const reversedArray = originalArray.slice().reverse();
-  
+
       let lastIndex = 0;
-      const indexedArray = reversedArray.map((item) => {
-        let currentIndex = item.badges.includes(badges.inactive.key) && item.badges.includes(badges.exceeded.key) ? '-' : ++lastIndex;
+      const indexedArray = reversedArray.map(item => {
+        const currentIndex = item.badges.includes(badges.inactive.key) && item.badges.includes(badges.exceeded.key) ? '-' : ++lastIndex;
         return { ...item, index: currentIndex };
       });
-  
+
       // Restaurer l'ordre original
       const originalOrderIndexedArray = indexedArray.slice().reverse();
-  
+
       setDataWithIndex(originalOrderIndexedArray);
     } else {
       setDataWithIndex([]);
@@ -84,7 +82,7 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
   </Button>
   );
 
-  const handleIconClick = (id) => {
+  const handleIconClick = id => {
     if (showTooltip === id) {
       setShowTooltip(null);
     } else {
@@ -92,8 +90,8 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
     }
   };
 
-  const renderRow = (appointment) => {
-    const isInactive = appointment.badges && appointment.badges.includes(badges.inactive.key)
+  const renderRow = appointment => {
+    const isInactive = appointment.badges && appointment.badges.includes(badges.inactive.key);
     const isInactiveRow = isInactive && appointment.badges.includes(badges.exceeded.key);
     const rowClass = isInactiveRow ? styles.grayedRow : '';
 
@@ -102,8 +100,9 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
         <td>{appointment.index}</td>
         <td className={styles.date}>
           <div>{new Date(appointment.appointmentDate).toLocaleDateString()}</div>
-          {appointment.badges.includes(badges.switch_rule_notice.key) &&
-            <div 
+          {appointment.badges.includes(badges.switch_rule_notice.key)
+            && (
+            <div
               className={styles.clickableElement}
               onClick={() => handleIconClick(appointment.id)}
             >
@@ -112,15 +111,15 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
                 size="lg"
                 color="#000091"
                 iconPosition="right"
-                
+
               />
               {showTooltip === appointment.id && (
-                <span className={styles.tooltip}>
-                  {badges.switch_rule_notice.tooltip}
-                </span>
+              <span className={styles.tooltip}>
+                {badges.switch_rule_notice.tooltip}
+              </span>
               )}
             </div>
-          }
+            )}
         </td>
         <td data-column="badges">
           <Badges badges={appointment.badges} univYear={selectedYear} />
@@ -141,28 +140,27 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
     );
   };
 
-
   const renderTable = () => (
-    <div className={`${"fr-table fr-table--bordered"} ${styles.tableAppointments}`}>
+    <div className={`${'fr-table fr-table--bordered'} ${styles.tableAppointments}`}>
       <table>
-          <thead>
-            <tr>
-                <th scope="col">n°</th>
-                <th scope="col">Dates des séances effectuées</th>
-                {/* <th scope="col" className={styles.notice}>
-                  <span className="fr-hidden">Notice</span>  
+        <thead>
+          <tr>
+            <th scope="col">n°</th>
+            <th scope="col">Dates des séances effectuées</th>
+            {/* <th scope="col" className={styles.notice}>
+                  <span className="fr-hidden">Notice</span>
                 </th> */}
-                <th scope="col">
-                  <span className="fr-hidden">Badges</span>  
-                </th>
-                <th scope="col">
-                  <span className="fr-hidden">Actions</span>
-                </th>
-            </tr>
-          </thead>
-          <tbody>
-              {dataWithIndex.map(appointment => renderRow(appointment))}
-          </tbody>
+            <th scope="col">
+              <span className="fr-hidden">Badges</span>
+            </th>
+            <th scope="col">
+              <span className="fr-hidden">Actions</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {dataWithIndex.map(appointment => renderRow(appointment))}
+        </tbody>
       </table>
     </div>
   );

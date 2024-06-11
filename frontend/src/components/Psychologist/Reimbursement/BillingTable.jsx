@@ -63,7 +63,7 @@ const BillingTable = ({ filteredDates, appointments }) => {
           nbNewRulesAppointments = appointments[date][badges.new_rules.key] || 0;
         }
 
-        const totalAmountAppointments = (nbAppointments * NEXT_APPOINTMENT_TTC) + (nbNewRulesAppointments * NEW_RULES_APPOINTMENT_TTC) ;
+        const totalAmountAppointments = (nbAppointments * NEXT_APPOINTMENT_TTC) + (nbNewRulesAppointments * NEW_RULES_APPOINTMENT_TTC);
         const totalAmountFirstAppointments = nbFirstAppointments * FIRST_APPOINTMENT_TTC;
         const totalAmount = `${totalAmountAppointments + totalAmountFirstAppointments}€`;
 

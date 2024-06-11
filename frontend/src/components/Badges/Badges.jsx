@@ -18,23 +18,23 @@ export const renderBadge = ({ badge, univYear, appointmentDate, isSmallScreen = 
   const inactiveBadge = isInactive ? styles.inactiveBadge : '';
 
   return text && (
-    <>
-      {tooltip ? 
-        <div className={styles.hoverElement}>
-          <span className={styles.tooltip}>{tooltip}</span>
-          <Badge icon={icon} text={text} type={severity} className={`${className} ${styles.badge} ${inactiveBadge}`} />
-        </div>
-        :
-        <Badge icon={icon} text={text} type={severity} className={`${className} ${styles.badge} ${inactiveBadge}`} />
-      }
-    </>
-);
+    <div>
+      {tooltip
+        ? (
+          <div className={styles.hoverElement}>
+            <span className={styles.tooltip}>{tooltip}</span>
+            <Badge icon={icon} text={text} type={severity} className={`${className} ${styles.badge} ${inactiveBadge}`} />
+          </div>
+        )
+        : <Badge icon={icon} text={text} type={severity} className={`${className} ${styles.badge} ${inactiveBadge}`} />}
+    </div>
+  );
 };
 
-const Badges = ({ badges, univYear}) => {
+const Badges = ({ badges, univYear }) => {
   const isSmallScreen = useScreenSize();
 
-  const isInactive = badges && badges.includes(badgesInfo.inactive.key)
+  const isInactive = badges && badges.includes(badgesInfo.inactive.key);
 
   return (
     <div className={styles.badgeWrapper} data-test-id="etudiant-badges">

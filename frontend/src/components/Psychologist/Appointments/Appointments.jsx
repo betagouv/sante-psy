@@ -8,8 +8,8 @@ import agent from 'services/agent';
 import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
 import Badges from 'components/Badges/Badges';
 import { useStore } from 'stores/';
-import styles from './appointments.cssmodule.scss';
 import getBadgeInfos from 'src/utils/badges';
+import styles from './appointments.cssmodule.scss';
 
 const Appointments = () => {
   const { commonStore: { setNotification } } = useStore();
@@ -57,7 +57,7 @@ const Appointments = () => {
     e.stopPropagation();
   };
 
-  const handleIconClick = (id) => {
+  const handleIconClick = id => {
     if (showTooltip === id) {
       setShowTooltip(null);
     } else {
@@ -94,8 +94,9 @@ const Appointments = () => {
       render: appointment => (
         <div className={styles.date}>
           <div>{formatFrenchDate(utcDate(appointment.appointmentDate))}</div>
-          {(appointment.badges.includes(badges.switch_rule_notice.key) || appointment.badges.includes(badges.inactive.key)) &&
-            <div 
+          {(appointment.badges.includes(badges.switch_rule_notice.key) || appointment.badges.includes(badges.inactive.key))
+            && (
+            <div
               className={styles.clickableElement}
               onClick={() => handleIconClick(appointment.id)}
             >
@@ -104,15 +105,15 @@ const Appointments = () => {
                 size="lg"
                 color="#000091"
                 iconPosition="right"
-                
+
               />
               {showTooltip === appointment.id && (
-                <span className={styles.tooltip}>
-                  {badges.switch_rule_notice.tooltip}
-                </span>
+              <span className={styles.tooltip}>
+                {badges.switch_rule_notice.tooltip}
+              </span>
               )}
             </div>
-          }
+            )}
         </div>
       ),
       sortable: true,
