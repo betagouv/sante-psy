@@ -12,10 +12,13 @@
     }
 }
 
-.date {
+.table {
     @include tooltip;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between
+    .date {
+    
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between
+    }
 }

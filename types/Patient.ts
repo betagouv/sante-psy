@@ -17,5 +17,6 @@ export type Patient = {
     renewed?: boolean // Deprecated: used on 2022/2023 only
     appointmentsYearCount?: string,
     appointmentsCount?: string,
+    countedAppointments?: string,
     badges?: [],
 }

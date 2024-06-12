@@ -14,13 +14,13 @@ import Badges from '../../Badges/Badges';
 const Patients = () => {
   const { commonStore: { setNotification } } = useStore();
   const [patients, setPatients] = useState([]);
-  const navigate = useNavigate();
   const [filterBadgeValue, setFilterBadgeValue] = useState('');
   const [filteredPatients, setfilteredPatients] = useState([]);
   const [filterOptions, setfilterOptions] = useState([]);
   const [seeAppointments, setSeeAppointments] = useState(true);
-  const table = useRef(null);
 
+  const table = useRef(null);
+  const navigate = useNavigate();
   const currentYear = currentUnivYear();
   const badgeInfo = getBadgeInfos(true, currentYear);
 
@@ -204,7 +204,7 @@ const Patients = () => {
       render: patient => <Badges badges={patient.badges} univYear={currentYear} />,
     },
     {
-      name: 'appointmentsYearCount',
+      name: 'countedAppointments',
       label: `Total séances ${currentYear}`,
       sortable: true,
     },

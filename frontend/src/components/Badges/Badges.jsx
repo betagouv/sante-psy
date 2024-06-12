@@ -1,11 +1,8 @@
 import React from 'react';
 import { getUnivYear } from 'services/date';
 import { Badge } from '@dataesr/react-dsfr';
-import getBadgeInfos from 'src/utils/badges';
 import useScreenSize from 'src/utils/useScreenSize';
 import styles from './badges.cssmodule.scss';
-
-const badgesInfo = getBadgeInfos();
 
 export const renderBadge = ({ badge, univYear, appointmentDate, isSmallScreen = false, isInactive = false }) => {
   const badgeUnivYear = univYear ?? getUnivYear(appointmentDate);
@@ -31,10 +28,8 @@ export const renderBadge = ({ badge, univYear, appointmentDate, isSmallScreen = 
   );
 };
 
-const Badges = ({ badges, univYear }) => {
+const Badges = ({ badges, univYear, isInactive = false }) => {
   const isSmallScreen = useScreenSize();
-
-  const isInactive = badges && badges.includes(badgesInfo.inactive.key);
 
   return (
     <div className={styles.badgeWrapper} data-test-id="etudiant-badges">

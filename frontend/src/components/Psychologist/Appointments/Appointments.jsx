@@ -9,6 +9,7 @@ import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
 import Badges from 'components/Badges/Badges';
 import { useStore } from 'stores/';
 import getBadgeInfos from 'src/utils/badges';
+import { useNavigate } from 'react-router-dom';
 import styles from './appointments.cssmodule.scss';
 
 const Appointments = () => {
@@ -23,6 +24,7 @@ const Appointments = () => {
     month: new Date().getMonth() + 1,
   });
 
+  const navigate = useNavigate();
   const badges = getBadgeInfos();
 
   useEffect(() => {
@@ -122,7 +124,10 @@ const Appointments = () => {
     {
       name: 'badge',
       label: '',
-      render: appointment => <Badges badges={appointment.badges} univYear={appointment.univYear} />,
+      render: appointment => {
+        const isInactive = appointment.badges && appointment.badges.includes(badges.inactive.key);
+        return <Badges isInactive={isInactive} badges={appointment.badges} univYear={appointment.univYear} />;
+      },
     },
     {
       name: 'student',
@@ -137,7 +142,16 @@ const Appointments = () => {
         />
         </div>
       ),
-      render: ({ firstNames, lastName }) => `${firstNames} ${lastName}`,
+      render: ({ patientId, firstNames, lastName }) => (
+        <div data-test-id="etudiant-name" className={styles.hoverElement} onClick={() => navigate(`/psychologue/modifier-etudiant/${patientId}/#anchor-student-list`)}>
+          <span className={styles.tooltip}>Séances de l&apos;étudiant</span>
+          <div>
+            {firstNames}
+            {' '}
+            {lastName}
+          </div>
+        </div>
+      ),
     },
     {
       name: 'actions',
@@ -220,6 +234,7 @@ const Appointments = () => {
         {filteredMonthAppointments.length > 0 ? (
           <Table
             data-test-id="appointments-table"
+            className={styles.table}
             columns={columns}
             data={filteredMonthAppointments}
             rowKey="id"

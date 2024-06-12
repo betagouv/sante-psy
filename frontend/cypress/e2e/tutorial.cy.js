@@ -73,7 +73,7 @@ const tutorials = [
   { page: 'nouvelle-seance', steps: 4 },
   { page: 'mes-etudiants', steps: 3 },
   { page: 'nouvel-etudiant', steps: 3 },
-  { page: 'mes-remboursements', steps: 6 },
+  { page: 'mes-remboursements', steps: 7 },
   { page: 'mon-profil', steps: 4 },
 ];
 describe('Other tutorials', () => {

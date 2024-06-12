@@ -1,5 +1,5 @@
 import date from '../utils/date';
-import { appointmentsTable, patientsTable } from './tables';
+import { patientsTable } from './tables';
 import db from './db';
 import { Patient } from '../types/Patient';
 
@@ -17,26 +17,6 @@ const getById = async (patientId: string, psychologistId: string): Promise<Patie
   }
 };
 
-const startCurrentUnivYear = (): string => {
-  const SEPTEMBER = 8;
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  if (currentMonth < SEPTEMBER) {
-    return `${currentYear - 1}-09-01`;
-  }
-  return `${currentYear}-09-01`;
-};
-
-const endCurrentUnivYear = (): string => {
-  const SEPTEMBER = 8;
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  if (currentMonth < SEPTEMBER) {
-    return `${currentYear}-09-01`;
-  }
-  return `${currentYear + 1}-09-01`;
-};
-
 const getAll = async (psychologistId: string): Promise<(Patient &
   { appointmentsCount: string, appointmentsYearCount: string })[]> => {
   try {
@@ -46,65 +26,7 @@ const getAll = async (psychologistId: string): Promise<(Patient &
         .where('psychologistId', psychologistId)
         .andWhere('deleted', false);
 
-    // Count the appointments taking in acount each patients sharing the same INE
-    const patientsDataPromises = patients.map(async (patient) => {
-      const appointmentsData = await db.select('id', 'appointmentDate')
-      .from(appointmentsTable)
-      .whereIn('patientId', function () {
-        this.select('id')
-          .from(patientsTable)
-          .where(function () {
-            if (patient.INE && patient.INE.trim() !== '') {
-              this.where('INE', patient.INE);
-            } else {
-              this.where('id', patient.id);
-            }
-          })
-          .andWhere('deleted', false);
-      })
-      .andWhere('deleted', false);
-
-      const START_NEW_RULES = new Date('2024-06-15T00:00:00Z');
-      const MAX_APPOINTMENT_OLD = 8;
-      let countedAppointments = 0;
-      let countOldRules = 0;
-
-      const appointmentsDataCurrentUnivYear = appointmentsData.filter((appointment) => {
-        const startUnivYear = date.getUTCDate(new Date(startCurrentUnivYear()));
-        const endUnivYear = date.getUTCDate(new Date(endCurrentUnivYear()));
-        const appointmentDate = date.getUTCDate(new Date(appointment.appointmentDate));
-
-        // NEW RULE UPDATE: newRuleCount doesn't count exceeded appointment when max was 8.
-        if (appointmentDate >= startUnivYear && appointmentDate <= endUnivYear) {
-          if (appointmentDate < START_NEW_RULES) {
-            countOldRules++;
-            if (countOldRules <= MAX_APPOINTMENT_OLD) {
-              countedAppointments++;
-            }
-          } else {
-            countedAppointments++;
-          }
-          return true;
-        }
-        return false;
-      });
-
-      const appointmentsCountResult = appointmentsData
-        ? appointmentsData.length.toString() : '0';
-      const appointmentsYearCountResult = appointmentsDataCurrentUnivYear
-        ? appointmentsDataCurrentUnivYear.length.toString() : '0';
-
-      return {
-        ...patient,
-        appointmentsCount: appointmentsCountResult,
-        appointmentsYearCount: appointmentsYearCountResult,
-        countedAppointments,
-      };
-    });
-
-    const patientsData = await Promise.all(patientsDataPromises);
-
-    return patientsData;
+    return patients;
   } catch (err) {
     console.error('Impossible de récupérer les patients', err);
     throw new Error('Impossible de récupérer les patients');

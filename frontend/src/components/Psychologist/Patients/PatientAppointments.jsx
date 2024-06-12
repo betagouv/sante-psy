@@ -122,7 +122,7 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
             )}
         </td>
         <td data-column="badges">
-          <Badges badges={appointment.badges} univYear={selectedYear} />
+          <Badges isInactive={isInactive} badges={appointment.badges} univYear={selectedYear} />
         </td>
         <td>
           <Button

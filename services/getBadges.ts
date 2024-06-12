@@ -34,9 +34,9 @@ const addBadges = (count: number, max: number, countFirsts = true): string[] => 
 };
 
 const getPatientBadges = (patient: AppointmentWithPatient | Patient): string[] => {
-  const MAX_APPOINTMENT = 8;
-  const appointmentsYearCount = parseInt(patient.appointmentsYearCount);
-  const badges = [];
+  const MAX_APPOINTMENT = 12;
+  const countedAppointments = parseInt(patient.countedAppointments);
+  let badges = [];
 
   if (!areStudentINEFilled(patient)) {
     badges.push(appointmentBadges.student_ine);
@@ -45,8 +45,8 @@ const getPatientBadges = (patient: AppointmentWithPatient | Patient): string[] =
     badges.push(appointmentBadges.prescription_infos);
   }
 
-  const badgesToAdd = addBadges(appointmentsYearCount, MAX_APPOINTMENT, false);
-  badges.concat(badgesToAdd);
+  const badgesToAdd = addBadges(countedAppointments, MAX_APPOINTMENT, false);
+  badges = badges.concat(badgesToAdd);
 
   if (badges.length === 0) {
     badges.push(appointmentBadges.completed);
