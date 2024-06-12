@@ -2,8 +2,8 @@ import React from 'react';
 import { getUnivYear } from 'services/date';
 import { Badge } from '@dataesr/react-dsfr';
 import useScreenSize from 'src/utils/useScreenSize';
-import styles from './badges.cssmodule.scss';
 import getBadgeInfos from 'src/utils/badges';
+import styles from './badges.cssmodule.scss';
 
 export const renderBadge = ({ badge, univYear, appointmentDate, isSmallScreen = false, isInactive = false }) => {
   const badgeUnivYear = univYear ?? getUnivYear(appointmentDate);
