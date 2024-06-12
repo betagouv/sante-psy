@@ -9,8 +9,9 @@ import CustomError from '../utils/CustomError';
 import { getAppointmentWithBadges } from '../services/getBadges';
 import dateUtils from '../utils/date';
 import validation from '../utils/validation';
-import { AppointmentByYear } from '../types/Appointment';
+import { AppointmentByYear, AppointmentWithPatient } from '../types/Appointment';
 import _ from 'lodash';
+import getAppointmentsCount from '../services/getAppointmentsCount';
 
 const createValidators = [
   check('date')
@@ -95,20 +96,21 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
     const selectedMonth = parseInt(month.toString());
     const startYear = (selectedMonth >= SEPTEMBER && selectedMonth <= DECEMBER) ? selectedYear : selectedYear - 1;
     const startDate = dateUtils.getUTCDate(new Date(startYear, 8));
-    const endDate = dateUtils.getUTCDate(new Date(selectedYear, selectedMonth + 1));
+    const endDate = dateUtils.getUTCDate(new Date(selectedYear, selectedMonth));
 
     dateRange = { startDate, endDate };
     selectedPeriod = { year: selectedYear, month: selectedMonth };
   }
-  const psychologistaAppointments = await dbAppointments.getAll(
+  const appointments = await dbAppointments.getAll(
     psychologistId,
     dateRange,
     [{ column: 'patientId' }, { column: 'appointmentDate' }],
   );
-  const appointments = await dbAppointments.getRelatedINEAppointments(psychologistaAppointments, dateRange);
+
+  const resultWithCount = await getAppointmentsCount(appointments) as AppointmentWithPatient[];
 
   const appointmentsWithBadges = getAppointmentWithBadges(
-    appointments,
+    resultWithCount,
     isBillingPurposes === 'true',
     selectedPeriod,
     null,
@@ -131,6 +133,8 @@ const getByPatientId = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Ce patient n\'existe pas', 404);
   }
 
+  const patientWithCount = await getAppointmentsCount([patient])[0];
+
   const appointments = await dbAppointments.getByPatientId(
     patientId,
     patient.INE.trim() !== '',
@@ -141,6 +145,7 @@ const getByPatientId = async (req: Request, res: Response): Promise<void> => {
     false,
     null,
     psychologistId,
+    patientWithCount,
   );
 
   const appointmentsByYear: AppointmentByYear = _.groupBy(appointmentsWithBadges, 'univYear') as AppointmentByYear;

@@ -77,6 +77,7 @@ const getAppointmentWithBadges = (
   isBillingPurposes: boolean,
   period?: { month: number, year: number },
   psychologistId?: string,
+  patientWithCount?: Patient,
 )
 : AppointmentWithPatient[] => {
   const START_CYCLE_DATE = new Date('2023-09-01T00:00:00Z');

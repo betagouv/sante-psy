@@ -10,6 +10,7 @@ import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { getPatientWithBadges } from '../services/getBadges';
 import { Patient } from '../types/Patient';
+import getAppointmentsCount from '../services/getAppointmentsCount';
 
 const sortData = (a: Patient, b: Patient) : number => (
   `${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`);
@@ -17,7 +18,8 @@ const sortData = (a: Patient, b: Patient) : number => (
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.psychologist;
   const patients = await dbPatients.getAll(psychologistId);
-  const patientsWithBadges = getPatientWithBadges(patients);
+  const patientsWithCount = await getAppointmentsCount(patients);
+  const patientsWithBadges = getPatientWithBadges(patientsWithCount);
 
   const sortedData = patientsWithBadges.sort(sortData);
   res.json(sortedData);
