@@ -25,7 +25,7 @@ const PsyProfile = () => {
       profilIssues.push('Votre présentation est trop courte.');
     }
 
-    const isWebsite = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*\.)+[a-z]{2,}|(\d{1,3}\.){3}\d{1,3}))(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[a-z\d_]*)?$/i;
+    const isWebsite = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/i;
     if (psy.website && !isWebsite.test(psy.website)) {
       profilIssues.push('Votre site internet ne semble pas valide.');
     }

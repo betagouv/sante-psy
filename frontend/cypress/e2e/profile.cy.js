@@ -342,4 +342,45 @@ describe('Profile', () => {
         );
     });
   });
+
+  describe('Check website url', () => {
+    it('should display alert if website does not have right url', () => {
+      cy.get('[data-test-id="show-profile-form-button"]').click();
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .clear()
+        .type('doctolib');
+      cy.get('[data-test-id="save-profile-button"]').click();
+      cy.wait('@updateProfile');
+      cy.get('[data-test-id="incomplete-profile-alert"]').should('exist');
+      cy.get('[data-test-id="incomplete-profile-alert"]')
+        // eslint-disable-next-line max-len
+        .should(
+          'have.text',
+          'Votre profil est incompletCela n‘est pas bloquant mais pourrait empêcher les étudiants et étudiantes de vous contacter ou d‘identifier si vous repondez à leurs attentes.Votre site internet ne semble pas valide.',
+        );
+    });
+
+    it('should NOT display alert if website doesnt have http or https', () => {
+      cy.get('[data-test-id="show-profile-form-button"]').click();
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .clear()
+        .type('doctolib.com');
+      cy.get('[data-test-id="psy-appointmentLink-input"] > input')
+        .clear()
+        .type('docto-lib.blabla');
+      cy.get('[data-test-id="save-profile-button"]').click();
+      cy.wait('@updateProfile');
+      cy.get('[data-test-id="incomplete-profile-alert"]').should('not.exist');
+    });
+
+    it('should NOT display alert if website has right url', () => {
+      cy.get('[data-test-id="show-profile-form-button"]').click();
+      cy.get('[data-test-id="psy-website-input"] > input')
+        .clear()
+        .type('http://doctolib.frnet');
+      cy.get('[data-test-id="save-profile-button"]').click();
+      cy.wait('@updateProfile');
+      cy.get('[data-test-id="incomplete-profile-alert"]').should('not.exist');
+    });
+  });
 });
