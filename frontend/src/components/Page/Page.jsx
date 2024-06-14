@@ -77,7 +77,8 @@ const Page = ({
       id={user && !user.hasSeenTutorial ? 'global' : tutorial}
     >
       <div className={classNames(className, styles.background)} data-test-id={dataTestId}>
-        {!withoutHeader && (
+        <div className={textContent ? styles.textContainer : styles.container}>
+          {!withoutHeader && (
           <div className={styles.header}>
             {breadCrumbsComponent}
             <div className={styles.headerTop}>
@@ -97,8 +98,7 @@ const Page = ({
             </div>
             {description && <p className={styles.description}>{description}</p>}
           </div>
-        )}
-        <div className={textContent ? styles.textContainer : styles.container}>
+          )}
           {withoutHeader && breadCrumbsComponent}
           {children}
         </div>
