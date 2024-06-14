@@ -8,7 +8,7 @@ export type Appointment = {
     deleted: boolean,
     updatedAt?: string,
     createdAt?: string,
-    badges?: [],
+    badges?: string[],
     univYear?: string,
 }
 

@@ -3,9 +3,9 @@ export const startCurrentUnivYear = (): string => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   if (currentMonth < SEPTEMBER) {
-    return `${currentYear - 1}-09-01`;
+    return `${currentYear - 1}-09-01T00:00:00.000Z`;
   }
-  return `${currentYear}-09-01`;
+  return `${currentYear}-09-01T00:00:00.000Z`;
 };
 
 export const endCurrentUnivYear = (): string => {
@@ -13,7 +13,7 @@ export const endCurrentUnivYear = (): string => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   if (currentMonth < SEPTEMBER) {
-    return `${currentYear}-09-01`;
+    return `${currentYear}-09-01T00:00:00.000Z`;
   }
-  return `${currentYear + 1}-09-01`;
+  return `${currentYear + 1}-09-01T00:00:00.000Z`;
 };

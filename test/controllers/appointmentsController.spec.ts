@@ -717,5 +717,100 @@ describe('appointmentsController', () => {
         return Promise.resolve();
       });
     });
+
+    /* New rule tests */
+    it('shouldn\'t have appointments with 1st badge after 15 june 2024', async () => {
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
+
+      await dbAppointments.insert(new Date('2024-06-16'), dbPatient1.id, psy.dossierNumber);
+
+      return chai.request(app)
+      .get('/api/appointments')
+      .query({ isBillingPurposes: true })
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then(async (res) => {
+        expect(res.body).to.have.length(1);
+        expect(res.body[0].badges).to.not.includes(appointmentBadges.first);
+        return Promise.resolve();
+      });
+    });
+
+    it('should add appointments with new reimbursement rule after 15 june 2024', async () => {
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
+
+      await dbAppointments.insert(new Date('2023-09-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-10-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-11-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-12-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-02-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-03-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-04-03'), dbPatient1.id, psy.dossierNumber);
+      const oldExceeded1 = await dbAppointments.insert(new Date('2024-05-03'), dbPatient1.id, psy.dossierNumber);
+      const oldExceeded2 = await dbAppointments.insert(new Date('2024-06-03'), dbPatient1.id, psy.dossierNumber);
+      const newRuleAppointment = await dbAppointments.insert(new Date('2024-06-16'), dbPatient1.id, psy.dossierNumber);
+
+      return chai.request(app)
+      .get('/api/appointments')
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then(async (res) => {
+        expect(res.body).to.have.length(11);
+        expect(new Date(res.body[2].appointmentDate)).to.eql(oldExceeded1.appointmentDate);
+        expect(new Date(res.body[1].appointmentDate)).to.eql(oldExceeded2.appointmentDate);
+        expect(new Date(res.body[0].appointmentDate)).to.eql(newRuleAppointment.appointmentDate);
+        expect(res.body[2].badges).to.includes(appointmentBadges.exceeded);
+        expect(res.body[2].badges).to.includes(appointmentBadges.inactive);
+        expect(res.body[1].badges).to.includes(appointmentBadges.exceeded);
+        expect(res.body[1].badges).to.includes(appointmentBadges.inactive);
+        expect(res.body[1].badges).to.includes(appointmentBadges.switch_rule_notice);
+        expect(res.body[0].badges).to.includes(appointmentBadges.new_rules);
+        return Promise.resolve();
+      });
+    });
+
+    it('should add 12 appointments instead of 8 with new reimbursement rule after 15 june 2024', async () => {
+      const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
+      const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
+
+      await dbAppointments.insert(new Date('2023-09-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-10-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-11-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-12-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-01-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-02-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-03-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-04-03'), dbPatient1.id, psy.dossierNumber);
+      const oldExceeded1 = await dbAppointments.insert(new Date('2024-05-03'), dbPatient1.id, psy.dossierNumber);
+      const oldExceeded2 = await dbAppointments.insert(new Date('2024-06-03'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-06-15'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-06-20'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-07-16'), dbPatient1.id, psy.dossierNumber);
+      const maxAppointment = await dbAppointments.insert(new Date('2024-07-20'), dbPatient1.id, psy.dossierNumber);
+
+      return chai.request(app)
+      .get('/api/appointments')
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('xsrf-token', 'randomXSRFToken')
+      .then(async (res) => {
+        expect(res.body).to.have.length(14);
+        expect(new Date(res.body[0].appointmentDate)).to.eql(maxAppointment.appointmentDate);
+        expect(new Date(res.body[4].appointmentDate)).to.eql(oldExceeded2.appointmentDate);
+        expect(new Date(res.body[5].appointmentDate)).to.eql(oldExceeded1.appointmentDate);
+        expect(res.body[6].badges).to.includes(appointmentBadges.max);
+        expect(res.body[6].badges).to.includes(appointmentBadges.inactive);
+        expect(res.body[5].badges).to.includes(appointmentBadges.exceeded);
+        expect(res.body[5].badges).to.includes(appointmentBadges.inactive);
+        expect(res.body[4].badges).to.includes(appointmentBadges.exceeded);
+        expect(res.body[4].badges).to.includes(appointmentBadges.inactive);
+        expect(res.body[4].badges).to.includes(appointmentBadges.switch_rule_notice);
+        expect(res.body[0].badges).to.includes(appointmentBadges.new_rules);
+        expect(res.body[0].badges).to.includes(appointmentBadges.max);
+        return Promise.resolve();
+      });
+    });
   });
 });

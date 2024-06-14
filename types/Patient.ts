@@ -18,5 +18,5 @@ export type Patient = {
     appointmentsYearCount?: string,
     appointmentsCount?: string,
     countedAppointments?: string,
-    badges?: [],
+    badges?: string[],
 }

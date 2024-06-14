@@ -125,6 +125,59 @@ describe('patientsController', () => {
           return Promise.resolve();
         });
     });
+
+    it('should get patient count with new rules', async () => {
+      const psy = {
+        dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
+        email: 'valid@valid.org',
+      };
+      const myPatient = await makePatient(psy.dossierNumber);
+
+      await dbAppointments.insert(new Date('2022-10-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2022-11-01'), myPatient.id, psy.dossierNumber);
+
+      await dbAppointments.insert(new Date('2023-09-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-10-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-11-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2023-12-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-01-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-02-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-02-10'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-03-01'), myPatient.id, psy.dossierNumber);
+
+      // Exceeded
+      await dbAppointments.insert(new Date('2024-04-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-05-01'), myPatient.id, psy.dossierNumber);
+
+      // New rule appointments
+      await dbAppointments.insert(new Date('2024-06-15'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-06-20'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-07-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-07-20'), myPatient.id, psy.dossierNumber);
+
+      return chai.request(app)
+        .get('/api/patients')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .then(async (res) => {
+          expect(res.status).to.equal(200);
+          res.status.should.equal(200);
+
+          res.body.length.should.equal(1);
+          res.body[0].firstNames.should.equal(myPatient.firstNames);
+          res.body[0].lastName.should.equal(myPatient.lastName);
+          res.body[0].id.should.equal(myPatient.id);
+          res.body[0].institutionName.should.equal(myPatient.institutionName);
+          res.body[0].doctorName.should.equal(myPatient.doctorName);
+          res.body[0].doctorAddress.should.equal(myPatient.doctorAddress);
+          res.body[0].dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
+          res.body[0].appointmentsCount.should.equal('16');
+          res.body[0].appointmentsYearCount.should.equal('14');
+          res.body[0].countedAppointments.should.equal('12');
+
+          return Promise.resolve();
+        });
+    });
   });
 
   describe('create patient', () => {

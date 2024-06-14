@@ -25,17 +25,17 @@ const getAppointmentsCount = async (patients: Patient[] | AppointmentWithPatient
               .andWhere('deleted', false);
 
     const START_NEW_RULES = new Date('2024-06-15T00:00:00Z');
+    const START_UNIV_YEAR = new Date(startCurrentUnivYear());
+    const END_UNIV_YEAR = new Date(endCurrentUnivYear());
     const MAX_APPOINTMENT_OLD = 8;
     let countedAppointments = 0;
     let countOldRules = 0;
 
     const appointmentsDataCurrentUnivYear = appointmentsData.filter((appointment) => {
-      const startUnivYear = date.getUTCDate(new Date(startCurrentUnivYear()));
-      const endUnivYear = date.getUTCDate(new Date(endCurrentUnivYear()));
       const appointmentDate = date.getUTCDate(new Date(appointment.appointmentDate));
 
-      // NEW RULE UPDATE: newRuleCount doesn't count exceeded appointment when max was 8.
-      if (appointmentDate >= startUnivYear && appointmentDate <= endUnivYear) {
+      if (appointmentDate >= START_UNIV_YEAR && appointmentDate <= END_UNIV_YEAR) {
+        /* New rule - doesn't count exceeded appointment when max was 8 */
         if (appointmentDate < START_NEW_RULES) {
           countOldRules++;
           if (countOldRules <= MAX_APPOINTMENT_OLD) {
@@ -44,6 +44,8 @@ const getAppointmentsCount = async (patients: Patient[] | AppointmentWithPatient
         } else {
           countedAppointments++;
         }
+        /* End new rule */
+
         return true;
       }
       return false;
@@ -58,7 +60,7 @@ const getAppointmentsCount = async (patients: Patient[] | AppointmentWithPatient
       ...patient,
       appointmentsCount: appointmentsCountResult,
       appointmentsYearCount: appointmentsYearCountResult,
-      countedAppointments: countedAppointments.toString(),
+      countedAppointments: countedAppointments.toString(), // New rule count
     };
   });
   const result: Patient[] = await Promise.all(promiseData);
