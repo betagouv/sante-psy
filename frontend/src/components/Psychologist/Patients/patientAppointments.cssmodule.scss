@@ -1,3 +1,4 @@
+@import 'src/variables.scss';
 
 .title {
     font-size: 1.2rem;
@@ -6,7 +7,7 @@
 
 .noAppointmentsTitle {
     font-size: 1.2rem;
-    color:#5F5F62;
+    color: $secondary-text-color;
 }
 
 .noAppointmentsWrapper {

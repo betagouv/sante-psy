@@ -1,3 +1,5 @@
+@import 'src/variables.scss';
+
 .incomplete {
   background-color: var(--tag-orange);
 }
@@ -17,7 +19,7 @@
 }
 
 .listTitle {
-  color:#5F5F62;
+  color: $secondary-text-color;
   font-size: 2.2rem;
   margin-top: 40px;
 }
