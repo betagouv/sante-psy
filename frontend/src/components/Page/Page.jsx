@@ -78,27 +78,27 @@ const Page = ({
     >
       <div className={classNames(className, styles.background)} data-test-id={dataTestId}>
         <div className={textContent ? styles.textContainer : styles.container}>
-          {!withoutHeader && (
-          <div className={styles.header}>
-            {breadCrumbsComponent}
-            <div className={styles.headerTop}>
+          <div className={!withoutHeader ? styles.headerWithTitle : styles.headerIconOnly}>
+            {!withoutHeader && (
+            <div className={styles.header}>
+              {breadCrumbsComponent}
               <h1 className={styles.title}>{title}</h1>
-              {tutorial && (
-                <div
-                  id="launch-tutorial"
-                  data-test-id="launch-tutorial"
-                  className={styles.tutorial}
-                  onClick={() => setTutoStatus({ run: true, stepIndex: 0 })}
-                >
-                  <Icon
-                    name="fr-fi-information-fill"
-                  />
-                </div>
-              )}
+              {description && <p className={styles.description}>{description}</p>}
             </div>
-            {description && <p className={styles.description}>{description}</p>}
+            )}
+            {tutorial && (
+            <div
+              id="launch-tutorial"
+              data-test-id="launch-tutorial"
+              className={styles.tutorial}
+              onClick={() => setTutoStatus({ run: true, stepIndex: 0 })}
+                >
+              <Icon
+                name="fr-fi-information-fill"
+                  />
+            </div>
+            )}
           </div>
-          )}
           {withoutHeader && breadCrumbsComponent}
           {children}
         </div>

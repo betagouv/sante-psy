@@ -6,17 +6,23 @@
 
 .header {
   position: relative;
-  padding: 16px 16px 72px 0px;
-  margin-bottom: -48px;
   >* {
     max-width: 1200px;
     margin: auto;
   }
 }
 
-.headerTop {
+.headerWithTitle {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding-bottom: 48px;
+}
+
+.headerIconOnly {
+  @extend .headerWithTitle;
+  justify-content: end;
+  padding-bottom: 0px;
 }
 
 .container {
@@ -66,12 +72,12 @@
 
 .tutorial {
   display: none;
-  color: white;
+  color: $primary-color;
   cursor: pointer;
 }
 
 @media (min-width: 992px) {
-  .tutorial {
+  .tutorial, .tutorialAbsolute {
     display: block;
   }
 }

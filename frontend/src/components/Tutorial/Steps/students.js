@@ -4,7 +4,7 @@ const steps = [
   {
     placement: 'center',
     target: 'body',
-    title: 'Gérer mes étudiants',
+    title: 'Suivi étudiants',
     content: "Cette page vous permet d'ajouter et de visualiser les étudiants.",
   },
   {
