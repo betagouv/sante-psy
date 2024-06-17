@@ -20,13 +20,15 @@ const AccessibilityActionPlan = () => (
     </p>
     <h2>Actions en cours et à venir en 2024</h2>
     <ul>
-      <li>Obtention d’un financement UX & Accessibilité</li>
-      <li>Finalisation des développements de refonte du site</li>
-      <li>Phase de remise en accessibilité après la refonte du site</li>
-      <li>Mise en place de tests d’accessibilité automatisés</li>
-      <li>Audit RGAA mené en interne ou par un prestataire externe</li>
-      <li>Correction des erreurs relevées au cours de l’audit</li>
+      <li>Obtention d’un financement UX & Accessibilité - été 2024</li>
+      <li>Consolidation des parcours utilisateurs lors de la refonte du site - depuis 2023, et 2024</li>
+      <li>Audit interne d’accessibilité - été 2024</li>
+      <li>Correctifs d’accessibilité suite à l’audit interne - automne 2024</li>
+      <li>Intégration des parcours utilisateur émergents - automne 2024</li>
+      <li>Audit RGAA mené en interne ou par un prestataire externe - automne 2024</li>
+      <li>Correction des erreurs relevées lors de l’audit externe - hiver 2024- 2025</li>
       <li>Suivi et évaluation régulière de l’accessibilité du site</li>
+      <li>Mise en place de tests d’accessibilité automatisés</li>
     </ul>
   </Page>
 );
