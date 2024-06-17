@@ -20,7 +20,7 @@ const Bill = () => {
   const parsedMonth = parseInt(month, 10);
   const parsedYear = parseInt(year, 10);
   const [user, setUser] = useState({});
-
+  const [filteredDates, setFilteredDates] = useState([]);
   const [valuesByDate, setValuesByDate] = useState({ appointments: {}, firstAppointments: {} });
   const [universityInfos, setUniversityInfos] = useState({
     name: undefined,
@@ -31,12 +31,14 @@ const Bill = () => {
   useAppointmentsByDate(setValuesByDate, month);
 
   useEffect(() => {
-    agent.User.getConnected().then(response => {
-      setUser(response.data);
+    const fetchUserData = async () => {
+      try {
+        const response = await agent.User.getConnected();
+        setUser(response.data);
 
-      const { universityId } = response.data.convention;
-      if (universityId) {
-        agent.University.getOne(universityId).then(university => {
+        const { universityId } = response.data.convention;
+        if (universityId) {
+          const university = await agent.University.getOne(universityId);
           if (university && (university.address || university.postal_code || university.city || university.billingAddress)) {
             setUniversityInfos({
               name: university.name,
@@ -46,16 +48,25 @@ const Bill = () => {
               billingAddress: university.billingAddress,
             });
           }
-        });
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
       }
-    });
+    };
+
+    fetchUserData();
   }, []);
 
   useEffect(() => {
-    if (Object.keys(valuesByDate).length > 0 && Object.keys(user).length > 0 && universityInfos.name !== undefined) {
+    if (filteredDates.length > 0 && Object.keys(valuesByDate).length > 0 && Object.keys(user).length > 0 && universityInfos.name !== undefined) {
       window.print();
     }
-  }, [valuesByDate, user, universityInfos]);
+  }, [filteredDates, valuesByDate, user, universityInfos]);
+
+  useEffect(() => {
+    const filteredDatesResult = billingDataService.getFilteredDates(valuesByDate.appointments, parsedMonth, parsedYear);
+    setFilteredDates(filteredDatesResult);
+  }, [valuesByDate, parsedMonth, parsedYear]);
 
   const getInfos = () => {
     const billingInfo = billingInfoService.get();
@@ -70,35 +81,41 @@ const Bill = () => {
     }
 
     return [
-      `Nom, prénom du prestataire : ${user.useLastName || user.lastName} ${user.useFirstNames || user.firstNames}`,
-      `Numéro SIRET : ${billingInfo.siret || '___________________'}`,
-      `Numéro ADELI : ${user.adeli}`,
-      `Adresse du prestataire : ${user.address}`,
-      `Email du prestataire : ${user.email}`,
-      `Date de l'émission de la facture : ${formatFrenchDate(new Date())}`,
-      `Numéro de la facture : 
+      { index: 1, text: `Nom, prénom du prestataire : ${user.useLastName || user.lastName} ${user.useFirstNames || user.firstNames}` },
+      { index: 2, text: `Numéro SIRET : ${billingInfo.siret || '___________________'}` },
+      { index: 3, text: `Numéro ADELI : ${user.adeli}` },
+      { index: 4, text: `Adresse du prestataire : ${user.address}` },
+      { index: 5, text: `Email du prestataire : ${user.email}` },
+      { index: 6, text: `Date de l'émission de la facture : ${formatFrenchDate(new Date())}` },
+      {
+        index: 7,
+        text: `Numéro de la facture : 
       ${billingInfo.billingNumber || '________________________________________________________________'}`,
-      `Nom et adresse de l'université : ${universityInfos.name || PARTIAL_UNDESCORE_LINE_UNI_NAME}`,
-      `${universityInfos.address || FULL_UNDERSCORE_LINE}`,
-      'E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :',
-      billingAddress,
-      `Numéro du bon de commande de l’université (à demander à l’université) : 
+      },
+      { index: 8, text: `Nom et adresse de l'université : ${universityInfos.name || PARTIAL_UNDESCORE_LINE_UNI_NAME}` },
+      { index: 9, text: `${universityInfos.address || FULL_UNDERSCORE_LINE}` },
+      { index: 10, text: 'E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :' },
+      { index: 11, text: billingAddress },
+      {
+        index: 12,
+        text: `Numéro du bon de commande de l’université (à demander à l’université) : 
       ${billingInfo.orderNumber || '___________________'}`,
+      },
     ];
   };
 
   const getFooter = () => {
     const billingInfo = billingInfoService.get();
     return [
-      'À régler sur le compte bancaire ci-dessous (RIB / IBAN) :',
-      billingInfo.iban ? billingInfo.iban : FULL_UNDERSCORE_LINE,
-      `Si le prestataire n’est pas assujetti à la TVA, la facture doit comporter la mention «TVA non applicable, art.
+      { index: 1, text: 'À régler sur le compte bancaire ci-dessous (RIB / IBAN) :' },
+      { index: 2, text: billingInfo.iban ? billingInfo.iban : FULL_UNDERSCORE_LINE },
+      {
+        index: 3, text: `Si le prestataire n’est pas assujetti à la TVA, la facture doit comporter la mention «TVA non applicable, art.
       293 B du CGI »`,
-      'Délai de paiement : 30 jours à réception de facture',
+      },
+      { index: 4, text: 'Délai de paiement : 30 jours à réception de facture' },
     ];
   };
-
-  const filteredDates = billingDataService.getFilteredDates(valuesByDate.appointments, parsedMonth, parsedYear);
 
   return (
     <>
@@ -111,7 +128,7 @@ const Bill = () => {
       </DSHeader>
       <div className={styles.content}>
         {getInfos().map(info => (
-          <div className={styles.info}>{info}</div>
+          <div key={info.index} className={styles.info}>{info.text}</div>
         ))}
       </div>
       <div className={styles.content}>
@@ -121,7 +138,7 @@ const Bill = () => {
       </div>
       <div className={styles.content}>
         {getFooter().map(info => (
-          <div className={styles.info}>{info}</div>
+          <div key={info.index} className={styles.info}>{info.text}</div>
         ))}
       </div>
     </>
