@@ -17,3 +17,12 @@ export const endCurrentUnivYear = (): string => {
   }
   return `${currentYear + 1}-09-01T00:00:00.000Z`;
 };
+
+export const getUnivYear = (date: Date) : string => {
+  const SEPTEMBER = 8;
+  const DECEMBER = 11;
+  const cycle = (date.getMonth() >= SEPTEMBER && date.getMonth() <= DECEMBER)
+    ? `${date.getFullYear()}-${date.getFullYear() + 1}`
+    : `${date.getFullYear() - 1}-${date.getFullYear()}`;
+  return cycle;
+};

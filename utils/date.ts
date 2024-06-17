@@ -49,15 +49,6 @@ const getUTCDate = (date: Date) : Date => new Date(Date.UTC(
   date.getMilliseconds(),
 ));
 
-const getUnivYear = (date: Date) : string => {
-  const SEPTEMBER = 8;
-  const DECEMBER = 11;
-  const cycle = (date.getMonth() >= SEPTEMBER && date.getMonth() <= DECEMBER)
-    ? `${date.getFullYear()}-${date.getFullYear() + 1}`
-    : `${date.getFullYear() - 1}-${date.getFullYear()}`;
-  return cycle;
-};
-
 const subtractDays = (date: Date, days: number) : Date => {
   date.setDate(date.getDate() - days);
 
@@ -72,6 +63,5 @@ export default {
   toFormatDDMMYYYY,
   parseForm,
   now,
-  getUnivYear,
   subtractDays,
 };

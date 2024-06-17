@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import Picker from 'react-month-picker';
-import { shortFrenchMonthNames, formatMonth, endYearOfCurrentUnivYear } from 'services/date';
+import { shortFrenchMonthNames, formatMonth } from 'services/date';
+import { endYearOfCurrentUnivYear } from 'services/univYears';
 
 const MonthPicker = ({ month, setMonth, id }) => {
   const calendar = useRef(null);

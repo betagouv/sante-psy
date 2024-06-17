@@ -1,6 +1,7 @@
 import { AppointmentWithPatient, AppointmentInfo } from '../types/Appointment';
 import dateUtils from '../utils/date';
 import appointmentBadges from '../utils/badges';
+import { getUnivYear } from '../utils/univYears';
 import { Patient } from '../types/Patient';
 
 const START_CYCLE_DATE = new Date('2023-09-01T00:00:00Z');
@@ -121,7 +122,7 @@ const processNextAppointment = (
   if (!nextAppointment) return;
 
   const nextAppointmentDate = dateUtils.getUTCDate(new Date(nextAppointment.appointmentDate));
-  const nextIsSameCycle = cycle === dateUtils.getUnivYear(nextAppointmentDate);
+  const nextIsSameCycle = cycle === getUnivYear(nextAppointmentDate);
   const nextPatient = nextAppointment.INE ? nextAppointment.INE : nextAppointment.patientId;
   const nextAppointmentChangeRule = !applyNewRules && nextAppointmentDate >= START_NEW_RULES
                                     && nextIsSameCycle && curatedPatient === nextPatient;
@@ -177,7 +178,7 @@ const getAppointmentWithBadges = (
 
   appointments.forEach((appointment, i) => {
     const appointmentDate = dateUtils.getUTCDate(new Date(appointment.appointmentDate));
-    const cycle = dateUtils.getUnivYear(appointmentDate);
+    const cycle = getUnivYear(appointmentDate);
     const currentMonth = appointmentDate.getMonth() + 1;
     const isInPeriod = period ? currentMonth === period.month : true;
     const curatedPatient = getCuratedPatient(appointment);
@@ -211,7 +212,7 @@ const getAppointmentWithBadges = (
     /* New rule */
     const nextAppointment = appointments[i + 1];
     const isLastAppointment = !nextAppointment || (nextAppointment.INE !== curatedPatient
-      && cycle !== dateUtils.getUnivYear(new Date(nextAppointment.appointmentDate)));
+      && cycle !== getUnivYear(new Date(nextAppointment.appointmentDate)));
 
     if (!applyNewRules && appointmentDate > START_CYCLE_DATE
       && isLastAppointment

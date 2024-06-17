@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Table, Callout, CalloutText, Icon, Button, Select, TextInput, CalloutTitle } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
-import { currentUnivYear } from 'services/date';
+import { currentUnivYear } from 'services/univYears';
 import { useStore } from 'stores/';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './patients.cssmodule.scss';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { getUnivYear } from 'services/date';
+import { getUnivYear } from 'services/univYears';
 import { Badge } from '@dataesr/react-dsfr';
 import useScreenSize from 'src/utils/useScreenSize';
 import getBadgeInfos from 'src/utils/badges';

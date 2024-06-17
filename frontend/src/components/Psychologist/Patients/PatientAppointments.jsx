@@ -6,7 +6,7 @@ import { useStore } from 'stores/';
 import Badges from 'components/Badges/Badges';
 import useScreenSize from 'src/utils/useScreenSize';
 import { useNavigate } from 'react-router-dom';
-import { currentUnivYear } from 'services/date';
+import { currentUnivYear } from 'services/univYears';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './patientAppointments.cssmodule.scss';
 
