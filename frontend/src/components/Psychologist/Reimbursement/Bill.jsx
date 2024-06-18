@@ -11,6 +11,7 @@ import BillingTable from './BillingTable';
 
 import styles from './bill.cssmodule.scss';
 import useAppointmentsByDate from './hooks/appointmentsByDate';
+import { useStore } from 'stores/';
 
 const Bill = () => {
   const FULL_UNDERSCORE_LINE = '_____________________________________________________________________________________';
@@ -28,6 +29,7 @@ const Bill = () => {
     billingAddress: undefined,
   });
 
+  const { commonStore: { setNotification } } = useStore();
   useAppointmentsByDate(setValuesByDate, month);
 
   useEffect(() => {
@@ -49,8 +51,8 @@ const Bill = () => {
             });
           }
         }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+      } catch (e) {
+        setNotification('Une erreur est survenue', false, false);
       }
     };
 
