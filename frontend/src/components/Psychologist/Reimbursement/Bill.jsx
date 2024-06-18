@@ -7,11 +7,11 @@ import { formatFrenchDate, formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 import billingDataService from 'services/billingData';
 import { useParams } from 'react-router-dom';
+import { useStore } from 'stores/';
 import BillingTable from './BillingTable';
 
 import styles from './bill.cssmodule.scss';
 import useAppointmentsByDate from './hooks/appointmentsByDate';
-import { useStore } from 'stores/';
 
 const Bill = () => {
   const FULL_UNDERSCORE_LINE = '_____________________________________________________________________________________';
