@@ -44,6 +44,7 @@ const Page = ({
   withoutHeader,
   className,
   dataTestId = null,
+  psyPage = false,
 }) => {
   const { userStore: { user } } = useStore();
   const [tutoStatus, setTutoStatus] = useState({ run: false, stepIndex: 0 });
@@ -76,31 +77,35 @@ const Page = ({
       setTutoStatus={setTutoStatus}
       id={user && !user.hasSeenTutorial ? 'global' : tutorial}
     >
-      <div className={classNames(className, styles.background)} data-test-id={dataTestId}>
-        <div className={textContent ? styles.textContainer : styles.container}>
-          <div className={!withoutHeader ? styles.headerWithTitle : styles.headerIconOnly}>
+      <div className={psyPage ? styles.psyHeader : ''}>
+        <div className={classNames(className, styles.background)} data-test-id={dataTestId}>
+          {(!withoutHeader || tutorial) && (
+          <div className={styles.header}>
             {!withoutHeader && (
-            <div className={styles.header}>
-              {breadCrumbsComponent}
-              <h1 className={styles.title}>{title}</h1>
-              {description && <p className={styles.description}>{description}</p>}
-            </div>
+              { breadCrumbsComponent },
+                <div className={styles.headerTop}>
+                  <h1 className={styles.title}>{title}</h1>
+                  {description && <p className={styles.description}>{description}</p>}
+                </div>
             )}
             {tutorial && (
             <div
               id="launch-tutorial"
               data-test-id="launch-tutorial"
-              className={styles.tutorial}
+              className={!withoutHeader ? styles.tutorial : styles.headerIconOnly}
               onClick={() => setTutoStatus({ run: true, stepIndex: 0 })}
-                >
+                  >
               <Icon
                 name="fr-fi-information-fill"
-                  />
+                      />
             </div>
             )}
           </div>
-          {withoutHeader && breadCrumbsComponent}
-          {children}
+          )}
+          <div className={textContent ? styles.textContainer : styles.container}>
+            {withoutHeader && breadCrumbsComponent}
+            {children}
+          </div>
         </div>
       </div>
       {withContact && <FaqSection />}

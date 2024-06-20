@@ -161,6 +161,7 @@ const PsychologistRouter = () => {
   return (
     <Page
       {...getPageProps()}
+      psyPage
       withContact
     >
       <Announcement />
