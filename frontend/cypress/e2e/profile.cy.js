@@ -124,7 +124,7 @@ describe('Profile', () => {
         cy.reload();
         cy.get('[data-test-id="show-availability-form"] p').should(
           'contain.text',
-          "Indisponible dans l'annuaire",
+          "Invisible dans l'annuaire",
         );
         cy.get('[data-test-id="show-public-profile-button"]').should(
           'not.exist',

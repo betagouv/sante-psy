@@ -64,14 +64,17 @@ const PsyProfile = () => {
   }, []);
 
   const renderPsychologistAvailability = () => {
-    if (user.inactiveUntil && user.inactiveUntil.startsWith('9999')) {
+    if (user.inactiveUntil) {
+      const isAlwaysInactive = user.inactiveUntil.startsWith('9999');
       return (
         <span>
-          <img src={redCircleIcon} alt="red circle" />
+          <img src={isAlwaysInactive ? redCircleIcon : orangeCircleIcon} alt="inactive icon" />
           <span className={styles.inactiveTexts}>
             <p>Invisible dans l&apos;annuaire</p>
             <p className={styles.inactiveSubtext}>
-              Les étudiants ne peuvent plus vous voir dans l&apos;annuaire
+              {isAlwaysInactive
+                ? "Les étudiants ne peuvent plus vous voir dans l'annuaire"
+                : `Date de fin : ${formatStringToDDMMYYYY(user.inactiveUntil)}`}
             </p>
           </span>
         </span>
