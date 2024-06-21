@@ -10,7 +10,7 @@ import styles from './psyDashboard.cssmodule.scss';
 const EditProfile = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { commonStore: { setPsychologists } } = useStore();
+  const { commonStore: { setPsychologists, setNotification } } = useStore();
   const [psychologist, setPsychologist] = useState(location.state?.psychologist || {
     personalEmail: '',
     departement: '',
@@ -24,21 +24,23 @@ const EditProfile = () => {
     appointmentLink: '',
     description: '',
   });
+  const [isLoaded, setIsLoaded] = useState(!!location.state?.psychologist);
 
   useEffect(() => {
     const loadPsychologist = async () => {
       try {
         const response = await agent.Psychologist.getProfile();
         setPsychologist(response);
+        setIsLoaded(true);
       } catch (error) {
-        console.error('Failed to load psychologist profile', error);
+        setNotification({ type: 'error', message: error.response.data });
       }
     };
 
-    if (!location.state?.psychologist) {
+    if (!isLoaded) {
       loadPsychologist();
     }
-  }, [location.state?.psychologist]);
+  }, [isLoaded]);
 
   const save = async e => {
     e.preventDefault();
@@ -47,7 +49,7 @@ const EditProfile = () => {
       updatePsyList();
       navigate('/psychologue/tableau-de-bord', { state: { notification: response } });
     } catch (error) {
-      console.error('Failed to update psychologist profile', error);
+      setNotification({ type: 'error', message: error.response.data });
     }
   };
 
@@ -74,6 +76,7 @@ const EditProfile = () => {
   };
 
   return (
+    isLoaded && (
     <form data-test-id="edit-profile-form" onSubmit={save}>
       <p className="fr-text--sm fr-mb-3w">
         Les champs avec une astérisque (
@@ -202,6 +205,7 @@ const EditProfile = () => {
         </Button>
       </ButtonGroup>
     </form>
+    )
   );
 };
 
