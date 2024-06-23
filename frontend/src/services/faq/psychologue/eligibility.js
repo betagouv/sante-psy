@@ -52,9 +52,4 @@ module.exports = config => [
       Les psychiatres relèvent d’un régime de remboursement aux étudiants de leurs actes par l’assurance maladie. \
       Ils n’ont donc pas vocation à intégrer le dispositif Santé Psy Étudiant.',
   },
-  {
-    question:
-      'Le dispositif SPE est-il exclusif de celui permettant de recruter des psychologues ou les deux dispositifs sont-ils au contraire cumulatifs\u00A0?',
-    answer: 'Les deux dispositifs sont cumulatifs pour les établissements éligibles à l’un et l’autre.',
-  },
 ];

@@ -60,10 +60,10 @@ const OtherServices = () => {
         <Service
           image={small ? '/images/monparcourspsy-small.jpg' : '/images/monparcourspsy.png'}
           logo="/images/monparcourspsy-logo.png"
-          name="MonParcoursPsy"
+          name="MonSoutienPsy"
           title="En parler, c'est déjà se soigner."
           description="Pour tout le monde, à partir de 3 ans. 8 séances par an chez un(e) psychologue"
-          link="https://monparcourspsy.sante.gouv.fr/"
+          link="https://www.ameli.fr/assure/remboursements/rembourse/remboursement-seance-psychologue-mon-soutien-psy"
         />
       </div>
     </Page>

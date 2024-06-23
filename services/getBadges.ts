@@ -10,11 +10,11 @@ const arePrescriptionInfosFilled = (appointment: AppointmentWithPatient | Patien
   return !!doctorAddress && !!doctorName && !!hasPrescription;
 };
 
-const areStudentInfosFilled = (appointment: AppointmentWithPatient | Patient) : boolean => {
+const areStudentINEFilled = (appointment: AppointmentWithPatient | Patient) : boolean => {
   const {
-    firstNames, lastName, dateOfBirth, institutionName, INE,
+    INE,
   } = appointment;
-  return !!firstNames && !!lastName && !!dateOfBirth && !!institutionName && !!INE;
+  return !!INE;
 };
 
 const getPatientBadges = (patient: AppointmentWithPatient | Patient): string[] => {
@@ -22,8 +22,8 @@ const getPatientBadges = (patient: AppointmentWithPatient | Patient): string[] =
   const appointmentsYearCount = parseInt(patient.appointmentsYearCount);
   const badges = [];
 
-  if (!areStudentInfosFilled(patient)) {
-    badges.push(appointmentBadges.student_infos);
+  if (!areStudentINEFilled(patient)) {
+    badges.push(appointmentBadges.student_ine);
   }
   if (!arePrescriptionInfosFilled(patient)) {
     badges.push(appointmentBadges.prescription_infos);
@@ -74,19 +74,20 @@ const getAppointmentWithBadges = (
     const cycle = dateUtils.getUnivYear(appointmentDate); // TODO: see if we can use appointment.univYear
     const currentmonth = appointmentDate.getMonth() + 1;
     const isInPeriod = period ? currentmonth === period.month : true;
+    const curatedPatient = appointment.INE ? appointment.INE : appointment.patientId;
 
     if (!appointmentsCountByPatient[cycle]) {
       appointmentsCountByPatient[cycle] = {};
     }
 
-    if (!appointmentsCountByPatient[cycle][appointment.INE]) {
-      appointmentsCountByPatient[cycle][appointment.INE] = 1;
+    if (!appointmentsCountByPatient[cycle][curatedPatient]) {
+      appointmentsCountByPatient[cycle][curatedPatient] = 1;
     }
 
     // We don't need before_max and max badges on bill.
     const badges = [];
 
-    const appointmentCount = appointmentsCountByPatient[cycle][appointment.INE];
+    const appointmentCount = appointmentsCountByPatient[cycle][curatedPatient];
 
     if (isBillingPurposes) {
       if (appointmentCount === 1) {
@@ -120,7 +121,7 @@ const getAppointmentWithBadges = (
       });
     }
 
-    appointmentsCountByPatient[cycle][appointment.INE]++;
+    appointmentsCountByPatient[cycle][curatedPatient]++;
   });
 
   const orderedAppointmentsWithBadges = appointmentsWithBadges.sort(

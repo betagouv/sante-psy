@@ -2,10 +2,20 @@
   display: flex;
   flex-direction: row;
   gap: 5%;
+
+  form {
+    z-index: 3;
+    width: 40%;
+  } 
+  
+  
 }
 
 @media (max-width: 768px) {
   .newAppointmentWrapper {
     flex-direction: column;
+    form {
+      width: auto;
+    }
   }
 }

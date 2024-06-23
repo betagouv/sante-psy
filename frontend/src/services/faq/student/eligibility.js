@@ -58,8 +58,8 @@ module.exports = () => [
   {
     question: 'Je ne suis pas éligible au dispositif Santé Psy Étudiant, que puis-je faire\u00A0?',
     answer:
-      'Comme toute personne à partir de 3 ans, vous pouvez bénéficier du dispositif MonParcoursPsy permettant \
+      'Comme toute personne à partir de 3 ans, vous pouvez bénéficier du dispositif Mon soutien psy permettant \
     l‘accès jusqu‘à 8 séances par an. Pour plus d‘informations, \
-    <a href="https://monparcourspsy.sante.gouv.fr" target="_blank" rel="noopener noreferrer">cliquez ici</a>.',
+    <a href="https://www.ameli.fr/assure/remboursements/rembourse/remboursement-seance-psychologue-mon-soutien-psy" target="_blank" rel="noopener noreferrer">cliquez ici</a>.',
   },
 ];

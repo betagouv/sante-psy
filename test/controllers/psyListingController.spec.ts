@@ -89,6 +89,7 @@ describe('psyListingController', () => {
       ]);
       expect(res.body[0]).to.have.all.keys([
         'dossierNumber',
+        'title',
         'firstNames',
         'lastName',
         'teleconsultation',
@@ -113,6 +114,8 @@ describe('psyListingController', () => {
         'appointmentLink',
         'useFirstNames',
         'useLastName',
+        'diploma',
+        'diplomaYear',
       ]);
     });
   });

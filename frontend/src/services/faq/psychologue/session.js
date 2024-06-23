@@ -15,12 +15,6 @@ module.exports = () => [
     L'étudiant doit seulement vous présenter sa carte d'étudiant et sa lettre d'orientation de son médecin généraliste.",
   },
   {
-    question: 'Qu\'est ce que les "chèques psy" (aussi appelé "pass santé psy")\u00A0?',
-    answer:
-      "Le terme \"chèque psy\" est employé par la ministre de l'Enseignement Supérieur et de la Recherche. \
-    Il indique l'accès aux 8 séances par la lettre d'orientation du médecin généraliste.",
-  },
-  {
     question: 'Quelles informations dois-je vérifier auprès du étudiant lors de la séance\u00A0?',
     answer:
       'Lors de chaque séance, vous devez renseigner les identités du médecin adresseur et de l’étudiant tout en confirmant que la séance a eu lieu. \
