@@ -175,9 +175,6 @@ const AddEditPatient = () => {
             )}
             <section className={styles.studentSectionTitle}>
               <h2>Lettre d&apos;orientation</h2>
-              {patient.badges.includes(badges.prescription_infos.key)
-                ? renderBadge({ badge: badges.prescription_infos.key })
-                : ''}
             </section>
             <Checkbox
               className="fr-input-group"

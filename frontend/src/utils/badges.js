@@ -36,12 +36,6 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
     severity: 'info',
     icon: 'fr-icon-info-fill fr-icon--sm',
   },
-  prescription_infos: {
-    key: 'prescription_infos',
-    text: isSmallScreen ? 'Lettre' : "Lettre d'orientation à compléter",
-    severity: 'new',
-    icon: 'fr-icon-info-fill fr-icon--sm',
-  },
   completed: {
     key: 'completed',
     text: 'à jour',

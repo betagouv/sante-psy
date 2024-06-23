@@ -47,9 +47,6 @@ const getPatientBadges = (patient: AppointmentWithPatient | Patient): string[] =
   if (!areStudentINEFilled(patient)) {
     badges.push(appointmentBadges.student_ine);
   }
-  if (!arePrescriptionInfosFilled(patient)) {
-    badges.push(appointmentBadges.prescription_infos);
-  }
 
   const badgesToAdd = addBadges(countedAppointments, MAX_APPOINTMENT_NEW, false);
   badges = badges.concat(badgesToAdd);
