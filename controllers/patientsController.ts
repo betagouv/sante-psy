@@ -64,16 +64,6 @@ const patientValidators = [
     .trim()
     .customSanitizer(DOMPurify.sanitize),
 
-  // all following prescriptions infos are optionnal so two
-  // valid option: field is empty or check if has the right format
-  oneOf(
-    [
-      check('doctorAddress').trim().isEmpty(),
-      check('doctorAddress')
-      .trim()
-      .customSanitizer(DOMPurify.sanitize),
-    ],
-  ),
   oneOf(
     [
       check('doctorName').trim().isEmpty(),
@@ -81,16 +71,6 @@ const patientValidators = [
       .trim()
       .customSanitizer(DOMPurify.sanitize),
     ],
-  ),
-  oneOf(
-    [
-      check('doctorEmail').trim().isEmpty(),
-      check('doctorEmail')
-      .trim()
-      .isEmail()
-      .customSanitizer(DOMPurify.sanitize),
-    ],
-    'Vous devez spécifier un email valide.',
   ),
 ];
 
@@ -114,7 +94,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
   const patientINE = req.body.INE;
   const patientInstitutionName = req.body.institutionName;
   const {
-    doctorName, doctorAddress, doctorEmail,
+    doctorName,
   } = req.body;
   // Force to boolean beacause checkbox value send undefined when it's not checked
   const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
@@ -129,8 +109,6 @@ const update = async (req: Request, res: Response): Promise<void> => {
     patientIsStudentStatusVerified,
     psychologistId,
     doctorName,
-    doctorAddress,
-    doctorEmail,
     dateOfBirth,
   );
 
@@ -140,8 +118,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
   }
 
   let infoMessage = `L'étudiant ${patientFirstNames} ${patientLastName} a bien été modifié.`;
-  if (!patientINE || !patientInstitutionName || !patientIsStudentStatusVerified
-      || !doctorAddress || !doctorEmail || !dateOfBirth) {
+  if (!patientINE || !patientInstitutionName || !patientIsStudentStatusVerified || !doctorName || !dateOfBirth) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
         + ' en cliquant le bouton "Modifier" du patient.';
   }
@@ -183,7 +160,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const { INE } = req.body;
   const { institutionName } = req.body;
   const {
-    doctorName, doctorAddress, doctorEmail,
+    doctorName,
   } = req.body;
   // Force to boolean beacause checkbox value send undefined when it's not checked
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
@@ -197,13 +174,10 @@ const create = async (req: Request, res: Response): Promise<void> => {
     isStudentStatusVerified,
     psychologistId,
     doctorName,
-    doctorAddress,
-    doctorEmail,
     dateOfBirth,
   );
   let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
-  if (!INE || !institutionName || !isStudentStatusVerified || !doctorAddress
-    || !doctorEmail) {
+  if (!INE || !institutionName || !doctorName || !isStudentStatusVerified) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
         + ' en cliquant le bouton "Modifier" du patient.';
   }

@@ -7,8 +7,6 @@ export type Patient = {
     isStudentStatusVerified?: boolean,
     psychologistId: string,
     doctorName?: string,
-    doctorAddress?: string,
-    doctorEmail?: string,
     dateOfBirth?: Date | null,
     deleted?: boolean,
     updatedAt?: Date,

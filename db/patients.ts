@@ -41,8 +41,6 @@ const insert = async (
   isStudentStatusVerified?: boolean,
   psychologistId?: string,
   doctorName?: string,
-  doctorAddress?: string,
-  doctorEmail?: string,
   dateOfBirth?: Date,
 ): Promise<Patient> => {
   try {
@@ -54,8 +52,6 @@ const insert = async (
       isStudentStatusVerified,
       psychologistId,
       doctorName,
-      doctorAddress,
-      doctorEmail,
       dateOfBirth,
     }).returning('*');
     return patientsArray[0];
@@ -74,8 +70,6 @@ const update = async (
   isStudentStatusVerified: boolean,
   psychologistId: string,
   doctorName: string,
-  doctorAddress: string,
-  doctorEmail: string,
   dateOfBirth: Date,
 ): Promise<number> => {
   try {
@@ -90,8 +84,6 @@ const update = async (
         isStudentStatusVerified,
         psychologistId,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
         updatedAt: date.now(),
       });

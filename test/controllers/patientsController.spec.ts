@@ -10,8 +10,6 @@ import dbAppointments from '../../db/appointments';
 import dbPsychologists from '../../db/psychologists';
 
 const doctorName = 'doctorName';
-const doctorAddress = 'doctorAddress';
-const doctorEmail = 'email@email.comfr';
 const dateOfBirth = '20/01/1980';
 
 const makePatient = async (psychologistId, INE = '12345678901') => {
@@ -25,11 +23,8 @@ const makePatient = async (psychologistId, INE = '12345678901') => {
     INE,
     '42',
     false,
-    false,
     psychologistId,
     doctorName,
-    doctorAddress,
-    doctorEmail,
     date.parseForm(dateOfBirth),
   );
   // Check patient is inserted
@@ -72,7 +67,6 @@ describe('patientsController', () => {
           res.body[0].id.should.equal(myPatient.id);
           res.body[0].institutionName.should.equal(myPatient.institutionName);
           res.body[0].doctorName.should.equal(myPatient.doctorName);
-          res.body[0].doctorAddress.should.equal(myPatient.doctorAddress);
           res.body[0].dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
           res.body[0].appointmentsCount.should.equal('2');
           res.body[0].appointmentsYearCount.should.equal('1');
@@ -115,7 +109,6 @@ describe('patientsController', () => {
           res.body[0].id.should.equal(myPatient.id);
           res.body[0].institutionName.should.equal(myPatient.institutionName);
           res.body[0].doctorName.should.equal(myPatient.doctorName);
-          res.body[0].doctorAddress.should.equal(myPatient.doctorAddress);
           res.body[0].dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
           res.body[0].appointmentsCount.should.equal('4');
           res.body[0].appointmentsYearCount.should.equal('3');
@@ -167,7 +160,6 @@ describe('patientsController', () => {
           res.body[0].id.should.equal(myPatient.id);
           res.body[0].institutionName.should.equal(myPatient.institutionName);
           res.body[0].doctorName.should.equal(myPatient.doctorName);
-          res.body[0].doctorAddress.should.equal(myPatient.doctorAddress);
           res.body[0].dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
           res.body[0].appointmentsCount.should.equal('16');
           res.body[0].appointmentsYearCount.should.equal('14');
@@ -202,8 +194,6 @@ describe('patientsController', () => {
           institutionName: 'test',
           isStudentStatusVerified: undefined,
           doctorName,
-          doctorAddress,
-          doctorEmail,
           dateOfBirth,
         })
         .then(async (res) => {
@@ -236,8 +226,6 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          doctorAddress,
-          doctorEmail,
           dateOfBirth,
         })
         .then(async (res) => {
@@ -264,8 +252,6 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: false,
           doctorName,
-          doctorAddress,
-          doctorEmail,
           dateOfBirth,
         },
         ]));
@@ -306,8 +292,6 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       }, 'Vous devez spécifier le.s prénom.s du patient.');
     });
@@ -320,8 +304,6 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       }, 'Vous devez spécifier le nom du patient.');
     });
@@ -334,8 +316,6 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       }, 'Vous devez spécifier le.s prénom.s du patient.');
     });
@@ -348,8 +328,6 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       }, 'Vous devez spécifier le nom du patient.');
     });
@@ -362,8 +340,6 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
       + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
@@ -400,8 +376,6 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
       + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
@@ -415,8 +389,6 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       });
     });
@@ -429,8 +401,6 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       });
     });
@@ -443,8 +413,6 @@ describe('patientsController', () => {
         institutionName: '',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       });
     });
@@ -461,8 +429,6 @@ describe('patientsController', () => {
         institutionName: 'stuff<script>evil</script>',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       };
 
@@ -525,7 +491,6 @@ describe('patientsController', () => {
           res.body.id.should.equal(myPatient.id);
           res.body.institutionName.should.equal(myPatient.institutionName);
           res.body.doctorName.should.equal(myPatient.doctorName);
-          res.body.doctorAddress.should.equal(myPatient.doctorAddress);
           res.body.dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
 
           return Promise.resolve();
@@ -608,7 +573,6 @@ describe('patientsController', () => {
           institutionName: updatedInstitution,
           isStudentStatusVerified: 'isStudentStatusVerified',
           doctorName,
-          doctorEmail,
           dateOfBirth: updatedDateOfBirth,
         })
         .then(async (res) => {
@@ -651,8 +615,6 @@ describe('patientsController', () => {
           institutionName: '',
           isStudentStatusVerified: false,
           doctorName: '',
-          doctorAddress: '',
-          doctorEmail: '',
           dateOfBirth: '',
         })
         .then(async (res) => {
@@ -668,8 +630,6 @@ describe('patientsController', () => {
           expect(patientsArray[0].isStudentStatusVerified).to.equal(false);
           expect(patientsArray[0].dateOfBirth).to.equal(null);
           expect(patientsArray[0].doctorName).to.equal('');
-          expect(patientsArray[0].doctorEmail).to.equal('');
-          expect(patientsArray[0].doctorAddress).to.equal('');
 
           return Promise.resolve();
         });
@@ -693,8 +653,6 @@ describe('patientsController', () => {
           institutionName: 'Grande ecole',
           isStudentStatusVerified: 'isStudentStatusVerified',
           doctorName,
-          doctorAddress,
-          doctorEmail,
           dateOfBirth,
         })
         .then(async (res) => {
@@ -801,7 +759,6 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          doctorAddress,
           dateOfBirth,
         },
         'Vous devez spécifier le.s prénom.s du patient.',
@@ -820,7 +777,6 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          doctorAddress,
           dateOfBirth,
         },
         'Vous devez spécifier le nom du patient.',
@@ -839,7 +795,6 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          doctorAddress,
           dateOfBirth,
         },
         'Vous devez spécifier le.s prénom.s du patient.',
@@ -858,7 +813,6 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          doctorAddress,
           dateOfBirth,
         },
         'Vous devez spécifier le nom du patient.',
@@ -877,7 +831,6 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          doctorAddress,
           dateOfBirth,
         },
         'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
@@ -897,7 +850,6 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          doctorAddress,
           dateOfBirth,
         },
         'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
@@ -916,7 +868,6 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          doctorAddress,
           dateOfBirth,
         },
         'Ce patient n\'existe pas.',
@@ -935,7 +886,6 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          doctorAddress,
           dateOfBirth: 'pizza time',
         },
         'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.\n'
@@ -973,8 +923,6 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       });
     });
@@ -988,7 +936,6 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
       }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
       + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
@@ -1001,7 +948,6 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
         dateOfBirth,
       });
     });
@@ -1014,11 +960,10 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        doctorAddress,
       });
     });
 
-    it('should pass validation if doctor name, phone and address are missing', (done) => {
+    it('should pass validation if doctor name is missing', (done) => {
       shouldPassUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
         firstNames: 'Blou Blou',
         lastName: 'Nom',

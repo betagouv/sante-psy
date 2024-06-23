@@ -21,11 +21,8 @@ describe('appointmentsController', () => {
       '12345678901',
       '42',
       false,
-      false,
       psy.dossierNumber,
       'Dr Docteur',
-      'adresse du docteur',
-      'email@email.comfr',
       dateOfBirth,
     );
   }
@@ -297,11 +294,8 @@ describe('appointmentsController', () => {
         '12345678901',
         '42',
         false,
-        false,
         psychologistId,
         'Dr Docteur',
-        'adresse du docteur',
-        'email@email.comfr',
         dateOfBirth,
       );
       const appointment = await dbAppointments.insert(new Date(), patient.id, psychologistId);
@@ -430,13 +424,9 @@ describe('appointmentsController', () => {
       patient1.INE,
       patient1.institutionName,
       patient1.isStudentStatusVerified,
-      patient1.hasPrescription,
       psy.dossierNumber,
       patient1.doctorName,
-      patient1.doctorAddress,
-      patient1.doctorEmail,
       patient1.dateOfBirth,
-      patient1.dateOfPrescription,
     );
   }
 

@@ -17,8 +17,6 @@ describe('DB Patients', () => {
   const institutionName = 'Pouldard';
   const isStudentStatusVerified = false;
   const doctorName = 'doctorName';
-  const doctorAddress = 'doctorAddress';
-  const doctorEmail = '';
   const dateOfBirth = new Date('1980/01/20');
 
   async function testDataPatientsExist(lastName) {
@@ -47,8 +45,6 @@ describe('DB Patients', () => {
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       );
 
@@ -67,8 +63,6 @@ describe('DB Patients', () => {
           isStudentStatusVerified,
           psy.dossierNumber,
           doctorName,
-          doctorAddress,
-          doctorEmail,
           dateOfBirth,
         );
         const exist = await testDataPatientsExist(lastName);
@@ -89,8 +83,6 @@ describe('DB Patients', () => {
           isStudentStatusVerified,
           psy.dossierNumber,
           doctorName,
-          doctorAddress,
-          doctorEmail,
           dateOfBirth,
         );
         assert.fail('insert patient should have failed');
@@ -117,8 +109,6 @@ describe('DB Patients', () => {
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       );
 
@@ -137,8 +127,6 @@ describe('DB Patients', () => {
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       );
 
@@ -155,8 +143,6 @@ describe('DB Patients', () => {
         oldPatient.isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       );
       const newPatient = await dbPatients.getById(oldPatient.id, psy.dossierNumber);
@@ -175,8 +161,6 @@ describe('DB Patients', () => {
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       );
 
@@ -203,8 +187,6 @@ describe('DB Patients', () => {
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       );
       await dbPatients.insert(
@@ -215,8 +197,6 @@ describe('DB Patients', () => {
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       );
 
@@ -235,8 +215,6 @@ describe('DB Patients', () => {
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
       );
       await dbPatients.delete(patient.id, psy.dossierNumber);

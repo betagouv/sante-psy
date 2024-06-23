@@ -37,9 +37,7 @@ const AddEditPatient = () => {
       setPatient({
         INE: '',
         dateOfBirth: '',
-        doctorAddress: '',
         doctorName: '',
-        doctorEmail: '',
         firstNames: '',
         institutionName: '',
         isStudentStatusVerified: false,
@@ -163,35 +161,19 @@ const AddEditPatient = () => {
               value="isStudentStatusVerified"
               onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
               />
+            <TextInput
+              className="midlength-input"
+              data-test-id="etudiant-doctor-name-input"
+              label="Nom, prénom du médecin (optionnel)"
+              hint="Exemple : Annie Benahmou"
+              value={patient.doctorName}
+              onChange={e => changePatient(e.target.value, 'doctorName')}
+                />
             {patientId && (
               <div id="anchor-student-list" className={styles.patientAppointments}>
                 <PatientAppointments patientId={patientId} />
               </div>
             )}
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-doctor-name-input"
-              label="Nom, prénom du médecin"
-              hint="Exemple : Annie Benahmou"
-              value={patient.doctorName}
-              onChange={e => changePatient(e.target.value, 'doctorName')}
-              />
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-doctor-location-input"
-              label="Ville / code postal du médecin"
-              hint="Exemple : 97400 Saint-Denis"
-              value={patient.doctorAddress}
-              onChange={e => changePatient(e.target.value, 'doctorAddress')}
-              />
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-doctor-email-input"
-              label="Email du médecin (optionnel)"
-              hint="Il servira si vous souhaitez participer au suivi de l’étudiant par le médecin"
-              value={patient.doctorEmail}
-              onChange={e => changePatient(e.target.value, 'doctorEmail')}
-              />
           </div>
           <div className="fr-my-5w">
             <Button

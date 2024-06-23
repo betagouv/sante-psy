@@ -283,8 +283,6 @@ const getOnePatient = (
   institutionName: `${getRandomInt()} university`,
   isStudentStatusVerified: true,
   doctorName: faker.name.lastName(),
-  doctorAddress: faker.address.streetAddress(),
-  doctorEmail: faker.internet.exampleEmail(),
   dateOfBirth: faker.date.past(),
   ...patient,
 });
