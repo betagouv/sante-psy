@@ -80,27 +80,27 @@ const Page = ({
       <div className={psyPage ? styles.psyHeader : ''}>
         <div className={classNames(className, styles.background)} data-test-id={dataTestId}>
           {(!withoutHeader || tutorial) && (
-          <div className={styles.header}>
-            {!withoutHeader && (
-              { breadCrumbsComponent },
-                <div className={styles.headerTop}>
-                  <h1 className={styles.title}>{title}</h1>
-                  {description && <p className={styles.description}>{description}</p>}
-                </div>
-            )}
-            {tutorial && (
-            <div
-              id="launch-tutorial"
-              data-test-id="launch-tutorial"
-              className={!withoutHeader ? styles.tutorial : styles.headerIconOnly}
-              onClick={() => setTutoStatus({ run: true, stepIndex: 0 })}
+            <div className={styles.header}>
+              {breadCrumbsComponent}
+              {!withoutHeader && (
+              <div className={styles.headerTop}>
+                <h1 className={styles.title}>{title}</h1>
+                {description && <p className={styles.description}>{description}</p>}
+              </div>
+              )}
+              {tutorial && (
+              <div
+                id="launch-tutorial"
+                data-test-id="launch-tutorial"
+                className={!withoutHeader ? styles.tutorial : styles.headerIconOnly}
+                onClick={() => setTutoStatus({ run: true, stepIndex: 0 })}
                   >
-              <Icon
-                name="fr-fi-information-fill"
+                <Icon
+                  name="fr-fi-information-fill"
                       />
+              </div>
+              )}
             </div>
-            )}
-          </div>
           )}
           <div className={textContent ? styles.textContainer : styles.container}>
             {withoutHeader && breadCrumbsComponent}

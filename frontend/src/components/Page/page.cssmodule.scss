@@ -80,6 +80,7 @@
 
   .header {
     display: flex;
+    flex-wrap: wrap;
     padding: 16px 32px;
     margin: auto;
     max-width: 1200px;
@@ -100,6 +101,7 @@
 
 
   .breadCrumbs {
+    width: 100%;
     color: $primary-color;
     .currentBreadCrumb a {
       color: $secondary-text-color !important;
