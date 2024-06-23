@@ -39,13 +39,11 @@ const insert = async (
   INE?: string,
   institutionName?: string,
   isStudentStatusVerified?: boolean,
-  hasPrescription?: boolean,
   psychologistId?: string,
   doctorName?: string,
   doctorAddress?: string,
   doctorEmail?: string,
   dateOfBirth?: Date,
-  dateOfPrescription?: Date,
 ): Promise<Patient> => {
   try {
     const patientsArray = await db(patientsTable).insert({
@@ -54,13 +52,11 @@ const insert = async (
       INE,
       institutionName,
       isStudentStatusVerified,
-      hasPrescription,
       psychologistId,
       doctorName,
       doctorAddress,
       doctorEmail,
       dateOfBirth,
-      dateOfPrescription,
     }).returning('*');
     return patientsArray[0];
   } catch (err) {
@@ -76,13 +72,11 @@ const update = async (
   INE: string,
   institutionName: string,
   isStudentStatusVerified: boolean,
-  hasPrescription: boolean,
   psychologistId: string,
   doctorName: string,
   doctorAddress: string,
   doctorEmail: string,
   dateOfBirth: Date,
-  dateOfPrescription: Date,
 ): Promise<number> => {
   try {
     return await db(patientsTable)
@@ -94,13 +88,11 @@ const update = async (
         INE,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psychologistId,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
         updatedAt: date.now(),
       });
   } catch (err) {

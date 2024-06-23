@@ -57,7 +57,6 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
           psychologistId: dossierNumber,
           lastName: 'Patient',
           firstNames: 'Arenouvelé',
-          hasPrescription: false,
         }));
 
         const remainingPatientCount = 5 - patients.length;

@@ -16,11 +16,9 @@ describe('DB Patients', () => {
   const anotherStudentNumber = '10987654321';
   const institutionName = 'Pouldard';
   const isStudentStatusVerified = false;
-  const hasPrescription = false;
   const doctorName = 'doctorName';
   const doctorAddress = 'doctorAddress';
   const doctorEmail = '';
-  const dateOfPrescription = new Date();
   const dateOfBirth = new Date('1980/01/20');
 
   async function testDataPatientsExist(lastName) {
@@ -47,13 +45,11 @@ describe('DB Patients', () => {
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
 
       const exist = await testDataPatientsExist(lastName);
@@ -69,13 +65,11 @@ describe('DB Patients', () => {
           '1'.repeat(12),
           institutionName,
           isStudentStatusVerified,
-          hasPrescription,
           psy.dossierNumber,
           doctorName,
           doctorAddress,
           doctorEmail,
           dateOfBirth,
-          dateOfPrescription,
         );
         const exist = await testDataPatientsExist(lastName);
         exist.should.be.equal(true);
@@ -93,13 +87,11 @@ describe('DB Patients', () => {
           '1'.repeat(51),
           institutionName,
           isStudentStatusVerified,
-          hasPrescription,
           psy.dossierNumber,
           doctorName,
           doctorAddress,
           doctorEmail,
           dateOfBirth,
-          dateOfPrescription,
         );
         assert.fail('insert patient should have failed');
       } catch (error) {
@@ -123,13 +115,11 @@ describe('DB Patients', () => {
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
 
       expect(insertedPatient.deleted).equal(false);
@@ -145,13 +135,11 @@ describe('DB Patients', () => {
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
 
       const newLastName = 'NewName';
@@ -165,13 +153,11 @@ describe('DB Patients', () => {
         oldPatient.INE,
         oldPatient.institutionName,
         oldPatient.isStudentStatusVerified,
-        oldPatient.hasPrescription,
         psy.dossierNumber,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
       const newPatient = await dbPatients.getById(oldPatient.id, psy.dossierNumber);
       expect(newPatient.lastName).equal(newLastName);
@@ -187,13 +173,11 @@ describe('DB Patients', () => {
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
 
       const patientBeforeDelete = await dbPatients.getById(patient.id, psy.dossierNumber);
@@ -217,13 +201,11 @@ describe('DB Patients', () => {
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
       await dbPatients.insert(
         firstNames,
@@ -231,13 +213,11 @@ describe('DB Patients', () => {
         anotherStudentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
 
       const patients = (await dbPatients.getAll(psy.dossierNumber))
@@ -253,13 +233,11 @@ describe('DB Patients', () => {
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
       await dbPatients.delete(patient.id, psy.dossierNumber);
 

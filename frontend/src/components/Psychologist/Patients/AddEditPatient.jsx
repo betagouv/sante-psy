@@ -31,9 +31,6 @@ const AddEditPatient = () => {
           dateOfBirth: response.dateOfBirth
             ? formatDDMMYYYY(new Date(response.dateOfBirth))
             : '',
-          dateOfPrescription: response.dateOfPrescription
-            ? formatDDMMYYYY(new Date(response.dateOfPrescription))
-            : '',
         });
       });
     } else {
@@ -43,9 +40,7 @@ const AddEditPatient = () => {
         doctorAddress: '',
         doctorName: '',
         doctorEmail: '',
-        dateOfPrescription: '',
         firstNames: '',
-        hasPrescription: false,
         institutionName: '',
         isStudentStatusVerified: false,
         lastName: '',
@@ -173,19 +168,6 @@ const AddEditPatient = () => {
                 <PatientAppointments patientId={patientId} />
               </div>
             )}
-            <section className={styles.studentSectionTitle}>
-              <h2>Lettre d&apos;orientation</h2>
-            </section>
-            <Checkbox
-              className="fr-input-group"
-              data-test-id="etudiant-letter-input"
-              defaultChecked={patient.hasPrescription}
-              label={`J'ai vérifié que les séances ont bien été orientées
-                par un médecin`}
-              hint="L’étudiant m’a bien présenté la lettre d’orientation rédigée par son médecin, pour l’année en cours"
-              value="hasPrescription"
-              onChange={e => changePatient(e.target.checked, 'hasPrescription')}
-              />
             <TextInput
               className="midlength-input"
               data-test-id="etudiant-doctor-name-input"
@@ -209,17 +191,6 @@ const AddEditPatient = () => {
               hint="Il servira si vous souhaitez participer au suivi de l’étudiant par le médecin"
               value={patient.doctorEmail}
               onChange={e => changePatient(e.target.value, 'doctorEmail')}
-              />
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-prescription-date-input"
-              label={"Date de la lettre d'orientation (optionnel)"}
-              hint="Format JJ/MM/AAAA, par exemple : 01/01/2024"
-              value={patient.dateOfPrescription}
-              type="text"
-              onChange={e => changePatient(e.target.value, 'dateOfPrescription')}
-              pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
-              placeholder="JJ/MM/AAAA"
               />
           </div>
           <div className="fr-my-5w">

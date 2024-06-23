@@ -13,7 +13,6 @@ const doctorName = 'doctorName';
 const doctorAddress = 'doctorAddress';
 const doctorEmail = 'email@email.comfr';
 const dateOfBirth = '20/01/1980';
-const dateOfPrescription = '01/01/2024';
 
 const makePatient = async (psychologistId, INE = '12345678901') => {
   const psy = create.getOnePsy();
@@ -32,7 +31,6 @@ const makePatient = async (psychologistId, INE = '12345678901') => {
     doctorAddress,
     doctorEmail,
     date.parseForm(dateOfBirth),
-    date.parseForm(dateOfPrescription),
   );
   // Check patient is inserted
   const createdPatient = await dbPatients.getById(patient.id, psychologistId);
@@ -203,12 +201,10 @@ describe('patientsController', () => {
           INE: '12345678901',
           institutionName: 'test',
           isStudentStatusVerified: undefined,
-          hasPrescription: undefined,
           doctorName,
           doctorAddress,
           doctorEmail,
           dateOfBirth,
-          dateOfPrescription,
         })
         .then(async (res) => {
           res.status.should.equal(200);
@@ -239,12 +235,10 @@ describe('patientsController', () => {
           INE: '12345678901',
           institutionName: '42',
           isStudentStatusVerified: undefined,
-          hasPrescription: undefined,
           doctorName,
           doctorAddress,
           doctorEmail,
           dateOfBirth,
-          dateOfPrescription,
         })
         .then(async (res) => {
           res.status.should.equal(401);
@@ -269,12 +263,10 @@ describe('patientsController', () => {
           INE: 'studentNumber',
           institutionName: '42',
           isStudentStatusVerified: false,
-          hasPrescription: false,
           doctorName,
           doctorAddress,
           doctorEmail,
           dateOfBirth,
-          dateOfPrescription,
         },
         ]));
       return Promise.resolve();
@@ -313,12 +305,10 @@ describe('patientsController', () => {
         INE: '1234567890A',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       }, 'Vous devez spécifier le.s prénom.s du patient.');
     });
 
@@ -329,12 +319,10 @@ describe('patientsController', () => {
         INE: '1234567890A',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       }, 'Vous devez spécifier le nom du patient.');
     });
 
@@ -345,12 +333,10 @@ describe('patientsController', () => {
         INE: '1234567890A',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       }, 'Vous devez spécifier le.s prénom.s du patient.');
     });
 
@@ -361,12 +347,10 @@ describe('patientsController', () => {
         INE: '1234567890A',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       }, 'Vous devez spécifier le nom du patient.');
     });
 
@@ -377,12 +361,10 @@ describe('patientsController', () => {
         INE: '1234567890à',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
       + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
@@ -417,12 +399,10 @@ describe('patientsController', () => {
         INE: '1234567890AA',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
       + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
@@ -434,12 +414,10 @@ describe('patientsController', () => {
         INE: '1234567890A',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       });
     });
 
@@ -450,12 +428,10 @@ describe('patientsController', () => {
         INE: '',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       });
     });
 
@@ -466,12 +442,10 @@ describe('patientsController', () => {
         INE: '',
         institutionName: '',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       });
     });
 
@@ -486,12 +460,10 @@ describe('patientsController', () => {
         INE: '',
         institutionName: 'stuff<script>evil</script>',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       };
 
       chai.request(app)
@@ -635,11 +607,9 @@ describe('patientsController', () => {
           INE: updatedINE,
           institutionName: updatedInstitution,
           isStudentStatusVerified: 'isStudentStatusVerified',
-          hasPrescription: 'hasPrescription',
           doctorName,
           doctorEmail,
           dateOfBirth: updatedDateOfBirth,
-          dateOfPrescription,
         })
         .then(async (res) => {
           res.status.should.equal(200);
@@ -656,7 +626,6 @@ describe('patientsController', () => {
           expect(patientsArray[0].INE).to.equal(updatedINE);
           expect(patientsArray[0].institutionName).to.equal(updatedInstitution);
           expect(patientsArray[0].isStudentStatusVerified).to.equal(true);
-          expect(patientsArray[0].hasPrescription).to.equal(true);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
             new Date('1982/02/25').getTime(),
           );
@@ -681,12 +650,10 @@ describe('patientsController', () => {
           INE: '',
           institutionName: '',
           isStudentStatusVerified: false,
-          hasPrescription: false,
           doctorName: '',
           doctorAddress: '',
           doctorEmail: '',
           dateOfBirth: '',
-          dateOfPrescription: '',
         })
         .then(async (res) => {
           res.status.should.equal(200);
@@ -699,12 +666,10 @@ describe('patientsController', () => {
           expect(patientsArray[0].INE).to.equal('');
           expect(patientsArray[0].institutionName).to.equal('');
           expect(patientsArray[0].isStudentStatusVerified).to.equal(false);
-          expect(patientsArray[0].hasPrescription).to.equal(false);
           expect(patientsArray[0].dateOfBirth).to.equal(null);
           expect(patientsArray[0].doctorName).to.equal('');
           expect(patientsArray[0].doctorEmail).to.equal('');
           expect(patientsArray[0].doctorAddress).to.equal('');
-          expect(patientsArray[0].dateOfPrescription).to.equal(null);
 
           return Promise.resolve();
         });
@@ -727,12 +692,10 @@ describe('patientsController', () => {
           INE: '111222333SS',
           institutionName: 'Grande ecole',
           isStudentStatusVerified: 'isStudentStatusVerified',
-          hasPrescription: 'hasPrescription',
           doctorName,
           doctorAddress,
           doctorEmail,
           dateOfBirth,
-          dateOfPrescription,
         })
         .then(async (res) => {
           res.status.should.equal(404);
@@ -747,7 +710,6 @@ describe('patientsController', () => {
           expect(patientsArray[0].INE).to.equal(patient.INE);
           expect(patientsArray[0].institutionName).to.equal(patient.institutionName);
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
-          expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
             new Date('1980/01/20').getTime(),
           );
@@ -771,7 +733,6 @@ describe('patientsController', () => {
           INE: '111',
           institutionName: 'Petite ecole',
           isStudentStatusVerified: 'isStudentStatusVerified',
-          hasPrescription: 'hasPrescription',
           dateOfBirth,
         })
         .then(async (res) => {
@@ -786,7 +747,6 @@ describe('patientsController', () => {
           expect(patientsArray[0].INE).to.equal(patient.INE);
           expect(patientsArray[0].institutionName).to.equal(patient.institutionName);
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
-          expect(patientsArray[0].hasPrescription).to.equal(patient.hasPrescription);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
             new Date('1980/01/20').getTime(),
           );
@@ -840,7 +800,6 @@ describe('patientsController', () => {
           INE: '1234567890A',
           institutionName: '42',
           isStudentStatusVerified: undefined,
-          hasPrescription: undefined,
           doctorName,
           doctorAddress,
           dateOfBirth,
@@ -860,7 +819,6 @@ describe('patientsController', () => {
           INE: '1234567890A',
           institutionName: '42',
           isStudentStatusVerified: undefined,
-          hasPrescription: undefined,
           doctorName,
           doctorAddress,
           dateOfBirth,
@@ -880,7 +838,6 @@ describe('patientsController', () => {
           INE: '1234567890A',
           institutionName: '42',
           isStudentStatusVerified: undefined,
-          hasPrescription: undefined,
           doctorName,
           doctorAddress,
           dateOfBirth,
@@ -900,7 +857,6 @@ describe('patientsController', () => {
           INE: '1234567890A',
           institutionName: '42',
           isStudentStatusVerified: undefined,
-          hasPrescription: undefined,
           doctorName,
           doctorAddress,
           dateOfBirth,
@@ -920,7 +876,6 @@ describe('patientsController', () => {
           INE: '1234567890à',
           institutionName: '42',
           isStudentStatusVerified: undefined,
-          hasPrescription: undefined,
           doctorName,
           doctorAddress,
           dateOfBirth,
@@ -941,7 +896,6 @@ describe('patientsController', () => {
           INE: '1'.repeat(51),
           institutionName: '42',
           isStudentStatusVerified: undefined,
-          hasPrescription: undefined,
           doctorName,
           doctorAddress,
           dateOfBirth,
@@ -961,7 +915,6 @@ describe('patientsController', () => {
           INE: '12345678901',
           institutionName: '42',
           isStudentStatusVerified: undefined,
-          hasPrescription: undefined,
           doctorName,
           doctorAddress,
           dateOfBirth,
@@ -981,34 +934,11 @@ describe('patientsController', () => {
           INE: '1234567890A',
           institutionName: '42',
           isStudentStatusVerified: undefined,
-          hasPrescription: undefined,
           doctorName,
           doctorAddress,
           dateOfBirth: 'pizza time',
         },
         'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.\n'
-      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.',
-      );
-    });
-
-    it('should refuse if dateOfPrescription is not valid', (done) => {
-      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(
-        done,
-        patientId,
-        {
-          firstNames: 'Blou Blou',
-          lastName: 'Nom',
-          INE: '1234567890A',
-          institutionName: '42',
-          isStudentStatusVerified: undefined,
-          hasPrescription: undefined,
-          doctorName,
-          doctorAddress,
-          dateOfBirth,
-          dateOfPrescription: 'pizza time',
-        },
-        'La date de prescription n\'est pas valide, le format doit être JJ/MM/AAAA.\n'
       + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.',
       );
     });
@@ -1042,12 +972,10 @@ describe('patientsController', () => {
         INE: '1234567890A',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       });
     });
 
@@ -1059,7 +987,6 @@ describe('patientsController', () => {
         INE: '1234567890AA',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
       }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
@@ -1073,7 +1000,6 @@ describe('patientsController', () => {
         INE: '',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
         dateOfBirth,
@@ -1087,7 +1013,6 @@ describe('patientsController', () => {
         INE: '1234567890A',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
         doctorName,
         doctorAddress,
       });
@@ -1100,7 +1025,6 @@ describe('patientsController', () => {
         INE: '',
         institutionName: '42',
         isStudentStatusVerified: undefined,
-        hasPrescription: undefined,
       });
     });
   });

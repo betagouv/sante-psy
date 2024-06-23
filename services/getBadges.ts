@@ -10,13 +10,6 @@ const START_NEW_RULES = new Date('2024-06-15T00:00:00Z');
 const MAX_APPOINTMENT_OLD = 8;
 const MAX_APPOINTMENT_NEW = 12;
 
-const arePrescriptionInfosFilled = (appointment: AppointmentWithPatient | Patient): boolean => {
-  const {
-    doctorAddress, doctorName, hasPrescription,
-  } = appointment;
-  return !!doctorAddress && !!doctorName && !!hasPrescription;
-};
-
 const areStudentINEFilled = (appointment: AppointmentWithPatient | Patient): boolean => {
   const {
     INE,
