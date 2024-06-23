@@ -46,6 +46,7 @@ const saveAssignedUniversity = async (psychologistId: string, assignedUniversity
 
 const selectFields = (): string[] => [
   'dossierNumber',
+  'title',
   'lastName',
   'adeli',
   'firstNames',
@@ -68,6 +69,8 @@ const selectFields = (): string[] => [
   'otherPostcode',
   'departement',
   'region',
+  'diploma',
+  'diplomaYear',
   'useFirstNames',
   'useLastName',
 ];

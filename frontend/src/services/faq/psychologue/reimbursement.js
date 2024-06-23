@@ -3,10 +3,10 @@
 module.exports = () => [
   {
     question:
-      'Comment a été fixé le tarif de 30 euros pour une consultation, sachant que les tarifs varient selon les régions, \
+      'Comment a été fixé le tarif pour une consultation, sachant que les tarifs varient selon les régions, \
     selon les formations complémentaires et spécialités de chaque professionnel\u00A0?',
     answer:
-      'S’agissant d’un dispositif national, le tarif doit être identique sur l’ensemble du territoire et il a été fixé à 30\u00A0€ par le ministère des solidarités et de la santé.',
+      'S’agissant d’un dispositif national, le tarif doit être identique sur l’ensemble du territoire. Il a été fixé à 40\u00A0€ pour les premières séances avec chaque étudiant et 30\u00A0€ pour les séances de suivi.',
   },
   {
     question:

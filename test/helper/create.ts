@@ -181,12 +181,14 @@ const getOnePsy = (
 
   return {
     dossierNumber,
+    title: 'Mme',
     firstNames: getFirstNames(),
     lastName: faker.name.lastName(),
     archived: false,
     state: DossierState.accepte,
     adeli: `${getRandomInt()}829302942`,
     diploma: 'Psychologie clinique de la santé',
+    diplomaYear: '2020',
     phone: faker.phone.number('0# ## ## ## ##'),
     email: faker.internet.exampleEmail(),
     personalEmail: 'loginemail@beta.gouv.fr',
@@ -244,6 +246,7 @@ const getOnePsyDS = (
   champId = faker.datatype.string(),
   firstName = faker.name.firstName(),
   lastName = faker.name.lastName(),
+  title = 'Mme',
 ) : DSPsychologist => ({
   id: faker.datatype.string(),
   state: DossierState.accepte,
@@ -265,6 +268,7 @@ const getOnePsyDS = (
   demandeur: {
     nom: lastName,
     prenom: firstName,
+    civilite: title,
   },
 });
 

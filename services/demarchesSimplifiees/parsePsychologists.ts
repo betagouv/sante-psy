@@ -34,12 +34,14 @@ const parseDossierMetadata = (dossier: DSPsychologist): Psychologist => {
 
   psy.lastName = demandeur.nom.trim();
   psy.firstNames = demandeur.prenom.trim();
+  psy.title = demandeur.civilite.trim();
 
   psy.personalEmail = usager.email.trim();
 
   const champsToMap = [
     'departement',
     'diploma',
+    'diplomaYear',
     'adeli',
     'phone',
     'address',
