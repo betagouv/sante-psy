@@ -78,8 +78,8 @@ const NewAppointment = () => {
         <div className={styles.message}>
           Vous pouvez vous faire rembourser
           <ul>
-            <li>jusqu‘à 12 séances depuis le 15 juin 2024.</li>
-            <li>jusqu‘à 8 séances avant le 15 juin 2024.</li>
+            <li>jusqu‘à 12 séances depuis le 1er juillet 2024.</li>
+            <li>jusqu‘à 8 séances avant le 1er juillet 2024.</li>
           </ul>
         </div>
         <div id="patients-list">

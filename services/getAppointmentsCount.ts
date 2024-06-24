@@ -24,7 +24,7 @@ const getAppointmentsCount = async (patients: Patient[] | AppointmentWithPatient
               })
               .andWhere('deleted', false);
 
-    const START_NEW_RULES = new Date('2024-06-15T00:00:00Z');
+    const START_NEW_RULES = new Date('2024-07-01T00:00:00Z');
     const START_UNIV_YEAR = new Date(startCurrentUnivYear());
     const END_UNIV_YEAR = new Date(endCurrentUnivYear());
     const MAX_APPOINTMENT_OLD = 8;

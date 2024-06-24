@@ -719,11 +719,11 @@ describe('appointmentsController', () => {
     });
 
     /* New rule tests */
-    it('shouldn\'t have appointments with 1st badge after 15 june 2024', async () => {
+    it('shouldn\'t have appointments with 1st badge after 1st July 2024', async () => {
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
 
-      await dbAppointments.insert(new Date('2024-06-16'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-07-02'), dbPatient1.id, psy.dossierNumber);
 
       return chai.request(app)
       .get('/api/appointments')
@@ -737,7 +737,7 @@ describe('appointmentsController', () => {
       });
     });
 
-    it('should add appointments with new reimbursement rule after 15 june 2024', async () => {
+    it('should add appointments with new reimbursement rule after 1st July 2024', async () => {
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
 
@@ -751,7 +751,7 @@ describe('appointmentsController', () => {
       await dbAppointments.insert(new Date('2024-04-03'), dbPatient1.id, psy.dossierNumber);
       const oldExceeded1 = await dbAppointments.insert(new Date('2024-05-03'), dbPatient1.id, psy.dossierNumber);
       const oldExceeded2 = await dbAppointments.insert(new Date('2024-06-03'), dbPatient1.id, psy.dossierNumber);
-      const newRuleAppointment = await dbAppointments.insert(new Date('2024-06-16'), dbPatient1.id, psy.dossierNumber);
+      const newRuleAppointment = await dbAppointments.insert(new Date('2024-07-02'), dbPatient1.id, psy.dossierNumber);
 
       return chai.request(app)
       .get('/api/appointments')
@@ -772,7 +772,7 @@ describe('appointmentsController', () => {
       });
     });
 
-    it('should add 12 appointments instead of 8 with new reimbursement rule after 15 june 2024', async () => {
+    it('should add 12 appointments instead of 8 with new reimbursement rule after 1st July 2024', async () => {
       const patient1 = create.getOnePatient(0, { psychologistId: psy.dossierNumber });
       const dbPatient1 = await insertPatientInfoInDb(patient1, psy);
 
@@ -786,9 +786,9 @@ describe('appointmentsController', () => {
       await dbAppointments.insert(new Date('2024-04-03'), dbPatient1.id, psy.dossierNumber);
       const oldExceeded1 = await dbAppointments.insert(new Date('2024-05-03'), dbPatient1.id, psy.dossierNumber);
       const oldExceeded2 = await dbAppointments.insert(new Date('2024-06-03'), dbPatient1.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2024-06-15'), dbPatient1.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2024-06-20'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-07-01'), dbPatient1.id, psy.dossierNumber);
       await dbAppointments.insert(new Date('2024-07-16'), dbPatient1.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-07-19'), dbPatient1.id, psy.dossierNumber);
       const maxAppointment = await dbAppointments.insert(new Date('2024-07-20'), dbPatient1.id, psy.dossierNumber);
 
       return chai.request(app)

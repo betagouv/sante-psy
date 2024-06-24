@@ -150,9 +150,9 @@ describe('patientsController', () => {
       await dbAppointments.insert(new Date('2024-05-01'), myPatient.id, psy.dossierNumber);
 
       // New rule appointments
-      await dbAppointments.insert(new Date('2024-06-15'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2024-06-20'), myPatient.id, psy.dossierNumber);
       await dbAppointments.insert(new Date('2024-07-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-07-05'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date('2024-07-15'), myPatient.id, psy.dossierNumber);
       await dbAppointments.insert(new Date('2024-07-20'), myPatient.id, psy.dossierNumber);
 
       return chai.request(app)
