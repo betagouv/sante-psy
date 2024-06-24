@@ -73,7 +73,6 @@ const tutorials = [
   { page: 'nouvelle-seance', steps: 4 },
   { page: 'mes-etudiants', steps: 3 },
   { page: 'nouvel-etudiant', steps: 3 },
-  { page: 'mes-remboursements', steps: 7 },
   { page: 'mon-profil', steps: 4 },
 ];
 describe('Other tutorials', () => {
@@ -94,4 +93,26 @@ describe('Other tutorials', () => {
 
     checkAllSteps(tutorial.steps);
   }));
+
+  it('should display billing tutorial when appointments', () => {
+    const now = new Date(2024, 1, 24).getTime();
+    cy.clock(now);
+    cy.visit('/psychologue/mes-remboursements');
+    cy.wait('@connecteduser');
+    cy.get('[data-test-id="launch-tutorial"]')
+      .click();
+
+    checkAllSteps(7);
+  });
+
+  it('should display billing tutorial when no appointments', () => {
+    const now = new Date(2024, 5, 24).getTime();
+    cy.clock(now);
+    cy.visit('/psychologue/mes-remboursements');
+    cy.wait('@connecteduser');
+    cy.get('[data-test-id="launch-tutorial"]')
+      .click();
+
+    checkAllSteps(6);
+  });
 });
