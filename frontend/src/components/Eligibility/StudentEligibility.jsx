@@ -50,7 +50,7 @@ const StudentEligibility = () => {
     if (__MATOMO__) {
       _paq.push(['trackEvent', 'Student', 'nextStepEligibility']);
     }
-    navigate('/#anchor-prescription-letter');
+    navigate('/#anchor-psy-list');
   };
 
   const onChange = ine => {

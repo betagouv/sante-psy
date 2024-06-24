@@ -4,9 +4,8 @@ module.exports = () => [
   {
     question: 'Je suis étudiant et j’ai besoin d’une aide psychologique. Que dois-je faire\u00A0?',
     answer:
-      'Vous devez consulter le service de santé de votre établissement ou un médecin généraliste, \
-    en étant muni de votre carte d’étudiant ou de tout document équivalent, \
-    qui vous orienteront en cas de besoin vers un psychologue partenaire du dispositif.',
+      "Après vous être assuré de votre éligibilité, \
+    vous pouvez vous rendre sur l'annuaire des psychologues partenaires du dispositif et prendre rendez-vous directement avec un psychologue.",
   },
   {
     question: "Quels sont les critères d'éligibilité pour bénéficier du dispositif Santé Psy Étudiant\u00A0?",
@@ -19,25 +18,16 @@ module.exports = () => [
     frequent: true,
   },
   {
-    question: 'Je ne connais pas mon Service de Santé Étudiante. Que faire\u00A0?',
-    answer:
-      "Vous n'êtes pas obligé de passer par un SSE\u00A0: \
-    vous pouvez consulter votre médecin traitant ou un médecin généraliste, \
-    qui vous orientera vers un psychologue partenaire du dispositif. \
-    Vous pouvez aussi consulter le site de votre université ou école, ou téléphoner, \
-    pour trouver si vous dépendez d'un SSE.",
-  },
-  {
     question: 'J’ai déjà un suivi. Puis-je cependant bénéficier du dispositif\u00A0?',
     answer:
       'Les étudiants qui ont déjà un suivi sont éligibles au dispositif Santé Psy Étudiant. \
     Ils devront cependant pour cela aller consulter un psychologue partenaire du dispositif.',
   },
   {
-    question: "Je n'ai pas de numéro INE mais j'ai bien une carte étudiante et l'ordonnance du médecin\u00A0?",
+    question: "Je n'ai pas de numéro INE mais j'ai bien une carte étudiante",
     answer:
-      "Le numéro INE est facultatif. Si vous êtes étudiant dans le supérieur vous pouvez donc avoir accès \
-    au dispositif en présentant votre lettre d'orientation.",
+      'Le numéro INE est fortement recommandé. Si vous êtes étudiant dans le supérieur vous pouvez avoir accès \
+    au dispositif en présentant votre carte d’étudiant ou tout document équivalent attestant de votre statut étudiant.',
   },
   {
     question: 'Je ne suis pas de nationalité française, mais étudiant en France. Suis-je éligible au dispositif\u00A0?',

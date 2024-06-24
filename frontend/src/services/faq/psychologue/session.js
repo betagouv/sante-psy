@@ -11,8 +11,8 @@ module.exports = () => [
   {
     question: "Mon étudiant n'a pas de numéro INE, que faire\u00A0?",
     answer:
-      "Le numéro INE est facultatif. \
-    L'étudiant doit seulement vous présenter sa carte d'étudiant et sa lettre d'orientation de son médecin généraliste.",
+      "Le numéro INE est fortement recommandé. \
+    L'étudiant doit seulement vous présenter sa carte d’étudiant ou tout document équivalent attestant de son statut étudiant.",
   },
   {
     question: 'Quelles informations dois-je vérifier auprès du étudiant lors de la séance\u00A0?',
@@ -28,9 +28,9 @@ module.exports = () => [
       "Les étudiants doivent présenter un justificatif d'inscription en études supérieures\u00A0: carte étudiante, certificat de scolarité ou autre document.",
   },
   {
-    question: "La lettre d'orientation est-elle obligatoire\u00A0? Qu'en est-il en cas de renouvellement\u00A0?",
+    question: "La lettre d'orientation est-elle obligatoire\u00A0? ",
     answer:
-      "Oui, la lettre d'orientation est obligatoire pour démarrer les séances. Après avoir effectué son cycle de 12 séances, l'étudiant doit toutefois solliciter une nouvelle lettre d'orientation auprès d'un médecin généraliste (et présenter son justificatif étudiant valable sur l'année universitaire en cours).",
+      "Non, la lettre d'orientation n'est plus obligatoire à compter du 1er juillet 2024 pour démarrer les séances.",
   },
   {
     question: "Que faire lorsqu'un étudiant annule sa consultation\u00A0?",
@@ -50,7 +50,7 @@ module.exports = () => [
   {
     question: 'Le renouvellement de séances est-il possible\u00A0? Sous quelles conditions\u00A0?',
     answer:
-      "Le renouvellement d'un cycle de 12 séances est possible. Un nouveau cycle peut être entamé sur l’année universitaire suivante sous réserve du passage chez un médecin généraliste afin d’établir une nouvelle lettre d’orientation et la présentation d’un justificatif étudiant valable sur l'année universitaire en cours. Pour le psychologue, la procédure de déclaration en ligne reste inchangée.",
+      "Le renouvellement d'un cycle de 12 séances est possible. Un nouveau cycle peut être entamé sur l’année universitaire suivante sous réserve de la présentation d’un justificatif étudiant valable sur l'année universitaire en cours. Pour le psychologue, la procédure de déclaration en ligne reste inchangée.",
     frequent: true,
   },
 ];
