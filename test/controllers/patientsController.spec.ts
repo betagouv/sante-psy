@@ -193,7 +193,6 @@ describe('patientsController', () => {
           INE: '12345678901',
           institutionName: 'test',
           isStudentStatusVerified: undefined,
-          doctorName,
           dateOfBirth,
         })
         .then(async (res) => {
@@ -428,7 +427,6 @@ describe('patientsController', () => {
         INE: '',
         institutionName: 'stuff<script>evil</script>',
         isStudentStatusVerified: undefined,
-        doctorName,
         dateOfBirth,
       };
 
@@ -449,7 +447,6 @@ describe('patientsController', () => {
             'Nom&lt;/', // sanitized
             sinon.match.string,
             'stuff', // sanitized
-            false,
             false,
             sinon.match.string,
           ];
@@ -572,7 +569,6 @@ describe('patientsController', () => {
           INE: updatedINE,
           institutionName: updatedInstitution,
           isStudentStatusVerified: 'isStudentStatusVerified',
-          doctorName,
           dateOfBirth: updatedDateOfBirth,
         })
         .then(async (res) => {
