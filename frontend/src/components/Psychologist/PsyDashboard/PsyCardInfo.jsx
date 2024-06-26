@@ -26,8 +26,7 @@ const PsyCardInfo = ({ psychologist }) => {
           title="profil public"
           icon="fr-fi-eye-line"
           secondary
-          onClick={() => navigate(`/trouver-un-psychologue/${user.dossierNumber}`)}
-            >
+          onClick={() => window.open(`/trouver-un-psychologue/${user.dossierNumber}`, '_blank', 'noopener,noreferrer')}>
           Voir profil public
         </Button>
         )}
@@ -40,16 +39,16 @@ const PsyCardInfo = ({ psychologist }) => {
         <p>
           {psychologist.address}
         </p>
-        <p>
-          {psychologist.email}
+        <span className={styles.emailPhoneContainer}>
+          <p>{psychologist.email}</p>
           {' '}
-          {psychologist.phone}
-        </p>
+          <p>{psychologist.phone}</p>
+        </span>
         <span className="">
           <Button
             tertiary
             onClick={() => {
-              window.open(string.prefixUrl(psychologist.website), '_blank');
+              window.open(string.prefixUrl(psychologist.website), '_blank', 'noopener,noreferrer');
             }}
             icon="ri-link"
             >
@@ -62,6 +61,7 @@ const PsyCardInfo = ({ psychologist }) => {
               window.open(
                 string.prefixUrl(psychologist.appointmentLink),
                 '_blank',
+                'noopener,noreferrer',
               );
             }}
             >

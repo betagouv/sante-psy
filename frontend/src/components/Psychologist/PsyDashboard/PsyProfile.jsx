@@ -153,7 +153,7 @@ const PsyProfile = () => {
           secondary
           className={styles.psyDashboardConvention}
           onClick={() => navigate('/psychologue/ma-convention')}
-          icon={!user.convention.isConventionSigned ? 'ri-edit-line' : ''}
+          icon="ri-edit-line"
           iconPosition="right"
         >
           {user.convention && user.convention.isConventionSigned ? (

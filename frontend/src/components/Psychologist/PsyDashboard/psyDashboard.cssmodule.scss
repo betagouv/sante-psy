@@ -35,6 +35,11 @@
   justify-content: end;
 }
 
+.emailPhoneContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .psyDashboardConvention, .psyDashboardAvailability, .psyDashboardConvention:disabled, .psyDashboardConvention[disabled] {
   width: 400px;
   margin-right: 16px;
