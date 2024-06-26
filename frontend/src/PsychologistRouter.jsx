@@ -44,11 +44,9 @@ const PsychologistRouter = () => {
           currentBreadCrumb: 'Modifier mon profil',
           title: (
             <>
-              Mes
+              Mes informations
               {' '}
-              <b>informations</b>
-              {' '}
-              Annuaire
+              <b>Annuaire</b>
             </>
           ),
         };
@@ -63,7 +61,6 @@ const PsychologistRouter = () => {
               <b>convention</b>
             </>
           ),
-          description: 'Vous avez la possibilité de gérer le statut de votre convention.',
         };
       case 'ma-disponibilite':
         return {
@@ -71,14 +68,11 @@ const PsychologistRouter = () => {
           currentBreadCrumb: 'Ma disponibilité',
           title: (
             <>
-              Mon
+              Mon statut
               {' '}
-              <b>statut</b>
-              {' '}
-              Annuaire
+              <b>Annuaire</b>
             </>
           ),
-          description: "Vous avez la possibilité de gérer votre visibilité dans l'Annuaire pour les étudiants.",
         };
       case 'nouvelle-seance':
         return {
@@ -89,7 +83,6 @@ const PsychologistRouter = () => {
               <b>séance</b>
             </>
           ),
-          description: 'Vous avez réalisé une séance avec un étudiant ou une étudiante. Renseignez-la sur cette page.',
           tutorial: 'new-appointment',
         };
       case 'mes-etudiants':
@@ -101,7 +94,6 @@ const PsychologistRouter = () => {
               <b>étudiants</b>
             </>
           ),
-          description: 'Veuillez enregistrer vos nouveaux étudiants afin de déclarer leurs séances pour procéder à vos remboursements.',
           tutorial: 'students',
         };
       case 'nouvel-etudiant':
@@ -113,20 +105,18 @@ const PsychologistRouter = () => {
               <b>étudiant</b>
             </>
           ),
-          description: 'Déclarez un étudiant comme étant patient du dispositif Santé Psy Étudiant. Vous pourrez ensuite déclarer les séances réalisées avec cet étudiant.',
           tutorial: 'new-student',
         };
       case 'modifier-etudiant':
         return {
           title: (
             <>
-              Compléter
+              {user.firstNames}
               {' '}
-              <b>les informations</b>
-              {' '}
-              de l&lsquo;étudiant
+              {user.lastName}
             </>
           ),
+          description: "Suivi de l'étudiant",
           tutorial: 'new-student',
         };
       case 'mes-remboursements':
@@ -138,7 +128,6 @@ const PsychologistRouter = () => {
               <b>facturations</b>
             </>
           ),
-          description: 'Vous pouvez éditer et générer vos factures sur cet espace avant de les envoyer au Service de Santé Étudiante afin de vous faire rembourser.',
           tutorial: 'billing',
         };
       case 'tableau-de-bord':
@@ -150,10 +139,10 @@ const PsychologistRouter = () => {
               <b>bord</b>
             </>
           ),
-          description: 'En tant que psychologue de Santé Psy Étudiant, vous avez la possibilité de gérer les informations au sein de notre annuaire.',
+          withoutHeader: true,
           tutorial: 'dashboard',
         };
-      default:
+      case 'mes-seances':
         return {
           title: (
             <>
@@ -162,15 +151,17 @@ const PsychologistRouter = () => {
               <b>séances</b>
             </>
           ),
-          description: 'La déclaration des séances en ligne est nécessaire à votre remboursement.',
           tutorial: 'appointments',
         };
+      default:
+        return { withoutHeader: true };
     }
   };
 
   return (
     <Page
       {...getPageProps()}
+      psyPage
       withContact
     >
       <Announcement />

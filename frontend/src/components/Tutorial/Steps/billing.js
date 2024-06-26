@@ -19,7 +19,7 @@ const steps = [
   {
     placement: 'center',
     target: 'body',
-    title: 'Gérer mes facturations',
+    title: 'Facturation',
     content: 'Cette page vous permet de gérér vos informations de facturation et de générer vos factures pour les Services de Santé Étudiante.',
   },
   {
