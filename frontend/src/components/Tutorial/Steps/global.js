@@ -10,8 +10,38 @@ const steps = [
   {
     placement: 'center',
     target: 'body',
+    title: 'Tableau de bord',
+    content: 'Cette page vous permet de gérer votre profil, votre statut de convention et votre disponibilité.',
+  },
+  {
+    placement: 'top-start',
+    target: '#show-profile-form-button',
+    content: "Pour être visible sur l'annuaire (et être correctement référencé) : pensez à compléter votre profil. La description permet aux étudiants de connaître vos spécialités, le cas échéant.",
+  },
+  {
+    placement: 'top-start',
+    target: '#show-public-profile-button',
+    shouldSkip: () => agent.Psychologist.getProfile().then(psychologist => !psychologist.active),
+    content: 'Pour voir ce à quoi les étudiants ont accès, vous pouvez cliquer sur ce bouton.',
+  },
+  {
+    placement: 'top-start',
+    target: '#show-convention-form',
+    shouldSkip: user => Promise.resolve(!user.convention || user.convention.isConventionSigned),
+    content: "Ce bouton nous permet de suivre l'état de votre convention. Il est important de nous signaler quand celle-ci est signée.",
+  },
+  {
+    placement: 'top-start',
+    target: '#show-availability-form',
+    content: "Enfin, si vous ne souhaitez plus être visible sur l'annuaire, veuillez cliquer ici.",
+  },
+  {
+    placement: 'bottom-start',
+    target: '#appointments-header',
     title: 'Déclarer une séance',
     content: 'Cette page vous permet de déclarer et de visualiser vos séances.',
+    onNext: navigate => { navigate('/psychologue/mes-seances'); },
+    onPrevious: navigate => { navigate('/psychologue/tableau-de-bord'); },
   },
   {
     placement: 'top-start',
@@ -39,41 +69,6 @@ const steps = [
     placement: 'bottom-start',
     target: '#billing-header',
     content: "Une fois vos séances déclarées, vous pourrez générer vos factures depuis ce menu. Pensez à vérifier l'exactitude des informations déclarées. Les erreurs de déclaration peuvent entraîner des retards de paiement.",
-  },
-  {
-    placement: 'bottom-start',
-    target: '#informations-header',
-    content: "Ce menu permet de gérer votre visibilité sur l'annuaire pour les étudiants.",
-    onNext: navigate => { navigate('/psychologue/mon-profil'); },
-    onPrevious: navigate => { navigate('/psychologue/mes-seances'); },
-  },
-  {
-    placement: 'top-start',
-    target: '#convention-form',
-    shouldSkip: user => Promise.resolve(user.convention),
-    content: "Il est important de nous signaler quand votre convention est signée. N'oubliez pas de mettre ce champ à jour.",
-  },
-  {
-    placement: 'top-start',
-    target: '#show-convention-form',
-    shouldSkip: user => Promise.resolve(!user.convention || user.convention.isConventionSigned),
-    content: "Ce bouton nous permet de suivre l'état de votre convention. Il est important de nous signaler quand celle-ci est signée.",
-  },
-  {
-    placement: 'top-start',
-    target: '#show-profile-form-button',
-    content: "Pour être visible sur l'annuaire (et être correctement référencé) : pensez à compléter votre profil. La description permet aux étudiants de connaître vos spécialités, le cas échéant.",
-  },
-  {
-    placement: 'top-start',
-    target: '#show-public-profile-button',
-    shouldSkip: () => agent.Psychologist.getProfile().then(psychologist => !psychologist.active),
-    content: 'Pour voir ce à quoi les étudiants ont accès, vous pouvez cliquer sur ce bouton.',
-  },
-  {
-    placement: 'top-start',
-    target: '#hide-profil-button',
-    content: "Enfin, si vous ne souhaitez plus être visible sur l'annuaire, veuillez cliquer ici.",
   },
   {
     placement: 'top-start',

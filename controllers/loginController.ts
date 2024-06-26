@@ -76,7 +76,9 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
     const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
 
     if (psy) {
-      const inactiveReason = psy.active ? undefined : (await dbSuspensions.getByPsychologist(psy.dossierNumber)).reason;
+      const { reason: inactiveReason, until: inactiveUntil } = psy.active
+        ? { reason: undefined, until: undefined }
+        : await dbSuspensions.getByPsychologist(psy.dossierNumber);
       const {
         dossierNumber,
         firstNames,
@@ -106,6 +108,7 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
         hasSeenTutorial,
         createdAt,
         inactiveReason,
+        inactiveUntil,
       });
 
       return;

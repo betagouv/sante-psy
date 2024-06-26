@@ -17,8 +17,8 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
   useEffect(() => {
     if (user && !user.hasSeenTutorial && !tutoStatus.run) {
       setTutoStatus({ run: true, stepIndex: 0 });
-      if (pathname !== '/psychologue/mes-seances') {
-        navigate('/psychologue/mes-seances');
+      if (pathname !== '/psychologue/tableau-de-bord') {
+        navigate('/psychologue/tableau-de-bord');
       }
     }
   }, [user]);

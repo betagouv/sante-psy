@@ -55,7 +55,7 @@ describe('Appointments', () => {
         .last()
         .should(
           'have.text',
-          'Veuillez indiquer l‘état de votre conventionnement sur la page Mes informations',
+          'Veuillez indiquer l‘état de votre conventionnement sur la page Ma convention',
         );
     });
   });
@@ -83,7 +83,7 @@ describe('Appointments', () => {
         cy.reload();
         cy.get('[data-test-id="notification-warning"] p').should(
           'have.text',
-          "Votre profil n‘est plus visible dans l‘annuaire. En cette période d'examens, les demandes d'étudiants sont en constante augmentation, nous sollicitons donc votre participation. Pour que les étudiants puissent vous contacter, rendez vous sur la page Mes informations.",
+          "Votre profil n‘est plus visible dans l‘annuaire. En cette période d'examens, les demandes d'étudiants sont en constante augmentation, nous sollicitons donc votre participation. Pour que les étudiants puissent vous contacter, rendez vous sur la page Ma disponibilité.",
         );
       });
     });

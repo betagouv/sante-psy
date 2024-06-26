@@ -8,16 +8,19 @@ import Appointments from 'components/Psychologist/Appointments/Appointments';
 import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
 import Patients from 'components/Psychologist/Patients/Patients';
 import AddEditPatient from 'components/Psychologist/Patients/AddEditPatient';
-import PsyProfile from 'components/Psychologist/Profile/PsyProfile';
+import PsyProfile from 'components/Psychologist/PsyDashboard/PsyProfile';
 import Page from 'components/Page/Page';
 import Notification from 'components/Notification/Notification';
 import ConventionModal from 'components/Psychologist/Appointments/ConventionModal';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import Billing from 'components/Psychologist/Reimbursement/Billing';
+import ConventionForm from 'components/Psychologist/PsyDashboard/ConventionForm';
+import SuspendProfile from 'components/Psychologist/PsyDashboard/SuspendProfile';
+import EditProfile from 'components/Psychologist/PsyDashboard/EditProfile';
 
 import { shouldCheckConventionAgain } from 'services/conventionVerification';
-import { getInactiveMessage } from './utils/inactive';
 import { useStore } from './stores';
+import { getInactiveMessage } from './utils/inactive';
 
 import 'react-month-picker/css/month-picker.css';
 import './custom-month-picker.css';
@@ -35,6 +38,42 @@ const PsychologistRouter = () => {
   const getPageProps = () => {
     const page = pathname.split('/')[2];
     switch (page) {
+      case 'modifier-profil':
+        return {
+          breadCrumbs: [{ href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' }],
+          currentBreadCrumb: 'Modifier mon profil',
+          title: (
+            <>
+              Mes informations
+              {' '}
+              <b>Annuaire</b>
+            </>
+          ),
+        };
+      case 'ma-convention':
+        return {
+          breadCrumbs: [{ href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' }],
+          currentBreadCrumb: 'Ma convention',
+          title: (
+            <>
+              Ma
+              {' '}
+              <b>convention</b>
+            </>
+          ),
+        };
+      case 'ma-disponibilite':
+        return {
+          breadCrumbs: [{ href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' }],
+          currentBreadCrumb: 'Ma disponibilité',
+          title: (
+            <>
+              Mon statut
+              {' '}
+              <b>Annuaire</b>
+            </>
+          ),
+        };
       case 'nouvelle-seance':
         return {
           title: (
@@ -44,7 +83,6 @@ const PsychologistRouter = () => {
               <b>séance</b>
             </>
           ),
-          description: 'Vous avez réalisé une séance avec un étudiant ou une étudiante. Renseignez-la sur cette page.',
           tutorial: 'new-appointment',
         };
       case 'mes-etudiants':
@@ -56,7 +94,6 @@ const PsychologistRouter = () => {
               <b>étudiants</b>
             </>
           ),
-          description: 'Veuillez enregistrer vos nouveaux étudiants afin de déclarer leurs séances pour procéder à vos remboursements.',
           tutorial: 'students',
         };
       case 'nouvel-etudiant':
@@ -68,20 +105,18 @@ const PsychologistRouter = () => {
               <b>étudiant</b>
             </>
           ),
-          description: 'Déclarez un étudiant comme étant patient du dispositif Santé Psy Étudiant. Vous pourrez ensuite déclarer les séances réalisées avec cet étudiant.',
           tutorial: 'new-student',
         };
       case 'modifier-etudiant':
         return {
           title: (
             <>
-              Compléter
+              {user.firstNames}
               {' '}
-              <b>les informations</b>
-              {' '}
-              de l&lsquo;étudiant
+              {user.lastName}
             </>
           ),
+          description: "Suivi de l'étudiant",
           tutorial: 'new-student',
         };
       case 'mes-remboursements':
@@ -93,22 +128,21 @@ const PsychologistRouter = () => {
               <b>facturations</b>
             </>
           ),
-          description: 'Vous pouvez éditer et générer vos factures sur cet espace avant de les envoyer au Service de Santé Étudiante afin de vous faire rembourser.',
           tutorial: 'billing',
         };
-      case 'mon-profil':
+      case 'tableau-de-bord':
         return {
           title: (
             <>
-              Mes
+              Tableau de
               {' '}
-              <b>informations</b>
+              <b>bord</b>
             </>
           ),
-          description: 'En tant que psychologue de Santé Psy Étudiant, vous avez la possibilité de gérer les informations au sein de notre annuaire.',
-          tutorial: 'profile',
+          withoutHeader: true,
+          tutorial: 'dashboard',
         };
-      default:
+      case 'mes-seances':
         return {
           title: (
             <>
@@ -117,15 +151,17 @@ const PsychologistRouter = () => {
               <b>séances</b>
             </>
           ),
-          description: 'La déclaration des séances en ligne est nécessaire à votre remboursement.',
           tutorial: 'appointments',
         };
+      default:
+        return { withoutHeader: true };
     }
   };
 
   return (
     <Page
       {...getPageProps()}
+      psyPage
       withContact
     >
       <Announcement />
@@ -134,7 +170,7 @@ const PsychologistRouter = () => {
       <Notification type="info">
         Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
         {' '}
-        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
+        <HashLink to="/psychologue/ma-convention">Ma convention</HashLink>
       </Notification>
       )}
       {user && !user.active && (
@@ -143,12 +179,14 @@ const PsychologistRouter = () => {
         {' '}
         {getInactiveMessage(user)}
         {' '}
-        <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
+        <HashLink to="/psychologue/ma-disponibilite">Ma disponibilité</HashLink>
         .
       </Notification>
       )}
       <GlobalNotification className="fr-my-2w" />
       <Routes>
+        <Route exact path="/tableau-de-bord" element={<PsyProfile />} />
+        <Route exact path="/modifier-profil" element={<EditProfile />} />
         <Route exact path="/mes-seances" element={<Appointments />} />
         <Route exact path="/nouvelle-seance" element={<NewAppointment />} />
         <Route exact path="/nouvelle-seance/:patientId" element={<NewAppointment />} />
@@ -156,8 +194,9 @@ const PsychologistRouter = () => {
         <Route exact path="/nouvel-etudiant" element={<AddEditPatient />} />
         <Route exact path="/modifier-etudiant/:patientId" element={<AddEditPatient />} />
         <Route exact path="/mes-remboursements" element={<Billing />} />
-        <Route path="/mon-profil" element={<PsyProfile />} />
-        <Route path="/*" element={<Navigate to="/psychologue/mes-seances" />} />
+        <Route exact path="/ma-convention" element={<ConventionForm checkDefaultValue />} />
+        <Route exact path="/ma-disponibilite" element={<SuspendProfile />} />
+        <Route path="/*" element={<Navigate to="/psychologue/tableau-de-bord" />} />
       </Routes>
     </Page>
   );

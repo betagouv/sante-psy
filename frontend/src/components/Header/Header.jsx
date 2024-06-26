@@ -23,19 +23,19 @@ const defaultItems = [
 ];
 
 const connectedItems = [
-  { title: 'Déclarer mes séances', link: '/psychologue/mes-seances' },
-  { title: 'Gérer mes étudiants', link: '/psychologue/mes-etudiants' },
+  { title: 'Tableau de bord', link: '/psychologue/tableau-de-bord', id: 'dashboard-header' },
+  { title: 'Déclarer mes séances', link: '/psychologue/mes-seances', id: 'appointments-header' },
+  { title: 'Suivi étudiants', link: '/psychologue/mes-etudiants' },
   {
 
-    title: 'Gérer mes facturations',
+    title: 'Facturation',
     link: '/psychologue/mes-remboursements',
     id: 'billing-header',
   },
   {
 
-    title: 'Mes informations',
-    link: '/psychologue/mon-profil',
-    id: 'informations-header',
+    title: 'Contact',
+    link: '/contact',
   },
 ];
 
@@ -62,7 +62,7 @@ const Header = () => {
             <ToolItem asLink={<Link data-test-id="back-home-button" to="/" />}>Revenir à l&lsquo;accueil</ToolItem>
             )}
             {user && !psychologistPage && (
-            <ToolItem asLink={<Link data-test-id="my-space-button" to="/psychologue/mes-seances" />}>
+            <ToolItem asLink={<Link data-test-id="my-space-button" to="/psychologue/tableau-de-bord" />}>
               Accéder à mon espace
             </ToolItem>
             )}

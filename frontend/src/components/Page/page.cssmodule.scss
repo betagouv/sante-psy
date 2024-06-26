@@ -15,11 +15,6 @@
   }
 }
 
-.headerTop {
-  display: flex;
-  justify-content: space-between;
-}
-
 .container {
   background-color: white;
   max-width: 1200px;
@@ -67,13 +62,74 @@
 
 .tutorial {
   display: none;
-  color: white;
+  color: $primary-color;
   cursor: pointer;
+}
+
+.headerIconOnly {
+  display: none;
+  cursor: pointer;
+  color: $primary-color;
+}
+
+// if it's a psy space's page
+.psyHeader {
+  .background {
+    background-color: white;
+  }
+
+  .header {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 16px 32px;
+    margin: auto;
+    max-width: 1200px;
+    margin-bottom: 0px;
+    background-color: white;
+    align-items: center;
+    justify-content: space-between;
+    >* {
+      margin: 0%;
+      padding: 0%;
+    }
+  }
+
+  .container {
+    padding: 16px 32px;
+    box-shadow: none;
+  }
+
+
+  .breadCrumbs {
+    width: 100%;
+    color: $primary-color;
+    .currentBreadCrumb a {
+      color: $secondary-text-color !important;
+    }
+  }
+
+  .title {
+    color: $secondary-text-color;
+    font-weight: 400;
+    margin: 12px 0px;
+    b {
+      color: $primary-color;
+      font-weight: 500;
+    }
+  }
 }
 
 @media (min-width: 992px) {
   .tutorial {
     display: block;
+  }
+
+  .headerIconOnly {
+    display: block;
+    position: absolute;
+    left: 76%;
+    top: 50%;
+    z-index: 1;
   }
 }
 

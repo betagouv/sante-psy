@@ -101,7 +101,7 @@ const PublicPsychologistProfile = () => {
         <div className={styles.psyInfo}>
           <div className={styles.column}>
             <h3 className={styles.title} data-test-id="psy-info">Présentation</h3>
-            <div>
+            <div className={styles.descriptionInput}>
               {psychologist.description}
             </div>
             {psychologist.teleconsultation && (

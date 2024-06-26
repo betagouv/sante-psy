@@ -19,13 +19,13 @@ describe('Redirection', () => {
     it('should redirect to mes seances page if unknown page but logged', () => {
       cy.visit('/psychologue/unknown-pizza');
       cy.wait('@config');
-      cy.location('pathname').should('eq', '/psychologue/mes-seances');
+      cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
     });
 
     it('should redirect to mes seances page if unknown page without /psychologue/ but logged', () => {
       cy.visit('/unknown-pizza');
       cy.wait('@config');
-      cy.location('pathname').should('eq', '/psychologue/mes-seances');
+      cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
     });
   });
 
