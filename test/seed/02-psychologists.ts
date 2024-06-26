@@ -19,6 +19,7 @@ export const mails = [
   'samy.tolba@beta.gouv.fr',
   'anais.altun@beta.gouv.fr',
   'donia.benharara@beta.gouv.fr',
+  'lorraine.tosi@beta.gouv.fr',
 ];
 
 export const seed = async (knex: Knex): Promise<void> => {
