@@ -109,4 +109,5 @@ export {
   formatMonth,
   shortFrenchMonthNames,
   utcDate,
+  formatStringToDDMMYYYY,
 };
