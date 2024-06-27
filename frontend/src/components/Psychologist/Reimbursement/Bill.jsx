@@ -7,6 +7,7 @@ import { formatFrenchDate, formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 import billingDataService from 'services/billingData';
 import { useParams } from 'react-router-dom';
+import { useStore } from 'stores/';
 import BillingTable from './BillingTable';
 
 import styles from './bill.cssmodule.scss';
@@ -28,6 +29,7 @@ const Bill = () => {
     billingAddress: undefined,
   });
 
+  const { commonStore: { setNotification } } = useStore();
   useAppointmentsByDate(setValuesByDate, month);
 
   useEffect(() => {
@@ -49,8 +51,8 @@ const Bill = () => {
             });
           }
         }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+      } catch (e) {
+        setNotification('Une erreur est survenue', false, false);
       }
     };
 

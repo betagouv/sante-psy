@@ -68,7 +68,7 @@ const Billing = () => {
               Veuillez attendre la signature de votre convention avant d&lsquo;envoyer votre facture. Renseignez le
               statut de votre convention dans la page
               {' '}
-              <HashLink to="/psychologue/mon-profil">Mes informations</HashLink>
+              <HashLink to="/psychologue/tableau-de-bord">Tableau de bord</HashLink>
             </Notification>
           </div>
         )}

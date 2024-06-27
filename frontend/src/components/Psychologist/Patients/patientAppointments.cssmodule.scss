@@ -1,4 +1,5 @@
 @import 'src/tooltip.scss';
+@import 'src/variables.scss';
 
 .grayedRow {
     color: #999;
@@ -11,7 +12,7 @@
 
 .noAppointmentsTitle {
     font-size: 1.2rem;
-    color:#5F5F62;
+    color: $secondary-text-color;
 }
 
 .noAppointmentsWrapper {

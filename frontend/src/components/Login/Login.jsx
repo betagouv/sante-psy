@@ -43,7 +43,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/psychologue/mes-seances');
+      navigate('/psychologue/tableau-de-bord');
     }
   }, [user, token]);
 

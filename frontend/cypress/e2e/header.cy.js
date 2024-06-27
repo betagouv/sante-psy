@@ -31,10 +31,10 @@ describe('Header Test', () => {
 
       it('should display correct nav items', () => {
         // Connected nav is not present
+        cy.get('[data-test-id="Tableau de bord"]').should('not.exist');
         cy.get('[data-test-id="Déclarer mes séances"]').should('not.exist');
-        cy.get('[data-test-id="Gérer mes étudiants"]').should('not.exist');
-        cy.get('[data-test-id="Gérer mes facturations"]').should('not.exist');
-        cy.get('[data-test-id="Mes informations"]').should('not.exist');
+        cy.get('[data-test-id="Suivi étudiants"]').should('not.exist');
+        cy.get('[data-test-id="Facturation"]').should('not.exist');
 
         // Public nav is visible and works
 
@@ -93,10 +93,10 @@ describe('Header Test', () => {
           cy.get('@close-burger-menu').should('be.visible');
 
           // Connected nav is not present
+          cy.get('[data-test-id="Tableau de bord"]').should('not.exist');
           cy.get('[data-test-id="Déclarer mes séances"]').should('not.exist');
-          cy.get('[data-test-id="Gérer mes étudiants"]').should('not.exist');
-          cy.get('[data-test-id="Gérer mes facturations"]').should('not.exist');
-          cy.get('[data-test-id="Mes informations"]').should('not.exist');
+          cy.get('[data-test-id="Suivi étudiants"]').should('not.exist');
+          cy.get('[data-test-id="Facturation"]').should('not.exist');
 
           // Public nav is visible and works
           cy.get('[data-test-id="Foire aux questions"]').should('be.visible').click();
@@ -149,7 +149,7 @@ describe('Header Test', () => {
         // We are on public space => my space button is visible and works
         cy.get('[data-test-id="back-home-button"]').should('not.exist');
         cy.get('[data-test-id="my-space-button"]').should('be.visible').click();
-        cy.location('pathname').should('eq', '/psychologue/mes-seances');
+        cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
 
         // Logout
         cy.get('[data-test-id="logout-link"]').should('be.visible').click();
@@ -163,14 +163,14 @@ describe('Header Test', () => {
         cy.get('[data-test-id="Foire aux questions"]').should('not.exist');
 
         // Connected nav is visible and works
-        cy.get('[data-test-id="Gérer mes étudiants"]').should('be.visible').click();
+        cy.get('[data-test-id="Suivi étudiants"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/psychologue/mes-etudiants');
 
-        cy.get('[data-test-id="Gérer mes facturations"]').should('be.visible').click();
+        cy.get('[data-test-id="Facturation"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/psychologue/mes-remboursements');
 
-        cy.get('[data-test-id="Mes informations"]').should('be.visible').click();
-        cy.location('pathname').should('eq', '/psychologue/mon-profil');
+        cy.get('[data-test-id="Tableau de bord"]').should('be.visible').click();
+        cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
 
         cy.get('[data-test-id="Déclarer mes séances"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/psychologue/mes-seances');
@@ -213,7 +213,7 @@ describe('Header Test', () => {
           // We are on public space => my space button is visible and works
           cy.get('[data-test-id="back-home-button"]').should('not.exist');
           cy.get('[data-test-id="my-space-button"]').should('be.visible').click();
-          cy.location('pathname').should('eq', '/psychologue/mes-seances');
+          cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
           cy.get('@close-burger-menu').should('not.be.visible');
         });
 
@@ -229,7 +229,7 @@ describe('Header Test', () => {
 
       it('should display correct nav items', () => {
         // Connected actions are not visible
-        cy.get('[data-test-id="Gérer mes étudiants"]').should('not.be.visible');
+        cy.get('[data-test-id="Suivi étudiants"]').should('not.be.visible');
 
         cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
         cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
@@ -244,20 +244,20 @@ describe('Header Test', () => {
           cy.get('[data-test-id="Foire aux questions"]').should('not.exist');
 
           // Connected nav is visible and works
-          cy.get('[data-test-id="Gérer mes étudiants"]').should('be.visible').click();
+          cy.get('[data-test-id="Suivi étudiants"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/psychologue/mes-etudiants');
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="Gérer mes facturations"]').should('be.visible').click();
+          cy.get('[data-test-id="Facturation"]').should('be.visible').click();
           cy.location('pathname').should('eq', '/psychologue/mes-remboursements');
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="Mes informations"]').should('be.visible').click();
-          cy.location('pathname').should('eq', '/psychologue/mon-profil');
+          cy.get('[data-test-id="Tableau de bord"]').should('be.visible').click();
+          cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
         });
 
         cy.get('@open-burger-menu').click();

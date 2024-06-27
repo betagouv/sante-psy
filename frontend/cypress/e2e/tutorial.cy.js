@@ -43,7 +43,7 @@ describe('Global tutorial', () => {
     checkConvention();
     resetTutorial();
 
-    cy.visit('/psychologue/mes-seances');
+    cy.visit('/psychologue/tableau-de-bord');
     cy.wait('@connecteduser');
   });
 
@@ -69,6 +69,7 @@ describe('Global tutorial', () => {
 });
 
 const tutorials = [
+  { page: 'tableau-de-bord', steps: 4 },
   { page: 'mes-seances', steps: 3 },
   { page: 'nouvelle-seance', steps: 4 },
   { page: 'mes-etudiants', steps: 3 },

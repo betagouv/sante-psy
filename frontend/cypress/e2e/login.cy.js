@@ -38,7 +38,7 @@ describe('Login', () => {
               cy.wait('@login');
               cy.wait('@connectedUser');
               cy.wait('@connectedUser');
-              cy.location('pathname').should('eq', '/psychologue/mes-seances');
+              cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
             });
         });
     });
@@ -47,7 +47,7 @@ describe('Login', () => {
       cy.visit('/psychologue/login/nop');
       cy.wait('@login');
       cy.wait('@connectedUser');
-      cy.location('pathname').should('not.eq', '/psychologue/mes-seances');
+      cy.location('pathname').should('not.eq', '/psychologue/tableau-de-bord');
       cy.get('[data-test-id="notification-error"] p')
         .should(
           'have.text',
@@ -64,11 +64,12 @@ describe('Login', () => {
               cy.wait('@login');
               cy.wait('@connectedUser');
               cy.wait('@connectedUser');
+              cy.get('[data-test-id="dashboard"]').should('be.visible');
               logout();
               cy.visit(`/psychologue/login/${response.body.token}`);
               cy.wait('@login');
               cy.wait('@connectedUser');
-              cy.location('pathname').should('not.eq', '/psychologue/mes-seances');
+              cy.location('pathname').should('not.eq', '/psychologue/tableau-de-bord');
               cy.get('[data-test-id="notification-error"] p')
                 .should(
                   'have.text',
@@ -83,7 +84,7 @@ describe('Login', () => {
     it('Should redirect to login page after expiration', () => {
       loginAsDefault(2);
       cy.visit('/psychologue/login');
-      cy.location('pathname').should('eq', '/psychologue/mes-seances');
+      cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
 
       // We explicitely wait for token to expire
       // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -97,7 +98,7 @@ describe('Login', () => {
   describe('Logout', () => {
     it('should redirect to home page after login in', () => {
       loginAsDefault();
-      cy.visit('/psychologue/mes-seances');
+      cy.visit('/psychologue/tableau-de-bord');
 
       logout();
       cy.wait('@logout');
