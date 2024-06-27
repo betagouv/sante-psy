@@ -10,13 +10,6 @@ const START_NEW_RULES = new Date('2024-07-01T00:00:00Z');
 const MAX_APPOINTMENT_OLD = 8;
 const MAX_APPOINTMENT_NEW = 12;
 
-const arePrescriptionInfosFilled = (appointment: AppointmentWithPatient | Patient): boolean => {
-  const {
-    doctorAddress, doctorName, hasPrescription,
-  } = appointment;
-  return !!doctorAddress && !!doctorName && !!hasPrescription;
-};
-
 const areStudentINEFilled = (appointment: AppointmentWithPatient | Patient): boolean => {
   const {
     INE,
@@ -46,9 +39,6 @@ const getPatientBadges = (patient: AppointmentWithPatient | Patient): string[] =
 
   if (!areStudentINEFilled(patient)) {
     badges.push(appointmentBadges.student_ine);
-  }
-  if (!arePrescriptionInfosFilled(patient)) {
-    badges.push(appointmentBadges.prescription_infos);
   }
 
   const badgesToAdd = addBadges(countedAppointments, MAX_APPOINTMENT_NEW, false);

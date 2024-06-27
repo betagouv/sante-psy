@@ -282,12 +282,8 @@ const getOnePatient = (
   INE: faker.phone.number('###########'),
   institutionName: `${getRandomInt()} university`,
   isStudentStatusVerified: true,
-  hasPrescription: true,
   doctorName: faker.name.lastName(),
-  doctorAddress: faker.address.streetAddress(),
-  doctorEmail: faker.internet.exampleEmail(),
   dateOfBirth: faker.date.past(),
-  dateOfPrescription: faker.date.past(),
   ...patient,
 });
 
