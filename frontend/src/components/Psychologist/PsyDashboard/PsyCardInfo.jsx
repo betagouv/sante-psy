@@ -31,8 +31,7 @@ const PsyCardInfo = ({ psychologist }) => {
         </Button>
         )}
         <b>
-          {'Université '}
-          {user.convention.universityName}
+          {user.convention ? `Université ${user.convention.universityName}` : "Vous n'êtes rattaché à aucune université"}
         </b>
       </div>
       <div className={styles.psyDashboardCardSecondColumn}>
