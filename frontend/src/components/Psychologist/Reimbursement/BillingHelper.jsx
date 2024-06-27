@@ -16,13 +16,16 @@ const BillingHelper = () => (
     </p>
     <p className="fr-mb-1w">
       Un doute sur le modèle de votre facture ?
-      Vous pouvez prendre exemple sur ce modèle qui contient tous les éléments requis pour votre remboursement :
+      Vous pouvez prendre exemple sur ces modèles qui contiennent tous les éléments requis pour votre remboursement.
+    </p>
+    <p>
+      Modèles pour les séances avant le 1er juillet 2024 (30€) :
     </p>
     <ButtonGroup isInlineFrom="xs" className="fr-my-2w">
       <div className="button-secondary-container">
         <a
           className="fr-btn fr-btn--secondary"
-          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.pdf`}
+          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant-30.pdf`}
           target="_blank"
           rel="noreferrer"
         >
@@ -33,7 +36,7 @@ const BillingHelper = () => (
       <div className="button-secondary-container">
         <a
           className="fr-btn fr-btn--secondary"
-          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.docx`}
+          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant-30.docx`}
           target="_blank"
           rel="noreferrer"
         >
@@ -44,7 +47,45 @@ const BillingHelper = () => (
       <div className="button-secondary-container">
         <a
           className="fr-btn fr-btn--secondary"
-          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant.odt`}
+          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant-30.odt`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span className="ri-file-download-line" aria-hidden="true" />
+          Libre Office .odt
+        </a>
+      </div>
+    </ButtonGroup>
+    <p>
+      Modèles pour les séances à partir du 1er juillet 2024 (50€) :
+    </p>
+    <ButtonGroup isInlineFrom="xs" className="fr-my-2w">
+      <div className="button-secondary-container">
+        <a
+          className="fr-btn fr-btn--secondary"
+          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant-50.pdf`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span className="ri-file-download-line" aria-hidden="true" />
+          .pdf
+        </a>
+      </div>
+      <div className="button-secondary-container">
+        <a
+          className="fr-btn fr-btn--secondary"
+          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant-50.docx`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span className="ri-file-download-line" aria-hidden="true" />
+          Microsoft Word .docx
+        </a>
+      </div>
+      <div className="button-secondary-container">
+        <a
+          className="fr-btn fr-btn--secondary"
+          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant-50.odt`}
           target="_blank"
           rel="noreferrer"
         >
