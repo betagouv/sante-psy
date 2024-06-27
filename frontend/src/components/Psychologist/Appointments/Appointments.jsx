@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
-import { Button, Table, Icon, TextInput } from '@dataesr/react-dsfr';
+import { Button, Table, Icon, TextInput, Callout, CalloutText } from '@dataesr/react-dsfr';
 
 import MonthPicker from 'components/Date/MonthPicker';
 
@@ -184,6 +184,34 @@ const Appointments = () => {
 
   return (
     <>
+      <Callout hasInfoIcon={false}>
+        <CalloutText size="md">
+          <span style={{ fontWeight: 'bold' }}>
+            Rappel des conditions de remboursement
+          </span>
+          <ul>
+            <li>
+              <b>Depuis le 1er juillet 2024, 12 séances maximum</b>
+              {' '}
+              prises en charge par année universitaire, sans lettre d&apos;orientation, remboursées 50€.
+            </li>
+            <li>
+              Année universitaire : du
+              {' '}
+              <b>1er septembre au 31 août</b>
+              {' '}
+              de l&apos;année suivante
+            </li>
+            <li>
+              Nous vous rappelons que dans le cadre du dispositif, il est strictement
+              {' '}
+              <b>interdit de demander aux étudiants une avance de frais</b>
+              {' '}
+              ou un complément.
+            </li>
+          </ul>
+        </CalloutText>
+      </Callout>
       <div className="fr-my-2w">
         <HashLink
           id="new-appointment-button"
