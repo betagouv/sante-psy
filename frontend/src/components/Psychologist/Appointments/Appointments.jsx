@@ -193,7 +193,7 @@ const Appointments = () => {
             <li>
               <b>Depuis le 1er juillet 2024, 12 séances maximum</b>
               {' '}
-              prises en charge par année universitaire, sans lettre d&apos;orientation, remboursées 50€.
+              prises en charge par année universitaire, sans lettre d&apos;orientation, au tarif de 50€.
             </li>
             <li>
               Année universitaire : du
