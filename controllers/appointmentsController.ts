@@ -86,8 +86,8 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.psychologist;
   let dateRange = null;
   let selectedPeriod = null;
+
   if (year && month) {
-    // get date range from september to selected month
     const SEPTEMBER = 9;
     const DECEMBER = 12;
 
@@ -95,11 +95,12 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
     const selectedMonth = parseInt(month.toString());
     const startYear = (selectedMonth >= SEPTEMBER && selectedMonth <= DECEMBER) ? selectedYear : selectedYear - 1;
     const startDate = dateUtils.getUTCDate(new Date(startYear, 8));
-    const endDate = dateUtils.getUTCDate(new Date(selectedYear, selectedMonth));
+    const endDate = dateUtils.getUTCDate(new Date(selectedYear, 8));
 
     dateRange = { startDate, endDate };
     selectedPeriod = { year: selectedYear, month: selectedMonth };
   }
+
   const psychologistaAppointments = await dbAppointments.getAll(
     psychologistId,
     dateRange,
@@ -114,10 +115,20 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
     null,
   );
 
-  const psychologistAppointments = appointmentsWithBadges
-  .filter((appointment) => appointment.psychologistId === psychologistId);
+  const filteredPsychologistAppointments = appointmentsWithBadges.filter((appointment) => {
+    const isPsychologistAppointment = appointment.psychologistId === psychologistId;
 
-  res.json(psychologistAppointments);
+    if (year && month) {
+      const appointmentDate = new Date(appointment.appointmentDate);
+      const appointmentYear = appointmentDate.getFullYear().toString();
+      const appointmentMonth = (appointmentDate.getMonth() + 1).toString();
+      return isPsychologistAppointment && appointmentYear === year && appointmentMonth === month;
+    }
+
+    return isPsychologistAppointment;
+  });
+
+  res.json(filteredPsychologistAppointments);
 };
 
 const getByPatientId = async (req: Request, res: Response): Promise<void> => {

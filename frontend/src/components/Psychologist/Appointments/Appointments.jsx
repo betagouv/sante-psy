@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
-import { Button, Table, Callout, CalloutText, Icon, TextInput } from '@dataesr/react-dsfr';
+import { Button, Table, Icon, TextInput, Callout, CalloutText } from '@dataesr/react-dsfr';
 
 import MonthPicker from 'components/Date/MonthPicker';
 
@@ -8,19 +8,24 @@ import agent from 'services/agent';
 import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
 import Badges from 'components/Badges/Badges';
 import { useStore } from 'stores/';
+import getBadgeInfos from 'src/utils/badges';
+import { useNavigate } from 'react-router-dom';
 import styles from './appointments.cssmodule.scss';
 
 const Appointments = () => {
+  const { commonStore: { setNotification } } = useStore();
+
   const [appointments, setAppointments] = useState([]);
   const [filteredAppointments, setfilteredAppointments] = useState([]);
   const [filteredMonthAppointments, setFilteredMonthApointments] = useState([]);
-
+  const [showTooltip, setShowTooltip] = useState(null);
   const [month, setMonth] = useState({
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1,
   });
 
-  const { commonStore: { setNotification } } = useStore();
+  const navigate = useNavigate();
+  const badges = getBadgeInfos();
 
   useEffect(() => {
     agent.Appointment.get({ month: month.month, year: month.year })
@@ -48,9 +53,18 @@ const Appointments = () => {
       || patient.firstNames.toLowerCase().includes(e.target.value.toLowerCase()));
     setfilteredAppointments(newFilteredAppointments);
   };
+
   const handleSearchClick = e => {
     e.preventDefault();
     e.stopPropagation();
+  };
+
+  const handleIconClick = id => {
+    if (showTooltip === id) {
+      setShowTooltip(null);
+    } else {
+      setShowTooltip(id);
+    }
   };
 
   const getFilteredMonthAppointments = () => {
@@ -79,14 +93,41 @@ const Appointments = () => {
     {
       name: 'date',
       label: 'Date',
-      render: ({ appointmentDate }) => formatFrenchDate(utcDate(appointmentDate)),
+      render: appointment => (
+        <div className={styles.date}>
+          <div>{formatFrenchDate(utcDate(appointment.appointmentDate))}</div>
+          {(appointment.badges.includes(badges.switch_rule_notice.key) || appointment.badges.includes(badges.inactive.key))
+            && (
+            <div
+              className={styles.clickableElement}
+              onClick={() => handleIconClick(appointment.id)}
+            >
+              <Icon
+                name="ri-information-line"
+                size="lg"
+                color="#000091"
+                iconPosition="right"
+
+              />
+              {showTooltip === appointment.id && (
+              <span className={styles.tooltip}>
+                {badges.switch_rule_notice.tooltip}
+              </span>
+              )}
+            </div>
+            )}
+        </div>
+      ),
       sortable: true,
       sort: (a, b) => sortAppointmentsByDate(a, b),
     },
     {
       name: 'badge',
       label: '',
-      render: appointment => <Badges badges={appointment.badges} univYear={appointment.univYear} />,
+      render: appointment => {
+        const isInactive = appointment.badges && appointment.badges.includes(badges.inactive.key);
+        return <Badges isInactive={isInactive} badges={appointment.badges} univYear={appointment.univYear} />;
+      },
     },
     {
       name: 'student',
@@ -101,7 +142,16 @@ const Appointments = () => {
         />
         </div>
       ),
-      render: ({ firstNames, lastName }) => `${firstNames} ${lastName}`,
+      render: ({ patientId, firstNames, lastName }) => (
+        <div data-test-id="etudiant-name" className={styles.hoverElement} onClick={() => navigate(`/psychologue/modifier-etudiant/${patientId}/#anchor-student-list`)}>
+          <span className={styles.tooltip}>Séances de l&apos;étudiant</span>
+          <div>
+            {firstNames}
+            {' '}
+            {lastName}
+          </div>
+        </div>
+      ),
     },
     {
       name: 'actions',
@@ -141,9 +191,9 @@ const Appointments = () => {
           </span>
           <ul>
             <li>
-              <b>8 séances maximum</b>
+              <b>Depuis le 1er juillet 2024, 12 séances maximum</b>
               {' '}
-              prises en charge par étudiant par année universitaire
+              prises en charge par année universitaire, sans lettre d&apos;orientation, au tarif de 50€.
             </li>
             <li>
               Année universitaire : du
@@ -184,6 +234,7 @@ const Appointments = () => {
         {filteredMonthAppointments.length > 0 ? (
           <Table
             data-test-id="appointments-table"
+            className={styles.table}
             columns={columns}
             data={filteredMonthAppointments}
             rowKey="id"

@@ -7,8 +7,11 @@
     z-index: 3;
     width: 40%;
   } 
-  
-  
+
+  .message {
+    font-weight: bold;
+    padding-bottom: 20px;
+  }
 }
 
 @media (max-width: 768px) {

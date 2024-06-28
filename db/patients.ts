@@ -1,5 +1,5 @@
 import date from '../utils/date';
-import { appointmentsTable, patientsTable } from './tables';
+import { patientsTable } from './tables';
 import db from './db';
 import { Patient } from '../types/Patient';
 
@@ -17,26 +17,6 @@ const getById = async (patientId: string, psychologistId: string): Promise<Patie
   }
 };
 
-const startCurrentUnivYear = (): string => {
-  const SEPTEMBER = 8;
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  if (currentMonth < SEPTEMBER) {
-    return `${currentYear - 1}-09-01`;
-  }
-  return `${currentYear}-09-01`;
-};
-
-const endCurrentUnivYear = (): string => {
-  const SEPTEMBER = 8;
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  if (currentMonth < SEPTEMBER) {
-    return `${currentYear}-09-01`;
-  }
-  return `${currentYear + 1}-09-01`;
-};
-
 const getAll = async (psychologistId: string): Promise<(Patient &
   { appointmentsCount: string, appointmentsYearCount: string })[]> => {
   try {
@@ -46,46 +26,7 @@ const getAll = async (psychologistId: string): Promise<(Patient &
         .where('psychologistId', psychologistId)
         .andWhere('deleted', false);
 
-    // Count the appointments taking in acount each patients sharing the same INE
-    const patientsDataPromises = patients.map(async (patient) => {
-      const appointmentsData = await db.select('id', 'appointmentDate')
-      .from(appointmentsTable)
-      .whereIn('patientId', function () {
-        this.select('id')
-          .from(patientsTable)
-          .where(function () {
-            if (patient.INE && patient.INE.trim() !== '') {
-              this.where('INE', patient.INE);
-            } else {
-              this.where('id', patient.id);
-            }
-          })
-          .andWhere('deleted', false);
-      })
-      .andWhere('deleted', false);
-
-      const appointmentsDataCurrentUnivYear = appointmentsData.filter((appointment) => {
-        const startUnivYear = date.getUTCDate(new Date(startCurrentUnivYear()));
-        const endUnivYear = date.getUTCDate(new Date(endCurrentUnivYear()));
-        const appointmentDate = date.getUTCDate(new Date(appointment.appointmentDate));
-        return appointmentDate >= startUnivYear && appointmentDate <= endUnivYear;
-      });
-
-      const appointmentsCountResult = appointmentsData
-        ? appointmentsData.length.toString() : '0';
-      const appointmentsYearCountResult = appointmentsDataCurrentUnivYear
-        ? appointmentsDataCurrentUnivYear.length.toString() : '0';
-
-      return {
-        ...patient,
-        appointmentsCount: appointmentsCountResult,
-        appointmentsYearCount: appointmentsYearCountResult,
-      };
-    });
-
-    const patientsData = await Promise.all(patientsDataPromises);
-
-    return patientsData;
+    return patients;
   } catch (err) {
     console.error('Impossible de récupérer les patients', err);
     throw new Error('Impossible de récupérer les patients');
@@ -98,13 +39,9 @@ const insert = async (
   INE?: string,
   institutionName?: string,
   isStudentStatusVerified?: boolean,
-  hasPrescription?: boolean,
   psychologistId?: string,
   doctorName?: string,
-  doctorAddress?: string,
-  doctorEmail?: string,
   dateOfBirth?: Date,
-  dateOfPrescription?: Date,
 ): Promise<Patient> => {
   try {
     const patientsArray = await db(patientsTable).insert({
@@ -113,13 +50,9 @@ const insert = async (
       INE,
       institutionName,
       isStudentStatusVerified,
-      hasPrescription,
       psychologistId,
       doctorName,
-      doctorAddress,
-      doctorEmail,
       dateOfBirth,
-      dateOfPrescription,
     }).returning('*');
     return patientsArray[0];
   } catch (err) {
@@ -135,13 +68,9 @@ const update = async (
   INE: string,
   institutionName: string,
   isStudentStatusVerified: boolean,
-  hasPrescription: boolean,
   psychologistId: string,
   doctorName: string,
-  doctorAddress: string,
-  doctorEmail: string,
   dateOfBirth: Date,
-  dateOfPrescription: Date,
 ): Promise<number> => {
   try {
     return await db(patientsTable)
@@ -153,13 +82,9 @@ const update = async (
         INE,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psychologistId,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
         updatedAt: date.now(),
       });
   } catch (err) {

@@ -20,13 +20,9 @@ async function insertPatientToDb(patientToInsert: Patient, psy: Psychologist) {
     patientToInsert.INE,
     patientToInsert.institutionName,
     patientToInsert.isStudentStatusVerified,
-    patientToInsert.hasPrescription,
     psy.dossierNumber,
     patientToInsert.doctorName,
-    patientToInsert.doctorAddress,
-    patientToInsert.doctorEmail,
     patientToInsert.dateOfBirth,
-    patientToInsert.dateOfPrescription,
   );
 }
 
@@ -95,13 +91,9 @@ describe('DB Appointments', () => {
         patientToInsert.INE,
         patientToInsert.institutionName,
         patientToInsert.isStudentStatusVerified,
-        patientToInsert.hasPrescription,
         psy.dossierNumber,
         patientToInsert.doctorName,
-        patientToInsert.doctorAddress,
-        patientToInsert.doctorEmail,
         patientToInsert.dateOfBirth,
-        patientToInsert.dateOfPrescription,
       );
 
       await dbAppointments.insert(new Date('2023-11-02'), patient.id, psy.dossierNumber);

@@ -152,7 +152,11 @@ const Billing = () => {
               </b>
               étudiants.
             </p>
-            <p>À partir du 1er janvier 2024, la première séance par cycle avec un étudiant est facturée 40€, les suivantes à 30€.</p>
+            <p>
+              Entre le premier janvier 2024 et le 1er juillet 2024, la première séance par cycle avec un étudiant est facturée 40€, les suivantes 30€.
+              <br />
+              A partir du 1er juillet 2024, toutes les séances sont comptabilisées à 50€, le nombre maximal de séances passe de 12 séances par étudiant par année universitaire (1er septembre au 31 août).
+            </p>
           </>
         ) : (
           <p className="fr-mb-2w" id="no-appointments">

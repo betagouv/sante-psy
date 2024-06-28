@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Table, Callout, CalloutText, Icon, Button, Select, TextInput, CalloutTitle } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
-import { currentUnivYear } from 'services/date';
+import { currentUnivYear } from 'services/univYears';
 import { useStore } from 'stores/';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './patients.cssmodule.scss';
@@ -14,13 +14,13 @@ import Badges from '../../Badges/Badges';
 const Patients = () => {
   const { commonStore: { setNotification } } = useStore();
   const [patients, setPatients] = useState([]);
-  const navigate = useNavigate();
   const [filterBadgeValue, setFilterBadgeValue] = useState('');
   const [filteredPatients, setfilteredPatients] = useState([]);
   const [filterOptions, setfilterOptions] = useState([]);
   const [seeAppointments, setSeeAppointments] = useState(true);
-  const table = useRef(null);
 
+  const table = useRef(null);
+  const navigate = useNavigate();
   const currentYear = currentUnivYear();
   const badgeInfo = getBadgeInfos(true, currentYear);
 
@@ -160,7 +160,7 @@ const Patients = () => {
         </div>
       ),
       render: patient => (
-        <div data-test-id="etudiant-name" className={styles.clickableElement} onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`)}>
+        <div data-test-id="etudiant-name" className={styles.hoverElement} onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`)}>
           <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
           {patient.lastName.toUpperCase()}
           {' '}
@@ -173,7 +173,7 @@ const Patients = () => {
     {
       name: 'update-etudiant-button',
       render: patient => (
-        <div className={styles.clickableElement}>
+        <div className={styles.hoverElement}>
           <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
           <Button
             data-test-id="update-etudiant-button"
@@ -204,7 +204,7 @@ const Patients = () => {
       render: patient => <Badges badges={patient.badges} univYear={currentYear} />,
     },
     {
-      name: 'appointmentsYearCount',
+      name: 'countedAppointments',
       label: `Total séances ${currentYear}`,
       sortable: true,
     },
@@ -213,7 +213,7 @@ const Patients = () => {
       name: 'appointments-list-button',
       label: 'Liste des séances',
       render: patient => (
-        <div className={styles.clickableElement}>
+        <div className={styles.hoverElement}>
           <span className={styles.tooltip}>Liste des séances</span>
           <Button
             data-test-id="seances-etudiant-button"
@@ -231,7 +231,7 @@ const Patients = () => {
       name: 'appointment-etudiant-button',
       label: 'Déclarer une séance',
       render: patient => (
-        <div className={styles.clickableElement}>
+        <div className={styles.hoverElement}>
           <span className={styles.tooltip}>Déclarer une séance</span>
           <Button
             data-test-id="appointment-etudiant-button"
@@ -247,7 +247,7 @@ const Patients = () => {
       name: 'delete-etudiant-button',
       label: "Supprimer l'étudiant",
       render: patient => (
-        <div className={styles.clickableElement}>
+        <div className={styles.hoverElement}>
           <span className={styles.tooltip}>{patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : 'Supprimer'}</span>
           <Button
             data-test-id="delete-etudiant-button"

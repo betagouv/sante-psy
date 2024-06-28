@@ -10,6 +10,7 @@ import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { getPatientWithBadges } from '../services/getBadges';
 import { Patient } from '../types/Patient';
+import getAppointmentsCount from '../services/getAppointmentsCount';
 
 const sortData = (a: Patient, b: Patient) : number => (
   `${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`);
@@ -17,7 +18,8 @@ const sortData = (a: Patient, b: Patient) : number => (
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.psychologist;
   const patients = await dbPatients.getAll(psychologistId);
-  const patientsWithBadges = getPatientWithBadges(patients);
+  const patientsWithCount = await getAppointmentsCount(patients);
+  const patientsWithBadges = getPatientWithBadges(patientsWithCount);
 
   const sortedData = patientsWithBadges.sort(sortData);
   res.json(sortedData);
@@ -62,16 +64,6 @@ const patientValidators = [
     .trim()
     .customSanitizer(DOMPurify.sanitize),
 
-  // all following prescriptions infos are optionnal so two
-  // valid option: field is empty or check if has the right format
-  oneOf(
-    [
-      check('doctorAddress').trim().isEmpty(),
-      check('doctorAddress')
-      .trim()
-      .customSanitizer(DOMPurify.sanitize),
-    ],
-  ),
   oneOf(
     [
       check('doctorName').trim().isEmpty(),
@@ -79,26 +71,6 @@ const patientValidators = [
       .trim()
       .customSanitizer(DOMPurify.sanitize),
     ],
-  ),
-  oneOf(
-    [
-      check('doctorEmail').trim().isEmpty(),
-      check('doctorEmail')
-      .trim()
-      .isEmail()
-      .customSanitizer(DOMPurify.sanitize),
-    ],
-    'Vous devez spécifier un email valide.',
-  ),
-  oneOf(
-    [
-      check('dateOfPrescription').trim().isEmpty(),
-      check('dateOfPrescription')
-          .trim().isDate({ format: date.formatFrenchDateForm })
-          .customSanitizer(DOMPurify.sanitize),
-    ],
-    `La date de prescription n'est pas valide, le format doit être JJ/MM/AAAA.
-    Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`,
   ),
 ];
 
@@ -122,12 +94,10 @@ const update = async (req: Request, res: Response): Promise<void> => {
   const patientINE = req.body.INE;
   const patientInstitutionName = req.body.institutionName;
   const {
-    doctorName, doctorAddress, doctorEmail,
+    doctorName,
   } = req.body;
-  const dateOfPrescription = date.parseForm(req.body.dateOfPrescription);
   // Force to boolean beacause checkbox value send undefined when it's not checked
   const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
-  const patientHasPrescription = Boolean(req.body.hasPrescription);
 
   const psychologistId = req.auth.psychologist;
   const updated = await dbPatients.update(
@@ -137,13 +107,9 @@ const update = async (req: Request, res: Response): Promise<void> => {
     patientINE,
     patientInstitutionName,
     patientIsStudentStatusVerified,
-    patientHasPrescription,
     psychologistId,
     doctorName,
-    doctorAddress,
-    doctorEmail,
     dateOfBirth,
-    dateOfPrescription,
   );
 
   if (updated === 0) {
@@ -152,8 +118,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
   }
 
   let infoMessage = `L'étudiant ${patientFirstNames} ${patientLastName} a bien été modifié.`;
-  if (!patientINE || !patientInstitutionName || !patientHasPrescription || !patientIsStudentStatusVerified
-      || !doctorAddress || !doctorEmail || !dateOfBirth || !dateOfPrescription) {
+  if (!patientINE || !patientInstitutionName || !patientIsStudentStatusVerified || !doctorName || !dateOfBirth) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
         + ' en cliquant le bouton "Modifier" du patient.';
   }
@@ -195,12 +160,10 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const { INE } = req.body;
   const { institutionName } = req.body;
   const {
-    doctorName, doctorAddress, doctorEmail,
+    doctorName,
   } = req.body;
-  const dateOfPrescription = date.parseForm(req.body.dateOfPrescription);
   // Force to boolean beacause checkbox value send undefined when it's not checked
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
-  const hasPrescription = Boolean(req.body.hasPrescription);
 
   const psychologistId = req.auth.psychologist;
   const addedPatient = await dbPatients.insert(
@@ -209,17 +172,12 @@ const create = async (req: Request, res: Response): Promise<void> => {
     INE,
     institutionName,
     isStudentStatusVerified,
-    hasPrescription,
     psychologistId,
     doctorName,
-    doctorAddress,
-    doctorEmail,
     dateOfBirth,
-    dateOfPrescription,
   );
   let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
-  if (!INE || !institutionName || !hasPrescription || !isStudentStatusVerified || !doctorAddress
-    || !doctorEmail || !dateOfPrescription) {
+  if (!INE || !institutionName || !doctorName || !isStudentStatusVerified) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
         + ' en cliquant le bouton "Modifier" du patient.';
   }

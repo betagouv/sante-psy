@@ -8,6 +8,8 @@ import getBadgeInfos from 'src/utils/badges';
 const FIRST_APPOINTMENT_TTC = 40;
 const NEXT_APPOINTMENT_TTC = 30;
 
+const NEW_RULES_APPOINTMENT_TTC = 50;
+
 const boldContent = content => (
   <div style={{ fontWeight: 'bold' }}>
     {content}
@@ -49,16 +51,19 @@ const BillingTable = ({ filteredDates, appointments }) => {
       render: date => {
         let nbAppointments = 0;
         let nbFirstAppointments = 0;
+        let nbNewRulesAppointments = 0;
 
         if (date === 'total') {
           nbFirstAppointments = totalAppointmentsByBadges[badges.first.key];
           nbAppointments = totalAppointmentsByBadges[badges.other.key];
+          nbNewRulesAppointments = totalAppointmentsByBadges[badges.new_rules.key];
         } else {
           nbFirstAppointments = appointments[date][badges.first.key] || 0;
           nbAppointments = appointments[date][badges.other.key] || 0;
+          nbNewRulesAppointments = appointments[date][badges.new_rules.key] || 0;
         }
 
-        const totalAmountAppointments = nbAppointments * NEXT_APPOINTMENT_TTC;
+        const totalAmountAppointments = (nbAppointments * NEXT_APPOINTMENT_TTC) + (nbNewRulesAppointments * NEW_RULES_APPOINTMENT_TTC);
         const totalAmountFirstAppointments = nbFirstAppointments * FIRST_APPOINTMENT_TTC;
         const totalAmount = `${totalAmountAppointments + totalAmountFirstAppointments}€`;
 

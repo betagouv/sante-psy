@@ -63,9 +63,8 @@ const CGU = () => {
           effectuer des recherches par nom, ville, code postal ou région.
         </p>
         <p>
-          Après consultation d’un médecin généraliste (du service de santé étudiante ou extérieur) et de
-          l’obtention d’une lettre d&lsquo;orientation, l’Utilisateur étudiant a le droit à 3 séances renouvelables 1
-          fois. Il peut prendre rendez-vous avec un des psychologues référencés en contactant le professionnel au
+          Muni de sa carte étudiant ou de son certificat de scolarité pour l&apos;année en cours, l’Utilisateur étudiant a le droit à 12 séances.
+          Il peut prendre rendez-vous avec un des psychologues référencés en contactant le professionnel au
           travers des moyens de contact renseignés sur le référentiel.
         </p>
         <Title as="h3" look="h5">4.2 Changer de psychologue</Title>

@@ -16,11 +16,7 @@ describe('DB Patients', () => {
   const anotherStudentNumber = '10987654321';
   const institutionName = 'Pouldard';
   const isStudentStatusVerified = false;
-  const hasPrescription = false;
   const doctorName = 'doctorName';
-  const doctorAddress = 'doctorAddress';
-  const doctorEmail = '';
-  const dateOfPrescription = new Date();
   const dateOfBirth = new Date('1980/01/20');
 
   async function testDataPatientsExist(lastName) {
@@ -47,13 +43,9 @@ describe('DB Patients', () => {
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
 
       const exist = await testDataPatientsExist(lastName);
@@ -69,13 +61,9 @@ describe('DB Patients', () => {
           '1'.repeat(12),
           institutionName,
           isStudentStatusVerified,
-          hasPrescription,
           psy.dossierNumber,
           doctorName,
-          doctorAddress,
-          doctorEmail,
           dateOfBirth,
-          dateOfPrescription,
         );
         const exist = await testDataPatientsExist(lastName);
         exist.should.be.equal(true);
@@ -93,13 +81,9 @@ describe('DB Patients', () => {
           '1'.repeat(51),
           institutionName,
           isStudentStatusVerified,
-          hasPrescription,
           psy.dossierNumber,
           doctorName,
-          doctorAddress,
-          doctorEmail,
           dateOfBirth,
-          dateOfPrescription,
         );
         assert.fail('insert patient should have failed');
       } catch (error) {
@@ -123,13 +107,9 @@ describe('DB Patients', () => {
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
 
       expect(insertedPatient.deleted).equal(false);
@@ -145,13 +125,9 @@ describe('DB Patients', () => {
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
 
       const newLastName = 'NewName';
@@ -165,13 +141,9 @@ describe('DB Patients', () => {
         oldPatient.INE,
         oldPatient.institutionName,
         oldPatient.isStudentStatusVerified,
-        oldPatient.hasPrescription,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
       const newPatient = await dbPatients.getById(oldPatient.id, psy.dossierNumber);
       expect(newPatient.lastName).equal(newLastName);
@@ -187,13 +159,9 @@ describe('DB Patients', () => {
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
 
       const patientBeforeDelete = await dbPatients.getById(patient.id, psy.dossierNumber);
@@ -209,77 +177,32 @@ describe('DB Patients', () => {
   });
 
   describe('getAll', () => {
-    it('should return psy patients with not deleted appointments And count related INE appointments', async () => {
+    it('should return psy patients', async () => {
       const psy = await create.insertOnePsy();
-      const anotherPsy = await create.insertOnePsy({ personalEmail: 'another@mail.fr' });
-      const patient = await dbPatients.insert(
+      await dbPatients.insert(
         firstNames,
         lastName,
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
-      const patient2 = await dbPatients.insert(
+      await dbPatients.insert(
         firstNames,
         lastName,
         anotherStudentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
-
-      const anotherPatient = await dbPatients.insert(
-        firstNames,
-        lastName,
-        studentNumber,
-        institutionName,
-        isStudentStatusVerified,
-        hasPrescription,
-        anotherPsy.dossierNumber,
-        doctorName,
-        doctorAddress,
-        doctorEmail,
-        dateOfBirth,
-        dateOfPrescription,
-      );
-
-      await Promise.all([
-        create.insertOneAppointment({ patientId: patient.id, psychologistId: psy.dossierNumber }),
-        create.insertOneAppointment({ patientId: patient.id, psychologistId: psy.dossierNumber }),
-        create.insertOneAppointment({
-          patientId: patient.id,
-          psychologistId: psy.dossierNumber,
-          appointmentDate: new Date(2021, 10, 10).toISOString(),
-          deleted: true,
-        }),
-
-        create.insertOneAppointment({ patientId: anotherPatient.id, psychologistId: anotherPsy.dossierNumber }),
-        create.insertOneAppointment({ patientId: anotherPatient.id, psychologistId: anotherPsy.dossierNumber }),
-        create.insertOneAppointment({ patientId: anotherPatient.id, psychologistId: anotherPsy.dossierNumber }),
-
-        create.insertOneAppointment({ patientId: patient2.id, psychologistId: psy.dossierNumber }),
-        create.insertOneAppointment({ patientId: patient2.id, psychologistId: psy.dossierNumber }),
-        create.insertOneAppointment({ patientId: patient2.id, psychologistId: psy.dossierNumber }),
-      ]);
 
       const patients = (await dbPatients.getAll(psy.dossierNumber))
       .sort((a, b) => parseInt(a.appointmentsCount) - parseInt(b.appointmentsCount));
       expect(patients).to.have.length(2);
-      patients[0].appointmentsCount.should.eq('3');
-      patients[1].appointmentsCount.should.eq('5');
     });
 
     it('should not return deleted patients', async () => {
@@ -290,13 +213,9 @@ describe('DB Patients', () => {
         studentNumber,
         institutionName,
         isStudentStatusVerified,
-        hasPrescription,
         psy.dossierNumber,
         doctorName,
-        doctorAddress,
-        doctorEmail,
         dateOfBirth,
-        dateOfPrescription,
       );
       await dbPatients.delete(patient.id, psy.dossierNumber);
 

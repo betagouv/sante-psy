@@ -5,7 +5,7 @@ module.exports = () => [
     question: "Je n'ai toujours pas signé de convention et je reçois des demandes, \
     que faire\u00A0? Quel est le délai de signature de ma convention avec l'université de rattachement\u00A0?",
     answer: "Une fois votre dossier accepté, vous pouvez commencer à recevoir les étudiants munis \
-    de la lettre d'orientation et de leur carte étudiante. \
+    de leur carte d'étudiant ou tout document équivalent attestant de leur statut étudiant. \
     Le remboursement des séances réalisées est garanti. \
     Veuillez compter un retour sous 2 à 3 semaines. \
     À noter que les délais peuvent être plus longs selon les demandes reçus par l'université.",

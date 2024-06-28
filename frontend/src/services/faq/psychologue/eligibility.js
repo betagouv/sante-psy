@@ -11,8 +11,7 @@ module.exports = config => [
       Si elle est conforme aux critères retenus, votre demande sera agréée et vous serez invité(e) à signer une convention \
       (destinée à définir les conditions de votre participation au dispositif et les modalités de règlement des consultations effectuées) \
       avec l’université à laquelle le SSE est rattaché. Vos coordonnées seront publiées sur la liste des psychologues participant au dispositif. \
-      Les étudiants orientés, par le SSE ou un médecin généraliste, vers un psychologue choisiront \
-      parmi celles et ceux inscrits sur cette liste et prendront directement rendez-vous avec celle ou celui qu’ils ont choisi(e).`,
+      Les étudiants choisiront parmi celles et ceux inscrits sur cette liste et prendront directement rendez-vous avec celle ou celui qu’ils ont choisi(e).`,
     frequent: true,
   },
   {

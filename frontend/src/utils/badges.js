@@ -36,19 +36,22 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
     severity: 'info',
     icon: 'fr-icon-info-fill fr-icon--sm',
   },
-  prescription_infos: {
-    key: 'prescription_infos',
-    text: isSmallScreen ? 'Lettre' : "Lettre d'orientation à compléter",
-    severity: 'new',
-    icon: 'fr-icon-info-fill fr-icon--sm',
-  },
   completed: {
     key: 'completed',
     text: 'à jour',
     severity: 'success',
     icon: 'fr-icon-success-fill fr-icon--sm',
   },
+  new_rules: {
+    key: 'new_rules',
+    text: isSmallScreen ? 'Nouveau tarif' : 'Nouveau tarif 50€',
+    severity: 'info',
+    icon: 'fr-icon-success-fill fr-icon--sm',
+    tooltip: 'A partir du 1er juillet 2024, toutes les séances sont comptabilisées 50€, le nombre maximal de séances passe à 12 au lieu de 8',
+  },
   other: { key: 'other' },
+  switch_rule_notice: { key: 'switch_rule_notice', tooltip: 'A partir du 1er juillet 2024, toutes les séances sont comptabilisées 50€, le nombre maximal de séances passe à 12 au lieu de 8' },
+  inactive: { key: 'inactive' },
 });
 
 export default getBadgeInfos;

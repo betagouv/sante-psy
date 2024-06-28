@@ -4,15 +4,15 @@ import getBadgeInfos from 'src/utils/badges';
 const badges = getBadgeInfos();
 const noAppointmentsInPeriod = async () => {
   const now = new Date();
-  return agent.Appointment.get({ isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear() }).then(appointments => {
-    const noAppointments = appointments.every(appointment => {
-      const appointmentDate = new Date(appointment.appointmentDate);
-      return appointmentDate.getFullYear() !== now.getFullYear()
-        || appointmentDate.getMonth() !== now.getMonth();
-    });
-    const allAppointmentsExceededBadge = appointments.every(appointment => appointment.badges.includes(badges.exceeded.key));
-    return noAppointments || allAppointmentsExceededBadge;
+  const appointments = await agent.Appointment.get({ isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear() });
+  const haveAppointments = appointments.some(appointment => {
+    const appointmentDate = new Date(appointment.appointmentDate);
+    return appointmentDate.getFullYear() === now.getFullYear()
+        && appointmentDate.getMonth() === now.getMonth();
   });
+
+  const allExceeded = appointments.every(appointment => appointment.badges.includes(badges.exceeded.key));
+  return !haveAppointments || allExceeded;
 };
 
 const steps = [
@@ -31,13 +31,17 @@ const steps = [
   {
     placement: 'top-start',
     target: '#no-appointments',
-    shouldSkip: () => {
+    shouldSkip: async () => {
       const now = new Date();
-      return agent.Appointment.get({ isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear() }).then(appointments => appointments.some(appointment => {
+      const appointments = await agent.Appointment.get({ isBillingPurposes: true, month: now.getMonth() + 1, year: now.getFullYear() });
+      const haveAppointments = appointments.some(appointment => {
         const appointmentDate = new Date(appointment.appointmentDate);
         return appointmentDate.getFullYear() === now.getFullYear()
-          && appointmentDate.getMonth() === now.getMonth() && appointment.badge !== badges.exceeded.key;
-      }));
+          && appointmentDate.getMonth() === now.getMonth();
+      });
+
+      const allExceeded = appointments.every(appointment => appointment.badges.includes(badges.exceeded.key));
+      return Promise.resolve(haveAppointments && !allExceeded);
     },
     content: "Vous n'avez pas déclarer de séances pour ce mois-ci, il n'y a donc pas de facture à générer. Commencez par déclarer des séances depuis l'onglet dédié ou générez une facture pour un autre mois.",
   },

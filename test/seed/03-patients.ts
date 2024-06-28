@@ -57,7 +57,6 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
           psychologistId: dossierNumber,
           lastName: 'Patient',
           firstNames: 'Arenouvelé',
-          hasPrescription: false,
         }));
 
         const remainingPatientCount = 5 - patients.length;
@@ -77,7 +76,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
       .filter((mail) => mail !== 'empty@beta.gouv.fr')
       .flatMap((mail) => {
         const dossierNumber = uuid.generateFromString(`psychologist-${mail}`);
-        const numberOfPatients = faker.datatype.number({ min: 1, max: 25 });
+        const numberOfPatients = faker.datatype.number({ min: 5, max: 15 });
         patientsByPsychologist[mail] = numberOfPatients;
         const patients = [];
         const selectedPatients = [];

@@ -46,16 +46,8 @@ describe('Patient', () => {
         .type('010203045LL');
       cy.get('[data-test-id="etudiant-status-input"]')
         .click();
-      cy.get('[data-test-id="etudiant-letter-input"]')
-        .click();
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
         .type('Dr Dupont');
-      cy.get('[data-test-id="etudiant-doctor-location-input"] > input')
-        .type('Saint-Denis');
-      cy.get('[data-test-id="etudiant-doctor-email-input"] > input')
-        .type('email@email.comfr');
-      cy.get('[data-test-id="etudiant-prescription-date-input"] > input')
-        .type('01/01/2001');
       cy.get('[data-test-id="save-etudiant-button"]')
         .click();
 
@@ -98,14 +90,7 @@ describe('Patient', () => {
         .clear()
         .type('010203045ML');
 
-      cy.get('[data-test-id="etudiant-letter-input"]')
-        .click();
-      cy.get('[data-test-id="etudiant-letter-input"]')
-        .click();
-
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
-        .type('My doctor');
-      cy.get('[data-test-id="etudiant-doctor-email-input"] > input')
         .clear();
       cy.get('[data-test-id="save-etudiant-button"]')
         .click();

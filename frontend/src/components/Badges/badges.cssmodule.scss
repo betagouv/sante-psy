@@ -1,4 +1,7 @@
+@import 'src/tooltip.scss';
+
 .badgeWrapper {
+    @include tooltip;
     display: flex;
     flex-wrap: wrap;
 
@@ -6,4 +9,11 @@
         margin: 4px;
         font-size: .7rem !important;
     }
+    
+    .inactiveBadge {
+        background-color: #f0f0f0;
+        color: #999;
+    }
+    
 }
+

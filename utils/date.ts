@@ -40,23 +40,14 @@ const getDatePlusOneHour = (): string => {
 };
 
 const getUTCDate = (date: Date) : Date => new Date(Date.UTC(
-  date.getUTCFullYear(),
-  date.getUTCMonth(),
-  date.getUTCDate(),
-  date.getUTCHours(),
-  date.getUTCMinutes(),
-  date.getUTCSeconds(),
-  date.getUTCMilliseconds(),
+  date.getFullYear(),
+  date.getMonth(),
+  date.getDate(),
+  date.getHours(),
+  date.getMinutes(),
+  date.getSeconds(),
+  date.getMilliseconds(),
 ));
-
-const getUnivYear = (date: Date) : string => {
-  const SEPTEMBER = 8;
-  const DECEMBER = 11;
-  const cycle = (date.getMonth() >= SEPTEMBER && date.getMonth() <= DECEMBER)
-    ? `${date.getFullYear()}-${date.getFullYear() + 1}`
-    : `${date.getFullYear() - 1}-${date.getFullYear()}`;
-  return cycle;
-};
 
 const subtractDays = (date: Date, days: number) : Date => {
   date.setDate(date.getDate() - days);
@@ -72,6 +63,5 @@ export default {
   toFormatDDMMYYYY,
   parseForm,
   now,
-  getUnivYear,
   subtractDays,
 };

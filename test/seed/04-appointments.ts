@@ -63,14 +63,20 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
     // Patient 2 => 1 appointments => 22
     appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[7], 22));
   } else {
+    const pastDate = new Date();
+    pastDate.setFullYear(pastDate.getFullYear() - 1);
+
+    const futureDate = new Date();
+    futureDate.setFullYear(futureDate.getFullYear() + 1);
+
     appointmentList = patientList.flatMap((patient) => {
-      const nbOfAppointments = faker.datatype.number(10);
+      const nbOfAppointments = faker.datatype.number({ min: 10, max: 50 });
       const result = [];
       for (let i = 0; i < nbOfAppointments; i++) {
         result.push(create.getOneAppointment({
           patientId: patient.id,
           psychologistId: patient.psychologistId,
-          appointmentDate: faker.date.future().toISOString(),
+          appointmentDate: faker.date.between(pastDate, futureDate).toISOString(),
         }));
       }
       return result;
