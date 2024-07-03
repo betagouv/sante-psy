@@ -12,6 +12,7 @@ import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
 import studentController from '../controllers/studentController';
 import eligibilityController from '../controllers/eligibilityController';
+import instagramController from '../controllers/instagramController';
 
 const router = express.Router();
 
@@ -77,4 +78,5 @@ router.post('/psychologist/:token/inactive', psyInactiveController.suspendValida
 router.post('/psychologist/:token/active', psyInactiveController.activate);
 router.get('/eligibility', eligibilityController.getValidators, eligibilityController.get);
 router.post('/eligibility/contact', eligibilityController.sendValidators, eligibilityController.send);
+router.get('/instagram/posts', instagramController.get);
 export default router;

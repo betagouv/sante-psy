@@ -3,28 +3,28 @@
 .header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    font-size: 32px;
-    line-height: 65px;  
-    color:#5F5F62;
-    padding: 32px 0 96px 0;
+    color: #5F5F62;
+    padding-top: 32px;
 
     .title {
+
         h1 {
-            color:#5F5F62;
+            color: #5F5F62;
             font-weight: 400;
             font-size: 56px;
-           
         }
+
         p {
             font-size: 28px;
         }
+
         span {
             color: $primary-color;
         }
     }
-    
+
     .headerButton {
         display: flex;
         justify-content: space-between;
@@ -34,13 +34,30 @@
 
 .accordion {
     background-color: $secondary-color;
+    section h3 {
+        --hover: $primary-color;
+        &:hover {
+            background-color: $primary-color; // Assurez-vous que cette variable est définie
+        }
+    }
 
 }
+
+.accordionHeader:hover {
+    color: $secondary-color;
+}
+
+// .accordion section h3:hover {
+//     background-color: blue !important;
+//     --hover: $primary-color !important;
+// }
+
 .accordionHeader {
     display: flex;
     flex-direction: row;
-    gap: 100px;
+    gap: 300px;
     align-items: center;
+    margin-left: 420px;
     
     .stepNumber {
         font-size: 56px;
@@ -49,8 +66,38 @@
 
 .page {
     background-color: white;
-
-    .textContainer {
-        max-width: none;
-    }
 }
+
+@media (max-width: 768px) {
+    .accordionHeader {
+        margin-left: 0;
+        padding-right: 10px;
+        gap: 20px;
+
+        .stepNumber {
+            font-size: 40px;
+        }
+
+        img {
+            width: 60px;
+        }
+    }
+
+    .accordion {
+        padding: 0 20px 0 20px;
+    }
+
+    .header {
+
+        .title {
+            h1 {
+                font-size: 40px;
+            }
+
+            p {
+                font-size: 24px;
+            }
+        }
+        
+    }
+  }

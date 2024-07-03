@@ -36,32 +36,36 @@ const Steps = ({type}) => {
     return (
       <div className={styles.accordionHeader}>
         <div className={styles.stepNumber}>{item.step}</div>
-        <div className={styles.stepTitle}>{item.description}</div>
+        <div className={styles.stepTitle}>{item.title}</div>
         <img src={"/images/" + item.image} className={styles.stepImage} alt="" />
     </div>
     )
   }
 
   return (
-    <Page
+    <div>
+      <Page
         breadCrumbs={[{ href: '/rejoindre', label: 'Rejoindre le dispositif' }]}
         currentBreadCrumb="Psychologues"
         withoutHeader
-        //textContent
+        //fullWidth
+        textContent
         className={styles.page}
     >
       {console.log(pageSteps)}
-      <div className={styles.header}>
-        <div className={styles.title}>{pageSteps.header.title}</div>
-        
-        { (pageSteps.header.buttonText && pageSteps.header.buttonImage)  &&
-          <div className={styles.headerButton}>
-            <img src={"/images/" + pageSteps.header.buttonImage} className={styles.headerImage} alt="avatar" />
-            <Button secondary>{pageSteps.header.buttonText}</Button>
-          </div>
-        }
-      </div>
-      <div>
+        <div className={styles.header}>
+          <div className={styles.title}>{pageSteps.header.title}</div>
+          
+          { (pageSteps.header.buttonText && pageSteps.header.buttonImage)  &&
+            <div className={styles.headerButton}>
+              <img src={"/images/" + pageSteps.header.buttonImage} className={styles.headerImage} alt="avatar" />
+              <Button secondary>{pageSteps.header.buttonText}</Button>
+            </div>
+          }
+        </div>
+    </Page>
+
+      <div className={styles.accordionContainer}>
         <Accordion className={'fr-mb-4w'}>
           {
             pageSteps.steps.map(item => (
@@ -70,13 +74,17 @@ const Steps = ({type}) => {
                   key={item.step}
                   className={styles.accordion}
                 >
-                 
+                <p>
+                  {item.description}
+                </p>
                 </AccordionItem>
               ))
           }
         </Accordion>
       </div>
-    </Page>
+    </div>
+    
+
   );
 };
 

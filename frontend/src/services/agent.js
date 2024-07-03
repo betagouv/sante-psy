@@ -59,6 +59,8 @@ const Convention = {
     .post(`/psychologist/${store.userStore.user.dossierNumber}/convention`, convention),
 };
 
+const Instagram = { get: (options = {postsIds: []}) => client.get('/instagram/posts', { params: options }) };
+
 const Eligibility = {
   get: (options = { INE: '' }) => client.get('/eligibility', { params: options }),
   send: message => client.post('/eligibility/contact', message),
@@ -110,6 +112,7 @@ export default {
   Config,
   Contact,
   Convention,
+  Instagram,
   Eligibility,
   Patient,
   Psychologist,
