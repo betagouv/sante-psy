@@ -194,6 +194,7 @@ const Appointments = () => {
               <b>Depuis le 1er juillet 2024, 12 séances maximum</b>
               {' '}
               prises en charge par année universitaire, sans lettre d&apos;orientation, au tarif de 50€.
+              Si vous aviez effectué 8 séances avec un étudiant, vous pouvez, entre le 1er juillet 2024 et le 31 aout, aller jusque 12 séances pour le cycle 2023/2024.
             </li>
             <li>
               Année universitaire : du
