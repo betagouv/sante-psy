@@ -151,6 +151,7 @@ const StudentEligibility = () => {
             </section>
             <section>
               <ol className={styles.borderedList}>
+                <li>Je suis étudiant en BTS : je suis éligible.</li>
                 <li>
                   Je suis dans une université / institut / école. Rechercher mon
                   établissement :
@@ -172,7 +173,6 @@ const StudentEligibility = () => {
                     <span className={styles.text}>{eligibilityMessage()}</span>
                   )}
                 </li>
-                <li>Je suis étudiant en BTS : je suis éligible.</li>
               </ol>
               <p>
                 Si votre établissement est dans la liste, vous pouvez consulter
@@ -239,17 +239,8 @@ const StudentEligibility = () => {
                     icon="ri-link"
                   />
                 </li>
-
-                <li>
-                  Si vous souhaitez tout de même vérifier votre éligibilité,
-                  contactez-nous.
-                  <Button
-                    secondary
-                    onClick={() => {
-                      navigate('/eligibilite/contact');
-                    }}
-                    icon="ri-link"
-                  />
+                <li className={styles.noButton}>
+                  Contactez-nous.
                 </li>
               </ol>
             </section>
