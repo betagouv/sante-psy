@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Button, TextInput, Icon, SearchableSelect } from '@dataesr/react-dsfr';
 import Page from 'components/Page/Page';
-import agent from 'services/agent';
 import classNames from 'classnames';
 import eligibleSchools from '../../utils/eligibleSchools.ts';
 import styles from './studentEligibility.cssmodule.scss';
@@ -23,28 +22,45 @@ const StudentEligibility = () => {
     setIsEligible(selectedSchool);
   };
 
+  const validateINE = (ine) => {
+    if (__MATOMO__) {
+      _paq.push(['trackEvent', 'Student', 'checkEligibility']);
+    }
+    
+    const errors = [];
+    
+    if (!ine) {
+      errors.push('Vous devez spécifier un numéro INE');
+    }
+    if (!/^[a-zA-Z0-9]{11}$/.test(ine)) {
+      errors.push('Le numéro INE doit être composé de 11 caractères alphanumériques (chiffres ou lettres sans accents).');
+    }
+  
+    return errors;
+  };
+
   const submit = e => {
     e.preventDefault();
     setIsLoading(true);
-
+    
     if (__MATOMO__) {
       _paq.push(['trackEvent', 'Student', 'checkEligibility']);
     }
 
-    agent.Eligibility.get({ ine: INE })
-      .then(response => {
-        setIsEligible(response);
-        setShowEligibility(true);
-        setIsLoading(false);
-      })
-      .catch(err => {
-        if (err.response.data && err.response.data.message) {
-          setErrorMessage(err.response.data.message);
-          setError(true);
-        }
-        setIsLoading(false);
-      });
+    const errors = validateINE(INE);
+    if (errors.length > 0) {
+      setErrorMessage(errors.join(' '));
+      setError(true);
+      setIsLoading(false);
+      return;
+    } else {
+      setShowEligibility(true);
+      setIsEligible(true);
+      setIsLoading(false);
+    }
   };
+    
+
 
   const handleNextStep = () => {
     if (__MATOMO__) {
@@ -82,23 +98,6 @@ const StudentEligibility = () => {
         </div>
       );
     }
-    return (
-      <div
-        className={classNames(
-          styles.eligibilityMessage,
-          styles.eligibilityMessage_error,
-        )}
-      >
-        <Icon
-          name="ri-close-circle-fill"
-          size="lg"
-          color="#ce0500"
-          iconPosition="left"
-        >
-          <p>Numéro INE inconnu ou non éligible au dispositif</p>
-        </Icon>
-      </div>
-    );
   };
 
   return (
@@ -127,8 +126,8 @@ const StudentEligibility = () => {
                 className="midlength-input"
                 data-test-id="ine-input"
                 value={INE}
-                label="inscription 2023 - 2024"
-                hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
+                label="inscription 2024 - 2025"
+                hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant ou sur le certificat de scolarité."
                 messageType={error ? 'error' : ''}
                 message={errorMessage}
                 onChange={e => onChange(e.target.value)}
