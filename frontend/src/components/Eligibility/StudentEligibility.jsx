@@ -22,27 +22,27 @@ const StudentEligibility = () => {
     setIsEligible(selectedSchool);
   };
 
-  const validateINE = (ine) => {
+  const validateINE = ine => {
     if (__MATOMO__) {
       _paq.push(['trackEvent', 'Student', 'checkEligibility']);
     }
-    
+
     const errors = [];
-    
+
     if (!ine) {
       errors.push('Vous devez spécifier un numéro INE.');
     }
     if (!/^[a-zA-Z0-9]{11}$/.test(ine)) {
       errors.push('Le numéro INE doit être composé de 11 caractères alphanumériques (chiffres ou lettres sans accents).');
     }
-  
+
     return errors;
   };
 
   const submit = e => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     if (__MATOMO__) {
       _paq.push(['trackEvent', 'Student', 'checkEligibility']);
     }
@@ -52,7 +52,6 @@ const StudentEligibility = () => {
       setErrorMessage(errors.join(' '));
       setError(true);
       setIsLoading(false);
-      return;
     } else {
       setShowEligibility(true);
       setIsEligible(true);
@@ -76,28 +75,26 @@ const StudentEligibility = () => {
     setIsLoading(false);
   };
 
-  const eligibilityMessage = () => {
-    if (isEligible) {
-      return (
-        <div
-          className={classNames(
-            styles.eligibilityMessage,
-            styles.eligibilityMessage_valid,
-          )}
+  const eligibilityMessage = () => (
+    <div
+      className={classNames(
+        styles.eligibilityMessage,
+        styles.eligibilityMessage_valid,
+      )}
         >
-          <Icon
-            name="ri-checkbox-circle-fill"
-            size="lg"
-            color="#18753c"
-            iconPosition="left"
+      <Icon
+        name="ri-checkbox-circle-fill"
+        size="lg"
+        color="#18753c"
+        iconPosition="left"
           >
-            <p>Vous êtes éligible au dispositif. 
-              Attention, lors de votre 1re consultation, le psychologue vérifiera votre carte étudiante ou certificat de scolarité en cours de validité pour l'année en cours.</p>
-          </Icon>
-        </div>
-      );
-    }
-  };
+        <p>
+          Vous êtes éligible au dispositif.
+          Attention, lors de votre 1re consultation, le psychologue vérifiera votre carte étudiante ou certificat de scolarité en cours de validité pour l&apos;année en cours.
+        </p>
+      </Icon>
+    </div>
+  );
 
   return (
     <Page
@@ -131,7 +128,7 @@ const StudentEligibility = () => {
                 message={errorMessage}
                 onChange={e => onChange(e.target.value)}
               />
-              {showEligibility && (
+              {showEligibility && isEligible && (
                 <span className={styles.text}>{eligibilityMessage()}</span>
               )}
             </div>
@@ -167,7 +164,7 @@ const StudentEligibility = () => {
                     />
                     <Icon name="ri-search-line" className={styles.searchIcon} />
                   </section>
-                  {selectedEligibleSchool && (
+                  {selectedEligibleSchool && isEligible && (
                     <span className={styles.text}>{eligibilityMessage()}</span>
                   )}
                 </li>
