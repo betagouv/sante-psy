@@ -30,7 +30,7 @@ const StudentEligibility = () => {
     const errors = [];
     
     if (!ine) {
-      errors.push('Vous devez spécifier un numéro INE');
+      errors.push('Vous devez spécifier un numéro INE.');
     }
     if (!/^[a-zA-Z0-9]{11}$/.test(ine)) {
       errors.push('Le numéro INE doit être composé de 11 caractères alphanumériques (chiffres ou lettres sans accents).');
@@ -59,8 +59,6 @@ const StudentEligibility = () => {
       setIsLoading(false);
     }
   };
-    
-
 
   const handleNextStep = () => {
     if (__MATOMO__) {
@@ -93,7 +91,8 @@ const StudentEligibility = () => {
             color="#18753c"
             iconPosition="left"
           >
-            <p>Vous êtes éligible au dispositif</p>
+            <p>Vous êtes éligible au dispositif. 
+              Attention, lors de votre 1re consultation, le psychologue vérifiera votre carte étudiante ou certificat de scolarité en cours de validité pour l'année en cours.</p>
           </Icon>
         </div>
       );

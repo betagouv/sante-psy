@@ -9,7 +9,6 @@
 }
 
 .eligibilityInput {
-  display: inline-flex;
   margin-bottom: 16px;
   width: 100%;
 }
@@ -116,10 +115,6 @@
 
   .searchIcon {
     display: none;
-  }
-
-  .eligibilityInput {
-    flex-direction: column;
   }
 
   .text {
