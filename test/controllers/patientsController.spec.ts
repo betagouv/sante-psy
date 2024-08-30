@@ -340,7 +340,7 @@ describe('patientsController', () => {
         isStudentStatusVerified: undefined,
         doctorName,
         dateOfBirth,
-      }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+      }, 'Le numéro INE doit faire maximum 11 caractères alphanumériques (chiffres ou lettres sans accents).\n'
       + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
 
@@ -376,7 +376,7 @@ describe('patientsController', () => {
         isStudentStatusVerified: undefined,
         doctorName,
         dateOfBirth,
-      }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+      }, 'Le numéro INE doit faire maximum 11 caractères alphanumériques (chiffres ou lettres sans accents).\n'
       + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
 
@@ -829,7 +829,7 @@ describe('patientsController', () => {
           doctorName,
           dateOfBirth,
         },
-        'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+        'Le numéro INE doit faire maximum 11 caractères alphanumériques (chiffres ou lettres sans accents).\n'
       + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.',
       );
     });
@@ -848,7 +848,7 @@ describe('patientsController', () => {
           doctorName,
           dateOfBirth,
         },
-        'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+        'Le numéro INE doit faire maximum 11 caractères alphanumériques (chiffres ou lettres sans accents).\n'
       + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.',
       );
     });
@@ -932,7 +932,7 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-      }, 'Le numéro INE doit faire maximum 50 caractères alphanumériques (chiffres ou lettres sans accents).\n'
+      }, 'Le numéro INE doit faire maximum 11 caractères alphanumériques (chiffres ou lettres sans accents).\n'
       + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
     });
 
