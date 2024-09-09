@@ -5,7 +5,7 @@
   "dependencies": {
     "@dataesr/react-dsfr": "^3.5.6",
     "@gouvfr/dsfr": "1.7.2",
-    "axios": "^1.6.0",
+    "axios": "^1.7.7",
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
     "jsonwebtoken": "^8.5.1",
@@ -27,7 +27,7 @@
     "react-router-hash-link": "^2.4.3",
     "sanitize-html": "^2.12.1",
     "uuid": "^9.0.0",
-    "wait-on": "^7.0.1"
+    "wait-on": "^7.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
