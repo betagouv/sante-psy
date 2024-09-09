@@ -45,7 +45,7 @@ const patientValidators = [
         .isLength({ min: 11, max: 11 })
         .customSanitizer(DOMPurify.sanitize),
     ],
-    `Le numéro INE doit faire maximum 50 caractères alphanumériques \
+    `Le numéro INE doit faire maximum 11 caractères alphanumériques \
 (chiffres ou lettres sans accents).
     Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`,
   ),

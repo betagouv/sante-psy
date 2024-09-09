@@ -59,11 +59,6 @@ const Convention = {
     .post(`/psychologist/${store.userStore.user.dossierNumber}/convention`, convention),
 };
 
-const Eligibility = {
-  get: (options = { INE: '' }) => client.get('/eligibility', { params: options }),
-  send: message => client.post('/eligibility/contact', message),
-};
-
 const Patient = {
   create: patient => client.post('/patients/', patient),
   delete: id => client.delete(`/patients/${id}`),
@@ -110,7 +105,6 @@ export default {
   Config,
   Contact,
   Convention,
-  Eligibility,
   Patient,
   Psychologist,
   Statistics,
