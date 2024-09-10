@@ -117,34 +117,42 @@ describe('patientsController', () => {
         });
     });
 
-    it('should get patient count with new rules', async () => {
+    it('should get patient right count for current schoolyear', async () => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       };
       const myPatient = await makePatient(psy.dossierNumber);
 
-      await dbAppointments.insert(new Date('2022-10-01'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2022-11-01'), myPatient.id, psy.dossierNumber);
+      const getCurrentSchoolYear = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const septemberFirst = new Date(year, 8, 1);
 
-      await dbAppointments.insert(new Date('2023-09-01'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2023-10-01'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2023-11-01'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2023-12-01'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2024-01-01'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2024-02-01'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2024-02-10'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2024-03-01'), myPatient.id, psy.dossierNumber);
+        if (now < septemberFirst) {
+          return year - 1;
+        }
+        return year;
+      };
 
-      // Exceeded
-      await dbAppointments.insert(new Date('2024-04-01'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2024-05-01'), myPatient.id, psy.dossierNumber);
+      const currentSchoolYear = getCurrentSchoolYear();
 
-      // New rule appointments
-      await dbAppointments.insert(new Date('2024-07-01'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2024-07-05'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2024-07-15'), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date('2024-07-20'), myPatient.id, psy.dossierNumber);
+      // former school year
+      await dbAppointments.insert(new Date(`${currentSchoolYear - 1}-11-01`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(`${currentSchoolYear - 1}-12-02`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(`${currentSchoolYear}-02-04`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(`${currentSchoolYear}-05-06`), myPatient.id, psy.dossierNumber);
+
+      // current school year
+      await dbAppointments.insert(new Date(`${currentSchoolYear}-09-01`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(`${currentSchoolYear}-10-01`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(`${currentSchoolYear}-11-01`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(`${currentSchoolYear}-12-01`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(`${currentSchoolYear + 1}-04-01`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(`${currentSchoolYear + 1}-05-01`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(`${currentSchoolYear + 1}-07-01`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(`${currentSchoolYear + 1}-07-05`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(new Date(`${currentSchoolYear + 1}-07-20`), myPatient.id, psy.dossierNumber);
 
       return chai.request(app)
         .get('/api/patients')
@@ -161,9 +169,8 @@ describe('patientsController', () => {
           res.body[0].institutionName.should.equal(myPatient.institutionName);
           res.body[0].doctorName.should.equal(myPatient.doctorName);
           res.body[0].dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
-          res.body[0].appointmentsCount.should.equal('16');
-          res.body[0].appointmentsYearCount.should.equal('14');
-          res.body[0].countedAppointments.should.equal('12');
+          res.body[0].appointmentsCount.should.equal('13');
+          res.body[0].appointmentsYearCount.should.equal('9');
 
           return Promise.resolve();
         });
