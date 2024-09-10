@@ -76,7 +76,7 @@ describe('Patient', () => {
       cy.wait('@etudiant');
 
       const getCurrentMonth = new Date().getMonth();
-      const firstPartScholarYear = getCurrentMonth > 8 ? true : false; 
+      const firstPartScholarYear = getCurrentMonth > 8;
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
       cy.get('[data-test-id="etudiant-seances-list"] tr')
         .should('have.length', firstPartScholarYear ? 25 : 49);
