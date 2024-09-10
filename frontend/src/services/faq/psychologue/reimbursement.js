@@ -6,7 +6,7 @@ module.exports = () => [
       'Comment a été fixé le tarif pour une consultation, sachant que les tarifs varient selon les régions, \
     selon les formations complémentaires et spécialités de chaque professionnel\u00A0?',
     answer:
-      'S’agissant d’un dispositif national, le tarif doit être identique sur l’ensemble du territoire. Il a été fixé à 40\u00A0€ pour les premières séances avec chaque étudiant et 30\u00A0€ pour les séances de suivi.',
+      'S’agissant d’un dispositif national, le tarif doit être identique sur l’ensemble du territoire. Il a été fixé à 50\u00A0€ pour chaque séance.',
   },
   {
     question:
