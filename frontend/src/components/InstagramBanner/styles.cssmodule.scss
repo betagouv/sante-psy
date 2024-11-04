@@ -1,0 +1,115 @@
+@import 'src/variables.scss';
+
+.mozaicInstagram, .podcast {
+    padding: 48px;
+    max-width: 1600px;
+    margin: auto;
+    img {
+        height: auto;
+    }
+}
+
+.mozaicInstagram {
+    margin-bottom: 50px;
+    .content {
+        max-width: 700px
+    }
+}
+
+.podcast {
+    img {
+        margin-left: 48px;
+        max-width: 370px;
+    }
+    .content {
+        max-width: 900px;
+        margin-left: 100px;
+    }
+}
+
+.howTo {
+    height: 280px;
+    padding: 0;
+
+    h2 {
+        max-width: 1400px;
+        align-self: center;
+        font-size: 32px;
+        width: 80%;
+    }
+
+    .content {
+        margin:0;
+        align-items: flex-start;
+    }
+}
+
+.otherServicesTitle {
+    height: 280px;
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+
+    h2 {
+        max-width: 1400px;
+        font-size: 56px;
+    }
+
+    .content {
+        max-width: 1200px;
+        margin: 0;
+
+    }
+}
+
+.otherServices {
+    max-width: 1200px;
+    margin: auto;
+    margin-top: -118px;
+    background-color: transparent;
+}
+
+
+@media (max-width: 1024px) {
+    .mozaicInstagram {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 900px) {
+    .mozaicInstagram {
+        flex-direction: column-reverse;
+        padding-bottom: 0px;
+        margin-bottom: 0px;
+    }
+
+    .podcast {
+        flex-direction: row-reverse;
+        align-items: center;
+        img {
+            margin-left: 0px;
+            max-width: 200px;
+            max-height: 200px;
+        }
+        .content {
+            max-width: 500px;
+            margin: 0px;
+            margin-left: 0px;
+        }
+    }
+
+    .otherServices {
+        margin-top: 0px;
+    }
+}
+
+@media (max-width: 425px) {
+    .mozaicInstagram {
+        flex-direction: column-reverse;
+    }
+
+    .podcast {
+        flex-direction: column-reverse;
+    }
+}

@@ -2,6 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { Link } from "react-router-dom";
 import OtherServices from "components/OtherServices/OtherServices";
+import InstagramBanner from "components/InstagramBanner/InstagramBanner";
 
 const EligibilityMessage = ({ isEligible }) => {
   return (
@@ -39,11 +40,11 @@ const EligibilityMessage = ({ isEligible }) => {
           Refaire le test
         </button>
       </div>
-      {/* {isEligible ? (
-
+      {isEligible ? (
+        <InstagramBanner />
       ) : (
         <OtherServices />
-      )} */}
+      )}
     </div>
   );
 };
