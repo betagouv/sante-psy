@@ -37,7 +37,7 @@ import OtherServices from 'components/OtherServices/OtherServices';
 import PublicAnnouncement from 'components/Notification/PublicAnnouncement';
 import LiveChat from 'components/LiveChat/LiveChat';
 import StudentUnregister from './components/StudentUnregister/StudentUnregister';
-import StudentEligibility from './components/Eligibility/StudentEligibility';
+import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 

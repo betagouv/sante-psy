@@ -65,6 +65,14 @@ const OtherServices = () => {
           description="Pour tout le monde, à partir de 3 ans. 12 séances par an chez un(e) psychologue"
           link="https://www.ameli.fr/assure/remboursements/rembourse/remboursement-seance-psychologue-mon-soutien-psy"
         />
+        <Service
+          image={small ? '/images/pass-sport-small.jpg' : '/images/pass-sport.jpg'}
+          logo="/images/pass-sport-logo.png"
+          name="pass'Sport"
+          title="Pour aller plus loin et prendre soin de soi."
+          description="Le pass Sport est une aide de 50 euros qui permet de financer une partie de l'inscription sportive de jeunes."
+          link="https://www.pass.sports.gouv.fr/"
+        />
       </div>
     </Page>
   );
