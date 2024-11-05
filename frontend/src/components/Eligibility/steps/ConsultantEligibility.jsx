@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { EligibilityQuestionIds, EligibilityOptions } from "./utils/eligibilityQuestions";
-import { renderEligibilityQuestion } from "./utils/renderEligibilityQuestion";
+import { EligibilityQuestionIds, EligibilityOptions } from "../utils/eligibilityQuestions";
+import { renderEligibilityQuestion } from "../utils/renderEligibilityQuestion";
 
 const ConsultantEligibility = ({ answers, onNext }) => {
   return (

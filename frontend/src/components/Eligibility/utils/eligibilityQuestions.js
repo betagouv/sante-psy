@@ -35,7 +35,7 @@ export const EligibilityOptions = {
 
 export const EligibilityQuestions = {
   [EligibilityQuestionIds.WHO_FOR]: {
-    question: "Pour qui souhaitez-vous vérifier l'éligibilité ?",
+    question: "Bonjour, vous souhaitez savoir si vous pouvez bénéficier du dispositif Santé Psy Étudiant. Pour qui souhaitez-vous vérifier l'éligibilité ?",
     options: Object.values(EligibilityOptions.WHO_FOR),
   },
   [EligibilityQuestionIds.ARE_YOU_STUDENT]: {

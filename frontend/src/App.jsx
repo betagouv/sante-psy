@@ -33,7 +33,7 @@ import InactiveProfile from 'components/Psychologist/PsyDashboard/InactiveProfil
 import ActiveProfile from 'components/Psychologist/PsyDashboard/ActiveProfile';
 import StudentLanding from 'components/Landing/StudentLanding';
 import StudentAnswer from 'components/StudentAnswer/StudentAnswer';
-import OtherServices from 'components/OtherServices/OtherServices';
+import OtherServicesPage from 'components/OtherServices/OtherServicesPage';
 import PublicAnnouncement from 'components/Notification/PublicAnnouncement';
 import LiveChat from 'components/LiveChat/LiveChat';
 import StudentUnregister from './components/StudentUnregister/StudentUnregister';
@@ -78,7 +78,7 @@ function App() {
               <Route exact path="/faq" element={<Faq />} />
               <Route exact path="/stats" element={<Statistics />} />
               <Route exact path="/contact" element={<Contact />} />
-              <Route exact path="/autres-services" element={<OtherServices />} />
+              <Route exact path="/autres-services" element={<OtherServicesPage />} />
               <Route exact path="/etudiant" element={<StudentLanding />} />
               <Route exact path="/enregistrement/:id" element={<StudentAnswer />} />
               <Route exact path="/desinscription/:id" element={<StudentUnregister />} />

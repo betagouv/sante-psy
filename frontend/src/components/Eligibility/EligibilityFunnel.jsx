@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react';
-import EligibilityMessage from './EligibilityMessage';
-import SelfEligibility from './SelfEligibility';
-import CloseEligibility from './CloseEligibility';
-import SchoolEligibility from './SchoolEligibility';
-import ConsultantEligibility from './ConsultantEligibility';
+import EligibilityMessage from './components/EligibilityMessage';
+import SelfEligibility from './steps/SelfEligibility';
+import CloseEligibility from './steps/CloseEligibility';
+import SchoolEligibility from './steps/SchoolEligibility';
+import ConsultantEligibility from './steps/ConsultantEligibility';
 import { checkEligibility, checkIneligibility } from './utils/eligibilityChecker';
 import { renderEligibilityQuestion } from './utils/renderEligibilityQuestion';
 import { EligibilityQuestionIds, EligibilityOptions } from './utils/eligibilityQuestions';
+import styles from './eligibilityStyles.cssmodule.scss'
+import { Container } from '@dataesr/react-dsfr';
 
 const EligibilityFunnel = () => {
   const [answers, setAnswers] = useState({});
-  const [eligibilityStatus, setEligibilityStatus] = useState(null); // État pour le statut d'éligibilité
+  const [eligibilityStatus, setEligibilityStatus] = useState(null);
 
   const handleNextStep = (questionId, answer) => {
     setAnswers((prevAnswers) => {
@@ -50,34 +52,36 @@ const EligibilityFunnel = () => {
   }, [answers]);
 
   return (
-    <div>
-      <h2>Formulaire d'éligibilité</h2>
+    <Container
+      spacing="py-4w"
+    >
+      <div className={styles.eligibilityForm}>
+        {renderEligibilityQuestion(
+          EligibilityQuestionIds.WHO_FOR,
+          (answer) => handleNextStep(EligibilityQuestionIds.WHO_FOR, answer)
+        )}
 
-      {renderEligibilityQuestion(
-        EligibilityQuestionIds.WHO_FOR,
-        (answer) => handleNextStep(EligibilityQuestionIds.WHO_FOR, answer)
-      )}
+        {answers.whoFor === EligibilityOptions.WHO_FOR.ME && (
+          <SelfEligibility answers={answers} onNext={handleNextStep} />
+        )}
 
-      {answers.whoFor === EligibilityOptions.WHO_FOR.ME && (
-        <SelfEligibility answers={answers} onNext={handleNextStep} />
-      )}
+        {answers.whoFor === EligibilityOptions.WHO_FOR.CLOSE && (
+          <CloseEligibility answers={answers} onNext={handleNextStep} />
+        )}
 
-      {answers.whoFor === EligibilityOptions.WHO_FOR.CLOSE && (
-        <CloseEligibility answers={answers} onNext={handleNextStep} />
-      )}
+        {answers.whoFor === EligibilityOptions.WHO_FOR.SCHOOL && (
+          <SchoolEligibility answers={answers} onNext={handleNextStep} />
+        )}
 
-      {answers.whoFor === EligibilityOptions.WHO_FOR.SCHOOL && (
-        <SchoolEligibility answers={answers} onNext={handleNextStep} />
-      )}
+        {answers.whoFor === EligibilityOptions.WHO_FOR.CONSULTANT && (
+          <ConsultantEligibility answers={answers} onNext={handleNextStep} />
+        )}
 
-      {answers.whoFor === EligibilityOptions.WHO_FOR.CONSULTANT && (
-        <ConsultantEligibility answers={answers} onNext={handleNextStep} />
-      )}
-
-      {eligibilityStatus !== null && (
-        <EligibilityMessage isEligible={eligibilityStatus} />
-      )}
-    </div>
+        {eligibilityStatus !== null && (
+          <EligibilityMessage isEligible={eligibilityStatus} />
+        )}
+      </div>
+    </Container>
   );
 };
 

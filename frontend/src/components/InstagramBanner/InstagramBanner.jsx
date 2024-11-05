@@ -13,26 +13,25 @@ const InstagramBanner = () => {
   }, []);
 
   return (
-    <div>
+    <div className={styles.container}>
       <Slice
         color="white"
         customStyle={{ container: styles.mozaicInstagram, content: styles.content }}
         buttonSecondary
         buttonIcon="ri-instagram-line"
         Component={MozaicInstagram}
-        // que du onlyContent si mobile
         title={(
-          <b>
-            Rejoignez la communauté Instagram
+          <div className={styles.title}>
+            <b>Rejoignez la communauté Instagram
             {' '}
-            <span>Santé Psy Étudiant</span>
+            <span>Santé Psy Étudiant</span></b>
             &#x00A0;
-          </b>
+          </div>
         )}
         y
         description={(
           <>
-            <b>{config?.statistics?.nbInstaFollower || '21,5k'}</b>
+            <b>'21,5k'</b>
             {' '}
             abonnés
             <br />
@@ -55,28 +54,14 @@ const InstagramBanner = () => {
         buttonIcon="ri-instagram-line"
         imageSrc="/images/kaavan.png"
         title={(
-          <>
-            <b>Podcast</b>
+          <div className={styles.title}>
+          <b>Podcast</b>
             {' '}
             sur la santé mentale
-          </>
+          </div>
         )}
         buttonLink="https://www.instagram.com/kaavan_podcast/"
         buttonText="Kaavan podcast"
-      />
-
-      <Slice
-        customStyle={{ container: styles.howTo, content: styles.content }}
-        title={(
-          <>
-            Professionnels de santé,
-            <br />
-            <span>Psychologues</span>
-            ,
-            <br />
-            <b> Comment orienter les étudiants ?</b>
-          </>
-        )}
       />
     </div>
   );

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import styles from './styles.cssmodule.scss';
 
 const MozaicInstagram = () => {
@@ -13,7 +12,7 @@ const MozaicInstagram = () => {
   ];
 
   return (
-    <div className={styles.mosaicGrid}>
+    <div className={styles.mozaicGrid}>
       {images.map((image, index) => (
         <div key={index} className={styles.imageItem}>
           <a href={image.href} target="_blank" rel="noopener noreferrer" className={styles.href}>
