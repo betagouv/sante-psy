@@ -106,7 +106,6 @@
 
 @media (max-width: 900px) {
     .mozaicInstagram {
-        flex-direction: column-reverse;
         padding-bottom: 0px;
         margin-bottom: 0px;
     }
@@ -132,7 +131,8 @@
 }
 
 @media (max-width: 768px) {
-    .mosaicGrid {
+    .mozaicGrid {
+        display: flex;
         max-width: 700px;
     }
 
@@ -144,6 +144,10 @@
 @media (max-width: 425px) {
     .mozaicInstagram {
         flex-direction: column-reverse;
+    }
+
+    .mozaicGrid {
+        display: none;
     }
 
     .podcast {

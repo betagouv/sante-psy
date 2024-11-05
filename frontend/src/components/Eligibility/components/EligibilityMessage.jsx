@@ -85,6 +85,14 @@ const EligibilityMessage = ({ isEligible }) => {
           Prendre RDV
         </Button>
       </div>
+      <div className={styles.conditionsContainer}>
+        <h2>Rappel des conditions</h2>
+        <ul>
+          <li>12 séances par année universitaire (du 1er septembre au 31 août),</li>
+          <li>Les étudiants peuvent changer de psychologue à tout moment.</li>
+          <li><b>Attention</b> : les séances sont <b>gratuites et sans avance de frais</b>, le psychologue ne doit pas demander de paiement.</li>
+        </ul>
+      </div>
       {isEligible ? <InstagramBanner /> : 
         (<div className={styles.otherServicesContainer}>
           <h2>Autres services</h2>

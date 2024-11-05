@@ -6,23 +6,26 @@ const QuestionStep = ({ question, options, onNext }) => {
   const [selectedOption, setSelectedOption] = useState("");
 
   const handleOptionChange = (option) => {
-    setSelectedOption(option);
+    setSelectedOption(option.label);
     onNext(option);
   };
 
   return (
     <div>
-      <RadioGroup
-        legend={<div className={styles.purpleBackgroundText}>{question}</div>}
-      >
+      <RadioGroup legend={<div className={styles.purpleBackgroundText}>{question}</div>}>
         {options.map((option) => (
-          <div key={option} className={styles.optionWrapper}>
+          <div key={option.label} className={styles.optionWrapper}>
             <Radio
-              label={option}
-              checked={selectedOption === option}
+              label={option.label}
+              checked={selectedOption === option.label}
               onChange={() => handleOptionChange(option)}
-              value=""
             />
+            {option.tooltip && (
+              <div className={styles.hoverElement}>
+                <span className={styles.tooltip}>{option.tooltip}</span>
+                <span class="fr-icon-information-line" aria-hidden="true"></span>
+              </div>
+            )}
           </div>
         ))}
       </RadioGroup>

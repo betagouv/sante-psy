@@ -11,25 +11,25 @@ export const EligibilityQuestionIds = {
 
 export const EligibilityOptions = {
   WHO_FOR: {
-    ME: "Pour moi-même",
-    CLOSE: "Pour un proche",
-    SCHOOL: "Pour une école",
-    CONSULTANT: "Pour un étudiant en consultation",
+    ME: { label: "Pour moi-même" },
+    CLOSE: { label: "Pour un proche" },
+    SCHOOL: { label: "Pour une école" },
+    CONSULTANT: { label: "Pour un étudiant en consultation" },
   },
   TRAINING: {
-    BTS: "BTS",
-    UNIVERSITY_DIPLOMA: "Diplôme universitaire",
-    OTHER: "Autre",
+    BTS: { label: "BTS" },
+    UNIVERSITY_DIPLOMA: { label: "Diplôme universitaire" },
+    OTHER: { label: "Autre" },
   },
   STUDENT: {
-    YES: "Oui",
-    NO: "Non",
+    YES: { label: "Oui" },
+    NO: { label: "Non" },
   },
   ELIGIBILITY: {
-    INE: "Un numéro INE",
-    CVEC: "Une cotisation CVEC",
-    BOTH: "Les deux",
-    NONE: "Aucun",
+    INE: { label: "Un numéro INE", tooltip: "Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant ou sur le certificat de scolarité." },
+    CVEC: { label: "Une cotisation CVEC", tooltip: "Chaque étudiant inscrit en formation initiale dans un établissement d'enseignement supérieur doit obligatoirement obtenir, préalablement à son inscription, son attestation d'acquittement de la Contribution de vie étudiante et de campus (CVEC), par paiement ou exonération (ex : boursier)." },
+    BOTH: { label: "Les deux" },
+    NONE: { label: "Aucun" },
   },
 };
 
