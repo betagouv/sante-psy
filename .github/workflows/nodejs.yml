@@ -45,7 +45,7 @@ jobs:
       run: npm --prefix frontend run cy:ci
     - name: Archive test results
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: cypress
         retention-days: 1
