@@ -7,7 +7,7 @@ import SchoolEligibility from './steps/SchoolEligibility';
 import ConsultantEligibility from './steps/ConsultantEligibility';
 import { checkEligibility, checkIneligibility } from './utils/eligibilityChecker';
 import { renderEligibilityQuestion } from './utils/renderEligibilityQuestion';
-import { EligibilityQuestionIds, EligibilityOptions } from './utils/eligibilityQuestions';
+import { EligibilityQuestionIds, EligibilityOptions } from './utils/eligibilitySteps';
 import styles from './eligibilityStyles.cssmodule.scss'
 import { Container } from '@dataesr/react-dsfr';
 
@@ -16,27 +16,42 @@ const EligibilityFunnel = () => {
   const [eligibilityStatus, setEligibilityStatus] = useState(null);
 
   const handleNextStep = (questionId, answer) => {
+    setEligibilityStatus(null);
+    
     setAnswers((prevAnswers) => {
       const newAnswers = { ...prevAnswers, [questionId]: answer };
-
-      if (questionId === EligibilityQuestionIds.WHO_FOR) {
-        delete newAnswers.isStudent;
-        delete newAnswers.formation;
-        delete newAnswers.otherEligibility;
-        delete newAnswers.isStudentClose;
-        delete newAnswers.formationClose;
-        delete newAnswers.otherEligibilityClose;
-        delete newAnswers.formationSchool;
-        delete newAnswers.otherEligibilitySchool;
-        delete newAnswers.formationConsult;
-        delete newAnswers.otherEligibilityConsult;
-      } else if (questionId === EligibilityQuestionIds.ARE_YOU_STUDENT) {
-        delete newAnswers.formation;
-        delete newAnswers.otherEligibility;
-      } else if (questionId === EligibilityQuestionIds.WHAT_TRAINING && answer !== EligibilityOptions.TRAINING.OTHER) {
-        delete newAnswers.otherEligibility;
+  
+      switch (questionId) {
+        case EligibilityQuestionIds.WHO_FOR:
+          delete newAnswers.isStudent;
+          delete newAnswers.formation;
+          delete newAnswers.otherEligibility;
+          delete newAnswers.isStudentClose;
+          delete newAnswers.formationClose;
+          delete newAnswers.otherEligibilityClose;
+          delete newAnswers.formationSchool;
+          delete newAnswers.otherEligibilitySchool;
+          delete newAnswers.formationConsult;
+          delete newAnswers.otherEligibilityConsult;
+          break;
+  
+        case EligibilityQuestionIds.ARE_YOU_STUDENT:
+          delete newAnswers.formation;
+          delete newAnswers.otherEligibility;
+          break;
+  
+        case EligibilityQuestionIds.WHAT_TRAINING:
+          delete newAnswers.otherEligibility;
+          break;
+  
+        case EligibilityQuestionIds.SCHOOL_TRAINING:
+          break;
+  
+  
+        default:
+          break;
       }
-
+  
       return newAnswers;
     });
   };
@@ -56,6 +71,10 @@ const EligibilityFunnel = () => {
       spacing="py-4w"
     >
       <div className={styles.eligibilityForm}>
+        <div className={styles.bubbleSpeechPerson}>
+          <img src={`/images/purple-speech-bubble.svg`} alt="purple speech bubble" width={180}/>
+          <img src={`/images/psychologist.svg`} alt="purple speech bubble" width={160}/>
+        </div>
         {renderEligibilityQuestion(
           EligibilityQuestionIds.WHO_FOR,
           (answer) => handleNextStep(EligibilityQuestionIds.WHO_FOR, answer)

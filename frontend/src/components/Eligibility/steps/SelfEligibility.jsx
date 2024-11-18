@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { renderEligibilityQuestion } from "../utils/renderEligibilityQuestion";
-import { EligibilityQuestionIds, EligibilityOptions } from "../utils/eligibilityQuestions";
+import { EligibilityQuestionIds, EligibilityOptions } from "../utils/eligibilitySteps";
 
 const SelfEligibility = ({ answers, onNext }) => {
   return (
@@ -19,7 +19,7 @@ const SelfEligibility = ({ answers, onNext }) => {
 
       {answers.formation === EligibilityOptions.TRAINING.OTHER &&
         renderEligibilityQuestion(
-          EligibilityQuestionIds.ELIGIBILITY_OPTIONS,
+          EligibilityQuestionIds.WHAT_PROOF,
           (answer) => onNext("otherEligibility", answer)
         )}
     </>

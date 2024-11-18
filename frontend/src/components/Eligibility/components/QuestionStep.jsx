@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Radio, RadioGroup } from "@dataesr/react-dsfr";
+import { Radio, RadioGroup, Icon } from "@dataesr/react-dsfr";
 import styles from "./questionStep.cssmodule.scss";
 
 const QuestionStep = ({ question, options, onNext }) => {
@@ -19,11 +19,17 @@ const QuestionStep = ({ question, options, onNext }) => {
               label={option.label}
               checked={selectedOption === option.label}
               onChange={() => handleOptionChange(option)}
+              value={option.label}
             />
             {option.tooltip && (
-              <div className={styles.hoverElement}>
+              <div className={styles.answerWithTooltip}>
                 <span className={styles.tooltip}>{option.tooltip}</span>
-                <span class="fr-icon-information-line" aria-hidden="true"></span>
+                <Icon
+                  name="ri-information-line"
+                  color="#000091"
+                  size="lg"
+                  className={styles.iconInfo}
+                />
               </div>
             )}
           </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { EligibilityQuestionIds, EligibilityOptions } from "../utils/eligibilityQuestions";
+import { EligibilityQuestionIds, EligibilityOptions } from "../utils/eligibilitySteps";
 import { observer } from "mobx-react";
 import { renderEligibilityQuestion } from "../utils/renderEligibilityQuestion";
 
@@ -13,7 +13,7 @@ const SchoolEligibility = ({ answers, onNext }) => {
 
       {answers.formationSchool === EligibilityOptions.TRAINING.OTHER &&
         renderEligibilityQuestion(
-          EligibilityQuestionIds.ELIGIBILITY_OPTIONS,
+          EligibilityQuestionIds.SCHOOL_PROOF,
           (answer) => onNext("otherEligibilitySchool", answer)
         )}
     </>

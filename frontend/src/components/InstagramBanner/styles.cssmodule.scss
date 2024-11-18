@@ -1,12 +1,12 @@
-@import 'src/variables.scss';
+@import "src/variables.scss";
 
 .container {
-    margin: 48px 0px;
+  margin: 48px 0px;
 }
 
 .title {
-    font-size: 36px;
-    line-height: normal;
+  font-size: 36px;
+  line-height: normal;
 }
 
 .mozaicGrid {
@@ -15,14 +15,12 @@
   margin: 0;
   padding: 0;
   width: 700px;
-  height: 500px;
 }
 
 .imageItem {
   flex: 0 0 calc(33.333% - 0px);
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  padding: 1px;
 }
 
 .imageItem img {
@@ -32,125 +30,133 @@
   object-fit: cover;
 }
 
-.mozaicInstagram, .podcast {
-    img {
-        height: auto;
-    }
+.imageItem a::after {
+  display: none;
+}
+
+.mozaicInstagram,
+.podcast {
+  img {
+    height: auto;
+  }
 }
 
 .mozaicInstagram {
-    margin-bottom: 50px;
-    .content {
-        max-width: 700px
-    }
+  margin-bottom: 50px;
+  .content {
+    max-width: 700px;
+  }
+}
+
+.yellowUnderline {
+    box-shadow: inset 0 -4px white, inset 0 -14px $primary-text-color;
 }
 
 .podcast {
-    img {
-        max-width: 370px;
-    }
-    .content {
-        max-width: 900px;
-        margin-left: 100px;
-    }
+  img {
+    max-width: 370px;
+  }
+  .content {
+    max-width: 900px;
+    margin-left: 100px;
+  }
 }
 
 .howTo {
-    height: 280px;
-    padding: 0;
+  height: 280px;
+  padding: 0;
 
-    h2 {
-        max-width: 1400px;
-        align-self: center;
-        font-size: 32px;
-        width: 80%;
-    }
+  h2 {
+    max-width: 1400px;
+    align-self: center;
+    font-size: 32px;
+    width: 80%;
+  }
 
-    .content {
-        margin:0;
-        align-items: flex-start;
-    }
+  .content {
+    margin: 0;
+    align-items: flex-start;
+  }
 }
 
 .otherServicesTitle {
-    height: 280px;
-    padding: 0;
-    flex-direction: column;
-    align-items: center;
+  height: 280px;
+  padding: 0;
+  flex-direction: column;
+  align-items: center;
 
-    h2 {
-        max-width: 1400px;
-        font-size: 56px;
-    }
+  h2 {
+    max-width: 1400px;
+    font-size: 56px;
+  }
 
-    .content {
-        max-width: 1200px;
-        margin: 0;
-
-    }
+  .content {
+    max-width: 1200px;
+    margin: 0;
+  }
 }
 
 .otherServices {
-    max-width: 1200px;
-    margin: auto;
-    margin-top: -118px;
-    background-color: transparent;
+  max-width: 1200px;
+  margin: auto;
+  margin-top: -118px;
+  background-color: transparent;
 }
 
 @media (max-width: 1024px) {
-    .mozaicInstagram {
-        display: flex;
-        flex-direction: column;
-    }
+  .mozaicInstagram {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 900px) {
-    .mozaicInstagram {
-        padding-bottom: 0px;
-        margin-bottom: 0px;
-    }
+  .mozaicInstagram {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+  }
 
-    .podcast {
-        flex-direction: row-reverse;
-        align-items: center;
-        img {
-            margin-left: 0px;
-            max-width: 200px;
-            max-height: 200px;
-        }
-        .content {
-            max-width: 500px;
-            margin: 0px;
-            margin-left: 0px;
-        }
+  .podcast {
+    flex-direction: row-reverse;
+    align-items: center;
+    img {
+      margin-left: 0px;
+      max-width: 200px;
+      max-height: 200px;
     }
+    .content {
+      max-width: 500px;
+      margin: 0px;
+      margin-left: 0px;
+    }
+  }
 
-    .otherServices {
-        margin-top: 0px;
-    }
+  .otherServices {
+    margin-top: 0px;
+  }
 }
 
 @media (max-width: 768px) {
-    .mozaicGrid {
-        display: flex;
-        max-width: 700px;
-    }
+  .mozaicGrid {
+    display: flex;
+    max-width: 700px;
+  }
 
-    .imageItem img {
-        width: 86%;
-    }
+  .imageItem img {
+    width: 86%;
+  }
 }
 
 @media (max-width: 425px) {
-    .mozaicInstagram {
-        flex-direction: column-reverse;
-    }
+  .mozaicInstagram {
+    flex-direction: column-reverse;
+  }
 
-    .mozaicGrid {
-        display: none;
-    }
+  .mozaicGrid {
+    display: none;
+  }
 
-    .podcast {
-        flex-direction: column-reverse;
-    }
+  .podcast {
+    flex-direction: column-reverse;
+  }
 }

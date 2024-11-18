@@ -22,7 +22,7 @@
     color: white;
   }
 
-  b, span {
+  b {
     color: $primary-text-color;
   }
 }
@@ -35,7 +35,7 @@
 .white {
   background-color: white;
 
-  h2 b, span {
+  h2 b {
     display: inline;
     box-shadow: inset 0 -4px white, inset 0 -14px $primary-text-color;
   }
@@ -44,7 +44,7 @@
 .secondary {
   background-color: $secondary-color;
 
-  h2 b, span {
+  h2 b {
     display: inline;
     box-shadow: inset 0 -4px $secondary-color, inset 0 -14px $primary-text-color;
   }
@@ -113,13 +113,13 @@
   }
 
   .white {
-    h2 b, span {
+    h2 b {
       box-shadow: inset 0 -9px white, inset 0 -21px $primary-text-color;
     }
   }
   
   .secondary {
-    h2 b, span {
+    h2 bw {
       box-shadow: inset 0 -9px $secondary-color, inset 0 -21px $primary-text-color;
     }
   }

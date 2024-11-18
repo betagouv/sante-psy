@@ -1,5 +1,5 @@
 import React from 'react';
-import { EligibilityQuestions } from './eligibilityQuestions';
+import { EligibilityQuestions } from './eligibilitySteps';
 import QuestionStep from '../components/QuestionStep';
 
 export const renderEligibilityQuestion = (questionId, onNext) => {

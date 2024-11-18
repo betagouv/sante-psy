@@ -25,7 +25,7 @@ const EligibilityMessage = ({ isEligible }) => {
           className={styles.alert}
           type="success"
           description={
-            <p>
+            <>
               <b>Vous êtes éligible au dispositif Santé Psy Étudiant !</b><br />
               Prenez rendez-vous dès à présent avec un psychologue partenaire :
               <br />
@@ -41,7 +41,7 @@ const EligibilityMessage = ({ isEligible }) => {
               <br />
               Votre certificat de scolarité vous sera demandé lors de votre
               première consultation.
-            </p>
+            </>
           }
         />
       ) : (
@@ -49,16 +49,15 @@ const EligibilityMessage = ({ isEligible }) => {
           className={styles.alert}
           type="error"
           description={
-            <p>
+            <>
               <b>Nous sommes désolé, vous n’êtes hélas pas éligible au dispositif
-              Santé Psy Étudiant.</b>
-              <br />
+              Santé Psy Étudiant.</b><br />
               N’hésitez pas à vous rapprocher de votre service étudiant pour
               confirmer que vous n’avez ni un numéro INE ni une cotisation CVEC.
               <br />
               Auquel cas, retrouvez les différents services qui pourront vous
               accompagner ci-dessous.
-            </p>
+            </>
           }
         />
       )}

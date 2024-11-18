@@ -1,41 +1,35 @@
-import { EligibilityOptions } from "./eligibilityQuestions";
+import { EligibilityOptions } from "./eligibilitySteps";
 
 export const checkEligibility = (answers) => {
   const { TRAINING, ELIGIBILITY } = EligibilityOptions;
-  
+
+  const eligibleTrainings = [TRAINING.BTS, TRAINING.UNIVERSITY_DIPLOMA];
+  const eligibleOtherOptions = [ELIGIBILITY.INE, ELIGIBILITY.CVEC, ELIGIBILITY.BOTH];
+
   return (
-    answers.formation === TRAINING.BTS ||
-    answers.formation === TRAINING.UNIVERSITY_DIPLOMA ||
-    answers.otherEligibility === ELIGIBILITY.INE ||
-    answers.otherEligibility === ELIGIBILITY.CVEC ||
-    answers.otherEligibility === ELIGIBILITY.BOTH ||
-    answers.formationClose === TRAINING.BTS ||
-    answers.formationClose === TRAINING.UNIVERSITY_DIPLOMA ||
-    answers.otherEligibilityClose === ELIGIBILITY.INE ||
-    answers.otherEligibilityClose === ELIGIBILITY.CVEC ||
-    answers.otherEligibilityClose === ELIGIBILITY.BOTH ||
-    answers.formationSchool === TRAINING.BTS ||
-    answers.formationSchool === TRAINING.UNIVERSITY_DIPLOMA ||
-    answers.otherEligibilitySchool === ELIGIBILITY.INE ||
-    answers.otherEligibilitySchool === ELIGIBILITY.CVEC ||
-    answers.otherEligibilitySchool === ELIGIBILITY.BOTH ||
-    answers.formationConsult === TRAINING.BTS ||
-    answers.formationConsult === TRAINING.UNIVERSITY_DIPLOMA ||
-    answers.otherEligibilityConsult === ELIGIBILITY.INE ||
-    answers.otherEligibilityConsult === ELIGIBILITY.CVEC ||
-    answers.otherEligibilityConsult === ELIGIBILITY.BOTH
+    eligibleTrainings.includes(answers.formation) ||
+    eligibleOtherOptions.includes(answers.otherEligibility) ||
+    eligibleTrainings.includes(answers.formationClose) ||
+    eligibleOtherOptions.includes(answers.otherEligibilityClose) ||
+    eligibleTrainings.includes(answers.formationSchool) ||
+    eligibleOtherOptions.includes(answers.otherEligibilitySchool) ||
+    eligibleTrainings.includes(answers.formationConsult) ||
+    eligibleOtherOptions.includes(answers.otherEligibilityConsult)
   );
 };
 
 export const checkIneligibility = (answers) => {
   const { STUDENT, ELIGIBILITY } = EligibilityOptions;
 
+  const ineligibleStudentOptions = [STUDENT.NO];
+  const ineligibleOtherOptions = [ELIGIBILITY.NONE];
+
   return (
-    answers.isStudent === STUDENT.NO ||
-    answers.isStudentClose === STUDENT.NO ||
-    answers.otherEligibility === ELIGIBILITY.NONE ||
-    answers.otherEligibilityClose === ELIGIBILITY.NONE ||
-    answers.otherEligibilitySchool === ELIGIBILITY.NONE ||
-    answers.otherEligibilityConsult === ELIGIBILITY.NONE
+    ineligibleStudentOptions.includes(answers.isStudent) ||
+    ineligibleStudentOptions.includes(answers.isStudentClose) ||
+    ineligibleOtherOptions.includes(answers.otherEligibility) ||
+    ineligibleOtherOptions.includes(answers.otherEligibilityClose) ||
+    ineligibleOtherOptions.includes(answers.otherEligibilitySchool) ||
+    ineligibleOtherOptions.includes(answers.otherEligibilityConsult)
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { EligibilityQuestionIds, EligibilityOptions } from "../utils/eligibilityQuestions";
+import { EligibilityQuestionIds, EligibilityOptions } from "../utils/eligibilitySteps";
 import { renderEligibilityQuestion } from "../utils/renderEligibilityQuestion";
 
 const CloseEligibility = ({ answers, onNext }) => {
@@ -19,7 +19,7 @@ const CloseEligibility = ({ answers, onNext }) => {
 
       {answers.formationClose === EligibilityOptions.TRAINING.OTHER &&
         renderEligibilityQuestion(
-          EligibilityQuestionIds.ELIGIBILITY_OPTIONS,
+          EligibilityQuestionIds.CLOSE_PROOF,
           (answer) => onNext("otherEligibilityClose", answer)
         )}
     </>
