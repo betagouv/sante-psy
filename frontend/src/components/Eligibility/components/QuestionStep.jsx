@@ -1,15 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Radio, RadioGroup, Icon } from "@dataesr/react-dsfr";
 import styles from "./questionStep.cssmodule.scss";
 
-const QuestionStep = ({ question, options, onNext }) => {
-  const [selectedOption, setSelectedOption] = useState("");
-
-  const handleOptionChange = (option) => {
-    setSelectedOption(option.label);
-    onNext(option);
-  };
-
+const QuestionStep = ({ question, options, onNext, currentAnswer }) => {
   return (
     <div>
       <RadioGroup legend={<div className={styles.purpleBackgroundText}>{question}</div>}>
@@ -17,12 +10,13 @@ const QuestionStep = ({ question, options, onNext }) => {
           <div key={option.label} className={styles.optionWrapper}>
             <Radio
               label={option.label}
-              checked={selectedOption === option.label}
-              onChange={() => handleOptionChange(option)}
+              checked={currentAnswer === option.value}
+              onChange={() => onNext(option)}
               value={option.label}
+              defaultChecked={false}
             />
             {option.tooltip && (
-              <div className={styles.answerWithTooltip}>
+              <div className={styles.hoverElement}>
                 <span className={styles.tooltip}>{option.tooltip}</span>
                 <Icon
                   name="ri-information-line"
@@ -38,5 +32,4 @@ const QuestionStep = ({ question, options, onNext }) => {
     </div>
   );
 };
-
 export default QuestionStep;

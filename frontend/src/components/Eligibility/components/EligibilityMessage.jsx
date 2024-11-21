@@ -4,9 +4,11 @@ import InstagramBanner from "components/InstagramBanner/InstagramBanner";
 import { Alert, Button } from "@dataesr/react-dsfr";
 import styles from './eligibilityMessage.cssmodule.scss'
 import ServicesList from "components/OtherServices/ServicesList";
+import { useNavigate } from "react-router-dom";
 
 const EligibilityMessage = ({ isEligible }) => {
   const [small, setSmall] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     function handleResize() {
@@ -51,10 +53,10 @@ const EligibilityMessage = ({ isEligible }) => {
           description={
             <>
               <b>Nous sommes désolé, vous n’êtes hélas pas éligible au dispositif
-              Santé Psy Étudiant.</b><br />
-              N’hésitez pas à vous rapprocher de votre service étudiant pour
+              Santé Psy Étudiant.</b><br /><br />
+              Si vous avez un service étudiant, n’hésitez pas à vous en rapprocher pour
               confirmer que vous n’avez ni un numéro INE ni une cotisation CVEC.
-              <br />
+              <br /><br />
               Auquel cas, retrouvez les différents services qui pourront vous
               accompagner ci-dessous.
             </>
@@ -81,7 +83,7 @@ const EligibilityMessage = ({ isEligible }) => {
           secondary
           className={styles.endFormButtons}
         >
-          Prendre RDV
+          Refaire le test
         </Button>
       </div>
       <div className={styles.conditionsContainer}>
