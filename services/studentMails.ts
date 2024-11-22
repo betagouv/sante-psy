@@ -13,7 +13,7 @@ const sendMail1 = async (email: string): Promise<void> => {
   const html = await ejs.renderFile('./views/emails/studentMail-1.ejs', {
     signature: getSignature(),
     faq: `${config.hostnameWithProtocol}/faq`,
-    parcours: `${config.hostnameWithProtocol}/static/documents/parcours_etudiant_sante_psy_etudiant.pdf`,
+    site: `${config.hostnameWithProtocol}`,
   });
   await sendEmail(email, `Les informations concernant ${config.appName}`, html);
 };
