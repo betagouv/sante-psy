@@ -1,17 +1,13 @@
-import React, { useEffect } from "react";
-import { observer } from "mobx-react";
+import React, { useEffect } from 'react';
+import { observer } from 'mobx-react';
 
-import Slice from "components/Slice/Slice";
-import { useStore } from "stores/index";
-import styles from "./styles.cssmodule.scss";
-import MozaicInstagram from "./MozaicInstagram";
+import Slice from 'components/Slice/Slice';
+import styles from './styles.cssmodule.scss';
+import MozaicInstagram from './MozaicInstagram';
 
 const InstagramBanner = () => {
-  const {
-    commonStore: { config },
-  } = useStore();
   useEffect(() => {
-    document.title = "Santé Psy Étudiant";
+    document.title = 'Santé Psy Étudiant';
   }, []);
 
   return (
@@ -25,16 +21,20 @@ const InstagramBanner = () => {
         buttonSecondary
         buttonIcon="ri-instagram-line"
         Component={MozaicInstagram}
-        title={
+        title={(
           <div className={styles.title}>
-            Rejoignez la communauté Instagram <span className={styles.yellowUnderline}>Santé Psy Étudiant</span>
+            Rejoignez la communauté Instagram
+            {' '}
+            <span className={styles.yellowUnderline}>Santé Psy Étudiant</span>
             &#x00A0;
           </div>
-        }
+        )}
         y
-        description={
+        description={(
           <>
-            <b>21,5k</b> abonnés
+            <b>21,5k</b>
+            {' '}
+            abonnés
             <br />
             Conseils
             <br />
@@ -43,7 +43,7 @@ const InstagramBanner = () => {
             Podcasts
             <br />
           </>
-        }
+        )}
         buttonLink="https://www.instagram.com/sante_psyetudiant/?hl=fr"
         buttonText="Santé Psy Étudiant"
       />

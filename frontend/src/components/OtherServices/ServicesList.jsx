@@ -5,7 +5,7 @@ import styles from './service.cssmodule.scss';
 
 const ServicesList = ({ small }) => (
   <div className={styles.services}>
-    {servicesData.map((service) => (
+    {servicesData.map(service => (
       <Service
         key={service.name}
         image={small ? service.imageSmall : service.imageLarge}

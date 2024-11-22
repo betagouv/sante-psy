@@ -20,11 +20,13 @@ const OtherServicesPage = () => {
     <Page
       breadCrumbs={[{ href: '/', label: 'Accueil' }]}
       currentBreadCrumb="Autres services"
-      title={
+      title={(
         <>
-          Autres services <b>à votre écoute</b>
+          Autres services
+          {' '}
+          <b>à votre écoute</b>
         </>
-      }
+      )}
       description="Vous n’êtes pas éligible au dispositif Santé Psy Etudiant ? Voici d’autres services à votre écoute."
       textContent
     >

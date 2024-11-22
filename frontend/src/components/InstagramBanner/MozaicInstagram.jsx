@@ -13,10 +13,10 @@ const MozaicInstagram = () => {
 
   return (
     <div className={styles.mozaicGrid}>
-      {images.map((image, index) => (
-        <div key={index} className={styles.imageItem}>
+      {images.map(image => (
+        <div className={styles.imageItem}>
           <a href={image.href} target="_blank" rel="noopener noreferrer" className={styles.href}>
-            <img src={`images/${image.name}.jpg`} alt={`Image ${index + 1}`} />
+            <img src={`images/${image.name}.jpg`} alt="Santé Psy Etudiant instagram post" />
           </a>
         </div>
       ))}
