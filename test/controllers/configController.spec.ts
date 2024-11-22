@@ -15,7 +15,7 @@ describe('configController', () => {
             statistics: {
               base: 'https://stats.santepsyetudiant.beta.gouv.fr',
               dashboard: '/public/dashboard/a3834fd4-aa00-4ee2-a119-11dd2156e082',
-              nbInstaFollower: '21 500',
+              nbInstaFollower: '22 100',
             },
             sessionDuration: '2',
           });
