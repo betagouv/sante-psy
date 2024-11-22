@@ -1,0 +1,15 @@
+.eligibilityForm {
+    margin: 16px;
+}
+
+.bubbleSpeechPerson {
+    display: inline-flex;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 425px) {
+    .bubbleSpeechPerson {
+        display: none;
+    }
+}

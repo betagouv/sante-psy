@@ -90,7 +90,7 @@ const departementToUniversityName = {
   88: 'Lorraine Sud-Nancy',
   89: 'Dijon',
   90: 'Franche-Comté',
-  91: 'Evry',
+  91: 'Paris Saclay',
   92: 'Paris Saclay',
   93: 'Sorbonne Paris Nord',
   94: 'Paris Est Créteil (UPEC)',

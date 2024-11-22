@@ -1,0 +1,24 @@
+@import 'src/tooltip.scss';
+
+.answerWithTooltip  {
+    display: flex;
+    height: fit-content;
+}
+
+.eligibilityForm {
+    margin: 16px;
+}
+
+.purpleBackgroundText {
+    background-color: var(--light-purple);
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.optionWrapper {
+    @include tooltip;
+    margin-left: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    height: 32px;
+}
