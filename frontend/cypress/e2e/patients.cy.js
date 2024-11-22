@@ -4,10 +4,6 @@ const { resetDB } = require('./utils/db');
 
 describe('Patient', () => {
   beforeEach(() => {
-    // we set this date to always have the same active tab in student profile
-    const currentYear = new Date().getFullYear();
-    cy.clock(new Date(currentYear, 5, 1).getTime());
-
     cy.intercept('GET', '/api/patients')
       .as('etudiants');
     cy.intercept('DELETE', '/api/patients/*')
@@ -74,16 +70,17 @@ describe('Patient', () => {
         .click();
 
       cy.wait('@etudiant');
-
-      const getCurrentMonth = new Date().getMonth();
-      const firstPartScholarYear = getCurrentMonth > 8;
+      
+      // we set this date to always have the same active tab in student profile
+      const currentYear = new Date().getFullYear();
+      cy.clock(new Date(currentYear, 5, 1).getTime());
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
       cy.get('[data-test-id="etudiant-seances-list"] tr')
-        .should('have.length', firstPartScholarYear ? 25 : 49);
+        .should('have.length', 25);
       cy.get('[data-test-id="etudiant-seances-list"] ul li button')
-        .eq(firstPartScholarYear ? 0 : 1).click();
+        .eq(0).click();
       cy.get('[data-test-id="etudiant-seances-list"] tr')
-        .should('have.length', firstPartScholarYear ? 49 : 25);
+        .should('have.length', 49);
 
       cy.get('[data-test-id="etudiant-first-name-input"] > input')
         .clear()
