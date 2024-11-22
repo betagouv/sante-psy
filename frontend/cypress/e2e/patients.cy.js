@@ -70,7 +70,6 @@ describe('Patient', () => {
         .click();
 
       cy.wait('@etudiant');
-      
       // we set this date to always have the same active tab in student profile
       const currentYear = new Date().getFullYear();
       cy.clock(new Date(currentYear, 5, 1).getTime());
