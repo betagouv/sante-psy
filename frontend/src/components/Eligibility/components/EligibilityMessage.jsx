@@ -28,9 +28,9 @@ const EligibilityMessage = ({ isEligible }) => {
           type="success"
           description={(
             <>
-              <b>Eligible au dispositif Santé Psy Étudiant !</b>
+              <b>Vous êtes éligible au dispositif Santé Psy Étudiant !</b>
               <br />
-              Prendre rendez-vous dès à présent avec un psychologue partenaire :
+              Prenez rendez-vous dès à présent avec un psychologue partenaire :
               <br />
               <Button
                 onClick={() => navigate('/trouver-un-psychologue')}
@@ -42,7 +42,7 @@ const EligibilityMessage = ({ isEligible }) => {
                 Prendre RDV
               </Button>
               <br />
-              Un certificat de scolarité sera demandé lors de le
+              Votre certificat de scolarité vous sera demandé lors de votre
               première consultation.
             </>
           )}
@@ -54,7 +54,8 @@ const EligibilityMessage = ({ isEligible }) => {
           description={(
             <>
               <b>
-                non éligible au dispositif Santé Psy Étudiant.
+                Nous sommes désolé, vous n’êtes hélas pas éligible au dispositif
+                Santé Psy Étudiant.
               </b>
               <br />
               <br />
@@ -62,7 +63,8 @@ const EligibilityMessage = ({ isEligible }) => {
               confirmer que vous n’avez ni un numéro INE ni une cotisation CVEC.
               <br />
               <br />
-              Auquel cas, retrouvez les différents services d'accompagnement ci-dessous.
+              Auquel cas, retrouvez les différents services qui pourront vous
+              accompagner ci-dessous.
             </>
           )}
         />
