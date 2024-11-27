@@ -57,7 +57,7 @@ const EligibilityMessage = ({ isEligible }) => {
       ) : (
         <Alert
           className={styles.alert}
-          type="error"
+          type="warning"
           description={(
             <>
               <b>
