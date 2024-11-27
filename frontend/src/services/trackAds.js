@@ -21,9 +21,9 @@ const initAxeptio = () => {
 
 function gtag() { window.dataLayer.push(arguments); }
 
-const initGoogleAds = () => {
+const initGoogleAds = token => {
   const el = document.createElement('script');
-  el.setAttribute('src', 'https://www.googletagmanager.com/gtag/js?id=AW-10803675495');
+  el.setAttribute('src', `https://www.googletagmanager.com/gtag/js?id=${token}`);
   el.setAttribute('async', true);
   if (document.body !== null) {
     document.body.appendChild(el);
@@ -32,7 +32,7 @@ const initGoogleAds = () => {
   window.dataLayer = window.dataLayer || [];
 
   gtag('js', new Date());
-  gtag('config', 'AW-10803675495');
+  gtag('config', token);
 };
 
 const removeGoogleAds = () => {
@@ -66,8 +66,8 @@ const removeFacebookAds = () => {
   }
 };
 
-const trackGoogleAds = () => {
-  gtag('event', 'conversion', { send_to: 'AW-10803675495/0jD3CLHYqYMDEOeCzJ8o' });
+const trackGoogleAds = (token, value) => {
+  gtag('event', 'conversion', { send_to: `${token}` }, value);
 };
 
 const trackFacebookAds = () => {

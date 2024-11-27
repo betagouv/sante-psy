@@ -1,52 +1,17 @@
 import { Alert, Button, TextInput } from '@dataesr/react-dsfr';
-import trackAds from 'services/trackAds';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import agent from 'services/agent';
+import useConsentAds from 'src/utils/googleAds/useConsentAds';
 import styles from './newsletter.cssmodule.scss';
 
 const Newsletter = ({ emailRef, withTracking, withText }) => {
   const searchParams = useLocation().search;
   const [email, setEmail] = useState('');
   const [notification, setNotification] = useState();
-  const [facebookConsent, setFacebookConsent] = useState(false);
-  const [googleAdsConsent, setGoogleAdsConsent] = useState(false);
-
   const from = new URLSearchParams(searchParams).get('from');
 
-  useEffect(() => {
-    if (withTracking && __PIXEL_ADS__) {
-      // Inspired by https://developers.axeptio.eu/cookies/cookies-integration
-      trackAds.initAxeptio();
-
-      if (!window._axcb) {
-        window._axcb = [];
-      }
-      window._axcb.push(axeptio => {
-        axeptio.on('cookies:complete', choices => {
-          if (choices.facebook_pixel) {
-            setFacebookConsent(true);
-            trackAds.initFacebookAds();
-          } else {
-            setFacebookConsent(false);
-            trackAds.removeFacebookAds();
-          }
-          if (choices.Google_Ads) {
-            setGoogleAdsConsent(true);
-            trackAds.initGoogleAds();
-          } else {
-            setGoogleAdsConsent(false);
-            trackAds.removeGoogleAds();
-          }
-        });
-
-        // See https:// developers.axeptio.eu/site-integration/special-cases-spa-or-react
-        axeptio.on('consent:saved', () => {
-          window.location.reload();
-        });
-      });
-    }
-  }, []);
+  const { trackFacebookAds, trackGoogleAdsNewsletter } = useConsentAds(withTracking);
 
   const onSubmit = event => {
     event.preventDefault();
@@ -74,13 +39,8 @@ const Newsletter = ({ emailRef, withTracking, withText }) => {
       }
     }
 
-    if (facebookConsent) {
-      trackAds.trackFacebookAds();
-    }
-
-    if (googleAdsConsent) {
-      trackAds.trackGoogleAds();
-    }
+    trackFacebookAds();
+    trackGoogleAdsNewsletter();
   };
 
   return (
