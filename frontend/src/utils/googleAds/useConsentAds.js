@@ -51,7 +51,7 @@ const useConsentAds = (withTracking, isEligibility = false) => {
 
   const trackGoogleAdsEligibility = React.useCallback(() => {
     if (googleAdsConsent) {
-      trackAds.trackGoogleAds(`${ELIGIBILITY_ADMIN_ID}/${ELIGIBILITY_CONVERSION_ID}`, '\'value\': 1.0');
+      trackAds.trackGoogleAds(`${ELIGIBILITY_ADMIN_ID}/${ELIGIBILITY_CONVERSION_ID}`, 1.0);
     }
   }, [googleAdsConsent]);
 

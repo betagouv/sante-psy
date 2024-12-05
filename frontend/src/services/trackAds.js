@@ -66,9 +66,14 @@ const removeFacebookAds = () => {
   }
 };
 
-const trackGoogleAds = (token, value) => {
-  gtag('event', 'conversion', { send_to: `${token}` }, value);
+const trackGoogleAds = (token, value = null) => {
+  const params = { send_to: token };
+  if (value) {
+    params.value = value;
+  }
+  gtag('event', 'conversion', params);
 };
+
 
 const trackFacebookAds = () => {
   window.fbq('track', 'Contact');
