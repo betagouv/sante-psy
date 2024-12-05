@@ -74,7 +74,6 @@ const trackGoogleAds = (token, value = null) => {
   gtag('event', 'conversion', params);
 };
 
-
 const trackFacebookAds = () => {
   window.fbq('track', 'Contact');
 };
