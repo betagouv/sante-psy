@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Table, Callout, CalloutText, Icon, Button, Select, TextInput, CalloutTitle } from '@dataesr/react-dsfr';
+import { Table, Callout, CalloutText, Icon, Button, Select, TextInput } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { currentUnivYear } from 'services/univYears';
@@ -269,18 +269,14 @@ const Patients = () => {
         hasInfoIcon={false}
         colorFamily="blue-cumulus"
       >
-        <CalloutTitle>
-          Bienvenue sur votre nouveau tableau de suivi des étudiants
-        </CalloutTitle>
         <CalloutText size="md">
+          L&lsquo;INE est désormais obligatoire pour pouvoir déclarer des séances afin de pouvoir maintenir à jour le compte des séances pour les étudiants.
+          {' '}
+          <br />
+          {' '}
+          <br />
           Si les alertes apparaissent pour d’anciens étudiants, nous admettons que vous ne pouvez pas tout remplir à nouveau.
           Vous pourrez les compléter pour les nouveaux étudiants à venir.
-          {' '}
-          <br />
-          {' '}
-          <br />
-          Nous vous rappelons que vous pouvez recevoir des étudiants quel que soit leur département,
-          écoles supérieures/universités ou lieu de résidence.
         </CalloutText>
       </Callout>
       <div className="fr-my-2w">
@@ -306,7 +302,7 @@ const Patients = () => {
             data={filteredPatients.length > 0 ? filteredPatients : patients}
             rowKey="id"
             />
-        ) : (<span>Vous n‘avez pas encore déclaré d&lsquo;étudiants.</span>)}
+        ) : (<span>Vous n&lsquo;avez pas encore déclaré d&lsquo;étudiants.</span>)}
       </div>
     </>
   );

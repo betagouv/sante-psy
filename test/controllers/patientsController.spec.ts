@@ -347,8 +347,7 @@ describe('patientsController', () => {
         isStudentStatusVerified: undefined,
         doctorName,
         dateOfBirth,
-      }, 'Le numéro INE doit faire maximum 11 caractères alphanumériques (chiffres ou lettres sans accents).\n'
-      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
+      }, 'Le numéro INE doit faire maximum 11 caractères alphanumériques (chiffres ou lettres sans accents).');
     });
 
     const shouldPassCreatePatientInputValidation = (done, postData) => {
@@ -383,8 +382,7 @@ describe('patientsController', () => {
         isStudentStatusVerified: undefined,
         doctorName,
         dateOfBirth,
-      }, 'Le numéro INE doit faire maximum 11 caractères alphanumériques (chiffres ou lettres sans accents).\n'
-      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.');
+      }, 'Le numéro INE doit faire maximum 11 caractères alphanumériques (chiffres ou lettres sans accents).');
     });
 
     it('should pass validation when all fields are correct', (done) => {
@@ -399,8 +397,8 @@ describe('patientsController', () => {
       });
     });
 
-    it('should pass validation when INE is missing', (done) => {
-      shouldPassCreatePatientInputValidation(done, {
+    it('should NOT pass validation when INE is missing', (done) => {
+      shouldFailCreatePatientInputValidation(done, {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '',
@@ -408,7 +406,7 @@ describe('patientsController', () => {
         isStudentStatusVerified: undefined,
         doctorName,
         dateOfBirth,
-      });
+      }, 'Le numéro INE doit faire maximum 11 caractères alphanumériques (chiffres ou lettres sans accents).');
     });
 
     it('should pass validation when institutionName is missing', (done) => {

@@ -38,16 +38,14 @@ const patientValidators = [
     .withMessage('Vous devez spécifier le nom du patient.'),
   oneOf(
     [
-      // Two valid possibilities : ine is empty, or ine is valid format.
-      check('INE').trim().isEmpty(),
+      check('INE').trim().not().isEmpty(),
       check('INE')
         .trim().isAlphanumeric()
         .isLength({ min: 11, max: 11 })
         .customSanitizer(DOMPurify.sanitize),
     ],
-    `Le numéro INE doit faire maximum 11 caractères alphanumériques \
-(chiffres ou lettres sans accents).
-    Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`,
+    'Le numéro INE doit faire maximum 11 caractères alphanumériques \
+(chiffres ou lettres sans accents).',
   ),
   oneOf(
     [

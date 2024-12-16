@@ -26,8 +26,7 @@ module.exports = () => [
   {
     question: "Je n'ai pas de numéro INE mais j'ai bien une carte étudiante",
     answer:
-      'Le numéro INE est fortement recommandé. Si vous êtes étudiant dans le supérieur vous pouvez avoir accès \
-    au dispositif en présentant votre carte d’étudiant ou tout document équivalent attestant de votre statut étudiant.',
+      "Depuis le 1er janvier 2025, le numéro INE est obligatoire. Si vous êtes étudiant dans le supérieur, vous pouvez vous rapprocher de l'administration de votre école afin de récupérer votre numéro INE.",
   },
   {
     question: 'Je ne suis pas de nationalité française, mais étudiant en France. Suis-je éligible au dispositif\u00A0?',

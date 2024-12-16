@@ -11,8 +11,8 @@ module.exports = () => [
   {
     question: "Mon étudiant n'a pas de numéro INE, que faire\u00A0?",
     answer:
-      "Le numéro INE est fortement recommandé. \
-    L'étudiant doit seulement vous présenter sa carte d’étudiant ou tout document équivalent attestant de son statut étudiant.",
+      "Depuis le 1er janvier 2025, le numéro INE est obligatoire. \
+    Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant ou le certificat de scolarité.",
   },
   {
     question: 'Quelles informations dois-je vérifier auprès du étudiant lors de la séance\u00A0?',

@@ -141,15 +141,17 @@ const AddEditPatient = () => {
               <TextInput
                 className={classNames(styles.ineInput, 'midlength-input')}
                 data-test-id="etudiant-ine-input"
-                label="Numéro INE de l'étudiant (optionnel)"
-                hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant."
+                label="Numéro INE de l'étudiant"
+                hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant ou le certificat de scolarité."
                 value={patient.INE}
                 pattern="^[a-zA-Z0-9]{11}$"
                 onChange={e => changePatient(e.target.value, 'INE')}
+                required
                 />
 
-              <Highlight size="lg">
-                Bien qu’optionnel, l’INE vous permettra de suivre les séances réalisées ailleurs et donc d’assurer votre remboursement.
+              <Highlight size="lg" className={styles.ineHighlight}>
+                L&lsquo;INE est désormais obligatoire pour pouvoir déclarer des séances afin de pouvoir maintenir à jour le compte des séances pour les étudiants.
+                {' '}
               </Highlight>
             </div>
             <Checkbox
