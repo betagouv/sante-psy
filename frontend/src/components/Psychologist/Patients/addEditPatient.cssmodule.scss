@@ -48,4 +48,10 @@
   .patientAppointments {
       width: 100%;
   }
+
+  .ineWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+  }
 }

@@ -8,7 +8,7 @@ const steps = [
   {
     placement: 'top-start',
     target: '#mandatory-informations',
-    content: "Le nom, prénom et date de naissance sont obligatoires pour identifier l'étudiant.",
+    content: "Le nom, prénom, la date de naissance et l'INE sont obligatoires pour identifier l'étudiant.",
   },
   {
     placement: 'top-start',
