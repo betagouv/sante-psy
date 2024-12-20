@@ -83,7 +83,7 @@ const AddEditPatient = () => {
         <form onSubmit={save}>
           <div id="mandatory-informations">
             <section id="anchor-student-file" className={styles.studentSectionTitle}>
-              <h2>Dossier étudiant</h2>
+              <h2>{patient.firstNames}{' '}{patient.lastName}</h2>
               {patient.badges.includes(badges.student_ine.key)
                 ? renderBadge({ badge: badges.student_ine.key })
                 : ''}
