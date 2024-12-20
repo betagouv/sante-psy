@@ -133,7 +133,7 @@ describe('DS integration tests', () => {
     isConventionSigned: null,
     selfModified: false,
     hasSeenTutorial: false,
-    acceptationDate: new Date('2021-06-04T00:00:00.000Z'),
+    acceptationDate: new Date('2021-06-03T22:00:00.000Z'),
   };
   const xavierId = '03ce077a-84c3-5035-9b27-f31a78a19b3a';
   const xavier = {
@@ -169,7 +169,7 @@ describe('DS integration tests', () => {
     isConventionSigned: null,
     selfModified: false,
     hasSeenTutorial: false,
-    acceptationDate: new Date('2021-06-01T00:00:00.000Z'),
+    acceptationDate: new Date('2021-05-31T22:00:00.000Z'),
   };
 
   beforeEach(async () => {
