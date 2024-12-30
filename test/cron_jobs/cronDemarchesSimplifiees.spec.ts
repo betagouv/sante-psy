@@ -133,7 +133,6 @@ describe('DS integration tests', () => {
     isConventionSigned: null,
     selfModified: false,
     hasSeenTutorial: false,
-    // must check why valid acceptationDate changed according to moment 
     acceptationDate: new Date('2021-06-04T00:00:00.000Z'),
   };
   const xavierId = '03ce077a-84c3-5035-9b27-f31a78a19b3a';

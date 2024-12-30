@@ -82,6 +82,8 @@ const AddEditPatient = () => {
       {patient && (
         <form onSubmit={save}>
           <div id="mandatory-informations">
+            {patient.firstNames
+            && (
             <section id="anchor-student-file" className={styles.studentSectionTitle}>
               <h2>
                 {patient.firstNames}
@@ -92,6 +94,7 @@ const AddEditPatient = () => {
                 ? renderBadge({ badge: badges.student_ine.key })
                 : ''}
             </section>
+            )}
             <p className="fr-text--sm fr-mb-1v">
               Les champs avec une astérisque (
               <span className="red-text">*</span>

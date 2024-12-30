@@ -139,22 +139,22 @@ const NewAppointment = () => {
           required
           disabled={!hasIne}
         />
+        <Alert
+          className="fr-mt-2w"
+          type="warning"
+          description={(
+            <>
+              Depuis le 1er janvier, vous ne pouvez pas déclarer de séances pour un patient sans avoir indiqué son numéro INE dans son dossier.
+              <br />
+              <HashLink to={`/psychologue/modifier-etudiant/${patientId}?addAppointment=true`}>
+                Indiquer le numéro INE d&lsquo;un étudiant
+              </HashLink>
+              .
+            </>
+                )}
+              />
         {tooMuchAppointments && (
         <>
-          <Alert
-            className="fr-mt-2w"
-            type="warning"
-            description={(
-              <>
-                Depuis le 1er janvier, vous ne pouvez pas déclarer de séances pour un patient sans avoir indiqué son numéro INE dans son dossier.
-                <br />
-                <HashLink to={`/psychologue/modifier-etudiant/${patientId}?addAppointment=true`}>
-                  Indiquer le numéro INE d&lsquo;un étudiant
-                </HashLink>
-                .
-              </>
-                  )}
-                />
           <Alert
             className="fr-mt-2w"
             description={(
@@ -178,7 +178,7 @@ const NewAppointment = () => {
           submit
           icon="ri-add-line"
           className="fr-mt-4w"
-          disabled={(tooMuchAppointments && !understand)}
+          disabled={(tooMuchAppointments && (!hasIne || !understand))}
         >
           Créer la séance
         </Button>
