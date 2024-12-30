@@ -92,17 +92,17 @@ describe('Appointments', () => {
   describe('New', () => {
     it('should create a new appointments if student is selected', () => {
       cy.get('[data-test-id="new-appointment-button"]').click();
-      
+
       cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
-      
+
       cy.get('[data-test-id="new-appointment-etudiant-input"] div div')
-      .eq(2)
-      .click();
-      
+        .eq(2)
+        .click();
+
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
-      
+
       selectNextCalendarDate();
-      
+
       cy.get('[data-test-id="new-appointment-submit"]')
         .invoke('attr', 'disabled')
         .then(disabled => {
