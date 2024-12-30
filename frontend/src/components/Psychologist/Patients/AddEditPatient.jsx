@@ -82,7 +82,7 @@ const AddEditPatient = () => {
       {patient && (
         <form onSubmit={save}>
           <div id="mandatory-informations">
-            {patient.firstNames
+            {patientId
             && (
             <section id="anchor-student-file" className={styles.studentSectionTitle}>
               <h2>

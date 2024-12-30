@@ -178,7 +178,7 @@ const NewAppointment = () => {
           submit
           icon="ri-add-line"
           className="fr-mt-4w"
-          disabled={(tooMuchAppointments && (!hasIne || !understand))}
+          disabled={(tooMuchAppointments && !understand) || !hasIne}
         >
           Créer la séance
         </Button>
