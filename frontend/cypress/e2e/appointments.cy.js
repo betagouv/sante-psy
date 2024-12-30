@@ -101,6 +101,10 @@ describe('Appointments', () => {
 
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
 
+      cy.get('[data-test-id="new-appointment-date-input"]').should('exist');
+
+      cy.get('[data-test-id="new-appointment-date-input"]').click();
+
       selectNextCalendarDate();
 
       cy.get('[data-test-id="new-appointment-submit"]')
