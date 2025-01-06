@@ -187,9 +187,13 @@ describe('DS integration tests', () => {
       useFirstNames,
       useLastName,
       isVeryAvailable,
+      acceptationDate,
       ...psy
     } = await dbPsychologists.getById(id);
     psy.should.eql(expected);
+
+    expect(acceptationDate.toISOString()).to.equal(expected.acceptationDate.toISOString());
+
     if (universityId) {
       assignedUniversityId.should.equals(universityId);
     }
