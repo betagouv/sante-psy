@@ -3,15 +3,17 @@ const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 
 describe('Reimbursement', () => {
+  const currentYear = new Date().getFullYear();
+
   beforeEach(() => {
-    cy.clock(new Date(2024, 0, 1).getTime());
+    cy.clock(new Date(currentYear, 0, 1).getTime());
 
     cy.intercept({
       method: 'GET',
       pathname: '/api/appointments',
       query: {
         month: '1',
-        year: '2024',
+        year: currentYear.toString(),
         isBillingPurposes: 'true',
       },
     }).as('appointments');
@@ -30,7 +32,7 @@ describe('Reimbursement', () => {
   describe('Display reimbursements', () => {
     it('should display reimbursements', () => {
       cy.get('[data-test-id="bill-summary-text"]')
-        .contains('vous avez effectué 13 séances, dont 2 premières séances, auprès de 3 étudiants');
+        .contains('vous avez effectué 13 séances, dont 0 premières séances, auprès de 3 étudiants');
 
       cy.get('[data-test-id="billing-table"] tr')
         .should('have.length', 8);
@@ -40,21 +42,21 @@ describe('Reimbursement', () => {
       cy.get('[data-test-id="billing-table"] td')
         .eq(2).should('have.text', '0');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(3).should('have.text', '30€');
+        .eq(3).should('have.text', '50€');
       cy.get('[data-test-id="billing-table"] td')
         .eq(13).should('have.text', '2');
       cy.get('[data-test-id="billing-table"] td')
         .eq(14).should('have.text', '0');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(15).should('have.text', '60€');
+        .eq(15).should('have.text', '100€');
       cy.get('[data-test-id="billing-table"] td')
         .eq(17).should('have.text', '3');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(18).should('have.text', '2');
+        .eq(18).should('have.text', '0');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(19).should('have.text', '110€');
+        .eq(19).should('have.text', '150€');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(27).should('have.text', '410€');
+        .eq(27).should('have.text', '650€');
     });
   });
 });
