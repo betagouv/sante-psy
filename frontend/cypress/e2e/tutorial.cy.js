@@ -3,6 +3,8 @@ const { checkConvention } = require('../../src/services/conventionVerification')
 const { loginAsDefault } = require('./utils/login');
 const { resetDB, resetTutorial } = require('./utils/db');
 
+const currentYear = new Date().getFullYear();
+
 const checkAllSteps = numberOfSteps => {
   // go the the ante last step
   for (let i = 0; i < numberOfSteps - 1; i++) {
@@ -96,7 +98,7 @@ describe('Other tutorials', () => {
   }));
 
   it('should display billing tutorial when appointments', () => {
-    const now = new Date(2024, 1, 24).getTime();
+    const now = new Date(currentYear, 1, 1).getTime();
     cy.clock(now);
     cy.visit('/psychologue/mes-remboursements');
     cy.wait('@connecteduser');
@@ -107,7 +109,7 @@ describe('Other tutorials', () => {
   });
 
   it('should display billing tutorial when no appointments', () => {
-    const now = new Date(2024, 5, 24).getTime();
+    const now = new Date(currentYear - 1, 1, 1).getTime();
     cy.clock(now);
     cy.visit('/psychologue/mes-remboursements');
     cy.wait('@connecteduser');

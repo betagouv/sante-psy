@@ -3,6 +3,7 @@ import getDiplomaErrors from '../../services/getDiplomaErrors';
 
 describe('getDiplomaErrors', () => {
   const DIPLOMA_ID = 'Q2hhbXAtMTYzOTE2OQ==';
+  const currentYear = new Date().getFullYear();
 
   it('Should refuse empty diploma', () => {
     const psychologist = create.getOnePsyDS('2000', 'random');
@@ -21,7 +22,8 @@ describe('getDiplomaErrors', () => {
   });
 
   it('Should refuse recent diploma', () => {
-    const psychologist = create.getOnePsyDS('2021', DIPLOMA_ID);
+    const threeYearsAgo = currentYear - 3;
+    const psychologist = create.getOnePsyDS(threeYearsAgo.toString(), DIPLOMA_ID);
 
     const errors = getDiplomaErrors(psychologist);
     errors.length.should.equals(1);
