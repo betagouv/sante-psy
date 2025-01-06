@@ -111,12 +111,11 @@ const PsychologistRouter = () => {
         return {
           title: (
             <>
-              {user.firstNames}
+              Modifier le
               {' '}
-              {user.lastName}
+              <b>dossier</b>
             </>
           ),
-          description: "Suivi de l'étudiant",
           tutorial: 'new-student',
         };
       case 'mes-remboursements':

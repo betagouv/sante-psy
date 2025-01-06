@@ -36,19 +36,14 @@ const patientValidators = [
     .trim().not().isEmpty()
     .customSanitizer(DOMPurify.sanitize)
     .withMessage('Vous devez spécifier le nom du patient.'),
-  oneOf(
-    [
-      // Two valid possibilities : ine is empty, or ine is valid format.
-      check('INE').trim().isEmpty(),
-      check('INE')
-        .trim().isAlphanumeric()
-        .isLength({ min: 11, max: 11 })
-        .customSanitizer(DOMPurify.sanitize),
-    ],
-    `Le numéro INE doit faire maximum 11 caractères alphanumériques \
-(chiffres ou lettres sans accents).
-    Si vous ne l'avez pas maintenant, ce n'est pas grave, vous pourrez y revenir plus tard.`,
-  ),
+  check('INE')
+    .trim().not().isEmpty()
+    .withMessage('Le numéro INE est obligatoire.')
+    .isAlphanumeric()
+    .withMessage('Le numéro INE doit être alphanumérique (chiffres ou lettres sans accents).')
+    .isLength({ min: 11, max: 11 })
+    .withMessage('Le numéro INE doit faire exactement 11 caractères.')
+    .customSanitizer(DOMPurify.sanitize),
   oneOf(
     [
       // Two valid possibilities : dateofbirth is empty, or dateofbirth is valid format.

@@ -45,6 +45,7 @@ const NewAppointment = () => {
 
   const patient = useMemo(() => patients?.find(p => p.id === patientId), [patients, patientId]);
   const tooMuchAppointments = useMemo(() => patient && patient.countedAppointments >= MAX_APPOINTMENT, [patient]);
+  const hasIne = useMemo(() => !!(patient && patient.INE), [patient]);
   const createNewAppointment = e => {
     e.preventDefault();
     setNotification({});
@@ -78,8 +79,8 @@ const NewAppointment = () => {
         <div className={styles.message}>
           Vous pouvez vous faire rembourser
           <ul>
-            <li>jusqu‘à 12 séances depuis le 1er juillet 2024.</li>
-            <li>jusqu‘à 8 séances avant le 1er juillet 2024.</li>
+            <li>jusqu&lsquo;à 12 séances depuis le 1er juillet 2024.</li>
+            <li>jusqu&lsquo;à 8 séances avant le 1er juillet 2024.</li>
           </ul>
         </div>
         <div id="patients-list">
@@ -133,10 +134,25 @@ const NewAppointment = () => {
           maxDate={maxDate}
           dateFormat="dd/MM/yyyy"
           showPopperArrow={false}
-          customInput={<DateInput label="Date de la séance" dataTestId="new-appointment-date-input" />}
+          customInput={<DateInput label="Date de la séance" dataTestId="new-appointment-date-input" disabled={!hasIne} />}
           onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
           required
+          disabled={!hasIne}
         />
+        <Alert
+          className="fr-mt-2w"
+          type="warning"
+          description={(
+            <>
+              Depuis le 1er janvier, vous ne pouvez pas déclarer de séances pour un patient sans avoir indiqué son numéro INE dans son dossier.
+              <br />
+              <HashLink to={`/psychologue/modifier-etudiant/${patientId}?addAppointment=true`}>
+                Indiquer le numéro INE d&lsquo;un étudiant
+              </HashLink>
+              .
+            </>
+                )}
+              />
         {tooMuchAppointments && (
         <>
           <Alert
@@ -162,7 +178,7 @@ const NewAppointment = () => {
           submit
           icon="ri-add-line"
           className="fr-mt-4w"
-          disabled={(tooMuchAppointments && !understand)}
+          disabled={(tooMuchAppointments && !understand) || !hasIne}
         >
           Créer la séance
         </Button>

@@ -90,12 +90,8 @@ describe('Appointments', () => {
   });
 
   describe('New', () => {
-    it('should create a new appointments', () => {
+    it('should create a new appointments if student is selected', () => {
       cy.get('[data-test-id="new-appointment-button"]').click();
-
-      cy.get('[data-test-id="new-appointment-date-input"]').click();
-
-      selectNextCalendarDate();
 
       cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
 
@@ -104,6 +100,12 @@ describe('Appointments', () => {
         .click();
 
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
+
+      cy.get('[data-test-id="new-appointment-date-input"]').should('exist');
+
+      cy.get('[data-test-id="new-appointment-date-input"]').click();
+
+      selectNextCalendarDate();
 
       cy.get('[data-test-id="new-appointment-submit"]')
         .invoke('attr', 'disabled')
