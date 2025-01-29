@@ -99,15 +99,17 @@ describe('checkForMultipleAcceptedDossiers', () => {
 });
 
 describe('DS integration tests', () => {
-  const paulId = '036e3a85-24bf-5915-9db0-a189bec8e7f6';
-  const paul = {
-    adeli: '1234567890',
-    title: 'M',
-    firstNames: 'Paul',
-    lastName: 'Burgun',
-    email: 'paul.burgun@beta.gouv.fr',
+  // warning: DS datas (test account) erase every 3,5 years, might create tests bug
+  // get below dossierNumber via log of dsAPIData
+  const anaisId = 'a8f759ce-3a30-52ae-a95e-2551d5cc5910';
+  const anais = {
+    adeli: '012345678',
+    title: 'Mme',
+    firstNames: 'Anais',
+    lastName: 'Alt',
+    email: 'anais.altun@beta.gouv.fr',
     address: '1 Rue Lecourbe 75015 Paris',
-    departement: '2B - Haute-Corse',
+    departement: '75 - Paris',
     longitude: null, // api-adresse.data.gouv.fr is mocked in test
     latitude: null, // api-adresse.data.gouv.fr is mocked in test
     city: null,
@@ -117,59 +119,59 @@ describe('DS integration tests', () => {
     otherLatitude: null,
     otherCity: null,
     otherPostcode: null,
-    region: 'Corse',
-    phone: '01 23 45 67 89',
-    website: '',
-    appointmentLink: null,
-    teleconsultation: false,
-    description: 'Test',
-    languages: 'Français',
-    training: ['Connaissance et pratique des outils diagnostic psychologique'],
-    diploma: 'Psychologue',
-    diplomaYear: '2008',
-    archived: false,
-    state: DossierState.accepte,
-    personalEmail: 'paul.burgun@beta.gouv.fr',
-    isConventionSigned: null,
-    selfModified: false,
-    hasSeenTutorial: false,
-    acceptationDate: new Date('2021-06-04T00:00:00.000Z'),
-  };
-  const xavierId = '03ce077a-84c3-5035-9b27-f31a78a19b3a';
-  const xavier = {
-    adeli: '123456789',
-    title: 'M',
-    firstNames: 'Xavier',
-    lastName: 'Dsdr',
-    email: 'xavier.desoindre@beta.gouv.fr',
-    address: 'Traverse C Est Ici 13380 Plan-de-Cuques',
-    departement: '99 - Etranger',
-    region: null, // not matching 99
-    longitude: null, // api-adresse.data.gouv.fr is mocked in test
-    latitude: null, // api-adresse.data.gouv.fr is mocked in test
-    city: null,
-    postcode: null,
-    otherAddress: null,
-    otherLongitude: null,
-    otherLatitude: null,
-    otherCity: null,
-    otherPostcode: null,
-    phone: '01',
+    region: 'Ile-de-France',
+    phone: '01 02 03 04 05',
     website: '',
     appointmentLink: null,
     teleconsultation: false,
     description: '',
     languages: 'Français',
-    training: ['Connaissance et pratique des outils diagnostic psychologique'],
-    diploma: 'T',
-    diplomaYear: '1992',
+    training: [''],
+    diploma: 'Psychologie',
+    diplomaYear: '2005',
     archived: false,
     state: DossierState.accepte,
-    personalEmail: 'xavier.desoindre@beta.gouv.fr',
+    personalEmail: 'anais.altun@beta.gouv.fr',
     isConventionSigned: null,
     selfModified: false,
     hasSeenTutorial: false,
-    acceptationDate: new Date('2021-06-01T00:00:00.000Z'),
+    acceptationDate: new Date('2025-01-29T00:00:00.000Z'),
+  };
+  const doniaId = 'a767ecdf-e565-5c1b-8169-e95116e8d126';
+  const donia = {
+    adeli: '95829302942',
+    title: 'Mme',
+    firstNames: 'Donia',
+    lastName: 'Benharara',
+    email: 'donia.benharara@beta.gouv.fr',
+    address: '10 Avenue Simon Vouet 78560 Le Port-Marly',
+    departement: '78 - Yvelines',
+    region: 'Ile-de-France',
+    longitude: null, // api-adresse.data.gouv.fr is mocked in test
+    latitude: null, // api-adresse.data.gouv.fr is mocked in test
+    city: null,
+    postcode: null,
+    otherAddress: null,
+    otherLongitude: null,
+    otherLatitude: null,
+    otherCity: null,
+    otherPostcode: null,
+    phone: '06 12 34 56 78',
+    website: '',
+    appointmentLink: null,
+    teleconsultation: false,
+    description: '',
+    languages: 'Français',
+    training: ['Psychologie Clinique', 'Psychopathologie et/ou Psychologie de la santé'],
+    diploma: 'Psychologie clinique de la santé',
+    diplomaYear: '2015',
+    archived: false,
+    state: DossierState.accepte,
+    personalEmail: 'donia.benharara@beta.gouv.fr',
+    isConventionSigned: null,
+    selfModified: false,
+    hasSeenTutorial: false,
+    acceptationDate: new Date('2025-01-29T00:00:00.000Z'),
   };
 
   beforeEach(async () => {
@@ -199,8 +201,8 @@ describe('DS integration tests', () => {
     const result = await cronDemarchesSimplifiees.importEveryDataFromDSToPG();
     result.should.be.true;
 
-    await verifyPsy(paulId, paul);
-    await verifyPsy(xavierId, xavier);
+    await verifyPsy(anaisId, anais);
+    await verifyPsy(doniaId, donia);
   }).timeout(30000);
 
   it('should update psy info when existing', async () => {
@@ -209,9 +211,9 @@ describe('DS integration tests', () => {
 
     // @ts-expect-error => test
     await dbPsychologists.upsertMany([{
-      ...paul,
-      training: JSON.stringify(paul.training),
-      dossierNumber: paulId,
+      ...anais,
+      training: JSON.stringify(anais.training),
+      dossierNumber: anaisId,
       firstNames: 'Paulo',
       description: 'Biz dev indispensable le jour, master en deguisement la nuit',
       selfModified: false,
@@ -219,9 +221,9 @@ describe('DS integration tests', () => {
     },
     // @ts-expect-error => test
     {
-      ...xavier,
-      training: JSON.stringify(xavier.training),
-      dossierNumber: xavierId,
+      ...donia,
+      training: JSON.stringify(donia.training),
+      dossierNumber: doniaId,
       firstNames: 'Raviere',
       diploma: 'BTS de claquettes',
       description: 'Codeur vaudoo, prefere mettre en prod un vendredi soir plutot que de faire des tests',
@@ -232,9 +234,9 @@ describe('DS integration tests', () => {
     const result = await cronDemarchesSimplifiees.importEveryDataFromDSToPG();
     result.should.be.true;
 
-    await verifyPsy(paulId, paul, paulUniversity.id);
-    await verifyPsy(xavierId, {
-      ...xavier,
+    await verifyPsy(anaisId, anais, paulUniversity.id);
+    await verifyPsy(doniaId, {
+      ...donia,
       description: 'Codeur vaudoo, prefere mettre en prod un vendredi soir plutot que de faire des tests',
       selfModified: true,
     }, xavierUniversity.id);

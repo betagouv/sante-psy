@@ -178,11 +178,6 @@ const AddEditPatient = () => {
               value={patient.doctorName}
               onChange={e => changePatient(e.target.value, 'doctorName')}
                 />
-            {patientId && (
-              <div id="anchor-student-list" className={styles.patientAppointments}>
-                <PatientAppointments patientId={patientId} />
-              </div>
-            )}
           </div>
           <div className="fr-my-5w">
             <Button
@@ -193,6 +188,13 @@ const AddEditPatient = () => {
               >
               {button.text}
             </Button>
+          </div>
+          <div>
+            {patientId && (
+              <div id="anchor-student-list" className={styles.patientAppointments}>
+                <PatientAppointments patientId={patientId} />
+              </div>
+            )}
           </div>
         </form>
       )}
