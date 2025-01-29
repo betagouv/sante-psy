@@ -9,7 +9,7 @@ const universities = [
   'Rennes',
   'Clermont-Auvergne (UCA)',
   'Picardie Jules Verne',
-  'Toulouse Midi-Pyrénées',
+  "Communauté d'université et établissements de Toulouse (COMUE de Toulouse)",
   'Reims Champagne-Ardenne',
   'Lille',
   'Limoges',

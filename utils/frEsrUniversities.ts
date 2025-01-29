@@ -494,7 +494,7 @@ const frEsrUniversities = [
     city: 'TOULON CEDEX 9',
   },
   {
-    name: 'Toulouse Midi-Pyrénées',
+    name: "Communauté d'université et établissements de Toulouse (COMUE de Toulouse)",
     siret: '19311382600013',
     address1: '',
     address2: '2 rue du Doyen-Gabriel-Marty',
