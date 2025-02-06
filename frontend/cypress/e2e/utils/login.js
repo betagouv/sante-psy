@@ -1,5 +1,3 @@
-const jwt = require('jsonwebtoken');
-
 let currentUser = {};
 let currentToken;
 
@@ -9,14 +7,11 @@ const setLoginInfo = () => {
 };
 
 const login = (psy, duration = 3600) => {
-  currentUser = psy;
-  currentToken = jwt.sign(
-    { psychologist: psy.dossierNumber, xsrfToken: 'randomXSRFToken' },
-    // TODO: find a better way to sync this secret
-    'production_value_should_be_set_in_.env',
-    { expiresIn: `${duration / 3600} hours` },
-  );
-  setLoginInfo();
+  cy.task('generateToken', { psy, duration }).then(token => {
+    currentUser = psy;
+    currentToken = token;
+    setLoginInfo();
+  });
 };
 
 const loginAsDefault = (duration = 3600) => cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
