@@ -1,22 +1,15 @@
 let currentUser = {};
-let currentToken;
 
-const setLoginInfo = () => {
-  window.localStorage.setItem('xsrfToken', 'randomXSRFToken');
-  cy.setCookie('token', currentToken);
+const setLoginInfo = (token, xsrfToken) => {
+  const currentXsrfToken = xsrfToken;
+  window.localStorage.setItem('xsrfToken', currentXsrfToken);
+  cy.setCookie('token', token);
 };
 
-const login = (psy, duration = 3600) => {
-  cy.task('generateToken', { psy, duration }).then(token => {
-    currentUser = psy;
-    currentToken = token;
-    setLoginInfo();
-  });
-};
-
-const loginAsDefault = (duration = 3600) => cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
+const loginAsDefault = () => cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
   .then(res => {
-    login(res.body.psy, duration);
+    currentUser = res.body.psy;
+    setLoginInfo(res.body.token, res.body.xsrfToken);
   });
 
 const logout = () => {
@@ -24,7 +17,6 @@ const logout = () => {
 };
 
 export default {
-  login,
   loginAsDefault,
   logout,
   getCurrentUser: () => currentUser,

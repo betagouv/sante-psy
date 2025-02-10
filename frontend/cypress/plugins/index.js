@@ -16,25 +16,14 @@ const jwt = require('jsonwebtoken');
 /**
  * @type {Cypress.PluginConfig}
  */
-module.exports = (on, config) => {
-  on('task', {
-    generateToken({ psy, duration }) {
-      const secret = 'production_value_should_be_set_in_.env';
-      const token = jwt.sign(
-        { psychologist: psy.dossierNumber, xsrfToken: 'randomXSRFToken' },
-        secret,
-        { expiresIn: `${duration / 3600} hours`}
-      );
-      return token;
-    }
-  });
-
+module.exports = on => {
+  // `on` is used to hook into various events Cypress emits
+  // `config` is the resolved Cypress config
+  // eslint-disable-next-line default-param-last
   on('before:browser:launch', (browser = {}, launchOptions) => {
     if (browser.name === 'chrome') {
       launchOptions.args.push('--disable-dev-shm-usage');
     }
     return launchOptions;
   });
-
-  return config;
 };
