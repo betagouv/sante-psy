@@ -7,7 +7,8 @@ export const EligibilityOptions = {
   ],
   TRAINING: [
     { value: 'BTS', label: 'BTS', eligible: true },
-    { value: 'UNIVERSITY_DIPLOMA', label: 'Formation universitaire', eligible: true },
+    { value: 'UNIVERSITY_DIPLOMA', label: 'Diplôme universitaire', eligible: true },
+    { value: 'FOREIGN_SCHOOL', label: 'Formation étrangère' },
     { value: 'OTHER', label: 'Autre' },
   ],
   STUDENT: [
@@ -15,7 +16,7 @@ export const EligibilityOptions = {
     { value: 'NO', label: 'Non', eligible: false },
   ],
   ELIGIBILITY: [
-    { value: 'INE', label: 'Un numéro INE', tooltip: "Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant ou sur le certificat de scolarité.", eligible: true },
+    { value: 'INE', label: 'Un numéro INE', tooltip: 'Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte étudiant ou sur le certificat de scolarité.', eligible: true },
     { value: 'CVEC', label: 'Une cotisation CVEC', tooltip: "Chaque étudiant inscrit en formation initiale dans un établissement d'enseignement supérieur doit obligatoirement obtenir, préalablement à son inscription, son attestation d'acquittement de la Contribution de vie étudiante et de campus (CVEC), par paiement ou exonération (ex : boursier).", eligible: true },
     { value: 'BOTH', label: 'Les deux', eligible: true },
     { value: 'NONE', label: 'Aucun', eligible: false },
@@ -68,11 +69,26 @@ export const EligibilitySteps = [
       return Object.values(EligibilityOptions.ELIGIBILITY);
     },
     next: answer => {
+      if (answer.value === 'FOREIGN_SCHOOL') {
+        return 'STEP_3B';
+      }
       if (answer.value === 'OTHER') {
         return 'STEP_4';
       }
       return null;
     },
+  },
+  {
+    id: 'STEP_3B',
+    getQuestion: answers => {
+      const previousAnswer = answers.STEP_1.value;
+      if (previousAnswer === 'ME') return 'Avez-vous un certificat scolaire dans une université / école française ?';
+      if (previousAnswer === 'CLOSE') return 'Votre proche a-t-il un certificat scolaire dans une université / école française ?';
+      if (previousAnswer === 'SCHOOL') return 'Êtes-vous une université / école française ?';
+      return "L'étudiant a-t-il un certificat scolaire dans une université / école française ?";
+    },
+    getOptions: () => Object.values(EligibilityOptions.STUDENT),
+    next: answer => (answer.value === 'YES' ? 'STEP_4' : 'INELIGIBLE'),
   },
   {
     id: 'STEP_4',
