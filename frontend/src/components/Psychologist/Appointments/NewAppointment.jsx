@@ -147,9 +147,8 @@ const NewAppointment = () => {
               Depuis le 1er janvier, vous ne pouvez pas déclarer de séances pour un patient sans avoir indiqué son numéro INE dans son dossier.
               <br />
               <HashLink to={`/psychologue/modifier-etudiant/${patientId}?addAppointment=true`}>
-                Indiquer le numéro INE d&lsquo;un étudiant
+                Indiquer le numéro INE de l&lsquo;étudiant
               </HashLink>
-              .
             </>
                 )}
               />
