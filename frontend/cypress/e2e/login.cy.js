@@ -82,7 +82,7 @@ describe('Login', () => {
 
   describe('Login expiration', () => {
     it('Should redirect to login page after expiration', () => {
-      loginAsDefault(2);
+      loginAsDefault('2s');
       cy.visit('/psychologue/login');
       cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
 
