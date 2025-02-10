@@ -60,7 +60,13 @@ const EligibilityFunnel = () => {
           <img src="/images/psychologist.svg" alt="person with laptop" width={160} />
         </div>
         {renderQuestions()}
-        {eligibilityStatus !== null && <EligibilityMessage isEligible={eligibilityStatus} />}
+        {eligibilityStatus !== null && (
+        <EligibilityMessage
+          isEligible={eligibilityStatus}
+          lastAnswerValue={Object.values(answers).at(-1)?.value}
+          whoFor={answers?.STEP_1?.value}
+        />
+        )}
       </div>
     </Container>
   );
