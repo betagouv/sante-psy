@@ -26,64 +26,6 @@ const getMessage = (
     find,
   } = pronouns[whoFor] || pronouns.ME;
 
-  if (!isEligible) {
-    const additionalText = lastAnswerValue === 'NO' || whoFor === 'SCHOOL' ||  lastAnswerValue ==='FOREIGN_SCHOOL' ? (
-      <>
-        Retrouvez cependant les différents services qui pourront
-        {' '}
-        {personalPronoun}
-        accompagner ci-dessous.
-      </>
-    ) : (
-      <>
-        N’hésitez pas à
-        {' '}
-        {pronoun === 'vous'
-          ? 'vous'
-          : "l'inviter à se"}
-        {' '}
-        {' '}
-        rapprocher de
-        {' '}
-        {possessive}
-        {' '}
-        service étudiant pour
-        confirmer
-        {' '}
-        {subjectNegativeHave}
-        {' '}
-        ni numéro INE ni cotisation CVEC.
-        <br />
-        <br />
-        Auquel cas, retrouvez les différents services qui pourront
-        {' '}
-        {personalPronoun}
-        accompagner ci-dessous.
-      </>
-    );
-
-    return (
-      <>
-        Nous sommes désolé,
-        {' '}
-        {subjectNegativeBe.toLowerCase()}
-        {' '}
-        hélas
-        {' '}
-        <b>
-          pas
-          {' '}
-          {pluralize('éligible')}
-        </b>
-        {' '}
-        au dispositif Santé Psy Étudiant.
-        <br />
-        <br />
-        {additionalText}
-      </>
-    );
-  }
-
   if (isEligible) {
     const needsIneInfo = ['UNIVERSITY_DIPLOMA', 'BTS', 'CVEC'].includes(
       lastAnswerValue,
@@ -172,7 +114,8 @@ const getMessage = (
             {ineInfo}
           </>
         ) : null}
-        { whoFor != 'CONSULTANT' &&
+        { whoFor !== 'CONSULTANT'
+          && (
           <>
             {take}
             {' '}
@@ -181,21 +124,22 @@ const getMessage = (
             {renderAppointmentButton(handleButtonClick)}
             <br />
             <em>
-            {capitalizeFirstLetter(possessive)}
-            {' '}
-            certificat de scolarité
-            {' '}
-            {pronoun === 'vous' ? 'vous sera' : 'sera'}
-            {' '}
-            demandé lors de
-            {' '}
-            {possesiveFem || possessive}
-            {' '}
-            première consultation.
+              {capitalizeFirstLetter(possessive)}
+              {' '}
+              certificat de scolarité
+              {' '}
+              {pronoun === 'vous' ? 'vous sera' : 'sera'}
+              {' '}
+              demandé lors de
+              {' '}
+              {possesiveFem || possessive}
+              {' '}
+              première consultation.
             </em>
           </>
-        }
-        { whoFor === 'CONSULTANT' &&
+          )}
+        { whoFor === 'CONSULTANT'
+        && (
         <>
           <em>
             {capitalizeFirstLetter(possessive)}
@@ -207,20 +151,75 @@ const getMessage = (
             {possesiveFem || possessive}
             {' '}
             première consultation.
-            </em>
-            <br />
-            <Button
-              onClick={() => navigate('/mes-etudiants')}
-              size="sm"
-              className="fr-my-1w"
+          </em>
+          <br />
+          <Button
+            onClick={() => navigate('/mes-etudiants')}
+            size="sm"
+            className="fr-my-1w"
             >
-              Créer le dossier de l'étudiant
-            </Button>
-            </>
-        }
+            Créer le dossier de l&apos;étudiant
+          </Button>
+        </>
+        )}
       </>
     );
   }
+  const additionalText = lastAnswerValue === 'NO' || whoFor === 'SCHOOL' || lastAnswerValue === 'FOREIGN_SCHOOL' ? (
+    <>
+      Retrouvez cependant les différents services qui pourront
+      {' '}
+      {personalPronoun}
+      accompagner ci-dessous.
+    </>
+  ) : (
+    <>
+      N’hésitez pas à
+      {' '}
+      {pronoun === 'vous'
+        ? 'vous'
+        : "l'inviter à se"}
+      {' '}
+      {' '}
+      rapprocher de
+      {' '}
+      {possessive}
+      {' '}
+      service étudiant pour
+      confirmer
+      {' '}
+      {subjectNegativeHave}
+      {' '}
+      ni numéro INE ni cotisation CVEC.
+      <br />
+      <br />
+      Auquel cas, retrouvez les différents services qui pourront
+      {' '}
+      {personalPronoun}
+      accompagner ci-dessous.
+    </>
+  );
+
+  return (
+    <>
+      Nous sommes désolé,
+      {' '}
+      {subjectNegativeBe.toLowerCase()}
+      {' '}
+      hélas
+      {' '}
+      <b>
+        pas
+        {' '}
+        {pluralize('éligible')}
+      </b>
+      {' '}
+      au dispositif Santé Psy Étudiant.
+      <br />
+      <br />
+      {additionalText}
+    </>
+  );
 };
 
 const renderAppointmentButton = handleButtonClick => (
