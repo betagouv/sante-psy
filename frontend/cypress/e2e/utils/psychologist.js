@@ -7,13 +7,11 @@ const suspend = () => {
   date.setDate(date.getDate() + 1);
 
   return cy.window().then(window => {
-     const xsrfToken = window.localStorage.getItem('xsrfToken');
+    const xsrfToken = window.localStorage.getItem('xsrfToken');
     return cy.request({
       method: 'POST',
       url: `http://localhost:8080/api/psychologist/${getCurrentUser().dossierNumber}/suspend`,
-      headers: {
-        'xsrf-token': xsrfToken,
-      },
+      headers: { 'xsrf-token': xsrfToken },
       body: {
         date,
         reason: 'because you are too awesome',
@@ -22,16 +20,14 @@ const suspend = () => {
   });
 };
 
-const signConvention = isSigned => {
-  return cy.window().then(window => {
-     const xsrfToken = window.localStorage.getItem('xsrfToken');
-    return cy.request({
-      method: 'POST',
-      url: `http://localhost:8080/api/psychologist/${getCurrentUser().dossierNumber}/convention`,
-      headers: { 'xsrf-token': xsrfToken },
-      body: { isConventionSigned: isSigned },
-    });
+const signConvention = isSigned => cy.window().then(window => {
+  const xsrfToken = window.localStorage.getItem('xsrfToken');
+  return cy.request({
+    method: 'POST',
+    url: `http://localhost:8080/api/psychologist/${getCurrentUser().dossierNumber}/convention`,
+    headers: { 'xsrf-token': xsrfToken },
+    body: { isConventionSigned: isSigned },
   });
-};
+});
 
 export default { removeConvention, signConvention, suspend };
