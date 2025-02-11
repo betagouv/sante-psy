@@ -46,7 +46,7 @@
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
     "@sentry/integrations": "^7.33.0",
-    "@sentry/node": "^7.33.0",
+    "@sentry/node": "^9.0.0",
     "@sentry/tracing": "^7.33.0",
     "@sentry/types": "^7.33.0",
     "@types/chai": "^4.3.4",
