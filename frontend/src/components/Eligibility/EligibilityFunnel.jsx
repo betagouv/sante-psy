@@ -49,7 +49,7 @@ const EligibilityFunnel = () => {
         onNext={answer => handleAnswerChange(stepId, answer)}
         isCurrent={isCurrent}
         currentAnswer={answers[stepId]?.value}
-        />
+      />
     );
   });
   return (
@@ -63,7 +63,7 @@ const EligibilityFunnel = () => {
         {eligibilityStatus !== null && (
         <EligibilityMessage
           isEligible={eligibilityStatus}
-          lastAnswerValue={Object.values(answers).at(-1)?.value}
+          lastAnswerValue={Object.values(answers).at(-1)?.value ?? Object.values(answers).at(-2)?.value}
           whoFor={answers?.STEP_1?.value}
         />
         )}
