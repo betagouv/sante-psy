@@ -34,10 +34,22 @@ const EligibilityFunnel = () => {
     setAnswers(updatedAnswers);
     setVisibleSteps(newVisibleSteps);
   };
+
+  const getLastAnswerValue = () => {
+    const answerEntries = Object.entries(answers);
+    for (let i = answerEntries.length - 1; i >= 0; i--) {
+      if (answerEntries[i][1]?.value !== undefined) {
+        return answerEntries[i][1].value;
+      }
+    }
+    return undefined;
+  };
+
   const handleAnswerChange = (stepId, newAnswer) => {
     const updatedAnswers = { ...answers, [stepId]: newAnswer };
     recalculateSteps(updatedAnswers, stepId);
   };
+
   const renderQuestions = () => visibleSteps.map(stepId => {
     const step = getStep(stepId);
     const isCurrent = stepId === visibleSteps[visibleSteps.length - 1];
@@ -52,6 +64,7 @@ const EligibilityFunnel = () => {
       />
     );
   });
+
   return (
     <Container spacing="py-4w">
       <div className={styles.eligibilityForm}>
@@ -63,7 +76,7 @@ const EligibilityFunnel = () => {
         {eligibilityStatus !== null && (
         <EligibilityMessage
           isEligible={eligibilityStatus}
-          lastAnswerValue={Object.values(answers).at(-1)?.value ?? Object.values(answers).at(-2)?.value}
+          lastAnswerValue={getLastAnswerValue()}
           whoFor={answers?.STEP_1?.value}
         />
         )}

@@ -24,6 +24,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
     possesiveFem,
     pronoun,
     personalPronoun,
+    otherPersonalPronoun,
     take,
     find,
   } = pronouns[whoFor] || pronouns.ME;
@@ -50,10 +51,12 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
           {capitalizeFirstLetter(find)}
           {' '}
           sur
+          {' '}
           {possesiveFem || possessive}
           {' '}
           carte
           étudiant ou
+          {' '}
           {possessive}
           {' '}
           certificat de scolarité.
@@ -67,6 +70,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
           {possesiveFem || possessive}
           {' '}
           scolarité pour obtenir
+          {' '}
           {possessive}
           {' '}
           numéro INE ou
@@ -90,7 +94,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
         <b>
           {subject}
           {' '}
-          {pluralize('éligible')}
+          {pluralize('éligible', whoFor)}
           {' '}
           au dispositif Santé Psy Étudiant !
         </b>
@@ -100,6 +104,8 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
             {capitalizeFirstLetter(possessive)}
             {' '}
             <b>numéro INE</b>
+            {' '}
+            {otherPersonalPronoun}
             {' '}
             {whoFor === 'CONSULTANT'
               ? 'doit lui être demandé'
@@ -144,6 +150,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
               {' '}
               certificat de scolarité doit
               également lui être demandé lors de
+              {' '}
               {possesiveFem || possessive}
               {' '}
               première consultation.
@@ -208,7 +215,8 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
         {' '}
         <b>
           pas
-          {pluralize('éligible')}
+          {' '}
+          {pluralize('éligible', whoFor)}
         </b>
         {' '}
         au dispositif Santé Psy Étudiant.
