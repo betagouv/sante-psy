@@ -8,6 +8,7 @@ import { EligibilitySteps } from './utils/eligibilitySteps';
 
 const EligibilityFunnel = () => {
   const [answers, setAnswers] = useState({});
+  const [lastAnswer, setLastAnswer] = useState({});
   const [eligibilityStatus, setEligibilityStatus] = useState(null);
   const [visibleSteps, setVisibleSteps] = useState(['STEP_1']);
   const getStep = stepId => EligibilitySteps.find(step => step.id === stepId);
@@ -35,16 +36,6 @@ const EligibilityFunnel = () => {
     setVisibleSteps(newVisibleSteps);
   };
 
-  const getLastAnswerValue = () => {
-    const answerEntries = Object.entries(answers);
-    for (let i = answerEntries.length - 1; i >= 0; i--) {
-      if (answerEntries[i][1]?.value !== undefined) {
-        return answerEntries[i][1].value;
-      }
-    }
-    return undefined;
-  };
-
   const handleAnswerChange = (stepId, newAnswer) => {
     const updatedAnswers = { ...answers, [stepId]: newAnswer };
     recalculateSteps(updatedAnswers, stepId);
@@ -58,7 +49,10 @@ const EligibilityFunnel = () => {
         key={stepId}
         question={step.getQuestion(answers)}
         options={step.getOptions(answers)}
-        onNext={answer => handleAnswerChange(stepId, answer)}
+        onNext={answer => {
+          handleAnswerChange(stepId, answer);
+          setLastAnswer(answer);
+        }}
         isCurrent={isCurrent}
         currentAnswer={answers[stepId]?.value}
       />
@@ -76,7 +70,7 @@ const EligibilityFunnel = () => {
         {eligibilityStatus !== null && (
         <EligibilityMessage
           isEligible={eligibilityStatus}
-          lastAnswerValue={getLastAnswerValue()}
+          lastAnswerValue={lastAnswer.value}
           whoFor={answers?.STEP_1?.value}
         />
         )}
