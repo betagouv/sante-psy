@@ -105,7 +105,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
             {' '}
             <b>numéro INE</b>
             {' '}
-            {otherPersonalPronoun}
+            {whoFor === 'CONSULTANT' ? '' : otherPersonalPronoun}
             {' '}
             {whoFor === 'CONSULTANT'
               ? 'doit lui être demandé'
