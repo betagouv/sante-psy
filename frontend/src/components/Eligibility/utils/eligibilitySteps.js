@@ -49,6 +49,9 @@ export const EligibilitySteps = [
       if (['ME', 'CLOSE'].includes(previousAnswer)) {
         return answer.value === 'YES' ? 'STEP_3' : 'INELIGIBLE';
       }
+      if (answer.value === 'FOREIGN_SCHOOL') {
+        return 'STEP_3B';
+      }
       return 'STEP_3';
     },
   },
@@ -96,15 +99,10 @@ export const EligibilitySteps = [
       const previousAnswer = answers.STEP_1.value;
       if (previousAnswer === 'ME') return 'Avez-vous :';
       if (previousAnswer === 'CLOSE') return 'Votre proche a-t-il :';
-      return '';
+      if (previousAnswer === 'SCHOOL') return 'Les étudiants ont-ils :';
+      return "L'étudiant a-t-il :";
     },
-    getOptions: answers => {
-      const previousAnswer = answers.STEP_1.value;
-      if (['ME', 'CLOSE'].includes(previousAnswer)) {
-        return Object.values(EligibilityOptions.ELIGIBILITY);
-      }
-      return [];
-    },
+    getOptions: () => Object.values(EligibilityOptions.ELIGIBILITY),
     next: () => null,
   },
 ];

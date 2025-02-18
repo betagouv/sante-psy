@@ -35,7 +35,7 @@ const pronouns = {
   },
   CONSULTANT: {
     subject: "L'étudiant est",
-    subjectNegativeBe: "L'étudiant n'est pas",
+    subjectNegativeBe: "L'étudiant n'est",
     subjectNegativeHave: "qu'il n'a pas",
     possessive: 'son',
     possesiveFem: 'sa',
