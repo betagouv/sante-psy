@@ -8,6 +8,7 @@ import { EligibilitySteps } from './utils/eligibilitySteps';
 
 const EligibilityFunnel = () => {
   const [answers, setAnswers] = useState({});
+  const [lastAnswer, setLastAnswer] = useState({});
   const [eligibilityStatus, setEligibilityStatus] = useState(null);
   const [visibleSteps, setVisibleSteps] = useState(['STEP_1']);
   const getStep = stepId => EligibilitySteps.find(step => step.id === stepId);
@@ -34,10 +35,12 @@ const EligibilityFunnel = () => {
     setAnswers(updatedAnswers);
     setVisibleSteps(newVisibleSteps);
   };
+
   const handleAnswerChange = (stepId, newAnswer) => {
     const updatedAnswers = { ...answers, [stepId]: newAnswer };
     recalculateSteps(updatedAnswers, stepId);
   };
+
   const renderQuestions = () => visibleSteps.map(stepId => {
     const step = getStep(stepId);
     const isCurrent = stepId === visibleSteps[visibleSteps.length - 1];
@@ -46,12 +49,16 @@ const EligibilityFunnel = () => {
         key={stepId}
         question={step.getQuestion(answers)}
         options={step.getOptions(answers)}
-        onNext={answer => handleAnswerChange(stepId, answer)}
+        onNext={answer => {
+          handleAnswerChange(stepId, answer);
+          setLastAnswer(answer);
+        }}
         isCurrent={isCurrent}
         currentAnswer={answers[stepId]?.value}
-        />
+      />
     );
   });
+
   return (
     <Container spacing="py-4w">
       <div className={styles.eligibilityForm}>
@@ -60,7 +67,13 @@ const EligibilityFunnel = () => {
           <img src="/images/psychologist.svg" alt="person with laptop" width={160} />
         </div>
         {renderQuestions()}
-        {eligibilityStatus !== null && <EligibilityMessage isEligible={eligibilityStatus} />}
+        {eligibilityStatus !== null && (
+        <EligibilityMessage
+          isEligible={eligibilityStatus}
+          lastAnswerValue={lastAnswer.value}
+          whoFor={answers?.STEP_1?.value}
+        />
+        )}
       </div>
     </Container>
   );
