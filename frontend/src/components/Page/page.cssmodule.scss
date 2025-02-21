@@ -1,4 +1,4 @@
-@import 'src/variables.scss';
+@use 'src/variables.scss' as *;
 
 .background {
   background-color: $secondary-color;

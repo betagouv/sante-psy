@@ -12,7 +12,7 @@ import { convertLocalToUTCDate, formatDDMMYYYY, parseDateForm } from 'services/d
 import { useStore } from 'stores/';
 import { observer } from 'mobx-react';
 
-import 'react-datepicker/dist/react-datepicker.css';
+import "react-datepicker/dist/react-datepicker.css";
 import PatientAppointments from '../Patients/PatientAppointments';
 import styles from './newAppointment.cssmodule.scss';
 
