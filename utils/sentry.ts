@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/node';
-import * as sentryIntegrations from '@sentry/integrations';
+import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { Express } from 'express';
 import config from './config';
 
@@ -13,7 +13,8 @@ const initCaptureConsole = (): void => {
     dsn: config.sentryDNS,
     // https://docs.sentry.io/platforms/javascript/configuration/integrations/plugin/#captureconsole
     integrations: [
-      new sentryIntegrations.CaptureConsole({ levels: logLevel }),
+      nodeProfilingIntegration(),
+      Sentry.captureConsoleIntegration({ levels: logLevel }),
     ],
     tracesSampleRate: parseFloat(process.env.SENTRY_TRACE_SAMPLE_RATE),
   });
@@ -23,12 +24,8 @@ const initCaptureConsoleWithHandler = (app: Express): void => {
   if (config.sentryDNS) {
     initCaptureConsole();
 
-    // RequestHandler creates a separate execution context using domains, so that every
-    // transaction/span/breadcrumb is attached to its own Hub instance
-    app.use(Sentry.Handlers.requestHandler());
-
     // The error handler must be before any other error middleware and after all controllers
-    app.use(Sentry.Handlers.errorHandler());
+    Sentry.setupExpressErrorHandler(app);
   } else {
     console.log('Sentry was not initialized as SENTRY_DNS env variable is missing');
   }
