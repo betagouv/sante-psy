@@ -1,19 +1,32 @@
 import { Request, Response } from 'express';
 
 import dbPsychologists from '../db/psychologists';
-import dbLoginToken from '../db/loginToken';
-
 import seed from '../test/helper/fake_data';
 import db from '../db/db';
+import jwt from 'jsonwebtoken';
+import config from '../utils/config';
+import loginInformations from '../services/loginInformations';
+import dbLoginToken from '../db/loginToken';
 
 const getPsychologist = async (req: Request, res: Response): Promise<void> => {
   try {
     const psy = await dbPsychologists.getAcceptedByEmail(req.params.email);
+    const xsrfToken = loginInformations.generateToken();
+
     const token = await dbLoginToken.getByEmail(req.params.email);
+
+    const duration = typeof req.query.duration === 'string' ? req.query.duration : '2h';
+
+    const jwtToken = token && !req.query.duration ? token.token : jwt.sign(
+      { psychologist: psy.dossierNumber, xsrfToken },
+      config.secret,
+      { expiresIn: duration },
+    );
 
     res.json({
       psy,
-      token: token ? token.token : undefined,
+      token: jwtToken,
+      xsrfToken,
     });
   } catch (err) {
     res.status(500).json('Oops');
