@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import { endYearOfCurrentUnivYear } from 'services/univYears';
 
 const MonthPicker = ({ month, setMonth }) => {
-  const handleChange = (date) => {
+  const handleChange = date => {
     setMonth({ month: date.getMonth() + 1, year: date.getFullYear() });
   };
 
@@ -30,7 +30,6 @@ const MonthPicker = ({ month, setMonth }) => {
         maxDate={maxDate}
       />
     </div>
-
 
   );
 };
