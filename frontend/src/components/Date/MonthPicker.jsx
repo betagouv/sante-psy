@@ -7,7 +7,7 @@ const MonthPicker = ({ month, setMonth }) => {
     setMonth({ month: date.getMonth() + 1, year: date.getFullYear() });
   };
 
-  const renderMonthContent = (month, shortMonth, longMonth, day) => {
+  const renderMonthContent = (numberMonth, shortMonth, longMonth, day) => {
     const fullYear = new Date(day).getFullYear();
     const tooltipText = `${longMonth} ${fullYear}`;
 
