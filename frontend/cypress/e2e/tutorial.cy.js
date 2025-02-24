@@ -60,9 +60,10 @@ describe('Global tutorial', () => {
       .click();
     cy.wait(2000);
     cy.get('[data-test-id="next-step"]')
-      .should('not.exist').wait(2000);
+      .should('not.exist');
 
     cy.reload();
+    cy.wait(2000);
     cy.wait('@connecteduser');
     cy.get('[data-test-id="next-step"]')
       .should('not.exist');
