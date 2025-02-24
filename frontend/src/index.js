@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { configure } from 'mobx';
@@ -17,7 +17,7 @@ configure({ enforceActions: 'never' });
 registerLocale('fr', fr);
 setDefaultLocale('fr');
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById('root'));
 
 root.render(
   <Observer>
@@ -31,6 +31,5 @@ root.render(
         </BrowserRouter>
       </React.StrictMode>
     )}
-  </Observer>,
-  document.getElementById('root'),
+  </Observer>
 );

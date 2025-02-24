@@ -2,7 +2,7 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import { endYearOfCurrentUnivYear } from 'services/univYears';
 
-const MonthPicker = ({ month, setMonth }) => {
+const MonthPicker = ({ month, setMonth, id }) => {
   const handleChange = date => {
     setMonth({ month: date.getMonth() + 1, year: date.getFullYear() });
   };
@@ -18,7 +18,7 @@ const MonthPicker = ({ month, setMonth }) => {
   const maxDate = new Date(endYearOfCurrentUnivYear(), 11, 31);
 
   return (
-    <div className="monthPicker">
+    <div className="monthPicker" id={id}>
       <DatePicker
         selected={new Date(month.year, month.month - 1)}
         onChange={handleChange}

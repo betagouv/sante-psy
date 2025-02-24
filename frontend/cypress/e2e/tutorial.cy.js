@@ -98,21 +98,33 @@ describe('Other tutorials', () => {
   }));
 
   it('should display billing tutorial when appointments', () => {
-    const now = new Date(currentYear, 1, 1).getTime();
-    cy.clock(now);
     cy.visit('/psychologue/mes-remboursements');
     cy.wait('@connecteduser');
+
+    cy.get('#billing-month').within(() => {
+      cy.get('.monthPicker').should('be.visible');
+      cy.get('.monthPicker').click();
+      cy.contains('févr.').click();
+    });
+
     cy.get('[data-test-id="launch-tutorial"]')
       .click();
 
     checkAllSteps(7);
   });
 
+
   it('should display billing tutorial when no appointments', () => {
-    const now = new Date(currentYear - 1, 1, 1).getTime();
-    cy.clock(now);
     cy.visit('/psychologue/mes-remboursements');
     cy.wait('@connecteduser');
+
+    cy.get('#billing-month').within(() => {
+      cy.get('.monthPicker').should('be.visible');
+      cy.get('.monthPicker').click();
+      cy.contains('Prev').click();
+      cy.contains('févr.').click();
+    });
+
     cy.get('[data-test-id="launch-tutorial"]')
       .click();
 
