@@ -3,8 +3,6 @@ const { checkConvention } = require('../../src/services/conventionVerification')
 const { loginAsDefault } = require('./utils/login');
 const { resetDB, resetTutorial } = require('./utils/db');
 
-const currentYear = new Date().getFullYear();
-
 const checkAllSteps = numberOfSteps => {
   // go the the ante last step
   for (let i = 0; i < numberOfSteps - 1; i++) {
@@ -112,7 +110,6 @@ describe('Other tutorials', () => {
 
     checkAllSteps(7);
   });
-
 
   it('should display billing tutorial when no appointments', () => {
     cy.visit('/psychologue/mes-remboursements');

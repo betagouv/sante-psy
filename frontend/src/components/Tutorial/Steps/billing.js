@@ -26,7 +26,6 @@ const getAppointmentsForMonth = async (month, year) => {
   return { haveAppointments, allExceeded };
 };
 
-
 const steps = [
   {
     placement: 'center',
@@ -73,11 +72,13 @@ const steps = [
   {
     placement: 'top-start',
     target: '#billing-generation',
-    shouldSkip: user => {
+    shouldSkip: async user => {
       if (!user.convention || !user.convention.isConventionSigned) {
         return Promise.resolve(true);
       }
-      return noAppointmentsInPeriod();
+      const { haveAppointments, allExceeded } = await getAppointmentsForMonth(new Date().getMonth() + 1, new Date().getFullYear());
+
+      return Promise.resolve(!haveAppointments || allExceeded);
     },
     content: 'Vous pouvez maintenant générer automatiquement une facture pré-remplie pour le mois séléctionné.',
   },
