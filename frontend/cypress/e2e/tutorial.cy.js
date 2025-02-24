@@ -3,8 +3,6 @@ const { checkConvention } = require('../../src/services/conventionVerification')
 const { loginAsDefault } = require('./utils/login');
 const { resetDB, resetTutorial } = require('./utils/db');
 
-const currentYear = new Date().getFullYear();
-
 const checkAllSteps = numberOfSteps => {
   // go the the ante last step
   for (let i = 0; i < numberOfSteps - 1; i++) {
@@ -60,10 +58,12 @@ describe('Global tutorial', () => {
   it('should pass tuto', () => {
     cy.get('[data-test-id="close-tutorial"]')
       .click();
+    cy.wait(2000);
     cy.get('[data-test-id="next-step"]')
       .should('not.exist');
 
     cy.reload();
+    cy.wait(2000);
     cy.wait('@connecteduser');
     cy.get('[data-test-id="next-step"]')
       .should('not.exist');
@@ -98,10 +98,15 @@ describe('Other tutorials', () => {
   }));
 
   it('should display billing tutorial when appointments', () => {
-    const now = new Date(currentYear, 1, 1).getTime();
-    cy.clock(now);
     cy.visit('/psychologue/mes-remboursements');
     cy.wait('@connecteduser');
+
+    cy.get('#billing-month').within(() => {
+      cy.get('.monthPicker').should('be.visible');
+      cy.get('.monthPicker').click();
+      cy.contains('févr.').click();
+    });
+
     cy.get('[data-test-id="launch-tutorial"]')
       .click();
 
@@ -109,10 +114,16 @@ describe('Other tutorials', () => {
   });
 
   it('should display billing tutorial when no appointments', () => {
-    const now = new Date(currentYear - 1, 1, 1).getTime();
-    cy.clock(now);
     cy.visit('/psychologue/mes-remboursements');
     cy.wait('@connecteduser');
+
+    cy.get('#billing-month').within(() => {
+      cy.get('.monthPicker').should('be.visible');
+      cy.get('.monthPicker').click();
+      cy.contains('Prev').click();
+      cy.contains('févr.').click();
+    });
+
     cy.get('[data-test-id="launch-tutorial"]')
       .click();
 

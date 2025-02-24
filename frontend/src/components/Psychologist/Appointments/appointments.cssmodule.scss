@@ -1,4 +1,4 @@
-@import 'src/tooltip.scss';
+@use 'src/tooltip.scss' as *;
 
 .filter {
     input, select {
