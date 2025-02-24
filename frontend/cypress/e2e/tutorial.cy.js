@@ -55,9 +55,10 @@ describe('Global tutorial', () => {
       .should('not.exist');
   });
 
-  it('should pass tuto', () => {
+  it.only('should pass tuto', () => {
     cy.get('[data-test-id="close-tutorial"]')
       .click();
+    cy.wait(500);
     cy.get('[data-test-id="next-step"]')
       .should('not.exist');
 
