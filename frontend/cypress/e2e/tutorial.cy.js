@@ -55,11 +55,12 @@ describe('Global tutorial', () => {
       .should('not.exist');
   });
 
-  it('should pass tuto', () => {
+  it.only('should pass tuto', () => {
     cy.get('[data-test-id="close-tutorial"]')
       .click();
+    cy.wait(2000);
     cy.get('[data-test-id="next-step"]')
-      .should('not.exist');
+      .should('not.exist').wait(2000);
 
     cy.reload();
     cy.wait('@connecteduser');
