@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 
 import Slice from 'components/Slice/Slice';
 import Faq from 'components/Faq/Faq';
 import { useStore } from 'stores/index';
+import agent from 'services/agent';
 import StudentProcess from './StudentProcess';
 import Statistics from './Statistics';
 
@@ -12,6 +13,17 @@ import FollowInstagram from './FollowInstagram';
 
 const Landing = () => {
   const { commonStore: { config } } = useStore();
+
+  const [patientsCount, setPatientsCount] = useState('99 000');
+
+  useEffect(() => {
+    agent.Statistics.getAll().then(data => {
+      if (data.length > 2) {
+        setPatientsCount(data[2].value.toString());
+      }
+    });
+  }, []);
+
   useEffect(() => {
     document.title = 'Santé Psy Étudiant';
   }, []);
@@ -42,7 +54,11 @@ const Landing = () => {
           <>
             Plus de
             {' '}
-            <b>62 000 étudiants</b>
+            <b>
+              {patientsCount}
+              {' '}
+              étudiants
+            </b>
             {' '}
             déjà accompagnés
           </>

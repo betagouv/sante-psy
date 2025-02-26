@@ -1,8 +1,7 @@
-import Slice from 'components/Slice/Slice';
 import React, { useEffect, useState } from 'react';
+import Slice from 'components/Slice/Slice';
 import agent from 'services/agent';
 import Statistic from './Statistic';
-
 import styles from './statistics.cssmodule.scss';
 
 const Statistics = () => {
@@ -27,15 +26,13 @@ const Statistics = () => {
       </div>
       <div className={styles.separator} />
       <div className={styles.content}>
-        {statistics.map(
-          statistic => (
-            <Statistic
-              key={statistic.label}
-              value={statistic.value}
-              description={statistic.label}
-            />
-          ),
-        )}
+        {statistics.map(statistic => (
+          <Statistic
+            key={statistic.label}
+            value={statistic.value}
+            description={statistic.label}
+          />
+        ))}
       </div>
     </Slice>
   );
