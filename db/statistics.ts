@@ -8,13 +8,25 @@ import {
 } from './tables';
 import db from './db';
 
-const getAvailablePsychologistCount = (): Promise<Registry[]> => db(psychologistsTable)
+const getAvailablePsychologistCount = (): Promise<Registry[]> => {
+  const now = new Date();
+  const threeMonthsFromNow = new Date(now.getFullYear(), now.getMonth() + 3, now.getDate());
+
+  return db(psychologistsTable)
     .where({
       state: DossierState.accepte,
       archived: false,
-      active: true,
+    })
+    .where((builder) => {
+      builder.where('active', true)
+        .orWhere((subBuilder) => {
+          subBuilder
+            .where('active', false)
+            .where('inactiveUntil', '<=', threeMonthsFromNow.toISOString().split('T')[0]);
+        });
     })
     .countDistinct('dossierNumber');
+};
 
 const getPatientCount = () : Promise<Registry[]> => db(patientsTable)
     .where({ deleted: false })
