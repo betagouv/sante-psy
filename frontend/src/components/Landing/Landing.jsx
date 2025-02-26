@@ -14,12 +14,10 @@ import FollowInstagram from './FollowInstagram';
 const Landing = () => {
   const { commonStore: { config } } = useStore();
 
-  const [statistics, setStatistics] = useState([]);
   const [patientsCount, setPatientsCount] = useState('99 000');
 
   useEffect(() => {
     agent.Statistics.getAll().then(data => {
-      setStatistics(data);
       if (data.length > 2) {
         setPatientsCount(data[2].value.toString());
       }
@@ -67,7 +65,7 @@ const Landing = () => {
         )}
       />
       <StudentProcess />
-      <Statistics statistics={statistics} />
+      <Statistics />
       <Slice
         color="white"
         reverse

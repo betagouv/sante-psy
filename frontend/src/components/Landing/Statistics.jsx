@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slice from 'components/Slice/Slice';
 import Statistic from './Statistic';
 import styles from './statistics.cssmodule.scss';
+import agent from 'services/agent';
 
-const Statistics = ({ statistics }) => (
+const Statistics = () => {
+  const [statistics, setStatistics] = useState([]);
+
+  useEffect(() => {
+    agent.Statistics.getAll().then(setStatistics);
+  }, []);
+
+  return (
   <Slice>
     <div className={styles.header}>
       <div className={styles.title}>
@@ -27,6 +35,6 @@ const Statistics = ({ statistics }) => (
       ))}
     </div>
   </Slice>
-);
+)}
 
 export default Statistics;
