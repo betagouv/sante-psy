@@ -14,12 +14,12 @@ import FollowInstagram from './FollowInstagram';
 const Landing = () => {
   const { commonStore: { config } } = useStore();
 
-  const [patientsCount, setPatientsCount] = useState('99 000');
+  const [patientsCount, setPatientsCount] = useState('100 000');
 
   useEffect(() => {
     agent.Statistics.getAll().then(data => {
-      if (data.length > 2) {
-        setPatientsCount(data[2].value.toString());
+      if (data.patientsCount) {
+        setPatientsCount(data.patientsCount.value.toString());
       }
     });
   }, []);

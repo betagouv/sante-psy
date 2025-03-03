@@ -14,20 +14,20 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
     psychologistCount,
     patientsCount,
   ] = await Promise.all([appointments, psychologist, patients]);
-  res.json([
-    {
+  res.json({
+    psychologistCount: {
       label: 'Psychologues disponibles',
       value: psychologistCount[0].count,
     },
-    {
+    appointmentsCount: {
       label: 'Séances réalisées',
       value: appointmentsCount[0].count,
     },
-    {
+    patientsCount: {
       label: 'Étudiants accompagnés',
       value: patientsCount[0].count,
     },
-  ]);
+  });
 };
 
 export default {
