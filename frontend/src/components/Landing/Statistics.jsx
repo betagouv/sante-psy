@@ -13,6 +13,8 @@ const Statistics = () => {
     });
   }, []);
 
+  const { teleconsultPsyCount, ...displayedStatistics } = statistics;
+
   return (
     <Slice>
       <div className={styles.header}>
@@ -28,8 +30,8 @@ const Statistics = () => {
       </div>
       <div className={styles.separator} />
       <div className={styles.content}>
-        {Object.values(statistics).length > 0 && (
-          Object.values(statistics).map(statistic => (
+        {Object.values(displayedStatistics).length > 0 && (
+          Object.values(displayedStatistics).map(statistic => (
             <Statistic
               key={statistic.label}
               value={statistic.value}

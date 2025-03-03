@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import {
   getAppointmentCount, getAvailablePsychologistCount, getPatientCount,
+  getTeleconsultPsyCount,
 } from '../db/statistics';
 import asyncHelper from '../utils/async-helper';
 
@@ -8,12 +9,14 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
   const appointments = getAppointmentCount();
   const psychologist = getAvailablePsychologistCount();
   const patients = getPatientCount();
+  const teleconsultPsy = getTeleconsultPsyCount();
 
   const [
     appointmentsCount,
     psychologistCount,
     patientsCount,
-  ] = await Promise.all([appointments, psychologist, patients]);
+    teleconsultPsyCount,
+  ] = await Promise.all([appointments, psychologist, patients, teleconsultPsy]);
   res.json({
     psychologistCount: {
       label: 'Psychologues disponibles',
@@ -26,6 +29,10 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
     patientsCount: {
       label: 'Étudiants accompagnés',
       value: patientsCount[0].count,
+    },
+    teleconsultPsyCount: {
+      label: 'Psychologues disponibles en téléconsultation',
+      value: teleconsultPsyCount[0].count,
     },
   });
 };

@@ -15,11 +15,15 @@ const Landing = () => {
   const { commonStore: { config } } = useStore();
 
   const [patientsCount, setPatientsCount] = useState('100 000');
+  const [teleconsultPsyCount, setTeleconsultPsyCount] = useState('2 800');
 
   useEffect(() => {
     agent.Statistics.getAll().then(data => {
       if (data.patientsCount) {
         setPatientsCount(data.patientsCount.value.toString());
+      }
+      if (data.teleconsultPsyCount) {
+        setTeleconsultPsyCount(data.teleconsultPsyCount.value.toString());
       }
     });
   }, []);
@@ -92,7 +96,13 @@ const Landing = () => {
         buttonText="Trouver un psychologue"
         hint={(
           <>
-            <b>Plus de 900 psychologues</b>
+            <b>
+              Plus de
+              {' '}
+              {teleconsultPsyCount}
+              {' '}
+              psychologues
+            </b>
             {' '}
             disponibles en téléconsultation
           </>
