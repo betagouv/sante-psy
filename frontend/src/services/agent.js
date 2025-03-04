@@ -52,7 +52,7 @@ const Appointment = {
 
 const Config = { get: () => clientWithoutErrorManagement.get('/config') };
 
-const Contact = { send: message => client.post('/contact', message) };
+const Contact = { send: message => client.post('/contact/form', message) };
 
 const Convention = {
   save: convention => client

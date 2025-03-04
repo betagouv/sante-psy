@@ -6,9 +6,9 @@ import Page from 'components/Page/Page';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
-import styles from './contact.cssmodule.scss';
+import styles from './contactForm.cssmodule.scss';
 
-const Contact = () => {
+const ContactForm = () => {
   const [userType, setUserType] = useState();
   const [name, setName] = useState();
   const [firstName, setFirstName] = useState();
@@ -61,8 +61,8 @@ const Contact = () => {
 
   return (
     <Page
-      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
-      currentBreadCrumb="Nous contacter"
+      breadCrumbs={[{ href: '/', label: 'Accueil' }, { href: '/contact', label: 'Nous contacter' }]}
+      currentBreadCrumb="Formulaire de contact"
       title={(
         <>
           Contacter
@@ -169,4 +169,4 @@ const Contact = () => {
   );
 };
 
-export default observer(Contact);
+export default observer(ContactForm);

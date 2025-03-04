@@ -1,7 +1,7 @@
 import chai from 'chai';
 import app from '../../index';
 
-describe('contactController', () => {
+describe('contactFormController', () => {
   describe('send', () => {
     it('should send message', async () => chai.request(app)
       .post('/api/contact')
