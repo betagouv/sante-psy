@@ -1,5 +1,39 @@
 @import 'src/variables.scss';
 
+.button {
+  background-color: white;
+  color: $primary-color;
+  font-size: 20px;
+}
+
+// .button:hover {
+//   ;
+// }
+
+.purpleBanner {
+  background-color: $primary-color;
+  padding: 32px;
+  color: white;
+  > * {
+    max-width: 1200px;
+    margin: 0 auto 24px auto;
+  }
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.smallTitle {
+  color: white;
+  font-size: 40px;
+  line-height: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  b {
+    color: $primary-text-color;
+  }
+}
+
 .line {
   display: flex;
   flex-wrap: wrap;
