@@ -20,9 +20,9 @@ const urgentServicesData = [
   {
     imageSmall: '/images/otherServices/psycom-small.jpg',
     imageLarge: '/images/otherServices/psycom.png',
-    logo: '/images/logos/psycom-logo.png',
+    logo: '/images/logos/cnae-logo.png',
     name: 'La CNAÉ',
-    title: "Signalement des violences",
+    title: 'Signalement des violences',
     description: 'Ligne d’écoute professionnelle opérée par l’association “ En Avant Toutes “.',
     link: 'https://www.etudiant.gouv.fr/fr/cnae',
   },
