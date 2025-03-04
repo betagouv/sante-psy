@@ -22,7 +22,7 @@ const sendMail2 = async (student: Student): Promise<void> => {
   const html = await ejs.renderFile('./views/emails/studentMail-2.ejs', {
     signature: getSignature(),
     site: `${config.hostnameWithProtocol}`,
-    contact: `${config.hostnameWithProtocol}/contact`,
+    contact: `${config.hostnameWithProtocol}/contact/form`,
     unregister: `${config.hostnameWithProtocol}/desinscription/${student.id}`,
   });
   return sendEmail(student.email, 'Comment te sens-tu en ce moment ?', html);

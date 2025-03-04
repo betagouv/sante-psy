@@ -85,7 +85,7 @@ const Faq = ({ simplified }) => {
       {!simplified && (
         <div className={styles.container}>
           <div className={styles.text}>Vous ne trouvez pas la réponse à votre question&#x00A0;?</div>
-          <Button onClick={() => navigate('/contact')}>
+          <Button onClick={() => navigate('/contact/form')}>
             Contactez notre équipe
           </Button>
         </div>

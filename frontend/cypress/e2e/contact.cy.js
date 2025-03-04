@@ -2,10 +2,10 @@ const { loginAsDefault } = require('./utils/login');
 
 describe('Contact', () => {
   beforeEach(() => {
-    cy.intercept('POST', '/api/contact')
+    cy.intercept('POST', '/api/contact/form')
       .as('contact');
 
-    cy.visit('/contact');
+    cy.visit('/contact/form');
   });
 
   it('should send contact info', () => {
