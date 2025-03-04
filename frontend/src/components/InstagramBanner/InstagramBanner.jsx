@@ -53,7 +53,7 @@ const InstagramBanner = () => {
         reverse
         buttonSecondary
         buttonIcon="ri-instagram-line"
-        imageSrc="/images/kaavan.png"
+        imageSrc="/images/instagram/kaavan.png"
         title={<div className={styles.title}>Podcast sur la santé mentale</div>}
         buttonLink="https://www.instagram.com/kaavan_podcast/"
         buttonText="Kaavan podcast"
