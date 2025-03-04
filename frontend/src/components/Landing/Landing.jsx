@@ -5,6 +5,7 @@ import Slice from 'components/Slice/Slice';
 import Faq from 'components/Faq/Faq';
 import { useStore } from 'stores/index';
 import agent from 'services/agent';
+import { displayStatistic } from 'services/string';
 import StudentProcess from './StudentProcess';
 import Statistics from './Statistics';
 
@@ -14,8 +15,8 @@ import FollowInstagram from './FollowInstagram';
 const Landing = () => {
   const { commonStore: { config } } = useStore();
 
-  const [patientsCount, setPatientsCount] = useState('100 000');
-  const [teleconsultPsyCount, setTeleconsultPsyCount] = useState('2 800');
+  const [patientsCount, setPatientsCount] = useState('100000');
+  const [teleconsultPsyCount, setTeleconsultPsyCount] = useState('1200');
 
   useEffect(() => {
     agent.Statistics.getAll().then(data => {
@@ -59,7 +60,7 @@ const Landing = () => {
             Plus de
             {' '}
             <b>
-              {patientsCount}
+              {displayStatistic(patientsCount)}
               {' '}
               étudiants
             </b>
@@ -99,7 +100,7 @@ const Landing = () => {
             <b>
               Plus de
               {' '}
-              {teleconsultPsyCount}
+              {displayStatistic(teleconsultPsyCount)}
               {' '}
               psychologues
             </b>
