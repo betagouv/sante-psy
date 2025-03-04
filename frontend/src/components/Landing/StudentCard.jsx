@@ -20,7 +20,7 @@ const StudentCard = ({ big, index, title, description, hint, image, buttonLink, 
       <div className={styles.index}>
         <span id={anchor || undefined}>{index}</span>
       </div>
-      <img className={styles.image} src={`/images/${image}.svg`} alt={image} />
+      <img className={styles.image} src={`/images/eligibility/${image}.svg`} alt={image} />
       <h2 className={big ? styles.bigTitle : styles.title}>{title}</h2>
       {description && <div className={styles.description}>{description}</div>}
       {buttonLink && buttonText && (
