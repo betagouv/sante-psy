@@ -83,7 +83,7 @@ const Page = ({
             <div className={styles.header}>
               {breadCrumbsComponent}
               {!withoutHeader && (
-              <div className={styles.headerTop}>
+              <div>
                 <h1 className={styles.title}>{title}</h1>
                 {description && <p className={styles.description}>{description}</p>}
               </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row } from '@dataesr/react-dsfr';
 import { useNavigate } from 'react-router-dom';
-import styles from './contact.cssmodule.scss';
+import styles from './cards.cssmodule.scss';
 
 const cards = [
   { imgSrc: '/images/contact/student.png', text: 'Je suis étudiant', section: 'etudiant' },

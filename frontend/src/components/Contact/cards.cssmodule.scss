@@ -1,0 +1,42 @@
+@import 'src/variables.scss';
+
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-top: -32px;
+  justify-content: center;
+}
+
+.card {
+  width: 350px;
+  height: 470px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.card img {
+  width: 300px;
+  height: 340px;
+  object-fit: contain;
+}
+
+.card p {
+  color: $primary-color;
+  font-size: 40px;
+  padding: 0px 28px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .cardContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+}
