@@ -14,9 +14,11 @@
 .react-datepicker__time-name {
   color: var(--text-title-blue-france);
 }
+
 .react-datepicker__navigation:hover {
   background-image: none !important;
 }
+
 .react-datepicker__navigation *::before {
   border-color: var(--text-title-blue-france);
 }
@@ -44,7 +46,7 @@
   background-color: var(--text-title-blue-france);
   color: var(--blue-france-950-100);
 
-  &:hover{
-    background-image: linear-gradient(0deg, var(--button-color-hover),var(--button-color-hover));
+  &:hover {
+    background-image: linear-gradient(0deg, var(--button-color-hover), var(--button-color-hover));
   }
 }

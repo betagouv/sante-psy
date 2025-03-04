@@ -72,7 +72,7 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
 
     if (finishedAction.includes(action)) {
       handleUserHasSeenTutorial();
-      setTutoStatus({ run: false, stepIndex: index });
+      setTutoStatus({ run: false, stepIndex: 0 });
     } else if (type === EVENTS.STEP_AFTER) {
       if (step.onNext && action === ACTIONS.NEXT) {
         step.onNext(navigate);
