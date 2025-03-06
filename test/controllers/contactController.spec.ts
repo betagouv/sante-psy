@@ -1,10 +1,10 @@
 import chai from 'chai';
 import app from '../../index';
 
-describe('contactFormController', () => {
+describe('contactController', () => {
   describe('send', () => {
     it('should send message', async () => chai.request(app)
-      .post('/api/contact/form')
+      .post('/api/contact')
       .send({
         name: 'Neris',
         firstName: 'Iti',
@@ -19,7 +19,7 @@ describe('contactFormController', () => {
       }));
 
     const failValidation = async (payload, errorMessage) => chai.request(app)
-      .post('/api/contact/form')
+      .post('/api/contact')
       .send(payload)
       .then(async (res) => {
         res.status.should.equal(400);

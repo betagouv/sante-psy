@@ -79,7 +79,7 @@ function App() {
               <Route exact path="/faq" element={<Faq />} />
               <Route exact path="/stats" element={<Statistics />} />
               <Route exact path="/contact" element={<Contact />} />
-              <Route exact path="/contact/form" element={<ContactForm />} />
+              <Route exact path="/contact/formulaire" element={<ContactForm />} />
               <Route exact path="/autres-services" element={<OtherServicesPage />} />
               <Route exact path="/etudiant" element={<StudentLanding />} />
               <Route exact path="/enregistrement/:id" element={<StudentAnswer />} />

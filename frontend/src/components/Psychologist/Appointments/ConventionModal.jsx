@@ -33,7 +33,7 @@ const ConventionModal = () => {
           {' '}
           <Link
             to={{
-              pathname: '/contact/form',
+              pathname: '/contact/formulaire',
               state: { reason: 'convention' },
             }}
           >

@@ -145,11 +145,11 @@ const PrivacyPolicy = () => (
         ou contactez-nous sur
         {' '}
         <a
-          href="https://santepsy.etudiant.gouv.fr/contact/form"
+          href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
           target="_blank"
           rel="noreferrer"
           >
-          santepsy.etudiant.gouv.fr/contact/form
+          santepsy.etudiant.gouv.fr/contact/formulaire
         </a>
         {' '}
       </p>

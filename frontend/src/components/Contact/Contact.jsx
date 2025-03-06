@@ -70,7 +70,7 @@ const Contact = () => {
             icon="ri-mail-line"
             iconPosition="right"
             className={styles.button}
-            onClick={() => navigate('/contact/form')}
+            onClick={() => navigate('/contact/formulaire')}
         >
             Nous contacter par mail
           </Button>
