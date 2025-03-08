@@ -15,9 +15,9 @@ const PsyProfile = () => {
   const navigate = useNavigate();
   const [psychologist, setPsychologist] = useState({ profilIssues: [], description: '' });
 
-  const greenCircleIcon = '/images/icon-available-psy.svg';
-  const orangeCircleIcon = '/images/icon-unavailable-psy.svg';
-  const redCircleIcon = '/images/icon-invisible-psy.svg';
+  const greenCircleIcon = '/images/icons/icon-available-psy.svg';
+  const orangeCircleIcon = '/images/icons/icon-unavailable-psy.svg';
+  const redCircleIcon = '/images/icons/icon-invisible-psy.svg';
 
   const getProfilIssues = psy => {
     const profilIssues = [];

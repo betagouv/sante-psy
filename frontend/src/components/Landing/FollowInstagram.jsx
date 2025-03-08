@@ -14,10 +14,10 @@ const FollowInstagram = () => {
       color="white"
       images={(
         <div className={styles.images}>
-          <a href="https://www.instagram.com/p/CoDGlRYoJBn" target="_blank" rel="noreferrer"><img src="/images/communaute-tl.jpg" alt="Choisir son psy" /></a>
-          <a href="https://www.instagram.com/p/Cc2dPYBD3M8" target="_blank" rel="noreferrer"><img src="/images/communaute-tr.jpg" alt="Anxiété lié aux examens" /></a>
-          <a href="https://www.instagram.com/p/Cj-lUoOIiqv" target="_blank" rel="noreferrer"><img src="/images/communaute-bl.jpg" alt="Déprime ou dépression" /></a>
-          <a href="https://www.instagram.com/p/CaxrMELroEb" target="_blank" rel="noreferrer"><img src="/images/communaute-br.jpg" alt="Noholito" /></a>
+          <a href="https://www.instagram.com/p/CoDGlRYoJBn" target="_blank" rel="noreferrer"><img src="/images/instagram/communaute-tl.jpg" alt="Choisir son psy" /></a>
+          <a href="https://www.instagram.com/p/Cc2dPYBD3M8" target="_blank" rel="noreferrer"><img src="/images/instagram/communaute-tr.jpg" alt="Anxiété lié aux examens" /></a>
+          <a href="https://www.instagram.com/p/Cj-lUoOIiqv" target="_blank" rel="noreferrer"><img src="/images/instagram/communaute-bl.jpg" alt="Déprime ou dépression" /></a>
+          <a href="https://www.instagram.com/p/CaxrMELroEb" target="_blank" rel="noreferrer"><img src="/images/instagram/communaute-br.jpg" alt="Noholito" /></a>
         </div>
       )}
       centerText

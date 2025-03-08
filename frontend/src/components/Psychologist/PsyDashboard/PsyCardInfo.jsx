@@ -13,7 +13,7 @@ const PsyCardInfo = ({ psychologist }) => {
   return (
     <section className={styles.psyDashboardCard}>
       <div className={styles.psyDashboardCardFirstColumn}>
-        <img src="/images/psychologist-profile.svg" alt="icon of a person in a circle" className={styles.psyPersonIcon} />
+        <img src="/images/icons/psychologist-profile.svg" alt="icon of a person in a circle" className={styles.psyPersonIcon} />
         <b>
           {psychologist.firstNames}
           {' '}

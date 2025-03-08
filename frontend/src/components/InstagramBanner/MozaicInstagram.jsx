@@ -16,7 +16,7 @@ const MozaicInstagram = () => {
       {images.map(image => (
         <div className={styles.imageItem}>
           <a href={image.href} target="_blank" rel="noopener noreferrer" className={styles.href}>
-            <img src={`images/${image.name}.jpg`} alt="Santé Psy Etudiant instagram post" />
+            <img src={`images/instagram/${image.name}.jpg`} alt="Santé Psy Etudiant instagram post" />
           </a>
         </div>
       ))}

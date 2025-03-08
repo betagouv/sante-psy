@@ -76,7 +76,7 @@ const AccessibilityDeclaration = () => (
         <li>
           Formulaire de contact&nbsp;:
           {' '}
-          <a href="https://santepsy.etudiant.gouv.fr/contact">https://santepsy.etudiant.gouv.fr/contact</a>
+          <a href="https://santepsy.etudiant.gouv.fr/contact/formulaire">https://santepsy.etudiant.gouv.fr/contact/formulaire</a>
         </li>
         <li>
           Adresse&nbsp;:

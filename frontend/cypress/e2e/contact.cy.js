@@ -5,7 +5,7 @@ describe('Contact', () => {
     cy.intercept('POST', '/api/contact')
       .as('contact');
 
-    cy.visit('/contact');
+    cy.visit('/contact/formulaire');
   });
 
   it('should send contact info', () => {

@@ -50,7 +50,7 @@ const LiveChat = () => {
       <>
         <Button className={styles.closeButton} onClick={hideChat} icon="fr-icon-close-line" tertiary hasBorder={false} />
         <Button className={styles.chatButton} onClick={openChat}>
-          <img className={styles.chatIcon} src="/images/crisp_closed_chat.svg" alt="Chat icon" />
+          <img className={styles.chatIcon} src="/images/icons/crisp_closed_chat.svg" alt="Chat icon" />
         </Button>
       </>
     )

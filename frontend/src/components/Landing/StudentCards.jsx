@@ -1,28 +1,26 @@
 import React from 'react';
 import { Row } from '@dataesr/react-dsfr';
 
+import Card from 'components/Card/Card';
 import styles from './studentCards.cssmodule.scss';
-import StudentCard from './StudentCard';
 
 const StudentCards = () => (
   <Row className={styles.card}>
-    <StudentCard
+    <Card
       index={1}
-      big
       title="Vérifier votre éligibilité"
-      image="psychologist"
+      image="eligibility/psychologist.svg"
       buttonIcon="ri-user-search-fill"
       buttonText="Vérifiez votre éligibilité"
-      buttonLink="/eligibilite"
+      link="/eligibilite"
     />
-    <StudentCard
+    <Card
       index={2}
-      big
       title="Choisissez un psychologue"
-      image="followup"
+      image="eligibility/followup.svg"
       buttonIcon="ri-search-line"
       buttonText="Trouver un psychologue"
-      buttonLink="/trouver-un-psychologue"
+      link="/trouver-un-psychologue"
       anchor="anchor-psy-list"
     />
   </Row>

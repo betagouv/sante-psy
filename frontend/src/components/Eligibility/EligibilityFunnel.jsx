@@ -63,8 +63,8 @@ const EligibilityFunnel = () => {
     <Container spacing="py-4w">
       <div className={styles.eligibilityForm}>
         <div className={styles.bubbleSpeechPerson}>
-          <img src="/images/purple-speech-bubble.svg" alt="purple speech bubble" width={180} />
-          <img src="/images/psychologist.svg" alt="person with laptop" width={160} />
+          <img src="/images/eligibility/purple-speech-bubble.svg" alt="purple speech bubble" width={180} />
+          <img src="/images/eligibility/psychologist.svg" alt="person with laptop" width={160} />
         </div>
         {renderQuestions()}
         {eligibilityStatus !== null && (
