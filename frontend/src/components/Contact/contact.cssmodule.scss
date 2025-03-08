@@ -28,3 +28,18 @@
     color: $primary-text-color;
   }
 }
+
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-top: -32px;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .cardContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+}
