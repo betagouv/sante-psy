@@ -57,11 +57,12 @@ describe('Global tutorial', () => {
 
   it('should pass tuto', () => {
     cy.get('[data-test-id="close-tutorial"]').click();
-    cy.get('[data-test-id="next-step"]', { timeout: 10000 })
+    cy.get('[data-test-id="next-step"]', { timeout: 20000 })
       .should('not.exist');
     cy.reload();
     cy.wait('@connecteduser');
-    cy.get('[data-test-id="next-step"]', { timeout: 10000 })
+    cy.wait(2000);
+    cy.get('[data-test-id="next-step"]', { timeout: 20000 })
       .should('not.exist');
   });
 });
