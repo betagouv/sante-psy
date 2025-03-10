@@ -17,7 +17,7 @@ const FaqProcess = ({ links, simplified }) => (simplified ? (
     </a>
   </div>
 )
-  : (
+  : (links && (
     <>
       <h4>Supports téléchargeables</h4>
       <ButtonGroup isInlineFrom="xs" align="left" className="fr-mt-2w">
@@ -38,6 +38,6 @@ const FaqProcess = ({ links, simplified }) => (simplified ? (
         ))}
       </ButtonGroup>
     </>
-  ));
+  )));
 
 export default FaqProcess;
