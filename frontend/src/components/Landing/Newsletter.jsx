@@ -50,7 +50,7 @@ const Newsletter = ({ emailRef, withTracking, withText }) => {
         <div className={styles.container}>
           {withText && <span>Vous souhaitez en savoir plus et être accompagné sur les premières étapes&nbsp;:</span>}
           <div className={styles.innercontainer}>
-            <img src="/images/newsletter.svg" alt="Newsletter" className={styles.logo} />
+            <img src="/images/icons/newsletter.svg" alt="Newsletter" className={styles.logo} />
             <div className={styles.separator} />
             <form
               className={styles.form}
