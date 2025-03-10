@@ -22,10 +22,6 @@ module.exports = on => {
   on('before:browser:launch', (browser = {}, launchOptions) => {
     if (browser.name === 'chrome') {
       launchOptions.args.push('--disable-dev-shm-usage');
-      launchOptions.args.push('--no-sandbox');
-      launchOptions.args.push('--window-size=1920,1080');
-      launchOptions.args.push('--disable-background-timer-throttling');
-      launchOptions.args.push('--disable-backgrounding-occluded-windows');
     }
     return launchOptions;
   });

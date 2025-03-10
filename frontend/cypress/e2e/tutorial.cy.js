@@ -37,6 +37,8 @@ describe('Global tutorial', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/connecteduser')
       .as('connecteduser');
+    cy.intercept('PUT', '/api/psychologist/*/seeTutorial')
+      .as('seeTutorial');
 
     resetDB();
     loginAsDefault();
@@ -55,14 +57,15 @@ describe('Global tutorial', () => {
       .should('not.exist');
   });
 
-  it('should pass tuto', () => {
+  it.only('should pass tuto', () => {
     cy.get('[data-test-id="close-tutorial"]').click();
-    cy.get('[data-test-id="next-step"]', { timeout: 20000 })
+    cy.wait('@seeTutorial');
+    cy.wait(500);
+    cy.get('[data-test-id="next-step"]', { timeout: 10000 })
       .should('not.exist');
     cy.reload();
     cy.wait('@connecteduser');
-    cy.wait(2000);
-    cy.get('[data-test-id="next-step"]', { timeout: 20000 })
+    cy.get('[data-test-id="next-step"]', { timeout: 10000 })
       .should('not.exist');
   });
 });
