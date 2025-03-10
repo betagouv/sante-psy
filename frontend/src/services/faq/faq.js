@@ -7,7 +7,11 @@ const reimbursement = require('./psychologue/reimbursement');
 const retractation = require('./psychologue/retractation');
 const psySession = require('./psychologue/session');
 const billing = require('./psychologue/billing');
-const doctor = require('./doctor');
+const schoolEligibility = require('./school/eligibility');
+const schoolBilling = require('./school/billing');
+const schoolConvention = require('./school/convention');
+const schoolJoin = require('./school/join');
+const schoolStatistics = require('./school/statistics');
 const eligibility = require('./student/eligibility');
 const payment = require('./student/payment');
 const session = require('./student/session');
@@ -17,7 +21,6 @@ module.exports = {
   agreement,
   billing,
   connection,
-  doctor,
   eligibility,
   psyEligibility,
   process,
@@ -28,4 +31,9 @@ module.exports = {
   retractation,
   session,
   studentProcess,
+  schoolBilling,
+  schoolConvention,
+  schoolEligibility,
+  schoolJoin,
+  schoolStatistics,
 };

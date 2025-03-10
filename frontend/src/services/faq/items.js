@@ -2,32 +2,6 @@ const items = {
   etudiant: {
     index: 0,
     label: 'étudiants',
-    links: [
-      {
-        href: '/static/documents/parcours_etudiant_sante_psy_etudiant.pdf',
-        title: 'Parcours étudiant',
-      },
-      {
-        href: '/static/documents/flyer_student_fr.pdf',
-        title: 'Voir le dépliant étudiant',
-      },
-      {
-        href: '/static/documents/flyer_student_en.pdf',
-        title: 'See the student flyer',
-      },
-      {
-        href: '/static/documents/flyer_student_sp.pdf',
-        title: 'Ver el folleto del estudiante',
-      },
-      // {
-      //   href: '/static/documents/flyer_student_ar.pdf',
-      //   title: '',
-      // },
-      {
-        href: '/static/documents/flyer_student_zn.pdf',
-        title: '见学生传单',
-      },
-    ],
     sections: [
       { title: 'Éligibilité', name: 'eligibility' },
       { title: 'Paiement', name: 'payment' },
@@ -60,21 +34,15 @@ const items = {
       { title: 'Rétractation', name: 'retractation' },
     ],
   },
-  medecin: {
+  ecole: {
     index: 2,
-    label: 'médecins',
-    links: [
-      {
-        href: '/static/documents/flyer_medecins.pdf',
-        title: 'Voir le dépliant médecin',
-      },
-      {
-        href: '/static/documents/flyer_sse.pdf',
-        title: 'Voir le dépliant SSE',
-      },
-    ],
+    label: 'SSE - Écoles',
     sections: [
-      { title: 'Divers', name: 'doctor' },
+      { title: 'Éligibilité des mes étudiants', name: 'schoolEligibility' },
+      { title: 'Conventionnement des psychologues', name: 'schoolConvention' },
+      { title: 'Facturation et remboursement', name: 'schoolBilling' },
+      { title: 'Devenir université partenaire', name: 'schoolJoin' },
+      { title: 'Données statistiques', name: 'schoolStatistics' },
     ],
   },
 };
