@@ -54,8 +54,6 @@ export default class UserStore {
   }
 
   seeTutorial() {
-    return agent.Psychologist.seeTutorial().then(() => {
-      return this.pullUser();
-    });
+    return agent.Psychologist.seeTutorial().then(() => this.pullUser());
   }
 }
