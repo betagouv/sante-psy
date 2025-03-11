@@ -37,7 +37,8 @@ describe('Global tutorial', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/connecteduser')
       .as('connecteduser');
-
+    cy.intercept('PUT', '/api/psychologist/*/seeTutorial')
+      .as('seeTutorial');
     resetDB();
     loginAsDefault();
     checkConvention();
@@ -58,6 +59,7 @@ describe('Global tutorial', () => {
   it('should pass tuto', () => {
     cy.get('[data-test-id="close-tutorial"]')
       .click();
+    cy.wait('@seeTutorial').its('response.statusCode').should('eq', 200);
     cy.get('[data-test-id="next-step"]')
       .should('not.exist');
     cy.reload();
