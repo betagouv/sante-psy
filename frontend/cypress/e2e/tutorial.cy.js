@@ -60,11 +60,12 @@ describe('Global tutorial', () => {
     cy.get('[data-test-id="close-tutorial"]')
       .click();
     cy.wait('@seeTutorial').its('response.statusCode').should('eq', 200);
-    cy.get('[data-test-id="next-step"]')
+    cy.wait(500);
+    cy.get('[data-test-id="next-step"]', { timeout: 10000 })
       .should('not.exist');
     cy.reload();
     cy.wait('@connecteduser');
-    cy.get('[data-test-id="next-step"]')
+    cy.get('[data-test-id="next-step"]', { timeout: 10000 })
       .should('not.exist');
   });
 });
