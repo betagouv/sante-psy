@@ -58,7 +58,6 @@ export default class UserStore {
       runInAction(() => {
         this.user.hasSeenTutorial = true;
       });
-      return this.pullUser();
     });
   }
 }
