@@ -59,7 +59,7 @@ describe('Global tutorial', () => {
 
   it('should pass tuto', () => {
     cy.get('[data-test-id="close-tutorial"]').click();
-    cy.wait('@seeTutorial');
+    cy.wait('@seeTutorial').its('response.statusCode').should('eq', 200);
     cy.wait(500);
     cy.get('[data-test-id="next-step"]', { timeout: 10000 })
       .should('not.exist');
