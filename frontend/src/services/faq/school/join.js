@@ -4,7 +4,7 @@ module.exports = () => [
   {
     question: 'Comment une université peut-elle devenir partenaire du dispositif Santé Psy Étudiant\u00A0?',
     answer: 'Vous souhaitez devenir partenaire du dispositif\u00A0? Vous pouvez formuler votre demande en nous contactant à \
-      <a href="mailto:contact@santepsyetudiant.beta.gouv.fr">contact@santepsyetudiant.beta.gouv.fr</a>.',
+      <a href="mailto:support-santepsyetudiant@beta.gouv.fr">support-santepsyetudiant@beta.gouv.fr</a>.',
   },
   {
     question: 'Comment une université peut-elle communiquer sur le dispositif\u00A0?',

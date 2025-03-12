@@ -12,7 +12,7 @@ if (!secret || !secretLogs) {
   console.error('Mandatory configurations SECRET or SECRET_LOG is/are missing');
 }
 
-const contactEmail = process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr';
+const contactEmail = process.env.CONTACT_EMAIL || 'support-santepsyetudiant@beta.gouv.fr';
 
 const getBooleanEnv = (value: string, defaultValue: string): boolean => (value || defaultValue) === 'true';
 
@@ -23,7 +23,7 @@ export default {
   publicAnnouncement: process.env.PUBLIC_ANNOUNCEMENT || '',
   port: process.env.PORT || 8080,
   teamEmail: process.env.TEAM_EMAIL || 'equipe-santepsyetudiants@beta.gouv.fr',
-  sendingEmail: process.env.SENDING_EMAIL || 'contact@santepsyetudiant.beta.gouv.fr',
+  sendingEmail: process.env.CONTACT_EMAIL || 'support-santepsyetudiant@beta.gouv.fr',
   contactEmail,
   databaseUrl: process.env.DATABASE_URL,
   dateOfBirthDeploymentDate: process.env.DATE_OF_BIRTH_FEATURE_DATE || '20/04/2021',
