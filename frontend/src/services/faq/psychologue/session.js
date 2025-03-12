@@ -1,7 +1,7 @@
 module.exports = () => [
   {
     question: 'Puis-je proposer ma participation au dispositif uniquement par consultations vidéo ?',
-    answer: 'Dans ce cas, votre demande sera examinée par le service médical étudiant (SSE) proche de votre lieu d’exercice qui déterminera, avec le concours de la fédération française des psychologues et de psychologie, si l’offre exclusive de téléconsultation que vous proposez convient.',
+    answer: 'La téléconsultation uniquement est autorisée comme mode de consultation pour le dispositif.',
   },
   {
     question: "N'ayant pas de cabinet professionnel, puis-je me déplacer au domicile des étudiants ?",

@@ -3,7 +3,7 @@
 module.exports = () => [
   {
     question: "Je n'ai toujours pas signé de convention et je reçois des demandes, que faire ?",
-    answer: "Une fois votre dossier accepté, vous pouvez commencer à recevoir les étudiants munis de leur carte d'étudiant ou tout document équivalent attestant de leur statut étudiant. Le remboursement des séances réalisées est garanti.",
+    answer: "Une fois votre dossier accepté, vous devez attendre d'avoir signé votre convention pour recevoir des étudiants. Vous serez contacté(e) par votre université ou par l'équipe Santé Psy Étudiant pour la signature de votre convention. Aucune séance effectuée avant signature de convention ne pourra faire l'objet d'un remboursement.",
   },
   {
     question: "Quel est le délai de signature de ma convention avec l'université de rattachement ?",

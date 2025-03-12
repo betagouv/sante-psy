@@ -44,4 +44,9 @@ module.exports = () => [
     answer:
       'Comme toute personne à partir de 3 ans, vous pouvez bénéficier du dispositif Mon Soutien Psy permettant l‘accès jusqu‘à 12 séances par an.',
   },
+  {
+    question: 'Je ne trouve pas mon INE',
+    answer:
+      '<a href="https://santepsy.etudiant.gouv.fr/eligibilite" target="_blank" rel="noopener noreferrer">Vérifier mon éligibilité</a>',
+  },
 ];

@@ -21,8 +21,4 @@ module.exports = () => [
     question: "Je n'arrive pas à envoyer mes factures, que puis-je faire ?",
     answer: "Suite à la déclaration de vos séances dans l'espace Psychologue, il faut effectivement transmettre une facture à l'université avec laquelle vous conventionnez. Les modalités exactes de transmission de ces factures divergent selon les universités (envoi par mail, par courrier, dépôt sur Chorus...). Nous vous invitons à vous rapprocher de votre Université assignée.",
   },
-  {
-    question: "Comment faire si j'exerce comme employé et que je ne dispose pas d'un numéro SIRET pour éditer ma facture ?",
-    answer: "Dans le cas où vous exercez en tant qu'employé pour une structure, c'est cette dernière qui doit émettre la facture que vous transmettrez à l'université pour le remboursement des séances. La structure qui vous emploie devra ensuite vous régler le montant récupéré.",
-  },
 ];
