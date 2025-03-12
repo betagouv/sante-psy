@@ -9,7 +9,7 @@ describe('configController', () => {
             announcement: '(Docker-compose variable) Very important announcement.',
             publicAnnouncement: '(Docker-compose variable) Very important public announcement.',
             appName: 'Santé Psy Étudiant',
-            contactEmail: 'contact-santepsyetudiants@beta.gouv.fr',
+            contactEmail: 'support-santepsyetudiant@beta.gouv.fr',
             dateOfBirthDeploymentDate: '20/04/2021',
             demarchesSimplifieesUrl: 'https://demarches-simplifiees.fr/',
             statistics: {
