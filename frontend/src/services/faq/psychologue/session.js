@@ -9,7 +9,7 @@ module.exports = () => [
   },
   {
     question: 'Je suis déjà des étudiants. Puis-je continuer à les suivre dans le cadre du dispositif Santé Psy Étudiant ?',
-    answer: 'Si les étudiants que vous prenez en charge actuellement souhaitent bénéficier du dispositif et poursuivre leur consultation avec vous, vous devez être agréé pour participer au dispositif : renseignez le formulaire en ligne (cliquez ici pour accéder au formulaire). Si vous remplissez les conditions de participation et acceptez les modalités de prise en charge des étudiants (tarif, lien avec le corps médical notamment), une convention avec l’université la plus proche de votre lieu d’exercice vous sera proposée et vous serez inscrit sur la liste des psychologues mise à disposition des étudiants.',
+    answer: 'Si les étudiants que vous prenez en charge actuellement souhaitent bénéficier du dispositif et poursuivre leur consultation avec vous, vous devez être agréé pour participer au dispositif : <a href="https://www.demarches-simplifiees.fr/commencer/postuler-pour-sante-psy-etudiants" target="_blank" rel="noopener noreferrer">cliquez ici</a> pour accéder au formulaire. Si vous remplissez les conditions de participation et acceptez les modalités de prise en charge des étudiants (tarif, lien avec le corps médical notamment), une convention avec l’université la plus proche de votre lieu d’exercice vous sera proposée et vous serez inscrit sur la liste des psychologues mise à disposition des étudiants.',
   },
   {
     question: 'Les étudiants peuvent-ils directement venir voir le psychologue ?',

@@ -3,7 +3,7 @@
 module.exports = () => [
   {
     question: "Quelles informations dois-je vérifier auprès d'un étudiant lors de la séance ?",
-    answer: 'Son certificat de scolarité doit également lui être demandé lors de sa première consultation : il doit être en cours de validité. Aussi, son numéro INE doit lui être demandé pour la création de son dossier. Il peut le retrouver sur sa carte étudiant ou son certificat de scolarité. Si besoin, il peut se tourner vers sa scolarité pour obtenir son numéro INE.\n\nPour vérifier son éligibilité : un module de contrôle est disponible [ici](https://santepsy.etudiant.gouv.fr/eligibilite).',
+    answer: 'Son certificat de scolarité doit également lui être demandé lors de sa première consultation : il doit être en cours de validité. Aussi, son numéro INE doit lui être demandé pour la création de son dossier. Il peut le retrouver sur sa carte étudiant ou son certificat de scolarité. Si besoin, il peut se tourner vers sa scolarité pour obtenir son numéro INE.\n\nPour vérifier son éligibilité : un module de contrôle est disponible <a href="https://santepsy.etudiant.gouv.fr/eligibilite" target="_blank" rel="noopener noreferrer">ici</a>.',
   },
   {
     question: "Mon étudiant n'a pas de numéro INE, que faire ?",
