@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Modal, ModalTitle, ModalContent } from '@dataesr/react-dsfr';
 import { checkConvention } from 'services/conventionVerification';
 import ConventionForm from '../PsyDashboard/ConventionForm';
@@ -31,14 +30,9 @@ const ConventionModal = () => {
           <br />
           Si vous n&lsquo;avez pas de nouvelles de l&lsquo;université sous 2 à 4 semaines,
           {' '}
-          <Link
-            to={{
-              pathname: '/contact/formulaire',
-              state: { reason: 'convention' },
-            }}
-          >
-            contactez nous
-          </Link>
+          <a href="mailto:support-santepsyetudiant@beta.gouv.fr?subject=Demande%20sur%20la%20convention" target="_blank" rel="noopener noreferrer">
+            contactez-nous
+          </a>
           .
         </div>
         <ConventionForm

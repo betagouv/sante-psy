@@ -11,8 +11,8 @@ module.exports = () => [
     Si vous avez besoin de plus de séances, le dispositif est cumulable avec Mon soutien psy.",
   },
   {
-    question: 'Mes séances ont été utilisées par quelqu\'un d\'autre\u00A0?',
-    answer: '<a href="https://santepsy.etudiant.gouv.fr/contact/formulaire" target="_blank" rel="noopener noreferrer">Veuillez nous contacter</a>',
+    question: "Mes séances ont été utilisées par quelqu'un d'autre",
+    answer: '<a href="mailto:support-santepsyetudiant@beta.gouv.fr?subject=Séances%20utilisées%20par%20quelquun%20dautre" target="_blank" rel="noopener noreferrer">Veuillez nous contacter</a>',
   },
   {
     question: 'Puis-je terminer mes 12 séances si j\'arrête ma formation en cours d\'année\u00A0?',

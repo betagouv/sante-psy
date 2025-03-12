@@ -9,11 +9,11 @@ module.exports = () => [
   },
   {
     question: 'Plainte sur un\u00A0/ une psychologue',
-    answer: '<a href="https://santepsy.etudiant.gouv.fr/contact/formulaire" target="_blank" rel="noopener noreferrer">Veuillez nous contacter</a>',
+    answer: '<a href="mailto:support-santepsyetudiant@beta.gouv.fr?subject=Plainte%20sur%20un/une%20psychologue" target="_blank" rel="noopener noreferrer">Veuillez nous contacter</a>',
   },
   {
     question: 'Je ne me sens pas à l\'aise avec mon\u00A0/ ma psychologue',
-    answer: '<a href="https://santepsy.etudiant.gouv.fr/contact/formulaire" target="_blank" rel="noopener noreferrer">Veuillez nous contacter</a>',
+    answer: '<a href="mailto:support-santepsyetudiant@beta.gouv.fr?subject=Je%20ne%20me%20sens%20pas%20à%20laise%20avec%20mon/ma%20psychologue" target="_blank" rel="noopener noreferrer">Veuillez nous contacter</a>',
   },
   {
     question: 'Je suis insatisfait d\'une séance avec un psychologue. Que puis-je faire\u00A0?',

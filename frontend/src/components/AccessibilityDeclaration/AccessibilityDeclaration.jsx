@@ -63,20 +63,14 @@ const AccessibilityDeclaration = () => (
     </Section>
     <Section title="Amélioration et contact">
       <p>
-        Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable de
+        Si vous n&apos;arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter l&apos;équipe de
         Santé Psy Etudiant pour être orienté vers une alternative accessible ou obtenir le contenu sous une autre forme.
       </p>
       <ul className="basic-information feedback h-card">
         <li>
           E-mail&nbsp;:
           {' '}
-          <a href="mailto:yann.mercier-brunel@enseignementsup.gouv.fr">yann.mercier-brunel@enseignementsup.gouv.fr</a>
-        </li>
-
-        <li>
-          Formulaire de contact&nbsp;:
-          {' '}
-          <a href="https://santepsy.etudiant.gouv.fr/contact/formulaire">https://santepsy.etudiant.gouv.fr/contact/formulaire</a>
+          <a href="mailto:support-santepsyetudiant@beta.gouv.fr">support-santepsyetudiant@beta.gouv.fr</a>
         </li>
         <li>
           Adresse&nbsp;:

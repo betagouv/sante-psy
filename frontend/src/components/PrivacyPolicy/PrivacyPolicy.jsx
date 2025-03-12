@@ -135,21 +135,11 @@ const PrivacyPolicy = () => (
         Par voie numérique : envoyez-nous un email à
         {' '}
         <a
-          href="mailto:support-santepsyetudiant@beta.gouv"
+          href="mailto:support-santepsyetudiant@beta.gouv.fr"
           target="_blank"
           rel="noreferrer"
           >
-          support-santepsyetudiant@beta.gouv
-        </a>
-        {' '}
-        ou contactez-nous sur
-        {' '}
-        <a
-          href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
-          target="_blank"
-          rel="noreferrer"
-          >
-          santepsy.etudiant.gouv.fr/contact/formulaire
+          support-santepsyetudiant@beta.gouv.fr
         </a>
         {' '}
       </p>
