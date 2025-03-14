@@ -23,7 +23,7 @@ const urgentServicesData = [
     logo: '/images/logos/cnae-logo.png',
     name: 'La CNAÉ',
     title: 'Signalement des violences',
-    description: 'Ligne d’écoute professionnelle opérée par l’association “ En Avant Toutes “.',
+    description: 'Dispositif d’écoute et de signalement pour les étudiant·e·s.',
     link: 'https://www.etudiant.gouv.fr/fr/cnae',
   },
   {

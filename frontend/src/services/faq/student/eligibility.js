@@ -17,7 +17,7 @@ module.exports = () => [
       'Les étudiants qui ont déjà un suivi sont éligibles au dispositif Santé Psy Étudiant. Ils devront cependant pour cela aller consulter un psychologue partenaire du dispositif.',
   },
   {
-    question: "Je n'ai pas de numéro INE mais j'ai bien une carte étudiante.",
+    question: "Je n'ai pas de numéro INE mais j'ai bien une carte étudiante",
     answer:
       "Depuis le 1er janvier 2025, le numéro INE est obligatoire. Si vous êtes étudiant dans le supérieur, vous pouvez vous rapprocher de l'administration de votre école afin de récupérer votre numéro INE.",
   },
