@@ -9,10 +9,12 @@ module.exports = () => [
   },
   {
     question: 'Quelle est la procédure à suivre pour se faire rembourser ?',
+    frequent: true,
     answer: 'Une fois la convention signée avec l’université, la première étape est de déclarer vos séances réalisées sur votre espace psychologue. Vous devez ensuite lui adresser vos facturations selon ses modalités d’envoi.',
   },
   {
     question: 'Le renouvellement de séances est-il possible ? Sous quelles conditions ?',
+    frequent: true,
     answer: "Le renouvellement d'un cycle de 12 séances a lieu le 1er septembre de l'année. Un nouveau cycle peut être entamé sur l’année universitaire suivante sous réserve de la présentation d’un justificatif étudiant valable sur l'année universitaire en cours. Pour le psychologue, la procédure de déclaration en ligne reste inchangée.",
   },
   {
