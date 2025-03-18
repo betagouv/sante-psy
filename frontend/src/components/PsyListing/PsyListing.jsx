@@ -60,9 +60,10 @@ const PsyListing = () => {
     try {
       const response = await agent.Psychologist.find(filters);
       console.log('response', response);
+      setPsychologists(response);
       setFilteredPsychologists(response);
     } catch (error) {
-      console.error("Erreur lors de la récupération des psychologues :", error);
+      console.error('Erreur lors de la récupération des psychologues :', error);
     }
   };
 
@@ -221,7 +222,7 @@ const PsyListing = () => {
     }
   };
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = newPage => {
     setPage(newPage);
     fetchPsychologists();
   };
@@ -242,111 +243,109 @@ const PsyListing = () => {
         : 'Chargement de la liste des psychologues'}
       dataTestId="psyListPage"
     >
-      {
-        <>
-          <div className="fr-pb-6w fr-mt-2w">
-            <div className={styles.filters}>
-              {psychologists && (
-                <div className={styles.number}>
-                  <b>
-                    {filteredPsychologists.length}
-                    {' '}
-                    {filteredPsychologists.length === 1 ? 'résultat' : 'résultats'}
-                  </b>
-                </div>
-              )}
+      <>
+        <div className="fr-pb-6w fr-mt-2w">
+          <div className={styles.filters}>
+            {psychologists && (
+              <div className={styles.number}>
+                <b>
+                  {filteredPsychologists.length}
+                  {' '}
+                  {filteredPsychologists.length === 1 ? 'résultat' : 'résultats'}
+                </b>
+              </div>
+            )}
 
-              <div className={styles.inputAlign}>
-                <TextInput
-                  className={styles.inputMediumSize}
-                  value={specialityFilter}
-                  onChange={e => setSpecialityFilter(e.target.value)}
-                  placeholder="Rechercher par spécialité, mot clé ..."
-                />
-                <Button><Icon className={styles.userIcon} name="ri-search-line" size="2x" /></Button>
-              </div>
-              <div className={styles.input}>
-                <TextInput
-                  value={nameFilter}
-                  onChange={e => setNameFilter(e.target.value)}
-                  placeholder="Rechercher par nom"
-                />
-              </div>
-              <div className={styles.input}>
-                <InputSelect
-                  selected={addressFilter}
-                  onChange={e => setAddressFilter(e)}
-                  placeholder="Ville, code postal ou région"
-                  options={[{ value: AROUND_ME, label: AROUND_ME }]}
-                />
-              </div>
-              <div className={styles.input}>
-                <TextInput
-                  value={languageFilter}
-                  onChange={e => setLanguageFilter(e.target.value)}
-                  placeholder="Langue parlée"
-                />
-              </div>
-              <Checkbox
-                value="teleconsultation"
-                onChange={e => { setTeleconsultation(e.target.checked); }}
-                label="Téléconsultation"
-                checked={teleconsultation}
+            <div className={styles.inputAlign}>
+              <TextInput
+                className={styles.inputMediumSize}
+                value={specialityFilter}
+                onChange={e => setSpecialityFilter(e.target.value)}
+                placeholder="Rechercher par spécialité, mot clé ..."
+              />
+              <Button><Icon className={styles.userIcon} name="ri-search-line" size="2x" /></Button>
+            </div>
+            <div className={styles.input}>
+              <TextInput
+                value={nameFilter}
+                onChange={e => setNameFilter(e.target.value)}
+                placeholder="Rechercher par nom"
               />
             </div>
-            {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
-              <Alert
-                className="fr-mt-2w"
-                type="error"
-                description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette
-                    fonctionnalité."
+            <div className={styles.input}>
+              <InputSelect
+                selected={addressFilter}
+                onChange={e => setAddressFilter(e)}
+                placeholder="Ville, code postal ou région"
+                options={[{ value: AROUND_ME, label: AROUND_ME }]}
               />
-            )}
-            {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.UNSUPPORTED && (
-              <Alert
-                className="fr-mt-1w"
-                type="error"
-                description="Votre navigateur ne permet pas d'utiliser cette fonctionnalité."
+            </div>
+            <div className={styles.input}>
+              <TextInput
+                value={languageFilter}
+                onChange={e => setLanguageFilter(e.target.value)}
+                placeholder="Langue parlée"
               />
-            )}
+            </div>
+            <Checkbox
+              value="teleconsultation"
+              onChange={e => { setTeleconsultation(e.target.checked); }}
+              label="Téléconsultation"
+              checked={teleconsultation}
+            />
           </div>
-          <Alert
-            type="warning"
-            title="Vous n‘avez aucune avance de frais à prévoir"
-            description="Le psychologue ne doit en aucun cas vous demander un complément financier ou une avance."
-          />
-          <PsyTable
-            page={page}
-            setPage={handlePageChange}
-            psychologists={filteredPsychologists || []}
-            nameFilter={nameFilter}
-            addressFilter={addressFilter}
-            languageFilter={languageFilter}
-            teleconsultation={teleconsultation}
-            geoLoading={geoLoading}
-          />
-          {filteredPsychologists && filteredPsychologists.length < 8
-            ? (
-              <NoResultPsyTable
-                noResult={filteredPsychologists.length === 0}
-                searchAroundMe={() => {
-                  setNameFilter('');
-                  setAddressFilter(AROUND_ME);
-                }}
-                searchWithTeleconsultation={() => {
-                  setNameFilter('');
-                  setAddressFilter(null);
-                  setTeleconsultation(true);
-                }}
-              />
-            ) : (
-              <Alert
-                title="Attention, en cas de séance non honorée et sans excuse valable"
-                description="Le psychologue peut se réserver le droit de refuser un étudiant"
-              />
-            )}
-        </>
-      }
+          {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
+            <Alert
+              className="fr-mt-2w"
+              type="error"
+              description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette
+                    fonctionnalité."
+            />
+          )}
+          {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.UNSUPPORTED && (
+            <Alert
+              className="fr-mt-1w"
+              type="error"
+              description="Votre navigateur ne permet pas d'utiliser cette fonctionnalité."
+            />
+          )}
+        </div>
+        <Alert
+          type="warning"
+          title="Vous n‘avez aucune avance de frais à prévoir"
+          description="Le psychologue ne doit en aucun cas vous demander un complément financier ou une avance."
+        />
+        <PsyTable
+          page={page}
+          setPage={handlePageChange}
+          psychologists={filteredPsychologists || []}
+          nameFilter={nameFilter}
+          addressFilter={addressFilter}
+          languageFilter={languageFilter}
+          teleconsultation={teleconsultation}
+          geoLoading={geoLoading}
+        />
+        {filteredPsychologists && filteredPsychologists.length < 8
+          ? (
+            <NoResultPsyTable
+              noResult={filteredPsychologists.length === 0}
+              searchAroundMe={() => {
+                setNameFilter('');
+                setAddressFilter(AROUND_ME);
+              }}
+              searchWithTeleconsultation={() => {
+                setNameFilter('');
+                setAddressFilter(null);
+                setTeleconsultation(true);
+              }}
+            />
+          ) : (
+            <Alert
+              title="Attention, en cas de séance non honorée et sans excuse valable"
+              description="Le psychologue peut se réserver le droit de refuser un étudiant"
+            />
+          )}
+      </>
     </Page>
   );
 };
