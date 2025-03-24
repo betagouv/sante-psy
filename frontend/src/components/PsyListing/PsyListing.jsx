@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, TextInput, Alert, Button, Icon } from '@dataesr/react-dsfr';
+import { Checkbox, TextInput, Alert } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
@@ -41,12 +41,6 @@ const PsyListing = () => {
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
   const [page, setPage] = useState(0);
 
-  // useEffect(() => {
-  //   if (!psychologists) {
-  //     agent.Psychologist.find().then(setPsychologists);
-  //   }
-  // }, []);
-
   const fetchPsychologists = async () => {
     const filters = {
       name: nameFilter || undefined,
@@ -59,7 +53,6 @@ const PsyListing = () => {
 
     try {
       const response = await agent.Psychologist.find(filters);
-      console.log('response', response);
       setPsychologists(response);
       setFilteredPsychologists(response);
     } catch (error) {
@@ -82,74 +75,6 @@ const PsyListing = () => {
 
     logSearchInMatomo();
   }, [nameFilter, addressFilter, teleconsultation, languageFilter, specialityFilter, coords]);
-
-  // useEffect(() => {
-  //   if (!psychologists) {
-  //     setFilteredPsychologists([]);
-  //     return;
-  //   }
-
-  //   const matchingFiltersPsychologists = psychologists.filter(psychologist => {
-  //     if (teleconsultation && !psychologist.teleconsultation) {
-  //       return false;
-  //     }
-
-  //     if (nameFilter && !utils.matchName(psychologist, nameFilter)
-  //     ) {
-  //       return false;
-  //     }
-
-  //     if (specialityFilter && !utils.matchSpeciality(psychologist, specialityFilter)
-  //     ) {
-  //       return false;
-  //     }
-
-  //     if (languageFilter && !utils.matchFilter(psychologist.languages, languageFilter)) {
-  //       return false;
-  //     }
-
-  //     if (addressFilter === AROUND_ME) {
-  //       return true;
-  //     }
-
-  //     const departementFilter = +addressFilter;
-  //     const addressIsDepartment = departementFilter
-  //       && (
-  //         (departementFilter > 0 && departementFilter < 96)
-  //         || (departementFilter > 970 && departementFilter < 977)
-  //       );
-
-  //     if (addressIsDepartment) {
-  //       if (!utils.matchDepartment(psychologist.address, addressFilter)
-  //         && !utils.matchDepartment(psychologist.otherAddress, addressFilter)) {
-  //         return false;
-  //       }
-  //     } else if (addressFilter
-  //       && !(
-  //         utils.matchZipCodeOrCity(psychologist.address, addressFilter)
-  //         || utils.matchZipCodeOrCity(psychologist.otherAddress, addressFilter)
-  //         || utils.matchFilter(psychologist.departement, addressFilter)
-  //         || utils.matchFilter(psychologist.region, addressFilter)
-  //       )
-  //     ) {
-  //       return false;
-  //     }
-
-  //     return true;
-  //   });
-
-  //   if (coords && addressFilter === AROUND_ME) {
-  //     setFilteredPsychologists(matchingFiltersPsychologists
-  //       .filter(psy => psy.latitude && psy.longitude)
-  //       .map(psy => ({
-  //         ...psy,
-  //         distance: distance.distanceKm(psy.latitude, psy.longitude, coords.latitude, coords.longitude),
-  //       }))
-  //       .sort((a, b) => a.distance - b.distance));
-  //   } else {
-  //     setFilteredPsychologists(matchingFiltersPsychologists);
-  //   }
-  // }, [psychologists, nameFilter, specialityFilter, addressFilter, teleconsultation, languageFilter, coords]);
 
   const logSearchInMatomo = () => {
     if (__MATOMO__) {
@@ -261,9 +186,9 @@ const PsyListing = () => {
                 className={styles.inputMediumSize}
                 value={specialityFilter}
                 onChange={e => setSpecialityFilter(e.target.value)}
-                placeholder="Rechercher par spécialité, mot clé ..."
+                placeholder="Rechercher par spécialité, mot-clé ..."
               />
-              <Button><Icon className={styles.userIcon} name="ri-search-line" size="2x" /></Button>
+              {/* <Button><Icon className={styles.userIcon} name="ri-search-line" size="xl" /></Button> */}
             </div>
             <div className={styles.input}>
               <TextInput

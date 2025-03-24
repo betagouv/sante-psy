@@ -75,20 +75,6 @@ const selectFields = (): string[] => [
   'useLastName',
 ];
 
-const getAllActive = async (): Promise<Psychologist[]> => {
-  try {
-    return db.select(selectFields())
-      .select()
-      .from(psychologistsTable)
-      .whereNot('archived', true)
-      .where('state', DossierState.accepte)
-      .andWhere('active', true);
-  } catch (err) {
-    console.error('Impossible de récupérer les psychologistes', err);
-    throw new Error('Impossible de récupérer les psychologistes');
-  }
-};
-
 const getAllActiveByAvailability = async (isVeryAvailable: boolean, filters?: PsychologistFilters)
 : Promise<Psychologist[]> => {
   try {
@@ -103,30 +89,33 @@ const getAllActiveByAvailability = async (isVeryAvailable: boolean, filters?: Ps
     /* Filters */
     if (filters.name) {
       query = query.andWhere((qb) => {
-        qb.whereILike('firstNames', `%${filters.name}%`)
-            .orWhereILike('lastName', `%${filters.name}%`);
+        qb.whereRaw('unaccent("firstNames") ILIKE unaccent(?)', `%${filters.name}%`)
+          .orWhereRaw('unaccent("lastName") ILIKE unaccent(?)', `%${filters.name}%`);
       });
     }
     if (filters.address) {
       query = query.andWhere((qb) => {
-        qb.whereILike('address', `%${filters.address}%`)
-            .orWhereILike('otherAddress', `%${filters.address}%`)
-            .orWhereILike('departement', `%${filters.address}%`)
-            .orWhereILike('region', `%${filters.address}%`);
+        qb.whereRaw('unaccent(address) ILIKE unaccent(?)', `%${filters.address}%`)
+          .orWhereRaw('unaccent(otherAddress) ILIKE unaccent(?)', `%${filters.address}%`)
+          .orWhereRaw('unaccent(departement) ILIKE unaccent(?)', `%${filters.address}%`)
+          .orWhereRaw('unaccent(region) ILIKE unaccent(?)', `%${filters.address}%`);
       });
     }
     if (filters.language) {
-      query = query.andWhereILike('languages', `%${filters.language}%`);
+      query = query.andWhereRaw('unaccent(languages) ILIKE unaccent(?)', `%${filters.language}%`);
     }
     if (filters.speciality) {
-      const specialityValue = `%${filters.speciality}%`;
+      const specialityValue = `%${filters.speciality}%`; // Nettoyage de l'entrée
       query = query.andWhere((qb) => {
-        qb.whereILike('description', specialityValue)
-            .orWhereILike('diploma', specialityValue)
-            .orWhereRaw(
-              'EXISTS (SELECT 1 FROM jsonb_array_elements_text(training::jsonb) AS elem WHERE elem ILIKE ?)',
-              [specialityValue],
-            );
+        qb.whereRaw('unaccent(description) ILIKE unaccent(?)', [specialityValue])
+          .orWhereRaw('unaccent(diploma) ILIKE unaccent(?)', [specialityValue])
+          .orWhereRaw(
+            `EXISTS (
+              SELECT 1 FROM jsonb_array_elements_text(training::jsonb) AS elem 
+              WHERE unaccent(elem) ILIKE unaccent(?)
+            )`,
+            [specialityValue],
+          );
       });
     }
     if (filters.teleconsultation !== undefined) {
@@ -427,7 +416,6 @@ const seeTutorial = async (dossierNumber: string): Promise<number> => {
 
 export default {
   getAllActiveByAvailability,
-  getAllActive,
   getById,
   getAcceptedByEmail,
   getNotYetAcceptedByEmail,
