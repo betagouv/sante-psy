@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 
 import Slice from 'components/Slice/Slice';
 import Faq from 'components/Faq/Faq';
 import { useStore } from 'stores/index';
+import agent from 'services/agent';
+import { displayStatistic } from 'services/string';
 import StudentProcess from './StudentProcess';
 import Statistics from './Statistics';
 
@@ -12,6 +14,21 @@ import FollowInstagram from './FollowInstagram';
 
 const Landing = () => {
   const { commonStore: { config } } = useStore();
+
+  const [patientsCount, setPatientsCount] = useState('100000');
+  const [teleconsultPsyCount, setTeleconsultPsyCount] = useState('1200');
+
+  useEffect(() => {
+    agent.Statistics.getAll().then(data => {
+      if (data.patientsCount) {
+        setPatientsCount(data.patientsCount.value.toString());
+      }
+      if (data.teleconsultPsyCount) {
+        setTeleconsultPsyCount(data.teleconsultPsyCount.value.toString());
+      }
+    });
+  }, []);
+
   useEffect(() => {
     document.title = 'Santé Psy Étudiant';
   }, []);
@@ -42,7 +59,11 @@ const Landing = () => {
           <>
             Plus de
             {' '}
-            <b>62 000 étudiants</b>
+            <b>
+              {displayStatistic(patientsCount)}
+              {' '}
+              étudiants
+            </b>
             {' '}
             déjà accompagnés
           </>
@@ -76,7 +97,13 @@ const Landing = () => {
         buttonText="Trouver un psychologue"
         hint={(
           <>
-            <b>Plus de 900 psychologues</b>
+            <b>
+              Plus de
+              {' '}
+              {displayStatistic(teleconsultPsyCount)}
+              {' '}
+              psychologues
+            </b>
             {' '}
             disponibles en téléconsultation
           </>

@@ -13,7 +13,7 @@ describe('FAQ Page Test', () => {
     cy.get('[data-test-id="faqPage"]').should('exist');
     cy.get('[data-test-id="tabpanel-etudiant"]').should('be.visible');
     cy.get('[data-test-id="tabpanel-psychologue"]').should('not.be.visible');
-    cy.get('[data-test-id="tabpanel-medecin"]').should('not.be.visible');
+    cy.get('[data-test-id="tabpanel-ecole"]').should('not.be.visible');
   });
 
   it('display faq page with specific tab', () => {
@@ -23,7 +23,7 @@ describe('FAQ Page Test', () => {
     cy.get('[data-test-id="faqPage"]').should('exist');
     cy.get('[data-test-id="tabpanel-etudiant"]').should('not.be.visible');
     cy.get('[data-test-id="tabpanel-psychologue"]').should('be.visible');
-    cy.get('[data-test-id="tabpanel-medecin"]').should('not.be.visible');
+    cy.get('[data-test-id="tabpanel-ecole"]').should('not.be.visible');
   });
 
   it('display psychologist tab if connected', () => {
@@ -34,17 +34,17 @@ describe('FAQ Page Test', () => {
     cy.get('[data-test-id="faqPage"]').should('exist');
     cy.get('[data-test-id="tabpanel-etudiant"]').should('not.be.visible');
     cy.get('[data-test-id="tabpanel-psychologue"]').should('be.visible');
-    cy.get('[data-test-id="tabpanel-medecin"]').should('not.be.visible');
+    cy.get('[data-test-id="tabpanel-ecole"]').should('not.be.visible');
   });
 
   it('display section tab if connected but specified', () => {
     loginAsDefault();
-    cy.visit('/faq?section=medecin');
+    cy.visit('/faq?section=ecole');
     cy.wait('@config');
 
     cy.get('[data-test-id="faqPage"]').should('exist');
     cy.get('[data-test-id="tabpanel-etudiant"]').should('not.be.visible');
     cy.get('[data-test-id="tabpanel-psychologue"]').should('not.be.visible');
-    cy.get('[data-test-id="tabpanel-medecin"]').should('be.visible');
+    cy.get('[data-test-id="tabpanel-ecole"]').should('be.visible');
   });
 });

@@ -1,16 +1,45 @@
-.line {
+@import 'src/variables.scss';
+
+.button {
+  background-color: white;
+  font-size: 16px;
+}
+
+.purpleBanner {
+  background-color: $primary-color;
+  padding: 32px;
+  color: white;
+  > * {
+    max-width: 1200px;
+    margin: 0 auto 24px auto;
+  }
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.smallTitle {
+  color: white;
+  font-size: 40px;
+  line-height: 1.1;
+  font-weight: 700;
+  margin-bottom: 12px;
+  b {
+    color: $primary-text-color;
+  }
+}
+
+.cardContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 32px;
+  gap: 40px;
+  margin-top: -32px;
+  justify-content: center;
+}
 
-  div {
-    flex-grow: 1;
-    width: calc(50% - 16px);
-    min-width: 320px;
-  }
-
-  .fullWidthInput {
-    max-width: 100%;
-    min-width: 100%;
+@media (max-width: 768px) {
+  .cardContainer {
+    flex-direction: column;
+    align-items: center;
   }
 }

@@ -26,8 +26,8 @@ const Faq = ({ simplified }) => {
   const { userStore: { user } } = useStore();
   const getDefaultTab = () => {
     const section = query.get('section');
-    if (items[section]) {
-      return items[section].index;
+    if (section && ['etudiant', 'psychologue', 'ecole'].includes(section)) {
+      return items[section]?.index || 0;
     }
 
     if (user) {
@@ -76,8 +76,8 @@ const Faq = ({ simplified }) => {
             <FaqTab type="psychologue" simplified={simplified} />
           </Tab>
           {!simplified && (
-            <Tab label={smallText ? 'Médecin' : 'Je suis médecin'}>
-              <FaqTab type="medecin" simplified={simplified} />
+            <Tab label={smallText ? 'École' : 'Je suis une école'}>
+              <FaqTab type="ecole" simplified={simplified} />
             </Tab>
           )}
         </Tabs>
@@ -85,7 +85,7 @@ const Faq = ({ simplified }) => {
       {!simplified && (
         <div className={styles.container}>
           <div className={styles.text}>Vous ne trouvez pas la réponse à votre question&#x00A0;?</div>
-          <Button onClick={() => navigate('/contact')}>
+          <Button onClick={() => navigate('/contact/formulaire')}>
             Contactez notre équipe
           </Button>
         </div>
