@@ -3,32 +3,29 @@ import { query } from 'express-validator';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import { PsychologistFilters } from '../types/Psychologist';
+import distanceKm from '../services/distance';
+import validation from '../utils/validation';
 
 const getValidators = [
   query('name').optional()
   .trim()
   .escape()
-  .isString()
   .isLength({ min: 1, max: 100 }),
   query('language').optional()
   .trim()
   .escape()
-  .isString()
   .isLength({ min: 1, max: 100 }),
   query('address').optional()
   .trim()
   .escape()
-  .isString()
   .isLength({ min: 1, max: 100 }),
   query('speciality').optional()
   .trim()
   .escape()
-  .isString()
   .isLength({ min: 1, max: 100 }),
   query('coords').optional()
   .trim()
   .escape()
-  .isString()
   .isLength({ min: 1, max: 50 }),
   query('teleconsultation').optional()
   .trim()
@@ -61,8 +58,8 @@ const preprocessFilters = (filters: PsychologistFilters): PsychologistFilters =>
   if (filters.speciality) {
     processedFilters.speciality = cleanValue(filters.speciality);
   }
-  if (typeof filters.teleconsultation === 'boolean') {
-    processedFilters.teleconsultation = filters.teleconsultation ? true : undefined;
+  if (filters.teleconsultation) {
+    processedFilters.teleconsultation = filters.teleconsultation.toString() === 'true' ? true : undefined;
   }
 
   return processedFilters;
@@ -74,9 +71,13 @@ const getAllActive = async (
   reduced: boolean,
 ): Promise<void> => {
   const { filters } = req.query;
+  validation.checkErrors(req);
   const rawFilters = filters as PsychologistFilters;
 
-  const psychologistFilters = preprocessFilters(rawFilters);
+  let psychologistFilters: PsychologistFilters = {};
+  if (rawFilters) {
+    psychologistFilters = preprocessFilters(rawFilters);
+  }
 
   const [veryAvailablePsys, notVeryAvailablePsys] = await Promise.all([
     dbPsychologists.getAllActiveByAvailability(true, psychologistFilters),
@@ -90,7 +91,7 @@ const getAllActive = async (
       .filter((psy) => {
         const [lat, lon] = psychologistFilters.coords.split(',').map(Number);
         const distance = distanceKm(lat, lon, psy.latitude, psy.longitude);
-        return distance <= 10;
+        return distance <= 30;
       })
       .map((psy) => {
         const [lat, lon] = psychologistFilters.coords.split(',').map(Number);
@@ -121,6 +122,7 @@ const getAllActive = async (
       languages: psy.languages,
       email: psy.email,
       phone: psy.phone,
+      description: psy.description,
     }))
     : filteredPsyList);
 };

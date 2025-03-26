@@ -32,4 +32,4 @@ const distanceKm = (lat1: number, lon1: number, lat2: number, lon2: number) : nu
   return dist * 1.609344;
 };
 
-module.exports = { distanceKm };
+export default distanceKm;

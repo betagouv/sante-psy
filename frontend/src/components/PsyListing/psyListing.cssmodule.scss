@@ -2,18 +2,8 @@
   width: 110px;
 }
 
-.input {
+.input, .inputMd {
   width: 100%;
-}
-
-.inputAlign {
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
-}
-
-.inputMediumSize {
-  width: 30%;
 }
 
 .filters {
@@ -21,6 +11,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
+  flex-direction: row;
 }
 
 .filters :global .fr-label {
@@ -30,9 +21,23 @@
   }
 }
 
+.userIcon {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+.resultsCount {
+  margin-top: 20px;
+}
+
 @media (min-width: 769px) {
   .input {
     width: 20%;
     min-width: 270px;
+  }
+  .inputMd {
+    width: 25%;
+    min-width: 300px;
   }
 }

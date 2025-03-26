@@ -73,6 +73,7 @@ describe('psyListingController', () => {
         'languages',
         'email',
         'phone',
+        'description',
       ];
       expect(resultPsyActive1).to.have.all.keys(expectedKeys);
       expect(resultPsyActive2).to.have.all.keys(expectedKeys);
@@ -81,7 +82,7 @@ describe('psyListingController', () => {
     it('should filter psy by name', async () => {
       const res = await chai.request(app)
         .get('/api/trouver-un-psychologue/reduced')
-        .query({ name: 'georgie' });
+        .query({ filters: { name: 'georgie' } });
 
       expect(res.status).to.equal(200);
       expect(res.body).to.have.length(1);
@@ -93,7 +94,7 @@ describe('psyListingController', () => {
     it('should filter psy by speciality', async () => {
       const res = await chai.request(app)
         .get('/api/trouver-un-psychologue/reduced')
-        .query({ speciality: 'Anxiete' });
+        .query({ filters: { speciality: 'Anxiete' } });
 
       expect(res.status).to.equal(200);
       expect(res.body).to.have.length(1);
@@ -104,10 +105,10 @@ describe('psyListingController', () => {
     it('should filter psy by languages', async () => {
       const res = await chai.request(app)
         .get('/api/trouver-un-psychologue/reduced')
-        .query({ language: 'francais' });
+        .query({ filters: { language: 'arabe' } });
 
       expect(res.status).to.equal(200);
-      expect(res.body).to.have.length(2);
+      expect(res.body).to.have.length(1);
     });
   });
 

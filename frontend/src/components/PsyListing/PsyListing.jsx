@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, TextInput, Alert } from '@dataesr/react-dsfr';
+import { Checkbox, TextInput, Alert, Button, Icon } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
@@ -14,6 +14,7 @@ import PsyTable from './PsyTable';
 import NoResultPsyTable from './NoResultPsyTable';
 
 import styles from './psyListing.cssmodule.scss';
+import GlobalNotification from 'components/Notification/GlobalNotification';
 
 const AROUND_ME = 'Autour de moi';
 
@@ -27,7 +28,7 @@ const geoStatusEnum = {
 let lastSearch;
 
 const PsyListing = () => {
-  const { commonStore: { psychologists, setPsychologists } } = useStore();
+  const { commonStore: { setNotification, psychologists, setPsychologists } } = useStore();
   const query = new URLSearchParams(useLocation().search);
 
   const [coords, setCoords] = useState();
@@ -60,21 +61,41 @@ const PsyListing = () => {
     }
   };
 
-  useEffect(() => {
-    fetchPsychologists();
-
-    if (page === 0) {
-      setPage(query.get('page') || 1);
-    } else {
+  const handleSearch = () => {
+    // Vérifie si au moins un filtre est défini
+    if (
+      nameFilter.trim() ||
+      specialityFilter.trim() ||
+      languageFilter.trim() ||
+      addressFilter.trim() ||
+      teleconsultation
+    ) {
+      fetchPsychologists();
       setPage(1);
+    } else {
+      setFilteredPsychologists([]);
+      setPage(0);
+      setNotification(
+        {
+          message: (
+            <p>
+              Veuillez entrer au moins un critère de recherche
+            </p>
+          ),
+        },
+        false,
+        false,
+      );
     }
+  };
 
+  useEffect(() => {
     if (addressFilter === AROUND_ME) {
       checkGeolocationPermission();
     }
 
     logSearchInMatomo();
-  }, [nameFilter, addressFilter, teleconsultation, languageFilter, specialityFilter, coords]);
+  }, [addressFilter, coords]);
 
   const logSearchInMatomo = () => {
     if (__MATOMO__) {
@@ -169,26 +190,15 @@ const PsyListing = () => {
       dataTestId="psyListPage"
     >
       <>
+        <GlobalNotification />
         <div className="fr-pb-6w fr-mt-2w">
           <div className={styles.filters}>
-            {psychologists && (
-              <div className={styles.number}>
-                <b>
-                  {filteredPsychologists.length}
-                  {' '}
-                  {filteredPsychologists.length === 1 ? 'résultat' : 'résultats'}
-                </b>
-              </div>
-            )}
-
-            <div className={styles.inputAlign}>
+            <div className={styles.inputMd}>
               <TextInput
-                className={styles.inputMediumSize}
                 value={specialityFilter}
                 onChange={e => setSpecialityFilter(e.target.value)}
                 placeholder="Rechercher par spécialité, mot-clé ..."
               />
-              {/* <Button><Icon className={styles.userIcon} name="ri-search-line" size="xl" /></Button> */}
             </div>
             <div className={styles.input}>
               <TextInput
@@ -218,7 +228,21 @@ const PsyListing = () => {
               label="Téléconsultation"
               checked={teleconsultation}
             />
+            <Button onClick={handleSearch}>Rechercher<Icon className={styles.userIcon} name="ri-search-line" size="xl" /></Button>
           </div>
+          <div className={styles.resultsCount}>
+            {filteredPsychologists && filteredPsychologists.length > 0 && (
+              <div className={styles.number}>
+                <b>
+                  {filteredPsychologists.length}
+                  {' '}
+                  {filteredPsychologists.length === 1 ? 'résultat' : 'résultats'}
+                </b>
+              </div>
+            )}
+          </div>
+
+
           {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
             <Alert
               className="fr-mt-2w"
@@ -250,7 +274,7 @@ const PsyListing = () => {
           teleconsultation={teleconsultation}
           geoLoading={geoLoading}
         />
-        {filteredPsychologists && filteredPsychologists.length < 8
+        {page !== 0 && filteredPsychologists && filteredPsychologists.length < 8
           ? (
             <NoResultPsyTable
               noResult={filteredPsychologists.length === 0}
