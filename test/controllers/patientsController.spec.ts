@@ -20,12 +20,13 @@ const makePatient = async (psychologistId, INE = '12345678901') => {
   const patient = await dbPatients.insert(
     'Ada',
     'Lovelace',
+    date.parseForm(dateOfBirth),
+    'female',
     INE,
     '42',
     false,
     psychologistId,
     doctorName,
-    date.parseForm(dateOfBirth),
   );
   // Check patient is inserted
   const createdPatient = await dbPatients.getById(patient.id, psychologistId);
@@ -169,6 +170,7 @@ describe('patientsController', () => {
           res.body[0].institutionName.should.equal(myPatient.institutionName);
           res.body[0].doctorName.should.equal(myPatient.doctorName);
           res.body[0].dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
+          res.body[0].gender.should.equal('female');
           res.body[0].appointmentsCount.should.equal('13');
           res.body[0].appointmentsYearCount.should.equal('9');
 
@@ -200,7 +202,8 @@ describe('patientsController', () => {
           INE: '12345678901',
           institutionName: 'test',
           isStudentStatusVerified: undefined,
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         })
         .then(async (res) => {
           res.status.should.equal(200);
@@ -232,7 +235,8 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         })
         .then(async (res) => {
           res.status.should.equal(401);
@@ -258,7 +262,8 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: false,
           doctorName,
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         },
         ]));
       return Promise.resolve();
@@ -298,7 +303,8 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        dateOfBirth,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
       }, 'Vous devez spécifier le.s prénom.s du patient.');
     });
 
@@ -310,7 +316,8 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        dateOfBirth,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
       }, 'Vous devez spécifier le nom du patient.');
     });
 
@@ -322,7 +329,8 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        dateOfBirth,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
       }, 'Vous devez spécifier le.s prénom.s du patient.');
     });
 
@@ -334,7 +342,8 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        dateOfBirth,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
       }, 'Vous devez spécifier le nom du patient.');
     });
 
@@ -346,7 +355,8 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        dateOfBirth,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
       }, 'Le numéro INE doit être alphanumérique (chiffres ou lettres sans accents).');
     });
 
@@ -381,20 +391,22 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        dateOfBirth,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
       }, 'Le numéro INE doit faire exactement 11 caractères.');
     });
 
-    it('should pass validation when all fields are correct', (done) => {
-      shouldPassCreatePatientInputValidation(done, {
+    it('shouldn\'t pass patient with no dateOfBirth', (done) => {
+      shouldFailCreatePatientInputValidation(done, {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
-        INE: '1234567890A',
+        INE: '123456780AA',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        dateOfBirth,
-      });
+        dateOfBirth: '',
+        gender: 'female',
+      }, 'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.');
     });
 
     it('should NOT pass validation when INE is missing', (done) => {
@@ -405,8 +417,35 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        dateOfBirth,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
       }, 'Le numéro INE est obligatoire.');
+    });
+
+    it.only('shouldn\'t pass patient without gender', (done) => {
+      shouldFailCreatePatientInputValidation(done, {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '123456790AA',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        doctorName,
+        dateOfBirth: '25/02/1982',
+        gender: '',
+      }, 'Vous devez spécifier le genre du patient.');
+    });
+
+    it('should pass validation when all fields are correct', (done) => {
+      shouldPassCreatePatientInputValidation(done, {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '1234567890A',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        doctorName,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
+      });
     });
 
     it('should pass validation when institutionName is missing', (done) => {
@@ -417,7 +456,8 @@ describe('patientsController', () => {
         institutionName: '',
         isStudentStatusVerified: undefined,
         doctorName,
-        dateOfBirth,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
       });
     });
 
@@ -429,10 +469,11 @@ describe('patientsController', () => {
       const postData = {
         firstNames: 'Blou Blou<div>',
         lastName: 'Nom</',
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
         INE: '123456789se',
         institutionName: 'stuff<script>evil</script>',
         isStudentStatusVerified: undefined,
-        dateOfBirth,
       };
 
       chai.request(app)
@@ -575,6 +616,7 @@ describe('patientsController', () => {
           institutionName: updatedInstitution,
           isStudentStatusVerified: 'isStudentStatusVerified',
           dateOfBirth: updatedDateOfBirth,
+          gender: 'male',
         })
         .then(async (res) => {
           res.status.should.equal(200);
@@ -594,6 +636,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
             new Date('1982/02/25').getTime(),
           );
+          expect(patientsArray[0].gender).to.equal('male');
 
           return Promise.resolve();
         });
@@ -616,7 +659,8 @@ describe('patientsController', () => {
           institutionName: '',
           isStudentStatusVerified: false,
           doctorName: '',
-          dateOfBirth: '',
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         })
         .then(async (res) => {
           res.status.should.equal(200);
@@ -629,7 +673,8 @@ describe('patientsController', () => {
           expect(patientsArray[0].INE).to.equal('123456789se');
           expect(patientsArray[0].institutionName).to.equal('');
           expect(patientsArray[0].isStudentStatusVerified).to.equal(false);
-          expect(patientsArray[0].dateOfBirth).to.equal(null);
+          expect(patientsArray[0].dateOfBirth).to.equal(new Date('1982/02/25'));
+          expect(patientsArray[0].gender).to.equal('female');
           expect(patientsArray[0].doctorName).to.equal('');
 
           return Promise.resolve();
@@ -654,7 +699,8 @@ describe('patientsController', () => {
           institutionName: 'Grande ecole',
           isStudentStatusVerified: 'isStudentStatusVerified',
           doctorName,
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         })
         .then(async (res) => {
           res.status.should.equal(404);
@@ -672,6 +718,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
             new Date('1980/01/20').getTime(),
           );
+          expect(patientsArray[0].gender).to.equal('female');
 
           return Promise.resolve();
         });
@@ -692,7 +739,8 @@ describe('patientsController', () => {
           INE: '111',
           institutionName: 'Petite ecole',
           isStudentStatusVerified: 'isStudentStatusVerified',
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         })
         .then(async (res) => {
           res.status.should.equal(401);
@@ -709,6 +757,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
             new Date('1980/01/20').getTime(),
           );
+          expect(patientsArray[0].gender).to.equal('female');
 
           return Promise.resolve();
         });
@@ -760,7 +809,8 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         },
         'Vous devez spécifier le.s prénom.s du patient.',
       );
@@ -778,7 +828,8 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         },
         'Vous devez spécifier le nom du patient.',
       );
@@ -796,7 +847,8 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         },
         'Vous devez spécifier le.s prénom.s du patient.',
       );
@@ -814,7 +866,8 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         },
         'Vous devez spécifier le nom du patient.',
       );
@@ -832,7 +885,8 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         },
         'Le numéro INE doit être alphanumérique (chiffres ou lettres sans accents).',
       );
@@ -850,7 +904,8 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         },
         'Le numéro INE doit faire exactement 11 caractères.',
       );
@@ -867,7 +922,8 @@ describe('patientsController', () => {
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
-          dateOfBirth,
+          dateOfBirth: '25/02/1982',
+          gender: 'female',
         },
         'Ce patient n\'existe pas.',
       );
@@ -886,9 +942,47 @@ describe('patientsController', () => {
           isStudentStatusVerified: undefined,
           doctorName,
           dateOfBirth: 'pizza time',
+          gender: 'female',
         },
-        'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.\n'
-      + '    Si vous ne l\'avez pas maintenant, ce n\'est pas grave, vous pourrez y revenir plus tard.',
+        'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.',
+      );
+    });
+
+    it('should refuse if dateOfBirth is empty', (done) => {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
+      shouldFailUpdatePatientInputValidation(
+        done,
+        patientId,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '1234567890A',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth: '',
+          gender: 'female',
+        },
+        'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.',
+      );
+    });
+
+    it('should refuse if gender is empty', (done) => {
+      const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
+      shouldFailUpdatePatientInputValidation(
+        done,
+        patientId,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '1234567890A',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth: '25/02/1982',
+          gender: '',
+        },
+        'Vous devez spécifier le genre du patient.',
       );
     });
 
@@ -922,7 +1016,8 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        dateOfBirth,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
       });
     });
 
@@ -935,6 +1030,8 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
       }, 'Le numéro INE doit faire exactement 11 caractères.');
     });
 
@@ -946,19 +1043,9 @@ describe('patientsController', () => {
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
-        dateOfBirth,
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
       }, 'Le numéro INE est obligatoire.');
-    });
-
-    it('should pass validation when dateOfBirth is missing', (done) => {
-      shouldPassUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '1234567890A',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-      });
     });
 
     it('should pass validation if doctor name is missing', (done) => {
@@ -966,6 +1053,8 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '123456789se',
+        dateOfBirth: '25/02/1982',
+        gender: 'female',
         institutionName: '42',
         isStudentStatusVerified: undefined,
       });

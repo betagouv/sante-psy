@@ -38,9 +38,10 @@ const patientValidators = [
     .withMessage('Vous devez spécifier le nom du patient.'),
   check('gender')
     .trim().not().isEmpty()
+    .withMessage('Vous devez spécifier le genre du patient.')
     .customSanitizer(DOMPurify.sanitize)
     .isIn(['male', 'female', 'other'])
-    .withMessage('Vous devez spécifier le genre du patient.'),
+    .withMessage('Le genre du patient n\'est pas valide.'),
   check('INE')
     .trim().not().isEmpty()
     .withMessage('Le numéro INE est obligatoire.')
