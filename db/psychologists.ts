@@ -125,15 +125,15 @@ const getAllActiveByAvailability = async (isVeryAvailable: boolean, filters?: Ps
     if (filters.speciality) {
       const specialityValue = `%${filters.speciality}%`;
       query = query.andWhere((qb) => {
-        qb.whereRaw('unaccent(description) ILIKE ?', [specialityValue]);
-        //   .orWhereRaw('unaccent(diploma) ILIKE ?', [specialityValue])
-        // .orWhereRaw(
-        //   `EXISTS (
-        //     SELECT 1 FROM jsonb_array_elements_text(training::jsonb) AS elem 
-        //     WHERE unaccent(elem) ILIKE ?
-        //   )`,
-        //   [specialityValue],
-        // );
+        qb.whereRaw('unaccent(description) ILIKE ?', [specialityValue])
+          .orWhereRaw('unaccent(diploma) ILIKE ?', [specialityValue])
+        .orWhereRaw(
+          `EXISTS (
+            SELECT 1 FROM jsonb_array_elements_text(training::jsonb) AS elem 
+            WHERE unaccent(elem) ILIKE ?
+          )`,
+          [specialityValue],
+        );
       });
     }
     if (filters.teleconsultation !== undefined) {

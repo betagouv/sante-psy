@@ -78,9 +78,7 @@ const PsyListing = () => {
       setNotification(
         {
           message: (
-            <p>
-              Veuillez entrer au moins un critère de recherche
-            </p>
+            'Veuillez entrer au moins un critère de recherche.'
           ),
         },
         false,
@@ -195,6 +193,7 @@ const PsyListing = () => {
           <div className={styles.filters}>
             <div className={styles.inputMd}>
               <TextInput
+                data-test-id="speciality-input"
                 value={specialityFilter}
                 onChange={e => setSpecialityFilter(e.target.value)}
                 placeholder="Rechercher par spécialité, mot-clé ..."
@@ -228,7 +227,7 @@ const PsyListing = () => {
               label="Téléconsultation"
               checked={teleconsultation}
             />
-            <Button onClick={handleSearch}>
+            <Button data-test-id="psy-search" onClick={handleSearch}>
               Rechercher
               <Icon className={styles.userIcon} name="ri-search-line" size="xl" />
             </Button>
