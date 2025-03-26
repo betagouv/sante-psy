@@ -33,7 +33,7 @@ const checkAllSteps = numberOfSteps => {
     .click();
 };
 
-describe.only('Global tutorial', () => {
+describe('Global tutorial', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/connecteduser')
       .as('connecteduser');
