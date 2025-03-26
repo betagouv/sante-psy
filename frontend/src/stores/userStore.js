@@ -1,4 +1,4 @@
-import { makeObservable, observable, action, reaction } from 'mobx';
+import { makeObservable, observable, action, reaction, runInAction } from 'mobx';
 
 import agent from 'services/agent';
 
@@ -54,7 +54,10 @@ export default class UserStore {
   }
 
   seeTutorial() {
-    this.user.hasSeenTutorial = true;
-    return agent.Psychologist.seeTutorial();
+    return agent.Psychologist.seeTutorial().then(() => {
+      runInAction(() => {
+        this.user.hasSeenTutorial = true;
+      });
+    });
   }
 }
