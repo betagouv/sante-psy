@@ -36,23 +36,25 @@ const getAll = async (psychologistId: string): Promise<(Patient &
 const insert = async (
   firstNames: string,
   lastName: string,
-  INE?: string,
+  dateOfBirth: Date,
+  gender: string,
+  INE: string,
   institutionName?: string,
   isStudentStatusVerified?: boolean,
   psychologistId?: string,
   doctorName?: string,
-  dateOfBirth?: Date,
 ): Promise<Patient> => {
   try {
     const patientsArray = await db(patientsTable).insert({
       firstNames,
       lastName,
+      dateOfBirth,
+      gender,
       INE,
       institutionName,
       isStudentStatusVerified,
       psychologistId,
       doctorName,
-      dateOfBirth,
     }).returning('*');
     return patientsArray[0];
   } catch (err) {
@@ -65,12 +67,13 @@ const update = async (
   id: string,
   firstNames: string,
   lastName: string,
+  dateOfBirth: Date,
+  gender: string,
   INE: string,
   institutionName: string,
   isStudentStatusVerified: boolean,
   psychologistId: string,
   doctorName: string,
-  dateOfBirth: Date,
 ): Promise<number> => {
   try {
     return await db(patientsTable)
@@ -79,12 +82,13 @@ const update = async (
       .update({
         firstNames,
         lastName,
+        dateOfBirth,
+        gender,
         INE,
         institutionName,
         isStudentStatusVerified,
         psychologistId,
         doctorName,
-        dateOfBirth,
         updatedAt: date.now(),
       });
   } catch (err) {

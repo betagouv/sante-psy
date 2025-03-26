@@ -284,6 +284,7 @@ const getOnePatient = (
   isStudentStatusVerified: true,
   doctorName: faker.name.lastName(),
   dateOfBirth: faker.date.past(),
+  gender: faker.helpers.arrayElement(['male', 'female', 'other']),
   ...patient,
 });
 
@@ -294,6 +295,8 @@ const getOneIncompletePatient = (
   id: uuid.generateFromString(`patient-${patient.psychologistId}-${index}`),
   firstNames: faker.name.firstName(),
   lastName: faker.name.lastName(),
+  gender: '',
+  INE: '',
   ...patient,
 });
 
