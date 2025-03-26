@@ -33,7 +33,7 @@ const checkAllSteps = numberOfSteps => {
     .click();
 };
 
-describe('Global tutorial', () => {
+describe.only('Global tutorial', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/connecteduser')
       .as('connecteduser');
@@ -57,15 +57,15 @@ describe('Global tutorial', () => {
   });
 
   it('should pass tuto', () => {
+    cy.wait(100);
     cy.get('[data-test-id="close-tutorial"]')
       .click();
     cy.wait('@seeTutorial').its('response.statusCode').should('eq', 200);
-    cy.wait(500);
-    cy.get('[data-test-id="next-step"]', { timeout: 10000 })
+    cy.get('[data-test-id="next-step"]')
       .should('not.exist');
     cy.reload();
     cy.wait('@connecteduser');
-    cy.get('[data-test-id="next-step"]', { timeout: 10000 })
+    cy.get('[data-test-id="next-step"]')
       .should('not.exist');
   });
 });
