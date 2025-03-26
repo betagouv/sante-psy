@@ -10,11 +10,11 @@ import agent from 'services/agent';
 
 import { useStore } from 'stores/';
 
+import GlobalNotification from 'components/Notification/GlobalNotification';
 import PsyTable from './PsyTable';
 import NoResultPsyTable from './NoResultPsyTable';
 
 import styles from './psyListing.cssmodule.scss';
-import GlobalNotification from 'components/Notification/GlobalNotification';
 
 const AROUND_ME = 'Autour de moi';
 
@@ -64,11 +64,11 @@ const PsyListing = () => {
   const handleSearch = () => {
     // Vérifie si au moins un filtre est défini
     if (
-      nameFilter.trim() ||
-      specialityFilter.trim() ||
-      languageFilter.trim() ||
-      addressFilter.trim() ||
-      teleconsultation
+      nameFilter.trim()
+      || specialityFilter.trim()
+      || languageFilter.trim()
+      || addressFilter.trim()
+      || teleconsultation
     ) {
       fetchPsychologists();
       setPage(1);
@@ -228,7 +228,10 @@ const PsyListing = () => {
               label="Téléconsultation"
               checked={teleconsultation}
             />
-            <Button onClick={handleSearch}>Rechercher<Icon className={styles.userIcon} name="ri-search-line" size="xl" /></Button>
+            <Button onClick={handleSearch}>
+              Rechercher
+              <Icon className={styles.userIcon} name="ri-search-line" size="xl" />
+            </Button>
           </div>
           <div className={styles.resultsCount}>
             {filteredPsychologists && filteredPsychologists.length > 0 && (
@@ -241,7 +244,6 @@ const PsyListing = () => {
               </div>
             )}
           </div>
-
 
           {addressFilter === AROUND_ME && geoStatus === geoStatusEnum.DENIED && (
             <Alert
