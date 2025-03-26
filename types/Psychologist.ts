@@ -81,3 +81,12 @@ export type DSPsychologist = {
     dateTraitement: Date
   }[]
 }
+
+export type PsychologistFilters = {
+  name?: string,
+  address?: string,
+  language?: string,
+  speciality?: string,
+  teleconsultation?: boolean,
+  coords? : string,
+}
