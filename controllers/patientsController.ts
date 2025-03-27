@@ -175,7 +175,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     doctorName,
   );
   let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
-  if (!INE || !institutionName || !doctorName || !isStudentStatusVerified) {
+  if (!institutionName || !doctorName || !isStudentStatusVerified) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
         + ' en cliquant le bouton "Modifier" du patient.';
   }
