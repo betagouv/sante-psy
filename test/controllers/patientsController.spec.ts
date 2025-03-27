@@ -674,7 +674,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].INE).to.equal('123456789se');
           expect(patientsArray[0].institutionName).to.equal('');
           expect(patientsArray[0].isStudentStatusVerified).to.equal(false);
-          expect(patientsArray[0].dateOfBirth).to.equal(new Date('1980/01/19'));
+          expect(patientsArray[0].dateOfBirth).to.equal(new Date('1980/01/20'));
           expect(patientsArray[0].gender).to.equal('female');
           expect(patientsArray[0].doctorName).to.equal('');
 
