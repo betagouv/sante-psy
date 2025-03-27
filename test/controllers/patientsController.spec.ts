@@ -35,7 +35,7 @@ const makePatient = async (psychologistId, INE = '12345678901') => {
   return patient;
 };
 
-describe.only('patientsController', () => {
+describe('patientsController', () => {
   describe('get all patients', () => {
     beforeEach(async (done) => {
       done();
