@@ -129,8 +129,9 @@ const AddEditPatient = () => {
               onChange={value => changePatient(value, 'gender')}
               required
               isInline
-            >
+              >
               <Radio
+                data-test-id="etudiant-gender-female-input"
                 label="Femme"
                 value="female"
               />

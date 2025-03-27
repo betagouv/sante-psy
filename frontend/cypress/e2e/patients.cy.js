@@ -40,6 +40,8 @@ describe('Patient', () => {
         .type('Toto');
       cy.get('[data-test-id="etudiant-birth-date-input"] > input')
         .type('01/01/2001');
+      cy.get('[data-test-id="etudiant-gender-female-input"]')
+        .click();
       cy.get('[data-test-id="etudiant-school-input"] > input')
         .type('Université de Rennes');
       cy.get('[data-test-id="etudiant-ine-input"] > input')
