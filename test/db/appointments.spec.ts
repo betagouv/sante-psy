@@ -17,12 +17,13 @@ async function insertPatientToDb(patientToInsert: Patient, psy: Psychologist) {
   return dbPatients.insert(
     patientToInsert.firstNames,
     patientToInsert.lastName,
+    patientToInsert.dateOfBirth,
+    patientToInsert.gender,
     patientToInsert.INE,
     patientToInsert.institutionName,
     patientToInsert.isStudentStatusVerified,
     psy.dossierNumber,
     patientToInsert.doctorName,
-    patientToInsert.dateOfBirth,
   );
 }
 
@@ -88,12 +89,13 @@ describe('DB Appointments', () => {
       const patient = await dbPatients.insert(
         patientToInsert.firstNames,
         patientToInsert.lastName,
+        patientToInsert.dateOfBirth,
+        patientToInsert.gender,
         patientToInsert.INE,
         patientToInsert.institutionName,
         patientToInsert.isStudentStatusVerified,
         psy.dossierNumber,
         patientToInsert.doctorName,
-        patientToInsert.dateOfBirth,
       );
 
       await dbAppointments.insert(new Date('2023-11-02'), patient.id, psy.dossierNumber);
@@ -202,6 +204,8 @@ describe('DB Appointments', () => {
         const sharedINEPatient = create.getOnePatient(1, {
           lastName: patientWithAppointments.lastName,
           firstNames: patientWithAppointments.firstNames,
+          dateOfBirth: patientWithAppointments.dateOfBirth,
+          gender: patientWithAppointments.gender,
           INE: patientWithAppointments.INE,
           psychologistId: anotherPsy.dossierNumber,
         });
