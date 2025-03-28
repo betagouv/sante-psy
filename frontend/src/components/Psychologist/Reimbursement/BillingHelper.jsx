@@ -11,8 +11,7 @@ const BillingHelper = () => (
       Le nombre d&lsquo;étudiant suffit.
     </p>
     <p className="fr-mb-1w" id="tva-billing-info">
-      Si le prestataire n’est pas assujetti à la TVA,
-      la facture doit comporter la mention « TVA non applicable selon l’article 261-4-1 du Code Général des Impôts »
+      « TVA non applicable selon l’article 261-4-1 du Code Général des Impôts »
     </p>
     <p className="fr-mb-1w">
       Un doute sur le modèle de votre facture ?

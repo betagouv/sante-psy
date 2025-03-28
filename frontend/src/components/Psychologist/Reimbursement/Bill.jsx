@@ -111,7 +111,7 @@ const Bill = () => {
     return [
       { index: 1, text: 'À régler sur le compte bancaire ci-dessous (RIB / IBAN) :' },
       { index: 2, text: billingInfo.iban ? billingInfo.iban : FULL_UNDERSCORE_LINE },
-      { index: 3, text: 'Si le prestataire n’est pas assujetti à la TVA, la facture doit comporter la mention « TVA non applicable selon l’article 261-4-1 du Code Général des Impôts »' },
+      { index: 3, text: '« TVA non applicable selon l’article 261-4-1 du Code Général des Impôts »' },
       { index: 4, text: 'Délai de paiement : 30 jours à réception de facture' },
     ];
   };
