@@ -270,7 +270,7 @@ const Patients = () => {
         colorFamily="blue-cumulus"
       >
         <CalloutText size="md">
-          L&lsquo;INE est désormais obligatoire pour pouvoir déclarer des séances afin de pouvoir maintenir à jour le compte des séances pour les étudiants.
+          La date de naissance et le genre des patients sont désormais obligatoires pour pouvoir déclarer des séances.
           {' '}
           <br />
           {' '}

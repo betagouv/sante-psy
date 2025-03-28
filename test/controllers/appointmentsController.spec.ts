@@ -13,17 +13,19 @@ import { Patient } from '../../types/Patient';
 
 describe('appointmentsController', () => {
   const dateOfBirth = new Date('1980/01/20');
+  const gender = 'female';
 
   async function patientInfoToInsert(psy) {
     return dbPatients.insert(
       'Ada',
       'Lovelace',
+      dateOfBirth,
+      gender,
       '12345678901',
       '42',
       false,
       psy.dossierNumber,
       'Dr Docteur',
-      dateOfBirth,
     );
   }
 
@@ -291,12 +293,13 @@ describe('appointmentsController', () => {
       const patient = await dbPatients.insert(
         'Ada',
         'Lovelace',
+        dateOfBirth,
+        gender,
         '12345678901',
         '42',
         false,
         psychologistId,
         'Dr Docteur',
-        dateOfBirth,
       );
       const appointment = await dbAppointments.insert(new Date(), patient.id, psychologistId);
       // Check appointment is inserted
@@ -421,12 +424,13 @@ describe('appointmentsController', () => {
     return dbPatients.insert(
       patient1.firstNames,
       patient1.lastName,
+      patient1.dateOfBirth,
+      patient1.gender,
       patient1.INE,
       patient1.institutionName,
       patient1.isStudentStatusVerified,
       psy.dossierNumber,
       patient1.doctorName,
-      patient1.dateOfBirth,
     );
   }
 

@@ -12,12 +12,13 @@ dotEnv.config();
 describe('DB Patients', () => {
   const firstNames = 'Harry James';
   const lastName = 'Potter';
+  const dateOfBirth = new Date('1980/01/20');
+  const gender = 'female';
   const studentNumber = '12345678901';
   const anotherStudentNumber = '10987654321';
   const institutionName = 'Pouldard';
   const isStudentStatusVerified = false;
   const doctorName = 'doctorName';
-  const dateOfBirth = new Date('1980/01/20');
 
   async function testDataPatientsExist(lastName) {
     const exist = await db(patientsTable)
@@ -40,12 +41,13 @@ describe('DB Patients', () => {
       await dbPatients.insert(
         firstNames,
         lastName,
+        dateOfBirth,
+        gender,
         studentNumber,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        dateOfBirth,
       );
 
       const exist = await testDataPatientsExist(lastName);
@@ -58,12 +60,13 @@ describe('DB Patients', () => {
         await dbPatients.insert(
           firstNames,
           lastName,
+          dateOfBirth,
+          gender,
           '1'.repeat(12),
           institutionName,
           isStudentStatusVerified,
           psy.dossierNumber,
           doctorName,
-          dateOfBirth,
         );
         const exist = await testDataPatientsExist(lastName);
         exist.should.be.equal(true);
@@ -78,12 +81,13 @@ describe('DB Patients', () => {
         await dbPatients.insert(
           firstNames,
           lastName,
+          dateOfBirth,
+          gender,
           '1'.repeat(51),
           institutionName,
           isStudentStatusVerified,
           psy.dossierNumber,
           doctorName,
-          dateOfBirth,
         );
         assert.fail('insert patient should have failed');
       } catch (error) {
@@ -93,7 +97,7 @@ describe('DB Patients', () => {
 
     it('should refuse insert without mandatory params in PG', async () => {
       try {
-        await dbPatients.insert(firstNames, studentNumber);
+        await dbPatients.insert(firstNames, null, dateOfBirth, gender, '123456789213');
       } catch (error) {
         expect(error).to.be.an('Error');
       }
@@ -104,12 +108,13 @@ describe('DB Patients', () => {
       const insertedPatient = await dbPatients.insert(
         firstNames,
         lastName,
+        dateOfBirth,
+        gender,
         studentNumber,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        dateOfBirth,
       );
 
       expect(insertedPatient.deleted).equal(false);
@@ -122,12 +127,13 @@ describe('DB Patients', () => {
       await dbPatients.insert(
         firstNames,
         lastName,
+        dateOfBirth,
+        gender,
         studentNumber,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        dateOfBirth,
       );
 
       const newLastName = 'NewName';
@@ -138,12 +144,13 @@ describe('DB Patients', () => {
         oldPatient.id,
         oldPatient.firstNames,
         newLastName,
+        dateOfBirth,
+        gender,
         oldPatient.INE,
         oldPatient.institutionName,
         oldPatient.isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        dateOfBirth,
       );
       const newPatient = await dbPatients.getById(oldPatient.id, psy.dossierNumber);
       expect(newPatient.lastName).equal(newLastName);
@@ -156,12 +163,13 @@ describe('DB Patients', () => {
       const patient = await dbPatients.insert(
         firstNames,
         lastName,
+        dateOfBirth,
+        gender,
         studentNumber,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        dateOfBirth,
       );
 
       const patientBeforeDelete = await dbPatients.getById(patient.id, psy.dossierNumber);
@@ -182,22 +190,24 @@ describe('DB Patients', () => {
       await dbPatients.insert(
         firstNames,
         lastName,
+        dateOfBirth,
+        gender,
         studentNumber,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        dateOfBirth,
       );
       await dbPatients.insert(
         firstNames,
         lastName,
+        dateOfBirth,
+        gender,
         anotherStudentNumber,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        dateOfBirth,
       );
 
       const patients = (await dbPatients.getAll(psy.dossierNumber))
@@ -210,12 +220,13 @@ describe('DB Patients', () => {
       const patient = await dbPatients.insert(
         firstNames,
         lastName,
+        dateOfBirth,
+        gender,
         studentNumber,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
-        dateOfBirth,
       );
       await dbPatients.delete(patient.id, psy.dossierNumber);
 
