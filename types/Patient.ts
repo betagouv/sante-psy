@@ -3,7 +3,7 @@ export type Patient = {
     firstNames: string,
     lastName: string,
     INE?: string,
-    gender?: string,
+    gender: string,
     institutionName?: string,
     isStudentStatusVerified?: boolean,
     psychologistId: string,
