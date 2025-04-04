@@ -12,6 +12,7 @@ import {
 import { DossierState } from '../../types/DossierState';
 import db from '../../db/db';
 import { University } from '../../types/University';
+import { allGenders } from '../../types/Genders';
 
 faker.locale = 'fr';
 
@@ -284,6 +285,7 @@ const getOnePatient = (
   isStudentStatusVerified: true,
   doctorName: faker.name.lastName(),
   dateOfBirth: faker.date.past(),
+  gender: faker.helpers.arrayElement(allGenders),
   ...patient,
 });
 
@@ -294,6 +296,8 @@ const getOneIncompletePatient = (
   id: uuid.generateFromString(`patient-${patient.psychologistId}-${index}`),
   firstNames: faker.name.firstName(),
   lastName: faker.name.lastName(),
+  gender: '',
+  INE: '',
   ...patient,
 });
 

@@ -13,6 +13,7 @@ module.exports = () => [
   },
   {
     question: 'Comment prendre rendez-vous\u00A0?',
+    frequent: true,
     answer:
       "<a href='https://santepsy.etudiant.gouv.fr/eligibilite' target='_blank' rel='noopener noreferrer'>Vérifier mon éligibilité</a><br />\
       <a href='https://santepsy.etudiant.gouv.fr/trouver-un-psychologue' target='_blank' rel='noopener noreferrer'>Choisir un psychologue et prendre RDV</a><br /><br />\
@@ -31,16 +32,19 @@ module.exports = () => [
   },
   {
     question: 'Les séances sont-elles gratuites\u00A0?',
+    frequent: true,
     answer:
       "Les séances sont totalement gratuites pour les étudiants, aucune avance de frais n'est à prévoir par l'étudiant pour les séances avec le psychologue conventionné, le psychologue se faisant régler par l’université de rattachement.",
   },
   {
     question: 'Puis-je aller voir un psychologue dans une autre ville\u00A0/ région\u00A0?',
+    frequent: true,
     answer:
       "Oui, vous pouvez contacter un psychologue partenaire dans un autre département peu importe votre département ou université d'origine par téléphone, email, visio ou sur son site internet.",
   },
   {
     question: 'On me demande mon IBAN\u00A0/ mon numéro de sécurité sociale ou toute autre information pour un remboursement',
+    frequent: true,
     answer:
       "⚠️ Attention\u00A0! Il s'agit d'une arnaque. Les séances sont totalement gratuites pour les étudiants, aucune avance de frais n'est à prévoir par l'étudiant pour les séances avec le psychologue conventionné, le psychologue se faisant régler par l’université de rattachement.",
   },

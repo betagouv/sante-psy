@@ -72,14 +72,15 @@ const jobs = [
     isActive: true,
     name: 'Send mail to students after 1 month',
   },
-  {
+  /* TODO: uncomment if needed by team */
+  /* {
     cronTime: '0 12 * * 3', // Every wednesday at noon
     onTick: cronDemarchesSimplifiees.autoAcceptPsychologists,
     start: true,
     timeZone: 'Europe/Paris',
     isActive: config.feature.autoAccept,
     name: 'Auto accept psychologist from designated universities in DS',
-  },
+  }, */
   {
     cronTime: '0 10 * * 1-5', // every weekday at 10am
     onTick: cronDemarchesSimplifiees.autoVerifyPsychologists,

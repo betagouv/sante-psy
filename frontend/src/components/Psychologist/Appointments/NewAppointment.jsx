@@ -45,7 +45,7 @@ const NewAppointment = () => {
 
   const patient = useMemo(() => patients?.find(p => p.id === patientId), [patients, patientId]);
   const tooMuchAppointments = useMemo(() => patient && patient.countedAppointments >= MAX_APPOINTMENT, [patient]);
-  const hasIne = useMemo(() => !!(patient && patient.INE), [patient]);
+  const hasAllCompulsoryInfo = useMemo(() => (patient && patient.INE && patient.dateOfBirth && patient.gender), [patient]);
   const createNewAppointment = e => {
     e.preventDefault();
     setNotification({});
@@ -134,20 +134,20 @@ const NewAppointment = () => {
           maxDate={maxDate}
           dateFormat="dd/MM/yyyy"
           showPopperArrow={false}
-          customInput={<DateInput label="Date de la séance" dataTestId="new-appointment-date-input" disabled={!hasIne} />}
+          customInput={<DateInput label="Date de la séance" dataTestId="new-appointment-date-input" disabled={!hasAllCompulsoryInfo} />}
           onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
           required
-          disabled={!hasIne}
+          disabled={!hasAllCompulsoryInfo}
         />
         <Alert
           className="fr-mt-2w"
           type="warning"
           description={(
             <>
-              Depuis le 1er janvier, vous ne pouvez pas déclarer de séances pour un patient sans avoir indiqué son numéro INE dans son dossier.
+              Depuis mars 2025, vous ne pouvez pas déclarer de séances pour un patient sans avoir indiqué sa date de naissance ainsi que son genre dans son dossier.
               <br />
               <HashLink to={`/psychologue/modifier-etudiant/${patientId}?addAppointment=true`}>
-                Indiquer le numéro INE de l&lsquo;étudiant
+                Compléter les informations de l&lsquo;étudiant
               </HashLink>
             </>
                 )}
@@ -177,7 +177,7 @@ const NewAppointment = () => {
           submit
           icon="ri-add-line"
           className="fr-mt-4w"
-          disabled={(tooMuchAppointments && !understand) || !hasIne}
+          disabled={(tooMuchAppointments && !understand) || !hasAllCompulsoryInfo}
         >
           Créer la séance
         </Button>

@@ -5,9 +5,11 @@ module.exports = () => [
     question: 'Suis-je éligible au dispositif\u00A0?',
     answer:
       '<a href="https://santepsy.etudiant.gouv.fr/eligibilite" target="_blank" rel="noopener noreferrer">Vérifier mon éligibilité</a>',
+    frequent: true,
   },
   {
     question: "Quels sont les critères d'éligibilité pour bénéficier du dispositif Santé Psy Étudiant\u00A0?",
+    frequent: true,
     answer:
       "Le dispositif Santé Psy Étudiant est accessible à tous les étudiants inscrits dans un établissement d'enseignement supérieur reconnu par le Ministère de l'Enseignement supérieur et de la Recherche (ou un ministère en lien avec celui-ci). Il concerne tout type d'établissement, qu'il soit public ou privé, quel que soit le lieu de scolarité, le statut de l'école\u00A0/ université ou bien encore le lieu de résidence de l'étudiant.",
   },
@@ -17,7 +19,7 @@ module.exports = () => [
       'Les étudiants qui ont déjà un suivi sont éligibles au dispositif Santé Psy Étudiant. Ils devront cependant pour cela aller consulter un psychologue partenaire du dispositif.',
   },
   {
-    question: "Je n'ai pas de numéro INE mais j'ai bien une carte étudiante.",
+    question: "Je n'ai pas de numéro INE mais j'ai bien une carte étudiante",
     answer:
       "Depuis le 1er janvier 2025, le numéro INE est obligatoire. Si vous êtes étudiant dans le supérieur, vous pouvez vous rapprocher de l'administration de votre école afin de récupérer votre numéro INE.",
   },
@@ -33,6 +35,7 @@ module.exports = () => [
   },
   {
     question: "Je suis de nationalité française, mais étudiant à l'étranger. Suis-je éligible au dispositif\u00A0?",
+    frequent: true,
     answer: `
       Cela dépend de votre inscription, si vous avez un certificat de scolarité dépendant d'une université ou école française. 
       <a href="https://santepsy.etudiant.gouv.fr/eligibilite" target="_blank" rel="noopener noreferrer">Vérifier votre éligibilité</a>. 

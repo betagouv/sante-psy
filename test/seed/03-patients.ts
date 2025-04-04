@@ -88,6 +88,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
             psychologistId: string,
             INE?: string,
             doctorName?: string,
+            gender?: string,
             dateOfBirth?: Date,
             firstNames?: string,
             lastName?: string
@@ -99,6 +100,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
             if (random % 15 === 0) {
               const randomIndex = Math.floor(Math.random() * sharedPatients.length);
               patientData.INE = sharedPatients[randomIndex].INE;
+              patientData.gender = sharedPatients[randomIndex].gender;
               patientData.firstNames = sharedPatients[randomIndex].firstNames;
               patientData.lastName = sharedPatients[randomIndex].lastName;
               sharedPatients.splice(randomIndex, 1);
