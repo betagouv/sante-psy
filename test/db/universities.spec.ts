@@ -5,7 +5,7 @@ import create from '../helper/create';
 
 dotEnv.config();
 
-describe.only('DB Universities', () => {
+describe('DB Universities', () => {
   const uniId = 'bb4d80e0-c2c4-50c5-94d7-a595c34ec81e';
   const uniName = 'Nîmes';
   const universities = [{
