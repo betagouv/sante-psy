@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Checkbox, TextInput, Alert, Button, Icon } from '@dataesr/react-dsfr';
+import { Checkbox, TextInput, Alert, Button } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
@@ -196,14 +196,14 @@ const PsyListing = () => {
                 data-test-id="speciality-input"
                 value={specialityFilter}
                 onChange={e => setSpecialityFilter(e.target.value)}
-                placeholder="Rechercher par spécialité, mot-clé ..."
+                placeholder="Spécialité, mot-clé ..."
               />
             </div>
             <div className={styles.input}>
               <TextInput
                 value={nameFilter}
                 onChange={e => setNameFilter(e.target.value)}
-                placeholder="Rechercher par nom"
+                placeholder="Nom du psychologue"
               />
             </div>
             <div className={styles.input}>
@@ -227,9 +227,8 @@ const PsyListing = () => {
               label="Téléconsultation"
               checked={teleconsultation}
             />
-            <Button data-test-id="psy-search" onClick={handleSearch}>
+            <Button data-test-id="psy-search" onClick={handleSearch} icon="ri-search-line" iconPosition="left">
               Rechercher
-              <Icon className={styles.userIcon} name="ri-search-line" size="xl" />
             </Button>
           </div>
           <div className={styles.resultsCount}>
