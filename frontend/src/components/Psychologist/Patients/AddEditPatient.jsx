@@ -149,7 +149,6 @@ const AddEditPatient = () => {
                         name="ri-information-line"
                         color="#000091"
                         size="lg"
-                        className={styles.iconInfo}
                       />
                     </span>
                   </span>
