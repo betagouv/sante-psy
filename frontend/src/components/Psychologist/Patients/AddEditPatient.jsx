@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button, TextInput, Checkbox, RadioGroup, Radio } from '@dataesr/react-dsfr';
+import { Button, TextInput, Checkbox, RadioGroup, Radio, Icon } from '@dataesr/react-dsfr';
 
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
@@ -140,8 +140,20 @@ const AddEditPatient = () => {
                 value="male"
               />
               <Radio
-                label="Autre"
                 value="other"
+                label={(
+                  <span className={styles.tooltipGender}>
+                    Autre
+                    <span title="Si l'étudiant s'interroge sur son genre, indiquer celui auquel il s'identifie">
+                      <Icon
+                        name="ri-information-line"
+                        color="#000091"
+                        size="lg"
+                        className={styles.iconInfo}
+                      />
+                    </span>
+                  </span>
+                )}
               />
             </RadioGroup>
             <TextInput
