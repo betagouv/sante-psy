@@ -44,6 +44,11 @@
   }
 }
 
+.tooltipGender {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+
 @media (max-width: 768px) {
   .patientAppointments {
       width: 100%;
