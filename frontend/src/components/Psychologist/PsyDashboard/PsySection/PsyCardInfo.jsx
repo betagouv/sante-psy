@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import string from 'services/string';
 import { useStore } from 'stores/index';
 
-import styles from './psyDashboard.cssmodule.scss';
+import styles from './rightSection.cssmodule.scss';
 
 const PsyCardInfo = ({ psychologist }) => {
   const navigate = useNavigate();
@@ -38,12 +38,16 @@ const PsyCardInfo = ({ psychologist }) => {
         <p>
           {psychologist.address}
         </p>
+        <p>
+          ADELI :
+          {psychologist.adeli}
+        </p>
         <span className={styles.emailPhoneContainer}>
           <p>{psychologist.email}</p>
           {' '}
           <p>{psychologist.phone}</p>
         </span>
-        <span className="">
+        <span>
           <Button
             tertiary
             onClick={() => {
