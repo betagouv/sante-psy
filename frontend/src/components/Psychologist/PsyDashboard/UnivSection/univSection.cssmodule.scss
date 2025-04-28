@@ -1,0 +1,52 @@
+@import 'src/variables.scss';
+
+.psyDashboardCard {
+  display: flex;
+  border: 1px solid #D9D9D9;
+  border-radius: 20px;
+  padding: 24px 0px 24px 24px;
+  width: 37%;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+.psyDashboardCard p {
+  margin-bottom: 10px;
+}
+
+.psyDashboardCard button {
+  font-size: 14px;
+  padding: 6px;
+  margin: 6px 24px 6px 0px;
+}
+
+.emailGroup {
+  align-items: center;
+}
+
+.button {
+  box-shadow: none;
+  font-size: 16px;
+}
+
+.buttonEdit {
+  box-shadow: none;
+}
+
+@media (max-width: 950px) {
+  .psyDashboardCard {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .psyDashboardCard button {
+    font-size: 14px;
+    margin: 6px 24px 6px 0px;
+  }
+}
+
+@media (max-width: 425px) {
+  .psyDashboardCard {
+    width: 100%;
+  }
+}

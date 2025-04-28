@@ -2,13 +2,11 @@ import React from 'react';
 import { Button } from '@dataesr/react-dsfr';
 import { useNavigate } from 'react-router-dom';
 import string from 'services/string';
-import { useStore } from 'stores/index';
 
-import styles from './rightSection.cssmodule.scss';
+import styles from './psySection.cssmodule.scss';
 
-const PsyCardInfo = ({ psychologist }) => {
+const PsyCardInfo = ({ psychologist, user }) => {
   const navigate = useNavigate();
-  const { userStore: { user } } = useStore();
 
   return (
     <section className={styles.psyDashboardCard}>

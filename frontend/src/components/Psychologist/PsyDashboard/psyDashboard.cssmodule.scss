@@ -1,12 +1,8 @@
 @import 'src/variables.scss';
 
-.psyDashboardCard {
-  display: flex;
-  border: 1px solid #D9D9D9;
-  border-radius: 20px;
-  padding: 24px;
-  width: 80%;
-  margin-bottom: 24px;
+.inlineCards {
+  display: inline-flex;
+  justify-content: space-between;
 }
 
 .inactiveTexts {
@@ -22,19 +18,7 @@
 }
 
 @media (max-width: 950px) {
-  .psyDashboardCard {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .psyDashboardCard button {
-    font-size: 14px;
-    margin: 6px 24px 6px 0px;
-  }
 }
 
 @media (max-width: 425px) {
-  .psyDashboardCard {
-    width: 100%;
-  }
 }

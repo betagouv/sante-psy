@@ -5,7 +5,7 @@ import agent from 'services/agent';
 import string from 'services/string';
 import DEPARTEMENTS from 'src/utils/departments';
 import { useStore } from 'stores/index';
-import styles from './rightSection.cssmodule.scss';
+import styles from './psySection.cssmodule.scss';
 
 const EditProfile = () => {
   const location = useLocation();
