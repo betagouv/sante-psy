@@ -7,12 +7,18 @@ import { useStore } from 'stores';
 import { Alert, Icon } from '@dataesr/react-dsfr';
 
 import styles from './psyDashboard.cssmodule.scss';
-import RightSection from './PsySection/RightSection';
+import ConventionAvailabilitySection from './PsySection/ConventionAvailabilitySection';
+import DescriptionSection from './PsySection/DescriptionSection';
+import PsyCardInfo from './PsySection/PsyCardInfoSection';
+import UnivContact from './UnivSection/Contact';
+
+// TODO version mobile à refaire
 
 const PsyProfile = () => {
   const { userStore: { pullUser, user } } = useStore();
   const navigate = useNavigate();
   const [psychologist, setPsychologist] = useState({ profilIssues: [], description: '' });
+  const [university, setUniversity] = useState();
 
   const getProfilIssues = psy => {
     const profilIssues = [];
@@ -54,8 +60,19 @@ const PsyProfile = () => {
       });
   };
 
+  const loadUnivInfo = () => {
+    agent.University.getOne(user.convention.universityId)
+      .then(response => {
+        setUniversity({ ...response });
+      })
+      .catch(() => {
+        navigate(-1);
+      });
+  };
+
   useEffect(() => {
     loadPsychologist();
+    loadUnivInfo();
   }, []);
 
   return (
@@ -92,8 +109,16 @@ const PsyProfile = () => {
           </div>
         </HashLink>
       </div>
-      <RightSection psychologist={psychologist} user={user} />
-
+      <div className={styles.inlineCards}>
+        <PsyCardInfo psychologist={psychologist} user={user} />
+        <UnivContact university={university} />
+      </div>
+      <div>
+        <span>
+          <ConventionAvailabilitySection psychologist={psychologist} user={user} />
+          <DescriptionSection psychologist={psychologist} />
+        </span>
+      </div>
     </div>
   );
 };
