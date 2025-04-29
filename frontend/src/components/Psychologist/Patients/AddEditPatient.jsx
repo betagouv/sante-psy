@@ -132,30 +132,29 @@ const AddEditPatient = () => {
                       name="ri-information-line"
                       color="#000091"
                       size="lg"
-          />
+                    />
                   </span>
                 </span>
-  )}
+              )}
               value={patient.gender}
               onChange={value => changePatient(value, 'gender')}
               required
               isInline
->
+            >
               <Radio
                 data-test-id="etudiant-gender-female-input"
                 label="Femme"
                 value="female"
-  />
+              />
               <Radio
                 label="Homme"
                 value="male"
-  />
+              />
               <Radio
                 value="other"
                 label="Autre"
-  />
+              />
             </RadioGroup>
-
             <TextInput
               className="midlength-input"
               data-test-id="etudiant-birth-date-input"
