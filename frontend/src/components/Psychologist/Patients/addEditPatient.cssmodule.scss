@@ -49,6 +49,13 @@
   gap: 0.3rem;
 }
 
+.iconRequired {
+  position: absolute;
+  left: 64px;
+  top: 18%;
+  transform: translateY(-50%);
+}
+
 @media (max-width: 768px) {
   .patientAppointments {
       width: 100%;

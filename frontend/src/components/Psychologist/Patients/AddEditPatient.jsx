@@ -124,37 +124,38 @@ const AddEditPatient = () => {
               />
             <RadioGroup
               name="gender"
-              legend="Genre"
+              legend={(
+                <span className={styles.tooltipGender}>
+                  Genre
+                  <span className={styles.iconRequired} title="Si l'étudiant s'interroge sur son genre, indiquer celui auquel il s'identifie">
+                    <Icon
+                      name="ri-information-line"
+                      color="#000091"
+                      size="lg"
+          />
+                  </span>
+                </span>
+  )}
               value={patient.gender}
               onChange={value => changePatient(value, 'gender')}
               required
               isInline
-              >
+>
               <Radio
                 data-test-id="etudiant-gender-female-input"
                 label="Femme"
                 value="female"
-              />
+  />
               <Radio
                 label="Homme"
                 value="male"
-              />
+  />
               <Radio
                 value="other"
-                label={(
-                  <span className={styles.tooltipGender}>
-                    Autre
-                    <span title="Si l'étudiant s'interroge sur son genre, indiquer celui auquel il s'identifie">
-                      <Icon
-                        name="ri-information-line"
-                        color="#000091"
-                        size="lg"
-                      />
-                    </span>
-                  </span>
-                )}
-              />
+                label="Autre"
+  />
             </RadioGroup>
+
             <TextInput
               className="midlength-input"
               data-test-id="etudiant-birth-date-input"
