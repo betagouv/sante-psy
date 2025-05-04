@@ -98,23 +98,23 @@ const Appointments = () => {
           <div>{formatFrenchDate(utcDate(appointment.appointmentDate))}</div>
           {(appointment.badges.includes(badges.switch_rule_notice.key) || appointment.badges.includes(badges.inactive.key))
             && (
-            <div
-              className={styles.clickableElement}
-              onClick={() => handleIconClick(appointment.id)}
-            >
-              <Icon
-                name="ri-information-line"
-                size="lg"
-                color="#000091"
-                iconPosition="right"
+              <div
+                className={styles.clickableElement}
+                onClick={() => handleIconClick(appointment.id)}
+              >
+                <Icon
+                  name="ri-information-line"
+                  size="lg"
+                  color="#000091"
+                  iconPosition="right"
 
-              />
-              {showTooltip === appointment.id && (
-              <span className={styles.tooltip}>
-                {badges.switch_rule_notice.tooltip}
-              </span>
-              )}
-            </div>
+                />
+                {showTooltip === appointment.id && (
+                  <span className={styles.tooltip}>
+                    {badges.switch_rule_notice.tooltip}
+                  </span>
+                )}
+              </div>
             )}
         </div>
       ),
@@ -139,7 +139,7 @@ const Appointments = () => {
             onChange={handleSearch}
             placeholder="Rechercher"
             className={styles.filter}
-        />
+          />
         </div>
       ),
       render: ({ patientId, firstNames, lastName }) => (
