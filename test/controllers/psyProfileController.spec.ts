@@ -447,8 +447,6 @@ describe('psyProfileController', () => {
       });
     });
 
-    
-
     it('should pass validation when description is missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: 'public@email.com',
