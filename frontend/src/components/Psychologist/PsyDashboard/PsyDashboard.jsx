@@ -11,8 +11,7 @@ import ConventionAvailabilitySection from './PsySection/ConventionAvailabilitySe
 import DescriptionSection from './PsySection/DescriptionSection';
 import PsyCardInfo from './PsySection/PsyCardInfoSection';
 import UnivContact from './UnivSection/Contact';
-
-// TODO version mobile à refaire
+import BillingInfoDashboard from './UnivSection/BillingInfo';
 
 const PsyProfile = () => {
   const { userStore: { pullUser, user } } = useStore();
@@ -110,14 +109,17 @@ const PsyProfile = () => {
         </HashLink>
       </div>
       <div className={styles.inlineCards}>
-        <PsyCardInfo psychologist={psychologist} user={user} />
+        <span className={styles.leftSection}>
+          <PsyCardInfo psychologist={psychologist} user={user} />
+        </span>
         <UnivContact university={university} />
       </div>
-      <div>
-        <span>
+      <div className={styles.inlineCards}>
+        <span className={styles.leftSection}>
           <ConventionAvailabilitySection psychologist={psychologist} user={user} />
           <DescriptionSection psychologist={psychologist} />
         </span>
+        <BillingInfoDashboard />
       </div>
     </div>
   );

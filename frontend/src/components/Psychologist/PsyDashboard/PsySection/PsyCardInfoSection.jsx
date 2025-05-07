@@ -38,6 +38,7 @@ const PsyCardInfo = ({ psychologist, user }) => {
         </p>
         <p>
           ADELI :
+          {' '}
           {psychologist.adeli}
         </p>
         <span className={styles.emailPhoneContainer}>

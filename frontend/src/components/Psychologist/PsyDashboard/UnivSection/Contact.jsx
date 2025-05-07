@@ -15,7 +15,7 @@ const UnivContact = ({ university }) => {
     const mailto = emails.length ? `mailto:${emails.join(',')}` : null;
 
     return (
-      <p className={styles.emailGroup}>
+      <p>
         <b>
           {label}
           {' '}
@@ -28,7 +28,7 @@ const UnivContact = ({ university }) => {
             tertiary
             size="lg"
             icon="ri-mail-line"
-            className={styles.button}
+            className={styles.mailButton}
             title={`Envoyer un mail au service de ${label.toLowerCase()}`}
             onClick={() => { window.location.href = mailto; }}
           />
@@ -38,9 +38,9 @@ const UnivContact = ({ university }) => {
   };
 
   return (
-    <section className={styles.psyDashboardCard}>
+    <section className={styles.UnivBillingCard}>
       {university ? (
-        <div className={styles.psyDashboardCardContent}>
+        <div className={styles.UnivBillingCardContent}>
           <h2>Contact universitaire</h2>
           <b>{`Université ${checkIsEmpty(university.name)}`}</b>
           <p>{fullAddress}</p>

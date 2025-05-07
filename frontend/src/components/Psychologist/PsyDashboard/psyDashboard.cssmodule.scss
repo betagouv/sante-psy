@@ -17,8 +17,21 @@
   color: #666666;
 }
 
+.leftSection {
+  max-width: 60%;
+}
+
 @media (max-width: 950px) {
+  .inlineCards {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .leftSection {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 425px) {
+
 }

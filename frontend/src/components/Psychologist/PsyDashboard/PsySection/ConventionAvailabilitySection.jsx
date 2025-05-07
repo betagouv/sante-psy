@@ -16,7 +16,7 @@ const ConventionAvailabilitySection = ({ user }) => {
     if (user.inactiveUntil) {
       const isAlwaysInactive = user.inactiveUntil.startsWith('9999');
       return (
-        <span>
+        <section className={styles.psyDashboardCard}>
           <img src={isAlwaysInactive ? redCircleIcon : orangeCircleIcon} alt="inactive icon" />
           <span className={styles.inactiveTexts}>
             <p>Invisible dans l&apos;annuaire</p>
@@ -26,7 +26,7 @@ const ConventionAvailabilitySection = ({ user }) => {
                 : `Date de fin : ${formatStringToDDMMYYYY(user.inactiveUntil)}`}
             </p>
           </span>
-        </span>
+        </section>
       );
     }
 
