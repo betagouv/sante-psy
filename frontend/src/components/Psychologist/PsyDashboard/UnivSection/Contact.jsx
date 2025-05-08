@@ -15,14 +15,16 @@ const UnivContact = ({ university }) => {
     const mailto = emails.length ? `mailto:${emails.join(',')}` : null;
 
     return (
-      <p>
-        <b>
-          {label}
-          {' '}
-          :
-        </b>
-        {' '}
-        {emailDisplay}
+      <section className={styles.emailRow}>
+        <div className={styles.emailText}>
+          <b>
+            {label}
+            {' '}
+            :
+          </b>
+&nbsp;
+          <span>{emailDisplay}</span>
+        </div>
         {mailto && (
           <Button
             tertiary
@@ -33,14 +35,14 @@ const UnivContact = ({ university }) => {
             onClick={() => { window.location.href = mailto; }}
           />
         )}
-      </p>
+      </section>
     );
   };
 
   return (
-    <section className={styles.UnivBillingCard}>
+    <section className={styles.univBillingCard}>
       {university ? (
-        <div className={styles.UnivBillingCardContent}>
+        <div>
           <h2>Contact universitaire</h2>
           <b>{`Université ${checkIsEmpty(university.name)}`}</b>
           <p>{fullAddress}</p>

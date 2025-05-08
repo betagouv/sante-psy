@@ -10,7 +10,7 @@ const BillingInfoDashboard = () => {
   const checkIsEmpty = value => (value?.trim() ? value : '-');
 
   return (
-    <section className={styles.UnivBillingCard}>
+    <section className={styles.univBillingCard}>
       {billingInfo ? (
         <div>
           <h2>Données de facturation</h2>
@@ -28,15 +28,18 @@ const BillingInfoDashboard = () => {
             Facturation
           </Button>
           <p>
-            SIRET
+            <b>SIRET :</b>
+&nbsp;
             {checkIsEmpty(billingInfo.siret)}
           </p>
           <p>
-            IBAN
+            <b>IBAN :</b>
+&nbsp;
             {checkIsEmpty(billingInfo.iban)}
           </p>
           <p>
-            Bon de commande :
+            <b>Bon de commande :</b>
+&nbsp;
             {' '}
             {checkIsEmpty(billingInfo.orderNumber)}
           </p>
