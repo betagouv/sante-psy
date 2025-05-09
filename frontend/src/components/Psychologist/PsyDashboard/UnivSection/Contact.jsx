@@ -31,7 +31,7 @@ const UnivContact = ({ university }) => {
             size="lg"
             icon="ri-mail-line"
             className={styles.mailButton}
-            title={`Envoyer un mail au service de ${label.toLowerCase()}`}
+            title={`Envoyer un mail à ${emails}`}
             onClick={() => { window.location.href = mailto; }}
           />
         )}
