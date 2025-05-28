@@ -12,6 +12,7 @@ import DescriptionSection from './PsySection/DescriptionSection';
 import PsyCardInfo from './PsySection/PsyCardInfoSection';
 import UnivContact from './UnivSection/Contact';
 import BillingInfoDashboard from './UnivSection/BillingInfo';
+import getPsyProfileIssues from '../../../utils/getPsyProfileIssues';
 
 const PsyProfile = () => {
   const { userStore: { pullUser, user } } = useStore();
@@ -19,40 +20,12 @@ const PsyProfile = () => {
   const [psychologist, setPsychologist] = useState({ profilIssues: [], description: '' });
   const [university, setUniversity] = useState();
 
-  const getProfilIssues = psy => {
-    const profilIssues = [];
-    if (!psy.description || psy.description.length < 50) {
-      profilIssues.push('Votre présentation est trop courte.');
-    }
-
-    const isWebsite = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/i;
-    if (psy.website && !isWebsite.test(psy.website)) {
-      profilIssues.push('Votre site internet ne semble pas valide.');
-    }
-
-    if (psy.appointmentLink && !isWebsite.test(psy.appointmentLink)) {
-      profilIssues.push(
-        'Votre site internet de prise de rendez-vous ne semble pas valide.',
-      );
-    }
-
-    if (psy.address && (!psy.longitude || !psy.latitude)) {
-      profilIssues.push(`L'adresse ${psy.address} ne semble pas valide.`);
-    }
-
-    if (psy.otherAddress && (!psy.otherLongitude || !psy.otherLatitude)) {
-      profilIssues.push(`L'adresse ${psy.otherAddress} ne semble pas valide.`);
-    }
-
-    return profilIssues;
-  };
-
   const loadPsychologist = () => {
     pullUser();
     agent.Psychologist.getProfile()
       .then(response => {
-        const profilIssues = getProfilIssues(response);
-        setPsychologist({ ...response, profilIssues });
+        const profileIssues = getPsyProfileIssues(response);
+        setPsychologist({ ...response, profilIssues: profileIssues });
       })
       .catch(() => {
         navigate(-1);
@@ -86,7 +59,7 @@ const PsyProfile = () => {
             <>
               Cela n&lsquo;est pas bloquant mais pourrait empêcher les
               étudiants et étudiantes de vous contacter ou d&lsquo;identifier
-              si vous repondez à leurs attentes.
+              si vous répondez à leurs attentes.
               <ul>
                 {psychologist.profilIssues.map(issue => (
                   <li key={issue}>{issue}</li>
@@ -108,18 +81,16 @@ const PsyProfile = () => {
           </div>
         </HashLink>
       </div>
-      <div className={styles.inlineCards}>
-        <span className={styles.leftSection}>
+      <div className={styles.allSections}>
+        <div className={styles.leftSection}>
           <PsyCardInfo psychologist={psychologist} user={user} />
-        </span>
-        <UnivContact university={university} />
-      </div>
-      <div className={styles.inlineCards}>
-        <span className={styles.leftSection}>
           <ConventionAvailabilitySection psychologist={psychologist} user={user} />
           <DescriptionSection psychologist={psychologist} />
-        </span>
-        <BillingInfoDashboard />
+        </div>
+        <div className={styles.rightSection}>
+          <UnivContact university={university} />
+          <BillingInfoDashboard />
+        </div>
       </div>
     </div>
   );

@@ -4,8 +4,7 @@
   display: flex;
   border: 1px solid #D9D9D9;
   border-radius: 20px;
-  padding: 24px;
-  width: 37%;
+  padding: 31px 24px;
   margin-bottom: 24px;
 }
 
@@ -60,7 +59,6 @@
   .univBillingCard {
     display: flex;
     flex-direction: column;
-    width: 100%;
   }
 
   .univBillingCard button {
@@ -69,4 +67,11 @@
 }
 
 @media (max-width: 425px) {
+  .univBillingCard {
+    order: 98;
+  }
+
+  .univBillingCard {
+    order: 99;
+  }
 }

@@ -82,6 +82,18 @@
   margin: 0;
 }
 
+.inactiveTexts {
+  display: flex;
+  flex-direction: column;
+}
+
+.inactiveSubtext {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #666666;
+}
+
 .descriptionInput {
   textarea {
     width: 25rem;

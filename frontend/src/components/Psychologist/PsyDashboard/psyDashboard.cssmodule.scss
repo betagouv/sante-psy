@@ -1,37 +1,33 @@
 @import 'src/variables.scss';
 
-.inlineCards {
-  display: inline-flex;
+.allSections {
+  display: flex;
   justify-content: space-between;
 }
 
-.inactiveTexts {
+.leftSection,
+.rightSection {
   display: flex;
   flex-direction: column;
-}
-
-.inactiveSubtext {
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 20px;
-  color: #666666;
+  justify-content: space-between;
 }
 
 .leftSection {
   max-width: 60%;
 }
 
-@media (max-width: 950px) {
-  .inlineCards {
+.rightSection {
+  max-width: 37%;
+}
+
+@media (max-width: 1200px) {
+  .allSections {
     display: flex;
     flex-direction: column;
   }
 
-  .leftSection {
+  .leftSection,
+  .rightSection {
     max-width: 100%;
   }
-}
-
-@media (max-width: 425px) {
-
 }
