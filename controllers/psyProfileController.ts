@@ -52,6 +52,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
     otherPostcode,
     useFirstNames,
     useLastName,
+    adeli,
   } = psychologist;
 
   res.json({
@@ -78,6 +79,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
     departement,
     region,
     personalEmail: extraInfo ? psychologist.personalEmail : undefined,
+    adeli,
   });
 };
 

@@ -23,6 +23,7 @@ describe('psyProfileController', () => {
         'phone',
         'website',
         'appointmentLink',
+        'adeli',
         'teleconsultation',
         'description',
         'languages',
@@ -52,11 +53,11 @@ describe('psyProfileController', () => {
       expect(actual.phone).to.eql(expected.phone);
       expect(actual.website).to.eql(expected.website);
       expect(actual.appointmentLink).to.eql(expected.appointmentLink);
+      expect(actual.adeli).to.eql(expected.adeli);
       expect(actual.teleconsultation).to.eql(expected.teleconsultation);
       expect(actual.description).to.eql(expected.description);
       expect(actual.languages).to.eql(expected.languages);
       expect(actual.active).to.eql(expected.active);
-
       expect(actual.address).to.eql(expected.address);
       expect(actual.longitude).to.eql(expected.longitude);
       expect(actual.latitude).to.eql(expected.latitude);
@@ -436,6 +437,7 @@ describe('psyProfileController', () => {
         address: '1 rue du Pôle Nord',
         departement: '59 - Nord',
         phone: '01 02 03 04 05',
+        adeli: '123456789',
         website: 'https://monwebsite.fr',
         appointmentLink: '',
         description: 'Consultez un psychologue gratuitement',

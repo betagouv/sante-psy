@@ -25,7 +25,8 @@ describe('universitiesController', () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.should.have.all.keys('name', 'siret', 'address', 'postal_code', 'city', 'billingAddress');
+          // eslint-disable-next-line max-len
+          res.body.should.have.all.keys('name', 'siret', 'address', 'postal_code', 'city', 'billingAddress', 'emailSSU', 'billingEmail');
           res.body.should.eql({
             name: university.name,
             siret: university.siret,
@@ -33,6 +34,8 @@ describe('universitiesController', () => {
             postal_code: university.postal_code,
             city: university.city,
             billingAddress: university.billingAddress,
+            emailSSU: university.emailSSU,
+            billingEmail: university.billingEmail,
           });
         }));
 

@@ -27,6 +27,8 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
     postal_code: university.postal_code,
     city: university.city,
     billingAddress: university.billingAddress,
+    emailSSU: university.emailSSU,
+    billingEmail: university.billingEmail,
   });
 };
 

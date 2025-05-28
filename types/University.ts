@@ -8,4 +8,5 @@ export type University = {
     postal_code?: string,
     city?: string,
     billingAddress?: string,
+    billingEmail?: string,
 }
