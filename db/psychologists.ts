@@ -8,7 +8,7 @@ import {
   nonEditablePsyFields,
 } from '../services/updatePsyFields';
 import getAddressCoordinates from '../services/getAddressCoordinates';
-import { Psychologist } from '../types/Psychologist';
+import { Psychologist, PsychologistFilters } from '../types/Psychologist';
 import db from './db';
 import { Coordinates } from '../types/Coordinates';
 
@@ -89,17 +89,58 @@ const getAllActive = async (): Promise<Psychologist[]> => {
   }
 };
 
-const getAllActiveByAvailability = async (isVeryAvailable: boolean): Promise<Psychologist[]> => {
+const getAllActiveByAvailability = async (isVeryAvailable: boolean, filters?: PsychologistFilters)
+: Promise<Psychologist[]> => {
   try {
-    const psychologists = db.select(selectFields())
+    let query = db.select(selectFields())
       .select()
       .from(psychologistsTable)
       .whereNot('archived', true)
       .where('state', DossierState.accepte)
       .andWhere('active', true)
-      .andWhere('isVeryAvailable', isVeryAvailable)
-      .orderByRaw('RANDOM()');
-    return psychologists;
+      .andWhere('isVeryAvailable', isVeryAvailable);
+
+    /* Filters */
+    if (filters.name) {
+      query = query.andWhere((qb) => {
+        qb.whereRaw('unaccent("firstNames") ILIKE ?', [`%${filters.name}%`])
+          .orWhereRaw('unaccent("lastName") ILIKE ?', [`%${filters.name}%`])
+          .orWhereRaw('unaccent("useLastName") ILIKE ?', [`%${filters.name}%`])
+          .orWhereRaw('unaccent("useFirstNames") ILIKE ?', [`%${filters.name}%`]);
+      });
+    }
+    if (filters.address) {
+      query = query.andWhere((qb) => {
+        qb.whereRaw('unaccent(replace(address, \'-\', \' \')) ILIKE ?', [`%${filters.address}%`])
+          .orWhereRaw('unaccent(replace("otherAddress", \'-\', \' \')) ILIKE ?', [`%${filters.address}%`])
+          .orWhereRaw('unaccent(replace(departement, \'-\', \' \')) ILIKE ?', [`%${filters.address}%`])
+          .orWhereRaw('unaccent(replace(region, \'-\', \' \')) ILIKE ?', [`%${filters.address}%`])
+          .orWhereRaw('replace(postcode, \' \', \'\') ILIKE ?', [`%${filters.address}%`]);
+      });
+    }
+    if (filters.language) {
+      query = query.andWhereRaw('unaccent(languages) ILIKE ?', [`%${filters.language}%`]);
+    }
+
+    if (filters.speciality) {
+      const specialityValue = `%${filters.speciality}%`;
+      query = query.andWhere((qb) => {
+        qb.whereRaw('unaccent(description) ILIKE ?', [specialityValue])
+          .orWhereRaw('unaccent(diploma) ILIKE ?', [specialityValue])
+        .orWhereRaw(
+          `EXISTS (
+            SELECT 1 FROM jsonb_array_elements_text(training::jsonb) AS elem 
+            WHERE unaccent(elem) ILIKE ?
+          )`,
+          [specialityValue],
+        );
+      });
+    }
+    if (filters.teleconsultation !== undefined) {
+      query = query.andWhere('teleconsultation', filters.teleconsultation);
+    }
+
+    return query.orderByRaw('RANDOM()');
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
     throw new Error('Impossible de récupérer les psychologistes');
@@ -392,8 +433,8 @@ const seeTutorial = async (dossierNumber: string): Promise<number> => {
 };
 
 export default {
-  getAllActiveByAvailability,
   getAllActive,
+  getAllActiveByAvailability,
   getById,
   getAcceptedByEmail,
   getNotYetAcceptedByEmail,

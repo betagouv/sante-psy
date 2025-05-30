@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button, TextInput, Checkbox, Highlight } from '@dataesr/react-dsfr';
+import { Button, TextInput, Checkbox, RadioGroup, Radio, Icon } from '@dataesr/react-dsfr';
 
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
@@ -37,6 +37,7 @@ const AddEditPatient = () => {
       setPatient({
         INE: '',
         dateOfBirth: '',
+        gender: '',
         doctorName: '',
         firstNames: '',
         institutionName: '',
@@ -121,6 +122,39 @@ const AddEditPatient = () => {
               onChange={e => changePatient(e.target.value, 'lastName')}
               required
               />
+            <RadioGroup
+              name="gender"
+              legend={(
+                <span className={styles.tooltipGender}>
+                  Genre
+                  <span className={styles.iconRequired} title="Si l'étudiant s'interroge sur son genre, indiquer celui auquel il s'identifie">
+                    <Icon
+                      name="ri-information-line"
+                      color="#000091"
+                      size="lg"
+                    />
+                  </span>
+                </span>
+              )}
+              value={patient.gender}
+              onChange={value => changePatient(value, 'gender')}
+              required
+              isInline
+            >
+              <Radio
+                data-test-id="etudiant-gender-female-input"
+                label="Femme"
+                value="female"
+              />
+              <Radio
+                label="Homme"
+                value="male"
+              />
+              <Radio
+                value="other"
+                label="Autre"
+              />
+            </RadioGroup>
             <TextInput
               className="midlength-input"
               data-test-id="etudiant-birth-date-input"
@@ -131,7 +165,26 @@ const AddEditPatient = () => {
               onChange={e => changePatient(e.target.value, 'dateOfBirth')}
               pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
               placeholder="JJ/MM/AAAA"
-              required={!patientId}
+              required
+            />
+            <TextInput
+              className={classNames(styles.ineInput, 'midlength-input')}
+              data-test-id="etudiant-ine-input"
+              label="Numéro INE de l'étudiant"
+              hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant ou le certificat de scolarité."
+              value={patient.INE}
+              pattern="^[a-zA-Z0-9]{11}$"
+              onChange={e => changePatient(e.target.value, 'INE')}
+              required
+            />
+            <Checkbox
+              className="fr-input-group"
+              data-test-id="etudiant-status-input"
+              defaultChecked={patient.isStudentStatusVerified}
+              label="J'ai bien vérifié le statut étudiant"
+              hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
+              value="isStudentStatusVerified"
+              onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
               />
           </div>
           <br />
@@ -144,32 +197,6 @@ const AddEditPatient = () => {
               value={patient.institutionName}
               onChange={e => changePatient(e.target.value, 'institutionName')}
             />
-            <div className={styles.ineWrapper}>
-              <TextInput
-                className={classNames(styles.ineInput, 'midlength-input')}
-                data-test-id="etudiant-ine-input"
-                label="Numéro INE de l'étudiant"
-                hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant ou le certificat de scolarité."
-                value={patient.INE}
-                pattern="^[a-zA-Z0-9]{11}$"
-                onChange={e => changePatient(e.target.value, 'INE')}
-                required
-                />
-
-              <Highlight size="lg" className={styles.ineHighlight}>
-                L&lsquo;INE est désormais obligatoire pour pouvoir déclarer des séances afin de pouvoir maintenir à jour le compte des séances pour les étudiants.
-                {' '}
-              </Highlight>
-            </div>
-            <Checkbox
-              className="fr-input-group"
-              data-test-id="etudiant-status-input"
-              defaultChecked={patient.isStudentStatusVerified}
-              label="J'ai bien vérifié le statut étudiant"
-              hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
-              value="isStudentStatusVerified"
-              onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
-              />
             <TextInput
               className="midlength-input"
               data-test-id="etudiant-doctor-name-input"
@@ -177,7 +204,7 @@ const AddEditPatient = () => {
               hint="Exemple : Annie Benahmou"
               value={patient.doctorName}
               onChange={e => changePatient(e.target.value, 'doctorName')}
-                />
+            />
           </div>
           <div className="fr-my-5w">
             <Button

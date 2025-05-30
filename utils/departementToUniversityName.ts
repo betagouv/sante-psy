@@ -29,7 +29,7 @@ const departementToUniversityName = {
   27: 'cas particulier',
   28: 'Orléans',
   29: 'Bretagne Occidentale',
-  30: 'Occitanie Ouest',
+  30: 'Nîmes',
   31: "Communauté d'université et établissements de Toulouse (COMUE de Toulouse)",
   32: "Communauté d'université et établissements de Toulouse (COMUE de Toulouse)",
   33: 'Bordeaux',
@@ -47,7 +47,7 @@ const departementToUniversityName = {
   45: 'Orléans',
   46: "Communauté d'université et établissements de Toulouse (COMUE de Toulouse)",
   47: 'Bordeaux',
-  48: 'Occitanie Ouest',
+  48: 'Nîmes',
   49: 'Angers',
   50: 'Caen Normandie',
   51: 'Reims Champagne-Ardenne',
@@ -65,7 +65,7 @@ const departementToUniversityName = {
   63: 'Clermont-Auvergne (UCA)',
   64: "Pau et Pays de l'Adour (UPPA)",
   65: "Communauté d'université et établissements de Toulouse (COMUE de Toulouse)",
-  66: 'Occitanie Ouest',
+  66: 'Perpignan (UPVD)',
   67: 'Strasbourg (UNISTRA)',
   68: 'Haute-Alsace (UHA)',
   69: 'cas particulier',
@@ -99,7 +99,7 @@ const departementToUniversityName = {
   972: 'Antilles - Pôle Martinique',
   973: '',
   974: 'La Réunion',
-  976: '',
+  976: 'Mayotte',
 };
 
 export default departementToUniversityName;
