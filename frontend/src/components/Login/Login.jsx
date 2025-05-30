@@ -20,6 +20,7 @@ const Login = () => {
   } = useStore();
 
   const emailRef = useRef();
+  const loginCalled = useRef(false);
   const { token } = useParams();
   const navigate = useNavigate();
 
@@ -33,7 +34,8 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    if (token) {
+    if (token && !loginCalled.current) {
+      loginCalled.current = true;
       agent.User.login(token)
         .then(xsrfToken => {
           setXsrfToken(xsrfToken);
@@ -60,7 +62,7 @@ const Login = () => {
           {' '}
           <b>Psychologues</b>
         </>
-)}
+      )}
     >
       <Section
         title="Me connecter"
