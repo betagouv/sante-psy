@@ -59,7 +59,7 @@
     "crisp-api": "^8.3.2",
     "cron": "^2.2.0",
     "crypto": "^1.0.1",
-    "dompurify": "^2.5.4",
+    "dompurify": "^3.2.4",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
