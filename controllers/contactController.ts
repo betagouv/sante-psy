@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import DOMPurify from '../services/sanitizer';
+import { purifySanitizer } from '../services/sanitizer';
 import { check } from 'express-validator';
 import Crisp from 'crisp-api';
 
@@ -15,21 +15,21 @@ CrispClient.authenticate(config.crisp.identifier, config.crisp.key);
 const sendValidators = [
   check('name')
     .trim().not().isEmpty()
-    .customSanitizer(DOMPurify.sanitize)
+    .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier un nom.'),
   check('firstName')
     .trim().not().isEmpty()
-    .customSanitizer(DOMPurify.sanitize)
+    .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier un prénom.'),
   check('email')
     .trim().not().isEmpty()
     .withMessage('Vous devez spécifier un email valide.')
-    .customSanitizer(DOMPurify.sanitize)
+    .customSanitizer(purifySanitizer)
     .isEmail()
     .withMessage('Vous devez spécifier un email valide.'),
   check('message')
     .trim().not().isEmpty()
-    .customSanitizer(DOMPurify.sanitize)
+    .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier un message.'),
   check('reason')
     .isIn([
@@ -46,7 +46,7 @@ const sendValidators = [
     .withMessage('Vous devez préciser qui vous êtes.'),
   check('navigator')
     .trim()
-    .customSanitizer(DOMPurify.sanitize),
+    .customSanitizer(purifySanitizer),
 ];
 
 const send = async (req: Request, res: Response): Promise<void> => {

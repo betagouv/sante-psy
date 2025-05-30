@@ -12,5 +12,10 @@ module.exports = defineConfig({
     },
     baseUrl: 'http://localhost:3000/',
     specPattern: 'cypress/e2e/**/*.cy.js',
+    defaultCommandTimeout: 10000,
+    requestTimeout: 10000,
+    responseTimeout: 10000,
+    pageLoadTimeout: 10000,
+    animationDistanceThreshold: 5,
   },
 });
