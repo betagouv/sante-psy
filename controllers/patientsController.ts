@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { check, oneOf } from 'express-validator';
-import DOMPurify from '../services/sanitizer';
+import { purifySanitizer } from '../services/sanitizer';
 
 import dbPatients from '../db/patients';
 import dbAppointments from '../db/appointments';
@@ -31,16 +31,16 @@ const patientValidators = [
   // todo : do we html-escape here ? We already escape in templates.
   check('firstNames')
     .trim().not().isEmpty()
-    .customSanitizer(DOMPurify.sanitize)
+    .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
   check('lastName')
     .trim().not().isEmpty()
-    .customSanitizer(DOMPurify.sanitize)
+    .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier le nom du patient.'),
   check('gender')
     .trim().not().isEmpty()
     .withMessage('Vous devez spécifier le genre du patient.')
-    .customSanitizer(DOMPurify.sanitize)
+    .customSanitizer(purifySanitizer)
     .isIn(allGenders)
     .withMessage('Le genre du patient n\'est pas valide.'),
   check('INE')
@@ -50,21 +50,21 @@ const patientValidators = [
     .withMessage('Le numéro INE doit être alphanumérique (chiffres ou lettres sans accents).')
     .isLength({ min: 11, max: 11 })
     .withMessage('Le numéro INE doit faire exactement 11 caractères.')
-    .customSanitizer(DOMPurify.sanitize),
+    .customSanitizer(purifySanitizer),
   check('dateOfBirth')
       .trim().isDate({ format: date.formatFrenchDateForm })
-      .customSanitizer(DOMPurify.sanitize)
+      .customSanitizer(purifySanitizer)
       .withMessage('La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.'),
   check('institutionName')
     .trim()
-    .customSanitizer(DOMPurify.sanitize),
+    .customSanitizer(purifySanitizer),
 
   oneOf(
     [
       check('doctorName').trim().isEmpty(),
       check('doctorName')
       .trim()
-      .customSanitizer(DOMPurify.sanitize),
+      .customSanitizer(purifySanitizer),
     ],
   ),
 ];
