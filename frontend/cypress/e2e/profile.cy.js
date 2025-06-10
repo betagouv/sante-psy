@@ -338,7 +338,7 @@ describe('Profile', () => {
         // eslint-disable-next-line max-len
         .should(
           'have.text',
-          "Votre profil est incompletCela n‘est pas bloquant mais pourrait empêcher les étudiants et étudiantes de vous contacter ou d‘identifier si vous repondez à leurs attentes.Votre présentation est trop courte.Votre site internet ne semble pas valide.L'adresse nimps... ne semble pas valide.L'adresse super nimps... ne semble pas valide.",
+          "Votre profil est incompletCela n‘est pas bloquant mais pourrait empêcher les étudiants et étudiantes de vous contacter ou d‘identifier si vous répondez à leurs attentes.Votre présentation est trop courte.Votre site internet ne semble pas valide.L'adresse nimps... ne semble pas valide.L'adresse super nimps... ne semble pas valide.",
         );
     });
   });
@@ -356,7 +356,7 @@ describe('Profile', () => {
         // eslint-disable-next-line max-len
         .should(
           'have.text',
-          'Votre profil est incompletCela n‘est pas bloquant mais pourrait empêcher les étudiants et étudiantes de vous contacter ou d‘identifier si vous repondez à leurs attentes.Votre site internet ne semble pas valide.',
+          "Votre profil est incompletCela n‘est pas bloquant mais pourrait empêcher les étudiants et étudiantes de vous contacter ou d‘identifier si vous répondez à leurs attentes.Votre site internet ne semble pas valide.",
         );
     });
 
