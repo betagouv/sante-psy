@@ -104,16 +104,27 @@ const Billing = () => {
             </div>
             <ButtonGroup className="fr-mb-2w" isInlineFrom="xs">
               {fillInfo ? (
-                <Button
-                  secondary
-                  icon="ri-close-line"
-                  onClick={() => {
-                    setBillingInfo(billingInfoService.get());
-                    setFillInfo(false);
-                  }}
+                <>
+                  <Button
+                    secondary
+                    icon="ri-close-line"
+                    onClick={() => {
+                      setBillingInfo(billingInfoService.get());
+                      setFillInfo(false);
+                    }}
                 >
-                  Annuler
-                </Button>
+                    Annuler
+                  </Button>
+                  <Button
+                    secondary
+                    icon="ri-save-line"
+                    onClick={() => {
+                      setFillInfo(false);
+                      billingInfoService.save(billingInfo);
+                    }}>
+                    Enregistrer
+                  </Button>
+                </>
               ) : (
                 <Button id="billing-info" secondary icon="ri-edit-line" onClick={() => setFillInfo(true)}>
                   Renseigner mes informations
@@ -132,11 +143,11 @@ const Billing = () => {
                   }}
                 >
                   <span className={classNames(styles.downloadIcon, 'ri-file-download-line')} aria-hidden="true" />
-                  Enregistrer et télécharger
+                  Télécharger / Imprimer
                 </a>
               ) : (
                 <Button disabled icon="ri-file-download-line">
-                  Enregistrer et télécharger
+                  Télécharger / Imprimer
                 </Button>
               )}
             </ButtonGroup>
