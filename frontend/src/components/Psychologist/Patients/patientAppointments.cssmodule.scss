@@ -1,5 +1,5 @@
-@import 'src/tooltip.scss';
-@import 'src/variables.scss';
+@use 'src/tooltip.scss' as *;
+@use 'src/variables.scss' as *;
 
 .grayedRow {
     color: #999;

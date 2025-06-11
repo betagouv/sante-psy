@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { HashLink } from 'react-router-hash-link';
+import { useSearchParams } from 'react-router-dom';
 
 import { Button, ButtonGroup, Callout, CalloutText } from '@dataesr/react-dsfr';
 import MonthPicker from 'components/Date/MonthPicker';
@@ -32,7 +33,13 @@ const Billing = () => {
   const [billingInfo, setBillingInfo] = useState(billingInfoService.get());
   const [universityHasBillingAddress, setUniversityHasBillingAddress] = useState(false);
 
+  const [searchParams] = useSearchParams();
+
   useAppointmentsByDate(setValuesByDate, month, true);
+
+  useEffect(() => {
+    localStorage.setItem('selectedMonth', JSON.stringify(month));
+  }, [month]);
 
   useEffect(() => {
     if (user.convention && user.convention.universityId) {
@@ -43,6 +50,12 @@ const Billing = () => {
       });
     }
   });
+
+  useEffect(() => {
+    if (searchParams.get('openBillingInfo') === 'true') {
+      setFillInfo(true);
+    }
+  }, [searchParams]);
 
   const badges = getBadgeInfos();
   const filteredDates = billingDataService.getFilteredDates(valuesByDate.appointments, month.month, month.year);
@@ -119,11 +132,11 @@ const Billing = () => {
                   }}
                 >
                   <span className={classNames(styles.downloadIcon, 'ri-file-download-line')} aria-hidden="true" />
-                  Télécharger/Imprimer
+                  Enregistrer et télécharger
                 </a>
               ) : (
                 <Button disabled icon="ri-file-download-line">
-                  Télécharger/Imprimer
+                  Enregistrer et télécharger
                 </Button>
               )}
             </ButtonGroup>

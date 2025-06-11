@@ -1,28 +1,36 @@
-import React, { useRef } from 'react';
-import Picker from 'react-month-picker';
-import { shortFrenchMonthNames, formatMonth } from 'services/date';
+import React from 'react';
+import DatePicker from 'react-datepicker';
 import { endYearOfCurrentUnivYear } from 'services/univYears';
 
 const MonthPicker = ({ month, setMonth, id }) => {
-  const calendar = useRef(null);
+  const handleChange = date => {
+    setMonth({ month: date.getMonth() + 1, year: date.getFullYear() });
+  };
+
+  const renderMonthContent = (numberMonth, shortMonth, longMonth, day) => {
+    const fullYear = new Date(day).getFullYear();
+    const tooltipText = `${longMonth} ${fullYear}`;
+
+    return <span title={tooltipText}>{shortMonth}</span>;
+  };
+
+  const minDate = new Date(2021, 2, 1);
+  const maxDate = new Date(endYearOfCurrentUnivYear(), 11, 31);
 
   return (
-    <Picker
-      years={{ min: { year: 2021, month: 3 }, max: { year: endYearOfCurrentUnivYear(), month: 12 } }}
-      ref={calendar}
-      value={month}
-      lang={shortFrenchMonthNames}
-      onChange={(y, m) => { setMonth({ month: m, year: y }); calendar.current.dismiss(); }}
-    >
-      <input
-        id={id}
-        title="Mois sélectionné"
+    <div className="monthPicker" id={id}>
+      <DatePicker
+        selected={new Date(month.year, month.month - 1)}
+        onChange={handleChange}
+        showMonthYearPicker
+        dateFormat="MMMM yyyy"
+        renderMonthContent={renderMonthContent}
         className="fr-input short-input"
-        onChange={() => {}}
-        onClick={() => calendar.current.show()}
-        value={formatMonth(month)}
+        minDate={minDate}
+        maxDate={maxDate}
       />
-    </Picker>
+    </div>
+
   );
 };
 
