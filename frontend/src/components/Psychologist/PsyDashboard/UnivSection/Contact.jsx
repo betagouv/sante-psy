@@ -18,7 +18,8 @@ const UnivContact = ({ university }) => {
       <section className={styles.emailRow}>
         <div className={styles.emailText}>
           <b>
-            {label}&nbsp;:
+            {label}
+&nbsp;:
           </b>
           &nbsp;
           <span>{emailDisplay}</span>
