@@ -33,7 +33,10 @@ const PsyProfile = () => {
   };
 
   const loadUnivInfo = () => {
-    agent.University.getOne(user.convention.universityId)
+    const universityId = user?.convention?.universityId;
+    if (!universityId) return;
+
+    agent.University.getOne(universityId)
       .then(response => {
         setUniversity({ ...response });
       })
