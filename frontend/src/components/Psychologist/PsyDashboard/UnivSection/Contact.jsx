@@ -19,10 +19,9 @@ const UnivContact = ({ university }) => {
         <div className={styles.emailText}>
           <b>
             {label}
-            {' '}
-            :
+&nbsp;:
           </b>
-&nbsp;
+          &nbsp;
           <span>{emailDisplay}</span>
         </div>
         {mailto && (
