@@ -1,0 +1,25 @@
+.iframeContainer {
+  position: relative;
+  height: 10000px;
+  overflow: hidden;
+}
+
+.iframeShifted {
+  position: relative;
+  height: 10600px;
+}
+
+.scrollTopButton {
+  position: fixed;
+  bottom: 30px;
+  right: 280px;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
