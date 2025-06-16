@@ -21,6 +21,7 @@ const defaultItems = [
   { title: 'Foire aux questions', link: '/faq' },
   { title: 'Nous contacter', link: '/contact' },
   { title: 'Autres services', link: '/autres-services' },
+  { title: 'Podcast', link: '/podcast' },
 ];
 
 const connectedItems = [
