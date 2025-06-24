@@ -49,6 +49,12 @@
   gap: 0.3rem;
 }
 
+.errorMessage {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 768px) {
   .patientAppointments {
       width: 100%;

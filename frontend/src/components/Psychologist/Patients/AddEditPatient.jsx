@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button, TextInput, Checkbox, RadioGroup, Radio, Icon } from '@dataesr/react-dsfr';
+import { Button } from '@dataesr/react-dsfr';
 
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
@@ -8,9 +8,9 @@ import agent from 'services/agent';
 import { renderBadge } from 'components/Badges/Badges';
 import getBadgeInfos from 'src/utils/badges';
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
-import classNames from 'classnames';
 import styles from './addEditPatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
+import PatientInfo from './AddEditPatientInfo';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
@@ -106,105 +106,7 @@ const AddEditPatient = () => {
               S&lsquo;il vous manque des champs non-obligatoires, vous pourrez y
               revenir plus tard pour compléter le dossier.
             </p>
-            <TextInput
-              className="midlength-input fr-mt-3w"
-              data-test-id="etudiant-first-name-input"
-              label="Prénoms"
-              value={patient.firstNames}
-              onChange={e => changePatient(e.target.value, 'firstNames')}
-              required
-              />
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-last-name-input"
-              label="Nom"
-              value={patient.lastName}
-              onChange={e => changePatient(e.target.value, 'lastName')}
-              required
-              />
-            <RadioGroup
-              name="gender"
-              legend="Genre"
-              value={patient.gender}
-              onChange={value => changePatient(value, 'gender')}
-              required
-              isInline
-              >
-              <Radio
-                data-test-id="etudiant-gender-female-input"
-                label="Femme"
-                value="female"
-              />
-              <Radio
-                label="Homme"
-                value="male"
-              />
-              <Radio
-                value="other"
-                label={(
-                  <span className={styles.tooltipGender}>
-                    Autre
-                    <span title="Si l'étudiant s'interroge sur son genre, indiquer celui auquel il s'identifie">
-                      <Icon
-                        name="ri-information-line"
-                        color="#000091"
-                        size="lg"
-                      />
-                    </span>
-                  </span>
-                )}
-              />
-            </RadioGroup>
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-birth-date-input"
-              label="Date de naissance"
-              hint="Format JJ/MM/AAAA, par exemple : 25/01/1987"
-              value={patient.dateOfBirth}
-              type="text"
-              onChange={e => changePatient(e.target.value, 'dateOfBirth')}
-              pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
-              placeholder="JJ/MM/AAAA"
-              required
-            />
-            <TextInput
-              className={classNames(styles.ineInput, 'midlength-input')}
-              data-test-id="etudiant-ine-input"
-              label="Numéro INE de l'étudiant"
-              hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant ou le certificat de scolarité."
-              value={patient.INE}
-              pattern="^[a-zA-Z0-9]{11}$"
-              onChange={e => changePatient(e.target.value, 'INE')}
-              required
-            />
-            <Checkbox
-              className="fr-input-group"
-              data-test-id="etudiant-status-input"
-              defaultChecked={patient.isStudentStatusVerified}
-              label="J'ai bien vérifié le statut étudiant"
-              hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
-              value="isStudentStatusVerified"
-              onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
-              />
-          </div>
-          <br />
-          <div id="other-informations">
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-school-input"
-              label="Établissement scolaire de l'étudiant"
-              hint="Exemple : Université de Rennes ou ENSAE"
-              value={patient.institutionName}
-              onChange={e => changePatient(e.target.value, 'institutionName')}
-            />
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-doctor-name-input"
-              label="Nom, prénom du médecin (optionnel)"
-              hint="Exemple : Annie Benahmou"
-              value={patient.doctorName}
-              onChange={e => changePatient(e.target.value, 'doctorName')}
-            />
+            <PatientInfo patient={patient} changePatient={changePatient} />
           </div>
           <div className="fr-my-5w">
             <Button
