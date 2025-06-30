@@ -1,3 +1,5 @@
+/* eslint-disable no-continue */
+/* eslint-disable no-await-in-loop */
 import date from '../utils/date';
 import { psychologistsTable, suspensionReasonsTable } from './tables';
 import { DossierState } from '../types/DossierState';
@@ -174,22 +176,31 @@ const getById = async (psychologistId: string): Promise<Psychologist> => {
   }
 };
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 /**
  * Perform a UPSERT with https://knexjs.org/#Builder-merge
  * @param {*} psy
  */
 const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
   console.log(`UPSERT of ${psyList.length} psychologists into PG....`);
-  const updatedAt = date.now(); // use to perform UPSERT in PG
+  const updatedAt = date.now();
   const universities = await dbUniversities.getAll();
-
   const psychologists = await getByIds(psyList.map((psy) => psy.dossierNumber));
   const psychologistsToInsert = [];
-  const upsertArray = psyList.map(async (psy) => {
+
+  for (let index = 0; index < psyList.length; index++) {
+    const psy = psyList[index];
     try {
       const psyInDb = psychologists[psy.dossierNumber];
       if (!psyInDb) {
+        if (index > 0) await sleep(50);
         const coordinates = await getAddressCoordinates(psy.address);
+
         psychologistsToInsert.push({
           ...psy,
           languages: addFrenchLanguageIfMissing(psy.languages),
@@ -201,16 +212,17 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
             postcode: coordinates.postcode,
           }),
         });
-        return Promise.resolve();
+        continue;
       }
 
       if (psyInDb.selfModified) {
-        return db(psychologistsTable)
+        await db(psychologistsTable)
           .where({ dossierNumber: psy.dossierNumber })
           .update({
             ...nonEditablePsyFields(psy),
             updatedAt,
           });
+        continue;
       }
 
       let coordinates: Coordinates;
@@ -218,7 +230,7 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
         coordinates = await getAddressCoordinates(psy.address);
       }
 
-      return db(psychologistsTable)
+      await db(psychologistsTable)
         .where({ dossierNumber: psy.dossierNumber })
         .update({
           ...editablePsyFields({
@@ -234,15 +246,18 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
           updatedAt,
         });
     } catch (err) {
-      console.error(`Error to insert ${psy}`, err);
-      return Promise.resolve();
+      console.error(`Error to insert ${psy.dossierNumber}`, err);
     }
-  });
-
-  await Promise.all(upsertArray);
+  }
 
   if (psychologistsToInsert.length > 0) {
-    await db(psychologistsTable).insert(psychologistsToInsert);
+    try {
+      await db(psychologistsTable).insert(psychologistsToInsert);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      console.error('Error to insert psychologists', err);
+      throw err;
+    }
   }
 
   console.log('UPSERT into PG : done');
