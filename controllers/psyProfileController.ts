@@ -157,7 +157,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
         postcode: psychologist.postcode,
       };
     }
-    if (req.body.otherAddress && psychologist.otherAddress !== req.body.otherAddress) {
+    if (psychologist.otherAddress !== req.body.otherAddress) {
       otherCoordinates = await getAddressCoordinates(req.body.otherAddress);
     } else {
       otherCoordinates = {
