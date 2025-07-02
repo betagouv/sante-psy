@@ -34,7 +34,7 @@ const getAccessToken = async (): Promise<string> => {
 const checkApiInesTrue = async (payload: { ine: string; dateNaissance: string }): Promise<
 { ine: string; dateNaissance: string }
 > => {
-  const verificationURL = process.env.VERIFICATION_URL;
+  const verificationURL = process.env.INES_VERIFICATION_URL;
   const xChannel = process.env.INES_XCHANNEL;
   const token = await getAccessToken();
 
