@@ -39,6 +39,7 @@ const insert = async (
   dateOfBirth: Date,
   gender: string,
   INE: string,
+  isINESvalid: boolean,
   institutionName?: string,
   isStudentStatusVerified?: boolean,
   psychologistId?: string,
@@ -51,6 +52,7 @@ const insert = async (
       dateOfBirth,
       gender,
       INE,
+      isINESvalid,
       institutionName,
       isStudentStatusVerified,
       psychologistId,
@@ -70,6 +72,7 @@ const update = async (
   dateOfBirth: Date,
   gender: string,
   INE: string,
+  isINESvalid: boolean,
   institutionName: string,
   isStudentStatusVerified: boolean,
   psychologistId: string,
@@ -90,12 +93,17 @@ const update = async (
         psychologistId,
         doctorName,
         updatedAt: date.now(),
+        isINESvalid,
       });
   } catch (err) {
     console.error('Erreur de modification du patient', err);
     throw new Error('Erreur de modification du patient');
   }
 };
+
+const updateIsINESValidOnly = async (patientId: string, isINESvalid: boolean): Promise<number> => db('patients')
+    .where({ id: patientId })
+    .update({ isINESvalid });
 
 const deleteOne = async (id: string, psychologistId: string): Promise<number> => {
   try {
@@ -121,5 +129,6 @@ export default {
   getAll,
   insert,
   update,
+  updateIsINESValidOnly,
   delete: deleteOne,
 };

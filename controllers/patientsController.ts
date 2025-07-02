@@ -16,6 +16,18 @@ import verifyINE from '../services/InesApi';
 const sortData = (a: Patient, b: Patient) : number => (
   `${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`);
 
+const verifyPatientINE = async (INE: string, rawDateOfBirth: string): Promise<boolean> => {
+  const dateOfBirth = date.parseForm(rawDateOfBirth);
+
+  try {
+    await verifyINE(INE, dateOfBirth);
+    return true;
+  } catch (error) {
+    console.warn('erreur lors de la requête API INES :', error);
+    return false;
+  }
+};
+
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.psychologist;
   const patients = await dbPatients.getAll(psychologistId);
@@ -39,9 +51,15 @@ const update = async (req: Request, res: Response): Promise<void> => {
     institutionName: patientInstitutionName,
     doctorName,
   } = req.body;
-  const dateOfBirth = date.parseForm(rawDateOfBirth);
 
-  await verifyINE(patientINE, dateOfBirth);
+  const isINESvalid = await verifyPatientINE(patientINE, rawDateOfBirth);
+
+  if (!isINESvalid) {
+    await dbPatients.updateIsINESValidOnly(patientId, false);
+
+    throw new CustomError('Le numéro INE et/ou la date de naissance est invalide selon la base nationale.'
+      + ' Merci de vérifier ces informations auprès du patient.', 400);
+  }
 
   const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
@@ -50,9 +68,10 @@ const update = async (req: Request, res: Response): Promise<void> => {
     patientId,
     patientFirstNames,
     patientLastName,
-    dateOfBirth,
+    date.parseForm(rawDateOfBirth),
     patientGender,
     patientINE,
+    isINESvalid,
     patientInstitutionName,
     patientIsStudentStatusVerified,
     psychologistId,
@@ -96,9 +115,13 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const {
     firstNames, lastName, gender, INE, institutionName, doctorName, dateOfBirth: rawDateOfBirth,
   } = req.body;
-  const dateOfBirth = date.parseForm(rawDateOfBirth);
 
-  await verifyINE(INE, dateOfBirth);
+  const isINESvalid = await verifyPatientINE(INE, rawDateOfBirth);
+
+  if (!isINESvalid) {
+    throw new CustomError('Le numéro INE et/ou la date de naissance est invalide selon la base nationale.'
+      + 'Merci de vérifier ces informations auprès du patient.', 400);
+  }
 
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
@@ -106,9 +129,10 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const addedPatient = await dbPatients.insert(
     firstNames,
     lastName,
-    dateOfBirth,
+    date.parseForm(rawDateOfBirth),
     gender,
     INE,
+    isINESvalid,
     institutionName,
     isStudentStatusVerified,
     psychologistId,
