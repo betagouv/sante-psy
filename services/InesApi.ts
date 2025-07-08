@@ -67,7 +67,7 @@ const verifyINE = async (INE: string, dateOfBirth: Date): Promise<void> => {
   const verificationResponse = await checkApiInesTrue(verificationPayload);
 
   if (!verificationResponse) {
-    throw new CustomError('Le numéro INE est introuvable ou invalide selon la base nationale.', 400);
+    throw new CustomError('INE ou/et date de naissance non trouvé dans API INES', 400);
   }
 };
 

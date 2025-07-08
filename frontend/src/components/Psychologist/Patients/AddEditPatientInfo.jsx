@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { TextInput, RadioGroup, Radio, Icon, Checkbox } from '@dataesr/react-dsfr';
 import classNames from 'classnames';
 import { addAutoSlashToDate } from 'services/date';
+import Notification from 'components/Notification/Notification';
+import { HashLink } from 'react-router-hash-link';
 import styles from './addEditPatient.cssmodule.scss';
+
+// TODO si date de naissance invalide, pas possible de cliquer
+// TODO ajouter env à staging et prod
+// TODO tester lib codegouv pour component ?
 
 const PatientInfo = ({ patient, changePatient }) => {
   const [ineError, setIneError] = useState('');
@@ -19,7 +25,7 @@ const PatientInfo = ({ patient, changePatient }) => {
     const isValid = patterns.some(pattern => pattern.test(value));
 
     if (!isValid) {
-      setIneError('Le numéro INE doit correspondre à un format national valide.');
+      setIneError('INE invalide. Veuillez vérifier le format.');
     } else {
       setIneError('');
     }
@@ -143,7 +149,18 @@ const PatientInfo = ({ patient, changePatient }) => {
         onChange={handleINEChange}
         required
       />
-      {ineError && <p className={styles.errorMessage}>{ineError}</p>}
+      {ineError && (
+        <>
+          <p className={styles.errorMessage}>{ineError}</p>
+          <Notification type="info">
+            <b>L&apos;INE : 11 chiffres ou lettres</b>
+            {' '}
+            présent sur le certificat de scolarité. Attention, il est différent du numéro étudiant, ou du numéro PIC de l&apos;université.
+            {' '}
+            <HashLink to="/eligibilite">Aussi, assurez-vous de l&apos;éligibilité de l&apos;étudiant</HashLink>
+          </Notification>
+        </>
+      )}
       <Checkbox
         className="fr-input-group"
         data-test-id="etudiant-status-input"

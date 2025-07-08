@@ -57,8 +57,10 @@ const update = async (req: Request, res: Response): Promise<void> => {
   if (!isINESvalid) {
     await dbPatients.updateIsINESValidOnly(patientId, false);
 
-    throw new CustomError('Le numéro INE et/ou la date de naissance est invalide selon la base nationale.'
-      + ' Merci de vérifier ces informations auprès du patient.', 400);
+    throw new CustomError(
+      'API_INES_VALIDATION_FAILED',
+      400,
+    );
   }
 
   const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
@@ -119,8 +121,10 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const isINESvalid = await verifyPatientINE(INE, rawDateOfBirth);
 
   if (!isINESvalid) {
-    throw new CustomError('Le numéro INE et/ou la date de naissance est invalide selon la base nationale.'
-      + 'Merci de vérifier ces informations auprès du patient.', 400);
+    throw new CustomError(
+      'API_INES_VALIDATION_FAILED',
+      400,
+    );
   }
 
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);

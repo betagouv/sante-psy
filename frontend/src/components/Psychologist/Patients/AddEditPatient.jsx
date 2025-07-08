@@ -8,6 +8,7 @@ import agent from 'services/agent';
 import { renderBadge } from 'components/Badges/Badges';
 import getBadgeInfos from 'src/utils/badges';
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
+import Notification from 'components/Notification/Notification';
 import styles from './addEditPatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
 import PatientInfo from './AddEditPatientInfo';
@@ -20,6 +21,7 @@ const AddEditPatient = () => {
   const addAppointment = new URLSearchParams(search).get('addAppointment');
 
   const [patient, setPatient] = useState();
+  const [customINESError, setCustomINESError] = useState(null);
 
   const badges = getBadgeInfos();
 
@@ -74,11 +76,34 @@ const AddEditPatient = () => {
           navigate('/psychologue/mes-etudiants', { state: { notification: response } });
         }
       })
-      .catch(() => window.scrollTo(0, 0));
+      .catch(err => {
+        const errorMessage = err?.response?.data?.message || '';
+        if (errorMessage.includes('API_INES_VALIDATION_FAILED')) {
+          setCustomINESError(true);
+        }
+        window.scrollTo(0, 0);
+      });
   };
 
   return (
     <div className="fr-my-2w">
+      {customINESError && (
+      <Notification type="warning">
+        <b>INE non reconnu</b>
+        {' '}
+        Le numéro INE et/ou la date naissance indiqué n&apos;est pas relié à un étudiant.
+        <br />
+        Or, un numéro INE valable doit être indiqué. Vous pouvez demander un contrôle.
+        <br />
+        <br />
+        <Button
+          onClick={() => navigate('/')}
+        >
+          Fournir le certificat de scolarité
+        </Button>
+      </Notification>
+      )}
+
       <ScrollToTop loading={!!patient} />
       {patient && (
         <form onSubmit={save}>
