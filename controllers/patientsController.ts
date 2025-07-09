@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import dbPatients from '../db/patients';
 import dbAppointments from '../db/appointments';
+import dbPsychologists from '../db/psychologists'; // Assurez-vous d'importer votre module db pour les psychologues
 import validation from '../utils/validation';
 import date from '../utils/date';
 import asyncHelper from '../utils/async-helper';
@@ -12,9 +13,13 @@ import {
   updateValidators, getOneValidators, patientValidators, deleteValidators,
 } from './validators/patientValidators';
 import verifyINE from '../services/InesApi';
+import send from '../utils/email';
 
-const sortData = (a: Patient, b: Patient) : number => (
-  `${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`);
+type MulterRequest = Request & { file: Express.Multer.File };
+
+const sortData = (a: Patient, b: Patient): number => (
+  `${a.lastName.toUpperCase()} ${a.firstNames}`.localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`)
+);
 
 const verifyPatientINE = async (INE: string, rawDateOfBirth: string): Promise<boolean> => {
   const dateOfBirth = date.parseForm(rawDateOfBirth);
@@ -23,7 +28,7 @@ const verifyPatientINE = async (INE: string, rawDateOfBirth: string): Promise<bo
     await verifyINE(INE, dateOfBirth);
     return true;
   } catch (error) {
-    console.warn('erreur lors de la requête API INES :', error);
+    console.warn('Erreur lors de la requête API INES :', error);
     return false;
   }
 };
@@ -179,6 +184,34 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+const sendCertificate = async (
+  req: MulterRequest,
+  res: Response,
+): Promise<void> => {
+  const { patientId, psychologistId } = req.body;
+
+  if (!req.file || !patientId || !psychologistId) {
+    throw new CustomError('Certificat, patientId ou psychologistId manquant.', 400);
+  }
+
+  await send(
+    'support-santepsyetudiant@beta.gouv.fr',
+    `Certificat de scolarité de ${patientId}`,
+    `Le psy ${psychologistId} vous a envoyé le certificat de scolarité du patient ${patientId}.`,
+    [
+      {
+        filename: req.file.originalname,
+        content: req.file.buffer,
+      },
+    ],
+  );
+
+  await dbPsychologists.incrementCertificateCount(psychologistId);
+  await dbPatients.updateCertificateChecked(patientId);
+
+  res.json({ message: 'Certificat envoyé avec succès.' });
+};
+
 export default {
   updateValidators,
   getOneValidators,
@@ -189,4 +222,5 @@ export default {
   getOne: asyncHelper(getOne),
   create: asyncHelper(create),
   delete: asyncHelper(deleteOne),
+  sendCertificate,
 };

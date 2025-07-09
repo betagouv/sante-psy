@@ -124,6 +124,17 @@ const deleteOne = async (id: string, psychologistId: string): Promise<number> =>
   }
 };
 
+const updateCertificateChecked = async (patientId: string): Promise<void> => {
+  try {
+    await db('patients')
+      .where({ id: patientId })
+      .update({ isCertificateChecked: true });
+  } catch (err) {
+    console.error('Erreur lors de la mise à jour de la colonne isCertificateChecked', err);
+    throw new Error('Erreur lors de la mise à jour de la colonne isCertificateChecked');
+  }
+};
+
 export default {
   getById,
   getAll,
@@ -131,4 +142,5 @@ export default {
   update,
   updateIsINESValidOnly,
   delete: deleteOne,
+  updateCertificateChecked,
 };

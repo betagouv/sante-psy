@@ -12,6 +12,7 @@ import Notification from 'components/Notification/Notification';
 import styles from './addEditPatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
 import PatientInfo from './AddEditPatientInfo';
+import { useStore } from 'stores/index';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const AddEditPatient = () => {
   const { patientId } = useParams();
   const appointmentDate = new URLSearchParams(search).get('appointmentDate');
   const addAppointment = new URLSearchParams(search).get('addAppointment');
+  const { userStore: { user } } = useStore();
 
   const [patient, setPatient] = useState();
   const [customINESError, setCustomINESError] = useState(null);
@@ -102,6 +104,7 @@ const AddEditPatient = () => {
                 state: {
                   patientId,
                   patientName: `${patient.firstNames} ${patient.lastName}`,
+                  psychologistId: user.dossierNumber,
                 },
               })
             }

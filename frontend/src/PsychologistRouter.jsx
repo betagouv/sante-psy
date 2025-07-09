@@ -25,6 +25,7 @@ import { getInactiveMessage } from './utils/inactive';
 import 'react-month-picker/css/month-picker.css';
 import './custom-month-picker.css';
 import './custom-date-picker.css';
+import SendPatientCertificate from 'components/Psychologist/Patients/SendPatientCertificate';
 
 const PsychologistRouter = () => {
   const { userStore: { user } } = useStore();
@@ -118,6 +119,18 @@ const PsychologistRouter = () => {
           ),
           tutorial: 'new-student',
         };
+      case 'envoi-certificat':
+        return {
+          breadCrumbs: [{ href: '/psychologue/mes-etudiants', label: 'Suivi étudiants' }],
+          currentBreadCrumb: 'Ajout certificat scolarité',
+          title: (
+            <>
+              Ajout
+              {' '}
+              <b>certificat scolarité</b>
+            </>
+          ),
+        };
       case 'mes-remboursements':
         return {
           title: (
@@ -192,6 +205,7 @@ const PsychologistRouter = () => {
         <Route exact path="/mes-etudiants" element={<Patients />} />
         <Route exact path="/nouvel-etudiant" element={<AddEditPatient />} />
         <Route exact path="/modifier-etudiant/:patientId" element={<AddEditPatient />} />
+        <Route exact path="/envoi-certificat" element={<SendPatientCertificate />} />
         <Route exact path="/mes-remboursements" element={<Billing />} />
         <Route exact path="/ma-convention" element={<ConventionForm checkDefaultValue />} />
         <Route exact path="/ma-disponibilite" element={<SuspendProfile />} />

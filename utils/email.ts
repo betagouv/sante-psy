@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import nodemailer, { SendMailOptions } from 'nodemailer';
 import config from './config';
 
 const mailTransport = nodemailer.createTransport({
@@ -15,17 +15,25 @@ const mailTransport = nodemailer.createTransport({
   },
 });
 
-const send = (toEmail: string, subject: string, html: string, ccEmail = '', bccEmail = ''): Promise<void> => {
-  const mail = {
-    to: toEmail, // Comma separated list or an array
-    cc: ccEmail, // Comma separated list or an array
-    bcc: bccEmail, // Comma separated list or an array
+const send = (
+  toEmail: string,
+  subject: string,
+  html: string,
+  attachments?: Array<{ filename: string; content: Buffer }>,
+  ccEmail = '',
+  bccEmail = '',
+): Promise<void> => {
+  const mail: SendMailOptions = {
+    to: toEmail,
+    cc: ccEmail,
+    bcc: bccEmail,
     from: `${config.appName} <${config.sendingEmail}>`,
     replyTo: config.contactEmail,
     subject,
     html,
     text: html.replace(/<(?:.|\n)*?>/gm, ''),
     headers: { 'X-Mailjet-TrackOpen': '0', 'X-Mailjet-TrackClick': '0' },
+    attachments,
   };
 
   return new Promise((resolve, reject) => {
