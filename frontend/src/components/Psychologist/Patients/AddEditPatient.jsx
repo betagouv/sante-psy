@@ -9,10 +9,10 @@ import { renderBadge } from 'components/Badges/Badges';
 import getBadgeInfos from 'src/utils/badges';
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
 import Notification from 'components/Notification/Notification';
+import { useStore } from 'stores/index';
 import styles from './addEditPatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
 import PatientInfo from './AddEditPatientInfo';
-import { useStore } from 'stores/index';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
@@ -99,15 +99,13 @@ const AddEditPatient = () => {
           <br />
           <br />
           <Button
-            onClick={() =>
-              navigate('/psychologue/envoi-certificat', {
-                state: {
-                  patientId,
-                  patientName: `${patient.firstNames} ${patient.lastName}`,
-                  psychologistId: user.dossierNumber,
-                },
-              })
-            }
+            onClick={() => navigate('/psychologue/envoi-certificat', {
+              state: {
+                patientId,
+                patientName: `${patient.firstNames} ${patient.lastName}`,
+                psychologistId: user.dossierNumber,
+              },
+            })}
           >
             Fournir le certificat de scolarité
           </Button>

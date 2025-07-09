@@ -17,6 +17,7 @@ import Billing from 'components/Psychologist/Reimbursement/Billing';
 import ConventionForm from 'components/Psychologist/PsyDashboard/ConventionForm';
 import SuspendProfile from 'components/Psychologist/PsyDashboard/SuspendProfile';
 import EditProfile from 'components/Psychologist/PsyDashboard/EditProfile';
+import SendPatientCertificate from 'components/Psychologist/Patients/SendPatientCertificate';
 
 import { shouldCheckConventionAgain } from 'services/conventionVerification';
 import { useStore } from './stores';
@@ -25,7 +26,6 @@ import { getInactiveMessage } from './utils/inactive';
 import 'react-month-picker/css/month-picker.css';
 import './custom-month-picker.css';
 import './custom-date-picker.css';
-import SendPatientCertificate from 'components/Psychologist/Patients/SendPatientCertificate';
 
 const PsychologistRouter = () => {
   const { userStore: { user } } = useStore();

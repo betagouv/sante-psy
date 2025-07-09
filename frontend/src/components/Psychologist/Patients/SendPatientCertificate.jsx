@@ -19,7 +19,7 @@ const SendPatientCertificate = () => {
     return null;
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     if (!file) {
@@ -46,8 +46,9 @@ const SendPatientCertificate = () => {
       {certificateSent ? (
         <div>
           <Notification type="success">
-            <b>L'INE non valide sera vérifié.</b><br />
-            Ce numéro sera utilisé pour comptabiliser des séances pour l'étudiant. Vous pouvez dès à présent déclarer des séances.
+            <b>L&apos;INE non valide sera vérifié.</b>
+            <br />
+            Ce numéro sera utilisé pour comptabiliser des séances pour l&apos;étudiant. Vous pouvez dès à présent déclarer des séances.
           </Notification>
           <HashLink
             to="/psychologue/nouvelle-seance"
@@ -62,8 +63,8 @@ const SendPatientCertificate = () => {
       ) : (
         <div>
           <h2 className="fr-mt-3w">Ajouter un certificat de scolarité</h2>
-          <p>Vous certifiez que le numéro INE indiqué est celui montré par l'étudiant.</p>
-          <p>Veuillez joindre une copie du certificat de scolarité de l'étudiant :</p>
+          <p>Vous certifiez que le numéro INE indiqué est celui montré par l&apos;étudiant.</p>
+          <p>Veuillez joindre une copie du certificat de scolarité de l&apos;étudiant :</p>
 
           {error && <Alert type="error" title="Erreur">{error}</Alert>}
 
@@ -75,7 +76,7 @@ const SendPatientCertificate = () => {
               type="file"
               accept=".pdf,.jpg,.jpeg,.png"
               placeholder="Formats supportés : .jpg, .png, .pdf. Un seul fichier possible."
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={e => setFile(e.target.files[0])}
             />
           </div>
 
