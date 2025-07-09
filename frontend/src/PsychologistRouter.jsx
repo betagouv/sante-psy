@@ -8,7 +8,7 @@ import Appointments from 'components/Psychologist/Appointments/Appointments';
 import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
 import Patients from 'components/Psychologist/Patients/Patients';
 import AddEditPatient from 'components/Psychologist/Patients/AddEditPatient';
-import PsyProfile from 'components/Psychologist/PsyDashboard/PsyProfile';
+import PsyProfile from 'components/Psychologist/PsyDashboard/PsyDashboard';
 import Page from 'components/Page/Page';
 import Notification from 'components/Notification/Notification';
 import ConventionModal from 'components/Psychologist/Appointments/ConventionModal';
@@ -23,7 +23,6 @@ import { shouldCheckConventionAgain } from 'services/conventionVerification';
 import { useStore } from './stores';
 import { getInactiveMessage } from './utils/inactive';
 
-import 'react-month-picker/css/month-picker.css';
 import './custom-month-picker.css';
 import './custom-date-picker.css';
 
@@ -179,21 +178,21 @@ const PsychologistRouter = () => {
       <Announcement />
       {modal}
       {user.convention && user.convention.isConventionSigned === null && (
-      <Notification type="info">
-        Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
-        {' '}
-        <HashLink to="/psychologue/ma-convention">Ma convention</HashLink>
-      </Notification>
+        <Notification type="info">
+          Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
+          {' '}
+          <HashLink to="/psychologue/ma-convention">Ma convention</HashLink>
+        </Notification>
       )}
       {user && !user.active && (
-      <Notification type="warning">
-        Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire.
-        {' '}
-        {getInactiveMessage(user)}
-        {' '}
-        <HashLink to="/psychologue/ma-disponibilite">Ma disponibilité</HashLink>
-        .
-      </Notification>
+        <Notification type="warning">
+          Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire.
+          {' '}
+          {getInactiveMessage(user)}
+          {' '}
+          <HashLink to="/psychologue/ma-disponibilite">Ma disponibilité</HashLink>
+          .
+        </Notification>
       )}
       <GlobalNotification className="fr-my-2w" />
       <Routes>

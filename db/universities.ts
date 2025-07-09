@@ -21,6 +21,7 @@ const upsertMany = async (universitiesList: University[]): Promise<void> => {
         name: university.name,
         emailSSU: university.emailSSU,
         emailUniversity: university.emailUniversity,
+        billingEmail: university.billingEmail,
         updatedAt,
       });
     } catch (err) {

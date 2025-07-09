@@ -171,6 +171,7 @@ const getOneUniversity = (name: string) : University => ({
   postal_code: faker.address.zipCode('#####'),
   city: faker.address.city(),
   billingAddress: getBillingAddress(),
+  billingEmail: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
 });
 
 const getOnePsy = (
