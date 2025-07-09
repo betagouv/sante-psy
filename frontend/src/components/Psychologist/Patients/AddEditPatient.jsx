@@ -88,20 +88,27 @@ const AddEditPatient = () => {
   return (
     <div className="fr-my-2w">
       {customINESError && (
-      <Notification type="warning">
-        <b>INE non reconnu</b>
-        {' '}
-        Le numéro INE et/ou la date naissance indiqué n&apos;est pas relié à un étudiant.
-        <br />
-        Or, un numéro INE valable doit être indiqué. Vous pouvez demander un contrôle.
-        <br />
-        <br />
-        <Button
-          onClick={() => navigate('/')}
-        >
-          Fournir le certificat de scolarité
-        </Button>
-      </Notification>
+        <Notification type="warning">
+          <b>INE non reconnu</b>
+          {' '}
+          Le numéro INE et/ou la date naissance indiqué n&apos;est pas relié à un étudiant.
+          <br />
+          Or, un numéro INE valable doit être indiqué. Vous pouvez demander un contrôle.
+          <br />
+          <br />
+          <Button
+            onClick={() =>
+              navigate('/psychologue/envoi-certificat', {
+                state: {
+                  patientId,
+                  patientName: `${patient.firstNames} ${patient.lastName}`,
+                },
+              })
+            }
+          >
+            Fournir le certificat de scolarité
+          </Button>
+        </Notification>
       )}
 
       <ScrollToTop loading={!!patient} />
