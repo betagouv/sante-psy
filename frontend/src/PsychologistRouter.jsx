@@ -14,9 +14,9 @@ import Notification from 'components/Notification/Notification';
 import ConventionModal from 'components/Psychologist/Appointments/ConventionModal';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import Billing from 'components/Psychologist/Reimbursement/Billing';
-import ConventionForm from 'components/Psychologist/PsyDashboard/ConventionForm';
-import SuspendProfile from 'components/Psychologist/PsyDashboard/SuspendProfile';
-import EditProfile from 'components/Psychologist/PsyDashboard/EditProfile';
+import ConventionForm from 'components/Psychologist/PsyDashboard/PsySection/ConventionForm';
+import SuspendProfile from 'components/Psychologist/PsyDashboard/PsySection/SuspendProfile';
+import EditProfile from 'components/Psychologist/PsyDashboard/PsySection/EditProfile';
 import SendPatientCertificate from 'components/Psychologist/Patients/SendPatientCertificate';
 
 import { shouldCheckConventionAgain } from 'services/conventionVerification';

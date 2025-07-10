@@ -92,6 +92,7 @@ const AddEditPatient = () => {
       {customINESError && (
         <Notification type="warning">
           <b>INE non reconnu</b>
+          <br />
           {' '}
           Le numéro INE et/ou la date naissance indiqué n&apos;est pas relié à un étudiant.
           <br />
