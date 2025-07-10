@@ -34,6 +34,12 @@ const parseForm = (date: string): Date => {
   return null;
 };
 
+const dateToDashedString = (date: Date): string => [
+  date.getFullYear(),
+  String(date.getMonth() + 1).padStart(2, '0'),
+  String(date.getDate()).padStart(2, '0'),
+].join('-');
+
 const getDatePlusOneHour = (): string => {
   const expirationDate = new Date();
   return new Date(expirationDate.setHours(expirationDate.getHours() + 1)).toISOString();
@@ -64,4 +70,5 @@ export default {
   parseForm,
   now,
   subtractDays,
+  dateToDashedString,
 };

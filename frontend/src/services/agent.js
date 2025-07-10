@@ -65,6 +65,7 @@ const Patient = {
   get: () => client.get('/patients'),
   getOne: id => client.get(`/patients/${id}`),
   update: (id, patient) => client.put(`/patients/${id}`, patient),
+  sendCertificate: formData => client.post('/patients/send-certificate', formData),
 };
 
 const Psychologist = {
@@ -80,7 +81,6 @@ const Psychologist = {
   updateProfile: psychologist => client
     .put(`/psychologist/${store.userStore.user.dossierNumber}`, psychologist),
   seeTutorial: () => client.put(`/psychologist/${store.userStore.user.dossierNumber}/seeTutorial`),
-
 };
 
 const Statistics = { getAll: () => client.get('/statistics') };

@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
-import { check, oneOf } from 'express-validator';
-import { purifySanitizer } from '../services/sanitizer';
-
 import dbPatients from '../db/patients';
 import dbAppointments from '../db/appointments';
+import dbPsychologists from '../db/psychologists'; // Assurez-vous d'importer votre module db pour les psychologues
 import validation from '../utils/validation';
 import date from '../utils/date';
 import asyncHelper from '../utils/async-helper';
@@ -11,10 +9,29 @@ import CustomError from '../utils/CustomError';
 import { getPatientWithBadges } from '../services/getBadges';
 import { Patient } from '../types/Patient';
 import getAppointmentsCount from '../services/getAppointmentsCount';
-import { allGenders } from '../types/Genders';
+import {
+  updateValidators, getOneValidators, patientValidators, deleteValidators,
+} from './validators/patientValidators';
+import verifyINE from '../services/InesApi';
+import send from '../utils/email';
 
-const sortData = (a: Patient, b: Patient) : number => (
-  `${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`);
+type MulterRequest = Request & { file: Express.Multer.File };
+
+const sortData = (a: Patient, b: Patient): number => (
+  `${a.lastName.toUpperCase()} ${a.firstNames}`.localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`)
+);
+
+const verifyPatientINE = async (INE: string, rawDateOfBirth: string): Promise<boolean> => {
+  const dateOfBirth = date.parseForm(rawDateOfBirth);
+
+  try {
+    await verifyINE(INE, dateOfBirth);
+    return true;
+  } catch (error) {
+    console.warn('Erreur lors de la requête API INES :', error);
+    return false;
+  }
+};
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.psychologist;
@@ -25,59 +42,6 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
   const sortedData = patientsWithBadges.sort(sortData);
   res.json(sortedData);
 };
-
-// Validators we reuse for editPatient and createPatient
-const patientValidators = [
-  // todo : do we html-escape here ? We already escape in templates.
-  check('firstNames')
-    .trim().not().isEmpty()
-    .customSanitizer(purifySanitizer)
-    .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
-  check('lastName')
-    .trim().not().isEmpty()
-    .customSanitizer(purifySanitizer)
-    .withMessage('Vous devez spécifier le nom du patient.'),
-  check('gender')
-    .trim().not().isEmpty()
-    .withMessage('Vous devez spécifier le genre du patient.')
-    .customSanitizer(purifySanitizer)
-    .isIn(allGenders)
-    .withMessage('Le genre du patient n\'est pas valide.'),
-  check('INE')
-    .trim().not().isEmpty()
-    .withMessage('Le numéro INE est obligatoire.')
-    .isAlphanumeric()
-    .withMessage('Le numéro INE doit être alphanumérique (chiffres ou lettres sans accents).')
-    .isLength({ min: 11, max: 11 })
-    .withMessage('Le numéro INE doit faire exactement 11 caractères.')
-    .customSanitizer(purifySanitizer),
-  check('dateOfBirth')
-      .trim().isDate({ format: date.formatFrenchDateForm })
-      .customSanitizer(purifySanitizer)
-      .withMessage('La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.'),
-  check('institutionName')
-    .trim()
-    .customSanitizer(purifySanitizer),
-
-  oneOf(
-    [
-      check('doctorName').trim().isEmpty(),
-      check('doctorName')
-      .trim()
-      .customSanitizer(purifySanitizer),
-    ],
-  ),
-];
-
-const updateValidators = [
-  // todo : do we html-escape here ? We already escape in templates.
-  check('patientId')
-    .trim().not().isEmpty()
-    .withMessage('Ce patient n\'existe pas.')
-    .isUUID()
-    .withMessage('Ce patient n\'existe pas.'),
-  ...patientValidators,
-];
 
 const update = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
@@ -92,9 +56,18 @@ const update = async (req: Request, res: Response): Promise<void> => {
     institutionName: patientInstitutionName,
     doctorName,
   } = req.body;
-  const dateOfBirth = date.parseForm(rawDateOfBirth);
 
-  // Force to boolean beacause checkbox value send undefined when it's not checked
+  const isINESvalid = await verifyPatientINE(patientINE, rawDateOfBirth);
+
+  if (!isINESvalid) {
+    await dbPatients.updateIsINESValidOnly(patientId, false);
+
+    throw new CustomError(
+      'API_INES_VALIDATION_FAILED',
+      400,
+    );
+  }
+
   const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
   const psychologistId = req.auth.psychologist;
@@ -102,9 +75,10 @@ const update = async (req: Request, res: Response): Promise<void> => {
     patientId,
     patientFirstNames,
     patientLastName,
-    dateOfBirth,
+    date.parseForm(rawDateOfBirth),
     patientGender,
     patientINE,
+    isINESvalid,
     patientInstitutionName,
     patientIsStudentStatusVerified,
     psychologistId,
@@ -124,14 +98,6 @@ const update = async (req: Request, res: Response): Promise<void> => {
   console.log(`Patient ${patientId} updated by psy id ${psychologistId}`);
   res.json({ message: infoMessage });
 };
-
-const getOneValidators = [
-  check('patientId')
-    .trim().not().isEmpty()
-    .withMessage('Ce patient n\'existe pas.')
-    .isUUID()
-    .withMessage('Ce patient n\'existe pas.'),
-];
 
 const getOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
@@ -156,17 +122,26 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const {
     firstNames, lastName, gender, INE, institutionName, doctorName, dateOfBirth: rawDateOfBirth,
   } = req.body;
-  const dateOfBirth = date.parseForm(rawDateOfBirth);
-  // Force to boolean beacause checkbox value send undefined when it's not checked
+
+  const isINESvalid = await verifyPatientINE(INE, rawDateOfBirth);
+
+  if (!isINESvalid) {
+    throw new CustomError(
+      'API_INES_VALIDATION_FAILED',
+      400,
+    );
+  }
+
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
   const psychologistId = req.auth.psychologist;
   const addedPatient = await dbPatients.insert(
     firstNames,
     lastName,
-    dateOfBirth,
+    date.parseForm(rawDateOfBirth),
     gender,
     INE,
+    isINESvalid,
     institutionName,
     isStudentStatusVerified,
     psychologistId,
@@ -183,12 +158,6 @@ const create = async (req: Request, res: Response): Promise<void> => {
     patientId: addedPatient.id,
   });
 };
-
-const deleteValidators = [
-  check('patientId')
-    .isUUID()
-    .withMessage('Vous devez spécifier un étudiant à supprimer.'),
-];
 
 const deleteOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
@@ -215,6 +184,34 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+const sendCertificate = async (
+  req: MulterRequest,
+  res: Response,
+): Promise<void> => {
+  const { patientId, psychologistId } = req.body;
+
+  if (!req.file || !patientId || !psychologistId) {
+    throw new CustomError('Certificat, patientId ou psychologistId manquant.', 400);
+  }
+
+  await send(
+    'support-santepsyetudiant@beta.gouv.fr',
+    `Certificat de scolarité de ${patientId}`,
+    `Le psy ${psychologistId} vous a envoyé le certificat de scolarité du patient ${patientId}.`,
+    [
+      {
+        filename: req.file.originalname,
+        content: req.file.buffer,
+      },
+    ],
+  );
+
+  await dbPsychologists.incrementCertificateCount(psychologistId);
+  await dbPatients.updateCertificateChecked(patientId);
+
+  res.json({ message: 'Certificat envoyé avec succès.' });
+};
+
 export default {
   updateValidators,
   getOneValidators,
@@ -225,4 +222,5 @@ export default {
   getOne: asyncHelper(getOne),
   create: asyncHelper(create),
   delete: asyncHelper(deleteOne),
+  sendCertificate,
 };
