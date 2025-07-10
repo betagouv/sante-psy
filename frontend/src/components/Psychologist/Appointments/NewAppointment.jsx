@@ -44,8 +44,9 @@ const NewAppointment = () => {
   }, []);
 
   const patient = useMemo(() => patients?.find(p => p.id === patientId), [patients, patientId]);
+  const INEhasBeenValidated = patient?.isINESvalid;
   const tooMuchAppointments = useMemo(() => patient && patient.countedAppointments >= MAX_APPOINTMENT, [patient]);
-  const hasAllCompulsoryInfo = useMemo(() => (patient && patient.INE && patient.dateOfBirth && patient.gender && patient.isINESvalid), [patient]);
+  const hasAllCompulsoryInfo = useMemo(() => (patient && patient.INE && patient.dateOfBirth && patient.gender && INEhasBeenValidated), [patient]);
   const createNewAppointment = e => {
     e.preventDefault();
     setNotification({});
@@ -139,7 +140,7 @@ const NewAppointment = () => {
           required
           disabled={!hasAllCompulsoryInfo}
         />
-        {patientId && !hasAllCompulsoryInfo && (
+        {patientId && !hasAllCompulsoryInfo && !INEhasBeenValidated && (
           <>
             <Alert
               className="fr-mt-2w"
@@ -184,7 +185,7 @@ const NewAppointment = () => {
             submit
             icon="ri-add-line"
             className="fr-mt-4w"
-            disabled={(tooMuchAppointments && !understand) || !hasAllCompulsoryInfo}
+            disabled={(tooMuchAppointments && !understand) || (!hasAllCompulsoryInfo && !INEhasBeenValidated)}
           >
             Créer la séance
           </Button>

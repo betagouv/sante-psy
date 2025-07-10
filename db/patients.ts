@@ -128,10 +128,10 @@ const updateCertificateChecked = async (patientId: string): Promise<void> => {
   try {
     await db('patients')
       .where({ id: patientId })
-      .update({ isCertificateChecked: true });
+      .update({ isINESvalid: true });
   } catch (err) {
-    console.error('Erreur lors de la mise à jour de la colonne isCertificateChecked', err);
-    throw new Error('Erreur lors de la mise à jour de la colonne isCertificateChecked');
+    console.error('Erreur lors de la mise à jour de la colonne isINESvalid', err);
+    throw new Error('Erreur lors de la mise à jour de la colonne isINESvalid');
   }
 };
 
