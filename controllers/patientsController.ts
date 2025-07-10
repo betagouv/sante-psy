@@ -4,6 +4,7 @@ import dbAppointments from '../db/appointments';
 import dbPsychologists from '../db/psychologists'; // Assurez-vous d'importer votre module db pour les psychologues
 import validation from '../utils/validation';
 import date from '../utils/date';
+import ejs from 'ejs';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { getPatientWithBadges } from '../services/getBadges';
@@ -194,22 +195,32 @@ const sendCertificate = async (
     throw new CustomError('Certificat, patientId ou psychologistId manquant.', 400);
   }
 
-  await send(
-    'support-santepsyetudiant@beta.gouv.fr',
-    `Certificat de scolarité de ${patientId}`,
-    `Le psy ${psychologistId} vous a envoyé le certificat de scolarité du patient ${patientId}.`,
-    [
-      {
-        filename: req.file.originalname,
-        content: req.file.buffer,
-      },
-    ],
-  );
+  try {
+    const html = await ejs.renderFile('./views/emails/sendCertificate.ejs', {
+      patientId,
+      psychologistId,
+    });
 
-  await dbPsychologists.incrementCertificateCount(psychologistId);
-  await dbPatients.updateCertificateChecked(patientId);
+    await send(
+      'support-santepsyetudiant@beta.gouv.fr',
+      'Nouveau certificat de scolarité reçu',
+      html,
+      [
+        {
+          filename: req.file.originalname,
+          content: req.file.buffer,
+        },
+      ],
+    );
 
-  res.json({ message: 'Certificat envoyé avec succès.' });
+    await dbPsychologists.incrementCertificateCount(psychologistId);
+    await dbPatients.updateCertificateChecked(patientId);
+
+    res.json({ message: 'Certificat envoyé avec succès.' });
+  } catch (err) {
+    console.error(err);
+    throw new CustomError("Erreur lors de l'envoi du certificat.", 500);
+  }
 };
 
 export default {
