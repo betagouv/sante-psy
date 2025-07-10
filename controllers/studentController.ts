@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { check, oneOf } from 'express-validator';
-import DOMPurify from '../services/sanitizer';
+import { purifySanitizer } from '../services/sanitizer';
 import dbStudents from '../db/students';
 import asyncHelper from '../utils/async-helper';
 import validation from '../utils/validation';
@@ -8,7 +8,7 @@ import { sendMail1 } from '../services/studentMails';
 
 const mailValidator = [
   check('email').isEmail().withMessage('Vous devez spécifier un email valide.'),
-  check('source').customSanitizer(DOMPurify.sanitize),
+  check('source').customSanitizer(purifySanitizer),
 ];
 
 const sendStudentMail = async (req: Request, res: Response): Promise<void> => {

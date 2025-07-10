@@ -29,8 +29,8 @@ import { useStore } from 'stores/';
 import './colors.css';
 import './App.css';
 
-import InactiveProfile from 'components/Psychologist/PsyDashboard/InactiveProfile';
-import ActiveProfile from 'components/Psychologist/PsyDashboard/ActiveProfile';
+import InactiveProfile from 'components/Psychologist/PsyDashboard/PsySection/InactiveProfile';
+import ActiveProfile from 'components/Psychologist/PsyDashboard/PsySection/ActiveProfile';
 import StudentLanding from 'components/Landing/StudentLanding';
 import StudentAnswer from 'components/StudentAnswer/StudentAnswer';
 import OtherServicesPage from 'components/OtherServices/OtherServicesPage';

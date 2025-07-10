@@ -71,8 +71,8 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
     }
 
     if (finishedAction.includes(action)) {
+      setTutoStatus({ run: false, stepIndex: 0 });
       handleUserHasSeenTutorial();
-      setTutoStatus({ run: false, stepIndex: index });
     } else if (type === EVENTS.STEP_AFTER) {
       if (step.onNext && action === ACTIONS.NEXT) {
         step.onNext(navigate);
@@ -85,6 +85,7 @@ const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
         .then(stepIndex => setTutoStatus({ run: stepIndex < steps.length ? tutoStatus.run : false, stepIndex }));
     } else if (type === EVENTS.TARGET_NOT_FOUND || type === EVENTS.ERROR) {
       // Consider user has seen tutorial in case of error to avoid blocking behavior
+      setTutoStatus({ run: false, stepIndex: 0 });
       handleUserHasSeenTutorial();
     }
   };

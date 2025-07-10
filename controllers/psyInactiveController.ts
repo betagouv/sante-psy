@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { check } from 'express-validator';
-import DOMPurify from '../services/sanitizer';
+import { purifySanitizer } from '../services/sanitizer';
 
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
@@ -10,7 +10,7 @@ const suspendValidators = [
   check('reason')
     .trim().not().isEmpty()
     .withMessage('Vous devez spécifier une raison.')
-    .customSanitizer(DOMPurify.sanitize)
+    .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier une raison.'),
 ];
 
