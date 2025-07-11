@@ -24,7 +24,7 @@ const AddEditPatient = () => {
 
   const [patient, setPatient] = useState();
   const [customINESError, setCustomINESError] = useState(null);
-
+  const [createdPatientId, setCreatedPatientId] = useState(null);
   const badges = getBadgeInfos();
 
   useEffect(() => {
@@ -67,7 +67,11 @@ const AddEditPatient = () => {
       : agent.Patient.create(patient);
     action
       .then(response => {
-        if (appointmentDate) {
+        if (!response?.isINESvalid) {
+          setCustomINESError(true);
+          setCreatedPatientId(response?.patientId);
+          window.scrollTo(0, 0);
+        } else if (appointmentDate) {
           navigate(
             `/psychologue/nouvelle-seance/${patientId || response.patientId}?date=${appointmentDate}`,
             { state: { notification: response } },
@@ -79,10 +83,7 @@ const AddEditPatient = () => {
         }
       })
       .catch(err => {
-        const errorMessage = err?.response?.data?.message || '';
-        if (errorMessage.includes('API_INES_VALIDATION_FAILED')) {
-          setCustomINESError(true);
-        }
+        console.log(err?.response?.data?.message);
         window.scrollTo(0, 0);
       });
   };
@@ -102,7 +103,7 @@ const AddEditPatient = () => {
           <Button
             onClick={() => navigate('/psychologue/envoi-certificat', {
               state: {
-                patientId,
+                patientId: createdPatientId || patientId,
                 patientName: `${patient.firstNames} ${patient.lastName}`,
                 psychologistId: user.dossierNumber,
               },
@@ -117,18 +118,17 @@ const AddEditPatient = () => {
       {patient && (
         <form onSubmit={save}>
           <div id="mandatory-informations">
-            {patientId
-            && (
-            <section id="anchor-student-file" className={styles.studentSectionTitle}>
-              <h2>
-                {patient.firstNames}
-                {' '}
-                {patient.lastName}
-              </h2>
-              {patient.badges.includes(badges.student_ine.key)
-                ? renderBadge({ badge: badges.student_ine.key })
-                : ''}
-            </section>
+            {patientId && (
+              <section id="anchor-student-file" className={styles.studentSectionTitle}>
+                <h2>
+                  {patient.firstNames}
+                  {' '}
+                  {patient.lastName}
+                </h2>
+                {patient.badges.includes(badges.student_ine.key)
+                  ? renderBadge({ badge: badges.student_ine.key })
+                  : ''}
+              </section>
             )}
             <p className="fr-text--sm fr-mb-1v">
               Les champs avec une astérisque (
@@ -148,7 +148,7 @@ const AddEditPatient = () => {
               id="save-etudiant-button"
               data-test-id="save-etudiant-button"
               icon={button.icon}
-              >
+            >
               {button.text}
             </Button>
           </div>

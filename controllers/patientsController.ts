@@ -62,11 +62,6 @@ const update = async (req: Request, res: Response): Promise<void> => {
 
   if (!isINESvalid) {
     await dbPatients.updateIsINESValidOnly(patientId, false);
-
-    throw new CustomError(
-      'API_INES_VALIDATION_FAILED',
-      400,
-    );
   }
 
   const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
@@ -97,7 +92,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
         + ' en cliquant le bouton "Modifier" du patient.';
   }
   console.log(`Patient ${patientId} updated by psy id ${psychologistId}`);
-  res.json({ message: infoMessage });
+  res.json({ message: infoMessage, isINESvalid });
 };
 
 const getOne = async (req: Request, res: Response): Promise<void> => {
@@ -126,13 +121,6 @@ const create = async (req: Request, res: Response): Promise<void> => {
 
   const isINESvalid = await verifyPatientINE(INE, rawDateOfBirth);
 
-  if (!isINESvalid) {
-    throw new CustomError(
-      'API_INES_VALIDATION_FAILED',
-      400,
-    );
-  }
-
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
   const psychologistId = req.auth.psychologist;
@@ -157,6 +145,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
   res.json({
     message: infoMessage,
     patientId: addedPatient.id,
+    isINESvalid,
   });
 };
 

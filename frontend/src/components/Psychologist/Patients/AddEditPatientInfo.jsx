@@ -6,10 +6,6 @@ import Notification from 'components/Notification/Notification';
 import { HashLink } from 'react-router-hash-link';
 import styles from './addEditPatient.cssmodule.scss';
 
-// TODO si date de naissance invalide, pas possible de cliquer
-// TODO ajouter env à staging et prod
-// TODO tester lib codegouv pour component ?
-
 const PatientInfo = ({ patient, changePatient }) => {
   const [ineError, setIneError] = useState('');
   const [dateOfBirthError, setDateOfBirthError] = useState('');
@@ -38,12 +34,6 @@ const PatientInfo = ({ patient, changePatient }) => {
   };
 
   const validateDateOfBirth = value => {
-    const pattern = /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/;
-    if (!pattern.test(value)) {
-      setDateOfBirthError('Le format de la date doit être JJ/MM/AAAA.');
-      return false;
-    }
-
     const [day, month, year] = value.split('/').map(Number);
     const birthDate = new Date(year, month - 1, day);
     const currentDate = new Date();
@@ -96,7 +86,18 @@ const PatientInfo = ({ patient, changePatient }) => {
       />
       <RadioGroup
         name="gender"
-        legend="Genre"
+        legend={(
+          <span className={styles.tooltipGender}>
+            Genre
+            <span className={styles.iconRequired} title="Si l'étudiant s'interroge sur son genre, indiquer celui auquel il s'identifie">
+              <Icon
+                name="ri-information-line"
+                color="#000091"
+                size="lg"
+              />
+            </span>
+          </span>
+        )}
         value={patient.gender}
         onChange={value => changePatient(value, 'gender')}
         required
@@ -113,18 +114,7 @@ const PatientInfo = ({ patient, changePatient }) => {
         />
         <Radio
           value="other"
-          label={(
-            <span className={styles.tooltipGender}>
-              Autre
-              <span title="Si l'étudiant s'interroge sur son genre, indiquer celui auquel il s'identifie">
-                <Icon
-                  name="ri-information-line"
-                  color="#000091"
-                  size="lg"
-                />
-              </span>
-            </span>
-          )}
+          label="Autre"
         />
       </RadioGroup>
       <TextInput
