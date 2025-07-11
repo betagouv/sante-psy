@@ -1,0 +1,155 @@
+.scrollTopButton {
+  position: fixed;
+  bottom: 30px;
+  right: 280px;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+  
+  &:hover {
+    background-color: #f0f0f0;
+  }
+  
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.imageResized {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+
+  img {
+    width: 250px;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+.smallerTitle {
+  font-size: 20px !important;
+  line-height: 28px !important;
+  
+  @media (min-width: 769px) {
+    font-size: 20px !important;
+    line-height: 28px !important;
+  }
+}
+
+.smallerDescription {
+  font-size: 16px !important;
+  line-height: 24px !important;
+  
+  @media (min-width: 769px) {
+    font-size: 16px !important;
+    line-height: 24px !important;
+  }
+}
+
+.rssIcon {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+  
+  &:focus {
+    outline: 2px solid #000091;
+    outline-offset: 2px;
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.podcastSlice {
+  position:relative;
+
+  @media (max-width: 768px) {
+    padding-top: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .imageResized img {
+    max-width: 200px;
+  }
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 16px;
+  justify-content: left;
+  flex-wrap: wrap;
+  
+  .fr-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 150px;
+    justify-content: center;
+  }
+  
+  @media (max-width: 768px) {
+    justify-content: center;
+    .fr-btn {
+      width: 100%;
+      max-width: 250px;
+    }
+  }
+}
+
+.platformLinks {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  
+  @media (max-width: 768px) {
+    display:none;
+    justify-content: center;
+    gap: 8px;
+    flex-direction: row;
+  }
+}
+
+.platformLink {
+  display: flex;
+  align-items: center;
+  color: #000091;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #f5f5fe;
+    color: #000074;
+    text-decoration: none;
+  }
+  
+  &:focus {
+    outline: 2px solid #000091;
+    outline-offset: 2px;
+  }
+}
+
+.separator {
+  color: #666;
+  font-weight: 300;
+  width: auto;
+  
+  @media (max-width: 576px) {
+    display: none;
+  }
+}

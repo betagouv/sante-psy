@@ -37,6 +37,7 @@ import OtherServicesPage from 'components/OtherServices/OtherServicesPage';
 import PublicAnnouncement from 'components/Notification/PublicAnnouncement';
 import LiveChat from 'components/LiveChat/LiveChat';
 import ContactForm from 'components/Contact/ContactForm';
+import Podcast from 'components/Podcast/Podcast';
 import StudentUnregister from './components/StudentUnregister/StudentUnregister';
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 
@@ -81,6 +82,7 @@ function App() {
               <Route exact path="/contact" element={<Contact />} />
               <Route exact path="/contact/formulaire" element={<ContactForm />} />
               <Route exact path="/autres-services" element={<OtherServicesPage />} />
+              <Route exact path="/podcast" element={<Podcast />} />
               <Route exact path="/etudiant" element={<StudentLanding />} />
               <Route exact path="/enregistrement/:id" element={<StudentAnswer />} />
               <Route exact path="/desinscription/:id" element={<StudentUnregister />} />
