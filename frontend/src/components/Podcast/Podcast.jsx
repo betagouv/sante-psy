@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Page from 'components/Page/Page';
-import styles from './podcast.cssmodule.scss';
 import { Button, Icon, Link } from '@dataesr/react-dsfr';
 import Slice from 'components/Slice/Slice';
+import styles from './podcast.cssmodule.scss';
 
 const Podcast = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -30,16 +30,18 @@ const Podcast = () => {
     >
       <Slice
         color="white"
-        images={<div className={styles.imageResized}>
-          <img src="/images/instagram/kaavan-podcast.png" alt="Kaavan podcast" />
-        </div>}
+        images={(
+          <div className={styles.imageResized}>
+            <img src="/images/instagram/kaavan-podcast.png" alt="Kaavan podcast" />
+          </div>
+        )}
         customStyle={{ container: styles.podcastSlice }}
         title={<h2 className={styles.smallerTitle}>Explorons le monde de la santé mentale !</h2>}
         description={(
           <div className={styles.smallerDescription}>
             <p>Anxiété, mal-être, dépression, hypersensibilité, burn out, addictions, troubles alimentaires... préparez-vous à écouter des histoires inspirantes, des voix authentiques et des conseils pratiques. Que vous soyez vous même touché, ou que vous accompagniez un proche. Personnalités, anonymes, experts, on plonge ensemble dans des discussions intimes et bienveillantes où chacun peut trouver un écho à son propre parcours.</p>
-            <p>Parce que la santé mentale c'est aussi important que la santé physique !</p>
-            <p>Retrouvez plus d'épisodes sur toutes vos plateformes d'écoute préférées:</p>
+            <p>Parce que la santé mentale c&apos;est aussi important que la santé physique !</p>
+            <p>Retrouvez plus d&apos;épisodes sur toutes vos plateformes d&apos;écoute préférées:</p>
             <div className={styles.platformLinks}>
               <a
                 href="https://open.spotify.com/show/1SrePWpXUtUhBqGmZsDRPQ"
@@ -115,7 +117,7 @@ const Podcast = () => {
         width="100%"
         title="Podcast Kaavan"
         data-embed="true"
-        style={{ border: "none", overflow: "hidden" }}
+        style={{ border: 'none', overflow: 'hidden' }}
         height="726px"
       />
 
