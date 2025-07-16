@@ -13,7 +13,7 @@ import getAppointmentsCount from '../services/getAppointmentsCount';
 import {
   updateValidators, getOneValidators, patientValidators, deleteValidators,
 } from './validators/patientValidators';
-import verifyINE from '../services/InesApi';
+import verifyINE from '../services/inesApi';
 import send from '../utils/email';
 
 type MulterRequest = Request & { file: Express.Multer.File };
