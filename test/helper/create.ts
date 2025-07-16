@@ -282,6 +282,7 @@ const getOnePatient = (
   firstNames: faker.name.firstName(),
   lastName: faker.name.lastName(),
   INE: faker.phone.number('###########'),
+  isINESvalid: false,
   institutionName: `${getRandomInt()} university`,
   isStudentStatusVerified: true,
   doctorName: faker.name.lastName(),
@@ -299,6 +300,7 @@ const getOneIncompletePatient = (
   lastName: faker.name.lastName(),
   gender: '',
   INE: '',
+  isINESvalid: false,
   ...patient,
 });
 

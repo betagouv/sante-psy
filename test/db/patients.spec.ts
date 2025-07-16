@@ -15,6 +15,7 @@ describe('DB Patients', () => {
   const dateOfBirth = new Date('1980/01/20');
   const gender = 'female';
   const studentNumber = '12345678901';
+  const isINESvalid = false;
   const anotherStudentNumber = '10987654321';
   const institutionName = 'Pouldard';
   const isStudentStatusVerified = false;
@@ -44,6 +45,7 @@ describe('DB Patients', () => {
         dateOfBirth,
         gender,
         studentNumber,
+        isINESvalid,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
@@ -54,7 +56,7 @@ describe('DB Patients', () => {
       exist.should.be.equal(true);
     });
 
-    it('should accept insert INE with more than 11 characters in PG', async () => {
+    it('should refuse insert for INE with more than 11 characters in PG', async () => {
       const psy = await create.insertOnePsy();
       try {
         await dbPatients.insert(
@@ -63,27 +65,7 @@ describe('DB Patients', () => {
           dateOfBirth,
           gender,
           '1'.repeat(12),
-          institutionName,
-          isStudentStatusVerified,
-          psy.dossierNumber,
-          doctorName,
-        );
-        const exist = await testDataPatientsExist(lastName);
-        exist.should.be.equal(true);
-      } catch (error) {
-        expect(error).to.be.an('Error');
-      }
-    });
-
-    it('should refuse insert for INE with more than 50 characters in PG', async () => {
-      const psy = await create.insertOnePsy();
-      try {
-        await dbPatients.insert(
-          firstNames,
-          lastName,
-          dateOfBirth,
-          gender,
-          '1'.repeat(51),
+          isINESvalid,
           institutionName,
           isStudentStatusVerified,
           psy.dossierNumber,
@@ -97,7 +79,7 @@ describe('DB Patients', () => {
 
     it('should refuse insert without mandatory params in PG', async () => {
       try {
-        await dbPatients.insert(firstNames, null, dateOfBirth, gender, '123456789213');
+        await dbPatients.insert(firstNames, null, dateOfBirth, gender, '123456789213', isINESvalid);
       } catch (error) {
         expect(error).to.be.an('Error');
       }
@@ -111,6 +93,7 @@ describe('DB Patients', () => {
         dateOfBirth,
         gender,
         studentNumber,
+        isINESvalid,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
@@ -130,6 +113,7 @@ describe('DB Patients', () => {
         dateOfBirth,
         gender,
         studentNumber,
+        isINESvalid,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
@@ -147,6 +131,7 @@ describe('DB Patients', () => {
         dateOfBirth,
         gender,
         oldPatient.INE,
+        isINESvalid,
         oldPatient.institutionName,
         oldPatient.isStudentStatusVerified,
         psy.dossierNumber,
@@ -166,6 +151,7 @@ describe('DB Patients', () => {
         dateOfBirth,
         gender,
         studentNumber,
+        isINESvalid,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
@@ -193,6 +179,7 @@ describe('DB Patients', () => {
         dateOfBirth,
         gender,
         studentNumber,
+        isINESvalid,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
@@ -204,6 +191,7 @@ describe('DB Patients', () => {
         dateOfBirth,
         gender,
         anotherStudentNumber,
+        isINESvalid,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
@@ -223,6 +211,7 @@ describe('DB Patients', () => {
         dateOfBirth,
         gender,
         studentNumber,
+        isINESvalid,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
