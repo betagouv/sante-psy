@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import dbPatients from '../db/patients';
 import dbAppointments from '../db/appointments';
-import dbPsychologists from '../db/psychologists'; // Assurez-vous d'importer votre module db pour les psychologues
+import dbPsychologists from '../db/psychologists';
 import validation from '../utils/validation';
 import date from '../utils/date';
 import ejs from 'ejs';
