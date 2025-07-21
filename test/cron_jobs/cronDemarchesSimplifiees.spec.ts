@@ -136,6 +136,7 @@ describe('DS integration tests', () => {
     selfModified: false,
     hasSeenTutorial: false,
     acceptationDate: new Date('2025-01-29T00:00:00.000Z'),
+    countCertificatesSent: 0,
   };
   const doniaId = 'a767ecdf-e565-5c1b-8169-e95116e8d126';
   const donia = {
@@ -172,6 +173,7 @@ describe('DS integration tests', () => {
     selfModified: false,
     hasSeenTutorial: false,
     acceptationDate: new Date('2025-01-29T00:00:00.000Z'),
+    countCertificatesSent: 0,
   };
 
   beforeEach(async () => {

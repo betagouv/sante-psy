@@ -487,7 +487,7 @@ describe('patientsController', () => {
         lastName: 'Nom</',
         dateOfBirth,
         gender,
-        INE: '123456789se',
+        INE: '1234567890A',
         isINESvalid: false,
         institutionName: 'stuff<script>evil</script>',
         isStudentStatusVerified: undefined,
@@ -511,6 +511,7 @@ describe('patientsController', () => {
             sinon.match.date,
             sinon.match('female'),
             sinon.match.string,
+            false,
             sinon.match('stuff'),
             false,
           ];
@@ -618,7 +619,7 @@ describe('patientsController', () => {
       };
       const patient = await makePatient(psy.dossierNumber);
       const updatedDateOfBirth = '25/02/1982';
-      const updatedINE = '111222333rr';
+      const updatedINE = '1234567890A';
       const updatedLastName = 'Lovelacekkk';
       const updatedFirstName = 'Adakkk';
       const updatedInstitution = 'polytech';
@@ -673,7 +674,7 @@ describe('patientsController', () => {
         .send({
           lastName: patient.lastName,
           firstNames: patient.firstNames,
-          INE: '123456789se',
+          INE: '1234567890A',
           isINESvalid: false,
           institutionName: '',
           isStudentStatusVerified: false,
@@ -689,7 +690,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber);
           expect(patientsArray[0].lastName).to.equal(patient.lastName);
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames);
-          expect(patientsArray[0].INE).to.equal('123456789se');
+          expect(patientsArray[0].INE).to.equal('1234567890A');
           expect(patientsArray[0].institutionName).to.equal('');
           expect(patientsArray[0].isStudentStatusVerified).to.equal(false);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
@@ -716,7 +717,7 @@ describe('patientsController', () => {
         .send({
           lastName: 'Lovelacekkk',
           firstNames: 'Adakkk',
-          INE: '111222333SS',
+          INE: '1234567890A',
           isINESvalid: false,
           institutionName: 'Grande ecole',
           isStudentStatusVerified: 'isStudentStatusVerified',
@@ -758,7 +759,7 @@ describe('patientsController', () => {
         .send({
           lastName: 'Lovelacekkk',
           firstNames: 'Adakkk',
-          INE: '111',
+          INE: '1234567890A',
           isINESvalid: false,
           institutionName: 'Petite ecole',
           isStudentStatusVerified: 'isStudentStatusVerified',
@@ -1088,7 +1089,7 @@ describe('patientsController', () => {
       shouldPassUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
-        INE: '123456789se',
+        INE: '1234567890A',
         isINESvalid: false,
         dateOfBirth,
         gender,

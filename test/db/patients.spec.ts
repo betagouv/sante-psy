@@ -64,7 +64,7 @@ describe('DB Patients', () => {
           lastName,
           dateOfBirth,
           gender,
-          '1'.repeat(12),
+          '1'.repeat(11),
           isINESvalid,
           institutionName,
           isStudentStatusVerified,
