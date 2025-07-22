@@ -21,10 +21,11 @@ const AddEditPatient = () => {
   const appointmentDate = new URLSearchParams(search).get('appointmentDate');
   const addAppointment = new URLSearchParams(search).get('addAppointment');
   const { userStore: { user } } = useStore();
-
   const [patient, setPatient] = useState();
-  const [customINESError, setCustomINESError] = useState(null);
+  const [customINESError, setCustomINESError] = useState(false);
+  const [customErrorsAlert, setCustomErrorsAlert] = useState(false);
   const [createdPatientId, setCreatedPatientId] = useState(null);
+  const [errors, setErrors] = useState({ dateOfBirth: false, ine: false });
   const badges = getBadgeInfos();
 
   useEffect(() => {
@@ -56,12 +57,25 @@ const AddEditPatient = () => {
     setPatient({ ...patient, [field]: value });
   };
 
+  const handleFormErrors = (type, value) => {
+    if (Object.keys(errors).includes(type)) {
+      setErrors({ ...errors, [type]: value });
+    }
+  };
+
   const button = {
     icon: patientId ? 'fr-fi-check-line' : 'fr-fi-add-line',
     text: patientId ? 'Valider les modifications' : "Ajouter l'étudiant",
   };
   const save = e => {
     e.preventDefault();
+    if (Object.values(errors).some(error => error)) {
+      setCustomErrorsAlert(true);
+      window.scrollTo(0, 0);
+      return;
+    }
+    setCustomErrorsAlert(false);
+
     const action = patientId
       ? agent.Patient.update(patientId, patient)
       : agent.Patient.create(patient);
@@ -114,10 +128,18 @@ const AddEditPatient = () => {
         </Notification>
       )}
 
+      {customErrorsAlert && (
+        <Notification type="warning">
+          {' '}
+          INE et/ou date de naissance invalide.
+          <br />
+        </Notification>
+      )}
+
       <ScrollToTop loading={!!patient} />
       {patient && (
         <form onSubmit={save}>
-          <div id="mandatory-informations">
+          <div>
             {patientId && (
               <section id="anchor-student-file" className={styles.studentSectionTitle}>
                 <h2>
@@ -140,7 +162,7 @@ const AddEditPatient = () => {
               S&lsquo;il vous manque des champs non-obligatoires, vous pourrez y
               revenir plus tard pour compléter le dossier.
             </p>
-            <PatientInfo patient={patient} changePatient={changePatient} />
+            <PatientInfo patient={patient} changePatient={changePatient} handleFormErrors={handleFormErrors} />
           </div>
           <div className="fr-my-5w">
             <Button
