@@ -447,17 +447,6 @@ const seeTutorial = async (dossierNumber: string): Promise<number> => {
   }
 };
 
-const incrementCertificateCount = async (psychologistId: string): Promise<void> => {
-  try {
-    await db(psychologistsTable)
-      .where({ dossierNumber: psychologistId })
-      .increment('countCertificatesSent', 1);
-  } catch (err) {
-    console.error('Erreur lors de l\'incrémentation du compteur de certificats de scolarité envoyés', err);
-    throw new Error('Erreur lors de l\'incrémentation du compteur de certificats de scolarité envoyés');
-  }
-};
-
 export default {
   getAllActive,
   getAllActiveByAvailability,
@@ -480,5 +469,4 @@ export default {
   active,
   seeTutorial,
   resetTutorial,
-  incrementCertificateCount,
 };

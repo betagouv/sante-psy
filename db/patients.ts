@@ -128,7 +128,8 @@ const updateCertificateChecked = async (patientId: string): Promise<void> => {
   try {
     await db('patients')
       .where({ id: patientId })
-      .update({ isINESvalid: true });
+      .update({ isINESvalid: true })
+      .increment('countCertificatesSent', 1);
   } catch (err) {
     console.error('Erreur lors de la mise à jour de la colonne isINESvalid', err);
     throw new Error('Erreur lors de la mise à jour de la colonne isINESvalid');

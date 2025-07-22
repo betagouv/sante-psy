@@ -48,6 +48,7 @@ const AddEditPatient = () => {
         institutionName: '',
         isStudentStatusVerified: false,
         lastName: '',
+        isINESvalid: false,
         badges: [],
       });
     }
@@ -104,6 +105,17 @@ const AddEditPatient = () => {
 
   return (
     <div className="fr-my-2w">
+      {!patient?.isINESvalid && !customINESError && !customErrorsAlert && (
+        <Notification type="info">
+          <b>INE à vérifier</b>
+          <br />
+          {' '}
+          Veuillez valider de nouveau les informations du patient afin que le numéro INE puisse être vérifié automatiquement.
+          <br />
+          Attention, vous ne pourrez pas créer de nouvelle séance pour ce patient tant que son numéro INE ne sera pas validé.
+          <br />
+        </Notification>
+      )}
       {customINESError && (
         <Notification type="warning">
           <b>INE non reconnu</b>
