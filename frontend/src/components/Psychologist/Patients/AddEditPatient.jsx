@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button, TextInput, Checkbox, RadioGroup, Radio, Icon } from '@dataesr/react-dsfr';
+import { Button } from '@dataesr/react-dsfr';
 
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
@@ -8,9 +8,11 @@ import agent from 'services/agent';
 import { renderBadge } from 'components/Badges/Badges';
 import getBadgeInfos from 'src/utils/badges';
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
-import classNames from 'classnames';
+import Notification from 'components/Notification/Notification';
+import { useStore } from 'stores/index';
 import styles from './addEditPatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
+import PatientInfo from './AddEditPatientInfo';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
@@ -18,9 +20,12 @@ const AddEditPatient = () => {
   const { patientId } = useParams();
   const appointmentDate = new URLSearchParams(search).get('appointmentDate');
   const addAppointment = new URLSearchParams(search).get('addAppointment');
-
+  const { userStore: { user } } = useStore();
   const [patient, setPatient] = useState();
-
+  const [customINESError, setCustomINESError] = useState(false);
+  const [customErrorsAlert, setCustomErrorsAlert] = useState(false);
+  const [createdPatientId, setCreatedPatientId] = useState(null);
+  const [errors, setErrors] = useState({ dateOfBirth: false, ine: false });
   const badges = getBadgeInfos();
 
   useEffect(() => {
@@ -43,6 +48,7 @@ const AddEditPatient = () => {
         institutionName: '',
         isStudentStatusVerified: false,
         lastName: '',
+        isINESvalid: false,
         badges: [],
       });
     }
@@ -52,18 +58,35 @@ const AddEditPatient = () => {
     setPatient({ ...patient, [field]: value });
   };
 
+  const handleFormErrors = (type, value) => {
+    if (Object.keys(errors).includes(type)) {
+      setErrors({ ...errors, [type]: value });
+    }
+  };
+
   const button = {
     icon: patientId ? 'fr-fi-check-line' : 'fr-fi-add-line',
     text: patientId ? 'Valider les modifications' : "Ajouter l'étudiant",
   };
   const save = e => {
     e.preventDefault();
+    if (Object.values(errors).some(error => error)) {
+      setCustomErrorsAlert(true);
+      window.scrollTo(0, 0);
+      return;
+    }
+    setCustomErrorsAlert(false);
+
     const action = patientId
       ? agent.Patient.update(patientId, patient)
       : agent.Patient.create(patient);
     action
       .then(response => {
-        if (appointmentDate) {
+        if (!response?.isINESvalid) {
+          setCustomINESError(true);
+          setCreatedPatientId(response?.patientId);
+          window.scrollTo(0, 0);
+        } else if (appointmentDate) {
           navigate(
             `/psychologue/nouvelle-seance/${patientId || response.patientId}?date=${appointmentDate}`,
             { state: { notification: response } },
@@ -74,27 +97,72 @@ const AddEditPatient = () => {
           navigate('/psychologue/mes-etudiants', { state: { notification: response } });
         }
       })
-      .catch(() => window.scrollTo(0, 0));
+      .catch(err => {
+        console.log(err?.response?.data?.message);
+        window.scrollTo(0, 0);
+      });
   };
 
   return (
     <div className="fr-my-2w">
+      {!patient?.isINESvalid && !customINESError && !customErrorsAlert && (
+        <Notification type="info">
+          <b>INE à vérifier</b>
+          <br />
+          {' '}
+          Veuillez valider de nouveau les informations du patient afin que le numéro INE puisse être vérifié automatiquement.
+          <br />
+          Attention, vous ne pourrez pas créer de nouvelle séance pour ce patient tant que son numéro INE ne sera pas validé.
+          <br />
+        </Notification>
+      )}
+      {customINESError && (
+        <Notification type="warning">
+          <b>INE non reconnu</b>
+          <br />
+          {' '}
+          Le numéro INE et/ou la date naissance indiqué n&apos;est pas relié à un étudiant.
+          <br />
+          Or, un numéro INE valable doit être indiqué. Vous pouvez demander un contrôle.
+          <br />
+          <br />
+          <Button
+            onClick={() => navigate('/psychologue/envoi-certificat', {
+              state: {
+                patientId: createdPatientId || patientId,
+                patientName: `${patient.firstNames} ${patient.lastName}`,
+                psychologistId: user.dossierNumber,
+              },
+            })}
+          >
+            Fournir le certificat de scolarité
+          </Button>
+        </Notification>
+      )}
+
+      {customErrorsAlert && (
+        <Notification type="warning">
+          {' '}
+          INE et/ou date de naissance invalide.
+          <br />
+        </Notification>
+      )}
+
       <ScrollToTop loading={!!patient} />
       {patient && (
         <form onSubmit={save}>
-          <div id="mandatory-informations">
-            {patientId
-            && (
-            <section id="anchor-student-file" className={styles.studentSectionTitle}>
-              <h2>
-                {patient.firstNames}
-                {' '}
-                {patient.lastName}
-              </h2>
-              {patient.badges.includes(badges.student_ine.key)
-                ? renderBadge({ badge: badges.student_ine.key })
-                : ''}
-            </section>
+          <div>
+            {patientId && (
+              <section id="anchor-student-file" className={styles.studentSectionTitle}>
+                <h2>
+                  {patient.firstNames}
+                  {' '}
+                  {patient.lastName}
+                </h2>
+                {patient.badges.includes(badges.student_ine.key)
+                  ? renderBadge({ badge: badges.student_ine.key })
+                  : ''}
+              </section>
             )}
             <p className="fr-text--sm fr-mb-1v">
               Les champs avec une astérisque (
@@ -106,105 +174,7 @@ const AddEditPatient = () => {
               S&lsquo;il vous manque des champs non-obligatoires, vous pourrez y
               revenir plus tard pour compléter le dossier.
             </p>
-            <TextInput
-              className="midlength-input fr-mt-3w"
-              data-test-id="etudiant-first-name-input"
-              label="Prénoms"
-              value={patient.firstNames}
-              onChange={e => changePatient(e.target.value, 'firstNames')}
-              required
-              />
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-last-name-input"
-              label="Nom"
-              value={patient.lastName}
-              onChange={e => changePatient(e.target.value, 'lastName')}
-              required
-              />
-            <RadioGroup
-              name="gender"
-              legend={(
-                <span className={styles.tooltipGender}>
-                  Genre
-                  <span className={styles.iconRequired} title="Si l'étudiant s'interroge sur son genre, indiquer celui auquel il s'identifie">
-                    <Icon
-                      name="ri-information-line"
-                      color="#000091"
-                      size="lg"
-                    />
-                  </span>
-                </span>
-              )}
-              value={patient.gender}
-              onChange={value => changePatient(value, 'gender')}
-              required
-              isInline
-            >
-              <Radio
-                data-test-id="etudiant-gender-female-input"
-                label="Femme"
-                value="female"
-              />
-              <Radio
-                label="Homme"
-                value="male"
-              />
-              <Radio
-                value="other"
-                label="Autre"
-              />
-            </RadioGroup>
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-birth-date-input"
-              label="Date de naissance"
-              hint="Format JJ/MM/AAAA, par exemple : 25/01/1987"
-              value={patient.dateOfBirth}
-              type="text"
-              onChange={e => changePatient(e.target.value, 'dateOfBirth')}
-              pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
-              placeholder="JJ/MM/AAAA"
-              required
-            />
-            <TextInput
-              className={classNames(styles.ineInput, 'midlength-input')}
-              data-test-id="etudiant-ine-input"
-              label="Numéro INE de l'étudiant"
-              hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant ou le certificat de scolarité."
-              value={patient.INE}
-              pattern="^[a-zA-Z0-9]{11}$"
-              onChange={e => changePatient(e.target.value, 'INE')}
-              required
-            />
-            <Checkbox
-              className="fr-input-group"
-              data-test-id="etudiant-status-input"
-              defaultChecked={patient.isStudentStatusVerified}
-              label="J'ai bien vérifié le statut étudiant"
-              hint="J'ai vu sa carte d'étudiant ou un autre justificatif"
-              value="isStudentStatusVerified"
-              onChange={e => changePatient(e.target.checked, 'isStudentStatusVerified')}
-              />
-          </div>
-          <br />
-          <div id="other-informations">
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-school-input"
-              label="Établissement scolaire de l'étudiant"
-              hint="Exemple : Université de Rennes ou ENSAE"
-              value={patient.institutionName}
-              onChange={e => changePatient(e.target.value, 'institutionName')}
-            />
-            <TextInput
-              className="midlength-input"
-              data-test-id="etudiant-doctor-name-input"
-              label="Nom, prénom du médecin (optionnel)"
-              hint="Exemple : Annie Benahmou"
-              value={patient.doctorName}
-              onChange={e => changePatient(e.target.value, 'doctorName')}
-            />
+            <PatientInfo patient={patient} changePatient={changePatient} handleFormErrors={handleFormErrors} />
           </div>
           <div className="fr-my-5w">
             <Button
@@ -212,7 +182,7 @@ const AddEditPatient = () => {
               id="save-etudiant-button"
               data-test-id="save-etudiant-button"
               icon={button.icon}
-              >
+            >
               {button.text}
             </Button>
           </div>

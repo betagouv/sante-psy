@@ -2,7 +2,8 @@ export type Patient = {
     id:string,
     firstNames: string,
     lastName: string,
-    INE?: string,
+    INE: string,
+    isINESvalid: boolean,
     gender: string,
     institutionName?: string,
     isStudentStatusVerified?: boolean,
@@ -15,5 +16,6 @@ export type Patient = {
     appointmentsYearCount?: string,
     appointmentsCount?: string,
     countedAppointments?: string,
+    countCertificatesSent?: number,
     badges?: string[],
 }

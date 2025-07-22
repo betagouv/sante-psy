@@ -45,7 +45,7 @@ describe('Patient', () => {
       cy.get('[data-test-id="etudiant-school-input"] > input')
         .type('Université de Rennes');
       cy.get('[data-test-id="etudiant-ine-input"] > input')
-        .type('010203045LL');
+        .type('010203045AA');
       cy.get('[data-test-id="etudiant-status-input"]')
         .click();
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
@@ -61,6 +61,30 @@ describe('Patient', () => {
           'have.text',
           "L'étudiant Titi Toto a bien été créé.",
         );
+    });
+    it('should NOT add etudiant with invalid INE and dateOfBirth', () => {
+      cy.get('[data-test-id="new-student-button"]')
+        .click();
+      cy.get('[data-test-id="etudiant-first-name-input"] > input')
+        .type('Titi');
+      cy.get('[data-test-id="etudiant-last-name-input"] > input')
+        .type('Toto');
+      cy.get('[data-test-id="etudiant-birth-date-input"] > input')
+        .type('01/01/2025');
+      cy.get('[data-test-id="etudiant-gender-female-input"]')
+        .click();
+      cy.get('[data-test-id="etudiant-school-input"] > input')
+        .type('Université de Rennes');
+      cy.get('[data-test-id="etudiant-ine-input"] > input')
+        .type('010203045LP');
+      cy.get('[data-test-id="etudiant-status-input"]')
+        .click();
+      cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
+        .type('Dr Dupont');
+      cy.get('[data-test-id="etudiant-birth-date-error"]')
+        .should('exist');
+      cy.get('[data-test-id="etudiant-ine-error"]')
+        .should('exist');
     });
   });
 
@@ -88,7 +112,10 @@ describe('Patient', () => {
       cy.get('[data-test-id="etudiant-last-name-input"] > input').clear();
       cy.get('[data-test-id="etudiant-last-name-input"] > input').type('Moustaki');
       cy.get('[data-test-id="etudiant-ine-input"] > input').clear();
-      cy.get('[data-test-id="etudiant-ine-input"] > input').type('010203045ML');
+      cy.get('[data-test-id="etudiant-ine-input"] > input').type('010203045AA');
+      cy.get('[data-test-id="etudiant-birth-date-input"] > input').clear();
+      cy.get('[data-test-id="etudiant-birth-date-input"] > input')
+        .type('01/01/2001');
 
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
         .clear();

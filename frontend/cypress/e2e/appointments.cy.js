@@ -96,7 +96,7 @@ describe('Appointments', () => {
       cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
 
       cy.get('[data-test-id="new-appointment-etudiant-input"] div div')
-        .eq(2)
+        .contains('SharedPatient1')
         .click();
 
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
@@ -126,6 +126,26 @@ describe('Appointments', () => {
       cy.wait('@createAppointment');
       cy.location('pathname').should('eq', '/psychologue/mes-seances');
       cy.get('[data-test-id="notification-success"] p').should('exist');
+    });
+
+    it('should NOT be able to create a new appointment if selected student doesnt have valid INE', () => {
+      cy.get('[data-test-id="new-appointment-button"]').click();
+
+      cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
+
+      cy.get('[data-test-id="new-appointment-etudiant-input"] div div')
+        .contains('SharedPatient2')
+        .click();
+
+      cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
+
+      cy.get('[data-test-id="new-appointment-date-input"]').should('exist');
+
+      cy.get('[data-test-id="new-appointment-date-input"]').should('have.attr', 'disabled');
+
+      cy.get('[data-test-id="new-appointment-submit"]').should('have.attr', 'disabled');
+
+      cy.get('[data-test-id="alert-missing-data"]').should('exist');
     });
   });
 });
