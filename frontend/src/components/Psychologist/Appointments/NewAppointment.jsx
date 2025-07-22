@@ -28,10 +28,7 @@ const NewAppointment = () => {
   const [patients, setPatients] = useState([]);
   const [understand, setUnderstand] = useState(false);
 
-  const {
-    commonStore: { setNotification },
-    userStore: { user },
-  } = useStore();
+  const { commonStore: { setNotification } } = useStore();
 
   useEffect(() => {
     if (queryDate) {
