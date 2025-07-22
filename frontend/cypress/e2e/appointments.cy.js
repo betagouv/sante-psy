@@ -1,7 +1,7 @@
 const { checkConvention } = require('../../src/services/conventionVerification');
 const { loginAsDefault } = require('./utils/login');
 const { resetDB } = require('./utils/db');
-const { selectNextCalendarDate } = require('./utils/calendar');
+const { selectPreviousCalendarDate } = require('./utils/calendar');
 const { removeConvention, suspend } = require('./utils/psychologist');
 
 describe('Appointments', () => {
@@ -89,8 +89,28 @@ describe('Appointments', () => {
     });
   });
 
-  describe('New', () => {
-    it('should create a new appointments if student is selected', () => {
+  describe.only('New', () => {
+    it('should not allow selecting a future date', () => {
+      cy.get('[data-test-id="new-appointment-button"]').click();
+      cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
+      cy.get('[data-test-id="new-appointment-etudiant-input"] div div')
+        .contains('SharedPatient1')
+        .click();
+
+      cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
+      cy.get('[data-test-id="new-appointment-date-input"]').should('exist');
+      cy.get('[data-test-id="new-appointment-date-input"]').click();
+
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const dayToSelect = tomorrow.getDate();
+      const selector = `.react-datepicker__day--0${dayToSelect < 10 ? `0${dayToSelect}` : dayToSelect}`;
+      cy.get(selector).should('have.class', 'react-datepicker__day--disabled');
+
+      cy.get('[data-test-id="new-appointment-submit"]').should('be.disabled');
+    });
+
+    it('should create a new previous appointments if student is selected', () => {
       cy.get('[data-test-id="new-appointment-button"]').click();
 
       cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
@@ -105,7 +125,7 @@ describe('Appointments', () => {
 
       cy.get('[data-test-id="new-appointment-date-input"]').click();
 
-      selectNextCalendarDate();
+      selectPreviousCalendarDate();
 
       cy.get('[data-test-id="new-appointment-submit"]')
         .invoke('attr', 'disabled')

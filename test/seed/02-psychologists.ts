@@ -28,6 +28,7 @@ export const seed = async (knex: Knex): Promise<void> => {
       {
         personalEmail: mail,
         assignedUniversityId: uuid.generateFromString(`university-${universities[index + 1]}`),
+        createdAt: new Date('2023-01-01T00:00:00Z'),
       },
     )),
     create.getOnePsy({ personalEmail: 'archived@beta.gouv.fr', archived: true }),
