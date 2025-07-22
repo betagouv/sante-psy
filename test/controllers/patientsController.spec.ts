@@ -511,7 +511,7 @@ describe('patientsController', () => {
             sinon.match.date,
             sinon.match('female'),
             sinon.match.string,
-            false,
+            true,
             sinon.match('stuff'),
             false,
           ];
