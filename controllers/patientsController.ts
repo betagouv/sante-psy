@@ -15,6 +15,7 @@ import {
 } from './validators/patientValidators';
 import verifyINE from '../services/inesApi';
 import send from '../utils/email';
+import config from '../utils/config';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
@@ -23,6 +24,11 @@ const sortData = (a: Patient, b: Patient): number => (
 );
 
 const verifyPatientINE = async (INE: string, rawDateOfBirth: string): Promise<boolean> => {
+  if (config.testEnvironment) {
+    console.log('Ce call API aurait été fait si vous étiez en prod');
+    return true;
+  }
+
   const dateOfBirth = date.parseForm(rawDateOfBirth);
 
   try {

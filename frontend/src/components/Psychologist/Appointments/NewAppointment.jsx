@@ -140,11 +140,12 @@ const NewAppointment = () => {
           required
           disabled={!hasAllCompulsoryInfo}
         />
-        {patientId && !hasAllCompulsoryInfo && !INEhasBeenValidated && (
+        {patientId && !hasAllCompulsoryInfo && (
           <>
             <Alert
               className="fr-mt-2w"
               type="warning"
+              data-test-id="alert-missing-data"
               title="Problème avec le dossier étudiant"
               description={(
                 <>
@@ -185,7 +186,7 @@ const NewAppointment = () => {
             submit
             icon="ri-add-line"
             className="fr-mt-4w"
-            disabled={(tooMuchAppointments && !understand) || (!hasAllCompulsoryInfo && !INEhasBeenValidated)}
+            disabled={(tooMuchAppointments && !understand) || !hasAllCompulsoryInfo}
           >
             Créer la séance
           </Button>

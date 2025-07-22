@@ -19,7 +19,8 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
       {
         lastName: 'Maxime',
         firstNames: 'SharedPatient1',
-        INE: '09393352792',
+        INE: '12345678910',
+        isINESvalid: true,
         index: [0, 1],
       },
       {
@@ -27,6 +28,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
         firstNames: 'SharedPatient2',
         INE: '280324352792',
         index: [0, 1],
+        isINESvalid: false,
       },
     ];
     patientList = mails
@@ -50,6 +52,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
             lastName: sharedPatient.lastName,
             firstNames: sharedPatient.firstNames,
             INE: sharedPatient.INE,
+            isINESvalid: sharedPatient.isINESvalid,
           })),
         );
 
