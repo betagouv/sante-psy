@@ -101,6 +101,20 @@ const formatMonth = m => {
   return '?';
 };
 
+const addAutoSlashToDate = value => {
+  const cleanedValue = value.replace(/\D/g, '');
+
+  let formattedValue = cleanedValue;
+  if (cleanedValue.length > 2) {
+    formattedValue = `${cleanedValue.substring(0, 2)}/${cleanedValue.substring(2)}`;
+  }
+  if (cleanedValue.length > 4) {
+    formattedValue = `${cleanedValue.substring(0, 2)}/${cleanedValue.substring(2, 4)}/${cleanedValue.substring(4, 8)}`;
+  }
+
+  return formattedValue;
+};
+
 export {
   formatFrenchDate,
   formatDDMMYYYY,
@@ -110,4 +124,5 @@ export {
   shortFrenchMonthNames,
   utcDate,
   formatStringToDDMMYYYY,
+  addAutoSlashToDate,
 };

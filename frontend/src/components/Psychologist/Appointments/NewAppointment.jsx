@@ -44,8 +44,9 @@ const NewAppointment = () => {
   }, []);
 
   const patient = useMemo(() => patients?.find(p => p.id === patientId), [patients, patientId]);
+  const INEhasBeenValidated = patient?.isINESvalid;
   const tooMuchAppointments = useMemo(() => patient && patient.countedAppointments >= MAX_APPOINTMENT, [patient]);
-  const hasAllCompulsoryInfo = useMemo(() => (patient && patient.INE && patient.dateOfBirth && patient.gender), [patient]);
+  const hasAllCompulsoryInfo = useMemo(() => (patient && patient.INE && patient.dateOfBirth && patient.gender && INEhasBeenValidated), [patient]);
   const createNewAppointment = e => {
     e.preventDefault();
     setNotification({});
@@ -139,19 +140,27 @@ const NewAppointment = () => {
           required
           disabled={!hasAllCompulsoryInfo}
         />
-        <Alert
-          className="fr-mt-2w"
-          type="warning"
-          description={(
-            <>
-              Depuis mars 2025, vous ne pouvez pas déclarer de séances pour un patient sans avoir indiqué sa date de naissance ainsi que son genre dans son dossier.
-              <br />
-              <HashLink to={`/psychologue/modifier-etudiant/${patientId}?addAppointment=true`}>
-                Compléter les informations de l&lsquo;étudiant
-              </HashLink>
-            </>
-                )}
-              />
+        {patientId && !hasAllCompulsoryInfo && (
+          <>
+            <Alert
+              className="fr-mt-2w"
+              type="warning"
+              data-test-id="alert-missing-data"
+              title="Problème avec le dossier étudiant"
+              description={(
+                <>
+                  Le dossier de l&apos;étudiant doit être complet pour ajouter des séances : INE valide, date de naissance, genre...
+                  <br />
+                </>
+            )} />
+            <br />
+            <Button
+              onClick={() => navigate(`/psychologue/modifier-etudiant/${patientId}?addAppointment=true`)}
+            >
+              Compléter le dossier étudiant
+            </Button>
+          </>
+        )}
         {tooMuchAppointments && (
         <>
           <Alert
@@ -159,7 +168,6 @@ const NewAppointment = () => {
             description={(
               <>
                 Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.
-
               </>
               )}
             />
@@ -171,16 +179,25 @@ const NewAppointment = () => {
             />
         </>
         )}
-        <Button
-          id="new-appointment-submit"
-          data-test-id="new-appointment-submit"
-          submit
-          icon="ri-add-line"
-          className="fr-mt-4w"
-          disabled={(tooMuchAppointments && !understand) || !hasAllCompulsoryInfo}
-        >
-          Créer la séance
-        </Button>
+        <div className={styles.submitCancelButtonsWrapper}>
+          <Button
+            id="new-appointment-submit"
+            data-test-id="new-appointment-submit"
+            submit
+            icon="ri-add-line"
+            className="fr-mt-4w"
+            disabled={(tooMuchAppointments && !understand) || !hasAllCompulsoryInfo}
+          >
+            Créer la séance
+          </Button>
+          <Button
+            secondary
+            className="fr-mt-4w"
+            onClick={() => navigate('/psychologue/mes-seances')}
+          >
+            Annuler
+          </Button>
+        </div>
       </form>
       { patientId && <PatientAppointments showCreateButton={false} patientId={patientId} />}
     </div>

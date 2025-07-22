@@ -24,6 +24,7 @@ const sendMailToUniversities = async (): Promise<void> => {
         emailsTo,
         `Résumé des séances ${config.appName}`,
         htmlFormated,
+        [],
         '', // cc mail
         config.contactEmail, // bcc mail
       );

@@ -24,6 +24,7 @@ const makePatient = async (psychologistId, INE = '12345678901') => {
     date.parseForm(dateOfBirth),
     gender,
     INE,
+    false,
     '42',
     false,
     psychologistId,
@@ -201,6 +202,7 @@ describe('patientsController', () => {
           lastName: 'Lovelace',
           firstNames: 'Ada',
           INE: '12345678901',
+          isINESvalid: false,
           institutionName: 'test',
           isStudentStatusVerified: undefined,
           dateOfBirth,
@@ -233,6 +235,7 @@ describe('patientsController', () => {
           lastName: 'Lovelace',
           firstNames: 'Ada',
           INE: '12345678901',
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -260,6 +263,7 @@ describe('patientsController', () => {
           firstNames: 'prenom',
           lastName: 'nom',
           INE: 'studentNumber',
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: false,
           doctorName,
@@ -301,6 +305,7 @@ describe('patientsController', () => {
         // no firstNames
         lastName: 'Nom',
         INE: '1234567890A',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -314,6 +319,7 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         // no lastName
         INE: '1234567890A',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -327,6 +333,7 @@ describe('patientsController', () => {
         firstNames: '   ',
         lastName: 'Nom',
         INE: '1234567890A',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -340,6 +347,7 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         lastName: '   ',
         INE: '1234567890A',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -353,12 +361,13 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '1234567890à',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
         dateOfBirth,
         gender,
-      }, 'Le numéro INE doit être alphanumérique (chiffres ou lettres sans accents).');
+      }, 'Le numéro INE est invalide. Veuillez vérifier le format.');
     });
 
     const shouldPassCreatePatientInputValidation = (done, postData) => {
@@ -389,12 +398,13 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '1234567890AA',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
         dateOfBirth,
         gender,
-      }, 'Le numéro INE doit faire exactement 11 caractères.');
+      }, 'Le numéro INE est invalide. Veuillez vérifier le format.');
     });
 
     it('shouldn\'t pass patient with no dateOfBirth', (done) => {
@@ -402,6 +412,7 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '123456780AA',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -415,6 +426,7 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -428,6 +440,7 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '123456790AA',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -441,6 +454,7 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '1234567890A',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -454,6 +468,7 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '12345678912',
+        isINESvalid: false,
         institutionName: '',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -472,7 +487,8 @@ describe('patientsController', () => {
         lastName: 'Nom</',
         dateOfBirth,
         gender,
-        INE: '123456789se',
+        INE: '1234567890A',
+        isINESvalid: false,
         institutionName: 'stuff<script>evil</script>',
         isStudentStatusVerified: undefined,
       };
@@ -495,6 +511,7 @@ describe('patientsController', () => {
             sinon.match.date,
             sinon.match('female'),
             sinon.match.string,
+            true,
             sinon.match('stuff'),
             false,
           ];
@@ -602,7 +619,7 @@ describe('patientsController', () => {
       };
       const patient = await makePatient(psy.dossierNumber);
       const updatedDateOfBirth = '25/02/1982';
-      const updatedINE = '111222333rr';
+      const updatedINE = '1234567890A';
       const updatedLastName = 'Lovelacekkk';
       const updatedFirstName = 'Adakkk';
       const updatedInstitution = 'polytech';
@@ -614,6 +631,7 @@ describe('patientsController', () => {
           lastName: updatedLastName,
           firstNames: updatedFirstName,
           INE: updatedINE,
+          isINESvalid: false,
           institutionName: updatedInstitution,
           isStudentStatusVerified: 'isStudentStatusVerified',
           dateOfBirth: updatedDateOfBirth,
@@ -656,7 +674,8 @@ describe('patientsController', () => {
         .send({
           lastName: patient.lastName,
           firstNames: patient.firstNames,
-          INE: '123456789se',
+          INE: '1234567890A',
+          isINESvalid: false,
           institutionName: '',
           isStudentStatusVerified: false,
           doctorName: '',
@@ -671,7 +690,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].psychologistId).to.equal(psy.dossierNumber);
           expect(patientsArray[0].lastName).to.equal(patient.lastName);
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames);
-          expect(patientsArray[0].INE).to.equal('123456789se');
+          expect(patientsArray[0].INE).to.equal('1234567890A');
           expect(patientsArray[0].institutionName).to.equal('');
           expect(patientsArray[0].isStudentStatusVerified).to.equal(false);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
@@ -698,7 +717,8 @@ describe('patientsController', () => {
         .send({
           lastName: 'Lovelacekkk',
           firstNames: 'Adakkk',
-          INE: '111222333SS',
+          INE: '1234567890A',
+          isINESvalid: false,
           institutionName: 'Grande ecole',
           isStudentStatusVerified: 'isStudentStatusVerified',
           doctorName,
@@ -739,7 +759,8 @@ describe('patientsController', () => {
         .send({
           lastName: 'Lovelacekkk',
           firstNames: 'Adakkk',
-          INE: '111',
+          INE: '1234567890A',
+          isINESvalid: false,
           institutionName: 'Petite ecole',
           isStudentStatusVerified: 'isStudentStatusVerified',
           dateOfBirth,
@@ -809,6 +830,7 @@ describe('patientsController', () => {
         // no firstNames
           lastName: 'Nom',
           INE: '1234567890A',
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -828,6 +850,7 @@ describe('patientsController', () => {
           firstNames: 'Blou Blou',
           // no lastName
           INE: '1234567890A',
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -847,6 +870,7 @@ describe('patientsController', () => {
           firstNames: '   ',
           lastName: 'Nom',
           INE: '1234567890A',
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -866,6 +890,7 @@ describe('patientsController', () => {
           firstNames: 'Blou Blou',
           lastName: '   ',
           INE: '1234567890A',
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -885,17 +910,18 @@ describe('patientsController', () => {
           firstNames: 'Blou Blou',
           lastName: 'Nom',
           INE: '1234567890à',
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
           dateOfBirth,
           gender,
         },
-        'Le numéro INE doit être alphanumérique (chiffres ou lettres sans accents).',
+        'Le numéro INE est invalide. Veuillez vérifier le format.',
       );
     });
 
-    it('should refuse validation with INE length > 50 chars', (done) => {
+    it('should refuse validation with INE length > 12 chars', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
       shouldFailUpdatePatientInputValidation(
         done,
@@ -903,14 +929,15 @@ describe('patientsController', () => {
         {
           firstNames: 'Blou Blou',
           lastName: 'Nom',
-          INE: '1'.repeat(51),
+          INE: '1'.repeat(12),
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
           dateOfBirth,
           gender,
         },
-        'Le numéro INE doit faire exactement 11 caractères.',
+        'Le numéro INE est invalide. Veuillez vérifier le format.',
       );
     });
 
@@ -922,6 +949,7 @@ describe('patientsController', () => {
           firstNames: 'Blou Blou',
           lastName: 'Nom',
           INE: '12345678901',
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -941,6 +969,7 @@ describe('patientsController', () => {
           firstNames: 'Blou Blou',
           lastName: 'Nom',
           INE: '1234567890A',
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -960,6 +989,7 @@ describe('patientsController', () => {
           firstNames: 'Blou Blou',
           lastName: 'Nom',
           INE: '1234567890A',
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -979,6 +1009,7 @@ describe('patientsController', () => {
           firstNames: 'Blou Blou',
           lastName: 'Nom',
           INE: '1234567890A',
+          isINESvalid: false,
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -1016,6 +1047,7 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '1234567890A',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -1030,12 +1062,13 @@ describe('patientsController', () => {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '1234567890AA',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
         dateOfBirth,
         gender,
-      }, 'Le numéro INE doit faire exactement 11 caractères.');
+      }, 'Le numéro INE est invalide. Veuillez vérifier le format.');
     });
 
     it('should not pass validation when INE is missing', (done) => {
@@ -1045,6 +1078,7 @@ describe('patientsController', () => {
         dateOfBirth,
         gender,
         INE: '',
+        isINESvalid: false,
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -1055,7 +1089,8 @@ describe('patientsController', () => {
       shouldPassUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
-        INE: '123456789se',
+        INE: '1234567890A',
+        isINESvalid: false,
         dateOfBirth,
         gender,
         institutionName: '42',
