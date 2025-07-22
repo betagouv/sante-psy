@@ -54,9 +54,8 @@ const NewAppointment = () => {
     });
   };
 
-  const beginningDate = new Date(user.createdAt);
-  const today = new Date();
-  const maxDate = new Date(today.setMonth(today.getMonth() + 4));
+  const beginningDate = new Date(2025, 0, 1);
+  const maxDate = new Date();
 
   const patientsMap = patients.map(p => ({
     value: p.id,
@@ -150,26 +149,26 @@ const NewAppointment = () => {
                 Compléter les informations de l&lsquo;étudiant
               </HashLink>
             </>
-                )}
-              />
+          )}
+        />
         {tooMuchAppointments && (
-        <>
-          <Alert
-            className="fr-mt-2w"
-            description={(
-              <>
-                Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.
+          <>
+            <Alert
+              className="fr-mt-2w"
+              description={(
+                <>
+                  Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.
 
-              </>
+                </>
               )}
             />
-          <Checkbox
-            className="fr-mt-1w"
-            data-test-id="new-appointment-understand"
-            label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances seront prises en charge par année universitaire.`}
-            onChange={e => setUnderstand(e.target.checked)}
+            <Checkbox
+              className="fr-mt-1w"
+              data-test-id="new-appointment-understand"
+              label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances seront prises en charge par année universitaire.`}
+              onChange={e => setUnderstand(e.target.checked)}
             />
-        </>
+          </>
         )}
         <Button
           id="new-appointment-submit"
@@ -182,7 +181,7 @@ const NewAppointment = () => {
           Créer la séance
         </Button>
       </form>
-      { patientId && <PatientAppointments showCreateButton={false} patientId={patientId} />}
+      {patientId && <PatientAppointments showCreateButton={false} patientId={patientId} />}
     </div>
 
   );
