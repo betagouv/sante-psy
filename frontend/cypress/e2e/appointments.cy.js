@@ -89,7 +89,7 @@ describe('Appointments', () => {
     });
   });
 
-  describe.only('New', () => {
+  describe('New', () => {
     it('should not allow selecting a future date', () => {
       cy.get('[data-test-id="new-appointment-button"]').click();
       cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
