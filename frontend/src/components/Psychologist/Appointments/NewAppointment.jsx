@@ -28,10 +28,7 @@ const NewAppointment = () => {
   const [patients, setPatients] = useState([]);
   const [understand, setUnderstand] = useState(false);
 
-  const {
-    commonStore: { setNotification },
-    userStore: { user },
-  } = useStore();
+  const { commonStore: { setNotification } } = useStore();
 
   useEffect(() => {
     if (queryDate) {
@@ -55,9 +52,8 @@ const NewAppointment = () => {
     });
   };
 
-  const beginningDate = new Date(user.createdAt);
-  const today = new Date();
-  const maxDate = new Date(today.setMonth(today.getMonth() + 4));
+  const beginningDate = new Date(2025, 0, 1);
+  const maxDate = new Date();
 
   const patientsMap = patients.map(p => ({
     value: p.id,
@@ -152,7 +148,7 @@ const NewAppointment = () => {
                   Le dossier de l&apos;étudiant doit être complet pour ajouter des séances : INE valide, date de naissance, genre...
                   <br />
                 </>
-            )} />
+              )} />
             <br />
             <Button
               onClick={() => navigate(`/psychologue/modifier-etudiant/${patientId}?addAppointment=true`)}
@@ -162,22 +158,22 @@ const NewAppointment = () => {
           </>
         )}
         {tooMuchAppointments && (
-        <>
-          <Alert
-            className="fr-mt-2w"
-            description={(
-              <>
-                Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.
-              </>
+          <>
+            <Alert
+              className="fr-mt-2w"
+              description={(
+                <>
+                  Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.
+                </>
               )}
             />
-          <Checkbox
-            className="fr-mt-1w"
-            data-test-id="new-appointment-understand"
-            label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances seront prises en charge par année universitaire.`}
-            onChange={e => setUnderstand(e.target.checked)}
+            <Checkbox
+              className="fr-mt-1w"
+              data-test-id="new-appointment-understand"
+              label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances seront prises en charge par année universitaire.`}
+              onChange={e => setUnderstand(e.target.checked)}
             />
-        </>
+          </>
         )}
         <div className={styles.submitCancelButtonsWrapper}>
           <Button
@@ -199,7 +195,7 @@ const NewAppointment = () => {
           </Button>
         </div>
       </form>
-      { patientId && <PatientAppointments showCreateButton={false} patientId={patientId} />}
+      {patientId && <PatientAppointments showCreateButton={false} patientId={patientId} />}
     </div>
 
   );
