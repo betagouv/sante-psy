@@ -36,6 +36,7 @@ export default helmet.contentSecurityPolicy({
     'frame-src': [
       'https://santepsy-metabase.osc-secnum-fr1.scalingo.io',
       'https://stats.santepsyetudiant.beta.gouv.fr',
+      'https://embed.acast.com/kaavan-podcast?feed=true&theme=light&wmode=opaque',
       'https://bid.g.doubleclick.net/',
       'https://game.crisp.chat',
     ],
