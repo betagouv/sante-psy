@@ -69,7 +69,7 @@ const SendPatientCertificate = () => {
           {error && <Alert type="error" title="Erreur">{error}</Alert>}
 
           <div className="fr-my-2w">
-            <label className="fr-label" htmlFor="file-upload">Ajouter un fichier</label>
+            <label className="fr-label" htmlFor="file-upload">Ajouter un fichier (.jpg, .pdf, .png)</label>
             <input
               className="fr-input"
               id="file-upload"
@@ -81,7 +81,7 @@ const SendPatientCertificate = () => {
           </div>
 
           <div className="fr-mt-3w fr-btns-group fr-btns-group--inline-md">
-            <Button onClick={handleSubmit}>
+            <Button onClick={handleSubmit} disabled={!file}>
               Envoyer le certificat de scolarité
             </Button>
             <Button secondary onClick={() => navigate('/psychologue/mes-etudiants')}>
