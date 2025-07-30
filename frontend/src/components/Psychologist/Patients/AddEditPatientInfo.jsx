@@ -167,7 +167,7 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
           </>
         )}
       </div>
-      <div id="other-informations">
+      <div id="other-informations" className={styles.otherInfo}>
         <Checkbox
           className="fr-input-group"
           data-test-id="etudiant-status-input"
