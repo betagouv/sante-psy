@@ -105,25 +105,31 @@ const AddEditPatient = () => {
 
   return (
     <div className="fr-my-2w">
-      {!patient?.isINESvalid && !customINESError && !customErrorsAlert && (
+      {patientId && !patient?.isINESvalid && !customINESError && !customErrorsAlert && (
         <Notification type="info">
-          <b>INE à vérifier</b>
+          <b>Contrôle de l&apos;INE</b>
           <br />
           {' '}
-          Veuillez valider de nouveau les informations du patient afin que le numéro INE puisse être vérifié automatiquement.
+          Veuillez confirmer les informations du patient afin que le numéro INE puisse être vérifié automatiquement.
           <br />
           Attention, vous ne pourrez pas créer de nouvelle séance pour ce patient tant que son numéro INE ne sera pas validé.
           <br />
+          <br />
+          <Button
+            onClick={save}
+          >
+            Je confirme ces informations
+          </Button>
         </Notification>
       )}
       {customINESError && (
         <Notification type="warning">
-          <b>INE non reconnu</b>
+          <b>Etudiant non reconnu</b>
           <br />
           {' '}
           Le numéro INE et/ou la date naissance indiqué n&apos;est pas relié à un étudiant.
           <br />
-          Or, un numéro INE valable doit être indiqué. Vous pouvez demander un contrôle.
+          La bonne date de naissance et un numéro INE valable doivent être indiqués.
           <br />
           <br />
           <Button

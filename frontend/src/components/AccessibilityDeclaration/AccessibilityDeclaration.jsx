@@ -68,12 +68,6 @@ const AccessibilityDeclaration = () => (
       </p>
       <ul className="basic-information feedback h-card">
         <li>
-          E-mail&nbsp;:
-          {' '}
-          <a href="mailto:yann.mercier-brunel@enseignementsup.gouv.fr">yann.mercier-brunel@enseignementsup.gouv.fr</a>
-        </li>
-
-        <li>
           Formulaire de contact&nbsp;:
           {' '}
           <a href="https://santepsy.etudiant.gouv.fr/contact/formulaire">https://santepsy.etudiant.gouv.fr/contact/formulaire</a>
