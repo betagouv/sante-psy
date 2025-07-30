@@ -7,16 +7,15 @@
     z-index: 3;
     width: 40%;
   } 
-
-  .message {
-    font-weight: bold;
-    padding-bottom: 20px;
-  }
 }
 
 .submitCancelButtonsWrapper {
   display: inline-flex;
   gap: 8px;
+  
+  button {
+  z-index: -1;
+  }
 }
 
 @media (max-width: 768px) {

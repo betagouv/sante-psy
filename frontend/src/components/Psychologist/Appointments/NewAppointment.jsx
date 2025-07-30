@@ -73,13 +73,6 @@ const NewAppointment = () => {
   return (
     <div className={styles.newAppointmentWrapper}>
       <form onSubmit={createNewAppointment} className="fr-my-2w">
-        <div className={styles.message}>
-          Vous pouvez vous faire rembourser
-          <ul>
-            <li>jusqu&lsquo;à 12 séances depuis le 1er juillet 2024.</li>
-            <li>jusqu&lsquo;à 8 séances avant le 1er juillet 2024.</li>
-          </ul>
-        </div>
         <div id="patients-list">
           {patients.length > 0 ? (
             <SearchableSelect
