@@ -31,8 +31,9 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
 
   const handleINEChange = e => {
     const { value } = e.target;
-    changePatient(value, 'INE');
-    validateINE(value);
+    const upperCaseValue = value.toUpperCase();
+    changePatient(upperCaseValue, 'INE');
+    validateINE(upperCaseValue);
   };
 
   const validateDateOfBirth = value => {
