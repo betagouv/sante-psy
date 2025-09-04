@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
 import { HashLink } from 'react-router-hash-link';
 import { useSearchParams } from 'react-router-dom';
 
-import { Button, ButtonGroup, Callout, CalloutText, Link, TextInput } from '@dataesr/react-dsfr';
+import { Button, Callout, CalloutText, TextInput } from '@dataesr/react-dsfr';
 import MonthPicker from 'components/Date/MonthPicker';
 import Notification from 'components/Notification/Notification';
 
-import agent from 'services/agent';
 import { formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 import billingDataService from 'services/billingData';
@@ -73,18 +71,18 @@ const Billing = () => {
           </div>
         )}
         <div className="fr-mb-2w">
-          <a
+          <button
             id="billing-info"
-            href="#"
-            onClick={(e) => {
+            type="button"
+            onClick={e => {
               e.preventDefault();
               window.open('/psychologue/informations-facturation', '_blank');
             }}
             className={styles.editLink}
           >
-            <span className="ri-edit-box-fill" style={{ fontSize: '1em' }} aria-hidden="true"></span>
+            <span className="ri-edit-box-fill" style={{ fontSize: '1em' }} aria-hidden="true" />
             Modifier le RIB / SIRET / Bon de commande
-          </a>
+          </button>
         </div>
         <div className={styles.monthPickerContainer}>
           Générer ma facture pour le mois de :
