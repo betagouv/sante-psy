@@ -11,3 +11,19 @@
 .downloadIcon {
     margin-right: 8px;
 }
+
+.separator {
+    border-top: 4px solid var(--grey-425);
+    border-radius: 10px;
+    width: 50%;
+    max-width: 200px;
+    margin: 0 25%;
+}
+
+.editLink {
+    color: var(--text-title-blue-france);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
