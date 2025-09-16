@@ -14,6 +14,7 @@ import Notification from 'components/Notification/Notification';
 import ConventionModal from 'components/Psychologist/Appointments/ConventionModal';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import Billing from 'components/Psychologist/Reimbursement/Billing';
+import BillingInfoPage from 'components/Psychologist/Reimbursement/BillingInfoPage';
 import ConventionForm from 'components/Psychologist/PsyDashboard/PsySection/ConventionForm';
 import SuspendProfile from 'components/Psychologist/PsyDashboard/PsySection/SuspendProfile';
 import EditProfile from 'components/Psychologist/PsyDashboard/PsySection/EditProfile';
@@ -141,6 +142,17 @@ const PsychologistRouter = () => {
           ),
           tutorial: 'billing',
         };
+      case 'informations-facturation':
+        return {
+          title: (
+            <>
+              Modifier
+              {' '}
+              <b>mes données de facturation</b>
+            </>
+          ),
+          tutorial: 'billing-info',
+        };
       case 'tableau-de-bord':
         return {
           title: (
@@ -206,6 +218,7 @@ const PsychologistRouter = () => {
         <Route exact path="/modifier-etudiant/:patientId" element={<AddEditPatient />} />
         <Route exact path="/envoi-certificat" element={<SendPatientCertificate />} />
         <Route exact path="/mes-remboursements" element={<Billing />} />
+        <Route exact path="/informations-facturation" element={<BillingInfoPage />} />
         <Route exact path="/ma-convention" element={<ConventionForm checkDefaultValue />} />
         <Route exact path="/ma-disponibilite" element={<SuspendProfile />} />
         <Route path="/*" element={<Navigate to="/psychologue/tableau-de-bord" />} />

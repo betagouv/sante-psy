@@ -9,11 +9,6 @@ const BillingInfo = ({ billingInfo, setBillingInfo, universityHasBillingAddress 
       value={billingInfo.siret}
       onChange={e => setBillingInfo({ ...billingInfo, siret: e.target.value })}
     />
-    <TextInput
-      label="Numéro de la facture"
-      value={billingInfo.billingNumber}
-      onChange={e => setBillingInfo({ ...billingInfo, billingNumber: e.target.value })}
-    />
     {!universityHasBillingAddress && (
       <>
         <TextInput
