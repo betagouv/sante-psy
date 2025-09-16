@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
 import { HashLink } from 'react-router-hash-link';
 import { useSearchParams } from 'react-router-dom';
 
-import { Button, ButtonGroup, Callout, CalloutText } from '@dataesr/react-dsfr';
+import { Button, Callout, CalloutText, TextInput } from '@dataesr/react-dsfr';
 import MonthPicker from 'components/Date/MonthPicker';
 import Notification from 'components/Notification/Notification';
 
-import agent from 'services/agent';
 import { formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 import billingDataService from 'services/billingData';
 import { useStore } from 'stores/';
 import getBadgeInfos from 'src/utils/badges';
 import BillingTable from './BillingTable';
-import BillingInfo from './BillingInfo';
 import BillingHelper from './BillingHelper';
 import useAppointmentsByDate from './hooks/appointmentsByDate';
 
@@ -29,9 +26,7 @@ const Billing = () => {
   const { userStore: { user } } = useStore();
 
   const [valuesByDate, setValuesByDate] = useState({ appointments: {}, firstAppointments: {}, patients: {} });
-  const [fillInfo, setFillInfo] = useState(false);
   const [billingInfo, setBillingInfo] = useState(billingInfoService.get());
-  const [universityHasBillingAddress, setUniversityHasBillingAddress] = useState(false);
 
   const [searchParams] = useSearchParams();
 
@@ -42,18 +37,8 @@ const Billing = () => {
   }, [month]);
 
   useEffect(() => {
-    if (user.convention && user.convention.universityId) {
-      agent.University.getOne(user.convention.universityId).then(university => {
-        if (university.billingAddress) {
-          setUniversityHasBillingAddress(true);
-        }
-      });
-    }
-  });
-
-  useEffect(() => {
     if (searchParams.get('openBillingInfo') === 'true') {
-      setFillInfo(true);
+      window.open('/psychologue/informations-facturation', '_blank');
     }
   }, [searchParams]);
 
@@ -85,6 +70,20 @@ const Billing = () => {
             </Notification>
           </div>
         )}
+        <div className="fr-mb-2w">
+          <button
+            id="billing-info"
+            type="button"
+            onClick={e => {
+              e.preventDefault();
+              window.open('/psychologue/informations-facturation', '_blank');
+            }}
+            className={styles.editLink}
+          >
+            <span className="ri-edit-box-fill" style={{ fontSize: '1em' }} aria-hidden="true" />
+            Modifier le RIB / SIRET / Bon de commande
+          </button>
+        </div>
         <div className={styles.monthPickerContainer}>
           Générer ma facture pour le mois de :
           <div className={styles.monthPicker} id="billing-month">
@@ -93,64 +92,35 @@ const Billing = () => {
         </div>
         {filteredDates.length > 0 ? (
           <>
-            <div className="fr-mb-2w">
-              {fillInfo && (
-                <BillingInfo
-                  billingInfo={billingInfo}
-                  setBillingInfo={setBillingInfo}
-                  universityHasBillingAddress={universityHasBillingAddress}
-                />
-              )}
-            </div>
-            <ButtonGroup className="fr-mb-2w" isInlineFrom="xs">
-              {fillInfo ? (
-                <>
-                  <Button
-                    secondary
-                    icon="ri-close-line"
-                    onClick={() => {
-                      setBillingInfo(billingInfoService.get());
-                      setFillInfo(false);
-                    }}
-                >
-                    Annuler
-                  </Button>
-                  <Button
-                    secondary
-                    icon="ri-save-line"
-                    onClick={() => {
-                      setFillInfo(false);
-                      billingInfoService.save(billingInfo);
-                    }}>
-                    Enregistrer
-                  </Button>
-                </>
-              ) : (
-                <Button id="billing-info" secondary icon="ri-edit-line" onClick={() => setFillInfo(true)}>
-                  Renseigner mes informations
-                </Button>
-              )}
-              {canGenerateBill ? (
-                <a
-                  id="billing-generation"
-                  className="fr-btn"
-                  href={`/psychologue/bill/${month.month}/${month.year}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => {
-                    setFillInfo(false);
-                    billingInfoService.save(billingInfo);
+            <div className="fr-mb-2w" style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem' }}>
+              <div>
+                <TextInput
+                  label="Numéro de facture"
+                  hint="Correspondant à votre comptabilité"
+                  value={billingInfo.billingNumber}
+                  onChange={e => {
+                    const newBillingInfo = { ...billingInfo, billingNumber: e.target.value };
+                    setBillingInfo(newBillingInfo);
+                    billingInfoService.save(newBillingInfo);
                   }}
-                >
-                  <span className={classNames(styles.downloadIcon, 'ri-file-download-line')} aria-hidden="true" />
-                  Télécharger / Imprimer
-                </a>
-              ) : (
-                <Button disabled icon="ri-file-download-line">
-                  Télécharger / Imprimer
-                </Button>
-              )}
-            </ButtonGroup>
+                  style={{ minWidth: '200px' }}
+                />
+              </div>
+              <Button
+                id="billing-generation"
+                disabled={!canGenerateBill}
+                icon="ri-file-download-line"
+                onClick={() => {
+                  if (canGenerateBill) {
+                    billingInfoService.save(billingInfo);
+                    window.open(`/psychologue/bill/${month.month}/${month.year}`, '_blank');
+                  }
+                }}
+              >
+                Télécharger / Imprimer
+              </Button>
+            </div>
+
             <BillingTable
               filteredDates={filteredDates}
               appointments={valuesByDate.appointments}

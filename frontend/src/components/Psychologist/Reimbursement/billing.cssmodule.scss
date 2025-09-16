@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
 .monthPicker {
@@ -10,4 +11,26 @@
 
 .downloadIcon {
     margin-right: 8px;
+}
+
+.separator {
+    border-top: 4px solid var(--grey-425);
+    border-radius: 10px;
+    width: 50%;
+    max-width: 200px;
+    margin: 0 25%;
+}
+
+.editLink {
+    color: var(--text-title-blue-france);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    text-decoration: none;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--text-title-blue-france);
+    padding: 0;
+    font: inherit;
 }

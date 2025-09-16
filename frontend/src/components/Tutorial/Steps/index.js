@@ -4,6 +4,7 @@ import studentsSteps from './students';
 import newStudentsSteps from './newStudent';
 import dashboardSteps from './dashboard';
 import billingSteps from './billing';
+import billingInfoSteps from './billingInfo';
 import globalSteps from './global';
 
 const getSteps = id => {
@@ -20,6 +21,8 @@ const getSteps = id => {
       return dashboardSteps;
     case 'billing':
       return billingSteps;
+    case 'billing-info':
+      return billingInfoSteps;
     default:
       return globalSteps;
   }
