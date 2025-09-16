@@ -103,7 +103,6 @@ const Billing = () => {
                     setBillingInfo(newBillingInfo);
                     billingInfoService.save(newBillingInfo);
                   }}
-                  type="number"
                   style={{ minWidth: '200px' }}
                 />
               </div>
