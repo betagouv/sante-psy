@@ -6,17 +6,12 @@ import Section from 'components/Page/Section';
 
 const dataConservation = [
   {
-    'Catégories de données': "Données d'inscription",
-    'Durée de conservation': '3 ans à compter de la dernière utilisation du compte',
+    'Catégories de données': 'Données relatives aux psychologues',
+    'Durée de conservation': '3 ans à compter de la dernière connexion',
   },
   {
-    'Catégories de données': 'Données relatives aux séances',
-    'Durée de conservation': '3 ans à compter de la dernière utilisation du compte',
-  },
-  {
-    'Catégories de données': 'Données de contact',
-    // eslint-disable-next-line max-len
-    'Durée de conservation': "3 ans à compter de l'écrit du message. S’agissant de la demande d’informations, l’adresse e-mail n’est pas stockée par Santé Psy Étudiant après l’envoi du courrier.",
+    'Catégories de données': 'Données relatives au formulaire de contact',
+    'Durée de conservation': '6 mois à compter de la réception du message',
   },
 ];
 
@@ -36,14 +31,8 @@ const dataSubcontractor = [
   {
     Partenaire: 'Crisp',
     Pays: 'France',
-    'Traitement réalisé': 'Messagerie et chatbot',
+    'Traitement réalisé': 'Outil de support et de chat',
     Garanties: <a href="https://help.crisp.chat/en/article/how-to-sign-my-gdpr-data-processing-agreement-dpa-1wfmngo/" target="_blank" rel="noreferrer">https://help.crisp.chat/en/article/how-to-sign-my-gdpr-data-processing-agreement-dpa-1wfmngo</a>,
-  },
-  {
-    Partenaire: 'Démarches simplifiées',
-    Pays: 'France',
-    'Traitement réalisé': 'Dématérialisation de Démarches Administrative',
-    Garanties: <a href="https://doc.demarches-simplifiees.fr/cgu/cgu" target="_blank" rel="noreferrer">https://doc.demarches-simplifiees.fr/cgu/cgu</a>,
   },
 ];
 
@@ -56,7 +45,7 @@ const dataCookies = [
     <p>Il mesure l’efficacité des campagnes sponsorisées.</p>
   </>,
     'Base juridique': 'Consentement',
-    Garanties: <a href="https://privacy.google.com/intl/fr_fr/businesses/compliance/#!?modal_active=none" target="_blank" rel="noreferrer">https://privacy.google.com/intl/fr_fr/businesses/compliance/#!?modal_active=none</a>,
+    Garanties: <a href="https://www.google.com/analytics/terms/dpa/dataprocessingamendment_20200816.html" target="_blank" rel="noreferrer">https://www.google.com/analytics/terms/dpa/dataprocessingamendment_20200816.html</a>,
   },
   {
     Cookies: 'Facebook Cookie Pixel',
@@ -66,7 +55,7 @@ const dataCookies = [
     <p>Il identifie les visiteurs en provenance de publications Facebook.</p>
   </>,
     'Base juridique': 'Consentement',
-    Garanties: <a href="https://www.facebook.com/business/help/471978536642445?id=1205376682832142" target="_blank" rel="noreferrer">https://www.facebook.com/business/help/471978536642445?id=1205376682832142</a>,
+    Garanties: <a href="https://www.facebook.com/legal/terms/dataprocessing" target="_blank" rel="noreferrer">https://www.facebook.com/legal/terms/dataprocessing</a>,
 
   },
 ];
@@ -80,34 +69,24 @@ const PrivacyPolicy = () => (
     <h1 className="secondaryPageTitle">Politique de confidentialité</h1>
     <Section title="Qui sommes-nous ?">
       <p>
-        Le présent site Santé Psy Étudiant est à l’initiative de l’Incubateur
-        de services numériques de la Direction interministérielle du numérique (DINUM),
-        qui en est le responsable de traitement.
+        Santé Psy Étudiant est un service numérique porté depuis février 2021 par le ministère chargé de l’enseignement supérieur et de la recherche (MESR). Il vise à mettre en relation les étudiants et des psychologues habilités par les services de santé étudiante (SSE), dans le but de faire bénéficier aux étudiants de 12 séances gratuites avec un psychologue.
       </p>
     </Section>
     <Section title="Pourquoi traitons-nous des données à caractère personnel ?">
       <p>
-        « Santé Psy Étudiant » vise à mettre en relation étudiants et psychologues afin de permettre
-        la réalisation de séances gratuites, en application des annonces du Président de la République
-        et du Premier Ministre, le Ministère de l’Enseignement Supérieur et de la Recherche (MESR)
-        pour le déploiement d’un ensemble de mesures destinées à soutenir psychologiquement les étudiants au cours de l’année 2021.
+        Santé Psy Étudiant traite des données à caractère personnel pour permettre aux psychologues de se connecter à leurs espaces personnels, mettre en place un observatoire statistique relatif à la santé mentale des jeunes et à toute personne notamment les étudiants et psychologues, de prendre contact avec l’équipe de Santé Psy Étudiant.
       </p>
     </Section>
     <Section title="Quelles sont les données à caractère personnel que nous traitons ?">
-      <p>Sont traitées les données suivantes :</p>
       <ul className="fr-list">
-        <li> Données relatives aux psychologues : nom, prénom, numéro de téléphone professionnel, adresse e-mail professionnelle et personnelle, logs et adresse IP ; </li>
-        <li> Données relatives aux étudiants : nom, prénom. La date de naissance et le numéro étudiant sont facultatifs ; </li>
-        <li> Données relatives au formulaire de contact : nom, prénom, adresse e-mail, champs libres. </li>
+        <li> Données relatives aux psychologues : nom, prénom, numéro de téléphone professionnel, adresse courriel, logs et adresse IP ; </li>
+        <li> Données relatives aux étudiants : nom, prénom, numéro INE, école, date de naissance, genre ; </li>
+        <li> Données relatives au formulaire de contact : nom, prénom, adresse courriel, champs libres. </li>
       </ul>
-      <p>
-        Les données introduites par le psychologue pour générer la facture sont collectées localement,
-        de ce fait elles ne sont pas traitées par Santé Psy Etudiant. Il en est de même lorsque
-        l’utilisateur décide d’activer la localisation sur la recherche dans l’annuaire des psychologues.
-        En effet, cette donnée n’est pas collectée ni conservée par Santé Psy Étudiant,
-        qui ne peut donc pas la relier à un utilisateur. La donnée est traitée directement sur le navigateur de
-        l’utilisateur après avoir exprimé son consentement.
-      </p>
+    </Section>
+    <Section title="Qu’est-ce qui nous autorise à traiter des données à caractère personnel ?">
+      <p>Nous traitons des données à caractère personnel selon la base légale de la mission d’intérêt public conformément à l’article 6-1 e) du RGPD. </p>
+      <p>Cette mission d’intérêt public se traduit en pratique par le décret n° 2025-12 du 8 janvier 2025 relatif aux attributions du ministre auprès de la ministre d’Etat, ministre de l’éducation nationale, de l’enseignement supérieur et de la recherche, chargé de l’enseignement supérieur et de la recherche. </p>
     </Section>
     <Section title="Pendant combien de temps conservons-nous vos données ?">
       <p>Les données à caractère personnel sont conservées :</p>
@@ -132,7 +111,7 @@ const PrivacyPolicy = () => (
         </li>
       </ul>
       <p>
-        Par voie numérique : envoyez-nous un email à
+        Par voie électronique : envoyez-nous un courriel à
         {' '}
         <a
           href="mailto:support-santepsyetudiant@beta.gouv"
@@ -153,16 +132,39 @@ const PrivacyPolicy = () => (
         </a>
         {' '}
       </p>
-      <p>Par voie postale :</p>
       <p>
-        A l’attention du ou de la Chargé(e) de mission sur le
-        dispositif Santé Psy Etudiant
+        Vous pouvez prendre attache avec le délégué à la protection des données à l’adresse suivante :
+        {' '}
+        <a
+          href="mailto:dpd@education.gouv.fr"
+          target="_blank"
+          rel="noreferrer"
+          >
+          dpd@education.gouv.fr
+        </a>
+        {' '}
+      </p>
+      <p>
+        Via le formulaire de saisine en ligne :
+        {' '}
+        <a
+          href="https://www.enseignementsup-recherche.gouv.fr/fr/nous-contacter-49937#dpd"
+          target="_blank"
+          rel="noreferrer"
+          >
+          https://www.enseignementsup-recherche.gouv.fr/fr/nous-contacter-49937#dpd
+        </a>
+        {' '}
+      </p>
+      <p>Ou par voie postale :</p>
+      <p>
+        Ministère de l’Enseignement supérieur et de la Recherche
         <br />
-        Sous-direction de la vie étudiante - DGESIP A2
+        Délégué à la protection des données (DPD)
         <br />
         1 rue Descartes
         <br />
-        75005 Paris
+        75231 Paris Cedex 5
       </p>
       <p>
         En raison de l’obligation de sécurité et de confidentialité
@@ -179,7 +181,7 @@ const PrivacyPolicy = () => (
           ici
         </a>
         {' '}
-        un modèle de courrier élaboré par la Cnil.
+        un modèle de courrier élaboré par la CNIL.
       </p>
       <p>
         Le responsable de traitement s’engage à répondre dans un délai raisonnable qui ne saurait
@@ -217,30 +219,16 @@ const PrivacyPolicy = () => (
       <p>
         En ce sens les données introduites par le psychologue pour générer
         la facture sont collectées localement, de ce fait elles ne sont pas
-        traitées par Santé Psy Etudiant.
+        traitées par Santé Psy Etudiant. De même, lorsque l’utilisateur recherche un psychologue autour de son emplacement, les données de géolocalisation sont collectées par le navigateur et ne sont pas remontées à l’équipe de Santé Psy Étudiant.
       </p>
     </Section>
-    <Section title="Cookies et traceurs">
+    <Section title="Témoins de connexion et traceurs">
       <p>
-        Un cookie est un fichier déposé sur votre terminal lors de la visite d’un site. Il a pour but de collecter des informations relatives à votre navigation et de vous adresser des services adaptés à votre terminal (ordinateur, mobile ou tablette).
-      </p>
-      <p>
-        En application de l’article 5(3) de la directive 2002/58/CE modifiée concernant le traitement des données à caractère personnel et la protection de la vie privée dans le secteur des communications électroniques, transposée à l’article 82 de la loi n°78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, les traceurs ou cookies suivent deux régimes distincts.
-      </p>
-      <p>
-        Les cookies strictement nécessaires au service ou ayant pour finalité exclusive de faciliter la communication par voie électronique sont dispensés de consentement préalable au titre de l’article 82 de la loi n°78-17 du 6 janvier 1978.
-      </p>
-      <p>
-        Les cookies n’étant pas strictement nécessaires au service ou n’ayant pas pour finalité exclusive de faciliter la communication par voie électronique doivent être consenti par l’utilisateur.
-        Ce consentement de la personne concernée pour une ou plusieurs finalités spécifiques constitue une base légale au sens du RGPD et doit être entendu au sens de l’article 6-a du Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 relatif à la protection des personnes physiques à l’égard du traitement des données à caractère personnel et à la libre circulation de ces données.
+        Un témoin de connexion est un fichier déposé sur votre terminal lors de la visite d’un site. Il a pour but de collecter des informations relatives à votre navigation et de vous adresser des services adaptés à votre terminal (ordinateur, mobile ou tablette).
+        Santé Psy Étudiant dépose des témoins de connexion, notamment pour la mesure d’audience sur son service. Le dépôt s’effectue uniquement lorsque l’utilisateur a consenti via le bandeau prévu à cet effet. L’utilisateur peut à tout moment revenir sur son choix.
+        Témoins de connexion déposés :
       </p>
       <SimpleTable data={dataCookies} />
-      <p>
-        Vous pouvez à tout moment accepter, refuser ou revenir sur votre consentement concernant le dépôt de cookies via le bandeau mis à disposition sur la page concernée
-        {' '}
-        <a href="https://santepsy.etudiant.gouv.fr/etudiant" target="_blank" rel="noreferrer">santepsy.etudiant.gouv.fr/etudiant</a>
-        {' '}
-      </p>
       <p>Nous utilisons également l’outil de mesure d’audience Matomo, configuré en mode “exempté” et ne nécessitant pas le recueil de votre consentement conformément aux recommandations de la CNIL.</p>
       <iframe title="Matomo opt-out" style={{ border: 'none', width: '90%' }} src="https://stats.beta.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=2f3b6c&fontSize=16px&fontFamily=sans-serif" />
       <p>
