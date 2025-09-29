@@ -36,31 +36,30 @@ const getLatestCursorSaved = (updateEverything = false): Promise<string | undefi
 };
 
 const saveLatestCursor = async (cursor: string): Promise<void> => {
+  const trx = await db.transaction();
   try {
     const now = date.now();
 
     const alreadySavedCursor = await getCursorFromDB();
-    // eslint-disable-next-line func-names
-    return await db.transaction((trx) => { // add transaction in case 2 cron jobs modify this cursor
-      if (alreadySavedCursor) {
-        console.log(`Updating the cursor ${cursor} in PG`);
-
-        return trx.into(dsApiCursorTable)
+    if (alreadySavedCursor) {
+      console.log(`Updating the cursor ${cursor} in PG`);
+      await trx(dsApiCursorTable)
         .where('id', 1)
         .update({
           cursor,
           updatedAt: now,
         });
-      } // no cursor already saved, we are going to create one entry
+    } else {
       console.log(`Saving a new cursor ${cursor} to PG`);
-
-      return trx.into(dsApiCursorTable).insert({
+      await trx(dsApiCursorTable).insert({
         id: 1,
         cursor,
         updatedAt: now,
       });
-    });
+    }
+    await trx.commit();
   } catch (err) {
+    await trx.rollback();
     console.error(`Impossible de sauvegarder le dernier cursor ${cursor} de l'api DS`, err);
     throw new Error('Impossible de sauvegarder le dernier cursor de l\'api DS');
   }
