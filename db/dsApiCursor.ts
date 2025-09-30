@@ -36,30 +36,23 @@ const getLatestCursorSaved = (updateEverything = false): Promise<string | undefi
 };
 
 const saveLatestCursor = async (cursor: string): Promise<void> => {
-  const trx = await db.transaction();
   try {
     const now = date.now();
 
-    const alreadySavedCursor = await getCursorFromDB();
-    if (alreadySavedCursor) {
-      console.log(`Updating the cursor ${cursor} in PG`);
-      await trx(dsApiCursorTable)
-        .where('id', 1)
-        .update({
-          cursor,
-          updatedAt: now,
-        });
-    } else {
-      console.log(`Saving a new cursor ${cursor} to PG`);
-      await trx(dsApiCursorTable).insert({
+    await db(dsApiCursorTable)
+      .insert({
         id: 1,
         cursor,
         updatedAt: now,
+      })
+      .onConflict('id')
+      .merge({
+        cursor,
+        updatedAt: now,
       });
-    }
-    await trx.commit();
+
+    console.log(`Cursor ${cursor} saved/updated in PG`);
   } catch (err) {
-    await trx.rollback();
     console.error(`Impossible de sauvegarder le dernier cursor ${cursor} de l'api DS`, err);
     throw new Error('Impossible de sauvegarder le dernier cursor de l\'api DS');
   }
