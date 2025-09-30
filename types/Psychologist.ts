@@ -83,10 +83,9 @@ export type DSPsychologist = {
 }
 
 export type PsychologistFilters = {
-  name?: string,
+  nameAndSpeciality?: string,
   address?: string,
   language?: string,
-  speciality?: string,
   teleconsultation?: boolean,
   coords? : string,
 }

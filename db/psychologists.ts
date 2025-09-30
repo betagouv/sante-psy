@@ -103,12 +103,26 @@ const getAllActiveByAvailability = async (isVeryAvailable: boolean, filters?: Ps
       .andWhere('isVeryAvailable', isVeryAvailable);
 
     /* Filters */
-    if (filters.name) {
-      query = query.andWhere((qb) => {
-        qb.whereRaw('unaccent("firstNames") ILIKE ?', [`%${filters.name}%`])
-          .orWhereRaw('unaccent("lastName") ILIKE ?', [`%${filters.name}%`])
-          .orWhereRaw('unaccent("useLastName") ILIKE ?', [`%${filters.name}%`])
-          .orWhereRaw('unaccent("useFirstNames") ILIKE ?', [`%${filters.name}%`]);
+    if (filters.nameAndSpeciality) {
+      const keywords = filters.nameAndSpeciality.split(/\s+/).filter(Boolean);
+
+      keywords.forEach((keyword) => {
+        const filter = `%${keyword}%`;
+        query = query.andWhere((qb) => {
+          qb.whereRaw('unaccent("firstNames") ILIKE ?', [filter])
+          .orWhereRaw('unaccent("lastName") ILIKE ?', [filter])
+          .orWhereRaw('unaccent("useLastName") ILIKE ?', [filter])
+          .orWhereRaw('unaccent("useFirstNames") ILIKE ?', [filter])
+          .orWhereRaw('unaccent(description) ILIKE ?', [filter])
+          .orWhereRaw('unaccent(diploma) ILIKE ?', [filter])
+          .orWhereRaw(
+            `EXISTS (
+              SELECT 1 FROM jsonb_array_elements_text(training::jsonb) AS elem
+              WHERE unaccent(elem) ILIKE ?
+            )`,
+            [filter],
+          );
+        });
       });
     }
     if (filters.address) {
@@ -124,20 +138,6 @@ const getAllActiveByAvailability = async (isVeryAvailable: boolean, filters?: Ps
       query = query.andWhereRaw('unaccent(languages) ILIKE ?', [`%${filters.language}%`]);
     }
 
-    if (filters.speciality) {
-      const specialityValue = `%${filters.speciality}%`;
-      query = query.andWhere((qb) => {
-        qb.whereRaw('unaccent(description) ILIKE ?', [specialityValue])
-          .orWhereRaw('unaccent(diploma) ILIKE ?', [specialityValue])
-        .orWhereRaw(
-          `EXISTS (
-            SELECT 1 FROM jsonb_array_elements_text(training::jsonb) AS elem 
-            WHERE unaccent(elem) ILIKE ?
-          )`,
-          [specialityValue],
-        );
-      });
-    }
     if (filters.teleconsultation !== undefined) {
       query = query.andWhere('teleconsultation', filters.teleconsultation);
     }

@@ -7,7 +7,7 @@ import distanceKm from '../services/distance';
 import validation from '../utils/validation';
 
 const getValidators = [
-  query('name').optional()
+  query('nameAndSpeciality').optional()
   .trim()
   .escape()
   .isLength({ min: 1, max: 100 }),
@@ -16,10 +16,6 @@ const getValidators = [
   .escape()
   .isLength({ min: 1, max: 100 }),
   query('address').optional()
-  .trim()
-  .escape()
-  .isLength({ min: 1, max: 100 }),
-  query('speciality').optional()
   .trim()
   .escape()
   .isLength({ min: 1, max: 100 }),
@@ -43,8 +39,8 @@ const cleanValue = (value: string): string => value
 const preprocessFilters = (filters: PsychologistFilters): PsychologistFilters => {
   const processedFilters: PsychologistFilters = {};
 
-  if (filters.name) {
-    processedFilters.name = cleanValue(filters.name);
+  if (filters.nameAndSpeciality) {
+    processedFilters.nameAndSpeciality = cleanValue(filters.nameAndSpeciality);
   }
   if (filters.address) {
     processedFilters.address = cleanValue(filters.address);
@@ -54,9 +50,6 @@ const preprocessFilters = (filters: PsychologistFilters): PsychologistFilters =>
   }
   if (filters.language) {
     processedFilters.language = cleanValue(filters.language);
-  }
-  if (filters.speciality) {
-    processedFilters.speciality = cleanValue(filters.speciality);
   }
   if (filters.teleconsultation) {
     processedFilters.teleconsultation = filters.teleconsultation.toString() === 'true' ? true : undefined;
