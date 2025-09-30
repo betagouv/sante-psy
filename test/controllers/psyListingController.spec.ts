@@ -27,7 +27,7 @@ describe('psyListingController', () => {
       useFirstNames: 'Géorgïe',
       useLastName: 'Sand',
       isVeryAvailable: true,
-      description: 'Psychologue en gestion du stress',
+      description: 'Psychologue en gestion du stress et amie de Victor',
       languages: 'Francais, espagnol',
     });
     psyInactive = create.getOneInactivePsy();
@@ -82,7 +82,7 @@ describe('psyListingController', () => {
     it('should filter psy by name', async () => {
       const res = await chai.request(app)
         .get('/api/trouver-un-psychologue/reduced')
-        .query({ filters: { name: 'georgie' } });
+        .query({ filters: { nameAndSpeciality: 'georgie' } });
 
       expect(res.status).to.equal(200);
       expect(res.body).to.have.length(1);
@@ -94,7 +94,27 @@ describe('psyListingController', () => {
     it('should filter psy by speciality', async () => {
       const res = await chai.request(app)
         .get('/api/trouver-un-psychologue/reduced')
-        .query({ filters: { speciality: 'Anxiete' } });
+        .query({ filters: { nameAndSpeciality: 'Anxiete' } });
+
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(1);
+      expect(res.body[0].dossierNumber).to.equals(psyActive1.dossierNumber);
+      expect(res.body[0].description).to.include('anxiété');
+    });
+
+    it('should filter psy by name and speciality', async () => {
+      const res = await chai.request(app)
+        .get('/api/trouver-un-psychologue/reduced')
+        .query({ filters: { nameAndSpeciality: 'victor' } });
+
+      expect(res.status).to.equal(200);
+      expect(res.body).to.have.length(2);
+    });
+
+    it('should only return if contains all keywords', async () => {
+      const res = await chai.request(app)
+        .get('/api/trouver-un-psychologue/reduced')
+        .query({ filters: { nameAndSpeciality: 'victor anxiete' } });
 
       expect(res.status).to.equal(200);
       expect(res.body).to.have.length(1);
