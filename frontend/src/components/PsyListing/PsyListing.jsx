@@ -35,8 +35,7 @@ const PsyListing = () => {
   const [filteredPsychologists, setFilteredPsychologists] = useState([]);
   const [geoStatus, setGeoStatus] = useState(geoStatusEnum.UNKNOWN);
   const [geoLoading, setGeoLoading] = useState(false);
-  const [nameFilter, setNameFilter] = useState(query.get('name') || '');
-  const [specialityFilter, setSpecialityFilter] = useState(query.get('speciality') || '');
+  const [nameAndSpecialityFilter, setNameAndSpecialityFilter] = useState(query.get('nameAndSpeciality') || '');
   const [languageFilter, setLanguageFilter] = useState(query.get('language') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
@@ -44,8 +43,7 @@ const PsyListing = () => {
 
   const fetchPsychologists = async () => {
     const filters = {
-      name: nameFilter || undefined,
-      speciality: specialityFilter || undefined,
+      nameAndSpeciality: nameAndSpecialityFilter || undefined,
       address: addressFilter !== AROUND_ME ? addressFilter : undefined,
       teleconsultation,
       language: languageFilter || undefined,
@@ -64,8 +62,7 @@ const PsyListing = () => {
   const handleSearch = () => {
     // Vérifie si au moins un filtre est défini
     if (
-      nameFilter.trim()
-      || specialityFilter.trim()
+      nameAndSpecialityFilter.trim()
       || languageFilter.trim()
       || addressFilter.trim()
       || teleconsultation
@@ -102,11 +99,8 @@ const PsyListing = () => {
       }
 
       let search = '';
-      if (nameFilter) {
-        search += `name=${nameFilter};`;
-      }
-      if (specialityFilter) {
-        search += `speciality=${specialityFilter};`;
+      if (nameAndSpecialityFilter) {
+        search += `name=${nameAndSpecialityFilter};`;
       }
       if (addressFilter) {
         search += `address=${addressFilter};`;
@@ -193,18 +187,11 @@ const PsyListing = () => {
           <div className={styles.filters}>
             <div className={styles.inputMd}>
               <TextInput
-                data-test-id="speciality-input"
-                value={specialityFilter}
-                onChange={e => setSpecialityFilter(e.target.value)}
-                placeholder="Spécialité, mot-clé ..."
-              />
-            </div>
-            <div className={styles.input}>
-              <TextInput
-                value={nameFilter}
-                onChange={e => setNameFilter(e.target.value)}
-                placeholder="Nom du psychologue"
-              />
+                data-test-id="name-speciality-input"
+                value={nameAndSpecialityFilter}
+                onChange={e => setNameAndSpecialityFilter(e.target.value)}
+                placeholder="Spécialité, mot-clé, nom du psychologue..."
+            />
             </div>
             <div className={styles.input}>
               <InputSelect
@@ -268,7 +255,7 @@ const PsyListing = () => {
           page={page}
           setPage={handlePageChange}
           psychologists={filteredPsychologists || []}
-          nameFilter={nameFilter}
+          nameAndSpecialityFilter={nameAndSpecialityFilter}
           addressFilter={addressFilter}
           languageFilter={languageFilter}
           teleconsultation={teleconsultation}
@@ -279,11 +266,11 @@ const PsyListing = () => {
             <NoResultPsyTable
               noResult={filteredPsychologists.length === 0}
               searchAroundMe={() => {
-                setNameFilter('');
+                setNameAndSpecialityFilter('');
                 setAddressFilter(AROUND_ME);
               }}
               searchWithTeleconsultation={() => {
-                setNameFilter('');
+                setNameAndSpecialityFilter('');
                 setAddressFilter(null);
                 setTeleconsultation(true);
               }}

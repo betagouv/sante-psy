@@ -10,7 +10,7 @@ describe('Psy Listing', () => {
 
   it('Should display table when filter search and redirect to public profile page', () => {
     cy.visit('/trouver-un-psychologue');
-    cy.get('[data-test-id="speciality-input"]').type('alimentaire');
+    cy.get('[data-test-id="name-speciality-input"]').type('alimentaire');
     cy.get('[data-test-id="psy-search"]').click();
     cy.wait('@psychologists');
 
