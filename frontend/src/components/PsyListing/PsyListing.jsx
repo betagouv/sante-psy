@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Checkbox, TextInput, Alert, Button } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
@@ -134,6 +134,8 @@ const PsyListing = () => {
     setGeoStatus(geoStatusEnum.DENIED);
   };
 
+  const searchButtonRef = useRef(null);
+
   const getGeolocation = state => {
     if (state === 'granted') {
       setGeoLoading(true);
@@ -184,7 +186,15 @@ const PsyListing = () => {
       <>
         <GlobalNotification />
         <div className="fr-pb-6w fr-mt-2w">
-          <div className={styles.filters}>
+          <div className={styles.filters}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearch();
+                searchButtonRef.current?.focus();
+              }
+            }}
+          >
             <div className={styles.inputMd}>
               <TextInput
                 data-test-id="name-speciality-input"
@@ -214,7 +224,13 @@ const PsyListing = () => {
               label="Téléconsultation"
               checked={teleconsultation}
             />
-            <Button data-test-id="psy-search" onClick={handleSearch} icon="ri-search-line" iconPosition="left">
+            <Button
+              ref={searchButtonRef}
+              data-test-id="psy-search"
+              onClick={handleSearch}
+              icon="ri-search-line"
+              iconPosition="left"
+            >
               Rechercher
             </Button>
           </div>
