@@ -112,22 +112,22 @@ const AddressAutocomplete = ({
 
     if (key === 'ArrowDown') {
       e.preventDefault();
-      setSelectedIndex(prev => (prev < suggestions.length - 1 ? prev + 1 : 0));
+      setArrowSelected(prev => (prev < suggestions.length - 1 ? prev + 1 : 0));
     }
 
     if (key === 'ArrowUp') {
       e.preventDefault();
-      setSelectedIndex(prev => (prev > 0 ? prev - 1 : suggestions.length - 1));
+      setArrowSelected(prev => (prev > 0 ? prev - 1 : suggestions.length - 1));
     }
 
-    if (key === 'Enter' && selectedIndex >= 0) {
+    if (key === 'Enter' && arrowSelected >= 0) {
       e.preventDefault();
-      onSelect(suggestions[selectedIndex]);
+      selectOption(suggestions[arrowSelected]);
     }
 
     if (key === 'Escape') {
       setSuggestions([]);
-      setSelectedIndex(-1);
+      setArrowSelected(-1);
     }
   };
 
@@ -176,7 +176,7 @@ const AddressAutocomplete = ({
                 styles.addressOption,
                 index === arrowSelected ? styles.addressOptionSelected : null,
               )}
-              key={`${selectId.current}-${option.value}-${index}`}
+              key={`${selectId.current}-${option.value}-${option.label}`}
               onMouseDown={() => selectOption(option)}
               onMouseEnter={() => setArrowSelected(index)}
                             >
