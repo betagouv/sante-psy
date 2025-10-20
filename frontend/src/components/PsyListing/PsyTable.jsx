@@ -22,6 +22,12 @@ const PsyTable = ({
     if (location.search !== searchPath) {
       navigate(`/trouver-un-psychologue${searchPath}`);
     }
+    
+    // Tracker la navigation vers un profil depuis les résultats de recherche
+    if (__MATOMO__) {
+      _paq.push(['trackEvent', 'PsychologistProfile', 'ViewFromResults', psychologist.dossierNumber]);
+    }
+    
     navigate(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
   };
 

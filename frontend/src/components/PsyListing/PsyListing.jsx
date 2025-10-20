@@ -5,6 +5,7 @@ import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
 import InputSelect from 'components/InputSelect/InputSelect';
+import AddressAutocomplete from 'components/AddressAutocomplete/AddressAutocomplete';
 
 import agent from 'services/agent';
 
@@ -54,8 +55,17 @@ const PsyListing = () => {
       const response = await agent.Psychologist.find(filters);
       setPsychologists(response);
       setFilteredPsychologists(response);
+
+      if (__MATOMO__) {
+        _paq.push(['trackEvent', 'PsychologistSearch', 'Results', (response?.length || 0).toString()]);
+      }
+
     } catch (error) {
       console.error('Erreur lors de la récupération des psychologues :', error);
+
+      if (__MATOMO__) {
+        _paq.push(['trackEvent', 'PsychologistSearch', 'Error', 'api_error']);
+      }
     }
   };
 
@@ -67,6 +77,38 @@ const PsyListing = () => {
       || addressFilter.trim()
       || teleconsultation
     ) {
+      if (__MATOMO__) {
+        let searchExecuted = '';
+        if (nameAndSpecialityFilter) {
+          searchExecuted += `speciality=${nameAndSpecialityFilter};`;
+        }
+        if (addressFilter) {
+          searchExecuted += `location=${addressFilter};`;
+        }
+        if (languageFilter) {
+          searchExecuted += `language=${languageFilter};`;
+        }
+        if (teleconsultation) {
+          searchExecuted += `teleconsultation=true;`;
+        }
+        _paq.push(['trackEvent', 'PsychologistSearch', 'Execute', searchExecuted]);
+
+        if (addressFilter) {
+          if (addressFilter === AROUND_ME) {
+            _paq.push(['trackEvent', 'LocationSearchExecuted', 'Geolocation', 'Autour de moi']);
+          } else {
+
+            if (/^\d{5}$/.test(addressFilter.trim())) {
+              _paq.push(['trackEvent', 'LocationSearchExecuted', 'PostalCode', addressFilter]);
+            } else if (addressFilter.includes(' - ')) {
+              _paq.push(['trackEvent', 'LocationSearchExecuted', 'Department', addressFilter]);
+            } else {
+              _paq.push(['trackEvent', 'LocationSearchExecuted', 'CityOrRegion', addressFilter]);
+            }
+          }
+        }
+      }
+
       fetchPsychologists();
       setPage(1);
     } else {
@@ -81,6 +123,10 @@ const PsyListing = () => {
         false,
         false,
       );
+
+      if (__MATOMO__) {
+        _paq.push(['trackEvent', 'PsychologistSearch', 'EmptySearch', 'no_criteria']);
+      }
     }
   };
 
@@ -100,22 +146,48 @@ const PsyListing = () => {
 
       let search = '';
       if (nameAndSpecialityFilter) {
-        search += `name=${nameAndSpecialityFilter};`;
+        search += `speciality=${nameAndSpecialityFilter};`;
       }
       if (addressFilter) {
-        search += `address=${addressFilter};`;
-      }
-      if (teleconsultation) {
-        search += `teleconsultation=${teleconsultation};`;
+        search += `location=${addressFilter};`;
       }
       if (languageFilter) {
         search += `language=${languageFilter};`;
+      }
+      if (teleconsultation) {
+        search += `teleconsultation=${teleconsultation};`;
       }
 
       if (search) {
         lastSearch = setTimeout(
           () => {
-            _paq.push(['trackEvent', 'Search', 'Psychologist', search]);
+            _paq.push(['trackEvent', 'PsychologistSearch', 'Input', search]);
+
+            // Tracker spécifiquement les recherches géographiques
+            if (addressFilter) {
+              if (addressFilter === AROUND_ME) {
+                _paq.push(['trackEvent', 'LocationSearch', 'Geolocation', 'Autour de moi']);
+              } else {
+                // Déterminer le type de lieu recherché
+                if (/^\d{5}$/.test(addressFilter.trim())) {
+                  _paq.push(['trackEvent', 'LocationSearch', 'PostalCode', addressFilter]);
+                } else if (addressFilter.includes(' - ')) {
+                  _paq.push(['trackEvent', 'LocationSearch', 'Department', addressFilter]);
+                } else {
+                  _paq.push(['trackEvent', 'LocationSearch', 'CityOrRegion', addressFilter]);
+                }
+              }
+            }
+
+            // Tracker spécifiquement les recherches de langues
+            if (languageFilter) {
+              _paq.push(['trackEvent', 'LanguageSearch', 'Language', languageFilter]);
+            }
+
+            // Tracker spécifiquement les recherches de spécialités
+            if (nameAndSpecialityFilter) {
+              _paq.push(['trackEvent', 'SpecialitySearch', 'Query', nameAndSpecialityFilter]);
+            }
           },
           2500,
         );
@@ -123,11 +195,35 @@ const PsyListing = () => {
     }
   };
 
-  const success = pos => {
+  const success = async pos => {
     const { longitude, latitude } = pos.coords;
     setCoords({ longitude, latitude });
     setGeoStatus(geoStatusEnum.GRANTED);
     setGeoLoading(false);
+
+    // Récupérer l'adresse à partir des coordonnées pour les stats
+    if (__MATOMO__) {
+      try {
+        const response = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}`);
+        const data = await response.json();
+
+        if (data.features && data.features.length > 0) {
+          const address = data.features[0].properties;
+          const city = address.city || address.name;
+          const postcode = address.postcode;
+          const context = address.context;
+
+          // Tracker la localisation réelle pour "autour de moi"
+          _paq.push(['trackEvent', 'GeolocationDetected', 'City', city || 'unknown']);
+          _paq.push(['trackEvent', 'GeolocationDetected', 'PostalCode', postcode || 'unknown']);
+          _paq.push(['trackEvent', 'GeolocationDetected', 'Region', context || 'unknown']);
+          _paq.push(['trackEvent', 'GeolocationDetected', 'FullAddress', `${city} ${postcode} - ${context}`]);
+        }
+      } catch (error) {
+        console.error('Erreur géocodage inversé:', error);
+        _paq.push(['trackEvent', 'GeolocationDetected', 'Error', 'reverse_geocoding_failed']);
+      }
+    }
   };
 
   const errors = () => {
@@ -195,20 +291,41 @@ const PsyListing = () => {
               }
             }}
           >
+            <div className={styles.input}>
+              <AddressAutocomplete
+                selected={addressFilter}
+                onChange={e => {
+                  setAddressFilter(e);
+                  if (__MATOMO__ && e && e !== addressFilter) {
+                    let addressType = 'city';
+                    if (e === AROUND_ME) {
+                      addressType = 'geolocation';
+                    } else if (/^\d+/.test(e)) {
+                      addressType = 'postal_code';
+                    } else if (e.includes(' - ')) {
+                      addressType = 'department';
+                    }
+
+                    // Tracker le type de sélection
+                    _paq.push(['trackEvent', 'AddressAutocomplete', 'Select', addressType]);
+
+                    // Tracker la valeur exacte sélectionnée pour les statistiques géographiques
+                    if (e === AROUND_ME) {
+                      _paq.push(['trackEvent', 'AddressAutocomplete', 'SelectedValue', 'Geolocation']);
+                    } else {
+                      _paq.push(['trackEvent', 'AddressAutocomplete', 'SelectedValue', e]);
+                    }
+                  }
+                }}
+                placeholder="Ville, code postal ou région"
+              />
+            </div>
             <div className={styles.inputMd}>
               <TextInput
                 data-test-id="name-speciality-input"
                 value={nameAndSpecialityFilter}
                 onChange={e => setNameAndSpecialityFilter(e.target.value)}
                 placeholder="Spécialité, mot-clé, nom du psychologue..."
-            />
-            </div>
-            <div className={styles.input}>
-              <InputSelect
-                selected={addressFilter}
-                onChange={e => setAddressFilter(e)}
-                placeholder="Ville, code postal ou région"
-                options={[{ value: AROUND_ME, label: AROUND_ME }]}
               />
             </div>
             <div className={styles.input}>
