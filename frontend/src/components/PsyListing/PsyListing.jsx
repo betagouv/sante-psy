@@ -4,7 +4,6 @@ import { Checkbox, TextInput, Alert, Button } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
-import InputSelect from 'components/InputSelect/InputSelect';
 import AddressAutocomplete from 'components/AddressAutocomplete/AddressAutocomplete';
 
 import agent from 'services/agent';
