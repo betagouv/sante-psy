@@ -143,18 +143,16 @@ const searchLocalData = query => {
         type: 'departement',
         context: departementToRegion[dept],
       });
-    }
-    // Search by department name
-    else if (deptName && deptName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(normalizedQuery)) {
+    } else if (deptName && deptName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(normalizedQuery)) {
+      // Search by department name
       results.push({
         value: dept,
         label: dept,
         type: 'departement',
         context: departementToRegion[dept],
       });
-    }
-    // Search in full name
-    else if (normalizedDept.includes(normalizedQuery)) {
+    } else if (normalizedDept.includes(normalizedQuery)) {
+      // Search in full name
       results.push({
         value: dept,
         label: dept,

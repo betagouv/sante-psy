@@ -162,15 +162,14 @@ const PsyListing = () => {
             if (addressFilter) {
               if (addressFilter === AROUND_ME) {
                 _paq.push(['trackEvent', 'LocationSearch', 'Geolocation', 'Autour de moi']);
+              } else if (/^\d{2,3}$/.test(addressFilter.trim())) {
+                _paq.push(['trackEvent', 'LocationSearch', 'DepartmentNumber', addressFilter]);
+              } else if (/^\d{5}$/.test(addressFilter.trim())) {
+                _paq.push(['trackEvent', 'LocationSearch', 'PostalCode', addressFilter]);
+              } else if (addressFilter.includes(' - ')) {
+                _paq.push(['trackEvent', 'LocationSearch', 'Department', addressFilter]);
               } else {
-                // Déterminer le type de lieu recherché
-                if (/^\d{5}$/.test(addressFilter.trim())) {
-                  _paq.push(['trackEvent', 'LocationSearch', 'PostalCode', addressFilter]);
-                } else if (addressFilter.includes(' - ')) {
-                  _paq.push(['trackEvent', 'LocationSearch', 'Department', addressFilter]);
-                } else {
-                  _paq.push(['trackEvent', 'LocationSearch', 'CityOrRegion', addressFilter]);
-                }
+                _paq.push(['trackEvent', 'LocationSearch', 'CityOrRegion', addressFilter]);
               }
             }
 
@@ -196,7 +195,6 @@ const PsyListing = () => {
     setGeoStatus(geoStatusEnum.GRANTED);
     setGeoLoading(false);
 
-    // Récupérer l'adresse à partir des coordonnées pour les stats
     if (__MATOMO__) {
       try {
         const response = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}`);
@@ -208,7 +206,6 @@ const PsyListing = () => {
           const { postcode } = address;
           const { context } = address;
 
-          // Tracker la localisation réelle pour "autour de moi"
           _paq.push(['trackEvent', 'GeolocationDetected', 'City', city || 'unknown']);
           _paq.push(['trackEvent', 'GeolocationDetected', 'PostalCode', postcode || 'unknown']);
           _paq.push(['trackEvent', 'GeolocationDetected', 'Region', context || 'unknown']);
@@ -300,11 +297,8 @@ const PsyListing = () => {
                     } else if (e.includes(' - ')) {
                       addressType = 'department';
                     }
-
-                    // Tracker le type de sélection
                     _paq.push(['trackEvent', 'AddressAutocomplete', 'Select', addressType]);
 
-                    // Tracker la valeur exacte sélectionnée pour les statistiques géographiques
                     if (e === AROUND_ME) {
                       _paq.push(['trackEvent', 'AddressAutocomplete', 'SelectedValue', 'Geolocation']);
                     } else {
