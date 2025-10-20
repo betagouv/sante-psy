@@ -130,7 +130,7 @@ const PublicPsychologistProfile = () => {
                 </div>
                 <Button
                   secondary
-                  onClick={() => { 
+                  onClick={() => {
                     if (__MATOMO__) {
                       _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'phone']);
                     }
@@ -148,7 +148,7 @@ const PublicPsychologistProfile = () => {
                 </div>
                 <Button
                   secondary
-                  onClick={() => { 
+                  onClick={() => {
                     if (__MATOMO__) {
                       _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'email']);
                     }
@@ -171,7 +171,6 @@ const PublicPsychologistProfile = () => {
               )
             }
 
-
             {psychologist.website && (
               <div className={styles.contactInfo}>
                 <div>
@@ -186,7 +185,7 @@ const PublicPsychologistProfile = () => {
                 </div>
                 <Button
                   secondary
-                  onClick={() => { 
+                  onClick={() => {
                     if (__MATOMO__) {
                       _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'website']);
                     }
@@ -205,7 +204,7 @@ const PublicPsychologistProfile = () => {
                 {window.innerWidth <= 769 ? (
                   <Button
                     secondary
-                    onClick={() => { 
+                    onClick={() => {
                       if (__MATOMO__) {
                         _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
                       }
@@ -218,7 +217,7 @@ const PublicPsychologistProfile = () => {
                 ) : (
                   <Button
                     secondary
-                    onClick={() => { 
+                    onClick={() => {
                       if (__MATOMO__) {
                         _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
                       }
