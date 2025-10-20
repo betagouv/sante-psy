@@ -51,7 +51,6 @@ const PublicPsychologistProfile = () => {
     agent.Psychologist.getProfile(psyId)
       .then((response) => {
         setPsychologist(response);
-        // Tracker la consultation du profil
         if (__MATOMO__) {
           _paq.push(["trackEvent", "PsychologistProfile", "View", psyId]);
         }
@@ -125,7 +124,7 @@ const PublicPsychologistProfile = () => {
               <div className={styles.contactInfo}>
                 <div>
                   <h5>Téléphone</h5>
-                  {psychologist.phone}
+                  <div data-test-id="psy-info">{psychologist.phone}</div>
                 </div>
                 <Button
                   secondary
@@ -143,7 +142,7 @@ const PublicPsychologistProfile = () => {
               <div className={styles.contactInfo}>
                 <div>
                   <h5>E-mail</h5>
-                  {psychologist.email}
+                  <div data-test-id="psy-info">{psychologist.email}</div>
                 </div>
                 <Button
                   secondary

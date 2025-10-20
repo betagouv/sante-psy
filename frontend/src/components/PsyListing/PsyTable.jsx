@@ -23,7 +23,6 @@ const PsyTable = ({
       navigate(`/trouver-un-psychologue${searchPath}`);
     }
 
-    // Tracker la navigation vers un profil depuis les résultats de recherche
     if (__MATOMO__) {
       _paq.push(['trackEvent', 'PsychologistProfile', 'ViewFromResults', psychologist.dossierNumber]);
     }
@@ -66,7 +65,7 @@ const PsyTable = ({
     <div ref={table}>
       {psychologists.length > 0 && (
         <div className={styles.table} data-test-id="psy-table">
-          { pagedPsychologists.map(psychologist => (
+          {pagedPsychologists.map(psychologist => (
             <div className={styles.box} key={psychologist.dossierNumber} data-test-id="psy-row">
               <div className={styles.personnalInfo}>
                 <Icon className={styles.userIcon} name="ri-user-line" size="2x" />
@@ -81,28 +80,28 @@ const PsyTable = ({
                       <Icon className="fr-mr-1w" name="ri-map-pin-2-fill" size="lg" />
                       <span>
                         {
-                        psychologist.city
-                          ? `${psychologist.city} • ${psychologist.postcode}`
-                          : psychologist.address
-                      }
+                          psychologist.city
+                            ? `${psychologist.city} • ${psychologist.postcode}`
+                            : psychologist.address
+                        }
                       </span>
                       {psychologist.otherCity && psychologist.otherCity !== psychologist.city && (
-                      <>
-                        <span className={styles.separator} />
-                        <span>{`${psychologist.otherCity} • ${psychologist.otherPostcode}`}</span>
-                      </>
+                        <>
+                          <span className={styles.separator} />
+                          <span>{`${psychologist.otherCity} • ${psychologist.otherPostcode}`}</span>
+                        </>
                       )}
                     </div>
                     {psychologist.teleconsultation && (
-                    <>
-                      <div className={styles.optionalSeparator} />
-                      <Badge
-                        className={styles.badge}
-                        icon="ri-webcam-fill"
-                        text="Téléconsultation disponible"
-                        colorFamily="green-bourgeon"
-                      />
-                    </>
+                      <>
+                        <div className={styles.optionalSeparator} />
+                        <Badge
+                          className={styles.badge}
+                          icon="ri-webcam-fill"
+                          text="Téléconsultation disponible"
+                          colorFamily="green-bourgeon"
+                        />
+                      </>
                     )}
                   </div>
                 </div>
@@ -138,7 +137,7 @@ const PsyTable = ({
             onClick={setPage}
           />
         </div>
-      ) }
+      )}
     </div>
   );
 };
