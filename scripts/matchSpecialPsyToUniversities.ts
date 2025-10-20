@@ -1,7 +1,7 @@
 import db from '../db/db';
 import dbUniversities from '../db/universities';
 import dbPsychologists from '../db/psychologists';
-import { psychologistsTable } from '../db/tables';
+import { psychologistsTable, assignedUniversityTable } from '../db/tables';
 import psyToUni from './psyToUni';
 import { DossierState } from '../types/DossierState';
 
@@ -23,9 +23,19 @@ const matchPsyToUni = async (dryRun): Promise<void> => {
     const statsNoPsyFound = [];
 
     const universities = await dbUniversities.getAll();
-    const psyFromDb = await db.column('personalEmail', 'dossierNumber', 'assignedUniversityId')
-      .select().from(psychologistsTable)
-      .where('state', DossierState.accepte);
+    
+    // Récupérer les psychologues avec leurs assignations actuelles
+    const psyFromDb = await db.from(psychologistsTable)
+      .leftJoin(assignedUniversityTable, function joinAssignments() {
+        this.on(`${psychologistsTable}.dossierNumber`, '=', `${assignedUniversityTable}.psychologistId`)
+          .andOnNull(`${assignedUniversityTable}.unassignedAt`);
+      })
+      .select(
+        `${psychologistsTable}.personalEmail`,
+        `${psychologistsTable}.dossierNumber`,
+        `${assignedUniversityTable}.universityId as assignedUniversityId`,
+      )
+      .where(`${psychologistsTable}.state`, DossierState.accepte);
 
     Object.keys(psyToUni).forEach((psyFromFile) => {
       const psyFoundInDb = psyFromDb.find((psy) => psy.personalEmail === psyFromFile);

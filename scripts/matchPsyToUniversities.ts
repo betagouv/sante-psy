@@ -1,7 +1,7 @@
 import db from '../db/db';
 import dbUniversities from '../db/universities';
 import dbPsychologists from '../db/psychologists';
-import { psychologistsTable } from '../db/tables';
+import { psychologistsTable, assignedUniversityTable } from '../db/tables';
 import department from '../utils/department';
 import departementToUniversityName from '../utils/departementToUniversityName';
 
@@ -25,8 +25,19 @@ const matchPsyToUni = async (dryRun): Promise<void> => {
     const statsNoChange = [];
 
     const universities = await dbUniversities.getAll();
-    const psychologists = await db.column('personalEmail', 'dossierNumber', 'departement', 'assignedUniversityId')
-      .select().from(psychologistsTable);
+    
+    // Récupérer les psychologues avec leurs assignations actuelles
+    const psychologists = await db.from(psychologistsTable)
+      .leftJoin(assignedUniversityTable, function joinAssignments() {
+        this.on(`${psychologistsTable}.dossierNumber`, '=', `${assignedUniversityTable}.psychologistId`)
+          .andOnNull(`${assignedUniversityTable}.unassignedAt`);
+      })
+      .select(
+        `${psychologistsTable}.personalEmail`,
+        `${psychologistsTable}.dossierNumber`,
+        `${psychologistsTable}.departement`,
+        `${assignedUniversityTable}.universityId as assignedUniversityId`,
+      );
 
     const needToWait = psychologists
       .map((psy) => {

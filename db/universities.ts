@@ -65,10 +65,6 @@ const insertByName = async (name: string): Promise<University> => {
 };
 
 const getAssignedUniversityId = (psychologist: Psychologist, universities: University[]): string | null => {
-  if (psychologist.assignedUniversityId) {
-    return psychologist.assignedUniversityId;
-  }
-
   const departement = department.getNumberFromString(psychologist.departement);
   if (!departement) {
     console.log(`No departement found - psy id ${psychologist.dossierNumber}`);

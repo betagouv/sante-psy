@@ -1,7 +1,7 @@
 /* eslint-disable no-continue */
 /* eslint-disable no-await-in-loop */
 import date from '../utils/date';
-import { psychologistsTable, suspensionReasonsTable } from './tables';
+import { psychologistsTable, suspensionReasonsTable, assignedUniversityTable } from './tables';
 import { DossierState } from '../types/DossierState';
 import dbUniversities from './universities';
 import {
@@ -28,22 +28,37 @@ const getAllAccepted = async (selectedData: string[]): Promise<Psychologist[]> =
 };
 
 const saveAssignedUniversity = async (psychologistId: string, assignedUniversityId: string): Promise<number> => {
-  const updatedPsy = await db(psychologistsTable)
-    .where({
-      dossierNumber: psychologistId,
-    })
-    .update({
-      assignedUniversityId,
-      updatedAt: date.now(),
-    });
+  // Utiliser la nouvelle table assigned_university au lieu de la colonne
+  const trx = await db.transaction();
+  
+  try {
+    // Fermer toute assignation active existante
+    await trx(assignedUniversityTable)
+      .where('psychologistId', psychologistId)
+      .whereNull('unassignedAt')
+      .update({
+        unassignedAt: date.now(),
+        updatedAt: date.now(),
+      });
 
-  console.log(`Psy id ${psychologistId} updated with assignedUniversityId ${assignedUniversityId}`);
+    // Créer la nouvelle assignation
+    await trx(assignedUniversityTable)
+      .insert({
+        psychologistId,
+        universityId: assignedUniversityId,
+        assignedAt: date.now(),
+        createdAt: date.now(),
+      });
 
-  if (!updatedPsy) {
-    throw new Error('No psychologist found for this id');
+    await trx.commit();
+    console.log(`Psy id ${psychologistId} assigned to university ${assignedUniversityId}`);
+    
+    return 1; // Retourner 1 pour indiquer le succès
+  } catch (error) {
+    await trx.rollback();
+    console.error('Error assigning university:', error);
+    throw new Error('Failed to assign university');
   }
-
-  return updatedPsy;
 };
 
 const selectFields = (): string[] => [
@@ -201,17 +216,24 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
         if (index > 0) await sleep(50);
         const coordinates = await getAddressCoordinates(psy.address);
 
-        psychologistsToInsert.push({
+        const psyToInsert = {
           ...psy,
           languages: addFrenchLanguageIfMissing(psy.languages),
-          assignedUniversityId: dbUniversities.getAssignedUniversityId(psy, universities),
           ...(coordinates && {
             longitude: coordinates.longitude,
             latitude: coordinates.latitude,
             city: coordinates.city,
             postcode: coordinates.postcode,
           }),
-        });
+        };
+        
+        // Stocker l'assignation d'université pour plus tard
+        const universityId = dbUniversities.getAssignedUniversityId(psy, universities);
+        if (universityId) {
+          (psyToInsert as any)._universityToAssign = universityId;
+        }
+        
+        psychologistsToInsert.push(psyToInsert);
         continue;
       }
 
@@ -252,7 +274,30 @@ const upsertMany = async (psyList: Psychologist[]): Promise<void> => {
 
   if (psychologistsToInsert.length > 0) {
     try {
-      await db(psychologistsTable).insert(psychologistsToInsert);
+      // Séparer les données d'université des données de psychologue
+      const psyData = psychologistsToInsert.map((psy) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { _universityToAssign, ...cleanPsy } = psy as any;
+        return cleanPsy;
+      });
+      
+      await db(psychologistsTable).insert(psyData);
+      
+      // Créer les assignations d'université après insertion
+      const assignments = psychologistsToInsert
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((psy) => (psy as any)._universityToAssign)
+        .map((psy) => ({
+          psychologistId: psy.dossierNumber,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          universityId: (psy as any)._universityToAssign,
+          assignedAt: date.now(),
+          createdAt: date.now(),
+        }));
+      
+      if (assignments.length > 0) {
+        await db(assignedUniversityTable).insert(assignments);
+      }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error('Error to insert psychologists', err);
@@ -325,11 +370,17 @@ const getConventionInfo = async (psychologistId: string)
       `${psychologistsTable}.isConventionSigned`,
     )
     .innerJoin(
+      assignedUniversityTable,
+      `${psychologistsTable}.dossierNumber`,
+      `${assignedUniversityTable}.psychologistId`,
+    )
+    .innerJoin(
       'universities',
-      `${psychologistsTable}.assignedUniversityId`,
+      `${assignedUniversityTable}.universityId`,
       `${'universities'}.id`,
     )
     .where(`${psychologistsTable}.dossierNumber`, psychologistId)
+    .whereNull(`${assignedUniversityTable}.unassignedAt`) // Seulement l'assignation active
     .first();
 
 const deleteConventionInfo = async (email: string): Promise<number> => db
@@ -447,6 +498,20 @@ const seeTutorial = async (dossierNumber: string): Promise<number> => {
   }
 };
 
+const getCurrentUniversity = async (psychologistId: string): Promise<string | null> => {
+  try {
+    const assignment = await db(assignedUniversityTable)
+      .where('psychologistId', psychologistId)
+      .whereNull('unassignedAt')
+      .first();
+    
+    return assignment ? assignment.universityId : null;
+  } catch (err) {
+    console.error('Erreur de récupération de l\'université assignée', err);
+    return null;
+  }
+};
+
 export default {
   getAllActive,
   getAllActiveByAvailability,
@@ -469,4 +534,5 @@ export default {
   active,
   seeTutorial,
   resetTutorial,
+  getCurrentUniversity,
 };
