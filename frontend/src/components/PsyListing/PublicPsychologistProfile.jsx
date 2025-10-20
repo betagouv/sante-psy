@@ -48,7 +48,6 @@ const PublicPsychologistProfile = () => {
     agent.Psychologist.getProfile(psyId)
       .then(response => {
         setPsychologist(response);
-        // Tracker la consultation du profil
         if (__MATOMO__) {
           _paq.push(['trackEvent', 'PsychologistProfile', 'View', psyId]);
         }
@@ -126,14 +125,11 @@ const PublicPsychologistProfile = () => {
               <div className={styles.contactInfo}>
                 <div>
                   <h5>Téléphone</h5>
-                  {psychologist.phone}
+                  <div data-test-id="psy-info">{psychologist.phone}</div>
                 </div>
                 <Button
                   secondary
                   onClick={() => {
-                    if (__MATOMO__) {
-                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'phone']);
-                    }
                     window.location.href = `tel:${psychologist.phone}`;
                   }}
                   icon="ri-phone-fill"
@@ -144,14 +140,11 @@ const PublicPsychologistProfile = () => {
               <div className={styles.contactInfo}>
                 <div>
                   <h5>E-mail</h5>
-                  {psychologist.email}
+                  <div data-test-id="psy-info">{psychologist.email}</div>
                 </div>
                 <Button
                   secondary
                   onClick={() => {
-                    if (__MATOMO__) {
-                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'email']);
-                    }
                     window.location.href = `mailto:${psychologist.email}`;
                   }}
                   icon="ri-mail-fill"
@@ -186,9 +179,6 @@ const PublicPsychologistProfile = () => {
                 <Button
                   secondary
                   onClick={() => {
-                    if (__MATOMO__) {
-                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'website']);
-                    }
                     window.open(string.prefixUrl(psychologist.website), '_blank');
                   }}
                   icon="ri-link"
@@ -205,9 +195,6 @@ const PublicPsychologistProfile = () => {
                   <Button
                     secondary
                     onClick={() => {
-                      if (__MATOMO__) {
-                        _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
-                      }
                       window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
                     }}
                     icon="ri-calendar-fill"
@@ -218,9 +205,6 @@ const PublicPsychologistProfile = () => {
                   <Button
                     secondary
                     onClick={() => {
-                      if (__MATOMO__) {
-                        _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
-                      }
                       window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
                     }}
                   >
