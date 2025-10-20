@@ -58,7 +58,6 @@ const PsyListing = () => {
       if (__MATOMO__) {
         _paq.push(['trackEvent', 'PsychologistSearch', 'Results', (response?.length || 0).toString()]);
       }
-
     } catch (error) {
       console.error('Erreur lors de la récupération des psychologues :', error);
 
@@ -88,22 +87,19 @@ const PsyListing = () => {
           searchExecuted += `language=${languageFilter};`;
         }
         if (teleconsultation) {
-          searchExecuted += `teleconsultation=true;`;
+          searchExecuted += 'teleconsultation=true;';
         }
         _paq.push(['trackEvent', 'PsychologistSearch', 'Execute', searchExecuted]);
 
         if (addressFilter) {
           if (addressFilter === AROUND_ME) {
             _paq.push(['trackEvent', 'LocationSearchExecuted', 'Geolocation', 'Autour de moi']);
+          } else if (/^\d{5}$/.test(addressFilter.trim())) {
+            _paq.push(['trackEvent', 'LocationSearchExecuted', 'PostalCode', addressFilter]);
+          } else if (addressFilter.includes(' - ')) {
+            _paq.push(['trackEvent', 'LocationSearchExecuted', 'Department', addressFilter]);
           } else {
-
-            if (/^\d{5}$/.test(addressFilter.trim())) {
-              _paq.push(['trackEvent', 'LocationSearchExecuted', 'PostalCode', addressFilter]);
-            } else if (addressFilter.includes(' - ')) {
-              _paq.push(['trackEvent', 'LocationSearchExecuted', 'Department', addressFilter]);
-            } else {
-              _paq.push(['trackEvent', 'LocationSearchExecuted', 'CityOrRegion', addressFilter]);
-            }
+            _paq.push(['trackEvent', 'LocationSearchExecuted', 'CityOrRegion', addressFilter]);
           }
         }
       }
@@ -209,8 +205,8 @@ const PsyListing = () => {
         if (data.features && data.features.length > 0) {
           const address = data.features[0].properties;
           const city = address.city || address.name;
-          const postcode = address.postcode;
-          const context = address.context;
+          const { postcode } = address;
+          const { context } = address;
 
           // Tracker la localisation réelle pour "autour de moi"
           _paq.push(['trackEvent', 'GeolocationDetected', 'City', city || 'unknown']);
