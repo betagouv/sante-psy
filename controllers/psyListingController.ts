@@ -5,6 +5,7 @@ import asyncHelper from '../utils/async-helper';
 import { PsychologistFilters } from '../types/Psychologist';
 import distanceKm from '../services/distance';
 import validation from '../utils/validation';
+import getAddressCoordinates from '../services/getAddressCoordinates';
 
 const getValidators = [
   query('nameAndSpeciality').optional()
@@ -72,27 +73,82 @@ const getAllActive = async (
     psychologistFilters = preprocessFilters(rawFilters);
   }
 
+  const filtersForDb = { ...psychologistFilters };
+  if (psychologistFilters.address && !psychologistFilters.coords) {
+    delete filtersForDb.address;
+  }
+
   const [veryAvailablePsys, notVeryAvailablePsys] = await Promise.all([
-    dbPsychologists.getAllActiveByAvailability(true, psychologistFilters),
-    dbPsychologists.getAllActiveByAvailability(false, psychologistFilters),
+    dbPsychologists.getAllActiveByAvailability(true, filtersForDb),
+    dbPsychologists.getAllActiveByAvailability(false, filtersForDb),
   ]);
   const psyList = veryAvailablePsys.concat(notVeryAvailablePsys);
 
-  /* Apply around me filter */
-  const filteredPsyList = psychologistFilters.coords
-    ? psyList
+  let filteredPsyList = psyList;
+  let searchCoordinates = null;
+
+  if (psychologistFilters.coords) {
+    const [lat, lon] = psychologistFilters.coords.split(',').map(Number);
+    searchCoordinates = { lat, lon };
+  } else if (psychologistFilters.address) {
+    try {
+      const coordinates = await getAddressCoordinates(psychologistFilters.address);
+      if (coordinates && coordinates.latitude && coordinates.longitude) {
+        searchCoordinates = { lat: coordinates.latitude, lon: coordinates.longitude };
+      }
+    } catch (error) {
+      console.error('Erreur lors du géocodage:', error);
+    }
+  }
+
+  if (searchCoordinates) {
+    const { lat, lon } = searchCoordinates;
+    const psysWithCoords = psyList
+      .filter((psy) => psy.latitude && psy.longitude)
       .filter((psy) => {
-        const [lat, lon] = psychologistFilters.coords.split(',').map(Number);
         const distance = distanceKm(lat, lon, psy.latitude, psy.longitude);
         return distance <= 30;
       })
       .map((psy) => {
-        const [lat, lon] = psychologistFilters.coords.split(',').map(Number);
         const distance = distanceKm(lat, lon, psy.latitude, psy.longitude);
         return { ...psy, distance };
-      })
-      .sort((a, b) => a.distance - b.distance)
-    : psyList;
+      });
+
+    const psysWithoutCoords = psychologistFilters.address
+      ? psyList
+          .filter((psy) => !psy.latitude || !psy.longitude)
+          .filter((psy) => {
+            const addressFields = [
+              psy.address,
+              psy.otherAddress,
+              psy.city,
+              psy.otherCity,
+              psy.departement,
+              psy.region,
+            ].filter(Boolean);
+
+            return addressFields.some((field) => cleanValue(field).includes(psychologistFilters.address)
+              || psychologistFilters.address.includes(cleanValue(field)));
+          })
+          .map((psy) => ({ ...psy, distance: null }))
+      : [];
+
+    filteredPsyList = [...psysWithCoords.sort((a, b) => a.distance - b.distance), ...psysWithoutCoords];
+  } else if (psychologistFilters.address) {
+    filteredPsyList = psyList.filter((psy) => {
+      const addressFields = [
+        psy.address,
+        psy.otherAddress,
+        psy.city,
+        psy.otherCity,
+        psy.departement,
+        psy.region,
+      ].filter(Boolean);
+
+      return addressFields.some((field) => cleanValue(field).includes(psychologistFilters.address)
+        || psychologistFilters.address.includes(cleanValue(field)));
+    });
+  }
 
   res.json(reduced
     ? filteredPsyList.map((psy) => ({
