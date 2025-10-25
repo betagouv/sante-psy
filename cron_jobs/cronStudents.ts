@@ -1,11 +1,11 @@
-import students from '../db/students';
+import students from '../db/studentsNewsletter';
 import {
   sendMail2,
   sendMail3,
   sendMail4,
   sendMailDoctorAppointment,
   sendMailDoctorAppointment2,
-} from '../services/studentMails';
+} from '../services/studentNewsletterMails';
 
 const getDates = (days: number): { from: Date, to: Date } => {
   const now = new Date();

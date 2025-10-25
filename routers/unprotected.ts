@@ -10,7 +10,7 @@ import config from '../utils/config';
 import psyProfileController from '../controllers/psyProfileController';
 import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
-import studentController from '../controllers/studentController';
+import studentNewsletterController from '../controllers/studentNewsletterController';
 
 const router = express.Router();
 
@@ -30,23 +30,30 @@ router.post(
 router.post('/psychologist/login', speedLimiterLogin, loginController.login);
 
 router.post(
-  '/student/sendMail',
+  '/studentNewsletter/sendMail',
   speedLimiterLogin,
-  studentController.mailValidator,
-  studentController.sendStudentMail,
+  studentNewsletterController.mailValidator,
+  studentNewsletterController.sendStudentMail,
 );
 
 router.post(
-  '/student/saveAnswer',
+  '/studentNewsletter/:studentId',
   speedLimiterLogin,
-  studentController.answerValidator,
-  studentController.saveAnswer,
+  studentNewsletterController.answerValidator,
+  studentNewsletterController.saveAnswer,
+);
+
+router.post(
+  '/studentNewsletter/saveAnswer',
+  speedLimiterLogin,
+  studentNewsletterController.answerValidator,
+  studentNewsletterController.saveAnswer,
 );
 
 router.delete(
-  '/student/:studentId',
+  '/studentNewsletter/:studentId',
   speedLimiterLogin,
-  studentController.unregister,
+  studentNewsletterController.unregister,
 );
 
 // prevent abuse for some rules

@@ -1,8 +1,8 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import app from '../../index';
-import dbStudents from '../../db/students';
-import * as studentMails from '../../services/studentMails';
+import dbStudentsNewsletter from '../../db/studentsNewsletter';
+import * as studentMails from '../../services/studentNewsletterMails';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('studentController', () => {
@@ -11,8 +11,8 @@ describe('studentController', () => {
   let sendMailStub;
 
   beforeEach(() => {
-    insertStudentStub = sinon.stub(dbStudents, 'insert');
-    updateStudentStub = sinon.stub(dbStudents, 'updateById');
+    insertStudentStub = sinon.stub(dbStudentsNewsletter, 'insert');
+    updateStudentStub = sinon.stub(dbStudentsNewsletter, 'updateById');
     sendMailStub = sinon.stub(studentMails, 'sendMail1');
   });
 

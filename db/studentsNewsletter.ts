@@ -1,11 +1,11 @@
-import { studentsTable } from './tables';
+import { studentsNewsletterTable } from './tables';
 import db from './db';
 import date from '../utils/date';
-import { Student } from '../types/Student';
+import { StudentNewsletter } from '../types/StudentNewsletter';
 
 const insert = async (email: string, source: string): Promise<void> => {
   try {
-    await db(studentsTable)
+    await db(studentsNewsletterTable)
       .insert({ email, source })
       .onConflict('email')
       .ignore();
@@ -18,10 +18,10 @@ const insert = async (email: string, source: string): Promise<void> => {
 const getAllCreatedBetweenWithEmail = async (
   from: Date,
   to: Date,
-): Promise<Student[]> => {
+): Promise<StudentNewsletter[]> => {
   try {
     return db
-      .from(studentsTable)
+      .from(studentsNewsletterTable)
       .whereNotNull('email')
       .whereBetween('createdAt', [from, to]);
   } catch (err) {
@@ -30,10 +30,10 @@ const getAllCreatedBetweenWithEmail = async (
   }
 };
 
-const getAllWithoutDoctorAppointment = async (): Promise<Student[]> => {
+const getAllWithoutDoctorAppointment = async (): Promise<StudentNewsletter[]> => {
   try {
     return db
-      .from(studentsTable)
+      .from(studentsNewsletterTable)
       .whereNotNull('email')
       .where('letter', false);
   } catch (err) {
@@ -44,10 +44,10 @@ const getAllWithoutDoctorAppointment = async (): Promise<Student[]> => {
 
 const updateById = async (
   id: string,
-  student: Partial<Student>,
+  student: Partial<StudentNewsletter>,
 ): Promise<void> => {
   try {
-    return db(studentsTable)
+    return db(studentsNewsletterTable)
       .where('id', id)
       .update({
         ...student,

@@ -7,7 +7,7 @@ import {
   universitiesTable,
   suspensionReasonsTable,
   lastConnectionsTable,
-  studentsTable,
+  studentsNewsletterTable,
 } from '../../db/tables';
 import db from '../../db/db';
 
@@ -23,7 +23,7 @@ const patients = async (): Promise<void> => {
 };
 
 const students = async (): Promise<void> => {
-  await db(studentsTable).del();
+  await db(studentsNewsletterTable).del();
 };
 
 const psychologists = async ():Promise<void> => {

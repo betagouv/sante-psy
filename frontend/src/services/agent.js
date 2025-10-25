@@ -94,7 +94,7 @@ const User = {
   logout: () => client.post('/psychologist/logout'),
 };
 
-const Student = {
+const StudentNewsletter = {
   sendMail: (email, source) => clientWithoutErrorManagement.post('/student/sendMail', { email, source }),
   saveAnswer: data => clientWithoutErrorManagement.post('/student/saveAnswer', data),
   unregister: id => clientWithoutErrorManagement.delete(`/student/${id}`),
@@ -110,5 +110,5 @@ export default {
   Statistics,
   University,
   User,
-  Student,
+  StudentNewsletter,
 };

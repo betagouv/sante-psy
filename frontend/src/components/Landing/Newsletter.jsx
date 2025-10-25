@@ -17,7 +17,7 @@ const Newsletter = ({ emailRef, withTracking, withText }) => {
     event.preventDefault();
     if (email) {
       trackEvent();
-      agent.Student.sendMail(email, from)
+      agent.StudentNewsletter.sendMail(email, from)
         .then(response => {
           setNotification({ type: 'success', message: response.data.message });
         })

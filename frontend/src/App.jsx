@@ -32,13 +32,13 @@ import './App.css';
 import InactiveProfile from 'components/Psychologist/PsyDashboard/PsySection/InactiveProfile';
 import ActiveProfile from 'components/Psychologist/PsyDashboard/PsySection/ActiveProfile';
 import StudentLanding from 'components/Landing/StudentLanding';
-import StudentAnswer from 'components/StudentAnswer/StudentAnswer';
+import StudentNewsletterAnswer from 'components/StudentNewsletterAnswer/StudentNewsletterAnswer';
 import OtherServicesPage from 'components/OtherServices/OtherServicesPage';
 import PublicAnnouncement from 'components/Notification/PublicAnnouncement';
 import LiveChat from 'components/LiveChat/LiveChat';
 import ContactForm from 'components/Contact/ContactForm';
 import Podcast from 'components/Podcast/Podcast';
-import StudentUnregister from './components/StudentUnregister/StudentUnregister';
+import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
@@ -84,8 +84,8 @@ function App() {
               <Route exact path="/autres-services" element={<OtherServicesPage />} />
               <Route exact path="/podcast" element={<Podcast />} />
               <Route exact path="/etudiant" element={<StudentLanding />} />
-              <Route exact path="/enregistrement/:id" element={<StudentAnswer />} />
-              <Route exact path="/desinscription/:id" element={<StudentUnregister />} />
+              <Route exact path="/enregistrement/:id" element={<StudentNewsletterAnswer />} />
+              <Route exact path="/desinscription/:id" element={<StudentNewsletterUnregister />} />
               <Route exact path="/eligibilite" element={<StudentEligibility />} />
               <Route exact path="/" element={<Landing />} />
               <Route

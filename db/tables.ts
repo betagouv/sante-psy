@@ -6,4 +6,4 @@ export const psychologistsTable = 'psychologists';
 export const universitiesTable = 'universities';
 export const suspensionReasonsTable = 'suspension_reasons';
 export const lastConnectionsTable = 'last_connections';
-export const studentsTable = 'students';
+export const studentsNewsletterTable = 'students_newsletter';

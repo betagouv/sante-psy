@@ -1,4 +1,4 @@
-export type Student = {
+export type StudentNewsletter = {
   id: string,
   email: string,
   letter: boolean,

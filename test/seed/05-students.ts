@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import { faker } from '@faker-js/faker';
-import { studentsTable } from '../../db/tables';
+import { studentsNewsletterTable } from '../../db/tables';
 
 // eslint-disable-next-line import/prefer-default-export
 export const seed = async (knex: Knex): Promise<void> => {
@@ -20,6 +20,6 @@ export const seed = async (knex: Knex): Promise<void> => {
     };
   });
 
-  await knex(studentsTable).insert(students);
+  await knex(studentsNewsletterTable).insert(students);
   console.log(`inserted ${students.length} students to studentsTable`);
 };

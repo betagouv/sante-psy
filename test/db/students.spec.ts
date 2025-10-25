@@ -3,9 +3,9 @@ import dotEnv from 'dotenv';
 import { faker } from '@faker-js/faker';
 import { v4 as uuidv4 } from 'uuid';
 import db from '../../db/db';
-import dbStudents from '../../db/students';
-import { studentsTable } from '../../db/tables';
-import { Student } from '../../types/Student';
+import dbStudentsNewsletter from '../../db/studentsNewsletter';
+import { studentsNewsletterTable } from '../../db/tables';
+import { StudentNewsletter } from '../../types/StudentNewsletter';
 import clean from '../helper/clean';
 
 dotEnv.config();
@@ -18,9 +18,9 @@ describe('DB Students', () => {
   describe('insert', () => {
     it('should insert student with new email', async () => {
       const email = faker.internet.exampleEmail();
-      await dbStudents.insert(email, null);
+      await dbStudentsNewsletter.insert(email, null);
 
-      const savedStudent = await db(studentsTable).where('email', email).first();
+      const savedStudent = await db(studentsNewsletterTable).where('email', email).first();
       expect(savedStudent).exist;
       expect(savedStudent.letter).to.be.null;
       expect(savedStudent.appointment).to.be.null;
@@ -32,9 +32,9 @@ describe('DB Students', () => {
     it('should insert student with new email & source', async () => {
       const email = faker.internet.exampleEmail();
       const source = 'instagram';
-      await dbStudents.insert(email, source);
+      await dbStudentsNewsletter.insert(email, source);
 
-      const savedStudent = await db(studentsTable).where('email', email).first();
+      const savedStudent = await db(studentsNewsletterTable).where('email', email).first();
       expect(savedStudent).exist;
       expect(savedStudent.letter).to.be.null;
       expect(savedStudent.appointment).to.be.null;
@@ -46,10 +46,10 @@ describe('DB Students', () => {
 
     it('should ignore with already existing email', async () => {
       const email = faker.internet.exampleEmail();
-      await dbStudents.insert(email, null);
-      await dbStudents.insert(email, 'instagram');
+      await dbStudentsNewsletter.insert(email, null);
+      await dbStudentsNewsletter.insert(email, 'instagram');
 
-      const savedStudent: Student[] = await db(studentsTable).where('email', email);
+      const savedStudent: StudentNewsletter[] = await db(studentsNewsletterTable).where('email', email);
       expect(savedStudent).has.length(1);
       expect(savedStudent[0].letter).to.be.null;
       expect(savedStudent[0].appointment).to.be.null;
@@ -63,14 +63,14 @@ describe('DB Students', () => {
   describe('update', () => {
     it('should update letter', async () => {
       const email = faker.internet.exampleEmail();
-      await dbStudents.insert(email, null);
-      const student = await db(studentsTable).where('email', email).first();
+      await dbStudentsNewsletter.insert(email, null);
+      const student = await db(studentsNewsletterTable).where('email', email).first();
 
-      await dbStudents.updateById(student.id, {
+      await dbStudentsNewsletter.updateById(student.id, {
         letter: true,
       });
 
-      const savedStudent = await db(studentsTable).where('email', email).first();
+      const savedStudent = await db(studentsNewsletterTable).where('email', email).first();
       expect(savedStudent.letter).to.be.true;
       expect(savedStudent.appointment).to.be.null;
       expect(savedStudent.referral).to.be.null;
@@ -79,14 +79,14 @@ describe('DB Students', () => {
 
     it('should update appointment', async () => {
       const email = faker.internet.exampleEmail();
-      await dbStudents.insert(email, null);
-      const student = await db(studentsTable).where('email', email).first();
+      await dbStudentsNewsletter.insert(email, null);
+      const student = await db(studentsNewsletterTable).where('email', email).first();
 
-      await dbStudents.updateById(student.id, {
+      await dbStudentsNewsletter.updateById(student.id, {
         appointment: false,
       });
 
-      const savedStudent = await db(studentsTable).where('email', email).first();
+      const savedStudent = await db(studentsNewsletterTable).where('email', email).first();
       expect(savedStudent.letter).to.be.null;
       expect(savedStudent.appointment).to.be.false;
       expect(savedStudent.referral).to.be.null;
@@ -95,14 +95,14 @@ describe('DB Students', () => {
 
     it('should update referral', async () => {
       const email = faker.internet.exampleEmail();
-      await dbStudents.insert(email, null);
-      const student = await db(studentsTable).where('email', email).first();
+      await dbStudentsNewsletter.insert(email, null);
+      const student = await db(studentsNewsletterTable).where('email', email).first();
 
-      await dbStudents.updateById(student.id, {
+      await dbStudentsNewsletter.updateById(student.id, {
         referral: 3,
       });
 
-      const savedStudent = await db(studentsTable).where('email', email).first();
+      const savedStudent = await db(studentsNewsletterTable).where('email', email).first();
       expect(savedStudent.letter).to.be.null;
       expect(savedStudent.appointment).to.be.null;
       expect(savedStudent.referral).to.equal(3);
@@ -111,7 +111,7 @@ describe('DB Students', () => {
 
     it('should ignore if id is unknown', async () => {
       const unknownId = uuidv4();
-      await dbStudents.updateById(unknownId, {
+      await dbStudentsNewsletter.updateById(unknownId, {
         referral: 3,
       });
     });
