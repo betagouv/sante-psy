@@ -1,4 +1,4 @@
-import students from '../db/studentsNewsletter';
+import studentsNewsletter from '../db/studentsNewsletter';
 import {
   sendMail2,
   sendMail3,
@@ -21,7 +21,7 @@ const getDates = (days: number): { from: Date, to: Date } => {
 const sendStudentsMailJ3 = async (): Promise<boolean> => {
   try {
     const { from, to } = getDates(3);
-    const results = await students.getAllCreatedBetweenWithEmail(from, to);
+    const results = await studentsNewsletter.getAllCreatedBetweenWithEmail(from, to);
     const n = results.length;
     console.log(`Students J+3: sending ${n} mails...`);
 
@@ -42,7 +42,7 @@ const sendStudentsMailJ3 = async (): Promise<boolean> => {
 const sendStudentsMailJ10 = async (): Promise<boolean> => {
   try {
     const { from, to } = getDates(10);
-    const results = await students.getAllCreatedBetweenWithEmail(from, to);
+    const results = await studentsNewsletter.getAllCreatedBetweenWithEmail(from, to);
     const n = results.length;
     console.log(`Students J+10: sending ${n} mails...`);
 
@@ -63,7 +63,7 @@ const sendStudentsMailJ10 = async (): Promise<boolean> => {
 const sendStudentsMailJ30 = async (): Promise<boolean> => {
   try {
     const { from, to } = getDates(30);
-    const results = await students.getAllCreatedBetweenWithEmail(from, to);
+    const results = await studentsNewsletter.getAllCreatedBetweenWithEmail(from, to);
     const n = results.length;
     console.log(`Students J+30: sending ${n} mails...`);
 
@@ -83,7 +83,7 @@ const sendStudentsMailJ30 = async (): Promise<boolean> => {
 
 const sendStudentsMailDoctorAppointment = async (): Promise<boolean> => {
   try {
-    const results = await students.getAllWithoutDoctorAppointment();
+    const results = await studentsNewsletter.getAllWithoutDoctorAppointment();
     const n = results.length;
     console.log(`Students DoctorAppointment: sending ${n} mails...`);
 
@@ -110,7 +110,7 @@ const sendStudentsMailDoctorAppointment = async (): Promise<boolean> => {
 
 const sendStudentsMailDoctorAppointment2 = async (): Promise<boolean> => {
   try {
-    const results = await students.getAllWithoutDoctorAppointment();
+    const results = await studentsNewsletter.getAllWithoutDoctorAppointment();
     const n = results.length;
     console.log(`Students DoctorAppointment2: sending ${n} mails...`);
 
