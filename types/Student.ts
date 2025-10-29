@@ -3,7 +3,7 @@ export type Student = {
   firstNames: string,
   email: string,
   ine: string,
-  activated: boolean,
+  validated: boolean,
   createdAt: Date,
   updatedAt?: Date
 }

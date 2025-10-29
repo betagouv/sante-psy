@@ -3,7 +3,7 @@ import { purifySanitizer } from '../../services/sanitizer';
 import { allGenders } from '../../types/Genders';
 import date from '../../utils/date';
 
-const inePatterns = [
+export const inePatterns = [
   /^[0-9]{9}[A-HJK]{2}$/, // INE-RNIE
   /^\d{10}[A-HJ-NPR-Z]$/, // INE-BEA
   /^[0-9A-Z]{10}\d$/, // INE-Base 36

@@ -5,21 +5,14 @@ import { addAutoSlashToDate } from 'services/date';
 import Notification from 'components/Notification/Notification';
 import { HashLink } from 'react-router-hash-link';
 import styles from './addEditPatient.cssmodule.scss';
+import { validateIneFormat } from 'src/utils/validateIneFormat';
 
 const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
   const [ineError, setIneError] = useState('');
   const [dateOfBirthError, setDateOfBirthError] = useState('');
 
   const validateINE = value => {
-    const patterns = [
-      /^[0-9]{9}[A-HJK]{2}$/, // INE-RNIE
-      /^\d{10}[A-HJ-NPR-Z]$/, // INE-BEA
-      /^[0-9A-Z]{10}\d$/, // INE-Base 36
-      /^\d{4}[A]\d{5}[A-HJ-NPR-Z]$/, // INE-SIFA
-      /^\d{4}[D]\d{5}[A-HJ-NPR-Z]$/i, // INE provisoire
-    ];
-
-    const isValid = patterns.some(pattern => pattern.test(value));
+    const isValid = validateIneFormat(value);
 
     if (!isValid) {
       setIneError('INE invalide. Veuillez vérifier le format.');

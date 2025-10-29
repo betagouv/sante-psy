@@ -11,9 +11,16 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
   const { trackGoogleAdsEligibility } = useConsentAds(true, true);
   const navigate = useNavigate();
 
+  const trackRegisterClick = item => {
+    if (__MATOMO__) {
+      _paq.push(['trackEvent', 'studentRegister', type, item.question]);
+    }
+  };
+
   function handleButtonClick() {
     trackGoogleAdsEligibility();
-    navigate('/trouver-un-psychologue');
+    trackRegisterClick();
+    navigate('/inscription');
   }
 
   const {
@@ -25,7 +32,6 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
     pronoun,
     personalPronoun,
     otherPersonalPronoun,
-    take,
     find,
   } = pronouns[whoFor] || pronouns.ME;
 
@@ -103,7 +109,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
           <p>
             {capitalizeFirstLetter(possessive)}
             {' '}
-            <b>numéro INE</b>
+            <b>certificat de scolarité</b>
             {' '}
             {whoFor === 'CONSULTANT' ? '' : otherPersonalPronoun}
             {' '}
@@ -111,22 +117,19 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
               ? 'doit lui être demandé'
               : 'sera demandé par le psychologue'}
             {' '}
-            pour la création de
+            pour
             {' '}
             {possessive}
             {' '}
-            dossier.
+            première consultation.
             <br />
             {ineInfo}
           </p>
         ) : null}
         {whoFor !== 'CONSULTANT' && (
           <p>
-            {take}
-            {' '}
-            rendez-vous dès à présent avec un psychologue partenaire :
             <br />
-            {renderAppointmentButton(handleButtonClick)}
+            {renderRegisterButton(handleButtonClick)}
             <br />
             <em>
               {capitalizeFirstLetter(possessive)}
@@ -135,7 +138,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
               {' '}
               {pronoun === 'vous' ? 'vous sera' : 'sera'}
               {' '}
-              demandé lors de
+              demandé pour
               {' '}
               {possesiveFem || possessive}
               {' '}
@@ -227,7 +230,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
   );
 };
 
-const renderAppointmentButton = handleButtonClick => (
+const renderRegisterButton = handleButtonClick => (
   <Button
     onClick={handleButtonClick}
     icon="fr-icon-arrow-right-s-line"
@@ -235,7 +238,7 @@ const renderAppointmentButton = handleButtonClick => (
     size="sm"
     className="fr-my-1w"
   >
-    Prendre RDV
+    S'inscrire en tant qu'étudiant
   </Button>
 );
 

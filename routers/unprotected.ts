@@ -11,6 +11,7 @@ import psyProfileController from '../controllers/psyProfileController';
 import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
+import studentController from '../controllers/studentController';
 
 const router = express.Router();
 
@@ -28,6 +29,13 @@ router.post(
   loginController.sendMail,
 );
 router.post('/psychologist/login', speedLimiterLogin, loginController.login);
+
+router.post(
+  '/student/signIn',
+  speedLimiterLogin,
+  studentController.signInValidator,
+  studentController.signIn,
+);
 
 router.post(
   '/studentNewsletter/sendMail',

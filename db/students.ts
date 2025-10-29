@@ -6,7 +6,7 @@ import { studentsTable } from './tables';
 type SignInResult =
   | { status: 'created', email: string }
   | { status: 'alreadyRegistered', email: string }
-  | { status: 'accountNotActivated', email: string }
+  | { status: 'accountNotValidated', email: string }
   | { status: 'conflict' };
 
 const signIn = async (
@@ -21,10 +21,10 @@ const signIn = async (
       .first();
 
     if (existingStudent) {
-      if (existingStudent.activated) {
+      if (existingStudent.validated) {
         return { status: 'alreadyRegistered', email: existingStudent.email };
       }
-      return { status: 'accountNotActivated', email: existingStudent.email };
+      return { status: 'accountNotValidated', email: existingStudent.email };
     }
 
     // email or ine already used
@@ -43,7 +43,7 @@ const signIn = async (
         email,
         ine,
         firstNames,
-        activated: false,
+        validated: false,
         createdAt: date.now(),
       })
       .returning('*') as Student[];

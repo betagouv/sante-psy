@@ -40,6 +40,8 @@ import ContactForm from 'components/Contact/ContactForm';
 import Podcast from 'components/Podcast/Podcast';
 import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
+import StudentRegister from 'components/Students/StudentRegister/StudentRegister';
+import StudentRegisterValidation from 'components/Students/StudentRegister/StudentRegisterValidation';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
@@ -84,6 +86,8 @@ function App() {
               <Route exact path="/autres-services" element={<OtherServicesPage />} />
               <Route exact path="/podcast" element={<Podcast />} />
               <Route exact path="/etudiant" element={<StudentLanding />} />
+              <Route exact path="/inscription" element={<StudentRegister />} />
+              <Route exact path="/inscription/validation" element={<StudentRegisterValidation />} />
               <Route exact path="/enregistrement/:id" element={<StudentNewsletterAnswer />} />
               <Route exact path="/desinscription/:id" element={<StudentNewsletterUnregister />} />
               <Route exact path="/eligibilite" element={<StudentEligibility />} />
