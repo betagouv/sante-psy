@@ -87,7 +87,7 @@ const Statistics = { getAll: () => client.get('/statistics') };
 
 const University = { getOne: id => client.get(`/universities/${id}`) };
 
-const User = {
+const Psy = {
   getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),
   login: token => client.post('/psychologist/login', { token }),
   sendMail: email => client.post('/psychologist/sendMail', { email }),
@@ -96,7 +96,8 @@ const User = {
 
 const Student = {
   signIn: data => client.post('/student/signIn', data),
-}
+  sendStudentLoginMail: email => client.post('/student/sendMail', { email }),
+};
 
 const StudentNewsletter = {
   sendMail: (email, source) => clientWithoutErrorManagement.post('/student/sendMail', { email, source }),
@@ -115,5 +116,5 @@ export default {
   Student,
   StudentNewsletter,
   University,
-  User,
+  Psy,
 };

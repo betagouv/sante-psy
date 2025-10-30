@@ -3,7 +3,7 @@ import slowDown from 'express-slow-down';
 
 import configController from '../controllers/configController';
 import psyListingController from '../controllers/psyListingController';
-import loginController from '../controllers/loginController';
+import psyLoginController from '../controllers/psyLoginController';
 import statisticsController from '../controllers/statisticsController';
 
 import config from '../utils/config';
@@ -12,6 +12,7 @@ import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
 import studentController from '../controllers/studentController';
+import studentLoginController from '../controllers/studentLoginController';
 
 const router = express.Router();
 
@@ -25,16 +26,22 @@ const speedLimiterLogin = slowDown({
 router.post(
   '/psychologist/sendMail',
   speedLimiterLogin,
-  loginController.emailValidators,
-  loginController.sendMail,
+  psyLoginController.emailValidators,
+  psyLoginController.sendPsyMail,
 );
-router.post('/psychologist/login', speedLimiterLogin, loginController.login);
+router.post('/psychologist/login', speedLimiterLogin, psyLoginController.psyLogin);
 
 router.post(
   '/student/signIn',
   speedLimiterLogin,
   studentController.signInValidator,
   studentController.signIn,
+);
+
+router.post(
+  '/student/sendStudentLoginMail',
+  speedLimiterLogin,
+  studentLoginController.sendStudentLoginEmail,
 );
 
 router.post(
@@ -86,7 +93,7 @@ router.get(
 // The other route is open to the public to get all psys (do not delete !)
 router.get('/trouver-un-psychologue', psyListingController.getFullActive);
 
-router.get('/connecteduser', loginController.connectedUser);
+router.get('/connecteduser', psyLoginController.connectedPsy);
 
 router.get('/statistics', statisticsController.getAll);
 router.get('/psychologist/:psyId', psyProfileController.getValidators, psyProfileController.get);
