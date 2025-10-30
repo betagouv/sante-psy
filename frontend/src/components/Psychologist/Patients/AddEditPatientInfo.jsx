@@ -5,7 +5,7 @@ import { addAutoSlashToDate } from 'services/date';
 import Notification from 'components/Notification/Notification';
 import { HashLink } from 'react-router-hash-link';
 import styles from './addEditPatient.cssmodule.scss';
-import { validateIneFormat } from 'src/utils/validateIneFormat';
+import validateIneFormat from 'src/utils/validateIneFormat';
 
 const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
   const [ineError, setIneError] = useState('');

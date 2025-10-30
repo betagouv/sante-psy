@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '@gouvfr/dsfr/dist/utility/utility.min.css';
-import '@gouvfr/dsfr/dist/component/input/input.min.css';
 import Page from 'components/Page/Page';
-import { validateIneFormat } from 'src/utils/validateIneFormat';
 import agent from 'services/agent';
 import { useStore } from 'stores/index';
 import styles from './studentRegister.cssmodule.scss';
-import { validateEmailFormat } from 'src/utils/validateEmailFormat';
+import validateIneFormat from 'src/utils/validateIneFormat';
+import validateEmailFormat from 'src/utils/validateEmailFormat';
 
 const StudentRegister = () => {
   const [firstNames, setFirstNames] = useState('');
@@ -20,7 +18,7 @@ const StudentRegister = () => {
   const navigate = useNavigate();
   const { commonStore: { setNotification } } = useStore();
 
-  const validateINE = (value) => {
+  const validateINE = value => {
     const isValidIne = validateIneFormat(value);
     if (!isValidIne) {
       setIneError('Format incorrect du numéro INE.');
@@ -30,7 +28,7 @@ const StudentRegister = () => {
     return true;
   };
 
-  const validateEmail = (value) => {
+  const validateEmail = value => {
     const isValidEmail = validateEmailFormat(value);
     if (!isValidEmail) {
       setEmailError("Format incorrect de l'email.");
@@ -40,10 +38,10 @@ const StudentRegister = () => {
     return true;
   };
 
-  const registerStudent = async (e) => {
+  const registerStudent = async e => {
     e.preventDefault();
     setFormError('');
-    
+
     const isValid = validateINE(ine) && validateEmail(email);
     if (!isValid) return;
 
@@ -52,8 +50,9 @@ const StudentRegister = () => {
       const status = response?.status;
 
       if (status === 201 || status === 200) {
-        setNotification({ type: 'success', message: response.data?.message });
+        agent.Student.sendStudentLoginMail(email);
         navigate('/inscription/validation');
+        setNotification({ type: 'success', message: response.data?.message });
       }
     } catch (error) {
       const status = error?.response?.status;
@@ -74,11 +73,13 @@ const StudentRegister = () => {
     <Page
       withStats
       breadCrumbs={[{ href: '/', label: 'Accueil' }]}
-      title={
+      title={(
         <>
-          Inscription à votre <b>Espace Étudiant</b>
+          Inscription à votre
+          {' '}
+          <b>Espace Étudiant</b>
         </>
-      }
+      )}
       description="Quelques infos sur vous"
     >
       <form onSubmit={registerStudent}>
@@ -92,7 +93,7 @@ const StudentRegister = () => {
               id="first-names-input"
               type="text"
               value={firstNames}
-              onChange={(e) => setFirstNames(e.target.value)}
+              onChange={e => setFirstNames(e.target.value)}
               required
             />
           </div>
@@ -102,9 +103,9 @@ const StudentRegister = () => {
               className={`fr-label ${ineError ? styles.labelError : ''}`}
               htmlFor="ine-input"
             >
-              Numéro INE de l'étudiant
+              Numéro INE de l&apos;étudiant
               <span className="fr-hint-text">
-                Il fait 11 caractères (chiffres et lettres). Vous pouvez le trouver sur votre carte d'étudiant
+                Il fait 11 caractères (chiffres et lettres). Vous pouvez le trouver sur votre carte d&apos;étudiant
                 ou votre certificat de scolarité.
               </span>
             </label>
@@ -113,7 +114,7 @@ const StudentRegister = () => {
               id="ine-input"
               type="text"
               value={ine}
-              onChange={(e) => setIne(e.target.value)}
+              onChange={e => setIne(e.target.value)}
               onBlur={() => validateINE(ine)}
               required
             />
@@ -128,7 +129,7 @@ const StudentRegister = () => {
               Votre e-mail
             </label>
             <span className="fr-hint-text">
-              Nécessaire pour créer un compte. Nous ne la transmettrons qu'aux psychologues avec qui
+              Nécessaire pour créer un compte. Nous ne la transmettrons qu&apos;aux psychologues avec qui
               vous prendrez rendez-vous.
             </span>
             <input
@@ -137,7 +138,7 @@ const StudentRegister = () => {
               type="email"
               placeholder="Votre e-mail"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               onBlur={() => validateEmail(email)}
               required
             />
