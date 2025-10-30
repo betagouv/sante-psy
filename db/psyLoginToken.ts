@@ -1,11 +1,11 @@
 import date from '../utils/date';
-import { loginTokenTable } from './tables';
+import { psyLoginTokenTable } from './tables';
 import db from './db';
-import { LoginToken } from '../types/LoginToken';
+import { PsyLoginToken } from '../types/PsyLoginToken';
 
-const getByToken = async (token: string): Promise<LoginToken> => {
+const getPsyByToken = async (token: string): Promise<PsyLoginToken> => {
   try {
-    const result = await db(loginTokenTable)
+    const result = await db(psyLoginTokenTable)
     .where('token', token)
     .andWhere('expiresAt', '>', date.now())
     .first();
@@ -17,9 +17,9 @@ const getByToken = async (token: string): Promise<LoginToken> => {
   }
 };
 
-const getByEmail = async (email: string): Promise<LoginToken> => {
+const getPsyByEmail = async (email: string): Promise<PsyLoginToken> => {
   try {
-    const result = await db(loginTokenTable)
+    const result = await db(psyLoginTokenTable)
     .where('email', email)
     .first();
 
@@ -30,9 +30,9 @@ const getByEmail = async (email: string): Promise<LoginToken> => {
   }
 };
 
-const insert = async (token: string, email: string, expiresAt: string): Promise<LoginToken> => {
+const insertPsy = async (token: string, email: string, expiresAt: string): Promise<PsyLoginToken> => {
   try {
-    return await db(loginTokenTable).insert({
+    return await db(psyLoginTokenTable).insert({
       token,
       email,
       expiresAt,
@@ -43,9 +43,9 @@ const insert = async (token: string, email: string, expiresAt: string): Promise<
   }
 };
 
-const deleteOne = async (token: string): Promise<void> => {
+const deleteOnePsy = async (token: string): Promise<void> => {
   try {
-    const deletedToken = await db(loginTokenTable)
+    const deletedToken = await db(psyLoginTokenTable)
     .where({
       token,
     })
@@ -63,8 +63,8 @@ const deleteOne = async (token: string): Promise<void> => {
 };
 
 export default {
-  getByToken,
-  getByEmail,
-  insert,
-  delete: deleteOne,
+  getPsyByToken,
+  getPsyByEmail,
+  insert: insertPsy,
+  delete: deleteOnePsy,
 };

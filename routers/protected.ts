@@ -9,7 +9,7 @@ import appointmentsRouter from './appointments';
 import xsrfProtection from '../middlewares/xsrfProtection';
 import refreshToken from '../middlewares/refreshToken';
 
-import loginController from '../controllers/loginController';
+import psyLoginController from '../controllers/psyLoginController';
 
 import access from '../utils/access';
 import config from '../utils/config';
@@ -29,7 +29,7 @@ router.use(expressjwt({
 router.use(xsrfProtection);
 router.use(refreshToken);
 
-router.post('/psychologist/logout', loginController.deleteToken);
+router.post('/psychologist/logout', psyLoginController.deletePsyToken);
 
 router.use('/appointments', appointmentsRouter);
 router.use('/patients', patientsRouter);

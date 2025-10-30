@@ -35,7 +35,7 @@ const Bill = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await agent.User.getConnected();
+        const response = await agent.Psy.getConnected();
         setUser(response.data);
 
         const { universityId } = response.data.convention;

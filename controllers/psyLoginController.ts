@@ -5,7 +5,7 @@ import ejs from 'ejs';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import dbSuspensions from '../db/suspensionReasons';
-import dbLoginToken from '../db/loginToken';
+import dbLoginToken from '../db/psyLoginToken';
 import dbLastConnection from '../db/lastConnections';
 import date from '../utils/date';
 import cookie from '../utils/cookie';
@@ -24,9 +24,9 @@ const emailValidators = [
     .withMessage('Vous devez spécifier un email valide.'),
 ];
 
-async function sendLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
+async function sendPsyLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
   try {
-    const html = await ejs.renderFile('./views/emails/login.ejs', {
+    const html = await ejs.renderFile('./views/emails/psyLogin.ejs', {
       loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
       appName: config.appName,
       loginUrl,
@@ -35,7 +35,7 @@ async function sendLoginEmail(email: string, loginUrl: string, token: string): P
     console.log(`Login email sent for ${logs.hash(email)}`);
   } catch (err) {
     console.error(err);
-    throw new Error("Erreur d'envoi de mail - sendLoginEmail");
+    throw new Error("Erreur d'envoi de mail - sendPsyLoginEmail");
   }
 }
 
@@ -52,7 +52,7 @@ async function sendNotYetAcceptedEmail(email: string): Promise<void> {
   }
 }
 
-async function saveToken(email: string, token: string): Promise<void> {
+async function savePsyToken(email: string, token: string): Promise<void> {
   try {
     const expiredAt = date.getDatePlusOneHour();
     await dbLoginToken.insert(token, email, expiredAt);
@@ -64,12 +64,12 @@ async function saveToken(email: string, token: string): Promise<void> {
   }
 }
 
-const deleteToken = (req: Request, res: Response): void => {
+const deletePsyToken = (req: Request, res: Response): void => {
   cookie.clearJwtCookie(res);
   res.json({ });
 };
 
-const connectedUser = async (req: Request, res: Response): Promise<void> => {
+const connectedPsy = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
   if (tokenData && checkXsrf(req, tokenData.xsrfToken)) {
     const psy = await dbPsychologists.getById(tokenData.psychologist);
@@ -118,11 +118,11 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
   res.json();
 };
 
-const login = async (req: Request, res: Response): Promise<void> => {
+const psyLogin = async (req: Request, res: Response): Promise<void> => {
   // Save a token that expire after config.sessionDurationHours hours if user is logged
   if (req.body.token) {
     const token = DOMPurify.sanitize(req.body.token);
-    const dbToken = await dbLoginToken.getByToken(token);
+    const dbToken = await dbLoginToken.getPsyByToken(token);
 
     if (dbToken) {
       const psychologistData = await dbPsychologists.getAcceptedByEmail(dbToken.email);
@@ -149,7 +149,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
 /**
  * Send a email with a login link if the email is already registered
  */
-const sendMail = async (req: Request, res: Response): Promise<void> => {
+const sendPsyMail = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
   const { email } = req.body;
 
@@ -177,8 +177,8 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
 
   const token = loginInformations.generateToken(32);
   const loginUrl = loginInformations.generateLoginUrl();
-  await sendLoginEmail(email, loginUrl, token);
-  await saveToken(email, token);
+  await sendPsyLoginEmail(email, loginUrl, token);
+  await savePsyToken(email, token);
   res.json({
     message: `Un lien de connexion a été envoyé à l'adresse ${email
     }. Le lien est valable ${config.sessionDurationHours} heures.`,
@@ -187,8 +187,8 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
 
 export default {
   emailValidators,
-  connectedUser: asyncHelper(connectedUser),
-  login: asyncHelper(login),
-  sendMail: asyncHelper(sendMail),
-  deleteToken,
+  connectedPsy: asyncHelper(connectedPsy),
+  psyLogin: asyncHelper(psyLogin),
+  sendPsyMail: asyncHelper(sendPsyMail),
+  deletePsyToken,
 };

@@ -36,7 +36,7 @@ const Login = () => {
   useEffect(() => {
     if (token && !loginCalled.current) {
       loginCalled.current = true;
-      agent.User.login(token)
+      agent.Psy.login(token)
         .then(xsrfToken => {
           setXsrfToken(xsrfToken);
         });
@@ -51,7 +51,7 @@ const Login = () => {
 
   const login = e => {
     e.preventDefault();
-    agent.User.sendMail(email).then(setNotification);
+    agent.Psy.sendMail(email).then(setNotification);
   };
 
   return (

@@ -35,7 +35,7 @@ export default class UserStore {
   };
 
   pullUser() {
-    return agent.User.getConnected()
+    return agent.Psy.getConnected()
       .then(user => {
         this.user = user.data;
       });
@@ -47,7 +47,7 @@ export default class UserStore {
   }
 
   deleteToken() {
-    return agent.User.logout().then(() => {
+    return agent.Psy.logout().then(() => {
       this.user = null;
       this.xsrfToken = null;
     });

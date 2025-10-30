@@ -1,5 +1,5 @@
 import { assert, expect } from 'chai';
-import dbToginToken from '../../db/loginToken';
+import dbPsyLoginToken from '../../db/psyLoginToken';
 import date from '../../utils/date';
 import clean from '../helper/clean';
 
@@ -18,8 +18,8 @@ describe('DB Login token', () => {
     it('should get all token info with a token', async () => {
       const email = 'prenom.nom@beta.gouv.fr';
       const expiresAt = date.getDatePlusOneHour();
-      await dbToginToken.insert(token, email, expiresAt);
-      const result = await dbToginToken.getByToken(token);
+      await dbPsyLoginToken.insert(token, email, expiresAt);
+      const result = await dbPsyLoginToken.getPsyByToken(token);
 
       result.token.should.be.equal(token);
       result.email.should.be.equal(email);
@@ -30,8 +30,8 @@ describe('DB Login token', () => {
       const email = 'prenom.nom@beta.gouv.fr';
       const expirationDate = new Date();
       const expiredDate = new Date(expirationDate.setHours(expirationDate.getHours() - 6)).toISOString();
-      await dbToginToken.insert(token, email, expiredDate);
-      const result = await dbToginToken.getByToken(token);
+      await dbPsyLoginToken.insert(token, email, expiredDate);
+      const result = await dbPsyLoginToken.getPsyByToken(token);
 
       assert.isUndefined(result);
     });
@@ -41,9 +41,9 @@ describe('DB Login token', () => {
     it('should insert a token and get it with its email', async () => {
       const email = 'prenom.nom@beta.gouv.fr';
       const expiresAt = date.getDatePlusOneHour();
-      await dbToginToken.insert(token, email, expiresAt);
+      await dbPsyLoginToken.insert(token, email, expiresAt);
 
-      const result = await dbToginToken.getByToken(token);
+      const result = await dbPsyLoginToken.getPsyByToken(token);
       result.token.should.be.equal(token);
       result.email.should.be.equal(email);
       new Date(result.expiresAt).toISOString().should.be.equal(expiresAt);
@@ -54,16 +54,16 @@ describe('DB Login token', () => {
     it('should delete an existing token', async () => {
       const email = 'prenom.nom@beta.gouv.fr';
       const expiresAt = date.getDatePlusOneHour();
-      await dbToginToken.insert(token, email, expiresAt);
+      await dbPsyLoginToken.insert(token, email, expiresAt);
 
-      await dbToginToken.delete(token);
-      const result = await dbToginToken.getByToken(token);
+      await dbPsyLoginToken.delete(token);
+      const result = await dbPsyLoginToken.getPsyByToken(token);
       assert.isUndefined(result);
     });
 
     it('should throw error when token does not exist', async () => {
       try {
-        await dbToginToken.delete('pizza');
+        await dbPsyLoginToken.delete('pizza');
         assert.fail('delete token should have failed');
       } catch (error) {
         expect(error).to.be.an('Error');
