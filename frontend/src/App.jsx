@@ -38,10 +38,10 @@ import PublicAnnouncement from 'components/Notification/PublicAnnouncement';
 import LiveChat from 'components/LiveChat/LiveChat';
 import ContactForm from 'components/Contact/ContactForm';
 import Podcast from 'components/Podcast/Podcast';
-import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
-import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 import StudentRegister from 'components/Students/StudentRegister/StudentRegister';
 import StudentRegisterValidation from 'components/Students/StudentRegister/StudentRegisterValidation';
+import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
+import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 

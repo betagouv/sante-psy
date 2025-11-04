@@ -1,24 +1,21 @@
 import React from 'react';
 import { Button } from '@dataesr/react-dsfr';
 import { useNavigate } from 'react-router-dom';
-import useConsentAds from 'src/utils/googleAds/useConsentAds';
 import pronouns, {
   capitalizeFirstLetter,
   pluralize,
 } from '../utils/eligibilitySyntax';
 
 const getMessage = (isEligible, lastAnswerValue, whoFor) => {
-  const { trackGoogleAdsEligibility } = useConsentAds(true, true);
   const navigate = useNavigate();
 
-  const trackRegisterClick = item => {
+  const trackRegisterClick = () => {
     if (__MATOMO__) {
-      _paq.push(['trackEvent', 'studentRegister', type, item.question]);
+      _paq.push(['trackEvent', 'Student', 'studentRegister']);
     }
   };
 
   function handleButtonClick() {
-    trackGoogleAdsEligibility();
     trackRegisterClick();
     navigate('/inscription');
   }
@@ -32,7 +29,6 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
     pronoun,
     personalPronoun,
     otherPersonalPronoun,
-    find,
   } = pronouns[whoFor] || pronouns.ME;
 
   if (isEligible) {
@@ -40,61 +36,6 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
       lastAnswerValue,
     );
     const needsBasicInfo = ['INE', 'BOTH'].includes(lastAnswerValue);
-
-    const getIneMessage = () => {
-      if (whoFor === 'SCHOOL') {
-        return (
-          <p>
-            <br />
-            Nous vous invitons à leur communiquer leur numéro INE ou à les
-            renvoyer vers leur relevé de notes du baccalauréat.
-            <br />
-          </p>
-        );
-      }
-      return (
-        <p>
-          {capitalizeFirstLetter(find)}
-          {' '}
-          sur
-          {' '}
-          {possesiveFem || possessive}
-          {' '}
-          carte
-          étudiant ou
-          {' '}
-          {possessive}
-          {' '}
-          certificat de scolarité.
-          <br />
-          Si besoin,
-          {' '}
-          {pronoun === 'vous' ? 'tournez-vous' : 'il peut se tourner'}
-          {' '}
-          vers
-          {' '}
-          {possesiveFem || possessive}
-          {' '}
-          scolarité pour obtenir
-          {' '}
-          {possessive}
-          {' '}
-          numéro INE ou
-          {' '}
-          {find}
-          {' '}
-          sur
-          {' '}
-          {possessive}
-          {' '}
-          relevé de notes du baccalauréat.
-          <br />
-          <br />
-        </p>
-      );
-    };
-    const ineInfo = needsIneInfo ? getIneMessage() : null;
-
     return (
       <>
         <b>
@@ -105,7 +46,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
           au dispositif Santé Psy Étudiant !
         </b>
         <br />
-        {needsIneInfo || needsBasicInfo ? (
+        {(needsIneInfo || needsBasicInfo) && (
           <p>
             {capitalizeFirstLetter(possessive)}
             {' '}
@@ -119,54 +60,25 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
             {' '}
             pour
             {' '}
-            {possessive}
+            {possesiveFem || possessive}
             {' '}
             première consultation.
             <br />
-            {ineInfo}
+            {whoFor !== 'CONSULTANT' ? (
+              renderRegisterButton(handleButtonClick)
+            ) : (
+              <>
+                <Button
+                  onClick={() => navigate('/psychologue/login')}
+                  size="sm"
+                  className="fr-my-1w"
+                >
+                  Créer le dossier de l&apos;étudiant
+                </Button>
+                <br />
+              </>
+            )}
           </p>
-        ) : null}
-        {whoFor !== 'CONSULTANT' && (
-          <p>
-            <br />
-            {renderRegisterButton(handleButtonClick)}
-            <br />
-            <em>
-              {capitalizeFirstLetter(possessive)}
-              {' '}
-              certificat de scolarité
-              {' '}
-              {pronoun === 'vous' ? 'vous sera' : 'sera'}
-              {' '}
-              demandé pour
-              {' '}
-              {possesiveFem || possessive}
-              {' '}
-              première consultation.
-            </em>
-          </p>
-        )}
-        {whoFor === 'CONSULTANT' && (
-          <>
-            <em>
-              {capitalizeFirstLetter(possessive)}
-              {' '}
-              certificat de scolarité doit
-              également lui être demandé lors de
-              {' '}
-              {possesiveFem || possessive}
-              {' '}
-              première consultation.
-            </em>
-            <br />
-            <Button
-              onClick={() => navigate('/psychologue/login')}
-              size="sm"
-              className="fr-my-1w"
-            >
-              Créer le dossier de l&apos;étudiant
-            </Button>
-          </>
         )}
       </>
     );
@@ -184,7 +96,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
       </p>
     ) : (
       <p>
-        N’hésitez pas à
+        N&apos;hésitez pas à
         {' '}
         {pronoun === 'vous' ? 'vous' : "l'inviter à se"}
         {' '}
@@ -233,12 +145,10 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
 const renderRegisterButton = handleButtonClick => (
   <Button
     onClick={handleButtonClick}
-    icon="fr-icon-arrow-right-s-line"
-    iconPosition="right"
     size="sm"
     className="fr-my-1w"
   >
-    S'inscrire en tant qu'étudiant
+    S&apos;inscrire à l&apos;Espace Étudiant
   </Button>
 );
 

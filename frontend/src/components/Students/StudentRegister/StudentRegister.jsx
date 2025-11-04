@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Page from 'components/Page/Page';
 import agent from 'services/agent';
 import { useStore } from 'stores/index';
-import styles from './studentRegister.cssmodule.scss';
 import validateIneFormat from 'src/utils/validateIneFormat';
 import validateEmailFormat from 'src/utils/validateEmailFormat';
+import styles from './studentRegister.cssmodule.scss';
 
 const StudentRegister = () => {
   const [firstNames, setFirstNames] = useState('');
