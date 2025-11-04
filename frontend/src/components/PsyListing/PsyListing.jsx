@@ -25,8 +25,6 @@ const geoStatusEnum = {
   GRANTED: 1,
 };
 
-let lastSearch;
-
 const PsyListing = () => {
   const { commonStore: { setNotification, psychologists, setPsychologists } } = useStore();
   const query = new URLSearchParams(useLocation().search);
@@ -38,13 +36,27 @@ const PsyListing = () => {
   const [nameAndSpecialityFilter, setNameAndSpecialityFilter] = useState(query.get('nameAndSpeciality') || '');
   const [languageFilter, setLanguageFilter] = useState(query.get('language') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
+  const [addressFilterObject, setAddressFilterObject] = useState(null);
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
   const [page, setPage] = useState(0);
 
   const fetchPsychologists = async () => {
+    let addressValue = addressFilter !== AROUND_ME ? addressFilter : undefined;
+
+    if (addressFilterObject && typeof addressFilterObject === 'object') {
+      addressValue = JSON.stringify({
+        label: addressFilterObject.label,
+        value: addressFilterObject.value,
+        type: addressFilterObject.type,
+        postcode: addressFilterObject.postcode,
+        city: addressFilterObject.city,
+        context: addressFilterObject.context
+      });
+    }
+
     const filters = {
       nameAndSpeciality: nameAndSpecialityFilter || undefined,
-      address: addressFilter !== AROUND_ME ? addressFilter : undefined,
+      address: addressValue,
       teleconsultation,
       language: languageFilter || undefined,
       coords: addressFilter === AROUND_ME && coords ? `${coords.latitude},${coords.longitude}` : undefined,
@@ -56,54 +68,61 @@ const PsyListing = () => {
       setFilteredPsychologists(response);
 
       if (__MATOMO__) {
-        _paq.push(['trackEvent', 'PsychologistSearch', 'Results', (response?.length || 0).toString()]);
+        const usedFilters = [];
+
+        if (nameAndSpecialityFilter && nameAndSpecialityFilter.trim()) {
+          _paq.push(['trackEvent', 'AnnuairePsy', 'SpecialitySearch', nameAndSpecialityFilter.trim()]);
+          usedFilters.push('speciality');
+        }
+
+        if (languageFilter && languageFilter.trim()) {
+          _paq.push(['trackEvent', 'AnnuairePsy', 'LanguageSearch', languageFilter.trim()]);
+          usedFilters.push('language');
+        }
+
+        if (addressFilterObject && addressFilterObject.label) {
+          _paq.push(['trackEvent', 'AnnuairePsy', 'LocationSearch', addressFilterObject.label]);
+          usedFilters.push('location');
+        } else if (addressFilter === AROUND_ME) {
+          _paq.push(['trackEvent', 'AnnuairePsy', 'LocationSearch', 'Géolocalisation']);
+          usedFilters.push('location');
+        }
+
+        _paq.push(['trackEvent', 'AnnuairePsy', 'TeleconsultationFilter', teleconsultation ? 'enabled' : 'disabled']);
+        if (teleconsultation) {
+          usedFilters.push('teleconsultation');
+        }
+
+        if (usedFilters.length > 0) {
+          _paq.push(['trackEvent', 'AnnuairePsy', 'SearchProfile', usedFilters.sort().join('+')]);
+        }
       }
     } catch (error) {
       console.error('Erreur lors de la récupération des psychologues :', error);
-
-      if (__MATOMO__) {
-        _paq.push(['trackEvent', 'PsychologistSearch', 'Error', 'api_error']);
-      }
     }
   };
 
   const handleSearch = () => {
-    // Vérifie si au moins un filtre est défini
+    const isAddressValid = !addressFilter || addressFilter === AROUND_ME || addressFilterObject;
+
+    if (!isAddressValid) {
+      setNotification(
+        {
+          message: 'Veuillez sélectionner une ville ou région dans la liste proposée.',
+        },
+        false,
+        false,
+      );
+      return;
+    }
+
     if (
       nameAndSpecialityFilter.trim()
       || languageFilter.trim()
       || addressFilter.trim()
       || teleconsultation
     ) {
-      if (__MATOMO__) {
-        let searchExecuted = '';
-        if (nameAndSpecialityFilter) {
-          searchExecuted += `speciality=${nameAndSpecialityFilter};`;
-        }
-        if (addressFilter) {
-          searchExecuted += `location=${addressFilter};`;
-        }
-        if (languageFilter) {
-          searchExecuted += `language=${languageFilter};`;
-        }
-        if (teleconsultation) {
-          searchExecuted += 'teleconsultation=true;';
-        }
-        _paq.push(['trackEvent', 'PsychologistSearch', 'Execute', searchExecuted]);
-
-        if (addressFilter) {
-          if (addressFilter === AROUND_ME) {
-            _paq.push(['trackEvent', 'LocationSearchExecuted', 'Geolocation', 'Autour de moi']);
-          } else if (/^\d{5}$/.test(addressFilter.trim())) {
-            _paq.push(['trackEvent', 'LocationSearchExecuted', 'PostalCode', addressFilter]);
-          } else if (addressFilter.includes(' - ')) {
-            _paq.push(['trackEvent', 'LocationSearchExecuted', 'Department', addressFilter]);
-          } else {
-            _paq.push(['trackEvent', 'LocationSearchExecuted', 'CityOrRegion', addressFilter]);
-          }
-        }
-      }
-
+      setNotification(null);
       fetchPsychologists();
       setPage(1);
     } else {
@@ -118,10 +137,6 @@ const PsyListing = () => {
         false,
         false,
       );
-
-      if (__MATOMO__) {
-        _paq.push(['trackEvent', 'PsychologistSearch', 'EmptySearch', 'no_criteria']);
-      }
     }
   };
 
@@ -129,93 +144,13 @@ const PsyListing = () => {
     if (addressFilter === AROUND_ME) {
       checkGeolocationPermission();
     }
-
-    logSearchInMatomo();
   }, [addressFilter, coords]);
 
-  const logSearchInMatomo = () => {
-    if (__MATOMO__) {
-      if (lastSearch) {
-        clearTimeout(lastSearch);
-      }
-
-      let search = '';
-      if (nameAndSpecialityFilter) {
-        search += `speciality=${nameAndSpecialityFilter};`;
-      }
-      if (addressFilter) {
-        search += `location=${addressFilter};`;
-      }
-      if (languageFilter) {
-        search += `language=${languageFilter};`;
-      }
-      if (teleconsultation) {
-        search += `teleconsultation=${teleconsultation};`;
-      }
-
-      if (search) {
-        lastSearch = setTimeout(
-          () => {
-            _paq.push(['trackEvent', 'PsychologistSearch', 'Input', search]);
-
-            // Tracker spécifiquement les recherches géographiques
-            if (addressFilter) {
-              if (addressFilter === AROUND_ME) {
-                _paq.push(['trackEvent', 'LocationSearch', 'Geolocation', 'Autour de moi']);
-              } else if (/^\d{2,3}$/.test(addressFilter.trim())) {
-                _paq.push(['trackEvent', 'LocationSearch', 'DepartmentNumber', addressFilter]);
-              } else if (/^\d{5}$/.test(addressFilter.trim())) {
-                _paq.push(['trackEvent', 'LocationSearch', 'PostalCode', addressFilter]);
-              } else if (addressFilter.includes(' - ')) {
-                _paq.push(['trackEvent', 'LocationSearch', 'Department', addressFilter]);
-              } else {
-                _paq.push(['trackEvent', 'LocationSearch', 'CityOrRegion', addressFilter]);
-              }
-            }
-
-            // Tracker spécifiquement les recherches de langues
-            if (languageFilter) {
-              _paq.push(['trackEvent', 'LanguageSearch', 'Language', languageFilter]);
-            }
-
-            // Tracker spécifiquement les recherches de spécialités
-            if (nameAndSpecialityFilter) {
-              _paq.push(['trackEvent', 'SpecialitySearch', 'Query', nameAndSpecialityFilter]);
-            }
-          },
-          2500,
-        );
-      }
-    }
-  };
-
-  const success = async pos => {
+  const success = pos => {
     const { longitude, latitude } = pos.coords;
     setCoords({ longitude, latitude });
     setGeoStatus(geoStatusEnum.GRANTED);
     setGeoLoading(false);
-
-    if (__MATOMO__) {
-      try {
-        const response = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${longitude}&lat=${latitude}`);
-        const data = await response.json();
-
-        if (data.features && data.features.length > 0) {
-          const address = data.features[0].properties;
-          const city = address.city || address.name;
-          const { postcode } = address;
-          const { context } = address;
-
-          _paq.push(['trackEvent', 'GeolocationDetected', 'City', city || 'unknown']);
-          _paq.push(['trackEvent', 'GeolocationDetected', 'PostalCode', postcode || 'unknown']);
-          _paq.push(['trackEvent', 'GeolocationDetected', 'Region', context || 'unknown']);
-          _paq.push(['trackEvent', 'GeolocationDetected', 'FullAddress', `${city} ${postcode} - ${context}`]);
-        }
-      } catch (error) {
-        console.error('Erreur géocodage inversé:', error);
-        _paq.push(['trackEvent', 'GeolocationDetected', 'Error', 'reverse_geocoding_failed']);
-      }
-    }
   };
 
   const errors = () => {
@@ -286,24 +221,16 @@ const PsyListing = () => {
             <div className={styles.input}>
               <AddressAutocomplete
                 selected={addressFilter}
-                onChange={e => {
-                  setAddressFilter(e);
-                  if (__MATOMO__ && e && e !== addressFilter) {
-                    let addressType = 'city';
-                    if (e === AROUND_ME) {
-                      addressType = 'geolocation';
-                    } else if (/^\d+/.test(e)) {
-                      addressType = 'postal_code';
-                    } else if (e.includes(' - ')) {
-                      addressType = 'department';
-                    }
-                    _paq.push(['trackEvent', 'AddressAutocomplete', 'Select', addressType]);
-
-                    if (e === AROUND_ME) {
-                      _paq.push(['trackEvent', 'AddressAutocomplete', 'SelectedValue', 'Geolocation']);
-                    } else {
-                      _paq.push(['trackEvent', 'AddressAutocomplete', 'SelectedValue', e]);
-                    }
+                onChange={(value, isValidSelection) => {
+                  if (typeof value === 'object' && value !== null) {
+                    setAddressFilter(value.label || value.value || '');
+                    setAddressFilterObject(value);
+                  } else if (typeof value === 'string') {
+                    setAddressFilter(value);
+                    setAddressFilterObject(null);
+                  } else {
+                    setAddressFilter('');
+                    setAddressFilterObject(null);
                   }
                 }}
                 placeholder="Ville, code postal ou région"

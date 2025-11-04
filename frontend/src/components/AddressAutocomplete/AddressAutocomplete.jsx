@@ -24,6 +24,7 @@ const AddressAutocomplete = ({
   const [showOptions, setShowOptions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isValidSelection, setIsValidSelection] = useState(false);
   const debounceRef = useRef();
 
   const fixedOptions = [{ value: AROUND_ME, label: AROUND_ME }];
@@ -42,8 +43,10 @@ const AddressAutocomplete = ({
   useEffect(() => {
     if (selected) {
       setInternalLabel(selected);
+      setIsValidSelection(true);
     } else {
       setInternalLabel('');
+      setIsValidSelection(false);
     }
   }, [selected]);
 
@@ -76,8 +79,9 @@ const AddressAutocomplete = ({
     }
   };
 
-  const onInternalChange = (newValue, newLabel) => {
+  const onInternalChange = (newValue, newLabel, fromSelection = false, fullOption = null) => {
     setInternalLabel(newLabel || newValue);
+    setIsValidSelection(fromSelection);
 
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
@@ -87,7 +91,9 @@ const AddressAutocomplete = ({
       searchAddresses(newValue);
     }, 300);
 
-    onChange(newValue);
+    // Si c'est une sélection valide, on retourne l'objet complet, sinon juste la valeur
+    const valueToReturn = fromSelection && fullOption ? fullOption : newValue;
+    onChange(valueToReturn, fromSelection);
   };
 
   const onInternalFocus = () => {
@@ -132,7 +138,7 @@ const AddressAutocomplete = ({
   };
 
   const selectOption = option => {
-    onInternalChange(option.value, option.label);
+    onInternalChange(option.value, option.label, true, option);
     setShowOptions(false);
   };
 
@@ -141,71 +147,80 @@ const AddressAutocomplete = ({
       <label
         className="fr-label"
         htmlFor={selectId.current}
-            >
+      >
         {label}
       </label>
       <div className={styles.addressAutocomplete}>
         <input
           id={selectId.current}
-          className="fr-select"
-          autoComplete="off"
+          className={classNames(
+            "fr-input",
+            !isValidSelection && internalLabel && internalLabel !== AROUND_ME ? "fr-input--error" : null
+          )}
+          autoComplete="on"
           onChange={e => onInternalChange(e.target.value)}
           onFocus={onInternalFocus}
           onBlur={onInternalBlur}
           onKeyDown={onInternalKeyDown}
           value={internalLabel}
           placeholder={placeholder}
-                />
+        />
+
+        {!isValidSelection && internalLabel && internalLabel !== AROUND_ME && !showOptions && (
+          <p className="fr-error-text">
+            Veuillez sélectionner une option dans la liste
+          </p>
+        )}
 
         {showOptions && (
-        <div
-          ref={optionsContainerRef}
-          className={styles.addressOptions}
-                    >
-          {isLoading && (
-          <div className={styles.addressOption}>
-            <span className="fr-icon-refresh-line" aria-hidden="true" />
-            recherche...
-          </div>
-          )}
+          <div
+            ref={optionsContainerRef}
+            className={styles.addressOptions}
+          >
+            {isLoading && (
+              <div className={styles.addressOption}>
+                <span className="fr-icon-refresh-line" aria-hidden="true" />
+                recherche...
+              </div>
+            )}
 
-          {allOptions.map((option, index) => (
-            <div
-              ref={optionsRef.current[index]}
-              className={classNames(
-                styles.addressOption,
-                index === arrowSelected ? styles.addressOptionSelected : null,
-              )}
-              key={`${selectId.current}-${option.value}-${option.label}`}
-              onMouseDown={() => selectOption(option)}
-              onMouseEnter={() => setArrowSelected(index)}
-                            >
-              <div className={styles.addressLabel}>
-                {option.label}
-                {option.type === 'region' && (
-                <span className={styles.addressType}> (région)</span>
+            {allOptions.map((option, index) => (
+              <div
+                ref={optionsRef.current[index]}
+                className={classNames(
+                  styles.addressOption,
+                  index === arrowSelected ? styles.addressOptionSelected : null,
                 )}
-                {option.type === 'departement' && (
-                <span className={styles.addressType}> (département)</span>
-                )}
-                {option.type === 'municipality' && (
-                <span className={styles.addressType}> (ville)</span>
+                key={`${selectId.current}-${option.value}-${option.label}`}
+                onMouseDown={() => selectOption(option)}
+                onMouseEnter={() => setArrowSelected(index)}
+              >
+                <div className={styles.addressLabel}>
+                  {option.label}
+                  {option.type === 'region' && (
+                    <span className={styles.addressType}> (région)</span>
+                  )}
+                  {option.type === 'departement' && (
+                    <span className={styles.addressType}> (département)</span>
+                  )}
+                  {option.type === 'municipality' && (
+                    <span className={styles.addressType}> (ville)</span>
+                  )}
+                </div>
+                {option.context && (
+                  <div className={styles.addressContext}>
+                    {option.context}
+                  </div>
                 )}
               </div>
-              {option.context && (
-              <div className={styles.addressContext}>
-                {option.context}
-              </div>
-              )}
-            </div>
-          ))}
+            ))}
 
-          {!isLoading && suggestions.length === 0 && internalLabel && internalLabel.length >= 2 && internalLabel !== AROUND_ME && (
-          <div className={styles.addressOption}>
-            Aucun résultat
+            {!isLoading && suggestions.length === 0 && internalLabel && internalLabel.length >= 2 && internalLabel !== AROUND_ME && (
+              <div className={styles.addressOption}>
+                Aucun résultat
+              </div>
+            )}
           </div>
-          )}
-        </div>
         )}
       </div>
     </div>
