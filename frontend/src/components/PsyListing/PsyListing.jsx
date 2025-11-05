@@ -50,7 +50,7 @@ const PsyListing = () => {
         type: addressFilterObject.type,
         postcode: addressFilterObject.postcode,
         city: addressFilterObject.city,
-        context: addressFilterObject.context
+        context: addressFilterObject.context,
       });
     }
 
@@ -107,9 +107,7 @@ const PsyListing = () => {
 
     if (!isAddressValid) {
       setNotification(
-        {
-          message: 'Veuillez sélectionner une ville ou région dans la liste proposée.',
-        },
+        { message: 'Veuillez sélectionner une ville ou région dans la liste proposée.' },
         false,
         false,
       );
@@ -221,7 +219,7 @@ const PsyListing = () => {
             <div className={styles.input}>
               <AddressAutocomplete
                 selected={addressFilter}
-                onChange={(value, isValidSelection) => {
+                onChange={(value) => {
                   if (typeof value === 'object' && value !== null) {
                     setAddressFilter(value.label || value.value || '');
                     setAddressFilterObject(value);
