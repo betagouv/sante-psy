@@ -154,8 +154,8 @@ const AddressAutocomplete = ({
         <input
           id={selectId.current}
           className={classNames(
-            "fr-input",
-            !isValidSelection && internalLabel && internalLabel !== AROUND_ME ? "fr-input--error" : null
+            'fr-input',
+            !isValidSelection && internalLabel && internalLabel !== AROUND_ME ? 'fr-input--error' : null,
           )}
           autoComplete="on"
           onChange={e => onInternalChange(e.target.value)}
