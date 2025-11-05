@@ -219,7 +219,7 @@ const PsyListing = () => {
             <div className={styles.input}>
               <AddressAutocomplete
                 selected={addressFilter}
-                onChange={(value) => {
+                onChange={value => {
                   if (typeof value === 'object' && value !== null) {
                     setAddressFilter(value.label || value.value || '');
                     setAddressFilterObject(value);
