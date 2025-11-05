@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Page from 'components/Page/Page';
 import agent from 'services/agent';
-import { useStore } from 'stores/index';
 import validateIneFormat from 'src/utils/validateIneFormat';
 import validateEmailFormat from 'src/utils/validateEmailFormat';
 import styles from './studentRegister.cssmodule.scss';
@@ -14,9 +13,9 @@ const StudentRegister = () => {
   const [ineError, setIneError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [formError, setFormError] = useState('');
+  const [notification, setNotification] = useState(null);
 
   const navigate = useNavigate();
-  const { commonStore: { setNotification } } = useStore();
 
   const validateINE = value => {
     const isValidIne = validateIneFormat(value);
@@ -46,26 +45,11 @@ const StudentRegister = () => {
     if (!isValid) return;
 
     try {
-      const response = await agent.Student.signIn({ firstNames, ine, email });
-      const status = response?.status;
-
-      if (status === 201 || status === 200) {
-        agent.Student.sendStudentLoginMail(email);
-        navigate('/inscription/validation');
-        setNotification({ type: 'success', message: response.data?.message });
-      }
+      await agent.Student.signIn({ firstNames, ine, email });
+      navigate('/inscription/validation');
     } catch (error) {
-      const status = error?.response?.status;
-      const message = error?.response?.data?.message;
-
-      if (status === 409) {
-        setFormError(message || 'Cet email ou numéro INE est déjà utilisé.');
-      } else {
-        setNotification({
-          type: 'error',
-          message: message || 'Une erreur est survenue.',
-        });
-      }
+      const message = error?.response?.data?.message || 'Une erreur est survenue.';
+      setNotification({ type: 'error', message });
     }
   };
 
@@ -145,6 +129,31 @@ const StudentRegister = () => {
             {emailError && <p className="fr-error-text">{emailError}</p>}
           </div>
         </div>
+
+        {notification && (
+          <div
+            className={`fr-alert fr-alert--${notification.type} fr-mt-3w`}
+            role="alert"
+          >
+            <h3 className="fr-alert__title">{notification.message}</h3>
+            <p>
+              Vérifiez que votre INE et votre adresse e-mail sont corrects et n&apos;ont pas déjà été utilisés
+              pour un autre compte.
+              <br />
+              Si vous suspectez une usurpation ou une erreur, vous pouvez nous contacter via le
+              {' '}
+              <a
+                href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
+                className="fr-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                formulaire de contact
+              </a>
+              .
+            </p>
+          </div>
+        )}
 
         <div className="fr-my-4w">
           <button className="fr-btn" type="submit">

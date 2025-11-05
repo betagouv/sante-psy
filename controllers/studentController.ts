@@ -38,34 +38,23 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
 
   switch (result.status) {
   case 'created':
-    res.status(201).json({
-      message: 'Votre compte a bien été créé.',
-      email: result.email,
-    });
+    res.status(201);
     break;
 
   case 'alreadyRegistered':
-    res.status(200).json({
-      message: 'Vous êtes déjà inscrit.',
-      email: result.email,
-    });
+    res.status(200);
     break;
 
   case 'accountNotValidated':
-    res.status(200).json({
-      message: 'Votre compte existe mais n’a pas encore été activé.',
-      email: result.email,
-    });
+    res.status(200);
     break;
 
   case 'conflict':
-    res.status(409).json({
-      message: 'Un autre compte utilise déjà cet e-mail ou ce numéro INE.',
-    });
+    res.status(409);
     break;
 
   default:
-    res.status(500).json({ message: 'Erreur inattendue.' });
+    res.status(500);
     break;
   }
 };
