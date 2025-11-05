@@ -48,7 +48,7 @@ const StudentRegister = () => {
       await agent.Student.signIn({ firstNames, ine, email });
       navigate('/inscription/validation');
     } catch (error) {
-      const message = error?.response?.data?.message || 'Une erreur est survenue.';
+      const message = "Une erreur est survenue lors de l'inscription.";
       setNotification({ type: 'error', message });
     }
   };
