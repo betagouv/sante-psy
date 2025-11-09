@@ -38,23 +38,23 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
 
   switch (result.status) {
   case 'created':
-    res.status(201);
+    res.status(201).json({ status: 'created' });
     break;
 
   case 'alreadyRegistered':
-    res.status(200);
+    res.status(200).json({ status: 'alreadyRegistered' });
     break;
 
   case 'accountNotValidated':
-    res.status(200);
+    res.status(200).json({ status: 'accountNotValidated' });
     break;
 
   case 'conflict':
-    res.status(409);
+    res.status(409).json({ status: 'conflict' });
     break;
 
   default:
-    res.status(500);
+    res.status(500).json({ status: 'error' });
     break;
   }
 };

@@ -5,7 +5,7 @@ import dbStudentsNewsletter from '../../db/studentsNewsletter';
 import * as studentMails from '../../services/studentNewsletterMails';
 import { v4 as uuidv4 } from 'uuid';
 
-describe.only('studentController', () => {
+describe('studentController', () => {
   let insertStudentStub;
   let updateStudentStub;
   let sendMailStub;
