@@ -73,8 +73,6 @@ const getAllActive = async (
     psychologistFilters = preprocessFilters(rawFilters);
   }
 
-  console.log('Psychologist Filters:', psychologistFilters);
-
   const filtersForDb = { ...psychologistFilters };
   if (psychologistFilters.address && !psychologistFilters.coords) {
     delete filtersForDb.address;
