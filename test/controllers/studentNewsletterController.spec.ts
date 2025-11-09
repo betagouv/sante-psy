@@ -5,7 +5,7 @@ import dbStudentsNewsletter from '../../db/studentsNewsletter';
 import * as studentMails from '../../services/studentNewsletterMails';
 import { v4 as uuidv4 } from 'uuid';
 
-describe('studentController', () => {
+describe.only('studentController', () => {
   let insertStudentStub;
   let updateStudentStub;
   let sendMailStub;
@@ -24,7 +24,7 @@ describe('studentController', () => {
 
   describe('sendMail', () => {
     const successValidation = async (payload) => chai.request(app)
-      .post('/api/student/sendMail')
+      .post('/api/studentNewsletter/sendStudentMail')
       .send(payload)
       .then(async (res) => {
         res.status.should.equal(200);
@@ -34,7 +34,7 @@ describe('studentController', () => {
       });
 
     const failValidation = async (payload, errorMessage) => chai.request(app)
-      .post('/api/student/sendMail')
+      .post('/api/studentNewsletter/sendStudentMail')
       .send(payload)
       .then(async (res) => {
         res.status.should.equal(400);
@@ -82,7 +82,7 @@ describe('studentController', () => {
 
   describe('saveAnswer', () => {
     const successValidation = async (payload) => chai.request(app)
-      .post('/api/student/saveAnswer')
+      .post('/api/studentNewsletter/saveAnswer')
       .send(payload)
       .then(async (res) => {
         res.status.should.equal(200);
@@ -92,7 +92,7 @@ describe('studentController', () => {
       });
 
     const failValidation = async (payload, errorMessage) => chai.request(app)
-      .post('/api/student/saveAnswer')
+      .post('/api/studentNewsletter/saveAnswer')
       .send(payload)
       .then(async (res) => {
         res.status.should.equal(400);
@@ -169,7 +169,7 @@ describe('studentController', () => {
   describe('unregister', () => {
     it('Should set email to null', async () => {
       chai.request(app)
-        .delete('/api/student/123')
+        .delete('/api/studentNewsletter/123')
         .then(async (res) => {
           res.status.should.equal(200);
           res.body.should.equal('Ok');

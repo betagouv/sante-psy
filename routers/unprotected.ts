@@ -45,7 +45,7 @@ router.post(
 );
 
 router.post(
-  '/studentNewsletter/sendMail',
+  '/studentNewsletter/sendStudentMail',
   speedLimiterLogin,
   studentNewsletterController.mailValidator,
   studentNewsletterController.sendStudentMail,

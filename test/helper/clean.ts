@@ -22,7 +22,7 @@ const patients = async (): Promise<void> => {
   await db(patientsTable).del();
 };
 
-const students = async (): Promise<void> => {
+const studentsNewsletter = async (): Promise<void> => {
   await db(studentsNewsletterTable).del();
 };
 
@@ -45,5 +45,5 @@ export default {
   appointments,
   psychologists,
   universities,
-  students,
+  studentsNewsletter,
 };

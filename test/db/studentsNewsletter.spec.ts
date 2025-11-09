@@ -10,9 +10,9 @@ import clean from '../helper/clean';
 
 dotEnv.config();
 
-describe('DB Students', () => {
+describe('DB Newsletter Students', () => {
   afterEach(async () => {
-    await clean.students();
+    await clean.studentsNewsletter();
   });
 
   describe('insert', () => {

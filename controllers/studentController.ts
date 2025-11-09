@@ -3,7 +3,7 @@ import { check } from 'express-validator';
 import asyncHelper from '../utils/async-helper';
 import validation from '../utils/validation';
 import { purifySanitizer } from '../services/sanitizer';
-import dbStudents from '../db/students'; // à créer si besoin
+import dbStudents from '../db/students';
 import { inePatterns } from './validators/patientValidators';
 
 const signInValidator = [

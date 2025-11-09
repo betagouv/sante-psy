@@ -100,9 +100,9 @@ const Student = {
 };
 
 const StudentNewsletter = {
-  sendMail: (email, source) => clientWithoutErrorManagement.post('/student/sendMail', { email, source }),
-  saveAnswer: data => clientWithoutErrorManagement.post('/student/saveAnswer', data),
-  unregister: id => clientWithoutErrorManagement.delete(`/student/${id}`),
+  sendStudentMail: (email, source) => clientWithoutErrorManagement.post('/studentNewsletter/sendStudentMail', { email, source }),
+  saveAnswer: data => clientWithoutErrorManagement.post('/studentNewsletter/saveAnswer', data),
+  unregister: id => clientWithoutErrorManagement.delete(`/studentNewsletter/${id}`),
 };
 
 export default {
