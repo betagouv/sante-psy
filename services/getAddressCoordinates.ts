@@ -5,10 +5,10 @@ import config from '../utils/config';
 const ADDRESS_DELIMITER = ';';
 
 const getAddressCoordinates = async (address: string): Promise<Coordinates> => {
-  // if (config.testEnvironment) {
-  //   console.log('Request to api-adresse.data.gouv.fr bypassed because you are using a test environment');
-  //   return Promise.resolve(null);
-  // }
+  if (config.testEnvironment) {
+    console.log('Request to api-adresse.data.gouv.fr bypassed because you are using a test environment');
+    return Promise.resolve(null);
+  }
   const firstAddress = address.split(ADDRESS_DELIMITER)[0];
 
   if (!firstAddress || firstAddress.length < 3) {
