@@ -11,8 +11,7 @@ import psyProfileController from '../controllers/psyProfileController';
 import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
-import studentController from '../controllers/studentController';
-// import studentLoginController from '../controllers/studentLoginController';
+import studentSignInController from '../controllers/studentSignInController';
 
 const router = express.Router();
 
@@ -34,8 +33,8 @@ router.post('/psychologist/login', speedLimiterLogin, psyLoginController.psyLogi
 router.post(
   '/student/signIn',
   speedLimiterLogin,
-  studentController.signInValidator,
-  studentController.signIn,
+  studentSignInController.studentSignInValidator,
+  studentSignInController.signIn,
 );
 
 // to do on login ticket
