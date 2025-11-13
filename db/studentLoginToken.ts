@@ -43,6 +43,19 @@ const insertStudent = async (token: string, email: string, expiresAt: string): P
   }
 };
 
+const updateStudent = async (email: string, expiresAt: string): Promise<void> => {
+  try {
+    const updated = await db(studentsLoginTokenTable)
+      .where({ email })
+      .update({ expiresAt });
+
+    if (!updated) throw new Error('Aucune entrée mise à jour');
+  } catch (err) {
+    console.error(`Erreur de mise à jour du token : ${err}`);
+    throw new Error('Erreur de mise à jour du token');
+  }
+};
+
 const deleteOneStudent = async (token: string): Promise<void> => {
   try {
     const deletedToken = await db(studentsLoginTokenTable)
@@ -66,5 +79,6 @@ export default {
   getStudentByToken,
   getStudentByEmail,
   insert: insertStudent,
+  update: updateStudent,
   delete: deleteOneStudent,
 };

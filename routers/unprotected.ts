@@ -12,7 +12,7 @@ import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
 import studentController from '../controllers/studentController';
-import studentLoginController from '../controllers/studentLoginController';
+// import studentLoginController from '../controllers/studentLoginController';
 
 const router = express.Router();
 
@@ -38,11 +38,13 @@ router.post(
   studentController.signIn,
 );
 
-router.post(
-  '/student/sendLoginMail',
-  speedLimiterLogin,
-  studentController.sendStudentMail,
-);
+// to do on login ticket
+
+// router.post(
+//   '/student/sendLoginMail',
+//   speedLimiterLogin,
+//   studentController.sendStudentMail,
+// );
 
 router.post(
   '/studentNewsletter/sendStudentMail',
