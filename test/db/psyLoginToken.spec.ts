@@ -14,7 +14,7 @@ describe('DB Login token', () => {
     await clean.dataToken();
   });
 
-  describe('getByToken', () => {
+  describe('getPsyByToken', () => {
     it('should get all token info with a token', async () => {
       const email = 'prenom.nom@beta.gouv.fr';
       const expiresAt = date.getDatePlusOneHour();
