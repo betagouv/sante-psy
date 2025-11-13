@@ -39,9 +39,9 @@ router.post(
 );
 
 router.post(
-  '/student/sendStudentLoginMail',
+  '/student/sendLoginMail',
   speedLimiterLogin,
-  studentLoginController.sendStudentLoginEmail,
+  studentController.sendStudentMail,
 );
 
 router.post(

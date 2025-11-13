@@ -96,7 +96,7 @@ const Psy = {
 
 const Student = {
   signIn: data => client.post('/student/signIn', data),
-  sendStudentLoginMail: email => client.post('/student/sendMail', { email }),
+  sendStudentLoginMail: email => client.post('/student/sendLoginMail', { email }),
 };
 
 const StudentNewsletter = {

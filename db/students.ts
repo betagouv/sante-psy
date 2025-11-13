@@ -55,6 +55,35 @@ const signIn = async (
   }
 };
 
+const getStudentByEmail = async (email: string): Promise<Student> => {
+  try {
+    const result = await db(studentsTable)
+    .where('email', email)
+    .first();
+
+    return result;
+  } catch (err) {
+    console.error("Impossible de récupérer l'email", err);
+    throw new Error('Une erreur est survenue.');
+  }
+};
+
+const validateStudentAccount = async (email: string): Promise<void> => {
+  try {
+    await db(studentsTable)
+      .where({ email })
+      .update({
+        validated: true,
+      });
+    console.log(`Compte étudiant validé pour ${email}`);
+  } catch (err) {
+    console.error(`Erreur lors de la validation du compte étudiant (${email})`, err);
+    throw new Error('Erreur lors de la validation du compte.');
+  }
+};
+
 export default {
   signIn,
+  getStudentByEmail,
+  validateStudentAccount,
 };
