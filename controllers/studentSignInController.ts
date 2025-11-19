@@ -4,38 +4,21 @@ import validation from '../utils/validation';
 import dbStudents from '../db/students';
 import dbStudentLoginToken from '../db/studentLoginToken';
 import CustomError from '../utils/CustomError';
-import sendStudentLoginMail from './studentLoginController';
 import { signInValidator } from './validators/studentValidators';
+import sendStudentValidationMail from './studentValidationController';
 
 const signIn = async (req: Request, res: Response): Promise<void> => {
   try {
     validation.checkErrors(req);
-    const { firstNames, ine, email } = req.body;
-    const result = await dbStudents.signIn(email, ine, firstNames);
-
-    switch (result.status) {
-    case 'created':
-      await sendStudentLoginMail(email, ine);
-      res.status(201).json({ status: 'created' });
-      break;
-    case 'alreadyRegistered':
-      res.status(200).json({ status: 'alreadyRegistered' });
-      break;
-    case 'accountNotValidated':
-      await sendStudentLoginMail(email, ine);
-      res.status(200).json({ status: 'accountNotValidated' });
-      break;
-    case 'conflict':
-      res.status(409).json({ status: 'conflict' });
-      break;
-    default:
-      throw new CustomError('Erreur interne', 500);
-    }
+    const { email } = req.body;
+    await dbStudents.signIn(email);
+    await sendStudentValidationMail(email);
+    res.status(201).json({ status: 'created' });
   } catch (err) {
     console.error(err);
-    res.status(err instanceof CustomError ? err.statusCode : 500).json({
-      error: err instanceof CustomError ? err.message : 'Erreur serveur',
-    });
+    const statusCode = err instanceof CustomError ? err.statusCode : 500;
+    const message = err instanceof CustomError ? err.message : 'Erreur serveur';
+    res.status(statusCode).json({ error: message });
   }
 };
 
