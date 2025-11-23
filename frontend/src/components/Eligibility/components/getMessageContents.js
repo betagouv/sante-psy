@@ -11,7 +11,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
 
   const trackRegisterClick = () => {
     if (__MATOMO__) {
-      _paq.push(['trackEvent', 'Student', 'studentRegister']);
+      _paq.push(['trackEvent', 'Student', 'studentSignIn']);
     }
   };
 

@@ -31,9 +31,18 @@ router.post(
 router.post('/psychologist/login', speedLimiterLogin, psyLoginController.psyLogin);
 
 router.post(
+  '/student/signInSecondStepMail',
+  speedLimiterLogin,
+  studentSignInController.studentEmailValidator,
+  studentSignInController.sendStudentSecondStepMail,
+);
+
+router.post('/student/signIn/:token', studentSignInController.verifyStudentToken);
+
+router.post(
   '/student/signIn',
   speedLimiterLogin,
-  studentSignInController.studentSignInValidator,
+  studentSignInController.studentEmailValidator,
   studentSignInController.signIn,
 );
 

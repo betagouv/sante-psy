@@ -3,7 +3,6 @@ export type Student = {
   firstNames: string,
   email: string,
   ine: string,
-  validated: boolean,
   createdAt: Date,
   updatedAt?: Date
 }

@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Page from 'components/Page/Page';
 import agent from 'services/agent';
 import validateEmailFormat from 'src/utils/validateEmailFormat';
-import styles from './studentRegister.cssmodule.scss';
+import { useStore } from 'stores/';
+import styles from './studentSignIn.cssmodule.scss';
 
-const StudentRegisterStep1 = () => {
+const StudentSignInStepOne = () => {
+  const { userStore: { user, setXsrfToken } } = useStore();
+  const { token } = useParams();
+  const loginCalled = useRef(false);
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [formError, setFormError] = useState('');
   const [notification, setNotification] = useState(null);
 
   const validateEmail = value => {
@@ -21,20 +26,16 @@ const StudentRegisterStep1 = () => {
     return true;
   };
 
-  const registerStudent = async e => {
+  const sendStudentSecondStepMail = async e => {
     e.preventDefault();
-    setFormError('');
-
     const isValid = validateEmail(email);
     if (!isValid) return;
 
     try {
-      await agent.Student.signIn({ email });
-      const message ="Consultez votre boîte mail";
-      setNotification({ type: 'success', message });
+      const response = await agent.Student.sendStudentSecondStepMail(email);
+      setNotification({ type: 'success', message: response.message });
     } catch (error) {
-      const message = "Une erreur est survenue lors de l'inscription.";
-      setNotification({ type: 'error', message });
+      setNotification({ type: 'error', message: "Une erreur est survenue lors de l'inscription." });
     }
   };
 
@@ -51,7 +52,7 @@ const StudentRegisterStep1 = () => {
       )}
       description="Votre identifiant sera votre email"
     >
-      <form onSubmit={registerStudent}>
+      <form onSubmit={sendStudentSecondStepMail}>
         {notification && (
           <div
             className={`fr-alert fr-alert--${notification.type} fr-mt-3w`}
@@ -74,7 +75,8 @@ const StudentRegisterStep1 = () => {
                 formulaire de contact
               </a>
               .
-            </p>)}
+            </p>
+            )}
           </div>
         )}
         <div className="fr-my-2w">
@@ -108,15 +110,9 @@ const StudentRegisterStep1 = () => {
             Suivant
           </button>
         </div>
-
-        {formError && (
-          <div className="fr-alert fr-alert--error fr-mt-2w" role="alert">
-            <p>{formError}</p>
-          </div>
-        )}
       </form>
     </Page>
   );
 };
 
-export default StudentRegisterStep1;
+export default StudentSignInStepOne;
