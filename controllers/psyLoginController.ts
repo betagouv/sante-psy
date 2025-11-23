@@ -176,7 +176,7 @@ const sendPsyMail = async (req: Request, res: Response): Promise<void> => {
   }
 
   const token = loginInformations.generateToken(32);
-  const loginUrl = loginInformations.generateLoginUrl();
+  const loginUrl = loginInformations.generatePsyLoginUrl();
   await sendPsyLoginEmail(email, loginUrl, token);
   await savePsyToken(email, token);
   res.json({
