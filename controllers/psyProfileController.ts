@@ -25,7 +25,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError("Le psychologue n'existe pas.", 500);
   }
   const tokenData = cookie.verifyJwt(req, res);
-  const extraInfo = tokenData && tokenData.psychologist === req.params.psyId;
+  const extraInfo = tokenData && tokenData.user === req.params.psyId;
 
   const {
     firstNames,

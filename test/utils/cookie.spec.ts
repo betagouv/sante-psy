@@ -32,7 +32,7 @@ describe('cookie', () => {
       // @ts-expect-error => fake cookie
       const result = cookie.verifyJwt({ cookies: { token } });
 
-      result.psychologist.should.be.eql(psychologist);
+      result.user.should.be.eql(psychologist);
     });
 
     it('should return false with wrong token', () => {

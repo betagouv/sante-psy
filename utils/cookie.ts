@@ -1,6 +1,6 @@
 import { CookieOptions, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { PsyJWT } from '../types/PsyLoginToken';
+import { UserJWT } from '../types/PsyLoginToken';
 import config from './config';
 import CustomError from './CustomError';
 
@@ -18,20 +18,20 @@ const getSessionDuration = (): string => `${config.sessionDurationHours} hours`;
  * @param {*} id
  * @see https://www.ionos.fr/digitalguide/sites-internet/developpement-web/json-web-token-jwt/
  */
-const getJwtTokenForUser = (psychologist: string, xsrfToken: string): string => {
+const getJwtTokenForUser = (user: string, xsrfToken: string): string => {
   const duration = getSessionDuration();
 
   return jwt.sign(
     {
-      psychologist,
+      user,
       xsrfToken,
     },
     config.secret,
     { expiresIn: duration },
   );
 };
-const createAndSetJwtCookie = (res: Response, psychologistData: string, xsrfToken: string): void => {
-  const jwtToken = getJwtTokenForUser(psychologistData, xsrfToken);
+const createAndSetJwtCookie = (res: Response, userData: string, xsrfToken: string): void => {
+  const jwtToken = getJwtTokenForUser(userData, xsrfToken);
   res.cookie('token', jwtToken, headers);
 };
 
@@ -39,10 +39,10 @@ const clearJwtCookie = (res: Response): void => {
   res.clearCookie('token');
 };
 
-const verifyJwt = (req: Request, res: Response): PsyJWT | undefined => {
+const verifyJwt = (req: Request, res: Response): UserJWT | undefined => {
   try {
     const verified = jwt.verify(req.cookies.token, config.secret);
-    return verified as PsyJWT;
+    return verified as UserJWT;
   } catch (err) {
     if (err instanceof jwt.TokenExpiredError) {
       res.clearCookie('token');

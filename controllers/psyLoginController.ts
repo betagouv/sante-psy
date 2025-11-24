@@ -72,8 +72,8 @@ const deletePsyToken = (req: Request, res: Response): void => {
 const connectedPsy = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
   if (tokenData && checkXsrf(req, tokenData.xsrfToken)) {
-    const psy = await dbPsychologists.getById(tokenData.psychologist);
-    const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
+    const psy = await dbPsychologists.getById(tokenData.user);
+    const convention = await dbPsychologists.getConventionInfo(tokenData.user);
 
     if (psy) {
       const { reason: inactiveReason, until: inactiveUntil } = psy.active
