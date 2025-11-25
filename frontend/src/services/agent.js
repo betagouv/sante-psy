@@ -95,10 +95,10 @@ const Psy = {
 };
 
 const Student = {
-  register: data => client.post('/student/signIn', data),
+  signIn: data => client.post('/student/signIn', data),
   sendStudentSecondStepMail: email => client.post('/student/signInSecondStepMail', { email }),
   verifyStudentToken: token => client.post(`/student/signIn/${token}`),
-
+  sendStudentWelcomeMail: email => client.post('/student/sendWelcomeMail', { email }),
   // sendStudentLoginMail: email => client.post('/student/sendLoginMail', { email }),
 };
 

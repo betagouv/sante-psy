@@ -12,12 +12,17 @@ function generatePsyLoginUrl(): string {
   return `${config.hostnameWithProtocol}/psychologue/login`;
 }
 
-function generateStudentSignInValidationUrl(): string {
+function generateStudentSignInStepTwoUrl(): string {
   return `${config.hostnameWithProtocol}/inscription`;
+}
+
+function generateStudentLoginUrl(): string {
+  return `${config.hostnameWithProtocol}/student/login`;
 }
 
 export default {
   generatePsyLoginUrl,
-  generateStudentSignInValidationUrl,
+  generateStudentSignInStepTwoUrl,
+  generateStudentLoginUrl,
   generateToken,
 };

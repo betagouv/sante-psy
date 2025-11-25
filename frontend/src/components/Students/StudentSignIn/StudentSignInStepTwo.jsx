@@ -3,8 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Page from 'components/Page/Page';
 import agent from 'services/agent';
 import validateIneFormat from 'src/utils/validateIneFormat';
-import styles from './studentSignIn.cssmodule.scss';
 import validateNameFormat from 'src/utils/validateNameFormat';
+import styles from './studentSignIn.cssmodule.scss';
 
 const StudentSignInStepTwo = () => {
   const { token } = useParams();
@@ -18,6 +18,13 @@ const StudentSignInStepTwo = () => {
   const [valid, setValid] = useState(false);
 
   const navigate = useNavigate();
+
+  // todo in login ticket
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate('/etudiant/accueil');
+  //   }
+  // }, [user, token]);
 
   useEffect(() => {
     if (!token) {
@@ -58,17 +65,34 @@ const StudentSignInStepTwo = () => {
     return true;
   };
 
-  const registerStudent = async e => {
+  const signIn = async e => {
     e.preventDefault();
+      agent.Student.signIn({ firstNames, ine, email })
+      .then(() => {
+          navigate('/');
+      })
+      .catch ((error) => {
+        if (error?.response?.status === 'conflict') {
+          setNotification({
+            type: 'error',
+            message: 'Cet email ou numéro INE est déjà utilisé.',
+          });
+        } else {
+          setNotification({
+            type: 'error',
+            message: 'Une erreur est survenue.',
+          });
+        }
+      })
 
-    try {
-      await agent.Student.signIn({ firstNames, ine, email });
-      // student will be connected if success
-      // navigate('/inscription/validation');
-    } catch (error) {
-      const message = "Une erreur est survenue lors de l'inscription.";
-      setNotification({ type: 'error', message });
-    }
+    // try {
+    //   await agent.Student.signIn({ firstNames, ine, email });
+    //   // student will be connected if success
+    //   // navigate('/inscription/validation');
+    // } catch (error) {
+    //   const message = 'Une erreur est survenue lors de votre inscription.';
+    //   setNotification({ type: 'error', message });
+    // }
   };
 
   return (
@@ -84,7 +108,7 @@ const StudentSignInStepTwo = () => {
       )}
       description="Dernière étape !"
     >
-      <form onSubmit={registerStudent}>
+      <form onSubmit={signIn}>
         <div className="fr-my-2w">
           <div className="fr-input-group">
             <label className="fr-label" htmlFor="first-names-input">
@@ -125,7 +149,7 @@ const StudentSignInStepTwo = () => {
           </div>
           <div>
             <p>
-              Ces données restent confidentielles et seront uniquement transmise à votre / vos psychologue(s)
+              Ces données restent confidentielles et seront uniquement transmises à votre / vos psychologue(s)
             </p>
           </div>
         </div>
@@ -157,7 +181,7 @@ const StudentSignInStepTwo = () => {
 
         <div className="fr-my-4w">
           <button className="fr-btn" type="submit">
-            Suivant
+            Accéder à mon espace
           </button>
         </div>
       </form>

@@ -1,24 +1,44 @@
 import db from './db';
-import date from '../utils/date';
 import { Student } from '../types/Student';
 import { studentsTable } from './tables';
+import date from '../utils/date';
+
+type SignInResult =
+  | { status: 'created', email: string }
+  | { status: 'alreadyRegistered', email: string }
+  | { status: 'conflict' };
 
 const signIn = async (
   email: string,
-): Promise<{ status: 'created', email: string }> => {
+  ine: string,
+  firstNames: string,
+): Promise<SignInResult> => {
   try {
+    // email + ine are already in base for same student
     const existingStudent = await db(studentsTable)
-      .where({ email })
+      .where({ email, ine })
       .first();
 
     if (existingStudent) {
-      return { status: 'created', email };
+      return { status: 'alreadyRegistered', email };
     }
 
+    // email or ine separately already used
+    const [conflict] = await db(studentsTable)
+      .where('email', email)
+      .orWhere('ine', ine)
+      .limit(1);
+
+    if (conflict) {
+      return { status: 'conflict' };
+    }
+
+    // if none of above, creating student
     await db(studentsTable)
       .insert({
         email,
-        validated: false,
+        ine,
+        firstNames,
         createdAt: date.now(),
       })
       .returning('*') as Student[];
@@ -27,6 +47,18 @@ const signIn = async (
   } catch (err) {
     console.error('Error while creating student', err);
     throw new Error('Erreur lors de la création de l’étudiant');
+  }
+};
+
+const getStudentById = async (studentId: string): Promise<Student> => {
+  try {
+    const student = await db(studentsTable)
+      .where('id', studentId)
+      .first();
+    return student;
+  } catch (err) {
+    console.error("Impossible de récupérer l'étudiant", err);
+    throw new Error("Impossible de récupérer l'étudiant");
   }
 };
 
@@ -43,22 +75,8 @@ const getStudentByEmail = async (email: string): Promise<Student> => {
   }
 };
 
-const validateStudentAccount = async (email: string): Promise<void> => {
-  try {
-    await db(studentsTable)
-      .where({ email })
-      .update({
-        validated: true,
-      });
-    console.log(`Compte étudiant validé pour ${email}`);
-  } catch (err) {
-    console.error(`Erreur lors de la validation du compte étudiant (${email})`, err);
-    throw new Error('Erreur lors de la validation du compte.');
-  }
-};
-
 export default {
   signIn,
+  getStudentById,
   getStudentByEmail,
-  validateStudentAccount,
 };

@@ -37,16 +37,23 @@ router.post(
   studentSignInController.sendStudentSecondStepMail,
 );
 
+router.post(
+  '/student/sendWelcomeMail',
+  speedLimiterLogin,
+  studentSignInController.studentEmailValidator,
+  studentSignInController.sendWelcomeMail,
+);
+
 router.post('/student/signIn/:token', studentSignInController.verifyStudentToken);
 
 router.post(
   '/student/signIn',
   speedLimiterLogin,
-  studentSignInController.studentEmailValidator,
+  studentSignInController.studentSignInValidator,
   studentSignInController.signIn,
 );
 
-// to do on login ticket
+// todo on login ticket
 
 // router.post(
 //   '/student/sendLoginMail',

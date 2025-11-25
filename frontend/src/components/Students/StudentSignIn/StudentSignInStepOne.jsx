@@ -1,17 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import Page from 'components/Page/Page';
 import agent from 'services/agent';
 import validateEmailFormat from 'src/utils/validateEmailFormat';
-import { useStore } from 'stores/';
 import styles from './studentSignIn.cssmodule.scss';
 
 const StudentSignInStepOne = () => {
-  const { userStore: { user, setXsrfToken } } = useStore();
-  const { token } = useParams();
-  const loginCalled = useRef(false);
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [notification, setNotification] = useState(null);

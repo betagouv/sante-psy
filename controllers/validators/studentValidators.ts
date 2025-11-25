@@ -23,5 +23,4 @@ export const signInValidator = [
       if (!isValid) throw new Error('Le numéro INE est invalide. Veuillez vérifier le format.');
       return true;
     }),
-  ...emailValidator,
 ];
