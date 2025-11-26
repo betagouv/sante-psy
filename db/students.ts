@@ -46,7 +46,7 @@ const signIn = async (
     return { status: 'created', email };
   } catch (err) {
     console.error('Error while creating student', err);
-    throw new Error('Erreur lors de la création de l’étudiant');
+    throw new Error("Erreur lors de la création de l'étudiant");
   }
 };
 
@@ -57,8 +57,8 @@ const getStudentById = async (studentId: string): Promise<Student> => {
       .first();
     return student;
   } catch (err) {
-    console.error("Impossible de récupérer l'étudiant", err);
-    throw new Error("Impossible de récupérer l'étudiant");
+    console.error('Error while getting the student by id', err);
+    throw new Error("Erreur lors de la récupération de l'étudiant par id");
   }
 };
 
@@ -70,8 +70,8 @@ const getStudentByEmail = async (email: string): Promise<Student> => {
 
     return result;
   } catch (err) {
-    console.error("Impossible de récupérer l'email", err);
-    throw new Error('Une erreur est survenue.');
+    console.error('Error while getting the student by email', err);
+    throw new Error("Erreur lors de la récupération de l'étudiant par email");
   }
 };
 

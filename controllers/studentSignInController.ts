@@ -19,18 +19,18 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
     const signInValidationUrl = loginInformations.generateStudentSignInStepTwoUrl();
     const loginUrl = loginInformations.generateStudentLoginUrl();
     const token = existingToken ? existingToken.token : loginInformations.generateToken(32);
-    let expiredAt;
+    let expiresAt;
 
     if (!existingStudent) {
-      expiredAt = date.getDateInAWeek();
+      expiresAt = date.getDateInAWeek();
     } else {
-      expiredAt = date.getDatePlusTwoHours();
+      expiresAt = date.getDatePlusTwoHours();
     }
 
     if (existingToken) {
-      await dbStudentLoginToken.update(email, expiredAt);
+      await dbStudentLoginToken.update(email, expiresAt);
     } else {
-      await dbStudentLoginToken.insert(token, email, expiredAt);
+      await dbStudentLoginToken.insert(token, email, expiresAt);
     }
     await sendStudentMailTemplate(
       email,
@@ -53,12 +53,12 @@ const sendWelcomeMail = async (email): Promise<void> => {
     const existingToken = await dbStudentLoginToken.getStudentByEmail(email);
     const loginUrl = loginInformations.generateStudentLoginUrl();
     const token = existingToken ? existingToken.token : loginInformations.generateToken(32);
-    const expiredAt = date.getDatePlusTwoHours();
+    const expiresAt = date.getDatePlusTwoHours();
 
     if (existingToken) {
-      await dbStudentLoginToken.update(email, expiredAt);
+      await dbStudentLoginToken.update(email, expiresAt);
     } else {
-      await dbStudentLoginToken.insert(token, email, expiredAt);
+      await dbStudentLoginToken.insert(token, email, expiresAt);
     }
     await sendStudentMailTemplate(
       email,
@@ -104,12 +104,12 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     switch (result.status) {
     case 'created':
       await sendWelcomeMail(email);
-      res.status(201).json();
+      res.status(201).json({ status: 'created' });
       break;
     case 'alreadyRegistered':
       // todo: changer le mail envoyé dans le login ticket
       await sendWelcomeMail(email);
-      res.status(200).json();
+      res.status(200).json({ status: 'alreadyRegistered' });
       break;
     case 'conflict':
       res.status(409).json({ status: 'conflict' });

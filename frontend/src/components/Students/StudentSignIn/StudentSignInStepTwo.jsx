@@ -67,11 +67,11 @@ const StudentSignInStepTwo = () => {
 
   const signIn = async e => {
     e.preventDefault();
-      agent.Student.signIn({ firstNames, ine, email })
+    agent.Student.signIn({ firstNames, ine, email })
       .then(() => {
-          navigate('/');
+        navigate('/');
       })
-      .catch ((error) => {
+      .catch(error => {
         if (error?.response?.status === 'conflict') {
           setNotification({
             type: 'error',
@@ -83,16 +83,7 @@ const StudentSignInStepTwo = () => {
             message: 'Une erreur est survenue.',
           });
         }
-      })
-
-    // try {
-    //   await agent.Student.signIn({ firstNames, ine, email });
-    //   // student will be connected if success
-    //   // navigate('/inscription/validation');
-    // } catch (error) {
-    //   const message = 'Une erreur est survenue lors de votre inscription.';
-    //   setNotification({ type: 'error', message });
-    // }
+      });
   };
 
   return (
