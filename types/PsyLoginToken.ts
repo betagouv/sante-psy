@@ -4,7 +4,7 @@ export type PsyLoginToken = {
     expiresAt: Date
 }
 
-export type UserJWT = {
-    user: string,
+export type psyJWT = {
+    psychologist: string,
     xsrfToken: string
 }
