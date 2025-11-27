@@ -69,7 +69,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
             ) : (
               <>
                 <Button
-                  onClick={() => navigate('/psychologue/login')}
+                  onClick={() => navigate('/login')}
                   size="sm"
                   className="fr-my-1w"
                 >

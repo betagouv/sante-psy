@@ -77,8 +77,8 @@ const Header = () => {
               </ToolItem>
             )}
             {!user && !studentPage && (
-              <ToolItem asLink={<Link data-test-id="login-button" to="/psychologue/login" />} icon="ri-user-fill">
-                Espace Psychologue
+              <ToolItem asLink={<Link data-test-id="login-button" to="/login" />} icon="ri-user-fill">
+                Mon Espace
               </ToolItem>
             )}
             {user && (

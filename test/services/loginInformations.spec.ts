@@ -3,7 +3,7 @@ import loginInformations from '../../services/loginInformations';
 describe('loginInformations', async () => {
   describe('generatePsyLoginUrl', () => {
     it('should create a login url to send in a email', () => {
-      loginInformations.generatePsyLoginUrl().should.equal('http://localhost:8080/psychologue/login');
+      loginInformations.generatePsyLoginUrl().should.equal('http://localhost:8080/login');
     });
   });
 

@@ -14,7 +14,7 @@ describe('Login', () => {
 
   describe('Email', () => {
     it('should send an email and notify the user', () => {
-      cy.visit('/psychologue/login');
+      cy.visit('/login');
       cy.get('[data-test-id="email-input"]')
         .type('login@beta.gouv.fr');
       cy.get('[data-test-id="email-button"]')
@@ -34,7 +34,7 @@ describe('Login', () => {
         .then(() => {
           cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
             .then(response => {
-              cy.visit(`/psychologue/login/${response.body.token}`);
+              cy.visit(`/login/${response.body.token}`);
               cy.wait('@login');
               cy.wait('@connectedUser');
               cy.wait('@connectedUser');
@@ -44,7 +44,7 @@ describe('Login', () => {
     });
 
     it('should display an error when invalid token is entered', () => {
-      cy.visit('/psychologue/login/nop');
+      cy.visit('/login/nop');
       cy.wait('@login');
       cy.wait('@connectedUser');
       cy.location('pathname').should('not.eq', '/psychologue/tableau-de-bord');
@@ -60,13 +60,13 @@ describe('Login', () => {
         .then(() => {
           cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
             .then(response => {
-              cy.visit(`/psychologue/login/${response.body.token}`);
+              cy.visit(`/login/${response.body.token}`);
               cy.wait('@login');
               cy.wait('@connectedUser');
               cy.wait('@connectedUser');
               cy.get('[data-test-id="dashboard"]').should('be.visible');
               logout();
-              cy.visit(`/psychologue/login/${response.body.token}`);
+              cy.visit(`/login/${response.body.token}`);
               cy.wait('@login');
               cy.wait('@connectedUser');
               cy.location('pathname').should('not.eq', '/psychologue/tableau-de-bord');
@@ -83,7 +83,7 @@ describe('Login', () => {
   describe('Login expiration', () => {
     it('Should redirect to login page after expiration', () => {
       loginAsDefault('2s');
-      cy.visit('/psychologue/login');
+      cy.visit('/login');
       cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
 
       // We explicitely wait for token to expire
@@ -91,7 +91,7 @@ describe('Login', () => {
       cy.wait(2000);
 
       cy.reload();
-      cy.location('pathname').should('eq', '/psychologue/login');
+      cy.location('pathname').should('eq', '/login');
     });
   });
 

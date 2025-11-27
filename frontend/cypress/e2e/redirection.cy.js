@@ -39,7 +39,7 @@ describe('Redirection', () => {
     it('should redirect to login page if unknown page starting with /psychologue/ and not logged', () => {
       cy.visit('/psychologue/unknown-pizza');
       cy.wait('@config');
-      cy.location('pathname').should('eq', '/psychologue/login');
+      cy.location('pathname').should('eq', '/login');
     });
   });
 });

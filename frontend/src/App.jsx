@@ -70,8 +70,8 @@ function App() {
               <Route exact path="/activation/:token" element={<ActiveProfile />} />
               <Route exact path="/suspension/:token" element={<InactiveProfile />} />
               <Route exact path="/psychologue/logout" element={<Logout />} />
-              <Route exact path="/psychologue/login/:token" element={<Login />} />
-              <Route exact path="/psychologue/login/" element={<Login />} />
+              <Route exact path="/login/:token" element={<Login />} />
+              <Route exact path="/login/" element={<Login />} />
               <Route exact path="/trouver-un-psychologue" element={<PsyListing />} />
               <Route exact path="/trouver-un-psychologue/:psyId" element={<PublicPsychologistProfile />} />
               <Route exact path="/mentions-legales" element={<LegalNotice />} />
@@ -95,7 +95,7 @@ function App() {
               <Route
                 path="/psychologue/*"
                 element={user
-                  ? <PsychologistRouter /> : <Navigate to="/psychologue/login" />}
+                  ? <PsychologistRouter /> : <Navigate to="/login" />}
               />
               <Route path="/*" element={<Navigate to={user ? '/psychologue/tableau-de-bord' : '/'} />} />
             </Routes>

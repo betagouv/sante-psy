@@ -3,7 +3,7 @@
 module.exports = () => [
   {
     question: 'Comment procéder à la facturation ?',
-    answer: "Une fois une séance réalisée, vous pouvez la déclarer sur votre espace psychologue, en renseignant le numéro de carte étudiant si l’étudiant en possède un (facultatif) et les coordonnées du médecin qui a orienté l'étudiant(e). Pour vous connecter à votre espace, cliquez sur le lien suivant : https://santepsy.etudiant.gouv.fr/psychologue/login",
+    answer: "Une fois une séance réalisée, vous pouvez la déclarer sur votre espace psychologue, en renseignant le numéro de carte étudiant si l’étudiant en possède un (facultatif) et les coordonnées du médecin qui a orienté l'étudiant(e). Pour vous connecter à votre espace, cliquez sur le lien suivant : https://santepsy.etudiant.gouv.fr/login",
   },
   {
     question: 'À qui dois-je envoyer ma facture ? Et quel est le délai de remboursement ?',

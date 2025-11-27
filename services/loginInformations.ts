@@ -9,7 +9,7 @@ function generateToken(size = 64): string {
 }
 
 function generatePsyLoginUrl(): string {
-  return `${config.hostnameWithProtocol}/psychologue/login`;
+  return `${config.hostnameWithProtocol}/login`;
 }
 
 function generateStudentSignInStepTwoUrl(): string {
