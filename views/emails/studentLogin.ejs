@@ -1,9 +1,10 @@
-<!-- to do on login ticket -->
-
-<!-- <%- include('header'); -%>
+<%- include('header'); -%>
   <p>Bonjour ! 👋</p>
   <p>
-    Bienvenue sur Santé Psy Etudiant. Voici un lien pour vous connecter
+    Vous avez demandé un lien pour vous connecter à votre Espace Étudiant.
+    <br/>
+    Lien valable durant <%= sessionDuration %> heures.
+    <br/>
   <p>
     <a href="<%= loginUrlWithToken %>" class="loginButton">
       Me connecter
@@ -11,15 +12,8 @@
   </p>
   <br/>
   <div>
-    Si vous avez un message d'erreur en cliquant sur le bouton, vous pouvez
-    <a title="Redemander un lien de connexion en cas de problème" href="<%= loginUrl %>">redemander un lien de connexion ici</a> et au lieu de cliquer sur le bouton,
-    copier directement le lien ci-dessous et coller le dans la barre d'adresse de votre navigateur :
+    Pas de mot de passe ! Pour vous connecter, demandez un lien à chaque fois sur
+    <br/>
+    <a title="demander un lien de connexion à Santé Psy Étudiant" href="<%= site %>"><%= site %></a>
   </div>
-  <p>
-    <%= loginUrlWithToken %>
-  </p>
-  <p>
-    Et si cela ne fonctionne toujours pas, ou en cas d'autres questions ou problèmes avec votre compte,
-    n'hésitez pas à répondre à ce mail, notre équipe de support se fera un plaisir de vous aider !
-  </p>
-<%- include('footer'); -%> -->
+<%- include('footer'); -%>

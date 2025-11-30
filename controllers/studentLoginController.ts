@@ -19,8 +19,7 @@ async function sendStudentLoginEmail(email: string, loginUrl: string, token: str
   try {
     const html = await ejs.renderFile('./views/emails/studentLogin.ejs', {
       loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
-      appName: config.appName,
-      loginUrl,
+      site: `${config.hostnameWithProtocol}`,
     });
     await sendEmail(email, `Connexion à ${config.appName}`, html);
     console.log(`Login email sent for ${logs.hash(email)}`);
