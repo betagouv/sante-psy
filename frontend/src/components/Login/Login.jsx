@@ -43,50 +43,43 @@ const Login = () => {
     }
   }, [token]);
 
-  useEffect(() => {
-    if (user) {
-      navigate('/psychologue/tableau-de-bord');
-    }
-  }, [user, token]);
+  // todo changer selon etudiant welcome page
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate('/psychologue/tableau-de-bord');
+  //   }
+  // }, [user, token]);
 
-  const login = e => {
+  const loginUser = e => {
     e.preventDefault();
-    agent.Psy.sendMail(email).then(setNotification);
+    agent.Auth.sendLoginMail(email).then(setNotification);
   };
 
   return (
     <Page
       title={(
         <>
-          Espace
+          Mon
           {' '}
-          <b>Psychologues</b>
+          <b>Espace</b>
         </>
       )}
     >
       <Section
-        title="Me connecter"
+        title="Connexion"
       >
         <GlobalNotification />
-        <p>
-          Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant
-          {` ${config.sessionDuration} `}
-          heures
-        </p>
-        <form onSubmit={login} id="login_form">
+        <form onSubmit={loginUser} id="login_form">
           <Row alignItems="bottom">
             <Col>
-              <label>
-                Adresse email :
-                <TextInput
-                  ref={emailRef}
-                  className={styles.mailInput}
-                  data-test-id="email-input"
-                  value={email}
-                  type="email"
-                  onChange={e => setEmail(e.target.value)}
-                />
-              </label>
+              <TextInput
+                ref={emailRef}
+                className={styles.mailInput}
+                data-test-id="email-input"
+                value={email}
+                type="email"
+                onChange={e => setEmail(e.target.value)}
+              />
             </Col>
             <Col>
               <Button
@@ -98,29 +91,64 @@ const Login = () => {
               </Button>
             </Col>
           </Row>
+          <br />
+          <p>Pas de mot de passe !</p>
+          <p>
+            Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant
+            {` ${config.sessionDuration} `}
+            heures
+          </p>
         </form>
       </Section>
 
       <Section
-        title="⚠️&nbsp;Problème d&lsquo;accès ?"
+        title="Un problème ?"
       >
-        <p>Pour rappel :</p>
         <ul>
           <li>
-            Veuillez indiquer l&lsquo;email utilisé lors de votre inscription
-            {' '}
-            <a href={config.demarchesSimplifieesUrl} target="_blank" rel="noopener noreferrer">en ligne</a>
-            . Il peut être différent de votre email de contact présenté dans l‘annuaire des psychologues.
+            Indiquez l&lsquo;email utilisé lors de votre inscription
           </li>
           <li>
-            Si vous ne recevez pas l&lsquo;email de connexion, pensez à vérifier vos spams et ajouter l&lsquo;adresse
-            {` "${config.contactEmail}" `}
-            à votre carnet d&lsquo;adresse email.
-          </li>
-          <li>
-            Si vous recevez l&lsquo;email de connexion mais le lien ne s&lsquo;ouvre pas, veuillez nous contacter.
+            <ul>
+              Si vous ne recevez pas l&lsquo;email de connexion
+              <li>
+                Vérifiez vos spams
+              </li>
+              <li>
+                Attendez quelques minutes
+              </li>
+            </ul>
           </li>
         </ul>
+      </Section>
+      <Section
+        title="Pas d'espace ?"
+      >
+        <Row>
+          <Col>
+            <p>
+              Étudiants, c&lsquo;est pas ici pour s&lsquo;inscrire
+            </p>
+            <Button
+              onClick={() => navigate('/inscription')}
+              className={styles.loginButton}
+            >
+              Créer mon espace étudiant
+            </Button>
+
+          </Col>
+          <Col>
+            <p>
+              Psychologues, créez votre dossier
+            </p>
+            <Button
+              onClick={() => window.open('https://www.demarches-simplifiees.fr/', '_blank')}
+              className={styles.loginButton}
+            >
+              Déposer un dossier psychologue
+            </Button>
+          </Col>
+        </Row>
       </Section>
       <Mail />
     </Page>

@@ -50,6 +50,9 @@ const Appointment = {
   getByPatientId: id => client.get(`/appointments/${id}`),
 };
 
+// todo supprimer la méthode login psy ? celle de student sert tjrs ?
+const Auth = { sendLoginMail: email => client.post('/auth/sendLoginMail', { email }) };
+
 const Config = { get: () => clientWithoutErrorManagement.get('/config') };
 
 const Contact = { send: message => client.post('/contact', message) };
@@ -110,6 +113,7 @@ const StudentNewsletter = {
 
 export default {
   Appointment,
+  Auth,
   Config,
   Contact,
   Convention,

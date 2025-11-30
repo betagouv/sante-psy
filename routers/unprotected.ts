@@ -12,6 +12,8 @@ import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
 import studentSignInController from '../controllers/studentSignInController';
+import authLoginController from '../controllers/authLoginController';
+import studentLoginController from '../controllers/studentLoginController';
 
 const router = express.Router();
 
@@ -21,6 +23,12 @@ const speedLimiterLogin = slowDown({
   delayAfter: config.speedLimitation ? 10 : 10000, // allow X requests per 5 minutes, then...
   delayMs: 500, // begin adding 500ms of delay per request above 10:
 });
+
+router.post(
+  '/auth/sendLoginMail',
+  studentSignInController.emailValidator,
+  authLoginController.sendUserLoginMail,
+);
 
 router.post(
   '/psychologist/sendMail',
@@ -33,14 +41,14 @@ router.post('/psychologist/login', speedLimiterLogin, psyLoginController.psyLogi
 router.post(
   '/student/signInSecondStepMail',
   speedLimiterLogin,
-  studentSignInController.studentEmailValidator,
+  studentSignInController.emailValidator,
   studentSignInController.sendStudentSecondStepMail,
 );
 
 router.post(
   '/student/sendWelcomeMail',
   speedLimiterLogin,
-  studentSignInController.studentEmailValidator,
+  studentSignInController.emailValidator,
   studentSignInController.sendWelcomeMail,
 );
 
@@ -53,13 +61,11 @@ router.post(
   studentSignInController.signIn,
 );
 
-// todo on login ticket
-
-// router.post(
-//   '/student/sendLoginMail',
-//   speedLimiterLogin,
-//   studentController.sendStudentMail,
-// );
+router.post(
+  '/student/sendLoginMail',
+  speedLimiterLogin,
+  studentLoginController.sendStudentMail,
+);
 
 router.post(
   '/studentNewsletter/sendStudentMail',
