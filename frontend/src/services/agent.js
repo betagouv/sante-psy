@@ -51,7 +51,11 @@ const Appointment = {
 };
 
 // todo supprimer la méthode login psy ? celle de student sert tjrs ?
-const Auth = { sendLoginMail: email => client.post('/auth/sendLoginMail', { email }) };
+const Auth = {
+  login: token => client.post('/auth/login', { token }),
+  sendLoginMail: email => client.post('/auth/sendLoginMail', { email }),
+  getConnected: () => clientWithoutErrorManagement.get('/auth/connected'),
+};
 
 const Config = { get: () => clientWithoutErrorManagement.get('/config') };
 
@@ -91,7 +95,7 @@ const Statistics = { getAll: () => client.get('/statistics') };
 const University = { getOne: id => client.get(`/universities/${id}`) };
 
 const Psy = {
-  getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),
+  getConnected: () => clientWithoutErrorManagement.get('/psychologist/connected'),
   login: token => client.post('/psychologist/login', { token }),
   sendMail: email => client.post('/psychologist/sendMail', { email }),
   logout: () => client.post('/psychologist/logout'),
@@ -102,6 +106,7 @@ const Student = {
   sendStudentSecondStepMail: email => client.post('/student/signInSecondStepMail', { email }),
   verifyStudentToken: token => client.post(`/student/signIn/${token}`),
   sendStudentWelcomeMail: email => client.post('/student/sendWelcomeMail', { email }),
+  getConnected: () => clientWithoutErrorManagement.get('/student/connected'),
   // sendStudentLoginMail: email => client.post('/student/sendLoginMail', { email }),
 };
 

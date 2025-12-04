@@ -5,14 +5,18 @@ import agent from 'services/agent';
 export default class UserStore {
   user;
 
+  role;
+
   xsrfToken = window.localStorage.getItem('xsrfToken');
 
   constructor() {
     makeObservable(this, {
       user: observable,
       xsrfToken: observable,
+      role: observable,
       pullUser: action.bound,
       setUser: action.bound,
+      setRole: action.bound,
       setXsrfToken: action.bound,
       deleteToken: action.bound,
       seeTutorial: action.bound,
@@ -30,11 +34,21 @@ export default class UserStore {
     );
   }
 
+  setRole = role => {
+    this.role = role;
+  };
+
   setUser = user => {
     this.user = { ...this.user, ...user };
   };
 
   pullUser() {
+    if (this.role === 'student') {
+      return agent.Student.getConnected()
+        .then(user => {
+          this.user = user.data;
+        });
+    }
     return agent.Psy.getConnected()
       .then(user => {
         this.user = user.data;
@@ -50,6 +64,7 @@ export default class UserStore {
     return agent.Psy.logout().then(() => {
       this.user = null;
       this.xsrfToken = null;
+      this.role = null;
     });
   }
 

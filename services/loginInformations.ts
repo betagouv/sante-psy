@@ -17,7 +17,7 @@ function generateStudentSignInStepTwoUrl(): string {
 }
 
 function generateStudentLoginUrl(): string {
-  return `${config.hostnameWithProtocol}/student/login`;
+  return `${config.hostnameWithProtocol}/login`;
 }
 
 export default {

@@ -4,10 +4,13 @@ import Page from 'components/Page/Page';
 import agent from 'services/agent';
 import validateIneFormat from 'src/utils/validateIneFormat';
 import validateNameFormat from 'src/utils/validateNameFormat';
+import { useStore } from 'stores/index';
 import styles from './studentSignIn.cssmodule.scss';
 
 const StudentSignInStepTwo = () => {
   const { token } = useParams();
+
+  const { userStore: { role, user } } = useStore();
 
   const [firstNames, setFirstNames] = useState('');
   const [firstNamesError, setFirstNamesError] = useState('');
@@ -19,12 +22,11 @@ const StudentSignInStepTwo = () => {
 
   const navigate = useNavigate();
 
-  // todo in login ticket
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate('/etudiant/accueil');
-  //   }
-  // }, [user, token]);
+  useEffect(() => {
+    if (role && user) {
+      navigate('/etudiant/accueil');
+    }
+  }, [role, token]);
 
   useEffect(() => {
     if (!token) {

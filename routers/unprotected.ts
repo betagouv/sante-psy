@@ -31,6 +31,16 @@ router.post(
 );
 
 router.post(
+  '/auth/login',
+  authLoginController.userLogin,
+);
+
+router.get(
+  '/auth/connected',
+  authLoginController.userConnected,
+);
+
+router.post(
   '/psychologist/sendMail',
   speedLimiterLogin,
   psyLoginController.emailValidators,
@@ -66,6 +76,8 @@ router.post(
   speedLimiterLogin,
   studentLoginController.sendStudentMail,
 );
+
+router.get('/student/connected', studentLoginController.connectedStudent);
 
 router.post(
   '/studentNewsletter/sendStudentMail',
@@ -116,7 +128,7 @@ router.get(
 // The other route is open to the public to get all psys (do not delete !)
 router.get('/trouver-un-psychologue', psyListingController.getFullActive);
 
-router.get('/connecteduser', psyLoginController.connectedPsy);
+router.get('/psychologist/connected', psyLoginController.connectedPsy);
 
 router.get('/statistics', statisticsController.getAll);
 router.get('/psychologist/:psyId', psyProfileController.getValidators, psyProfileController.get);

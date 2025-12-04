@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
+import { Button, TextInput, Row, Col, Alert } from '@dataesr/react-dsfr';
 
 import Page from 'components/Page/Page';
-import GlobalNotification from 'components/Notification/GlobalNotification';
 import Mail from 'components/Footer/Mail';
 import Section from 'components/Page/Section';
 
@@ -15,8 +14,8 @@ import styles from './login.cssmodule.scss';
 
 const Login = () => {
   const {
-    commonStore: { config, setNotification },
-    userStore: { user, setXsrfToken },
+    commonStore: { config },
+    userStore: { role, setXsrfToken, setRole },
   } = useStore();
 
   const emailRef = useRef();
@@ -25,6 +24,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
+  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     // Not set when redirecting
@@ -36,19 +36,23 @@ const Login = () => {
   useEffect(() => {
     if (token && !loginCalled.current) {
       loginCalled.current = true;
-      agent.Psy.login(token)
-        .then(xsrfToken => {
-          setXsrfToken(xsrfToken);
+      agent.Auth.login(token)
+        .then(data => {
+          console.log('ça c data dans Auth.login', data);
+          setXsrfToken(data.xsrfToken);
+          setRole(data.role);
         });
     }
   }, [token]);
 
-  // todo changer selon etudiant welcome page
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate('/psychologue/tableau-de-bord');
-  //   }
-  // }, [user, token]);
+  useEffect(() => {
+    if (role === 'psy') {
+      navigate('/psychologue/tableau-de-bord');
+    }
+    if (role === 'student') {
+      navigate('/etudiant/accueil');
+    }
+  }, [role, token]);
 
   const loginUser = e => {
     e.preventDefault();
@@ -68,7 +72,13 @@ const Login = () => {
       <Section
         title="Connexion"
       >
-        <GlobalNotification />
+        {notification && (
+          <Alert
+            className={styles.alert}
+            type="success"
+            title="Un mail de connexion vient de vous être envoyé si votre adresse e-mail correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. Le lien est valable 2 heures."
+          />
+        )}
         <form onSubmit={loginUser} id="login_form">
           <Row alignItems="bottom">
             <Col>

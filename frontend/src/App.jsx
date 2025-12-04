@@ -40,13 +40,34 @@ import ContactForm from 'components/Contact/ContactForm';
 import Podcast from 'components/Podcast/Podcast';
 import StudentSignInStepOne from 'components/Students/StudentSignIn/StudentSignInStepOne';
 import StudentSignInStepTwo from 'components/Students/StudentSignIn/StudentSignInStepTwo';
+import StudentHomepage from 'components/Students/Homepage';
 import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
+import StudentRouter from './StudentRouter';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
+const navigateToRoleRouter = role => {
+  if (role === 'psy') {
+    return <PsychologistRouter />;
+  } if (role === 'student') {
+    return <StudentRouter />;
+  }
+  return <Navigate to="/login" />;
+};
+
+const navigateToRoleHomepage = (user, role) => {
+  console.log('navigateToRoleHomepage', role);
+  if (user && role === 'psy') {
+    return '/psychologue/tableau-de-bord';
+  } if (user && role === 'student') {
+    return '/etudiant/accueil';
+  }
+  return '/';
+};
+
 function App() {
-  const { commonStore: { setConfig }, userStore: { user, pullUser } } = useStore();
+  const { commonStore: { setConfig }, userStore: { user, pullUser, role } } = useStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -86,6 +107,7 @@ function App() {
               <Route exact path="/autres-services" element={<OtherServicesPage />} />
               <Route exact path="/podcast" element={<Podcast />} />
               <Route exact path="/etudiant" element={<StudentLanding />} />
+              <Route exact path="/etudiant/accueil" element={<StudentHomepage />} />
               <Route exact path="/inscription" element={<StudentSignInStepOne />} />
               <Route exact path="/inscription/:token" element={<StudentSignInStepTwo />} />
               <Route exact path="/enregistrement/:id" element={<StudentNewsletterAnswer />} />
@@ -94,10 +116,13 @@ function App() {
               <Route exact path="/" element={<Landing />} />
               <Route
                 path="/psychologue/*"
-                element={user
-                  ? <PsychologistRouter /> : <Navigate to="/login" />}
+                element={user && role ? navigateToRoleRouter(role) : <Navigate to="/login" />}
               />
-              <Route path="/*" element={<Navigate to={user ? '/psychologue/tableau-de-bord' : '/'} />} />
+              <Route
+                path="/etudiant/*"
+                element={user && role ? navigateToRoleRouter(role) : <Navigate to="/login" />}
+              />
+              <Route path="/*" element={<Navigate to={role ? navigateToRoleHomepage(role) : '/'} />} />
             </Routes>
           </React.Suspense>
         )}
