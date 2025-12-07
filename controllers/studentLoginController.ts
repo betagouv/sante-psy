@@ -19,7 +19,7 @@ async function sendStudentLoginEmail(email: string, loginUrl: string, token: str
   try {
     const html = await ejs.renderFile('./views/emails/studentLogin.ejs', {
       loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
-      site: `${config.hostnameWithProtocol}`,
+      site: `${config.hostnameWithProtocol}/login`,
     });
     await sendEmail(email, `Connexion à ${config.appName}`, html);
     console.log(`Login email sent for ${logs.hash(email)}`);
@@ -110,11 +110,7 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
     await saveStudentToken(email, token);
   }
 
-  res.json({
-    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
-    correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
-    Le lien est valable ${config.sessionDurationHours} heures.`,
-  });
+  res.json({});
 };
 
 export default {

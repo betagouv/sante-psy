@@ -155,34 +155,26 @@ const sendPsyMail = async (req: Request, res: Response): Promise<void> => {
 
   console.log(`User with ${logs.hash(email)} asked for a login link`);
   const acceptedEmailExist = await dbPsychologists.getAcceptedByEmail(email);
+  const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedByEmail(email);
 
-  if (!acceptedEmailExist) {
-    const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedByEmail(email);
-    if (notYetAcceptedEmailExist) {
-      await sendNotYetAcceptedEmail(email);
-      throw new CustomError(
-        'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.',
-        401,
-      );
-    }
-
-    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${
-      logs.hash(email)}
-    `);
+  if (acceptedEmailExist) {
+    const token = loginInformations.generateToken(32);
+    const loginUrl = loginInformations.generatePsyLoginUrl();
+    await sendPsyLoginEmail(email, loginUrl, token);
+    await savePsyToken(email, token);
+  } else if (notYetAcceptedEmailExist) {
+    await sendNotYetAcceptedEmail(email);
     throw new CustomError(
-      `L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`,
+      'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.',
       401,
     );
+  } else {
+    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${
+      logs.hash(email)}
+      `);
   }
 
-  const token = loginInformations.generateToken(32);
-  const loginUrl = loginInformations.generatePsyLoginUrl();
-  await sendPsyLoginEmail(email, loginUrl, token);
-  await savePsyToken(email, token);
-  res.json({
-    message: `Un lien de connexion a été envoyé à l'adresse ${email
-    }. Le lien est valable ${config.sessionDurationHours} heures.`,
-  });
+  res.json({});
 };
 
 export default {

@@ -38,7 +38,6 @@ const Login = () => {
       loginCalled.current = true;
       agent.Auth.login(token)
         .then(data => {
-          console.log('ça c data dans Auth.login', data);
           setXsrfToken(data.xsrfToken);
           setRole(data.role);
         });

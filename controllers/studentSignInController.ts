@@ -130,6 +130,6 @@ export default {
   sendWelcomeMail: asyncHelper(sendWelcomeMail),
   verifyStudentToken: asyncHelper(verifyStudentToken),
   signIn: asyncHelper(signIn),
-  studentEmailValidator: emailValidator,
+  emailValidator,
   studentSignInValidator: signInValidator,
 };

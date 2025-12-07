@@ -57,7 +57,6 @@ const navigateToRoleRouter = role => {
 };
 
 const navigateToRoleHomepage = (user, role) => {
-  console.log('navigateToRoleHomepage', role);
   if (user && role === 'psy') {
     return '/psychologue/tableau-de-bord';
   } if (user && role === 'student') {

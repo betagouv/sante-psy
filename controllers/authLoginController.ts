@@ -3,6 +3,7 @@ import asyncHelper from '../utils/async-helper';
 import validation from '../utils/validation';
 
 import dbStudents from '../db/students';
+import dbSuspensions from '../db/suspensionReasons';
 import dbPsychologists from '../db/psychologists';
 import dbPsyLoginToken from '../db/psyLoginToken';
 import dbStudentLoginToken from '../db/studentLoginToken';
@@ -87,33 +88,65 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
   );
 };
 
-const userConnected = async (req: Request, res: Response): Promise<any> => {
+const userConnected = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
   if (!tokenData || !checkXsrf(req, tokenData.xsrfToken)) {
-    return res.json({ role: null, user: null });
+    res.json({ role: null, user: null });
+    return;
   }
 
   const { psychologist } = tokenData;
 
-  const isPsy = await dbPsychologists.getById(psychologist);
+  const psy = await dbPsychologists.getById(psychologist);
   const isStudent = await dbStudents.getStudentById(psychologist);
 
-  if (isPsy) {
+  if (psy) {
     const convention = await dbPsychologists.getConventionInfo(psychologist);
-    return res.json({
-      role: 'psy',
-      user: { ...isPsy, convention },
+    const { reason: inactiveReason, until: inactiveUntil } = psy.active
+      ? { reason: undefined, until: undefined }
+      : await dbSuspensions.getByPsychologist(psy.dossierNumber);
+    const {
+      dossierNumber,
+      firstNames,
+      lastName,
+      useFirstNames,
+      useLastName,
+      email,
+      active,
+      adeli,
+      address,
+      otherAddress,
+      hasSeenTutorial,
+      createdAt,
+    } = psy;
+    res.json({
+      dossierNumber,
+      firstNames,
+      lastName,
+      useFirstNames,
+      useLastName,
+      adeli,
+      address,
+      otherAddress,
+      email,
+      convention,
+      active,
+      hasSeenTutorial,
+      createdAt,
+      inactiveReason,
+      inactiveUntil,
     });
   }
 
   if (isStudent) {
-    return res.json({
+    res.json({
       role: 'student',
       user: { ...isStudent },
     });
+    return;
   }
 
-  return res.json({ role: null, user: null });
+  res.json({ role: null, user: null });
 };
 
 export default {

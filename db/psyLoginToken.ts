@@ -10,7 +10,7 @@ const getPsyByToken = async (token: string): Promise<PsyLoginToken> => {
     .andWhere('expiresAt', '>', date.now())
     .first();
 
-    return result;
+    return result || null;
   } catch (err) {
     console.error('Impossible de récupérer le token', err);
     throw new Error('Une erreur est survenue.');
@@ -23,7 +23,7 @@ const getPsyByEmail = async (email: string): Promise<PsyLoginToken> => {
     .where('email', email)
     .first();
 
-    return result;
+    return result || null;
   } catch (err) {
     console.error('Impossible de récupérer le token', err);
     throw new Error('Une erreur est survenue.');
