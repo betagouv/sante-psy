@@ -34,9 +34,11 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
     }
     await sendStudentMailTemplate(
       email,
+      // todo: check if this step works well when loginEmail is set in login ticket
       existingStudent ? loginUrl : signInValidationUrl,
       token,
       existingStudent ? 'studentLogin' : 'studentSignInValidation',
+      existingStudent ? 'Connexion à votre espace' : 'Étape 2 de votre inscription',
     );
 
     res.json({
@@ -65,6 +67,7 @@ const sendWelcomeMail = async (email): Promise<void> => {
       loginUrl,
       token,
       'studentWelcome',
+      'Bienvenue !',
     );
   } catch (err) {
     console.error(err);

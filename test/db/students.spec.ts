@@ -1,178 +1,119 @@
-// import { expect } from 'chai';
-// import sinon from 'sinon';
-// import * as dbModule from '../../db/db';
-// import studentsDb from '../../db/students';
-// import { studentsTable } from '../../db/tables';
+import { expect } from 'chai';
+import dbStudents from '../../db/students';
+import db from '../../db/db';
+import clean from '../helper/clean';
+import { studentsTable } from '../../db/tables';
+import date from '../../utils/date';
 
-// describe.only('DB Students', () => {
-//   let dbStub;
+describe('DB Students', () => {
+  const email = 'donia@test.com';
+  const email2 = 'ana@test.com';
+  const firstNames = 'Donia';
+  const ine = '1234567890A';
+  const ine2 = 'A0987654321';
 
-//   beforeEach(() => {
-//     dbStub = sinon.stub();
-//     sinon.stub(dbModule, 'default').value(dbStub);
-//   });
+  async function studentExists(email: string) {
+    const student = await dbStudents.getStudentByEmail(email);
+    return !!student;
+  }
 
-//   afterEach(() => {
-//     sinon.restore();
-//   });
+  beforeEach(async () => {
+    await clean.students();
+  });
 
-//   describe('signIn', () => {
-//     it('should return alreadyRegistered if email AND ine match one existing student', async () => {
-//       const email = 'test@student.fr';
-//       const ine = '1234567890A';
-//       const firstNames = 'Donia';
+  afterEach(async () => {
+    await clean.students();
+  });
 
-//       dbStub.withArgs(studentsTable).returns({
-//         where: () => ({
-//           first: () => Promise.resolve({ email, ine }),
-//         }),
-//       });
+  describe('signIn', () => {
+    it('should create a student and return status "created"', async () => {
+      const result = await dbStudents.signIn(email, ine, firstNames);
 
-//       const result = await studentsDb.signIn(email, ine, firstNames);
+      expect(result.status).equal('created');
+      expect(result).to.have.property('email', email);
 
-//       expect(result.status).to.equal('alreadyRegistered');
-//     });
+      const exists = await studentExists(email);
+      expect(exists).equal(true);
+    });
 
-//     it('should return conflict if email OR ine already exists', async () => {
-//       const email = 'conflict@student.fr';
-//       const ine = '1234567890B';
-//       const firstNames = 'Ava';
+    it('should return "alreadyRegistered" when same email + ine already exist', async () => {
+      await db(studentsTable).insert({
+        email,
+        ine,
+        firstNames,
+        createdAt: date.now(),
+      });
 
-//       dbStub.withArgs(studentsTable).returns({
-//         where: () => ({
-//           first: () => Promise.resolve(null),
-//         }),
-//         orWhere: () => ({
-//           limit: () => Promise.resolve([{ email }]),
-//         }),
-//       });
+      const result = await dbStudents.signIn(email, ine, firstNames);
 
-//       const result = await studentsDb.signIn(email, ine, firstNames);
+      expect(result.status).equal('alreadyRegistered');
+      expect(result).to.have.property('email', email);
+    });
 
-//       expect(result.status).to.equal('conflict');
-//     });
+    it('should return "conflict" when email exists but ine differs', async () => {
+      await db(studentsTable).insert({
+        email,
+        ine,
+        firstNames,
+        createdAt: date.now(),
+      });
 
-//     it('should create student and return created', async () => {
-//       const email = 'create@student.fr';
-//       const ine = '1234567890C';
-//       const firstNames = 'Sandy';
+      const result = await dbStudents.signIn(email, ine2, firstNames);
 
-//       dbStub.withArgs(studentsTable).returns({
-//         where: () => ({
-//           first: () => Promise.resolve(null),
-//         }),
-//         orWhere: () => ({
-//           limit: () => Promise.resolve([]),
-//         }),
-//         insert: () => ({
-//           returning: () => Promise.resolve([{ email, ine }]),
-//         }),
-//       });
+      expect(result.status).equal('conflict');
+    });
 
-//       const result = await studentsDb.signIn(email, ine, firstNames);
+    it('should return "conflict" when ine exists but email differs', async () => {
+      await db(studentsTable).insert({
+        email,
+        ine,
+        firstNames,
+        createdAt: date.now(),
+      });
 
-//       expect(result.status).to.equal('created');
-//     });
+      const result = await dbStudents.signIn(email2, ine, firstNames);
 
-//     it('should throw error if DB crashes', async () => {
-//       const email = 'err@test.fr';
-//       const ine = '1234567890D';
-//       const firstNames = 'Crash Test';
+      expect(result.status).equal('conflict');
+    });
+  });
 
-//       dbStub.withArgs(studentsTable).throws(new Error('DB crash'));
+  describe('getStudentById', () => {
+    it('should retrieve a student by id', async () => {
+      const inserted = await db(studentsTable)
+        .insert({
+          email,
+          ine,
+          firstNames,
+          createdAt: date.now(),
+        })
+        .returning('*');
 
-//       try {
-//         await studentsDb.signIn(email, ine, firstNames);
-//         expect.fail('Should throw');
-//       } catch (err) {
-//         expect(err.message).to.equal("Erreur lors de la création de l'étudiant");
-//       }
-//     });
-//   });
+      const student = await dbStudents.getStudentById(inserted[0].id);
 
-//   describe('getStudentById', () => {
-//     it('should return student if exists', async () => {
-//       const studentId = '9c883409-664e-4aeb-b425-a30b5fbbe43a';
+      expect(student).to.not.be.undefined;
+      expect(student.email).equal(email);
+      expect(student.ine).equal(ine);
+    });
+  });
 
-//       dbStub.withArgs(studentsTable).returns({
-//         where: () => ({
-//           first: () => Promise.resolve({ id: studentId, email: 'exist@test.fr' }),
-//         }),
-//       });
+  describe('getStudentByEmail', () => {
+    it('should retrieve a student by email', async () => {
+      await db(studentsTable).insert({
+        email,
+        ine,
+        firstNames,
+        createdAt: date.now(),
+      });
 
-//       const result = await studentsDb.getStudentById(studentId);
+      const student = await dbStudents.getStudentByEmail(email);
 
-//       expect(result.id).to.equal(studentId);
-//     });
+      expect(student).to.not.be.undefined;
+      expect(student.email).equal(email);
+    });
 
-//     it('should return undefined if student does not exist', async () => {
-//       const studentId = 'unknown';
-
-//       dbStub.withArgs(studentsTable).returns({
-//         where: () => ({
-//           first: () => Promise.resolve(undefined),
-//         }),
-//       });
-
-//       const result = await studentsDb.getStudentById(studentId);
-
-//       expect(result).to.be.undefined;
-//     });
-
-//     it('should throw on DB error', async () => {
-//       const studentId = 'err';
-
-//       dbStub.withArgs(studentsTable).throws(new Error('DB failed'));
-
-//       try {
-//         await studentsDb.getStudentById(studentId);
-//         expect.fail('Should throw');
-//       } catch (err) {
-//         expect(err.message).to.equal("Impossible de récupérer l'étudiant");
-//       }
-//     });
-//   });
-
-//   describe('getStudentByEmail', () => {
-//     it('should return student if exists', async () => {
-//       const email = 'test@test.fr';
-
-//       dbStub.withArgs(studentsTable).returns({
-//         where: () => ({
-//           first: () => Promise.resolve({ email }),
-//         }),
-//       });
-
-//       const result = await studentsDb.getStudentByEmail(email);
-
-//       expect(result.email).to.equal(email);
-//     });
-
-//     it('should return undefined if not exists', async () => {
-//       const email = 'non@test.fr';
-
-//       dbStub.withArgs(studentsTable).returns({
-//         where: () => ({
-//           first: () => Promise.resolve(undefined),
-//         }),
-//       });
-
-//       const result = await studentsDb.getStudentByEmail(email);
-
-//       expect(result).to.be.undefined;
-//     });
-
-//     it('should throw on DB error', async () => {
-//       const email = 'err@test.fr';
-
-//       dbStub.withArgs(studentsTable).throws(new Error('DB fail'));
-
-//       try {
-//         await studentsDb.getStudentByEmail(email);
-//         expect.fail('should throw');
-//       } catch (err) {
-//         expect(err.message).to.equal('Une erreur est survenue.');
-//       }
-//     });
-//   });
-// });
+    it('should return undefined if student email does not exist', async () => {
+      const student = await dbStudents.getStudentByEmail('doesnotexist@test.fr');
+      expect(student).to.be.undefined;
+    });
+  });
+});
