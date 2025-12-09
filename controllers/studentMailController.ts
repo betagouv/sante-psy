@@ -9,12 +9,13 @@ const sendStudentMailTemplate = async (
   loginUrl: string,
   token: string,
   template: string,
+  title: string,
 ): Promise<void> => {
   try {
     const html = await ejs.renderFile(`./views/emails/${template}.ejs`, {
       loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
     });
-    await sendEmail(email, `Connexion à ${config.appName}`, html);
+    await sendEmail(email, `${config.appName} - ${title}`, html);
     console.log(`Login email sent for ${logs.hash(email)}`);
   } catch (err) {
     console.error(err);
