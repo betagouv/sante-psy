@@ -8,6 +8,7 @@ import loginInformations from '../services/loginInformations';
 import date from '../utils/date';
 import db from '../db/db';
 import { studentsTable } from '../db/tables';
+import studentLoginController from './studentLoginController';
 import sendStudentMailTemplate from './studentMailController';
 import validation from '../utils/validation';
 
@@ -16,30 +17,34 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
     const { email } = req.body;
     const existingStudent = await db(studentsTable).where({ email }).first();
     const existingToken = await dbStudentLoginToken.getStudentByEmail(email);
-    const signInValidationUrl = loginInformations.generateStudentSignInStepTwoUrl();
-    const loginUrl = loginInformations.generateStudentLoginUrl();
-    const token = existingToken ? existingToken.token : loginInformations.generateToken(32);
-    let expiresAt;
+    const token = existingToken?.token || loginInformations.generateToken(32);
+    const isNewStudent = !existingStudent;
 
-    if (!existingStudent) {
-      expiresAt = date.getDateInAWeek();
-    } else {
-      expiresAt = date.getDatePlusTwoHours();
-    }
+    const expiresAt = isNewStudent
+      ? date.getDateInAWeek()
+      : date.getDatePlusTwoHours();
 
     if (existingToken) {
       await dbStudentLoginToken.update(email, expiresAt);
     } else {
       await dbStudentLoginToken.insert(token, email, expiresAt);
     }
-    await sendStudentMailTemplate(
-      email,
-      // todo: check if this step works well when loginEmail is set in login ticket
-      existingStudent ? loginUrl : signInValidationUrl,
-      token,
-      existingStudent ? 'studentLogin' : 'studentSignInValidation',
-      existingStudent ? 'Connexion à votre espace' : 'Étape 2 de votre inscription',
-    );
+
+    if (isNewStudent) {
+      await sendStudentMailTemplate(
+        email,
+        loginInformations.generateStudentSignInStepTwoUrl(),
+        token,
+        'studentSignInValidation',
+        'Étape 2 de votre inscription',
+      );
+    } else {
+      await studentLoginController.sendStudentLoginEmail(
+        email,
+        loginInformations.generateStudentLoginUrl(),
+        token,
+      );
+    }
 
     res.json({
       message: 'Consultez votre boîte mail',
@@ -109,11 +114,22 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       await sendWelcomeMail(email);
       res.status(201).json({ status: 'created' });
       break;
-    case 'alreadyRegistered':
-      // todo: changer le mail envoyé dans le login ticket
-      await sendWelcomeMail(email);
+    case 'alreadyRegistered': {
+      const studentHasToken = await dbStudentLoginToken.getStudentByEmail(email);
+      const loginUrl = loginInformations.generateStudentLoginUrl();
+      const expiresAt = date.getDatePlusTwoHours();
+      let token;
+      if (studentHasToken) {
+        token = studentHasToken.token;
+        await dbStudentLoginToken.update(email, expiresAt);
+      } else {
+        token = loginInformations.generateToken(32);
+        await dbStudentLoginToken.insert(token, email, expiresAt);
+      }
+      await studentLoginController.sendStudentLoginEmail(email, loginUrl, token);
       res.status(200).json({ status: 'alreadyRegistered' });
       break;
+    }
     case 'conflict':
       res.status(409).json({ status: 'conflict' });
       break;

@@ -30,7 +30,6 @@ async function sendStudentLoginEmail(email: string, loginUrl: string, token: str
 }
 
 async function saveStudentToken(email: string, token: string): Promise<void> {
-  // todo ici je peux vérifier si existingToken pour l'écraser
   try {
     const expiresAt = date.getDatePlusTwoHours();
     await dbLoginToken.insert(token, email, expiresAt);
@@ -102,9 +101,16 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
 
   console.log(`Student with ${logs.hash(email)} asked for a login link`);
   const studentIsRegistered = await dbStudents.getStudentByEmail(email);
+  const existingToken = await dbLoginToken.getStudentByEmail(email);
+  let token;
+
+  if (existingToken) {
+    token = existingToken.token;
+  } else {
+    token = loginInformations.generateToken(32);
+  }
 
   if (studentIsRegistered) {
-    const token = loginInformations.generateToken(32);
     const loginUrl = loginInformations.generateStudentLoginUrl();
     await sendStudentLoginEmail(email, loginUrl, token);
     await saveStudentToken(email, token);
@@ -114,6 +120,7 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
 };
 
 export default {
+  sendStudentLoginEmail,
   connectedStudent: asyncHelper(connectedStudent),
   studentLogin: asyncHelper(studentLogin),
   sendStudentMail: asyncHelper(sendStudentMail),
