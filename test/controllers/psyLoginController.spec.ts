@@ -13,7 +13,7 @@ import { DossierState } from '../../types/DossierState';
 
 const sendEmail = require('../../utils/email');
 
-describe('loginController', async () => {
+describe('psyLoginController', async () => {
   describe('login page', () => {
     const token = cookie.getJwtTokenForUser('dossierNumber', 'randomXSRFToken');
     const email = 'prenom.nom@beta.gouv.fr';

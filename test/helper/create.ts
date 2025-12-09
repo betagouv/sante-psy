@@ -8,11 +8,13 @@ import dbUniversities from '../../db/universities';
 import {
   appointmentsTable,
   psychologistsTable,
+  studentsTable,
 } from '../../db/tables';
 import { DossierState } from '../../types/DossierState';
 import db from '../../db/db';
 import { University } from '../../types/University';
 import { allGenders } from '../../types/Genders';
+import { Student } from '../../types/Student';
 
 faker.locale = 'fr';
 
@@ -324,6 +326,21 @@ const insertOneAppointment = async (
   return result;
 };
 
+const getOneStudent = (student: Partial<Student> = {}): Student => ({
+  id: uuid.generateRandom(),
+  firstNames: faker.name.firstName(),
+  email: faker.internet.exampleEmail(),
+  ine: faker.datatype.string(11),
+  createdAt: new Date(),
+  ...student,
+});
+
+const insertOneStudent = async (student: Partial<Student> = {}): Promise<Student> => {
+  const stud = getOneStudent(student);
+  await db(studentsTable).insert(stud);
+  return stud;
+};
+
 export default {
   getRandomInt,
   getOneAppointment,
@@ -335,4 +352,6 @@ export default {
   getOnePsyDS,
   insertOnePsy,
   insertOneAppointment,
+  getOneStudent,
+  insertOneStudent,
 };
