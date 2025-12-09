@@ -8,6 +8,7 @@ import {
   suspensionReasonsTable,
   lastConnectionsTable,
   studentsNewsletterTable,
+  studentsTable,
 } from '../../db/tables';
 import db from '../../db/db';
 
@@ -33,6 +34,10 @@ const psychologists = async ():Promise<void> => {
   await db(psychologistsTable).del();
 };
 
+const students = async ():Promise<void> => {
+  await db(studentsTable).del();
+};
+
 const universities = async ():Promise<void> => {
   await psychologists();
   await db(universitiesTable).del();
@@ -45,5 +50,6 @@ export default {
   appointments,
   psychologists,
   universities,
+  students,
   studentsNewsletter,
 };
