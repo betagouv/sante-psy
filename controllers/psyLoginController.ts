@@ -24,7 +24,7 @@ const emailValidators = [
     .withMessage('Vous devez spécifier un email valide.'),
 ];
 
-async function sendPsyLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
+async function sendLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
   try {
     const html = await ejs.renderFile('./views/emails/psyLogin.ejs', {
       loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
@@ -52,7 +52,7 @@ async function sendNotYetAcceptedEmail(email: string): Promise<void> {
   }
 }
 
-async function savePsyToken(email: string, token: string): Promise<void> {
+async function saveToken(email: string, token: string): Promise<void> {
   try {
     const expiredAt = date.getDatePlusOneHour();
     await dbLoginToken.insert(token, email, expiredAt);
@@ -64,7 +64,7 @@ async function savePsyToken(email: string, token: string): Promise<void> {
   }
 }
 
-const deletePsyToken = (req: Request, res: Response): void => {
+const deleteToken = (req: Request, res: Response): void => {
   cookie.clearJwtCookie(res);
   res.json({ });
 };
@@ -118,11 +118,11 @@ const connectedPsy = async (req: Request, res: Response): Promise<void> => {
   res.json();
 };
 
-const psyLogin = async (req: Request, res: Response): Promise<void> => {
+const login = async (req: Request, res: Response): Promise<void> => {
   // Save a token that expire after config.sessionDurationHours hours if user is logged
   if (req.body.token) {
     const token = DOMPurify.sanitize(req.body.token);
-    const dbToken = await dbLoginToken.getPsyByToken(token);
+    const dbToken = await dbLoginToken.getByToken(token);
 
     if (dbToken) {
       const psychologistData = await dbPsychologists.getAcceptedByEmail(dbToken.email);
@@ -149,7 +149,7 @@ const psyLogin = async (req: Request, res: Response): Promise<void> => {
 /**
  * Send a email with a login link if the email is already registered
  */
-const sendPsyMail = async (req: Request, res: Response): Promise<void> => {
+const sendMail = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
   const { email } = req.body;
 
@@ -177,8 +177,8 @@ const sendPsyMail = async (req: Request, res: Response): Promise<void> => {
 
   const token = loginInformations.generateToken(32);
   const loginUrl = loginInformations.generatePsyLoginUrl();
-  await sendPsyLoginEmail(email, loginUrl, token);
-  await savePsyToken(email, token);
+  await sendLoginEmail(email, loginUrl, token);
+  await saveToken(email, token);
   res.json({
     message: `Un lien de connexion a été envoyé à l'adresse ${email
     }. Le lien est valable ${config.sessionDurationHours} heures.`,
@@ -188,7 +188,7 @@ const sendPsyMail = async (req: Request, res: Response): Promise<void> => {
 export default {
   emailValidators,
   connectedPsy: asyncHelper(connectedPsy),
-  psyLogin: asyncHelper(psyLogin),
-  sendPsyMail: asyncHelper(sendPsyMail),
-  deletePsyToken,
+  login: asyncHelper(login),
+  sendMail: asyncHelper(sendMail),
+  deleteToken,
 };

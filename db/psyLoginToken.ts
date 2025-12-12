@@ -3,7 +3,7 @@ import { psyLoginTokenTable } from './tables';
 import db from './db';
 import { PsyLoginToken } from '../types/PsyLoginToken';
 
-const getPsyByToken = async (token: string): Promise<PsyLoginToken> => {
+const getByToken = async (token: string): Promise<PsyLoginToken> => {
   try {
     const result = await db(psyLoginTokenTable)
     .where('token', token)
@@ -17,7 +17,7 @@ const getPsyByToken = async (token: string): Promise<PsyLoginToken> => {
   }
 };
 
-const getPsyByEmail = async (email: string): Promise<PsyLoginToken> => {
+const getByEmail = async (email: string): Promise<PsyLoginToken> => {
   try {
     const result = await db(psyLoginTokenTable)
     .where('email', email)
@@ -30,7 +30,7 @@ const getPsyByEmail = async (email: string): Promise<PsyLoginToken> => {
   }
 };
 
-const insertPsy = async (token: string, email: string, expiresAt: string): Promise<PsyLoginToken> => {
+const insert = async (token: string, email: string, expiresAt: string): Promise<PsyLoginToken> => {
   try {
     return await db(psyLoginTokenTable).insert({
       token,
@@ -43,7 +43,7 @@ const insertPsy = async (token: string, email: string, expiresAt: string): Promi
   }
 };
 
-const deleteOnePsy = async (token: string): Promise<void> => {
+const deleteOne = async (token: string): Promise<void> => {
   try {
     const deletedToken = await db(psyLoginTokenTable)
     .where({
@@ -63,8 +63,8 @@ const deleteOnePsy = async (token: string): Promise<void> => {
 };
 
 export default {
-  getPsyByToken,
-  getPsyByEmail,
-  insert: insertPsy,
-  delete: deleteOnePsy,
+  getByToken,
+  getByEmail,
+  insert,
+  delete: deleteOne,
 };

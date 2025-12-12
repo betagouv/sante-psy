@@ -14,12 +14,12 @@ describe('DB Login token', () => {
     await clean.dataToken();
   });
 
-  describe('getPsyByToken', () => {
+  describe('getByToken', () => {
     it('should get all token info with a token', async () => {
       const email = 'prenom.nom@beta.gouv.fr';
       const expiresAt = date.getDatePlusOneHour();
       await dbPsyLoginToken.insert(token, email, expiresAt);
-      const result = await dbPsyLoginToken.getPsyByToken(token);
+      const result = await dbPsyLoginToken.getByToken(token);
 
       result.token.should.be.equal(token);
       result.email.should.be.equal(email);
@@ -31,7 +31,7 @@ describe('DB Login token', () => {
       const expirationDate = new Date();
       const expiredDate = new Date(expirationDate.setHours(expirationDate.getHours() - 6)).toISOString();
       await dbPsyLoginToken.insert(token, email, expiredDate);
-      const result = await dbPsyLoginToken.getPsyByToken(token);
+      const result = await dbPsyLoginToken.getByToken(token);
 
       assert.isUndefined(result);
     });
@@ -43,7 +43,7 @@ describe('DB Login token', () => {
       const expiresAt = date.getDatePlusOneHour();
       await dbPsyLoginToken.insert(token, email, expiresAt);
 
-      const result = await dbPsyLoginToken.getPsyByToken(token);
+      const result = await dbPsyLoginToken.getByToken(token);
       result.token.should.be.equal(token);
       result.email.should.be.equal(email);
       new Date(result.expiresAt).toISOString().should.be.equal(expiresAt);
@@ -57,7 +57,7 @@ describe('DB Login token', () => {
       await dbPsyLoginToken.insert(token, email, expiresAt);
 
       await dbPsyLoginToken.delete(token);
-      const result = await dbPsyLoginToken.getPsyByToken(token);
+      const result = await dbPsyLoginToken.getByToken(token);
       assert.isUndefined(result);
     });
 

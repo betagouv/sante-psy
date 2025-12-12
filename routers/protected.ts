@@ -29,7 +29,7 @@ router.use(expressjwt({
 router.use(xsrfProtection);
 router.use(refreshToken);
 
-router.post('/psychologist/logout', psyLoginController.deletePsyToken);
+router.post('/psychologist/logout', psyLoginController.deleteToken);
 
 router.use('/appointments', appointmentsRouter);
 router.use('/patients', patientsRouter);
