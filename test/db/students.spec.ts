@@ -13,7 +13,7 @@ describe('DB Students', () => {
   const ine2 = 'A0987654321';
 
   async function studentExists(email: string) {
-    const student = await dbStudents.getStudentByEmail(email);
+    const student = await dbStudents.getByEmail(email);
     return !!student;
   }
 
@@ -77,7 +77,7 @@ describe('DB Students', () => {
     });
   });
 
-  describe('getStudentById', () => {
+  describe('getById', () => {
     it('should retrieve a student by id', async () => {
       const inserted = await db(studentsTable)
         .insert({
@@ -88,7 +88,7 @@ describe('DB Students', () => {
         })
         .returning('*');
 
-      const student = await dbStudents.getStudentById(inserted[0].id);
+      const student = await dbStudents.getById(inserted[0].id);
 
       expect(student).to.not.be.undefined;
       expect(student.email).equal(email);
@@ -96,7 +96,7 @@ describe('DB Students', () => {
     });
   });
 
-  describe('getStudentByEmail', () => {
+  describe('getByEmail', () => {
     it('should retrieve a student by email', async () => {
       await db(studentsTable).insert({
         email,
@@ -105,14 +105,14 @@ describe('DB Students', () => {
         createdAt: date.now(),
       });
 
-      const student = await dbStudents.getStudentByEmail(email);
+      const student = await dbStudents.getByEmail(email);
 
       expect(student).to.not.be.undefined;
       expect(student.email).equal(email);
     });
 
     it('should return undefined if student email does not exist', async () => {
-      const student = await dbStudents.getStudentByEmail('doesnotexist@test.fr');
+      const student = await dbStudents.getByEmail('doesnotexist@test.fr');
       expect(student).to.be.undefined;
     });
   });
