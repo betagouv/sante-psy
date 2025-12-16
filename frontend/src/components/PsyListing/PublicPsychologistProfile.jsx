@@ -46,7 +46,12 @@ const PublicPsychologistProfile = () => {
   useEffect(() => {
     setError();
     agent.Psychologist.getProfile(psyId)
-      .then(setPsychologist)
+      .then(response => {
+        setPsychologist(response);
+        if (__MATOMO__) {
+          _paq.push(['trackEvent', 'PsychologistProfile', 'View', psyId]);
+        }
+      })
       .catch(() => {
         setError('Impossible de trouver les informations pour ce psychologue');
       });
@@ -56,33 +61,28 @@ const PublicPsychologistProfile = () => {
     <>
       <div className={styles.separator} />
       <h5>Langues parlées</h5>
-      <div data-test-id="psy-info">
+      <div data-test-id="psy-info" className={styles.contactInfo}>
         {psychologist.languages}
       </div>
       {psychologist.longitude && psychologist.latitude && (
-      <div className={styles.mapContainer}>
-        <MapContainer
-          center={[psychologist.latitude, psychologist.longitude]}
-          zoom={getZoomLevel(psychologist)}
-          scrollWheelZoom={false}
-          className={styles.map}
-        >
-          <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <Marker position={[psychologist.latitude, psychologist.longitude]} />
-          {psychologist.otherLongitude && psychologist.otherLatitude && (
-          <Marker position={[psychologist.otherLatitude, psychologist.otherLongitude]} />
-          )}
-        </MapContainer>
-      </div>
+        <div className={styles.mapContainer}>
+          <MapContainer
+            center={[psychologist.latitude, psychologist.longitude]}
+            zoom={getZoomLevel(psychologist)}
+            scrollWheelZoom={false}
+            className={styles.map}
+          >
+            <TileLayer
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={[psychologist.latitude, psychologist.longitude]} />
+            {psychologist.otherLongitude && psychologist.otherLatitude && (
+              <Marker position={[psychologist.otherLatitude, psychologist.otherLongitude]} />
+            )}
+          </MapContainer>
+        </div>
       )}
-      <h5>{psychologist.otherAddress ? 'Adresses' : 'Adresse'}</h5>
-      <div>
-        <div data-test-id="psy-info">{psychologist.address}</div>
-        <div data-test-id="psy-info">{psychologist.otherAddress}</div>
-      </div>
     </>
   );
   return (
@@ -122,49 +122,68 @@ const PublicPsychologistProfile = () => {
             <h3>Contacter le psychologue</h3>
             <div className={styles.optionalSeparator} />
             {psychologist.phone && (
-            <div className={styles.contactInfo}>
-              <div>
-                <h5>Téléphone</h5>
-                {psychologist.phone}
+              <div className={styles.contactInfo}>
+                <div>
+                  <h5>Téléphone</h5>
+                  <div data-test-id="psy-info">{psychologist.phone}</div>
+                </div>
+                <Button
+                  secondary
+                  onClick={() => {
+                    window.location.href = `tel:${psychologist.phone}`;
+                  }}
+                  icon="ri-phone-fill"
+                />
               </div>
-              <Button
-                secondary
-                onClick={() => { window.location.href = `tel:${psychologist.phone}`; }}
-                icon="ri-phone-fill"
-              />
-            </div>
             )}
             {psychologist.email && (
-            <div className={styles.contactInfo}>
-              <div>
-                <h5>E-mail</h5>
-                {psychologist.email}
+              <div className={styles.contactInfo}>
+                <div>
+                  <h5>E-mail</h5>
+                  <div data-test-id="psy-info">{psychologist.email}</div>
+                </div>
+                <Button
+                  secondary
+                  onClick={() => {
+                    window.location.href = `mailto:${psychologist.email}`;
+                  }}
+                  icon="ri-mail-fill"
+                />
               </div>
-              <Button
-                secondary
-                onClick={() => { window.location.href = `mailto:${psychologist.email}`; }}
-                icon="ri-mail-fill"
-              />
-            </div>
             )}
+            {
+              !psychologist.otherAddress && !psychologist.address ? null : (
+                <>
+                  <h5>Adresses</h5>
+                  <div className={styles.contactInfo}>
+                    <div data-test-id="psy-info">{psychologist.address}</div>
+                    <div data-test-id="psy-info">{psychologist.otherAddress}</div>
+                  </div>
+                </>
+
+              )
+            }
+
             {psychologist.website && (
-            <div className={styles.contactInfo}>
-              <div>
-                <h5>Site web</h5>
-                <a
-                  href={string.prefixUrl(psychologist.website)}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {psychologist.website}
-                </a>
+              <div className={styles.contactInfo}>
+                <div>
+                  <h5>Site web</h5>
+                  <a
+                    href={string.prefixUrl(psychologist.website)}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {psychologist.website}
+                  </a>
+                </div>
+                <Button
+                  secondary
+                  onClick={() => {
+                    window.open(string.prefixUrl(psychologist.website), '_blank');
+                  }}
+                  icon="ri-link"
+                />
               </div>
-              <Button
-                secondary
-                onClick={() => { window.open(string.prefixUrl(psychologist.website), '_blank'); }}
-                icon="ri-link"
-              />
-            </div>
             )}
             {psychologist.appointmentLink && (
               <div className={styles.contactInfo}>
@@ -175,7 +194,9 @@ const PublicPsychologistProfile = () => {
                 {window.innerWidth <= 769 ? (
                   <Button
                     secondary
-                    onClick={() => { window.open(string.prefixUrl(psychologist.appointmentLink), '_blank'); }}
+                    onClick={() => {
+                      window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
+                    }}
                     icon="ri-calendar-fill"
                   >
                     RDV
@@ -183,7 +204,9 @@ const PublicPsychologistProfile = () => {
                 ) : (
                   <Button
                     secondary
-                    onClick={() => { window.open(string.prefixUrl(psychologist.appointmentLink), '_blank'); }}
+                    onClick={() => {
+                      window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
+                    }}
                   >
                     Prendre rendez-vous
                   </Button>

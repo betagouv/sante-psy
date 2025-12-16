@@ -4,7 +4,7 @@ import { Checkbox, TextInput, Alert, Button } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
-import InputSelect from 'components/InputSelect/InputSelect';
+import AddressAutocomplete from 'components/AddressAutocomplete/AddressAutocomplete';
 
 import agent from 'services/agent';
 
@@ -25,8 +25,6 @@ const geoStatusEnum = {
   GRANTED: 1,
 };
 
-let lastSearch;
-
 const PsyListing = () => {
   const { commonStore: { setNotification, psychologists, setPsychologists } } = useStore();
   const query = new URLSearchParams(useLocation().search);
@@ -38,13 +36,27 @@ const PsyListing = () => {
   const [nameAndSpecialityFilter, setNameAndSpecialityFilter] = useState(query.get('nameAndSpeciality') || '');
   const [languageFilter, setLanguageFilter] = useState(query.get('language') || '');
   const [addressFilter, setAddressFilter] = useState(query.get('address') || '');
+  const [addressFilterObject, setAddressFilterObject] = useState(null);
   const [teleconsultation, setTeleconsultation] = useState(query.get('teleconsultation') === 'true' || false);
   const [page, setPage] = useState(0);
 
   const fetchPsychologists = async () => {
+    let addressValue = addressFilter !== AROUND_ME ? addressFilter : undefined;
+
+    if (addressFilterObject && typeof addressFilterObject === 'object') {
+      addressValue = JSON.stringify({
+        label: addressFilterObject.label,
+        value: addressFilterObject.value,
+        type: addressFilterObject.type,
+        postcode: addressFilterObject.postcode,
+        city: addressFilterObject.city,
+        context: addressFilterObject.context,
+      });
+    }
+
     const filters = {
       nameAndSpeciality: nameAndSpecialityFilter || undefined,
-      address: addressFilter !== AROUND_ME ? addressFilter : undefined,
+      address: addressValue,
       teleconsultation,
       language: languageFilter || undefined,
       coords: addressFilter === AROUND_ME && coords ? `${coords.latitude},${coords.longitude}` : undefined,
@@ -54,19 +66,61 @@ const PsyListing = () => {
       const response = await agent.Psychologist.find(filters);
       setPsychologists(response);
       setFilteredPsychologists(response);
+
+      if (__MATOMO__) {
+        const usedFilters = [];
+
+        if (nameAndSpecialityFilter && nameAndSpecialityFilter.trim()) {
+          _paq.push(['trackEvent', 'AnnuairePsy', 'SpecialitySearch', nameAndSpecialityFilter.trim()]);
+          usedFilters.push('speciality');
+        }
+
+        if (languageFilter && languageFilter.trim()) {
+          _paq.push(['trackEvent', 'AnnuairePsy', 'LanguageSearch', languageFilter.trim()]);
+          usedFilters.push('language');
+        }
+
+        if (addressFilterObject && addressFilterObject.label) {
+          _paq.push(['trackEvent', 'AnnuairePsy', 'LocationSearch', addressFilterObject.label]);
+          usedFilters.push('location');
+        } else if (addressFilter === AROUND_ME) {
+          _paq.push(['trackEvent', 'AnnuairePsy', 'LocationSearch', 'Géolocalisation']);
+          usedFilters.push('location');
+        }
+
+        _paq.push(['trackEvent', 'AnnuairePsy', 'TeleconsultationFilter', teleconsultation ? 'enabled' : 'disabled']);
+        if (teleconsultation) {
+          usedFilters.push('teleconsultation');
+        }
+
+        if (usedFilters.length > 0) {
+          _paq.push(['trackEvent', 'AnnuairePsy', 'SearchProfile', usedFilters.sort().join('+')]);
+        }
+      }
     } catch (error) {
       console.error('Erreur lors de la récupération des psychologues :', error);
     }
   };
 
   const handleSearch = () => {
-    // Vérifie si au moins un filtre est défini
+    const isAddressValid = !addressFilter || addressFilter === AROUND_ME || addressFilterObject;
+
+    if (!isAddressValid) {
+      setNotification(
+        { message: 'Veuillez sélectionner une ville ou région dans la liste proposée.' },
+        false,
+        false,
+      );
+      return;
+    }
+
     if (
       nameAndSpecialityFilter.trim()
       || languageFilter.trim()
       || addressFilter.trim()
       || teleconsultation
     ) {
+      setNotification(null);
       fetchPsychologists();
       setPage(1);
     } else {
@@ -88,40 +142,7 @@ const PsyListing = () => {
     if (addressFilter === AROUND_ME) {
       checkGeolocationPermission();
     }
-
-    logSearchInMatomo();
   }, [addressFilter, coords]);
-
-  const logSearchInMatomo = () => {
-    if (__MATOMO__) {
-      if (lastSearch) {
-        clearTimeout(lastSearch);
-      }
-
-      let search = '';
-      if (nameAndSpecialityFilter) {
-        search += `name=${nameAndSpecialityFilter};`;
-      }
-      if (addressFilter) {
-        search += `address=${addressFilter};`;
-      }
-      if (teleconsultation) {
-        search += `teleconsultation=${teleconsultation};`;
-      }
-      if (languageFilter) {
-        search += `language=${languageFilter};`;
-      }
-
-      if (search) {
-        lastSearch = setTimeout(
-          () => {
-            _paq.push(['trackEvent', 'Search', 'Psychologist', search]);
-          },
-          2500,
-        );
-      }
-    }
-  };
 
   const success = pos => {
     const { longitude, latitude } = pos.coords;
@@ -195,20 +216,30 @@ const PsyListing = () => {
               }
             }}
           >
+            <div className={styles.input}>
+              <AddressAutocomplete
+                selected={addressFilter}
+                onChange={value => {
+                  if (typeof value === 'object' && value !== null) {
+                    setAddressFilter(value.label || value.value || '');
+                    setAddressFilterObject(value);
+                  } else if (typeof value === 'string') {
+                    setAddressFilter(value);
+                    setAddressFilterObject(null);
+                  } else {
+                    setAddressFilter('');
+                    setAddressFilterObject(null);
+                  }
+                }}
+                placeholder="Ville, code postal ou région"
+              />
+            </div>
             <div className={styles.inputMd}>
               <TextInput
                 data-test-id="name-speciality-input"
                 value={nameAndSpecialityFilter}
                 onChange={e => setNameAndSpecialityFilter(e.target.value)}
                 placeholder="Spécialité, mot-clé, nom du psychologue..."
-            />
-            </div>
-            <div className={styles.input}>
-              <InputSelect
-                selected={addressFilter}
-                onChange={e => setAddressFilter(e)}
-                placeholder="Ville, code postal ou région"
-                options={[{ value: AROUND_ME, label: AROUND_ME }]}
               />
             </div>
             <div className={styles.input}>
