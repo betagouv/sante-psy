@@ -13,7 +13,7 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
     const psy = await dbPsychologists.getAcceptedByEmail(req.params.email);
     const xsrfToken = loginInformations.generateToken();
 
-    const token = await dbPsyLoginToken.getPsyByEmail(req.params.email);
+    const token = await dbPsyLoginToken.getByEmail(req.params.email);
 
     const duration = typeof req.query.duration === 'string' ? req.query.duration : '2h';
 

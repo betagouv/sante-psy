@@ -50,7 +50,7 @@ const signIn = async (
   }
 };
 
-const getStudentById = async (studentId: string): Promise<Student> => {
+const getById = async (studentId: string): Promise<Student> => {
   try {
     const student = await db(studentsTable)
       .where('id', studentId)
@@ -62,7 +62,7 @@ const getStudentById = async (studentId: string): Promise<Student> => {
   }
 };
 
-const getStudentByEmail = async (email: string): Promise<Student> => {
+const getByEmail = async (email: string): Promise<Student> => {
   try {
     const result = await db(studentsTable)
     .where('email', email)
@@ -77,6 +77,6 @@ const getStudentByEmail = async (email: string): Promise<Student> => {
 
 export default {
   signIn,
-  getStudentById,
-  getStudentByEmail,
+  getById,
+  getByEmail,
 };

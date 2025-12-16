@@ -3,7 +3,7 @@ import { studentsLoginTokenTable } from './tables';
 import db from './db';
 import { StudentLoginToken } from '../types/StudentLoginToken';
 
-const getStudentByToken = async (token: string): Promise<StudentLoginToken> => {
+const getByToken = async (token: string): Promise<StudentLoginToken> => {
   try {
     const result = await db(studentsLoginTokenTable)
     .where('token', token)
@@ -17,7 +17,7 @@ const getStudentByToken = async (token: string): Promise<StudentLoginToken> => {
   }
 };
 
-const getStudentByEmail = async (email: string): Promise<StudentLoginToken> => {
+const getByEmail = async (email: string): Promise<StudentLoginToken> => {
   try {
     const result = await db(studentsLoginTokenTable)
     .where('email', email)
@@ -30,7 +30,7 @@ const getStudentByEmail = async (email: string): Promise<StudentLoginToken> => {
   }
 };
 
-const insertStudent = async (token: string, email: string, expiresAt: string): Promise<StudentLoginToken> => {
+const insert = async (token: string, email: string, expiresAt: string): Promise<StudentLoginToken> => {
   try {
     return await db(studentsLoginTokenTable).insert({
       token,
@@ -43,7 +43,7 @@ const insertStudent = async (token: string, email: string, expiresAt: string): P
   }
 };
 
-const updateStudent = async (email: string, expiresAt: string): Promise<void> => {
+const update = async (email: string, expiresAt: string): Promise<void> => {
   try {
     const updated = await db(studentsLoginTokenTable)
       .where({ email })
@@ -56,7 +56,7 @@ const updateStudent = async (email: string, expiresAt: string): Promise<void> =>
   }
 };
 
-const deleteOneStudent = async (token: string): Promise<void> => {
+const deleteOne = async (token: string): Promise<void> => {
   try {
     const deletedToken = await db(studentsLoginTokenTable)
     .where({
@@ -76,9 +76,9 @@ const deleteOneStudent = async (token: string): Promise<void> => {
 };
 
 export default {
-  getStudentByToken,
-  getStudentByEmail,
-  insert: insertStudent,
-  update: updateStudent,
-  delete: deleteOneStudent,
+  getByToken,
+  getByEmail,
+  insert,
+  update,
+  delete: deleteOne,
 };

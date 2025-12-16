@@ -16,7 +16,7 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
   try {
     const { email } = req.body;
     const existingStudent = await db(studentsTable).where({ email }).first();
-    const existingToken = await dbStudentLoginToken.getStudentByEmail(email);
+    const existingToken = await dbStudentLoginToken.getByEmail(email);
     const token = existingToken?.token || loginInformations.generateToken(32);
     const isNewStudent = !existingStudent;
 
@@ -57,7 +57,7 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
 
 const sendWelcomeMail = async (email): Promise<void> => {
   try {
-    const existingToken = await dbStudentLoginToken.getStudentByEmail(email);
+    const existingToken = await dbStudentLoginToken.getByEmail(email);
     const loginUrl = loginInformations.generateStudentLoginUrl();
     const token = existingToken ? existingToken.token : loginInformations.generateToken(32);
     const expiresAt = date.getDatePlusTwoHours();
@@ -84,7 +84,7 @@ const verifyStudentToken = async (req: Request, res: Response): Promise<void> =>
   try {
     const { token } = req.params;
 
-    const tokenRow = await dbStudentLoginToken.getStudentByToken(token);
+    const tokenRow = await dbStudentLoginToken.getByToken(token);
 
     if (!tokenRow) {
       throw new CustomError('Token invalide', 401);

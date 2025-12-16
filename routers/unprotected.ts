@@ -44,9 +44,9 @@ router.post(
   '/psychologist/sendMail',
   speedLimiterLogin,
   psyLoginController.emailValidators,
-  psyLoginController.sendPsyMail,
+  psyLoginController.sendMail,
 );
-router.post('/psychologist/login', speedLimiterLogin, psyLoginController.psyLogin);
+router.post('/psychologist/login', speedLimiterLogin, psyLoginController.login);
 
 router.post(
   '/student/signInSecondStepMail',

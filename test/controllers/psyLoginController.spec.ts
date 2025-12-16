@@ -19,7 +19,7 @@ describe('psyLoginController', async () => {
     const email = 'prenom.nom@beta.gouv.fr';
 
     describe('getLogin', () => {
-      let getPsyByTokenStub;
+      let getByTokenStub;
       let deleteTokenStub;
       let lastConnectionStub;
       let getAcceptedPsychologistByEmailStub;
@@ -37,7 +37,7 @@ describe('psyLoginController', async () => {
       });
 
       afterEach((done) => {
-        getPsyByTokenStub.restore();
+        getByTokenStub.restore();
         lastConnectionStub.restore();
         deleteTokenStub.restore();
         getAcceptedPsychologistByEmailStub.restore();
@@ -45,7 +45,7 @@ describe('psyLoginController', async () => {
       });
 
       it('should log someone in', (done) => {
-        getPsyByTokenStub = sinon.stub(dbPsyLoginToken, 'getPsyByToken').returns(
+        getByTokenStub = sinon.stub(dbPsyLoginToken, 'getByToken').returns(
           Promise.resolve({
             token,
             email,
@@ -57,7 +57,7 @@ describe('psyLoginController', async () => {
           .post('/api/psychologist/login')
           .send({ token })
           .end((err, res) => {
-            sinon.assert.called(getPsyByTokenStub);
+            sinon.assert.called(getByTokenStub);
             sinon.assert.called(deleteTokenStub);
             sinon.assert.called(lastConnectionStub);
             sinon.assert.called(getAcceptedPsychologistByEmailStub);
@@ -70,8 +70,8 @@ describe('psyLoginController', async () => {
       });
 
       it('should NOT log someone in', (done) => {
-        getPsyByTokenStub = sinon
-          .stub(dbPsyLoginToken, 'getPsyByToken')
+        getByTokenStub = sinon
+          .stub(dbPsyLoginToken, 'getByToken')
           .returns(Promise.resolve());
 
         chai
@@ -79,7 +79,7 @@ describe('psyLoginController', async () => {
           .post('/api/psychologist/login')
           .send({ token: 'pizzaForToken' })
           .end((err, res) => {
-            sinon.assert.called(getPsyByTokenStub);
+            sinon.assert.called(getByTokenStub);
             sinon.assert.notCalled(deleteTokenStub);
             sinon.assert.notCalled(lastConnectionStub);
             sinon.assert.notCalled(getAcceptedPsychologistByEmailStub);

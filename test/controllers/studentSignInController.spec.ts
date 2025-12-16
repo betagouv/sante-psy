@@ -25,7 +25,7 @@ describe('signIn', () => {
     studentSignInStub = sinon.stub(dbStudents, 'signIn');
     studentSendMailStub = sinon.stub(studentMailController, 'default').resolves();
 
-    getStudentByMailStub = sinon.stub(dbStudentLoginToken, 'getStudentByEmail');
+    getStudentByMailStub = sinon.stub(dbStudentLoginToken, 'getByEmail');
     insertStudentTokenStub = sinon.stub(dbStudentLoginToken, 'insert').resolves();
     updateStudentTokenStub = sinon.stub(dbStudentLoginToken, 'update').resolves();
   });
