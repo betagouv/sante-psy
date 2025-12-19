@@ -2,7 +2,7 @@
   "name": "sante-psy",
   "version": "1.0.0",
   "engines": {
-    "node": "18",
+    "node": "24",
     "pnpm": "10"
   },
   "description": "Accompagnement Psychologique pour les étudiants",
