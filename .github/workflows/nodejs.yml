@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -19,7 +19,7 @@ jobs:
     - name: run DB
       run: docker compose -f docker-compose-only-db.yml up -d;
     - name: pnpm back install
-      run: pnpm clean-install
+      run: pnpm install --frozen-lockfile
     - name: pnpm front install and build
       run: pnpm run scalingo-prebuild
     - name: Back build
