@@ -70,6 +70,7 @@
     "less-loader": "^11.1.0",
     "lint-staged": "^13.1.0",
     "markdown-loader": "^8.0.0",
+    "minimist": "^1.2.8",
     "mocha": "^10.8.2",
     "react-dev-utils": "^12.0.1",
     "resolve": "1.22.1",
@@ -105,8 +106,7 @@
       "@parcel/watcher",
       "core-js-pure",
       "cypress",
-      "less",
-      "minimist"
+      "less"
     ]
   }
 }

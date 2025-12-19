@@ -204,6 +204,9 @@ importers:
       markdown-loader:
         specifier: ^8.0.0
         version: 8.0.0(webpack@5.103.0)
+      minimist:
+        specifier: ^1.2.8
+        version: 1.2.8
       mocha:
         specifier: ^10.8.2
         version: 10.8.2
