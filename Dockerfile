@@ -1,10 +1,14 @@
-FROM node:16-alpine
+FROM node:18-alpine
 
 WORKDIR /app 
 
-COPY .env.sample .env
-COPY . /app 
+RUN corepack enable \
+ && corepack prepare pnpm@10.0.0 --activate
+
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+COPY . .
 
 EXPOSE 8080
-
-RUN npm install
+CMD ["pnpm", "run", "dev"]

@@ -1,9 +1,14 @@
-FROM node:16-alpine
+FROM node:18-alpine
 
-WORKDIR /app 
+WORKDIR /app
 
-COPY . /app 
+RUN corepack enable \
+ && corepack prepare pnpm@10.0.0 --activate
+
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+COPY . .
 
 EXPOSE 3000
-
-RUN npm install
+CMD ["pnpm", "run", "dev"]

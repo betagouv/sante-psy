@@ -8,27 +8,16 @@ Accompagnement psychologique pour les étudiants
 
 ### Prérequis
 
-* node
-* npm
-* docker-compose
+* node >= 18
+* pnpm
+* docker compose (docker-compose avec tiret selon votre version)
 
-### Installation
+### Installation avec docker-compose
 
 ```bash
 git clone https://github.com/betagouv/sante-psy
-
-cd sante-psy
-npm i
-
-cd frontend
-npm i
-```
-
-### Lancement en local avec docker-compose
-
-```bash
 cp .env.sample .env # remplacer les valeurs nécessaires
-docker-compose up
+docker compose up # docker-compose avec tiret selon votre version
 ```
 
 Vous pouvez accéder au site sur <http://localhost:3000>.
@@ -49,13 +38,13 @@ Voir `.env.sample` pour la liste complète
 [KnexJS](http://knexjs.org/#Migrations) permet de créer des migrations de base de données. Un shortcut a été ajouté au `package.json` pour créer une migration :
 
 ```bash
-npm run makeMigration <nom de la migration>
+pnpm run makeMigration <nom de la migration>
 ```
 
 Une fois la migration créée, vous pouvez l'appliquer avec :
 
 ```bash
-npm run migrate
+pnpm run migrate
 ```
 
 ### Import de fausses données
@@ -65,7 +54,7 @@ Voir les fichiers dans `test/seed` qui vont nettoyer la base puis créer quelque
 Pour l'exécuter:
 
 ```bash
-npm run seed
+pnpm run seed
 ```
 
 ### Lancement des tests
@@ -77,15 +66,15 @@ Penser à décommenter les variables d'environnement `SECRET` et `SECRET_LOGS` d
 Une fois l'appli lancée normalement, on utilise cypress.
 
 ```bash
-docker-compose up
+docker-compose up # docker-compose avec ou sans tiret selon votre version
 
 cd frontend
-npm run cy:run
+pnpm run cy:run
 ```
 ou
 
 ```bash
-npm run cy:open
+pnpm run cy:open
 ```
 pour visualiser et simuler les tests sur un navigateur
 
@@ -94,22 +83,22 @@ pour visualiser et simuler les tests sur un navigateur
 Pour lancer les tests back, on a besoin d'une base de données postgres initialisée.
 
 ```bash
-docker-compose up
-docker-compose stop web
+docker-compose up # docker-compose avec ou sans tiret selon votre version
+docker-compose stop web # pareil
 
-npm test
+pnpm test
 ```
 
 Pour lancer uniquement un test
 
 ```bash
-npm test -- --grep "should call batchInsert on PG"
+pnpm test -- --grep "should call batchInsert on PG"
 ```
 
 #### Code coverage
 
 ```bash
-npm run coverage
+pnpm run coverage
 ```
 
 Ensuite, visiter avec votre navigateur pour visualiser le dossier `./coverage` :
@@ -133,7 +122,7 @@ Ce repo contient tout ce qu'il faut pour tourner sur Scalingo. Il suffit de dép
 Le deploiement sur scalingo se base sur le fichier [`Procfile`](https://doc.scalingo.com/platform/app/procfile)
 
 ```bash
-npm start
+pnpm start
 ```
 
 ## Actions ponctuelles sur Scalingo
