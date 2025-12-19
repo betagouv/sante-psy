@@ -23,6 +23,8 @@ jobs:
       run: docker compose -f docker-compose-only-db.yml up -d;
     - name: pnpm back install
       run: pnpm install --frozen-lockfile
+    - name: rebuild dependencies
+      run: pnpm rebuild
     - name: pnpm front install and build
       run: pnpm run scalingo-prebuild
     - name: Back build
