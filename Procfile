@@ -1,3 +1,3 @@
-web: npm start
+web: pnpm start
 updateDataDSToPG: node dist/cron_jobs/cron.js
-postdeploy: npm run migrate
+postdeploy: pnpm run migrate

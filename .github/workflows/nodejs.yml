@@ -18,31 +18,31 @@ jobs:
       run: cp .env.ci .env
     - name: run DB
       run: docker compose -f docker-compose-only-db.yml up -d;
-    - name: NPM back install
-      run: npm clean-install
-    - name: NPM front install and build
-      run: npm run scalingo-prebuild
+    - name: pnpm back install
+      run: pnpm clean-install
+    - name: pnpm front install and build
+      run: pnpm run scalingo-prebuild
     - name: Back build
-      run: npm run postbuild
+      run: pnpm run postbuild
     - name: Back linter
-      run: npm run lint -- --quiet
+      run: pnpm run lint -- --quiet
     - name: EJS linter
-      run: npm run ejslint -- --quiet
+      run: pnpm run ejslint -- --quiet
     - name: Front linter
-      run: npm --prefix frontend run lint -- --quiet
+      run: pnpm --prefix frontend run lint -- --quiet
     - name: Migrate DB
-      run: npm run migrate
+      run: pnpm run migrate
     - name: Seed DB
-      run: npm run seed
+      run: pnpm run seed
     - name: Run unit tests
-      run: npm run test:ci
+      run: pnpm run test:ci
       env:
         API_TOKEN: ${{ secrets.API_TOKEN }}
         DEMARCHES_SIMPLIFIEES_ID: ${{ secrets.DEMARCHES_SIMPLIFIEES_ID }}
     - name: Run app
       run: node dist/index.js &
     - name: Run integration tests
-      run: npm --prefix frontend run cy:ci
+      run: pnpm --prefix frontend run cy:ci
     - name: Archive test results
       if: ${{ failure() }}
       uses: actions/upload-artifact@v4

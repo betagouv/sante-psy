@@ -2,13 +2,13 @@
   "name": "sante-psy",
   "version": "1.0.0",
   "engines": {
-    "node": "16",
-    "npm": "8"
+    "node": "18",
+    "pnpm": "10"
   },
   "description": "Accompagnement Psychologique pour les étudiants",
   "main": "index.ts",
   "scripts": {
-    "coverage": "nyc --reporter html --reporter text npm run test",
+    "coverage": "nyc --reporter html --reporter text pnpm run test",
     "dev": "ts-node-dev --respawn --transpile-only index.ts",
     "build": "tsc",
     "devKnex": "DEBUG=knex:query nodemon index.js",
@@ -23,14 +23,14 @@
     "rollback": "knex migrate:rollback",
     "rollback-one": "knex migrate:down",
     "start": "node dist/index.js",
-    "test": "npm run test:backend && npm run test:frontend",
+    "test": "pnpm run test:backend && pnpm run test:frontend",
     "test:backend": "set TEST_ENVIRONMENT=true && ts-mocha --require @babel/register --exit test/** test/**/*",
-    "test:frontend": "npm --prefix frontend run test",
-    "test:ci": "wait-on --timeout 60000 https://api-annuaire-sante.herokuapp.com/annuaire/annuaire.json?Identification+nationale+PP__in=0 && npm run test",
+    "test:frontend": "pnpm --prefix frontend run test",
+    "test:ci": "wait-on --timeout 60000 https://api-annuaire-sante.herokuapp.com/annuaire/annuaire.json?Identification+nationale+PP__in=0 && pnpm run test",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
-    "scalingo-prebuild": "npm --prefix frontend run scalingo-prebuild",
-    "scalingo-postbuild": "npm --prefix frontend run scalingo-postbuild && npm run postbuild",
+    "scalingo-prebuild": "pnpm --prefix frontend run scalingo-prebuild",
+    "scalingo-postbuild": "pnpm --prefix frontend run scalingo-postbuild && pnpm run postbuild",
     "postbuild": "tsc && cp -a frontend/dist dist/frontend"
   },
   "repository": {
@@ -113,5 +113,6 @@
     "sinon": "^15.0.1",
     "ts-mocha": "^10.0.0",
     "ts-node-dev": "^2.0.0"
-  }
+  },
+  "packageManager": "pnpm@10.0.0"
 }

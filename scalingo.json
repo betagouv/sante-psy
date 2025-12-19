@@ -8,7 +8,7 @@
   },
   "scripts": {
     "first-deploy": "bash scalingo-dev-seed.sh",
-    "postdeploy": "npm run migrate"
+    "postdeploy": "pnpm run migrate"
   },
   "formation": {
     "web": {
