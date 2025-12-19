@@ -99,5 +99,14 @@
     "cy:open": "cypress open",
     "cy:run": "wait-on http://localhost:3000 && wait-on http-get://localhost:8080/api/config && cypress run",
     "cy:ci": "wait-on --timeout 30000  http-get://localhost:8080/api/config && CYPRESS_BASE_URL=http://localhost:8080/ cypress run --browser chrome"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "core-js-pure",
+      "cypress",
+      "less",
+      "minimist"
+    ]
   }
 }
