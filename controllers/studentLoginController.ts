@@ -32,7 +32,7 @@ async function sendStudentLoginEmail(email: string, loginUrl: string, token: str
 async function saveStudentToken(email: string, token: string): Promise<void> {
   try {
     const expiresAt = date.getDatePlusTwoHours();
-    await dbLoginToken.insert(token, email, expiresAt);
+    await dbLoginToken.upsert(token, email, expiresAt);
 
     console.log(`Login token created for ${logs.hash(email)}`);
   } catch (err) {
@@ -44,7 +44,7 @@ async function saveStudentToken(email: string, token: string): Promise<void> {
 const connectedStudent = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
   if (tokenData && checkXsrf(req, tokenData.xsrfToken)) {
-    const student = await dbStudents.getStudentById(tokenData.psychologist);
+    const student = await dbStudents.getById(tokenData.psychologist);
 
     if (student) {
       const {
@@ -72,10 +72,10 @@ const connectedStudent = async (req: Request, res: Response): Promise<void> => {
 const studentLogin = async (req: Request, res: Response): Promise<void> => {
   if (req.body.token) {
     const token = DOMPurify.sanitize(req.body.token);
-    const dbToken = await dbLoginToken.getStudentByToken(token);
+    const dbToken = await dbLoginToken.getByToken(token);
 
     if (dbToken) {
-      const studentData = await dbStudents.getStudentByEmail(dbToken.email);
+      const studentData = await dbStudents.getByEmail(dbToken.email);
       const xsrfToken = loginInformations.generateToken();
       cookie.createAndSetJwtCookie(res, studentData.id, xsrfToken);
       console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
@@ -100,8 +100,8 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   const { email } = req.body;
 
   console.log(`Student with ${logs.hash(email)} asked for a login link`);
-  const studentIsRegistered = await dbStudents.getStudentByEmail(email);
-  const existingToken = await dbLoginToken.getStudentByEmail(email);
+  const studentIsRegistered = await dbStudents.getByEmail(email);
+  const existingToken = await dbLoginToken.getByEmail(email);
   let token;
 
   if (existingToken) {
@@ -112,8 +112,8 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
 
   if (studentIsRegistered) {
     const loginUrl = loginInformations.generateStudentLoginUrl();
-    await sendStudentLoginEmail(email, loginUrl, token);
     await saveStudentToken(email, token);
+    await sendStudentLoginEmail(email, loginUrl, token);
   }
 
   res.json({});

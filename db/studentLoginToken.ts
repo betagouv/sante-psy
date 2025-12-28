@@ -30,29 +30,34 @@ const getByEmail = async (email: string): Promise<StudentLoginToken> => {
   }
 };
 
-const insert = async (token: string, email: string, expiresAt: string): Promise<StudentLoginToken> => {
+const upsert = async (
+  token: string,
+  email: string,
+  expiresAt: Date,
+): Promise<StudentLoginToken> => {
   try {
-    return await db(studentsLoginTokenTable).insert({
-      token,
-      email,
-      expiresAt,
-    });
+    const existing = await getByEmail(email);
+
+    if (existing) {
+      await db(studentsLoginTokenTable)
+        .where({ email })
+        .update({ token, expiresAt });
+
+      return {
+        ...existing,
+        token,
+        expiresAt,
+      };
+    }
+
+    const [created] = await db(studentsLoginTokenTable)
+      .insert({ token, email, expiresAt })
+      .returning('*');
+
+    return created;
   } catch (err) {
-    console.error(`Erreur de sauvegarde du token : ${err}`);
+    console.error(`Erreur d'upsert du token : ${err}`);
     throw new Error('Erreur de sauvegarde du token');
-  }
-};
-
-const update = async (email: string, expiresAt: string): Promise<void> => {
-  try {
-    const updated = await db(studentsLoginTokenTable)
-      .where({ email })
-      .update({ expiresAt });
-
-    if (!updated) throw new Error('Aucune entrée mise à jour');
-  } catch (err) {
-    console.error(`Erreur de mise à jour du token : ${err}`);
-    throw new Error('Erreur de mise à jour du token');
   }
 };
 
@@ -78,7 +83,6 @@ const deleteOne = async (token: string): Promise<void> => {
 export default {
   getByToken,
   getByEmail,
-  insert,
-  update,
+  upsert,
   delete: deleteOne,
 };

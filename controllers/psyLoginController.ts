@@ -160,8 +160,8 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   if (acceptedEmailExist) {
     const token = loginInformations.generateToken(32);
     const loginUrl = loginInformations.generatePsyLoginUrl();
-    await sendPsyLoginEmail(email, loginUrl, token);
-    await savePsyToken(email, token);
+    await sendLoginEmail(email, loginUrl, token);
+    await saveToken(email, token);
   } else if (notYetAcceptedEmailExist) {
     await sendNotYetAcceptedEmail(email);
     throw new CustomError(

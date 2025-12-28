@@ -45,14 +45,14 @@ const getDatePlusOneHour = (): string => {
   return new Date(expirationDate.setHours(expirationDate.getHours() + 1)).toISOString();
 };
 
-const getDatePlusTwoHours = (): string => {
+const getDatePlusTwoHours = (): Date => {
   const expirationDate = new Date();
-  return new Date(expirationDate.setHours(expirationDate.getHours() + 2)).toISOString();
+  return new Date(expirationDate.setHours(expirationDate.getHours() + 2));
 };
 
-const getDateInAWeek = (): string => {
+const getDatePlusSevenDays = (): Date => {
   const expirationDate = new Date();
-  return new Date(expirationDate.setDate(expirationDate.getDate() + 7)).toISOString();
+  return new Date(expirationDate.setDate(expirationDate.getDate() + 7));
 };
 
 const getUTCDate = (date: Date) : Date => new Date(Date.UTC(
@@ -76,7 +76,7 @@ export default {
   formatFrenchDate: dateFormatter.format,
   getDatePlusOneHour,
   getDatePlusTwoHours,
-  getDateInAWeek,
+  getDatePlusSevenDays,
   getUTCDate,
   toFormatDDMMYYYY,
   parseForm,

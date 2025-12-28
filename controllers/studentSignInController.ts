@@ -21,14 +21,10 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
     const isNewStudent = !existingStudent;
 
     const expiresAt = isNewStudent
-      ? date.getDateInAWeek()
+      ? date.getDatePlusSevenDays()
       : date.getDatePlusTwoHours();
 
-    if (existingToken) {
-      await dbStudentLoginToken.update(email, expiresAt);
-    } else {
-      await dbStudentLoginToken.insert(token, email, expiresAt);
-    }
+    await dbStudentLoginToken.upsert(token, email, expiresAt);
 
     if (isNewStudent) {
       await sendStudentMailTemplate(
@@ -62,11 +58,7 @@ const sendWelcomeMail = async (email): Promise<void> => {
     const token = existingToken ? existingToken.token : loginInformations.generateToken(32);
     const expiresAt = date.getDatePlusTwoHours();
 
-    if (existingToken) {
-      await dbStudentLoginToken.update(email, expiresAt);
-    } else {
-      await dbStudentLoginToken.insert(token, email, expiresAt);
-    }
+    await dbStudentLoginToken.upsert(token, email, expiresAt);
     await sendStudentMailTemplate(
       email,
       loginUrl,
@@ -115,17 +107,11 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       res.status(201).json({ status: 'created' });
       break;
     case 'alreadyRegistered': {
-      const studentHasToken = await dbStudentLoginToken.getStudentByEmail(email);
+      const studentHasToken = await dbStudentLoginToken.getByEmail(email);
       const loginUrl = loginInformations.generateStudentLoginUrl();
       const expiresAt = date.getDatePlusTwoHours();
-      let token;
-      if (studentHasToken) {
-        token = studentHasToken.token;
-        await dbStudentLoginToken.update(email, expiresAt);
-      } else {
-        token = loginInformations.generateToken(32);
-        await dbStudentLoginToken.insert(token, email, expiresAt);
-      }
+      const token = studentHasToken ? studentHasToken.token : loginInformations.generateToken(32);
+      await dbStudentLoginToken.upsert(token, email, expiresAt);
       await studentLoginController.sendStudentLoginEmail(email, loginUrl, token);
       res.status(200).json({ status: 'alreadyRegistered' });
       break;

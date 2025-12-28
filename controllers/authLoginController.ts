@@ -25,7 +25,7 @@ const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => 
 
   console.log(`User login link request for ${email}`);
 
-  const student = await dbStudents.getStudentByEmail(email);
+  const student = await dbStudents.getByEmail(email);
   if (student) {
     studentLoginController.sendStudentMail(req, res, () => {});
     return;
@@ -34,7 +34,7 @@ const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => 
   const psy = await dbPsychologists.getAcceptedByEmail(email);
 
   if (psy) {
-    psyController.sendPsyMail(req, res, () => {});
+    psyController.sendMail(req, res, () => {});
     return;
   }
 
@@ -52,7 +52,7 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Token manquant.', 400);
   }
 
-  const psyToken = await dbPsyLoginToken.getPsyByToken(token);
+  const psyToken = await dbPsyLoginToken.getByToken(token);
   if (psyToken) {
     const psy = await dbPsychologists.getAcceptedByEmail(psyToken.email);
     const xsrfToken = loginInformations.generateToken();
@@ -67,9 +67,9 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  const studentToken = await dbStudentLoginToken.getStudentByToken(token);
+  const studentToken = await dbStudentLoginToken.getByToken(token);
   if (studentToken) {
-    const student = await dbStudents.getStudentByEmail(studentToken.email);
+    const student = await dbStudents.getByEmail(studentToken.email);
     const xsrfToken = loginInformations.generateToken();
 
     cookie.createAndSetJwtCookie(res, student.id, xsrfToken);
@@ -98,7 +98,7 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
   const { psychologist } = tokenData;
 
   const psy = await dbPsychologists.getById(psychologist);
-  const isStudent = await dbStudents.getStudentById(psychologist);
+  const isStudent = await dbStudents.getById(psychologist);
 
   if (psy) {
     const convention = await dbPsychologists.getConventionInfo(psychologist);
