@@ -6,14 +6,14 @@ import db from '../db/db';
 import jwt from 'jsonwebtoken';
 import config from '../utils/config';
 import loginInformations from '../services/loginInformations';
-import dbPsyLoginToken from '../db/psyLoginToken';
+import dbLoginToken from '../db/loginToken';
 
 const getPsychologist = async (req: Request, res: Response): Promise<void> => {
   try {
     const psy = await dbPsychologists.getAcceptedByEmail(req.params.email);
     const xsrfToken = loginInformations.generateToken();
 
-    const token = await dbPsyLoginToken.getByEmail(req.params.email);
+    const token = await dbLoginToken.getByEmail(req.params.email);
 
     const duration = typeof req.query.duration === 'string' ? req.query.duration : '2h';
 

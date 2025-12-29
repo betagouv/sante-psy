@@ -3,7 +3,7 @@ import slowDown from 'express-slow-down';
 
 import configController from '../controllers/configController';
 import psyListingController from '../controllers/psyListingController';
-import psyLoginController from '../controllers/psyLoginController';
+import loginController from '../controllers/loginController';
 import statisticsController from '../controllers/statisticsController';
 
 import config from '../utils/config';
@@ -13,7 +13,6 @@ import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
 import studentSignInController from '../controllers/studentSignInController';
 import authLoginController from '../controllers/authLoginController';
-import studentLoginController from '../controllers/studentLoginController';
 
 const router = express.Router();
 
@@ -43,10 +42,10 @@ router.get(
 router.post(
   '/psychologist/sendMail',
   speedLimiterLogin,
-  psyLoginController.emailValidators,
-  psyLoginController.sendMail,
+  loginController.emailValidators,
+  loginController.sendMail,
 );
-router.post('/psychologist/login', speedLimiterLogin, psyLoginController.login);
+router.post('/psychologist/login', speedLimiterLogin, loginController.login);
 
 router.post(
   '/student/signInSecondStepMail',
@@ -74,10 +73,11 @@ router.post(
 router.post(
   '/student/sendLoginMail',
   speedLimiterLogin,
-  studentLoginController.sendStudentMail,
+  loginController.sendMail,
 );
 
-router.get('/student/connected', studentLoginController.connectedStudent);
+//todo adapter après mutualisation de les loginController
+router.get('/student/connected', loginController.connectedPsy);
 
 router.post(
   '/studentNewsletter/sendStudentMail',
@@ -128,7 +128,7 @@ router.get(
 // The other route is open to the public to get all psys (do not delete !)
 router.get('/trouver-un-psychologue', psyListingController.getFullActive);
 
-router.get('/psychologist/connected', psyLoginController.connectedPsy);
+router.get('/psychologist/connected', loginController.connectedPsy);
 
 router.get('/statistics', statisticsController.getAll);
 router.get('/psychologist/:psyId', psyProfileController.getValidators, psyProfileController.get);

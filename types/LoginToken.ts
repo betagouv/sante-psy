@@ -1,4 +1,4 @@
-export type PsyLoginToken = {
+export type LoginToken = {
     token: string,
     email: string,
     expiresAt: Date

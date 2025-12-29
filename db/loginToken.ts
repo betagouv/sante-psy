@@ -1,29 +1,29 @@
 import date from '../utils/date';
-import { studentsLoginTokenTable } from './tables';
+import { loginTokenTable } from './tables';
 import db from './db';
-import { StudentLoginToken } from '../types/StudentLoginToken';
+import { LoginToken } from '../types/LoginToken';
 
-const getByToken = async (token: string): Promise<StudentLoginToken> => {
+const getByToken = async (token: string): Promise<LoginToken> => {
   try {
-    const result = await db(studentsLoginTokenTable)
+    const result = await db(loginTokenTable)
     .where('token', token)
     .andWhere('expiresAt', '>', date.now())
     .first();
 
-    return result;
+    return result || null;
   } catch (err) {
     console.error('Impossible de récupérer le token', err);
     throw new Error('Une erreur est survenue.');
   }
 };
 
-const getByEmail = async (email: string): Promise<StudentLoginToken> => {
+const getByEmail = async (email: string): Promise<LoginToken> => {
   try {
-    const result = await db(studentsLoginTokenTable)
+    const result = await db(loginTokenTable)
     .where('email', email)
     .first();
 
-    return result;
+    return result || null;
   } catch (err) {
     console.error('Impossible de récupérer le token', err);
     throw new Error('Une erreur est survenue.');
@@ -34,12 +34,12 @@ const upsert = async (
   token: string,
   email: string,
   expiresAt: Date,
-): Promise<StudentLoginToken> => {
+): Promise<LoginToken> => {
   try {
     const existing = await getByEmail(email);
 
     if (existing) {
-      await db(studentsLoginTokenTable)
+      await db(loginTokenTable)
         .where({ email })
         .update({ token, expiresAt });
 
@@ -50,7 +50,7 @@ const upsert = async (
       };
     }
 
-    const [created] = await db(studentsLoginTokenTable)
+    const [created] = await db(loginTokenTable)
       .insert({ token, email, expiresAt })
       .returning('*');
 
@@ -63,7 +63,7 @@ const upsert = async (
 
 const deleteOne = async (token: string): Promise<void> => {
   try {
-    const deletedToken = await db(studentsLoginTokenTable)
+    const deletedToken = await db(loginTokenTable)
     .where({
       token,
     })

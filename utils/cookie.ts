@@ -1,6 +1,6 @@
 import { CookieOptions, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { psyJWT } from '../types/PsyLoginToken';
+import { psyJWT } from '../types/LoginToken';
 import config from './config';
 import CustomError from './CustomError';
 

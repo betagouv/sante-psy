@@ -8,7 +8,7 @@ function generateToken(size = 64): string {
   return crypto.randomBytes(size).toString('hex');
 }
 
-function generatePsyLoginUrl(): string {
+function generateLoginUrl(): string {
   return `${config.hostnameWithProtocol}/login`;
 }
 
@@ -16,13 +16,8 @@ function generateStudentSignInStepTwoUrl(): string {
   return `${config.hostnameWithProtocol}/inscription`;
 }
 
-function generateStudentLoginUrl(): string {
-  return `${config.hostnameWithProtocol}/login`;
-}
-
 export default {
-  generatePsyLoginUrl,
+  generateLoginUrl,
   generateStudentSignInStepTwoUrl,
-  generateStudentLoginUrl,
   generateToken,
 };

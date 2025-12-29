@@ -3,7 +3,7 @@ import chai from 'chai';
 import { v4 as uuidv4 } from 'uuid';
 import app from '../../index';
 
-import dbPsyLoginToken from '../../db/psyLoginToken';
+import dbLoginToken from '../../db/loginToken';
 import dbLastConnection from '../../db/lastConnections';
 import dbPsychologists from '../../db/psychologists';
 import dbUniversities from '../../db/universities';
@@ -24,7 +24,7 @@ describe('psyLoginController', async () => {
       let lastConnectionStub;
       let getAcceptedPsychologistByEmailStub;
       beforeEach(async () => {
-        deleteTokenStub = sinon.stub(dbPsyLoginToken, 'delete');
+        deleteTokenStub = sinon.stub(dbLoginToken, 'delete');
         lastConnectionStub = sinon.stub(dbLastConnection, 'upsert');
         getAcceptedPsychologistByEmailStub = sinon
           .stub(dbPsychologists, 'getAcceptedByEmail')
@@ -45,7 +45,7 @@ describe('psyLoginController', async () => {
       });
 
       it('should log someone in', (done) => {
-        getByTokenStub = sinon.stub(dbPsyLoginToken, 'getByToken').returns(
+        getByTokenStub = sinon.stub(dbLoginToken, 'getByToken').returns(
           Promise.resolve({
             token,
             email,
@@ -71,7 +71,7 @@ describe('psyLoginController', async () => {
 
       it('should NOT log someone in', (done) => {
         getByTokenStub = sinon
-          .stub(dbPsyLoginToken, 'getByToken')
+          .stub(dbLoginToken, 'getByToken')
           .returns(Promise.resolve());
 
         chai
@@ -101,7 +101,7 @@ describe('psyLoginController', async () => {
 
       beforeEach(async () => {
         insertTokenStub = sinon
-          .stub(dbPsyLoginToken, 'insert')
+          .stub(dbLoginToken, 'upsert')
           .returns(Promise.resolve());
 
         sendMailStub = sinon

@@ -3,7 +3,7 @@ import {
   patientsTable,
   psychologistsTable,
   dsApiCursorTable,
-  psyLoginTokenTable,
+  loginTokenTable,
   universitiesTable,
   suspensionReasonsTable,
   lastConnectionsTable,
@@ -14,7 +14,7 @@ import db from '../../db/db';
 
 const dataCursor = async (): Promise<void> => { await db(dsApiCursorTable).del(); };
 
-const dataToken = async (): Promise<void> => { await db(psyLoginTokenTable).del(); };
+const dataToken = async (): Promise<void> => { await db(loginTokenTable).del(); };
 
 const appointments = async (): Promise<void> => { await db(appointmentsTable).del(); };
 

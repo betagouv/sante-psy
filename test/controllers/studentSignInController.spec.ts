@@ -3,8 +3,8 @@ import chai from 'chai';
 import app from '../../index';
 
 import dbStudents from '../../db/students';
-import dbStudentLoginToken from '../../db/studentLoginToken';
-import * as studentMailController from '../../controllers/studentMailController';
+import dbLoginToken from '../../db/loginToken';
+import * as studentMailController from '../../services/sendStudentMailTemplate';
 
 chai.should();
 
@@ -25,8 +25,8 @@ describe('signIn', () => {
     studentSignInStub = sinon.stub(dbStudents, 'signIn');
     studentSendMailStub = sinon.stub(studentMailController, 'default').resolves();
 
-    getStudentByMailStub = sinon.stub(dbStudentLoginToken, 'getByEmail');
-    insertStudentTokenStub = sinon.stub(dbStudentLoginToken, 'upsert').resolves();
+    getStudentByMailStub = sinon.stub(dbLoginToken, 'getByEmail');
+    insertStudentTokenStub = sinon.stub(dbLoginToken, 'upsert').resolves();
   });
 
   afterEach(() => {

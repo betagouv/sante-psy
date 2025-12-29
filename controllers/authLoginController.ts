@@ -5,12 +5,10 @@ import validation from '../utils/validation';
 import dbStudents from '../db/students';
 import dbSuspensions from '../db/suspensionReasons';
 import dbPsychologists from '../db/psychologists';
-import dbPsyLoginToken from '../db/psyLoginToken';
-import dbStudentLoginToken from '../db/studentLoginToken';
+import loginToken from '../db/loginToken';
 import dbLastConnection from '../db/lastConnections';
 
-import psyController from './psyLoginController';
-import studentLoginController from './studentLoginController';
+import loginController from './loginController';
 import config from '../utils/config';
 import DOMPurify from '../services/sanitizer';
 import CustomError from '../utils/CustomError';
@@ -27,14 +25,14 @@ const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => 
 
   const student = await dbStudents.getByEmail(email);
   if (student) {
-    studentLoginController.sendStudentMail(req, res, () => {});
+    loginController.sendStudentMail(req, res, () => {});
     return;
   }
 
   const psy = await dbPsychologists.getAcceptedByEmail(email);
 
   if (psy) {
-    psyController.sendMail(req, res, () => {});
+    loginController.sendMail(req, res, () => {});
     return;
   }
 
@@ -52,7 +50,7 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Token manquant.', 400);
   }
 
-  const psyToken = await dbPsyLoginToken.getByToken(token);
+  const psyToken = await loginToken.getByToken(token);
   if (psyToken) {
     const psy = await dbPsychologists.getAcceptedByEmail(psyToken.email);
     const xsrfToken = loginInformations.generateToken();
@@ -60,14 +58,14 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     cookie.createAndSetJwtCookie(res, psy.dossierNumber, xsrfToken);
     console.log(`Successful authentication for psy ${logs.hash(psyToken.email)}`);
 
-    await dbPsyLoginToken.delete(token);
+    await loginToken.delete(token);
     await dbLastConnection.upsert(psy.dossierNumber);
 
     res.json({ xsrfToken, role: 'psy' });
     return;
   }
 
-  const studentToken = await dbStudentLoginToken.getByToken(token);
+  const studentToken = await loginToken.getByToken(token);
   if (studentToken) {
     const student = await dbStudents.getByEmail(studentToken.email);
     const xsrfToken = loginInformations.generateToken();
@@ -75,7 +73,7 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     cookie.createAndSetJwtCookie(res, student.id, xsrfToken);
     console.log(`Successful authentication for student ${logs.hash(studentToken.email)}`);
 
-    await dbStudentLoginToken.delete(token);
+    await loginToken.delete(token);
 
     res.json({ xsrfToken, role: 'student' });
     return;
