@@ -76,8 +76,7 @@ router.post(
   loginController.sendMail,
 );
 
-//todo adapter après mutualisation de les loginController
-router.get('/student/connected', loginController.connectedPsy);
+router.get('/student/connected', loginController.connectedStudent);
 
 router.post(
   '/studentNewsletter/sendStudentMail',

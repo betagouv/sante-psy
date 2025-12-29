@@ -25,6 +25,7 @@ const emailValidators = [
     .withMessage('Vous devez spécifier un email valide.'),
 ];
 
+// TODO : to refacto all doc to mutualize some methods looking alike
 async function sendPsyLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
   try {
     const html = await ejs.renderFile('./views/emails/psyLogin.ejs', {

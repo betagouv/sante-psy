@@ -50,13 +50,23 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Token manquant.', 400);
   }
 
-  const psyToken = await loginToken.getByToken(token);
-  if (psyToken) {
-    const psy = await dbPsychologists.getAcceptedByEmail(psyToken.email);
-    const xsrfToken = loginInformations.generateToken();
+  const tokenData = await loginToken.getByToken(token);
 
+  if (!tokenData) {
+    console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
+    throw new CustomError(
+      'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
+      401,
+    );
+  }
+
+  const { email } = tokenData;
+  const xsrfToken = loginInformations.generateToken();
+
+  const psy = await dbPsychologists.getAcceptedByEmail(email);
+  if (psy) {
     cookie.createAndSetJwtCookie(res, psy.dossierNumber, xsrfToken);
-    console.log(`Successful authentication for psy ${logs.hash(psyToken.email)}`);
+    console.log(`Successful authentication for psy ${logs.hash(email)}`);
 
     await loginToken.delete(token);
     await dbLastConnection.upsert(psy.dossierNumber);
@@ -65,13 +75,10 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  const studentToken = await loginToken.getByToken(token);
-  if (studentToken) {
-    const student = await dbStudents.getByEmail(studentToken.email);
-    const xsrfToken = loginInformations.generateToken();
-
+  const student = await dbStudents.getByEmail(email);
+  if (student) {
     cookie.createAndSetJwtCookie(res, student.id, xsrfToken);
-    console.log(`Successful authentication for student ${logs.hash(studentToken.email)}`);
+    console.log(`Successful authentication for student ${logs.hash(email)}`);
 
     await loginToken.delete(token);
 
@@ -79,7 +86,9 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
+  console.log(`Token without matching user : ${logs.hash(email)}`);
+  await loginToken.delete(token);
+
   throw new CustomError(
     'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
     401,
