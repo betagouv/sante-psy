@@ -263,7 +263,7 @@ describe('psyLoginController', async () => {
 
       return chai
         .request(app)
-        .get('/api/connecteduser')
+        .get('/api/psychologist/connected')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
@@ -290,31 +290,33 @@ describe('psyLoginController', async () => {
           res.body.email.should.equal(psy.email);
           res.body.adeli.should.equal(psy.adeli);
           res.body.active.should.equal(psy.active);
-          res.body.convention.should.eql({
-            isConventionSigned: true,
-            universityName: 'Monster university',
-            universityId,
-          });
+          res.body.convention.should.have.all.keys(
+            'isConventionSigned',
+            'universityName',
+            'universityId',
+          );
+          res.body.convention.isConventionSigned.should.equal(true);
+          res.body.convention.universityName.should.equal('Monster university');
           res.body.address.should.equal(psy.address);
         });
     });
 
     it('should return empty info when psy does not exist', async () => chai
         .request(app)
-        .get('/api/connecteduser')
+        .get('/api/psychologist/connected')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken')}`)
         .then(async (res) => res.body.should.be.empty));
 
     it('should return empty info if user is not connected', async () => chai
         .request(app)
-        .get('/api/connecteduser')
+        .get('/api/psychologist/connected')
         .then(async (res) => res.body.should.be.empty));
 
     it('should return empty info if user does not have csrf', async () => {
       const psy = create.insertOnePsy();
       return chai
         .request(app)
-        .get('/api/connecteduser')
+        .get('/api/psychologist/connected')
         .set('Cookie', `token=${cookie.getJwtTokenForUser((await psy).dossierNumber, 'randomXSRFToken')}`)
         .then(async (res) => res.body.should.be.empty);
     });

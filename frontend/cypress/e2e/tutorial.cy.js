@@ -35,7 +35,7 @@ const checkAllSteps = numberOfSteps => {
 
 describe('Global tutorial', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/connecteduser')
+    cy.intercept('GET', '/api/psychologist/connected')
       .as('connecteduser');
     cy.intercept('PUT', '/api/psychologist/*/seeTutorial')
       .as('seeTutorial');
@@ -80,7 +80,7 @@ const tutorials = [
 ];
 describe('Other tutorials', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/connecteduser')
+    cy.intercept('GET', '/api/psychologist/connected')
       .as('connecteduser');
 
     resetDB();

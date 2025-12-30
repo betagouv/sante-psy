@@ -8,7 +8,7 @@ describe('Login', () => {
       .as('login');
     cy.intercept('POST', '/api/psychologist/logout')
       .as('logout');
-    cy.intercept('GET', '/api/connecteduser')
+    cy.intercept('GET', '/api/psychologist/connected')
       .as('connectedUser');
   });
 
