@@ -12,7 +12,6 @@ import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
 import studentSignInController from '../controllers/studentSignInController';
-import authLoginController from '../controllers/authLoginController';
 
 const router = express.Router();
 
@@ -26,17 +25,17 @@ const speedLimiterLogin = slowDown({
 router.post(
   '/auth/sendLoginMail',
   studentSignInController.emailValidator,
-  authLoginController.sendUserLoginMail,
+  loginController.sendUserLoginMail,
 );
 
 router.post(
   '/auth/login',
-  authLoginController.userLogin,
+  loginController.userLogin,
 );
 
 router.get(
   '/auth/connected',
-  authLoginController.userConnected,
+  loginController.userConnected,
 );
 
 router.post(

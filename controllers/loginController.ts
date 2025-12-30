@@ -237,26 +237,34 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
 
   console.log(`User with ${logs.hash(email)} asked for a login link`);
   const acceptedEmailExist = await dbPsychologists.getAcceptedByEmail(email);
-  const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedByEmail(email);
 
-  if (acceptedEmailExist) {
-    const token = loginInformations.generateToken(32);
-    const loginUrl = loginInformations.generateLoginUrl();
-    await sendPsyLoginEmail(email, loginUrl, token);
-    await savePsyToken(email, token);
-  } else if (notYetAcceptedEmailExist) {
-    await sendNotYetAcceptedEmail(email);
-    throw new CustomError(
-      'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.',
-      401,
-    );
-  } else {
+  if (!acceptedEmailExist) {
+    const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedByEmail(email);
+    if (notYetAcceptedEmailExist) {
+      await sendNotYetAcceptedEmail(email);
+      throw new CustomError(
+        'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.',
+        401,
+      );
+    }
+
     console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${
       logs.hash(email)}
-      `);
+    `);
+    throw new CustomError(
+      `L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`,
+      401,
+    );
   }
 
-  res.json({});
+  const token = loginInformations.generateToken(32);
+  const loginUrl = loginInformations.generateLoginUrl();
+  await sendPsyLoginEmail(email, loginUrl, token);
+  await savePsyToken(email, token);
+  res.json({
+    message: `Un lien de connexion a été envoyé à l'adresse ${email
+    }. Le lien est valable ${config.sessionDurationHours} heures.`,
+  });
 };
 
 const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
@@ -283,6 +291,145 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   res.json({});
 };
 
+const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+  const { email } = req.body;
+
+  console.log(`User login link request for ${email}`);
+
+  const student = await dbStudents.getByEmail(email);
+  if (student) {
+    await sendStudentMail(req, res);
+    return;
+  }
+
+  const psy = await dbPsychologists.getAcceptedByEmail(email);
+
+  if (psy) {
+    await sendMail(req, res);
+    return;
+  }
+
+  res.json({
+    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+        correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
+        Le lien est valable ${config.sessionDurationHours} heures.`,
+  });
+};
+
+const userLogin = async (req: Request, res: Response): Promise<void> => {
+  const token = DOMPurify.sanitize(req.body.token);
+
+  if (!token) {
+    throw new CustomError('Token manquant.', 400);
+  }
+
+  const tokenData = await dbLoginToken.getByToken(token);
+
+  if (!tokenData) {
+    console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
+    throw new CustomError(
+      'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
+      401,
+    );
+  }
+
+  const { email } = tokenData;
+  const xsrfToken = loginInformations.generateToken();
+
+  const psy = await dbPsychologists.getAcceptedByEmail(email);
+  if (psy) {
+    cookie.createAndSetJwtCookie(res, psy.dossierNumber, xsrfToken);
+    console.log(`Successful authentication for psy ${logs.hash(email)}`);
+
+    await dbLoginToken.delete(token);
+    await dbLastConnection.upsert(psy.dossierNumber);
+
+    res.json({ xsrfToken, role: 'psy' });
+    return;
+  }
+
+  const student = await dbStudents.getByEmail(email);
+  if (student) {
+    cookie.createAndSetJwtCookie(res, student.id, xsrfToken);
+    console.log(`Successful authentication for student ${logs.hash(email)}`);
+
+    await dbLoginToken.delete(token);
+
+    res.json({ xsrfToken, role: 'student' });
+    return;
+  }
+
+  console.log(`Token without matching user : ${logs.hash(email)}`);
+  await dbLoginToken.delete(token);
+
+  throw new CustomError(
+    'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
+    401,
+  );
+};
+
+const userConnected = async (req: Request, res: Response): Promise<void> => {
+  const tokenData = cookie.verifyJwt(req, res);
+  if (!tokenData || !checkXsrf(req, tokenData.xsrfToken)) {
+    res.json({ role: null, user: null });
+    return;
+  }
+
+  const { psychologist } = tokenData;
+
+  const psy = await dbPsychologists.getById(psychologist);
+  const isStudent = await dbStudents.getById(psychologist);
+
+  if (psy) {
+    const convention = await dbPsychologists.getConventionInfo(psychologist);
+    const { reason: inactiveReason, until: inactiveUntil } = psy.active
+      ? { reason: undefined, until: undefined }
+      : await dbSuspensions.getByPsychologist(psy.dossierNumber);
+    const {
+      dossierNumber,
+      firstNames,
+      lastName,
+      useFirstNames,
+      useLastName,
+      email,
+      active,
+      adeli,
+      address,
+      otherAddress,
+      hasSeenTutorial,
+      createdAt,
+    } = psy;
+    res.json({
+      dossierNumber,
+      firstNames,
+      lastName,
+      useFirstNames,
+      useLastName,
+      adeli,
+      address,
+      otherAddress,
+      email,
+      convention,
+      active,
+      hasSeenTutorial,
+      createdAt,
+      inactiveReason,
+      inactiveUntil,
+    });
+  }
+
+  if (isStudent) {
+    res.json({
+      role: 'student',
+      user: { ...isStudent },
+    });
+    return;
+  }
+
+  res.json({ role: null, user: null });
+};
+
 export default {
   emailValidators,
   connectedPsy: asyncHelper(connectedPsy),
@@ -293,4 +440,7 @@ export default {
   sendStudentMail: asyncHelper(sendStudentMail),
   sendStudentLoginEmail,
   deleteToken,
+  sendUserLoginMail: asyncHelper(sendUserLoginMail),
+  userLogin: asyncHelper(userLogin),
+  userConnected: asyncHelper(userConnected),
 };
