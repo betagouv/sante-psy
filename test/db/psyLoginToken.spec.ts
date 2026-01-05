@@ -23,7 +23,7 @@ describe('DB Login token', () => {
 
       result.token.should.be.equal(token);
       result.email.should.be.equal(email);
-      new Date(result.expiresAt).should.be.equal(expiresAt);
+      new Date(result.expiresAt).getTime().should.be.equal(expiresAt.getTime());
     });
 
     it('should get nothing if token is older than one hour', async () => {
@@ -46,7 +46,7 @@ describe('DB Login token', () => {
       const result = await dbLoginToken.getByToken(token);
       result.token.should.be.equal(token);
       result.email.should.be.equal(email);
-      new Date(result.expiresAt).should.be.equal(expiresAt);
+      new Date(result.expiresAt).getTime().should.be.equal(expiresAt.getTime());
     });
   });
 

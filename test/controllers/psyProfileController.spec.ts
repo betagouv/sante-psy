@@ -11,6 +11,10 @@ const getAddressCoordinates = require('../../services/getAddressCoordinates');
 
 describe('psyProfileController', () => {
   describe('get psy profile', () => {
+    beforeEach(async () => {
+      await clean.psychologists();
+    });
+
     afterEach(async () => {
       await clean.psychologists();
     });
