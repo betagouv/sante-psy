@@ -424,12 +424,12 @@ describe('DB Psychologists', () => {
   });
 
   describe('getById', () => {
-    it('should return undefined if does not exist', async () => {
+    it('should return null if does not exist', async () => {
       const unknownPsyId = '390e285c-ed4a-4ce4-ac30-59bb3adf0123';
 
       const returnedPsy = await dbPsychologists.getById(unknownPsyId);
 
-      expect(returnedPsy).to.be.undefined;
+      expect(returnedPsy).to.be.null;
     });
 
     it('should return psychologist if exists', async () => {

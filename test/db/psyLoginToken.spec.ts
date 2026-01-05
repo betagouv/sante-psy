@@ -23,7 +23,7 @@ describe('DB Login token', () => {
 
       result.token.should.be.equal(token);
       result.email.should.be.equal(email);
-      new Date(result.expiresAt).toISOString().should.be.equal(expiresAt);
+      new Date(result.expiresAt).should.be.equal(expiresAt);
     });
 
     it('should get nothing if token is older than one hour', async () => {
@@ -33,12 +33,12 @@ describe('DB Login token', () => {
       await dbLoginToken.upsert(token, email, expiredDate);
       const result = await dbLoginToken.getByToken(token);
 
-      assert.isUndefined(result);
+      assert.isNull(result);
     });
   });
 
   describe('upsert', () => {
-    it('should insert a token and get it with its email', async () => {
+    it('should upsert a token and get it with its email', async () => {
       const email = 'prenom.nom@beta.gouv.fr';
       const expiresAt = date.getDatePlusOneHour();
       await dbLoginToken.upsert(token, email, expiresAt);
@@ -46,7 +46,7 @@ describe('DB Login token', () => {
       const result = await dbLoginToken.getByToken(token);
       result.token.should.be.equal(token);
       result.email.should.be.equal(email);
-      new Date(result.expiresAt).toISOString().should.be.equal(expiresAt);
+      new Date(result.expiresAt).should.be.equal(expiresAt);
     });
   });
 
@@ -58,7 +58,7 @@ describe('DB Login token', () => {
 
       await dbLoginToken.delete(token);
       const result = await dbLoginToken.getByToken(token);
-      assert.isUndefined(result);
+      assert.isNull(result);
     });
 
     it('should throw error when token does not exist', async () => {
