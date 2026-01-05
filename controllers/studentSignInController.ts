@@ -101,31 +101,30 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     const { firstNames, ine, email } = req.body;
 
     const result = await dbStudents.signIn(email, ine, firstNames);
-    switch (result.status) {
-    case 'created':
+    if (result.status === 'created') {
       await sendWelcomeMail(email);
-      res.status(201).json({ status: 'created' });
-      break;
-    case 'alreadyRegistered': {
-      const studentHasToken = await dbLoginToken.getByEmail(email);
-      const loginUrl = loginInformations.generateLoginUrl();
+    }
+    if (result.status === 'alreadyRegistered') {
+      const existingToken = await dbLoginToken.getByEmail(email);
+      const token = existingToken?.token || loginInformations.generateToken(32);
       const expiresAt = date.getDatePlusTwoHours();
-      const token = studentHasToken ? studentHasToken.token : loginInformations.generateToken(32);
+
       await dbLoginToken.upsert(token, email, expiresAt);
-      await loginController.sendStudentLoginEmail(email, loginUrl, token);
-      res.status(200).json({ status: 'alreadyRegistered' });
-      break;
+      await loginController.sendStudentLoginEmail(
+        email,
+        loginInformations.generateLoginUrl(),
+        token,
+      );
     }
-    case 'conflict':
-      res.status(409).json({ status: 'conflict' });
-      break;
-    default:
-      throw new CustomError('Erreur interne', 500);
-    }
+
+    res.status(200).json({
+      message: 'Si un compte existe, un email vous a été envoyé.',
+    });
   } catch (err) {
     console.error(err);
-    res.status(err instanceof CustomError ? err.statusCode : 500).json({
-      error: err instanceof CustomError ? err.message : 'Erreur serveur',
+
+    res.status(200).json({
+      message: 'Si un compte existe, un email vous a été envoyé.',
     });
   }
 };
