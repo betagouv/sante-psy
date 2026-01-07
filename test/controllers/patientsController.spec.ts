@@ -25,6 +25,7 @@ const makePatient = async (psychologistId, INE = '12345678901') => {
     gender,
     INE,
     false,
+    'patient@beta.gouv.fr',
     '42',
     false,
     psychologistId,

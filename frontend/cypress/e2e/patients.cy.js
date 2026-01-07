@@ -46,6 +46,8 @@ describe('Patient', () => {
         .type('Université de Rennes');
       cy.get('[data-test-id="etudiant-ine-input"] > input')
         .type('010203045AA');
+      cy.get('[data-test-id="etudiant-email-input"] > input')
+        .type('login@beta.gouv.fr');
       cy.get('[data-test-id="etudiant-status-input"]')
         .click();
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
@@ -77,6 +79,8 @@ describe('Patient', () => {
         .type('Université de Rennes');
       cy.get('[data-test-id="etudiant-ine-input"] > input')
         .type('010203045LP');
+      cy.get('[data-test-id="etudiant-email-input"] > input')
+        .type('login@beta.gouv.fr');
       cy.get('[data-test-id="etudiant-status-input"]')
         .click();
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
@@ -113,6 +117,8 @@ describe('Patient', () => {
       cy.get('[data-test-id="etudiant-last-name-input"] > input').type('Moustaki');
       cy.get('[data-test-id="etudiant-ine-input"] > input').clear();
       cy.get('[data-test-id="etudiant-ine-input"] > input').type('010203045AA');
+      cy.get('[data-test-id="etudiant-email-input"] > input').clear();
+      cy.get('[data-test-id="etudiant-email-input"] > input').type('login@beta.gouv.fr');
       cy.get('[data-test-id="etudiant-birth-date-input"] > input').clear();
       cy.get('[data-test-id="etudiant-birth-date-input"] > input')
         .type('01/01/2001');
