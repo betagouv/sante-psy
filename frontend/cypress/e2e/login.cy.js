@@ -28,7 +28,7 @@ describe('Login', () => {
     });
   });
 
-  describe.only('Login', () => {
+  describe('Login', () => {
     it('should login user when token is entered', () => {
       loginAsDefault();
       cy.visit('/psychologue/tableau-de-bord');
