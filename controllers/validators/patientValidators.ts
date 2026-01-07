@@ -64,6 +64,9 @@ export const patientValidators = [
       .trim()
       .customSanitizer(purifySanitizer),
   ]),
+  check('email')
+    .isEmail()
+    .withMessage('Vous devez spécifier un email valide.'),
 ];
 
 export const updateValidators = [
