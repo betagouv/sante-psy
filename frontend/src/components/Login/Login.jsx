@@ -10,8 +10,8 @@ import Section from 'components/Page/Section';
 import { useStore } from 'stores/';
 
 import agent from 'services/agent';
-import styles from './login.cssmodule.scss';
 import GlobalNotification from 'components/Notification/GlobalNotification';
+import styles from './login.cssmodule.scss';
 
 const Login = () => {
   const {

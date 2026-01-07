@@ -47,7 +47,7 @@ describe('Login', () => {
         );
     });
 
-    //TODO : should be tested in unit test
+    // TODO : should be tested in unit test
     // it('should not logged twice with same token', () => {
     //   cy.request('http://localhost:8080/test/auth/login@beta.gouv.fr')
     //     .then(response => {
