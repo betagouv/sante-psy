@@ -1,4 +1,4 @@
-const { logout, loginAsDefault, setLoginInfo, getLoginInfo } = require('./utils/login');
+const { logout, loginAsDefault } = require('./utils/login');
 
 describe('Login', () => {
   beforeEach(() => {

@@ -47,26 +47,6 @@ import StudentRouter from './StudentRouter';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
-const navigateToRoleRouter = role => {
-  if (role === 'psy') {
-    return <PsychologistRouter />;
-  } if (role === 'student') {
-    return <StudentRouter />;
-  }
-  return <Navigate to="/login" />;
-};
-
-const navigateToRoleHomepage = (user, role) => {
-  console.log('user', user);
-  console.log('role', role);
-  if (user && role === 'psy') {
-    return <PsychologistRouter />;
-  } if (user && role === 'student') {
-    return <StudentRouter />;
-  }
-  return <Navigate to="/login" />;
-};
-
 function App() {
   const { commonStore: { setConfig }, userStore: { user, pullUser, role } } = useStore();
   const [loading, setLoading] = useState(true);

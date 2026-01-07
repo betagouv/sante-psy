@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button, TextInput, Row, Col, Alert } from '@dataesr/react-dsfr';
+import { Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
 
 import Page from 'components/Page/Page';
 import Mail from 'components/Footer/Mail';
