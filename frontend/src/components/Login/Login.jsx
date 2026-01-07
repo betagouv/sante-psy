@@ -75,6 +75,7 @@ const Login = () => {
           <Alert
             className={styles.alert}
             type="success"
+            data-test-id="notification-success"
             title="Un mail de connexion vient de vous être envoyé si votre adresse e-mail correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. Le lien est valable 2 heures."
           />
         )}

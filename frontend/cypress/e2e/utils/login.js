@@ -8,7 +8,7 @@ const setLoginInfo = (token, xsrfToken) => {
 
 const loginAsDefault = (duration = '2h') => cy.request({
   method: 'GET',
-  url: 'http://localhost:8080/test/psychologist/login@beta.gouv.fr',
+  url: 'http://localhost:8080/test/auth/login@beta.gouv.fr',
   qs: { duration },
 })
   .then(res => {

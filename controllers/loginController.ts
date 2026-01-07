@@ -386,37 +386,28 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
     const { reason: inactiveReason, until: inactiveUntil } = psy.active
       ? { reason: undefined, until: undefined }
       : await dbSuspensions.getByPsychologist(psy.dossierNumber);
-    const {
-      dossierNumber,
-      firstNames,
-      lastName,
-      useFirstNames,
-      useLastName,
-      email,
-      active,
-      adeli,
-      address,
-      otherAddress,
-      hasSeenTutorial,
-      createdAt,
-    } = psy;
+
     res.json({
-      dossierNumber,
-      firstNames,
-      lastName,
-      useFirstNames,
-      useLastName,
-      adeli,
-      address,
-      otherAddress,
-      email,
-      convention,
-      active,
-      hasSeenTutorial,
-      createdAt,
-      inactiveReason,
-      inactiveUntil,
+      role: 'psy',
+      user: {
+        dossierNumber: psy.dossierNumber,
+        firstNames: psy.firstNames,
+        lastName: psy.lastName,
+        useFirstNames: psy.useFirstNames,
+        useLastName: psy.useLastName,
+        adeli: psy.adeli,
+        address: psy.address,
+        otherAddress: psy.otherAddress,
+        email: psy.email,
+        convention,
+        active: psy.active,
+        hasSeenTutorial: psy.hasSeenTutorial,
+        createdAt: psy.createdAt,
+        inactiveReason,
+        inactiveUntil,
+      },
     });
+    return;
   }
 
   if (isStudent) {

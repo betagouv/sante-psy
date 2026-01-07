@@ -24,17 +24,20 @@ const speedLimiterLogin = slowDown({
 
 router.post(
   '/auth/sendLoginMail',
+  speedLimiterLogin,
   studentSignInController.emailValidator,
   loginController.sendUserLoginMail,
 );
 
 router.post(
   '/auth/login',
+  speedLimiterLogin,
   loginController.userLogin,
 );
 
 router.get(
   '/auth/connected',
+  speedLimiterLogin,
   loginController.userConnected,
 );
 

@@ -2,13 +2,13 @@ const { logout, loginAsDefault } = require('./utils/login');
 
 describe('Login', () => {
   beforeEach(() => {
-    cy.intercept('POST', '/api/psychologist/sendMail')
+    cy.intercept('POST', '/api/auth/sendLoginMail')
       .as('sendMail');
-    cy.intercept('POST', '/api/psychologist/login')
+    cy.intercept('POST', '/api/auth/login')
       .as('login');
     cy.intercept('POST', '/api/psychologist/logout')
       .as('logout');
-    cy.intercept('GET', '/api/psychologist/connected')
+    cy.intercept('GET', '/api/auth/connected')
       .as('connectedUser');
   });
 
@@ -23,17 +23,18 @@ describe('Login', () => {
       cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
-          'Un lien de connexion a été envoyé à l\'adresse login@beta.gouv.fr. Le lien est valable 2 heures.',
+          'Un mail de connexion vient de vous être envoyé si votre adresse e-mail correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. Le lien est valable 2 heures.',
         );
     });
   });
 
   describe('Login', () => {
     it('should login user when token is entered', () => {
-      cy.request('POST', 'http://localhost:8080/api/psychologist/sendMail', { email: 'login@beta.gouv.fr' })
+      cy.request('POST', 'http://localhost:8080/api/auth/sendLoginMail', { email: 'login@beta.gouv.fr' })
         .then(() => {
-          cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
+          cy.request('http://localhost:8080/test/auth/login@beta.gouv.fr')
             .then(response => {
+              console.log('response', response);
               cy.visit(`/login/${response.body.token}`);
               cy.wait('@login');
               cy.wait('@connectedUser');
@@ -56,9 +57,9 @@ describe('Login', () => {
     });
 
     it('should not logged twice with same token', () => {
-      cy.request('POST', 'http://localhost:8080/api/psychologist/sendMail', { email: 'login@beta.gouv.fr' })
+      cy.request('POST', 'http://localhost:8080/api/auth/sendLoginMail', { email: 'login@beta.gouv.fr' })
         .then(() => {
-          cy.request('http://localhost:8080/test/psychologist/login@beta.gouv.fr')
+          cy.request('http://localhost:8080/test/auth/login@beta.gouv.fr')
             .then(response => {
               cy.visit(`/login/${response.body.token}`);
               cy.wait('@login');
