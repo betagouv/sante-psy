@@ -45,6 +45,7 @@ const StudentRouter = () => {
       withContact
     >
       <Routes>
+        <Route exact path="/" element={<Navigate to="/etudiant/mes-seances" replace />} />
         <Route exact path="/modifier-profil" element={<StudentHomepage />} />
         <Route exact path="/mes-seances" element={<StudentHomepage />} />
         <Route path="/*" element={<Navigate to="/etudiant/mes-seances" />} />

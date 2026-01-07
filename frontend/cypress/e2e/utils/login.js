@@ -1,8 +1,11 @@
 let currentUser = {};
 
-const setLoginInfo = (token, xsrfToken) => {
+const setLoginInfo = (token, xsrfToken, role = 'psy') => {
   const currentXsrfToken = xsrfToken;
   window.localStorage.setItem('xsrfToken', currentXsrfToken);
+  if (role) {
+    window.localStorage.setItem('role', role);
+  }
   cy.setCookie('token', token);
 };
 

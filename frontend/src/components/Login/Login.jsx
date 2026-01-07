@@ -11,11 +11,12 @@ import { useStore } from 'stores/';
 
 import agent from 'services/agent';
 import styles from './login.cssmodule.scss';
+import GlobalNotification from 'components/Notification/GlobalNotification';
 
 const Login = () => {
   const {
-    commonStore: { config },
-    userStore: { role, setXsrfToken, setRole },
+    commonStore: { config, setNotification },
+    userStore: { setXsrfToken, role, setRole },
   } = useStore();
 
   const emailRef = useRef();
@@ -24,7 +25,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
-  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     // Not set when redirecting
@@ -37,21 +37,23 @@ const Login = () => {
     if (token && !loginCalled.current) {
       loginCalled.current = true;
       agent.Auth.login(token)
-        .then(data => {
-          setXsrfToken(data.xsrfToken);
+        .then(async data => {
+          await setXsrfToken(data.xsrfToken);
           setRole(data.role);
+        }).catch(error => {
+          setNotification({ message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' }, false);
         });
     }
   }, [token]);
 
   useEffect(() => {
     if (role === 'psy') {
-      navigate('/psychologue/tableau-de-bord');
+      navigate('/psychologue');
     }
     if (role === 'student') {
-      navigate('/etudiant/accueil');
+      navigate('/etudiant');
     }
-  }, [role, token]);
+  }, [role, navigate]);
 
   const loginUser = e => {
     e.preventDefault();
@@ -71,14 +73,8 @@ const Login = () => {
       <Section
         title="Connexion"
       >
-        {notification && (
-          <Alert
-            className={styles.alert}
-            type="success"
-            data-test-id="notification-success"
-            title="Un mail de connexion vient de vous être envoyé si votre adresse e-mail correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. Le lien est valable 2 heures."
-          />
-        )}
+
+        <GlobalNotification />
         <form onSubmit={loginUser} id="login_form">
           <Row alignItems="bottom">
             <Col>

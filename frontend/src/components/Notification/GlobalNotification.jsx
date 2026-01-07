@@ -19,7 +19,7 @@ const GlobalNotification = ({ className }) => {
   );
 
   if (notification && notification.message
-    && (location.pathname.startsWith('/psychologue') || !notification.displayOnlyOnPsyPages)) {
+    && (location.pathname.startsWith('/') || !notification.displayOnlyOnPsyPages)) {
     return (
       <Notification
         {...notification}

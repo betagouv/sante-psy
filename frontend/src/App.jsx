@@ -57,12 +57,14 @@ const navigateToRoleRouter = role => {
 };
 
 const navigateToRoleHomepage = (user, role) => {
+  console.log('user', user);
+  console.log('role', role);
   if (user && role === 'psy') {
-    return '/psychologue/tableau-de-bord';
+    return <PsychologistRouter />;
   } if (user && role === 'student') {
-    return '/etudiant/accueil';
+    return <StudentRouter />;
   }
-  return '/';
+  return <Navigate to="/login" />;
 };
 
 function App() {
@@ -115,13 +117,14 @@ function App() {
               <Route exact path="/" element={<Landing />} />
               <Route
                 path="/psychologue/*"
-                element={user && role ? navigateToRoleRouter(role) : <Navigate to="/login" />}
+                element={user && role === 'psy' ? <PsychologistRouter /> : <Navigate to="/login" />}
               />
               <Route
                 path="/etudiant/*"
-                element={user && role ? navigateToRoleRouter(role) : <Navigate to="/login" />}
+                element={user && role === 'student' ? <StudentRouter /> : <Navigate to="/login" />}
               />
-              <Route path="/*" element={<Navigate to={role ? navigateToRoleHomepage(role) : '/'} />} />
+              <Route path="/*" element={<Navigate to="/" />} />
+
             </Routes>
           </React.Suspense>
         )}

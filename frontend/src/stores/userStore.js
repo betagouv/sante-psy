@@ -5,7 +5,7 @@ import agent from 'services/agent';
 export default class UserStore {
   user;
 
-  role;
+  role = window.localStorage.getItem('role');
 
   xsrfToken = window.localStorage.getItem('xsrfToken');
 
@@ -29,6 +29,17 @@ export default class UserStore {
           window.localStorage.setItem('xsrfToken', xsrfToken);
         } else {
           window.localStorage.removeItem('xsrfToken');
+        }
+      },
+    );
+
+    reaction(
+      () => this.role,
+      role => {
+        if (role) {
+          window.localStorage.setItem('role', role);
+        } else {
+          window.localStorage.removeItem('role');
         }
       },
     );

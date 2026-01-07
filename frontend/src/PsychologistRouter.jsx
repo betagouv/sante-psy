@@ -208,6 +208,7 @@ const PsychologistRouter = () => {
       )}
       <GlobalNotification className="fr-my-2w" />
       <Routes>
+        <Route exact path="/" element={<Navigate to="/psychologue/tableau-de-bord" replace />} />
         <Route exact path="/tableau-de-bord" element={<PsyProfile />} />
         <Route exact path="/modifier-profil" element={<EditProfile />} />
         <Route exact path="/mes-seances" element={<Appointments />} />
