@@ -62,7 +62,6 @@ const update = async (req: Request, res: Response): Promise<void> => {
     institutionName: patientInstitutionName,
     doctorName,
     email,
-
   } = req.body;
 
   const isINESvalid = await verifyPatientINE(patientINE, rawDateOfBirth);
