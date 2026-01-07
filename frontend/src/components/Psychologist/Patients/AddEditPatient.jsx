@@ -49,6 +49,7 @@ const AddEditPatient = () => {
         isStudentStatusVerified: false,
         lastName: '',
         isINESvalid: false,
+        email: '',
         badges: [],
       });
     }
