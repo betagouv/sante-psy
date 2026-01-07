@@ -61,6 +61,8 @@ const update = async (req: Request, res: Response): Promise<void> => {
     INE: patientINE,
     institutionName: patientInstitutionName,
     doctorName,
+    email,
+
   } = req.body;
 
   const isINESvalid = await verifyPatientINE(patientINE, rawDateOfBirth);
@@ -80,6 +82,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     patientGender,
     patientINE,
     isINESvalid,
+    email,
     patientInstitutionName,
     patientIsStudentStatusVerified,
     psychologistId,
@@ -121,7 +124,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const {
-    firstNames, lastName, gender, INE, institutionName, doctorName, dateOfBirth: rawDateOfBirth,
+    firstNames, lastName, gender, INE, institutionName, doctorName, dateOfBirth: rawDateOfBirth, email,
   } = req.body;
 
   const isINESvalid = await verifyPatientINE(INE, rawDateOfBirth);
@@ -136,6 +139,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     gender,
     INE,
     isINESvalid,
+    email,
     institutionName,
     isStudentStatusVerified,
     psychologistId,
