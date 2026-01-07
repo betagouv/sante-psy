@@ -9,6 +9,7 @@ import styles from './addEditPatient.cssmodule.scss';
 const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
   const [ineError, setIneError] = useState('');
   const [dateOfBirthError, setDateOfBirthError] = useState('');
+  const [emailError, setEmailError] = useState('');
 
   const validateINE = value => {
     const patterns = [
@@ -60,6 +61,32 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
     validateDateOfBirth(formattedValue);
   };
 
+  const validateEmail = value => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!value || value.trim() === '') {
+      setEmailError('L\'email de l\'étudiant est désormais obligatoire.');
+      handleFormErrors('email', true);
+      return false;
+    }
+
+    if (!emailRegex.test(value)) {
+      setEmailError('L\'email n\'est pas valide.');
+      handleFormErrors('email', true);
+      return false;
+    }
+
+    setEmailError('');
+    handleFormErrors('email', false);
+    return true;
+  };
+
+  const handleEmailChange = e => {
+    const { value } = e.target;
+    changePatient(value, 'email');
+    validateEmail(value);
+  };
+
   useEffect(() => {
     if (patient.INE) {
       validateINE(patient.INE);
@@ -71,6 +98,12 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
       validateDateOfBirth(patient.dateOfBirth);
     }
   }, [patient.dateOfBirth]);
+
+  useEffect(() => {
+    if (patient.email) {
+      validateEmail(patient.email);
+    }
+  }, [patient.email]);
 
   return (
     <>
@@ -91,6 +124,21 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
           onChange={e => changePatient(e.target.value, 'lastName')}
           required
         />
+        <TextInput
+          className="midlength-input"
+          data-test-id="etudiant-email-input"
+          label="Email"
+          value={patient.email}
+          onChange={handleEmailChange}
+          required
+        />
+        {emailError && (
+          <p
+            data-test-id="etudiant-email-error"
+            className={styles.errorMessage}>
+            {emailError}
+          </p>
+        )}
         <RadioGroup
           name="gender"
           legend={(
