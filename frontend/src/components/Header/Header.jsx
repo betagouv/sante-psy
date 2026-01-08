@@ -46,15 +46,16 @@ const Header = () => {
   const { userStore: { user } } = useStore();
 
   const psychologistPage = location.pathname.startsWith('/psychologue');
-  const studentPage = location.pathname.startsWith('/etudiant');
+  // todo: modify this studentPage management on homepage ticket
+  const studentPage = location.pathname.startsWith('/info-etudiant');
   return (
     <DSHeader>
       <HeaderBody>
-        <Logo asLink={<Link to={studentPage ? '/etudiant' : '/'} title="Revenir à l'accueil" />}>
+        <Logo asLink={<Link to={studentPage ? '/info-etudiant' : '/'} title="Revenir à l'accueil" />}>
           Ministère de l&lsquo;Enseignement Supérieur et de la Recherche
         </Logo>
         <Service
-          asLink={<Link to={studentPage ? '/etudiant' : '/'} />}
+          asLink={<Link to={studentPage ? '/info-etudiant' : '/'} />}
           title={`Santé Psy Étudiant${psychologistPage ? ' - Espace Psychologues' : ''}`}
           description="Accompagnement psychologique pour les étudiants"
         />

@@ -6,7 +6,7 @@ import StudentCards from './StudentCards';
 import FollowInstagram from './FollowInstagram';
 import Newsletter from './Newsletter';
 
-const StudentLanding = () => {
+const StudentInfoLanding = () => {
   const emailRef = useRef();
 
   useEffect(() => {
@@ -46,4 +46,4 @@ const StudentLanding = () => {
   );
 };
 
-export default StudentLanding;
+export default StudentInfoLanding;
