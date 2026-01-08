@@ -262,8 +262,9 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   await sendPsyLoginEmail(email, loginUrl, token);
   await savePsyToken(email, token);
   res.json({
-    message: `Un lien de connexion a été envoyé à l'adresse ${email
-    }. Le lien est valable ${config.sessionDurationHours} heures.`,
+    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
+      Le lien est valable ${config.sessionDurationHours} heures.`,
   });
 };
 
@@ -288,7 +289,11 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
     await sendStudentLoginEmail(email, loginUrl, token);
   }
 
-  res.json({});
+  res.json({
+    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
+      Le lien est valable ${config.sessionDurationHours} heures.`,
+  });
 };
 
 const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => {
@@ -312,8 +317,8 @@ const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => 
 
   res.json({
     message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
-        correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
-        Le lien est valable ${config.sessionDurationHours} heures.`,
+      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
+      Le lien est valable ${config.sessionDurationHours} heures.`,
   });
 };
 
