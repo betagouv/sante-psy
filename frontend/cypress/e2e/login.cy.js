@@ -23,7 +23,7 @@ describe('Login', () => {
       cy.get('[data-test-id="notification-success"] p')
         .should(
           'have.text',
-          'Un mail de connexion vient de vous être envoyé si votre adresse e-mail correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. Le lien est valable 2 heures.',
+          'Un lien de connexion a été envoyé à l\'adresse login@beta.gouv.fr. Le lien est valable 2 heures.',
         );
     });
   });
@@ -73,8 +73,9 @@ describe('Login', () => {
   describe('Login expiration', () => {
     it('Should redirect to login page after expiration', () => {
       loginAsDefault('2s');
-      cy.visit('/login');
+      cy.visit('/psychologue');
       cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
+      cy.wait('@connectedUser');
 
       // We explicitely wait for token to expire
       // eslint-disable-next-line cypress/no-unnecessary-waiting

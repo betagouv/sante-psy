@@ -13,7 +13,7 @@ describe('Patient', () => {
     cy.intercept('GET', '/api/config')
       .as('config');
 
-    resetDB();
+    resetDB(2025);
     loginAsDefault();
     checkConvention();
 
@@ -96,9 +96,6 @@ describe('Patient', () => {
         .click();
 
       cy.wait('@etudiant');
-      // we set this date to always have the same active tab in student profile
-      const currentYear = new Date().getFullYear();
-      cy.clock(new Date(currentYear, 5, 1).getTime());
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
       cy.get('[data-test-id="etudiant-seances-list"] tr')
         .should('have.length', 25);

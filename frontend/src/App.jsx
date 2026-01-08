@@ -57,6 +57,16 @@ function App() {
     document.title = 'Santé Psy Étudiant';
   }, []);
 
+  const getAuthenticatedRoute = () => {
+    if (user && role === 'psy') {
+      return <PsychologistRouter />;
+    }
+    if (user && role === 'student') {
+      return <StudentRouter />;
+    }
+    return null;
+  };
+
   return (
     <>
       {__MATOMO__ && <Matomo />}
@@ -103,7 +113,10 @@ function App() {
                 path="/etudiant/*"
                 element={user && role === 'student' ? <StudentRouter /> : <Navigate to="/login" />}
               />
-              <Route path="/*" element={<Navigate to="/" />} />
+              <Route
+                path="/*"
+                element={getAuthenticatedRoute() || <Navigate to="/" replace />}
+              />
 
             </Routes>
           </React.Suspense>

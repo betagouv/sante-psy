@@ -34,7 +34,8 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
 };
 
 const resetDB = async (req: Request, res: Response) : Promise<void> => {
-  await seed(db, true);
+  const year = typeof req.query.year === 'string' ? parseInt(req.query.year, 10) : undefined;
+  await seed(db, year, true);
   res.status(200).json('DB reset');
 };
 
