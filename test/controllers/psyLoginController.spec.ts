@@ -141,8 +141,12 @@ describe('psyLoginController', async () => {
             sinon.assert.called(insertTokenStub);
 
             res.status.should.equal(200);
-            res.body.message.should.equal(
-              "Un lien de connexion a été envoyé à l'adresse prenom.nom@beta.gouv.fr. Le lien est valable 2 heures.",
+            res.body.message
+            .replace(/\s+/g, ' ')
+            .trim()
+            .should.equal(
+              'Un mail de connexion vient de vous être envoyé si votre adresse e-mail correspond bien à '
+              + 'un utilisateur inscrit sur Santé Psy Étudiant. Le lien est valable 2 heures.',
             );
             done();
           });
