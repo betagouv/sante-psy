@@ -100,12 +100,13 @@ describe('Patient', () => {
         .click();
 
       cy.wait('@etudiant');
+      // todo: find how to fix annual changing needed on 25/49
       // we set this date to always have the same active tab in student profile
       const currentYear = new Date().getFullYear();
       cy.clock(new Date(currentYear, 5, 1).getTime());
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
       cy.get('[data-test-id="etudiant-seances-list"] tr')
-        .should('have.length', 25);
+        .should('have.length', 49);
       cy.get('[data-test-id="etudiant-seances-list"] ul li button')
         .eq(0).click();
       cy.get('[data-test-id="etudiant-seances-list"] tr')
