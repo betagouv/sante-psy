@@ -100,7 +100,7 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
   }, [patient.dateOfBirth]);
 
   useEffect(() => {
-      validateEmail(patient.email || '');
+    validateEmail(patient.email || '');
   }, [patient.email]);
 
   return (
