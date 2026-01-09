@@ -4,8 +4,8 @@ import classNames from 'classnames';
 
 import FaqSection from 'components/Page/FaqSection';
 
-import styles from './studentPage.cssmodule.scss';
 import { NavLink } from 'react-router-dom';
+import styles from './studentPage.cssmodule.scss';
 
 const StudentPage = ({
   title,
@@ -23,32 +23,30 @@ const StudentPage = ({
     <>
       <div className={styles.studentHeader}>
         <nav
-      className={styles.menu}
-      aria-label="Menu principal étudiant"
+          className={styles.menu}
+          aria-label="Menu principal étudiant"
     >
-      <ul className={styles.menuList}>
-        <li>
-          <NavLink
-            to="/etudiant/accueil"
-            className={({ isActive }) =>
-              isActive ? styles.activeLink : undefined
-            }
+          <ul className={styles.menuList}>
+            <li>
+              <NavLink
+                to="/etudiant/accueil"
+                className={({ isActive }) => (isActive ? styles.activeLink : undefined)}
           >
-            Accueil
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/trouver-un-psychologue">
-            Trouver un psychologue
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/faq">
-            Aide
-          </NavLink>
-        </li>
-      </ul>
-    </nav>
+                Accueil
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/trouver-un-psychologue">
+                Trouver un psychologue
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/faq">
+                Aide
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
       </div>
       <div
         className={classNames(styles.background, className)}

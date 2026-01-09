@@ -8,25 +8,23 @@ import './custom-month-picker.css';
 import './custom-date-picker.css';
 import StudentPage from 'components/Page/StudentPage';
 
-const StudentRouter = () => {
-  return (
-    <StudentPage title="Espace étudiant">
-      <Routes>
-        <Route
-          path="/"
-          element={<Navigate to="/etudiant/accueil" replace />}
+const StudentRouter = () => (
+  <StudentPage title="Espace étudiant">
+    <Routes>
+      <Route
+        path="/"
+        element={<Navigate to="/etudiant/accueil" replace />}
         />
-        <Route
-          path="/accueil"
-          element={<StudentHomepage />}
+      <Route
+        path="/accueil"
+        element={<StudentHomepage />}
         />
-        <Route
-          path="/*"
-          element={<Navigate to="/etudiant/accueil" />}
+      <Route
+        path="/*"
+        element={<Navigate to="/etudiant/accueil" />}
         />
-      </Routes>
-    </StudentPage>
-  );
-};
+    </Routes>
+  </StudentPage>
+);
 
 export default observer(StudentRouter);

@@ -16,7 +16,7 @@ import styles from './login.cssmodule.scss';
 const Login = () => {
   const {
     commonStore: { config, setNotification },
-    userStore: { setXsrfToken, role, setRole },
+    userStore: { setXsrfToken, setRole },
   } = useStore();
 
   const emailRef = useRef();
