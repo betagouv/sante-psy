@@ -376,6 +376,7 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
 
 const userConnected = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
+
   if (tokenData && checkXsrf(req, tokenData.xsrfToken)) {
     const psy = await dbPsychologists.getById(tokenData.psychologist);
     // changer nom token
@@ -401,34 +402,39 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
         createdAt,
       } = psy;
       res.json({
-        dossierNumber,
-        firstNames,
-        lastName,
-        useFirstNames,
-        useLastName,
-        adeli,
-        address,
-        otherAddress,
-        email,
-        convention,
-        active,
-        hasSeenTutorial,
-        createdAt,
-        inactiveReason,
-        inactiveUntil,
+        role: 'psy',
+        user: {
+          dossierNumber,
+          firstNames,
+          lastName,
+          useFirstNames,
+          useLastName,
+          adeli,
+          address,
+          otherAddress,
+          email,
+          convention,
+          active,
+          hasSeenTutorial,
+          createdAt,
+          inactiveReason,
+          inactiveUntil,
+        },
       });
       return;
     }
 
     if (isStudent) {
       res.json({
-        ...isStudent,
+        role: 'student',
+        user: { ...isStudent },
       });
       return;
     }
-    res.json();
+    res.json({ role: null, user: null });
+    return;
   }
-  res.json();
+  res.json({ role: null, user: null });
 };
 
 export default {

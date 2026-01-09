@@ -54,12 +54,11 @@ export default class UserStore {
   };
 
   async pullUser() {
-    if (!this.role) {
-      return Promise.resolve();
-    }
     return agent.Auth.getConnected()
       .then(user => {
-        this.user = user.data;
+        console.log(user);
+        this.user = user.data.user;
+        this.role = user.data.role;
       });
   }
 

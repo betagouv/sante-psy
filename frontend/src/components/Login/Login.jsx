@@ -16,7 +16,7 @@ import styles from './login.cssmodule.scss';
 const Login = () => {
   const {
     commonStore: { config, setNotification },
-    userStore: { setXsrfToken, setRole },
+    userStore: { setXsrfToken, role },
   } = useStore();
 
   const emailRef = useRef();
@@ -38,20 +38,28 @@ const Login = () => {
       loginCalled.current = true;
       agent.Auth.login(token)
         .then(async data => {
-          await setRole(data.role);
-          await setXsrfToken(data.xsrfToken);
+          setXsrfToken(data.xsrfToken);
 
-          if (data.role === 'psy') {
-            navigate('/psychologue');
-          }
-          if (data.role === 'student') {
-            navigate('/etudiant');
-          }
         }).catch(error => {
           setNotification({ message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' }, false);
         });
     }
   }, [token]);
+
+  useEffect(() => {
+    if (loginCalled.current === false) {
+      return;
+    }
+    if (!role) {
+      return;
+    }
+    if (role === 'psy') {
+      navigate('/psychologue');
+    }
+    if (role === 'student') {
+      navigate('/etudiant');
+    }
+  }, [role]);
 
   const loginUser = e => {
     e.preventDefault();
