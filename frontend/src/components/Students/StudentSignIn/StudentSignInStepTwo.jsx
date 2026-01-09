@@ -23,12 +23,6 @@ const StudentSignInStepTwo = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (role && user) {
-      navigate('/etudiant/accueil');
-    }
-  }, [role, token]);
-
-  useEffect(() => {
     if (!token) {
       navigate('/inscription');
       return;

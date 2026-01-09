@@ -53,25 +53,30 @@ export default class UserStore {
     this.user = { ...this.user, ...user };
   };
 
-  pullUser() {
+  async pullUser() {
+    if (!this.role) {
+      return Promise.resolve();
+    }
     if (this.role === 'student') {
       return agent.Student.getConnected()
         .then(user => {
           this.user = user.data;
         });
+    } else if (this.role === 'psy') {
+      return agent.Psy.getConnected()
+        .then(user => {
+          this.user = user.data;
+        });
     }
-    return agent.Psy.getConnected()
-      .then(user => {
-        this.user = user.data;
-      });
+
   }
 
-  setXsrfToken(xsrfToken) {
+  async setXsrfToken(xsrfToken) {
     this.xsrfToken = xsrfToken;
     return this.pullUser();
   }
 
-  deleteToken() {
+  async deleteToken() {
     return agent.Psy.logout().then(() => {
       this.user = null;
       this.xsrfToken = null;
@@ -79,7 +84,7 @@ export default class UserStore {
     });
   }
 
-  seeTutorial() {
+  async seeTutorial() {
     return agent.Psychologist.seeTutorial().then(() => {
       runInAction(() => {
         this.user.hasSeenTutorial = true;
