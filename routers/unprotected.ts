@@ -37,7 +37,6 @@ router.post(
 
 router.get(
   '/auth/connected',
-  speedLimiterLogin,
   loginController.userConnected,
 );
 

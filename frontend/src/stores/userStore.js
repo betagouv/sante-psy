@@ -57,18 +57,10 @@ export default class UserStore {
     if (!this.role) {
       return Promise.resolve();
     }
-    if (this.role === 'student') {
-      return agent.Student.getConnected()
-        .then(user => {
-          this.user = user.data;
-        });
-    } else if (this.role === 'psy') {
-      return agent.Psy.getConnected()
-        .then(user => {
-          this.user = user.data;
-        });
-    }
-
+    return agent.Auth.getConnected()
+      .then(user => {
+        this.user = user.data;
+      });
   }
 
   async setXsrfToken(xsrfToken) {

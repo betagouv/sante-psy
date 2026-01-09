@@ -376,54 +376,59 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
 
 const userConnected = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
-  if (!tokenData || !checkXsrf(req, tokenData.xsrfToken)) {
-    res.json({ role: null, user: null });
-    return;
-  }
+  if (tokenData && checkXsrf(req, tokenData.xsrfToken)) {
+    const psy = await dbPsychologists.getById(tokenData.psychologist);
+    // changer nom token
+    const isStudent = await dbStudents.getById(tokenData.psychologist);
 
-  const { psychologist } = tokenData;
-
-  const psy = await dbPsychologists.getById(psychologist);
-  const isStudent = await dbStudents.getById(psychologist);
-
-  if (psy) {
-    const convention = await dbPsychologists.getConventionInfo(psychologist);
-    const { reason: inactiveReason, until: inactiveUntil } = psy.active
-      ? { reason: undefined, until: undefined }
-      : await dbSuspensions.getByPsychologist(psy.dossierNumber);
-
-    res.json({
-      role: 'psy',
-      user: {
-        dossierNumber: psy.dossierNumber,
-        firstNames: psy.firstNames,
-        lastName: psy.lastName,
-        useFirstNames: psy.useFirstNames,
-        useLastName: psy.useLastName,
-        adeli: psy.adeli,
-        address: psy.address,
-        otherAddress: psy.otherAddress,
-        email: psy.email,
+    if (psy) {
+      const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
+      const { reason: inactiveReason, until: inactiveUntil } = psy.active
+        ? { reason: undefined, until: undefined }
+        : await dbSuspensions.getByPsychologist(psy.dossierNumber);
+      const {
+        dossierNumber,
+        firstNames,
+        lastName,
+        useFirstNames,
+        useLastName,
+        email,
+        active,
+        adeli,
+        address,
+        otherAddress,
+        hasSeenTutorial,
+        createdAt,
+      } = psy;
+      res.json({
+        dossierNumber,
+        firstNames,
+        lastName,
+        useFirstNames,
+        useLastName,
+        adeli,
+        address,
+        otherAddress,
+        email,
         convention,
-        active: psy.active,
-        hasSeenTutorial: psy.hasSeenTutorial,
-        createdAt: psy.createdAt,
+        active,
+        hasSeenTutorial,
+        createdAt,
         inactiveReason,
         inactiveUntil,
-      },
-    });
-    return;
-  }
+      });
+      return;
+    }
 
-  if (isStudent) {
-    res.json({
-      role: 'student',
-      user: { ...isStudent },
-    });
-    return;
+    if (isStudent) {
+      res.json({
+        ...isStudent,
+      });
+      return;
+    }
+    res.json();
   }
-
-  res.json({ role: null, user: null });
+  res.json();
 };
 
 export default {

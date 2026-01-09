@@ -53,15 +53,6 @@ const Login = () => {
     }
   }, [token]);
 
-  // useEffect(() => {
-  //   if (role === 'psy') {
-  //     navigate('/psychologue');
-  //   }
-  //   if (role === 'student') {
-  //     navigate('/etudiant');
-  //   }
-  // }, [role, navigate]);
-
   const loginUser = e => {
     e.preventDefault();
     agent.Auth.sendLoginMail(email).then(setNotification);
