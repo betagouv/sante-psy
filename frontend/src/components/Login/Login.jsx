@@ -39,7 +39,6 @@ const Login = () => {
       agent.Auth.login(token)
         .then(async data => {
           setXsrfToken(data.xsrfToken);
-
         }).catch(error => {
           setNotification({ message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' }, false);
         });
