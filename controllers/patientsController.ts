@@ -40,7 +40,13 @@ const verifyPatientINE = async (INE: string, rawDateOfBirth: string): Promise<bo
 };
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
-  const psychologistId = req.auth.psychologist;
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
   const patients = await dbPatients.getAll(psychologistId);
   const patientsWithCount = await getAppointmentsCount(patients);
   const patientsWithBadges = getPatientWithBadges(patientsWithCount);
@@ -71,7 +77,13 @@ const update = async (req: Request, res: Response): Promise<void> => {
 
   const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
-  const psychologistId = req.auth.psychologist;
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
   const updated = await dbPatients.update(
     patientId,
     patientFirstNames,
@@ -104,7 +116,13 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { patientId } = req.params;
-  const psychologistId = req.auth.psychologist;
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
   const patient = await dbPatients.getById(patientId, psychologistId);
 
   if (!patient) {
@@ -128,7 +146,13 @@ const create = async (req: Request, res: Response): Promise<void> => {
 
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
-  const psychologistId = req.auth.psychologist;
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
   const addedPatient = await dbPatients.insert(
     firstNames,
     lastName,
@@ -158,7 +182,12 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { patientId } = req.params;
-  const psychologistId = req.auth.psychologist;
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
 
   const patientAppointment = await dbAppointments.countByPatient(patientId);
 

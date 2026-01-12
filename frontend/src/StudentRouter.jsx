@@ -1,30 +1,60 @@
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import StudentHomepage from 'components/Students/Homepage';
+
+import { useStore } from 'stores/';
 
 import './custom-month-picker.css';
 import './custom-date-picker.css';
 import StudentPage from 'components/Page/StudentPage';
 
-const StudentRouter = () => (
-  <StudentPage title="Espace étudiant">
-    <Routes>
-      <Route
-        path="/"
-        element={<Navigate to="/etudiant/accueil" replace />}
+const StudentRouter = () => {
+  const { userStore: { user, role } } = useStore();
+  const location = useLocation();
+  const pathname = location.pathname;
+
+  if (!user || role !== 'student') {
+    return <Navigate to="/login" replace />;
+  }
+
+  const getPageProps = () => {
+    const page = pathname.split('/')[2];
+    switch (page) {
+      case 'mes-seances':
+        return {
+          title: (
+            <>
+              Mes
+              {' '}
+              <b>séances</b>
+            </>
+          ),
+        };
+      default:
+        return {};
+    }
+  };
+
+  return (
+    <StudentPage {...getPageProps()}>
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="/etudiant/mes-seances" replace />}
         />
-      <Route
-        path="/accueil"
-        element={<StudentHomepage />}
+        <Route
+          path="/mes-seances"
+          element={<StudentHomepage />}
         />
-      <Route
-        path="/*"
-        element={<Navigate to="/etudiant/accueil" />}
+        <Route
+          path="/*"
+          element={<Navigate to="/etudiant/mes-seances" />}
         />
-    </Routes>
-  </StudentPage>
-);
+      </Routes>
+    </StudentPage>
+  );
+};
 
 export default observer(StudentRouter);

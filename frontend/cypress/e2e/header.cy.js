@@ -124,7 +124,7 @@ describe('Header Test', () => {
         method: 'GET',
         pathname: '/api/appointments',
       }).as('appointments');
-      cy.intercept('POST', '/api/psychologist/logout').as('logout');
+      cy.intercept('POST', '/api/logout').as('logout');
 
       resetDB();
       loginAsDefault().then(() => signConvention(true));

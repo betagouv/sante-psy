@@ -15,7 +15,7 @@ const sendEmail = require('../../utils/email');
 
 describe('psyLoginController', async () => {
   describe('login page', () => {
-    const token = cookie.getJwtTokenForUser('dossierNumber', 'randomXSRFToken');
+    const token = cookie.getJwtTokenForUser('dossierNumber', 'randomXSRFToken', 'psy');
     const email = 'prenom.nom@beta.gouv.fr';
 
     describe('getLogin', () => {
@@ -268,7 +268,7 @@ describe('psyLoginController', async () => {
       return chai
         .request(app)
         .get('/api/psychologist/connected')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.body.should.have.all.keys(
@@ -308,7 +308,7 @@ describe('psyLoginController', async () => {
     it('should return empty info when psy does not exist', async () => chai
         .request(app)
         .get('/api/psychologist/connected')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken', 'psy')}`)
         .then(async (res) => res.body.should.be.empty));
 
     it('should return empty info if user is not connected', async () => chai
@@ -321,7 +321,7 @@ describe('psyLoginController', async () => {
       return chai
         .request(app)
         .get('/api/psychologist/connected')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser((await psy).dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser((await psy).dossierNumber, 'randomXSRFToken', 'psy')}`)
         .then(async (res) => res.body.should.be.empty);
     });
   });

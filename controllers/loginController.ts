@@ -71,7 +71,7 @@ async function sendNotYetAcceptedEmail(email: string): Promise<void> {
 async function savePsyToken(email: string, token: string): Promise<void> {
   try {
     const expiredAt = date.getDatePlusOneHour();
-    await dbLoginToken.upsert(token, email, expiredAt);
+    await dbLoginToken.upsert(token, email, expiredAt, 'psy');
 
     console.log(`Login token created for ${logs.hash(email)}`);
   } catch (err) {
@@ -83,7 +83,7 @@ async function savePsyToken(email: string, token: string): Promise<void> {
 async function saveStudentToken(email: string, token: string): Promise<void> {
   try {
     const expiresAt = date.getDatePlusTwoHours();
-    await dbLoginToken.upsert(token, email, expiresAt);
+    await dbLoginToken.upsert(token, email, expiresAt, 'student');
 
     console.log(`Login token created for ${logs.hash(email)}`);
   } catch (err) {
@@ -183,7 +183,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
     if (dbToken) {
       const psychologistData = await dbPsychologists.getAcceptedByEmail(dbToken.email);
       const xsrfToken = loginInformations.generateToken();
-      cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken);
+      cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken, 'psy');
       console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
 
       dbLoginToken.delete(token);
@@ -210,7 +210,7 @@ const studentLogin = async (req: Request, res: Response): Promise<void> => {
     if (dbToken) {
       const studentData = await dbStudents.getByEmail(dbToken.email);
       const xsrfToken = loginInformations.generateToken();
-      cookie.createAndSetJwtCookie(res, studentData.id, xsrfToken);
+      cookie.createAndSetJwtCookie(res, studentData.id, xsrfToken, 'student');
       console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
 
       dbLoginToken.delete(token);
@@ -339,33 +339,35 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     );
   }
 
-  const { email } = tokenData;
+  const { email, role } = tokenData;
   const xsrfToken = loginInformations.generateToken();
 
-  const psy = await dbPsychologists.getAcceptedByEmail(email);
-  if (psy) {
-    cookie.createAndSetJwtCookie(res, psy.dossierNumber, xsrfToken);
-    console.log(`Successful authentication for psy ${logs.hash(email)}`);
+  if (role === 'psy') {
+    const psy = await dbPsychologists.getAcceptedByEmail(email);
+    if (psy) {
+      cookie.createAndSetJwtCookie(res, psy.dossierNumber, xsrfToken, 'psy');
+      console.log(`Successful authentication for psy ${logs.hash(email)}`);
 
-    await dbLoginToken.delete(token);
-    await dbLastConnection.upsert(psy.dossierNumber);
+      await dbLoginToken.delete(token);
+      await dbLastConnection.upsert(psy.dossierNumber);
 
-    res.json({ xsrfToken, role: 'psy' });
-    return;
+      res.json({ xsrfToken, role: 'psy' });
+      return;
+    }
+  } else if (role === 'student') {
+    const student = await dbStudents.getByEmail(email);
+    if (student) {
+      cookie.createAndSetJwtCookie(res, student.id, xsrfToken, 'student');
+      console.log(`Successful authentication for student ${logs.hash(email)}`);
+
+      await dbLoginToken.delete(token);
+
+      res.json({ xsrfToken, role: 'student' });
+      return;
+    }
   }
 
-  const student = await dbStudents.getByEmail(email);
-  if (student) {
-    cookie.createAndSetJwtCookie(res, student.id, xsrfToken);
-    console.log(`Successful authentication for student ${logs.hash(email)}`);
-
-    await dbLoginToken.delete(token);
-
-    res.json({ xsrfToken, role: 'student' });
-    return;
-  }
-
-  console.log(`Token without matching user : ${logs.hash(email)}`);
+  console.log(`Token without matching user : ${logs.hash(email)}, role: ${role}`);
   await dbLoginToken.delete(token);
 
   throw new CustomError(
@@ -377,46 +379,83 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
 const userConnected = async (req: Request, res: Response): Promise<void> => {
   const tokenData = cookie.verifyJwt(req, res);
 
-  if (tokenData && checkXsrf(req, tokenData.xsrfToken)) {
-    const psy = await dbPsychologists.getById(tokenData.psychologist);
-    // changer nom token
-    const isStudent = await dbStudents.getById(tokenData.psychologist);
+  if (!tokenData || !checkXsrf(req, tokenData.xsrfToken)) {
+    res.json({ role: null, user: null });
+    return;
+  }
 
+  const userId = tokenData.userId || tokenData.psychologist;
+  const { role } = tokenData;
+
+  if (!userId) {
+    res.json({ role: null, user: null });
+    return;
+  }
+
+  if (role === 'psy') {
+    const psy = await dbPsychologists.getById(userId);
     if (psy) {
-      const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
+      const convention = await dbPsychologists.getConventionInfo(userId);
       const { reason: inactiveReason, until: inactiveUntil } = psy.active
         ? { reason: undefined, until: undefined }
         : await dbSuspensions.getByPsychologist(psy.dossierNumber);
-      const {
-        dossierNumber,
-        firstNames,
-        lastName,
-        useFirstNames,
-        useLastName,
-        email,
-        active,
-        adeli,
-        address,
-        otherAddress,
-        hasSeenTutorial,
-        createdAt,
-      } = psy;
+
       res.json({
         role: 'psy',
         user: {
-          dossierNumber,
-          firstNames,
-          lastName,
-          useFirstNames,
-          useLastName,
-          adeli,
-          address,
-          otherAddress,
-          email,
+          dossierNumber: psy.dossierNumber,
+          firstNames: psy.firstNames,
+          lastName: psy.lastName,
+          useFirstNames: psy.useFirstNames,
+          useLastName: psy.useLastName,
+          adeli: psy.adeli,
+          address: psy.address,
+          otherAddress: psy.otherAddress,
+          email: psy.email,
           convention,
-          active,
-          hasSeenTutorial,
-          createdAt,
+          active: psy.active,
+          hasSeenTutorial: psy.hasSeenTutorial,
+          createdAt: psy.createdAt,
+          inactiveReason,
+          inactiveUntil,
+        },
+      });
+      return;
+    }
+  } else if (role === 'student') {
+    const student = await dbStudents.getById(userId);
+    if (student) {
+      res.json({
+        role: 'student',
+        user: { ...student },
+      });
+      return;
+    }
+  } else {
+    // Backward compatibility: check both tables if role is missing
+    const psy = await dbPsychologists.getById(userId);
+    if (psy) {
+      const convention = await dbPsychologists.getConventionInfo(userId);
+      const { reason: inactiveReason, until: inactiveUntil } = psy.active
+        ? { reason: undefined, until: undefined }
+        : await dbSuspensions.getByPsychologist(psy.dossierNumber);
+
+      res.json({
+        role: 'psy',
+        user: {
+          dossierNumber: psy.dossierNumber,
+          firstNames: psy.firstNames,
+          lastName: psy.lastName,
+          useFirstNames: psy.useFirstNames,
+          useLastName: psy.useLastName,
+          adeli: psy.adeli,
+          address: psy.address,
+          otherAddress: psy.otherAddress,
+          email: psy.email,
+          convention,
+          active: psy.active,
+          hasSeenTutorial: psy.hasSeenTutorial,
+          createdAt: psy.createdAt,
           inactiveReason,
           inactiveUntil,
         },
@@ -424,6 +463,7 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    const isStudent = await dbStudents.getById(userId);
     if (isStudent) {
       res.json({
         role: 'student',
@@ -431,9 +471,8 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
       });
       return;
     }
-    res.json({ role: null, user: null });
-    return;
   }
+
   res.json({ role: null, user: null });
 };
 

@@ -97,7 +97,7 @@ const Psy = {
   getConnected: () => clientWithoutErrorManagement.get('/psychologist/connected'),
   login: token => client.post('/psychologist/login', { token }),
   sendMail: email => client.post('/psychologist/sendMail', { email }),
-  logout: () => client.post('/psychologist/logout'),
+  logout: () => client.post('/logout'),
 };
 
 const Student = {

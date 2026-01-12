@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
 
@@ -16,15 +16,31 @@ import styles from './login.cssmodule.scss';
 const Login = () => {
   const {
     commonStore: { config, setNotification },
-    userStore: { setXsrfToken, role },
+    userStore: { setXsrfToken, role, setRole, user },
   } = useStore();
 
   const emailRef = useRef();
   const loginCalled = useRef(false);
   const { token } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    const isOnLoginPage = location.pathname === '/login' || location.pathname.startsWith('/login/');
+
+    if (isOnLoginPage && !token && user && role) {
+      if (role === 'psy') {
+        navigate('/psychologue/tableau-de-bord', { replace: true });
+      } else if (role === 'student') {
+        navigate('/etudiant/mes-seances', { replace: true });
+      } else {
+        console.warn('Unknown role, logging out:', role);
+        navigate('/logout', { replace: true });
+      }
+    }
+  }, [token, user, role, navigate, location]);
 
   useEffect(() => {
     // Not set when redirecting
@@ -38,16 +54,17 @@ const Login = () => {
       loginCalled.current = true;
       agent.Auth.login(token)
         .then(async data => {
-          setXsrfToken(data.xsrfToken);
+          setRole(data.role);
+          await setXsrfToken(data.xsrfToken);
 
         }).catch(error => {
           setNotification({ message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' }, false);
         });
     }
-  }, [token]);
+  }, [token, setRole, setXsrfToken, setNotification]);
 
   useEffect(() => {
-    if (loginCalled.current === false) {
+    if (!token || loginCalled.current === false) {
       return;
     }
     if (!role) {
@@ -59,7 +76,7 @@ const Login = () => {
     if (role === 'student') {
       navigate('/etudiant');
     }
-  }, [role]);
+  }, [role, token, navigate]);
 
   const loginUser = e => {
     e.preventDefault();

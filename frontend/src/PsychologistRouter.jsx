@@ -28,8 +28,12 @@ import './custom-month-picker.css';
 import './custom-date-picker.css';
 
 const PsychologistRouter = () => {
-  const { userStore: { user } } = useStore();
+  const { userStore: { user, role } } = useStore();
   const { pathname } = useLocation();
+
+  if (!user || role !== 'psy') {
+    return <Navigate to="/login" replace />;
+  }
 
   const hasSignedConvention = user.convention && user.convention.isConventionSigned;
   const modal = hasSignedConvention || !shouldCheckConventionAgain()

@@ -1,9 +1,11 @@
 declare namespace Express {
     interface Request {
         auth: {
-            psychologist: string,
+            psychologist?: string, // old JWT format
+            userId?: string,
             xsrfToken: string,
-            exp: number
+            exp: number,
+            role?: 'psy' | 'student'
         }
         sanitize: (text: string) => string
     }

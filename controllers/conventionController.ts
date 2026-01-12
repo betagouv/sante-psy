@@ -16,7 +16,13 @@ const update = async (req: Request, res: Response): Promise<void> => {
 
   const { isConventionSigned } = req.body;
 
-  const psychologistId = req.auth.psychologist;
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
   await dbPsychologists.updateConventionInfo(psychologistId, isConventionSigned);
   const convention = await dbPsychologists.getConventionInfo(psychologistId);
   res.json({

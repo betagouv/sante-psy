@@ -2,8 +2,11 @@ import express from 'express';
 
 import psyProfileController from '../controllers/psyProfileController';
 import conventionController from '../controllers/conventionController';
+import access from '../utils/access';
 
 const router = express.Router();
+
+router.use(access.requirePsyRole);
 
 router.post(
   '/convention',

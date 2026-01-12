@@ -26,7 +26,13 @@ const create = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { patientId } = req.body;
-  const psyId = req.auth.psychologist;
+  const psyId = req.auth.userId || req.auth.psychologist;
+
+  if (!psyId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
   const date = new Date(req.body.date);
   const today = new Date();
   const limitDate = new Date(today.setMonth(today.getMonth() + 4));
@@ -64,7 +70,13 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
   const { appointmentId } = req.params;
-  const psychologistId = req.auth.psychologist;
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
   const deletedAppointment = await dbAppointments.delete(appointmentId, psychologistId);
   if (deletedAppointment === 0) {
     console.log(
@@ -83,7 +95,13 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const { isBillingPurposes, year, month } = req.query;
-  const psychologistId = req.auth.psychologist;
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
   let dateRange = null;
   let selectedPeriod = null;
 
@@ -135,7 +153,13 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
 const getByPatientId = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
-  const psychologistId = req.auth.psychologist;
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
   const { patientId } = req.params;
 
   const patient = await dbPatient.getById(patientId, psychologistId);
