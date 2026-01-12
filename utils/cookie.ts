@@ -1,6 +1,6 @@
 import { CookieOptions, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { JWT } from '../types/LoginToken';
+import { psyJWT } from '../types/LoginToken';
 import config from './config';
 import CustomError from './CustomError';
 
@@ -39,10 +39,10 @@ const clearJwtCookie = (res: Response): void => {
   res.clearCookie('token');
 };
 
-const verifyJwt = (req: Request, res: Response): JWT | undefined => {
+const verifyJwt = (req: Request, res: Response): psyJWT | undefined => {
   try {
     const verified = jwt.verify(req.cookies.token, config.secret);
-    return verified as JWT;
+    return verified as psyJWT;
   } catch (err) {
     if (err instanceof jwt.TokenExpiredError) {
       res.clearCookie('token');

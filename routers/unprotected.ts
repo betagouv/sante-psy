@@ -10,7 +10,8 @@ import config from '../utils/config';
 import psyProfileController from '../controllers/psyProfileController';
 import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
-import studentController from '../controllers/studentController';
+import studentNewsletterController from '../controllers/studentNewsletterController';
+import studentSignInController from '../controllers/studentSignInController';
 
 const router = express.Router();
 
@@ -22,6 +23,24 @@ const speedLimiterLogin = slowDown({
 });
 
 router.post(
+  '/auth/sendLoginMail',
+  speedLimiterLogin,
+  studentSignInController.emailValidator,
+  loginController.sendUserLoginMail,
+);
+
+router.post(
+  '/auth/login',
+  speedLimiterLogin,
+  loginController.userLogin,
+);
+
+router.get(
+  '/auth/connected',
+  loginController.userConnected,
+);
+
+router.post(
   '/psychologist/sendMail',
   speedLimiterLogin,
   loginController.emailValidators,
@@ -30,23 +49,61 @@ router.post(
 router.post('/psychologist/login', speedLimiterLogin, loginController.login);
 
 router.post(
-  '/student/sendMail',
+  '/student/signInSecondStepMail',
   speedLimiterLogin,
-  studentController.mailValidator,
-  studentController.sendStudentMail,
+  studentSignInController.emailValidator,
+  studentSignInController.sendStudentSecondStepMail,
 );
 
 router.post(
-  '/student/saveAnswer',
+  '/student/sendWelcomeMail',
   speedLimiterLogin,
-  studentController.answerValidator,
-  studentController.saveAnswer,
+  studentSignInController.emailValidator,
+  studentSignInController.sendWelcomeMail,
+);
+
+router.post('/student/signIn/:token', studentSignInController.verifyStudentToken);
+
+router.post(
+  '/student/signIn',
+  speedLimiterLogin,
+  studentSignInController.studentSignInValidator,
+  studentSignInController.signIn,
+);
+
+router.post(
+  '/student/sendLoginMail',
+  speedLimiterLogin,
+  loginController.sendMail,
+);
+
+router.get('/student/connected', loginController.connectedStudent);
+
+router.post(
+  '/studentNewsletter/sendStudentMail',
+  speedLimiterLogin,
+  studentNewsletterController.mailValidator,
+  studentNewsletterController.sendStudentMail,
+);
+
+router.post(
+  '/studentNewsletter/:studentId',
+  speedLimiterLogin,
+  studentNewsletterController.answerValidator,
+  studentNewsletterController.saveAnswer,
+);
+
+router.post(
+  '/studentNewsletter/saveAnswer',
+  speedLimiterLogin,
+  studentNewsletterController.answerValidator,
+  studentNewsletterController.saveAnswer,
 );
 
 router.delete(
-  '/student/:studentId',
+  '/studentNewsletter/:studentId',
   speedLimiterLogin,
-  studentController.unregister,
+  studentNewsletterController.unregister,
 );
 
 // prevent abuse for some rules
@@ -71,7 +128,7 @@ router.get(
 // The other route is open to the public to get all psys (do not delete !)
 router.get('/trouver-un-psychologue', psyListingController.getFullActive);
 
-router.get('/connecteduser', loginController.connectedUser);
+router.get('/psychologist/connected', loginController.connectedPsy);
 
 router.get('/statistics', statisticsController.getAll);
 router.get('/psychologist/:psyId', psyProfileController.getValidators, psyProfileController.get);

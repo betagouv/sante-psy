@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { check, oneOf } from 'express-validator';
 import { purifySanitizer } from '../services/sanitizer';
-import dbStudents from '../db/students';
+import dbStudentsNewsletter from '../db/studentsNewsletter';
 import asyncHelper from '../utils/async-helper';
 import validation from '../utils/validation';
-import { sendMail1 } from '../services/studentMails';
+import { sendMail1 } from '../services/studentNewsletterMails';
 
 const mailValidator = [
   check('email').isEmail().withMessage('Vous devez spécifier un email valide.'),
@@ -22,7 +22,7 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
     message: "Nous vous avons envoyé un mail avec toutes les informations sur le dispositif. Pensez à verifier vos spams et n'hésitez pas à nous contacter en cas de problèmes.",
   });
 
-  dbStudents.insert(email, source);
+  dbStudentsNewsletter.insert(email, source);
 };
 
 const answerValidator = [
@@ -61,7 +61,7 @@ const saveAnswer = async (req: Request, res: Response): Promise<void> => {
     id, letter, appointment, referral, doctorAppointment, doctorAppointment2,
   } = req.body;
 
-  dbStudents.updateById(id, {
+  dbStudentsNewsletter.updateById(id, {
     letter: letter == null ? undefined : letter,
     appointment: appointment == null ? undefined : appointment,
     referral: referral == null ? undefined : referral,
@@ -75,7 +75,7 @@ const saveAnswer = async (req: Request, res: Response): Promise<void> => {
 const unregister = async (req: Request, res: Response): Promise<void> => {
   const { studentId } = req.params;
 
-  dbStudents.updateById(studentId, {
+  dbStudentsNewsletter.updateById(studentId, {
     email: null,
   });
 

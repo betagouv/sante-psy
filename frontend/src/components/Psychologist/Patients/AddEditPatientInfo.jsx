@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { addAutoSlashToDate } from 'services/date';
 import Notification from 'components/Notification/Notification';
 import { HashLink } from 'react-router-hash-link';
+import validateIneFormat from 'src/utils/validateIneFormat';
 import styles from './addEditPatient.cssmodule.scss';
 
 const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
@@ -12,15 +13,7 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
   const [emailError, setEmailError] = useState('');
 
   const validateINE = value => {
-    const patterns = [
-      /^[0-9]{9}[A-HJK]{2}$/, // INE-RNIE
-      /^\d{10}[A-HJ-NPR-Z]$/, // INE-BEA
-      /^[0-9A-Z]{10}\d$/, // INE-Base 36
-      /^\d{4}[A]\d{5}[A-HJ-NPR-Z]$/, // INE-SIFA
-      /^\d{4}[D]\d{5}[A-HJ-NPR-Z]$/i, // INE provisoire
-    ];
-
-    const isValid = patterns.some(pattern => pattern.test(value));
+    const isValid = validateIneFormat(value);
 
     if (!isValid) {
       setIneError('INE invalide. Veuillez vérifier le format.');

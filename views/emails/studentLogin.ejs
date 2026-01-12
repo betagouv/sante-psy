@@ -1,0 +1,19 @@
+<%- include('header'); -%>
+  <p>Bonjour ! 👋</p>
+  <p>
+    Vous avez demandé un lien pour vous connecter à votre Espace Étudiant.
+    <br/>
+    Lien valable durant 2 heures.
+    <br/>
+  <p>
+    <a href="<%= loginUrlWithToken %>" class="loginButton">
+      Me connecter
+    </a>
+  </p>
+  <br/>
+  <div>
+    Pas de mot de passe ! Pour vous connecter, demandez un lien à chaque fois sur
+    <br/>
+    <a title="demander un lien de connexion à Santé Psy Étudiant" href="<%= site %>"><%= site %></a>
+  </div>
+<%- include('footer'); -%>

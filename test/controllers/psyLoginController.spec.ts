@@ -13,7 +13,7 @@ import { DossierState } from '../../types/DossierState';
 
 const sendEmail = require('../../utils/email');
 
-describe('loginController', async () => {
+describe('psyLoginController', async () => {
   describe('login page', () => {
     const token = cookie.getJwtTokenForUser('dossierNumber', 'randomXSRFToken');
     const email = 'prenom.nom@beta.gouv.fr';
@@ -101,7 +101,7 @@ describe('loginController', async () => {
 
       beforeEach(async () => {
         insertTokenStub = sinon
-          .stub(dbLoginToken, 'insert')
+          .stub(dbLoginToken, 'upsert')
           .returns(Promise.resolve());
 
         sendMailStub = sinon
@@ -141,8 +141,12 @@ describe('loginController', async () => {
             sinon.assert.called(insertTokenStub);
 
             res.status.should.equal(200);
-            res.body.message.should.equal(
-              "Un lien de connexion a été envoyé à l'adresse prenom.nom@beta.gouv.fr. Le lien est valable 2 heures.",
+            res.body.message
+            .replace(/\s+/g, ' ')
+            .trim()
+            .should.equal(
+              'Un mail de connexion vient de vous être envoyé si votre adresse e-mail correspond bien à '
+              + 'un utilisateur inscrit sur Santé Psy Étudiant. Le lien est valable 2 heures.',
             );
             done();
           });
@@ -263,7 +267,7 @@ describe('loginController', async () => {
 
       return chai
         .request(app)
-        .get('/api/connecteduser')
+        .get('/api/psychologist/connected')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
@@ -290,31 +294,33 @@ describe('loginController', async () => {
           res.body.email.should.equal(psy.email);
           res.body.adeli.should.equal(psy.adeli);
           res.body.active.should.equal(psy.active);
-          res.body.convention.should.eql({
-            isConventionSigned: true,
-            universityName: 'Monster university',
-            universityId,
-          });
+          res.body.convention.should.have.all.keys(
+            'isConventionSigned',
+            'universityName',
+            'universityId',
+          );
+          res.body.convention.isConventionSigned.should.equal(true);
+          res.body.convention.universityName.should.equal('Monster university');
           res.body.address.should.equal(psy.address);
         });
     });
 
     it('should return empty info when psy does not exist', async () => chai
         .request(app)
-        .get('/api/connecteduser')
+        .get('/api/psychologist/connected')
         .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken')}`)
         .then(async (res) => res.body.should.be.empty));
 
     it('should return empty info if user is not connected', async () => chai
         .request(app)
-        .get('/api/connecteduser')
+        .get('/api/psychologist/connected')
         .then(async (res) => res.body.should.be.empty));
 
     it('should return empty info if user does not have csrf', async () => {
       const psy = create.insertOnePsy();
       return chai
         .request(app)
-        .get('/api/connecteduser')
+        .get('/api/psychologist/connected')
         .set('Cookie', `token=${cookie.getJwtTokenForUser((await psy).dossierNumber, 'randomXSRFToken')}`)
         .then(async (res) => res.body.should.be.empty);
     });

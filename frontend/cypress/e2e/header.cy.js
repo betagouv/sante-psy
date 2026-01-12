@@ -5,7 +5,7 @@ const { signConvention } = require('./utils/psychologist');
 describe('Header Test', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/config').as('config');
-    cy.intercept('GET', '/api/connecteduser').as('connectedUser');
+    cy.intercept('GET', '/api/psychologist/connected').as('connectedUser');
     cy.intercept('GET', '/api/statistics').as('statistics');
   });
 
@@ -26,7 +26,7 @@ describe('Header Test', () => {
 
         // Public action is visible and works
         cy.get('[data-test-id="login-button"]').should('be.visible').click();
-        cy.location('pathname').should('eq', '/psychologue/login');
+        cy.location('pathname').should('eq', '/login');
       });
 
       it('should display correct nav items', () => {
@@ -75,7 +75,7 @@ describe('Header Test', () => {
 
           // Public action is visible and works
           cy.get('[data-test-id="login-button"]').should('be.visible').click();
-          cy.location('pathname').should('eq', '/psychologue/login');
+          cy.location('pathname').should('eq', '/login');
         });
       });
 

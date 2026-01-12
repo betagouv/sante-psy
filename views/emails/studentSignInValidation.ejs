@@ -1,0 +1,15 @@
+<%- include('header'); -%>
+  <p>Bonjour ! 👋</p>
+  <p>
+    Vous êtes en cours de création de votre Espace Étudiant sur Santé Psy Étudiant. Veuillez confirmer votre adresse mail.
+  <p>
+    <p>Attention, ce lien est valide une seule fois, pendant 7 jours. Passé ce délai, vous devrez vous réinscrire.</p>
+    <a href="<%= loginUrlWithToken %>" class="loginButton">
+      Confirmer mon email
+    </a>
+  </p>
+  <br/>
+  <p>
+    Si vous recevez ce mail par erreur, ou si le lien ne fonctionne pas, n'hésitez pas à répondre à ce mail, notre équipe de support se fera un plaisir de vous aider.
+  </p>
+<%- include('footer'); -%>

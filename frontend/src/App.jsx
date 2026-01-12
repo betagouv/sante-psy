@@ -31,20 +31,23 @@ import './App.css';
 
 import InactiveProfile from 'components/Psychologist/PsyDashboard/PsySection/InactiveProfile';
 import ActiveProfile from 'components/Psychologist/PsyDashboard/PsySection/ActiveProfile';
-import StudentLanding from 'components/Landing/StudentLanding';
-import StudentAnswer from 'components/StudentAnswer/StudentAnswer';
+import StudentInfoLanding from 'components/Landing/StudentInfoLanding';
+import StudentNewsletterAnswer from 'components/StudentNewsletterAnswer/StudentNewsletterAnswer';
 import OtherServicesPage from 'components/OtherServices/OtherServicesPage';
 import PublicAnnouncement from 'components/Notification/PublicAnnouncement';
 import LiveChat from 'components/LiveChat/LiveChat';
 import ContactForm from 'components/Contact/ContactForm';
 import Podcast from 'components/Podcast/Podcast';
-import StudentUnregister from './components/StudentUnregister/StudentUnregister';
+import StudentSignInStepOne from 'components/Students/StudentSignIn/StudentSignInStepOne';
+import StudentSignInStepTwo from 'components/Students/StudentSignIn/StudentSignInStepTwo';
+import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
+import StudentRouter from './StudentRouter';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
 function App() {
-  const { commonStore: { setConfig }, userStore: { user, pullUser } } = useStore();
+  const { commonStore: { setConfig }, userStore: { user, pullUser, role } } = useStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,6 +55,16 @@ function App() {
     pullUser().finally(() => setLoading(false));
     document.title = 'Santé Psy Étudiant';
   }, []);
+
+  const getAuthenticatedRoute = () => {
+    if (user && role === 'psy') {
+      return <PsychologistRouter />;
+    }
+    if (user && role === 'student') {
+      return <StudentRouter />;
+    }
+    return null;
+  };
 
   return (
     <>
@@ -68,8 +81,8 @@ function App() {
               <Route exact path="/activation/:token" element={<ActiveProfile />} />
               <Route exact path="/suspension/:token" element={<InactiveProfile />} />
               <Route exact path="/psychologue/logout" element={<Logout />} />
-              <Route exact path="/psychologue/login/:token" element={<Login />} />
-              <Route exact path="/psychologue/login/" element={<Login />} />
+              <Route exact path="/login/:token" element={<Login />} />
+              <Route exact path="/login/" element={<Login />} />
               <Route exact path="/trouver-un-psychologue" element={<PsyListing />} />
               <Route exact path="/trouver-un-psychologue/:psyId" element={<PublicPsychologistProfile />} />
               <Route exact path="/mentions-legales" element={<LegalNotice />} />
@@ -83,17 +96,25 @@ function App() {
               <Route exact path="/contact/formulaire" element={<ContactForm />} />
               <Route exact path="/autres-services" element={<OtherServicesPage />} />
               <Route exact path="/podcast" element={<Podcast />} />
-              <Route exact path="/etudiant" element={<StudentLanding />} />
-              <Route exact path="/enregistrement/:id" element={<StudentAnswer />} />
-              <Route exact path="/desinscription/:id" element={<StudentUnregister />} />
+              <Route exact path="/info-etudiant" element={<StudentInfoLanding />} />
+              <Route exact path="/inscription" element={<StudentSignInStepOne />} />
+              <Route exact path="/inscription/:token" element={<StudentSignInStepTwo />} />
+              <Route exact path="/enregistrement/:id" element={<StudentNewsletterAnswer />} />
+              <Route exact path="/desinscription/:id" element={<StudentNewsletterUnregister />} />
               <Route exact path="/eligibilite" element={<StudentEligibility />} />
               <Route exact path="/" element={<Landing />} />
               <Route
                 path="/psychologue/*"
-                element={user
-                  ? <PsychologistRouter /> : <Navigate to="/psychologue/login" />}
+                element={user && role === 'psy' ? <PsychologistRouter /> : <Navigate to="/login" />}
               />
-              <Route path="/*" element={<Navigate to={user ? '/psychologue/tableau-de-bord' : '/'} />} />
+              <Route
+                path="/etudiant/*"
+                element={user && role === 'student' ? <StudentRouter /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/*"
+                element={getAuthenticatedRoute() || <Navigate to="/" replace />}
+              />
             </Routes>
           </React.Suspense>
         )}
