@@ -13,7 +13,7 @@ import StudentPage from 'components/Page/StudentPage';
 const StudentRouter = () => {
   const { userStore: { user, role } } = useStore();
   const location = useLocation();
-  const pathname = location.pathname;
+  const { pathname } = location;
 
   if (!user || role !== 'student') {
     return <Navigate to="/login" replace />;

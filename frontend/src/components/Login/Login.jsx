@@ -56,7 +56,6 @@ const Login = () => {
         .then(async data => {
           setRole(data.role);
           await setXsrfToken(data.xsrfToken);
-
         }).catch(error => {
           setNotification({ message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' }, false);
         });
