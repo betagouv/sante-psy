@@ -1,0 +1,65 @@
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.period {
+  margin-bottom: 1.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+@media (min-width: 48em) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--background-alt-blue-france);
+  border-radius: 4px;
+}
+
+.index {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.date {
+  font-weight: 700;
+  margin: 0;
+}
+
+.psychologist {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.counter {
+  margin-top: 1.5rem;
+  font-weight: 700;
+}
+
+.empty {
+  margin-top: 2rem;
+}
+
+.help {
+  margin-top: 1rem;
+  padding-left: 1.5rem;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
