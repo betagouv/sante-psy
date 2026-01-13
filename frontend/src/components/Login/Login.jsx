@@ -66,7 +66,6 @@ const Login = () => {
       } else if (role === 'student') {
         navigate('/etudiant/mes-seances', { replace: true });
       }
-      return;
     }
   }, [token, xsrfToken, role, user, location.pathname]); // Minimal dependencies
 
