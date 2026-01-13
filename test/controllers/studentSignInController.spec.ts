@@ -25,7 +25,9 @@ describe('signIn', () => {
   const fakeFirstNames = 'Anna';
 
   beforeEach(() => {
-    generateTokenStub = sinon.stub(loginInformations, 'generateToken');
+    generateTokenStub = sinon
+      .stub(loginInformations, 'generateToken')
+      .returns('FAKE_TOKEN');
     studentSignInStub = sinon.stub(dbStudents, 'signIn');
     sendStudentMailStub = sinon.stub(studentMailController, 'default').resolves();
     sendLoginMailStub = sinon.stub(loginController, 'sendStudentLoginEmail').resolves();
@@ -53,7 +55,7 @@ describe('signIn', () => {
             sendStudentMailStub,
             fakeEmail,
             sinon.match.string,
-            sinon.match.string,
+            'FAKE_TOKEN',
             'studentSignInValidation',
             'Étape 2 de votre inscription',
           );
@@ -115,7 +117,7 @@ describe('signIn', () => {
           sendStudentMailStub,
           fakeEmail,
           sinon.match.string,
-          sinon.match.string,
+          'FAKE_TOKEN',
           'studentWelcome',
           'Bienvenue !',
         );
