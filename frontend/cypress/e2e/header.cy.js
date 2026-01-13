@@ -5,7 +5,7 @@ const { signConvention } = require('./utils/psychologist');
 describe('Header Test', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/config').as('config');
-    cy.intercept('GET', '/api/psychologist/connected').as('connectedUser');
+    cy.intercept('GET', '/api/auth/connected').as('connectedUser');
     cy.intercept('GET', '/api/statistics').as('statistics');
   });
 

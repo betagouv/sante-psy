@@ -97,83 +97,6 @@ const deleteToken = (req: Request, res: Response): void => {
   res.json({ });
 };
 
-const connectedPsy = async (req: Request, res: Response): Promise<void> => {
-  const tokenData = cookie.verifyJwt(req, res);
-  if (tokenData && checkXsrf(req, tokenData.xsrfToken)) {
-    const psy = await dbPsychologists.getById(tokenData.psychologist);
-    const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
-
-    if (psy) {
-      const { reason: inactiveReason, until: inactiveUntil } = psy.active
-        ? { reason: undefined, until: undefined }
-        : await dbSuspensions.getByPsychologist(psy.dossierNumber);
-      const {
-        dossierNumber,
-        firstNames,
-        lastName,
-        useFirstNames,
-        useLastName,
-        email,
-        active,
-        adeli,
-        address,
-        otherAddress,
-        hasSeenTutorial,
-        createdAt,
-      } = psy;
-      res.json({
-        dossierNumber,
-        firstNames,
-        lastName,
-        useFirstNames,
-        useLastName,
-        adeli,
-        address,
-        otherAddress,
-        email,
-        convention,
-        active,
-        hasSeenTutorial,
-        createdAt,
-        inactiveReason,
-        inactiveUntil,
-      });
-
-      return;
-    }
-  }
-
-  res.json();
-};
-
-const connectedStudent = async (req: Request, res: Response): Promise<void> => {
-  const tokenData = cookie.verifyJwt(req, res);
-  if (tokenData && checkXsrf(req, tokenData.xsrfToken)) {
-    const student = await dbStudents.getById(tokenData.psychologist);
-
-    if (student) {
-      const {
-        id,
-        firstNames,
-        ine,
-        email,
-        createdAt,
-      } = student;
-      res.json({
-        id,
-        firstNames,
-        ine,
-        email,
-        createdAt,
-      });
-
-      return;
-    }
-  }
-
-  res.json();
-};
-
 const login = async (req: Request, res: Response): Promise<void> => {
   // Save a token that expire after config.sessionDurationHours hours if user is logged
   if (req.body.token) {
@@ -478,8 +401,6 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
 
 export default {
   emailValidators,
-  connectedPsy: asyncHelper(connectedPsy),
-  connectedStudent: asyncHelper(connectedStudent),
   login: asyncHelper(login),
   studentLogin: asyncHelper(studentLogin),
   sendMail: asyncHelper(sendMail),

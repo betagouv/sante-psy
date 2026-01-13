@@ -94,7 +94,6 @@ const Statistics = { getAll: () => client.get('/statistics') };
 const University = { getOne: id => client.get(`/universities/${id}`) };
 
 const Psy = {
-  getConnected: () => clientWithoutErrorManagement.get('/psychologist/connected'),
   login: token => client.post('/psychologist/login', { token }),
   sendMail: email => client.post('/psychologist/sendMail', { email }),
   logout: () => client.post('/logout'),
@@ -105,7 +104,6 @@ const Student = {
   sendStudentSecondStepMail: email => client.post('/student/signInSecondStepMail', { email }),
   verifyStudentToken: token => client.post(`/student/signIn/${token}`),
   sendStudentWelcomeMail: email => client.post('/student/sendWelcomeMail', { email }),
-  getConnected: () => clientWithoutErrorManagement.get('/student/connected'),
 };
 
 const StudentNewsletter = {
