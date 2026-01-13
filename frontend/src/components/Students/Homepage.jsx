@@ -1,36 +1,44 @@
-import React, { useEffect, useRef } from 'react';
-import Slice from 'components/Slice/Slice';
+import React, { useEffect } from 'react';
+import { useStore } from 'stores';
+import { Link } from 'react-router-dom';
+import StudentHistory from './StudentHistory/StudentHistory';
+import styles from './homepage.cssmodule.scss';
 
 const StudentHomepage = () => {
-  const emailRef = useRef();
+  const { userStore: { user, pullUser } } = useStore();
 
   useEffect(() => {
-    document.title = 'Santé Psy Étudiant';
-    // Not set when redirecting
-    if (emailRef.current) {
-      emailRef.current.focus();
-    }
+    pullUser();
   }, []);
 
   return (
-    <div data-test-id="landingPageContainer">
-      <Slice
-        centerTitle
-        centerText
-        title={(
-          <>
-            <b>Étudiantes, étudiants,</b>
-            <br />
-            Bénéficiez de
-            {' '}
-            <b>12 séances gratuites</b>
-            <div>
-              avec un psychologue
-            </div>
-          </>
-        )}
-       />
-    </div>
+    <>
+      <header className={styles.header}>
+        <span className="fr-icon-account-line" aria-hidden="true" />
+        <strong>
+          Bonjour
+          {' '}
+          {user.firstNames}
+        </strong>
+      </header>
+
+      <main className="fr-container">
+        <div className={styles.titleRow}>
+          <h2 className="fr-h4">
+            Mes RDV
+          </h2>
+
+          <Link
+            to="/annuaire"
+            className="fr-btn fr-btn--secondary"
+          >
+            Prendre RDV
+          </Link>
+        </div>
+
+        <StudentHistory />
+      </main>
+    </>
   );
 };
 
