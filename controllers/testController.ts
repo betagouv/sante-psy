@@ -18,7 +18,9 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
     const duration = typeof req.query.duration === 'string' ? req.query.duration : '2h';
 
     const jwtToken = token && !req.query.duration ? token.token : jwt.sign(
-      { userId: psy.dossierNumber, role: 'psy', xsrfToken, psychologist: psy.dossierNumber },
+      {
+        userId: psy.dossierNumber, role: 'psy', xsrfToken, psychologist: psy.dossierNumber,
+      },
       config.secret,
       { expiresIn: duration },
     );
