@@ -6,7 +6,7 @@ describe('Login', () => {
       .as('sendMail');
     // cy.intercept('POST', '/api/auth/login')
     //   .as('login'); // TODO: I dont think we need this one because there is a login utility for cypress
-    cy.intercept('POST', '/api/psychologist/logout')
+    cy.intercept('POST', '/api/logout')
       .as('logout');
     cy.intercept('GET', '/api/auth/connected')
       .as('connectedUser');
