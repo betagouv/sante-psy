@@ -50,7 +50,7 @@ describe('signIn', () => {
             sendStudentMailStub,
             fakeEmail,
             sinon.match.string,
-            sinon.match.string,
+            'FAKE_TOKEN',
             'studentSignInValidation',
             'Étape 2 de votre inscription',
           );
@@ -69,7 +69,7 @@ describe('signIn', () => {
         .end((err, res) => {
           sinon.assert.called(getStudentByEmailStub);
           sinon.assert.called(upsertStudentTokenStub);
-          sinon.assert.called(sendStudentMailStub);
+          sinon.assert.called(sendLoginMailStub); // Existing student gets login email
           res.status.should.equal(200);
           done();
         });
@@ -105,7 +105,7 @@ describe('signIn', () => {
           sendStudentMailStub,
           fakeEmail,
           sinon.match.string,
-          sinon.match.string,
+          'FAKE_TOKEN',
           'studentWelcome',
           'Bienvenue !',
         );

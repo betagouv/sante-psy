@@ -41,16 +41,7 @@ const upsert = async (
     const existing = await getByEmail(email);
 
     if (existing) {
-      await db(loginTokenTable)
-        .where({ email })
-        .update({ token, expiresAt, role });
-
-      return {
-        ...existing,
-        token,
-        expiresAt,
-        role,
-      };
+      await db(loginTokenTable).where({ email }).del();
     }
 
     const [created] = await db(loginTokenTable)
