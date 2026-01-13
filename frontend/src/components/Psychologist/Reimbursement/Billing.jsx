@@ -36,9 +36,9 @@ const Billing = () => {
     const handleFocus = () => {
       setBillingInfo(billingInfoService.get());
     };
-
+    
     window.addEventListener('focus', handleFocus);
-
+    
     return () => {
       window.removeEventListener('focus', handleFocus);
     };
