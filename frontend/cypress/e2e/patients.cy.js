@@ -102,7 +102,7 @@ describe('Patient', () => {
       cy.wait('@etudiant');
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
       cy.get('[data-test-id="etudiant-seances-list"] tr')
-        .should('have.length', 49);
+        .should('have.length', 25);
       cy.get('[data-test-id="etudiant-seances-list"] ul li button')
         .eq(0).click();
       cy.get('[data-test-id="etudiant-seances-list"] tr')
