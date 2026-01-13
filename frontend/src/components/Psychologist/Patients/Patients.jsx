@@ -270,12 +270,12 @@ const Patients = () => {
         colorFamily="blue-cumulus"
       >
         <CalloutText size="md">
-          La date de naissance et le genre des patients sont désormais obligatoires pour pouvoir déclarer des séances.
+          L&apos;email des patients est désormais obligatoire pour pouvoir déclarer des séances.
           {' '}
           <br />
           {' '}
           <br />
-          Si les alertes apparaissent pour d’anciens étudiants, nous admettons que vous ne pouvez pas tout remplir à nouveau.
+          Si les alertes apparaissent pour d&apos;anciens étudiants, nous admettons que vous ne pouvez pas tout remplir à nouveau.
           Vous pourrez les compléter pour les nouveaux étudiants à venir.
         </CalloutText>
       </Callout>

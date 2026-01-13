@@ -33,6 +33,18 @@ const Billing = () => {
   useAppointmentsByDate(setValuesByDate, month, true);
 
   useEffect(() => {
+    const handleFocus = () => {
+      setBillingInfo(billingInfoService.get());
+    };
+
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem('selectedMonth', JSON.stringify(month));
   }, [month]);
 

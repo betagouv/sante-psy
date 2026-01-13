@@ -21,6 +21,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
         firstNames: 'SharedPatient1',
         INE: '12345678910',
         isINESvalid: true,
+        email: 'bonjour@beta.gouv.fr',
         index: [0, 1],
       },
       {
@@ -28,6 +29,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
         firstNames: 'SharedPatient2',
         INE: '280324352792',
         index: [0, 1],
+        email: 'bonsoir@beta.gouv.fr',
         isINESvalid: false,
       },
     ];
@@ -53,6 +55,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
             firstNames: sharedPatient.firstNames,
             INE: sharedPatient.INE,
             isINESvalid: sharedPatient.isINESvalid,
+            email: sharedPatient.email,
           })),
         );
 
@@ -94,7 +97,8 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
             gender?: string,
             dateOfBirth?: Date,
             firstNames?: string,
-            lastName?: string
+            lastName?: string,
+            email?: string
           } = {
             psychologistId: dossierNumber,
           };
@@ -106,6 +110,7 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
               patientData.gender = sharedPatients[randomIndex].gender;
               patientData.firstNames = sharedPatients[randomIndex].firstNames;
               patientData.lastName = sharedPatients[randomIndex].lastName;
+              patientData.email = sharedPatients[randomIndex].email;
               sharedPatients.splice(randomIndex, 1);
             }
           }

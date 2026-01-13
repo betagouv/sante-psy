@@ -25,6 +25,7 @@ const makePatient = async (psychologistId, INE = '12345678901') => {
     gender,
     INE,
     false,
+    'patient@beta.gouv.fr',
     '42',
     false,
     psychologistId,
@@ -203,6 +204,7 @@ describe('patientsController', () => {
           firstNames: 'Ada',
           INE: '12345678901',
           isINESvalid: false,
+          email: 'ada@beta.gouv.fr',
           institutionName: 'test',
           isStudentStatusVerified: undefined,
           dateOfBirth,
@@ -306,6 +308,7 @@ describe('patientsController', () => {
         lastName: 'Nom',
         INE: '1234567890A',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -320,6 +323,7 @@ describe('patientsController', () => {
         // no lastName
         INE: '1234567890A',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -334,6 +338,7 @@ describe('patientsController', () => {
         lastName: 'Nom',
         INE: '1234567890A',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -348,6 +353,7 @@ describe('patientsController', () => {
         lastName: '   ',
         INE: '1234567890A',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -362,6 +368,7 @@ describe('patientsController', () => {
         lastName: 'Nom',
         INE: '1234567890à',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -399,6 +406,7 @@ describe('patientsController', () => {
         lastName: 'Nom',
         INE: '1234567890AA',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -413,6 +421,7 @@ describe('patientsController', () => {
         lastName: 'Nom',
         INE: '123456780AA',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -427,6 +436,7 @@ describe('patientsController', () => {
         lastName: 'Nom',
         INE: '',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -435,12 +445,28 @@ describe('patientsController', () => {
       }, 'Le numéro INE est obligatoire.');
     });
 
+    it('shouldn\'t pass patient without email', (done) => {
+      shouldFailCreatePatientInputValidation(done, {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        INE: '123456790AA',
+        isINESvalid: false,
+        email: undefined,
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        doctorName,
+        dateOfBirth,
+        gender,
+      }, 'Vous devez spécifier un email valide.');
+    });
+
     it('shouldn\'t pass patient without gender', (done) => {
       shouldFailCreatePatientInputValidation(done, {
         firstNames: 'Blou Blou',
         lastName: 'Nom',
         INE: '123456790AA',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -455,6 +481,7 @@ describe('patientsController', () => {
         lastName: 'Nom',
         INE: '1234567890A',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -469,6 +496,7 @@ describe('patientsController', () => {
         lastName: 'Nom',
         INE: '12345678912',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: '',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -489,6 +517,7 @@ describe('patientsController', () => {
         gender,
         INE: '1234567890A',
         isINESvalid: false,
+        email: 'ada@beta.gouv.fr',
         institutionName: 'stuff<script>evil</script>',
         isStudentStatusVerified: undefined,
       };
@@ -512,6 +541,7 @@ describe('patientsController', () => {
             sinon.match('female'),
             sinon.match.string,
             true,
+            sinon.match('ada@beta.gouv.fr'),
             sinon.match('stuff'),
             false,
           ];
@@ -553,6 +583,7 @@ describe('patientsController', () => {
           res.body.institutionName.should.equal(myPatient.institutionName);
           res.body.doctorName.should.equal(myPatient.doctorName);
           res.body.dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
+          res.body.email.should.equal(myPatient.email.toString());
 
           return Promise.resolve();
         });
@@ -622,6 +653,7 @@ describe('patientsController', () => {
       const updatedINE = '1234567890A';
       const updatedLastName = 'Lovelacekkk';
       const updatedFirstName = 'Adakkk';
+      const updatedEmail = 'lovelace@beta.gouv.fr';
       const updatedInstitution = 'polytech';
       return chai.request(app)
         .put(`/api/patients/${patient.id}`)
@@ -632,6 +664,7 @@ describe('patientsController', () => {
           firstNames: updatedFirstName,
           INE: updatedINE,
           isINESvalid: false,
+          email: updatedEmail,
           institutionName: updatedInstitution,
           isStudentStatusVerified: 'isStudentStatusVerified',
           dateOfBirth: updatedDateOfBirth,
@@ -650,6 +683,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].lastName).to.equal(updatedLastName);
           expect(patientsArray[0].firstNames).to.equal(updatedFirstName);
           expect(patientsArray[0].INE).to.equal(updatedINE);
+          expect(patientsArray[0].email).to.equal(updatedEmail);
           expect(patientsArray[0].institutionName).to.equal(updatedInstitution);
           expect(patientsArray[0].isStudentStatusVerified).to.equal(true);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
@@ -676,6 +710,7 @@ describe('patientsController', () => {
           firstNames: patient.firstNames,
           INE: '1234567890A',
           isINESvalid: false,
+          email: patient.email,
           institutionName: '',
           isStudentStatusVerified: false,
           doctorName: '',
@@ -691,6 +726,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].lastName).to.equal(patient.lastName);
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames);
           expect(patientsArray[0].INE).to.equal('1234567890A');
+          expect(patientsArray[0].email).to.equal(patient.email);
           expect(patientsArray[0].institutionName).to.equal('');
           expect(patientsArray[0].isStudentStatusVerified).to.equal(false);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
@@ -718,6 +754,7 @@ describe('patientsController', () => {
           lastName: 'Lovelacekkk',
           firstNames: 'Adakkk',
           INE: '1234567890A',
+          email: 'email@email.com',
           isINESvalid: false,
           institutionName: 'Grande ecole',
           isStudentStatusVerified: 'isStudentStatusVerified',
@@ -736,6 +773,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].lastName).to.equal(patient.lastName);
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames);
           expect(patientsArray[0].INE).to.equal(patient.INE);
+          expect(patientsArray[0].email).to.equal(patient.email);
           expect(patientsArray[0].institutionName).to.equal(patient.institutionName);
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
@@ -761,6 +799,7 @@ describe('patientsController', () => {
           firstNames: 'Adakkk',
           INE: '1234567890A',
           isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
           institutionName: 'Petite ecole',
           isStudentStatusVerified: 'isStudentStatusVerified',
           dateOfBirth,
@@ -776,6 +815,7 @@ describe('patientsController', () => {
           expect(patientsArray[0].lastName).to.equal(patient.lastName);
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames);
           expect(patientsArray[0].INE).to.equal(patient.INE);
+          expect(patientsArray[0].email).to.equal(patient.email);
           expect(patientsArray[0].institutionName).to.equal(patient.institutionName);
           expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
@@ -831,6 +871,7 @@ describe('patientsController', () => {
           lastName: 'Nom',
           INE: '1234567890A',
           isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -851,6 +892,7 @@ describe('patientsController', () => {
           // no lastName
           INE: '1234567890A',
           isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -871,6 +913,7 @@ describe('patientsController', () => {
           lastName: 'Nom',
           INE: '1234567890A',
           isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -891,6 +934,7 @@ describe('patientsController', () => {
           lastName: '   ',
           INE: '1234567890A',
           isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -911,6 +955,7 @@ describe('patientsController', () => {
           lastName: 'Nom',
           INE: '1234567890à',
           isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -931,6 +976,7 @@ describe('patientsController', () => {
           lastName: 'Nom',
           INE: '1'.repeat(12),
           isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -950,6 +996,7 @@ describe('patientsController', () => {
           lastName: 'Nom',
           INE: '12345678901',
           isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -970,6 +1017,7 @@ describe('patientsController', () => {
           lastName: 'Nom',
           INE: '1234567890A',
           isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -990,6 +1038,7 @@ describe('patientsController', () => {
           lastName: 'Nom',
           INE: '1234567890A',
           isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -1010,6 +1059,7 @@ describe('patientsController', () => {
           lastName: 'Nom',
           INE: '1234567890A',
           isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
           institutionName: '42',
           isStudentStatusVerified: undefined,
           doctorName,
@@ -1048,6 +1098,7 @@ describe('patientsController', () => {
         lastName: 'Nom',
         INE: '1234567890A',
         isINESvalid: false,
+        email: 'lovelace@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -1063,6 +1114,7 @@ describe('patientsController', () => {
         lastName: 'Nom',
         INE: '1234567890AA',
         isINESvalid: false,
+        email: 'lovelace@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
@@ -1079,10 +1131,41 @@ describe('patientsController', () => {
         gender,
         INE: '',
         isINESvalid: false,
+        email: 'lovelace@beta.gouv.fr',
         institutionName: '42',
         isStudentStatusVerified: undefined,
         doctorName,
       }, 'Le numéro INE est obligatoire.');
+    });
+
+    it('should not pass validation when email is missing', (done) => {
+      shouldFailUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        dateOfBirth,
+        gender,
+        INE: '12345678912',
+        isINESvalid: false,
+        email: '',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        doctorName,
+      }, 'Vous devez spécifier un email valide.');
+    });
+
+    it('should not pass validation when email is invalid format', (done) => {
+      shouldFailUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
+        firstNames: 'Blou Blou',
+        lastName: 'Nom',
+        dateOfBirth,
+        gender,
+        INE: '12345678912',
+        isINESvalid: false,
+        email: 'bloublou@',
+        institutionName: '42',
+        isStudentStatusVerified: undefined,
+        doctorName,
+      }, 'Email invalide.');
     });
 
     it('should pass validation if doctor name is missing', (done) => {
@@ -1091,6 +1174,7 @@ describe('patientsController', () => {
         lastName: 'Nom',
         INE: '1234567890A',
         isINESvalid: false,
+        email: 'lovelace@beta.gouv.fr',
         dateOfBirth,
         gender,
         institutionName: '42',

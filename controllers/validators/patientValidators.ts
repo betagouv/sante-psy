@@ -26,6 +26,12 @@ export const patientValidators = [
     .customSanitizer(purifySanitizer)
     .isIn(allGenders)
     .withMessage('Le genre du patient n\'est pas valide.'),
+  check('email')
+    .trim().not().isEmpty()
+    .withMessage('Vous devez spécifier un email valide.')
+    .isEmail()
+    .customSanitizer(purifySanitizer)
+    .withMessage('Email invalide.'),
   check('INE')
     .trim().not().isEmpty()
     .withMessage('Le numéro INE est obligatoire.')
