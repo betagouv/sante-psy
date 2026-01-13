@@ -14,7 +14,7 @@ describe('ConventionModal', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/config')
       .as('config');
-    cy.intercept('GET', '/api/psychologist/connected')
+    cy.intercept('GET', '/api/auth/connected')
       .as('user');
     cy.intercept({
       method: 'GET',

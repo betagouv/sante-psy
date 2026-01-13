@@ -8,7 +8,7 @@ describe('Login', () => {
     //   .as('login'); // TODO: I dont think we need this one because there is a login utility for cypress
     cy.intercept('POST', '/api/psychologist/logout')
       .as('logout');
-    cy.intercept('GET', '/api/psychologist/connected')
+    cy.intercept('GET', '/api/auth/connected')
       .as('connectedUser');
   });
 
