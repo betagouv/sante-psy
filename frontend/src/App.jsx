@@ -51,8 +51,6 @@ function App() {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
-  console.log('🏠 App render - location:', location.pathname, 'user:', !!user, 'role:', role, 'loading:', loading);
-
   useEffect(() => {
     agent.Config.get().then(response => setConfig(response.data));
 

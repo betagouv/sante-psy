@@ -11,11 +11,13 @@ import './custom-date-picker.css';
 import StudentPage from 'components/Page/StudentPage';
 
 const StudentRouter = () => {
-  const { userStore: { user, role } } = useStore();
+  const { userStore: { user, role, xsrfToken } } = useStore();
   const location = useLocation();
   const { pathname } = location;
 
-  if (!user || role !== 'student') {
+  // Security guard - redirect to login if not authenticated as student
+  // Check xsrfToken OR user to handle async loading (xsrfToken loads sync from localStorage)
+  if ((!user && !xsrfToken) || (role && role !== 'student')) {
     return <Navigate to="/login" replace />;
   }
 

@@ -21,6 +21,7 @@ const getByEmail = async (email: string): Promise<LoginToken> => {
   try {
     const result = await db(loginTokenTable)
     .where('email', email)
+    .andWhere('expiresAt', '>', date.now())
     .first();
 
     return result || null;
@@ -84,9 +85,23 @@ const deleteOne = async (token: string): Promise<void> => {
   }
 };
 
+const deleteByEmail = async (email: string): Promise<void> => {
+  try {
+    await db(loginTokenTable)
+      .where({ email })
+      .del();
+
+    console.log(`Login token deleted for email: ${email}`);
+  } catch (err) {
+    console.error(`Erreur de suppression du token par email : ${err}`);
+    throw new Error('Erreur de suppression du token');
+  }
+};
+
 export default {
   getByToken,
   getByEmail,
   upsert,
   delete: deleteOne,
+  deleteByEmail,
 };

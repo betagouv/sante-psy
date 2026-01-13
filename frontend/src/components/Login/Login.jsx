@@ -16,7 +16,7 @@ import styles from './login.cssmodule.scss';
 const Login = () => {
   const {
     commonStore: { config, setNotification },
-    userStore: { setXsrfToken, role, setRole, user },
+    userStore: { setXsrfToken, role, setRole, user, xsrfToken, pullUser },
   } = useStore();
 
   const emailRef = useRef();
@@ -28,21 +28,6 @@ const Login = () => {
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    const isOnLoginPage = location.pathname === '/login' || location.pathname.startsWith('/login/');
-
-    if (isOnLoginPage && !token && user && role) {
-      if (role === 'psy') {
-        navigate('/psychologue/tableau-de-bord', { replace: true });
-      } else if (role === 'student') {
-        navigate('/etudiant/mes-seances', { replace: true });
-      } else {
-        console.warn('Unknown role, logging out:', role);
-        navigate('/logout', { replace: true });
-      }
-    }
-  }, [token, user, role, navigate, location]);
-
-  useEffect(() => {
     // Not set when redirecting
     if (emailRef.current) {
       emailRef.current.focus();
@@ -50,37 +35,50 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    if (token && !loginCalled.current) {
+    const isOnLoginPage = location.pathname === '/login' || location.pathname.startsWith('/login/');
+    const isLoginWithToken = location.pathname.startsWith('/login/') && token;
+
+    // Case 1: Login with token from email link (always login when token is in URL)
+    if (isLoginWithToken && !loginCalled.current) {
       loginCalled.current = true;
       agent.Auth.login(token)
         .then(async data => {
           setRole(data.role);
           await setXsrfToken(data.xsrfToken);
-        }).catch(error => {
-          setNotification({ message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' }, false);
+          // After login, load user then redirect
+          return pullUser();
+        })
+        .then(() => {
+          loginCalled.current = false;
+        })
+        .catch(error => {
+          console.error('Login failed:', error.response?.data || error);
+          setNotification({ message: error.response?.data?.message || 'Une erreur est survenue lors de la connexion.', type: 'error' }, false);
+          loginCalled.current = false; // Allow retry
         });
+      return;
     }
-  }, [token, setRole, setXsrfToken, setNotification]);
 
-  useEffect(() => {
-    if (!token || loginCalled.current === false) {
+    // Case 2: Already connected with user loaded, on /login page -> redirect immediately
+    if (isOnLoginPage && xsrfToken && role && user) {
+      if (role === 'psy') {
+        navigate('/psychologue/tableau-de-bord', { replace: true });
+      } else if (role === 'student') {
+        navigate('/etudiant/mes-seances', { replace: true });
+      }
       return;
     }
-    if (!role) {
-      return;
-    }
-    if (role === 'psy') {
-      navigate('/psychologue');
-    }
-    if (role === 'student') {
-      navigate('/etudiant');
-    }
-  }, [role, token, navigate]);
+  }, [token, xsrfToken, role, user, location.pathname]); // Minimal dependencies
 
   const loginUser = e => {
     e.preventDefault();
     agent.Auth.sendLoginMail(email).then(setNotification);
   };
+
+  // If user already has valid session and on /login (not /login/TOKEN), don't render login form
+  if (xsrfToken && role && user && !token) {
+    return null;
+  }
 
   return (
     <Page

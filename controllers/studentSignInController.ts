@@ -16,15 +16,14 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
   try {
     const { email } = req.body;
     const existingStudent = await db(studentsTable).where({ email }).first();
-    const existingToken = await dbLoginToken.getByEmail(email);
-    const token = existingToken?.token || loginInformations.generateToken(32);
+    const token = loginInformations.generateToken(32);
     const isNewStudent = !existingStudent;
 
     const expiresAt = isNewStudent
       ? date.getDatePlusSevenDays()
       : date.getDatePlusTwoHours();
 
-    await dbLoginToken.upsert(token, email, expiresAt);
+    await dbLoginToken.upsert(token, email, expiresAt, 'student');
 
     if (isNewStudent) {
       await sendStudentMailTemplate(
@@ -53,12 +52,11 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
 
 const sendWelcomeMail = async (email): Promise<void> => {
   try {
-    const existingToken = await dbLoginToken.getByEmail(email);
     const loginUrl = loginInformations.generateLoginUrl();
-    const token = existingToken ? existingToken.token : loginInformations.generateToken(32);
+    const token = loginInformations.generateToken(32);
     const expiresAt = date.getDatePlusTwoHours();
 
-    await dbLoginToken.upsert(token, email, expiresAt);
+    await dbLoginToken.upsert(token, email, expiresAt, 'student');
     await sendStudentMailTemplate(
       email,
       loginUrl,
@@ -105,11 +103,10 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       await sendWelcomeMail(email);
     }
     if (result.status === 'alreadyRegistered') {
-      const existingToken = await dbLoginToken.getByEmail(email);
-      const token = existingToken?.token || loginInformations.generateToken(32);
+      const token = loginInformations.generateToken(32);
       const expiresAt = date.getDatePlusTwoHours();
 
-      await dbLoginToken.upsert(token, email, expiresAt);
+      await dbLoginToken.upsert(token, email, expiresAt, 'student');
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),
