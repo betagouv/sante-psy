@@ -180,8 +180,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
     );
   }
 
-  const existingToken = await dbLoginToken.getByEmail(email);
-  const token = existingToken ? existingToken.token : loginInformations.generateToken(32);
+  const token = loginInformations.generateToken(32);
   const loginUrl = loginInformations.generateLoginUrl();
   await sendPsyLoginEmail(email, loginUrl, token);
   await savePsyToken(email, token);

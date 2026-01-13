@@ -56,7 +56,6 @@ export default class UserStore {
   async pullUser() {
     return agent.Auth.getConnected()
       .then(user => {
-        console.log(user);
         this.user = user.data.user;
         this.role = user.data.role;
       });
