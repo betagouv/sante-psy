@@ -1,5 +1,5 @@
 import sinon from 'sinon';
-import chai from 'chai';
+import chai, { expect } from 'chai';
 import { v4 as uuidv4 } from 'uuid';
 import app from '../../index';
 
@@ -313,8 +313,8 @@ describe('psyLoginController', async () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken', 'psy')}`)
         .then(async (res) => {
           res.body.should.have.all.keys('role', 'user');
-          res.body.role.should.be.null;
-          res.body.user.should.be.null;
+          expect(res.body.role).to.be.null;
+          expect(res.body.user).to.be.null;
         }));
 
     it('should return empty info if user is not connected', async () => chai
@@ -322,8 +322,8 @@ describe('psyLoginController', async () => {
         .get('/api/auth/connected')
         .then(async (res) => {
           res.body.should.have.all.keys('role', 'user');
-          res.body.role.should.be.null;
-          res.body.user.should.be.null;
+          expect(res.body.role).to.be.null;
+          expect(res.body.user).to.be.null;
         }));
 
     it('should return empty info if user does not have csrf', async () => {
@@ -334,8 +334,8 @@ describe('psyLoginController', async () => {
         .set('Cookie', `token=${cookie.getJwtTokenForUser((await psy).dossierNumber, 'randomXSRFToken', 'psy')}`)
         .then(async (res) => {
           res.body.should.have.all.keys('role', 'user');
-          res.body.role.should.be.null;
-          res.body.user.should.be.null;
+          expect(res.body.role).to.be.null;
+          expect(res.body.user).to.be.null;
         });
     });
   });
