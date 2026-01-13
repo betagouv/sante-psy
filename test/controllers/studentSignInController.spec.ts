@@ -6,10 +6,12 @@ import dbStudents from '../../db/students';
 import dbLoginToken from '../../db/loginToken';
 import * as studentMailController from '../../services/sendStudentMailTemplate';
 import loginController from '../../controllers/loginController';
+import loginInformations from '../../services/loginInformations';
 
 chai.should();
 
 describe('signIn', () => {
+  let generateTokenStub;
   let studentSignInStub;
   let sendStudentMailStub;
   let getStudentByMailStub;
@@ -23,6 +25,9 @@ describe('signIn', () => {
   const fakeFirstNames = 'Anna';
 
   beforeEach(() => {
+    generateTokenStub = sinon
+      .stub(loginInformations, 'generateToken')
+      .returns('FAKE_TOKEN');
     studentSignInStub = sinon.stub(dbStudents, 'signIn');
     sendStudentMailStub = sinon.stub(studentMailController, 'default').resolves();
     sendLoginMailStub = sinon.stub(loginController, 'sendStudentLoginEmail').resolves();
@@ -50,7 +55,7 @@ describe('signIn', () => {
             sendStudentMailStub,
             fakeEmail,
             sinon.match.string,
-            sinon.match.string,
+            'FAKE_TOKEN',
             'studentSignInValidation',
             'Étape 2 de votre inscription',
           );
@@ -59,18 +64,25 @@ describe('signIn', () => {
         });
     });
 
-    it('should upsert token if token already exists', (done) => {
-      getStudentByMailStub.resolves({ token: 'ABC' });
+    it('should delete old token and create a new one', (done) => {
+      getStudentByMailStub.resolves({ token: 'OLD_TOKEN' });
+
+      generateTokenStub.returns('NEW_TOKEN');
 
       chai
         .request(app)
         .post(routeSecondStep)
         .send({ email: fakeEmail })
-        .end((err, res) => {
-          sinon.assert.called(getStudentByMailStub);
-          sinon.assert.called(upsertStudentTokenStub);
-          sinon.assert.called(sendStudentMailStub);
-          res.status.should.equal(200);
+        .end(() => {
+          sinon.assert.calledOnce(upsertStudentTokenStub);
+
+          sinon.assert.calledWith(
+            upsertStudentTokenStub,
+            'NEW_TOKEN',
+            fakeEmail,
+            sinon.match.date,
+          );
+
           done();
         });
     });
@@ -105,7 +117,7 @@ describe('signIn', () => {
           sendStudentMailStub,
           fakeEmail,
           sinon.match.string,
-          sinon.match.string,
+          'FAKE_TOKEN',
           'studentWelcome',
           'Bienvenue !',
         );
