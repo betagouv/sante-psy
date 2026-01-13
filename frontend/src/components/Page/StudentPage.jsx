@@ -4,20 +4,52 @@ import classNames from 'classnames';
 
 import FaqSection from 'components/Page/FaqSection';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
+import { Breadcrumb, BreadcrumbItem } from '@dataesr/react-dsfr';
 import styles from './studentPage.cssmodule.scss';
+
+const getNodeText = node => {
+  if (['string', 'number'].includes(typeof node)) {
+    return node;
+  }
+  if (node instanceof Array) {
+    return node.map(getNodeText).join('');
+  }
+  if (typeof node === 'object' && node) {
+    return getNodeText(node.props.children);
+  }
+  return '';
+};
 
 const StudentPage = ({
   title,
   children,
   className,
   dataTestId = null,
+  breadCrumbs,
+  currentBreadCrumb,
 }) => {
   useEffect(() => {
     if (title) {
-      document.title = `${title} - Santé Psy Étudiant`;
+      document.title = `${getNodeText(title)} - Santé Psy Étudiant`;
     }
   }, [title]);
+
+  const breadCrumbsComponent = breadCrumbs ? (
+    <Breadcrumb className={styles.breadCrumbs}>
+      {breadCrumbs.map(breadCrumb => (
+        <BreadcrumbItem
+          key={breadCrumb.label}
+          asLink={<Link to={breadCrumb.href} />}
+        >
+          {breadCrumb.label}
+        </BreadcrumbItem>
+      ))}
+      <BreadcrumbItem className={styles.currentBreadCrumb}>
+        {currentBreadCrumb || getNodeText(title)}
+      </BreadcrumbItem>
+    </Breadcrumb>
+  ) : null;
 
   return (
     <>
@@ -25,14 +57,14 @@ const StudentPage = ({
         <nav
           className={styles.menu}
           aria-label="Menu principal étudiant"
-    >
+        >
           <ul className={styles.menuList}>
             <li>
               <NavLink
-                to="/etudiant/accueil"
+                to="/etudiant/mes-seances"
                 className={({ isActive }) => (isActive ? styles.activeLink : undefined)}
-          >
-                Accueil
+              >
+                Mes séances
               </NavLink>
             </li>
             <li>
@@ -48,6 +80,12 @@ const StudentPage = ({
           </ul>
         </nav>
       </div>
+      {breadCrumbsComponent}
+      {title && (
+        <div className={styles.titleContainer}>
+          <h1 className={styles.title}>{title}</h1>
+        </div>
+      )}
       <div
         className={classNames(styles.background, className)}
         data-test-id={dataTestId}

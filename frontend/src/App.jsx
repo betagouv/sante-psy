@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
@@ -49,22 +49,23 @@ const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 function App() {
   const { commonStore: { setConfig }, userStore: { user, pullUser, role } } = useStore();
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
+
+  console.log('🏠 App render - location:', location.pathname, 'user:', !!user, 'role:', role, 'loading:', loading);
 
   useEffect(() => {
     agent.Config.get().then(response => setConfig(response.data));
-    pullUser().finally(() => setLoading(false));
+
+    const isLoginWithToken = location.pathname.startsWith('/login/');
+
+    if (!isLoginWithToken) {
+      pullUser().finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+
     document.title = 'Santé Psy Étudiant';
   }, []);
-
-  const getAuthenticatedRoute = () => {
-    if (user && role === 'psy') {
-      return <PsychologistRouter />;
-    }
-    if (user && role === 'student') {
-      return <StudentRouter />;
-    }
-    return null;
-  };
 
   return (
     <>
@@ -80,7 +81,7 @@ function App() {
             <Routes>
               <Route exact path="/activation/:token" element={<ActiveProfile />} />
               <Route exact path="/suspension/:token" element={<InactiveProfile />} />
-              <Route exact path="/psychologue/logout" element={<Logout />} />
+              <Route exact path="/logout" element={<Logout />} />
               <Route exact path="/login/:token" element={<Login />} />
               <Route exact path="/login/" element={<Login />} />
               <Route exact path="/trouver-un-psychologue" element={<PsyListing />} />
@@ -113,7 +114,7 @@ function App() {
               />
               <Route
                 path="/*"
-                element={getAuthenticatedRoute() || <Navigate to="/" replace />}
+                element={<Navigate to="/" replace />}
               />
             </Routes>
           </React.Suspense>

@@ -1,10 +1,13 @@
 export type LoginToken = {
     token: string,
     email: string,
-    expiresAt: Date
+    expiresAt: Date,
+    role: 'psy' | 'student'
 }
 
 export type psyJWT = {
-    psychologist: string,
-    xsrfToken: string
+    psychologist?: string, // old JWT format
+    userId?: string,
+    xsrfToken: string,
+    role?: 'psy' | 'student'
 }

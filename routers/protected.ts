@@ -5,6 +5,7 @@ import psychologistRouter from './psychologist';
 import patientsRouter from './patients';
 import universitiesRouter from './universities';
 import appointmentsRouter from './appointments';
+import studentsRouter from './students';
 
 import xsrfProtection from '../middlewares/xsrfProtection';
 import refreshToken from '../middlewares/refreshToken';
@@ -29,11 +30,12 @@ router.use(expressjwt({
 router.use(xsrfProtection);
 router.use(refreshToken);
 
-router.post('/psychologist/logout', loginController.deleteToken);
+router.post('/logout', loginController.deleteToken);
 
 router.use('/appointments', appointmentsRouter);
 router.use('/patients', patientsRouter);
 router.use('/universities', universitiesRouter);
 router.use('/psychologist/:psyId', access.checkPsyParam, psychologistRouter);
+router.use('/student/:studentId', access.checkStudentParam, studentsRouter);
 
 export default router;

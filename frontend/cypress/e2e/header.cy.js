@@ -5,7 +5,7 @@ const { signConvention } = require('./utils/psychologist');
 describe('Header Test', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/config').as('config');
-    cy.intercept('GET', '/api/psychologist/connected').as('connectedUser');
+    cy.intercept('GET', '/api/auth/connected').as('connectedUser');
     cy.intercept('GET', '/api/statistics').as('statistics');
   });
 
@@ -124,7 +124,7 @@ describe('Header Test', () => {
         method: 'GET',
         pathname: '/api/appointments',
       }).as('appointments');
-      cy.intercept('POST', '/api/psychologist/logout').as('logout');
+      cy.intercept('POST', '/api/logout').as('logout');
 
       resetDB();
       loginAsDefault().then(() => signConvention(true));

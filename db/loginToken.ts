@@ -34,6 +34,7 @@ const upsert = async (
   token: string,
   email: string,
   expiresAt: Date,
+  role: 'psy' | 'student' = 'psy',
 ): Promise<LoginToken> => {
   try {
     const existing = await getByEmail(email);
@@ -41,17 +42,20 @@ const upsert = async (
     if (existing) {
       await db(loginTokenTable)
         .where({ email })
-        .update({ token, expiresAt });
+        .update({ token, expiresAt, role });
 
       return {
         ...existing,
         token,
         expiresAt,
+        role,
       };
     }
 
     const [created] = await db(loginTokenTable)
-      .insert({ token, email, expiresAt })
+      .insert({
+        token, email, expiresAt, role,
+      })
       .returning('*');
 
     return created;

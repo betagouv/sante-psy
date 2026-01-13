@@ -53,7 +53,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .post('/api/appointments')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: patient.id,
@@ -79,7 +79,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .post('/api/appointments')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: patient.id,
@@ -129,7 +129,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .post('/api/appointments')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: patient.id,
@@ -156,7 +156,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .post('/api/appointments')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: patient.id,
@@ -197,7 +197,7 @@ describe('appointmentsController', () => {
     it('should refuse invalid patientId', (done) => {
       chai.request(app)
         .post('/api/appointments')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: 'not-a-uuid',
@@ -216,7 +216,7 @@ describe('appointmentsController', () => {
     it('should refuse empty patientId', (done) => {
       chai.request(app)
         .post('/api/appointments')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           // no patientId
@@ -239,7 +239,7 @@ describe('appointmentsController', () => {
       };
       chai.request(app)
         .post('/api/appointments')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
@@ -258,7 +258,7 @@ describe('appointmentsController', () => {
     it('should refuse empty date', (done) => {
       chai.request(app)
         .post('/api/appointments')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser('prenom.nom@beta.gouv.fr', 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: '052d3a16-7042-4f93-9fc0-2049e5fdae79',
@@ -322,7 +322,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .delete(`/api/appointments/${appointment.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(200);
@@ -345,7 +345,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .delete(`/api/appointments/${appointment.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(404);
@@ -368,7 +368,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .delete(`/api/appointments/${appointment.id}4`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(400);
@@ -411,7 +411,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
         .delete('/api/appointments')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(404);
@@ -465,7 +465,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(1);
@@ -484,7 +484,7 @@ describe('appointmentsController', () => {
       return chai.request(app)
       .get('/api/appointments')
       .query({ isBillingPurposes: true })
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(2);
@@ -503,7 +503,7 @@ describe('appointmentsController', () => {
       return chai.request(app)
       .get('/api/appointments')
       .query({ isBillingPurposes: true })
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(1);
@@ -531,7 +531,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(8);
@@ -558,7 +558,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(8);
@@ -585,7 +585,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(10);
@@ -622,7 +622,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(7);
@@ -667,7 +667,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get(`/api/appointments/${dbPatient1.id}`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         const patientAppointments = res.body['2023-2024'];
@@ -707,7 +707,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get(`/api/appointments/${dbPatient1.id}`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         const patientAppointments1 = res.body['2023-2024'];
@@ -728,7 +728,7 @@ describe('appointmentsController', () => {
       return chai.request(app)
       .get('/api/appointments')
       .query({ isBillingPurposes: true })
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(1);
@@ -755,7 +755,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(11);
@@ -793,7 +793,7 @@ describe('appointmentsController', () => {
 
       return chai.request(app)
       .get('/api/appointments')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
       .then(async (res) => {
         expect(res.body).to.have.length(14);
