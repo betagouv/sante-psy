@@ -20,7 +20,7 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
     const isNewStudent = !existingStudent;
 
     const expiresAt = isNewStudent
-      ? date.getDatePlusSevenDays()
+      ? date.getDatePlusFourtyEightHours()
       : date.getDatePlusTwoHours();
 
     await dbLoginToken.upsert(token, email, expiresAt);

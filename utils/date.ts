@@ -50,9 +50,9 @@ const getDatePlusTwoHours = (): Date => {
   return new Date(expirationDate.setHours(expirationDate.getHours() + 2));
 };
 
-const getDatePlusSevenDays = (): Date => {
+const getDatePlusFourtyEightHours = (): Date => {
   const expirationDate = new Date();
-  return new Date(expirationDate.setDate(expirationDate.getDate() + 7));
+  return new Date(expirationDate.setHours(expirationDate.getHours() + 48));
 };
 
 const getUTCDate = (date: Date) : Date => new Date(Date.UTC(
@@ -76,7 +76,7 @@ export default {
   formatFrenchDate: dateFormatter.format,
   getDatePlusOneHour,
   getDatePlusTwoHours,
-  getDatePlusSevenDays,
+  getDatePlusFourtyEightHours,
   getUTCDate,
   toFormatDDMMYYYY,
   parseForm,
