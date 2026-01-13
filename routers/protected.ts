@@ -14,6 +14,7 @@ import loginController from '../controllers/loginController';
 
 import access from '../utils/access';
 import config from '../utils/config';
+import studentsController from '../controllers/studentsController';
 
 const router = express.Router();
 
@@ -37,5 +38,7 @@ router.use('/patients', patientsRouter);
 router.use('/universities', universitiesRouter);
 router.use('/psychologist/:psyId', access.checkPsyParam, psychologistRouter);
 router.use('/student/:studentId', access.checkStudentParam, studentsRouter);
+
+router.use('/student/:studentId/appointments', access.checkStudentParam, studentsController.getStudentAppointments);
 
 export default router;
