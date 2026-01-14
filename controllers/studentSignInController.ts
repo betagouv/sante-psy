@@ -17,27 +17,26 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
     const { email } = req.body;
     const existingStudent = await db(studentsTable).where({ email }).first();
     const token = loginInformations.generateToken(32);
-    const isNewStudent = !existingStudent;
 
-    const expiresAt = isNewStudent
-      ? date.getDatePlusFourtyEightHours()
-      : date.getDatePlusTwoHours();
+    const expiresAt = existingStudent
+      ? date.getDatePlusTwoHours()
+      : date.getDatePlusFourtyEightHours();
 
     await dbLoginToken.upsert(token, email, expiresAt);
 
-    if (isNewStudent) {
+    if (existingStudent) {
+      await loginController.sendStudentLoginEmail(
+        email,
+        loginInformations.generateLoginUrl(),
+        token,
+      );
+    } else {
       await sendStudentMailTemplate(
         email,
         loginInformations.generateStudentSignInStepTwoUrl(),
         token,
         'studentSignInValidation',
         'Étape 2 de votre inscription',
-      );
-    } else {
-      await loginController.sendStudentLoginEmail(
-        email,
-        loginInformations.generateLoginUrl(),
-        token,
       );
     }
 
