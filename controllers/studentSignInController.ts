@@ -101,6 +101,9 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     const result = await dbStudents.signIn(email, ine, firstNames);
     if (result.status === 'created') {
       await sendWelcomeMail(email);
+      res.status(200).json({
+        message: 'Un email vous a été envoyé.',
+      });
     }
     if (result.status === 'alreadyRegistered') {
       const token = loginInformations.generateToken(32);
@@ -112,16 +115,18 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         loginInformations.generateLoginUrl(),
         token,
       );
+      res.status(200).json({
+        message: 'Un email vous a été envoyé.',
+      });
     }
-
-    res.status(200).json({
-      message: 'Si un compte existe, un email vous a été envoyé.',
+    res.status(400).json({
+      message: 'Inscription non autorisée.',
     });
   } catch (err) {
     console.error(err);
 
-    res.status(200).json({
-      message: 'Si un compte existe, un email vous a été envoyé.',
+    res.status(400).json({
+      message: 'Inscription non autorisée.',
     });
   }
 };
