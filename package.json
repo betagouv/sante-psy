@@ -2,8 +2,8 @@
   "name": "sante-psy",
   "version": "1.0.0",
   "engines": {
-    "node": "18",
-    "pnpm": "10"
+    "node": ">=18 <19",
+    "pnpm": ">=10"
   },
   "description": "Accompagnement Psychologique pour les étudiants",
   "main": "index.ts",
@@ -25,12 +25,12 @@
     "start": "node dist/index.js",
     "test": "pnpm run test:backend && pnpm run test:frontend",
     "test:backend": "set TEST_ENVIRONMENT=true && ts-mocha --require @babel/register --exit test/** test/**/*",
-    "test:frontend": "pnpm --prefix frontend run test",
+    "test:frontend": "pnpm --filter frontend run test",
     "test:ci": "wait-on --timeout 60000 https://api-annuaire-sante.herokuapp.com/annuaire/annuaire.json?Identification+nationale+PP__in=0 && pnpm run test",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
-    "scalingo-prebuild": "pnpm --prefix frontend run scalingo-prebuild",
-    "scalingo-postbuild": "pnpm --prefix frontend run scalingo-postbuild && pnpm run postbuild",
+    "scalingo-prebuild": "pnpm --filter frontend run scalingo-prebuild",
+    "scalingo-postbuild": "pnpm --filter frontend run scalingo-postbuild && pnpm run postbuild",
     "postbuild": "tsc && cp -a frontend/dist dist/frontend"
   },
   "repository": {
@@ -114,5 +114,5 @@
     "ts-mocha": "^10.0.0",
     "ts-node-dev": "^2.0.0"
   },
-  "packageManager": "pnpm@10.0.0"
+  "packageManager": "pnpm@10.26.1"
 }

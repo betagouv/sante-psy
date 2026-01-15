@@ -1,0 +1,11 @@
+packages: []
+
+minimumReleaseAge: 10080 # wait for a 7 days (in minutes) cooldown period
+
+trustPolicy: no-downgrade
+
+onlyBuiltDependencies: 
+  - "@parcel/watcher"
+  - core-js-pure
+  - cypress
+  - less

@@ -2,6 +2,10 @@
   "name": "react-starter",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18 <19",
+    "pnpm": ">=10"
+  },
   "dependencies": {
     "@dataesr/react-dsfr": "^3.10.0",
     "@gouvfr/dsfr": "^1.13.0",
@@ -101,12 +105,5 @@
     "cy:run": "wait-on http://localhost:3000 && wait-on http-get://localhost:8080/api/config && cypress run",
     "cy:ci": "wait-on --timeout 30000  http-get://localhost:8080/api/config && CYPRESS_BASE_URL=http://localhost:8080/ cypress run --browser chrome"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "core-js-pure",
-      "cypress",
-      "less"
-    ]
-  }
+  "packageManager": "pnpm@10.26.1"
 }
