@@ -1,14 +1,16 @@
-FROM node:24-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
 RUN corepack enable \
- && corepack prepare pnpm@10.0.0 --activate
+ && corepack prepare pnpm@10.26.1 --activate
 
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
-
-COPY . .
+COPY . /app
 
 EXPOSE 3000
-CMD ["pnpm", "run", "dev"]
+
+# Set CI=true to allow pnpm to remove modules without TTY
+ENV CI=true
+
+RUN pnpm install --frozen-lockfile
+

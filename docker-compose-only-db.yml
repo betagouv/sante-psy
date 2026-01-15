@@ -2,7 +2,7 @@
 version: '3'
 services:
   db:
-    image: postgres:12.5
+    image: postgres:13.21
     environment:
       POSTGRES_USER: santepsy
       POSTGRES_PASSWORD: santepsy
