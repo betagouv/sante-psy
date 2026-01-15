@@ -116,24 +116,24 @@ const StudentHistory = () => {
           <p>
             Tes séances consommées apparaîtront ici si tu indiques ton adresse mail à ton psychologue.
           </p>
-
-          <button
-            type="button"
-            className="fr-btn fr-btn--secondary"
-            onClick={() => setShowHelp(!showHelp)}
-            aria-expanded={showHelp}
-          >
-            Un problème
-          </button>
-
-          {showHelp && (
-            <ul className={styles.help}>
-              <li>Vérifier avec ton psychologue qu’il a bien indiqué ton adresse email</li>
-              <li>Vérifie les informations avec ton psychologue : nom, prénom, date de naissance, numéro INE…</li>
-              <li>Contacte le support si cela ne fonctionne toujours pas</li>
-            </ul>
-          )}
         </div>
+      )}
+
+      <button
+        type="button"
+        className="fr-btn fr-btn--secondary"
+        onClick={() => setShowHelp(!showHelp)}
+        aria-expanded={showHelp}
+          >
+        Un problème
+      </button>
+
+      {showHelp && (
+      <ul className={styles.help}>
+        <li>Vérifie avec ton psychologue qu&apos;il a bien indiqué ton adresse email</li>
+        <li>Vérifie les informations avec ton psychologue : nom, prénom, date de naissance, numéro INE…</li>
+        <li>Contacte le support si cela ne fonctionne toujours pas</li>
+      </ul>
       )}
 
       <nav className={styles.navigation} aria-label="Navigation entre années universitaires">

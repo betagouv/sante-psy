@@ -85,7 +85,7 @@ const StudentSignInStepTwo = () => {
       breadCrumbs={[{ href: '/', label: 'Accueil' }]}
       title={(
         <>
-          Inscription à votre
+          Inscription à ton
           {' '}
           <b>Espace Étudiant</b>
         </>
@@ -117,7 +117,7 @@ const StudentSignInStepTwo = () => {
             >
               Numéro INE
               <span className="fr-hint-text">
-                11 chiffres ou lettres, présent sur votre certificat de scolarité ou attestation CVEC
+                11 chiffres ou lettres, présent sur ton certificat de scolarité ou attestation CVEC
               </span>
             </label>
             <input
@@ -133,7 +133,7 @@ const StudentSignInStepTwo = () => {
           </div>
           <div>
             <p>
-              Ces données restent confidentielles et seront uniquement transmises à votre / vos psychologue(s)
+              Ces données restent confidentielles et seront uniquement transmises à ton / tes psychologue(s)
             </p>
           </div>
         </div>
@@ -145,10 +145,10 @@ const StudentSignInStepTwo = () => {
           >
             <h3 className="fr-alert__title">{notification.message}</h3>
             <p>
-              Vérifiez que votre INE et votre adresse e-mail sont corrects et n&apos;ont pas déjà été utilisés
+              Vérifie que ton INE et ton adresse e-mail sont corrects et n&apos;ont pas déjà été utilisés
               pour un autre compte.
               <br />
-              Si vous suspectez une usurpation ou une erreur, vous pouvez nous contacter via le
+              Si tu suspectes une usurpation ou une erreur, tu peux nous contacter via le
               {' '}
               <a
                 href="https://santepsy.etudiant.gouv.fr/contact/formulaire"

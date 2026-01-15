@@ -29,7 +29,7 @@ const StudentHomepage = () => {
           </h2>
 
           <Link
-            to="/annuaire"
+            to="/trouver-un-psychologue"
             className="fr-btn fr-btn--secondary"
           >
             Prendre RDV

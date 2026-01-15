@@ -155,7 +155,7 @@ const Login = () => {
         <Row>
           <Col>
             <p>
-              Étudiants, c&lsquo;est pas ici pour s&lsquo;inscrire
+              Étudiants, c&lsquo;est par ici pour s&lsquo;inscrire
             </p>
             <Button
               onClick={() => navigate('/inscription')}
