@@ -14,7 +14,7 @@ const StudentHomepage = () => {
   return (
     <>
       <header className={styles.header}>
-        <span className="fr-icon-account-line" aria-hidden="true" />
+        <span className="fr-icon-user-line" aria-hidden="true" />
         <strong>
           Bonjour
           {' '}
@@ -22,20 +22,18 @@ const StudentHomepage = () => {
         </strong>
       </header>
 
-      <main className="fr-container">
+      <main className={styles.container}>
         <div className={styles.titleRow}>
-          <h2 className="fr-h4">
+          <h2>
             Mes RDV
           </h2>
-
           <Link
             to="/trouver-un-psychologue"
-            className="fr-btn fr-btn--secondary"
+            className="fr-btn fr-btn--primary"
           >
             Prendre RDV
           </Link>
         </div>
-
         <StudentHistory />
       </main>
     </>

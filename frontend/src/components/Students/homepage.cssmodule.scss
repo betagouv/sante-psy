@@ -1,14 +1,30 @@
+.container {
+  width: auto;
+  margin: 24px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 60%;
+  }
+}
+
 .header {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 2rem;
+  font-size: large;
+  margin: 20px;
+  color: var(--text-active-blue-france)
 }
 
 .titleRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin: 40px 0 20px 0;
+  h2 {
+    margin: 0;
+  }
 }

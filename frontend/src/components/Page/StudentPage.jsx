@@ -3,9 +3,6 @@ import { observer } from 'mobx-react';
 import classNames from 'classnames';
 
 import FaqSection from 'components/Page/FaqSection';
-
-import { NavLink, Link } from 'react-router-dom';
-import { Breadcrumb, BreadcrumbItem } from '@dataesr/react-dsfr';
 import styles from './studentPage.cssmodule.scss';
 
 const getNodeText = node => {
@@ -26,8 +23,6 @@ const StudentPage = ({
   children,
   className,
   dataTestId = null,
-  breadCrumbs,
-  currentBreadCrumb,
 }) => {
   useEffect(() => {
     if (title) {
@@ -35,52 +30,9 @@ const StudentPage = ({
     }
   }, [title]);
 
-  const breadCrumbsComponent = breadCrumbs ? (
-    <Breadcrumb className={styles.breadCrumbs}>
-      {breadCrumbs.map(breadCrumb => (
-        <BreadcrumbItem
-          key={breadCrumb.label}
-          asLink={<Link to={breadCrumb.href} />}
-        >
-          {breadCrumb.label}
-        </BreadcrumbItem>
-      ))}
-      <BreadcrumbItem className={styles.currentBreadCrumb}>
-        {currentBreadCrumb || getNodeText(title)}
-      </BreadcrumbItem>
-    </Breadcrumb>
-  ) : null;
-
   return (
     <>
-      <div className={styles.studentHeader}>
-        <nav
-          className={styles.menu}
-          aria-label="Menu principal étudiant"
-        >
-          <ul className={styles.menuList}>
-            <li>
-              <NavLink
-                to="/etudiant/mes-seances"
-                className={({ isActive }) => (isActive ? styles.activeLink : undefined)}
-              >
-                Mes séances
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/trouver-un-psychologue">
-                Trouver un psychologue
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/faq">
-                Aide
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      {breadCrumbsComponent}
+      <div className={styles.studentHeader} />
       {title && (
         <div className={styles.titleContainer}>
           <h1 className={styles.title}>{title}</h1>
