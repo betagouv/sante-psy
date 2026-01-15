@@ -7,7 +7,7 @@ import { signInValidator, emailValidator } from './validators/studentValidators'
 import loginInformations from '../services/loginInformations';
 import date from '../utils/date';
 import db from '../db/db';
-import { studentsTable } from '../db/tables';
+import { psychologistsTable, studentsTable } from '../db/tables';
 import loginController from './loginController';
 import sendStudentMailTemplate from '../services/sendStudentMailTemplate';
 import validation from '../utils/validation';
@@ -16,6 +16,7 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
   try {
     const { email } = req.body;
     const existingStudent = await db(studentsTable).where({ email }).first();
+    const isPsyEmail = await db(psychologistsTable).where({ email }).first();
     const token = loginInformations.generateToken(32);
 
     const expiresAt = existingStudent
@@ -24,13 +25,13 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
 
     await dbLoginToken.upsert(token, email, expiresAt);
 
-    if (existingStudent) {
+    if (existingStudent && !isPsyEmail) {
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),
         token,
       );
-    } else {
+    } else if (!isPsyEmail) {
       await sendStudentMailTemplate(
         email,
         loginInformations.generateStudentSignInStepTwoUrl(),
