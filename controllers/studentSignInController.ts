@@ -23,7 +23,7 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
       ? date.getDatePlusTwoHours()
       : date.getDatePlusFourtyEightHours();
 
-    await dbLoginToken.upsert(token, email, expiresAt);
+    await dbLoginToken.upsert(token, email, expiresAt, 'student');
 
     if (existingStudent && !isPsyEmail) {
       await loginController.sendStudentLoginEmail(
@@ -56,7 +56,7 @@ const sendWelcomeMail = async (email): Promise<void> => {
     const token = loginInformations.generateToken(32);
     const expiresAt = date.getDatePlusTwoHours();
 
-    await dbLoginToken.upsert(token, email, expiresAt);
+    await dbLoginToken.upsert(token, email, expiresAt, 'student');
     await sendStudentMailTemplate(
       email,
       loginUrl,
@@ -109,7 +109,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       const token = loginInformations.generateToken(32);
       const expiresAt = date.getDatePlusTwoHours();
 
-      await dbLoginToken.upsert(token, email, expiresAt);
+      await dbLoginToken.upsert(token, email, expiresAt, 'student');
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),

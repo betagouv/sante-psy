@@ -38,12 +38,12 @@ const StudentSignInStepOne = () => {
       breadCrumbs={[{ href: '/', label: 'Accueil' }]}
       title={(
         <>
-          Inscription à votre
+          Inscription à ton
           {' '}
           <b>Espace Étudiant</b>
         </>
       )}
-      description="Votre identifiant sera votre email"
+      description="Ton identifiant sera ton email"
     >
       <form onSubmit={sendStudentSecondStepMail}>
         {notification && (
@@ -54,10 +54,10 @@ const StudentSignInStepOne = () => {
             <h3 className="fr-alert__title">{notification.message}</h3>
             {notification.type === 'success' && (
             <p>
-              Un mail de validation vient de vous être envoyé si votre adresse e-mail est correcte et n&apos;a pas déjà été utilisée
+              Un mail de validation vient de t&apos;être envoyé si ton adresse e-mail est correcte et n&apos;a pas déjà été utilisée
               pour un autre compte.
               <br />
-              Si vous suspectez une usurpation ou une erreur, vous pouvez nous contacter via le
+              Si tu suspectes une usurpation ou une erreur, tu peux nous contacter via le
               {' '}
               <a
                 href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
@@ -78,17 +78,13 @@ const StudentSignInStepOne = () => {
               className={`fr-label ${emailError ? styles.labelError : ''}`}
               htmlFor="email-input"
             >
-              Votre e-mail
+              Ton e-mail
             </label>
-            <span className="fr-hint-text">
-              Nécessaire pour créer un compte. Nous ne la transmettrons qu&apos;aux psychologues avec qui
-              vous prendrez rendez-vous.
-            </span>
             <input
               className={`fr-input ${emailError ? 'fr-input--error' : ''}`}
               id="email-input"
               type="email"
-              placeholder="Votre e-mail"
+              placeholder="Ton e-mail"
               value={email}
               onChange={e => setEmail(e.target.value)}
               onBlur={() => validateEmail(email)}

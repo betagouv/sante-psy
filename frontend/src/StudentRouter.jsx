@@ -23,15 +23,7 @@ const StudentRouter = () => {
     const page = pathname.split('/')[2];
     switch (page) {
       case 'mes-seances':
-        return {
-          title: (
-            <>
-              Mes
-              {' '}
-              <b>séances</b>
-            </>
-          ),
-        };
+        return {};
       default:
         return {};
     }

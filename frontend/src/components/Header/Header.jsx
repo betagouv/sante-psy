@@ -24,7 +24,7 @@ const defaultItems = [
   { title: 'Podcast', link: '/podcast' },
 ];
 
-const connectedItems = [
+const psyItems = [
   { title: 'Tableau de bord', link: '/psychologue/tableau-de-bord', id: 'dashboard-header' },
   { title: 'Déclarer mes séances', link: '/psychologue/mes-seances', id: 'appointments-header' },
   { title: 'Suivi étudiants', link: '/psychologue/mes-etudiants' },
@@ -41,24 +41,32 @@ const connectedItems = [
   },
 ];
 
+const studentItems = [
+  { title: 'Accueil', link: '/etudiant/mes-seances', id: 'homepage-header' },
+  { title: 'Trouver un psychologue', link: '/trouver-un-psychologue', id: 'find-psy-header' },
+  { title: 'FAQ', link: '/faq', id: 'faq' },
+];
+
 const Header = () => {
   const location = useLocation();
   const { userStore: { user, role } } = useStore();
 
   const psychologistPage = location.pathname.startsWith('/psychologue');
-  const studentPage = location.pathname.startsWith('/info-etudiant') || location.pathname.startsWith('/etudiant');
+  const publicStudentPage = location.pathname.startsWith('/info-etudiant');
+  const studentPage = location.pathname.startsWith('/etudiant');
 
   const mySpaceUrl = role === 'psy' ? '/psychologue/tableau-de-bord' : '/etudiant/accueil';
+  const itemsToDisplay = user && (psychologistPage ? psyItems : studentItems);
 
   return (
     <DSHeader>
       <HeaderBody>
-        <Logo asLink={<Link to={studentPage ? '/info-etudiant' : '/'} title="Revenir à l'accueil" />}>
+        <Logo asLink={<Link to={publicStudentPage ? '/info-etudiant' : '/'} title="Revenir à l'accueil" />}>
           Ministère de l&lsquo;Enseignement Supérieur et de la Recherche
         </Logo>
         <Service
-          asLink={<Link to={studentPage ? '/info-etudiant' : '/'} />}
-          title={`Santé Psy Étudiant${psychologistPage ? ' - Espace Psychologues' : ''}`}
+          asLink={<Link to={publicStudentPage ? '/info-etudiant' : '/'} />}
+          title={`Santé Psy Étudiant${psychologistPage || studentPage ? ' - Mon espace' : ''}`}
           description="Accompagnement psychologique pour les étudiants"
         />
         <Tool>
@@ -66,12 +74,12 @@ const Header = () => {
             {user && psychologistPage && (
               <ToolItem asLink={<Link data-test-id="back-home-button" to="/" />}>Revenir à l&lsquo;accueil</ToolItem>
             )}
-            {user && !psychologistPage && !studentPage && (
+            {user && studentPage && (
               <ToolItem asLink={<Link data-test-id="my-space-button" to={mySpaceUrl} />}>
                 Accéder à mon espace
               </ToolItem>
             )}
-            {!user && !studentPage && (
+            {!user && !publicStudentPage && (
               <ToolItem
                 asLink={<Link to="/trouver-un-psychologue" />}
                 icon="ri-search-line"
@@ -79,7 +87,7 @@ const Header = () => {
                 Trouver un psychologue
               </ToolItem>
             )}
-            {!user && !studentPage && (
+            {!user && !publicStudentPage && (
               <ToolItem asLink={<Link data-test-id="login-button" to="/login" />} icon="ri-user-fill">
                 Mon Espace
               </ToolItem>
@@ -90,10 +98,10 @@ const Header = () => {
           </ToolItemGroup>
         </Tool>
       </HeaderBody>
-      {!studentPage && (
+      {!publicStudentPage && (
         <HeaderNav>
-          {psychologistPage && user
-            ? connectedItems.map(item => (
+          {user && itemsToDisplay
+            ? itemsToDisplay.map(item => (
               <NavItem
                 id={item.id}
                 key={item.title}

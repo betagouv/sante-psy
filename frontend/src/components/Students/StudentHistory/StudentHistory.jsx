@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import agent from 'services/agent';
 import { currentUnivYear } from 'services/univYears';
+import { Link } from 'react-router-dom';
 import styles from './studentHistory.cssmodule.scss';
 
 const MAX_SESSIONS = 12;
@@ -56,10 +57,10 @@ const StudentHistory = () => {
   const [startYear, endYear] = currentYear.split('-');
 
   return (
-    <section>
+    <section className={styles.historyContainer}>
       <header className={styles.title}>
-        <span className="fr-icon-calendar-line" aria-hidden="true" />
-        <h3 className="fr-h5">
+        <span className="fr-icon-calendar-line fr-color" aria-hidden="true" />
+        <h3>
           Année
           {' '}
           {currentYear}
@@ -93,8 +94,11 @@ const StudentHistory = () => {
                   {index + 1}
                 </div>
                 <div>
+                  <p className={styles.day}>
+                    {appt.appointmentDate.split(' ')[0]}
+                  </p>
                   <p className={styles.date}>
-                    {appt.appointmentDate}
+                    {appt.appointmentDate.split(' ').slice(1).join(' ')}
                   </p>
                   <p className={styles.psychologist}>
                     {appt.psychologistName}
@@ -103,64 +107,66 @@ const StudentHistory = () => {
               </div>
             ))}
           </div>
-
           <p className={styles.counter}>
             {yearAppointments.length}
             {' '}
             séances consommées sur
+            {' '}
             {MAX_SESSIONS}
           </p>
+
+          <nav className={styles.navigation} aria-label="Navigation entre années universitaires">
+            {prevYear ? (
+              <button
+                type="button"
+                className="fr-btn fr-btn--secondary"
+                onClick={() => setCurrentYear(prevYear)}
+              >
+                <span className="fr-icon-arrow-left-s-first-line" aria-hidden="true" />
+                {' '}
+                {prevYear}
+              </button>
+            ) : <span />}
+
+            {nextYear ? (
+              <button
+                type="button"
+                className="fr-btn fr-btn--secondary"
+                onClick={() => setCurrentYear(nextYear)}
+              >
+                {nextYear}
+                {' '}
+                <span className="fr-icon-arrow-right-s-last-line" aria-hidden="true" />
+              </button>
+            ) : <span />}
+          </nav>
+
         </>
       ) : (
         <div className={styles.empty}>
           <p>
             Tes séances consommées apparaîtront ici si tu indiques ton adresse mail à ton psychologue.
           </p>
-
-          <button
-            type="button"
-            className="fr-btn fr-btn--secondary"
-            onClick={() => setShowHelp(!showHelp)}
-            aria-expanded={showHelp}
-          >
-            Un problème
-          </button>
-
-          {showHelp && (
-            <ul className={styles.help}>
-              <li>Vérifier avec ton psychologue qu’il a bien indiqué ton adresse email</li>
-              <li>Vérifie les informations avec ton psychologue : nom, prénom, date de naissance, numéro INE…</li>
-              <li>Contacte le support si cela ne fonctionne toujours pas</li>
-            </ul>
-          )}
         </div>
       )}
 
-      <nav className={styles.navigation} aria-label="Navigation entre années universitaires">
-        {prevYear ? (
-          <button
-            type="button"
-            className="fr-btn fr-btn--secondary"
-            onClick={() => setCurrentYear(prevYear)}
+      <button
+        type="button"
+        className="fr-btn fr-btn--secondary"
+        onClick={() => setShowHelp(!showHelp)}
+        aria-expanded={showHelp}
           >
-            ←
-            {' '}
-            {prevYear}
-          </button>
-        ) : <span />}
+        Un problème ?
+      </button>
 
-        {nextYear ? (
-          <button
-            type="button"
-            className="fr-btn fr-btn--secondary"
-            onClick={() => setCurrentYear(nextYear)}
-          >
-            {nextYear}
-            {' '}
-            →
-          </button>
-        ) : <span />}
-      </nav>
+      {showHelp && (
+      <ul className={styles.help}>
+        <li>Vérifie avec ton psychologue qu&apos;il a bien indiqué ton adresse email</li>
+        <li>Vérifie les informations avec ton psychologue : nom, prénom, date de naissance, numéro INE…</li>
+        <li>Contacte le support si cela ne fonctionne toujours pas</li>
+        <Link to="/contact">Nous contacter</Link>
+      </ul>
+      )}
     </section>
   );
 };

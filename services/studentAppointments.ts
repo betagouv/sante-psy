@@ -37,10 +37,10 @@ const getStudentAppointments = async (
     psychologistIds.map((id) => psychologists.getById(id)),
   );
 
-  const psychologistLastnameById = psychologistsArray.reduce<Record<string, string>>(
+  const psychologistNameById = psychologistsArray.reduce<Record<string, string>>(
     (acc, psy) => {
       if (psy) {
-        acc[psy.dossierNumber] = psy.lastName;
+        acc[psy.dossierNumber] = `${psy.useFirstNames || psy.firstNames} ${psy.useLastName || psy.lastName}`;
       }
       return acc;
     },
@@ -52,7 +52,7 @@ const getStudentAppointments = async (
     univYear: appt.univYear || 'unknown',
     appointmentDate: appt.appointmentDate,
     psychologistName:
-      psychologistLastnameById[appt.psychologistId]
+      psychologistNameById[appt.psychologistId]
       ?? 'Psychologue inconnu',
   }))
   .sort(
