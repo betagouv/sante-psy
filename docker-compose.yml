@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:13.21
+    image: postgres:13.23
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U santepsy"]
       interval: 5s
