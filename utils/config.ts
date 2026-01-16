@@ -8,8 +8,20 @@ const { protocol } = new URL(hostnameWithProtocol);
 
 const secret = process.env.SECRET;
 const secretLogs = process.env.SECRET_LOGS;
+
+// Security: Ensure secrets are defined and strong enough
 if (!secret || !secretLogs) {
-  console.error('Mandatory configurations SECRET or SECRET_LOG is/are missing');
+  throw new Error('FATAL: SECRET and SECRET_LOGS environment variables must be defined');
+}
+
+// SECRET must be at least 256 bits (32 bytes = 32 characters in hex or 64 in base64)
+// For JWT HS256, OWASP recommends minimum 256 bits
+if (secret.length < 32) {
+  throw new Error('FATAL: SECRET must be at least 32 characters (256 bits) for secure JWT signing');
+}
+
+if (secretLogs.length < 32) {
+  throw new Error('FATAL: SECRET_LOGS must be at least 32 characters (256 bits) for secure hashing');
 }
 
 const contactEmail = process.env.CONTACT_EMAIL || 'contact-santepsyetudiants@beta.gouv.fr';

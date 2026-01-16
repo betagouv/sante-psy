@@ -6,15 +6,13 @@ import dbStudents from '../../db/students';
 import dbLoginToken from '../../db/loginToken';
 import * as studentMailController from '../../services/sendStudentMailTemplate';
 import loginController from '../../controllers/loginController';
-import loginInformations from '../../services/loginInformations';
 
 chai.should();
 
 describe('signIn', () => {
-  let generateTokenStub;
   let studentSignInStub;
   let sendStudentMailStub;
-  let getStudentByMailStub;
+  let getStudentByEmailStub;
   let upsertStudentTokenStub;
   let sendLoginMailStub;
 
@@ -25,14 +23,11 @@ describe('signIn', () => {
   const fakeFirstNames = 'Anna';
 
   beforeEach(() => {
-    generateTokenStub = sinon
-      .stub(loginInformations, 'generateToken')
-      .returns('FAKE_TOKEN');
     studentSignInStub = sinon.stub(dbStudents, 'signIn');
     sendStudentMailStub = sinon.stub(studentMailController, 'default').resolves();
     sendLoginMailStub = sinon.stub(loginController, 'sendStudentLoginEmail').resolves();
 
-    getStudentByMailStub = sinon.stub(dbLoginToken, 'getByEmail');
+    getStudentByEmailStub = sinon.stub(dbStudents, 'getByEmail');
     upsertStudentTokenStub = sinon.stub(dbLoginToken, 'upsert').resolves();
   });
 
@@ -42,7 +37,7 @@ describe('signIn', () => {
 
   describe('Sign in step 1', () => {
     it('should send second step mail for new student', (done) => {
-      getStudentByMailStub.resolves(null);
+      getStudentByEmailStub.resolves(null);
 
       chai
         .request(app)
@@ -55,7 +50,7 @@ describe('signIn', () => {
             sendStudentMailStub,
             fakeEmail,
             sinon.match.string,
-            'FAKE_TOKEN',
+            sinon.match.string,
             'studentSignInValidation',
             'Étape 2 de votre inscription',
           );
@@ -64,25 +59,18 @@ describe('signIn', () => {
         });
     });
 
-    it('should delete old token and create a new one', (done) => {
-      getStudentByMailStub.resolves({ token: 'OLD_TOKEN' });
-
-      generateTokenStub.returns('NEW_TOKEN');
+    it('should upsert token if token already exists', (done) => {
+      getStudentByEmailStub.resolves({ token: 'ABC' });
 
       chai
         .request(app)
         .post(routeSecondStep)
         .send({ email: fakeEmail })
-        .end(() => {
-          sinon.assert.calledOnce(upsertStudentTokenStub);
-
-          sinon.assert.calledWith(
-            upsertStudentTokenStub,
-            'NEW_TOKEN',
-            fakeEmail,
-            sinon.match.date,
-          );
-
+        .end((err, res) => {
+          sinon.assert.called(getStudentByEmailStub);
+          sinon.assert.called(upsertStudentTokenStub);
+          sinon.assert.called(sendLoginMailStub); // Existing student gets login email
+          res.status.should.equal(200);
           done();
         });
     });
@@ -91,7 +79,7 @@ describe('signIn', () => {
   describe('Sign in step 2', () => {
     it('should return 200 when new student is created', (done) => {
       studentSignInStub.resolves({ status: 'created' });
-      getStudentByMailStub.resolves({ token: 'ABC' });
+      getStudentByEmailStub.resolves({ token: 'ABC' });
 
       chai
         .request(app)
@@ -105,7 +93,7 @@ describe('signIn', () => {
 
     it('should send welcome mail when student is created', (done) => {
       studentSignInStub.resolves({ status: 'created' });
-      getStudentByMailStub.resolves(null);
+      getStudentByEmailStub.resolves(null);
 
       chai
       .request(app)
@@ -116,8 +104,8 @@ describe('signIn', () => {
         sinon.assert.calledWith(
           sendStudentMailStub,
           fakeEmail,
-          sinon.match.string,
-          'FAKE_TOKEN',
+          sinon.match.string, // URL
+          sinon.match.string, // Token (64 char hex string generated)
           'studentWelcome',
           'Bienvenue !',
         );
@@ -127,7 +115,7 @@ describe('signIn', () => {
 
     it('should upsert token when new student is created', (done) => {
       studentSignInStub.resolves({ status: 'created' });
-      getStudentByMailStub.resolves({ token: 'ABC' });
+      getStudentByEmailStub.resolves({ token: 'ABC' });
 
       chai
         .request(app)
@@ -141,7 +129,7 @@ describe('signIn', () => {
 
     it('should return 200 when student already registered', (done) => {
       studentSignInStub.resolves({ status: 'alreadyRegistered' });
-      getStudentByMailStub.resolves({ token: 'ABC' });
+      getStudentByEmailStub.resolves({ token: 'ABC' });
 
       chai
         .request(app)
@@ -156,7 +144,7 @@ describe('signIn', () => {
 
     it('should send login mail when student already registered', (done) => {
       studentSignInStub.resolves({ status: 'alreadyRegistered' });
-      getStudentByMailStub.resolves({ token: 'ABC' });
+      getStudentByEmailStub.resolves({ token: 'ABC' });
 
       chai
       .request(app)

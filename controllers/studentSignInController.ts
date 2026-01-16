@@ -6,8 +6,6 @@ import CustomError from '../utils/CustomError';
 import { signInValidator, emailValidator } from './validators/studentValidators';
 import loginInformations from '../services/loginInformations';
 import date from '../utils/date';
-import db from '../db/db';
-import { studentsTable } from '../db/tables';
 import loginController from './loginController';
 import sendStudentMailTemplate from '../services/sendStudentMailTemplate';
 import validation from '../utils/validation';
@@ -15,7 +13,7 @@ import validation from '../utils/validation';
 const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email } = req.body;
-    const existingStudent = await db(studentsTable).where({ email }).first();
+    const existingStudent = await dbStudents.getByEmail(email);
     const token = loginInformations.generateToken(32);
     const isNewStudent = !existingStudent;
 

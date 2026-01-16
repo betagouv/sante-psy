@@ -178,9 +178,12 @@ describe('psyLoginController', async () => {
             sinon.assert.called(sendMailStub);
             sinon.assert.notCalled(insertTokenStub);
 
-            res.status.should.equal(401);
+            // Security: Always return 200 to prevent user enumeration
+            res.status.should.equal(200);
             res.body.message.should.equal(
-              "Votre compte n'est pas encore validé par nos services, veuillez rééssayer plus tard.",
+              'Un mail de connexion vient de vous être envoyé si votre adresse e-mail '
+              + '\n      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. '
+              + '\n      Le lien est valable 2 heures.',
             );
             done();
           });
@@ -207,9 +210,12 @@ describe('psyLoginController', async () => {
             sinon.assert.notCalled(sendMailStub);
             sinon.assert.notCalled(insertTokenStub);
 
-            res.status.should.equal(401);
+            // Security: Always return 200 to prevent user enumeration
+            res.status.should.equal(200);
             res.body.message.should.equal(
-              "L'email prenom.nom@beta.gouv.fr est inconnu, ou est lié à un dossier classé sans suite ou refusé.",
+              'Un mail de connexion vient de vous être envoyé si votre adresse e-mail '
+              + '\n      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. '
+              + '\n      Le lien est valable 2 heures.',
             );
             done();
           });
