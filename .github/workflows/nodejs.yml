@@ -26,18 +26,16 @@ jobs:
       run: docker compose -f docker-compose-only-db.yml up -d;
     - name: pnpm back install
       run: pnpm install --frozen-lockfile
-    - name: rebuild dependencies
-      run: pnpm rebuild
     - name: pnpm front install and build
       run: pnpm run scalingo-prebuild
     - name: Back build
       run: pnpm run postbuild
     - name: Back linter
-      run: pnpm run lint -- --quiet
+      run: pnpm run lint --quiet
     - name: EJS linter
-      run: pnpm run ejslint -- --quiet
+      run: pnpm run ejslint --quiet
     - name: Front linter
-      run: pnpm --filter frontend run lint -- --quiet
+      run: pnpm --filter ./frontend run lint --quiet
     - name: Migrate DB
       run: pnpm run migrate
     - name: Seed DB
@@ -50,7 +48,7 @@ jobs:
     - name: Run app
       run: node dist/index.js &
     - name: Run integration tests
-      run: pnpm --filter frontend run cy:ci
+      run: pnpm --filter ./frontend run cy:ci
     - name: Archive test results
       if: ${{ failure() }}
       uses: actions/upload-artifact@v4

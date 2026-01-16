@@ -99,7 +99,7 @@
     "lint": "node_modules/.bin/eslint --quiet . --ext .js,.jsx",
     "lint:fix": "node_modules/.bin/eslint --quiet --fix . --ext .js,.jsx",
     "test": "mocha --exit",
-    "scalingo-prebuild": "pnpm install --frozen-lockfile && pnpm run build -- --env.PROD",
+    "scalingo-prebuild": "pnpm install --frozen-lockfile && pnpm run build --env.PROD",
     "scalingo-postbuild": "pnpm prune --prod",
     "cy:open": "cypress open",
     "cy:run": "wait-on http://localhost:3000 && wait-on http-get://localhost:8080/api/config && cypress run",

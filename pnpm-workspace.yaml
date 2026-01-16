@@ -1,5 +1,14 @@
-packages: []
+packages:
+  - "frontend"
 
 minimumReleaseAge: 10080 # wait for a 7 days (in minutes) cooldown period
 
 trustPolicy: no-downgrade
+trustPolicyExclude:
+  - ua-parser-js@0.7.41
+
+onlyBuiltDependencies: 
+  - "@parcel/watcher"
+  - core-js-pure
+  - cypress
+  - less

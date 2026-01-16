@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { gql } from 'graphql-request';
 import config from '../../utils/config';
 import { getChampsIdFromField, getAnnotationsIdFromField } from '../champsAndAnnotations';

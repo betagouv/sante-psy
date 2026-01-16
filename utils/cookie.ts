@@ -1,5 +1,5 @@
 import { CookieOptions, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { JWT } from '../types/LoginToken';
 import config from './config';
 import CustomError from './CustomError';
@@ -10,7 +10,8 @@ const headers: CookieOptions = {
   sameSite: 'lax',
 };
 
-const getSessionDuration = (): string => `${config.sessionDurationHours} hours`;
+// eslint-disable-next-line max-len
+const getSessionDuration = (): NonNullable<SignOptions['expiresIn']> => `${config.sessionDurationHours}h` as NonNullable<SignOptions['expiresIn']>;
 
 /**
  * get a json web token to store psychologist data
