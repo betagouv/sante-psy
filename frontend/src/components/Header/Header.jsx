@@ -56,7 +56,15 @@ const Header = () => {
   const studentPage = location.pathname.startsWith('/etudiant');
 
   const mySpaceUrl = role === 'psy' ? '/psychologue/tableau-de-bord' : '/etudiant/accueil';
-  const itemsToDisplay = user && (psychologistPage ? psyItems : studentItems);
+
+  const getItemsToDisplay = () => {
+    if (!user) return defaultItems;
+    if (psychologistPage) return psyItems;
+    if (studentPage) return studentItems;
+    return defaultItems;
+  };
+
+  const itemsToDisplay = getItemsToDisplay();
 
   return (
     <DSHeader>
