@@ -82,7 +82,7 @@ const Header = () => {
             {user && psychologistPage && (
               <ToolItem asLink={<Link data-test-id="back-home-button" to="/" />}>Revenir à l&lsquo;accueil</ToolItem>
             )}
-            {user && studentPage && (
+            {user && !psychologistPage && !studentPage && (
               <ToolItem asLink={<Link data-test-id="my-space-button" to={mySpaceUrl} />}>
                 Accéder à mon espace
               </ToolItem>
