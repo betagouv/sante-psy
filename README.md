@@ -92,7 +92,7 @@ pnpm test
 Pour lancer uniquement un test
 
 ```bash
-pnpm test -- --grep "should call batchInsert on PG"
+pnpm run test:backend --grep "should create appointments"
 ```
 
 #### Code coverage
