@@ -169,7 +169,7 @@ describe('signIn', () => {
       });
     });
 
-    it('should return 200 on any other cases and send no mail', (done) => {
+    it('should return 400 on conflict and send no mail', (done) => {
       studentSignInStub.resolves({ status: 'conflict' });
       chai
         .request(app)
@@ -178,7 +178,7 @@ describe('signIn', () => {
         .end((err, res) => {
           sinon.assert.notCalled(sendStudentMailStub);
           sinon.assert.notCalled(sendLoginMailStub);
-          res.status.should.equal(200);
+          res.status.should.equal(400);
           done();
         });
     });
