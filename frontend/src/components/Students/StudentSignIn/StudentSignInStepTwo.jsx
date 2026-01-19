@@ -131,11 +131,6 @@ const StudentSignInStepTwo = () => {
             />
             {ineError && <p className="fr-error-text">{ineError}</p>}
           </div>
-          <div>
-            <p>
-              Ces données restent confidentielles et seront uniquement transmises à ton / tes psychologue(s)
-            </p>
-          </div>
         </div>
 
         {notification && (

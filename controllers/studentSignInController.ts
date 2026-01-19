@@ -7,7 +7,7 @@ import { signInValidator, emailValidator } from './validators/studentValidators'
 import loginInformations from '../services/loginInformations';
 import date from '../utils/date';
 import db from '../db/db';
-import { studentsTable } from '../db/tables';
+import { psychologistsTable, studentsTable } from '../db/tables';
 import loginController from './loginController';
 import sendStudentMailTemplate from '../services/sendStudentMailTemplate';
 import validation from '../utils/validation';
@@ -16,28 +16,28 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
   try {
     const { email } = req.body;
     const existingStudent = await db(studentsTable).where({ email }).first();
+    const isPsyEmail = await db(psychologistsTable).where({ email }).first();
     const token = loginInformations.generateToken(32);
-    const isNewStudent = !existingStudent;
 
-    const expiresAt = isNewStudent
-      ? date.getDatePlusFourtyEightHours()
-      : date.getDatePlusTwoHours();
+    const expiresAt = existingStudent
+      ? date.getDatePlusTwoHours()
+      : date.getDatePlusFourtyEightHours();
 
     await dbLoginToken.upsert(token, email, expiresAt, 'student');
 
-    if (isNewStudent) {
+    if (existingStudent && !isPsyEmail) {
+      await loginController.sendStudentLoginEmail(
+        email,
+        loginInformations.generateLoginUrl(),
+        token,
+      );
+    } else if (!isPsyEmail) {
       await sendStudentMailTemplate(
         email,
         loginInformations.generateStudentSignInStepTwoUrl(),
         token,
         'studentSignInValidation',
         'Étape 2 de votre inscription',
-      );
-    } else {
-      await loginController.sendStudentLoginEmail(
-        email,
-        loginInformations.generateLoginUrl(),
-        token,
       );
     }
 
@@ -101,6 +101,9 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     const result = await dbStudents.signIn(email, ine, firstNames);
     if (result.status === 'created') {
       await sendWelcomeMail(email);
+      res.status(200).json({
+        message: 'Un email vous a été envoyé.',
+      });
     }
     if (result.status === 'alreadyRegistered') {
       const token = loginInformations.generateToken(32);
@@ -112,16 +115,18 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         loginInformations.generateLoginUrl(),
         token,
       );
+      res.status(200).json({
+        message: 'Un email vous a été envoyé.',
+      });
     }
-
-    res.status(200).json({
-      message: 'Si un compte existe, un email vous a été envoyé.',
+    res.status(400).json({
+      message: 'Inscription non autorisée.',
     });
   } catch (err) {
     console.error(err);
 
-    res.status(200).json({
-      message: 'Si un compte existe, un email vous a été envoyé.',
+    res.status(400).json({
+      message: 'Inscription non autorisée.',
     });
   }
 };
