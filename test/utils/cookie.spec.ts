@@ -8,8 +8,8 @@ import cookie from '../../utils/cookie';
 
 describe('cookie', () => {
   describe('getSessionDuration', () => {
-    it('should return a duration with format X hours', () => {
-      cookie.getSessionDuration().should.equal('2 hours');
+    it('should return a duration with format Xh', () => {
+      cookie.getSessionDuration().should.equal('2h');
     });
   });
 
