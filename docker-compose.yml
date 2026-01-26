@@ -46,7 +46,9 @@ services:
         condition: service_healthy
 
   react:
-    build: ./frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
     working_dir: /app/frontend
     command: ["pnpm", "run", "dev"]
     ports:

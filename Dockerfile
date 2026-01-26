@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY .env.sample .env
 
-RUN corepack enable \
+RUN apk add --no-cache ca-certificates \
+ && update-ca-certificates \
+ && corepack enable \
  && corepack prepare pnpm@10.26.1 --activate
 
 COPY . /app 
