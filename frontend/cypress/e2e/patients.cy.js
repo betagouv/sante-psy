@@ -116,7 +116,7 @@ describe('Patient', () => {
           'have.length',
           (isCurrently1stSemester ? nbAppointments1stSemester : nbAppointments2ndSemester)
           + 1, // table header
-        ); 
+        );
       cy.get('[data-test-id="etudiant-seances-list"] ul li button')
         .eq(isCurrently1stSemester ? 1 : 0).click();
       cy.get('[data-test-id="etudiant-seances-list"] tr')
@@ -124,7 +124,7 @@ describe('Patient', () => {
           'have.length',
           (isCurrently1stSemester ? nbAppointments2ndSemester : nbAppointments1stSemester)
           + 1, // table header
-        ); 
+        );
 
       cy.get('[data-test-id="etudiant-first-name-input"] > input').clear();
       cy.get('[data-test-id="etudiant-first-name-input"] > input').type('Georges');
