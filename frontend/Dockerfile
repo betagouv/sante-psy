@@ -2,9 +2,7 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-RUN apk add --no-cache ca-certificates \
- && update-ca-certificates \
- && corepack enable \
+RUN corepack enable \
  && corepack prepare pnpm@10.26.1 --activate
 
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
