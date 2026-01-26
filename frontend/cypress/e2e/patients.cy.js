@@ -96,16 +96,35 @@ describe('Patient', () => {
         .click();
 
       cy.wait('@etudiant');
-      // we set this date to always have the same active tab in student profile
-      const currentYear = new Date().getFullYear();
-      cy.clock(new Date(currentYear, 5, 1).getTime());
+
+      const currentMonth = new Date().getMonth() + 1; // +1 because january = 0
+      const nbAppointments1stSemester = 48;
+      const nbAppointments2ndSemester = 24;
+      const isCurrently1stSemester = currentMonth <= 6;
+
+      // Ex: 26/01/2026 => 1st semester of 2026
+      // Tab 0: 2025/2026 -> 48 << active by default
+      // Tab 1: 2026/2027 -> 24 << go to tab 1
+
+      // Ex: 26/10/2026 => 2nd semester of 2026
+      // Tab 1: 2026/2027 -> 24 << active by default
+      // Tab 0: 2025/2026 -> 48 << go to tab 0
+
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
       cy.get('[data-test-id="etudiant-seances-list"] tr')
-        .should('have.length', 25);
+        .should(
+          'have.length',
+          (isCurrently1stSemester ? nbAppointments1stSemester : nbAppointments2ndSemester)
+          + 1, // table header
+        ); 
       cy.get('[data-test-id="etudiant-seances-list"] ul li button')
-        .eq(0).click();
+        .eq(isCurrently1stSemester ? 1 : 0).click();
       cy.get('[data-test-id="etudiant-seances-list"] tr')
-        .should('have.length', 49);
+        .should(
+          'have.length',
+          (isCurrently1stSemester ? nbAppointments2ndSemester : nbAppointments1stSemester)
+          + 1, // table header
+        ); 
 
       cy.get('[data-test-id="etudiant-first-name-input"] > input').clear();
       cy.get('[data-test-id="etudiant-first-name-input"] > input').type('Georges');
