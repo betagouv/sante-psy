@@ -96,7 +96,7 @@ const Bill = () => {
       },
       { index: 8, text: `Nom et adresse de l'université : ${universityInfos.name || PARTIAL_UNDESCORE_LINE_UNI_NAME}` },
       { index: 9, text: `${universityInfos.address || FULL_UNDERSCORE_LINE}` },
-      { index: 10, text: 'E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :' },
+      { index: 10, text: 'Email ou adresse postale du service facturier de l’université (destinataire de la facture) :' },
       { index: 11, text: billingAddress },
       {
         index: 12,

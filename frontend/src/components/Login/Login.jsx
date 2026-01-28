@@ -129,28 +129,23 @@ const Login = () => {
         </form>
       </Section>
 
-      <Section
-        title="Un problème ?"
-      >
+      <Section title="Un problème ?">
         <ul>
           <li>
             Indiquez l&lsquo;email utilisé lors de votre inscription
           </li>
+
           <li>
+            Si vous ne recevez pas l&lsquo;email de connexion :
             <ul>
-              Si vous ne recevez pas l&lsquo;email de connexion
-              <li>
-                Vérifiez vos spams
-              </li>
-              <li>
-                Attendez quelques minutes
-              </li>
+              <li>Vérifiez vos spams</li>
+              <li>Attendez quelques minutes</li>
             </ul>
           </li>
         </ul>
       </Section>
       <Section
-        title="Pas d'espace ?"
+        title="Vous n&lsquo;avez pas encore créé votre espace ?"
       >
         <Row>
           <Col>

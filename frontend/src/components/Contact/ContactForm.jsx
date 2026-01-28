@@ -41,7 +41,7 @@ const ContactForm = () => {
             {
               message: (
                 <p>
-                  Une erreur est survenue, veuillez nous contacter par mail à
+                  Une erreur est survenue, veuillez nous contacter par email à
                   {' '}
                   <a href={`mailto:${config.contactEmail}`}>{config.contactEmail}</a>
                 </p>

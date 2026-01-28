@@ -30,7 +30,7 @@ const UnivContact = ({ university }) => {
             size="lg"
             icon="ri-mail-line"
             className={styles.mailButton}
-            title={`Envoyer un mail à ${emails}`}
+            title={`Envoyer un email à ${emails}`}
             onClick={() => { window.location.href = mailto; }}
           />
         )}

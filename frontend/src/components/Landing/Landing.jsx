@@ -123,7 +123,7 @@ const Landing = () => {
         )}
         description={(
           <>
-            Recevez toute l’information nécessaire par e-mail pour bénéficier des
+            Recevez toute l’information nécessaire par email pour bénéficier des
             {' '}
             <b>12 séances gratuites</b>
             {' '}

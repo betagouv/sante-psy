@@ -140,7 +140,7 @@ const StudentSignInStepTwo = () => {
           >
             <h3 className="fr-alert__title">{notification.message}</h3>
             <p>
-              Vérifie que ton INE et ton adresse e-mail sont corrects et n&apos;ont pas déjà été utilisés
+              Vérifie que ton INE et ton adresse email sont corrects et n&apos;ont pas déjà été utilisés
               pour un autre compte.
               <br />
               Si tu suspectes une usurpation ou une erreur, tu peux nous contacter via le
