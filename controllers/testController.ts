@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 
-import dbPsychologists from '../db/psychologists';
-import seed from '../test/helper/fake_data';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 import db from '../db/db';
-import jwt from 'jsonwebtoken';
-import config from '../utils/config';
-import loginInformations from '../services/loginInformations';
 import dbLoginToken from '../db/loginToken';
+import dbPsychologists from '../db/psychologists';
+import loginInformations from '../services/loginInformations';
+import seed from '../test/helper/fake_data';
+import config from '../utils/config';
 
 const getPsychologist = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -15,13 +15,15 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
 
     const token = await dbLoginToken.getByEmail(req.params.email);
 
-    const duration = typeof req.query.duration === 'string' ? req.query.duration : '2h';
+    const duration = typeof req.query.duration === 'string'
+      ? (req.query.duration as NonNullable<SignOptions['expiresIn']>)
+      : '2h';
 
     const jwtToken = token && !req.query.duration ? token.token : jwt.sign(
       {
         userId: psy.dossierNumber, role: 'psy', xsrfToken, psychologist: psy.dossierNumber,
       },
-      config.secret,
+      config.secret as Secret,
       { expiresIn: duration },
     );
 
@@ -35,18 +37,18 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const resetDB = async (req: Request, res: Response) : Promise<void> => {
+const resetDB = async (req: Request, res: Response): Promise<void> => {
   const year = typeof req.query.year === 'string' ? parseInt(req.query.year, 10) : undefined;
   await seed(db, year, true);
   res.status(200).json('DB reset');
 };
 
-const removeConvention = async (req: Request, res: Response) : Promise<void> => {
+const removeConvention = async (req: Request, res: Response): Promise<void> => {
   await dbPsychologists.deleteConventionInfo(req.params.email);
   res.status(200).json('Convention removed');
 };
 
-const resetTutorial = async (req: Request, res: Response) : Promise<void> => {
+const resetTutorial = async (req: Request, res: Response): Promise<void> => {
   await dbPsychologists.resetTutorial(req.params.email);
   res.status(200).json('Tuto reseted');
 };
