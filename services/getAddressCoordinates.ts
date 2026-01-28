@@ -16,7 +16,7 @@ const getAddressCoordinates = async (address: string): Promise<Coordinates> => {
     return null;
   }
 
-  const url = encodeURI(`https://api-adresse.data.gouv.fr/search/?q=${firstAddress}&limit=1`);
+  const url = encodeURI(`https://data.geopf.fr/geocodage/search/?q=${firstAddress}&limit=1`);
 
   try {
     const response = await axios.get<CoordinatesAPI>(url, { timeout: 10000 });
