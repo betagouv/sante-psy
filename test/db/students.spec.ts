@@ -1,119 +1,119 @@
 import { expect } from 'chai';
-import dotEnv from 'dotenv';
-import { faker } from '@faker-js/faker';
-import { v4 as uuidv4 } from 'uuid';
-import db from '../../db/db';
 import dbStudents from '../../db/students';
-import { studentsTable } from '../../db/tables';
-import { Student } from '../../types/Student';
+import db from '../../db/db';
 import clean from '../helper/clean';
-
-dotEnv.config();
+import { studentsTable } from '../../db/tables';
+import date from '../../utils/date';
 
 describe('DB Students', () => {
+  const email = 'donia@test.com';
+  const email2 = 'ana@test.com';
+  const firstNames = 'Donia';
+  const ine = '1234567890A';
+  const ine2 = 'A0987654321';
+
+  async function studentExists(email: string) {
+    const student = await dbStudents.getByEmail(email);
+    return !!student;
+  }
+
+  beforeEach(async () => {
+    await clean.students();
+  });
+
   afterEach(async () => {
     await clean.students();
   });
 
-  describe('insert', () => {
-    it('should insert student with new email', async () => {
-      const email = faker.internet.exampleEmail();
-      await dbStudents.insert(email, null);
+  describe('signIn', () => {
+    it('should create a student and return status "created"', async () => {
+      const result = await dbStudents.signIn(email, ine, firstNames);
 
-      const savedStudent = await db(studentsTable).where('email', email).first();
-      expect(savedStudent).exist;
-      expect(savedStudent.letter).to.be.null;
-      expect(savedStudent.appointment).to.be.null;
-      expect(savedStudent.referral).to.be.null;
-      expect(savedStudent.createdAt).to.exist;
-      expect(savedStudent.updatedAt).to.be.null;
+      expect(result.status).equal('created');
+      expect(result).to.have.property('email', email);
+
+      const exists = await studentExists(email);
+      expect(exists).equal(true);
     });
 
-    it('should insert student with new email & source', async () => {
-      const email = faker.internet.exampleEmail();
-      const source = 'instagram';
-      await dbStudents.insert(email, source);
+    it('should return "alreadyRegistered" when same email + ine already exist', async () => {
+      await db(studentsTable).insert({
+        email,
+        ine,
+        firstNames,
+        createdAt: date.now(),
+      });
 
-      const savedStudent = await db(studentsTable).where('email', email).first();
-      expect(savedStudent).exist;
-      expect(savedStudent.letter).to.be.null;
-      expect(savedStudent.appointment).to.be.null;
-      expect(savedStudent.referral).to.be.null;
-      expect(savedStudent.source).to.eql(source);
-      expect(savedStudent.createdAt).to.exist;
-      expect(savedStudent.updatedAt).to.be.null;
+      const result = await dbStudents.signIn(email, ine, firstNames);
+
+      expect(result.status).equal('alreadyRegistered');
+      expect(result).to.have.property('email', email);
     });
 
-    it('should ignore with already existing email', async () => {
-      const email = faker.internet.exampleEmail();
-      await dbStudents.insert(email, null);
-      await dbStudents.insert(email, 'instagram');
+    it('should return "conflict" when email exists but ine differs', async () => {
+      await db(studentsTable).insert({
+        email,
+        ine,
+        firstNames,
+        createdAt: date.now(),
+      });
 
-      const savedStudent: Student[] = await db(studentsTable).where('email', email);
-      expect(savedStudent).has.length(1);
-      expect(savedStudent[0].letter).to.be.null;
-      expect(savedStudent[0].appointment).to.be.null;
-      expect(savedStudent[0].referral).to.be.null;
-      expect(savedStudent[0].source).to.be.null;
-      expect(savedStudent[0].createdAt).to.be.not.null;
-      expect(savedStudent[0].updatedAt).to.be.null;
+      const result = await dbStudents.signIn(email, ine2, firstNames);
+
+      expect(result.status).equal('conflict');
+    });
+
+    it('should return "conflict" when ine exists but email differs', async () => {
+      await db(studentsTable).insert({
+        email,
+        ine,
+        firstNames,
+        createdAt: date.now(),
+      });
+
+      const result = await dbStudents.signIn(email2, ine, firstNames);
+
+      expect(result.status).equal('conflict');
     });
   });
 
-  describe('update', () => {
-    it('should update letter', async () => {
-      const email = faker.internet.exampleEmail();
-      await dbStudents.insert(email, null);
-      const student = await db(studentsTable).where('email', email).first();
+  describe('getById', () => {
+    it('should retrieve a student by id', async () => {
+      const inserted = await db(studentsTable)
+        .insert({
+          email,
+          ine,
+          firstNames,
+          createdAt: date.now(),
+        })
+        .returning('*');
 
-      await dbStudents.updateById(student.id, {
-        letter: true,
+      const student = await dbStudents.getById(inserted[0].id);
+
+      expect(student).to.not.be.undefined;
+      expect(student.email).equal(email);
+      expect(student.ine).equal(ine);
+    });
+  });
+
+  describe('getByEmail', () => {
+    it('should retrieve a student by email', async () => {
+      await db(studentsTable).insert({
+        email,
+        ine,
+        firstNames,
+        createdAt: date.now(),
       });
 
-      const savedStudent = await db(studentsTable).where('email', email).first();
-      expect(savedStudent.letter).to.be.true;
-      expect(savedStudent.appointment).to.be.null;
-      expect(savedStudent.referral).to.be.null;
-      expect(savedStudent.updatedAt).to.be.not.null;
+      const student = await dbStudents.getByEmail(email);
+
+      expect(student).to.not.be.undefined;
+      expect(student.email).equal(email);
     });
 
-    it('should update appointment', async () => {
-      const email = faker.internet.exampleEmail();
-      await dbStudents.insert(email, null);
-      const student = await db(studentsTable).where('email', email).first();
-
-      await dbStudents.updateById(student.id, {
-        appointment: false,
-      });
-
-      const savedStudent = await db(studentsTable).where('email', email).first();
-      expect(savedStudent.letter).to.be.null;
-      expect(savedStudent.appointment).to.be.false;
-      expect(savedStudent.referral).to.be.null;
-      expect(savedStudent.updatedAt).to.be.not.null;
-    });
-
-    it('should update referral', async () => {
-      const email = faker.internet.exampleEmail();
-      await dbStudents.insert(email, null);
-      const student = await db(studentsTable).where('email', email).first();
-
-      await dbStudents.updateById(student.id, {
-        referral: 3,
-      });
-
-      const savedStudent = await db(studentsTable).where('email', email).first();
-      expect(savedStudent.letter).to.be.null;
-      expect(savedStudent.appointment).to.be.null;
-      expect(savedStudent.referral).to.equal(3);
-      expect(savedStudent.updatedAt).to.be.not.null;
-    });
-
-    it('should ignore if id is unknown', async () => {
-      const unknownId = uuidv4();
-      await dbStudents.updateById(unknownId, {
-        referral: 3,
-      });
+    it('should return undefined if student email does not exist', async () => {
+      const student = await dbStudents.getByEmail('doesnotexist@test.fr');
+      expect(student).to.be.undefined;
     });
   });
 });

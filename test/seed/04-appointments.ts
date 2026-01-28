@@ -8,20 +8,21 @@ import {
 import { getPatientsByPsychologist } from './03-patients';
 import { Appointment } from '../../types/Appointment';
 
-const getOneAppointmentPerMonth = (patient: { id: string, psychologistId: string }, day: number, deleted = false)
-  : Appointment[] => {
-  const currentYear = new Date().getFullYear();
-  return [...Array(12).keys()]
-    .map((i) => create.getOneAppointment({
-      patientId: patient.id,
-      psychologistId: patient.psychologistId,
-      appointmentDate: new Date(currentYear, i, day).toISOString(),
-      deleted,
-    }));
-};
+const getOneAppointmentPerMonth = (
+  patient: { id: string, psychologistId: string },
+  day: number,
+  deleted = false,
+  year = new Date().getFullYear(),
+): Appointment[] => [...Array(12).keys()]
+  .map((i) => create.getOneAppointment({
+    patientId: patient.id,
+    psychologistId: patient.psychologistId,
+    appointmentDate: new Date(year, i, day).toISOString(),
+    deleted,
+  }));
 
 // eslint-disable-next-line import/prefer-default-export
-export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
+export const seed = async (knex: Knex, year?: number, fixedValues = false): Promise<void> => {
   const patientsByPsychologist = getPatientsByPsychologist();
   const patientList = Object.keys(patientsByPsychologist)
     .flatMap((psychologist) => {
@@ -38,30 +39,30 @@ export const seed = async (knex: Knex, fixedValues = false): Promise<void> => {
     // Add appointments to the first psychologist.
 
     // Patient 0 => One appointment deleted
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[0], 10, true));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[0], 10, true, year));
     // Patient 1 => 3 appointements => 5 10 and 15
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[1], 5));
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[1], 10));
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[1], 15));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[1], 5, false, year));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[1], 10, false, year));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[1], 15, false, year));
     // Patient 2 => 5 appointements => 2 on the 5, 10, 20 and 25
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[2], 5));
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[2], 5));
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[2], 10));
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[2], 20));
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[2], 25));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[2], 5, false, year));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[2], 5, false, year));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[2], 10, false, year));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[2], 20, false, year));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[2], 25, false, year));
     // Patient 3 => 5 appointments on the 1, 
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1));
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1));
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1));
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1));
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1, false, year));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1, false, year));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1, false, year));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1, false, year));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[3], 1, false, year));
 
     // Add appointments to another psychologist, it's shared patient with the first psychologist.
 
     // Patient 1 => 1 appointments => 12
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[6], 12));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[6], 12, false, year));
     // Patient 2 => 1 appointments => 22
-    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[7], 22));
+    appointmentList = appointmentList.concat(getOneAppointmentPerMonth(patientList[7], 22, false, year));
   } else {
     const pastDate = new Date();
     pastDate.setFullYear(pastDate.getFullYear() - 1);

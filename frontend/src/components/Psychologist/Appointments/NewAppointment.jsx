@@ -43,7 +43,7 @@ const NewAppointment = () => {
   const patient = useMemo(() => patients?.find(p => p.id === patientId), [patients, patientId]);
   const INEhasBeenValidated = patient?.isINESvalid;
   const tooMuchAppointments = useMemo(() => patient && patient.countedAppointments >= MAX_APPOINTMENT, [patient]);
-  const hasAllCompulsoryInfo = useMemo(() => (patient && patient.INE && patient.dateOfBirth && patient.gender && INEhasBeenValidated), [patient]);
+  const hasAllCompulsoryInfo = useMemo(() => (patient && patient.INE && patient.dateOfBirth && patient.gender && INEhasBeenValidated && patient.email), [patient]);
   const createNewAppointment = e => {
     e.preventDefault();
     setNotification({});
@@ -138,7 +138,7 @@ const NewAppointment = () => {
               title="Problème avec le dossier étudiant"
               description={(
                 <>
-                  Le dossier de l&apos;étudiant doit être complet pour ajouter des séances : INE valide, date de naissance, genre...
+                  Le dossier de l&apos;étudiant doit être complet pour ajouter des séances : email, INE valide, date de naissance, genre...
                   <br />
                 </>
               )} />

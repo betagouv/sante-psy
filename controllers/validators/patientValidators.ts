@@ -3,7 +3,7 @@ import { purifySanitizer } from '../../services/sanitizer';
 import { allGenders } from '../../types/Genders';
 import date from '../../utils/date';
 
-const inePatterns = [
+export const inePatterns = [
   /^[0-9]{9}[A-HJK]{2}$/, // INE-RNIE
   /^\d{10}[A-HJ-NPR-Z]$/, // INE-BEA
   /^[0-9A-Z]{10}\d$/, // INE-Base 36
@@ -26,6 +26,12 @@ export const patientValidators = [
     .customSanitizer(purifySanitizer)
     .isIn(allGenders)
     .withMessage('Le genre du patient n\'est pas valide.'),
+  check('email')
+    .trim().not().isEmpty()
+    .withMessage('Vous devez spécifier un email valide.')
+    .isEmail()
+    .customSanitizer(purifySanitizer)
+    .withMessage('Email invalide.'),
   check('INE')
     .trim().not().isEmpty()
     .withMessage('Le numéro INE est obligatoire.')

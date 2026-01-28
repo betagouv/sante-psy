@@ -37,7 +37,7 @@ describe('conventionController', () => {
 
       return chai.request(app)
       .post(`/api/psychologist/${targetPsy.dossierNumber}/convention`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(connectedPsy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(connectedPsy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           isConventionSigned: true,
@@ -58,7 +58,7 @@ describe('conventionController', () => {
 
       return chai.request(app)
       .post(`/api/psychologist/${psy.dossierNumber}/convention`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           isConventionSigned: true,
@@ -80,7 +80,7 @@ describe('conventionController', () => {
 
       return chai.request(app)
       .post(`/api/psychologist/${psy.dossierNumber}/convention`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
       .set('xsrf-token', 'randomXSRFToken')
         .send(payload)
         .then(async (res) => {

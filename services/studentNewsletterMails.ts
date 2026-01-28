@@ -1,5 +1,5 @@
 import ejs from 'ejs';
-import { Student } from '../types/Student';
+import { StudentNewsletter } from '../types/StudentNewsletter';
 import config from '../utils/config';
 import sendEmail from '../utils/email';
 
@@ -18,7 +18,7 @@ const sendMail1 = async (email: string): Promise<void> => {
   await sendEmail(email, `Les informations concernant ${config.appName}`, html);
 };
 
-const sendMail2 = async (student: Student): Promise<void> => {
+const sendMail2 = async (student: StudentNewsletter): Promise<void> => {
   const html = await ejs.renderFile('./views/emails/studentMail-2.ejs', {
     signature: getSignature(),
     site: `${config.hostnameWithProtocol}`,
@@ -28,7 +28,7 @@ const sendMail2 = async (student: Student): Promise<void> => {
   return sendEmail(student.email, 'Comment te sens-tu en ce moment ?', html);
 };
 
-const sendMail3 = async (student: Student): Promise<void> => {
+const sendMail3 = async (student: StudentNewsletter): Promise<void> => {
   const html = await ejs.renderFile('./views/emails/studentMail-3.ejs', {
     signature: getSignature(),
     faq: `${config.hostnameWithProtocol}/faq`,
@@ -38,7 +38,7 @@ const sendMail3 = async (student: Student): Promise<void> => {
   return sendEmail(student.email, 'On vient prendre de tes nouvelles !', html);
 };
 
-const sendMail4 = async (student: Student): Promise<void> => {
+const sendMail4 = async (student: StudentNewsletter): Promise<void> => {
   const html = await ejs.renderFile('./views/emails/studentMail-4.ejs', {
     signature: getSignature(),
     faq: `${config.hostnameWithProtocol}/faq`,
@@ -48,7 +48,7 @@ const sendMail4 = async (student: Student): Promise<void> => {
   return sendEmail(student.email, 'Tout se passe bien pour toi ?', html);
 };
 
-const sendMailDoctorAppointment = async (student: Student): Promise<void> => {
+const sendMailDoctorAppointment = async (student: StudentNewsletter): Promise<void> => {
   const html = await ejs.renderFile('./views/emails/studentMail-doctorAppointment.ejs', {
     signature: getSignature(),
     faq: `${config.hostnameWithProtocol}/faq`,
@@ -58,7 +58,7 @@ const sendMailDoctorAppointment = async (student: Student): Promise<void> => {
   return sendEmail(student.email, 'As-tu réussi à rencontrer un médecin ?', html);
 };
 
-const sendMailDoctorAppointment2 = async (student: Student): Promise<void> => {
+const sendMailDoctorAppointment2 = async (student: StudentNewsletter): Promise<void> => {
   const html = await ejs.renderFile('./views/emails/studentMail-doctorAppointment-2.ejs', {
     signature: getSignature(),
     faq: `${config.hostnameWithProtocol}/faq`,

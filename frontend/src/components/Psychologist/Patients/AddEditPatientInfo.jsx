@@ -4,22 +4,16 @@ import classNames from 'classnames';
 import { addAutoSlashToDate } from 'services/date';
 import Notification from 'components/Notification/Notification';
 import { HashLink } from 'react-router-hash-link';
+import validateIneFormat from 'src/utils/validateIneFormat';
 import styles from './addEditPatient.cssmodule.scss';
 
 const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
   const [ineError, setIneError] = useState('');
   const [dateOfBirthError, setDateOfBirthError] = useState('');
+  const [emailError, setEmailError] = useState('');
 
   const validateINE = value => {
-    const patterns = [
-      /^[0-9]{9}[A-HJK]{2}$/, // INE-RNIE
-      /^\d{10}[A-HJ-NPR-Z]$/, // INE-BEA
-      /^[0-9A-Z]{10}\d$/, // INE-Base 36
-      /^\d{4}[A]\d{5}[A-HJ-NPR-Z]$/, // INE-SIFA
-      /^\d{4}[D]\d{5}[A-HJ-NPR-Z]$/i, // INE provisoire
-    ];
-
-    const isValid = patterns.some(pattern => pattern.test(value));
+    const isValid = validateIneFormat(value);
 
     if (!isValid) {
       setIneError('INE invalide. Veuillez vérifier le format.');
@@ -60,6 +54,32 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
     validateDateOfBirth(formattedValue);
   };
 
+  const validateEmail = value => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!value || value.trim() === '') {
+      setEmailError('L\'email de l\'étudiant est désormais obligatoire.');
+      handleFormErrors('email', true);
+      return false;
+    }
+
+    if (!emailRegex.test(value)) {
+      setEmailError('L\'email n\'est pas valide.');
+      handleFormErrors('email', true);
+      return false;
+    }
+
+    setEmailError('');
+    handleFormErrors('email', false);
+    return true;
+  };
+
+  const handleEmailChange = e => {
+    const { value } = e.target;
+    changePatient(value, 'email');
+    validateEmail(value);
+  };
+
   useEffect(() => {
     if (patient.INE) {
       validateINE(patient.INE);
@@ -71,6 +91,10 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
       validateDateOfBirth(patient.dateOfBirth);
     }
   }, [patient.dateOfBirth]);
+
+  useEffect(() => {
+    validateEmail(patient.email || '');
+  }, [patient.email]);
 
   return (
     <>
@@ -91,6 +115,21 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
           onChange={e => changePatient(e.target.value, 'lastName')}
           required
         />
+        <TextInput
+          className="midlength-input"
+          data-test-id="etudiant-email-input"
+          label="Email"
+          value={patient.email}
+          onChange={handleEmailChange}
+          required
+        />
+        {emailError && (
+          <p
+            data-test-id="etudiant-email-error"
+            className={styles.errorMessage}>
+            {emailError}
+          </p>
+        )}
         <RadioGroup
           name="gender"
           legend={(

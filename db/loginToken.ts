@@ -10,7 +10,7 @@ const getByToken = async (token: string): Promise<LoginToken> => {
     .andWhere('expiresAt', '>', date.now())
     .first();
 
-    return result;
+    return result || null;
   } catch (err) {
     console.error('Impossible de récupérer le token', err);
     throw new Error('Une erreur est survenue.');
@@ -23,22 +23,35 @@ const getByEmail = async (email: string): Promise<LoginToken> => {
     .where('email', email)
     .first();
 
-    return result;
+    return result || null;
   } catch (err) {
     console.error('Impossible de récupérer le token', err);
     throw new Error('Une erreur est survenue.');
   }
 };
 
-const insert = async (token: string, email: string, expiresAt: string): Promise<LoginToken> => {
+const upsert = async (
+  token: string,
+  email: string,
+  expiresAt: Date,
+  role: 'psy' | 'student' = 'psy',
+): Promise<LoginToken> => {
   try {
-    return await db(loginTokenTable).insert({
-      token,
-      email,
-      expiresAt,
-    });
+    const existing = await getByEmail(email);
+
+    if (existing) {
+      await db(loginTokenTable).where({ email }).del();
+    }
+
+    const [created] = await db(loginTokenTable)
+      .insert({
+        token, email, expiresAt, role,
+      })
+      .returning('*');
+
+    return created;
   } catch (err) {
-    console.error(`Erreur de sauvegarde du token : ${err}`);
+    console.error(`Erreur d'upsert du token : ${err}`);
     throw new Error('Erreur de sauvegarde du token');
   }
 };
@@ -65,6 +78,6 @@ const deleteOne = async (token: string): Promise<void> => {
 export default {
   getByToken,
   getByEmail,
-  insert,
+  upsert,
   delete: deleteOne,
 };

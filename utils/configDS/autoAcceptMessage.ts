@@ -10,7 +10,7 @@ https://santepsy.etudiant.gouv.fr/static/documents/parcours_psychologue_sante_ps
 Une université partenaire va vous contacter dans les prochaines semaines afin d'établir une convention. C'est cette université qui réalisera le remboursement des séances effectuées et déclarées dans le cadre du dispositif. 
 ${waitForConvention ? 'Vous pourrez commencer à recevoir des étudiants après la signature de votre convention.' : 'Dès à présent, vous pouvez recevoir des étudiants.'}
 
-Pour déclarer vos séances à rembourser, connecter-vous à votre espace sur la plateforme : https://santepsy.etudiant.gouv.fr/psychologue/login
+Pour déclarer vos séances à rembourser, connecter-vous à votre espace sur la plateforme : https://santepsy.etudiant.gouv.fr/login
 
 Pour toute question, nous vous invitons à consulter notre FAQ ou à nous écrire à ${contactEmail}
 `;

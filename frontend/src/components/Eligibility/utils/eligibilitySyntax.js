@@ -7,8 +7,6 @@ const pronouns = {
     pronoun: 'vous',
     personalPronoun: 'vous ',
     otherPersonalPronoun: 'vous',
-    take: 'Prenez',
-    find: 'retrouvez-le',
   },
   CLOSE: {
     subject: 'Votre proche est',
@@ -19,8 +17,6 @@ const pronouns = {
     pronoun: 'il',
     personalPronoun: "l'",
     otherPersonalPronoun: 'lui',
-    take: 'Il peut prendre',
-    find: 'il peut le retrouver',
   },
   SCHOOL: {
     subject: 'Vos étudiants sont',
@@ -30,8 +26,6 @@ const pronouns = {
     pronoun: 'ils',
     personalPronoun: 'les ',
     otherPersonalPronoun: 'leur',
-    take: 'Ils peuvent prendre',
-    find: 'ils peuvent le retrouver',
   },
   CONSULTANT: {
     subject: "L'étudiant est",
@@ -42,8 +36,6 @@ const pronouns = {
     pronoun: 'il',
     personalPronoun: "l'",
     otherPersonalPronoun: 'lui',
-    take: 'Il peut prendre',
-    find: 'il peut le retrouver',
   },
 };
 

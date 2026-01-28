@@ -16,6 +16,7 @@ describe('DB Patients', () => {
   const gender = 'female';
   const studentNumber = '12345678901';
   const isINESvalid = false;
+  const email = 'patient@beta.gouv.fr';
   const anotherStudentNumber = '10987654321';
   const institutionName = 'Pouldard';
   const isStudentStatusVerified = false;
@@ -46,6 +47,7 @@ describe('DB Patients', () => {
         gender,
         studentNumber,
         isINESvalid,
+        email,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
@@ -66,6 +68,7 @@ describe('DB Patients', () => {
           gender,
           '1'.repeat(12),
           isINESvalid,
+          email,
           institutionName,
           isStudentStatusVerified,
           psy.dossierNumber,
@@ -89,6 +92,7 @@ describe('DB Patients', () => {
           '1'.repeat(51),
           isINESvalid,
           institutionName,
+          email,
           isStudentStatusVerified,
           psy.dossierNumber,
           doctorName,
@@ -101,7 +105,7 @@ describe('DB Patients', () => {
 
     it('should refuse insert without mandatory params in PG', async () => {
       try {
-        await dbPatients.insert(firstNames, null, dateOfBirth, gender, '123456789213', isINESvalid);
+        await dbPatients.insert(firstNames, null, dateOfBirth, gender, '123456789213', isINESvalid, email);
       } catch (error) {
         expect(error).to.be.an('Error');
       }
@@ -117,6 +121,7 @@ describe('DB Patients', () => {
         studentNumber,
         isINESvalid,
         institutionName,
+        email,
         isStudentStatusVerified,
         psy.dossierNumber,
         doctorName,
@@ -136,6 +141,7 @@ describe('DB Patients', () => {
         gender,
         studentNumber,
         isINESvalid,
+        email,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
@@ -154,6 +160,7 @@ describe('DB Patients', () => {
         gender,
         oldPatient.INE,
         isINESvalid,
+        oldPatient.email,
         oldPatient.institutionName,
         oldPatient.isStudentStatusVerified,
         psy.dossierNumber,
@@ -174,6 +181,7 @@ describe('DB Patients', () => {
         gender,
         studentNumber,
         isINESvalid,
+        email,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
@@ -202,6 +210,7 @@ describe('DB Patients', () => {
         gender,
         studentNumber,
         isINESvalid,
+        email,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
@@ -214,6 +223,7 @@ describe('DB Patients', () => {
         gender,
         anotherStudentNumber,
         isINESvalid,
+        email,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,
@@ -234,6 +244,7 @@ describe('DB Patients', () => {
         gender,
         studentNumber,
         isINESvalid,
+        email,
         institutionName,
         isStudentStatusVerified,
         psy.dossierNumber,

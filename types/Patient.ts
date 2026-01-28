@@ -4,6 +4,7 @@ export type Patient = {
     lastName: string,
     INE: string,
     isINESvalid: boolean,
+    email: string,
     gender: string,
     institutionName?: string,
     isStudentStatusVerified?: boolean,

@@ -1,14 +1,17 @@
 let currentUser = {};
 
-const setLoginInfo = (token, xsrfToken) => {
+const setLoginInfo = (token, xsrfToken, role = 'psy') => {
   const currentXsrfToken = xsrfToken;
   window.localStorage.setItem('xsrfToken', currentXsrfToken);
+  if (role) {
+    window.localStorage.setItem('role', role);
+  }
   cy.setCookie('token', token);
 };
 
 const loginAsDefault = (duration = '2h') => cy.request({
   method: 'GET',
-  url: 'http://localhost:8080/test/psychologist/login@beta.gouv.fr',
+  url: 'http://localhost:8080/test/auth/login@beta.gouv.fr',
   qs: { duration },
 })
   .then(res => {

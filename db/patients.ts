@@ -40,6 +40,7 @@ const insert = async (
   gender: string,
   INE: string,
   isINESvalid: boolean,
+  email: string,
   institutionName?: string,
   isStudentStatusVerified?: boolean,
   psychologistId?: string,
@@ -53,6 +54,7 @@ const insert = async (
       gender,
       INE,
       isINESvalid,
+      email,
       institutionName,
       isStudentStatusVerified,
       psychologistId,
@@ -73,6 +75,7 @@ const update = async (
   gender: string,
   INE: string,
   isINESvalid: boolean,
+  email: string,
   institutionName: string,
   isStudentStatusVerified: boolean,
   psychologistId: string,
@@ -88,6 +91,7 @@ const update = async (
         dateOfBirth,
         gender,
         INE,
+        email,
         institutionName,
         isStudentStatusVerified,
         psychologistId,
@@ -136,6 +140,23 @@ const updateCertificateChecked = async (patientId: string): Promise<void> => {
   }
 };
 
+const getByStudentEmailAndIne = async (
+  email: string,
+  INE: string,
+): Promise<Patient[]> => {
+  try {
+    return await db(patientsTable)
+      .where({
+        email,
+        INE,
+      })
+      .andWhere('deleted', false);
+  } catch (err) {
+    console.error('Erreur récupération patients étudiant', err);
+    throw new Error('Erreur récupération patients étudiant');
+  }
+};
+
 export default {
   getById,
   getAll,
@@ -144,4 +165,5 @@ export default {
   updateIsINESValidOnly,
   delete: deleteOne,
   updateCertificateChecked,
+  getByStudentEmailAndIne,
 };

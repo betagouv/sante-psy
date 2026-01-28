@@ -13,7 +13,7 @@ describe('Patient', () => {
     cy.intercept('GET', '/api/config')
       .as('config');
 
-    resetDB();
+    resetDB(2025);
     loginAsDefault();
     checkConvention();
 
@@ -46,6 +46,8 @@ describe('Patient', () => {
         .type('Université de Rennes');
       cy.get('[data-test-id="etudiant-ine-input"] > input')
         .type('010203045AA');
+      cy.get('[data-test-id="etudiant-email-input"] > input')
+        .type('login@beta.gouv.fr');
       cy.get('[data-test-id="etudiant-status-input"]')
         .click();
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
@@ -77,6 +79,8 @@ describe('Patient', () => {
         .type('Université de Rennes');
       cy.get('[data-test-id="etudiant-ine-input"] > input')
         .type('010203045LP');
+      cy.get('[data-test-id="etudiant-email-input"] > input')
+        .type('login@beta.gouv.fr');
       cy.get('[data-test-id="etudiant-status-input"]')
         .click();
       cy.get('[data-test-id="etudiant-doctor-name-input"] > input')
@@ -96,9 +100,6 @@ describe('Patient', () => {
         .click();
 
       cy.wait('@etudiant');
-      // we set this date to always have the same active tab in student profile
-      const currentYear = new Date().getFullYear();
-      cy.clock(new Date(currentYear, 5, 1).getTime());
       cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
       cy.get('[data-test-id="etudiant-seances-list"] tr')
         .should('have.length', 49);
@@ -113,6 +114,8 @@ describe('Patient', () => {
       cy.get('[data-test-id="etudiant-last-name-input"] > input').type('Moustaki');
       cy.get('[data-test-id="etudiant-ine-input"] > input').clear();
       cy.get('[data-test-id="etudiant-ine-input"] > input').type('010203045AA');
+      cy.get('[data-test-id="etudiant-email-input"] > input').clear();
+      cy.get('[data-test-id="etudiant-email-input"] > input').type('login@beta.gouv.fr');
       cy.get('[data-test-id="etudiant-birth-date-input"] > input').clear();
       cy.get('[data-test-id="etudiant-birth-date-input"] > input')
         .type('01/01/2001');

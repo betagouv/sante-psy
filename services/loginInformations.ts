@@ -9,10 +9,15 @@ function generateToken(size = 64): string {
 }
 
 function generateLoginUrl(): string {
-  return `${config.hostnameWithProtocol}/psychologue/login`;
+  return `${config.hostnameWithProtocol}/login`;
+}
+
+function generateStudentSignInStepTwoUrl(): string {
+  return `${config.hostnameWithProtocol}/inscription`;
 }
 
 export default {
   generateLoginUrl,
+  generateStudentSignInStepTwoUrl,
   generateToken,
 };

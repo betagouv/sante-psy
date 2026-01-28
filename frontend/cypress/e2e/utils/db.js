@@ -1,5 +1,6 @@
-const resetDB = () => {
-  cy.request('POST', 'http://localhost:8080/test/reset');
+const resetDB = year => {
+  const url = year ? `http://localhost:8080/test/reset?year=${year}` : 'http://localhost:8080/test/reset';
+  cy.request('POST', url);
 };
 
 const resetTutorial = (email = 'login@beta.gouv.fr') => {
