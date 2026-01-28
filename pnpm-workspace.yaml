@@ -3,6 +3,7 @@ packages:
 
 minimumReleaseAge: 10080 # wait for a 7 days (in minutes) cooldown period
 
+sideEffectsCache: false
 trustPolicy: no-downgrade
 trustPolicyExclude:
   - ua-parser-js@0.7.41
