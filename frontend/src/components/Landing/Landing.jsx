@@ -54,7 +54,7 @@ const Landing = () => {
           </>
         )}
         buttonLink="/eligibilite"
-        buttonText="Vérifier mon éligibilité"
+        buttonText="Prendre RDV"
         hint={(
           <>
             Plus de

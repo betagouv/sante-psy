@@ -6,7 +6,10 @@ const refreshToken = (req: Request, res: Response, next: NextFunction): void => 
   if (req.auth) {
     const now = (new Date()).getTime() / 1000;
     if (req.auth.exp - now > Number(config.refreshDurationHours) * 3600) {
-      cookie.createAndSetJwtCookie(res, req.auth.psychologist, req.auth.xsrfToken);
+      const userId = req.auth.userId || req.auth.psychologist;
+      if (userId) {
+        cookie.createAndSetJwtCookie(res, userId, req.auth.xsrfToken, req.auth.role);
+      }
     }
   }
 

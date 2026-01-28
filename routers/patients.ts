@@ -1,9 +1,12 @@
 import express from 'express';
 import multer from 'multer';
 import patientsController from '../controllers/patientsController';
+import access from '../utils/access';
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
+
+router.use(access.requirePsyRole);
 
 router.get('/', patientsController.getAll);
 router.post(

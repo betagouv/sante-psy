@@ -14,13 +14,24 @@ describe('cookie', () => {
   });
 
   describe('getJwtTokenForUser', () => {
-    it('should return a json web token with only id', () => {
+    it('should return a json web token with only id (backward compat)', () => {
       const psychologist = uuidv4();
       const token = cookie.getJwtTokenForUser(psychologist, 'randomXSRF');
 
       token.length.should.be.equal(233);
       const decoded = jwtDecode(token);
       decoded.should.have.all.keys('psychologist', 'xsrfToken', 'iat', 'exp');
+    });
+
+    it('should return a json web token with userId and role', () => {
+      const userId = uuidv4();
+      const token = cookie.getJwtTokenForUser(userId, 'randomXSRF', 'psy');
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const decoded: any = jwtDecode(token);
+      decoded.should.have.all.keys('userId', 'role', 'xsrfToken', 'iat', 'exp');
+      decoded.userId.should.equal(userId);
+      decoded.role.should.equal('psy');
     });
   });
 

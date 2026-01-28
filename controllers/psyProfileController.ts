@@ -25,7 +25,8 @@ const get = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError("Le psychologue n'existe pas.", 500);
   }
   const tokenData = cookie.verifyJwt(req, res);
-  const extraInfo = tokenData && tokenData.psychologist === req.params.psyId;
+  const userId = tokenData ? (tokenData.userId || tokenData.psychologist) : null;
+  const extraInfo = tokenData && userId === req.params.psyId;
 
   const {
     firstNames,
@@ -143,9 +144,16 @@ const update = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Departement invalide', 400);
   }
 
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
   let coordinates: Coordinates;
   let otherCoordinates: Coordinates;
-  const psychologist = await dbPsychologists.getById(req.auth.psychologist);
+  const psychologist = await dbPsychologists.getById(psychologistId);
   if (psychologist) {
     if (psychologist.address !== req.body.address) {
       coordinates = await getAddressCoordinates(req.body.address);
@@ -172,7 +180,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
 
   await dbPsychologists.update({
     ...req.body,
-    dossierNumber: req.auth.psychologist,
+    dossierNumber: psychologistId,
     region,
     longitude: coordinates ? coordinates.longitude : null,
     latitude: coordinates ? coordinates.latitude : null,
@@ -190,7 +198,14 @@ const update = async (req: Request, res: Response): Promise<void> => {
 };
 
 const activate = async (req: Request, res: Response): Promise<void> => {
-  await dbPsychologists.activate(req.auth.psychologist);
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
+  await dbPsychologists.activate(psychologistId);
 
   res.json({
     message: 'Vos informations sont de nouveau visibles sur l\'annuaire.',
@@ -213,7 +228,14 @@ const suspendValidators = [
 const suspend = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
-  await dbPsychologists.suspend(req.auth.psychologist, req.body.date, req.body.reason);
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
+  await dbPsychologists.suspend(psychologistId, req.body.date, req.body.reason);
 
   res.json({
     message: 'Vos informations ne sont plus visibles sur l\'annuaire.',
@@ -221,7 +243,14 @@ const suspend = async (req: Request, res: Response): Promise<void> => {
 };
 
 const seeTutorial = async (req: Request, res: Response): Promise<void> => {
-  await dbPsychologists.seeTutorial(req.auth.psychologist);
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!psychologistId) {
+    res.status(403).json({ message: 'Non autorisé' });
+    return;
+  }
+
+  await dbPsychologists.seeTutorial(psychologistId);
 
   res.json({
     message: 'Tutorial vu !',

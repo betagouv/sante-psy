@@ -20,7 +20,9 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
       : '2h';
 
     const jwtToken = token && !req.query.duration ? token.token : jwt.sign(
-      { psychologist: psy.dossierNumber, xsrfToken },
+      {
+        userId: psy.dossierNumber, role: 'psy', xsrfToken, psychologist: psy.dossierNumber,
+      },
       config.secret as Secret,
       { expiresIn: duration },
     );
@@ -36,7 +38,8 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
 };
 
 const resetDB = async (req: Request, res: Response): Promise<void> => {
-  await seed(db, true);
+  const year = typeof req.query.year === 'string' ? parseInt(req.query.year, 10) : undefined;
+  await seed(db, year, true);
   res.status(200).json('DB reset');
 };
 

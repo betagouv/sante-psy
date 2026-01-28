@@ -35,10 +35,10 @@ const Bill = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await agent.User.getConnected();
-        setUser(response.data);
+        const response = await agent.Auth.getConnected();
+        setUser(response.data.user);
 
-        const { universityId } = response.data.convention;
+        const { universityId } = response.data.user.convention;
         if (universityId) {
           const university = await agent.University.getOne(universityId);
           if (university && (university.address || university.postal_code || university.city || university.billingAddress)) {

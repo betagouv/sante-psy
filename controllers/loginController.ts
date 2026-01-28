@@ -4,6 +4,7 @@ import { check } from 'express-validator';
 import ejs from 'ejs';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
+import dbStudents from '../db/students';
 import dbSuspensions from '../db/suspensionReasons';
 import dbLoginToken from '../db/loginToken';
 import dbLastConnection from '../db/lastConnections';
@@ -24,9 +25,10 @@ const emailValidators = [
     .withMessage('Vous devez spécifier un email valide.'),
 ];
 
-async function sendLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
+// TODO : to refacto all doc to mutualize some methods looking alike
+async function sendPsyLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
   try {
-    const html = await ejs.renderFile('./views/emails/login.ejs', {
+    const html = await ejs.renderFile('./views/emails/psyLogin.ejs', {
       loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
       appName: config.appName,
       loginUrl,
@@ -35,7 +37,21 @@ async function sendLoginEmail(email: string, loginUrl: string, token: string): P
     console.log(`Login email sent for ${logs.hash(email)}`);
   } catch (err) {
     console.error(err);
-    throw new Error("Erreur d'envoi de mail - sendLoginEmail");
+    throw new Error("Erreur d'envoi de mail - sendPsyLoginEmail");
+  }
+}
+
+async function sendStudentLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
+  try {
+    const html = await ejs.renderFile('./views/emails/studentLogin.ejs', {
+      loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
+      site: `${config.hostnameWithProtocol}/login`,
+    });
+    await sendEmail(email, `Connexion à ${config.appName}`, html);
+    console.log(`Login email sent for ${logs.hash(email)}`);
+  } catch (err) {
+    console.error(err);
+    throw new Error("Erreur d'envoi de mail - sendStudentLoginEmail");
   }
 }
 
@@ -52,10 +68,22 @@ async function sendNotYetAcceptedEmail(email: string): Promise<void> {
   }
 }
 
-async function saveToken(email: string, token: string): Promise<void> {
+async function savePsyToken(email: string, token: string): Promise<void> {
   try {
     const expiredAt = date.getDatePlusOneHour();
-    await dbLoginToken.insert(token, email, expiredAt);
+    await dbLoginToken.upsert(token, email, expiredAt, 'psy');
+
+    console.log(`Login token created for ${logs.hash(email)}`);
+  } catch (err) {
+    console.error(`Erreur de sauvegarde du token : ${err}`);
+    throw new Error('Erreur de sauvegarde du token');
+  }
+}
+
+async function saveStudentToken(email: string, token: string): Promise<void> {
+  try {
+    const expiresAt = date.getDatePlusTwoHours();
+    await dbLoginToken.upsert(token, email, expiresAt, 'student');
 
     console.log(`Login token created for ${logs.hash(email)}`);
   } catch (err) {
@@ -69,55 +97,6 @@ const deleteToken = (req: Request, res: Response): void => {
   res.json({ });
 };
 
-const connectedUser = async (req: Request, res: Response): Promise<void> => {
-  const tokenData = cookie.verifyJwt(req, res);
-  if (tokenData && checkXsrf(req, tokenData.xsrfToken)) {
-    const psy = await dbPsychologists.getById(tokenData.psychologist);
-    const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
-
-    if (psy) {
-      const { reason: inactiveReason, until: inactiveUntil } = psy.active
-        ? { reason: undefined, until: undefined }
-        : await dbSuspensions.getByPsychologist(psy.dossierNumber);
-      const {
-        dossierNumber,
-        firstNames,
-        lastName,
-        useFirstNames,
-        useLastName,
-        email,
-        active,
-        adeli,
-        address,
-        otherAddress,
-        hasSeenTutorial,
-        createdAt,
-      } = psy;
-      res.json({
-        dossierNumber,
-        firstNames,
-        lastName,
-        useFirstNames,
-        useLastName,
-        adeli,
-        address,
-        otherAddress,
-        email,
-        convention,
-        active,
-        hasSeenTutorial,
-        createdAt,
-        inactiveReason,
-        inactiveUntil,
-      });
-
-      return;
-    }
-  }
-
-  res.json();
-};
-
 const login = async (req: Request, res: Response): Promise<void> => {
   // Save a token that expire after config.sessionDurationHours hours if user is logged
   if (req.body.token) {
@@ -127,7 +106,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
     if (dbToken) {
       const psychologistData = await dbPsychologists.getAcceptedByEmail(dbToken.email);
       const xsrfToken = loginInformations.generateToken();
-      cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken);
+      cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken, 'psy');
       console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
 
       dbLoginToken.delete(token);
@@ -142,6 +121,32 @@ const login = async (req: Request, res: Response): Promise<void> => {
 
   throw new CustomError(
     'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
+    401,
+  );
+};
+
+const studentLogin = async (req: Request, res: Response): Promise<void> => {
+  if (req.body.token) {
+    const token = DOMPurify.sanitize(req.body.token);
+    const dbToken = await dbLoginToken.getByToken(token);
+
+    if (dbToken) {
+      const studentData = await dbStudents.getByEmail(dbToken.email);
+      const xsrfToken = loginInformations.generateToken();
+      cookie.createAndSetJwtCookie(res, studentData.id, xsrfToken, 'student');
+      console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
+
+      dbLoginToken.delete(token);
+
+      res.json(xsrfToken);
+      return;
+    }
+
+    console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
+  }
+
+  throw new CustomError(
+    'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
     401,
   );
 };
@@ -177,18 +182,232 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
 
   const token = loginInformations.generateToken(32);
   const loginUrl = loginInformations.generateLoginUrl();
-  await sendLoginEmail(email, loginUrl, token);
-  await saveToken(email, token);
+  await sendPsyLoginEmail(email, loginUrl, token);
+  await savePsyToken(email, token);
   res.json({
-    message: `Un lien de connexion a été envoyé à l'adresse ${email
-    }. Le lien est valable ${config.sessionDurationHours} heures.`,
+    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
+      Le lien est valable ${config.sessionDurationHours} heures.`,
   });
+};
+
+const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+  const { email } = req.body;
+
+  console.log(`Student with ${logs.hash(email)} asked for a login link`);
+  const studentIsRegistered = await dbStudents.getByEmail(email);
+  const existingToken = await dbLoginToken.getByEmail(email);
+  let token;
+
+  if (existingToken) {
+    token = existingToken.token;
+  } else {
+    token = loginInformations.generateToken(32);
+  }
+
+  if (studentIsRegistered) {
+    const loginUrl = loginInformations.generateLoginUrl();
+    await saveStudentToken(email, token);
+    await sendStudentLoginEmail(email, loginUrl, token);
+  }
+
+  res.json({
+    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
+      Le lien est valable ${config.sessionDurationHours} heures.`,
+  });
+};
+
+const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+  const { email } = req.body;
+
+  console.log(`User login link request for ${email}`);
+
+  const student = await dbStudents.getByEmail(email);
+  if (student) {
+    await sendStudentMail(req, res);
+    return;
+  }
+
+  const psy = await dbPsychologists.getAcceptedByEmail(email);
+
+  if (psy) {
+    await sendMail(req, res);
+    return;
+  }
+
+  res.json({
+    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
+      Le lien est valable ${config.sessionDurationHours} heures.`,
+  });
+};
+
+const userLogin = async (req: Request, res: Response): Promise<void> => {
+  const token = DOMPurify.sanitize(req.body.token);
+
+  if (!token) {
+    throw new CustomError('Token manquant.', 400);
+  }
+
+  const tokenData = await dbLoginToken.getByToken(token);
+
+  if (!tokenData) {
+    console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
+    throw new CustomError(
+      'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
+      401,
+    );
+  }
+
+  const { email, role } = tokenData;
+  const xsrfToken = loginInformations.generateToken();
+
+  if (role === 'psy') {
+    const psy = await dbPsychologists.getAcceptedByEmail(email);
+    if (psy) {
+      cookie.createAndSetJwtCookie(res, psy.dossierNumber, xsrfToken, 'psy');
+      console.log(`Successful authentication for psy ${logs.hash(email)}`);
+
+      await dbLoginToken.delete(token);
+      await dbLastConnection.upsert(psy.dossierNumber);
+
+      res.json({ xsrfToken, role: 'psy' });
+      return;
+    }
+  } else if (role === 'student') {
+    const student = await dbStudents.getByEmail(email);
+    if (student) {
+      cookie.createAndSetJwtCookie(res, student.id, xsrfToken, 'student');
+      console.log(`Successful authentication for student ${logs.hash(email)}`);
+
+      await dbLoginToken.delete(token);
+
+      res.json({ xsrfToken, role: 'student' });
+      return;
+    }
+  }
+
+  console.log(`Token without matching user : ${logs.hash(email)}, role: ${role}`);
+  await dbLoginToken.delete(token);
+
+  throw new CustomError(
+    'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
+    401,
+  );
+};
+
+const userConnected = async (req: Request, res: Response): Promise<void> => {
+  const tokenData = cookie.verifyJwt(req, res);
+
+  if (!tokenData || !checkXsrf(req, tokenData.xsrfToken)) {
+    res.json({ role: null, user: null });
+    return;
+  }
+
+  const userId = tokenData.userId || tokenData.psychologist;
+  const { role } = tokenData;
+
+  if (!userId) {
+    res.json({ role: null, user: null });
+    return;
+  }
+
+  if (role === 'psy') {
+    const psy = await dbPsychologists.getById(userId);
+    if (psy) {
+      const convention = await dbPsychologists.getConventionInfo(userId);
+      const { reason: inactiveReason, until: inactiveUntil } = psy.active
+        ? { reason: undefined, until: undefined }
+        : await dbSuspensions.getByPsychologist(psy.dossierNumber);
+
+      res.json({
+        role: 'psy',
+        user: {
+          dossierNumber: psy.dossierNumber,
+          firstNames: psy.firstNames,
+          lastName: psy.lastName,
+          useFirstNames: psy.useFirstNames,
+          useLastName: psy.useLastName,
+          adeli: psy.adeli,
+          address: psy.address,
+          otherAddress: psy.otherAddress,
+          email: psy.email,
+          convention,
+          active: psy.active,
+          hasSeenTutorial: psy.hasSeenTutorial,
+          createdAt: psy.createdAt,
+          inactiveReason,
+          inactiveUntil,
+        },
+      });
+      return;
+    }
+  } else if (role === 'student') {
+    const student = await dbStudents.getById(userId);
+    if (student) {
+      res.json({
+        role: 'student',
+        user: { ...student },
+      });
+      return;
+    }
+  } else {
+    // Backward compatibility: check both tables if role is missing
+    const psy = await dbPsychologists.getById(userId);
+    if (psy) {
+      const convention = await dbPsychologists.getConventionInfo(userId);
+      const { reason: inactiveReason, until: inactiveUntil } = psy.active
+        ? { reason: undefined, until: undefined }
+        : await dbSuspensions.getByPsychologist(psy.dossierNumber);
+
+      res.json({
+        role: 'psy',
+        user: {
+          dossierNumber: psy.dossierNumber,
+          firstNames: psy.firstNames,
+          lastName: psy.lastName,
+          useFirstNames: psy.useFirstNames,
+          useLastName: psy.useLastName,
+          adeli: psy.adeli,
+          address: psy.address,
+          otherAddress: psy.otherAddress,
+          email: psy.email,
+          convention,
+          active: psy.active,
+          hasSeenTutorial: psy.hasSeenTutorial,
+          createdAt: psy.createdAt,
+          inactiveReason,
+          inactiveUntil,
+        },
+      });
+      return;
+    }
+
+    const isStudent = await dbStudents.getById(userId);
+    if (isStudent) {
+      res.json({
+        role: 'student',
+        user: { ...isStudent },
+      });
+      return;
+    }
+  }
+
+  res.json({ role: null, user: null });
 };
 
 export default {
   emailValidators,
-  connectedUser: asyncHelper(connectedUser),
   login: asyncHelper(login),
+  studentLogin: asyncHelper(studentLogin),
   sendMail: asyncHelper(sendMail),
+  sendStudentMail: asyncHelper(sendStudentMail),
+  sendStudentLoginEmail,
   deleteToken,
+  sendUserLoginMail: asyncHelper(sendUserLoginMail),
+  userLogin: asyncHelper(userLogin),
+  userConnected: asyncHelper(userConnected),
 };
