@@ -145,7 +145,7 @@ describe('psyLoginController', async () => {
             .replace(/\s+/g, ' ')
             .trim()
             .should.equal(
-              'Un mail de connexion vient de vous être envoyé si votre adresse e-mail correspond bien à '
+              'Un email de connexion vient de vous être envoyé si votre adresse email correspond bien à '
               + 'un utilisateur inscrit sur Santé Psy Étudiant. Le lien est valable 2 heures.',
             );
             done();

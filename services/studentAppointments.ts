@@ -29,8 +29,12 @@ const getStudentAppointments = async (
     return {};
   }
 
+  const uniqueAppointments = Array.from(
+    new Map(flatAppointments.map((appt) => [appt.id, appt])).values(),
+  );
+
   const psychologistIds = [
-    ...new Set(flatAppointments.map((appt) => appt.psychologistId)),
+    ...new Set(uniqueAppointments.map((appt) => appt.psychologistId)),
   ];
 
   const psychologistsArray = await Promise.all(
@@ -47,7 +51,7 @@ const getStudentAppointments = async (
     {},
   );
 
-  const mappedAppointments: StudentAppointment[] = flatAppointments
+  const mappedAppointments: StudentAppointment[] = uniqueAppointments
   .map((appt) => ({
     univYear: appt.univYear || 'unknown',
     appointmentDate: appt.appointmentDate,

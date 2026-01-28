@@ -7,7 +7,7 @@ export const EligibilityOptions = {
   ],
   TRAINING: [
     { value: 'BTS', label: 'BTS', eligible: true },
-    { value: 'UNIVERSITY_DIPLOMA', label: 'Diplôme universitaire en France', eligible: true },
+    { value: 'UNIVERSITY_DIPLOMA', label: 'Formation universitaire en France', eligible: true },
     { value: 'FOREIGN_SCHOOL', label: 'Formation étrangère' },
     { value: 'OTHER', label: 'Autre' },
   ],

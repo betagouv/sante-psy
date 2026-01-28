@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
 
-import FaqSection from 'components/Page/FaqSection';
 import styles from './studentPage.cssmodule.scss';
 
 const getNodeText = node => {
@@ -46,7 +45,6 @@ const StudentPage = ({
           {children}
         </div>
       </div>
-      <FaqSection />
     </>
   );
 };

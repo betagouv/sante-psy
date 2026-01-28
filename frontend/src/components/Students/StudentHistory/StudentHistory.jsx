@@ -77,6 +77,14 @@ const StudentHistory = () => {
         {endYear}
       </p>
 
+      <p className={styles.counter}>
+        {yearAppointments.length}
+        {' '}
+        séances consommées sur
+        {' '}
+        {MAX_SESSIONS}
+      </p>
+
       {yearAppointments.length > 0 ? (
         <>
           <div
@@ -107,13 +115,6 @@ const StudentHistory = () => {
               </div>
             ))}
           </div>
-          <p className={styles.counter}>
-            {yearAppointments.length}
-            {' '}
-            séances consommées sur
-            {' '}
-            {MAX_SESSIONS}
-          </p>
 
           <nav className={styles.navigation} aria-label="Navigation entre années universitaires">
             {prevYear ? (
@@ -123,6 +124,8 @@ const StudentHistory = () => {
                 onClick={() => setCurrentYear(prevYear)}
               >
                 <span className="fr-icon-arrow-left-s-first-line" aria-hidden="true" />
+                {' '}
+                Année
                 {' '}
                 {prevYear}
               </button>
@@ -134,6 +137,8 @@ const StudentHistory = () => {
                 className="fr-btn fr-btn--secondary"
                 onClick={() => setCurrentYear(nextYear)}
               >
+                Année
+                {' '}
                 {nextYear}
                 {' '}
                 <span className="fr-icon-arrow-right-s-last-line" aria-hidden="true" />
@@ -145,7 +150,7 @@ const StudentHistory = () => {
       ) : (
         <div className={styles.empty}>
           <p>
-            Tes séances consommées apparaîtront ici si tu indiques ton adresse mail à ton psychologue.
+            Tes séances consommées apparaîtront ici si tu indiques ton adresse email à ton psychologue.
           </p>
         </div>
       )}
@@ -156,15 +161,17 @@ const StudentHistory = () => {
         onClick={() => setShowHelp(!showHelp)}
         aria-expanded={showHelp}
           >
-        Un problème ?
+        Tes séances n&apos;apparaissent pas ?
       </button>
 
       {showHelp && (
       <ul className={styles.help}>
-        <li>Vérifie avec ton psychologue qu&apos;il a bien indiqué ton adresse email</li>
-        <li>Vérifie les informations avec ton psychologue : nom, prénom, date de naissance, numéro INE…</li>
-        <li>Contacte le support si cela ne fonctionne toujours pas</li>
-        <Link to="/contact">Nous contacter</Link>
+        <li>les séances futures n&apos;apparaissent pas</li>
+        <li>ton psychologue n&apos;a peut-être pas encore déclaré toutes les séances</li>
+        <li>vérifie avec ton psychologue qu&apos;il a bien indiqué la bonne adresse email</li>
+        <li>vérifie les informations avec ton psychologue : nom, prénom, date de naissance, numéro INE,...</li>
+        <li>cela ne fonctionne toujours pas ? tu n&apos;es pas d&apos;accord avec ton compte de séances ?</li>
+        <Link to="/contact/formulaire">Contacter le support</Link>
       </ul>
       )}
     </section>
