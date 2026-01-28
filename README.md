@@ -17,6 +17,7 @@ Accompagnement psychologique pour les étudiants
 ```bash
 git clone https://github.com/betagouv/sante-psy
 cp .env.sample .env # remplacer les valeurs nécessaires
+pnpm install --frozen-lockfile
 docker compose up # docker-compose avec tiret selon votre version
 ```
 
