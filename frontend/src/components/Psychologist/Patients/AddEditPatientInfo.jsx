@@ -118,7 +118,8 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
         <TextInput
           className="midlength-input"
           data-test-id="etudiant-email-input"
-          label="Email"
+          label="Adresse email"
+          hint="Utilisée pour l'espace étudiant"
           value={patient.email}
           onChange={handleEmailChange}
           required

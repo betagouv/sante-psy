@@ -29,6 +29,8 @@ const StudentHomepage = () => {
           </h2>
           <Link
             to="/trouver-un-psychologue"
+            target="_blank"
+            rel="noopener noreferrer"
             className="fr-btn fr-btn--primary"
           >
             Prendre RDV

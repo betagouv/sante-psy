@@ -77,6 +77,14 @@ const StudentHistory = () => {
         {endYear}
       </p>
 
+      <p className={styles.counter}>
+        {yearAppointments.length}
+        {' '}
+        séances consommées sur
+        {' '}
+        {MAX_SESSIONS}
+      </p>
+
       {yearAppointments.length > 0 ? (
         <>
           <div
@@ -107,13 +115,6 @@ const StudentHistory = () => {
               </div>
             ))}
           </div>
-          <p className={styles.counter}>
-            {yearAppointments.length}
-            {' '}
-            séances consommées sur
-            {' '}
-            {MAX_SESSIONS}
-          </p>
 
           <nav className={styles.navigation} aria-label="Navigation entre années universitaires">
             {prevYear ? (
