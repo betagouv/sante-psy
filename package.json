@@ -75,7 +75,7 @@
     "jsdom": "^21.1.0",
     "jsonwebtoken": "^9.0.0",
     "knex": "^2.4.2",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "mime-types": "^2.1.35",
     "multer": "^2.0.1",
     "nodemailer": "^7.0.7",
