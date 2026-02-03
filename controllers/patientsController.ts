@@ -12,6 +12,7 @@ import getAppointmentsCount from '../services/getAppointmentsCount';
 import {
   updateValidators, getOneValidators, patientValidators, deleteValidators,
 } from './validators/patientValidators';
+import sendSecondStepMail from '../services/sendSecondStepMail';
 import verifyINE from '../services/inesApi';
 import send from '../utils/email';
 import config from '../utils/config';
@@ -105,6 +106,16 @@ const update = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Ce patient n\'existe pas.', 404);
   }
 
+  try {
+    await sendSecondStepMail.inviteNewStudentToCreateAccount(
+      email,
+      'studentInvitationFromPsy',
+      'Création de votre espace étudiant',
+    );
+  } catch (err) {
+    console.error('Failed to send student invitation from psy', err);
+  }
+
   let infoMessage = `L'étudiant ${patientFirstNames} ${patientLastName} a bien été modifié.`;
   if (!patientInstitutionName || !patientIsStudentStatusVerified || !doctorName) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
@@ -168,6 +179,13 @@ const create = async (req: Request, res: Response): Promise<void> => {
     psychologistId,
     doctorName,
   );
+
+  await sendSecondStepMail.inviteNewStudentToCreateAccount(
+    email,
+    'studentInvitationFromPsy',
+    'Création de votre espace étudiant',
+  );
+
   let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
   if (!institutionName || !doctorName || !isStudentStatusVerified) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'

@@ -10,6 +10,7 @@ import db from '../db/db';
 import { psychologistsTable, studentsTable } from '../db/tables';
 import loginController from './loginController';
 import sendStudentMailTemplate from '../services/sendStudentMailTemplate';
+import sendSecondStepMail from '../services/sendSecondStepMail';
 import validation from '../utils/validation';
 
 const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<void> => {
@@ -17,25 +18,19 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
     const { email } = req.body;
     const existingStudent = await db(studentsTable).where({ email }).first();
     const isPsyEmail = await db(psychologistsTable).where({ email }).first();
-    const token = loginInformations.generateToken(32);
-
-    const expiresAt = existingStudent
-      ? date.getDatePlusTwoHours()
-      : date.getDatePlusFourtyEightHours();
-
-    await dbLoginToken.upsert(token, email, expiresAt, 'student');
 
     if (existingStudent && !isPsyEmail) {
+      const token = loginInformations.generateToken(32);
+      const expiresAt = date.getDatePlusTwoHours();
+      await dbLoginToken.upsert(token, email, expiresAt, 'student');
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),
         token,
       );
     } else if (!isPsyEmail) {
-      await sendStudentMailTemplate(
+      await sendSecondStepMail.inviteNewStudentToCreateAccount(
         email,
-        loginInformations.generateStudentSignInStepTwoUrl(),
-        token,
         'studentSignInValidation',
         'Étape 2 de votre inscription',
       );

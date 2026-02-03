@@ -119,7 +119,7 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
           className="midlength-input"
           data-test-id="etudiant-email-input"
           label="Adresse email"
-          hint="Utilisée pour l'espace étudiant"
+          hint="Veillez à informer l\'étudiant que la collecte de son email est obligatoire pour créer son espace et suivre ses séances"
           value={patient.email}
           onChange={handleEmailChange}
           required
