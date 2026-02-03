@@ -331,7 +331,9 @@ const insertOneAppointment = async (
 const getOneStudent = (student: Partial<Student> = {}): Student => ({
   id: uuid.generateRandom(),
   firstNames: faker.name.firstName(),
+  lastName: faker.name.lastName(),
   email: faker.internet.exampleEmail(),
+  dateOfBirth: faker.date.past(),
   ine: faker.datatype.string(11),
   createdAt: new Date(),
   ...student,

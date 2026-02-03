@@ -13,6 +13,8 @@ export const seed = async (knex: Knex): Promise<void> => {
       email: faker.internet.email(),
       ine: faker.phone.number('###########'),
       firstNames: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      dateOfBirth: faker.date.past(),
       createdAt,
     };
   });
