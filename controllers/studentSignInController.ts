@@ -12,6 +12,7 @@ import loginController from './loginController';
 import sendStudentMailTemplate from '../services/sendStudentMailTemplate';
 import sendSecondStepMail from '../services/sendSecondStepMail';
 import validation from '../utils/validation';
+import verifyINEWithBirthDate from '../services/verifyStudentINE';
 
 const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -91,16 +92,17 @@ const verifyStudentToken = async (req: Request, res: Response): Promise<void> =>
 const signIn = async (req: Request, res: Response): Promise<void> => {
   try {
     validation.checkErrors(req);
-    const { firstNames, ine, email } = req.body;
+    const {
+      firstNames,
+      lastName,
+      dateOfBirth: rawDateOfBirth,
+      ine,
+      email,
+    } = req.body;
 
-    const result = await dbStudents.signIn(email, ine, firstNames);
-    if (result.status === 'created') {
-      await sendWelcomeMail(email);
-      res.status(200).json({
-        message: 'Un email vous a été envoyé.',
-      });
-    }
-    if (result.status === 'alreadyRegistered') {
+    const duplicateCheck = await dbStudents.checkDuplicates(email, ine);
+
+    if (duplicateCheck.status === 'alreadyRegistered') {
       const token = loginInformations.generateToken(32);
       const expiresAt = date.getDatePlusTwoHours();
 
@@ -113,9 +115,37 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       res.status(200).json({
         message: 'Un email vous a été envoyé.',
       });
+      return;
     }
-    res.status(400).json({
-      message: 'Inscription non autorisée.',
+
+    if (duplicateCheck.status === 'conflict') {
+      throw new CustomError(
+        'Cet email ou ce numéro INE est déjà utilisé.',
+        400,
+      );
+    }
+
+    const isINEValid = await verifyINEWithBirthDate(ine, rawDateOfBirth);
+
+    if (!isINEValid) {
+      throw new CustomError(
+        'Le numéro INE et la date de naissance ne correspondent pas.',
+        400,
+      );
+    }
+
+    await dbStudents.create(
+      email,
+      ine,
+      firstNames,
+      lastName,
+      date.parseForm(rawDateOfBirth),
+    );
+
+    await sendWelcomeMail(email);
+
+    res.status(200).json({
+      message: 'Un email vous a été envoyé.',
     });
   } catch (err) {
     console.error(err);

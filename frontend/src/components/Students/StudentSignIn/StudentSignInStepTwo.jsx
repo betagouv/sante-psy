@@ -4,20 +4,24 @@ import Page from 'components/Page/Page';
 import agent from 'services/agent';
 import validateIneFormat from 'src/utils/validateIneFormat';
 import validateNameFormat from 'src/utils/validateNameFormat';
+import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import styles from './studentSignIn.cssmodule.scss';
 
 const StudentSignInStepTwo = () => {
   const { token } = useParams();
+  const navigate = useNavigate();
 
   const [firstNames, setFirstNames] = useState('');
   const [firstNamesError, setFirstNamesError] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [lastNameError, setLastNameError] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [dateOfBirthError, setDateOfBirthError] = useState('');
   const [ine, setIne] = useState('');
   const [ineError, setIneError] = useState('');
   const [email, setEmail] = useState('');
   const [notification, setNotification] = useState(null);
   const [valid, setValid] = useState(false);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!token) {
@@ -30,7 +34,7 @@ const StudentSignInStepTwo = () => {
         const response = await agent.Student.verifyStudentToken(token);
         setEmail(response.email);
         setValid(true);
-      } catch (err) {
+      } catch {
         navigate('/inscription');
       }
     };
@@ -48,9 +52,36 @@ const StudentSignInStepTwo = () => {
     return true;
   };
 
+  const validateLastName = value => {
+    if (!validateNameFormat(value)) {
+      setLastNameError('Format incorrect du nom.');
+      return false;
+    }
+    setLastNameError('');
+    return true;
+  };
+
+  const validateDateOfBirth = value => {
+    if (!value) {
+      setDateOfBirthError('Date de naissance requise.');
+      return false;
+    }
+    if (!isValidBirthDate(value)) {
+      setDateOfBirthError("La date de naissance entrée n'est pas valide.");
+    }
+    setDateOfBirthError('');
+    return true;
+  };
+
+  const handleDateOfBirthChange = e => {
+    const { value } = e.target;
+    const formattedValue = addAutoSlashToDate(value);
+    setDateOfBirth(formattedValue);
+    validateDateOfBirth(formattedValue);
+  };
+
   const validateINE = value => {
-    const isValidIne = validateIneFormat(value);
-    if (!isValidIne) {
+    if (!validateIneFormat(value)) {
       setIneError('Format incorrect du numéro INE.');
       return false;
     }
@@ -60,23 +91,32 @@ const StudentSignInStepTwo = () => {
 
   const signIn = async e => {
     e.preventDefault();
-    agent.Student.signIn({ firstNames, ine, email })
-      .then(() => {
-        navigate('/');
-      })
-      .catch(error => {
-        if (error?.response?.status === 'conflict') {
-          setNotification({
-            type: 'error',
-            message: 'Cet email ou numéro INE est déjà utilisé.',
-          });
-        } else {
-          setNotification({
-            type: 'error',
-            message: 'Une erreur est survenue.',
-          });
-        }
+
+    const isValid = validateFirstNames(firstNames)
+      && validateLastName(lastName)
+      && validateDateOfBirth(dateOfBirth)
+      && validateINE(ine);
+
+    if (!isValid) return;
+
+    try {
+      await agent.Student.signIn({
+        firstNames,
+        lastName,
+        dateOfBirth,
+        ine,
+        email,
       });
+      navigate('/');
+    } catch (error) {
+      setNotification({
+        type: 'error',
+        message:
+          error?.response?.status === 'conflict'
+            ? 'Cet email ou numéro INE est déjà utilisé.'
+            : 'Une erreur est survenue.',
+      });
+    }
   };
 
   return (
@@ -99,7 +139,7 @@ const StudentSignInStepTwo = () => {
               Prénom(s)
             </label>
             <input
-              className="fr-input midlength-input"
+              className={`fr-input midlength-input ${firstNamesError ? 'fr-input--error' : ''}`}
               id="first-names-input"
               type="text"
               value={firstNames}
@@ -108,6 +148,39 @@ const StudentSignInStepTwo = () => {
               required
             />
             {firstNamesError && <p className="fr-error-text">{firstNamesError}</p>}
+          </div>
+
+          <div className="fr-input-group">
+            <label className="fr-label" htmlFor="last-name-input">
+              Nom
+            </label>
+            <input
+              className={`fr-input midlength-input ${lastNameError ? 'fr-input--error' : ''}`}
+              id="last-name-input"
+              value={lastName}
+              type="text"
+              onChange={e => setLastName(e.target.value)}
+              onBlur={() => validateLastName(lastName)}
+              required
+            />
+            {lastNameError && <p className="fr-error-text">{lastNameError}</p>}
+          </div>
+
+          <div className="fr-input-group">
+            <label className="fr-label" htmlFor="dob-input">
+              Date de naissance
+            </label>
+            <input
+              className={`fr-input midlength-input ${dateOfBirthError ? 'fr-input--error' : ''}`}
+              id="dateBirth-input"
+              type="text"
+              value={dateOfBirth}
+              onChange={handleDateOfBirthChange}
+              onBlur={() => validateDateOfBirth(dateOfBirth)}
+              placeholder="JJ/MM/AAAA"
+              required
+            />
+            {dateOfBirthError && <p className="fr-error-text">{dateOfBirthError}</p>}
           </div>
 
           <div className="fr-input-group">
