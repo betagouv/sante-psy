@@ -5,7 +5,7 @@ import clean from '../helper/clean';
 import { studentsTable } from '../../db/tables';
 import date from '../../utils/date';
 
-describe.only('DB Students', () => {
+describe('DB Students', () => {
   const email = 'donia@test.com';
   const email2 = 'ana@test.com';
   const firstNames = 'Donia';
