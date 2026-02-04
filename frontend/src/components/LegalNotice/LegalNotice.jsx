@@ -12,8 +12,8 @@ const LegalNotice = () => (
     <h1 className="secondaryPageTitle">Mentions légales - Santé Psy Étudiant</h1>
     <Section title="Éditeur de la Plateforme">
       <span>
-        ministère de l&lsquo;Enseignement supérieur
-        et de la Recherche
+        ministère de l&lsquo;Enseignement supérieur,
+        de la Recherche et de l&lsquo;Espace
       </span>
       <p>
         Pavillon Boncourt

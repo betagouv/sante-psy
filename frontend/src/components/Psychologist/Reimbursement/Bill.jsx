@@ -121,7 +121,7 @@ const Bill = () => {
       {/* TODO: fix print view (by using styles.header?) */}
       <DSHeader>
         <HeaderBody>
-          <Logo>Ministère de l&lsquo;Enseignement Supérieur et de la Recherche</Logo>
+          <Logo>Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Espace</Logo>
           <Service title="Santé Psy Étudiant" description={`Facture ${formatMonth({ month, year })}`} />
         </HeaderBody>
       </DSHeader>
