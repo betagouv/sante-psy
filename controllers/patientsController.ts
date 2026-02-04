@@ -13,32 +13,14 @@ import {
   updateValidators, getOneValidators, patientValidators, deleteValidators,
 } from './validators/patientValidators';
 import sendSecondStepMail from '../services/sendSecondStepMail';
-import verifyINE from '../services/inesApi';
 import send from '../utils/email';
-import config from '../utils/config';
+import verifyINEWithBirthDate from '../services/verifyStudentINE';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
 const sortData = (a: Patient, b: Patient): number => (
   `${a.lastName.toUpperCase()} ${a.firstNames}`.localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`)
 );
-
-const verifyPatientINE = async (INE: string, rawDateOfBirth: string): Promise<boolean> => {
-  if (config.testEnvironment) {
-    console.log('Ce call API aurait été fait si vous étiez en prod');
-    return true;
-  }
-
-  const dateOfBirth = date.parseForm(rawDateOfBirth);
-
-  try {
-    await verifyINE(INE, dateOfBirth);
-    return true;
-  } catch (error) {
-    console.warn('Erreur lors de la requête API INES :', error);
-    return false;
-  }
-};
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.userId || req.auth.psychologist;
@@ -71,7 +53,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     email,
   } = req.body;
 
-  const isINESvalid = await verifyPatientINE(patientINE, rawDateOfBirth);
+  const isINESvalid = await verifyINEWithBirthDate(patientINE, rawDateOfBirth);
 
   if (!isINESvalid) {
     await dbPatients.updateIsINESValidOnly(patientId, false);
@@ -155,7 +137,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     firstNames, lastName, gender, INE, institutionName, doctorName, dateOfBirth: rawDateOfBirth, email,
   } = req.body;
 
-  const isINESvalid = await verifyPatientINE(INE, rawDateOfBirth);
+  const isINESvalid = await verifyINEWithBirthDate(INE, rawDateOfBirth);
 
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
