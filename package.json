@@ -30,7 +30,7 @@
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
     "scalingo-prebuild": "pnpm --filter ./frontend run scalingo-prebuild",
-    "scalingo-postbuild": "pnpm --filter ./frontend run scalingo-postbuild && pnpm run postbuild",
+    "scalingo-postbuild": "pnpm run postbuild && pnpm prune --prod",
     "postbuild": "tsc && cp -a frontend/dist dist/frontend"
   },
   "repository": {
