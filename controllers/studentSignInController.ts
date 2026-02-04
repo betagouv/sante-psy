@@ -7,12 +7,16 @@ import { signInValidator, emailValidator } from './validators/studentValidators'
 import loginInformations from '../services/loginInformations';
 import date from '../utils/date';
 import db from '../db/db';
+import ejs from 'ejs';
 import { psychologistsTable, studentsTable } from '../db/tables';
 import loginController from './loginController';
 import sendStudentMailTemplate from '../services/sendStudentMailTemplate';
 import sendSecondStepMail from '../services/sendSecondStepMail';
 import validation from '../utils/validation';
 import verifyINEWithBirthDate from '../services/verifyStudentINE';
+import send from '../utils/email';
+
+type MulterRequest = Request & { file: Express.Multer.File };
 
 const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -98,6 +102,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       dateOfBirth: rawDateOfBirth,
       ine,
       email,
+      isRetry = false,
     } = req.body;
 
     const duplicateCheck = await dbStudents.checkDuplicates(email, ine);
@@ -128,10 +133,16 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     const isINEValid = await verifyINEWithBirthDate(ine, rawDateOfBirth);
 
     if (!isINEValid) {
-      throw new CustomError(
-        'Le numéro INE et la date de naissance ne correspondent pas.',
-        400,
-      );
+      res.status(400).json({
+        errorType: 'INE_NOT_FOUND',
+        canRetry: !isRetry,
+        message: isRetry
+          ? "Tes informations n'ont pas été retrouvées."
+            + "Merci d'envoyer ton certificat de scolarité."
+          : "Tes informations n'ont pas été retrouvées."
+            + "Vérifie que tu n'as pas fait d'erreur de saisie.",
+      });
+      return;
     }
 
     await dbStudents.create(
@@ -156,6 +167,64 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const sendCertificate = async (
+  req: MulterRequest,
+  res: Response,
+): Promise<void> => {
+  const {
+    token, ine, firstNames, lastName, dateOfBirth,
+  } = req.body;
+
+  if (!req.file || !token || !ine) {
+    throw new CustomError('Certificat, token ou ine manquant.', 400);
+  }
+
+  const tokenRow = await dbLoginToken.getByToken(token);
+
+  if (!tokenRow) throw new CustomError('Token invalide', 401);
+  if (new Date(tokenRow.expiresAt) < new Date()) {
+    throw new CustomError('Token expiré', 401);
+  }
+
+  const { email } = tokenRow;
+
+  try {
+    const html = await ejs.renderFile('./views/emails/sendStudentCertificate.ejs', {
+      email,
+      ine,
+    });
+
+    await send(
+      'support-santepsyetudiant@beta.gouv.fr',
+      'Nouveau certificat de scolarité reçu',
+      html,
+      [
+        {
+          filename: req.file.originalname,
+          content: req.file.buffer,
+        },
+      ],
+    );
+
+    await dbStudents.create(
+      email,
+      ine,
+      firstNames,
+      lastName,
+      date.parseForm(dateOfBirth),
+    );
+
+    await sendWelcomeMail(email);
+
+    res.json({
+      message: 'Certificat envoyé et inscription validée.',
+    });
+  } catch (err) {
+    console.error(err);
+    throw new CustomError("Erreur lors de l'envoi du certificat.", 500);
+  }
+};
+
 export default {
   sendStudentSecondStepMail: asyncHelper(sendStudentSecondStepMail),
   sendWelcomeMail: asyncHelper(sendWelcomeMail),
@@ -163,4 +232,5 @@ export default {
   signIn: asyncHelper(signIn),
   emailValidator,
   studentSignInValidator: signInValidator,
+  sendCertificate,
 };

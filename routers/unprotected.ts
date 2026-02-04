@@ -12,7 +12,9 @@ import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
 import studentSignInController from '../controllers/studentSignInController';
+import multer from 'multer';
 
+const upload = multer({ storage: multer.memoryStorage() });
 const router = express.Router();
 
 // prevent abuse for some rules
@@ -69,6 +71,12 @@ router.post(
   speedLimiterLogin,
   studentSignInController.studentSignInValidator,
   studentSignInController.signIn,
+);
+
+router.post(
+  '/student/send-certificate',
+  upload.single('file'),
+  studentSignInController.sendCertificate,
 );
 
 router.post(
