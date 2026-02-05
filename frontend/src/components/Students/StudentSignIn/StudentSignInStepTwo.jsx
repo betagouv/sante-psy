@@ -70,7 +70,7 @@ const StudentSignInStepTwo = () => {
 
         <div className="fr-mt-3w">
           <Button onClick={() => navigate('/')}>
-            Accéder à l'accueil
+            Accéder à l&apos;accueil
           </Button>
         </div>
       </Page>
