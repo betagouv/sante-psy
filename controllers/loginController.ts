@@ -66,7 +66,7 @@ async function saveToken(email: string, token: string): Promise<void> {
 
 const deleteToken = (req: Request, res: Response): void => {
   cookie.clearJwtCookie(res);
-  res.json({ });
+  res.json({});
 };
 
 const connectedUser = async (req: Request, res: Response): Promise<void> => {
@@ -76,9 +76,16 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
     const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
 
     if (psy) {
-      const { reason: inactiveReason, until: inactiveUntil } = psy.active
-        ? { reason: undefined, until: undefined }
-        : await dbSuspensions.getByPsychologist(psy.dossierNumber);
+      let inactiveReason = undefined;
+      let inactiveUntil = undefined;
+      if (!psy.active) {
+        const suspension = await dbSuspensions.getByPsychologist(psy.dossierNumber);
+        if (suspension) {
+          inactiveReason = suspension.reason;
+          inactiveUntil = suspension.until;
+        }
+      }
+
       const {
         dossierNumber,
         firstNames,
@@ -166,8 +173,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
       );
     }
 
-    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${
-      logs.hash(email)}
+    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${logs.hash(email)}
     `);
     throw new CustomError(
       `L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`,
@@ -181,7 +187,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   await saveToken(email, token);
   res.json({
     message: `Un lien de connexion a été envoyé à l'adresse ${email
-    }. Le lien est valable ${config.sessionDurationHours} heures.`,
+      }. Le lien est valable ${config.sessionDurationHours} heures.`,
   });
 };
 
