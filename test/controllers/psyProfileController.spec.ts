@@ -69,7 +69,17 @@ describe('psyProfileController', () => {
       }
     };
 
+    it('should return basic info if user is not logged in', async () => {
+      const psy = await create.insertOnePsy();
 
+      return chai.request(app)
+        .get(`/api/psychologist/${psy.dossierNumber}`)
+        .then(async (res) => {
+          res.status.should.equal(200);
+          checkProfile(res.body, psy, false);
+        });
+    });
+    
     it('should return basic info if user is logged in but ask for someone else', async () => {
       const psy = await create.insertOnePsy();
 
