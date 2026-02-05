@@ -76,8 +76,8 @@ const connectedUser = async (req: Request, res: Response): Promise<void> => {
     const convention = await dbPsychologists.getConventionInfo(tokenData.psychologist);
 
     if (psy) {
-      let inactiveReason = undefined;
-      let inactiveUntil = undefined;
+      let inactiveReason;
+      let inactiveUntil;
       if (!psy.active) {
         const suspension = await dbSuspensions.getByPsychologist(psy.dossierNumber);
         if (suspension) {
@@ -187,7 +187,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   await saveToken(email, token);
   res.json({
     message: `Un lien de connexion a été envoyé à l'adresse ${email
-      }. Le lien est valable ${config.sessionDurationHours} heures.`,
+    }. Le lien est valable ${config.sessionDurationHours} heures.`,
   });
 };
 

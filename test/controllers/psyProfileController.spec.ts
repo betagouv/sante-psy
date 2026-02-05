@@ -79,7 +79,7 @@ describe('psyProfileController', () => {
           checkProfile(res.body, psy, false);
         });
     });
-    
+
     it('should return basic info if user is logged in but ask for someone else', async () => {
       const psy = await create.insertOnePsy();
 
