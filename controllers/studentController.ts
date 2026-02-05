@@ -34,14 +34,14 @@ const answerValidator = [
     .optional({ nullable: true })
     .isBoolean(),
   check('referral', 'Vous devez spécifier un nombre entre 1 et 3')
-      .optional({ nullable: true })
-      .isInt({ min: 1, max: 3 }),
+    .optional({ nullable: true })
+    .isInt({ min: 1, max: 3 }),
   check('doctorAppointment', 'Vous devez spécifier un booléen')
-            .optional({ nullable: true })
-            .isBoolean(),
+    .optional({ nullable: true })
+    .isBoolean(),
   check('doctorAppointment2', 'Vous devez spécifier un booléen')
-                  .optional({ nullable: true })
-                  .isBoolean(),
+    .optional({ nullable: true })
+    .isBoolean(),
   oneOf(
     [
       check('letter').exists(),
