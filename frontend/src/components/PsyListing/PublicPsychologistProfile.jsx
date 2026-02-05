@@ -46,7 +46,14 @@ const PublicPsychologistProfile = () => {
   useEffect(() => {
     setError();
     agent.Psychologist.getProfile(psyId)
-      .then(setPsychologist)
+      .then(response => {
+        if (response.active === false) {
+          setError('Ce psychologue n\'est plus disponible dans notre annuaire');
+          setPsychologist(null);
+        } else {
+          setPsychologist(response);
+        }
+      })
       .catch(() => {
         setError('Impossible de trouver les informations pour ce psychologue');
       });
@@ -137,7 +144,7 @@ const PublicPsychologistProfile = () => {
             {psychologist.email && (
             <div className={styles.contactInfo}>
               <div>
-                <h5>E-mail</h5>
+                <h5>Email</h5>
                 {psychologist.email}
               </div>
               <Button
