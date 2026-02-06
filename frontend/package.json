@@ -99,7 +99,6 @@
     "lint": "node_modules/.bin/eslint --quiet . --ext .js,.jsx",
     "lint:fix": "node_modules/.bin/eslint --quiet --fix . --ext .js,.jsx",
     "test": "mocha --exit",
-    "scalingo-prebuild": "pnpm run build --env.PROD",
     "cy:open": "cypress open",
     "cy:run": "wait-on http://localhost:3000 && wait-on http-get://localhost:8080/api/config && cypress run",
     "cy:ci": "wait-on --timeout 30000  http-get://localhost:8080/api/config && CYPRESS_BASE_URL=http://localhost:8080/ cypress run --browser chrome"
