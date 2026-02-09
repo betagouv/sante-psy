@@ -144,6 +144,9 @@ const StudentSignInStepTwo = () => {
       <SendCertificate
         email={email}
         ine={ine}
+        firstNames={firstNames}
+        lastName={lastName}
+        dateOfBirth={dateOfBirth}
         onSuccess={() => setCertificateSent(true)}
       />
     );
