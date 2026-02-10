@@ -13,6 +13,8 @@ import { DossierState } from '../../types/DossierState';
 
 const sendEmail = require('../../utils/email');
 
+// TODO after merge: rename file and describe loginController.spec.ts
+
 describe('psyLoginController', async () => {
   describe('login page', () => {
     const token = cookie.getJwtTokenForUser('dossierNumber', 'randomXSRFToken', 'psy');
