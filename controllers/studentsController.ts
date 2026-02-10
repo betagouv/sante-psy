@@ -23,6 +23,7 @@ const getStudentAppointments = async (
     const student = await studentsDb.getById(studentId);
 
     if (!student) {
+      // TODO renvoyer 401 sans erreur
       res.status(404).json({ error: 'Étudiant introuvable' });
       return;
     }
@@ -32,6 +33,7 @@ const getStudentAppointments = async (
     const appointments = await studentAppointments.getStudentAppointments(email, ine);
 
     res.json(appointments);
+    // TODO : nombreux try catch qui servent pas car error deja géré dans méthode ! à enlever partout
   } catch (err) {
     res.status(500).json({
       error: err instanceof Error ? err.message : 'Erreur inconnue',

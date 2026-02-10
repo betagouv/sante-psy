@@ -44,6 +44,7 @@ const upsert = async (
     }
 
     const [created] = await db(loginTokenTable)
+    // TODO use .upsert() directly
       .insert({
         token, email, expiresAt, role,
       })

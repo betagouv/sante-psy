@@ -16,10 +16,12 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
   try {
     const { email } = req.body;
     const existingStudent = await db(studentsTable).where({ email }).first();
+    // TODO renommer en existingPsy
     const isPsyEmail = await db(psychologistsTable).where({ email }).first();
     const token = loginInformations.generateToken(32);
 
     const expiresAt = existingStudent
+    // TODO utiliser variable d'env partout où on parle du temps de connexion (mail aussi)
       ? date.getDatePlusTwoHours()
       : date.getDatePlusFourtyEightHours();
 
@@ -71,64 +73,49 @@ const sendWelcomeMail = async (email): Promise<void> => {
 };
 
 const verifyStudentToken = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { token } = req.params;
+  const { token } = req.params;
 
-    const tokenRow = await dbLoginToken.getByToken(token);
+  const tokenRow = await dbLoginToken.getByToken(token);
 
-    if (!tokenRow) {
-      throw new CustomError('Token invalide', 401);
-    }
-
-    if (new Date(tokenRow.expiresAt) < new Date()) {
-      throw new CustomError('Token expiré', 401);
-    }
-
-    res.json({ email: tokenRow.email });
-  } catch (err) {
-    console.error(err);
-    throw err instanceof CustomError
-      ? err
-      : new CustomError('Erreur validation token', 500);
+  if (!tokenRow) {
+    throw new CustomError('Token invalide', 401);
   }
+
+  if (new Date(tokenRow.expiresAt) < new Date()) {
+    throw new CustomError('Token expiré', 401);
+  }
+
+  res.json({ email: tokenRow.email });
 };
 
 const signIn = async (req: Request, res: Response): Promise<void> => {
-  try {
-    validation.checkErrors(req);
-    const { firstNames, ine, email } = req.body;
+  validation.checkErrors(req);
+  const { firstNames, ine, email } = req.body;
 
-    const result = await dbStudents.signIn(email, ine, firstNames);
-    if (result.status === 'created') {
-      await sendWelcomeMail(email);
-      res.status(200).json({
-        message: 'Un email vous a été envoyé.',
-      });
-    }
-    if (result.status === 'alreadyRegistered') {
-      const token = loginInformations.generateToken(32);
-      const expiresAt = date.getDatePlusTwoHours();
-
-      await dbLoginToken.upsert(token, email, expiresAt, 'student');
-      await loginController.sendStudentLoginEmail(
-        email,
-        loginInformations.generateLoginUrl(),
-        token,
-      );
-      res.status(200).json({
-        message: 'Un email vous a été envoyé.',
-      });
-    }
-    res.status(400).json({
-      message: 'Inscription non autorisée.',
-    });
-  } catch (err) {
-    console.error(err);
-
-    res.status(400).json({
-      message: 'Inscription non autorisée.',
+  const result = await dbStudents.signIn(email, ine, firstNames);
+  if (result.status === 'created') {
+    await sendWelcomeMail(email);
+    res.status(200).json({
+      message: 'Un email vous a été envoyé.',
     });
   }
+  if (result.status === 'alreadyRegistered') {
+    const token = loginInformations.generateToken(32);
+    const expiresAt = date.getDatePlusTwoHours();
+
+    await dbLoginToken.upsert(token, email, expiresAt, 'student');
+    await loginController.sendStudentLoginEmail(
+      email,
+      loginInformations.generateLoginUrl(),
+      token,
+    );
+    res.status(200).json({
+      message: 'Un email vous a été envoyé.',
+    });
+  }
+  res.status(401).json({
+    message: 'Inscription non autorisée.',
+  });
 };
 
 export default {

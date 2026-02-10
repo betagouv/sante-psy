@@ -15,7 +15,7 @@ const getStudentAppointments = async (
 ): Promise<Record<string, StudentAppointment[]>> => {
   const matchedPatients = await patients.getByStudentEmailAndIne(email, INE);
 
-  if (!matchedPatients.length) {
+  if (matchedPatients.length === 0) {
     return {};
   }
 
@@ -25,7 +25,7 @@ const getStudentAppointments = async (
 
   const flatAppointments = appointmentsArrays.flat();
 
-  if (!flatAppointments.length) {
+  if (flatAppointments.length === 0) {
     return {};
   }
 

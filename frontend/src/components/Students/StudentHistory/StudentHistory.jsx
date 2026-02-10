@@ -22,8 +22,9 @@ const StudentHistory = () => {
         const years = Object.keys(data);
         if (years.includes(currentUnivYear('-'))) {
           setCurrentYear(currentUnivYear('-'));
-        } else if (years.length) {
+        } else if (years.length > 0) {
           const sorted = years.sort((a, b) => {
+            // TODO function à sortir dans un utils pour clean code
             const aEnd = parseInt(a.split('-')[1], 10);
             const bEnd = parseInt(b.split('-')[1], 10);
             return bEnd - aEnd;
@@ -36,14 +37,15 @@ const StudentHistory = () => {
   }, []);
 
   if (loading) {
-    return <p aria-live="polite">Chargement de vos rendez-vous…</p>;
+    return <p>Chargement de vos rendez-vous…</p>;
   }
 
   if (error) {
-    return <p role="alert">{error}</p>;
+    return <p>{error}</p>;
   }
 
   const univYears = Object.keys(appointments).sort((a, b) => {
+    // TODO use la function créé en utils ici + créer un test !
     const aEnd = parseInt(a.split('-')[1], 10);
     const bEnd = parseInt(b.split('-')[1], 10);
     return bEnd - aEnd;
@@ -90,7 +92,7 @@ const StudentHistory = () => {
                 className={styles.card}
                 role="listitem"
               >
-                <div className={styles.index} aria-hidden="true">
+                <div className={styles.index}>
                   {index + 1}
                 </div>
                 <div>
@@ -115,8 +117,8 @@ const StudentHistory = () => {
             {MAX_SESSIONS}
           </p>
 
-          <nav className={styles.navigation} aria-label="Navigation entre années universitaires">
-            {prevYear ? (
+          {(prevYear || nextYear) && (<nav className={styles.navigation} aria-label="Navigation entre années universitaires">
+            {prevYear && (
               <button
                 type="button"
                 className="fr-btn fr-btn--secondary"
@@ -126,9 +128,9 @@ const StudentHistory = () => {
                 {' '}
                 {prevYear}
               </button>
-            ) : <span />}
+            )}
 
-            {nextYear ? (
+            {nextYear && (
               <button
                 type="button"
                 className="fr-btn fr-btn--secondary"
@@ -138,8 +140,8 @@ const StudentHistory = () => {
                 {' '}
                 <span className="fr-icon-arrow-right-s-last-line" aria-hidden="true" />
               </button>
-            ) : <span />}
-          </nav>
+            )}
+          </nav>)}
 
         </>
       ) : (

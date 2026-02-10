@@ -39,7 +39,6 @@ const signIn = async (
         email,
         ine,
         firstNames,
-        createdAt: date.now(),
       })
       .returning('*') as Student[];
 

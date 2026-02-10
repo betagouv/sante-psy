@@ -55,7 +55,7 @@ const Header = () => {
   const publicStudentPage = location.pathname.startsWith('/info-etudiant');
   const studentPage = location.pathname.startsWith('/etudiant');
 
-  const mySpaceUrl = role === 'psy' ? '/psychologue/tableau-de-bord' : '/etudiant/accueil';
+  const mySpaceUrl = role === 'student' ? '/etudiant/accueil' : '/psychologue/tableau-de-bord';
 
   const getItemsToDisplay = () => {
     if (!user) return defaultItems;

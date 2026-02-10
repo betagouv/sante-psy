@@ -54,7 +54,7 @@ const Login = () => {
       loginCalled.current = true;
       agent.Auth.login(token)
         .then(async data => {
-          setRole(data.role);
+          await setRole(data.role);
           await setXsrfToken(data.xsrfToken);
         }).catch(error => {
           setNotification({ message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' }, false);
