@@ -53,7 +53,6 @@ const SendCertificate = ({
           <b>Espace Étudiant</b>
         </>
       )}
-      description="Dernière étape !"
     >
       <h2 className="fr-mt-3w">Ton accès doit être vérifié</h2>
       <img src="/images/icons/file.svg" alt="" />

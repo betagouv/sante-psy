@@ -163,7 +163,6 @@ const StudentSignInStepTwo = () => {
           <b>Espace Étudiant</b>
         </>
       )}
-      description="Dernière étape !"
     >
       <form onSubmit={signIn}>
         <div className="fr-my-2w">

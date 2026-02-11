@@ -118,7 +118,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     const currentAttempts = tokenRow.signInAttempts;
 
     if (currentAttempts >= signInAttempts.MAX_SIGNIN_ATTEMPTS) {
-      res.status(400).json({
+      res.status(429).json({
         shouldSendCertificate: true,
       });
       return;
@@ -138,7 +138,6 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       );
       res.status(200).json({
         message: 'Un email vous a été envoyé.',
-        success: true,
       });
       return;
     }
@@ -149,7 +148,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         currentAttempts,
       );
 
-      res.status(400).json({
+      res.status(429).json({
         shouldSendCertificate,
       });
       return;
@@ -163,7 +162,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         currentAttempts,
       );
 
-      res.status(400).json({
+      res.status(429).json({
         shouldSendCertificate,
       });
       return;
@@ -181,12 +180,11 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({
       message: 'Un email vous a été envoyé.',
-      success: true,
     });
   } catch (err) {
     console.error(err);
 
-    res.status(400).json({
+    res.status(403).json({
       message: 'Inscription non autorisée.',
     });
   }
@@ -241,7 +239,6 @@ const sendCertificate = async (
 
     res.json({
       message: 'Certificat envoyé et inscription validée.',
-      success: true,
     });
   } catch (err) {
     console.error(err);

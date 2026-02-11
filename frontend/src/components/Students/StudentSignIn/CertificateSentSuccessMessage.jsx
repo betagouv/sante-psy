@@ -8,7 +8,6 @@ const CertificateSentSuccessMessage = () => {
   return (
     <Page
       withStats
-      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
       title="Certificat envoyé"
       >
       <div className="fr-alert fr-alert--success fr-mb-3w">
