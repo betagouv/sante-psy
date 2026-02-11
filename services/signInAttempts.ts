@@ -1,6 +1,7 @@
 import dbLoginToken from '../db/loginToken';
+import config from '../utils/config';
 
-const MAX_SIGNIN_ATTEMPTS = parseInt(process.env.MAX_SIGNIN_ATTEMPTS || '3', 10);
+const MAX_SIGNIN_ATTEMPTS = config.maxSignInAttempts;
 
 const checkAndIncrementAttempts = async (
   token: string,
