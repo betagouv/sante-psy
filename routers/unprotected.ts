@@ -12,9 +12,8 @@ import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
 import studentSignInController from '../controllers/studentSignInController';
-import multer from 'multer';
+import uploadCertificate from '../middlewares/uploadCertificate';
 
-const upload = multer({ storage: multer.memoryStorage() });
 const router = express.Router();
 
 // prevent abuse for some rules
@@ -22,6 +21,13 @@ const speedLimiterLogin = slowDown({
   windowMs: 5 * 60 * 1000, // 5 minutes
   delayAfter: config.speedLimitation ? 10 : 10000, // allow X requests per 5 minutes, then...
   delayMs: 500, // begin adding 500ms of delay per request above 10:
+});
+
+const speedLimiterSendCertificate = slowDown({
+  windowMs: 60 * 60 * 1000, // 60 minutes time window
+  delayAfter: 1, // allow 1 request per 60 minutes, then...
+  delayMs: 2000, // begin adding 2000ms of delay per request above 1
+  max: 3, // block requests after 3 attempts
 });
 
 router.post(
@@ -75,7 +81,8 @@ router.post(
 
 router.post(
   '/student/send-certificate',
-  upload.single('file'),
+  speedLimiterSendCertificate,
+  uploadCertificate.single('file'),
   studentSignInController.sendCertificate,
 );
 
