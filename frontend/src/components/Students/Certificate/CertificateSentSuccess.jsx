@@ -2,14 +2,14 @@ import React from 'react';
 import Page from 'components/Page/Page';
 import { useNavigate } from 'react-router-dom';
 
-const CertificateSentSuccessMessage = () => {
+const CertificateSentSuccess = () => {
   const navigate = useNavigate();
 
   return (
     <Page
       withStats
       title="Certificat envoyé"
-      >
+            >
       <div className="fr-alert fr-alert--success fr-mb-3w">
         <h3 className="fr-alert__title">Certificat envoyé</h3>
         <p>Le support Santé Psy Étudiant doit vérifier ton accès à l&apos;espace étudiant. Tu peux déjà te connecter</p>
@@ -24,4 +24,4 @@ const CertificateSentSuccessMessage = () => {
   );
 };
 
-export default CertificateSentSuccessMessage;
+export default CertificateSentSuccess;

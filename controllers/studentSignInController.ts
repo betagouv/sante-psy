@@ -209,41 +209,36 @@ const sendCertificate = async (
     throw new CustomError('Token expiré', 401);
   }
 
-  try {
-    const html = await ejs.renderFile('./views/emails/sendStudentCertificate.ejs', {
-      email,
-      ine,
-    });
+  const html = await ejs.renderFile('./views/emails/sendStudentCertificate.ejs', {
+    email,
+    ine,
+  });
 
-    await send(
-      'support-santepsyetudiant@beta.gouv.fr',
-      'Nouveau certificat de scolarité reçu',
-      html,
-      [
-        {
-          filename: req.file.originalname,
-          content: req.file.buffer,
-        },
-      ],
-    );
+  await dbStudents.create(
+    email,
+    ine,
+    firstNames,
+    lastName,
+    date.parseForm(dateOfBirth),
+  );
 
-    await dbStudents.create(
-      email,
-      ine,
-      firstNames,
-      lastName,
-      date.parseForm(dateOfBirth),
-    );
+  await send(
+    'support-santepsyetudiant@beta.gouv.fr',
+    'Nouveau certificat de scolarité reçu',
+    html,
+    [
+      {
+        filename: req.file.originalname,
+        content: req.file.buffer,
+      },
+    ],
+  );
 
-    await sendWelcomeMail(email);
+  await sendWelcomeMail(email);
 
-    res.json({
-      message: 'Certificat envoyé et inscription validée.',
-    });
-  } catch (err) {
-    console.error(err);
-    throw new CustomError("Erreur lors de l'envoi du certificat.", 500);
-  }
+  res.status(200).json({
+    message: 'Certificat envoyé et inscription validée.',
+  });
 };
 
 export default {

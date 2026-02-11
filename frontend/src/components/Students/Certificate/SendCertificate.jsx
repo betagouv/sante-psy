@@ -32,11 +32,8 @@ const SendCertificate = ({
     formData.append('email', email);
 
     try {
-      const response = await agent.Student.sendCertificate(formData);
-      if (response.success) {
-        onSuccess();
-        window.scrollTo(0, 0);
-      }
+      await agent.Student.sendCertificate(formData);
+      onSuccess();
     } catch {
       setFileError("Erreur lors de l'envoi du certificat. Merci de réessayer.");
     }
@@ -45,7 +42,6 @@ const SendCertificate = ({
   return (
     <Page
       withStats
-      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
       title={(
         <>
           Inscription à ton

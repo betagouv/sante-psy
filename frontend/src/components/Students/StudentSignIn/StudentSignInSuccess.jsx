@@ -2,15 +2,14 @@ import React from 'react';
 import Page from 'components/Page/Page';
 import { useNavigate } from 'react-router-dom';
 
-const SuccessMessage = () => {
+const StudentSignInSuccess = () => {
   const navigate = useNavigate();
 
   return (
     <Page
       withStats
-      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
       title="Inscription validée"
-      >
+        >
       <div className="fr-alert fr-alert--success fr-mb-3w">
         <h3 className="fr-alert__title">Ton inscription a bien été validée !</h3>
         <p>
@@ -28,4 +27,4 @@ const SuccessMessage = () => {
   );
 };
 
-export default SuccessMessage;
+export default StudentSignInSuccess;

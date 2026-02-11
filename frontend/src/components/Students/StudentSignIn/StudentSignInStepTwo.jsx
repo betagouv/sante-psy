@@ -6,9 +6,6 @@ import validateIneFormat from 'src/utils/validateIneFormat';
 import validateNameFormat from 'src/utils/validateNameFormat';
 import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import styles from './studentSignIn.cssmodule.scss';
-import SuccessMessage from './SuccessMessage';
-import CertificateSentSuccessMessage from './CertificateSentSuccessMessage';
-import SendCertificate from './SendCertificate';
 
 const StudentSignInStepTwo = () => {
   const { token } = useParams();
@@ -25,9 +22,6 @@ const StudentSignInStepTwo = () => {
   const [email, setEmail] = useState('');
   const [notification, setNotification] = useState(null);
   const [valid, setValid] = useState(false);
-  const [shouldSendCertificate, setShouldSendCertificate] = useState(false);
-  const [certificateSent, setCertificateSent] = useState(false);
-  const [signInSuccess, setSignInSuccess] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -116,41 +110,27 @@ const StudentSignInStepTwo = () => {
         email,
       });
 
-      if (response.success) {
-        setSignInSuccess(true);
-        window.scrollTo(0, 0);
+      if (response) {
+        navigate('/inscription/success');
       }
     } catch (error) {
       const errorData = error?.response?.data;
 
       if (errorData?.shouldSendCertificate) {
-        setShouldSendCertificate(true);
+        navigate('/inscription/certificat', {
+          state: {
+            email,
+            ine,
+            firstNames,
+            lastName,
+            dateOfBirth,
+          },
+        });
       } else {
         setNotification({ type: 'error' });
       }
     }
   };
-
-  if (signInSuccess) {
-    return <SuccessMessage />;
-  }
-
-  if (certificateSent) {
-    return <CertificateSentSuccessMessage />;
-  }
-
-  if (shouldSendCertificate) {
-    return (
-      <SendCertificate
-        email={email}
-        ine={ine}
-        firstNames={firstNames}
-        lastName={lastName}
-        dateOfBirth={dateOfBirth}
-        onSuccess={() => setCertificateSent(true)}
-      />
-    );
-  }
 
   return (
     <Page
