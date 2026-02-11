@@ -9,7 +9,8 @@ const CertificateSentSuccess = () => {
     <Page
       withStats
       title="Certificat envoyé"
-            >
+    >
+      {/* TODO: ça ne devrait pas etre une alerte ca ninterrompt rien */}
       <div className="fr-alert fr-alert--success fr-mb-3w">
         <h3 className="fr-alert__title">Certificat envoyé</h3>
         <p>Le support Santé Psy Étudiant doit vérifier ton accès à l&apos;espace étudiant. Tu peux déjà te connecter</p>
