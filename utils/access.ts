@@ -4,9 +4,9 @@ import { Request, Response, NextFunction } from 'express';
  * Check that user is a psychologist and psyId param matches their ID
  */
 const checkPsyParam = (req: Request, res: Response, next: NextFunction) : void => {
-  const psychologistId = req.auth.userId || req.auth.psychologist;
+  const psychologistId = req.auth?.userId || req.auth?.psychologist;
 
-  if (req.auth.role && req.auth.role !== 'psy') {
+  if (req.auth?.role && req.auth.role !== 'psy') {
     console.warn('⚠️ Access denied - Wrong role for psychologist route:', {
       role: req.auth.role,
       expectedRole: 'psy',
@@ -38,9 +38,9 @@ const checkPsyParam = (req: Request, res: Response, next: NextFunction) : void =
  * Check that user is a psychologist (no URL param validation)
  */
 const requirePsyRole = (req: Request, res: Response, next: NextFunction) : void => {
-  const psychologistId = req.auth.userId || req.auth.psychologist;
+  const psychologistId = req.auth?.userId || req.auth?.psychologist;
 
-  if (req.auth.role && req.auth.role !== 'psy') {
+  if (req.auth?.role && req.auth.role !== 'psy') {
     console.warn('⚠️ Access denied - Wrong role for psychologist-only route:', {
       role: req.auth.role,
       expectedRole: 'psy',
@@ -52,7 +52,7 @@ const requirePsyRole = (req: Request, res: Response, next: NextFunction) : void 
     return;
   }
 
-  if (!req.auth || !psychologistId) {
+  if (!psychologistId) {
     console.warn('⚠️ Access denied - No auth or psychologist ID:', {
       hasAuth: !!req.auth,
       userId: psychologistId,
@@ -70,7 +70,7 @@ const requirePsyRole = (req: Request, res: Response, next: NextFunction) : void 
  * Check that user is a student and studentId param matches their ID
  */
 const checkStudentParam = (req: Request, res: Response, next: NextFunction) : void => {
-  const studentId = req.auth.userId || req.auth.psychologist;
+  const studentId = req.auth?.userId;
 
   if (req.auth?.role !== 'student') {
     console.warn('⚠️ Access denied - Wrong role for student route:', {
@@ -104,7 +104,7 @@ const checkStudentParam = (req: Request, res: Response, next: NextFunction) : vo
  * Check that user is a student (no URL param validation)
  */
 const requireStudentRole = (req: Request, res: Response, next: NextFunction) : void => {
-  const studentId = req.auth.userId || req.auth.psychologist;
+  const studentId = req.auth?.userId;
 
   if (req.auth?.role !== 'student') {
     console.warn('⚠️ Access denied - Wrong role for student-only route:', {
@@ -118,7 +118,7 @@ const requireStudentRole = (req: Request, res: Response, next: NextFunction) : v
     return;
   }
 
-  if (!req.auth || !studentId) {
+  if (!studentId) {
     console.warn('⚠️ Access denied - No auth or student ID:', {
       hasAuth: !!req.auth,
       userId: studentId,
