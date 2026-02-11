@@ -72,7 +72,7 @@ const requirePsyRole = (req: Request, res: Response, next: NextFunction) : void 
 const checkStudentParam = (req: Request, res: Response, next: NextFunction) : void => {
   const studentId = req.auth.userId || req.auth.psychologist;
 
-  if (req.auth.role && req.auth.role !== 'student') {
+  if (req.auth?.role !== 'student') {
     console.warn('⚠️ Access denied - Wrong role for student route:', {
       role: req.auth.role,
       expectedRole: 'student',
@@ -106,7 +106,7 @@ const checkStudentParam = (req: Request, res: Response, next: NextFunction) : vo
 const requireStudentRole = (req: Request, res: Response, next: NextFunction) : void => {
   const studentId = req.auth.userId || req.auth.psychologist;
 
-  if (req.auth.role && req.auth.role !== 'student') {
+  if (req.auth?.role !== 'student') {
     console.warn('⚠️ Access denied - Wrong role for student-only route:', {
       role: req.auth.role,
       expectedRole: 'student',
