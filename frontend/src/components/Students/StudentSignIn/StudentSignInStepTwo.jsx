@@ -102,7 +102,7 @@ const StudentSignInStepTwo = () => {
     setNotification(null);
 
     try {
-      const response = await agent.Student.signIn({
+      await agent.Student.signIn({
         firstNames,
         lastName,
         dateOfBirth,
@@ -110,9 +110,7 @@ const StudentSignInStepTwo = () => {
         email,
       });
 
-      if (response) {
-        navigate('/inscription/success');
-      }
+      navigate('/inscription/success');
     } catch (error) {
       const errorData = error?.response?.data;
 
