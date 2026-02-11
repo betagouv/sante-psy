@@ -1,0 +1,30 @@
+<%- include('header'); -%>
+  <p>Bonjour ! 👋</p>
+
+  <p>
+    Ton psychologue t'a invité à créer ton Espace Étudiant sur Santé Psy Étudiant.
+  </p>
+  <p>
+    Tu peux confirmer ton adresse email en complétant ton inscription via le bouton ci-dessous.
+  </p>
+  <p>
+    Lien expirant dans 48 heures
+  </p>
+  <a href="<%= loginUrlWithToken %>" class="loginButton">
+    Confirmer mon adresse
+  </a>
+  <br/>
+  <p>À quoi sert l'Espace Étudiant ?</p>
+  <ul>
+    <li>
+      Il te permettra de suivre ton compte de séances
+    </li>
+    <li>
+      Tu pourras accéder à du contenu sur la santé mentale
+    </li>
+  </ul>
+  <p>
+    Si tu reçois ce mail par erreur, ou si le lien ne fonctionne pas, n'hésite pas à répondre à ce mail,
+    notre équipe de support se fera un plaisir de t'aider.
+  </p>
+<%- include('footer'); -%>

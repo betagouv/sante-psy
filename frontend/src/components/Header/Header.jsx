@@ -70,7 +70,7 @@ const Header = () => {
     <DSHeader>
       <HeaderBody>
         <Logo asLink={<Link to={publicStudentPage ? '/info-etudiant' : '/'} title="Revenir à l'accueil" />}>
-          Ministère de l&lsquo;Enseignement Supérieur et de la Recherche
+          Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Espace
         </Logo>
         <Service
           asLink={<Link to={publicStudentPage ? '/info-etudiant' : '/'} />}

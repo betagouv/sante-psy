@@ -115,6 +115,27 @@ const addAutoSlashToDate = value => {
   return formattedValue;
 };
 
+const isValidBirthDate = (value, minAge = 15) => {
+  if (!value) return false;
+
+  const regex = /^([0-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4}$/;
+  if (!regex.test(value)) return false;
+
+  const [day, month, year] = value.split('/').map(Number);
+  const birthDate = new Date(year, month - 1, day);
+
+  if (Number.isNaN(birthDate.getTime())) return false;
+
+  const today = new Date();
+  const minDate = new Date(
+    today.getFullYear() - minAge,
+    today.getMonth(),
+    today.getDate(),
+  );
+
+  return birthDate <= minDate;
+};
+
 export {
   formatFrenchDate,
   formatDDMMYYYY,
@@ -125,4 +146,5 @@ export {
   utcDate,
   formatStringToDDMMYYYY,
   addAutoSlashToDate,
+  isValidBirthDate,
 };

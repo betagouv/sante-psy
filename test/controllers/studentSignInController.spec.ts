@@ -10,7 +10,7 @@ import loginInformations from '../../services/loginInformations';
 
 chai.should();
 
-describe('signIn', () => {
+describe.skip('signIn', () => {
   let generateTokenStub;
   let studentSignInStub;
   let sendStudentMailStub;

@@ -25,10 +25,12 @@ const StudentHomepage = () => {
       <main className={styles.container}>
         <div className={styles.titleRow}>
           <h2>
-            Mes RDV
+            Mes RDV passés
           </h2>
           <Link
             to="/trouver-un-psychologue"
+            target="_blank"
+            rel="noopener noreferrer"
             className="fr-btn fr-btn--primary"
           >
             Prendre RDV
