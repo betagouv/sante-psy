@@ -1,7 +1,8 @@
-import date from '../utils/date';
-import { loginTokenTable } from './tables';
-import db from './db';
 import { LoginToken } from '../types/LoginToken';
+import date from '../utils/date';
+import logs from '../utils/logs';
+import db from './db';
+import { loginTokenTable } from './tables';
 
 const getByToken = async (token: string): Promise<LoginToken> => {
   try {
@@ -82,7 +83,7 @@ const deleteByEmail = async (email: string): Promise<void> => {
       .where({ email })
       .del();
 
-    console.log(`Login token deleted for email: ${email}`);
+    console.log(`Login token deleted for email: ${logs.hash(email)}`);
   } catch (err) {
     console.error(`Erreur de suppression du token par email : ${err}`);
     throw new Error('Erreur de suppression du token');

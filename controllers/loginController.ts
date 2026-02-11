@@ -1,23 +1,23 @@
 import { Request, Response } from 'express';
 
-import { check } from 'express-validator';
 import ejs from 'ejs';
-import validation from '../utils/validation';
+import { check } from 'express-validator';
+import dbLastConnection from '../db/lastConnections';
+import dbLoginToken from '../db/loginToken';
 import dbPsychologists from '../db/psychologists';
 import dbStudents from '../db/students';
 import dbSuspensions from '../db/suspensionReasons';
-import dbLoginToken from '../db/loginToken';
-import dbLastConnection from '../db/lastConnections';
-import date from '../utils/date';
-import cookie from '../utils/cookie';
-import logs from '../utils/logs';
-import sendEmail from '../utils/email';
-import config from '../utils/config';
-import asyncHelper from '../utils/async-helper';
-import CustomError from '../utils/CustomError';
 import { checkXsrf } from '../middlewares/xsrfProtection';
 import loginInformations from '../services/loginInformations';
 import DOMPurify from '../services/sanitizer';
+import asyncHelper from '../utils/async-helper';
+import config from '../utils/config';
+import cookie from '../utils/cookie';
+import CustomError from '../utils/CustomError';
+import date from '../utils/date';
+import sendEmail from '../utils/email';
+import logs from '../utils/logs';
+import validation from '../utils/validation';
 
 const emailValidators = [
   check('email')
@@ -229,7 +229,7 @@ const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => 
   validation.checkErrors(req);
   const { email } = req.body;
 
-  console.log(`User login link request for ${email}`);
+  console.log(`User login link request for ${logs.hash(email)}`);
 
   const student = await dbStudents.getByEmail(email);
   if (student) {
@@ -274,7 +274,7 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     const psy = await dbPsychologists.getAcceptedByEmail(email);
     if (psy) {
       cookie.createAndSetJwtCookie(res, psy.dossierNumber, xsrfToken, 'psy');
-      console.log(`Successful authentication for psy ${psy.dossierNumber}`);
+      console.log(`Successful authentication for psy ${logs.hash(email)}`);
 
       await dbLoginToken.delete(token); // Psy tokens are single-use
       await dbLastConnection.upsert(psy.dossierNumber);
@@ -286,7 +286,7 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     const student = await dbStudents.getByEmail(email);
     if (student) {
       cookie.createAndSetJwtCookie(res, student.id, xsrfToken, 'student');
-      console.log(`Successful authentication for student ${student.id}`);
+      console.log(`Successful authentication for student ${logs.hash(email)}`);
 
       res.json({ xsrfToken, role: 'student' });
       return;
