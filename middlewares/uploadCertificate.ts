@@ -1,5 +1,4 @@
 import multer from 'multer';
-import CustomError from '../utils/CustomError';
 
 // TODO put in env var
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
@@ -17,7 +16,7 @@ const uploadCertificate = multer({
     ];
 
     if (!allowedMimeTypes.includes(file.mimetype)) {
-      cb(new CustomError('Unsupported file type', 400));
+      cb(null, false);
     } else {
       cb(null, true);
     }
