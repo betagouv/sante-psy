@@ -3,6 +3,7 @@ export type LoginToken = {
     email: string,
     expiresAt: Date,
     role: 'psy' | 'student'
+    signInAttempts: number,
 }
 
 export type psyJWT = {
