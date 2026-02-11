@@ -15,6 +15,7 @@ import sendSecondStepMail from '../services/sendSecondStepMail';
 import validation from '../utils/validation';
 import verifyINEWithBirthDate from '../services/verifyStudentINE';
 import send from '../utils/email';
+import signInAttempts from '../services/signInAttempts';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
@@ -102,8 +103,26 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       dateOfBirth: rawDateOfBirth,
       ine,
       email,
-      isRetry = false,
     } = req.body;
+
+    const tokenRow = await dbLoginToken.getByEmail(email);
+
+    if (!tokenRow) {
+      throw new CustomError('Token invalide', 401);
+    }
+
+    if (new Date(tokenRow.expiresAt) < new Date()) {
+      throw new CustomError('Token expiré', 401);
+    }
+
+    const currentAttempts = tokenRow.signInAttempts;
+
+    if (currentAttempts >= signInAttempts.MAX_SIGNIN_ATTEMPTS) {
+      res.status(429).json({
+        shouldSendCertificate: true,
+      });
+      return;
+    }
 
     const duplicateCheck = await dbStudents.checkDuplicates(email, ine);
 
@@ -124,23 +143,27 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     }
 
     if (duplicateCheck.status === 'conflict') {
-      throw new CustomError(
-        'Cet email ou ce numéro INE est déjà utilisé.',
-        400,
+      const { shouldSendCertificate } = await signInAttempts.checkAndIncrementAttempts(
+        tokenRow.token,
+        currentAttempts,
       );
+
+      res.status(429).json({
+        shouldSendCertificate,
+      });
+      return;
     }
 
     const isINEValid = await verifyINEWithBirthDate(ine, rawDateOfBirth);
 
     if (!isINEValid) {
-      res.status(400).json({
-        errorType: 'INE_NOT_FOUND',
-        canRetry: !isRetry,
-        message: isRetry
-          ? "Tes informations n'ont pas été retrouvées."
-            + "Merci d'envoyer ton certificat de scolarité."
-          : "Tes informations n'ont pas été retrouvées."
-            + "Vérifie que tu n'as pas fait d'erreur de saisie.",
+      const { shouldSendCertificate } = await signInAttempts.checkAndIncrementAttempts(
+        tokenRow.token,
+        currentAttempts,
+      );
+
+      res.status(429).json({
+        shouldSendCertificate,
       });
       return;
     }
@@ -161,7 +184,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
   } catch (err) {
     console.error(err);
 
-    res.status(400).json({
+    res.status(403).json({
       message: 'Inscription non autorisée.',
     });
   }
@@ -172,57 +195,50 @@ const sendCertificate = async (
   res: Response,
 ): Promise<void> => {
   const {
-    token, ine, firstNames, lastName, dateOfBirth,
+    email, ine, firstNames, lastName, dateOfBirth,
   } = req.body;
 
-  if (!req.file || !token || !ine) {
-    throw new CustomError('Certificat, token ou ine manquant.', 400);
+  if (!req.file || !email || !ine) {
+    throw new CustomError('Certificat, email ou ine manquant.', 400);
   }
 
-  const tokenRow = await dbLoginToken.getByToken(token);
+  const tokenRow = await dbLoginToken.getByEmail(email);
 
   if (!tokenRow) throw new CustomError('Token invalide', 401);
   if (new Date(tokenRow.expiresAt) < new Date()) {
     throw new CustomError('Token expiré', 401);
   }
 
-  const { email } = tokenRow;
+  const html = await ejs.renderFile('./views/emails/sendStudentCertificate.ejs', {
+    email,
+    ine,
+  });
 
-  try {
-    const html = await ejs.renderFile('./views/emails/sendStudentCertificate.ejs', {
-      email,
-      ine,
-    });
+  await dbStudents.create(
+    email,
+    ine,
+    firstNames,
+    lastName,
+    date.parseForm(dateOfBirth),
+  );
 
-    await send(
-      'support-santepsyetudiant@beta.gouv.fr',
-      'Nouveau certificat de scolarité reçu',
-      html,
-      [
-        {
-          filename: req.file.originalname,
-          content: req.file.buffer,
-        },
-      ],
-    );
+  await send(
+    'support-santepsyetudiant@beta.gouv.fr',
+    'Nouveau certificat de scolarité reçu',
+    html,
+    [
+      {
+        filename: req.file.originalname,
+        content: req.file.buffer,
+      },
+    ],
+  );
 
-    await dbStudents.create(
-      email,
-      ine,
-      firstNames,
-      lastName,
-      date.parseForm(dateOfBirth),
-    );
+  await sendWelcomeMail(email);
 
-    await sendWelcomeMail(email);
-
-    res.json({
-      message: 'Certificat envoyé et inscription validée.',
-    });
-  } catch (err) {
-    console.error(err);
-    throw new CustomError("Erreur lors de l'envoi du certificat.", 500);
-  }
+  res.status(200).json({
+    message: 'Certificat envoyé et inscription validée.',
+  });
 };
 
 export default {
@@ -232,5 +248,5 @@ export default {
   signIn: asyncHelper(signIn),
   emailValidator,
   studentSignInValidator: signInValidator,
-  sendCertificate,
+  sendCertificate: asyncHelper(sendCertificate),
 };
