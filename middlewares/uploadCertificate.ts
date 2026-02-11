@@ -1,6 +1,7 @@
 import multer from 'multer';
 import CustomError from '../utils/CustomError';
 
+// TODO put in env var
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
 const uploadCertificate = multer({

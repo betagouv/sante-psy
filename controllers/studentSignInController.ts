@@ -16,6 +16,7 @@ import validation from '../utils/validation';
 import verifyINEWithBirthDate from '../services/verifyStudentINE';
 import send from '../utils/email';
 import signInAttempts from '../services/signInAttempts';
+import config from '../utils/config';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
@@ -117,7 +118,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
 
     const currentAttempts = tokenRow.signInAttempts;
 
-    if (currentAttempts >= signInAttempts.MAX_SIGNIN_ATTEMPTS) {
+    if (currentAttempts >= config.maxSignInAttempts) {
       res.status(429).json({
         shouldSendCertificate: true,
       });
