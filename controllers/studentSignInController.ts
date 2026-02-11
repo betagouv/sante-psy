@@ -148,6 +148,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         currentAttempts,
       );
 
+      // TODO: 429 is not adequat for this error, find a code similar to all errors here so we don't differentiate them
       res.status(429).json({
         shouldSendCertificate,
       });
@@ -198,6 +199,7 @@ const sendCertificate = async (
     email, ine, firstNames, lastName, dateOfBirth,
   } = req.body;
 
+  // TODO gérer ça dans un validator
   if (!req.file || !email || !ine) {
     throw new CustomError('Certificat, email ou ine manquant.', 400);
   }
@@ -223,6 +225,7 @@ const sendCertificate = async (
   );
 
   await send(
+    // TODO : replace mail by env var
     'support-santepsyetudiant@beta.gouv.fr',
     'Nouveau certificat de scolarité reçu',
     html,

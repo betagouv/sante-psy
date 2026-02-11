@@ -2,6 +2,7 @@ import verifyINE from './inesApi';
 import date from '../utils/date';
 import config from '../utils/config';
 
+// TODO rename this function and verifyINE because sound same and both use those arg
 const verifyINEWithBirthDate = async (
   ine: string,
   rawDateOfBirth: string,
@@ -16,6 +17,7 @@ const verifyINEWithBirthDate = async (
   try {
     await verifyINE(ine, dateOfBirth);
     return true;
+    // TODO: catch needed or error handled in verifyINE ?
   } catch (err) {
     console.warn('Erreur API INES', err);
     return false;

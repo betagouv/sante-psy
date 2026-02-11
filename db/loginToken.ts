@@ -49,7 +49,6 @@ const upsert = async (
         email,
         expiresAt,
         role,
-        signInAttempts: 0,
       })
       .returning('*');
 
