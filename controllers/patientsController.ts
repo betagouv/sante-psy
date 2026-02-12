@@ -192,7 +192,8 @@ const sendCertificate = async (
   res: Response,
 ): Promise<void> => {
   const { patientId } = req.body;
-  const psychologistId = req.auth.userId;
+  // TODO: delete psychologist from JWT after MEP
+  const psychologistId = req.auth.userId || req.auth.psychologist;
 
   if (!req.file || !patientId || !psychologistId) {
     throw new CustomError('Certificat, patientId ou psychologistId manquant.', 400);
