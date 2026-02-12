@@ -25,11 +25,6 @@ const sortData = (a: Patient, b: Patient): number => (
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.userId || req.auth.psychologist;
 
-  if (!psychologistId) {
-    res.status(403).json({ message: 'Non autorisé' });
-    return;
-  }
-
   const patients = await dbPatients.getAll(psychologistId);
   const patientsWithCount = await getAppointmentsCount(patients);
   const patientsWithBadges = getPatientWithBadges(patientsWithCount);
@@ -62,11 +57,6 @@ const update = async (req: Request, res: Response): Promise<void> => {
   const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
   const psychologistId = req.auth.userId || req.auth.psychologist;
-
-  if (!psychologistId) {
-    res.status(403).json({ message: 'Non autorisé' });
-    return;
-  }
 
   const updated = await dbPatients.update(
     patientId,
@@ -113,11 +103,6 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
   const { patientId } = req.params;
   const psychologistId = req.auth.userId || req.auth.psychologist;
 
-  if (!psychologistId) {
-    res.status(403).json({ message: 'Non autorisé' });
-    return;
-  }
-
   const patient = await dbPatients.getById(patientId, psychologistId);
 
   if (!patient) {
@@ -142,11 +127,6 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
   const psychologistId = req.auth.userId || req.auth.psychologist;
-
-  if (!psychologistId) {
-    res.status(403).json({ message: 'Non autorisé' });
-    return;
-  }
 
   const addedPatient = await dbPatients.insert(
     firstNames,
@@ -186,11 +166,6 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 
   const { patientId } = req.params;
   const psychologistId = req.auth.userId || req.auth.psychologist;
-
-  if (!psychologistId) {
-    res.status(403).json({ message: 'Non autorisé' });
-    return;
-  }
 
   const patientAppointment = await dbAppointments.countByPatient(patientId);
 

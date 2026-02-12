@@ -13,7 +13,7 @@ const getStudentAppointments = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { studentId } = req.params;
+    const studentId = req.auth.userId;
 
     if (!studentId) {
       res.status(400).json({ error: 'Student ID manquant' });
@@ -21,12 +21,6 @@ const getStudentAppointments = async (
     }
 
     const student = await dbStudents.getById(studentId);
-
-    if (!student) {
-      // TODO renvoyer 401 sans erreur
-      res.status(404).json({ error: 'Étudiant introuvable' });
-      return;
-    }
 
     const { email, ine } = student;
 
