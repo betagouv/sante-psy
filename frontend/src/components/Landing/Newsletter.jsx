@@ -58,7 +58,7 @@ const Newsletter = ({ emailRef, withTracking, withText }) => {
             >
               <TextInput
                 ref={emailRef}
-                placeholder="Votre e-mail"
+                placeholder="Votre email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
               />

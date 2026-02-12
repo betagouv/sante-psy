@@ -429,7 +429,7 @@ describe('DB Psychologists', () => {
 
       const returnedPsy = await dbPsychologists.getById(unknownPsyId);
 
-      expect(returnedPsy).to.be.null;
+      expect(returnedPsy).to.be.undefined;
     });
 
     it('should return psychologist if exists', async () => {

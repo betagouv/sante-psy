@@ -93,4 +93,5 @@ export default {
   minScoreAddress: parseFloat(process.env.MIN_SCORE_ADDRESS || '0.55'),
   apiIneToken: process.env.API_INE_TOKEN,
   apiIneUrl: process.env.API_INE_URL,
+  maxSignInAttempts: parseInt(process.env.MAX_SIGNIN_ATTEMPTS || '3', 10),
 };

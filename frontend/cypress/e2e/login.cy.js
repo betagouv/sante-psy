@@ -4,8 +4,6 @@ describe('Login', () => {
   beforeEach(() => {
     cy.intercept('POST', '/api/auth/sendLoginMail')
       .as('sendMail');
-    // cy.intercept('POST', '/api/auth/login')
-    //   .as('login'); // TODO: I dont think we need this one because there is a login utility for cypress
     cy.intercept('POST', '/api/logout')
       .as('logout');
     cy.intercept('GET', '/api/auth/connected')
@@ -25,7 +23,7 @@ describe('Login', () => {
         .then(text => text.replace(/\s+/g, ' ').trim())
         .should(
           'eq',
-          'Un mail de connexion vient de vous être envoyé si votre adresse e-mail correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. Le lien est valable 2 heures.',
+          'Un email de connexion vient de vous être envoyé si votre adresse email correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. Le lien est valable 2 heures.',
         );
     });
   });

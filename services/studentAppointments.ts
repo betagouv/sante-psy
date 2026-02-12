@@ -9,13 +9,14 @@ interface StudentAppointment {
   psychologistName: string;
 }
 
+// TODO unit tests please
 const getStudentAppointments = async (
   email: string,
   INE: string,
 ): Promise<Record<string, StudentAppointment[]>> => {
   const matchedPatients = await patients.getByStudentEmailAndIne(email, INE);
 
-  if (!matchedPatients.length) {
+  if (matchedPatients.length === 0) {
     return {};
   }
 
@@ -25,34 +26,38 @@ const getStudentAppointments = async (
 
   const flatAppointments = appointmentsArrays.flat();
 
-  if (!flatAppointments.length) {
+  if (flatAppointments.length === 0) {
     return {};
   }
 
+  const uniqueAppointments = Array.from(
+    new Map(flatAppointments.map((appt) => [appt.id, appt])).values(),
+  );
+
   const psychologistIds = [
-    ...new Set(flatAppointments.map((appt) => appt.psychologistId)),
+    ...new Set(uniqueAppointments.map((appt) => appt.psychologistId)),
   ];
 
   const psychologistsArray = await Promise.all(
     psychologistIds.map((id) => psychologists.getById(id)),
   );
 
-  const psychologistLastnameById = psychologistsArray.reduce<Record<string, string>>(
+  const psychologistNameById = psychologistsArray.reduce<Record<string, string>>(
     (acc, psy) => {
       if (psy) {
-        acc[psy.dossierNumber] = psy.lastName;
+        acc[psy.dossierNumber] = `${psy.useFirstNames || psy.firstNames} ${psy.useLastName || psy.lastName}`;
       }
       return acc;
     },
     {},
   );
 
-  const mappedAppointments: StudentAppointment[] = flatAppointments
+  const mappedAppointments: StudentAppointment[] = uniqueAppointments
   .map((appt) => ({
     univYear: appt.univYear || 'unknown',
     appointmentDate: appt.appointmentDate,
     psychologistName:
-      psychologistLastnameById[appt.psychologistId]
+      psychologistNameById[appt.psychologistId]
       ?? 'Psychologue inconnu',
   }))
   .sort(

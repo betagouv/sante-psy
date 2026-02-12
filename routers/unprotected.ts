@@ -12,6 +12,7 @@ import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
 import studentSignInController from '../controllers/studentSignInController';
+import uploadCertificate from '../middlewares/uploadCertificate';
 
 const router = express.Router();
 
@@ -24,6 +25,13 @@ const speedLimiterLogin = slowDown({
   // request #6 is delayed by 1000ms
   // request #7 is delayed by 2000ms
   // etc.
+});
+
+const speedLimiterSendCertificate = slowDown({
+  windowMs: 60 * 60 * 1000, // 60 minutes time window
+  delayAfter: 1, // allow 1 request per 60 minutes, then...
+  delayMs: 2000, // begin adding 2000ms of delay per request above 1
+  max: 3, // block requests after 3 attempts
 });
 
 router.post(
@@ -41,6 +49,7 @@ router.post(
 
 router.get(
   '/auth/connected',
+  speedLimiterLogin,
   loginController.userConnected,
 );
 
@@ -51,7 +60,7 @@ router.post(
   loginController.sendMail,
 );
 router.post('/psychologist/login', speedLimiterLogin, loginController.login);
-
+// TODO move this route in protected
 router.post(
   '/student/signInSecondStepMail',
   speedLimiterLogin,
@@ -66,13 +75,24 @@ router.post(
   studentSignInController.sendWelcomeMail,
 );
 
-router.post('/student/signIn/:token', studentSignInController.verifyStudentToken);
+router.post(
+  '/student/signIn/:token',
+  speedLimiterLogin,
+  studentSignInController.verifyStudentToken,
+);
 
 router.post(
   '/student/signIn',
   speedLimiterLogin,
   studentSignInController.studentSignInValidator,
   studentSignInController.signIn,
+);
+
+router.post(
+  '/student/send-certificate',
+  speedLimiterSendCertificate,
+  uploadCertificate.single('file'),
+  studentSignInController.sendCertificate,
 );
 
 router.post(
@@ -86,13 +106,6 @@ router.post(
   speedLimiterLogin,
   studentNewsletterController.mailValidator,
   studentNewsletterController.sendStudentMail,
-);
-
-router.post(
-  '/studentNewsletter/:studentId',
-  speedLimiterLogin,
-  studentNewsletterController.answerValidator,
-  studentNewsletterController.saveAnswer,
 );
 
 router.post(

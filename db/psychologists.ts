@@ -169,7 +169,8 @@ const getById = async (psychologistId: string): Promise<Psychologist | null> => 
     const psychologist = await db(psychologistsTable)
       .where('dossierNumber', psychologistId)
       .first();
-    return psychologist || null;
+    return psychologist;
+    // TODO est-ce que ça pète vraiment quand je renvoie pas null ?
   } catch (err) {
     console.error('Impossible de récupérer le psychologue', err);
     throw new Error('Impossible de récupérer le psychologue');

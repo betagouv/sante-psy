@@ -4,6 +4,7 @@ import { Alert } from '@dataesr/react-dsfr';
 
 const Notification = ({ message, type, onClose, children, className }) => (
   <div data-test-id={`notification-${type}`} className={className || 'fr-my-2w'}>
+    {/* TODO remplacer l'usage de react-dsfr par dsfr officiel */}
     <Alert
       type={type}
       description={message || children}

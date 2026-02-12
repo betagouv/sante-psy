@@ -7,11 +7,11 @@ import { loginTokenTable } from './tables';
 const getByToken = async (token: string): Promise<LoginToken> => {
   try {
     const result = await db(loginTokenTable)
-    .where('token', token)
-    .andWhere('expiresAt', '>', date.now())
-    .first();
+      .where('token', token)
+      .andWhere('expiresAt', '>', date.now())
+      .first();
 
-    return result || null;
+    return result;
   } catch (err) {
     console.error('Impossible de récupérer le token', err);
     throw new Error('Une erreur est survenue.');
@@ -25,7 +25,7 @@ const getByEmail = async (email: string): Promise<LoginToken> => {
     .andWhere('expiresAt', '>', date.now())
     .first();
 
-    return result || null;
+    return result;
   } catch (err) {
     console.error('Impossible de récupérer le token', err);
     throw new Error('Une erreur est survenue.');
@@ -46,8 +46,12 @@ const upsert = async (
     }
 
     const [created] = await db(loginTokenTable)
+    // TODO use .upsert() directly
       .insert({
-        token, email, expiresAt, role,
+        token,
+        email,
+        expiresAt,
+        role,
       })
       .returning('*');
 
@@ -61,19 +65,27 @@ const upsert = async (
 const deleteOne = async (token: string): Promise<void> => {
   try {
     const deletedToken = await db(loginTokenTable)
-    .where({
-      token,
-    })
-    .del()
-    .returning('*');
+      .where({ token })
+      .del()
+      .returning('*');
 
     if (deletedToken.length === 0) {
-      console.error('token not deleted : does not exist or is not allowed');
       throw new Error('token not deleted : does not exist or is not allowed');
     }
   } catch (err) {
     console.error(`Erreur de suppression du token : ${err}`);
     throw new Error('Erreur de suppression du token');
+  }
+};
+
+const incrementAttempts = async (token: string): Promise<void> => {
+  try {
+    await db(loginTokenTable)
+      .where({ token })
+      .increment('signInAttempts', 1);
+  } catch (err) {
+    console.error('Erreur lors de l\'incrémentation des tentatives', err);
+    throw new Error('Erreur lors de l\'incrémentation des tentatives');
   }
 };
 
@@ -95,5 +107,6 @@ export default {
   getByEmail,
   upsert,
   delete: deleteOne,
+  incrementAttempts,
   deleteByEmail,
 };

@@ -37,5 +37,7 @@ router.use('/patients', patientsRouter);
 router.use('/universities', universitiesRouter);
 router.use('/psychologist/:psyId', access.checkPsyParam, psychologistRouter);
 router.use('/student/:studentId', access.checkStudentParam, studentsRouter);
+// todo: ajouter les nouvelles routes dans test/middlewares/xsrfProtection.spec.ts pour tester la sécurité
+router.use('/student/:studentId/appointments', access.checkStudentParam, studentsController.getStudentAppointments);
 
 export default router;

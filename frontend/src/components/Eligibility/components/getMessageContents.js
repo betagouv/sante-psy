@@ -16,6 +16,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
   };
 
   function handleButtonClick() {
+    // TODO à ajouter plutôt sur le onClick
     trackRegisterClick();
     navigate('/inscription');
   }

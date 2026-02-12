@@ -104,6 +104,7 @@ const Student = {
   sendStudentSecondStepMail: email => client.post('/student/signInSecondStepMail', { email }),
   verifyStudentToken: token => client.post(`/student/signIn/${token}`),
   sendStudentWelcomeMail: email => client.post('/student/sendWelcomeMail', { email }),
+  sendCertificate: formData => client.post('/student/send-certificate', formData),
   getAppointments: () => client.get(`/student/${store.userStore.user.id}/appointments`),
 };
 

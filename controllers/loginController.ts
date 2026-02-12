@@ -198,7 +198,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
 
   // Security: Always return the same message regardless of email existence
   res.json({
-    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+    message: `Un email de connexion vient de vous être envoyé si votre adresse email 
       correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
       Le lien est valable ${config.sessionDurationHours} heures.`,
   });
@@ -219,7 +219,7 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   }
 
   res.json({
-    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+    message: `Un email de connexion vient de vous être envoyé si votre adresse email 
       correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
       Le lien est valable ${config.sessionDurationHours} heures.`,
   });
@@ -245,7 +245,7 @@ const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => 
   }
 
   res.json({
-    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+    message: `Un email de connexion vient de vous être envoyé si votre adresse email 
       correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
       Le lien est valable ${config.sessionDurationHours} heures.`,
   });
