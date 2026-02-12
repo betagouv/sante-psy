@@ -14,6 +14,7 @@ import loginController from '../controllers/loginController';
 
 import access from '../utils/access';
 import config from '../utils/config';
+import studentsController from '../controllers/studentsController';
 
 const router = express.Router();
 
