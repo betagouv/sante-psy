@@ -118,35 +118,37 @@ const StudentHistory = () => {
             ))}
           </div>
 
-          {(prevYear || nextYear) && (<nav className={styles.navigation} aria-label="Navigation entre années universitaires">
+          {(prevYear || nextYear) && (
+          <nav className={styles.navigation} aria-label="Navigation entre années universitaires">
             {prevYear && (
-              <button
-                type="button"
-                className="fr-btn fr-btn--secondary"
-                onClick={() => setCurrentYear(prevYear)}
+            <button
+              type="button"
+              className="fr-btn fr-btn--secondary"
+              onClick={() => setCurrentYear(prevYear)}
               >
-                <span className="fr-icon-arrow-left-s-first-line" aria-hidden="true" />
+              <span className="fr-icon-arrow-left-s-first-line" aria-hidden="true" />
+              {' '}
+              Année
                 {' '}
-                Année
-                {' '}
-                {prevYear}
-              </button>
+              {prevYear}
+            </button>
             )}
 
             {nextYear && (
-              <button
-                type="button"
-                className="fr-btn fr-btn--secondary"
-                onClick={() => setCurrentYear(nextYear)}
+            <button
+              type="button"
+              className="fr-btn fr-btn--secondary"
+              onClick={() => setCurrentYear(nextYear)}
               >
-                Année
+              Année
                 {' '}
-                {nextYear}
-                {' '}
-                <span className="fr-icon-arrow-right-s-last-line" aria-hidden="true" />
-              </button>
+              {nextYear}
+              {' '}
+              <span className="fr-icon-arrow-right-s-last-line" aria-hidden="true" />
+            </button>
             )}
-          </nav>)}
+          </nav>
+          )}
 
         </>
       ) : (

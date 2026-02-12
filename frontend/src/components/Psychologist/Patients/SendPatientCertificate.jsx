@@ -11,7 +11,6 @@ const SendPatientCertificate = () => {
   // TODO dans PR certif le psyId doit venir de la req, pas des params
   const { patientId, patientName, psychologistId } = location.state || {};
 
-
   const [file, setFile] = useState(null);
   const [error, setError] = useState('');
   const [certificateSent, setCertificateSent] = useState(false);
