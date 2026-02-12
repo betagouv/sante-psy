@@ -161,10 +161,10 @@ const StudentHistory = () => {
 
       <button
         type="button"
-        className="fr-btn fr-btn--secondary"
+        className="fr-btn fr-btn--secondary fr-mt-4w"
         onClick={() => setShowHelp(!showHelp)}
         aria-expanded={showHelp}
-          >
+      >
         Tes séances n&apos;apparaissent pas ?
       </button>
 

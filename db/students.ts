@@ -70,7 +70,7 @@ const getById = async (studentId: string): Promise<Student> => {
     const student = await db(studentsTable)
       .where('id', studentId)
       .first();
-    return student || null;
+    return student;
   } catch (err) {
     console.error('Error while getting the student by id', err);
     throw new Error("Erreur lors de la récupération de l'étudiant par id");

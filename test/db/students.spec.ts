@@ -4,6 +4,7 @@ import db from '../../db/db';
 import clean from '../helper/clean';
 import { studentsTable } from '../../db/tables';
 import date from '../../utils/date';
+import create from '../helper/create';
 
 describe('DB Students', () => {
   const email = 'donia@test.com';
@@ -101,14 +102,7 @@ describe('DB Students', () => {
     });
 
     it('should throw an error if trying to create duplicate student', async () => {
-      await db(studentsTable).insert({
-        email,
-        ine,
-        firstNames,
-        lastName,
-        dateOfBirth,
-        createdAt: date.now(),
-      });
+      await create.insertOneStudent({ ine });
 
       try {
         await dbStudents.create(email, ine, firstNames, lastName, dateOfBirth);
@@ -132,6 +126,7 @@ describe('DB Students', () => {
         })
         .returning('*');
 
+      // TODO this test seems useless, test when can't find byId and return nothing
       const student = await dbStudents.getById(inserted[0].id);
 
       expect(student).to.not.be.undefined;

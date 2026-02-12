@@ -10,7 +10,7 @@ const getByToken = async (token: string): Promise<LoginToken> => {
       .andWhere('expiresAt', '>', date.now())
       .first();
 
-    return result || null;
+    return result;
   } catch (err) {
     console.error('Impossible de récupérer le token', err);
     throw new Error('Une erreur est survenue.');
@@ -23,7 +23,7 @@ const getByEmail = async (email: string): Promise<LoginToken> => {
       .where('email', email)
       .first();
 
-    return result || null;
+    return result;
   } catch (err) {
     console.error('Impossible de récupérer le token', err);
     throw new Error('Une erreur est survenue.');

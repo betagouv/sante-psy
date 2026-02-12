@@ -45,6 +45,7 @@ router.post(
 
 router.get(
   '/auth/connected',
+  speedLimiterLogin,
   loginController.userConnected,
 );
 
@@ -70,7 +71,11 @@ router.post(
   studentSignInController.sendWelcomeMail,
 );
 
-router.post('/student/signIn/:token', studentSignInController.verifyStudentToken);
+router.post(
+  '/student/signIn/:token',
+  speedLimiterLogin,
+  studentSignInController.verifyStudentToken
+);
 
 router.post(
   '/student/signIn',
@@ -97,13 +102,6 @@ router.post(
   speedLimiterLogin,
   studentNewsletterController.mailValidator,
   studentNewsletterController.sendStudentMail,
-);
-
-router.post(
-  '/studentNewsletter/:studentId',
-  speedLimiterLogin,
-  studentNewsletterController.answerValidator,
-  studentNewsletterController.saveAnswer,
 );
 
 router.post(

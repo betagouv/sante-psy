@@ -9,6 +9,7 @@ interface StudentAppointment {
   psychologistName: string;
 }
 
+// TODO unit tests please
 const getStudentAppointments = async (
   email: string,
   INE: string,

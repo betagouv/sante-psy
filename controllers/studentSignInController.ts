@@ -23,11 +23,15 @@ type MulterRequest = Request & { file: Express.Multer.File };
 const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email } = req.body;
+    const existingPsy = await db(psychologistsTable).where({ email }).first();
+    if (existingPsy) {
+      res.json({
+        message: 'Consultez votre boîte mail',
+      });
+      return;
+    }
     const existingStudent = await db(studentsTable).where({ email }).first();
-    // TODO renommer en existingPsy
-    const isPsyEmail = await db(psychologistsTable).where({ email }).first();
-
-    if (existingStudent && !isPsyEmail) {
+    if (existingStudent) {
       const token = loginInformations.generateToken(32);
       const expiresAt = date.getDatePlusTwoHours();
       await dbLoginToken.upsert(token, email, expiresAt, 'student');
@@ -36,7 +40,7 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
         loginInformations.generateLoginUrl(),
         token,
       );
-    } else if (!isPsyEmail) {
+    } else {
       await sendSecondStepMail.inviteNewStudentToCreateAccount(
         email,
         'studentSignInValidation',
