@@ -3,16 +3,15 @@ import { Student } from '../types/Student';
 import { studentsTable } from './tables';
 import date from '../utils/date';
 
-type SignInResult =
-  | { status: 'created', email: string }
-  | { status: 'alreadyRegistered', email: string }
-  | { status: 'conflict' };
+type DuplicateCheckResult =
+  | { status: 'alreadyRegistered' }
+  | { status: 'conflict' }
+  | { status: 'available' };
 
-const signIn = async (
+const checkDuplicates = async (
   email: string,
   ine: string,
-  firstNames: string,
-): Promise<SignInResult> => {
+): Promise<DuplicateCheckResult> => {
   try {
     // email + ine are already in base for same student
     const existingStudent = await db(studentsTable)
@@ -20,7 +19,7 @@ const signIn = async (
       .first();
 
     if (existingStudent) {
-      return { status: 'alreadyRegistered', email };
+      return { status: 'alreadyRegistered' };
     }
 
     // email or ine separately already used
@@ -33,16 +32,33 @@ const signIn = async (
       return { status: 'conflict' };
     }
 
-    // if none of above, creating student
-    await db(studentsTable)
+    return { status: 'available' };
+  } catch (err) {
+    console.error('Error while checking duplicates', err);
+    throw new Error('Erreur lors de la vérification des doublons');
+  }
+};
+
+const create = async (
+  email: string,
+  ine: string,
+  firstNames: string,
+  lastName: string,
+  dateOfBirth: Date,
+): Promise<Student> => {
+  try {
+    const [student] = await db(studentsTable)
       .insert({
         email,
         ine,
         firstNames,
+        lastName,
+        dateOfBirth,
+        createdAt: date.now(),
       })
       .returning('*') as Student[];
 
-    return { status: 'created', email };
+    return student;
   } catch (err) {
     console.error('Error while creating student', err);
     throw new Error("Erreur lors de la création de l'étudiant");
@@ -75,7 +91,8 @@ const getByEmail = async (email: string): Promise<Student> => {
 };
 
 export default {
-  signIn,
+  checkDuplicates,
+  create,
   getById,
   getByEmail,
 };

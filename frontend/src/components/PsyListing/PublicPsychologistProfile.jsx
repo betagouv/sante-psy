@@ -137,7 +137,7 @@ const PublicPsychologistProfile = () => {
             {psychologist.email && (
             <div className={styles.contactInfo}>
               <div>
-                <h5>E-mail</h5>
+                <h5>Email</h5>
                 {psychologist.email}
               </div>
               <Button

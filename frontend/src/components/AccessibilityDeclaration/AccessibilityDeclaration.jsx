@@ -20,7 +20,7 @@ const AccessibilityDeclaration = () => (
       .
     </p>
     <p>
-      <span>Ministère de l’Enseignement Supérieur et de la Recherche</span>
+      <span>Ministère de l’Enseignement Supérieur, de la Recherche et de l’Espace</span>
       {' '}
       s’engage à rendre son service accessible, conformément à l’article 47 de la loi n° 2005-102 du 11 février 2005.
     </p>
@@ -75,7 +75,7 @@ const AccessibilityDeclaration = () => (
         <li>
           Adresse&nbsp;:
           {' '}
-          <span>MINISTÈRE DE L‘ENSEIGNEMENT SUPÉRIEUR ET DE LA RECHERCHE 1 rue Descartes - 75231 Paris cedex 05</span>
+          <span>MINISTÈRE DE L‘ENSEIGNEMENT SUPÉRIEUR, DE LA RECHERCHE ET DE L’ESPACE 1 rue Descartes - 75231 Paris cedex 05</span>
         </li>
       </ul>
     </Section>

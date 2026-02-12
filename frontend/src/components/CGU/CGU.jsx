@@ -33,7 +33,7 @@ const CGU = () => {
         <p>
           « Santé Psy Étudiant » vise à mettre en relation étudiants et psychologues afin de permettre la
           réalisation de séances gratuites, en application des annonces du Président de la République et du
-          Premier Ministre, le Ministère de l’Enseignement Supérieur et de la Recherche (MESR)
+          Premier Ministre, le Ministère de l’Enseignement Supérieur, de la Recherche et de l’Espace (MESRE)
           pour le déploiement d’un ensemble de mesures destinées à soutenir psychologiquement les étudiants au
           cours de l’année 2021.
         </p>

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import studentAppointments from '../services/studentAppointments';
-import studentsDb from '../db/students';
+import dbStudents from '../db/students';
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -20,7 +20,7 @@ const getStudentAppointments = async (
       return;
     }
 
-    const student = await studentsDb.getById(studentId);
+    const student = await dbStudents.getById(studentId);
 
     if (!student) {
       // TODO renvoyer 401 sans erreur

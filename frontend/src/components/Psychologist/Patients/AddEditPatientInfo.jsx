@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput, RadioGroup, Radio, Icon, Checkbox } from '@dataesr/react-dsfr';
 import classNames from 'classnames';
-import { addAutoSlashToDate } from 'services/date';
+import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import Notification from 'components/Notification/Notification';
 import { HashLink } from 'react-router-hash-link';
 import validateIneFormat from 'src/utils/validateIneFormat';
@@ -32,16 +32,12 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
   };
 
   const validateDateOfBirth = value => {
-    const [day, month, year] = value.split('/').map(Number);
-    const birthDate = new Date(year, month - 1, day);
-    const currentDate = new Date();
-    const maxBirthDate = new Date(currentDate.getFullYear() - 15, currentDate.getMonth(), currentDate.getDate());
-
-    if (birthDate > maxBirthDate) {
-      setDateOfBirthError('La date de naissance entrée n\'est pas valide.');
+    if (!isValidBirthDate(value)) {
+      setDateOfBirthError("La date de naissance entrée n'est pas valide.");
       handleFormErrors('dateOfBirth', true);
       return false;
     }
+
     setDateOfBirthError('');
     handleFormErrors('dateOfBirth', false);
     return true;
@@ -118,7 +114,8 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
         <TextInput
           className="midlength-input"
           data-test-id="etudiant-email-input"
-          label="Email"
+          label="Adresse email"
+          hint="Veillez à informer l\'étudiant que la collecte de son email est obligatoire pour créer son espace et suivre ses séances"
           value={patient.email}
           onChange={handleEmailChange}
           required

@@ -69,7 +69,7 @@ const PrivacyPolicy = () => (
     <h1 className="secondaryPageTitle">Politique de confidentialité</h1>
     <Section title="Qui sommes-nous ?">
       <p>
-        Santé Psy Étudiant est un service numérique porté depuis février 2021 par le ministère chargé de l’enseignement supérieur et de la recherche (MESR). Il vise à mettre en relation les étudiants et des psychologues habilités par les services de santé étudiante (SSE), dans le but de faire bénéficier aux étudiants de 12 séances gratuites avec un psychologue.
+        Santé Psy Étudiant est un service numérique porté depuis février 2021 par le ministère chargé de l’enseignement supérieur, de la recherche et de l’espace (MESRE). Il vise à mettre en relation les étudiants et des psychologues habilités par les services de santé étudiante (SSE), dans le but de faire bénéficier aux étudiants de 12 séances gratuites avec un psychologue.
       </p>
     </Section>
     <Section title="Pourquoi traitons-nous des données à caractère personnel ?">
@@ -86,7 +86,7 @@ const PrivacyPolicy = () => (
     </Section>
     <Section title="Qu’est-ce qui nous autorise à traiter des données à caractère personnel ?">
       <p>Nous traitons des données à caractère personnel selon la base légale de la mission d’intérêt public conformément à l’article 6-1 e) du RGPD. </p>
-      <p>Cette mission d’intérêt public se traduit en pratique par le décret n° 2025-12 du 8 janvier 2025 relatif aux attributions du ministre auprès de la ministre d’Etat, ministre de l’éducation nationale, de l’enseignement supérieur et de la recherche, chargé de l’enseignement supérieur et de la recherche. </p>
+      <p>Cette mission d’intérêt public se traduit en pratique par le décret n° 2025-12 du 8 janvier 2025 relatif aux attributions du ministre auprès de la ministre d’Etat, ministre de l’éducation nationale, de l’enseignement supérieur, de la recherche et de l’espace, chargé de l’enseignement supérieur, de la recherche et de l’espace. </p>
     </Section>
     <Section title="Pendant combien de temps conservons-nous vos données ?">
       <p>Les données à caractère personnel sont conservées :</p>
@@ -158,7 +158,7 @@ const PrivacyPolicy = () => (
       </p>
       <p>Ou par voie postale :</p>
       <p>
-        Ministère de l’Enseignement supérieur et de la Recherche
+        Ministère de l’Enseignement supérieur, de la Recherche et de l’Espace
         <br />
         Délégué à la protection des données (DPD)
         <br />

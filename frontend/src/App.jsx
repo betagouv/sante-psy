@@ -40,6 +40,9 @@ import ContactForm from 'components/Contact/ContactForm';
 import Podcast from 'components/Podcast/Podcast';
 import StudentSignInStepOne from 'components/Students/StudentSignIn/StudentSignInStepOne';
 import StudentSignInStepTwo from 'components/Students/StudentSignIn/StudentSignInStepTwo';
+import StudentSendCertificate from 'components/Students/Certificate/StudentSendCertificate';
+import CertificateSentSuccess from 'components/Students/Certificate/CertificateSentSuccess';
+import StudentSignInSuccess from 'components/Students/StudentSignIn/StudentSignInSuccess';
 import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 import StudentRouter from './StudentRouter';
@@ -100,6 +103,9 @@ function App() {
               <Route exact path="/info-etudiant" element={<StudentInfoLanding />} />
               <Route exact path="/inscription" element={<StudentSignInStepOne />} />
               <Route exact path="/inscription/:token" element={<StudentSignInStepTwo />} />
+              <Route exact path="/inscription/success" element={<StudentSignInSuccess />} />
+              <Route exact path="/inscription/certificat" element={<StudentSendCertificate />} />
+              <Route exact path="/inscription/certificat/success" element={<CertificateSentSuccess />} />
               <Route exact path="/enregistrement/:id" element={<StudentNewsletterAnswer />} />
               <Route exact path="/desinscription/:id" element={<StudentNewsletterUnregister />} />
               <Route exact path="/eligibilite" element={<StudentEligibility />} />
