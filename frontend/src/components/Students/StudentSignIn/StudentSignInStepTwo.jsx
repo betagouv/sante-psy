@@ -245,7 +245,7 @@ const StudentSignInStepTwo = () => {
             M&apos;inscrire
           </button>
         </div>
-        <p className="fr-mb-1w">En savoir plus sur tes données</p>
+        <p className="fr-mb-1w">En savoir plus sur l&apos;usage de tes données</p>
         <a
           href="https://santepsy.etudiant.gouv.fr/politique-de-confidentialite"
           className="fr-link fr-mt-0w"

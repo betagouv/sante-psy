@@ -94,7 +94,7 @@ const SendCertificate = ({
           Si tu ne le trouves pas, il est sur ton attestation CVEC.
         </p>
         <p className="fr-text--sm">
-          Si tu n&apos;as pas ces éléments, il se peut que tu ne sois pas éligible.
+          Si tu n&apos;as pas ces éléments, il se peut que tu ne sois pas éligible. Vérifie auprès de ton établissement scolaire.
         </p>
       </div>
       <a

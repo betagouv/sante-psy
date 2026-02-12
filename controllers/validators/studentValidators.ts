@@ -8,6 +8,7 @@ export const emailValidator = [
 ];
 
 export const signInValidator = [
+  check('email').isEmail().withMessage('Vous devez spécifier un email valide.'),
   check('firstNames')
     .isString()
     .trim()

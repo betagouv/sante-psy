@@ -56,7 +56,7 @@ router.post(
   loginController.sendMail,
 );
 router.post('/psychologist/login', speedLimiterLogin, loginController.login);
-
+// TODO move this route in protected
 router.post(
   '/student/signInSecondStepMail',
   speedLimiterLogin,
@@ -74,7 +74,7 @@ router.post(
 router.post(
   '/student/signIn/:token',
   speedLimiterLogin,
-  studentSignInController.verifyStudentToken
+  studentSignInController.verifyStudentToken,
 );
 
 router.post(

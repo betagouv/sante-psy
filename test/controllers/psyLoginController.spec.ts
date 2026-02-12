@@ -142,6 +142,7 @@ describe('psyLoginController', async () => {
 
             res.status.should.equal(200);
             res.body.message
+            // TODO check why we use replace and if its due to bad initial message writing with spaces
             .replace(/\s+/g, ' ')
             .trim()
             .should.equal(
