@@ -35,7 +35,7 @@ describe('DB Login token', () => {
       await dbLoginToken.upsert(token, email, expiredDate);
       const result = await dbLoginToken.getByToken(token);
 
-      assert.isNull(result);
+      assert.isUndefined(result);
     });
   });
 
@@ -60,7 +60,7 @@ describe('DB Login token', () => {
 
       await dbLoginToken.delete(token);
       const result = await dbLoginToken.getByToken(token);
-      assert.isNull(result);
+      assert.isUndefined(result);
     });
 
     it('should throw error when token does not exist', async () => {
