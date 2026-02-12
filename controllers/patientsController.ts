@@ -186,11 +186,13 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+// TODO : mutualize this with Student sendCertificate
 const sendCertificate = async (
   req: MulterRequest,
   res: Response,
 ): Promise<void> => {
-  const { patientId, psychologistId } = req.body;
+  const { patientId } = req.body;
+  const psychologistId = req.auth.userId;
 
   if (!req.file || !patientId || !psychologistId) {
     throw new CustomError('Certificat, patientId ou psychologistId manquant.', 400);
