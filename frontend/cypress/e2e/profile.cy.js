@@ -1,5 +1,5 @@
 const { checkConvention } = require('../../src/services/conventionVerification');
-const { loginAsDefault } = require('./utils/login');
+const { loginDefaultPsy } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 const { selectNextCalendarDate } = require('./utils/calendar');
 const { suspend } = require('./utils/psychologist');
@@ -13,7 +13,7 @@ describe('Profile', () => {
     cy.intercept('GET', '/api/config').as('config');
 
     resetDB();
-    loginAsDefault();
+    loginDefaultPsy();
     checkConvention();
 
     cy.visit('/psychologue/tableau-de-bord');

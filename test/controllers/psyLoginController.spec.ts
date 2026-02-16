@@ -86,7 +86,7 @@ describe('psyLoginController', async () => {
             chai.assert.isUndefined(res.body.token);
             res.status.should.equal(401);
             res.body.message.should.equal(
-              'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
+              'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
             );
             done();
           });
