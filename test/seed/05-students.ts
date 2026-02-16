@@ -5,7 +5,7 @@ import create from '../helper/create';
 // eslint-disable-next-line import/prefer-default-export
 export const seed = async (knex: Knex): Promise<void> => {
   const students = [...Array(10).keys()]
-    .map((_) => create.getOneStudent());
+    .map(() => create.getOneStudent());
   students.push(create.getOneStudent({ email: 'student@beta.gouv.fr' }));
 
   await knex(studentsTable).insert(students);
