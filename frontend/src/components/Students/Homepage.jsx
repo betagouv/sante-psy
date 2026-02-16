@@ -22,7 +22,7 @@ const StudentHomepage = () => {
         </strong>
       </header>
 
-      <main className={styles.container}>
+      <main className={styles.container} data-test-id="dashboard_student">
         <div className={styles.titleRow}>
           <h2>
             Mes RDV passés

@@ -1,6 +1,6 @@
 let currentUser = {};
 
-const setLoginInfo = (token, xsrfToken, role = 'psy') => {
+const setLoginInfo = (token, xsrfToken, role) => {
   const currentXsrfToken = xsrfToken;
   window.localStorage.setItem('xsrfToken', currentXsrfToken);
   if (role) {
@@ -9,14 +9,24 @@ const setLoginInfo = (token, xsrfToken, role = 'psy') => {
   cy.setCookie('token', token);
 };
 
-const loginAsDefault = (duration = '2h') => cy.request({
+const loginDefaultPsy = (duration = '2h') => cy.request({
   method: 'GET',
-  url: 'http://localhost:8080/test/auth/login@beta.gouv.fr',
+  url: 'http://localhost:8080/test/auth/psychologist/login@beta.gouv.fr',
   qs: { duration },
 })
   .then(res => {
-    currentUser = res.body.psy;
-    setLoginInfo(res.body.token, res.body.xsrfToken);
+    currentUser = res.body.user;
+    setLoginInfo(res.body.token, res.body.xsrfToken, 'psy');
+  });
+
+const loginDefaultStudent = (duration = '2h') => cy.request({
+  method: 'GET',
+  url: 'http://localhost:8080/test/auth/student/student@beta.gouv.fr',
+  qs: { duration },
+})
+  .then(res => {
+    currentUser = res.body.user;
+    setLoginInfo(res.body.token, res.body.xsrfToken, 'student');
   });
 
 const logout = () => {
@@ -24,7 +34,8 @@ const logout = () => {
 };
 
 export default {
-  loginAsDefault,
+  loginDefaultPsy,
+  loginDefaultStudent,
   logout,
   getCurrentUser: () => currentUser,
   setLoginInfo,

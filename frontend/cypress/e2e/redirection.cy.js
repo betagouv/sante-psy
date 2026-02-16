@@ -1,4 +1,4 @@
-const { loginAsDefault } = require('./utils/login');
+const { loginDefaultPsy } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 
 describe('Redirection', () => {
@@ -15,7 +15,7 @@ describe('Redirection', () => {
 
   describe('Logged', () => {
     beforeEach(() => {
-      loginAsDefault();
+      loginDefaultPsy();
     });
 
     it('should redirect to mes seances page if unknown page but logged', () => {

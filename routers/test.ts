@@ -4,8 +4,8 @@ import testController from '../controllers/testController';
 
 const router = express.Router();
 
-// TODO keep psychologist in path because it only call getPsy
-router.get('/auth/:email', testController.getPsychologist);
+router.get('/auth/psychologist/:email', testController.getPsychologist);
+router.get('/auth/student/:email', testController.getStudent);
 router.post('/reset', testController.resetDB);
 router.delete('/psychologist/:email/convention', testController.removeConvention);
 router.delete('/psychologist/:email/hasSeenTutorial', testController.resetTutorial);
