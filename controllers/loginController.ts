@@ -120,7 +120,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
   }
 
   throw new CustomError(
-    'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
+    'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
     401,
   );
 };
