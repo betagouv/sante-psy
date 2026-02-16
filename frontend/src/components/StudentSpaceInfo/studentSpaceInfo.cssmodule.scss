@@ -3,7 +3,6 @@
 .centeredSliceWrapper {
   display: flex;
   justify-content: center;
-  width: 100%;
 }
 
 .sliceContentNormal {
@@ -91,7 +90,7 @@
 
 .cardsContainer {
   gap: 32px;
-  max-width: 1400px;
+  max-width: 1200px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   justify-content: center;
@@ -195,6 +194,8 @@
   .cardsContainer {
     grid-template-columns: 1fr;
     gap: 24px;
+    max-width: 500px;
+    margin: 0 auto;
   }
   
   .instaWrapper {

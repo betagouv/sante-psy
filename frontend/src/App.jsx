@@ -43,10 +43,10 @@ import StudentSignInStepTwo from 'components/Students/StudentSignIn/StudentSignI
 import StudentSendCertificate from 'components/Students/Certificate/StudentSendCertificate';
 import CertificateSentSuccess from 'components/Students/Certificate/CertificateSentSuccess';
 import StudentSignInSuccess from 'components/Students/StudentSignIn/StudentSignInSuccess';
+import StudentSpaceInfo from 'components/StudentSpaceInfo/StudentSpaceInfo';
 import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 import StudentRouter from './StudentRouter';
-import StudentSpaceInfo from 'components/StudentSpaceInfo/StudentSpaceInfo';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 

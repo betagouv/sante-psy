@@ -79,6 +79,16 @@
   line-height: 1;
 }
 
+.customCard {
+  width: 100%;
+  max-width: 500px;
+  
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
 @media (min-width: 769px) {
   .bigContainer {
     width: 384px;
@@ -87,5 +97,11 @@
   .bigContainer {
     width: 400px;
     padding: 64px 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .customCard {
+    max-width: 100%;
   }
 }

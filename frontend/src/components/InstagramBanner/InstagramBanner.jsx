@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 
 import Slice from 'components/Slice/Slice';
+import { useStore } from 'stores/index';
 import styles from './styles.cssmodule.scss';
 import MozaicInstagram from './MozaicInstagram';
-import { useStore } from 'stores/index';
 
 const InstagramBanner = () => {
   const { commonStore: { config } } = useStore();
-  
+
   useEffect(() => {
     document.title = 'Santé Psy Étudiant';
   }, []);
