@@ -4,8 +4,11 @@ import { observer } from 'mobx-react';
 import Slice from 'components/Slice/Slice';
 import styles from './styles.cssmodule.scss';
 import MozaicInstagram from './MozaicInstagram';
+import { useStore } from 'stores/index';
 
 const InstagramBanner = () => {
+  const { commonStore: { config } } = useStore();
+  
   useEffect(() => {
     document.title = 'Santé Psy Étudiant';
   }, []);
@@ -32,7 +35,7 @@ const InstagramBanner = () => {
         y
         description={(
           <>
-            <b>21,5k</b>
+            <b>{config?.statistics?.nbInstaFollower}</b>
             {' '}
             abonnés
             <br />

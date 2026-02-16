@@ -1,0 +1,211 @@
+@use 'src/variables.scss' as *;
+
+.centeredSliceWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.sliceContentNormal {
+  padding-inline: clamp(16px, 18vw, 500px);
+  padding-block: 24px;
+  align-items: start;
+  margin: 12px auto;
+}
+
+.sliceContainer {
+  background-color: $secondary-color;
+  width: 100%;
+}
+
+.sliceContainerSecondary {
+  display: flex;
+  justify-content: center;
+  background-color: $secondary-color;
+}
+
+.sliceContent {
+  display: flex;
+  gap: 32px;
+  padding-inline: clamp(16px, 18vw, 500px);
+  padding-block: 48px;
+  width: 100%;
+  
+  img {
+    height: 400px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+}
+
+.textContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  min-height: 400px;
+  
+  p {
+    font-size: 28px;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+.secondaryContent {
+  align-items: start;
+  p {
+    font-size: 28px;
+    line-height: 1.5;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      font-size: 28px;
+      line-height: 1.6;
+      padding: 8px 0 8px 24px;
+      position: relative;
+      
+      &::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.cardsWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 48px 16px;
+}
+
+.cardsContainer {
+  gap: 32px;
+  max-width: 1400px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: center;
+  width: 100%;
+}
+
+.cardList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  
+  li {
+    padding: 6px 0;
+    position: relative;
+    padding-left: 20px;
+    line-height: 1.4;
+    
+    &::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+  }
+}
+
+.instaWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 48px 16px;
+  margin: 0px;
+  
+  > div {
+    max-width: 1200px;
+    width: 100%;
+  }
+  
+  img {
+    max-width: 400px;
+    height: auto;
+  }
+}
+
+.instaDescription {
+  p {
+    font-size: 20px;
+    line-height: 1.5;
+    margin: 0 0 16px 0;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .sliceContentNormal {
+    padding-inline: 16px;
+    padding-block: 16px;
+  }
+  
+  .sliceContainerSecondary {
+    padding: 32px 16px;
+  }
+  
+  .sliceContent {
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+    
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  
+  .textContent {
+    min-height: auto;
+    
+    p {
+      font-size: 18px;
+    }
+  }
+  
+  .secondaryContent {
+    p {
+      font-size: 18px;
+    }
+    
+    ul li {
+      font-size: 16px;
+    }
+  }
+  
+  .cardsWrapper {
+    padding: 32px 16px;
+  }
+  
+  .cardsContainer {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .instaWrapper {
+    padding: 32px 16px;
+    
+    img {
+      max-width: 100%;
+    }
+  }
+  
+  .instaDescription p {
+    font-size: 16px;
+  }
+}

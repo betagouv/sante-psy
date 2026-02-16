@@ -46,6 +46,7 @@ import StudentSignInSuccess from 'components/Students/StudentSignIn/StudentSignI
 import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 import StudentRouter from './StudentRouter';
+import StudentSpaceInfo from 'components/StudentSpaceInfo/StudentSpaceInfo';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
@@ -95,6 +96,7 @@ function App() {
               <Route exact path="/cgu" element={<CGU />} />
               <Route exact path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
               <Route exact path="/faq" element={<Faq />} />
+              <Route exact path="/espace-etudiant" element={<StudentSpaceInfo />} />
               <Route exact path="/stats" element={<Statistics />} />
               <Route exact path="/contact" element={<Contact />} />
               <Route exact path="/contact/formulaire" element={<ContactForm />} />
