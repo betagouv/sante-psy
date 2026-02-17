@@ -240,20 +240,20 @@ const StudentSignInStepTwo = () => {
           </div>
         )}
 
-        <div className="fr-my-4w">
+        <p className="fr-mb-1w">En cliquant sur m&apos;inscrire, je reconnais avoir lu et accepté les</p>
+        <a
+          href="https://santepsy.etudiant.gouv.fr/cgu"
+          className="fr-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          conditions générales d&apos;utilisation
+        </a>
+        <div className="fr-mb-4w fr-mt-2w">
           <button className="fr-btn" type="submit">
             M&apos;inscrire
           </button>
         </div>
-        <p className="fr-mb-1w">En savoir plus sur l&apos;usage de tes données</p>
-        <a
-          href="https://santepsy.etudiant.gouv.fr/politique-de-confidentialite"
-          className="fr-link fr-mt-0w"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Protection des données
-        </a>
       </form>
     </Page>
   );
