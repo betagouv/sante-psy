@@ -8,7 +8,7 @@ import CardsBanner from './CardsBanner';
 import InstagramBanner from './InstagramBanner';
 
 const StudentSpaceInfo = () => (
-  <div>
+  <>
     <Slice
       customStyle={{ content: styles.sliceContentNormal }}
       title={(
@@ -92,7 +92,7 @@ const StudentSpaceInfo = () => (
     </div>
     <Faq simplified />
     <InstagramBanner />
-  </div>
+  </>
 );
 
 export default observer(StudentSpaceInfo);

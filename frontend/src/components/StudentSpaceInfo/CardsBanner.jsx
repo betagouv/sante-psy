@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 
 import Slice from 'components/Slice/Slice';
 import Card from 'components/Card/Card';
-import styles from './studentSpaceInfo.cssmodule.scss';
+import styles from './cardsBanner.cssmodule.scss';
 
 const CardsBanner = () => (
   <div>
