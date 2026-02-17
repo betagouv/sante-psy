@@ -1,12 +1,10 @@
 export type Student = {
   id: string,
+  firstNames: string,
+  lastName: string,
   email: string,
-  letter: boolean,
-  appointment: boolean,
-  doctorAppointment: boolean,
-  doctorAppointment2: boolean,
-  referral: number,
-  source: string,
+  dateOfBirth: Date,
+  ine: string,
   createdAt: Date,
   updatedAt?: Date
 }

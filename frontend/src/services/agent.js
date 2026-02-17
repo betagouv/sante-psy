@@ -50,6 +50,12 @@ const Appointment = {
   getByPatientId: id => client.get(`/appointments/${id}`),
 };
 
+const Auth = {
+  login: token => client.post('/auth/login', { token }),
+  sendLoginMail: email => client.post('/auth/sendLoginMail', { email }),
+  getConnected: () => clientWithoutErrorManagement.get('/auth/connected'),
+};
+
 const Config = { get: () => clientWithoutErrorManagement.get('/config') };
 
 const Contact = { send: message => client.post('/contact', message) };
@@ -87,28 +93,38 @@ const Statistics = { getAll: () => client.get('/statistics') };
 
 const University = { getOne: id => client.get(`/universities/${id}`) };
 
-const User = {
-  getConnected: () => clientWithoutErrorManagement.get('/connecteduser'),
+const Psy = {
   login: token => client.post('/psychologist/login', { token }),
   sendMail: email => client.post('/psychologist/sendMail', { email }),
-  logout: () => client.post('/psychologist/logout'),
+  logout: () => client.post('/logout'),
 };
 
 const Student = {
-  sendMail: (email, source) => clientWithoutErrorManagement.post('/student/sendMail', { email, source }),
-  saveAnswer: data => clientWithoutErrorManagement.post('/student/saveAnswer', data),
-  unregister: id => clientWithoutErrorManagement.delete(`/student/${id}`),
+  signIn: data => client.post('/student/signIn', data),
+  sendStudentSecondStepMail: email => client.post('/student/signInSecondStepMail', { email }),
+  verifyStudentToken: token => client.post(`/student/signIn/${token}`),
+  sendStudentWelcomeMail: email => client.post('/student/sendWelcomeMail', { email }),
+  sendCertificate: formData => client.post('/student/send-certificate', formData),
+  getAppointments: () => client.get(`/student/${store.userStore.user.id}/appointments`),
+};
+
+const StudentNewsletter = {
+  sendStudentMail: (email, source) => clientWithoutErrorManagement.post('/studentNewsletter/sendStudentMail', { email, source }),
+  saveAnswer: data => clientWithoutErrorManagement.post('/studentNewsletter/saveAnswer', data),
+  unregister: id => clientWithoutErrorManagement.delete(`/studentNewsletter/${id}`),
 };
 
 export default {
   Appointment,
+  Auth,
   Config,
   Contact,
   Convention,
   Patient,
   Psychologist,
   Statistics,
-  University,
-  User,
   Student,
+  StudentNewsletter,
+  University,
+  Psy,
 };

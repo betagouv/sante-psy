@@ -35,10 +35,10 @@ const Bill = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await agent.User.getConnected();
-        setUser(response.data);
+        const response = await agent.Auth.getConnected();
+        setUser(response.data.user);
 
-        const { universityId } = response.data.convention;
+        const { universityId } = response.data.user.convention;
         if (universityId) {
           const university = await agent.University.getOne(universityId);
           if (university && (university.address || university.postal_code || university.city || university.billingAddress)) {
@@ -96,7 +96,7 @@ const Bill = () => {
       },
       { index: 8, text: `Nom et adresse de l'université : ${universityInfos.name || PARTIAL_UNDESCORE_LINE_UNI_NAME}` },
       { index: 9, text: `${universityInfos.address || FULL_UNDERSCORE_LINE}` },
-      { index: 10, text: 'E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :' },
+      { index: 10, text: 'Email ou adresse postale du service facturier de l’université (destinataire de la facture) :' },
       { index: 11, text: billingAddress },
       {
         index: 12,
@@ -121,7 +121,7 @@ const Bill = () => {
       {/* TODO: fix print view (by using styles.header?) */}
       <DSHeader>
         <HeaderBody>
-          <Logo>Ministère de l&lsquo;Enseignement Supérieur et de la Recherche</Logo>
+          <Logo>Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Espace</Logo>
           <Service title="Santé Psy Étudiant" description={`Facture ${formatMonth({ month, year })}`} />
         </HeaderBody>
       </DSHeader>

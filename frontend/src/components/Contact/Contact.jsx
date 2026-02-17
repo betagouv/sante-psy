@@ -72,7 +72,7 @@ const Contact = () => {
           satisfaisante ?
         </h1>
         <p>
-          Contactez-nous directement par e-mail pour que nous puissions trouver une solution.
+          Contactez-nous directement par email pour que nous puissions trouver une solution.
         </p>
         <div className={styles.hover}>
           <Button
@@ -82,7 +82,7 @@ const Contact = () => {
             className={styles.button}
             onClick={() => navigate('/contact/formulaire')}
           >
-            Nous contacter par mail
+            Nous contacter par email
           </Button>
         </div>
       </div>

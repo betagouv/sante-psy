@@ -17,7 +17,7 @@ const Newsletter = ({ emailRef, withTracking, withText }) => {
     event.preventDefault();
     if (email) {
       trackEvent();
-      agent.Student.sendMail(email, from)
+      agent.StudentNewsletter.sendStudentMail(email, from)
         .then(response => {
           setNotification({ type: 'success', message: response.data.message });
         })
@@ -33,9 +33,9 @@ const Newsletter = ({ emailRef, withTracking, withText }) => {
     }
 
     if (__MATOMO__) {
-      _paq.push(['trackEvent', 'Student', 'SendMail']);
+      _paq.push(['trackEvent', 'Student', 'SendStudentMail']);
       if (from) {
-        _paq.push(['trackEvent', from, 'SendMail']);
+        _paq.push(['trackEvent', from, 'SendStudentMail']);
       }
     }
 
@@ -58,7 +58,7 @@ const Newsletter = ({ emailRef, withTracking, withText }) => {
             >
               <TextInput
                 ref={emailRef}
-                placeholder="Votre e-mail"
+                placeholder="Votre email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
               />

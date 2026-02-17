@@ -1,6 +1,6 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 const { checkConvention } = require('../../src/services/conventionVerification');
-const { loginAsDefault } = require('./utils/login');
+const { loginDefaultPsy } = require('./utils/login');
 const { resetDB, resetTutorial } = require('./utils/db');
 
 const checkAllSteps = numberOfSteps => {
@@ -35,12 +35,12 @@ const checkAllSteps = numberOfSteps => {
 
 describe('Global tutorial', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/connecteduser')
+    cy.intercept('GET', '/api/auth/connected')
       .as('connecteduser');
     cy.intercept('PUT', '/api/psychologist/*/seeTutorial')
       .as('seeTutorial');
     resetDB();
-    loginAsDefault();
+    loginDefaultPsy();
     checkConvention();
     resetTutorial();
 
@@ -80,11 +80,11 @@ const tutorials = [
 ];
 describe('Other tutorials', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/connecteduser')
+    cy.intercept('GET', '/api/auth/connected')
       .as('connecteduser');
 
     resetDB();
-    loginAsDefault();
+    loginDefaultPsy();
     checkConvention();
   });
 

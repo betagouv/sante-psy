@@ -11,7 +11,7 @@ import fr from 'date-fns/locale/fr';
 import Bill from 'components/Psychologist/Reimbursement/Bill';
 import App from './App';
 
-import '@gouvfr/dsfr/dist/utility/icons/icons-system/icons-system.min.css';
+import '@gouvfr/dsfr/dist/utility/icons/icons.min.css';
 
 configure({ enforceActions: 'never' });
 registerLocale('fr', fr);

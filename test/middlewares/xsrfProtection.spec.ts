@@ -16,20 +16,20 @@ describe('Route should be XSRF protected', () => {
     { method: 'post', url: '/api/psychologist/495614e8-89af-4406-ba02-9fc038b991f9/activate' },
     { method: 'post', url: '/api/psychologist/495614e8-89af-4406-ba02-9fc038b991f9/suspend' },
     { method: 'put', url: '/api/psychologist/495614e8-89af-4406-ba02-9fc038b991f9' },
-    { method: 'post', url: '/api/psychologist/logout' },
+    { method: 'post', url: '/api/logout' },
   ];
 
   routes.map((route) => it(
     `${route.method} ${route.url} without xsrf`,
     () => chai.request(app)[route.method](route.url)
-  .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken')}`)
+  .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken', 'psy')}`)
   .then((res) => res.status.should.equal(401)),
   ));
 
   routes.map((route) => it(
     `${route.method} ${route.url} with wrong xsrf`,
     () => chai.request(app)[route.method](route.url)
-  .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken')}`)
+  .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken', 'psy')}`)
   .set('xsrf-token', 'notSoRandomXSRFToken')
   .then((res) => res.status.should.equal(401)),
   ));
@@ -37,7 +37,7 @@ describe('Route should be XSRF protected', () => {
   routes.map((route) => it(
     `${route.method} ${route.url} with xsrf`,
     () => chai.request(app)[route.method](route.url)
-  .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken')}`)
+  .set('Cookie', `token=${cookie.getJwtTokenForUser('myUser', 'randomXSRFToken', 'psy')}`)
   .set('xsrf-token', 'randomXSRFToken')
   .then((res) => res.status.should.not.equal(401)),
   ));

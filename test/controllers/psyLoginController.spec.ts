@@ -1,5 +1,5 @@
 import sinon from 'sinon';
-import chai from 'chai';
+import chai, { expect } from 'chai';
 import { v4 as uuidv4 } from 'uuid';
 import app from '../../index';
 
@@ -13,9 +13,9 @@ import { DossierState } from '../../types/DossierState';
 
 const sendEmail = require('../../utils/email');
 
-describe('loginController', async () => {
+describe('psyLoginController', async () => {
   describe('login page', () => {
-    const token = cookie.getJwtTokenForUser('dossierNumber', 'randomXSRFToken');
+    const token = cookie.getJwtTokenForUser('dossierNumber', 'randomXSRFToken', 'psy');
     const email = 'prenom.nom@beta.gouv.fr';
 
     describe('getLogin', () => {
@@ -86,7 +86,7 @@ describe('loginController', async () => {
             chai.assert.isUndefined(res.body.token);
             res.status.should.equal(401);
             res.body.message.should.equal(
-              'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
+              'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
             );
             done();
           });
@@ -101,7 +101,7 @@ describe('loginController', async () => {
 
       beforeEach(async () => {
         insertTokenStub = sinon
-          .stub(dbLoginToken, 'insert')
+          .stub(dbLoginToken, 'upsert')
           .returns(Promise.resolve());
 
         sendMailStub = sinon
@@ -141,8 +141,13 @@ describe('loginController', async () => {
             sinon.assert.called(insertTokenStub);
 
             res.status.should.equal(200);
-            res.body.message.should.equal(
-              "Un lien de connexion a été envoyé à l'adresse prenom.nom@beta.gouv.fr. Le lien est valable 2 heures.",
+            res.body.message
+            // TODO check why we use replace and if its due to bad initial message writing with spaces
+            .replace(/\s+/g, ' ')
+            .trim()
+            .should.equal(
+              'Un email de connexion vient de vous être envoyé si votre adresse email correspond bien à '
+              + 'un utilisateur inscrit sur Santé Psy Étudiant. Le lien est valable 2 heures.',
             );
             done();
           });
@@ -263,11 +268,13 @@ describe('loginController', async () => {
 
       return chai
         .request(app)
-        .get('/api/connecteduser')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .get('/api/auth/connected')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
-          res.body.should.have.all.keys(
+          res.body.should.have.all.keys('role', 'user');
+          res.body.role.should.equal('psy');
+          res.body.user.should.have.all.keys(
             'dossierNumber',
             'firstNames',
             'lastName',
@@ -282,41 +289,55 @@ describe('loginController', async () => {
             'hasSeenTutorial',
             'createdAt',
           );
-          res.body.dossierNumber.should.equal(psy.dossierNumber);
-          res.body.firstNames.should.equal(psy.firstNames);
-          res.body.lastName.should.equal(psy.lastName);
-          res.body.useFirstNames.should.equal(psy.useFirstNames);
-          res.body.useLastName.should.equal(psy.useLastName);
-          res.body.email.should.equal(psy.email);
-          res.body.adeli.should.equal(psy.adeli);
-          res.body.active.should.equal(psy.active);
-          res.body.convention.should.eql({
-            isConventionSigned: true,
-            universityName: 'Monster university',
-            universityId,
-          });
-          res.body.address.should.equal(psy.address);
+          res.body.user.dossierNumber.should.equal(psy.dossierNumber);
+          res.body.user.firstNames.should.equal(psy.firstNames);
+          res.body.user.lastName.should.equal(psy.lastName);
+          res.body.user.useFirstNames.should.equal(psy.useFirstNames);
+          res.body.user.useLastName.should.equal(psy.useLastName);
+          res.body.user.email.should.equal(psy.email);
+          res.body.user.adeli.should.equal(psy.adeli);
+          res.body.user.active.should.equal(psy.active);
+          res.body.user.convention.should.have.all.keys(
+            'isConventionSigned',
+            'universityName',
+            'universityId',
+          );
+          res.body.user.convention.isConventionSigned.should.equal(true);
+          res.body.user.convention.universityName.should.equal('Monster university');
+          res.body.user.address.should.equal(psy.address);
         });
     });
 
     it('should return empty info when psy does not exist', async () => chai
         .request(app)
-        .get('/api/connecteduser')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken')}`)
-        .then(async (res) => res.body.should.be.empty));
+        .get('/api/auth/connected')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken', 'psy')}`)
+        .then(async (res) => {
+          res.body.should.have.all.keys('role', 'user');
+          expect(res.body.role).to.be.null;
+          expect(res.body.user).to.be.null;
+        }));
 
     it('should return empty info if user is not connected', async () => chai
         .request(app)
-        .get('/api/connecteduser')
-        .then(async (res) => res.body.should.be.empty));
+        .get('/api/auth/connected')
+        .then(async (res) => {
+          res.body.should.have.all.keys('role', 'user');
+          expect(res.body.role).to.be.null;
+          expect(res.body.user).to.be.null;
+        }));
 
     it('should return empty info if user does not have csrf', async () => {
       const psy = create.insertOnePsy();
       return chai
         .request(app)
-        .get('/api/connecteduser')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser((await psy).dossierNumber, 'randomXSRFToken')}`)
-        .then(async (res) => res.body.should.be.empty);
+        .get('/api/auth/connected')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser((await psy).dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .then(async (res) => {
+          res.body.should.have.all.keys('role', 'user');
+          expect(res.body.role).to.be.null;
+          expect(res.body.user).to.be.null;
+        });
     });
   });
 });

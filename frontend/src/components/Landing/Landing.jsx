@@ -54,7 +54,7 @@ const Landing = () => {
           </>
         )}
         buttonLink="/eligibilite"
-        buttonText="Vérifier mon éligibilité"
+        buttonText="Prendre RDV"
         hint={(
           <>
             Plus de
@@ -123,7 +123,7 @@ const Landing = () => {
         )}
         description={(
           <>
-            Recevez toute l’information nécessaire par e-mail pour bénéficier des
+            Recevez toute l’information nécessaire par email pour bénéficier des
             {' '}
             <b>12 séances gratuites</b>
             {' '}

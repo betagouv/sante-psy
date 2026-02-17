@@ -12,7 +12,7 @@ const BillingInfo = ({ billingInfo, setBillingInfo, universityHasBillingAddress 
     {!universityHasBillingAddress && (
       <>
         <TextInput
-          label="E-mail ou adresse postale du service facturier de l’université (destinataire de la facture) :"
+          label="Email ou adresse postale du service facturier de l’université (destinataire de la facture) :"
           value={billingInfo.address1}
           onChange={e => setBillingInfo({ ...billingInfo, address1: e.target.value })}
         />

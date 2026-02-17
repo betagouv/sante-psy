@@ -1,4 +1,4 @@
-const { loginAsDefault } = require('./utils/login');
+const { loginDefaultPsy } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 const { removeConvention, signConvention } = require('./utils/psychologist');
 
@@ -14,7 +14,7 @@ describe('ConventionModal', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/config')
       .as('config');
-    cy.intercept('GET', '/api/connecteduser')
+    cy.intercept('GET', '/api/auth/connected')
       .as('user');
     cy.intercept({
       method: 'GET',
@@ -24,7 +24,7 @@ describe('ConventionModal', () => {
       .as('updateConvention');
 
     resetDB();
-    loginAsDefault();
+    loginDefaultPsy();
   });
 
   describe('Basic display', () => {

@@ -22,7 +22,7 @@ describe('universitiesController', () => {
 
   it('should return one university', async () => chai.request(app)
         .get(`/api/universities/${university.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           // eslint-disable-next-line max-len
@@ -41,7 +41,7 @@ describe('universitiesController', () => {
 
   it('should NOT return one university if invalid id', async () => chai.request(app)
         .get('/api/universities/invalid_id')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.eql(400);

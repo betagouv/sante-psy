@@ -1,8 +1,11 @@
 import express from 'express';
 
 import appointmentsController from '../controllers/appointmentsController';
+import access from '../utils/access';
 
 const router = express.Router();
+
+router.use(access.requirePsyRole);
 
 router.get('/', appointmentsController.getAll);
 router.get('/:patientId', appointmentsController.getByPatientId);

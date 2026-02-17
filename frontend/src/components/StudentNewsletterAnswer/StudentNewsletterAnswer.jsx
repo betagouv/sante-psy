@@ -5,9 +5,9 @@ import { ButtonGroup, Button } from '@dataesr/react-dsfr';
 import Slice from 'components/Slice/Slice';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
-import styles from './studentAnswer.cssmodule.scss';
+import styles from './studentNewsletterAnswer.cssmodule.scss';
 
-const StudentAnswer = () => {
+const StudentNewsletterAnswer = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const { commonStore: { setNotification } } = useStore();
@@ -16,7 +16,7 @@ const StudentAnswer = () => {
   const onClick = referral => {
     setSuccess(false);
     setNotification({});
-    agent.Student.saveAnswer({ id, referral })
+    agent.StudentNewsletter.saveAnswer({ id, referral })
       .then(notification => {
         setSuccess(true);
         setNotification(notification.data, true, false);
@@ -27,7 +27,7 @@ const StudentAnswer = () => {
   };
 
   useEffect(() => {
-    agent.Student.saveAnswer({
+    agent.StudentNewsletter.saveAnswer({
       id,
       letter: searchParams.get('letter'),
       appointment: searchParams.get('appointment'),
@@ -61,4 +61,4 @@ const StudentAnswer = () => {
   );
 };
 
-export default StudentAnswer;
+export default StudentNewsletterAnswer;

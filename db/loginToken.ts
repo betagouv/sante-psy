@@ -6,9 +6,9 @@ import { LoginToken } from '../types/LoginToken';
 const getByToken = async (token: string): Promise<LoginToken> => {
   try {
     const result = await db(loginTokenTable)
-    .where('token', token)
-    .andWhere('expiresAt', '>', date.now())
-    .first();
+      .where('token', token)
+      .andWhere('expiresAt', '>', date.now())
+      .first();
 
     return result;
   } catch (err) {
@@ -20,8 +20,8 @@ const getByToken = async (token: string): Promise<LoginToken> => {
 const getByEmail = async (email: string): Promise<LoginToken> => {
   try {
     const result = await db(loginTokenTable)
-    .where('email', email)
-    .first();
+      .where('email', email)
+      .first();
 
     return result;
   } catch (err) {
@@ -30,15 +30,32 @@ const getByEmail = async (email: string): Promise<LoginToken> => {
   }
 };
 
-const insert = async (token: string, email: string, expiresAt: string): Promise<LoginToken> => {
+const upsert = async (
+  token: string,
+  email: string,
+  expiresAt: Date,
+  role: 'psy' | 'student' = 'psy',
+): Promise<LoginToken> => {
   try {
-    return await db(loginTokenTable).insert({
-      token,
-      email,
-      expiresAt,
-    });
+    const existing = await getByEmail(email);
+
+    if (existing) {
+      await db(loginTokenTable).where({ email }).del();
+    }
+
+    const [created] = await db(loginTokenTable)
+    // TODO use .upsert() directly
+      .insert({
+        token,
+        email,
+        expiresAt,
+        role,
+      })
+      .returning('*');
+
+    return created;
   } catch (err) {
-    console.error(`Erreur de sauvegarde du token : ${err}`);
+    console.error(`Erreur d'upsert du token : ${err}`);
     throw new Error('Erreur de sauvegarde du token');
   }
 };
@@ -46,14 +63,11 @@ const insert = async (token: string, email: string, expiresAt: string): Promise<
 const deleteOne = async (token: string): Promise<void> => {
   try {
     const deletedToken = await db(loginTokenTable)
-    .where({
-      token,
-    })
-    .del()
-    .returning('*');
+      .where({ token })
+      .del()
+      .returning('*');
 
     if (deletedToken.length === 0) {
-      console.error('token not deleted : does not exist or is not allowed');
       throw new Error('token not deleted : does not exist or is not allowed');
     }
   } catch (err) {
@@ -62,9 +76,21 @@ const deleteOne = async (token: string): Promise<void> => {
   }
 };
 
+const incrementAttempts = async (token: string): Promise<void> => {
+  try {
+    await db(loginTokenTable)
+      .where({ token })
+      .increment('signInAttempts', 1);
+  } catch (err) {
+    console.error('Erreur lors de l\'incrémentation des tentatives', err);
+    throw new Error('Erreur lors de l\'incrémentation des tentatives');
+  }
+};
+
 export default {
   getByToken,
   getByEmail,
-  insert,
+  upsert,
   delete: deleteOne,
+  incrementAttempts,
 };

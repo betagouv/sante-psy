@@ -1,0 +1,98 @@
+.historyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+
+  h3 {
+    margin: 0;
+    padding-left: 5px;
+    font-size: 20px;
+  }
+
+  span {
+    color: var(--text-active-blue-france);
+  }
+}
+
+.period {
+  font-family: Marianne;
+  font-weight: 300;
+  font-style: Light;
+  font-size: 16px;
+  color: var(--text-mention-grey);
+}
+
+.empty p {
+  color: var(--text-mention-grey);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+@media (min-width: 425px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #F9F2FF;
+  border-radius: 4px;
+}
+
+.index {
+  font-size: 32px;
+  font-weight: 700;
+  align-self: center;
+  // TODO : ça ne rend surement pas bon en dark mode, besoin de DSFR
+  color: #6F016B;
+}
+
+.day {
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.date {
+  font-weight: 700;
+  margin: 0;
+  color: #6F016B;
+}
+
+.psychologist {
+  margin: 0;
+}
+
+.counter {
+  color: var(--text-mention-grey);
+}
+
+.empty {
+  margin-top: 2rem;
+}
+
+.help {
+  margin-top: 1rem;
+  padding-left: 1.5rem;
+}
+
+.navigation {
+  margin-top: 1rem;
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+}

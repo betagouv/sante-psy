@@ -11,17 +11,17 @@ import getSteps from './Steps';
 const Tutorial = ({ children, tutoStatus, setTutoStatus, id }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { userStore: { user, seeTutorial } } = useStore();
+  const { userStore: { user, seeTutorial, role } } = useStore();
   const [steps, setSteps] = useState(getSteps(id));
 
   useEffect(() => {
-    if (user && !user.hasSeenTutorial && !tutoStatus.run) {
+    if (user && role === 'psy' && !user.hasSeenTutorial && !tutoStatus.run) {
       setTutoStatus({ run: true, stepIndex: 0 });
       if (pathname !== '/psychologue/tableau-de-bord') {
         navigate('/psychologue/tableau-de-bord');
       }
     }
-  }, [user]);
+  }, [user, role]);
 
   useEffect(() => { setSteps(getSteps(id)); }, [id]);
 

@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom';
 import Slice from 'components/Slice/Slice';
 import agent from 'services/agent';
 
-const StudentUnregister = () => {
+const StudentNewsletterUnregister = () => {
   const { id } = useParams();
 
   useEffect(() => {
     if (id) {
-      agent.Student.unregister(id);
+      agent.StudentNewsletter.unregister(id);
     }
   }, []);
 
@@ -27,4 +27,4 @@ const StudentUnregister = () => {
   );
 };
 
-export default StudentUnregister;
+export default StudentNewsletterUnregister;

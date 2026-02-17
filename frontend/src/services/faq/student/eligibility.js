@@ -11,7 +11,7 @@ module.exports = () => [
     question: "Quels sont les critères d'éligibilité pour bénéficier du dispositif Santé Psy Étudiant\u00A0?",
     frequent: true,
     answer:
-      "Le dispositif Santé Psy Étudiant est accessible à tous les étudiants inscrits dans un établissement d'enseignement supérieur reconnu par le Ministère de l'Enseignement supérieur et de la Recherche (ou un ministère en lien avec celui-ci). Il concerne tout type d'établissement, qu'il soit public ou privé, quel que soit le lieu de scolarité, le statut de l'école\u00A0/ université ou bien encore le lieu de résidence de l'étudiant.",
+      "Le dispositif Santé Psy Étudiant est accessible à tous les étudiants inscrits dans un établissement d'enseignement supérieur reconnu par le Ministère de l'Enseignement supérieur, de la Recherche et de l'Espace (ou un ministère en lien avec celui-ci). Il concerne tout type d'établissement, qu'il soit public ou privé, quel que soit le lieu de scolarité, le statut de l'école\u00A0/ université ou bien encore le lieu de résidence de l'étudiant.",
   },
   {
     question: "J'ai déjà un suivi. Puis-je cependant bénéficier du dispositif\u00A0?",

@@ -1,67 +1,98 @@
-import { studentsTable } from './tables';
 import db from './db';
-import date from '../utils/date';
 import { Student } from '../types/Student';
+import { studentsTable } from './tables';
+import date from '../utils/date';
 
-const insert = async (email: string, source: string): Promise<void> => {
+type DuplicateCheckResult =
+  | { status: 'alreadyRegistered' }
+  | { status: 'conflict' }
+  | { status: 'available' };
+
+const checkDuplicates = async (
+  email: string,
+  ine: string,
+): Promise<DuplicateCheckResult> => {
   try {
-    await db(studentsTable)
-      .insert({ email, source })
-      .onConflict('email')
-      .ignore();
+    // email + ine are already in base for same student
+    const existingStudent = await db(studentsTable)
+      .where({ email, ine })
+      .first();
+
+    if (existingStudent) {
+      return { status: 'alreadyRegistered' };
+    }
+
+    // email or ine separately already used
+    const [conflict] = await db(studentsTable)
+      .where('email', email)
+      .orWhere('ine', ine)
+      .limit(1);
+
+    if (conflict) {
+      return { status: 'conflict' };
+    }
+
+    return { status: 'available' };
   } catch (err) {
-    console.error('Erreur de sauvegarde du mail', err);
-    throw new Error('Erreur de sauvegarde du mail');
+    console.error('Error while checking duplicates', err);
+    throw new Error('Erreur lors de la vérification des doublons');
   }
 };
 
-const getAllCreatedBetweenWithEmail = async (
-  from: Date,
-  to: Date,
-): Promise<Student[]> => {
+const create = async (
+  email: string,
+  ine: string,
+  firstNames: string,
+  lastName: string,
+  dateOfBirth: Date,
+): Promise<Student> => {
   try {
-    return db
-      .from(studentsTable)
-      .whereNotNull('email')
-      .whereBetween('createdAt', [from, to]);
+    const [student] = await db(studentsTable)
+      .insert({
+        email,
+        ine,
+        firstNames,
+        lastName,
+        dateOfBirth,
+        createdAt: date.now(),
+      })
+      .returning('*') as Student[];
+
+    return student;
   } catch (err) {
-    console.error('Erreur lors de la récuperation des étudiants', err);
-    throw new Error('Erreur lors de la récuperation des étudiants');
+    console.error('Error while creating student', err);
+    throw new Error("Erreur lors de la création de l'étudiant");
   }
 };
 
-const getAllWithoutDoctorAppointment = async (): Promise<Student[]> => {
+const getById = async (studentId: string): Promise<Student> => {
   try {
-    return db
-      .from(studentsTable)
-      .whereNotNull('email')
-      .where('letter', false);
+    const student = await db(studentsTable)
+      .where('id', studentId)
+      .first();
+    return student;
   } catch (err) {
-    console.error('Erreur lors de la récuperation des étudiants', err);
-    throw new Error('Erreur lors de la récuperation des étudiants');
+    console.error('Error while getting the student by id', err);
+    throw new Error("Erreur lors de la récupération de l'étudiant par id");
   }
 };
 
-const updateById = async (
-  id: string,
-  student: Partial<Student>,
-): Promise<void> => {
+const getByEmail = async (email: string): Promise<Student> => {
   try {
-    return db(studentsTable)
-      .where('id', id)
-      .update({
-        ...student,
-        updatedAt: date.now(),
-      });
+    const result = await db(studentsTable)
+    .where('email', email)
+    .first();
+
+    return result;
   } catch (err) {
-    console.error("Erreur de modification de l'étudiant", err);
-    throw new Error("Erreur de modification de l'étudiant");
+    console.error('Error while getting the student by email', err);
+    throw new Error("Erreur lors de la récupération de l'étudiant par email");
   }
 };
 
 export default {
-  insert,
-  getAllCreatedBetweenWithEmail,
-  getAllWithoutDoctorAppointment,
-  updateById,
+  checkDuplicates,
+  create,
+  getById,
+  getByEmail,
 };
