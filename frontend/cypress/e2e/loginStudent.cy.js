@@ -73,14 +73,14 @@ describe('Login Student', () => {
 
   describe('Login expiration', () => {
     it('Should redirect to login page after expiration', () => {
-      loginDefaultStudent('2s');
+      loginDefaultStudent('3s');
       cy.visit('/etudiant');
       cy.location('pathname').should('eq', '/etudiant/mes-seances');
       cy.wait('@connectedUser');
 
       // We explicitely wait for token to expire
       // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(2000);
+      cy.wait(3000);
 
       cy.reload();
       cy.location('pathname').should('eq', '/login');

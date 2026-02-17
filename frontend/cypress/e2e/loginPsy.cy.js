@@ -74,14 +74,14 @@ describe('Login Psy', () => {
 
   describe('Login expiration', () => {
     it('Should redirect to login page after expiration', () => {
-      loginDefaultPsy('2s');
+      loginDefaultPsy('3s');
       cy.visit('/psychologue');
       cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
       cy.wait('@connectedUser');
 
       // We explicitely wait for token to expire
       // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(2000);
+      cy.wait(3000);
 
       cy.reload();
       cy.location('pathname').should('eq', '/login');
