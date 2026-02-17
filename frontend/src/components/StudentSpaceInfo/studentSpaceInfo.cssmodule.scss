@@ -1,0 +1,107 @@
+@use 'src/variables.scss' as *;
+
+.sliceContainer {
+  background-color: $secondary-color;
+  width: 100%;
+}
+
+.sliceContentNormal {
+  padding-inline: clamp(16px, 18vw, 500px);
+  padding-block: 24px;
+  align-items: start;
+  margin: 12px auto;
+}
+
+.sliceContent {
+  display: flex;
+  gap: 32px;
+  padding-inline: clamp(16px, 18vw, 500px);
+  padding-block: 48px;
+  width: 100%;
+  
+  img {
+    height: 400px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+}
+
+.textContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  min-height: 400px;
+  
+  p {
+    font-size: 24px;
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+.secondaryContent {
+  align-items: start;
+  p {
+    font-size: 24px;
+    line-height: 1.5;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      font-size: 24px;
+      line-height: 1.6;
+      padding: 8px 0 8px 24px;
+      position: relative;
+      
+      &::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .sliceContentNormal {
+    padding-inline: 16px;
+    padding-block: 16px;
+  }
+  
+  .sliceContent {
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+    
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  
+  .textContent {
+    min-height: auto;
+    
+    p {
+      font-size: 18px;
+    }
+  }
+  
+  .secondaryContent {
+    p {
+      font-size: 18px;
+    }
+    
+    ul li {
+      font-size: 16px;
+    }
+  }
+}

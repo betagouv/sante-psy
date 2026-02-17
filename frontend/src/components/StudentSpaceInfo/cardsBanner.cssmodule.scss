@@ -1,0 +1,63 @@
+@use 'src/variables.scss' as *;
+
+.sliceContentNormal {
+  padding-inline: clamp(16px, 18vw, 500px);
+  padding-block: 24px;
+  align-items: start;
+  margin: 12px auto;
+}
+
+.cardsWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 48px 16px;
+}
+
+.cardsContainer {
+  gap: 32px;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: center;
+  width: 100%;
+}
+
+.cardList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  
+  li {
+    padding: 6px 0;
+    position: relative;
+    padding-left: 20px;
+    line-height: 1.4;
+    
+    &::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .sliceContentNormal {
+    padding-inline: 16px;
+    padding-block: 16px;
+  }
+  
+  .cardsWrapper {
+    padding: 32px 16px;
+  }
+  
+  .cardsContainer {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}

@@ -43,6 +43,7 @@ import StudentSignInStepTwo from 'components/Students/StudentSignIn/StudentSignI
 import StudentSendCertificate from 'components/Students/Certificate/StudentSendCertificate';
 import CertificateSentSuccess from 'components/Students/Certificate/CertificateSentSuccess';
 import StudentSignInSuccess from 'components/Students/StudentSignIn/StudentSignInSuccess';
+import StudentSpaceInfo from 'components/StudentSpaceInfo/StudentSpaceInfo';
 import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 import StudentRouter from './StudentRouter';
@@ -95,6 +96,7 @@ function App() {
               <Route exact path="/cgu" element={<CGU />} />
               <Route exact path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
               <Route exact path="/faq" element={<Faq />} />
+              <Route exact path="/espace-etudiant" element={<StudentSpaceInfo />} />
               <Route exact path="/stats" element={<Statistics />} />
               <Route exact path="/contact" element={<Contact />} />
               <Route exact path="/contact/formulaire" element={<ContactForm />} />

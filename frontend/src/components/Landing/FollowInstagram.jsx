@@ -33,7 +33,7 @@ const FollowInstagram = () => {
           Déjà plus de
           {' '}
           <b>
-            {config?.statistics?.nbInstaFollower || '22 100'}
+            {config?.statistics?.nbInstaFollower || '29 400'}
             {' '}
             abonnés sur Instagram.
           </b>

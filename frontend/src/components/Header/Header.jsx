@@ -17,6 +17,7 @@ import { useStore } from 'stores/';
 
 const defaultItems = [
   { title: 'Comment ça marche ?', link: '/' },
+  { title: 'Espace Étudiant', link: '/espace-etudiant' },
   { title: 'Trouver un psychologue', link: '/trouver-un-psychologue' },
   { title: 'Foire aux questions', link: '/faq' },
   { title: 'Nous contacter', link: '/contact' },
