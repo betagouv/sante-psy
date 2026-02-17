@@ -1,5 +1,4 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 
 import Slice from 'components/Slice/Slice';
 import Card from 'components/Card/Card';
@@ -76,4 +75,4 @@ const CardsBanner = () => (
   </div>
 );
 
-export default observer(CardsBanner);
+export default CardsBanner;

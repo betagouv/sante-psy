@@ -16,11 +16,7 @@ const InstagramBanner = () => {
       }}
       color="white"
       imageSrc="/images/studentSpace/instaBanner.png"
-      title={(
-        <>
-          Rejoins la communauté Santé Psy Étudiant
-        </>
-      )}
+      title="Rejoins la communauté Santé Psy Étudiant"
       description={(
         <div className={styles.instaDescription}>
           <p>

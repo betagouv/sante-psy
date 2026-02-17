@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
-import { observer } from 'mobx-react';
 
 import Slice from 'components/Slice/Slice';
 import Faq from 'components/Faq/Faq';
 import styles from './studentSpaceInfo.cssmodule.scss';
 import CardsBanner from './CardsBanner';
 import InstagramBanner from './InstagramBanner';
+
+// TODO dsfr tout le style (avec font adaptative)
+// TODO convertir all image en webp ou jpg c moins lourd
 
 const StudentSpaceInfo = () => {
   useEffect(() => {
@@ -25,6 +27,7 @@ const StudentSpaceInfo = () => {
         )}
         description="Un espace personnel pour t'aider à prendre soin de ta santé mentale"
       />
+      {/* TODO le transformer en component ou refacto Slice */}
       <div className={styles.sliceContainer}>
         <div className={styles.sliceContent}>
           <div className={styles.textContent}>
@@ -78,27 +81,25 @@ const StudentSpaceInfo = () => {
           </div>
         </div>
       </div>
-      <div>
-        <Slice
-          customStyle={{ content: styles.sliceContentNormal }}
-          title={(
-            <b>Prêt à créer ton espace étudiant ?</b>
-          )}
-          description={(
-            <>
-              Créer ton espace ne prend que quelques minutes.
-              {' '}
-              Et si ce n&apos;est pas le bon moment, tu pourras toujours y revenir plus tard.
-            </>
-          )}
-          buttonLink="/inscription"
-          buttonText="Créer mon espace"
-        />
-      </div>
+      <Slice
+        customStyle={{ content: styles.sliceContentNormal }}
+        title={(
+          <b>Prêt à créer ton espace étudiant ?</b>
+        )}
+        description={(
+          <>
+            Créer ton espace ne prend que quelques minutes.
+            {' '}
+            Et si ce n&apos;est pas le bon moment, tu pourras toujours y revenir plus tard.
+          </>
+        )}
+        buttonLink="/inscription"
+        buttonText="Créer mon espace"
+      />
       <Faq simplified />
       <InstagramBanner />
     </>
   );
 };
 
-export default observer(StudentSpaceInfo);
+export default StudentSpaceInfo;
