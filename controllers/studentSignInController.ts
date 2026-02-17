@@ -130,6 +130,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       const expiresAt = date.getDatePlusTwoHours();
 
       await dbLoginToken.upsert(token, email, expiresAt, 'student');
+      await dbLoginToken.upsert(token, email, expiresAt, 'student');
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),

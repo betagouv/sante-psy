@@ -1,14 +1,14 @@
 import express from 'express';
 import { expressjwt } from 'express-jwt';
 
-import psychologistRouter from './psychologist';
-import patientsRouter from './patients';
-import universitiesRouter from './universities';
 import appointmentsRouter from './appointments';
+import patientsRouter from './patients';
+import psychologistRouter from './psychologist';
 import studentsRouter from './students';
+import universitiesRouter from './universities';
 
-import xsrfProtection from '../middlewares/xsrfProtection';
 import refreshToken from '../middlewares/refreshToken';
+import xsrfProtection from '../middlewares/xsrfProtection';
 
 import loginController from '../controllers/loginController';
 

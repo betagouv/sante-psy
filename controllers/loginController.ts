@@ -1,23 +1,23 @@
 import { Request, Response } from 'express';
 
-import { check } from 'express-validator';
 import ejs from 'ejs';
-import validation from '../utils/validation';
+import { check } from 'express-validator';
+import dbLastConnection from '../db/lastConnections';
+import dbLoginToken from '../db/loginToken';
 import dbPsychologists from '../db/psychologists';
 import dbStudents from '../db/students';
 import dbSuspensions from '../db/suspensionReasons';
-import dbLoginToken from '../db/loginToken';
-import dbLastConnection from '../db/lastConnections';
-import date from '../utils/date';
-import cookie from '../utils/cookie';
-import logs from '../utils/logs';
-import sendEmail from '../utils/email';
-import config from '../utils/config';
-import asyncHelper from '../utils/async-helper';
-import CustomError from '../utils/CustomError';
 import { checkXsrf } from '../middlewares/xsrfProtection';
 import loginInformations from '../services/loginInformations';
 import DOMPurify from '../services/sanitizer';
+import asyncHelper from '../utils/async-helper';
+import config from '../utils/config';
+import cookie from '../utils/cookie';
+import CustomError from '../utils/CustomError';
+import date from '../utils/date';
+import sendEmail from '../utils/email';
+import logs from '../utils/logs';
+import validation from '../utils/validation';
 
 const emailValidators = [
   check('email')
@@ -92,7 +92,27 @@ async function saveStudentToken(email: string, token: string): Promise<void> {
   }
 }
 
-const deleteToken = (req: Request, res: Response): void => {
+const deleteToken = async (req: Request, res: Response): Promise<void> => {
+  const tokenData = cookie.verifyJwt(req, res);
+
+  if (tokenData) {
+    const userId = tokenData.userId || tokenData.psychologist;
+    const { role } = tokenData;
+
+    // Delete login token from DB to invalidate email link
+    if (role === 'psy') {
+      const psy = await dbPsychologists.getById(userId);
+      if (psy) {
+        await dbLoginToken.deleteByEmail(psy.email);
+      }
+    } else if (role === 'student') {
+      const student = await dbStudents.getById(userId);
+      if (student) {
+        await dbLoginToken.deleteByEmail(student.email);
+      }
+    }
+  }
+
   cookie.clearJwtCookie(res);
   res.json({ });
 };
@@ -109,7 +129,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
       cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken, 'psy');
       console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
 
-      dbLoginToken.delete(token);
+      dbLoginToken.delete(token); // Psy tokens are single-use
       dbLastConnection.upsert(psychologistData.dossierNumber);
 
       res.json(xsrfToken);
@@ -136,8 +156,6 @@ const studentLogin = async (req: Request, res: Response): Promise<void> => {
       cookie.createAndSetJwtCookie(res, studentData.id, xsrfToken, 'student');
       console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
 
-      dbLoginToken.delete(token);
-
       res.json(xsrfToken);
       return;
     }
@@ -153,6 +171,7 @@ const studentLogin = async (req: Request, res: Response): Promise<void> => {
 
 /**
  * Send a email with a login link if the email is already registered
+ * Security: Always return the same message to prevent user enumeration
  */
 const sendMail = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
@@ -161,29 +180,23 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   console.log(`User with ${logs.hash(email)} asked for a login link`);
   const acceptedEmailExist = await dbPsychologists.getAcceptedByEmail(email);
 
-  if (!acceptedEmailExist) {
+  if (acceptedEmailExist) {
+    const token = loginInformations.generateToken(32);
+    const loginUrl = loginInformations.generateLoginUrl();
+    await sendPsyLoginEmail(email, loginUrl, token);
+    await savePsyToken(email, token);
+  } else {
     const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedByEmail(email);
     if (notYetAcceptedEmailExist) {
       await sendNotYetAcceptedEmail(email);
-      throw new CustomError(
-        'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.',
-        401,
-      );
+    } else {
+      console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${
+        logs.hash(email)}
+      `);
     }
-
-    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${
-      logs.hash(email)}
-    `);
-    throw new CustomError(
-      `L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`,
-      401,
-    );
   }
 
-  const token = loginInformations.generateToken(32);
-  const loginUrl = loginInformations.generateLoginUrl();
-  await sendPsyLoginEmail(email, loginUrl, token);
-  await savePsyToken(email, token);
+  // Security: Always return the same message regardless of email existence
   res.json({
     message: `Un email de connexion vient de vous être envoyé si votre adresse email 
       correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
@@ -197,14 +210,7 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
 
   console.log(`Student with ${logs.hash(email)} asked for a login link`);
   const studentIsRegistered = await dbStudents.getByEmail(email);
-  const existingToken = await dbLoginToken.getByEmail(email);
-  let token;
-
-  if (existingToken) {
-    token = existingToken.token;
-  } else {
-    token = loginInformations.generateToken(32);
-  }
+  const token = loginInformations.generateToken(32);
 
   if (studentIsRegistered) {
     const loginUrl = loginInformations.generateLoginUrl();
@@ -223,7 +229,7 @@ const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => 
   validation.checkErrors(req);
   const { email } = req.body;
 
-  console.log(`User login link request for ${email}`);
+  console.log(`User login link request for ${logs.hash(email)}`);
 
   const student = await dbStudents.getByEmail(email);
   if (student) {
@@ -255,7 +261,6 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
   const tokenData = await dbLoginToken.getByToken(token);
 
   if (!tokenData) {
-    console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
     throw new CustomError(
       'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
       401,
@@ -271,7 +276,7 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
       cookie.createAndSetJwtCookie(res, psy.dossierNumber, xsrfToken, 'psy');
       console.log(`Successful authentication for psy ${logs.hash(email)}`);
 
-      await dbLoginToken.delete(token);
+      await dbLoginToken.delete(token); // Psy tokens are single-use
       await dbLastConnection.upsert(psy.dossierNumber);
 
       res.json({ xsrfToken, role: 'psy' });
@@ -283,15 +288,12 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
       cookie.createAndSetJwtCookie(res, student.id, xsrfToken, 'student');
       console.log(`Successful authentication for student ${logs.hash(email)}`);
 
-      await dbLoginToken.delete(token);
-
       res.json({ xsrfToken, role: 'student' });
       return;
     }
   }
 
   console.log(`Token without matching user : ${logs.hash(email)}, role: ${role}`);
-  await dbLoginToken.delete(token);
 
   throw new CustomError(
     'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
@@ -406,7 +408,7 @@ export default {
   sendMail: asyncHelper(sendMail),
   sendStudentMail: asyncHelper(sendStudentMail),
   sendStudentLoginEmail,
-  deleteToken,
+  deleteToken: asyncHelper(deleteToken),
   sendUserLoginMail: asyncHelper(sendUserLoginMail),
   userLogin: asyncHelper(userLogin),
   userConnected: asyncHelper(userConnected),

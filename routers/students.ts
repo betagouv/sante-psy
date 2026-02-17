@@ -1,11 +1,12 @@
 import express from 'express';
 
 import access from '../utils/access';
+import studentsController from '../controllers/studentsController';
 
 const router = express.Router();
 
 router.use(access.requireStudentRole);
 
-// Student routes will be added here as needed
+router.use('/appointments', studentsController.getStudentAppointments);
 
 export default router;

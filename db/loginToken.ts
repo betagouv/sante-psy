@@ -1,7 +1,8 @@
-import date from '../utils/date';
-import { loginTokenTable } from './tables';
-import db from './db';
 import { LoginToken } from '../types/LoginToken';
+import date from '../utils/date';
+import logs from '../utils/logs';
+import db from './db';
+import { loginTokenTable } from './tables';
 
 const getByToken = async (token: string): Promise<LoginToken> => {
   try {
@@ -20,8 +21,9 @@ const getByToken = async (token: string): Promise<LoginToken> => {
 const getByEmail = async (email: string): Promise<LoginToken> => {
   try {
     const result = await db(loginTokenTable)
-      .where('email', email)
-      .first();
+    .where('email', email)
+    .andWhere('expiresAt', '>', date.now())
+    .first();
 
     return result;
   } catch (err) {
@@ -87,10 +89,24 @@ const incrementAttempts = async (token: string): Promise<void> => {
   }
 };
 
+const deleteByEmail = async (email: string): Promise<void> => {
+  try {
+    await db(loginTokenTable)
+      .where({ email })
+      .del();
+
+    console.log(`Login token deleted for email: ${logs.hash(email)}`);
+  } catch (err) {
+    console.error(`Erreur de suppression du token par email : ${err}`);
+    throw new Error('Erreur de suppression du token');
+  }
+};
+
 export default {
   getByToken,
   getByEmail,
   upsert,
   delete: deleteOne,
   incrementAttempts,
+  deleteByEmail,
 };

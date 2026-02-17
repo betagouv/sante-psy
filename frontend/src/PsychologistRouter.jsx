@@ -28,10 +28,12 @@ import './custom-month-picker.css';
 import './custom-date-picker.css';
 
 const PsychologistRouter = () => {
-  const { userStore: { user, role } } = useStore();
+  const { userStore: { user, role, xsrfToken } } = useStore();
   const { pathname } = useLocation();
 
-  if (!user || role !== 'psy') {
+  // Security guard - redirect to login if not authenticated as psy
+  // Check xsrfToken OR user to handle async loading (xsrfToken loads sync from localStorage)
+  if ((!user && !xsrfToken) || (role && role !== 'psy')) {
     return <Navigate to="/login" replace />;
   }
 

@@ -16,11 +16,15 @@ import uploadCertificate from '../middlewares/uploadCertificate';
 
 const router = express.Router();
 
-// prevent abuse for some rules
+// Security: Prevent brute force attacks on login endpoints
+// Limit to 5 attempts per 5 minutes to prevent email enumeration and brute force
 const speedLimiterLogin = slowDown({
   windowMs: 5 * 60 * 1000, // 5 minutes
-  delayAfter: config.speedLimitation ? 10 : 10000, // allow X requests per 5 minutes, then...
-  delayMs: 500, // begin adding 500ms of delay per request above 10:
+  delayAfter: config.speedLimitation ? 5 : 10000, // allow 5 requests per 5 minutes in production, then...
+  delayMs: 1000, // begin adding 1000ms of delay per request above 5:
+  // request #6 is delayed by 1000ms
+  // request #7 is delayed by 2000ms
+  // etc.
 });
 
 const speedLimiterSendCertificate = slowDown({

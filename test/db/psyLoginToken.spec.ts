@@ -7,6 +7,8 @@ import dotEnv from 'dotenv';
 
 dotEnv.config();
 
+// TODO after merge: rename file loginToken.spec.ts
+
 describe('DB Login token', () => {
   const token = '0Hj1xrlN6p4icK7TwC7YCr6vMLR0NXen';
   // Clean up all data
