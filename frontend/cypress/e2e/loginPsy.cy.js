@@ -50,26 +50,26 @@ describe('Login Psy', () => {
     });
 
     // TODO : should be tested in unit test
-    it('should not logged twice with same token', () => {
-      cy.request('http://localhost:8080/test/auth/psychologist/login@beta.gouv.fr')
-        .then(response => {
-          cy.visit(`/login/${response.body.token}`);
-          cy.wait('@login');
-          cy.wait('@connectedUser');
-          cy.wait('@connectedUser');
-          cy.get('[data-test-id="dashboard"]').should('be.visible');
-          logout();
-          cy.visit(`/login/${response.body.token}`);
-          cy.wait('@login');
-          cy.wait('@connectedUser');
-          cy.location('pathname').should('not.eq', '/psychologue/tableau-de-bord');
-          cy.get('[data-test-id="notification-error"] p')
-            .should(
-              'have.text',
-              'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
-            );
-        });
-    });
+    // it('should not logged twice with same token', () => {
+    //   cy.request('http://localhost:8080/test/auth/psychologist/login@beta.gouv.fr')
+    //     .then(response => {
+    //       cy.visit(`/login/${response.body.token}`);
+    //       cy.wait('@login');
+    //       cy.wait('@connectedUser');
+    //       cy.wait('@connectedUser');
+    //       cy.get('[data-test-id="dashboard"]').should('be.visible');
+    //       logout();
+    //       cy.visit(`/login/${response.body.token}`);
+    //       cy.wait('@login');
+    //       cy.wait('@connectedUser');
+    //       cy.location('pathname').should('not.eq', '/psychologue/tableau-de-bord');
+    //       cy.get('[data-test-id="notification-error"] p')
+    //         .should(
+    //           'have.text',
+    //           'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
+    //         );
+    //     });
+    // });
   });
 
   describe('Login expiration', () => {

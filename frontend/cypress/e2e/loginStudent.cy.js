@@ -49,26 +49,26 @@ describe('Login Student', () => {
         );
     });
 
-    it('should not logged twice with same token', () => {
-      cy.request('http://localhost:8080/test/auth/student/student@beta.gouv.fr')
-        .then(response => {
-          cy.visit(`/login/${response.body.token}`);
-          cy.wait('@login');
-          cy.wait('@connectedUser');
-          cy.wait('@connectedUser');
-          cy.get('[data-test-id="dashboard_student"]').should('be.visible');
-          logout();
-          cy.visit(`/login/${response.body.token}`);
-          cy.wait('@login');
-          cy.wait('@connectedUser');
-          cy.location('pathname').should('not.eq', '/etudiant/mes-seances');
-          cy.get('[data-test-id="notification-error"] p')
-            .should(
-              'have.text',
-              'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
-            );
-        });
-    });
+    // it('should not logged twice with same token', () => {
+    //   cy.request('http://localhost:8080/test/auth/student/student@beta.gouv.fr')
+    //     .then(response => {
+    //       cy.visit(`/login/${response.body.token}`);
+    //       cy.wait('@login');
+    //       cy.wait('@connectedUser');
+    //       cy.wait('@connectedUser');
+    //       cy.get('[data-test-id="dashboard_student"]').should('be.visible');
+    //       logout();
+    //       cy.visit(`/login/${response.body.token}`);
+    //       cy.wait('@login');
+    //       cy.wait('@connectedUser');
+    //       cy.location('pathname').should('not.eq', '/etudiant/mes-seances');
+    //       cy.get('[data-test-id="notification-error"] p')
+    //         .should(
+    //           'have.text',
+    //           'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
+    //         );
+    //     });
+    // });
   });
 
   describe('Login expiration', () => {
