@@ -94,7 +94,7 @@ async function saveStudentToken(email: string, token: string): Promise<void> {
 
 const deleteToken = (req: Request, res: Response): void => {
   cookie.clearJwtCookie(res);
-  res.json({ });
+  res.json({});
 };
 
 const login = async (req: Request, res: Response): Promise<void> => {
@@ -171,8 +171,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
       );
     }
 
-    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${
-      logs.hash(email)}
+    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${logs.hash(email)}
     `);
     throw new CustomError(
       `L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`,
@@ -319,9 +318,15 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
     const psy = await dbPsychologists.getById(userId);
     if (psy) {
       const convention = await dbPsychologists.getConventionInfo(userId);
-      const { reason: inactiveReason, until: inactiveUntil } = psy.active
-        ? { reason: undefined, until: undefined }
-        : await dbSuspensions.getByPsychologist(psy.dossierNumber);
+      let inactiveReason;
+      let inactiveUntil;
+      if (!psy.active) {
+        const suspension = await dbSuspensions.getByPsychologist(psy.dossierNumber);
+        if (suspension) {
+          inactiveReason = suspension.reason;
+          inactiveUntil = suspension.until;
+        }
+      }
 
       res.json({
         role: 'psy',
