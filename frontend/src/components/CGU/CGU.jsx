@@ -36,7 +36,7 @@ const CGU = () => {
           « Santé Psy Étudiant » vise à mettre en relation étudiants et psychologues - via un annuaire
           afin de permettre la réalisation de consultations gratuites, en application des annonces du
           Président de la République et du Premier Ministre. Le MESRE (ci-après “Éditeur”) a déployé
-          le dispositif dans le but d'accompagner psychologiquement les étudiants depuis 2021.
+          le dispositif dans le but d’accompagner psychologiquement les étudiants depuis 2021.
         </p>
         <p>
           Le dispositif Santé Psy Étudiant est entièrement gratuit pour les étudiants qui n’ont à avancer
@@ -173,7 +173,7 @@ const CGU = () => {
         <p>
           Tout étudiant connecté à son espace peut consulter la liste des psychologues référencés par le
           dispositif SPE et effectuer des recherches par nom, ville, code postal ou région. Muni de sa
-          carte étudiante ou de son certificat de scolarité pour l'année en cours, il bénéficie de douze
+          carte étudiante ou de son certificat de scolarité pour l’année en cours, il bénéficie de douze
           séances par année universitaire. Il peut prendre rendez-vous avec un des psychologuesréférencés en contactant le professionnel au travers des moyens de contact renseignés sur la
           Plateforme.
         </p>
