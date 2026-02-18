@@ -12,6 +12,7 @@ const schoolConvention = require('./school/convention');
 const schoolJoin = require('./school/join');
 const schoolStatistics = require('./school/statistics');
 const eligibility = require('./student/eligibility');
+const studentSpace = require('./studentSpace/space');
 const problem = require('./student/problem');
 const session = require('./student/session');
 const studentProcess = require('./student/process');
@@ -29,6 +30,7 @@ module.exports = {
   retractation,
   session,
   studentProcess,
+  studentSpace,
   schoolBilling,
   schoolConvention,
   schoolEligibility,

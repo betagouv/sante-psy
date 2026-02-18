@@ -26,7 +26,7 @@ const Faq = ({ simplified }) => {
   const { userStore: { user } } = useStore();
   const getDefaultTab = () => {
     const section = query.get('section');
-    if (section && ['etudiant', 'psychologue', 'ecole'].includes(section)) {
+    if (section && ['etudiant', 'psychologue', 'ecole', 'espace'].includes(section)) {
       return items[section]?.index || 0;
     }
 
@@ -80,6 +80,9 @@ const Faq = ({ simplified }) => {
               <FaqTab type="ecole" simplified={simplified} />
             </Tab>
           )}
+          <Tab label="Espace Étudiant">
+            <FaqTab type="espaceEtudiant" simplified={simplified} />
+          </Tab>
         </Tabs>
       </div>
       {!simplified && (
