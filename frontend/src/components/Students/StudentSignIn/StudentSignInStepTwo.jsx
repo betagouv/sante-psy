@@ -208,7 +208,7 @@ const StudentSignInStepTwo = () => {
               id="ine-input"
               type="text"
               value={ine}
-              onChange={e => setIne(e.target.value)}
+              onChange={e => setIne((e.target.value).toUpperCase())}
               onBlur={() => validateINE(ine)}
               required
             />
