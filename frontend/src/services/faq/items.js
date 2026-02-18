@@ -44,6 +44,13 @@ const items = {
       { title: 'Données statistiques', name: 'schoolStatistics' },
     ],
   },
+  espaceEtudiant: {
+    index: 3,
+    label: 'Espace Étudiant',
+    sections: [
+      { title: 'Espace Étudiant', name: 'studentSpace' },
+    ],
+  },
 };
 
 export default items;
