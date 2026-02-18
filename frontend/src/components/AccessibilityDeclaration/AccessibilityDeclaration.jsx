@@ -15,7 +15,7 @@ const AccessibilityDeclaration = () => (
     <p>
       Établie le
       {' '}
-      <span>24 mai 2024</span>
+      <span>16 février 2026</span>
       {/* no space */}
       .
     </p>
@@ -30,7 +30,7 @@ const AccessibilityDeclaration = () => (
     </p>
     <ul>
       <li><a href="https://beta.gouv.fr/accessibilite/schema-pluriannuel">Schéma pluriannuel</a></li>
-      <li><a href="https://santepsy.etudiant.gouv.fr/declaration-accessibilite/plan-action">Plan d’action 2024</a></li>
+      <li><a href="https://santepsy.etudiant.gouv.fr/declaration-accessibilite/plan-action">Plan d’action 2026</a></li>
     </ul>
     <p>
       Cette déclaration d’accessibilité s’applique à
@@ -113,7 +113,7 @@ const AccessibilityDeclaration = () => (
     <p>
       Cette déclaration d’accessibilité a été créé le
       {' '}
-      <span>24 mai 2024</span>
+      <span>16 février 2026</span>
       {' '}
       grâce au
       {' '}
