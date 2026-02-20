@@ -6,23 +6,25 @@ import { Patient } from '../types/Patient';
 import { AppointmentWithPatient } from '../types/Appointment';
 
 const getAppointmentsCount = async (patients: Patient[] | AppointmentWithPatient[])
-: Promise<Patient[] | AppointmentWithPatient[]> => {
-  const promiseData = patients.map(async (patient) => {
-    const appointmentsData = await db.select('id', 'appointmentDate')
-              .from(appointmentsTable)
-              .whereIn('patientId', function () {
-                this.select('id')
-                  .from(patientsTable)
-                  .where(function () {
-                    if (patient.INE && patient.INE.trim() !== '') {
-                      this.where('INE', patient.INE);
-                    } else {
-                      this.where('id', patient.id);
-                    }
-                  })
-                  .andWhere('deleted', false);
-              })
-              .andWhere('deleted', false);
+: Promise<Patient[] | AppointmentWithPatient[]> => (
+  Promise.all(patients.map(async (patient) => {
+    const isValidINE = patient.INE?.trim() !== '';
+
+    const patientFilter = isValidINE
+      ? { INE: patient.INE }
+      : { id: patient.id };
+
+    const matchingPatientIds = db
+      .select('id')
+      .from(patientsTable)
+      .where(patientFilter)
+      .andWhere('deleted', false);
+
+    const appointmentsData = await db
+      .select('id', 'appointmentDate')
+      .from(appointmentsTable)
+      .whereIn('patientId', matchingPatientIds)
+      .andWhere('deleted', false);
 
     const START_NEW_RULES = new Date('2024-07-01T00:00:00Z');
     const START_UNIV_YEAR = new Date(startCurrentUnivYear());
@@ -62,9 +64,6 @@ const getAppointmentsCount = async (patients: Patient[] | AppointmentWithPatient
       appointmentsYearCount: appointmentsYearCountResult,
       countedAppointments: countedAppointments.toString(), // New rule count
     };
-  });
-  const result: Patient[] = await Promise.all(promiseData);
-  return result;
-};
+  })));
 
 export default getAppointmentsCount;
