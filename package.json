@@ -30,7 +30,7 @@
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
     "scalingo-postbuild": "pnpm --filter ./frontend install && pnpm --filter ./frontend run build && pnpm run postbuild",
-    "postbuild": "tsc && cp -a frontend/dist dist/frontend"
+    "postbuild": "tsc"
   },
   "repository": {
     "type": "git",
