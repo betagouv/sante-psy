@@ -5,10 +5,9 @@ import dbStudents from '../db/students';
 import seed from '../test/helper/fake_data';
 import db from '../db/db';
 import dbLoginToken from '../db/loginToken';
-import dbPsychologists from '../db/psychologists';
 import loginInformations from '../services/loginInformations';
-import seed from '../test/helper/fake_data';
 import config from '../utils/config';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 
 const getPsychologist = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -25,7 +24,7 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
       {
         userId: psy.dossierNumber, role: 'psy', xsrfToken, psychologist: psy.dossierNumber,
       },
-      config.secret,
+      config.secret as Secret,
       { expiresIn: duration },
     );
 
@@ -66,7 +65,7 @@ const getStudent = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const resetDB = async (req: Request, res: Response) : Promise<void> => {
+const resetDB = async (req: Request, res: Response): Promise<void> => {
   const year = typeof req.query.year === 'string' ? parseInt(req.query.year, 10) : undefined;
   await seed(db, year, true);
   res.status(200).json('DB reset');

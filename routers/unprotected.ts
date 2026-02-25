@@ -50,24 +50,6 @@ router.get(
 );
 
 router.post(
-  '/auth/sendLoginMail',
-  speedLimiterLogin,
-  studentSignInController.emailValidator,
-  loginController.sendUserLoginMail,
-);
-
-router.post(
-  '/auth/login',
-  speedLimiterLogin,
-  loginController.userLogin,
-);
-
-router.get(
-  '/auth/connected',
-  loginController.userConnected,
-);
-
-router.post(
   '/psychologist/sendMail',
   speedLimiterLogin,
   loginController.emailValidators,

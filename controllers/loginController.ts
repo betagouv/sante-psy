@@ -151,32 +151,6 @@ const studentLogin = async (req: Request, res: Response): Promise<void> => {
   );
 };
 
-const studentLogin = async (req: Request, res: Response): Promise<void> => {
-  if (req.body.token) {
-    const token = DOMPurify.sanitize(req.body.token);
-    const dbToken = await dbLoginToken.getByToken(token);
-
-    if (dbToken) {
-      const studentData = await dbStudents.getByEmail(dbToken.email);
-      const xsrfToken = loginInformations.generateToken();
-      cookie.createAndSetJwtCookie(res, studentData.id, xsrfToken, 'student');
-      console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
-
-      dbLoginToken.delete(token);
-
-      res.json(xsrfToken);
-      return;
-    }
-
-    console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
-  }
-
-  throw new CustomError(
-    'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
-    401,
-  );
-};
-
 /**
  * Send a email with a login link if the email is already registered
  */

@@ -33,7 +33,7 @@ describe('DB Login token', () => {
       await dbLoginToken.upsert(token, email, expiredDate);
       const result = await dbLoginToken.getByToken(token);
 
-      assert.isNull(result);
+      assert.isUndefined(result);
     });
   });
 
