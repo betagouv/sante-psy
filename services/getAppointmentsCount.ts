@@ -14,17 +14,12 @@ const getAppointmentsCount = async (patients: Patient[] | AppointmentWithPatient
       ? { INE: patient.INE }
       : { id: patient.id };
 
-    const matchingPatientIds = db
-      .select('id')
-      .from(patientsTable)
-      .where(patientFilter)
-      .andWhere('deleted', false);
-
-    const appointmentsData = await db
-      .select('id', 'appointmentDate')
-      .from(appointmentsTable)
-      .whereIn('patientId', matchingPatientIds)
-      .andWhere('deleted', false);
+    const appointmentsData = await db(`${appointmentsTable} as a`)
+      .select('a.id', 'a.appointmentDate')
+      .join(`${patientsTable} as p`, 'a.patientId', 'p.id')
+      .where(patientFilter.INE ? { 'p.INE': patientFilter.INE } : { 'a.patientId': patientFilter.id })
+      .andWhere('a.deleted', false)
+      .andWhere('p.deleted', false);
 
     const START_NEW_RULES = new Date('2024-07-01T00:00:00Z');
     const START_UNIV_YEAR = new Date(startCurrentUnivYear());
