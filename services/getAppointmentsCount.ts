@@ -11,13 +11,13 @@ const getAppointmentsCount = async (patients: Patient[] | AppointmentWithPatient
     const isValidINE = patient.INE?.trim() !== '';
 
     const patientFilter = isValidINE
-      ? { INE: patient.INE }
-      : { id: patient.id };
+      ? { 'p.INE': patient.INE }
+      : { 'a.patientId': patient.id };
 
     const appointmentsData = await db(`${appointmentsTable} as a`)
       .select('a.id', 'a.appointmentDate')
       .join(`${patientsTable} as p`, 'a.patientId', 'p.id')
-      .where(patientFilter.INE ? { 'p.INE': patientFilter.INE } : { 'a.patientId': patientFilter.id })
+      .where(patientFilter)
       .andWhere('a.deleted', false)
       .andWhere('p.deleted', false);
 

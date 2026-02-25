@@ -26,7 +26,7 @@ const getPsychologistCount = (additionalCriteria = {}): Promise<Registry[]> => d
             .where('inactiveUntil', '<=', threeMonthsFromNowDate);
         });
     })
-    .countDistinct('dossierNumber');
+    .count('dossierNumber');
 
 const getAvailablePsychologistCount = (): Promise<Registry[]> => getPsychologistCount();
 
@@ -34,11 +34,11 @@ const getTeleconsultPsyCount = (): Promise<Registry[]> => getPsychologistCount({
 
 const getPatientCount = () : Promise<Registry[]> => db(patientsTable)
     .where({ deleted: false })
-    .countDistinct('id');
+    .count('id');
 
 const getAppointmentCount = () : Promise<Registry[]> => db(appointmentsTable)
     .where({ deleted: false })
-    .countDistinct('id');
+    .count('id');
 
 export {
   getAppointmentCount,
