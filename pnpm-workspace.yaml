@@ -1,0 +1,19 @@
+packages:
+  - "frontend"
+
+minimumReleaseAge: 10080 # wait for a 7 days (in minutes) cooldown period
+
+sideEffectsCache: false
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  - ua-parser-js@0.7.41
+  - eslint-config-prettier@8.10.2
+  - eslint-plugin-prettier@4.2.5
+  - semver@5.7.2 || 6.3.1
+  - chokidar@4.0.3
+
+onlyBuiltDependencies: 
+  - "@parcel/watcher"
+  - core-js-pure
+  - cypress
+  - less

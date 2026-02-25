@@ -2,6 +2,10 @@
   "name": "react-starter",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18 <19",
+    "pnpm": ">=10"
+  },
   "dependencies": {
     "@dataesr/react-dsfr": "^3.10.0",
     "@gouvfr/dsfr": "^1.13.0",
@@ -70,6 +74,7 @@
     "less-loader": "^11.1.0",
     "lint-staged": "^13.1.0",
     "markdown-loader": "^8.0.0",
+    "minimist": "^1.2.8",
     "mocha": "^10.8.2",
     "react-dev-utils": "^12.0.1",
     "resolve": "1.22.1",
@@ -94,10 +99,9 @@
     "lint": "node_modules/.bin/eslint --quiet . --ext .js,.jsx",
     "lint:fix": "node_modules/.bin/eslint --quiet --fix . --ext .js,.jsx",
     "test": "mocha --exit",
-    "scalingo-prebuild": "npm clean-install --force --production=false && npm run build -- --env.PROD",
-    "scalingo-postbuild": "npm prune --production --force",
     "cy:open": "cypress open",
     "cy:run": "wait-on http://localhost:3000 && wait-on http-get://localhost:8080/api/config && cypress run",
     "cy:ci": "wait-on --timeout 30000  http-get://localhost:8080/api/config && CYPRESS_BASE_URL=http://localhost:8080/ cypress run --browser chrome"
-  }
+  },
+  "packageManager": "pnpm@10.26.1"
 }

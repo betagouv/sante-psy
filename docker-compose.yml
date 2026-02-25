@@ -1,7 +1,11 @@
-version: '3'
 services:
   db:
-    image: postgres:12.5
+    image: postgres:13.23
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U santepsy"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     environment:
       POSTGRES_USER: santepsy
       POSTGRES_PASSWORD: santepsy
@@ -19,7 +23,7 @@ services:
 
   web:
     build: .
-    command: sh -c "echo 'starting sante-psy...'; npm run migrate; npm run seed; npm run dev"
+    command: sh -c "pnpm run migrate && pnpm run seed && pnpm run dev"
     env_file:
       - .env
     environment:
@@ -37,14 +41,16 @@ services:
       - "8080:8080"
     volumes:
       - .:/app
-    depends_on: # https://docs.docker.com/compose/startup-order/
-      - db
+    depends_on:
+      db:
+        condition: service_healthy
 
-  react: 
-    image: node:16
-    build: ./frontend
+  react:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
     working_dir: /app/frontend
-    command: sh -c "npm run dev"
+    command: ["pnpm", "run", "dev"]
     ports:
       - "3000:3000"
     volumes:
