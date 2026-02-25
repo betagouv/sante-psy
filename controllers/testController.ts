@@ -45,13 +45,15 @@ const getStudent = async (req: Request, res: Response): Promise<void> => {
 
     const token = await dbLoginToken.getByEmail(req.params.email);
 
-    const duration = typeof req.query.duration === 'string' ? req.query.duration : '2h';
+    const duration = typeof req.query.duration === 'string'
+      ? (req.query.duration as NonNullable<SignOptions['expiresIn']>)
+      : '2h';
 
     const jwtToken = token && !req.query.duration ? token.token : jwt.sign(
       {
         userId: student.id, role: 'student', xsrfToken,
       },
-      config.secret,
+      config.secret as Secret,
       { expiresIn: duration },
     );
 
