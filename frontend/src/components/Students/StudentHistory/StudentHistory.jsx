@@ -22,8 +22,9 @@ const StudentHistory = () => {
         const years = Object.keys(data);
         if (years.includes(currentUnivYear('-'))) {
           setCurrentYear(currentUnivYear('-'));
-        } else if (years.length) {
+        } else if (years.length > 0) {
           const sorted = years.sort((a, b) => {
+            // TODO function à sortir dans un utils pour clean code
             const aEnd = parseInt(a.split('-')[1], 10);
             const bEnd = parseInt(b.split('-')[1], 10);
             return bEnd - aEnd;
@@ -36,14 +37,15 @@ const StudentHistory = () => {
   }, []);
 
   if (loading) {
-    return <p aria-live="polite">Chargement de vos rendez-vous…</p>;
+    return <p>Chargement de vos rendez-vous…</p>;
   }
 
   if (error) {
-    return <p role="alert">{error}</p>;
+    return <p>{error}</p>;
   }
 
   const univYears = Object.keys(appointments).sort((a, b) => {
+    // TODO use la function créé en utils ici + créer un test !
     const aEnd = parseInt(a.split('-')[1], 10);
     const bEnd = parseInt(b.split('-')[1], 10);
     return bEnd - aEnd;
@@ -77,6 +79,14 @@ const StudentHistory = () => {
         {endYear}
       </p>
 
+      <p className={styles.counter}>
+        {yearAppointments.length}
+        {' '}
+        séances consommées sur
+        {' '}
+        {MAX_SESSIONS}
+      </p>
+
       {yearAppointments.length > 0 ? (
         <>
           <div
@@ -90,7 +100,7 @@ const StudentHistory = () => {
                 className={styles.card}
                 role="listitem"
               >
-                <div className={styles.index} aria-hidden="true">
+                <div className={styles.index}>
                   {index + 1}
                 </div>
                 <div>
@@ -107,64 +117,65 @@ const StudentHistory = () => {
               </div>
             ))}
           </div>
-          <p className={styles.counter}>
-            {yearAppointments.length}
-            {' '}
-            séances consommées sur
-            {' '}
-            {MAX_SESSIONS}
-          </p>
 
+          {(prevYear || nextYear) && (
           <nav className={styles.navigation} aria-label="Navigation entre années universitaires">
-            {prevYear ? (
-              <button
-                type="button"
-                className="fr-btn fr-btn--secondary"
-                onClick={() => setCurrentYear(prevYear)}
+            {prevYear && (
+            <button
+              type="button"
+              className="fr-btn fr-btn--secondary"
+              onClick={() => setCurrentYear(prevYear)}
               >
-                <span className="fr-icon-arrow-left-s-first-line" aria-hidden="true" />
+              <span className="fr-icon-arrow-left-s-first-line" aria-hidden="true" />
+              {' '}
+              Année
                 {' '}
-                {prevYear}
-              </button>
-            ) : <span />}
+              {prevYear}
+            </button>
+            )}
 
-            {nextYear ? (
-              <button
-                type="button"
-                className="fr-btn fr-btn--secondary"
-                onClick={() => setCurrentYear(nextYear)}
+            {nextYear && (
+            <button
+              type="button"
+              className="fr-btn fr-btn--secondary"
+              onClick={() => setCurrentYear(nextYear)}
               >
-                {nextYear}
+              Année
                 {' '}
-                <span className="fr-icon-arrow-right-s-last-line" aria-hidden="true" />
-              </button>
-            ) : <span />}
+              {nextYear}
+              {' '}
+              <span className="fr-icon-arrow-right-s-last-line" aria-hidden="true" />
+            </button>
+            )}
           </nav>
+          )}
 
         </>
       ) : (
         <div className={styles.empty}>
           <p>
-            Tes séances consommées apparaîtront ici si tu indiques ton adresse mail à ton psychologue.
+            Tes séances consommées apparaîtront ici si tu indiques ton adresse email à ton psychologue.
           </p>
         </div>
       )}
 
       <button
         type="button"
-        className="fr-btn fr-btn--secondary"
+        className="fr-btn fr-btn--secondary fr-mt-4w"
         onClick={() => setShowHelp(!showHelp)}
         aria-expanded={showHelp}
-          >
-        Un problème ?
+      >
+        Tes séances n&apos;apparaissent pas ?
       </button>
 
       {showHelp && (
       <ul className={styles.help}>
-        <li>Vérifie avec ton psychologue qu&apos;il a bien indiqué ton adresse email</li>
-        <li>Vérifie les informations avec ton psychologue : nom, prénom, date de naissance, numéro INE…</li>
-        <li>Contacte le support si cela ne fonctionne toujours pas</li>
-        <Link to="/contact">Nous contacter</Link>
+        <li>les séances futures n&apos;apparaissent pas</li>
+        <li>ton psychologue n&apos;a peut-être pas encore déclaré toutes les séances</li>
+        <li>vérifie avec ton psychologue qu&apos;il a bien indiqué la bonne adresse email</li>
+        <li>vérifie les informations avec ton psychologue : nom, prénom, date de naissance, numéro INE,...</li>
+        <li>cela ne fonctionne toujours pas ? tu n&apos;es pas d&apos;accord avec ton compte de séances ?</li>
+        <Link to="/contact/formulaire">Contacter le support</Link>
       </ul>
       )}
     </section>

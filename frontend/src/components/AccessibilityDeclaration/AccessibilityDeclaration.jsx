@@ -15,12 +15,12 @@ const AccessibilityDeclaration = () => (
     <p>
       Établie le
       {' '}
-      <span>24 mai 2024</span>
+      <span>16 février 2026</span>
       {/* no space */}
       .
     </p>
     <p>
-      <span>Ministère de l’Enseignement Supérieur et de la Recherche</span>
+      <span>Ministère de l’Enseignement Supérieur, de la Recherche et de l’Espace</span>
       {' '}
       s’engage à rendre son service accessible, conformément à l’article 47 de la loi n° 2005-102 du 11 février 2005.
     </p>
@@ -30,7 +30,7 @@ const AccessibilityDeclaration = () => (
     </p>
     <ul>
       <li><a href="https://beta.gouv.fr/accessibilite/schema-pluriannuel">Schéma pluriannuel</a></li>
-      <li><a href="https://santepsy.etudiant.gouv.fr/declaration-accessibilite/plan-action">Plan d’action 2024</a></li>
+      <li><a href="https://santepsy.etudiant.gouv.fr/declaration-accessibilite/plan-action">Plan d’action 2026</a></li>
     </ul>
     <p>
       Cette déclaration d’accessibilité s’applique à
@@ -75,7 +75,7 @@ const AccessibilityDeclaration = () => (
         <li>
           Adresse&nbsp;:
           {' '}
-          <span>MINISTÈRE DE L‘ENSEIGNEMENT SUPÉRIEUR ET DE LA RECHERCHE 1 rue Descartes - 75231 Paris cedex 05</span>
+          <span>MINISTÈRE DE L‘ENSEIGNEMENT SUPÉRIEUR, DE LA RECHERCHE ET DE L’ESPACE 1 rue Descartes - 75231 Paris cedex 05</span>
         </li>
       </ul>
     </Section>
@@ -113,7 +113,7 @@ const AccessibilityDeclaration = () => (
     <p>
       Cette déclaration d’accessibilité a été créé le
       {' '}
-      <span>24 mai 2024</span>
+      <span>16 février 2026</span>
       {' '}
       grâce au
       {' '}

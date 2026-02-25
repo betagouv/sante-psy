@@ -1,4 +1,4 @@
-const { loginAsDefault } = require('./utils/login');
+const { loginDefaultPsy } = require('./utils/login');
 
 describe('FAQ Page Test', () => {
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('FAQ Page Test', () => {
   });
 
   it('display psychologist tab if connected', () => {
-    loginAsDefault();
+    loginDefaultPsy();
     cy.visit('/faq');
     cy.wait('@config');
 
@@ -38,7 +38,7 @@ describe('FAQ Page Test', () => {
   });
 
   it('display section tab if connected but specified', () => {
-    loginAsDefault();
+    loginDefaultPsy();
     cy.visit('/faq?section=ecole');
     cy.wait('@config');
 

@@ -24,9 +24,14 @@ const get = async (req: Request, res: Response): Promise<void> => {
   if (!psychologist) {
     throw new CustomError("Le psychologue n'existe pas.", 500);
   }
+
   const tokenData = cookie.verifyJwt(req, res);
   const userId = tokenData ? (tokenData.userId || tokenData.psychologist) : null;
   const extraInfo = tokenData && userId === req.params.psyId;
+
+  if (!extraInfo && !psychologist.active) {
+    throw new CustomError("Le psychologue n'existe pas.", 500);
+  }
 
   const {
     firstNames,
@@ -119,9 +124,9 @@ const updateValidators = [
     // Two valid possibilities : email is empty, or email is valid format.
     check('email').trim().isEmpty(),
     check('email')
-        .trim()
-        .customSanitizer(purifySanitizer)
-        .isEmail(),
+      .trim()
+      .customSanitizer(purifySanitizer)
+      .isEmail(),
   ], 'Vous devez spécifier un email valide.'),
   check('description')
     .trim()

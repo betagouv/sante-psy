@@ -19,7 +19,7 @@ const sendStudentMailTemplate = async (
     console.log(`Login email sent for ${logs.hash(email)}`);
   } catch (err) {
     console.error(err);
-    throw new CustomError('Erreur lors de l’envoi de l’email.', 500);
+    throw new CustomError('Erreur lors de l\'envoi de l\'email.', 500);
   }
 };
 

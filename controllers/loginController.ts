@@ -94,7 +94,7 @@ async function saveStudentToken(email: string, token: string): Promise<void> {
 
 const deleteToken = (req: Request, res: Response): void => {
   cookie.clearJwtCookie(res);
-  res.json({ });
+  res.json({});
 };
 
 const login = async (req: Request, res: Response): Promise<void> => {
@@ -120,7 +120,33 @@ const login = async (req: Request, res: Response): Promise<void> => {
   }
 
   throw new CustomError(
-    'Ce lien est invalide ou expiré. Indiquez votre email ci dessous pour en avoir un nouveau.',
+    'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
+    401,
+  );
+};
+
+const studentLogin = async (req: Request, res: Response): Promise<void> => {
+  if (req.body.token) {
+    const token = DOMPurify.sanitize(req.body.token);
+    const dbToken = await dbLoginToken.getByToken(token);
+
+    if (dbToken) {
+      const studentData = await dbStudents.getByEmail(dbToken.email);
+      const xsrfToken = loginInformations.generateToken();
+      cookie.createAndSetJwtCookie(res, studentData.id, xsrfToken, 'student');
+      console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
+
+      dbLoginToken.delete(token);
+
+      res.json(xsrfToken);
+      return;
+    }
+
+    console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
+  }
+
+  throw new CustomError(
+    'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
     401,
   );
 };
@@ -171,8 +197,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
       );
     }
 
-    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${
-      logs.hash(email)}
+    console.warn(`Email inconnu -ou sans suite ou refusé- qui essaye d'accéder au service : ${logs.hash(email)}
     `);
     throw new CustomError(
       `L'email ${email} est inconnu, ou est lié à un dossier classé sans suite ou refusé.`,
@@ -185,7 +210,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   await sendPsyLoginEmail(email, loginUrl, token);
   await savePsyToken(email, token);
   res.json({
-    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+    message: `Un email de connexion vient de vous être envoyé si votre adresse email 
       correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
       Le lien est valable ${config.sessionDurationHours} heures.`,
   });
@@ -213,7 +238,7 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   }
 
   res.json({
-    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+    message: `Un email de connexion vient de vous être envoyé si votre adresse email 
       correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
       Le lien est valable ${config.sessionDurationHours} heures.`,
   });
@@ -239,7 +264,7 @@ const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => 
   }
 
   res.json({
-    message: `Un mail de connexion vient de vous être envoyé si votre adresse e-mail 
+    message: `Un email de connexion vient de vous être envoyé si votre adresse email 
       correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
       Le lien est valable ${config.sessionDurationHours} heures.`,
   });
@@ -319,9 +344,15 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
     const psy = await dbPsychologists.getById(userId);
     if (psy) {
       const convention = await dbPsychologists.getConventionInfo(userId);
-      const { reason: inactiveReason, until: inactiveUntil } = psy.active
-        ? { reason: undefined, until: undefined }
-        : await dbSuspensions.getByPsychologist(psy.dossierNumber);
+      let inactiveReason;
+      let inactiveUntil;
+      if (!psy.active) {
+        const suspension = await dbSuspensions.getByPsychologist(psy.dossierNumber);
+        if (suspension) {
+          inactiveReason = suspension.reason;
+          inactiveUntil = suspension.until;
+        }
+      }
 
       res.json({
         role: 'psy',

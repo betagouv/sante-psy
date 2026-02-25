@@ -25,7 +25,7 @@ const Statistics = () => {
         </div>
         <div className={styles.description}>
           Pour tout étudiant de l’enseignement supérieur,
-          dont la formation est reconnue par le ministère de l’Enseignement supérieur et de la Recherche.
+          dont la formation est reconnue par le ministère de l’Enseignement supérieur, de la Recherche et de l’Espace.
         </div>
       </div>
       <div className={styles.separator} />

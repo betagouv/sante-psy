@@ -86,7 +86,7 @@ const EditProfile = () => {
       <TextInput
         className="midlength-input"
         label="Email personnel"
-        hint="Adresse non communiquée sur l'annuaire, utilisée uniquement pour la réception de mail provenant de
+        hint="Adresse non communiquée sur l'annuaire, utilisée uniquement pour la réception d'email provenant de
              Santé Psy Étudiant."
         data-test-id="psy-personal-email-input"
         value={psychologist.personalEmail}

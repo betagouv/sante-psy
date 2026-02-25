@@ -17,6 +17,7 @@ import { useStore } from 'stores/';
 
 const defaultItems = [
   { title: 'Comment ça marche ?', link: '/' },
+  { title: 'Espace Étudiant', link: '/espace-etudiant' },
   { title: 'Trouver un psychologue', link: '/trouver-un-psychologue' },
   { title: 'Foire aux questions', link: '/faq' },
   { title: 'Nous contacter', link: '/contact' },
@@ -55,7 +56,7 @@ const Header = () => {
   const publicStudentPage = location.pathname.startsWith('/info-etudiant');
   const studentPage = location.pathname.startsWith('/etudiant');
 
-  const mySpaceUrl = role === 'psy' ? '/psychologue/tableau-de-bord' : '/etudiant/accueil';
+  const mySpaceUrl = role === 'student' ? '/etudiant/accueil' : '/psychologue/tableau-de-bord';
 
   const getItemsToDisplay = () => {
     if (!user) return defaultItems;
@@ -70,7 +71,7 @@ const Header = () => {
     <DSHeader>
       <HeaderBody>
         <Logo asLink={<Link to={publicStudentPage ? '/info-etudiant' : '/'} title="Revenir à l'accueil" />}>
-          Ministère de l&lsquo;Enseignement Supérieur et de la Recherche
+          Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Espace
         </Logo>
         <Service
           asLink={<Link to={publicStudentPage ? '/info-etudiant' : '/'} />}

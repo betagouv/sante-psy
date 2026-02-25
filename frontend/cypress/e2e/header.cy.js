@@ -1,4 +1,4 @@
-const { loginAsDefault } = require('./utils/login');
+const { loginDefaultPsy } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 const { signConvention } = require('./utils/psychologist');
 
@@ -127,7 +127,7 @@ describe('Header Test', () => {
       cy.intercept('POST', '/api/logout').as('logout');
 
       resetDB();
-      loginAsDefault().then(() => signConvention(true));
+      loginDefaultPsy().then(() => signConvention(true));
     });
 
     describe('On desktop', () => {

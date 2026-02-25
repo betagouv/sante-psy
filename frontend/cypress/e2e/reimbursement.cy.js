@@ -1,5 +1,5 @@
 const { checkConvention } = require('../../src/services/conventionVerification');
-const { loginAsDefault } = require('./utils/login');
+const { loginDefaultPsy } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 
 describe('Reimbursement', () => {
@@ -21,7 +21,7 @@ describe('Reimbursement', () => {
       .as('config');
 
     resetDB();
-    loginAsDefault();
+    loginDefaultPsy();
     checkConvention();
 
     cy.visit('/psychologue/mes-remboursements');

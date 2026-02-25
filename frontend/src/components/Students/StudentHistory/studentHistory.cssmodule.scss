@@ -9,14 +9,16 @@
 .title {
   display: inline-flex;
   align-items: center;
- h3 {
-  margin: 0;
-  padding-left: 5px;
-  font-size: 20px;
- }
- span {
-  color: var(--text-active-blue-france);
-}
+
+  h3 {
+    margin: 0;
+    padding-left: 5px;
+    font-size: 20px;
+  }
+
+  span {
+    color: var(--text-active-blue-france);
+  }
 }
 
 .period {
@@ -56,6 +58,7 @@
   font-size: 32px;
   font-weight: 700;
   align-self: center;
+  // TODO : ça ne rend surement pas bon en dark mode, besoin de DSFR
   color: #6F016B;
 }
 
@@ -75,7 +78,6 @@
 }
 
 .counter {
-  margin-top: 1rem;
   color: var(--text-mention-grey);
 }
 
@@ -89,8 +91,8 @@
 }
 
 .navigation {
+  margin-top: 1rem;
   width: 100%;
   display: inline-flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
 }

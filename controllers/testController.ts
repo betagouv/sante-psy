@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 
-import jwt, { Secret, SignOptions } from 'jsonwebtoken';
+import dbPsychologists from '../db/psychologists';
+import dbStudents from '../db/students';
+import seed from '../test/helper/fake_data';
 import db from '../db/db';
 import dbLoginToken from '../db/loginToken';
 import dbPsychologists from '../db/psychologists';
@@ -23,12 +25,12 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
       {
         userId: psy.dossierNumber, role: 'psy', xsrfToken, psychologist: psy.dossierNumber,
       },
-      config.secret as Secret,
+      config.secret,
       { expiresIn: duration },
     );
 
     res.json({
-      psy,
+      user: psy,
       token: jwtToken,
       xsrfToken,
     });
@@ -37,7 +39,34 @@ const getPsychologist = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const resetDB = async (req: Request, res: Response): Promise<void> => {
+const getStudent = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const student = await dbStudents.getByEmail(req.params.email);
+    const xsrfToken = loginInformations.generateToken();
+
+    const token = await dbLoginToken.getByEmail(req.params.email);
+
+    const duration = typeof req.query.duration === 'string' ? req.query.duration : '2h';
+
+    const jwtToken = token && !req.query.duration ? token.token : jwt.sign(
+      {
+        userId: student.id, role: 'student', xsrfToken,
+      },
+      config.secret,
+      { expiresIn: duration },
+    );
+
+    res.json({
+      user: student,
+      token: jwtToken,
+      xsrfToken,
+    });
+  } catch (err) {
+    res.status(500).json('Oops');
+  }
+};
+
+const resetDB = async (req: Request, res: Response) : Promise<void> => {
   const year = typeof req.query.year === 'string' ? parseInt(req.query.year, 10) : undefined;
   await seed(db, year, true);
   res.status(200).json('DB reset');
@@ -55,6 +84,7 @@ const resetTutorial = async (req: Request, res: Response): Promise<void> => {
 
 export default {
   getPsychologist,
+  getStudent,
   resetDB,
   removeConvention,
   resetTutorial,

@@ -12,9 +12,9 @@ import getAppointmentsCount from '../services/getAppointmentsCount';
 import {
   updateValidators, getOneValidators, patientValidators, deleteValidators,
 } from './validators/patientValidators';
-import verifyINE from '../services/inesApi';
+import sendSecondStepMail from '../services/sendSecondStepMail';
 import send from '../utils/email';
-import config from '../utils/config';
+import verifyINEWithBirthDate from '../services/verifyStudentINE';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
@@ -22,30 +22,8 @@ const sortData = (a: Patient, b: Patient): number => (
   `${a.lastName.toUpperCase()} ${a.firstNames}`.localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`)
 );
 
-const verifyPatientINE = async (INE: string, rawDateOfBirth: string): Promise<boolean> => {
-  if (config.testEnvironment) {
-    console.log('Ce call API aurait été fait si vous étiez en prod');
-    return true;
-  }
-
-  const dateOfBirth = date.parseForm(rawDateOfBirth);
-
-  try {
-    await verifyINE(INE, dateOfBirth);
-    return true;
-  } catch (error) {
-    console.warn('Erreur lors de la requête API INES :', error);
-    return false;
-  }
-};
-
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.userId || req.auth.psychologist;
-
-  if (!psychologistId) {
-    res.status(403).json({ message: 'Non autorisé' });
-    return;
-  }
 
   const patients = await dbPatients.getAll(psychologistId);
   const patientsWithCount = await getAppointmentsCount(patients);
@@ -70,7 +48,7 @@ const update = async (req: Request, res: Response): Promise<void> => {
     email,
   } = req.body;
 
-  const isINESvalid = await verifyPatientINE(patientINE, rawDateOfBirth);
+  const isINESvalid = await verifyINEWithBirthDate(patientINE, rawDateOfBirth);
 
   if (!isINESvalid) {
     await dbPatients.updateIsINESValidOnly(patientId, false);
@@ -79,11 +57,6 @@ const update = async (req: Request, res: Response): Promise<void> => {
   const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
   const psychologistId = req.auth.userId || req.auth.psychologist;
-
-  if (!psychologistId) {
-    res.status(403).json({ message: 'Non autorisé' });
-    return;
-  }
 
   const updated = await dbPatients.update(
     patientId,
@@ -105,6 +78,16 @@ const update = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError('Ce patient n\'existe pas.', 404);
   }
 
+  try {
+    await sendSecondStepMail.inviteNewStudentToCreateAccount(
+      email,
+      'studentInvitationFromPsy',
+      'Création de votre espace étudiant',
+    );
+  } catch (err) {
+    console.error('Failed to send student invitation from psy', err);
+  }
+
   let infoMessage = `L'étudiant ${patientFirstNames} ${patientLastName} a bien été modifié.`;
   if (!patientInstitutionName || !patientIsStudentStatusVerified || !doctorName) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
@@ -119,11 +102,6 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
 
   const { patientId } = req.params;
   const psychologistId = req.auth.userId || req.auth.psychologist;
-
-  if (!psychologistId) {
-    res.status(403).json({ message: 'Non autorisé' });
-    return;
-  }
 
   const patient = await dbPatients.getById(patientId, psychologistId);
 
@@ -144,16 +122,11 @@ const create = async (req: Request, res: Response): Promise<void> => {
     firstNames, lastName, gender, INE, institutionName, doctorName, dateOfBirth: rawDateOfBirth, email,
   } = req.body;
 
-  const isINESvalid = await verifyPatientINE(INE, rawDateOfBirth);
+  const isINESvalid = await verifyINEWithBirthDate(INE, rawDateOfBirth);
 
   const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
 
   const psychologistId = req.auth.userId || req.auth.psychologist;
-
-  if (!psychologistId) {
-    res.status(403).json({ message: 'Non autorisé' });
-    return;
-  }
 
   const addedPatient = await dbPatients.insert(
     firstNames,
@@ -168,6 +141,13 @@ const create = async (req: Request, res: Response): Promise<void> => {
     psychologistId,
     doctorName,
   );
+
+  await sendSecondStepMail.inviteNewStudentToCreateAccount(
+    email,
+    'studentInvitationFromPsy',
+    'Création de votre espace étudiant',
+  );
+
   let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
   if (!institutionName || !doctorName || !isStudentStatusVerified) {
     infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
@@ -186,11 +166,6 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
 
   const { patientId } = req.params;
   const psychologistId = req.auth.userId || req.auth.psychologist;
-
-  if (!psychologistId) {
-    res.status(403).json({ message: 'Non autorisé' });
-    return;
-  }
 
   const patientAppointment = await dbAppointments.countByPatient(patientId);
 
@@ -211,11 +186,14 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+// TODO : mutualize this with Student sendCertificate
 const sendCertificate = async (
   req: MulterRequest,
   res: Response,
 ): Promise<void> => {
-  const { patientId, psychologistId } = req.body;
+  const { patientId } = req.body;
+  // TODO: delete psychologist from JWT after MEP
+  const psychologistId = req.auth.userId || req.auth.psychologist;
 
   if (!req.file || !patientId || !psychologistId) {
     throw new CustomError('Certificat, patientId ou psychologistId manquant.', 400);

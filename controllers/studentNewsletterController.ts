@@ -19,7 +19,7 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
 
   res.json({
     // eslint-disable-next-line max-len
-    message: "Nous vous avons envoyé un mail avec toutes les informations sur le dispositif. Pensez à verifier vos spams et n'hésitez pas à nous contacter en cas de problèmes.",
+    message: "Nous vous avons envoyé un email avec toutes les informations sur le dispositif. Pensez à verifier vos spams et n'hésitez pas à nous contacter en cas de problèmes.",
   });
 
   dbStudentsNewsletter.insert(email, source);
@@ -34,14 +34,14 @@ const answerValidator = [
     .optional({ nullable: true })
     .isBoolean(),
   check('referral', 'Vous devez spécifier un nombre entre 1 et 3')
-      .optional({ nullable: true })
-      .isInt({ min: 1, max: 3 }),
+    .optional({ nullable: true })
+    .isInt({ min: 1, max: 3 }),
   check('doctorAppointment', 'Vous devez spécifier un booléen')
-            .optional({ nullable: true })
-            .isBoolean(),
+    .optional({ nullable: true })
+    .isBoolean(),
   check('doctorAppointment2', 'Vous devez spécifier un booléen')
-                  .optional({ nullable: true })
-                  .isBoolean(),
+    .optional({ nullable: true })
+    .isBoolean(),
   oneOf(
     [
       check('letter').exists(),

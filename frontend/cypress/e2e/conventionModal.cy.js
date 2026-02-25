@@ -1,4 +1,4 @@
-const { loginAsDefault } = require('./utils/login');
+const { loginDefaultPsy } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 const { removeConvention, signConvention } = require('./utils/psychologist');
 
@@ -24,7 +24,7 @@ describe('ConventionModal', () => {
       .as('updateConvention');
 
     resetDB();
-    loginAsDefault();
+    loginDefaultPsy();
   });
 
   describe('Basic display', () => {

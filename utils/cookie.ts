@@ -1,5 +1,5 @@
 import { CookieOptions, Request, Response } from 'express';
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { psyJWT } from '../types/LoginToken';
 import config from './config';
 import CustomError from './CustomError';

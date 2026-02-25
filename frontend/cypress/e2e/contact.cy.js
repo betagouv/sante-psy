@@ -1,4 +1,4 @@
-const { loginAsDefault } = require('./utils/login');
+const { loginDefaultPsy } = require('./utils/login');
 
 describe('Contact', () => {
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('Contact', () => {
     cy.get('[data-test-id="user-psychologist-input"] input')
       .should('not.be.checked');
 
-    loginAsDefault();
+    loginDefaultPsy();
     cy.reload();
 
     cy.get('[data-test-id="user-psychologist-input"] input')

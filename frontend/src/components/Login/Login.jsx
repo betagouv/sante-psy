@@ -54,7 +54,7 @@ const Login = () => {
       loginCalled.current = true;
       agent.Auth.login(token)
         .then(async data => {
-          setRole(data.role);
+          await setRole(data.role);
           await setXsrfToken(data.xsrfToken);
         }).catch(error => {
           setNotification({ message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' }, false);
@@ -129,28 +129,23 @@ const Login = () => {
         </form>
       </Section>
 
-      <Section
-        title="Un problème ?"
-      >
+      <Section title="Un problème ?">
         <ul>
           <li>
             Indiquez l&lsquo;email utilisé lors de votre inscription
           </li>
+
           <li>
+            Si vous ne recevez pas l&lsquo;email de connexion :
             <ul>
-              Si vous ne recevez pas l&lsquo;email de connexion
-              <li>
-                Vérifiez vos spams
-              </li>
-              <li>
-                Attendez quelques minutes
-              </li>
+              <li>Vérifiez vos spams</li>
+              <li>Attendez quelques minutes</li>
             </ul>
           </li>
         </ul>
       </Section>
       <Section
-        title="Pas d'espace ?"
+        title="Vous n&lsquo;avez pas encore créé votre espace ?"
       >
         <Row>
           <Col>

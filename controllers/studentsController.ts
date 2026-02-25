@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import studentAppointments from '../services/studentAppointments';
-import studentsDb from '../db/students';
+import dbStudents from '../db/students';
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -13,25 +13,21 @@ const getStudentAppointments = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { studentId } = req.params;
+    const studentId = req.auth.userId;
 
     if (!studentId) {
       res.status(400).json({ error: 'Student ID manquant' });
       return;
     }
 
-    const student = await studentsDb.getById(studentId);
-
-    if (!student) {
-      res.status(404).json({ error: 'Étudiant introuvable' });
-      return;
-    }
+    const student = await dbStudents.getById(studentId);
 
     const { email, ine } = student;
 
     const appointments = await studentAppointments.getStudentAppointments(email, ine);
 
     res.json(appointments);
+    // TODO : nombreux try catch qui servent pas car error deja géré dans méthode ! à enlever partout
   } catch (err) {
     res.status(500).json({
       error: err instanceof Error ? err.message : 'Erreur inconnue',

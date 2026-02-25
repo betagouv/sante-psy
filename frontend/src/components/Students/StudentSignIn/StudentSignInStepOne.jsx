@@ -54,7 +54,7 @@ const StudentSignInStepOne = () => {
             <h3 className="fr-alert__title">{notification.message}</h3>
             {notification.type === 'success' && (
             <p>
-              Un mail de validation vient de t&apos;être envoyé si ton adresse e-mail est correcte et n&apos;a pas déjà été utilisée
+              Un email de validation vient de t&apos;être envoyé si ton adresse email est correcte et n&apos;a pas déjà été utilisée
               pour un autre compte.
               <br />
               Si tu suspectes une usurpation ou une erreur, tu peux nous contacter via le
@@ -78,13 +78,13 @@ const StudentSignInStepOne = () => {
               className={`fr-label ${emailError ? styles.labelError : ''}`}
               htmlFor="email-input"
             >
-              Ton e-mail
+              Ton email
             </label>
             <input
               className={`fr-input ${emailError ? 'fr-input--error' : ''}`}
               id="email-input"
               type="email"
-              placeholder="Ton e-mail"
+              placeholder="Ton email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               onBlur={() => validateEmail(email)}

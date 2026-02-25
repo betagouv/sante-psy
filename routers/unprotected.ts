@@ -12,6 +12,7 @@ import psyInactiveController from '../controllers/psyInactiveController';
 import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
 import studentSignInController from '../controllers/studentSignInController';
+import uploadCertificate from '../middlewares/uploadCertificate';
 
 const router = express.Router();
 
@@ -21,6 +22,32 @@ const speedLimiterLogin = slowDown({
   delayAfter: config.speedLimitation ? 10 : 10000, // allow X requests per 5 minutes, then...
   delayMs: 500, // begin adding 500ms of delay per request above 10:
 });
+
+const speedLimiterSendCertificate = slowDown({
+  windowMs: 60 * 60 * 1000, // 60 minutes time window
+  delayAfter: 1, // allow 1 request per 60 minutes, then...
+  delayMs: 2000, // begin adding 2000ms of delay per request above 1
+  max: 3, // block requests after 3 attempts
+});
+
+router.post(
+  '/auth/sendLoginMail',
+  speedLimiterLogin,
+  studentSignInController.emailValidator,
+  loginController.sendUserLoginMail,
+);
+
+router.post(
+  '/auth/login',
+  speedLimiterLogin,
+  loginController.userLogin,
+);
+
+router.get(
+  '/auth/connected',
+  speedLimiterLogin,
+  loginController.userConnected,
+);
 
 router.post(
   '/auth/sendLoginMail',
@@ -47,7 +74,7 @@ router.post(
   loginController.sendMail,
 );
 router.post('/psychologist/login', speedLimiterLogin, loginController.login);
-
+// TODO move this route in protected
 router.post(
   '/student/signInSecondStepMail',
   speedLimiterLogin,
@@ -62,13 +89,24 @@ router.post(
   studentSignInController.sendWelcomeMail,
 );
 
-router.post('/student/signIn/:token', studentSignInController.verifyStudentToken);
+router.post(
+  '/student/signIn/:token',
+  speedLimiterLogin,
+  studentSignInController.verifyStudentToken,
+);
 
 router.post(
   '/student/signIn',
   speedLimiterLogin,
   studentSignInController.studentSignInValidator,
   studentSignInController.signIn,
+);
+
+router.post(
+  '/student/send-certificate',
+  speedLimiterSendCertificate,
+  uploadCertificate.single('file'),
+  studentSignInController.sendCertificate,
 );
 
 router.post(
@@ -82,13 +120,6 @@ router.post(
   speedLimiterLogin,
   studentNewsletterController.mailValidator,
   studentNewsletterController.sendStudentMail,
-);
-
-router.post(
-  '/studentNewsletter/:studentId',
-  speedLimiterLogin,
-  studentNewsletterController.answerValidator,
-  studentNewsletterController.saveAnswer,
 );
 
 router.post(
