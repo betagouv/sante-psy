@@ -115,7 +115,13 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
           className="midlength-input"
           data-test-id="etudiant-email-input"
           label="Adresse email"
-          hint="Veillez à informer l\'étudiant que la collecte de son email est obligatoire pour créer son espace et suivre ses séances"
+          hint={(
+            <>
+              Utilisée pour l&apos;espace étudiant, pour afficher le compte des séances. Modifiable à tout moment.
+              <br />
+              Si toutefois l&apos;information vous manquait, entrez l&apos;adresse support-santepsyetudiant-help@beta.gouv.fr
+            </>
+          )}
           value={patient.email}
           onChange={handleEmailChange}
           required
