@@ -16,7 +16,7 @@ const ContactForm = () => {
   const [reason, setReason] = useState();
   const [message, setMessage] = useState();
 
-  const { commonStore: { setNotification, config }, userStore: { user } } = useStore();
+  const { commonStore: { setNotification, config } } = useStore();
   const location = useLocation();
 
   useEffect(() => {
@@ -24,8 +24,6 @@ const ContactForm = () => {
       setReason(location.state.reason);
     }
   }, [location]);
-
-  const defaultUserType = user ? 'psychologue' : undefined;
 
   const submit = e => {
     e.preventDefault();
@@ -87,7 +85,7 @@ const ContactForm = () => {
           legend="Je suis"
           isInline
           required
-          value={defaultUserType}
+          value={undefined}
           onChange={setUserType}
         >
           <Radio
@@ -133,8 +131,10 @@ const ContactForm = () => {
             required
             label="Sujet"
             options={[
-              { value: '', label: '- Selectionner la raison de votre message -', disabled: true, hidden: true },
+              { value: '', label: '- Sélectionner la raison de votre message -', disabled: true, hidden: true },
               { value: 'éligibilité', label: 'Éligibilité' },
+              { value: 'probleme-inscription', label: "Problème d'inscription" },
+              { value: 'espace-etudiant', label: 'Espace étudiant' },
               { value: 'convention', label: 'Convention' },
               { value: 'remboursement', label: 'Remboursement' },
               { value: 'rétractation', label: 'Rétractation' },
