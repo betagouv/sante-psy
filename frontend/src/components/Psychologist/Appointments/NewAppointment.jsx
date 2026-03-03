@@ -37,6 +37,7 @@ const NewAppointment = () => {
         setDate(parsedDate);
       }
     }
+    // TODO : pas besoin de remonter toutes les infos du patient, juste nom prénom wesh, puis après getOne quand j'en sélectionne un
     agent.Patient.get().then(setPatients);
   }, []);
 
