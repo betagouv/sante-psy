@@ -72,8 +72,8 @@ const PatientInfo = ({ patient, changePatient, handleFormErrors }) => {
 
   const handleEmailChange = e => {
     const { value } = e.target;
-    changePatient(value, 'email');
-    validateEmail(value);
+    changePatient(value.toLowerCase(), 'email');
+    validateEmail(value.toLowerCase());
   };
 
   useEffect(() => {
