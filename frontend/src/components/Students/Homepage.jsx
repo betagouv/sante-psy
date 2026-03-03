@@ -14,12 +14,19 @@ const StudentHomepage = () => {
   return (
     <>
       <header className={styles.header}>
-        <span className="fr-icon-user-line" aria-hidden="true" />
-        <strong>
-          Bonjour
+        <div className={styles.firstNameGroup}>
+          <span className="fr-icon-user-line" aria-hidden="true" />
+          <strong>
+            Bonjour
+            {' '}
+            {user.firstNames}
+          </strong>
+        </div>
+        <p>
+          INE :
           {' '}
-          {user.firstNames}
-        </strong>
+          {user.ine}
+        </p>
       </header>
 
       <main className={styles.container} data-test-id="dashboard_student">
