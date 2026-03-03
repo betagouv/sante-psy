@@ -15,6 +15,7 @@ const steps = [
   {
     placement: 'top-start',
     target: '#students-table',
+    // TODO j'ai pas besoin de faire cette requête lourde non ?
     shouldSkip: () => agent.Patient.get().then(students => students.length > 0),
     content: "Les étudiants enregistrés apparaîtront ici, vous pourrez les supprimer en cas d'erreur ou modifier leurs informations.",
   },

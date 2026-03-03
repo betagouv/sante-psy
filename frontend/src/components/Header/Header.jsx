@@ -46,6 +46,7 @@ const studentItems = [
   { title: 'Accueil', link: '/etudiant/mes-seances', id: 'homepage-header' },
   { title: 'Trouver un psychologue', link: '/trouver-un-psychologue', id: 'find-psy-header' },
   { title: 'FAQ', link: '/faq', id: 'faq' },
+  { title: 'Podcast', link: '/podcast' },
 ];
 
 const Header = () => {

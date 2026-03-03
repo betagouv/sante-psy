@@ -13,9 +13,12 @@ const checkDuplicates = async (
   ine: string,
 ): Promise<DuplicateCheckResult> => {
   try {
+    const normalizedEmail = email.toLowerCase();
+
     // email + ine are already in base for same student
     const existingStudent = await db(studentsTable)
-      .where({ email, ine })
+      .whereRaw('LOWER(email) = ?', [normalizedEmail])
+      .where({ ine })
       .first();
 
     if (existingStudent) {
@@ -24,7 +27,7 @@ const checkDuplicates = async (
 
     // email or ine separately already used
     const [conflict] = await db(studentsTable)
-      .where('email', email)
+      .whereRaw('LOWER(email) = ?', [normalizedEmail])
       .orWhere('ine', ine)
       .limit(1);
 

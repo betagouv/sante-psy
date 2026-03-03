@@ -153,6 +153,10 @@ const StudentHistory = () => {
         </>
       ) : (
         <div className={styles.empty}>
+          <div className={styles.placeholders}>
+            <div className={styles.placeholderCard} aria-hidden="true" />
+            <div className={styles.placeholderCard} aria-hidden="true" />
+          </div>
           <p>
             Tes séances consommées apparaîtront ici si tu indiques ton adresse email à ton psychologue.
           </p>

@@ -85,6 +85,20 @@
   margin-top: 2rem;
 }
 
+.placeholders {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.placeholderCard {
+  flex: 1;
+  height: 80px;
+  border: 2px dashed #aaa;
+  border-radius: 8px;
+  background: transparent;
+}
+
 .help {
   margin-top: 1rem;
   padding-left: 1.5rem;

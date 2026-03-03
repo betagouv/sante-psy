@@ -11,11 +11,17 @@
 
 .header {
   display: flex;
+  flex-direction: column;
   justify-content: flex-end;
-  align-items: center;
+  align-items: flex-end;
   gap: 0.5rem;
   font-size: large;
   margin: 20px;
+  font-weight: 500;
+}
+
+.firstNameGroup {
+  display: inline-flex;
   color: var(--text-active-blue-france)
 }
 

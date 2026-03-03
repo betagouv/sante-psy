@@ -34,6 +34,8 @@ const sendValidators = [
   check('reason')
     .isIn([
       'éligibilité',
+      'probleme-inscription',
+      'espace-etudiant',
       'convention',
       'remboursement',
       'rétractation',

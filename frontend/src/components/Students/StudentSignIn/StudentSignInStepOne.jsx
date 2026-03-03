@@ -86,7 +86,7 @@ const StudentSignInStepOne = () => {
               type="email"
               placeholder="Ton email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value.toLowerCase())}
               onBlur={() => validateEmail(email)}
               required
             />
