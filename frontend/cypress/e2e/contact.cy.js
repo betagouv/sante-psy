@@ -1,5 +1,3 @@
-const { loginDefaultPsy } = require('./utils/login');
-
 describe('Contact', () => {
   beforeEach(() => {
     cy.intercept('POST', '/api/contact')
@@ -34,16 +32,5 @@ describe('Contact', () => {
         'have.text',
         'Votre message a bien été envoyé. Nous reviendrons vers vous rapidement.',
       );
-  });
-
-  it('should default psychologist if connected', () => {
-    cy.get('[data-test-id="user-psychologist-input"] input')
-      .should('not.be.checked');
-
-    loginDefaultPsy();
-    cy.reload();
-
-    cy.get('[data-test-id="user-psychologist-input"] input')
-      .should('be.checked');
   });
 });

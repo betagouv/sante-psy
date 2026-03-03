@@ -85,7 +85,6 @@ const ContactForm = () => {
           legend="Je suis"
           isInline
           required
-          value={undefined}
           onChange={setUserType}
         >
           <Radio
