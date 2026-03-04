@@ -5,9 +5,11 @@ import agent from 'services/agent';
 import validateIneFormat from 'src/utils/validateIneFormat';
 import validateNameFormat from 'src/utils/validateNameFormat';
 import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
+import { useStore } from 'stores/';
 import styles from './studentSignIn.cssmodule.scss';
 
 const StudentSignInStepTwo = () => {
+  const { commonStore: { config } } = useStore();
   const { token } = useParams();
   const navigate = useNavigate();
 
@@ -22,6 +24,7 @@ const StudentSignInStepTwo = () => {
   const [email, setEmail] = useState('');
   const [notification, setNotification] = useState(null);
   const [valid, setValid] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -33,6 +36,9 @@ const StudentSignInStepTwo = () => {
       try {
         const response = await agent.Student.verifyStudentToken(token);
         setEmail(response.email);
+        if (response.signInAttempts >= config.maxSignInAttempts) {
+          setIsBlocked(true);
+        }
         setValid(true);
       } catch {
         navigate('/inscription');
@@ -124,6 +130,8 @@ const StudentSignInStepTwo = () => {
             dateOfBirth,
           },
         });
+      } else if (errorData?.shouldContact) {
+        setIsBlocked(true);
       } else {
         setNotification({ type: 'error' });
       }
@@ -156,6 +164,7 @@ const StudentSignInStepTwo = () => {
               onChange={e => setFirstNames(e.target.value)}
               onBlur={() => validateFirstNames(firstNames)}
               required
+              disabled={isBlocked}
             />
             {firstNamesError && <p className="fr-error-text">{firstNamesError}</p>}
           </div>
@@ -172,6 +181,7 @@ const StudentSignInStepTwo = () => {
               onChange={e => setLastName(e.target.value)}
               onBlur={() => validateLastName(lastName)}
               required
+              disabled={isBlocked}
             />
             {lastNameError && <p className="fr-error-text">{lastNameError}</p>}
           </div>
@@ -189,6 +199,7 @@ const StudentSignInStepTwo = () => {
               onBlur={() => validateDateOfBirth(dateOfBirth)}
               placeholder="JJ/MM/AAAA"
               required
+              disabled={isBlocked}
             />
             {dateOfBirthError && <p className="fr-error-text">{dateOfBirthError}</p>}
           </div>
@@ -211,14 +222,15 @@ const StudentSignInStepTwo = () => {
               onChange={e => setIne((e.target.value).toUpperCase())}
               onBlur={() => validateINE(ine)}
               required
+              disabled={isBlocked}
             />
             {ineError && <p className="fr-error-text">{ineError}</p>}
           </div>
         </div>
 
-        {notification && (
+        {(notification || isBlocked) && (
           <div
-            className={`fr-alert fr-alert--${notification.type} fr-mt-3w`}
+            className="fr-alert fr-alert--error fr-mt-3w"
             role="alert"
           >
             <h3 className="fr-alert__title">Une erreur est survenue lors de l&apos;inscription.</h3>
@@ -250,8 +262,8 @@ const StudentSignInStepTwo = () => {
           conditions générales d&apos;utilisation
         </a>
         <div className="fr-mb-4w fr-mt-2w">
-          <button className="fr-btn" type="submit">
-            M&apos;inscrire
+          <button className="fr-btn" type="submit" disabled={isBlocked}>
+            {notification?.type === 'error' ? 'Confirmer ces informations' : "M'inscrire"}
           </button>
         </div>
       </form>

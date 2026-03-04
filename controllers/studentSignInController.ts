@@ -90,7 +90,10 @@ const verifyStudentToken = async (req: Request, res: Response): Promise<void> =>
     throw new CustomError('Token expiré', 401);
   }
 
-  res.json({ email: tokenRow.email });
+  res.json({
+    email: tokenRow.email,
+    signInAttempts: tokenRow.signInAttempts,
+  });
 };
 
 const signIn = async (req: Request, res: Response): Promise<void> => {
@@ -115,14 +118,6 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     }
 
     const currentAttempts = tokenRow.signInAttempts;
-
-    if (currentAttempts >= config.maxSignInAttempts) {
-      res.status(429).json({
-        shouldSendCertificate: true,
-      });
-      return;
-    }
-
     const duplicateCheck = await dbStudents.checkDuplicates(email, ine);
 
     if (duplicateCheck.status === 'alreadyRegistered') {
@@ -147,9 +142,20 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         currentAttempts,
       );
 
+      if (shouldSendCertificate) {
+        await dbLoginToken.delete(tokenRow.token);
+      }
+
       // TODO: 429 is not adequat for this error, find a code similar to all errors here so we don't differentiate them
       res.status(429).json({
-        shouldSendCertificate,
+        shouldContact: shouldSendCertificate,
+      });
+      return;
+    }
+
+    if (currentAttempts >= config.maxSignInAttempts) {
+      res.status(429).json({
+        shouldSendCertificate: true,
       });
       return;
     }
