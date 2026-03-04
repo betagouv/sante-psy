@@ -13,6 +13,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
     sessionDuration: config.sessionDurationHours,
     statistics: config.statistics,
     crispWebsite: config.crisp.website,
+    maxSignInAttempts: config.maxSignInAttempts,
   });
 };
 

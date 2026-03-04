@@ -18,6 +18,7 @@ describe('configController', () => {
               nbInstaFollower: '22 100',
             },
             sessionDuration: '2',
+            maxSignInAttempts: 2,
           });
         }));
 });
