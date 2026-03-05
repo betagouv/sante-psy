@@ -30,6 +30,9 @@ const create = async (req: Request, res: Response): Promise<void> => {
 
   const date = new Date(req.body.date);
   const today = new Date();
+  const firstDayOfLastMonth = dateUtils.getFirstDayOfLastMonth();
+
+  // TODO limitDate 4 month not true anymore, change this and test
   const limitDate = new Date(today.setMonth(today.getMonth() + 4));
 
   const patientExist = await dbPatient.getById(patientId, psyId);
@@ -42,6 +45,11 @@ const create = async (req: Request, res: Response): Promise<void> => {
   if (date < psy.createdAt) {
     console.warn("It's impossible to declare an appointment before psychologist creation date");
     throw new CustomError("La date de la séance ne peut pas être antérieure à l'inscription au dispositif", 400);
+  }
+
+  if (date < firstDayOfLastMonth) {
+    console.warn('The appointment date is before the first day of last month');
+    throw new CustomError('La date de la séance ne peut pas être antérieure au 1er du mois précédent', 400);
   }
 
   if (date > limitDate) {
