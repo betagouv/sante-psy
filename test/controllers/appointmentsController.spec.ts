@@ -128,7 +128,7 @@ describe('appointmentsController', () => {
       const patient = await patientInfoToInsert(psy);
 
       const firstDayOfLastMonth = dateUtils.getFirstDayOfLastMonth();
-      const invalidPastDate = firstDayOfLastMonth.setDate(firstDayOfLastMonth.getDate() - 1);
+      const invalidPastDate = new Date(firstDayOfLastMonth.setDate(firstDayOfLastMonth.getDate() - 1));
 
       return chai.request(app)
         .post('/api/appointments')
