@@ -128,7 +128,7 @@ describe('appointmentsController', () => {
       const patient = await patientInfoToInsert(psy);
 
       const firstDayOfLastMonth = dateUtils.getFirstDayOfLastMonth();
-      const invalidPastDate = new Date(firstDayOfLastMonth.setDate(firstDayOfLastMonth.getDate() - 1));
+      const invalidPastDate = firstDayOfLastMonth.setDate(firstDayOfLastMonth.getDate() - 1);
 
       return chai.request(app)
         .post('/api/appointments')
@@ -178,11 +178,11 @@ describe('appointmentsController', () => {
     });
 
     it('should not create appointment if date before psychologist creation date', async () => {
-      const beginningDate = new Date();
-      const psy = await create.insertOnePsy({ createdAt: beginningDate });
+      const todayBeginningDate = new Date();
+      const psy = await create.insertOnePsy({ createdAt: todayBeginningDate });
       const patient = await patientInfoToInsert(psy);
 
-      const invalidDate = new Date(beginningDate.setMonth(beginningDate.getMonth() - 1));
+      const invalidDate = new Date(todayBeginningDate.setMonth(todayBeginningDate.getMonth() - 1));
 
       return chai.request(app)
         .post('/api/appointments')

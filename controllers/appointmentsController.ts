@@ -41,6 +41,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError("Erreur. La séance n'est pas créée. Pourriez-vous réessayer ?");
   }
 
+  // TODO : should we put all sentences in env var?
   const psy = await dbPsychologists.getById(psyId);
   if (date < psy.createdAt) {
     console.warn("It's impossible to declare an appointment before psychologist creation date");

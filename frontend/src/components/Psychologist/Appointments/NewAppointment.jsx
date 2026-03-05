@@ -21,6 +21,7 @@ export const MAX_APPOINTMENT = 12;
 const NewAppointment = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
+  // TODO understand why we use this url param
   const queryDate = new URLSearchParams(search).get('date');
   const [date, setDate] = useState();
   const params = useParams();
