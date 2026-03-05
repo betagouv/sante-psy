@@ -136,6 +136,11 @@ const isValidBirthDate = (value, minAge = 15) => {
   return birthDate <= minDate;
 };
 
+const getFirstDayOfLastMonth = () => {
+  const todayDate = new Date();
+  return new Date(todayDate.getFullYear(), todayDate.getMonth() - 1, 1);
+};
+
 export {
   formatFrenchDate,
   formatDDMMYYYY,
@@ -147,4 +152,5 @@ export {
   formatStringToDDMMYYYY,
   addAutoSlashToDate,
   isValidBirthDate,
+  getFirstDayOfLastMonth,
 };

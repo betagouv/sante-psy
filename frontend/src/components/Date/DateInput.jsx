@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 
-const DateInput = forwardRef(({ value, onClick, label, dataTestId, required, id, disabled }, ref) => (
+const DateInput = forwardRef(({ value, onClick, label, dataTestId, required, id, disabled, hint }, ref) => (
   <div
     onClick={onClick}
     ref={ref}
@@ -10,6 +10,7 @@ const DateInput = forwardRef(({ value, onClick, label, dataTestId, required, id,
     <label className="fr-label" htmlFor="date">
       {label}
       {required && <span className="error"> *</span>}
+      {hint && <span className="fr-hint-text">{hint}</span>}
     </label>
     )}
     <input

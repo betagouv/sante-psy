@@ -71,6 +71,11 @@ const subtractDays = (date: Date, days: number) : Date => {
   return date;
 };
 
+const getFirstDayOfLastMonth = (): Date => {
+  const today = new Date();
+  return new Date(today.getFullYear(), today.getMonth() - 1, 1);
+};
+
 export default {
   formatFrenchDateForm: 'DD/MM/YYYY',
   formatFrenchDate: dateFormatter.format,
@@ -83,4 +88,5 @@ export default {
   now,
   subtractDays,
   dateToDashedString,
+  getFirstDayOfLastMonth,
 };
