@@ -15,6 +15,10 @@ const StudentSignInStepOne = () => {
       setEmailError("Format incorrect de l'email.");
       return false;
     }
+    if (value.toLowerCase().includes('santepsyetudiant')) {
+      setEmailError("Cette adresse email n'est pas autorisée à créer un compte étudiant.");
+      return false;
+    }
     setEmailError('');
     return true;
   };

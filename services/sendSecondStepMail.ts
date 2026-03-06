@@ -34,6 +34,7 @@ const inviteNewStudentToCreateAccount = async (
   title = 'Étape 2 de votre inscription',
 ): Promise<void> => {
   if (!email) return;
+  if (email.toLowerCase().includes('santepsyetudiant')) return;
 
   const alreadyExists = await studentHasAccount(email);
   if (alreadyExists) return;
