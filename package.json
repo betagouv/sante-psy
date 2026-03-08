@@ -52,7 +52,7 @@
     "@types/chai": "^4.3.4",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.11.18",
-    "axios": "^1.12.2",
+    "axios": "^1.13.5",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
