@@ -19,7 +19,7 @@
     "react-joyride": "^2.5.3",
     "react-leaflet": "^4.2.0",
     "react-refresh": "^0.14.0",
-    "react-router-dom": "^6.7.0",
+    "react-router-dom": "^6.30.3",
     "react-router-hash-link": "^2.4.3",
     "sanitize-html": "^2.12.1",
     "uuid": "^9.0.0",
