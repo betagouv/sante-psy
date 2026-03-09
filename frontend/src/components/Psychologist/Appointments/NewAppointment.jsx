@@ -7,7 +7,7 @@ import { Alert, Button, Checkbox, SearchableSelect, Select } from '@dataesr/reac
 import DateInput from 'components/Date/DateInput';
 
 import agent from 'services/agent';
-import { convertLocalToUTCDate, formatDDMMYYYY, parseDateForm } from 'services/date';
+import { convertLocalToUTCDate, formatDDMMYYYY, getFirstDayOfLastMonth, parseDateForm } from 'services/date';
 
 import { useStore } from 'stores/';
 import { observer } from 'mobx-react';
@@ -21,6 +21,7 @@ export const MAX_APPOINTMENT = 12;
 const NewAppointment = () => {
   const navigate = useNavigate();
   const { search } = useLocation();
+  // TODO understand why we use this url param
   const queryDate = new URLSearchParams(search).get('date');
   const [date, setDate] = useState();
   const params = useParams();
@@ -53,7 +54,7 @@ const NewAppointment = () => {
     });
   };
 
-  const beginningDate = new Date(2025, 0, 1);
+  const beginningDate = getFirstDayOfLastMonth();
   const maxDate = new Date();
 
   const patientsMap = patients.map(p => ({
@@ -74,7 +75,7 @@ const NewAppointment = () => {
   return (
     <div className={styles.newAppointmentWrapper}>
       <form onSubmit={createNewAppointment} className="fr-my-2w">
-        <div id="patients-list">
+        <div id="patients-list" className="fr-mb-2w">
           {patients.length > 0 ? (
             <SearchableSelect
               className="midlength-select"
@@ -125,7 +126,21 @@ const NewAppointment = () => {
           maxDate={maxDate}
           dateFormat="dd/MM/yyyy"
           showPopperArrow={false}
-          customInput={<DateInput label="Date de la séance" dataTestId="new-appointment-date-input" disabled={!hasAllCompulsoryInfo} />}
+          customInput={(
+            <DateInput
+              label="Date de la séance"
+              hint={(
+                <>
+                  Les séances doivent être déclarées au plus tard le dernier jour du mois suivant leur réalisation. Pour toute aide,
+                  {' '}
+                  <HashLink to="/contact/formulaire">
+                    contactez le support.
+                  </HashLink>
+                </>
+            )}
+              dataTestId="new-appointment-date-input"
+              disabled={!hasAllCompulsoryInfo} />
+)}
           onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
           required
           disabled={!hasAllCompulsoryInfo}

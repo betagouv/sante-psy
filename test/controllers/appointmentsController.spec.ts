@@ -9,11 +9,14 @@ import dbPsychologists from '../../db/psychologists';
 import cookie from '../../utils/cookie';
 import { Psychologist } from '../../types/Psychologist';
 import appointmentBadges from '../../utils/badges';
+import dateUtils from '../../utils/date';
 import { Patient } from '../../types/Patient';
 
 describe('appointmentsController', () => {
   const dateOfBirth = new Date('1980/01/20');
   const gender = 'female';
+  const today = new Date();
+  const validDate = new Date(today.getFullYear(), today.getMonth(), 1);
 
   async function patientInfoToInsert(psy) {
     return dbPatients.insert(
@@ -57,12 +60,13 @@ describe('appointmentsController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: patient.id,
-          date: new Date('2023-11-27'),
+          date: validDate,
           renewal: false,
         })
         .then(async (res) => {
+          const formattedDate = dateUtils.formatFrenchDate(validDate);
           res.status.should.equal(200);
-          res.body.message.should.equal('La séance du lundi 27 novembre 2023 a bien été créée.');
+          res.body.message.should.equal(`La séance du ${formattedDate} a bien été créée.`);
 
           const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);
@@ -83,7 +87,7 @@ describe('appointmentsController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: patient.id,
-          date: new Date('09/02/2021'),
+          date: validDate,
           renewal: false,
         })
         .then(async (res) => {
@@ -106,13 +110,39 @@ describe('appointmentsController', () => {
         .post('/api/appointments')
         .send({
           patientId: patient.id,
-          date: new Date('09/02/2021'),
+          date: validDate,
           renewal: false,
         })
         .then(async (res) => {
           res.status.should.equal(401);
 
           // Appointment not created
+          const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
+          expect(appointmentArray).to.have.length(0);
+
+          return Promise.resolve();
+        });
+    });
+
+    it('should not create appointment if date is before first day of last month', async () => {
+      const patient = await patientInfoToInsert(psy);
+
+      const firstDayOfLastMonth = dateUtils.getFirstDayOfLastMonth();
+      const invalidPastDate = new Date(firstDayOfLastMonth.setDate(firstDayOfLastMonth.getDate() - 1));
+
+      return chai.request(app)
+        .post('/api/appointments')
+        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set('xsrf-token', 'randomXSRFToken')
+        .send({
+          patientId: patient.id,
+          date: invalidPastDate,
+          renewal: false,
+        })
+        .then(async (res) => {
+          res.status.should.equal(400);
+          res.body.message.should.equal('La date de la séance ne peut pas être antérieure au 1er du mois précédent');
+
           const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(0);
 
@@ -148,11 +178,11 @@ describe('appointmentsController', () => {
     });
 
     it('should not create appointment if date before psychologist creation date', async () => {
-      const beginningDate = new Date('2021-03-22');
-      const psy = await create.insertOnePsy({ createdAt: beginningDate });
+      const todayBeginningDate = new Date();
+      const psy = await create.insertOnePsy({ createdAt: todayBeginningDate });
       const patient = await patientInfoToInsert(psy);
 
-      const invalidDate = new Date(beginningDate.setMonth(beginningDate.getMonth() - 2));
+      const invalidDate = new Date(todayBeginningDate.setMonth(todayBeginningDate.getMonth() - 1));
 
       return chai.request(app)
         .post('/api/appointments')
@@ -201,7 +231,7 @@ describe('appointmentsController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           patientId: 'not-a-uuid',
-          date: new Date('09/02/2021'),
+          date: validDate,
           renewal: false,
         })
         .end((err, res) => {
@@ -220,7 +250,7 @@ describe('appointmentsController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           // no patientId
-          date: new Date('09/02/2021'),
+          date: validDate,
           renewal: false,
         })
         .end((err, res) => {
