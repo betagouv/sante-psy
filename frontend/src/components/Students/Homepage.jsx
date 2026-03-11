@@ -13,7 +13,7 @@ const StudentHomepage = () => {
 
   return (
     <>
-      <header className={styles.header}>
+      <div className={styles.header}>
         <div className={styles.firstNameGroup}>
           <span className="fr-icon-user-line" aria-hidden="true" />
           <strong>
@@ -27,9 +27,16 @@ const StudentHomepage = () => {
           {' '}
           {user.ine}
         </p>
-      </header>
+        <Link
+          to="/etudiant/numeros-urgence"
+          className={styles.ctaBtn}
+        >
+          <span className="fr-icon-phone-line" aria-hidden="true" />
+          Je me sens mal
+        </Link>
+      </div>
 
-      <main className={styles.container} data-test-id="dashboard_student">
+      <div className={styles.container} data-test-id="dashboard_student">
         <div className={styles.titleRow}>
           <h2>
             Mes RDV passés
@@ -44,7 +51,14 @@ const StudentHomepage = () => {
           </Link>
         </div>
         <StudentHistory />
-      </main>
+        <Link
+          to="/etudiant/numeros-urgence"
+          className={`${styles.ctaBtn} ${styles.ctaBtnDown}`}
+        >
+          <span className="fr-icon-phone-line" aria-hidden="true" />
+          Je me sens mal
+        </Link>
+      </div>
     </>
   );
 };
