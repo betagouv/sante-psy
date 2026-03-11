@@ -26,7 +26,7 @@ const numbers = [
 ];
 
 const EmergencyNumbers = () => (
-  <main className={styles.page}>
+  <div className={styles.page}>
     <div className={styles.bearCard}>
       <img
         src="/images/studentSpace/emergencyNumbersBear.png"
@@ -53,7 +53,6 @@ const EmergencyNumbers = () => (
         <NumbersItems key={item.number} {...item} />
       ))}
     </ul>
-
     <div className={styles.supportRow}>
       <Link
         to="/contact/formulaire"
@@ -63,8 +62,7 @@ const EmergencyNumbers = () => (
         Contacter le support
       </Link>
     </div>
-
-  </main>
+  </div>
 );
 
 export default EmergencyNumbers;
