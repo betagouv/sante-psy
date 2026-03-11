@@ -9,6 +9,7 @@ import { useStore } from 'stores/';
 import './custom-month-picker.css';
 import './custom-date-picker.css';
 import StudentPage from 'components/Page/StudentPage';
+import EmergyNumbers from 'components/Students/EmergencyNumbers/EmergencyNumbers';
 
 const StudentRouter = () => {
   const { userStore: { user, role } } = useStore();
@@ -39,6 +40,10 @@ const StudentRouter = () => {
         <Route
           path="/mes-seances"
           element={<StudentHomepage />}
+        />
+        <Route
+          path="/numeros-urgence"
+          element={<EmergyNumbers />}
         />
         <Route
           path="/*"
