@@ -27,6 +27,13 @@ const StudentHomepage = () => {
           {' '}
           {user.ine}
         </p>
+        <Link
+          to="/etudiant/numeros-urgence"
+          className={styles.ctaBtn}
+        >
+          <span className="fr-icon-phone-line" aria-hidden="true" />
+          Je me sens mal
+        </Link>
       </div>
 
       <div className={styles.container} data-test-id="dashboard_student">
@@ -46,7 +53,7 @@ const StudentHomepage = () => {
         <StudentHistory />
         <Link
           to="/etudiant/numeros-urgence"
-          className={styles.ctaBtn}
+          className={`${styles.ctaBtn} ${styles.ctaBtnDown}`}
         >
           <span className="fr-icon-phone-line" aria-hidden="true" />
           Je me sens mal
