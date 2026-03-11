@@ -8,6 +8,9 @@
     --tag-orange: #ffdbd2;
     --button-color-hover: rgba(0,0,221,0.5);
     --button-color-active: rgba(41,41,255,0.5);
+    --badge-blue: #0A76F6;
+    --badge-purple: #AC47FF;
+    --badge-grey-purple: #5150A1;
 }
 
 :root[data-fr-theme=dark] {
@@ -19,4 +22,7 @@
     --tag-orange: #bf5339;
     --button-color-hover: rgba(71,71,255,0.5);
     --button-color-active: rgba(0,0,243,0.5);
+    --badge-blue: #3d9bff;
+    --badge-purple: #c97aff;
+    --badge-grey-purple: #7b7acf;
 }
