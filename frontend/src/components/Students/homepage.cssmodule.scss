@@ -53,6 +53,12 @@
   }
 }
 
+@media (max-width: 767px) {
+  .header {
+    margin-bottom: 66px;
+  }
+}
+
 @media (min-width: 768px) {
   .container {
     width: 60%;
