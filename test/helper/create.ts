@@ -334,7 +334,7 @@ const getOneStudent = (student: Partial<Student> = {}): Student => ({
   lastName: faker.name.lastName(),
   email: faker.internet.exampleEmail(),
   dateOfBirth: faker.date.past(),
-  ine: faker.datatype.string(11),
+  ine: faker.phone.number('###########'),
   createdAt: new Date(),
   ...student,
 });
