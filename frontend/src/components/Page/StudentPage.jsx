@@ -30,13 +30,14 @@ const StudentPage = ({
   }, [title]);
 
   return (
-    <>
-      <div className={styles.studentHeader} />
-      {title && (
+    <main>
+      <header className={styles.studentHeader}>
+        {title && (
         <div className={styles.titleContainer}>
           <h1 className={styles.title}>{title}</h1>
         </div>
-      )}
+        )}
+      </header>
       <div
         className={classNames(styles.background, className)}
         data-test-id={dataTestId}
@@ -45,7 +46,7 @@ const StudentPage = ({
           {children}
         </div>
       </div>
-    </>
+    </main>
   );
 };
 
