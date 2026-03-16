@@ -69,6 +69,10 @@ const getFirstNames = (): string => {
   return firstNames;
 };
 
+const getEmailFromNames = (firstNames, lastName): string => {
+  return `${[firstNames, lastName].join(' ').replaceAll(" ", '.').toLowerCase()}@test.com`.normalize('NFKD').replace(/[^\w.@-]/g, "")
+}
+
 const getAddress = (): {
     address: string,
     departement: string,
@@ -183,18 +187,21 @@ const getOnePsy = (
     `psychologist-${psychologist.personalEmail || 'loginemail@beta.gouv.fr'}`,
   );
 
+  const firstNames = getFirstNames()
+  const lastName = faker.name.lastName()
+  const email = getEmailFromNames(firstNames, lastName)
   return {
     dossierNumber,
     title: 'Mme',
-    firstNames: getFirstNames(),
-    lastName: faker.name.lastName(),
+    firstNames,
+    lastName,
     archived: false,
     state: DossierState.accepte,
     adeli: `${getRandomInt()}829302942`,
     diploma: 'Psychologie clinique de la santé',
     diplomaYear: '2020',
     phone: faker.phone.number('0# ## ## ## ##'),
-    email: faker.internet.exampleEmail(),
+    email,
     personalEmail: 'loginemail@beta.gouv.fr',
     website: getFakeAddress(),
     appointmentLink: getFakeAddress(),
@@ -279,20 +286,26 @@ const getOnePsyDS = (
 const getOnePatient = (
   index: number,
   patient: Partial<Patient> & {psychologistId: string},
-): Patient => ({
+): Patient => {
+  const firstName = faker.name.firstName()
+  const lastName = faker.name.lastName()  
+  const email = getEmailFromNames(firstName, lastName)
+
+  return {
   id: uuid.generateFromString(`patient-${patient.psychologistId}-${index}`),
-  firstNames: faker.name.firstName(),
-  lastName: faker.name.lastName(),
+  firstNames: firstName,
+  lastName,
   INE: faker.phone.number('###########'),
   isINESvalid: false,
-  email: faker.internet.exampleEmail(),
+  email,
   institutionName: `${getRandomInt()} university`,
   isStudentStatusVerified: true,
   doctorName: faker.name.lastName(),
   dateOfBirth: faker.date.past(),
   gender: faker.helpers.arrayElement(allGenders),
   ...patient,
-});
+}
+};
 
 const getOneIncompletePatient = (
   index: number,
@@ -328,16 +341,22 @@ const insertOneAppointment = async (
   return result;
 };
 
-const getOneStudent = (student: Partial<Student> = {}): Student => ({
+const getOneStudent = (student: Partial<Student> = {}): Student => {
+  const firstName = faker.name.firstName()
+  const lastName = faker.name.lastName()  
+  const email = getEmailFromNames(firstName, lastName)
+
+  return {
   id: uuid.generateRandom(),
-  firstNames: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  email: faker.internet.exampleEmail(),
+  firstNames: firstName,
+  lastName,
+  email,
   dateOfBirth: faker.date.past(),
   ine: faker.phone.number('###########'),
   createdAt: new Date(),
   ...student,
-});
+} 
+}
 
 const insertOneStudent = async (student: Partial<Student> = {}): Promise<Student> => {
   const stud = getOneStudent(student);
