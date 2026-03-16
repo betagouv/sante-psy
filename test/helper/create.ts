@@ -147,16 +147,10 @@ const getAddress = (): {
 // faker can give address with accent wich are not considered as valid...
 const getFakeAddress = (): string => {
   let website = '';
+  const isWebsite = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/i;
 
-  while (true) {
+  while (!isWebsite.test(website)) {
     website = faker.internet.domainName() + faker.internet.domainSuffix();
-    try {
-      // if valid url, exit loop
-      new URL(`https://${website}`);
-      break;
-    } catch {
-      // invalid URL, let's try again
-    }
   }
   return website;
 };
