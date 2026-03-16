@@ -29,7 +29,7 @@
     "test:ci": "wait-on --timeout 60000 https://api-annuaire-sante.herokuapp.com/annuaire/annuaire.json?Identification+nationale+PP__in=0 && pnpm run test",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
-    "scalingo-postbuild": "pnpm --filter ./frontend install && pnpm --filter ./frontend run build -- --env.PROD && pnpm run postbuild && cp -a frontend/dist dist/frontend",
+    "scalingo-postbuild": "pnpm --filter ./frontend install && pnpm --filter ./frontend run build && pnpm run postbuild && cp -a frontend/dist dist/frontend",
     "postbuild": "tsc"
   },
   "repository": {
