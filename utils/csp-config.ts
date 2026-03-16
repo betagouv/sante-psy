@@ -39,6 +39,7 @@ export default helmet.contentSecurityPolicy({
       'https://embed.acast.com/kaavan-podcast?feed=true&theme=light&wmode=opaque',
       'https://bid.g.doubleclick.net/',
       'https://game.crisp.chat',
+      'https://*.crisp.chat',
     ],
     'connect-src': [
       "'self'",
@@ -50,6 +51,23 @@ export default helmet.contentSecurityPolicy({
       'https://storage.crisp.chat',
       'wss://stream.relay.crisp.chat',
       'https://cdn.jsdelivr.net',
+      'https://*.crisp.chat',
+      'wss://*.relay.crisp.chat',
+      'wss://*.relay.rescue.crisp.chat',
+    ],
+    'font-src': [
+      'https://*.crisp.chat',
+    ],
+    'media-src': [
+      'https://*.crisp.chat',
+    ],
+    'style-src': [
+      "'unsafe-inline'",
+      'https://*.crisp.chat',
+    ],
+    'worker-src': [
+      'blob:',
+      'https://*.crisp.chat',
     ],
   },
 });
