@@ -1,8 +1,8 @@
 # Only start PG
-version: '3'
+version: "3"
 services:
   db:
-    image: postgres:13.23
+    image: postgres:14.20
     environment:
       POSTGRES_USER: santepsy
       POSTGRES_PASSWORD: santepsy
