@@ -1,8 +1,11 @@
 import helmet from 'helmet';
 
+const defaultDirectives = helmet.contentSecurityPolicy.getDefaultDirectives();
+const crispDomains = ['https://*.crisp.chat', 'https://*.crisp.help'];
+
 export default helmet.contentSecurityPolicy({
   directives: {
-    ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+    ...defaultDirectives,
     'script-src': [
       "'self'",
       'https://stats.beta.gouv.fr/',
@@ -13,7 +16,7 @@ export default helmet.contentSecurityPolicy({
       'https://www.googletagmanager.com/',
       'https://www.googleadservices.com/',
       'https://googleads.g.doubleclick.net',
-      'https://*.crisp.chat',
+      ...crispDomains,
       // Crisp chat script hash
       "'sha256-t4VtNIUiuBKi5VJfKaIxe2Ww1/6O3gae/Qtmhx4B0uE='",
     ],
@@ -30,7 +33,7 @@ export default helmet.contentSecurityPolicy({
       'https://www.google.fr/',
       'https://www.facebook.com',
       'https://googleads.g.doubleclick.net',
-      'https://*.crisp.chat',
+      ...crispDomains,
       'data:',
     ],
     'frame-src': [
@@ -39,6 +42,7 @@ export default helmet.contentSecurityPolicy({
       'https://embed.acast.com/kaavan-podcast?feed=true&theme=light&wmode=opaque',
       'https://bid.g.doubleclick.net/',
       'https://game.crisp.chat',
+      ...crispDomains,
     ],
     'connect-src': [
       "'self'",
@@ -50,6 +54,7 @@ export default helmet.contentSecurityPolicy({
       'https://storage.crisp.chat',
       'wss://stream.relay.crisp.chat',
       'https://cdn.jsdelivr.net',
+      ...crispDomains,
     ],
   },
 });
