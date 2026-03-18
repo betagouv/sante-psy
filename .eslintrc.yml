@@ -32,15 +32,12 @@ rules:
   no-restricted-syntax: "warn"
   guard-for-in: "warn"
   eqeqeq: "warn"
-  indent: 
-    - "error"
-    - 2
-    - MemberExpression: "off"
+  indent: "off"
   node/no-unpublished-require: "off"
   import/order: "off"
   radix: "off"
   no-new: "off"
-  no-plusplus: "off" 
+  no-plusplus: "off"
   no-multi-str: "off"
   no-unused-vars: "off"
   "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }]
@@ -50,10 +47,7 @@ rules:
   "@typescript-eslint/no-empty-function": "off"
   "@typescript-eslint/no-var-requires": "off"
   mocha-no-only/mocha-no-only: ["error"]
-  import/extensions: ["error", {
-    js: "never",
-    ts: "never",
-  }]
+  import/extensions: ["error", { js: "never", ts: "never" }]
 
 overrides:
   - files:
@@ -66,5 +60,5 @@ overrides:
       - "migrations/*.js"
     rules:
       max-len: "off"
-      func-names: "off"      
+      func-names: "off"
       "@typescript-eslint/explicit-function-return-type": "off"

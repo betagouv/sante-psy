@@ -49,7 +49,7 @@ const languages = [
   'Français, Anglais parlé, mais pas langue maternelle',
 ];
 
-const getRandomInt = () : string => {
+const getRandomInt = (): string => {
   const ourRandom = faker.datatype.number({ min: 1, max: 99 });
   if (ourRandom < 10) {
     return `0${ourRandom.toString()}`;
@@ -69,101 +69,101 @@ const getFirstNames = (): string => {
   return firstNames;
 };
 
+const getEmailFromNames = (firstNames, lastName): string => `${[firstNames, lastName].join(' ')
+  .replaceAll(' ', '.')
+  .toLowerCase()}@test.com`
+  .normalize('NFKD')
+  .replace(/[^\w.@-]/g, '');
+
 const getAddress = (): {
-    address: string,
-    departement: string,
-    region: string,
-    longitude: number,
-    latitude: number,
-    city: string,
-    postcode: string,
-    otherAddress?: string,
-    otherLongitude?: number,
-    otherLatitude?: number,
-    otherCity?: string,
-    otherPostcode?: string,
-  } => {
+  address: string,
+  departement: string,
+  region: string,
+  longitude: number,
+  latitude: number,
+  city: string,
+  postcode: string,
+  otherAddress?: string,
+  otherLongitude?: number,
+  otherLatitude?: number,
+  otherCity?: string,
+  otherPostcode?: string,
+} => {
   const rand = faker.datatype.number() % 5;
   switch (rand) {
-  case 0:
-    return {
-      address: `${getRandomInt()} avenue de segur 75007 paris`,
-      departement: '75 - Paris',
-      region: 'Ile-de-France',
-      longitude: 2.308880,
-      latitude: 48.850570,
-      city: 'paris',
-      postcode: '75007',
-    };
-  case 1:
-    return {
-      address: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
-      departement: '33 - Gironde',
-      region: 'Nouvelle-Aquitaine',
-      longitude: -0.575710,
-      latitude: 44.848660,
-      city: 'Bordeaux',
-      postcode: '33000',
-      otherAddress: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
-      otherLongitude: -0.575810,
-      otherLatitude: 44.848460,
-      otherCity: 'Bordeaux',
-      otherPostcode: '33000',
-    };
-  case 2:
-    return {
-      address: `${getRandomInt()} Boulevard Maréchal Foch 38100 Grenoble`,
-      departement: '38 - Isère',
-      region: 'Auvergne-Rhône-Alpes',
-      longitude: 5.720050,
-      latitude: 45.179540,
-      city: 'Grenoble',
-      postcode: '38100',
-      otherAddress: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
-      otherLongitude: -0.575810,
-      otherLatitude: 44.848460,
-      otherCity: 'Bordeaux',
-      otherPostcode: '33000',
-    };
-  default:
-    return {
-      address: `${faker.address.streetAddress()} ${faker.address.zipCode('#####')} ${faker.address.city()}`,
-      departement: '14 - Calvados',
-      region: 'Normandie',
-      longitude: -0.073080,
-      latitude: 49.126301,
-      city: null,
-      postcode: null,
-    };
+    case 0:
+      return {
+        address: `${getRandomInt()} avenue de segur 75007 paris`,
+        departement: '75 - Paris',
+        region: 'Ile-de-France',
+        longitude: 2.30888,
+        latitude: 48.85057,
+        city: 'paris',
+        postcode: '75007',
+      };
+    case 1:
+      return {
+        address: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
+        departement: '33 - Gironde',
+        region: 'Nouvelle-Aquitaine',
+        longitude: -0.57571,
+        latitude: 44.84866,
+        city: 'Bordeaux',
+        postcode: '33000',
+        otherAddress: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
+        otherLongitude: -0.57581,
+        otherLatitude: 44.84846,
+        otherCity: 'Bordeaux',
+        otherPostcode: '33000',
+      };
+    case 2:
+      return {
+        address: `${getRandomInt()} Boulevard Maréchal Foch 38100 Grenoble`,
+        departement: '38 - Isère',
+        region: 'Auvergne-Rhône-Alpes',
+        longitude: 5.72005,
+        latitude: 45.17954,
+        city: 'Grenoble',
+        postcode: '38100',
+        otherAddress: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
+        otherLongitude: -0.57581,
+        otherLatitude: 44.84846,
+        otherCity: 'Bordeaux',
+        otherPostcode: '33000',
+      };
+    default:
+      return {
+        address: `${faker.address.streetAddress()} ${faker.address.zipCode('#####')} ${faker.address.city()}`,
+        departement: '14 - Calvados',
+        region: 'Normandie',
+        longitude: -0.07308,
+        latitude: 49.126301,
+        city: null,
+        postcode: null,
+      };
   }
 };
 
 // faker can give address with accent wich are not considered as valid...
 const getFakeAddress = (): string => {
   let website = '';
-  const isWebsite = new RegExp('^(https?:\\/\\/)?' // protocol
-  + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
-  + '((\\d{1,3}\\.){3}\\d{1,3}))' // OR ip (v4) address
-  + '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' // port and path
-  + '(\\?[;&a-z\\d%_.~+=-]*)?' // query string
-  + '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+  const isWebsite = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/i;
+
   while (!isWebsite.test(website)) {
     website = faker.internet.domainName() + faker.internet.domainSuffix();
   }
-
   return website;
 };
 
 const getBillingAddress = (): string | null => {
   const shouldHaveBillingAddress = Math.random() < 0.1;
 
-  return shouldHaveBillingAddress
-    // eslint-disable-next-line max-len
-    ? `Service facturier - ${faker.address.streetAddress()} ${faker.address.zipCode('#####')} ${faker.address.city()}`
+  // eslint-disable-next-line max-len
+  return shouldHaveBillingAddress ? `Service facturier - ${faker.address.streetAddress()} ${faker.address.zipCode('#####')} ${faker.address.city()}`
     : null;
 };
 
-const getOneUniversity = (name: string) : University => ({
+const getOneUniversity = (name: string): University => ({
   name,
   id: uuid.generateFromString(`university-${name}`),
   emailUniversity: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
@@ -176,25 +176,26 @@ const getOneUniversity = (name: string) : University => ({
   billingEmail: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
 });
 
-const getOnePsy = (
-  psychologist: Partial<Psychologist> = {},
-): Psychologist => {
+const getOnePsy = (psychologist: Partial<Psychologist> = {}): Psychologist => {
   const dossierNumber = uuid.generateFromString(
     `psychologist-${psychologist.personalEmail || 'loginemail@beta.gouv.fr'}`,
   );
 
+  const firstNames = getFirstNames();
+  const lastName = faker.name.lastName();
+  const email = getEmailFromNames(firstNames, lastName);
   return {
     dossierNumber,
     title: 'Mme',
-    firstNames: getFirstNames(),
-    lastName: faker.name.lastName(),
+    firstNames,
+    lastName,
     archived: false,
     state: DossierState.accepte,
     adeli: `${getRandomInt()}829302942`,
     diploma: 'Psychologie clinique de la santé',
     diplomaYear: '2020',
     phone: faker.phone.number('0# ## ## ## ##'),
-    email: faker.internet.exampleEmail(),
+    email,
     personalEmail: 'loginemail@beta.gouv.fr',
     website: getFakeAddress(),
     appointmentLink: getFakeAddress(),
@@ -213,10 +214,7 @@ const getOnePsy = (
   };
 };
 
-const insertOnePsy = async (
-  psychologist: Partial<Psychologist> = {},
-  withUniversity = true,
-): Promise<Psychologist> => {
+const insertOnePsy = async (psychologist: Partial<Psychologist> = {}, withUniversity = true): Promise<Psychologist> => {
   let universityId = null;
   if (withUniversity) {
     const university = getOneUniversity(faker.company.name());
@@ -224,7 +222,10 @@ const insertOnePsy = async (
     universityId = university.id;
   }
 
-  const psy = getOnePsy({ ...psychologist, assignedUniversityId: universityId });
+  const psy = getOnePsy({
+    ...psychologist,
+    assignedUniversityId: universityId,
+  });
   await dbPsychologists.upsertMany([psy]);
 
   // Hack to force createdAt update
@@ -237,13 +238,11 @@ const insertOnePsy = async (
   return psy;
 };
 
-const getOneInactivePsy = (inactiveUntil: Date = new Date()): Psychologist => getOnePsy(
-  {
-    personalEmail: `inactive@${inactiveUntil}.fr`,
-    inactiveUntil,
-    active: !inactiveUntil,
-  },
-);
+const getOneInactivePsy = (inactiveUntil: Date = new Date()): Psychologist => getOnePsy({
+  personalEmail: `inactive@${inactiveUntil}.fr`,
+  inactiveUntil,
+  active: !inactiveUntil,
+});
 
 const getOnePsyDS = (
   champValue = faker.datatype.string(),
@@ -251,7 +250,7 @@ const getOnePsyDS = (
   firstName = faker.name.firstName(),
   lastName = faker.name.lastName(),
   title = 'Mme',
-) : DSPsychologist => ({
+): DSPsychologist => ({
   id: faker.datatype.string(),
   state: DossierState.accepte,
   archived: false,
@@ -265,10 +264,12 @@ const getOnePsyDS = (
   messages: [],
   annotations: [],
   traitements: [],
-  champs: [{
-    id: champId,
-    stringValue: champValue,
-  }],
+  champs: [
+    {
+      id: champId,
+      stringValue: champValue,
+    },
+  ],
   demandeur: {
     nom: lastName,
     prenom: firstName,
@@ -276,28 +277,28 @@ const getOnePsyDS = (
   },
 });
 
-const getOnePatient = (
-  index: number,
-  patient: Partial<Patient> & {psychologistId: string},
-): Patient => ({
-  id: uuid.generateFromString(`patient-${patient.psychologistId}-${index}`),
-  firstNames: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  INE: faker.phone.number('###########'),
-  isINESvalid: false,
-  email: faker.internet.exampleEmail(),
-  institutionName: `${getRandomInt()} university`,
-  isStudentStatusVerified: true,
-  doctorName: faker.name.lastName(),
-  dateOfBirth: faker.date.past(),
-  gender: faker.helpers.arrayElement(allGenders),
-  ...patient,
-});
+const getOnePatient = (index: number, patient: Partial<Patient> & { psychologistId: string }): Patient => {
+  const firstName = faker.name.firstName();
+  const lastName = faker.name.lastName();
+  const email = getEmailFromNames(firstName, lastName);
 
-const getOneIncompletePatient = (
-  index: number,
-  patient: Partial<Patient> & {psychologistId: string},
-): Patient => ({
+  return {
+    id: uuid.generateFromString(`patient-${patient.psychologistId}-${index}`),
+    firstNames: firstName,
+    lastName,
+    INE: faker.phone.number('###########'),
+    isINESvalid: false,
+    email,
+    institutionName: `${getRandomInt()} university`,
+    isStudentStatusVerified: true,
+    doctorName: faker.name.lastName(),
+    dateOfBirth: faker.date.past(),
+    gender: faker.helpers.arrayElement(allGenders),
+    ...patient,
+  };
+};
+
+const getOneIncompletePatient = (index: number, patient: Partial<Patient> & { psychologistId: string }): Patient => ({
   id: uuid.generateFromString(`patient-${patient.psychologistId}-${index}`),
   firstNames: faker.name.firstName(),
   lastName: faker.name.lastName(),
@@ -309,7 +310,10 @@ const getOneIncompletePatient = (
 });
 
 const getOneAppointment = (
-  appointment: Partial<Appointment> & {patientId: string, psychologistId: string},
+  appointment: Partial<Appointment> & {
+    patientId: string;
+    psychologistId: string;
+  },
 ): Appointment => {
   const myDate = new Date(2021, 3, 10).toISOString();
   return {
@@ -321,23 +325,32 @@ const getOneAppointment = (
 };
 
 const insertOneAppointment = async (
-  appointment: Partial<Appointment> & {patientId: string, psychologistId: string},
+  appointment: Partial<Appointment> & {
+    patientId: string;
+    psychologistId: string;
+  },
 ): Promise<Appointment> => {
   const result = getOneAppointment(appointment);
   await db(appointmentsTable).insert(result);
   return result;
 };
 
-const getOneStudent = (student: Partial<Student> = {}): Student => ({
-  id: uuid.generateRandom(),
-  firstNames: faker.name.firstName(),
-  lastName: faker.name.lastName(),
-  email: faker.internet.exampleEmail(),
-  dateOfBirth: faker.date.past(),
-  ine: faker.phone.number('###########'),
-  createdAt: new Date(),
-  ...student,
-});
+const getOneStudent = (student: Partial<Student> = {}): Student => {
+  const firstName = faker.name.firstName();
+  const lastName = faker.name.lastName();
+  const email = getEmailFromNames(firstName, lastName);
+
+  return {
+    id: uuid.generateRandom(),
+    firstNames: firstName,
+    lastName,
+    email,
+    dateOfBirth: faker.date.past(),
+    ine: faker.phone.number('###########'),
+    createdAt: new Date(),
+    ...student,
+  };
+};
 
 const insertOneStudent = async (student: Partial<Student> = {}): Promise<Student> => {
   const stud = getOneStudent(student);
