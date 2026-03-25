@@ -193,7 +193,6 @@ const AddressAutocomplete = ({
                 )}
                 key={`${selectId.current}-${option.value}-${option.label}`}
                 onMouseDown={() => selectOption(option)}
-                onMouseEnter={() => setArrowSelected(index)}
               >
                 <div className={styles.addressLabel}>
                   {option.label}
