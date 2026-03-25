@@ -186,13 +186,13 @@ const getOneUniversity = (name: string): University => ({
 });
 
 const getOnePsy = (psychologist: Partial<Psychologist> = {}): Psychologist => {
-  const dossierNumber = uuid.generateFromString(
-    `psychologist-${psychologist.personalEmail || 'loginemail@beta.gouv.fr'}`,
-  );
-
   const firstNames = getFirstNames();
   const lastName = faker.name.lastName();
   const email = getEmailFromNames(firstNames, lastName);
+
+  const dossierNumber = uuid.generateFromString(
+    `psychologist-${psychologist.personalEmail || email}`,
+  );
   return {
     dossierNumber,
     title: 'Mme',
@@ -205,7 +205,7 @@ const getOnePsy = (psychologist: Partial<Psychologist> = {}): Psychologist => {
     diplomaYear: '2020',
     phone: faker.phone.number('0# ## ## ## ##'),
     email,
-    personalEmail: 'loginemail@beta.gouv.fr',
+    personalEmail: email,
     website: getFakeAddress(),
     appointmentLink: getFakeAddress(),
     teleconsultation: faker.datatype.boolean(),

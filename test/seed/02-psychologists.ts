@@ -23,6 +23,7 @@ export const mails = [
   'cyrielle.francais@beta.gouv.fr',
 ];
 
+const NB_ADDITIONAL_PSYS = 20;
 export const seed = async (knex: Knex): Promise<void> => {
   const psyList = [
     ...mails.map((mail, index) => create.getOnePsy(
@@ -36,6 +37,8 @@ export const seed = async (knex: Knex): Promise<void> => {
     create.getOnePsy({ personalEmail: 'empty@beta.gouv.fr' }),
     create.getOnePsy({ personalEmail: 'construction@beta.gouv.fr', state: DossierState.enConstruction }),
     create.getOnePsy({ personalEmail: 'refuse@beta.gouv.fr', state: DossierState.refuse }),
+    ...Array.from({ length: NB_ADDITIONAL_PSYS }, () => create.getOnePsy({
+    })),
   ];
 
   await knex(psychologistsTable).insert(psyList);
