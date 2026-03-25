@@ -186,11 +186,11 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
               </div>
             ))}
 
-            {!isLoading &&
-              suggestions.length === 0 &&
-              internalLabel &&
-              internalLabel.length >= 2 &&
-              internalLabel !== AROUND_ME && <div className={styles.addressOption}>Aucun résultat</div>}
+            {!isLoading
+              && suggestions.length === 0
+              && internalLabel
+              && internalLabel.length >= 2
+              && internalLabel !== AROUND_ME && <div className={styles.addressOption}>Aucun résultat</div>}
           </div>
         )}
       </div>
