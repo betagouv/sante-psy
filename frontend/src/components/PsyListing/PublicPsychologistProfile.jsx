@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { Alert, Badge, Button } from "@dataesr/react-dsfr";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { Alert, Badge, Button } from '@dataesr/react-dsfr';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
-import Page from "components/Page/Page";
-import Notification from "components/Notification/Notification";
+import Page from 'components/Page/Page';
+import Notification from 'components/Notification/Notification';
 
-import agent from "services/agent";
-import string from "services/string";
-import distance from "services/distance";
+import agent from 'services/agent';
+import string from 'services/string';
+import distance from 'services/distance';
 
-import styles from "./publicPsychologistProfile.cssmodule.scss";
+import styles from './publicPsychologistProfile.cssmodule.scss';
 
-const getZoomLevel = (psychologist) => {
+const getZoomLevel = psychologist => {
   if (!psychologist.otherLongitude || !psychologist.otherLatitude) {
     return 13;
   }
@@ -49,14 +49,14 @@ const PublicPsychologistProfile = () => {
   useEffect(() => {
     setError();
     agent.Psychologist.getProfile(psyId)
-      .then((response) => {
+      .then(response => {
         setPsychologist(response);
         if (__MATOMO__) {
-          _paq.push(["trackEvent", "PsychologistProfile", "View", psyId]);
+          _paq.push(['trackEvent', 'PsychologistProfile', 'View', psyId]);
         }
       })
       .catch(() => {
-        setError("Impossible de trouver les informations pour ce psychologue");
+        setError('Impossible de trouver les informations pour ce psychologue');
       });
   }, [psyId]);
 
@@ -91,8 +91,8 @@ const PublicPsychologistProfile = () => {
   return (
     <Page
       breadCrumbs={[
-        { href: "/", label: "Accueil" },
-        { href: "/trouver-un-psychologue", label: "Trouver un psychologue" },
+        { href: '/', label: 'Accueil' },
+        { href: '/trouver-un-psychologue', label: 'Trouver un psychologue' },
       ]}
       currentBreadCrumb={psychologist && `${psychologist.firstNames} ${psychologist.lastName.toUpperCase()}`}
       title={<b>Psychologue</b>}
@@ -130,7 +130,7 @@ const PublicPsychologistProfile = () => {
                   secondary
                   onClick={() => {
                     if (__MATOMO__) {
-                      _paq.push(["trackEvent", "PsychologistProfile", "Contact", "phone"]);
+                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'phone']);
                     }
                     window.location.href = `tel:${psychologist.phone}`;
                   }}
@@ -148,7 +148,7 @@ const PublicPsychologistProfile = () => {
                   secondary
                   onClick={() => {
                     if (__MATOMO__) {
-                      _paq.push(["trackEvent", "PsychologistProfile", "Contact", "email"]);
+                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'email']);
                     }
                     window.location.href = `mailto:${psychologist.email}`;
                   }}
@@ -178,9 +178,9 @@ const PublicPsychologistProfile = () => {
                   secondary
                   onClick={() => {
                     if (__MATOMO__) {
-                      _paq.push(["trackEvent", "PsychologistProfile", "Contact", "website"]);
+                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'website']);
                     }
-                    window.open(string.prefixUrl(psychologist.website), "_blank");
+                    window.open(string.prefixUrl(psychologist.website), '_blank');
                   }}
                   icon="ri-link"
                 />
@@ -192,31 +192,32 @@ const PublicPsychologistProfile = () => {
                   <h5>Prendre rendez-vous</h5>
                   <p>Directement en ligne</p>
                 </div>
-                {window.innerWidth <= 769 ?
+                {window.innerWidth <= 769 ? (
                   <Button
                     secondary
                     onClick={() => {
                       if (__MATOMO__) {
-                        _paq.push(["trackEvent", "PsychologistProfile", "Contact", "appointment"]);
+                        _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
                       }
-                      window.open(string.prefixUrl(psychologist.appointmentLink), "_blank");
+                      window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
                     }}
                     icon="ri-calendar-fill"
                   >
                     RDV
                   </Button>
-                : <Button
+                ) : (
+                  <Button
                     secondary
                     onClick={() => {
                       if (__MATOMO__) {
-                        _paq.push(["trackEvent", "PsychologistProfile", "Contact", "appointment"]);
+                        _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
                       }
-                      window.open(string.prefixUrl(psychologist.appointmentLink), "_blank");
+                      window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
                     }}
                   >
                     Prendre rendez-vous
                   </Button>
-                }
+                )}
               </div>
             )}
             <Alert
