@@ -8,14 +8,7 @@ import styles from './addressAutocomplete.cssmodule.scss';
 
 const AROUND_ME = 'Autour de moi';
 
-const AddressAutocomplete = ({
-  id,
-  label,
-  className,
-  selected,
-  onChange,
-  placeholder,
-}) => {
+const AddressAutocomplete = ({ id, label, className, selected, onChange, placeholder }) => {
   const selectId = useRef(id || uuidv4());
   const optionsRef = useRef([]);
   const optionsContainerRef = useRef();
@@ -52,10 +45,7 @@ const AddressAutocomplete = ({
 
   useEffect(() => {
     if (arrowSelected !== null && optionsContainerRef.current && optionsRef.current[arrowSelected]) {
-      optionsContainerRef.current.scrollTop = Math.max(
-        0,
-        optionsRef.current[arrowSelected].current.offsetTop - 20,
-      );
+      optionsContainerRef.current.scrollTop = Math.max(0, optionsRef.current[arrowSelected].current.offsetTop - 20);
     } else if (optionsContainerRef.current) {
       optionsContainerRef.current.scrollTop = 0;
     }
@@ -144,10 +134,7 @@ const AddressAutocomplete = ({
 
   return (
     <div className={className}>
-      <label
-        className="fr-label"
-        htmlFor={selectId.current}
-      >
+      <label className="fr-label" htmlFor={selectId.current}>
         {label}
       </label>
       <div className={styles.addressAutocomplete}>
@@ -167,16 +154,11 @@ const AddressAutocomplete = ({
         />
 
         {!isValidSelection && internalLabel && internalLabel !== AROUND_ME && !showOptions && (
-          <p className="fr-error-text">
-            Veuillez sélectionner une option dans la liste
-          </p>
+          <p className="fr-error-text">Veuillez sélectionner une option dans la liste</p>
         )}
 
         {showOptions && (
-          <div
-            ref={optionsContainerRef}
-            className={styles.addressOptions}
-          >
+          <div ref={optionsContainerRef} className={styles.addressOptions}>
             {isLoading && (
               <div className={styles.addressOption}>
                 <span className="fr-icon-refresh-line" aria-hidden="true" />
@@ -196,29 +178,19 @@ const AddressAutocomplete = ({
               >
                 <div className={styles.addressLabel}>
                   {option.label}
-                  {option.type === 'region' && (
-                    <span className={styles.addressType}> (région)</span>
-                  )}
-                  {option.type === 'departement' && (
-                    <span className={styles.addressType}> (département)</span>
-                  )}
-                  {option.type === 'municipality' && (
-                    <span className={styles.addressType}> (ville)</span>
-                  )}
+                  {option.type === 'region' && <span className={styles.addressType}> (région)</span>}
+                  {option.type === 'departement' && <span className={styles.addressType}> (département)</span>}
+                  {option.type === 'municipality' && <span className={styles.addressType}> (ville)</span>}
                 </div>
-                {option.context && (
-                  <div className={styles.addressContext}>
-                    {option.context}
-                  </div>
-                )}
+                {option.context && <div className={styles.addressContext}>{option.context}</div>}
               </div>
             ))}
 
-            {!isLoading && suggestions.length === 0 && internalLabel && internalLabel.length >= 2 && internalLabel !== AROUND_ME && (
-              <div className={styles.addressOption}>
-                Aucun résultat
-              </div>
-            )}
+            {!isLoading &&
+              suggestions.length === 0 &&
+              internalLabel &&
+              internalLabel.length >= 2 &&
+              internalLabel !== AROUND_ME && <div className={styles.addressOption}>Aucun résultat</div>}
           </div>
         )}
       </div>
