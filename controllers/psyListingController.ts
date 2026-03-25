@@ -74,7 +74,7 @@ const getAllActive = async (
   }
 
   const filtersForDb = { ...psychologistFilters };
-  if (psychologistFilters.address && !psychologistFilters.coords) {
+  if ((psychologistFilters.address && !psychologistFilters.coords) || psychologistFilters.coords) {
     delete filtersForDb.address;
   }
 
