@@ -47,7 +47,7 @@ const preprocessFilters = (filters: PsychologistFilters): PsychologistFilters =>
     processedFilters.address = cleanValue(filters.address);
   }
   if (filters.coords) {
-    processedFilters.coords = cleanValue(filters.coords);
+    processedFilters.coords = filters.coords;
   }
   if (filters.language) {
     processedFilters.language = cleanValue(filters.language);
