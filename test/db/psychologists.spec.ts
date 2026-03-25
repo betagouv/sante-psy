@@ -260,7 +260,10 @@ describe('DB Psychologists', () => {
     });
 
     it("should return undefined if we dont use 'personalEmail' but 'email' as the login", async () => {
-      const psy = await create.insertOnePsy();
+      const psy = await create.insertOnePsy({
+        personalEmail: 'personal.email@email.com',
+      });
+      // psy.email won't match personalEmail
       const unknownPsy = await dbPsychologists.getAcceptedByEmail(psy.email);
       assert.isUndefined(unknownPsy);
     });
