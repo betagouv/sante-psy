@@ -1,0 +1,61 @@
+.addressAutocomplete {
+  position: relative;
+}
+
+.addressOptions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid var(--border-default-grey);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.addressOption {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-default-grey-hover);
+  transition: background-color 0.2s;
+}
+
+.addressOption:last-child {
+  border-bottom: none;
+}
+
+.addressOption:hover,
+.addressOptionSelected {
+  background-color: var(--background-default-grey-hover);
+}
+
+.addressLabel {
+  font-weight: 500;
+  color: var(--text-title-grey);
+}
+
+.addressType {
+  font-weight: 400;
+  color: var(--text-mention-grey);
+  font-size: 0.875rem;
+}
+
+.addressContext {
+  font-size: 0.875rem;
+  color: var(--text-mention-grey);
+  margin-top: 2px;
+}
+
+.addressOption .fr-icon-refresh-line {
+  margin-right: 8px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

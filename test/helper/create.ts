@@ -15,6 +15,7 @@ import db from '../../db/db';
 import { University } from '../../types/University';
 import { allGenders } from '../../types/Genders';
 import { Student } from '../../types/Student';
+import geo from '../../utils/geo';
 
 faker.locale = 'fr';
 
@@ -49,6 +50,11 @@ const languages = [
   'Français, Anglais parlé, mais pas langue maternelle',
 ];
 
+const knownCoords = [
+  [-1.68186449, 48.11197912], // rennes
+  [2.333333, 48.866667], // paris
+];
+
 const getRandomInt = (): string => {
   const ourRandom = faker.datatype.number({ min: 1, max: 99 });
   if (ourRandom < 10) {
@@ -75,73 +81,76 @@ const getEmailFromNames = (firstNames, lastName): string => `${[firstNames, last
   .normalize('NFKD')
   .replace(/[^\w.@-]/g, '');
 
-const getAddress = (): {
-  address: string,
-  departement: string,
-  region: string,
-  longitude: number,
-  latitude: number,
-  city: string,
-  postcode: string,
-  otherAddress?: string,
-  otherLongitude?: number,
-  otherLatitude?: number,
-  otherCity?: string,
-  otherPostcode?: string,
-} => {
+type AddressElements = {
+  streetAddress: string;
+  city: string;
+  postcode: string;
+  longitude: number;
+  latitude: number;
+}
+const getRandomAddressElements = (): AddressElements => {
+  const streetAddress = faker.address.streetAddress();
+  const city = faker.address.city();
+  const postcode = faker.address.zipCode();
+  const [longitude, latitude] = faker.helpers.arrayElement(knownCoords);
+  return {
+    streetAddress,
+    city,
+    postcode,
+    longitude,
+    latitude,
+  };
+};
+type Address = {
+  address: string;
+  departement: string;
+  region: string;
+  city: string;
+  postcode: string;
+  longitude: number;
+  latitude: number;
+  otherAddress?: string;
+  otherLongitude?: number;
+  otherLatitude?: number;
+  otherCity?: string;
+  otherPostcode?: string;
+};
+
+const getAddress = (): Address => {
+  const {
+    streetAddress, city, postcode, longitude, latitude,
+  } = getRandomAddressElements();
+
+  const [departement, region] = faker.helpers.arrayElement(Object.entries(geo.departementToRegion));
+  let ret: Address = {
+    address: `${streetAddress} ${postcode} ${city}`,
+    departement,
+    region,
+    city,
+    postcode,
+    longitude,
+    latitude,
+  };
   const rand = faker.datatype.number() % 5;
-  switch (rand) {
-    case 0:
-      return {
-        address: `${getRandomInt()} avenue de segur 75007 paris`,
-        departement: '75 - Paris',
-        region: 'Ile-de-France',
-        longitude: 2.30888,
-        latitude: 48.85057,
-        city: 'paris',
-        postcode: '75007',
-      };
-    case 1:
-      return {
-        address: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
-        departement: '33 - Gironde',
-        region: 'Nouvelle-Aquitaine',
-        longitude: -0.57571,
-        latitude: 44.84866,
-        city: 'Bordeaux',
-        postcode: '33000',
-        otherAddress: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
-        otherLongitude: -0.57581,
-        otherLatitude: 44.84846,
-        otherCity: 'Bordeaux',
-        otherPostcode: '33000',
-      };
-    case 2:
-      return {
-        address: `${getRandomInt()} Boulevard Maréchal Foch 38100 Grenoble`,
-        departement: '38 - Isère',
-        region: 'Auvergne-Rhône-Alpes',
-        longitude: 5.72005,
-        latitude: 45.17954,
-        city: 'Grenoble',
-        postcode: '38100',
-        otherAddress: `${getRandomInt()} cours de verdun, 33000, Bordeaux`,
-        otherLongitude: -0.57581,
-        otherLatitude: 44.84846,
-        otherCity: 'Bordeaux',
-        otherPostcode: '33000',
-      };
-    default:
-      return {
-        address: `${faker.address.streetAddress()} ${faker.address.zipCode('#####')} ${faker.address.city()}`,
-        departement: '14 - Calvados',
-        region: 'Normandie',
-        longitude: -0.07308,
-        latitude: 49.126301,
-        city: null,
-        postcode: null,
-      };
+  if (rand === 0) {
+    const {
+      streetAddress: otherStreetAddress,
+      city: otherCity,
+      postcode: otherPostcode,
+      longitude: otherLongitude,
+      latitude: otherLatitude,
+    } = getRandomAddressElements();
+    ret = {
+      ...ret,
+      otherAddress: `${otherStreetAddress} ${otherPostcode} ${otherCity}`,
+      otherLongitude,
+      otherLatitude,
+      otherCity,
+      otherPostcode,
+
+    };
   }
+  return ret;
 };
 
 // faker can give address with accent wich are not considered as valid...
@@ -177,13 +186,13 @@ const getOneUniversity = (name: string): University => ({
 });
 
 const getOnePsy = (psychologist: Partial<Psychologist> = {}): Psychologist => {
-  const dossierNumber = uuid.generateFromString(
-    `psychologist-${psychologist.personalEmail || 'loginemail@beta.gouv.fr'}`,
-  );
-
   const firstNames = getFirstNames();
   const lastName = faker.name.lastName();
   const email = getEmailFromNames(firstNames, lastName);
+
+  const dossierNumber = uuid.generateFromString(
+    `psychologist-${psychologist.personalEmail || email}`,
+  );
   return {
     dossierNumber,
     title: 'Mme',
@@ -196,7 +205,7 @@ const getOnePsy = (psychologist: Partial<Psychologist> = {}): Psychologist => {
     diplomaYear: '2020',
     phone: faker.phone.number('0# ## ## ## ##'),
     email,
-    personalEmail: 'loginemail@beta.gouv.fr',
+    personalEmail: email,
     website: getFakeAddress(),
     appointmentLink: getFakeAddress(),
     teleconsultation: faker.datatype.boolean(),
