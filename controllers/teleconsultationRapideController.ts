@@ -42,8 +42,12 @@ const getFastestTeleconsultation = async (_req: Request, res: Response): Promise
     return;
   }
 
-  // Cache frais (< 15 min) : on vérifie que les 5 créneaux existent encore
-  const verified = await verifySlots(top5);
+  // Cache frais (< 15 min) : on vérifie que les 5 créneaux existent encore.
+  // verifySlots met à jour le cache (nextSlot = null pour les créneaux expirés).
+  // On relit ensuite getTop5() pour que les psys sans créneau soient automatiquement
+  // remplacés par les suivants dans le cache (ex. : si le #3 n'a plus de dispo,
+  // le #6 remonte à sa place).
+  await verifySlots(top5);
 
   if (isDoctolibBlocked()) {
     // La vérification a détecté un blocage : on renvoie le cache tel quel
@@ -51,7 +55,8 @@ const getFastestTeleconsultation = async (_req: Request, res: Response): Promise
     return;
   }
 
-  res.json({ results: verified, stale: false, blocked: false });
+  const results = await teleconsultationCache.getTop5();
+  res.json({ results, stale: false, blocked: false });
 };
 
 export default { getFastestTeleconsultation };
