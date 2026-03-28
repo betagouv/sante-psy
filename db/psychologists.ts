@@ -448,9 +448,24 @@ const seeTutorial = async (dossierNumber: string): Promise<number> => {
   }
 };
 
+const getAllAcceptedWithTeleconsultation = async (): Promise<Psychologist[]> => {
+  try {
+    return db(psychologistsTable)
+      .where('state', DossierState.accepte)
+      .where('teleconsultation', true)
+      .whereNotNull('appointmentLink')
+      .whereNot('appointmentLink', '')
+      .select('dossierNumber', 'firstNames', 'lastName', 'appointmentLink', 'website');
+  } catch (err) {
+    console.error('Impossible de récupérer les psychologistes avec téléconsultation', err);
+    throw new Error('Impossible de récupérer les psychologistes avec téléconsultation');
+  }
+};
+
 export default {
   getAllActive,
   getAllActiveByAvailability,
+  getAllAcceptedWithTeleconsultation,
   getById,
   getAcceptedByEmail,
   getNotYetAcceptedByEmail,
