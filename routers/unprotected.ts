@@ -13,6 +13,7 @@ import contactController from '../controllers/contactController';
 import studentNewsletterController from '../controllers/studentNewsletterController';
 import studentSignInController from '../controllers/studentSignInController';
 import uploadCertificate from '../middlewares/uploadCertificate';
+import teleconsultationRapideController from '../controllers/teleconsultationRapideController';
 
 const router = express.Router();
 
@@ -138,6 +139,9 @@ router.get(
 );
 // The other route is open to the public to get all psys (do not delete !)
 router.get('/trouver-un-psychologue', psyListingController.getFullActive);
+
+// Fastest teleconsultation availability
+router.get('/teleconsultation-rapide', teleconsultationRapideController.getFastestTeleconsultation);
 
 router.get('/statistics', statisticsController.getAll);
 router.get('/psychologist/:psyId', psyProfileController.getValidators, psyProfileController.get);
