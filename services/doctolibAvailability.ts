@@ -282,8 +282,8 @@ export const runFullRefresh = async (): Promise<void> => {
  * Retourne true si un blocage Cloudflare a été détecté.
  */
 export const verifySlots = async (): Promise<boolean> => {
-  // On charge plus de lignes que nécessaire pour avoir un buffer si des slots sont pris
-  const candidates = await teleconsultationSlots.getTopN(30);
+  // Liste plate (multi-créneaux par psy) pour naviguer les slots pris sans appel Doctolib
+  const candidates = await teleconsultationSlots.getFlatTopN(30);
 
   // verifiedPsys[psyId] = nextSlot retourné par Doctolib lors de cette passe
   const verifiedPsys = new Map<string, string | null>();

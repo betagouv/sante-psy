@@ -10,8 +10,29 @@ export type SlotEntry = {
   lastFullRefreshAt: Date | null;
 };
 
-/** Retourne les N prochains créneaux futurs triés par date croissante (liste plate). */
-const getTopN = async (n: number): Promise<SlotEntry[]> => db(teleconsultationSlotsTable)
+/**
+ * Retourne les N psys avec le créneau le plus tôt, triés par date croissante.
+ * Un seul créneau par psy (le plus proche) — utilise DISTINCT ON PostgreSQL.
+ */
+const getTopN = async (n: number): Promise<SlotEntry[]> => db
+  .with('earliest', qb =>
+    qb
+      .distinctOn('psychologistId')
+      .from(teleconsultationSlotsTable)
+      .where('slotDatetime', '>=', new Date())
+      .orderBy('psychologistId')
+      .orderBy('slotDatetime', 'asc'),
+  )
+  .select('*')
+  .from('earliest')
+  .orderBy('slotDatetime', 'asc')
+  .limit(n);
+
+/**
+ * Retourne tous les créneaux futurs triés par date croissante (liste plate, multi-psy).
+ * Utilisé en interne par le service de vérification.
+ */
+const getFlatTopN = async (n: number): Promise<SlotEntry[]> => db(teleconsultationSlotsTable)
   .where('slotDatetime', '>=', new Date())
   .orderBy('slotDatetime', 'asc')
   .limit(n);
@@ -81,6 +102,7 @@ const deleteAll = async (): Promise<void> => {
 
 export default {
   getTopN,
+  getFlatTopN,
   getSlotCount,
   getLastFullRefreshAt,
   replaceSlots,
