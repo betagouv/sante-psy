@@ -1,74 +1,90 @@
-import { teleconsultationCacheTable } from './tables';
+import { teleconsultationSlotsTable } from './tables';
 import db from './db';
 
-export type CacheEntry = {
+export type SlotEntry = {
   id: number;
   psychologistId: string;
   psychologistName: string;
   doctolibUrl: string;
-  nextSlot: Date | null;
-  lastSlotCheckedAt: Date | null;
+  slotDatetime: Date;
   lastFullRefreshAt: Date | null;
 };
 
-const getTop5 = async (): Promise<CacheEntry[]> => db(teleconsultationCacheTable)
-  .whereNotNull('nextSlot')
-  .where('nextSlot', '>=', new Date())
-  .orderBy('nextSlot', 'asc')
-  .limit(5);
+/** Retourne les N prochains créneaux futurs triés par date croissante (liste plate). */
+const getTopN = async (n: number): Promise<SlotEntry[]> => db(teleconsultationSlotsTable)
+  .where('slotDatetime', '>=', new Date())
+  .orderBy('slotDatetime', 'asc')
+  .limit(n);
 
-const getLastFullRefreshAt = async (): Promise<Date | null> => {
-  const row = await db(teleconsultationCacheTable)
-    .whereNotNull('lastFullRefreshAt')
-    .orderBy('lastFullRefreshAt', 'desc')
-    .select('lastFullRefreshAt')
+/** Retourne le nombre de créneaux futurs en cache pour un psy donné. */
+const getSlotCount = async (psychologistId: string): Promise<number> => {
+  const row = await db(teleconsultationSlotsTable)
+    .where({ psychologistId })
+    .where('slotDatetime', '>=', new Date())
+    .count('id as count')
     .first();
-  return row ? row.lastFullRefreshAt : null;
+  return Number(row?.count ?? 0);
 };
 
-const upsertSlot = async (
+/** Timestamp du dernier refresh complet (max de lastFullRefreshAt sur toute la table). */
+const getLastFullRefreshAt = async (): Promise<Date | null> => {
+  const row = await db(teleconsultationSlotsTable)
+    .whereNotNull('lastFullRefreshAt')
+    .max('lastFullRefreshAt as lastFullRefreshAt')
+    .first();
+  return row?.lastFullRefreshAt ?? null;
+};
+
+/**
+ * Remplace tous les créneaux d'un psy par les nouveaux slots fournis.
+ * Si `isFullRefresh` est true, renseigne lastFullRefreshAt sur chaque ligne insérée.
+ */
+const replaceSlots = async (
   psychologistId: string,
   psychologistName: string,
   doctolibUrl: string,
-  nextSlot: string | null,
+  slots: string[],
   isFullRefresh = false,
 ): Promise<void> => {
-  const existing = await db(teleconsultationCacheTable)
-    .where({ psychologistId })
-    .first();
+  await db(teleconsultationSlotsTable).where({ psychologistId }).delete();
+
+  if (slots.length === 0) return;
 
   const now = new Date();
-  const updateData: Record<string, unknown> = {
+  const rows = slots.map(slot => ({
+    psychologistId,
     psychologistName,
     doctolibUrl,
-    nextSlot: nextSlot || null,
-    lastSlotCheckedAt: now,
+    slotDatetime: new Date(slot),
+    lastFullRefreshAt: isFullRefresh ? now : null,
+    created_at: now,
     updated_at: now,
-  };
-  if (isFullRefresh) {
-    updateData.lastFullRefreshAt = now;
-  }
+  }));
 
-  if (existing) {
-    await db(teleconsultationCacheTable)
-      .where({ psychologistId })
-      .update(updateData);
-  } else {
-    await db(teleconsultationCacheTable).insert({
-      psychologistId,
-      ...updateData,
-      created_at: now,
-    });
-  }
+  await db(teleconsultationSlotsTable).insert(rows);
 };
 
+/** Supprime un créneau précis par son id (créneau confirmé comme pris). */
+const deleteSlot = async (id: number): Promise<void> => {
+  await db(teleconsultationSlotsTable).where({ id }).delete();
+};
+
+/** Supprime tous les créneaux d'un psy (compteur tombé à 0 ou profil introuvable). */
+const deleteAllForPsy = async (psychologistId: string): Promise<void> => {
+  await db(teleconsultationSlotsTable).where({ psychologistId }).delete();
+};
+
+/** Vide entièrement la table (avant un refresh complet). */
 const deleteAll = async (): Promise<void> => {
-  await db(teleconsultationCacheTable).delete();
+  await db(teleconsultationSlotsTable).delete();
 };
 
 export default {
-  getTop5,
+  getTopN,
+  getSlotCount,
   getLastFullRefreshAt,
-  upsertSlot,
+  replaceSlots,
+  deleteSlot,
+  deleteAllForPsy,
   deleteAll,
 };

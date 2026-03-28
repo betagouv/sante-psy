@@ -8,20 +8,26 @@
  * Détection de blocage : si >= 80 % des 10 premières requêtes SSF d'un refresh
  * retournent 403, on positionne doctolibBlocked = true. Le flag se réinitialise
  * au prochain refresh complet si les requêtes repassent.
+ *
+ * Cache multi-créneaux : pour chaque psy, on stocke TOUS les créneaux retournés
+ * par l'API (limit=5 jours). La vérification itère la liste plate triée par date ;
+ * un appel Doctolib n'est fait qu'au premier contact avec un psy par passe. Si le
+ * compteur d'un psy tombe à 0, on le re-fetche immédiatement.
  */
 
 import dbPsychologists from '../db/psychologists';
-import teleconsultationCache, { CacheEntry } from '../db/teleconsultationCache';
+import teleconsultationSlots from '../db/teleconsultationCache';
 import { Psychologist } from '../types/Psychologist';
 
 const DOCTOLIB_BASE = 'https://www.doctolib.fr';
 const SSF_URL = `${DOCTOLIB_BASE}/online_booking/api/slot_selection_funnel/v1/info.json`;
 const AVAIL_URL = `${DOCTOLIB_BASE}/availabilities.json`;
 const RATE_MS = 250; // ~4 req/s
+const AVAIL_DAYS_LIMIT = 5; // jours de créneaux récupérés par psy
 
 /** Nombre de requêtes SSF initiales utilisées pour détecter un blocage Cloudflare. */
 const BLOCK_SAMPLE_SIZE = 10;
-/** Proportion d'échecs (403/429/réseau) déclenchant le flag de blocage. */
+/** Proportion d'échecs (403/429) déclenchant le flag de blocage. */
 const BLOCK_THRESHOLD = 0.8;
 
 const HEADERS: Record<string, string> = {
@@ -47,11 +53,7 @@ const throttledFetch = async (url: string, signal?: AbortSignal): Promise<Respon
   const now = Date.now();
   const wait = Math.max(0, nextAllowedAt - now);
   nextAllowedAt = Math.max(now, nextAllowedAt) + RATE_MS;
-
-  if (wait > 0) {
-    await new Promise<void>(resolve => setTimeout(resolve, wait));
-  }
-
+  if (wait > 0) await new Promise<void>(resolve => setTimeout(resolve, wait));
   return fetch(url, { headers: HEADERS, signal });
 };
 
@@ -70,7 +72,6 @@ type PsyWithLink = {
   doctolibUrl: string;
 };
 
-/** Résultat d'un appel SSF : null si échec, avec un flag `blocked` si c'est un 403/429. */
 type MetaResult =
   | { meta: DoctolibMeta; blocked: false }
   | { meta: null; blocked: boolean };
@@ -91,7 +92,7 @@ const extractDoctolibUrl = (
   return null;
 };
 
-// ── Étape 1 : métadonnées Doctolib (agenda + motif téléconsultation) ─────────
+// ── Étape 1 : métadonnées Doctolib ───────────────────────────────────────────
 
 const fetchDoctolibMetaWithBlockInfo = async (
   doctolibUrl: string,
@@ -102,12 +103,8 @@ const fetchDoctolibMetaWithBlockInfo = async (
     const url = `${SSF_URL}?profile_slug=${encodeURIComponent(slug)}&locale=fr`;
     const resp = await throttledFetch(url, signal);
 
-    if (resp.status === 403 || resp.status === 429) {
-      return { meta: null, blocked: true };
-    }
-    if (!resp.ok) {
-      return { meta: null, blocked: false };
-    }
+    if (resp.status === 403 || resp.status === 429) return { meta: null, blocked: true };
+    if (!resp.ok) return { meta: null, blocked: false };
 
     const data = await resp.json();
     const root = data.data ?? data;
@@ -136,17 +133,54 @@ const fetchDoctolibMetaWithBlockInfo = async (
   }
 };
 
-export const fetchDoctolibMeta = async (
-  doctolibUrl: string,
+// ── Étape 2 : tous les créneaux disponibles ───────────────────────────────────
+
+/**
+ * Retourne tous les créneaux disponibles pour un psy (sur AVAIL_DAYS_LIMIT jours),
+ * triés par date croissante, dédupliqués.
+ */
+const fetchAllSlots = async (
+  meta: DoctolibMeta,
   signal?: AbortSignal,
-): Promise<DoctolibMeta | null> => {
-  const result = await fetchDoctolibMetaWithBlockInfo(doctolibUrl, signal);
-  return result.meta;
+): Promise<string[]> => {
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const params = new URLSearchParams({
+      start_date: today,
+      visit_motive_ids: String(meta.visitMotiveId),
+      agenda_ids: meta.agendaIds,
+      practice_ids: String(meta.practiceId),
+      telehealth: 'true',
+      insurance_sector: 'public',
+      limit: String(AVAIL_DAYS_LIMIT),
+    });
+
+    const resp = await throttledFetch(`${AVAIL_URL}?${params.toString()}`, signal);
+    if (!resp.ok) return [];
+
+    const data = await resp.json();
+
+    // Collecte tous les slots depuis data.availabilities[].slots[]
+    const slots = new Set<string>();
+    for (const day of (data.availabilities ?? []) as Array<{ slots?: string[] }>) {
+      for (const slot of (day.slots ?? [])) {
+        slots.add(slot);
+      }
+    }
+    // Inclut next_slot au cas où il ne serait pas dans availabilities
+    if (data.next_slot) slots.add(data.next_slot as string);
+
+    return [...slots].sort();
+  } catch {
+    return [];
+  }
 };
 
-// ── Étape 2 : prochain créneau disponible ─────────────────────────────────────
-
-export const fetchNextSlot = async (
+/**
+ * Version "premier créneau seulement" utilisée lors de la vérification pour
+ * savoir quel est le prochain créneau réel (sans stocker les suivants).
+ */
+const fetchNextSlotOnly = async (
   meta: DoctolibMeta,
   signal?: AbortSignal,
 ): Promise<string | null> => {
@@ -159,17 +193,27 @@ export const fetchNextSlot = async (
       practice_ids: String(meta.practiceId),
       telehealth: 'true',
       insurance_sector: 'public',
-      limit: '3',
+      limit: '1',
     });
-
     const resp = await throttledFetch(`${AVAIL_URL}?${params.toString()}`, signal);
     if (!resp.ok) return null;
-
     const data = await resp.json();
     return (data.next_slot as string) ?? null;
   } catch {
     return null;
   }
+};
+
+// ── Re-fetch d'un seul psy (compteur tombé à 0) ───────────────────────────────
+
+const refetchOnePsy = async (psy: PsyWithLink): Promise<void> => {
+  const name = `${psy.lastName} ${psy.firstNames}`.trim();
+  const result = await fetchDoctolibMetaWithBlockInfo(psy.doctolibUrl);
+  if (!result.meta) return;
+  const slots = await fetchAllSlots(result.meta);
+  await teleconsultationSlots.replaceSlots(
+    psy.dossierNumber, name, psy.doctolibUrl, slots, false,
+  );
 };
 
 // ── Refresh complet (toutes les psys avec lien Doctolib) ─────────────────────
@@ -196,9 +240,8 @@ export const runFullRefresh = async (): Promise<void> => {
       })
       .filter((p): p is PsyWithLink => p !== null);
 
-    await teleconsultationCache.deleteAll();
+    await teleconsultationSlots.deleteAll();
 
-    // ── Détection de blocage sur les N premiers appels ──────────────────────
     let sampleBlocked = 0;
     let sampleTotal = 0;
 
@@ -206,83 +249,125 @@ export const runFullRefresh = async (): Promise<void> => {
       const name = `${psy.lastName} ${psy.firstNames}`.trim();
       const result = await fetchDoctolibMetaWithBlockInfo(psy.doctolibUrl);
 
-      // Mise à jour de l'échantillon de détection
+      // Détection de blocage sur les N premiers appels
       if (sampleTotal < BLOCK_SAMPLE_SIZE) {
         sampleTotal += 1;
         if (result.blocked) sampleBlocked += 1;
-
         if (sampleTotal === BLOCK_SAMPLE_SIZE) {
-          // Décision finale sur le blocage
           doctolibBlocked = sampleBlocked / BLOCK_SAMPLE_SIZE >= BLOCK_THRESHOLD;
-          if (doctolibBlocked) {
-            // Inutile de continuer le scan si Doctolib bloque
-            return;
-          }
+          if (doctolibBlocked) return;
         }
       }
 
-      if (!result.meta) {
-        await teleconsultationCache.upsertSlot(
-          psy.dossierNumber, name, psy.doctolibUrl, null, true,
-        );
-        continue;
-      }
+      if (!result.meta) continue;
 
-      const slot = await fetchNextSlot(result.meta);
-      await teleconsultationCache.upsertSlot(
-        psy.dossierNumber, name, psy.doctolibUrl, slot, true,
+      const slots = await fetchAllSlots(result.meta);
+      await teleconsultationSlots.replaceSlots(
+        psy.dossierNumber, name, psy.doctolibUrl, slots, true,
       );
     }
 
-    // Refresh terminé sans blocage détecté
     doctolibBlocked = false;
   } finally {
     refreshRunning = false;
   }
 };
 
-// ── Vérification des créneaux du top 5 en cache ───────────────────────────────
+// ── Vérification de la liste plate (cache frais, < 15 min) ───────────────────
 
-export const verifySlots = async (entries: CacheEntry[]): Promise<CacheEntry[]> => {
-  const verified: CacheEntry[] = [];
+/**
+ * Parcourt la liste plate triée par date. Pour chaque psy rencontré la première fois,
+ * appelle Doctolib une seule fois. Les créneaux pris sont supprimés du cache.
+ * Si le compteur d'un psy tombe à 0, il est immédiatement re-fetché.
+ * Retourne true si un blocage Cloudflare a été détecté.
+ */
+export const verifySlots = async (): Promise<boolean> => {
+  // On charge plus de lignes que nécessaire pour avoir un buffer si des slots sont pris
+  const candidates = await teleconsultationSlots.getTopN(30);
+
+  // verifiedPsys[psyId] = nextSlot retourné par Doctolib lors de cette passe
+  const verifiedPsys = new Map<string, string | null>();
   let blockedCount = 0;
 
-  for (const entry of entries) {
-    if (!entry.nextSlot) {
-      verified.push({ ...entry, nextSlot: null });
-      continue;
+  // Index de toutes les psys pour pouvoir re-fetcher (dossierNumber → PsyWithLink)
+  // On construit un Map paresseux depuis les entrées du cache
+  const psyIndex = new Map<string, { dossierNumber: string; firstNames: string; lastName: string; doctolibUrl: string }>();
+  for (const entry of candidates) {
+    if (!psyIndex.has(entry.psychologistId)) {
+      psyIndex.set(entry.psychologistId, {
+        dossierNumber: entry.psychologistId,
+        firstNames: '',
+        lastName: entry.psychologistName,
+        doctolibUrl: entry.doctolibUrl,
+      });
     }
-
-    const result = await fetchDoctolibMetaWithBlockInfo(entry.doctolibUrl);
-
-    if (result.blocked) {
-      blockedCount += 1;
-      // On conserve le créneau en cache sans le modifier
-      verified.push(entry);
-      continue;
-    }
-
-    if (!result.meta) {
-      // Profil introuvable (psy supprimé etc.) → on conserve le cache
-      verified.push(entry);
-      continue;
-    }
-
-    const slot = await fetchNextSlot(result.meta);
-    await teleconsultationCache.upsertSlot(
-      entry.psychologistId,
-      entry.psychologistName,
-      entry.doctolibUrl,
-      slot,
-      false,
-    );
-    verified.push({ ...entry, nextSlot: slot ? new Date(slot) : null });
   }
 
-  // Si tous les appels de vérification sont bloqués → flag
-  if (entries.length > 0 && blockedCount === entries.length) {
+  for (const entry of candidates) {
+    const psyId = entry.psychologistId;
+
+    if (verifiedPsys.has(psyId)) {
+      // Ce psy a déjà été vérifié cette passe — on se base sur nextSlot connu
+      const knownNext = verifiedPsys.get(psyId)!;
+      if (knownNext === null) {
+        await teleconsultationSlots.deleteSlot(entry.id);
+        continue;
+      }
+      if (entry.slotDatetime < new Date(knownNext)) {
+        // Ce créneau est antérieur au prochain connu de Doctolib → il a été pris
+        await teleconsultationSlots.deleteSlot(entry.id);
+        const count = await teleconsultationSlots.getSlotCount(psyId);
+        if (count === 0) {
+          const psyInfo = psyIndex.get(psyId);
+          if (psyInfo) await refetchOnePsy(psyInfo);
+        }
+      }
+      // Si slotDatetime >= knownNext → créneau encore valide, rien à faire
+    } else {
+      // Premier contact avec ce psy cette passe : appel Doctolib
+      const metaResult = await fetchDoctolibMetaWithBlockInfo(entry.doctolibUrl);
+
+      if (metaResult.blocked) {
+        blockedCount += 1;
+        verifiedPsys.set(psyId, entry.slotDatetime.toISOString()); // conservatif
+        continue;
+      }
+
+      if (!metaResult.meta) {
+        verifiedPsys.set(psyId, null);
+        await teleconsultationSlots.deleteAllForPsy(psyId);
+        continue;
+      }
+
+      const nextSlot = await fetchNextSlotOnly(metaResult.meta);
+      verifiedPsys.set(psyId, nextSlot);
+
+      if (nextSlot === null) {
+        await teleconsultationSlots.deleteAllForPsy(psyId);
+        continue;
+      }
+
+      if (entry.slotDatetime < new Date(nextSlot)) {
+        // Créneau pris
+        await teleconsultationSlots.deleteSlot(entry.id);
+        const count = await teleconsultationSlots.getSlotCount(psyId);
+        if (count === 0) {
+          const psyInfo = psyIndex.get(psyId);
+          if (psyInfo) await refetchOnePsy(psyInfo);
+        }
+      }
+      // Si slotDatetime >= nextSlot → créneau encore valide
+    }
+  }
+
+  // Si tous les appels ont été bloqués → flag global
+  const uniquePsysChecked = [...verifiedPsys.keys()].filter(
+    id => !verifiedPsys.get(id) || verifiedPsys.get(id) !== null,
+  ).length;
+  if (uniquePsysChecked > 0 && blockedCount === uniquePsysChecked) {
     doctolibBlocked = true;
+    return true;
   }
 
-  return verified.filter(e => e.nextSlot && e.nextSlot >= new Date());
+  return false;
 };

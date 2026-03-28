@@ -1,23 +1,32 @@
 import { Request, Response } from 'express';
-import teleconsultationCache from '../db/teleconsultationCache';
+import teleconsultationSlots from '../db/teleconsultationCache';
 import { runFullRefresh, verifySlots, isDoctolibBlocked } from '../services/doctolibAvailability';
 
 const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
+const RESULTS_COUNT = 5;
+
+/** Formate les SlotEntry en objet lisible par le frontend (slotDatetime → nextSlot). */
+const formatResults = (entries: Awaited<ReturnType<typeof teleconsultationSlots.getTopN>>) =>
+  entries.map(e => ({
+    psychologistId: e.psychologistId,
+    psychologistName: e.psychologistName,
+    doctolibUrl: e.doctolibUrl,
+    nextSlot: e.slotDatetime,
+  }));
 
 const getFastestTeleconsultation = async (_req: Request, res: Response): Promise<void> => {
-  // Si Doctolib bloque les requêtes serveur, on ne renvoie rien
+  // Si Doctolib bloque les requêtes serveur, on masque le bouton
   if (isDoctolibBlocked()) {
     res.json({ results: [], stale: false, blocked: true });
     return;
   }
 
-  const top5 = await teleconsultationCache.getTop5();
-  const lastRefreshAt = await teleconsultationCache.getLastFullRefreshAt();
-
+  const lastRefreshAt = await teleconsultationSlots.getLastFullRefreshAt();
   const isStale =
     !lastRefreshAt || Date.now() - new Date(lastRefreshAt).getTime() > CACHE_TTL_MS;
 
-  const isEmpty = top5.length === 0;
+  const topEntries = await teleconsultationSlots.getTopN(RESULTS_COUNT);
+  const isEmpty = topEntries.length === 0;
 
   if (isEmpty) {
     // Premier appel : on attend le refresh complet avant de répondre
@@ -28,35 +37,31 @@ const getFastestTeleconsultation = async (_req: Request, res: Response): Promise
       return;
     }
 
-    const results = await teleconsultationCache.getTop5();
-    res.json({ results, stale: false, blocked: false });
+    const results = await teleconsultationSlots.getTopN(RESULTS_COUNT);
+    res.json({ results: formatResults(results), stale: false, blocked: false });
     return;
   }
 
   if (isStale) {
-    // Cache périmé : on répond immédiatement avec les données en cache
-    // et on lance le refresh en arrière-plan
-    res.json({ results: top5, stale: true, blocked: false });
-    // fire-and-forget
+    // Cache périmé : réponse immédiate + refresh en arrière-plan
+    res.json({ results: formatResults(topEntries), stale: true, blocked: false });
     runFullRefresh().catch(err => console.error('Erreur refresh Doctolib en arrière-plan :', err));
     return;
   }
 
-  // Cache frais (< 15 min) : on vérifie que les 5 créneaux existent encore.
-  // verifySlots met à jour le cache (nextSlot = null pour les créneaux expirés).
-  // On relit ensuite getTop5() pour que les psys sans créneau soient automatiquement
-  // remplacés par les suivants dans le cache (ex. : si le #3 n'a plus de dispo,
-  // le #6 remonte à sa place).
-  await verifySlots(top5);
+  // Cache frais : vérification de la liste plate (supprime les créneaux pris,
+  // re-fetche les psys à compteur 0, met à jour le cache)
+  const blocked = await verifySlots();
 
-  if (isDoctolibBlocked()) {
-    // La vérification a détecté un blocage : on renvoie le cache tel quel
-    res.json({ results: top5, stale: false, blocked: true });
+  if (blocked) {
+    res.json({ results: formatResults(topEntries), stale: false, blocked: true });
     return;
   }
 
-  const results = await teleconsultationCache.getTop5();
-  res.json({ results, stale: false, blocked: false });
+  // Relit le top-5 après mise à jour : si un créneau est parti, son remplaçant
+  // (même psy ou autre psy) est automatiquement remonté
+  const results = await teleconsultationSlots.getTopN(RESULTS_COUNT);
+  res.json({ results: formatResults(results), stale: false, blocked: false });
 };
 
 export default { getFastestTeleconsultation };
