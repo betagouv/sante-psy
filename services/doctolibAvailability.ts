@@ -3,9 +3,11 @@
  * téléconsultation disponibles.
  *
  * Doctolib est protégé par Cloudflare. On tente les appels avec des en-têtes qui
- * ressemblent à ceux d'un vrai navigateur Chrome. Si le serveur de production
- * Scalingo est bloqué (403), les fonctions retournent null et le backend dégrade
- * gracieusement (affiche le lien Doctolib sans créneau).
+ * ressemblent à ceux d'un vrai navigateur Chrome.
+ *
+ * Détection de blocage : si >= 80 % des 10 premières requêtes SSF d'un refresh
+ * retournent 403, on positionne doctolibBlocked = true. Le flag se réinitialise
+ * au prochain refresh complet si les requêtes repassent.
  */
 
 import dbPsychologists from '../db/psychologists';
@@ -17,6 +19,11 @@ const SSF_URL = `${DOCTOLIB_BASE}/online_booking/api/slot_selection_funnel/v1/in
 const AVAIL_URL = `${DOCTOLIB_BASE}/availabilities.json`;
 const RATE_MS = 250; // ~4 req/s
 
+/** Nombre de requêtes SSF initiales utilisées pour détecter un blocage Cloudflare. */
+const BLOCK_SAMPLE_SIZE = 10;
+/** Proportion d'échecs (403/429/réseau) déclenchant le flag de blocage. */
+const BLOCK_THRESHOLD = 0.8;
+
 const HEADERS: Record<string, string> = {
   'User-Agent':
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
@@ -24,6 +31,13 @@ const HEADERS: Record<string, string> = {
   'Accept-Language': 'fr-FR,fr;q=0.9',
   Referer: `${DOCTOLIB_BASE}/`,
 };
+
+// ── Détection de blocage Cloudflare ──────────────────────────────────────────
+
+let doctolibBlocked = false;
+
+/** Retourne true si Doctolib bloque les requêtes serveur (Cloudflare WAF). */
+export const isDoctolibBlocked = (): boolean => doctolibBlocked;
 
 // ── Rate limiter (token bucket) ─────────────────────────────────────────────
 
@@ -56,6 +70,11 @@ type PsyWithLink = {
   doctolibUrl: string;
 };
 
+/** Résultat d'un appel SSF : null si échec, avec un flag `blocked` si c'est un 403/429. */
+type MetaResult =
+  | { meta: DoctolibMeta; blocked: false }
+  | { meta: null; blocked: boolean };
+
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 const extractSlug = (url: string): string => url.replace(/\/$/, '').split('/').pop() ?? '';
@@ -74,16 +93,21 @@ const extractDoctolibUrl = (
 
 // ── Étape 1 : métadonnées Doctolib (agenda + motif téléconsultation) ─────────
 
-export const fetchDoctolibMeta = async (
+const fetchDoctolibMetaWithBlockInfo = async (
   doctolibUrl: string,
   signal?: AbortSignal,
-): Promise<DoctolibMeta | null> => {
+): Promise<MetaResult> => {
   try {
     const slug = extractSlug(doctolibUrl);
     const url = `${SSF_URL}?profile_slug=${encodeURIComponent(slug)}&locale=fr`;
     const resp = await throttledFetch(url, signal);
 
-    if (!resp.ok) return null;
+    if (resp.status === 403 || resp.status === 429) {
+      return { meta: null, blocked: true };
+    }
+    if (!resp.ok) {
+      return { meta: null, blocked: false };
+    }
 
     const data = await resp.json();
     const root = data.data ?? data;
@@ -91,22 +115,33 @@ export const fetchDoctolibMeta = async (
     const visitMotives: Array<{ id: number; name: string; telehealth: boolean }> =
       root.visit_motives ?? [];
 
-    if (!agendas.length || !visitMotives.length) return null;
+    if (!agendas.length || !visitMotives.length) return { meta: null, blocked: false };
 
     const telehealth = visitMotives.filter(m => m.telehealth);
-    if (!telehealth.length) return null;
+    if (!telehealth.length) return { meta: null, blocked: false };
 
     const motive =
       telehealth.find(m => m.name.toLowerCase().includes('nouveau')) ?? telehealth[0];
 
     return {
-      agendaIds: agendas.map(a => a.id).join('-'),
-      practiceId: agendas[0].practice_id,
-      visitMotiveId: motive.id,
+      meta: {
+        agendaIds: agendas.map(a => a.id).join('-'),
+        practiceId: agendas[0].practice_id,
+        visitMotiveId: motive.id,
+      },
+      blocked: false,
     };
   } catch {
-    return null;
+    return { meta: null, blocked: false };
   }
+};
+
+export const fetchDoctolibMeta = async (
+  doctolibUrl: string,
+  signal?: AbortSignal,
+): Promise<DoctolibMeta | null> => {
+  const result = await fetchDoctolibMetaWithBlockInfo(doctolibUrl, signal);
+  return result.meta;
 };
 
 // ── Étape 2 : prochain créneau disponible ─────────────────────────────────────
@@ -163,20 +198,44 @@ export const runFullRefresh = async (): Promise<void> => {
 
     await teleconsultationCache.deleteAll();
 
+    // ── Détection de blocage sur les N premiers appels ──────────────────────
+    let sampleBlocked = 0;
+    let sampleTotal = 0;
+
     for (const psy of psysWithLink) {
       const name = `${psy.lastName} ${psy.firstNames}`.trim();
-      const meta = await fetchDoctolibMeta(psy.doctolibUrl);
-      if (!meta) {
+      const result = await fetchDoctolibMetaWithBlockInfo(psy.doctolibUrl);
+
+      // Mise à jour de l'échantillon de détection
+      if (sampleTotal < BLOCK_SAMPLE_SIZE) {
+        sampleTotal += 1;
+        if (result.blocked) sampleBlocked += 1;
+
+        if (sampleTotal === BLOCK_SAMPLE_SIZE) {
+          // Décision finale sur le blocage
+          doctolibBlocked = sampleBlocked / BLOCK_SAMPLE_SIZE >= BLOCK_THRESHOLD;
+          if (doctolibBlocked) {
+            // Inutile de continuer le scan si Doctolib bloque
+            return;
+          }
+        }
+      }
+
+      if (!result.meta) {
         await teleconsultationCache.upsertSlot(
           psy.dossierNumber, name, psy.doctolibUrl, null, true,
         );
         continue;
       }
-      const slot = await fetchNextSlot(meta);
+
+      const slot = await fetchNextSlot(result.meta);
       await teleconsultationCache.upsertSlot(
         psy.dossierNumber, name, psy.doctolibUrl, slot, true,
       );
     }
+
+    // Refresh terminé sans blocage détecté
+    doctolibBlocked = false;
   } finally {
     refreshRunning = false;
   }
@@ -186,6 +245,7 @@ export const runFullRefresh = async (): Promise<void> => {
 
 export const verifySlots = async (entries: CacheEntry[]): Promise<CacheEntry[]> => {
   const verified: CacheEntry[] = [];
+  let blockedCount = 0;
 
   for (const entry of entries) {
     if (!entry.nextSlot) {
@@ -193,14 +253,22 @@ export const verifySlots = async (entries: CacheEntry[]): Promise<CacheEntry[]> 
       continue;
     }
 
-    const meta = await fetchDoctolibMeta(entry.doctolibUrl);
-    if (!meta) {
-      // Impossible de vérifier : on conserve le créneau mis en cache
+    const result = await fetchDoctolibMetaWithBlockInfo(entry.doctolibUrl);
+
+    if (result.blocked) {
+      blockedCount += 1;
+      // On conserve le créneau en cache sans le modifier
       verified.push(entry);
       continue;
     }
 
-    const slot = await fetchNextSlot(meta);
+    if (!result.meta) {
+      // Profil introuvable (psy supprimé etc.) → on conserve le cache
+      verified.push(entry);
+      continue;
+    }
+
+    const slot = await fetchNextSlot(result.meta);
     await teleconsultationCache.upsertSlot(
       entry.psychologistId,
       entry.psychologistName,
@@ -209,6 +277,11 @@ export const verifySlots = async (entries: CacheEntry[]): Promise<CacheEntry[]> 
       false,
     );
     verified.push({ ...entry, nextSlot: slot ? new Date(slot) : null });
+  }
+
+  // Si tous les appels de vérification sont bloqués → flag
+  if (entries.length > 0 && blockedCount === entries.length) {
+    doctolibBlocked = true;
   }
 
   return verified.filter(e => e.nextSlot && e.nextSlot >= new Date());

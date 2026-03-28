@@ -25,6 +25,7 @@ const TeleconsultationRapide = () => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
   const [stale, setStale] = useState(false);
+  const [blocked, setBlocked] = useState(false);
   const [error, setError] = useState(false);
 
   const handleClick = async () => {
@@ -32,6 +33,11 @@ const TeleconsultationRapide = () => {
     setError(false);
     try {
       const data = await agent.Psychologist.fastestTeleconsultation();
+      if (data.blocked) {
+        setBlocked(true);
+        return;
+      }
+      setBlocked(false);
       setResults(data.results);
       setStale(data.stale);
     } catch {
@@ -40,6 +46,11 @@ const TeleconsultationRapide = () => {
       setLoading(false);
     }
   };
+
+  // Si Doctolib bloque le serveur, on masque entièrement le composant
+  if (blocked) {
+    return null;
+  }
 
   return (
     <div className="fr-mb-4w">
