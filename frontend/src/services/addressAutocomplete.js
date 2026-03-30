@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const ADDRESS_API_URL = 'https://api-adresse.data.gouv.fr/search/';
+const ADDRESS_API_URL = 'https://data.geopf.fr/geocodage/search/';
 
 const departementToRegion = {
   '01 - Ain': 'Auvergne-Rhône-Alpes',

@@ -55,6 +55,7 @@ export default helmet.contentSecurityPolicy({
       'wss://stream.relay.crisp.chat',
       'https://cdn.jsdelivr.net',
       ...crispDomains,
+      'https://data.geopf.fr/',
     ],
   },
 });
