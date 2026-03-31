@@ -110,8 +110,8 @@ describe('DS integration tests', () => {
     email: 'anais.altun@beta.gouv.fr',
     address: '1 Rue Lecourbe 75015 Paris',
     departement: '75 - Paris',
-    longitude: null, // api-adresse.data.gouv.fr is mocked in test
-    latitude: null, // api-adresse.data.gouv.fr is mocked in test
+    longitude: null, // api data.geopf.fr is mocked in test
+    latitude: null, // api data.geopf.fr is mocked in test
     city: null,
     postcode: null,
     otherAddress: null,
@@ -147,8 +147,8 @@ describe('DS integration tests', () => {
     address: '10 Avenue Simon Vouet 78560 Le Port-Marly',
     departement: '78 - Yvelines',
     region: 'Ile-de-France',
-    longitude: null, // api-adresse.data.gouv.fr is mocked in test
-    latitude: null, // api-adresse.data.gouv.fr is mocked in test
+    longitude: null, // api data.geopf.fr is mocked in test
+    latitude: null, // api data.geopf.fr is mocked in test
     city: null,
     postcode: null,
     otherAddress: null,
