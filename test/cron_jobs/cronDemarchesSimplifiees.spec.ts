@@ -75,7 +75,7 @@ describe('checkForMultipleAcceptedDossiers', () => {
   });
 
   it('should notify if two accepted dossiers for the same person', async () => {
-    const university = await create.getOneUniversity('random');
+    const university = await create.createUniversity();
     const psy = create.getOnePsy({
       assignedUniversityId: university.id,
       isConventionSigned: true,
