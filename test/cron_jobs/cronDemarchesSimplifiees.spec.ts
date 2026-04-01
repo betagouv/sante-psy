@@ -75,8 +75,11 @@ describe('checkForMultipleAcceptedDossiers', () => {
   });
 
   it('should notify if two accepted dossiers for the same person', async () => {
-    // insert 2 psychologists, same data except uuid, with accepte state
-    const psy = create.getOnePsy();
+    const university = await create.getOneUniversity('random');
+    const psy = create.getOnePsy({
+      assignedUniversityId: university.id,
+      isConventionSigned: true,
+    });
     psy.state = DossierState.accepte;
     psy.dossierNumber = '27172a9b-5081-4502-9022-b17510ba40a1';
     await dbPsychologists.upsertMany([psy]);

@@ -181,7 +181,7 @@ describe('DB Psychologists', () => {
 
   describe('getAllActive', () => {
     it('should only return not archived and accepted psychologists', async () => {
-      const activePsy = create.getOnePsy();
+      await create.insertOnePsy({ isConventionSigned: true });
       const archivedPsy = create.getOnePsy({ personalEmail: 'archived@psy.fr' });
       archivedPsy.archived = true;
       archivedPsy.lastName = 'ArchivedPsy';
@@ -189,7 +189,7 @@ describe('DB Psychologists', () => {
       constructionPsy.state = DossierState.enConstruction;
       constructionPsy.lastName = 'ConstructionPsy';
       const inactivePsy = create.getOneInactivePsy(new Date());
-      await dbPsychologists.upsertMany([activePsy, archivedPsy, constructionPsy, inactivePsy]);
+      await dbPsychologists.upsertMany([archivedPsy, constructionPsy, inactivePsy]);
 
       const shouldBeOne = await dbPsychologists.getAllActive();
       shouldBeOne.length.should.be.equal(1);
