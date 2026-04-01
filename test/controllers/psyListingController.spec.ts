@@ -2,25 +2,23 @@ import chai, { expect } from 'chai';
 import app from '../../index';
 import clean from '../helper/clean';
 import create from '../helper/create';
-import dbPsychologists from '../../db/psychologists';
 
 describe('psyListingController', () => {
   let psyActive1;
   let psyActive2;
-  let psyInactive;
-  let psyArchived;
 
   before(async () => {
     await clean.psychologists();
 
-    psyActive1 = create.getOnePsy({
+    psyActive1 = await create.insertOnePsy({
       personalEmail: 'active1@beta.gouv.fr',
       firstNames: 'Victor',
       lastName: 'Hugo',
       description: 'Psychologue spécialisé en anxiété',
       languages: 'français, anglais, arabe',
+      isConventionSigned: true,
     });
-    psyActive2 = create.getOnePsy({
+    psyActive2 = await create.insertOnePsy({
       personalEmail: 'active2@beta.gouv.fr',
       firstNames: 'Amantine Aurore Lucile',
       lastName: 'Dupin',
@@ -29,10 +27,14 @@ describe('psyListingController', () => {
       isVeryAvailable: true,
       description: 'Psychologue en gestion du stress et amie de Victor',
       languages: 'Francais, espagnol',
+      isConventionSigned: true,
     });
-    psyInactive = create.getOneInactivePsy();
-    psyArchived = create.getOnePsy({ personalEmail: 'archived@beta.gouv.fr', archived: true });
-    await dbPsychologists.upsertMany([psyActive1, psyActive2, psyInactive, psyArchived]);
+    await create.getOneInactivePsy();
+    await create.insertOnePsy({
+      personalEmail: 'archived@beta.gouv.fr',
+      archived: true,
+      isConventionSigned: true,
+    });
   });
 
   describe('getReducedActive', () => {
