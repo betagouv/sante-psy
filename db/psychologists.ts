@@ -84,7 +84,9 @@ const getAllActive = async (): Promise<Psychologist[]> => {
       .from(psychologistsTable)
       .whereNot('archived', true)
       .where('state', DossierState.accepte)
-      .andWhere('active', true);
+      .andWhere('active', true)
+      .whereNotNull('assignedUniversityId')
+      .andWhere('isConventionSigned', true);
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
     throw new Error('Impossible de récupérer les psychologistes');
@@ -100,6 +102,8 @@ const getAllActiveByAvailability = async (isVeryAvailable: boolean, filters?: Ps
       .whereNot('archived', true)
       .where('state', DossierState.accepte)
       .andWhere('active', true)
+      .whereNotNull('assignedUniversityId')
+      .andWhere('isConventionSigned', true)
       .andWhere('isVeryAvailable', isVeryAvailable);
 
     /* Filters */
