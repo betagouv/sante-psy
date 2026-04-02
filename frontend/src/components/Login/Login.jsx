@@ -13,6 +13,12 @@ import agent from 'services/agent';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import styles from './login.cssmodule.scss';
 
+export const ButtonLogin = ({ children, ...props }) => (
+  <Button className={styles.loginButton} {...props}>
+    {children}
+  </Button>
+);
+
 const Login = () => {
   const {
     commonStore: { config, setNotification },
@@ -56,8 +62,12 @@ const Login = () => {
         .then(async data => {
           await setRole(data.role);
           await setXsrfToken(data.xsrfToken);
-        }).catch(error => {
-          setNotification({ message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' }, false);
+        })
+        .catch(error => {
+          setNotification(
+            { message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' },
+            false,
+          );
         });
     }
   }, [token, setRole, setXsrfToken, setNotification]);
@@ -84,18 +94,13 @@ const Login = () => {
 
   return (
     <Page
-      title={(
+      title={
         <>
-          Mon
-          {' '}
-          <b>Espace</b>
+          Mon <b>Espace</b>
         </>
-      )}
+      }
     >
-      <Section
-        title="Connexion"
-      >
-
+      <Section title="Connexion">
         <GlobalNotification />
         <form onSubmit={loginUser} id="login_form">
           <Row alignItems="bottom">
@@ -110,13 +115,9 @@ const Login = () => {
               />
             </Col>
             <Col>
-              <Button
-                submit
-                className={styles.loginButton}
-                data-test-id="email-button"
-              >
+              <ButtonLogin submit data-test-id="email-button">
                 Recevoir le lien de connexion
-              </Button>
+              </ButtonLogin>
             </Col>
           </Row>
           <br />
@@ -131,9 +132,7 @@ const Login = () => {
 
       <Section title="Un problème ?">
         <ul>
-          <li>
-            Indiquez l&lsquo;email utilisé lors de votre inscription
-          </li>
+          <li>Indiquez l&lsquo;email utilisé lors de votre inscription</li>
 
           <li>
             Si vous ne recevez pas l&lsquo;email de connexion :
@@ -144,32 +143,17 @@ const Login = () => {
           </li>
         </ul>
       </Section>
-      <Section
-        title="Vous n&lsquo;avez pas encore créé votre espace ?"
-      >
+      <Section title="Vous n&lsquo;avez pas encore créé votre espace ?">
         <Row>
           <Col>
-            <p>
-              Étudiants, c&lsquo;est par ici pour s&lsquo;inscrire
-            </p>
-            <Button
-              onClick={() => navigate('/inscription')}
-              className={styles.loginButton}
-            >
-              Créer mon espace étudiant
-            </Button>
-
+            <p>Étudiants, c&lsquo;est par ici pour s&lsquo;inscrire</p>
+            <ButtonLogin onClick={() => navigate('/inscription')}>Créer mon espace étudiant</ButtonLogin>
           </Col>
           <Col>
-            <p>
-              Psychologues, créez votre dossier
-            </p>
-            <Button
-              onClick={() => window.open('https://www.demarches-simplifiees.fr/', '_blank')}
-              className={styles.loginButton}
-            >
+            <p>Psychologues, créez votre dossier</p>
+            <ButtonLogin onClick={() => window.open('https://www.demarches-simplifiees.fr/', '_blank')}>
               Déposer un dossier psychologue
-            </Button>
+            </ButtonLogin>
           </Col>
         </Row>
       </Section>
