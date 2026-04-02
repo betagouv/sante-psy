@@ -185,6 +185,12 @@ const getOneUniversity = (name: string): University => ({
   billingEmail: `${faker.internet.userName()}@beta.gouv.fr ; ${faker.internet.userName()}@beta.gouv.fr`,
 });
 
+const createUniversity = async (): Promise<University> => {
+  const university = getOneUniversity(faker.company.name());
+  await dbUniversities.upsertMany([university]);
+  return university;
+};
+
 const getOnePsy = (psychologist: Partial<Psychologist> = {}): Psychologist => {
   const firstNames = getFirstNames();
   const lastName = faker.name.lastName();
@@ -368,6 +374,7 @@ const insertOneStudent = async (student: Partial<Student> = {}): Promise<Student
 };
 
 export default {
+  createUniversity,
   getRandomInt,
   getOneAppointment,
   getOneIncompletePatient,
@@ -376,8 +383,8 @@ export default {
   getOnePsy,
   getOneInactivePsy,
   getOnePsyDS,
+  getOneStudent,
   insertOnePsy,
   insertOneAppointment,
-  getOneStudent,
   insertOneStudent,
 };
