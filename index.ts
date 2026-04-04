@@ -19,6 +19,17 @@ const { appName } = config;
 
 const app = express();
 
+const BLOCKED_IPS = new Set(['54.165.195.193', '27.34.111.140']);
+app.use((req, res, next) => {
+  const forwarded = req.headers['x-forwarded-for'];
+  const ip = (Array.isArray(forwarded) ? forwarded[0] : forwarded?.split(',')[0])?.trim() ?? req.ip;
+  if (BLOCKED_IPS.has(ip)) {
+    res.status(403).end();
+    return;
+  }
+  next();
+});
+
 // Desactivate debug log for production as they are a bit too verbose
 if (!config.activateDebug) {
   console.log('console.debug is not active - thanks to ACTIVATE_DEBUG_LOG env variable');
