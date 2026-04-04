@@ -82,6 +82,11 @@ app.use(rateLimiter);
 
 app.use(router);
 
+// block undefined /api routes
+app.use('/api/*', (req, res) => {
+  res.status(404).end();
+});
+
 app.get('*', getIndex);
 
 app.use(errorManager);
