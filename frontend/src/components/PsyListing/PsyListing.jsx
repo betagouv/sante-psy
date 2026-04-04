@@ -13,6 +13,7 @@ import { useStore } from 'stores/';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import PsyTable from './PsyTable';
 import NoResultPsyTable from './NoResultPsyTable';
+import TeleconsultationRapide from './TeleconsultationRapide';
 
 import styles from './psyListing.cssmodule.scss';
 
@@ -295,9 +296,10 @@ const PsyListing = () => {
         </div>
         <Alert
           type="warning"
-          title="Vous n‘avez aucune avance de frais à prévoir"
+          title="Vous n’avez aucune avance de frais à prévoir"
           description="Le psychologue ne doit en aucun cas vous demander un complément financier ou une avance."
         />
+        <TeleconsultationRapide />
         <PsyTable
           page={page}
           setPage={handlePageChange}
