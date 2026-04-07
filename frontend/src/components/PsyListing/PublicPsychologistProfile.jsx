@@ -165,7 +165,7 @@ const ContactSection = ({ psychologist }) => {
           />
         </>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', rowGap: '2rem' }}>
+        <div className={styles.flexColumn}>
           <Alert
             type="warning"
             title="Pour obtenir les coordonnées du psychologue, il te faut créer ton espace étudiant."
