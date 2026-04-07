@@ -93,9 +93,26 @@ const getByEmail = async (email: string): Promise<Student> => {
   }
 };
 
+const getByEmailAndIne = async (
+  ine: string,
+  email: string,
+): Promise<Student> | null => {
+  try {
+    const result = await db(studentsTable)
+      .where('email', email)
+      .andWhere('ine', ine)
+      .first();
+    return result;
+  } catch (err) {
+    console.error('Error while getting the student by email and ine', err);
+    return null;
+  }
+};
+
 export default {
   checkDuplicates,
   create,
   getById,
   getByEmail,
+  getByEmailAndIne,
 };
