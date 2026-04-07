@@ -7,8 +7,11 @@ export const notifyStudentNewAppointment = async (student: Student | null): Prom
   }
 
   try {
+    // TODO: check if user wants to be notified by email
     await sendAppointmentNotificationEmail(student.email);
   } catch (err) {
     console.error('Failed to send appointment notification email', err);
   }
+
+  // TODO: check if user wants to be notified by sms and if so implement notification by SMS
 };
