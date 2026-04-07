@@ -182,6 +182,15 @@ const ContactSection = ({ psychologist }) => {
                 <li>Accéder plus simplement à la prise de rendez-vous avec un psychologue</li>
                 <li>Avoir une vision claire de ton parcours</li>
               </ul>
+              <Button
+                tertiary
+                icon="ri-information-line"
+                size="sm"
+                iconPosition="left"
+                onClick={() => navigate('/espace-etudiant')}
+              >
+                En savoir plus
+              </Button>
             </CalloutText>
           </Callout>
         </div>
