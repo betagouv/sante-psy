@@ -1,0 +1,26 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+  padding: 2rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+img {
+  margin: auto;
+}
+
+p {
+  text-align: left;
+}
+
+.checkbox label {
+  text-align: left;
+}

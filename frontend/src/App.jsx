@@ -47,11 +47,15 @@ import StudentSpaceInfo from 'components/StudentSpaceInfo/StudentSpaceInfo';
 import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 import StudentRouter from './StudentRouter';
+import StudentTest from 'components/Students/StudentSignIn/StudentTest';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
 function App() {
-  const { commonStore: { setConfig }, userStore: { user, pullUser, role } } = useStore();
+  const {
+    commonStore: { setConfig },
+    userStore: { user, pullUser, role },
+  } = useStore();
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
@@ -112,6 +116,7 @@ function App() {
               <Route exact path="/desinscription/:id" element={<StudentNewsletterUnregister />} />
               <Route exact path="/eligibilite" element={<StudentEligibility />} />
               <Route exact path="/" element={<Landing />} />
+              <Route exact path="/test" element={<StudentTest />} />
               <Route
                 path="/psychologue/*"
                 element={user && role === 'psy' ? <PsychologistRouter /> : <Navigate to="/login" />}
@@ -120,10 +125,7 @@ function App() {
                 path="/etudiant/*"
                 element={user && role === 'student' ? <StudentRouter /> : <Navigate to="/login" />}
               />
-              <Route
-                path="/*"
-                element={<Navigate to="/" replace />}
-              />
+              <Route path="/*" element={<Navigate to="/" replace />} />
             </Routes>
           </React.Suspense>
         )}
