@@ -14,6 +14,8 @@ import distance from 'services/distance';
 import styles from './publicPsychologistProfile.cssmodule.scss';
 import { useStore } from 'stores/index';
 import { ButtonLogin } from 'components/Login/Login';
+import { Callout } from '@dataesr/react-dsfr';
+import { CalloutText } from '@dataesr/react-dsfr';
 
 const getZoomLevel = psychologist => {
   if (!psychologist.otherLongitude || !psychologist.otherLatitude) {
@@ -172,16 +174,16 @@ const ContactSection = ({ psychologist }) => {
             description="Tu ne pourras pas bénéficier de séances gratuites si tu n'as pas créé ton espace étudiant au préalable."
           />
           <ButtonLogin onClick={() => navigate('/inscription')}>Créer mon espace étudiant</ButtonLogin>
-          <Alert
-            title="Avec ton espace étudiant, tu pourras"
-            description={
+          <Callout hasInfoIcon={false}>
+            <CalloutText size="md">
+              <span style={{ fontWeight: 'bold' }}>Avec ton espace étudiant, tu pourras</span>
               <ul>
                 <li>Retrouver l'historique de tes séances</li>
                 <li>Accéder plus simplement à la prise de rendez-vous avec un psychologue</li>
                 <li>Avoir une vision claire de ton parcours</li>
               </ul>
-            }
-          />
+            </CalloutText>
+          </Callout>
         </div>
       )}
     </>
