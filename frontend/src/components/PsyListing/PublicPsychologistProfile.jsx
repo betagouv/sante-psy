@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, Badge, Button } from '@dataesr/react-dsfr';
+import { Alert, Badge, Button, Callout, CalloutText } from '@dataesr/react-dsfr';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 import Page from 'components/Page/Page';
@@ -11,11 +11,9 @@ import agent from 'services/agent';
 import string from 'services/string';
 import distance from 'services/distance';
 
-import styles from './publicPsychologistProfile.cssmodule.scss';
 import { useStore } from 'stores/index';
 import { ButtonLogin } from 'components/Login/Login';
-import { Callout } from '@dataesr/react-dsfr';
-import { CalloutText } from '@dataesr/react-dsfr';
+import styles from './publicPsychologistProfile.cssmodule.scss';
 
 const getZoomLevel = psychologist => {
   if (!psychologist.otherLongitude || !psychologist.otherLatitude) {
@@ -178,7 +176,7 @@ const ContactSection = ({ psychologist }) => {
             <CalloutText size="md">
               <span style={{ fontWeight: 'bold' }}>Avec ton espace étudiant, tu pourras</span>
               <ul>
-                <li>Retrouver l'historique de tes séances</li>
+                <li>Retrouver l&apos;historique de tes séances</li>
                 <li>Accéder plus simplement à la prise de rendez-vous avec un psychologue</li>
                 <li>Avoir une vision claire de ton parcours</li>
               </ul>
