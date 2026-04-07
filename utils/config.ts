@@ -82,4 +82,6 @@ export default {
   apiIneToken: process.env.API_INE_TOKEN,
   apiIneUrl: process.env.API_INE_URL,
   maxSignInAttempts: parseInt(process.env.MAX_SIGNIN_ATTEMPTS || '2', 10),
+  brevoApiKey: process.env.BREVO_API_KEY,
+  brevoSmsSender: process.env.BREVO_SMS_SENDER,
 };
