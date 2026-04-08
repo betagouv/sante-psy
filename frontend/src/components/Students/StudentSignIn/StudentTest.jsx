@@ -4,6 +4,7 @@ import { Button, Radio, RadioGroup } from '@dataesr/react-dsfr';
 import { Checkbox } from '@dataesr/react-dsfr';
 import { ButtonGroup } from '@dataesr/react-dsfr';
 import { TextInput } from '@dataesr/react-dsfr';
+import { useNavigate } from 'react-router-dom';
 
 const STEPS = [
   {
@@ -68,6 +69,45 @@ const STUDY_LEVELS = [
     label: 'BAC+2',
     value: 'bac_plus_deux',
   },
+  {
+    label: 'BAC+3',
+    value: 'bac_plus_trois',
+  },
+  {
+    label: 'BAC+4',
+    value: 'bac_plus_quatre',
+  },
+  {
+    label: 'BAC+5 et plus',
+    value: 'bac_plus_cinq_et_plus',
+  },
+];
+
+const STUDY_FIELDS = [
+  {
+    label: 'arts, lettres, langues',
+    value: 'arts',
+  },
+  {
+    label: 'droit, économie, gestion',
+    value: 'legal',
+  },
+  {
+    label: 'sciences humaines et sociales',
+    value: 'sociology',
+  },
+  {
+    label: 'sciences, technologies',
+    value: 'science',
+  },
+  {
+    label: 'santé - médical et paramédical',
+    value: 'medical',
+  },
+  {
+    label: 'autre',
+    value: 'other',
+  },
 ];
 
 const GENDERS = [
@@ -128,6 +168,7 @@ const NOTIFICATION_METHODS = [
 ];
 
 const StudentTest = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
 
   // step 0
@@ -138,12 +179,16 @@ const StudentTest = () => {
   const [schoolPostcode, setSchoolPostcode] = useState('');
   // step 2
   const [studyLevel, setStudyLevel] = useState(null);
+  const [studyField, setStudyField] = useState(null);
   //step 3
   const [gender, setGender] = useState(null);
+  const [livingPostcode, setLivingPostcode] = useState('');
   //step 4
   const [howDidYouKnow, setHowDidYouKnow] = useState(null);
+  const [otherHowDidYouKnow, setOtherHowDidYouKnow] = useState(null);
   //step 5
   const [notificationMethod, setNotificationMethod] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
 
   const onClickNext = () => {
     if (step === 5) {
@@ -162,19 +207,19 @@ const StudentTest = () => {
       return !!acceptedCGUs;
     }
     if (step === 1) {
-      return !!schoolType && !!schoolPostcode && schoolType === 'other' && !!otherSchoolType;
+      return !!schoolType && !!schoolPostcode && (schoolType !== 'other' || !!otherSchoolType);
     }
     if (step === 2) {
-      return !!studyLevel;
+      return !!studyLevel && !!studyField;
     }
     if (step === 3) {
-      return !!gender;
+      return !!gender && !!livingPostcode;
     }
     if (step === 4) {
-      return !!howDidYouKnow;
+      return !!howDidYouKnow && (howDidYouKnow !== 'other' || !!otherHowDidYouKnow);
     }
     if (step === 5) {
-      return !!notificationMethod;
+      return !!notificationMethod && (notificationMethod === 'email' || !!phoneNumber);
     }
   }, [
     step,
@@ -186,6 +231,10 @@ const StudentTest = () => {
     notificationMethod,
     schoolPostcode,
     otherSchoolType,
+    studyField,
+    livingPostcode,
+    otherHowDidYouKnow,
+    phoneNumber,
   ]);
 
   return (
@@ -195,12 +244,14 @@ const StudentTest = () => {
       {step === 0 && (
         <>
           <p>Pour en savoir plus sur ton espace, consulte la page suivante : </p>
-          <Button secondary>Conditions Générales d’Utilisation</Button>
+          {/* TODO: how to open CGU in a new tab ? */}
+          <Button secondary onClick={() => navigate('/cgu')}>
+            Conditions Générales d’Utilisation
+          </Button>
           <Checkbox
             label="J’ai lu et j’accepte les Conditions Générales d’Utilisation"
             onChange={e => setAcceptedCGUs(e.target.checked)}
             checked={acceptedCGUs}
-            className={styles.checkbox}
           ></Checkbox>
         </>
       )}
@@ -247,6 +298,17 @@ const StudentTest = () => {
               <Radio key={value} label={label} value={value} />
             ))}
           </RadioGroup>
+          <RadioGroup
+            name="studyField"
+            legend="Fillière suivie :"
+            value={studyField}
+            onChange={value => setStudyField(value)}
+            required
+          >
+            {STUDY_FIELDS.map(({ label, value }) => (
+              <Radio key={value} label={label} value={value} />
+            ))}
+          </RadioGroup>
         </>
       )}
       {step === 3 && (
@@ -262,6 +324,15 @@ const StudentTest = () => {
               <Radio key={value} label={label} value={value} />
             ))}
           </RadioGroup>
+
+          <TextInput
+            required
+            label="Où habites-tu ?"
+            hint="Pour te proposer des psychologues près de chez toi"
+            value={livingPostcode}
+            onChange={e => setLivingPostcode(e.target.value)}
+            type="number"
+          />
         </>
       )}
       {step === 4 && (
@@ -277,6 +348,14 @@ const StudentTest = () => {
               <Radio key={value} label={label} value={value} />
             ))}
           </RadioGroup>
+          {howDidYouKnow === 'other' && (
+            <TextInput
+              required
+              label="Autre : précisez"
+              value={otherHowDidYouKnow}
+              onChange={e => setOtherHowDidYouKnow(e.target.value)}
+            />
+          )}
         </>
       )}
       {step === 5 && (
@@ -292,6 +371,15 @@ const StudentTest = () => {
               <Radio key={value} label={label} value={value} />
             ))}
           </RadioGroup>
+          {notificationMethod !== 'email' && (
+            <TextInput
+              required
+              label="Numéro de téléphone"
+              hint="Utilisé uniquement pour les notifications"
+              value={phoneNumber}
+              onChange={e => setPhoneNumber(e.target.value)}
+            />
+          )}
         </>
       )}
       <ButtonGroup isInlineFrom="xs">
