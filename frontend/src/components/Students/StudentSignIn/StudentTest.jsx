@@ -247,7 +247,7 @@ const StudentTest = () => {
           <Link
             target="_blank"
             rel="noopener noreferrer"
-            to='/cgu'
+            to="/cgu"
             className="fr-btn"
           >
             Conditions Générales d’Utilisation
@@ -256,7 +256,7 @@ const StudentTest = () => {
             label="J’ai lu et j’accepte les Conditions Générales d’Utilisation"
             onChange={e => setAcceptedCGUs(e.target.checked)}
             checked={acceptedCGUs}
-          ></Checkbox>
+          />
         </>
       )}
       {step === 1 && (
@@ -284,8 +284,11 @@ const StudentTest = () => {
             required
             label="Code postal de l'établissement"
             value={schoolPostcode}
-            onChange={e => setSchoolPostcode(e.target.value)}
-            type="number"
+            onChange={e => {
+              const postcode = e.target.value.replace(/\D/g, '');
+              if (postcode.length <= 5) setSchoolPostcode(postcode);
+            }}
+            className="short-input"
           />
         </>
       )}
