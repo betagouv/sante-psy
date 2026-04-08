@@ -4,7 +4,7 @@ import { Button, Radio, RadioGroup } from '@dataesr/react-dsfr';
 import { Checkbox } from '@dataesr/react-dsfr';
 import { ButtonGroup } from '@dataesr/react-dsfr';
 import { TextInput } from '@dataesr/react-dsfr';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const STEPS = [
   {
@@ -244,10 +244,14 @@ const StudentTest = () => {
       {step === 0 && (
         <>
           <p>Pour en savoir plus sur ton espace, consulte la page suivante : </p>
-          {/* TODO: how to open CGU in a new tab ? */}
-          <Button secondary onClick={() => navigate('/cgu')}>
+          <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            to='/cgu'
+            className="fr-btn"
+          >
             Conditions Générales d’Utilisation
-          </Button>
+          </Link>
           <Checkbox
             label="J’ai lu et j’accepte les Conditions Générales d’Utilisation"
             onChange={e => setAcceptedCGUs(e.target.checked)}
