@@ -3,6 +3,7 @@ import styles from './studentTest.cssmodule.scss';
 import { Button, Radio, RadioGroup } from '@dataesr/react-dsfr';
 import { Checkbox } from '@dataesr/react-dsfr';
 import { ButtonGroup } from '@dataesr/react-dsfr';
+import { TextInput } from '@dataesr/react-dsfr';
 
 const STEPS = [
   {
@@ -37,8 +38,24 @@ const SCHOOL_TYPES = [
     label: 'Université',
   },
   {
-    value: 'cpge',
+    label: 'Ecole de commerce / compta / gestion / vente',
+    value: 'school',
+  },
+  {
+    label: 'Formation ingénieur',
+    value: 'engineer',
+  },
+  {
+    label: 'SST',
+    value: 'sst',
+  },
+  {
     label: 'CPGE',
+    value: 'cpge',
+  },
+  {
+    label: 'Autre',
+    value: 'other',
   },
 ];
 
@@ -52,11 +69,81 @@ const STUDY_LEVELS = [
     value: 'bac_plus_deux',
   },
 ];
+
+const GENDERS = [
+  {
+    label: 'Homme',
+    value: 'male',
+  },
+  {
+    label: 'Femme',
+    value: 'female',
+  },
+  {
+    label: 'Non binaire',
+    value: 'non_binary',
+  },
+  {
+    label: 'Je ne préfère pas répondre',
+    value: 'no_answer',
+  },
+];
+
+const HOW_DID_YOU_KNOW = [
+  {
+    label: 'Réseaux sociaux',
+    value: 'social_network',
+  },
+  {
+    label: 'Internet',
+    value: 'internet',
+  },
+  {
+    label: 'Mon école',
+    value: 'school',
+  },
+  {
+    label: 'Médias',
+    value: 'media',
+  },
+  {
+    label: 'Autre',
+    value: 'other',
+  },
+];
+
+const NOTIFICATION_METHODS = [
+  {
+    label: 'email',
+    value: 'email',
+  },
+  {
+    label: 'SMS',
+    value: 'sms',
+  },
+  {
+    label: 'email + SMS',
+    value: 'both',
+  },
+];
+
 const StudentTest = () => {
-  const [acceptedCGUs, setAcceptedCGUs] = useState(false);
   const [step, setStep] = useState(0);
+
+  // step 0
+  const [acceptedCGUs, setAcceptedCGUs] = useState(false);
+  // step 1
   const [schoolType, setSchoolType] = useState(null);
+  const [otherSchoolType, setOtherSchoolType] = useState('');
+  const [schoolPostcode, setSchoolPostcode] = useState('');
+  // step 2
   const [studyLevel, setStudyLevel] = useState(null);
+  //step 3
+  const [gender, setGender] = useState(null);
+  //step 4
+  const [howDidYouKnow, setHowDidYouKnow] = useState(null);
+  //step 5
+  const [notificationMethod, setNotificationMethod] = useState(null);
 
   const onClickNext = () => {
     if (step === 5) {
@@ -75,12 +162,31 @@ const StudentTest = () => {
       return !!acceptedCGUs;
     }
     if (step === 1) {
-      return !!schoolType;
+      return !!schoolType && !!schoolPostcode && schoolType === 'other' && !!otherSchoolType;
     }
     if (step === 2) {
       return !!studyLevel;
     }
-  }, [step, schoolType, studyLevel, acceptedCGUs]);
+    if (step === 3) {
+      return !!gender;
+    }
+    if (step === 4) {
+      return !!howDidYouKnow;
+    }
+    if (step === 5) {
+      return !!notificationMethod;
+    }
+  }, [
+    step,
+    schoolType,
+    studyLevel,
+    acceptedCGUs,
+    gender,
+    howDidYouKnow,
+    notificationMethod,
+    schoolPostcode,
+    otherSchoolType,
+  ]);
 
   return (
     <div className={styles.wrapper}>
@@ -111,6 +217,21 @@ const StudentTest = () => {
               <Radio key={value} label={label} value={value} />
             ))}
           </RadioGroup>
+          {schoolType === 'other' && (
+            <TextInput
+              required
+              label="Autre : précisez"
+              value={otherSchoolType}
+              onChange={e => setOtherSchoolType(e.target.value)}
+            />
+          )}
+          <TextInput
+            required
+            label="Code postal de l'établissement"
+            value={schoolPostcode}
+            onChange={e => setSchoolPostcode(e.target.value)}
+            type="number"
+          />
         </>
       )}
       {step === 2 && (
@@ -123,6 +244,51 @@ const StudentTest = () => {
             required
           >
             {STUDY_LEVELS.map(({ label, value }) => (
+              <Radio key={value} label={label} value={value} />
+            ))}
+          </RadioGroup>
+        </>
+      )}
+      {step === 3 && (
+        <>
+          <RadioGroup
+            name="gender"
+            legend="Comment te définis-tu ?"
+            value={gender}
+            onChange={value => setGender(value)}
+            required
+          >
+            {GENDERS.map(({ label, value }) => (
+              <Radio key={value} label={label} value={value} />
+            ))}
+          </RadioGroup>
+        </>
+      )}
+      {step === 4 && (
+        <>
+          <RadioGroup
+            name="howDidYouKnow"
+            legend="Comment as-tu connu Santé Psy Étudiant ?"
+            value={howDidYouKnow}
+            onChange={value => setHowDidYouKnow(value)}
+            required
+          >
+            {HOW_DID_YOU_KNOW.map(({ label, value }) => (
+              <Radio key={value} label={label} value={value} />
+            ))}
+          </RadioGroup>
+        </>
+      )}
+      {step === 5 && (
+        <>
+          <RadioGroup
+            name="notificationMethod"
+            legend="Comment souhaites-tu être notifé des séances déclarées par les psychologues ?"
+            value={notificationMethod}
+            onChange={value => setNotificationMethod(value)}
+            required
+          >
+            {NOTIFICATION_METHODS.map(({ label, value }) => (
               <Radio key={value} label={label} value={value} />
             ))}
           </RadioGroup>
