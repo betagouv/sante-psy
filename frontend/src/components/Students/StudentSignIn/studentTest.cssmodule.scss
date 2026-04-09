@@ -16,3 +16,34 @@
 img {
   margin: auto;
 }
+
+.universityContainer {
+  position: relative;
+}
+
+.universityList {
+  position: absolute;
+  z-index: 1000;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--border-default-grey);
+  background-color: var(--background-default-grey);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.universityItem {
+  padding: 8px 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--background-contrast-grey);
+  }
+}
+
+.noResult {
+  padding: 8px 16px;
+  color: var(--text-mention-grey);
+}

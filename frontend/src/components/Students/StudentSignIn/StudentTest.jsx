@@ -1,10 +1,8 @@
 import React, { useMemo, useState } from 'react';
+import { Button, Radio, RadioGroup, Checkbox, ButtonGroup, TextInput } from '@dataesr/react-dsfr';
+import universities from 'src/utils/universities';
+import { Link } from 'react-router-dom';
 import styles from './studentTest.cssmodule.scss';
-import { Button, Radio, RadioGroup } from '@dataesr/react-dsfr';
-import { Checkbox } from '@dataesr/react-dsfr';
-import { ButtonGroup } from '@dataesr/react-dsfr';
-import { TextInput } from '@dataesr/react-dsfr';
-import { useNavigate, Link } from 'react-router-dom';
 
 const STEPS = [
   {
@@ -168,27 +166,36 @@ const NOTIFICATION_METHODS = [
 ];
 
 const StudentTest = () => {
-  const navigate = useNavigate();
   const [step, setStep] = useState(0);
 
   // step 0
   const [acceptedCGUs, setAcceptedCGUs] = useState(false);
   // step 1
   const [schoolType, setSchoolType] = useState(null);
+  const [selectedUniversity, setSelectedUniversity] = useState('');
   const [otherSchoolType, setOtherSchoolType] = useState('');
   const [schoolPostcode, setSchoolPostcode] = useState('');
   // step 2
   const [studyLevel, setStudyLevel] = useState(null);
   const [studyField, setStudyField] = useState(null);
-  //step 3
+  // step 3
   const [gender, setGender] = useState(null);
   const [livingPostcode, setLivingPostcode] = useState('');
-  //step 4
+  // step 4
   const [howDidYouKnow, setHowDidYouKnow] = useState(null);
   const [otherHowDidYouKnow, setOtherHowDidYouKnow] = useState(null);
-  //step 5
+  // step 5
   const [notificationMethod, setNotificationMethod] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState(null);
+  const [universitySearch, setUniversitySearch] = useState('');
+  const [showUnivList, setShowUnivList] = useState(false);
+
+  const filteredUniversities = useMemo(
+    () => universities
+      .sort()
+      .filter(univ => univ.toLowerCase().includes(universitySearch.toLowerCase())),
+    [universitySearch],
+  );
 
   const onClickNext = () => {
     if (step === 5) {
@@ -207,7 +214,7 @@ const StudentTest = () => {
       return !!acceptedCGUs;
     }
     if (step === 1) {
-      return !!schoolType && !!schoolPostcode && (schoolType !== 'other' || !!otherSchoolType);
+      return !!schoolType && !!schoolPostcode && (schoolType !== 'other' || !!otherSchoolType) && (schoolType !== 'university' || !!selectedUniversity);
     }
     if (step === 2) {
       return !!studyLevel && !!studyField;
@@ -235,6 +242,7 @@ const StudentTest = () => {
     livingPostcode,
     otherHowDidYouKnow,
     phoneNumber,
+    selectedUniversity,
   ]);
 
   return (
@@ -272,6 +280,47 @@ const StudentTest = () => {
               <Radio key={value} label={label} value={value} />
             ))}
           </RadioGroup>
+          {schoolType === 'university' && (
+            <div className={`fr-select-group ${styles.universityContainer}`}>
+              <label className="fr-label" htmlFor="university-input">Université</label>
+              <input
+                className="fr-input"
+                id="university-input"
+                value={universitySearch}
+                onChange={e => {
+                  setUniversitySearch(e.target.value);
+                  setSelectedUniversity('');
+                  setShowUnivList(true);
+                }}
+                onFocus={() => setShowUnivList(true)}
+                onBlur={() => setTimeout(() => setShowUnivList(false), 150)}
+                placeholder="Tapez pour rechercher..."
+              />
+              {showUnivList && (
+                <ul className={styles.universityList}>
+                  {filteredUniversities.length > 0 ? (
+                    filteredUniversities.map(university => (
+                      <li
+                        key={university}
+                        className={styles.universityItem}
+                        role="option"
+                        aria-selected={selectedUniversity}
+                        onMouseDown={() => {
+                          setSelectedUniversity(university);
+                          setUniversitySearch(university);
+                          setShowUnivList(false);
+                        }}
+                      >
+                        {university}
+                      </li>
+                    ))
+                  ) : (
+                    <li className={styles.noResult}>Aucun résultat</li>
+                  )}
+                </ul>
+              )}
+            </div>
+          )}
           {schoolType === 'other' && (
             <TextInput
               required
