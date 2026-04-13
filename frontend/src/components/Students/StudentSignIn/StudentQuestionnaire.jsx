@@ -8,11 +8,9 @@ import {
   TextInput,
 } from '@dataesr/react-dsfr';
 import universities from 'src/utils/universities';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './studentTest.cssmodule.scss';
-import { useLocation } from 'react-router-dom';
 import agent from 'services/agent';
-import { useNavigate } from 'react-router-dom';
 import StudentSignInHeader from './StudentSignInHeader';
 
 const STEPS = [
@@ -293,6 +291,7 @@ const StudentQuestionnaire = () => {
         (notificationMethod === 'email' || !!phoneNumber)
       );
     }
+    return false;
   }, [
     step,
     schoolType,
