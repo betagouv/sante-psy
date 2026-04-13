@@ -117,6 +117,7 @@ const StudentSignInStepTwo = () => {
         dateOfBirth,
         ine,
         email,
+        dryRun: true,
       });
 
       navigate('/inscription/questionnaire', {

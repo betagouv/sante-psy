@@ -118,6 +118,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       dateOfBirth: rawDateOfBirth,
       ine,
       email,
+      dryRun = false, // if true, student will not be created for now
     } = req.body;
     const tokenRow = await dbLoginToken.getByEmail(email);
 
@@ -188,19 +189,25 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    await dbStudents.create(
-      email,
-      ine,
-      firstNames,
-      lastName,
-      date.parseForm(rawDateOfBirth),
-    );
+    if (!dryRun) {
+      await dbStudents.create(
+        email,
+        ine,
+        firstNames,
+        lastName,
+        date.parseForm(rawDateOfBirth),
+      );
 
-    await sendWelcomeMail(email);
+      await sendWelcomeMail(email);
 
-    res.status(200).json({
-      message: 'Un email vous a été envoyé.',
-    });
+      res.status(200).json({
+        message: 'Un email vous a été envoyé.',
+      });
+    } else {
+      res.status(200).json({
+        message: "L'étudiant peut être créé sans erreur.",
+      });
+    }
   } catch (err) {
     console.error(err);
 
