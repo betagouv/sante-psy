@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, Badge, Button } from '@dataesr/react-dsfr';
+import { Alert, Badge, Button, Callout, CalloutText } from '@dataesr/react-dsfr';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 import Page from 'components/Page/Page';
@@ -11,6 +11,8 @@ import agent from 'services/agent';
 import string from 'services/string';
 import distance from 'services/distance';
 
+import { useStore } from 'stores/index';
+import { ButtonLogin } from 'components/Login/Login';
 import styles from './publicPsychologistProfile.cssmodule.scss';
 
 const getZoomLevel = psychologist => {
@@ -39,6 +41,160 @@ const getZoomLevel = psychologist => {
   }
 
   return 5;
+};
+
+const ContactSection = ({ psychologist }) => {
+  const {
+    userStore: { user },
+  } = useStore();
+  const isUserConnected = !!user;
+  const navigate = useNavigate();
+  return (
+    <>
+      <h3>Contacter le psychologue</h3>
+      {isUserConnected ? (
+        <>
+          <div className={styles.optionalSeparator} />
+          {psychologist.phone && (
+            <div className={styles.contactInfo}>
+              <div>
+                <h5>Téléphone</h5>
+                <div data-test-id="psy-info">{psychologist.phone}</div>
+              </div>
+              <Button
+                secondary
+                onClick={() => {
+                  if (__MATOMO__) {
+                    _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'phone']);
+                  }
+                  window.location.href = `tel:${psychologist.phone}`;
+                }}
+                icon="ri-phone-fill"
+              />
+            </div>
+          )}
+          {psychologist.email && (
+            <div className={styles.contactInfo}>
+              <div>
+                <h5>E-mail</h5>
+                <div data-test-id="psy-info">{psychologist.email}</div>
+              </div>
+              <Button
+                secondary
+                onClick={() => {
+                  if (__MATOMO__) {
+                    _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'email']);
+                  }
+                  window.location.href = `mailto:${psychologist.email}`;
+                }}
+                icon="ri-mail-fill"
+              />
+            </div>
+          )}
+          {!psychologist.otherAddress && !psychologist.address ? null : (
+            <>
+              <h5>Adresses</h5>
+              <div className={styles.contactInfo}>
+                <div data-test-id="psy-info">{psychologist.address}</div>
+                <div data-test-id="psy-info">{psychologist.otherAddress}</div>
+              </div>
+            </>
+          )}
+          {psychologist.website && (
+            <div className={styles.contactInfo}>
+              <div>
+                <h5>Site web</h5>
+                <a href={string.prefixUrl(psychologist.website)} target="_blank" rel="noreferrer">
+                  {psychologist.website}
+                </a>
+              </div>
+              <Button
+                secondary
+                onClick={() => {
+                  if (__MATOMO__) {
+                    _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'website']);
+                  }
+                  window.open(string.prefixUrl(psychologist.website), '_blank');
+                }}
+                icon="ri-link"
+              />
+            </div>
+          )}
+          {psychologist.appointmentLink && (
+            <div className={styles.contactInfo}>
+              <div>
+                <h5>Prendre rendez-vous</h5>
+                <p>Directement en ligne</p>
+              </div>
+              {window.innerWidth <= 769 ? (
+                <Button
+                  secondary
+                  onClick={() => {
+                    if (__MATOMO__) {
+                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
+                    }
+                    window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
+                  }}
+                  icon="ri-calendar-fill"
+                >
+                  RDV
+                </Button>
+              ) : (
+                <Button
+                  secondary
+                  onClick={() => {
+                    if (__MATOMO__) {
+                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
+                    }
+                    window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
+                  }}
+                >
+                  Prendre rendez-vous
+                </Button>
+              )}
+            </div>
+          )}
+          <Alert
+            type="warning"
+            title="Vous n‘avez aucune avance de frais à prévoir"
+            description="Le psychologue ne doit en aucun cas vous demander un complément financier ou une avance."
+          />
+          <Alert
+            title="Attention, en cas de séance non honorée et sans excuse valable"
+            description="Le psychologue peut se réserver le droit de refuser un étudiant."
+          />
+        </>
+      ) : (
+        <div className={styles.flexColumn}>
+          <Alert
+            type="warning"
+            title="Pour obtenir les coordonnées du psychologue, il te faut créer ton espace étudiant."
+            description="Tu ne pourras pas bénéficier de séances gratuites si tu n'as pas créé ton espace étudiant au préalable."
+          />
+          <ButtonLogin onClick={() => navigate('/inscription')}>Créer mon espace étudiant</ButtonLogin>
+          <Callout hasInfoIcon={false}>
+            <CalloutText size="md">
+              <span style={{ fontWeight: 'bold' }}>Avec ton espace étudiant, tu pourras</span>
+              <ul>
+                <li>Retrouver l&apos;historique de tes séances</li>
+                <li>Accéder plus simplement à la prise de rendez-vous avec un psychologue</li>
+                <li>Avoir une vision claire de ton parcours</li>
+              </ul>
+              <Button
+                tertiary
+                icon="ri-information-line"
+                size="sm"
+                iconPosition="left"
+                onClick={() => navigate('/espace-etudiant')}
+              >
+                En savoir plus
+              </Button>
+            </CalloutText>
+          </Callout>
+        </div>
+      )}
+    </>
+  );
 };
 
 const PublicPsychologistProfile = () => {
@@ -118,117 +274,7 @@ const PublicPsychologistProfile = () => {
           </div>
           <div className={styles.columnSeparator} />
           <div className={styles.column}>
-            <h3>Contacter le psychologue</h3>
-            <div className={styles.optionalSeparator} />
-            {psychologist.phone && (
-              <div className={styles.contactInfo}>
-                <div>
-                  <h5>Téléphone</h5>
-                  <div data-test-id="psy-info">{psychologist.phone}</div>
-                </div>
-                <Button
-                  secondary
-                  onClick={() => {
-                    if (__MATOMO__) {
-                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'phone']);
-                    }
-                    window.location.href = `tel:${psychologist.phone}`;
-                  }}
-                  icon="ri-phone-fill"
-                />
-              </div>
-            )}
-            {psychologist.email && (
-              <div className={styles.contactInfo}>
-                <div>
-                  <h5>E-mail</h5>
-                  <div data-test-id="psy-info">{psychologist.email}</div>
-                </div>
-                <Button
-                  secondary
-                  onClick={() => {
-                    if (__MATOMO__) {
-                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'email']);
-                    }
-                    window.location.href = `mailto:${psychologist.email}`;
-                  }}
-                  icon="ri-mail-fill"
-                />
-              </div>
-            )}
-            {!psychologist.otherAddress && !psychologist.address ? null : (
-              <>
-                <h5>Adresses</h5>
-                <div className={styles.contactInfo}>
-                  <div data-test-id="psy-info">{psychologist.address}</div>
-                  <div data-test-id="psy-info">{psychologist.otherAddress}</div>
-                </div>
-              </>
-            )}
-
-            {psychologist.website && (
-              <div className={styles.contactInfo}>
-                <div>
-                  <h5>Site web</h5>
-                  <a href={string.prefixUrl(psychologist.website)} target="_blank" rel="noreferrer">
-                    {psychologist.website}
-                  </a>
-                </div>
-                <Button
-                  secondary
-                  onClick={() => {
-                    if (__MATOMO__) {
-                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'website']);
-                    }
-                    window.open(string.prefixUrl(psychologist.website), '_blank');
-                  }}
-                  icon="ri-link"
-                />
-              </div>
-            )}
-            {psychologist.appointmentLink && (
-              <div className={styles.contactInfo}>
-                <div>
-                  <h5>Prendre rendez-vous</h5>
-                  <p>Directement en ligne</p>
-                </div>
-                {window.innerWidth <= 769 ? (
-                  <Button
-                    secondary
-                    onClick={() => {
-                      if (__MATOMO__) {
-                        _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
-                      }
-                      window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
-                    }}
-                    icon="ri-calendar-fill"
-                  >
-                    RDV
-                  </Button>
-                ) : (
-                  <Button
-                    secondary
-                    onClick={() => {
-                      if (__MATOMO__) {
-                        _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
-                      }
-                      window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
-                    }}
-                  >
-                    Prendre rendez-vous
-                  </Button>
-                )}
-              </div>
-            )}
-            <Alert
-              type="warning"
-              title="Vous n‘avez aucune avance de frais à prévoir"
-              description="Le psychologue ne doit en aucun cas vous demander un complément financier ou une avance."
-            />
-            <Alert
-              title="Attention, en cas de séance non honorée et sans excuse valable"
-              description="Le psychologue peut se réserver le droit de refuser un étudiant."
-            />
+            <ContactSection psychologist={psychologist} />
             <div className={styles.displayMobile}>{otherInfo}</div>
           </div>
         </div>

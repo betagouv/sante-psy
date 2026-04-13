@@ -13,6 +13,12 @@ import agent from 'services/agent';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import styles from './login.cssmodule.scss';
 
+export const ButtonLogin = ({ children, ...props }) => (
+  <Button className={styles.loginButton} {...props}>
+    {children}
+  </Button>
+);
+
 const Login = () => {
   const {
     commonStore: { config, setNotification },
@@ -28,10 +34,11 @@ const Login = () => {
 
   const [email, setEmail] = useState('');
 
-  useEffect(() => setCanSendEmail(true), [email]);
+  useEffect(() => setCanSendEmail(!!email), [email]);
 
   useEffect(() => {
-    const isOnLoginPage = location.pathname === '/login' || location.pathname.startsWith('/login/');
+    const isOnLoginPage =
+      location.pathname === '/login' || location.pathname.startsWith('/login/');
 
     if (isOnLoginPage && !token && user && role) {
       if (role === 'psy') {
@@ -62,7 +69,12 @@ const Login = () => {
         })
         .catch(error => {
           setNotification(
-            { message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' },
+            {
+              message:
+                error.response?.data.message ||
+                'Une erreur est survenue lors de la connexion.',
+              type: 'error',
+            },
             false,
           );
         });
@@ -113,15 +125,20 @@ const Login = () => {
               />
             </Col>
             <Col>
-              <Button submit className={styles.loginButton} data-test-id="email-button" disabled={!canSendEmail}>
+              <ButtonLogin
+                submit
+                data-test-id="email-button"
+                disabled={!canSendEmail}
+              >
                 Recevoir le lien de connexion
-              </Button>
+              </ButtonLogin>
             </Col>
           </Row>
           <br />
           <p>Pas de mot de passe !</p>
           <p>
-            Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant
+            Vous recevrez un lien de connexion par email qui vous permettra
+            d&lsquo;être connecté pendant
             {` ${config.sessionDuration} `}
             heures
           </p>
@@ -145,18 +162,19 @@ const Login = () => {
         <Row>
           <Col>
             <p>Étudiants, c&lsquo;est par ici pour s&lsquo;inscrire</p>
-            <Button onClick={() => navigate('/inscription')} className={styles.loginButton}>
+            <ButtonLogin onClick={() => navigate('/inscription')}>
               Créer mon espace étudiant
-            </Button>
+            </ButtonLogin>
           </Col>
           <Col>
             <p>Psychologues, créez votre dossier</p>
-            <Button
-              onClick={() => window.open('https://www.demarches-simplifiees.fr/', '_blank')}
-              className={styles.loginButton}
+            <ButtonLogin
+              onClick={() =>
+                window.open('https://www.demarches-simplifiees.fr/', '_blank')
+              }
             >
               Déposer un dossier psychologue
-            </Button>
+            </ButtonLogin>
           </Col>
         </Row>
       </Section>
