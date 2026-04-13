@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Page from 'components/Page/Page';
 import agent from 'services/agent';
 import validateEmailFormat from 'src/utils/validateEmailFormat';
@@ -8,6 +8,7 @@ const StudentSignInStepOne = () => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [notification, setNotification] = useState(null);
+  const [canSendEmail, setCanSendEmail] = useState(true);
 
   const validateEmail = value => {
     const isValidEmail = validateEmailFormat(value);
@@ -23,12 +24,15 @@ const StudentSignInStepOne = () => {
     return true;
   };
 
+  useEffect(() => setCanSendEmail(true), [email]);
+
   const sendStudentSecondStepMail = async e => {
     e.preventDefault();
     const isValid = validateEmail(email);
     if (!isValid) return;
 
     try {
+      setCanSendEmail(false);
       const response = await agent.Student.sendStudentSecondStepMail(email);
       setNotification({ type: 'success', message: response.message });
     } catch (error) {
@@ -40,48 +44,39 @@ const StudentSignInStepOne = () => {
     <Page
       withStats
       breadCrumbs={[{ href: '/', label: 'Accueil' }]}
-      title={(
+      title={
         <>
-          Inscription à ton
-          {' '}
-          <b>Espace Étudiant</b>
+          Inscription à ton <b>Espace Étudiant</b>
         </>
-      )}
+      }
       description="Ton identifiant sera ton email"
     >
       <form onSubmit={sendStudentSecondStepMail}>
         {notification && (
-          <div
-            className={`fr-alert fr-alert--${notification.type} fr-mt-3w`}
-            role="alert"
-          >
+          <div className={`fr-alert fr-alert--${notification.type} fr-mt-3w`} role="alert">
             <h3 className="fr-alert__title">{notification.message}</h3>
             {notification.type === 'success' && (
-            <p>
-              Un email de validation vient de t&apos;être envoyé si ton adresse email est correcte et n&apos;a pas déjà été utilisée
-              pour un autre compte.
-              <br />
-              Si tu suspectes une usurpation ou une erreur, tu peux nous contacter via le
-              {' '}
-              <a
-                href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
-                className="fr-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                formulaire de contact
-              </a>
-              .
-            </p>
+              <p>
+                Un email de validation vient de t&apos;être envoyé si ton adresse email est correcte et n&apos;a pas
+                déjà été utilisée pour un autre compte.
+                <br />
+                Si tu suspectes une usurpation ou une erreur, tu peux nous contacter via le{' '}
+                <a
+                  href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
+                  className="fr-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  formulaire de contact
+                </a>
+                .
+              </p>
             )}
           </div>
         )}
         <div className="fr-my-2w">
           <div className="fr-input-group">
-            <label
-              className={`fr-label ${emailError ? styles.labelError : ''}`}
-              htmlFor="email-input"
-            >
+            <label className={`fr-label ${emailError ? styles.labelError : ''}`} htmlFor="email-input">
               Ton email
             </label>
             <input
@@ -99,7 +94,7 @@ const StudentSignInStepOne = () => {
         </div>
 
         <div className="fr-my-4w">
-          <button className="fr-btn" type="submit">
+          <button className="fr-btn" type="submit" disabled={!canSendEmail}>
             Suivant
           </button>
         </div>
