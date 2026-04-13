@@ -42,27 +42,49 @@ const checkDuplicates = async (
   }
 };
 
-const create = async (
-  email: string,
-  ine: string,
-  firstNames: string,
-  lastName: string,
-  dateOfBirth: Date,
-  acceptedCGUs: boolean,
-  schoolType: string,
-  selectedUniversity: string,
-  otherSchoolType: string,
-  schoolPostcode: string,
-  studyLevel: string,
-  studyField: string,
-  gender: string,
-  livingPostcode: string,
-  howDidYouKnow: string,
-  otherHowDidYouKnow: string,
-  phoneNumber: string,
-  notificationsEmail: boolean,
-  notificationsSms: boolean,
-): Promise<Student> => {
+type CreateStudentParams = {
+  email: string;
+  ine: string;
+  firstNames: string;
+  lastName: string;
+  dateOfBirth: Date;
+  acceptedCGUs?: boolean;
+  schoolType?: string;
+  selectedUniversity?: string;
+  otherSchoolType?: string;
+  schoolPostcode?: string;
+  studyLevel?: string;
+  studyField?: string;
+  gender?: string;
+  livingPostcode?: string;
+  howDidYouKnow?: string;
+  otherHowDidYouKnow?: string;
+  phoneNumber?: string;
+  notificationsEmail?: boolean;
+  notificationsSms?: boolean;
+};
+
+const create = async ({
+  email,
+  ine,
+  firstNames,
+  lastName,
+  dateOfBirth,
+  acceptedCGUs,
+  schoolType,
+  selectedUniversity,
+  otherSchoolType,
+  schoolPostcode,
+  studyLevel,
+  studyField,
+  gender,
+  livingPostcode,
+  howDidYouKnow,
+  otherHowDidYouKnow,
+  phoneNumber,
+  notificationsEmail,
+  notificationsSms,
+}: CreateStudentParams): Promise<Student> => {
   try {
     const [student] = (await db(studentsTable)
       .insert({

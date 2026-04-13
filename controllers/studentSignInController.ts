@@ -204,12 +204,12 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     }
 
     if (!dryRun) {
-      await dbStudents.create(
+      await dbStudents.create({
         email,
         ine,
         firstNames,
         lastName,
-        date.parseForm(rawDateOfBirth),
+        dateOfBirth: date.parseForm(rawDateOfBirth),
         acceptedCGUs,
         schoolType,
         selectedUniversity,
@@ -224,7 +224,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         phoneNumber,
         notificationsEmail,
         notificationsSms,
-      );
+      });
 
       await sendWelcomeMail(email);
 
