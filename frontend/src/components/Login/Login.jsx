@@ -30,11 +30,15 @@ const Login = () => {
   const { token } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const [canSendEmail, setCanSendEmail] = useState(true);
 
   const [email, setEmail] = useState('');
 
+  useEffect(() => setCanSendEmail(!!email), [email]);
+
   useEffect(() => {
-    const isOnLoginPage = location.pathname === '/login' || location.pathname.startsWith('/login/');
+    const isOnLoginPage =
+      location.pathname === '/login' || location.pathname.startsWith('/login/');
 
     if (isOnLoginPage && !token && user && role) {
       if (role === 'psy') {
@@ -65,7 +69,12 @@ const Login = () => {
         })
         .catch(error => {
           setNotification(
-            { message: error.response?.data.message || 'Une erreur est survenue lors de la connexion.', type: 'error' },
+            {
+              message:
+                error.response?.data.message ||
+                'Une erreur est survenue lors de la connexion.',
+              type: 'error',
+            },
             false,
           );
         });
@@ -88,6 +97,7 @@ const Login = () => {
   }, [role, token, navigate]);
 
   const loginUser = e => {
+    setCanSendEmail(false);
     e.preventDefault();
     agent.Auth.sendLoginMail(email).then(setNotification);
   };
@@ -115,7 +125,11 @@ const Login = () => {
               />
             </Col>
             <Col>
-              <ButtonLogin submit data-test-id="email-button">
+              <ButtonLogin
+                submit
+                data-test-id="email-button"
+                disabled={!canSendEmail}
+              >
                 Recevoir le lien de connexion
               </ButtonLogin>
             </Col>
@@ -123,7 +137,8 @@ const Login = () => {
           <br />
           <p>Pas de mot de passe !</p>
           <p>
-            Vous recevrez un lien de connexion par email qui vous permettra d&lsquo;être connecté pendant
+            Vous recevrez un lien de connexion par email qui vous permettra
+            d&lsquo;être connecté pendant
             {` ${config.sessionDuration} `}
             heures
           </p>
@@ -147,11 +162,17 @@ const Login = () => {
         <Row>
           <Col>
             <p>Étudiants, c&lsquo;est par ici pour s&lsquo;inscrire</p>
-            <ButtonLogin onClick={() => navigate('/inscription')}>Créer mon espace étudiant</ButtonLogin>
+            <ButtonLogin onClick={() => navigate('/inscription')}>
+              Créer mon espace étudiant
+            </ButtonLogin>
           </Col>
           <Col>
             <p>Psychologues, créez votre dossier</p>
-            <ButtonLogin onClick={() => window.open('https://www.demarches-simplifiees.fr/', '_blank')}>
+            <ButtonLogin
+              onClick={() =>
+                window.open('https://www.demarches-simplifiees.fr/', '_blank')
+              }
+            >
               Déposer un dossier psychologue
             </ButtonLogin>
           </Col>

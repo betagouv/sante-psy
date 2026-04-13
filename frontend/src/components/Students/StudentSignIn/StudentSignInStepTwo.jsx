@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Page from 'components/Page/Page';
 import agent from 'services/agent';
 import validateIneFormat from 'src/utils/validateIneFormat';
 import validateNameFormat from 'src/utils/validateNameFormat';
 import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import { useStore } from 'stores/';
 import styles from './studentSignIn.cssmodule.scss';
+import StudentSignInHeader from './StudentSignInHeader';
 
 const StudentSignInStepTwo = () => {
-  const { commonStore: { config } } = useStore();
+  const {
+    commonStore: { config },
+  } = useStore();
   const { token } = useParams();
   const navigate = useNavigate();
 
@@ -98,10 +100,11 @@ const StudentSignInStepTwo = () => {
   const signIn = async e => {
     e.preventDefault();
 
-    const isFormValid = validateFirstNames(firstNames)
-      && validateLastName(lastName)
-      && validateDateOfBirth(dateOfBirth)
-      && validateINE(ine);
+    const isFormValid =
+      validateFirstNames(firstNames) &&
+      validateLastName(lastName) &&
+      validateDateOfBirth(dateOfBirth) &&
+      validateINE(ine);
 
     if (!isFormValid) return;
 
@@ -114,9 +117,18 @@ const StudentSignInStepTwo = () => {
         dateOfBirth,
         ine,
         email,
+        dryRun: true,
       });
 
-      navigate('/inscription/success');
+      navigate('/inscription/questionnaire', {
+        state: {
+          email,
+          ine,
+          firstNames,
+          lastName,
+          dateOfBirth,
+        },
+      });
     } catch (error) {
       const errorData = error?.response?.data;
 
@@ -139,17 +151,7 @@ const StudentSignInStepTwo = () => {
   };
 
   return (
-    <Page
-      withStats
-      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
-      title={(
-        <>
-          Inscription à ton
-          {' '}
-          <b>Espace Étudiant</b>
-        </>
-      )}
-    >
+    <StudentSignInHeader>
       <form onSubmit={signIn}>
         <div className="fr-my-2w">
           <div className="fr-input-group">
@@ -166,7 +168,9 @@ const StudentSignInStepTwo = () => {
               required
               disabled={isBlocked}
             />
-            {firstNamesError && <p className="fr-error-text">{firstNamesError}</p>}
+            {firstNamesError && (
+              <p className="fr-error-text">{firstNamesError}</p>
+            )}
           </div>
 
           <div className="fr-input-group">
@@ -201,7 +205,9 @@ const StudentSignInStepTwo = () => {
               required
               disabled={isBlocked}
             />
-            {dateOfBirthError && <p className="fr-error-text">{dateOfBirthError}</p>}
+            {dateOfBirthError && (
+              <p className="fr-error-text">{dateOfBirthError}</p>
+            )}
           </div>
 
           <div className="fr-input-group">
@@ -211,7 +217,8 @@ const StudentSignInStepTwo = () => {
             >
               Numéro INE
               <span className="fr-hint-text">
-                11 chiffres ou lettres, présent sur ton certificat de scolarité ou attestation CVEC
+                11 chiffres ou lettres, présent sur ton certificat de scolarité
+                ou attestation CVEC
               </span>
             </label>
             <input
@@ -219,7 +226,7 @@ const StudentSignInStepTwo = () => {
               id="ine-input"
               type="text"
               value={ine}
-              onChange={e => setIne((e.target.value).toUpperCase())}
+              onChange={e => setIne(e.target.value.toUpperCase())}
               onBlur={() => validateINE(ine)}
               required
               disabled={isBlocked}
@@ -229,16 +236,15 @@ const StudentSignInStepTwo = () => {
         </div>
 
         {(notification || isBlocked) && (
-          <div
-            className="fr-alert fr-alert--error fr-mt-3w"
-            role="alert"
-          >
-            <h3 className="fr-alert__title">Une erreur est survenue lors de l&apos;inscription.</h3>
+          <div className="fr-alert fr-alert--error fr-mt-3w" role="alert">
+            <h3 className="fr-alert__title">
+              Une erreur est survenue lors de l&apos;inscription.
+            </h3>
             <p>
-              Vérifie que toutes tes informations sont correctes / n&apos;ont pas déjà été utilisées.
+              Vérifie que toutes tes informations sont correctes / n&apos;ont
+              pas déjà été utilisées.
               <br />
-              Autrement,
-              {' '}
+              Autrement,{' '}
               <a
                 href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
                 className="fr-link"
@@ -251,26 +257,15 @@ const StudentSignInStepTwo = () => {
             </p>
           </div>
         )}
-        {(notification && (
-          <div>
-            <p className="fr-mb-1w">En cliquant sur m&apos;inscrire, je reconnais avoir lu et accepté les</p>
-            <a
-              href="https://santepsy.etudiant.gouv.fr/cgu"
-              className="fr-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              >
-              conditions générales d&apos;utilisation
-            </a>
-          </div>
-        ))}
         <div className="fr-mb-4w fr-mt-2w">
           <button className="fr-btn" type="submit" disabled={isBlocked}>
-            {notification?.type === 'error' ? 'Confirmer ces informations' : "M'inscrire"}
+            {notification?.type === 'error'
+              ? 'Confirmer ces informations'
+              : 'Continuer mon inscription'}
           </button>
         </div>
       </form>
-    </Page>
+    </StudentSignInHeader>
   );
 };
 

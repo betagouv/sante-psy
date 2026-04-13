@@ -42,15 +42,51 @@ const checkDuplicates = async (
   }
 };
 
-const create = async (
-  email: string,
-  ine: string,
-  firstNames: string,
-  lastName: string,
-  dateOfBirth: Date,
-): Promise<Student> => {
+type CreateStudentParams = {
+  email: string;
+  ine: string;
+  firstNames: string;
+  lastName: string;
+  dateOfBirth: Date;
+  acceptedCGUs?: boolean;
+  schoolType?: string;
+  selectedUniversity?: string;
+  otherSchoolType?: string;
+  schoolPostcode?: string;
+  studyLevel?: string;
+  studyField?: string;
+  gender?: string;
+  livingPostcode?: string;
+  howDidYouKnow?: string;
+  otherHowDidYouKnow?: string;
+  phoneNumber?: string;
+  notificationsEmail?: boolean;
+  notificationsSms?: boolean;
+};
+
+const create = async ({
+  email,
+  ine,
+  firstNames,
+  lastName,
+  dateOfBirth,
+  acceptedCGUs,
+  schoolType,
+  selectedUniversity,
+  otherSchoolType,
+  schoolPostcode,
+  studyLevel,
+  studyField,
+  gender,
+  livingPostcode,
+  howDidYouKnow,
+  otherHowDidYouKnow,
+  phoneNumber,
+  notificationsEmail,
+  notificationsSms,
+}: CreateStudentParams): Promise<Student> => {
   try {
-    const [student] = await db(studentsTable)
+    const [student] = (await db(studentsTable)
       .insert({
         email,
         ine,
@@ -58,8 +94,22 @@ const create = async (
         lastName,
         dateOfBirth,
         createdAt: date.now(),
+        has_accepted_cgu: acceptedCGUs,
+        school_type: schoolType,
+        school_type_other: otherSchoolType,
+        university_name: selectedUniversity,
+        study_level: studyLevel,
+        study_field: studyField,
+        gender,
+        school_postcode: schoolPostcode,
+        living_postcode: livingPostcode,
+        how_did_you_know: howDidYouKnow,
+        how_did_you_know_other: otherHowDidYouKnow,
+        notification_email: notificationsEmail,
+        notification_sms: notificationsSms,
+        phone_number: phoneNumber,
       })
-      .returning('*') as Student[];
+      .returning('*')) as Student[];
 
     return student;
   } catch (err) {
@@ -70,9 +120,7 @@ const create = async (
 
 const getById = async (studentId: string): Promise<Student> => {
   try {
-    const student = await db(studentsTable)
-      .where('id', studentId)
-      .first();
+    const student = await db(studentsTable).where('id', studentId).first();
     return student;
   } catch (err) {
     console.error('Error while getting the student by id', err);
@@ -82,9 +130,7 @@ const getById = async (studentId: string): Promise<Student> => {
 
 const getByEmail = async (email: string): Promise<Student> => {
   try {
-    const result = await db(studentsTable)
-    .where('email', email)
-    .first();
+    const result = await db(studentsTable).where('email', email).first();
 
     return result;
   } catch (err) {
@@ -93,9 +139,26 @@ const getByEmail = async (email: string): Promise<Student> => {
   }
 };
 
+const getByEmailAndIne = async (
+  ine: string,
+  email: string,
+): Promise<Student> | null => {
+  try {
+    const result = await db(studentsTable)
+      .where('email', email)
+      .andWhere('ine', ine)
+      .first();
+    return result;
+  } catch (err) {
+    console.error('Error while getting the student by email and ine', err);
+    return null;
+  }
+};
+
 export default {
   checkDuplicates,
   create,
   getById,
   getByEmail,
+  getByEmailAndIne,
 };
