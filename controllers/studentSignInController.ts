@@ -118,7 +118,21 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       dateOfBirth: rawDateOfBirth,
       ine,
       email,
-      dryRun = false, // if true, student will not be created for now
+      dryRun = false, // if true, student will not be created for now,
+      acceptedCGUs,
+      schoolType,
+      selectedUniversity,
+      otherSchoolType,
+      schoolPostcode,
+      studyLevel,
+      studyField,
+      gender,
+      livingPostcode,
+      howDidYouKnow,
+      otherHowDidYouKnow,
+      phoneNumber,
+      notificationsEmail,
+      notificationsSms,
     } = req.body;
     const tokenRow = await dbLoginToken.getByEmail(email);
 
@@ -196,6 +210,20 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         firstNames,
         lastName,
         date.parseForm(rawDateOfBirth),
+        acceptedCGUs,
+        schoolType,
+        selectedUniversity,
+        otherSchoolType,
+        schoolPostcode,
+        studyLevel,
+        studyField,
+        gender,
+        livingPostcode,
+        howDidYouKnow,
+        otherHowDidYouKnow,
+        phoneNumber,
+        notificationsEmail,
+        notificationsSms,
       );
 
       await sendWelcomeMail(email);

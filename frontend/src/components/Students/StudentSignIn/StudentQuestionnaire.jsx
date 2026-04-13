@@ -221,6 +221,20 @@ const StudentQuestionnaire = () => {
         dateOfBirth,
         ine,
         email,
+        acceptedCGUs: true,
+        schoolType,
+        selectedUniversity,
+        otherSchoolType,
+        schoolPostcode,
+        studyLevel,
+        studyField,
+        gender,
+        livingPostcode,
+        howDidYouKnow,
+        otherHowDidYouKnow,
+        phoneNumber,
+        notificationsEmail: ['email', 'both'].includes(notificationMethod),
+        notificationsSms: ['sms', 'both'].includes(notificationMethod),
       });
       navigate('/inscription/success');
     } catch (error) {
