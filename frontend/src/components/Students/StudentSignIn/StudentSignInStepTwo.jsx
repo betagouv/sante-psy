@@ -251,19 +251,6 @@ const StudentSignInStepTwo = () => {
             </p>
           </div>
         )}
-        {(notification && (
-          <div>
-            <p className="fr-mb-1w">En cliquant sur m&apos;inscrire, je reconnais avoir lu et accepté les</p>
-            <a
-              href="https://santepsy.etudiant.gouv.fr/cgu"
-              className="fr-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              >
-              conditions générales d&apos;utilisation
-            </a>
-          </div>
-        ))}
         <div className="fr-mb-4w fr-mt-2w">
           <button className="fr-btn" type="submit" disabled={isBlocked}>
             {notification?.type === 'error' ? 'Confirmer ces informations' : "M'inscrire"}
