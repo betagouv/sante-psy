@@ -116,7 +116,15 @@ const StudentSignInStepTwo = () => {
         email,
       });
 
-      navigate('/inscription/success');
+      navigate('/inscription/questionnaire', {
+        state: {
+          email,
+          ine,
+          firstNames,
+          lastName,
+          dateOfBirth,
+        },
+      });
     } catch (error) {
       const errorData = error?.response?.data;
 
