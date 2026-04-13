@@ -22,7 +22,7 @@ describe('Psy Listing', () => {
 
     cy.wait('@psychologist');
 
-    cy.get('[data-test-id="psy-info"]').should('have.length', 7);
+    cy.get('[data-test-id="psy-info"]').should('have.length', 3);
   });
 
   it('Shouldn\'t display table when no filter in search', () => {

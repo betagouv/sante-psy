@@ -3,7 +3,10 @@ import asyncHelper from '../utils/async-helper';
 import dbStudents from '../db/students';
 import dbLoginToken from '../db/loginToken';
 import CustomError from '../utils/CustomError';
-import { signInValidator, emailValidator } from './validators/studentValidators';
+import {
+  signInValidator,
+  emailValidator,
+} from './validators/studentValidators';
 import loginInformations from '../services/loginInformations';
 import date from '../utils/date';
 import db from '../db/db';
@@ -20,7 +23,10 @@ import config from '../utils/config';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
-const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<void> => {
+const sendStudentSecondStepMail = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { email } = req.body;
     const existingPsy = await db(psychologistsTable).where({ email }).first();
@@ -53,7 +59,9 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
     });
   } catch (err) {
     console.error(err);
-    throw err instanceof CustomError ? err : new CustomError("Erreur lors de l'envoi du mail de connexion", 500);
+    throw err instanceof CustomError
+      ? err
+      : new CustomError("Erreur lors de l'envoi du mail de connexion", 500);
   }
 };
 
@@ -73,11 +81,16 @@ const sendWelcomeMail = async (email): Promise<void> => {
     );
   } catch (err) {
     console.error(err);
-    throw err instanceof CustomError ? err : new CustomError("Erreur lors de l'envoi du mail de connexion", 500);
+    throw err instanceof CustomError
+      ? err
+      : new CustomError("Erreur lors de l'envoi du mail de connexion", 500);
   }
 };
 
-const verifyStudentToken = async (req: Request, res: Response): Promise<void> => {
+const verifyStudentToken = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const { token } = req.params;
 
   const tokenRow = await dbLoginToken.getByToken(token);
@@ -105,8 +118,22 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       dateOfBirth: rawDateOfBirth,
       ine,
       email,
+      dryRun = false, // if true, student will not be created for now,
+      acceptedCGUs,
+      schoolType,
+      selectedUniversity,
+      otherSchoolType,
+      schoolPostcode,
+      studyLevel,
+      studyField,
+      gender,
+      livingPostcode,
+      howDidYouKnow,
+      otherHowDidYouKnow,
+      phoneNumber,
+      notificationsEmail,
+      notificationsSms,
     } = req.body;
-
     const tokenRow = await dbLoginToken.getByEmail(email);
 
     if (!tokenRow) {
@@ -137,10 +164,11 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     }
 
     if (duplicateCheck.status === 'conflict') {
-      const { shouldSendCertificate } = await signInAttempts.checkAndIncrementAttempts(
-        tokenRow.token,
-        currentAttempts,
-      );
+      const { shouldSendCertificate } =
+        await signInAttempts.checkAndIncrementAttempts(
+          tokenRow.token,
+          currentAttempts,
+        );
 
       if (shouldSendCertificate) {
         await dbLoginToken.delete(tokenRow.token);
@@ -163,10 +191,11 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     const isINEValid = await verifyINEWithBirthDate(ine, rawDateOfBirth);
 
     if (!isINEValid) {
-      const { shouldSendCertificate } = await signInAttempts.checkAndIncrementAttempts(
-        tokenRow.token,
-        currentAttempts,
-      );
+      const { shouldSendCertificate } =
+        await signInAttempts.checkAndIncrementAttempts(
+          tokenRow.token,
+          currentAttempts,
+        );
 
       res.status(429).json({
         shouldSendCertificate,
@@ -174,19 +203,39 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    await dbStudents.create(
-      email,
-      ine,
-      firstNames,
-      lastName,
-      date.parseForm(rawDateOfBirth),
-    );
+    if (!dryRun) {
+      await dbStudents.create({
+        email,
+        ine,
+        firstNames,
+        lastName,
+        dateOfBirth: date.parseForm(rawDateOfBirth),
+        acceptedCGUs,
+        schoolType,
+        selectedUniversity,
+        otherSchoolType,
+        schoolPostcode,
+        studyLevel,
+        studyField,
+        gender,
+        livingPostcode,
+        howDidYouKnow,
+        otherHowDidYouKnow,
+        phoneNumber,
+        notificationsEmail,
+        notificationsSms,
+      });
 
-    await sendWelcomeMail(email);
+      await sendWelcomeMail(email);
 
-    res.status(200).json({
-      message: 'Un email vous a été envoyé.',
-    });
+      res.status(200).json({
+        message: 'Un email vous a été envoyé.',
+      });
+    } else {
+      res.status(200).json({
+        message: "L'étudiant peut être créé sans erreur.",
+      });
+    }
   } catch (err) {
     console.error(err);
 
@@ -200,9 +249,7 @@ const sendCertificate = async (
   req: MulterRequest,
   res: Response,
 ): Promise<void> => {
-  const {
-    email, ine, firstNames, lastName, dateOfBirth,
-  } = req.body;
+  const { email, ine } = req.body;
 
   // TODO gérer ça dans un validator
   if (!req.file || !email || !ine) {
@@ -216,17 +263,12 @@ const sendCertificate = async (
     throw new CustomError('Token expiré', 401);
   }
 
-  const html = await ejs.renderFile('./views/emails/sendStudentCertificate.ejs', {
-    email,
-    ine,
-  });
-
-  await dbStudents.create(
-    email,
-    ine,
-    firstNames,
-    lastName,
-    date.parseForm(dateOfBirth),
+  const html = await ejs.renderFile(
+    './views/emails/sendStudentCertificate.ejs',
+    {
+      email,
+      ine,
+    },
   );
 
   await send(
@@ -242,10 +284,8 @@ const sendCertificate = async (
     ],
   );
 
-  await sendWelcomeMail(email);
-
   res.status(200).json({
-    message: 'Certificat envoyé et inscription validée.',
+    message: 'Certificat envoyé.',
   });
 };
 

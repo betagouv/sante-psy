@@ -6,7 +6,8 @@ const StudentSendCertificate = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { email, ine, firstNames, lastName, dateOfBirth } = location.state || {};
+  const { email, ine, firstNames, lastName, dateOfBirth } =
+    location.state || {};
 
   if (!email || !ine) {
     navigate('/inscription');
@@ -20,7 +21,17 @@ const StudentSendCertificate = () => {
       firstNames={firstNames}
       lastName={lastName}
       dateOfBirth={dateOfBirth}
-      onSuccess={() => navigate('/inscription/certificat/success')}
+      onSuccess={() =>
+        navigate('/inscription/questionnaire', {
+          state: {
+            email,
+            ine,
+            firstNames,
+            lastName,
+            dateOfBirth,
+          },
+        })
+      }
     />
   );
 };

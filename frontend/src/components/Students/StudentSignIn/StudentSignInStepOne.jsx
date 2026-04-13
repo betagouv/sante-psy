@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import Page from 'components/Page/Page';
+import React, { useEffect, useState } from 'react';
 import agent from 'services/agent';
 import validateEmailFormat from 'src/utils/validateEmailFormat';
 import styles from './studentSignIn.cssmodule.scss';
+import StudentSignInHeader from './StudentSignInHeader';
 
 const StudentSignInStepOne = () => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [notification, setNotification] = useState(null);
+  const [canSendEmail, setCanSendEmail] = useState(true);
 
   const validateEmail = value => {
     const isValidEmail = validateEmailFormat(value);
@@ -16,12 +17,16 @@ const StudentSignInStepOne = () => {
       return false;
     }
     if (value.toLowerCase().includes('santepsyetudiant')) {
-      setEmailError("Cette adresse email n'est pas autorisée à créer un compte étudiant.");
+      setEmailError(
+        "Cette adresse email n'est pas autorisée à créer un compte étudiant.",
+      );
       return false;
     }
     setEmailError('');
     return true;
   };
+
+  useEffect(() => setCanSendEmail(true), [email]);
 
   const sendStudentSecondStepMail = async e => {
     e.preventDefault();
@@ -29,26 +34,19 @@ const StudentSignInStepOne = () => {
     if (!isValid) return;
 
     try {
+      setCanSendEmail(false);
       const response = await agent.Student.sendStudentSecondStepMail(email);
       setNotification({ type: 'success', message: response.message });
     } catch (error) {
-      setNotification({ type: 'error', message: "Une erreur est survenue lors de l'inscription." });
+      setNotification({
+        type: 'error',
+        message: "Une erreur est survenue lors de l'inscription.",
+      });
     }
   };
 
   return (
-    <Page
-      withStats
-      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
-      title={(
-        <>
-          Inscription à ton
-          {' '}
-          <b>Espace Étudiant</b>
-        </>
-      )}
-      description="Ton identifiant sera ton email"
-    >
+    <StudentSignInHeader description="Ton identifiant sera ton email">
       <form onSubmit={sendStudentSecondStepMail}>
         {notification && (
           <div
@@ -57,22 +55,23 @@ const StudentSignInStepOne = () => {
           >
             <h3 className="fr-alert__title">{notification.message}</h3>
             {notification.type === 'success' && (
-            <p>
-              Un email de validation vient de t&apos;être envoyé si ton adresse email est correcte et n&apos;a pas déjà été utilisée
-              pour un autre compte.
-              <br />
-              Si tu suspectes une usurpation ou une erreur, tu peux nous contacter via le
-              {' '}
-              <a
-                href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
-                className="fr-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                formulaire de contact
-              </a>
-              .
-            </p>
+              <p>
+                Un email de validation vient de t&apos;être envoyé si ton
+                adresse email est correcte et n&apos;a pas déjà été utilisée
+                pour un autre compte.
+                <br />
+                Si tu suspectes une usurpation ou une erreur, tu peux nous
+                contacter via le{' '}
+                <a
+                  href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
+                  className="fr-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  formulaire de contact
+                </a>
+                .
+              </p>
             )}
           </div>
         )}
@@ -99,12 +98,12 @@ const StudentSignInStepOne = () => {
         </div>
 
         <div className="fr-my-4w">
-          <button className="fr-btn" type="submit">
+          <button className="fr-btn" type="submit" disabled={!canSendEmail}>
             Suivant
           </button>
         </div>
       </form>
-    </Page>
+    </StudentSignInHeader>
   );
 };
 

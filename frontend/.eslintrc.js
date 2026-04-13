@@ -1,9 +1,6 @@
 module.exports = {
   root: true,
-  extends: [
-    'airbnb',
-    'plugin:cypress/recommended',
-  ],
+  extends: ['airbnb', 'plugin:cypress/recommended', 'prettier'],
   env: {
     es6: true,
     browser: true,
@@ -32,10 +29,15 @@ module.exports = {
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
-    'max-len': ['warn', 120, 2, {
-      ignoreUrls: true,
-      ignoreComments: false,
-    }],
+    'max-len': [
+      'warn',
+      120,
+      2,
+      {
+        ignoreUrls: true,
+        ignoreComments: false,
+      },
+    ],
     'new-cap': ['error', { capIsNew: false }],
     'no-continue': 'off',
     'no-param-reassign': ['error', { props: false }],
@@ -45,12 +47,7 @@ module.exports = {
     'no-use-before-define': 'off',
     'no-only-tests/no-only-tests': 'error',
     'no-irregular-whitespace': 'off',
-    'object-curly-newline': ['error', {
-      ObjectExpression: { multiline: true },
-      ObjectPattern: { multiline: true },
-      ImportDeclaration: { multiline: true },
-      ExportDeclaration: { multiline: true },
-    }],
+    'object-curly-newline': 'off',
     'react/destructuring-assignment': 'off',
     'react/jsx-closing-bracket-location': ['warn', 'line-aligned'],
     'react/jsx-first-prop-new-line': ['warn', 'multiline'],
@@ -60,16 +57,14 @@ module.exports = {
     'react/prefer-stateless-function': 'off',
     'react/prop-types': 'off',
     'react/sort-comp': [
-      'error', {
-        order: [
-          'static-methods',
-          'instance-variables',
-          'lifecycle',
-        ],
+      'error',
+      {
+        order: ['static-methods', 'instance-variables', 'lifecycle'],
       },
     ],
     'react/static-property-placement': 'off',
     'react/function-component-definition': 'off',
+    "import/order": "off",
   },
   settings: {
     'import/resolver': { webpack: { config: 'config/webpack.base.js' } },
@@ -77,8 +72,5 @@ module.exports = {
     pragma: 'React',
     version: '17.0',
   },
-  plugins: [
-    'react',
-    'no-only-tests',
-  ],
+  plugins: ['react', 'no-only-tests'],
 };
