@@ -47,7 +47,7 @@ import StudentSpaceInfo from 'components/StudentSpaceInfo/StudentSpaceInfo';
 import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 import StudentRouter from './StudentRouter';
-import StudentTest from 'components/Students/StudentSignIn/StudentTest';
+import StudentQuestionnaire from 'components/Students/StudentSignIn/StudentQuestionnaire';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
@@ -112,11 +112,11 @@ function App() {
               <Route exact path="/inscription/success" element={<StudentSignInSuccess />} />
               <Route exact path="/inscription/certificat" element={<StudentSendCertificate />} />
               <Route exact path="/inscription/certificat/success" element={<CertificateSentSuccess />} />
+              <Route exact path="/inscription/questionnaire" element={<StudentQuestionnaire />} />
               <Route exact path="/enregistrement/:id" element={<StudentNewsletterAnswer />} />
               <Route exact path="/desinscription/:id" element={<StudentNewsletterUnregister />} />
               <Route exact path="/eligibilite" element={<StudentEligibility />} />
               <Route exact path="/" element={<Landing />} />
-              <Route exact path="/test" element={<StudentTest />} />
               <Route
                 path="/psychologue/*"
                 element={user && role === 'psy' ? <PsychologistRouter /> : <Navigate to="/login" />}
