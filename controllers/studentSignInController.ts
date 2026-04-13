@@ -221,7 +221,7 @@ const sendCertificate = async (
   req: MulterRequest,
   res: Response,
 ): Promise<void> => {
-  const { email, ine, firstNames, lastName, dateOfBirth } = req.body;
+  const { email, ine } = req.body;
 
   // TODO gérer ça dans un validator
   if (!req.file || !email || !ine) {
@@ -243,14 +243,6 @@ const sendCertificate = async (
     },
   );
 
-  await dbStudents.create(
-    email,
-    ine,
-    firstNames,
-    lastName,
-    date.parseForm(dateOfBirth),
-  );
-
   await send(
     // TODO : replace mail by env var
     'support-santepsyetudiant@beta.gouv.fr',
@@ -264,10 +256,8 @@ const sendCertificate = async (
     ],
   );
 
-  await sendWelcomeMail(email);
-
   res.status(200).json({
-    message: 'Certificat envoyé et inscription validée.',
+    message: 'Certificat envoyé.',
   });
 };
 
