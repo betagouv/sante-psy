@@ -9,7 +9,9 @@ import { useStore } from 'stores/';
 import styles from './studentSignIn.cssmodule.scss';
 
 const StudentSignInStepTwo = () => {
-  const { commonStore: { config } } = useStore();
+  const {
+    commonStore: { config },
+  } = useStore();
   const { token } = useParams();
   const navigate = useNavigate();
 
@@ -98,10 +100,11 @@ const StudentSignInStepTwo = () => {
   const signIn = async e => {
     e.preventDefault();
 
-    const isFormValid = validateFirstNames(firstNames)
-      && validateLastName(lastName)
-      && validateDateOfBirth(dateOfBirth)
-      && validateINE(ine);
+    const isFormValid =
+      validateFirstNames(firstNames) &&
+      validateLastName(lastName) &&
+      validateDateOfBirth(dateOfBirth) &&
+      validateINE(ine);
 
     if (!isFormValid) return;
 
@@ -150,13 +153,11 @@ const StudentSignInStepTwo = () => {
     <Page
       withStats
       breadCrumbs={[{ href: '/', label: 'Accueil' }]}
-      title={(
+      title={
         <>
-          Inscription à ton
-          {' '}
-          <b>Espace Étudiant</b>
+          Inscription à ton <b>Espace Étudiant</b>
         </>
-      )}
+      }
     >
       <form onSubmit={signIn}>
         <div className="fr-my-2w">
@@ -174,7 +175,9 @@ const StudentSignInStepTwo = () => {
               required
               disabled={isBlocked}
             />
-            {firstNamesError && <p className="fr-error-text">{firstNamesError}</p>}
+            {firstNamesError && (
+              <p className="fr-error-text">{firstNamesError}</p>
+            )}
           </div>
 
           <div className="fr-input-group">
@@ -209,7 +212,9 @@ const StudentSignInStepTwo = () => {
               required
               disabled={isBlocked}
             />
-            {dateOfBirthError && <p className="fr-error-text">{dateOfBirthError}</p>}
+            {dateOfBirthError && (
+              <p className="fr-error-text">{dateOfBirthError}</p>
+            )}
           </div>
 
           <div className="fr-input-group">
@@ -219,7 +224,8 @@ const StudentSignInStepTwo = () => {
             >
               Numéro INE
               <span className="fr-hint-text">
-                11 chiffres ou lettres, présent sur ton certificat de scolarité ou attestation CVEC
+                11 chiffres ou lettres, présent sur ton certificat de scolarité
+                ou attestation CVEC
               </span>
             </label>
             <input
@@ -227,7 +233,7 @@ const StudentSignInStepTwo = () => {
               id="ine-input"
               type="text"
               value={ine}
-              onChange={e => setIne((e.target.value).toUpperCase())}
+              onChange={e => setIne(e.target.value.toUpperCase())}
               onBlur={() => validateINE(ine)}
               required
               disabled={isBlocked}
@@ -237,16 +243,15 @@ const StudentSignInStepTwo = () => {
         </div>
 
         {(notification || isBlocked) && (
-          <div
-            className="fr-alert fr-alert--error fr-mt-3w"
-            role="alert"
-          >
-            <h3 className="fr-alert__title">Une erreur est survenue lors de l&apos;inscription.</h3>
+          <div className="fr-alert fr-alert--error fr-mt-3w" role="alert">
+            <h3 className="fr-alert__title">
+              Une erreur est survenue lors de l&apos;inscription.
+            </h3>
             <p>
-              Vérifie que toutes tes informations sont correctes / n&apos;ont pas déjà été utilisées.
+              Vérifie que toutes tes informations sont correctes / n&apos;ont
+              pas déjà été utilisées.
               <br />
-              Autrement,
-              {' '}
+              Autrement,{' '}
               <a
                 href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
                 className="fr-link"
@@ -261,7 +266,9 @@ const StudentSignInStepTwo = () => {
         )}
         <div className="fr-mb-4w fr-mt-2w">
           <button className="fr-btn" type="submit" disabled={isBlocked}>
-            {notification?.type === 'error' ? 'Confirmer ces informations' : "M'inscrire"}
+            {notification?.type === 'error'
+              ? 'Confirmer ces informations'
+              : 'Continuer mon inscription'}
           </button>
         </div>
       </form>
