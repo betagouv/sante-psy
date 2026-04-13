@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Button,
   Radio,
@@ -179,6 +179,13 @@ const NOTIFICATION_METHODS = [
 const StudentQuestionnaire = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!location.state) {
+      navigate('/inscription', { replace: true });
+    }
+  }, [location.state, navigate]);
+
   const { email, ine, firstNames, lastName, dateOfBirth } =
     location.state || {};
 
