@@ -13,7 +13,7 @@ import styles from './studentTest.cssmodule.scss';
 import { useLocation } from 'react-router-dom';
 import agent from 'services/agent';
 import { useNavigate } from 'react-router-dom';
-import Page from 'components/Page/Page';
+import StudentSignInHeader from './StudentSignInHeader';
 
 const STEPS = [
   {
@@ -290,15 +290,7 @@ const StudentQuestionnaire = () => {
   ]);
 
   return (
-    <Page
-      withStats
-      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
-      title={
-        <>
-          Inscription à ton <b>Espace Étudiant</b>
-        </>
-      }
-    >
+    <StudentSignInHeader>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>{STEPS[step].title}</h2>
         <img
@@ -510,7 +502,7 @@ const StudentQuestionnaire = () => {
           </Button>
         </ButtonGroup>
       </div>
-    </Page>
+    </StudentSignInHeader>
   );
 };
 

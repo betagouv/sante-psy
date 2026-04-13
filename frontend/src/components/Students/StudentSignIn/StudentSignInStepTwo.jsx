@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Page from 'components/Page/Page';
 import agent from 'services/agent';
 import validateIneFormat from 'src/utils/validateIneFormat';
 import validateNameFormat from 'src/utils/validateNameFormat';
 import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import { useStore } from 'stores/';
 import styles from './studentSignIn.cssmodule.scss';
+import StudentSignInHeader from './StudentSignInHeader';
 
 const StudentSignInStepTwo = () => {
   const {
@@ -151,15 +151,7 @@ const StudentSignInStepTwo = () => {
   };
 
   return (
-    <Page
-      withStats
-      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
-      title={
-        <>
-          Inscription à ton <b>Espace Étudiant</b>
-        </>
-      }
-    >
+    <StudentSignInHeader>
       <form onSubmit={signIn}>
         <div className="fr-my-2w">
           <div className="fr-input-group">
@@ -273,7 +265,7 @@ const StudentSignInStepTwo = () => {
           </button>
         </div>
       </form>
-    </Page>
+    </StudentSignInHeader>
   );
 };
 
