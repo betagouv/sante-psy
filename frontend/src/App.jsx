@@ -41,7 +41,6 @@ import Podcast from 'components/Podcast/Podcast';
 import StudentSignInStepOne from 'components/Students/StudentSignIn/StudentSignInStepOne';
 import StudentSignInStepTwo from 'components/Students/StudentSignIn/StudentSignInStepTwo';
 import StudentSendCertificate from 'components/Students/Certificate/StudentSendCertificate';
-import CertificateSentSuccess from 'components/Students/Certificate/CertificateSentSuccess';
 import StudentSignInSuccess from 'components/Students/StudentSignIn/StudentSignInSuccess';
 import StudentSpaceInfo from 'components/StudentSpaceInfo/StudentSpaceInfo';
 import StudentNewsletterUnregister from './components/StudentNewsletterUnregister/StudentNewsletterUnregister';
@@ -59,7 +58,16 @@ function App() {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
-  console.log('🏠 App render - location:', location.pathname, 'user:', !!user, 'role:', role, 'loading:', loading);
+  console.log(
+    '🏠 App render - location:',
+    location.pathname,
+    'user:',
+    !!user,
+    'role:',
+    role,
+    'loading:',
+    loading,
+  );
 
   useEffect(() => {
     agent.Config.get().then(response => setConfig(response.data));
@@ -87,43 +95,130 @@ function App() {
         {!loading && (
           <React.Suspense fallback={null}>
             <Routes>
-              <Route exact path="/activation/:token" element={<ActiveProfile />} />
-              <Route exact path="/suspension/:token" element={<InactiveProfile />} />
+              <Route
+                exact
+                path="/activation/:token"
+                element={<ActiveProfile />}
+              />
+              <Route
+                exact
+                path="/suspension/:token"
+                element={<InactiveProfile />}
+              />
               <Route exact path="/logout" element={<Logout />} />
               <Route exact path="/login/:token" element={<Login />} />
               <Route exact path="/login/" element={<Login />} />
-              <Route exact path="/trouver-un-psychologue" element={<PsyListing />} />
-              <Route exact path="/trouver-un-psychologue/:psyId" element={<PublicPsychologistProfile />} />
+              <Route
+                exact
+                path="/trouver-un-psychologue"
+                element={<PsyListing />}
+              />
+              <Route
+                exact
+                path="/trouver-un-psychologue/:psyId"
+                element={<PublicPsychologistProfile />}
+              />
               <Route exact path="/mentions-legales" element={<LegalNotice />} />
-              <Route exact path="/declaration-accessibilite" element={<AccessibilityDeclaration />} />
-              <Route exact path="/declaration-accessibilite/plan-action" element={<AccessibilityActionPlan />} />
+              <Route
+                exact
+                path="/declaration-accessibilite"
+                element={<AccessibilityDeclaration />}
+              />
+              <Route
+                exact
+                path="/declaration-accessibilite/plan-action"
+                element={<AccessibilityActionPlan />}
+              />
               <Route exact path="/cgu" element={<CGU />} />
-              <Route exact path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
+              <Route
+                exact
+                path="/politique-de-confidentialite"
+                element={<PrivacyPolicy />}
+              />
               <Route exact path="/faq" element={<Faq />} />
-              <Route exact path="/espace-etudiant" element={<StudentSpaceInfo />} />
+              <Route
+                exact
+                path="/espace-etudiant"
+                element={<StudentSpaceInfo />}
+              />
               <Route exact path="/stats" element={<Statistics />} />
               <Route exact path="/contact" element={<Contact />} />
-              <Route exact path="/contact/formulaire" element={<ContactForm />} />
-              <Route exact path="/autres-services" element={<OtherServicesPage />} />
+              <Route
+                exact
+                path="/contact/formulaire"
+                element={<ContactForm />}
+              />
+              <Route
+                exact
+                path="/autres-services"
+                element={<OtherServicesPage />}
+              />
               <Route exact path="/podcast" element={<Podcast />} />
-              <Route exact path="/info-etudiant" element={<StudentInfoLanding />} />
-              <Route exact path="/inscription" element={<StudentSignInStepOne />} />
-              <Route exact path="/inscription/:token" element={<StudentSignInStepTwo />} />
-              <Route exact path="/inscription/success" element={<StudentSignInSuccess />} />
-              <Route exact path="/inscription/certificat" element={<StudentSendCertificate />} />
-              <Route exact path="/inscription/certificat/success" element={<CertificateSentSuccess />} />
-              <Route exact path="/inscription/questionnaire" element={<StudentQuestionnaire />} />
-              <Route exact path="/enregistrement/:id" element={<StudentNewsletterAnswer />} />
-              <Route exact path="/desinscription/:id" element={<StudentNewsletterUnregister />} />
-              <Route exact path="/eligibilite" element={<StudentEligibility />} />
+              <Route
+                exact
+                path="/info-etudiant"
+                element={<StudentInfoLanding />}
+              />
+              <Route
+                exact
+                path="/inscription"
+                element={<StudentSignInStepOne />}
+              />
+              <Route
+                exact
+                path="/inscription/:token"
+                element={<StudentSignInStepTwo />}
+              />
+              <Route
+                exact
+                path="/inscription/success"
+                element={<StudentSignInSuccess />}
+              />
+              <Route
+                exact
+                path="/inscription/certificat"
+                element={<StudentSendCertificate />}
+              />
+              <Route
+                exact
+                path="/inscription/questionnaire"
+                element={<StudentQuestionnaire />}
+              />
+              <Route
+                exact
+                path="/enregistrement/:id"
+                element={<StudentNewsletterAnswer />}
+              />
+              <Route
+                exact
+                path="/desinscription/:id"
+                element={<StudentNewsletterUnregister />}
+              />
+              <Route
+                exact
+                path="/eligibilite"
+                element={<StudentEligibility />}
+              />
               <Route exact path="/" element={<Landing />} />
               <Route
                 path="/psychologue/*"
-                element={user && role === 'psy' ? <PsychologistRouter /> : <Navigate to="/login" />}
+                element={
+                  user && role === 'psy' ? (
+                    <PsychologistRouter />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
               />
               <Route
                 path="/etudiant/*"
-                element={user && role === 'student' ? <StudentRouter /> : <Navigate to="/login" />}
+                element={
+                  user && role === 'student' ? (
+                    <StudentRouter />
+                  ) : (
+                    <Navigate to="/login" />
+                  )
+                }
               />
               <Route path="/*" element={<Navigate to="/" replace />} />
             </Routes>
