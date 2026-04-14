@@ -11,6 +11,22 @@
 .title {
   font-size: 1.75rem;
   font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.privacyBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: var(--background-alt-blue-france);
+  border-radius: 4px;
+}
+
+.privacyText {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-default-grey);
 }
 
 img {
