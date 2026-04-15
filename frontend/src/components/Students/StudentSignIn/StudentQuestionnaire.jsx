@@ -272,12 +272,10 @@ const StudentQuestionnaire = () => {
       return !!acceptedCGUs;
     }
     if (step === 1) {
-      return (
-        !!schoolType &&
-        !!schoolPostcode &&
-        (schoolType !== 'other' || !!otherSchoolType) &&
-        (schoolType !== 'university' || !!selectedUniversity)
-      );
+    return !!schoolType && 
+      !!schoolPostcode && 
+      (schoolType === 'university' || !!otherSchoolType) && 
+      (schoolType !== 'university' || !!selectedUniversity);
     }
     if (step === 2) {
       return !!studyLevel && !!studyField;
@@ -418,10 +416,10 @@ const StudentQuestionnaire = () => {
                 )}
               </div>
             )}
-            {schoolType === 'other' && (
+            {schoolType && schoolType !== 'university' && (
               <TextInput
                 required
-                label="Autre : précisez"
+                label="Nom de l'établissement"
                 value={otherSchoolType}
                 onChange={e => setOtherSchoolType(e.target.value)}
               />
