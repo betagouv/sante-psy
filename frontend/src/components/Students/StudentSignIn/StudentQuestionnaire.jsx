@@ -333,12 +333,12 @@ const StudentQuestionnaire = () => {
             </p>
           </div>
         )}
-        <img
-          src={`/images/studentSpace/questionnaire/${STEPS[step].png}.png`}
-          alt=""
-          height={186}
-          width={186}
-        />
+        <div className={styles.imageContainer}>
+          <img
+            src={`/images/studentSpace/questionnaire/${STEPS[step].png}.png`}
+            alt=""
+          />
+        </div>
         {step === 0 && (
           <>
             <p>
