@@ -377,6 +377,7 @@ const StudentQuestionnaire = () => {
               <div className={`fr-select-group ${styles.universityContainer}`}>
                 <label className="fr-label" htmlFor="university-input">
                   Université
+                  <span className="error" aria-hidden="true"> *</span>
                 </label>
                 <input
                   className="fr-input"
