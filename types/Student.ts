@@ -16,8 +16,6 @@ export type Student = {
   gender?: string;
   school_postcode?: string;
   living_postcode?: string;
-  how_did_you_know?: string;
-  how_did_you_know_other?: string;
   notification_email?: string;
   notification_sms?: boolean;
   phone_number?: boolean;

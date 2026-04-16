@@ -141,29 +141,6 @@ const GENDERS = [
   },
 ];
 
-const HOW_DID_YOU_KNOW = [
-  {
-    label: 'Réseaux sociaux',
-    value: 'social_network',
-  },
-  {
-    label: 'Internet',
-    value: 'internet',
-  },
-  {
-    label: 'Mon école',
-    value: 'school',
-  },
-  {
-    label: 'Médias',
-    value: 'media',
-  },
-  {
-    label: 'Autre',
-    value: 'other',
-  },
-];
-
 const NOTIFICATION_METHODS = [
   {
     label: 'email',
@@ -208,9 +185,6 @@ const StudentQuestionnaire = () => {
   const [gender, setGender] = useState(null);
   const [livingPostcode, setLivingPostcode] = useState('');
   // step 4
-  const [howDidYouKnow, setHowDidYouKnow] = useState(null);
-  const [otherHowDidYouKnow, setOtherHowDidYouKnow] = useState(null);
-  // step 5
   const [notificationMethod, setNotificationMethod] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [universitySearch, setUniversitySearch] = useState('');
@@ -233,8 +207,6 @@ const StudentQuestionnaire = () => {
         studyField,
         gender,
         livingPostcode,
-        howDidYouKnow,
-        otherHowDidYouKnow,
         phoneNumber,
         notificationsEmail: ['email', 'both'].includes(notificationMethod),
         notificationsSms: ['sms', 'both'].includes(notificationMethod),
@@ -285,11 +257,6 @@ const StudentQuestionnaire = () => {
     }
     if (step === 4) {
       return (
-        !!howDidYouKnow && (howDidYouKnow !== 'other' || !!otherHowDidYouKnow)
-      );
-    }
-    if (step === 5) {
-      return (
         !!notificationMethod &&
         (notificationMethod === 'email' || !!phoneNumber)
       );
@@ -301,13 +268,11 @@ const StudentQuestionnaire = () => {
     studyLevel,
     acceptedCGUs,
     gender,
-    howDidYouKnow,
     notificationMethod,
     schoolPostcode,
     otherSchoolType,
     studyField,
     livingPostcode,
-    otherHowDidYouKnow,
     phoneNumber,
     selectedUniversity,
   ]);
@@ -488,29 +453,6 @@ const StudentQuestionnaire = () => {
           </>
         )}
         {step === 4 && (
-          <>
-            <RadioGroup
-              name="howDidYouKnow"
-              legend="Comment as-tu connu Santé Psy Étudiant ?"
-              value={howDidYouKnow}
-              onChange={value => setHowDidYouKnow(value)}
-              required
-            >
-              {HOW_DID_YOU_KNOW.map(({ label, value }) => (
-                <Radio key={value} label={label} value={value} />
-              ))}
-            </RadioGroup>
-            {howDidYouKnow === 'other' && (
-              <TextInput
-                required
-                label="Autre : précisez"
-                value={otherHowDidYouKnow}
-                onChange={e => setOtherHowDidYouKnow(e.target.value)}
-              />
-            )}
-          </>
-        )}
-        {step === 5 && (
           <>
             <RadioGroup
               name="notificationMethod"
