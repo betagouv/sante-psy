@@ -57,8 +57,6 @@ type CreateStudentParams = {
   studyField?: string;
   gender?: string;
   livingPostcode?: string;
-  howDidYouKnow?: string;
-  otherHowDidYouKnow?: string;
   phoneNumber?: string;
   notificationsEmail?: boolean;
   notificationsSms?: boolean;
@@ -79,8 +77,6 @@ const create = async ({
   studyField,
   gender,
   livingPostcode,
-  howDidYouKnow,
-  otherHowDidYouKnow,
   phoneNumber,
   notificationsEmail,
   notificationsSms,
@@ -103,8 +99,6 @@ const create = async ({
         gender,
         school_postcode: schoolPostcode,
         living_postcode: livingPostcode,
-        how_did_you_know: howDidYouKnow,
-        how_did_you_know_other: otherHowDidYouKnow,
         notification_email: notificationsEmail,
         notification_sms: notificationsSms,
         phone_number: phoneNumber,
