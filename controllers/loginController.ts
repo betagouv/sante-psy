@@ -132,7 +132,6 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
   const { email } = req.body;
 
-  console.log(`User with ${logs.hash(email)} asked for a login link`);
   const acceptedEmailExist = await dbPsychologists.getAcceptedByEmail(email);
 
   if (!acceptedEmailExist) {
@@ -168,7 +167,6 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
   const { email } = req.body;
 
-  console.log(`Student with ${logs.hash(email)} asked for a login link`);
   const studentIsRegistered = await dbStudents.getByEmail(email);
   const existingToken = await dbLoginToken.getByEmail(email);
   let token;
@@ -195,8 +193,6 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
 const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
   const { email } = req.body;
-
-  console.log(`User login link request for ${email}`);
 
   const student = await dbStudents.getByEmail(email);
   if (student) {
