@@ -33,7 +33,7 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
     const existingStudent = await db(studentsTable).where({ email }).first();
     if (existingStudent) {
       const token = loginInformations.generateToken(32);
-      const expiresAt = date.getDatePlusTwoHours();
+      const expiresAt = date.getDatePlusHours(2);
       await dbLoginToken.upsert(token, email, expiresAt, 'student');
       await loginController.sendStudentLoginEmail(
         email,
@@ -61,7 +61,7 @@ const sendWelcomeMail = async (email): Promise<void> => {
   try {
     const loginUrl = loginInformations.generateLoginUrl();
     const token = loginInformations.generateToken(32);
-    const expiresAt = date.getDatePlusTwoHours();
+    const expiresAt = date.getDatePlusHours(2);
 
     await dbLoginToken.upsert(token, email, expiresAt, 'student');
     await sendStudentMailTemplate(
@@ -122,7 +122,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
 
     if (duplicateCheck.status === 'alreadyRegistered') {
       const token = loginInformations.generateToken(32);
-      const expiresAt = date.getDatePlusTwoHours();
+      const expiresAt = date.getDatePlusHours(2);
 
       await dbLoginToken.upsert(token, email, expiresAt, 'student');
       await loginController.sendStudentLoginEmail(

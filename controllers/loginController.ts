@@ -87,7 +87,7 @@ async function sendNotYetAcceptedEmail(email: string): Promise<void> {
 
 async function savePsyToken(email: string, token: string): Promise<void> {
   try {
-    const expiredAt = date.getDatePlusOneHour();
+    const expiredAt = date.getDatePlusHours(1);
     await dbLoginToken.upsert(token, email, expiredAt, 'psy');
 
     console.log(`Login token created for ${logs.hash(email)}`);
@@ -99,7 +99,7 @@ async function savePsyToken(email: string, token: string): Promise<void> {
 
 async function saveStudentToken(email: string, token: string): Promise<void> {
   try {
-    const expiresAt = date.getDatePlusTwoHours();
+    const expiresAt = date.getDatePlusHours(2);
     await dbLoginToken.upsert(token, email, expiresAt, 'student');
 
     console.log(`Login token created for ${logs.hash(email)}`);

@@ -40,19 +40,9 @@ const dateToDashedString = (date: Date): string => [
   String(date.getDate()).padStart(2, '0'),
 ].join('-');
 
-const getDatePlusOneHour = (): Date => {
+const getDatePlusHours = (nbHours: number): Date => {
   const expirationDate = new Date();
-  return new Date(expirationDate.setHours(expirationDate.getHours() + 1));
-};
-
-const getDatePlusTwoHours = (): Date => {
-  const expirationDate = new Date();
-  return new Date(expirationDate.setHours(expirationDate.getHours() + 2));
-};
-
-const getDatePlusFourtyEightHours = (): Date => {
-  const expirationDate = new Date();
-  return new Date(expirationDate.setHours(expirationDate.getHours() + 48));
+  return new Date(expirationDate.setHours(expirationDate.getHours() + nbHours));
 };
 
 const getUTCDate = (date: Date) : Date => new Date(Date.UTC(
@@ -79,9 +69,7 @@ const getFirstDayOfLastMonth = (): Date => {
 export default {
   formatFrenchDateForm: 'DD/MM/YYYY',
   formatFrenchDate: dateFormatter.format,
-  getDatePlusOneHour,
-  getDatePlusTwoHours,
-  getDatePlusFourtyEightHours,
+  getDatePlusHours,
   getUTCDate,
   toFormatDDMMYYYY,
   parseForm,

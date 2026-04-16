@@ -17,7 +17,7 @@ describe('DB Login token', () => {
   describe('getByToken', () => {
     it('should get all token info with a token', async () => {
       const email = 'prenom.nom@beta.gouv.fr';
-      const expiresAt = date.getDatePlusOneHour();
+      const expiresAt = date.getDatePlusHours(1);
       await dbLoginToken.upsert(token, email, expiresAt);
       const result = await dbLoginToken.getByToken(token);
 
@@ -40,7 +40,7 @@ describe('DB Login token', () => {
   describe('upsert', () => {
     it('should upsert a token and get it with its email', async () => {
       const email = 'prenom.nom@beta.gouv.fr';
-      const expiresAt = date.getDatePlusOneHour();
+      const expiresAt = date.getDatePlusHours(1);
       await dbLoginToken.upsert(token, email, expiresAt);
 
       const result = await dbLoginToken.getByToken(token);
@@ -53,7 +53,7 @@ describe('DB Login token', () => {
   describe('delete', () => {
     it('should delete an existing token', async () => {
       const email = 'prenom.nom@beta.gouv.fr';
-      const expiresAt = date.getDatePlusOneHour();
+      const expiresAt = date.getDatePlusHours(1);
       await dbLoginToken.upsert(token, email, expiresAt);
 
       await dbLoginToken.delete(token);

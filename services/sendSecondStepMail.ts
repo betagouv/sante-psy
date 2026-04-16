@@ -15,7 +15,7 @@ const sendStudentSecondStepInvitation = async (
   title: string,
 ): Promise<void> => {
   const token = loginInformations.generateToken(32);
-  const expiresAt = date.getDatePlusFourtyEightHours();
+  const expiresAt = date.getDatePlusHours(48);
 
   await dbLoginToken.upsert(token, email, expiresAt, 'student');
 
