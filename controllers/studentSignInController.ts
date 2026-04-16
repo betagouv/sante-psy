@@ -3,7 +3,10 @@ import asyncHelper from '../utils/async-helper';
 import dbStudents from '../db/students';
 import dbLoginToken from '../db/loginToken';
 import CustomError from '../utils/CustomError';
-import { signInValidator, emailValidator } from './validators/studentValidators';
+import {
+  signInValidator,
+  emailValidator,
+} from './validators/studentValidators';
 import loginInformations from '../services/loginInformations';
 import date from '../utils/date';
 import db from '../db/db';
@@ -20,7 +23,10 @@ import config from '../utils/config';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
-const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<void> => {
+const sendStudentSecondStepMail = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { email } = req.body;
     const existingPsy = await db(psychologistsTable).where({ email }).first();
@@ -33,8 +39,11 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
     const existingStudent = await db(studentsTable).where({ email }).first();
     if (existingStudent) {
       const token = loginInformations.generateToken(32);
-      const expiresAt = date.getDatePlusTwoHours();
+      const expiresAt = date.getDatePlusHours(2);
       await dbLoginToken.upsert(token, email, expiresAt, 'student');
+      console.log(
+        `--login (via signin) - existing student - token created for ${email} token=${token.slice(0, 6)}...`,
+      );
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),
@@ -53,7 +62,9 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
     });
   } catch (err) {
     console.error(err);
-    throw err instanceof CustomError ? err : new CustomError("Erreur lors de l'envoi du mail de connexion", 500);
+    throw err instanceof CustomError
+      ? err
+      : new CustomError("Erreur lors de l'envoi du mail de connexion", 500);
   }
 };
 
@@ -61,9 +72,12 @@ const sendWelcomeMail = async (email): Promise<void> => {
   try {
     const loginUrl = loginInformations.generateLoginUrl();
     const token = loginInformations.generateToken(32);
-    const expiresAt = date.getDatePlusTwoHours();
+    const expiresAt = date.getDatePlusHours(2);
 
     await dbLoginToken.upsert(token, email, expiresAt, 'student');
+    console.log(
+      `--login (via signin step 2) - user creation - token created for ${email} token=${token.slice(0, 6)}...`,
+    );
     await sendStudentMailTemplate(
       email,
       loginUrl,
@@ -73,11 +87,16 @@ const sendWelcomeMail = async (email): Promise<void> => {
     );
   } catch (err) {
     console.error(err);
-    throw err instanceof CustomError ? err : new CustomError("Erreur lors de l'envoi du mail de connexion", 500);
+    throw err instanceof CustomError
+      ? err
+      : new CustomError("Erreur lors de l'envoi du mail de connexion", 500);
   }
 };
 
-const verifyStudentToken = async (req: Request, res: Response): Promise<void> => {
+const verifyStudentToken = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const { token } = req.params;
 
   const tokenRow = await dbLoginToken.getByToken(token);
@@ -122,9 +141,12 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
 
     if (duplicateCheck.status === 'alreadyRegistered') {
       const token = loginInformations.generateToken(32);
-      const expiresAt = date.getDatePlusTwoHours();
+      const expiresAt = date.getDatePlusHours(2);
 
       await dbLoginToken.upsert(token, email, expiresAt, 'student');
+      console.log(
+        `--login (via signin step 2) - alreadyRegistered - token created for ${email} token=${token.slice(0, 6)}...`,
+      );
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),
@@ -137,10 +159,11 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     }
 
     if (duplicateCheck.status === 'conflict') {
-      const { shouldSendCertificate } = await signInAttempts.checkAndIncrementAttempts(
-        tokenRow.token,
-        currentAttempts,
-      );
+      const { shouldSendCertificate } =
+        await signInAttempts.checkAndIncrementAttempts(
+          tokenRow.token,
+          currentAttempts,
+        );
 
       if (shouldSendCertificate) {
         await dbLoginToken.delete(tokenRow.token);
@@ -163,10 +186,11 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
     const isINEValid = await verifyINEWithBirthDate(ine, rawDateOfBirth);
 
     if (!isINEValid) {
-      const { shouldSendCertificate } = await signInAttempts.checkAndIncrementAttempts(
-        tokenRow.token,
-        currentAttempts,
-      );
+      const { shouldSendCertificate } =
+        await signInAttempts.checkAndIncrementAttempts(
+          tokenRow.token,
+          currentAttempts,
+        );
 
       res.status(429).json({
         shouldSendCertificate,
@@ -200,9 +224,7 @@ const sendCertificate = async (
   req: MulterRequest,
   res: Response,
 ): Promise<void> => {
-  const {
-    email, ine, firstNames, lastName, dateOfBirth,
-  } = req.body;
+  const { email, ine, firstNames, lastName, dateOfBirth } = req.body;
 
   // TODO gérer ça dans un validator
   if (!req.file || !email || !ine) {
@@ -216,10 +238,13 @@ const sendCertificate = async (
     throw new CustomError('Token expiré', 401);
   }
 
-  const html = await ejs.renderFile('./views/emails/sendStudentCertificate.ejs', {
-    email,
-    ine,
-  });
+  const html = await ejs.renderFile(
+    './views/emails/sendStudentCertificate.ejs',
+    {
+      email,
+      ine,
+    },
+  );
 
   await dbStudents.create(
     email,

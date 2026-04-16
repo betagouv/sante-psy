@@ -34,38 +34,32 @@ const parseForm = (date: string): Date => {
   return null;
 };
 
-const dateToDashedString = (date: Date): string => [
-  date.getFullYear(),
-  String(date.getMonth() + 1).padStart(2, '0'),
-  String(date.getDate()).padStart(2, '0'),
-].join('-');
+const dateToDashedString = (date: Date): string =>
+  [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0'),
+  ].join('-');
 
-const getDatePlusOneHour = (): Date => {
+const getDatePlusHours = (nbHours: number): Date => {
   const expirationDate = new Date();
-  return new Date(expirationDate.setHours(expirationDate.getHours() + 1));
+  return new Date(expirationDate.setHours(expirationDate.getHours() + nbHours));
 };
 
-const getDatePlusTwoHours = (): Date => {
-  const expirationDate = new Date();
-  return new Date(expirationDate.setHours(expirationDate.getHours() + 2));
-};
+const getUTCDate = (date: Date): Date =>
+  new Date(
+    Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      date.getHours(),
+      date.getMinutes(),
+      date.getSeconds(),
+      date.getMilliseconds(),
+    ),
+  );
 
-const getDatePlusFourtyEightHours = (): Date => {
-  const expirationDate = new Date();
-  return new Date(expirationDate.setHours(expirationDate.getHours() + 48));
-};
-
-const getUTCDate = (date: Date) : Date => new Date(Date.UTC(
-  date.getFullYear(),
-  date.getMonth(),
-  date.getDate(),
-  date.getHours(),
-  date.getMinutes(),
-  date.getSeconds(),
-  date.getMilliseconds(),
-));
-
-const subtractDays = (date: Date, days: number) : Date => {
+const subtractDays = (date: Date, days: number): Date => {
   date.setDate(date.getDate() - days);
 
   return date;
@@ -79,9 +73,7 @@ const getFirstDayOfLastMonth = (): Date => {
 export default {
   formatFrenchDateForm: 'DD/MM/YYYY',
   formatFrenchDate: dateFormatter.format,
-  getDatePlusOneHour,
-  getDatePlusTwoHours,
-  getDatePlusFourtyEightHours,
+  getDatePlusHours,
   getUTCDate,
   toFormatDDMMYYYY,
   parseForm,
