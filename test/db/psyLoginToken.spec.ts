@@ -29,7 +29,9 @@ describe('DB Login token', () => {
     it('should get nothing if token is older than one hour', async () => {
       const email = 'prenom.nom@beta.gouv.fr';
       const expirationDate = new Date();
-      const expiredDate = new Date(expirationDate.setHours(expirationDate.getHours() - 6));
+      const expiredDate = new Date(
+        expirationDate.setHours(expirationDate.getHours() - 6),
+      );
       await dbLoginToken.upsert(token, email, expiredDate);
       const result = await dbLoginToken.getByToken(token);
 
