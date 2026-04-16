@@ -29,7 +29,7 @@ const STEPS = [
   {
     title: 'Mieux te connaître',
     png: 'image_260',
-    privacyHidden: true
+    privacyHidden: true,
   },
   {
     title: 'Notifications',
@@ -89,27 +89,27 @@ const STUDY_LEVELS = [
 
 const STUDY_FIELDS = [
   {
-    label: 'arts, lettres, langues',
+    label: 'Arts, lettres, langues',
     value: 'arts',
   },
   {
-    label: 'droit, économie, gestion',
+    label: 'Droit, économie, gestion',
     value: 'legal',
   },
   {
-    label: 'sciences humaines et sociales',
+    label: 'Sciences humaines et sociales',
     value: 'sociology',
   },
   {
-    label: 'sciences, technologies',
+    label: 'Sciences, technologies',
     value: 'science',
   },
   {
-    label: 'santé - médical et paramédical',
+    label: 'Santé - médical et paramédical',
     value: 'medical',
   },
   {
-    label: 'autre',
+    label: 'Autre',
     value: 'other',
   },
 ];
@@ -170,6 +170,8 @@ const StudentQuestionnaire = () => {
   const [selectedUniversity, setSelectedUniversity] = useState('');
   const [otherSchoolType, setOtherSchoolType] = useState('');
   const [schoolPostcode, setSchoolPostcode] = useState('');
+  const [universitySearch, setUniversitySearch] = useState('');
+  const [showUnivList, setShowUnivList] = useState(false);
   // step 2
   const [studyLevel, setStudyLevel] = useState(null);
   const [studyField, setStudyField] = useState(null);
@@ -180,8 +182,6 @@ const StudentQuestionnaire = () => {
   // step 4
   const [notificationMethod, setNotificationMethod] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState(null);
-  const [universitySearch, setUniversitySearch] = useState('');
-  const [showUnivList, setShowUnivList] = useState(false);
 
   const signIn = async () => {
     try {
@@ -222,7 +222,7 @@ const StudentQuestionnaire = () => {
   );
 
   const onClickNext = () => {
-    if (step === 5) {
+    if (step === 4) {
       signIn();
       return;
     }
@@ -265,12 +265,12 @@ const StudentQuestionnaire = () => {
     gender,
     notificationMethod,
     schoolPostcode,
+    selectedUniversity,
     otherSchoolType,
     studyField,
     studyFieldOther,
     livingPostcode,
     phoneNumber,
-    selectedUniversity,
   ]);
 
   return (
@@ -443,8 +443,8 @@ const StudentQuestionnaire = () => {
               hint="Pour te proposer des psychologues près de chez toi"
               value={livingPostcode}
               onChange={e => {
-                const livingPostcode = e.target.value.replace(/\D/g, '');
-                if (livingPostcode.length <= 5) setLivingPostcode(livingPostcode);
+                const value = e.target.value.replace(/\D/g, '');
+                if (value.length <= 5) setLivingPostcode(value);
               }}
             />
           </>
@@ -453,7 +453,7 @@ const StudentQuestionnaire = () => {
           <>
             <RadioGroup
               name="notificationMethod"
-              legend="Comment souhaites-tu être notifé des séances déclarées par les psychologues ?"
+              legend="Comment souhaites-tu être notifié des séances déclarées par les psychologues ?"
               value={notificationMethod}
               onChange={value => setNotificationMethod(value)}
               required

@@ -136,7 +136,7 @@ const getByEmail = async (email: string): Promise<Student> => {
 const getByEmailAndIne = async (
   ine: string,
   email: string,
-): Promise<Student> | null => {
+): Promise<Student | null> => {
   try {
     const result = await db(studentsTable)
       .where('email', email)
