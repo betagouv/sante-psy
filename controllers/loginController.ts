@@ -85,10 +85,15 @@ async function sendNotYetAcceptedEmail(email: string): Promise<void> {
   }
 }
 
-async function savePsyToken(email: string, token: string): Promise<void> {
+async function saveToken(
+  email: string,
+  token: string,
+  role: 'psy' | 'student',
+  expiresInNHours: number,
+): Promise<void> {
   try {
-    const expiredAt = date.getDatePlusHours(1);
-    await dbLoginToken.upsert(token, email, expiredAt, 'psy');
+    const expiredAt = date.getDatePlusHours(expiresInNHours);
+    await dbLoginToken.upsert(token, email, expiredAt, role);
 
     console.log(`Login token created for ${logs.hash(email)}`);
   } catch (err) {
@@ -97,16 +102,12 @@ async function savePsyToken(email: string, token: string): Promise<void> {
   }
 }
 
-async function saveStudentToken(email: string, token: string): Promise<void> {
-  try {
-    const expiresAt = date.getDatePlusHours(2);
-    await dbLoginToken.upsert(token, email, expiresAt, 'student');
+async function savePsyToken(email: string, token: string): Promise<void> {
+  return saveToken(email, token, 'psy', 1);
+}
 
-    console.log(`Login token created for ${logs.hash(email)}`);
-  } catch (err) {
-    console.error(`Erreur de sauvegarde du token : ${err}`);
-    throw new Error('Erreur de sauvegarde du token');
-  }
+async function saveStudentToken(email: string, token: string): Promise<void> {
+  return saveToken(email, token, 'student', 2);
 }
 
 const deleteToken = (req: Request, res: Response): void => {
