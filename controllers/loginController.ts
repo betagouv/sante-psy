@@ -19,6 +19,10 @@ import { checkXsrf } from '../middlewares/xsrfProtection';
 import loginInformations from '../services/loginInformations';
 import DOMPurify from '../services/sanitizer';
 
+const CONNEXION_EMAIL_SENT_MESSAGE = `Un email de connexion vient de vous être envoyé si votre adresse email 
+      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
+      Le lien est valable ${config.sessionDurationHours} heures.`;
+
 const emailValidators = [
   check('email').isEmail().withMessage('Vous devez spécifier un email valide.'),
 ];
@@ -180,9 +184,7 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   await sendPsyLoginEmail(email, loginUrl, token);
   await savePsyToken(email, token);
   res.json({
-    message: `Un email de connexion vient de vous être envoyé si votre adresse email 
-      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
-      Le lien est valable ${config.sessionDurationHours} heures.`,
+    message: CONNEXION_EMAIL_SENT_MESSAGE,
   });
 };
 
@@ -207,9 +209,7 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   }
 
   res.json({
-    message: `Un email de connexion vient de vous être envoyé si votre adresse email 
-      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
-      Le lien est valable ${config.sessionDurationHours} heures.`,
+    message: CONNEXION_EMAIL_SENT_MESSAGE,
   });
 };
 
@@ -234,9 +234,7 @@ const sendUserLoginMail = async (
   }
 
   res.json({
-    message: `Un email de connexion vient de vous être envoyé si votre adresse email 
-      correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
-      Le lien est valable ${config.sessionDurationHours} heures.`,
+    message: CONNEXION_EMAIL_SENT_MESSAGE,
   });
 };
 
