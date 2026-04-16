@@ -49,13 +49,6 @@ router.get(
   loginController.userConnected,
 );
 
-router.post(
-  '/psychologist/sendMail',
-  speedLimiterLogin,
-  loginController.emailValidators,
-  loginController.sendMail,
-);
-router.post('/psychologist/login', speedLimiterLogin, loginController.login);
 // TODO move this route in protected
 router.post(
   '/student/signInSecondStepMail',
@@ -89,12 +82,6 @@ router.post(
   speedLimiterSendCertificate,
   uploadCertificate.single('file'),
   studentSignInController.sendCertificate,
-);
-
-router.post(
-  '/student/sendLoginMail',
-  speedLimiterLogin,
-  loginController.sendMail,
 );
 
 router.post(
