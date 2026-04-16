@@ -20,9 +20,7 @@ module.exports = {
   },
   rules: {
     'arrow-body-style': ['error', 'as-needed'],
-    'arrow-parens': ['error', 'as-needed'],
     'class-methods-use-this': 'off',
-    'comma-dangle': ['error', 'always-multiline'],
     'guard-for-in': 'off',
     'import/extensions': ['error', 'never', { json: 'always' }],
     'import/no-cycle': 'off',

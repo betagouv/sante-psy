@@ -1,7 +1,9 @@
 packages:
-  - "frontend"
+  - 'frontend'
 
 minimumReleaseAge: 10080 # wait for a 7 days (in minutes) cooldown period
+minimumReleaseAgeExclude:
+  - axios
 
 sideEffectsCache: false
 trustPolicy: no-downgrade
@@ -12,8 +14,8 @@ trustPolicyExclude:
   - semver@5.7.2 || 6.3.1
   - chokidar@4.0.3
 
-onlyBuiltDependencies: 
-  - "@parcel/watcher"
+onlyBuiltDependencies:
+  - '@parcel/watcher'
   - core-js-pure
   - cypress
   - less

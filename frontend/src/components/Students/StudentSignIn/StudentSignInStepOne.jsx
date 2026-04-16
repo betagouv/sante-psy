@@ -10,7 +10,9 @@ const StudentSignInStepOne = () => {
   const [notification, setNotification] = useState(null);
   const [canSendEmail, setCanSendEmail] = useState(true);
 
-  const validateEmail = value => {
+  useEffect(() => setCanSendEmail(!!email), [email]);
+
+  const validateEmail = (value) => {
     const isValidEmail = validateEmailFormat(value);
     if (!isValidEmail) {
       setEmailError("Format incorrect de l'email.");
@@ -28,7 +30,8 @@ const StudentSignInStepOne = () => {
 
   useEffect(() => setCanSendEmail(true), [email]);
 
-  const sendStudentSecondStepMail = async e => {
+  const sendStudentSecondStepMail = async (e) => {
+    setCanSendEmail(false);
     e.preventDefault();
     const isValid = validateEmail(email);
     if (!isValid) return;
@@ -89,7 +92,7 @@ const StudentSignInStepOne = () => {
               type="email"
               placeholder="Ton email"
               value={email}
-              onChange={e => setEmail(e.target.value.toLowerCase())}
+              onChange={(e) => setEmail(e.target.value.toLowerCase())}
               onBlur={() => validateEmail(email)}
               required
             />

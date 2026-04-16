@@ -63,11 +63,11 @@ const Login = () => {
     if (token && !loginCalled.current) {
       loginCalled.current = true;
       agent.Auth.login(token)
-        .then(async data => {
+        .then(async (data) => {
           await setRole(data.role);
           await setXsrfToken(data.xsrfToken);
         })
-        .catch(error => {
+        .catch((error) => {
           setNotification(
             {
               message:
@@ -96,7 +96,7 @@ const Login = () => {
     }
   }, [role, token, navigate]);
 
-  const loginUser = e => {
+  const loginUser = (e) => {
     setCanSendEmail(false);
     e.preventDefault();
     agent.Auth.sendLoginMail(email).then(setNotification);
@@ -121,7 +121,7 @@ const Login = () => {
                 data-test-id="email-input"
                 value={email}
                 type="email"
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Col>
             <Col>

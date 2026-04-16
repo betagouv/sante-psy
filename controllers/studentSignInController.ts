@@ -39,8 +39,11 @@ const sendStudentSecondStepMail = async (
     const existingStudent = await db(studentsTable).where({ email }).first();
     if (existingStudent) {
       const token = loginInformations.generateToken(32);
-      const expiresAt = date.getDatePlusTwoHours();
+      const expiresAt = date.getDatePlusHours(2);
       await dbLoginToken.upsert(token, email, expiresAt, 'student');
+      console.log(
+        `--login (via signin) - existing student - token created for ${email} token=${token.slice(0, 6)}...`,
+      );
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),
@@ -69,9 +72,12 @@ const sendWelcomeMail = async (email): Promise<void> => {
   try {
     const loginUrl = loginInformations.generateLoginUrl();
     const token = loginInformations.generateToken(32);
-    const expiresAt = date.getDatePlusTwoHours();
+    const expiresAt = date.getDatePlusHours(2);
 
     await dbLoginToken.upsert(token, email, expiresAt, 'student');
+    console.log(
+      `--login (via signin step 2) - user creation - token created for ${email} token=${token.slice(0, 6)}...`,
+    );
     await sendStudentMailTemplate(
       email,
       loginUrl,
@@ -149,9 +155,12 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
 
     if (duplicateCheck.status === 'alreadyRegistered') {
       const token = loginInformations.generateToken(32);
-      const expiresAt = date.getDatePlusTwoHours();
+      const expiresAt = date.getDatePlusHours(2);
 
       await dbLoginToken.upsert(token, email, expiresAt, 'student');
+      console.log(
+        `--login (via signin step 2) - alreadyRegistered - token created for ${email} token=${token.slice(0, 6)}...`,
+      );
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),
@@ -249,7 +258,7 @@ const sendCertificate = async (
   req: MulterRequest,
   res: Response,
 ): Promise<void> => {
-  const { email, ine } = req.body;
+  const { email, ine, firstNames, lastName, dateOfBirth } = req.body;
 
   // TODO gérer ça dans un validator
   if (!req.file || !email || !ine) {

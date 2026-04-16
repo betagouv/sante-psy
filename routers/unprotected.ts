@@ -37,25 +37,10 @@ router.post(
   loginController.sendUserLoginMail,
 );
 
-router.post(
-  '/auth/login',
-  speedLimiterLogin,
-  loginController.userLogin,
-);
+router.post('/auth/login', speedLimiterLogin, loginController.userLogin);
 
-router.get(
-  '/auth/connected',
-  speedLimiterLogin,
-  loginController.userConnected,
-);
+router.get('/auth/connected', speedLimiterLogin, loginController.userConnected);
 
-router.post(
-  '/psychologist/sendMail',
-  speedLimiterLogin,
-  loginController.emailValidators,
-  loginController.sendMail,
-);
-router.post('/psychologist/login', speedLimiterLogin, loginController.login);
 // TODO move this route in protected
 router.post(
   '/student/signInSecondStepMail',
@@ -89,12 +74,6 @@ router.post(
   speedLimiterSendCertificate,
   uploadCertificate.single('file'),
   studentSignInController.sendCertificate,
-);
-
-router.post(
-  '/student/sendLoginMail',
-  speedLimiterLogin,
-  loginController.sendMail,
 );
 
 router.post(
@@ -140,9 +119,21 @@ router.get(
 router.get('/trouver-un-psychologue', psyListingController.getFullActive);
 
 router.get('/statistics', statisticsController.getAll);
-router.get('/psychologist/:psyId', psyProfileController.getValidators, psyProfileController.get);
-router.post('/contact', contactController.sendValidators, contactController.send);
-router.post('/psychologist/:token/inactive', psyInactiveController.suspendValidators, psyInactiveController.suspend);
+router.get(
+  '/psychologist/:psyId',
+  psyProfileController.getValidators,
+  psyProfileController.get,
+);
+router.post(
+  '/contact',
+  contactController.sendValidators,
+  contactController.send,
+);
+router.post(
+  '/psychologist/:token/inactive',
+  psyInactiveController.suspendValidators,
+  psyInactiveController.suspend,
+);
 router.post('/psychologist/:token/active', psyInactiveController.activate);
 
 export default router;

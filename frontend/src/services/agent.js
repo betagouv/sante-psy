@@ -94,7 +94,6 @@ const Statistics = { getAll: () => client.get('/statistics') };
 const University = { getOne: id => client.get(`/universities/${id}`) };
 
 const Psy = {
-  login: token => client.post('/psychologist/login', { token }),
   sendMail: email => client.post('/psychologist/sendMail', { email }),
   logout: () => client.post('/logout'),
 };
