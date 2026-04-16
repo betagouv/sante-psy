@@ -13,6 +13,7 @@ export type Student = {
   university_name?: string;
   study_level?: string;
   study_field?: string;
+  study_field_other?: string;
   gender?: string;
   school_postcode?: string;
   living_postcode?: string;

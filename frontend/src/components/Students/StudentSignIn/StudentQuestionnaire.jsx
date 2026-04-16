@@ -43,20 +43,20 @@ const SCHOOL_TYPES = [
     label: 'Université',
   },
   {
-    label: 'Ecole de commerce / compta / gestion / vente',
-    value: 'school',
+    label: 'École de commerce / management',
+    value: 'business',
   },
   {
-    label: 'Formation ingénieur',
+    label: "École d'ingénieur",
     value: 'engineer',
   },
   {
-    label: 'SST',
-    value: 'sst',
+    label: 'Lycée (CPGE, BTS, autres formations)',
+    value: 'highschool',
   },
   {
-    label: 'CPGE',
-    value: 'cpge',
+    label: 'Établissement de santé (IFSI, écoles paramédicales…)',
+    value: 'health',
   },
   {
     label: 'Autre',
@@ -173,6 +173,7 @@ const StudentQuestionnaire = () => {
   // step 2
   const [studyLevel, setStudyLevel] = useState(null);
   const [studyField, setStudyField] = useState(null);
+  const [studyFieldOther, setStudyFieldOther] = useState(null);
   // step 3
   const [gender, setGender] = useState(null);
   const [livingPostcode, setLivingPostcode] = useState('');
@@ -197,6 +198,7 @@ const StudentQuestionnaire = () => {
         schoolPostcode,
         studyLevel,
         studyField,
+        studyFieldOther,
         gender,
         livingPostcode,
         phoneNumber,
@@ -242,7 +244,7 @@ const StudentQuestionnaire = () => {
       (schoolType !== 'university' || !!selectedUniversity);
     }
     if (step === 2) {
-      return !!studyLevel && !!studyField;
+      return !!studyLevel && !!studyField && (studyField !== 'other' || !!studyFieldOther);
     }
     if (step === 3) {
       return !!gender && !!livingPostcode;
@@ -264,6 +266,7 @@ const StudentQuestionnaire = () => {
     schoolPostcode,
     otherSchoolType,
     studyField,
+    studyFieldOther,
     livingPostcode,
     phoneNumber,
     selectedUniversity,
@@ -409,6 +412,14 @@ const StudentQuestionnaire = () => {
                 <Radio key={value} label={label} value={value} />
               ))}
             </RadioGroup>
+            {studyField === 'other' && (
+              <TextInput
+                required
+                label="Précisez :"
+                value={studyFieldOther}
+                onChange={e => setStudyFieldOther(e.target.value)}
+              />
+            )}
           </>
         )}
         {step === 3 && (
