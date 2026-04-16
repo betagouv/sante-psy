@@ -20,13 +20,15 @@ import loginInformations from '../services/loginInformations';
 import DOMPurify from '../services/sanitizer';
 
 const emailValidators = [
-  check('email')
-    .isEmail()
-    .withMessage('Vous devez spécifier un email valide.'),
+  check('email').isEmail().withMessage('Vous devez spécifier un email valide.'),
 ];
 
 // TODO : to refacto all doc to mutualize some methods looking alike
-async function sendPsyLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
+async function sendPsyLoginEmail(
+  email: string,
+  loginUrl: string,
+  token: string,
+): Promise<void> {
   try {
     const html = await ejs.renderFile('./views/emails/psyLogin.ejs', {
       loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
@@ -41,7 +43,11 @@ async function sendPsyLoginEmail(email: string, loginUrl: string, token: string)
   }
 }
 
-async function sendStudentLoginEmail(email: string, loginUrl: string, token: string): Promise<void> {
+async function sendStudentLoginEmail(
+  email: string,
+  loginUrl: string,
+  token: string,
+): Promise<void> {
   try {
     const html = await ejs.renderFile('./views/emails/studentLogin.ejs', {
       loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
@@ -57,10 +63,17 @@ async function sendStudentLoginEmail(email: string, loginUrl: string, token: str
 
 async function sendNotYetAcceptedEmail(email: string): Promise<void> {
   try {
-    const html = await ejs.renderFile('./views/emails/loginNotAcceptedYet.ejs', {
-      appName: config.appName,
-    });
-    await sendEmail(email, `C'est trop tôt pour vous connecter à ${config.appName}`, html);
+    const html = await ejs.renderFile(
+      './views/emails/loginNotAcceptedYet.ejs',
+      {
+        appName: config.appName,
+      },
+    );
+    await sendEmail(
+      email,
+      `C'est trop tôt pour vous connecter à ${config.appName}`,
+      html,
+    );
     console.log(`Not yet accepted email sent for ${logs.hash(email)}`);
   } catch (err) {
     console.error(err);
@@ -104,9 +117,16 @@ const login = async (req: Request, res: Response): Promise<void> => {
     const dbToken = await dbLoginToken.getByToken(token);
 
     if (dbToken) {
-      const psychologistData = await dbPsychologists.getAcceptedByEmail(dbToken.email);
+      const psychologistData = await dbPsychologists.getAcceptedByEmail(
+        dbToken.email,
+      );
       const xsrfToken = loginInformations.generateToken();
-      cookie.createAndSetJwtCookie(res, psychologistData.dossierNumber, xsrfToken, 'psy');
+      cookie.createAndSetJwtCookie(
+        res,
+        psychologistData.dossierNumber,
+        xsrfToken,
+        'psy',
+      );
       console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
 
       dbLoginToken.delete(token);
@@ -116,7 +136,9 @@ const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
+    console.log(
+      `Invalid or expired token received : ${token.substring(0, 5)}...`,
+    );
   }
 
   throw new CustomError(
@@ -135,11 +157,12 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
   const acceptedEmailExist = await dbPsychologists.getAcceptedByEmail(email);
 
   if (!acceptedEmailExist) {
-    const notYetAcceptedEmailExist = await dbPsychologists.getNotYetAcceptedByEmail(email);
+    const notYetAcceptedEmailExist =
+      await dbPsychologists.getNotYetAcceptedByEmail(email);
     if (notYetAcceptedEmailExist) {
       await sendNotYetAcceptedEmail(email);
       throw new CustomError(
-        'Votre compte n\'est pas encore validé par nos services, veuillez rééssayer plus tard.',
+        "Votre compte n'est pas encore validé par nos services, veuillez rééssayer plus tard.",
         401,
       );
     }
@@ -190,7 +213,10 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
-const sendUserLoginMail = async (req: Request, res: Response): Promise<void> => {
+const sendUserLoginMail = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   validation.checkErrors(req);
   const { email } = req.body;
 
@@ -224,7 +250,9 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
   const tokenData = await dbLoginToken.getByToken(token);
 
   if (!tokenData) {
-    console.log(`Invalid or expired token received : ${token.substring(0, 5)}...`);
+    console.log(
+      `Invalid or expired token received : ${token.substring(0, 5)}...`,
+    );
     throw new CustomError(
       'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
       401,
@@ -259,7 +287,9 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
     }
   }
 
-  console.log(`Token without matching user : ${logs.hash(email)}, role: ${role}`);
+  console.log(
+    `Token without matching user : ${logs.hash(email)}, role: ${role}`,
+  );
   await dbLoginToken.delete(token);
 
   throw new CustomError(
@@ -291,7 +321,9 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
       let inactiveReason;
       let inactiveUntil;
       if (!psy.active) {
-        const suspension = await dbSuspensions.getByPsychologist(psy.dossierNumber);
+        const suspension = await dbSuspensions.getByPsychologist(
+          psy.dossierNumber,
+        );
         if (suspension) {
           inactiveReason = suspension.reason;
           inactiveUntil = suspension.until;
