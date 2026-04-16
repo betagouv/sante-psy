@@ -17,27 +17,19 @@ const STEPS = [
   {
     title: 'Conditions d’utilisation',
     png: 'image_284',
-    privacy: null 
   },
   {
     title: 'Tes études',
     png: 'image_277',
-    privacy: 'visible'
   },
   {
     title: 'Tes études',
     png: 'image_278',
-    privacy: 'visible'
   },
   {
     title: 'Mieux te connaître',
     png: 'image_260',
-    privacy: 'hidden'
-  },
-  {
-    title: 'Mieux te connaître',
-    png: 'image_280',
-    privacy: 'hidden'
+    privacyHidden: true
   },
   {
     title: 'Notifications',
@@ -281,20 +273,11 @@ const StudentQuestionnaire = () => {
     <StudentSignInHeader>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>{STEPS[step].title}</h2>
-        {STEPS[step].privacy && (
+        {STEPS[step].privacyHidden && (
           <div className={styles.privacyBanner}>
-            <span
-              className={`fr-icon--sm ${
-                STEPS[step].privacy === 'visible'
-                  ? 'fr-icon-eye-line'
-                  : 'fr-icon-eye-off-line'
-              }`}
-              aria-hidden="true"
-            />
+            <span className="fr-icon--sm fr-icon-eye-off-line" aria-hidden="true" />
             <p className={styles.privacyText}>
-              {STEPS[step].privacy === 'visible'
-                ? 'Les informations suivantes seront visibles par les psychologues'
-                : 'Les informations suivantes ne seront pas visibles par les psychologues'}
+              Les informations suivantes ne seront pas visibles par les psychologues
             </p>
           </div>
         )}

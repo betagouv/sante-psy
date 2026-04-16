@@ -152,6 +152,12 @@ const StudentSignInStepTwo = () => {
 
   return (
     <StudentSignInHeader>
+      <div className={styles.privacyBanner}>
+        <span className="fr-icon--sm fr-icon-eye-line" aria-hidden="true" />
+        <p className={styles.privacyText}>
+          Les informations suivantes seront visibles par les psychologues
+        </p>
+      </div>
       <form onSubmit={signIn}>
         <div className="fr-my-2w">
           <div className="fr-input-group">
@@ -257,6 +263,11 @@ const StudentSignInStepTwo = () => {
             </p>
           </div>
         )}
+        <div className="fr-alert fr-alert--warning fr-mb-3w" role="alert">
+          <p>
+            <strong>Cette étape n'est pas la dernière !</strong> Tu ne seras définitivement inscrit qu'après avoir complété toutes les étapes du questionnaire.
+          </p>
+        </div>
         <div className="fr-mb-4w fr-mt-2w">
           <button className="fr-btn" type="submit" disabled={isBlocked}>
             {notification?.type === 'error'
