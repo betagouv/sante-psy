@@ -8,8 +8,6 @@ import cookie from '../../utils/cookie';
 import create from '../helper/create';
 
 describe('psyLoginController', async () => {
-  describe('login page', () => {
-
   describe('connected user information', () => {
     it('should return only my basic information', async () => {
       const universityId = uuidv4();
@@ -32,7 +30,10 @@ describe('psyLoginController', async () => {
       return chai
         .request(app)
         .get('/api/auth/connected')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.body.should.have.all.keys('role', 'user');
@@ -66,22 +67,29 @@ describe('psyLoginController', async () => {
             'universityId',
           );
           res.body.user.convention.isConventionSigned.should.equal(true);
-          res.body.user.convention.universityName.should.equal('Monster university');
+          res.body.user.convention.universityName.should.equal(
+            'Monster university',
+          );
           res.body.user.address.should.equal(psy.address);
         });
     });
 
-    it('should return empty info when psy does not exist', async () => chai
+    it('should return empty info when psy does not exist', async () =>
+      chai
         .request(app)
         .get('/api/auth/connected')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken', 'psy')}`,
+        )
         .then(async (res) => {
           res.body.should.have.all.keys('role', 'user');
           expect(res.body.role).to.be.null;
           expect(res.body.user).to.be.null;
         }));
 
-    it('should return empty info if user is not connected', async () => chai
+    it('should return empty info if user is not connected', async () =>
+      chai
         .request(app)
         .get('/api/auth/connected')
         .then(async (res) => {
@@ -95,7 +103,10 @@ describe('psyLoginController', async () => {
       return chai
         .request(app)
         .get('/api/auth/connected')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser((await psy).dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser((await psy).dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .then(async (res) => {
           res.body.should.have.all.keys('role', 'user');
           expect(res.body.role).to.be.null;
