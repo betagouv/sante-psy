@@ -35,6 +35,9 @@ const sendStudentSecondStepMail = async (req: Request, res: Response): Promise<v
       const token = loginInformations.generateToken(32);
       const expiresAt = date.getDatePlusHours(2);
       await dbLoginToken.upsert(token, email, expiresAt, 'student');
+      console.log(
+        `--login (via signin) - existing student - token created for ${email} token=${token.slice(0, 6)}...`,
+      );
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),
@@ -64,6 +67,9 @@ const sendWelcomeMail = async (email): Promise<void> => {
     const expiresAt = date.getDatePlusHours(2);
 
     await dbLoginToken.upsert(token, email, expiresAt, 'student');
+    console.log(
+      `--login (via signin step 2) - user creation - token created for ${email} token=${token.slice(0, 6)}...`,
+    );
     await sendStudentMailTemplate(
       email,
       loginUrl,
@@ -125,6 +131,9 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       const expiresAt = date.getDatePlusHours(2);
 
       await dbLoginToken.upsert(token, email, expiresAt, 'student');
+      console.log(
+        `--login (via signin step 2) - alreadyRegistered - token created for ${email} token=${token.slice(0, 6)}...`,
+      );
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),

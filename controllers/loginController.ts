@@ -94,8 +94,9 @@ async function saveToken(
   try {
     const expiredAt = date.getDatePlusHours(expiresInNHours);
     await dbLoginToken.upsert(token, email, expiredAt, role);
-
-    console.log(`Login token created for ${logs.hash(email)}`);
+    console.log(
+      `--login - ${role} - token created for ${email} token=${token.slice(0, 6)}...`,
+    );
   } catch (err) {
     console.error(`Erreur de sauvegarde du token : ${err}`);
     throw new Error('Erreur de sauvegarde du token');
@@ -199,8 +200,14 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
 
   if (existingToken) {
     token = existingToken.token;
+    console.log(
+      `--login - student - token existed for email ${email} token=${token.slice(0, 6)}...`,
+    );
   } else {
     token = loginInformations.generateToken(32);
+    console.log(
+      `--login - student - token did not exist for email ${email}, create a new one token=${token.slice(0, 6)}...`,
+    );
   }
 
   if (studentIsRegistered) {
@@ -221,6 +228,7 @@ const sendUserLoginMail = async (
   validation.checkErrors(req);
   const { email } = req.body;
 
+  console.log(`--login sendUserLoginMail for email ${email}`);
   const student = await dbStudents.getByEmail(email);
   if (student) {
     await sendStudentMail(req, res);
@@ -268,6 +276,10 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
       console.log(`Successful authentication for psy ${logs.hash(email)}`);
 
       await dbLoginToken.delete(token);
+      console.log(
+        `--login - psy - email=${email} token ${token.slice(0, 6)}... deleted`,
+      );
+
       await dbLastConnection.upsert(psy.dossierNumber);
 
       res.json({ xsrfToken, role: 'psy' });
@@ -280,6 +292,9 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
       console.log(`Successful authentication for student ${logs.hash(email)}`);
 
       await dbLoginToken.delete(token);
+      console.log(
+        `--login - student - email=${email} token ${token.slice(0, 6)}... deleted`,
+      );
 
       res.json({ xsrfToken, role: 'student' });
       return;

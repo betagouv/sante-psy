@@ -18,7 +18,9 @@ const sendStudentSecondStepInvitation = async (
   const expiresAt = date.getDatePlusHours(48);
 
   await dbLoginToken.upsert(token, email, expiresAt, 'student');
-
+  console.log(
+    `--login (via signin) - new student - token created for ${email} token=${token.slice(0, 6)}...`,
+  );
   await sendStudentMailTemplate(
     email,
     loginInformations.generateStudentSignInStepTwoUrl(),
