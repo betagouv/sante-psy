@@ -239,7 +239,7 @@ const StudentQuestionnaire = () => {
     }
     if (step === 1) {
     return !!schoolType && 
-      !!schoolPostcode && 
+      schoolPostcode.length === 5 &&
       (schoolType === 'university' || !!otherSchoolType) && 
       (schoolType !== 'university' || !!selectedUniversity);
     }
@@ -247,12 +247,13 @@ const StudentQuestionnaire = () => {
       return !!studyLevel && !!studyField && (studyField !== 'other' || !!studyFieldOther);
     }
     if (step === 3) {
-      return !!gender && !!livingPostcode;
+      return !!gender && livingPostcode.length === 5; ;
     }
     if (step === 4) {
       return (
         !!notificationMethod &&
-        (notificationMethod === 'email' || !!phoneNumber)
+        (notificationMethod === 'email' || 
+          (phoneNumber?.length === 10 && phoneNumber.startsWith('0')))
       );
     }
     return false;
@@ -441,8 +442,10 @@ const StudentQuestionnaire = () => {
               label="Où habites-tu ?"
               hint="Pour te proposer des psychologues près de chez toi"
               value={livingPostcode}
-              onChange={e => setLivingPostcode(e.target.value)}
-              type="number"
+              onChange={e => {
+                const livingPostcode = e.target.value.replace(/\D/g, '');
+                if (livingPostcode.length <= 5) setLivingPostcode(livingPostcode);
+              }}
             />
           </>
         )}
@@ -463,9 +466,12 @@ const StudentQuestionnaire = () => {
               <TextInput
                 required
                 label="Numéro de téléphone"
-                hint="Utilisé uniquement pour les notifications"
+                hint="Numéro français à 10 chiffres, commençant par 0. Utilisé uniquement pour les notifications"
                 value={phoneNumber}
-                onChange={e => setPhoneNumber(e.target.value)}
+                onChange={e => {
+                  const number = e.target.value.replace(/\D/g, '');
+                  if (number.length <= 10) setPhoneNumber(number);
+                }}
               />
             )}
           </>
