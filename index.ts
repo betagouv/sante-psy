@@ -41,9 +41,6 @@ app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false,
   hsts: false,
-  referrerPolicy: {
-    policy: 'strict-origin-when-cross-origin',
-  },
 }));
 
 app.use((req, res, next) => {
