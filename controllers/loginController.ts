@@ -116,43 +116,6 @@ const deleteToken = (req: Request, res: Response): void => {
   res.json({});
 };
 
-const login = async (req: Request, res: Response): Promise<void> => {
-  // Save a token that expire after config.sessionDurationHours hours if user is logged
-  if (req.body.token) {
-    const token = DOMPurify.sanitize(req.body.token);
-    const dbToken = await dbLoginToken.getByToken(token);
-
-    if (dbToken) {
-      const psychologistData = await dbPsychologists.getAcceptedByEmail(
-        dbToken.email,
-      );
-      const xsrfToken = loginInformations.generateToken();
-      cookie.createAndSetJwtCookie(
-        res,
-        psychologistData.dossierNumber,
-        xsrfToken,
-        'psy',
-      );
-      console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
-
-      dbLoginToken.delete(token);
-      dbLastConnection.upsert(psychologistData.dossierNumber);
-
-      res.json(xsrfToken);
-      return;
-    }
-
-    console.log(
-      `Invalid or expired token received : ${token.substring(0, 5)}...`,
-    );
-  }
-
-  throw new CustomError(
-    'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
-    401,
-  );
-};
-
 /**
  * Send a email with a login link if the email is already registered
  */
@@ -422,7 +385,6 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
 
 export default {
   emailValidators,
-  login: asyncHelper(login),
   sendStudentMail: asyncHelper(sendStudentMail),
   sendStudentLoginEmail,
   deleteToken,
