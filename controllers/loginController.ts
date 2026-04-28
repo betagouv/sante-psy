@@ -8,6 +8,7 @@ import dbStudents from '../db/students';
 import dbSuspensions from '../db/suspensionReasons';
 import dbLoginToken from '../db/loginToken';
 import dbLastConnection from '../db/lastConnections';
+import dbLastConnectionStudent from '../db/lastConnectionsStudents';
 import date from '../utils/date';
 import cookie from '../utils/cookie';
 import logs from '../utils/logs';
@@ -258,6 +259,8 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
       console.log(
         `--login - student - email=${email} token ${token.slice(0, 6)}... deleted`,
       );
+
+      await dbLastConnectionStudent.upsert(student.id);
 
       res.json({ xsrfToken, role: 'student' });
       return;
