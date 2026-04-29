@@ -6,5 +6,6 @@ export const psychologistsTable = 'psychologists';
 export const universitiesTable = 'universities';
 export const suspensionReasonsTable = 'suspension_reasons';
 export const lastConnectionsTable = 'last_connections';
+export const lastConnectionsStudentsTable = 'last_connections_students';
 export const studentsTable = 'students';
 export const studentsNewsletterTable = 'students_newsletter';
