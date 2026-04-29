@@ -246,7 +246,7 @@ const sendCertificate = async (
   req: MulterRequest,
   res: Response,
 ): Promise<void> => {
-  const { email, ine, firstNames, lastName, dateOfBirth } = req.body;
+  const { email, ine } = req.body;
 
   // TODO gérer ça dans un validator
   if (!req.file || !email || !ine) {
