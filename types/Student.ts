@@ -17,7 +17,4 @@ export type Student = {
   gender?: string;
   school_postcode?: string;
   living_postcode?: string;
-  notification_email?: string;
-  notification_sms?: boolean;
-  phone_number?: boolean;
 };

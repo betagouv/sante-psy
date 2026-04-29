@@ -134,9 +134,6 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       studyField,
       gender,
       livingPostcode,
-      phoneNumber,
-      notificationsEmail,
-      notificationsSms,
     } = req.body;
     const tokenRow = await dbLoginToken.getByEmail(email);
 
@@ -226,9 +223,6 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         studyField,
         gender,
         livingPostcode,
-        phoneNumber,
-        notificationsEmail,
-        notificationsSms,
       });
 
       await sendWelcomeMail(email);

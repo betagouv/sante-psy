@@ -31,10 +31,6 @@ const STEPS = [
     png: 'image_260',
     privacyHidden: true,
   },
-  {
-    title: 'Notifications',
-    png: 'image_298',
-  },
 ];
 
 const SCHOOL_TYPES = [
@@ -170,21 +166,6 @@ const GENDERS = [
   },
 ];
 
-const NOTIFICATION_METHODS = [
-  {
-    label: 'email',
-    value: 'email',
-  },
-  {
-    label: 'SMS',
-    value: 'sms',
-  },
-  {
-    label: 'email + SMS',
-    value: 'both',
-  },
-];
-
 const StudentQuestionnaire = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -216,9 +197,6 @@ const StudentQuestionnaire = () => {
   // step 3
   const [gender, setGender] = useState(null);
   const [livingPostcode, setLivingPostcode] = useState('');
-  // step 4
-  const [notificationMethod, setNotificationMethod] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState(null);
 
   const signIn = async () => {
     try {
@@ -238,9 +216,6 @@ const StudentQuestionnaire = () => {
         studyFieldOther,
         gender,
         livingPostcode,
-        phoneNumber,
-        notificationsEmail: ['email', 'both'].includes(notificationMethod),
-        notificationsSms: ['sms', 'both'].includes(notificationMethod),
       });
       navigate('/inscription/success');
     } catch (error) {
@@ -286,13 +261,6 @@ const StudentQuestionnaire = () => {
     if (step === 3) {
       return !!gender && livingPostcode.length === 5; ;
     }
-    if (step === 4) {
-      return (
-        !!notificationMethod &&
-        (notificationMethod === 'email' || 
-          (phoneNumber?.length === 10 && phoneNumber.startsWith('0')))
-      );
-    }
     return false;
   }, [
     step,
@@ -300,14 +268,12 @@ const StudentQuestionnaire = () => {
     studyLevel,
     acceptedCGUs,
     gender,
-    notificationMethod,
     schoolPostcode,
     selectedUniversity,
     otherSchoolType,
     studyField,
     studyFieldOther,
     livingPostcode,
-    phoneNumber,
   ]);
 
   return (
@@ -491,39 +457,12 @@ const StudentQuestionnaire = () => {
 
           </>
         )}
-        {step === 4 && (
-          <>
-            <RadioGroup
-              name="notificationMethod"
-              legend="Comment souhaites-tu être notifié des séances déclarées par les psychologues ?"
-              value={notificationMethod}
-              onChange={value => setNotificationMethod(value)}
-              required
-            >
-              {NOTIFICATION_METHODS.map(({ label, value }) => (
-                <Radio key={value} label={label} value={value} />
-              ))}
-            </RadioGroup>
-            {notificationMethod !== 'email' && (
-              <TextInput
-                required
-                label="Numéro de téléphone"
-                hint="Numéro français à 10 chiffres, commençant par 0. Utilisé uniquement pour les notifications"
-                value={phoneNumber}
-                onChange={e => {
-                  const number = e.target.value.replace(/\D/g, '');
-                  if (number.length <= 10) setPhoneNumber(number);
-                }}
-              />
-            )}
-          </>
-        )}
         <ButtonGroup isInlineFrom="xs">
           <Button secondary disabled={step === 0} onClick={onClickPrev}>
             Retour
           </Button>
           <Button onClick={onClickNext} disabled={!isButtonEnabled}>
-            {step < 5 ? 'Suivant' : "M'inscrire"}
+            {step < 3 ? 'Suivant' : "M'inscrire"}
           </Button>
         </ButtonGroup>
       </div>
