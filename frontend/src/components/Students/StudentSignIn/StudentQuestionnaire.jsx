@@ -39,52 +39,77 @@ const STEPS = [
 
 const SCHOOL_TYPES = [
   {
+    label: 'À l’université (y compris IUT / BUT / inspé)',
     value: 'university',
-    label: 'Université',
   },
   {
-    label: 'École de commerce / management',
-    value: 'business',
+    label: 'Dans un grand établissement (type IEP, EHESS, INALCO…)',
+    value: 'grandsEtablissements',
+  },
+    {
+    label: 'En classe préparatoire aux grandes écoles (CPGE)',
+    value: 'prepa',
   },
   {
-    label: "École d'ingénieur",
+    label: "En école d’ingénieur (y compris école d’ingénieur universitaire)",
     value: 'engineer',
   },
-  {
-    label: 'Lycée (CPGE, BTS, autres formations)',
-    value: 'highschool',
+    {
+    label: 'En section de technicien supérieur (STS, BTS)',
+    value: 'technician',
   },
   {
-    label: 'Établissement de santé (IFSI, écoles paramédicales…)',
+    label: 'En école de commerce',
+    value: 'business',
+  },
+    {
+    label: 'En école artistique ou culturelle',
+    value: 'art',
+  },
+  {
+    label: 'En établissement de santé (IFSI, écoles paramédicales…)',
     value: 'health',
   },
   {
-    label: 'Autre',
+    label: 'Dans un autre type d’établissement',
     value: 'other',
   },
 ];
 
 const STUDY_LEVELS = [
   {
-    label: 'BAC+1',
+    label: 'Capacité en droit, DAEU, remise à niveau',
+    value: 'daeu',
+  },
+  {
+    label: 'Bac + 1 (L1, CPGE1, BTS1, prépa intégrée 1e année…)',
     value: 'bac_plus_un',
   },
   {
-    label: 'BAC+2',
+    label: 'Bac +2 (L2, CPGE2, BTS2, prépa intégrée 2e année…)',
     value: 'bac_plus_deux',
   },
   {
-    label: 'BAC+3',
+    label: 'Bac + 3 (L3, 1e année école ingénieur / du cycle grande école, année de spécialisation post BTS…)',
     value: 'bac_plus_trois',
   },
   {
-    label: 'BAC+4',
+    label: 'Bac +4 (M1, 2e année école ingénieur / du cycle grande école…)',
     value: 'bac_plus_quatre',
   },
   {
-    label: 'BAC+5 et plus',
-    value: 'bac_plus_cinq_et_plus',
+    label: 'Bac +5 (M2, 3e année école ingénieur / du cycle grande école…)',
+    value: 'bac_plus_cinq',
   },
+  {
+    label: 'Bac +6 et plus',
+    value: 'bac_plus_six_et_plus',
+  },
+  {
+    label: 'Diplôme universitaire (DU)',
+    value: 'university_degree',
+  },
+  
 ];
 
 const STUDY_FIELDS = [
@@ -93,7 +118,7 @@ const STUDY_FIELDS = [
     value: 'arts',
   },
   {
-    label: 'Droit, économie, gestion',
+    label: 'Droit, économie, gestion, sciences politiques',
     value: 'legal',
   },
   {
@@ -101,12 +126,16 @@ const STUDY_FIELDS = [
     value: 'sociology',
   },
   {
-    label: 'Sciences, technologies',
+    label: 'Sciences et technologies',
     value: 'science',
   },
   {
-    label: 'Santé - médical et paramédical',
+    label: 'Santé, médical et paramédical',
     value: 'medical',
+  },
+  {
+    label: 'Sciences et Techniques des Activités physiques et sportives (STAPS)',
+    value: 'staps',
   },
   {
     label: 'Autre',
@@ -116,11 +145,11 @@ const STUDY_FIELDS = [
 
 const GENDERS = [
   {
-    label: 'Homme',
+    label: 'Comme un homme',
     value: 'male',
   },
   {
-    label: 'Femme',
+    label: 'Comme une femme',
     value: 'female',
   },
   {
@@ -128,7 +157,15 @@ const GENDERS = [
     value: 'non_binary',
   },
   {
-    label: 'Je ne préfère pas répondre',
+    label: "D'une autre manière",
+    value: 'other',
+  },
+  {
+    label: "Je ne sais pas",
+    value: 'unknown',
+  },
+  {
+    label: 'Je préfère ne pas répondre',
     value: 'no_answer',
   },
 ];
@@ -316,7 +353,8 @@ const StudentQuestionnaire = () => {
           <>
             <RadioGroup
               name="schoolType"
-              legend="Type d'établissement :"
+              legend="Dans quel type d’établissement étudies-tu ?"
+              hint="Si double cursus, mettre l’établissement principal"
               value={schoolType}
               onChange={value => setSchoolType(value)}
               required
@@ -372,14 +410,15 @@ const StudentQuestionnaire = () => {
             {schoolType && schoolType !== 'university' && (
               <TextInput
                 required
-                label="Nom de l'établissement"
+                label="Quel est le nom de ton établissement ?"
                 value={otherSchoolType}
                 onChange={e => setOtherSchoolType(e.target.value)}
               />
             )}
             <TextInput
               required
-              label="Code postal de l'établissement"
+              label="Où se situe ton établissement ?"
+              hint="Indique le code postal"
               value={schoolPostcode}
               onChange={e => {
                 const postcode = e.target.value.replace(/\D/g, '');
@@ -393,7 +432,8 @@ const StudentQuestionnaire = () => {
           <>
             <RadioGroup
               name="studyLevel"
-              legend="Niveau d’études suivi :"
+              legend="À quel niveau d’études t’es-tu inscrit cette année ?"
+              hint="Si double cursus, mettre le plus haut niveau"
               value={studyLevel}
               onChange={value => setStudyLevel(value)}
               required
@@ -404,7 +444,8 @@ const StudentQuestionnaire = () => {
             </RadioGroup>
             <RadioGroup
               name="studyField"
-              legend="Fillière suivie :"
+              legend="Quel est ton domaine d’études ?"
+              hint="Si double cursus, mettre le domaine principal"
               value={studyField}
               onChange={value => setStudyField(value)}
               required
@@ -416,7 +457,7 @@ const StudentQuestionnaire = () => {
             {studyField === 'other' && (
               <TextInput
                 required
-                label="Précisez :"
+                label="Préciser le domaine d’études"
                 value={studyFieldOther}
                 onChange={e => setStudyFieldOther(e.target.value)}
               />
@@ -425,9 +466,20 @@ const StudentQuestionnaire = () => {
         )}
         {step === 3 && (
           <>
+            <TextInput
+              required
+              label="Dans quelle zone géographique aimerais-tu consulter un psychologue ?"
+              hint="Cela nous aide à mieux comprendre les besoins en psychologues selon les zones"
+              value={livingPostcode}
+              placeholder='75001'
+              onChange={e => {
+                const value = e.target.value.replace(/\D/g, '');
+                if (value.length <= 5) setLivingPostcode(value);
+              }}
+            />
             <RadioGroup
               name="gender"
-              legend="Comment te définis-tu ?"
+              legend="Comment t’identifies-tu ?"
               value={gender}
               onChange={value => setGender(value)}
               required
@@ -437,16 +489,6 @@ const StudentQuestionnaire = () => {
               ))}
             </RadioGroup>
 
-            <TextInput
-              required
-              label="Où habites-tu ?"
-              hint="Pour te proposer des psychologues près de chez toi"
-              value={livingPostcode}
-              onChange={e => {
-                const value = e.target.value.replace(/\D/g, '');
-                if (value.length <= 5) setLivingPostcode(value);
-              }}
-            />
           </>
         )}
         {step === 4 && (
