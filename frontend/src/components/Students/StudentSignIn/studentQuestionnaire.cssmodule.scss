@@ -2,19 +2,46 @@
   display: flex;
   flex-direction: column;
   row-gap: 8px;
-  max-width: 400px;
+  max-width: 600px;
   margin: auto;
   text-align: left;
   padding: 2rem;
+
+  @media (max-width: 425px) {
+    padding: 0.5rem;
+  }
 }
 
 .title {
   font-size: 1.75rem;
   font-weight: 700;
+  margin-bottom: 8px;
 }
 
-img {
-  margin: auto;
+.privacyBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: var(--background-alt-blue-france);
+  border-radius: 4px;
+}
+
+.privacyText {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-default-grey);
+}
+
+.imageContainer {
+  width: 200px;
+  height: 200px;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }
 
 .universityContainer {

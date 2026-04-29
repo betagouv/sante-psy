@@ -9,7 +9,7 @@ import {
 } from '@dataesr/react-dsfr';
 import universities from 'src/utils/universities';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import styles from './studentTest.cssmodule.scss';
+import styles from './studentQuestionnaire.cssmodule.scss';
 import agent from 'services/agent';
 import StudentSignInHeader from './StudentSignInHeader';
 
@@ -29,37 +29,119 @@ const STEPS = [
   {
     title: 'Mieux te connaître',
     png: 'image_260',
-  },
-  {
-    title: 'Mieux te connaître',
-    png: 'image_280',
-  },
-  {
-    title: 'Notifications',
-    png: 'image_298',
+    privacyHidden: true,
   },
 ];
 
 const SCHOOL_TYPES = [
   {
+    label: 'À l’université',
+    hint: 'Y compris IUT / BUT / inspé',
     value: 'university',
-    label: 'Université',
   },
   {
-    label: 'Ecole de commerce / compta / gestion / vente',
-    value: 'school',
+    label: 'Dans un grand établissement',
+    hint: 'Type IEP, EHESS, INALCO…',
+    value: 'grandsEtablissements',
+  },
+    {
+    label: 'En classe préparatoire aux grandes écoles (CPGE)',
+    value: 'prepa',
   },
   {
-    label: 'Formation ingénieur',
+    label: "En école d’ingénieur",
+    hint: 'Y compris école d’ingénieur universitaire',
     value: 'engineer',
   },
-  {
-    label: 'SST',
-    value: 'sst',
+    {
+    label: 'En section de technicien supérieur',
+    hint: 'STS, BTS',
+    value: 'technician',
   },
   {
-    label: 'CPGE',
-    value: 'cpge',
+    label: 'En école de commerce',
+    value: 'business',
+  },
+    {
+    label: 'En école artistique ou culturelle',
+    value: 'art',
+  },
+  {
+    label: 'En établissement de santé',
+    hint: 'IFSI, écoles paramédicales…',
+    value: 'health',
+  },
+  {
+    label: 'Dans un autre type d’établissement',
+    value: 'other',
+  },
+];
+
+const STUDY_LEVELS = [
+  {
+    label: 'Capacité en droit, DAEU, remise à niveau',
+    value: 'daeu',
+  },
+  {
+    label: 'Bac + 1',
+    hint: 'L1, CPGE1, BTS1, prépa intégrée 1e année…',
+    value: 'bac_plus_un',
+  },
+  {
+    label: 'Bac +2',
+    hint: 'L2, CPGE2, BTS2, prépa intégrée 2e année…',
+    value: 'bac_plus_deux',
+  },
+  {
+    label: 'Bac + 3',
+    hint: 'L3, 1e année école ingénieur / du cycle grande école, année de spécialisation post BTS…',
+    value: 'bac_plus_trois',
+  },
+  {
+    label: 'Bac +4',
+    hint: 'M1, 2e année école ingénieur / du cycle grande école…',
+    value: 'bac_plus_quatre',
+  },
+  {
+    label: 'Bac +5',
+    hint: 'M2, 3e année école ingénieur / du cycle grande école…',
+    value: 'bac_plus_cinq',
+  },
+  {
+    label: 'Bac +6 et plus',
+    value: 'bac_plus_six_et_plus',
+  },
+  {
+    label: 'Diplôme universitaire (DU)',
+    value: 'university_degree',
+  },
+  
+];
+
+const STUDY_FIELDS = [
+  {
+    label: 'Arts, lettres, langues',
+    value: 'arts',
+  },
+  {
+    label: 'Droit, économie, gestion, sciences politiques',
+    value: 'legal',
+  },
+  {
+    label: 'Sciences humaines et sociales',
+    value: 'sociology',
+  },
+  {
+    label: 'Sciences et technologies',
+    value: 'science',
+  },
+  {
+    label: 'Santé, médical et paramédical',
+    value: 'medical',
+  },
+  {
+    label: 'Sciences et Techniques des Activités physiques et sportives (STAPS)',
+    value: 'staps',
   },
   {
     label: 'Autre',
@@ -67,63 +149,13 @@ const SCHOOL_TYPES = [
   },
 ];
 
-const STUDY_LEVELS = [
-  {
-    label: 'BAC+1',
-    value: 'bac_plus_un',
-  },
-  {
-    label: 'BAC+2',
-    value: 'bac_plus_deux',
-  },
-  {
-    label: 'BAC+3',
-    value: 'bac_plus_trois',
-  },
-  {
-    label: 'BAC+4',
-    value: 'bac_plus_quatre',
-  },
-  {
-    label: 'BAC+5 et plus',
-    value: 'bac_plus_cinq_et_plus',
-  },
-];
-
-const STUDY_FIELDS = [
-  {
-    label: 'arts, lettres, langues',
-    value: 'arts',
-  },
-  {
-    label: 'droit, économie, gestion',
-    value: 'legal',
-  },
-  {
-    label: 'sciences humaines et sociales',
-    value: 'sociology',
-  },
-  {
-    label: 'sciences, technologies',
-    value: 'science',
-  },
-  {
-    label: 'santé - médical et paramédical',
-    value: 'medical',
-  },
-  {
-    label: 'autre',
-    value: 'other',
-  },
-];
-
 const GENDERS = [
   {
-    label: 'Homme',
+    label: 'Comme un homme',
     value: 'male',
   },
   {
-    label: 'Femme',
+    label: 'Comme une femme',
     value: 'female',
   },
   {
@@ -131,46 +163,16 @@ const GENDERS = [
     value: 'non_binary',
   },
   {
-    label: 'Je ne préfère pas répondre',
-    value: 'no_answer',
-  },
-];
-
-const HOW_DID_YOU_KNOW = [
-  {
-    label: 'Réseaux sociaux',
-    value: 'social_network',
-  },
-  {
-    label: 'Internet',
-    value: 'internet',
-  },
-  {
-    label: 'Mon école',
-    value: 'school',
-  },
-  {
-    label: 'Médias',
-    value: 'media',
-  },
-  {
-    label: 'Autre',
+    label: "D'une autre manière",
     value: 'other',
   },
-];
-
-const NOTIFICATION_METHODS = [
   {
-    label: 'email',
-    value: 'email',
+    label: "Je ne sais pas",
+    value: 'unknown',
   },
   {
-    label: 'SMS',
-    value: 'sms',
-  },
-  {
-    label: 'email + SMS',
-    value: 'both',
+    label: 'Je préfère ne pas répondre',
+    value: 'no_answer',
   },
 ];
 
@@ -194,22 +196,29 @@ const StudentQuestionnaire = () => {
   // step 1
   const [schoolType, setSchoolType] = useState(null);
   const [selectedUniversity, setSelectedUniversity] = useState('');
-  const [otherSchoolType, setOtherSchoolType] = useState('');
+  const [schoolName, setSchoolName] = useState('');
   const [schoolPostcode, setSchoolPostcode] = useState('');
+  const [universitySearch, setUniversitySearch] = useState('');
+  const [showUnivList, setShowUnivList] = useState(false);
   // step 2
   const [studyLevel, setStudyLevel] = useState(null);
   const [studyField, setStudyField] = useState(null);
+  const [studyFieldOther, setStudyFieldOther] = useState(null);
   // step 3
   const [gender, setGender] = useState(null);
   const [livingPostcode, setLivingPostcode] = useState('');
-  // step 4
-  const [howDidYouKnow, setHowDidYouKnow] = useState(null);
-  const [otherHowDidYouKnow, setOtherHowDidYouKnow] = useState(null);
-  // step 5
-  const [notificationMethod, setNotificationMethod] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState(null);
-  const [universitySearch, setUniversitySearch] = useState('');
-  const [showUnivList, setShowUnivList] = useState(false);
+
+  useEffect(() => {
+    setSelectedUniversity('');
+    setUniversitySearch('');
+  }, [schoolType])
+
+  useEffect(() => {
+    const element = document.getElementById('questionnaire-wrapper');
+      if (element) {
+      element.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      }
+  }, [step])
 
   const signIn = async () => {
     try {
@@ -221,18 +230,13 @@ const StudentQuestionnaire = () => {
         email,
         acceptedCGUs: true,
         schoolType,
-        selectedUniversity,
-        otherSchoolType,
+        schoolName: selectedUniversity || schoolName,
         schoolPostcode,
         studyLevel,
         studyField,
+        studyFieldOther,
         gender,
         livingPostcode,
-        howDidYouKnow,
-        otherHowDidYouKnow,
-        phoneNumber,
-        notificationsEmail: ['email', 'both'].includes(notificationMethod),
-        notificationsSms: ['sms', 'both'].includes(notificationMethod),
       });
       navigate('/inscription/success');
     } catch (error) {
@@ -251,7 +255,7 @@ const StudentQuestionnaire = () => {
   );
 
   const onClickNext = () => {
-    if (step === 5) {
+    if (step === 3) {
       signIn();
       return;
     }
@@ -267,29 +271,16 @@ const StudentQuestionnaire = () => {
       return !!acceptedCGUs;
     }
     if (step === 1) {
-      return (
-        !!schoolType &&
-        !!schoolPostcode &&
-        (schoolType !== 'other' || !!otherSchoolType) &&
-        (schoolType !== 'university' || !!selectedUniversity)
-      );
+    return !!schoolType && 
+      schoolPostcode.length === 5 &&
+      (schoolType === 'university' || !!schoolName) && 
+      (schoolType !== 'university' || !!selectedUniversity);
     }
     if (step === 2) {
-      return !!studyLevel && !!studyField;
+      return !!studyLevel && !!studyField && (studyField !== 'other' || !!studyFieldOther);
     }
     if (step === 3) {
-      return !!gender && !!livingPostcode;
-    }
-    if (step === 4) {
-      return (
-        !!howDidYouKnow && (howDidYouKnow !== 'other' || !!otherHowDidYouKnow)
-      );
-    }
-    if (step === 5) {
-      return (
-        !!notificationMethod &&
-        (notificationMethod === 'email' || !!phoneNumber)
-      );
+      return !!gender && livingPostcode.length === 5; ;
     }
     return false;
   }, [
@@ -298,27 +289,32 @@ const StudentQuestionnaire = () => {
     studyLevel,
     acceptedCGUs,
     gender,
-    howDidYouKnow,
-    notificationMethod,
     schoolPostcode,
-    otherSchoolType,
-    studyField,
-    livingPostcode,
-    otherHowDidYouKnow,
-    phoneNumber,
     selectedUniversity,
+    schoolName,
+    studyField,
+    studyFieldOther,
+    livingPostcode,
   ]);
 
   return (
     <StudentSignInHeader>
-      <div className={styles.wrapper}>
+      <div className={styles.wrapper} id='questionnaire-wrapper'>
         <h2 className={styles.title}>{STEPS[step].title}</h2>
-        <img
-          src={`/images/studentSpace/questionnaire/${STEPS[step].png}.png`}
-          alt=""
-          height={186}
-          width={186}
-        />
+        {STEPS[step].privacyHidden && (
+          <div className={styles.privacyBanner}>
+            <span className="fr-icon--sm fr-icon-eye-off-line" aria-hidden="true" />
+            <p className={styles.privacyText}>
+              Les informations suivantes ne seront pas visibles par les psychologues
+            </p>
+          </div>
+        )}
+        <div className={styles.imageContainer}>
+          <img
+            src={`/images/studentSpace/questionnaire/${STEPS[step].png}.png`}
+            alt=""
+          />
+        </div>
         {step === 0 && (
           <>
             <p>
@@ -344,19 +340,21 @@ const StudentQuestionnaire = () => {
           <>
             <RadioGroup
               name="schoolType"
-              legend="Type d'établissement :"
+              legend="Dans quel type d’établissement étudies-tu ?"
+              hint="Si double cursus, mettre l’établissement principal"
               value={schoolType}
               onChange={value => setSchoolType(value)}
               required
             >
-              {SCHOOL_TYPES.map(({ value, label }) => (
-                <Radio key={value} label={label} value={value} />
+              {SCHOOL_TYPES.map(({ value, label, hint }) => (
+                <Radio key={value} label={label} value={value} hint={hint}/>
               ))}
             </RadioGroup>
             {schoolType === 'university' && (
               <div className={`fr-select-group ${styles.universityContainer}`}>
                 <label className="fr-label" htmlFor="university-input">
                   Université
+                  <span className="error" aria-hidden="true"> *</span>
                 </label>
                 <input
                   className="fr-input"
@@ -396,23 +394,24 @@ const StudentQuestionnaire = () => {
                 )}
               </div>
             )}
-            {schoolType === 'other' && (
+            {schoolType && schoolType !== 'university' && (
               <TextInput
                 required
-                label="Autre : précisez"
-                value={otherSchoolType}
-                onChange={e => setOtherSchoolType(e.target.value)}
+                label="Quel est le nom de ton établissement ?"
+                value={schoolName}
+                onChange={e => setSchoolName(e.target.value)}
               />
             )}
             <TextInput
               required
-              label="Code postal de l'établissement"
+              label="Où se situe ton établissement ?"
+              hint="Indique le code postal"
+              placeholder='75001'
               value={schoolPostcode}
               onChange={e => {
                 const postcode = e.target.value.replace(/\D/g, '');
                 if (postcode.length <= 5) setSchoolPostcode(postcode);
               }}
-              className="short-input"
             />
           </>
         )}
@@ -420,18 +419,20 @@ const StudentQuestionnaire = () => {
           <>
             <RadioGroup
               name="studyLevel"
-              legend="Niveau d’études suivi :"
+              legend="À quel niveau d’études t’es-tu inscrit cette année ?"
+              hint="Si double cursus, mettre le plus haut niveau"
               value={studyLevel}
               onChange={value => setStudyLevel(value)}
               required
             >
-              {STUDY_LEVELS.map(({ label, value }) => (
-                <Radio key={value} label={label} value={value} />
+              {STUDY_LEVELS.map(({ label, value, hint }) => (
+                <Radio key={value} label={label} value={value} hint={hint}/>
               ))}
             </RadioGroup>
             <RadioGroup
               name="studyField"
-              legend="Fillière suivie :"
+              legend="Quel est ton domaine d’études ?"
+              hint="Si double cursus, mettre le domaine principal"
               value={studyField}
               onChange={value => setStudyField(value)}
               required
@@ -440,13 +441,32 @@ const StudentQuestionnaire = () => {
                 <Radio key={value} label={label} value={value} />
               ))}
             </RadioGroup>
+            {studyField === 'other' && (
+              <TextInput
+                required
+                label="Préciser le domaine d’études"
+                value={studyFieldOther}
+                onChange={e => setStudyFieldOther(e.target.value)}
+              />
+            )}
           </>
         )}
         {step === 3 && (
           <>
+            <TextInput
+              required
+              label="Dans quelle zone géographique aimerais-tu consulter un psychologue ?"
+              hint="Cela nous aide à mieux comprendre les besoins en psychologues selon les zones"
+              value={livingPostcode}
+              placeholder='75001'
+              onChange={e => {
+                const value = e.target.value.replace(/\D/g, '');
+                if (value.length <= 5) setLivingPostcode(value);
+              }}
+            />
             <RadioGroup
               name="gender"
-              legend="Comment te définis-tu ?"
+              legend="Comment t’identifies-tu ?"
               value={gender}
               onChange={value => setGender(value)}
               required
@@ -456,61 +476,6 @@ const StudentQuestionnaire = () => {
               ))}
             </RadioGroup>
 
-            <TextInput
-              required
-              label="Où habites-tu ?"
-              hint="Pour te proposer des psychologues près de chez toi"
-              value={livingPostcode}
-              onChange={e => setLivingPostcode(e.target.value)}
-              type="number"
-            />
-          </>
-        )}
-        {step === 4 && (
-          <>
-            <RadioGroup
-              name="howDidYouKnow"
-              legend="Comment as-tu connu Santé Psy Étudiant ?"
-              value={howDidYouKnow}
-              onChange={value => setHowDidYouKnow(value)}
-              required
-            >
-              {HOW_DID_YOU_KNOW.map(({ label, value }) => (
-                <Radio key={value} label={label} value={value} />
-              ))}
-            </RadioGroup>
-            {howDidYouKnow === 'other' && (
-              <TextInput
-                required
-                label="Autre : précisez"
-                value={otherHowDidYouKnow}
-                onChange={e => setOtherHowDidYouKnow(e.target.value)}
-              />
-            )}
-          </>
-        )}
-        {step === 5 && (
-          <>
-            <RadioGroup
-              name="notificationMethod"
-              legend="Comment souhaites-tu être notifé des séances déclarées par les psychologues ?"
-              value={notificationMethod}
-              onChange={value => setNotificationMethod(value)}
-              required
-            >
-              {NOTIFICATION_METHODS.map(({ label, value }) => (
-                <Radio key={value} label={label} value={value} />
-              ))}
-            </RadioGroup>
-            {notificationMethod !== 'email' && (
-              <TextInput
-                required
-                label="Numéro de téléphone"
-                hint="Utilisé uniquement pour les notifications"
-                value={phoneNumber}
-                onChange={e => setPhoneNumber(e.target.value)}
-              />
-            )}
           </>
         )}
         <ButtonGroup isInlineFrom="xs">
@@ -518,7 +483,7 @@ const StudentQuestionnaire = () => {
             Retour
           </Button>
           <Button onClick={onClickNext} disabled={!isButtonEnabled}>
-            {step < 5 ? 'Suivant' : "M'inscrire"}
+            {step < 3 ? 'Suivant' : "M'inscrire"}
           </Button>
         </ButtonGroup>
       </div>

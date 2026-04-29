@@ -50,18 +50,13 @@ type CreateStudentParams = {
   dateOfBirth: Date;
   acceptedCGUs?: boolean;
   schoolType?: string;
-  selectedUniversity?: string;
-  otherSchoolType?: string;
+  schoolName?: string;
   schoolPostcode?: string;
   studyLevel?: string;
   studyField?: string;
+  studyFieldOther?: string;
   gender?: string;
   livingPostcode?: string;
-  howDidYouKnow?: string;
-  otherHowDidYouKnow?: string;
-  phoneNumber?: string;
-  notificationsEmail?: boolean;
-  notificationsSms?: boolean;
 };
 
 const create = async ({
@@ -72,18 +67,13 @@ const create = async ({
   dateOfBirth,
   acceptedCGUs,
   schoolType,
-  selectedUniversity,
-  otherSchoolType,
+  schoolName,
   schoolPostcode,
   studyLevel,
   studyField,
+  studyFieldOther,
   gender,
   livingPostcode,
-  howDidYouKnow,
-  otherHowDidYouKnow,
-  phoneNumber,
-  notificationsEmail,
-  notificationsSms,
 }: CreateStudentParams): Promise<Student> => {
   try {
     const [student] = (await db(studentsTable)
@@ -96,18 +86,13 @@ const create = async ({
         createdAt: date.now(),
         has_accepted_cgu: acceptedCGUs,
         school_type: schoolType,
-        school_type_other: otherSchoolType,
-        university_name: selectedUniversity,
+        school_name: schoolName,
         study_level: studyLevel,
         study_field: studyField,
+        study_field_other: studyFieldOther,
         gender,
         school_postcode: schoolPostcode,
         living_postcode: livingPostcode,
-        how_did_you_know: howDidYouKnow,
-        how_did_you_know_other: otherHowDidYouKnow,
-        notification_email: notificationsEmail,
-        notification_sms: notificationsSms,
-        phone_number: phoneNumber,
       })
       .returning('*')) as Student[];
 
@@ -142,7 +127,7 @@ const getByEmail = async (email: string): Promise<Student> => {
 const getByEmailAndIne = async (
   ine: string,
   email: string,
-): Promise<Student> | null => {
+): Promise<Student | null> => {
   try {
     const result = await db(studentsTable)
       .where('email', email)

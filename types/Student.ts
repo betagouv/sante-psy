@@ -9,16 +9,11 @@ export type Student = {
   updatedAt?: Date;
   has_accepted_cgu?: boolean;
   school_type?: string;
-  school_type_other?: string;
-  university_name?: string;
+  school_name?: string;
   study_level?: string;
   study_field?: string;
+  study_field_other?: string;
   gender?: string;
   school_postcode?: string;
   living_postcode?: string;
-  how_did_you_know?: string;
-  how_did_you_know_other?: string;
-  notification_email?: string;
-  notification_sms?: boolean;
-  phone_number?: boolean;
 };

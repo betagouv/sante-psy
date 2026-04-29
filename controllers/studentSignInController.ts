@@ -127,18 +127,13 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       dryRun = false, // if true, student will not be created for now,
       acceptedCGUs,
       schoolType,
-      selectedUniversity,
-      otherSchoolType,
+      schoolName,
       schoolPostcode,
       studyLevel,
       studyField,
+      studyFieldOther,
       gender,
       livingPostcode,
-      howDidYouKnow,
-      otherHowDidYouKnow,
-      phoneNumber,
-      notificationsEmail,
-      notificationsSms,
     } = req.body;
     const tokenRow = await dbLoginToken.getByEmail(email);
 
@@ -221,18 +216,13 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         dateOfBirth: date.parseForm(rawDateOfBirth),
         acceptedCGUs,
         schoolType,
-        selectedUniversity,
-        otherSchoolType,
+        schoolName,
         schoolPostcode,
         studyLevel,
         studyField,
+        studyFieldOther,
         gender,
         livingPostcode,
-        howDidYouKnow,
-        otherHowDidYouKnow,
-        phoneNumber,
-        notificationsEmail,
-        notificationsSms,
       });
 
       await sendWelcomeMail(email);
@@ -258,7 +248,7 @@ const sendCertificate = async (
   req: MulterRequest,
   res: Response,
 ): Promise<void> => {
-  const { email, ine, firstNames, lastName, dateOfBirth } = req.body;
+  const { email, ine } = req.body;
 
   // TODO gérer ça dans un validator
   if (!req.file || !email || !ine) {
