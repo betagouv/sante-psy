@@ -35,11 +35,13 @@ const STEPS = [
 
 const SCHOOL_TYPES = [
   {
-    label: 'À l’université (y compris IUT / BUT / inspé)',
+    label: 'À l’université',
+    hint: 'Y compris IUT / BUT / inspé',
     value: 'university',
   },
   {
-    label: 'Dans un grand établissement (type IEP, EHESS, INALCO…)',
+    label: 'Dans un grand établissement',
+    hint: 'Type IEP, EHESS, INALCO…',
     value: 'grandsEtablissements',
   },
     {
@@ -47,11 +49,13 @@ const SCHOOL_TYPES = [
     value: 'prepa',
   },
   {
-    label: "En école d’ingénieur (y compris école d’ingénieur universitaire)",
+    label: "En école d’ingénieur",
+    hint: 'Y compris école d’ingénieur universitaire',
     value: 'engineer',
   },
     {
-    label: 'En section de technicien supérieur (STS, BTS)',
+    label: 'En section de technicien supérieur',
+    hint: 'STS, BTS',
     value: 'technician',
   },
   {
@@ -63,7 +67,8 @@ const SCHOOL_TYPES = [
     value: 'art',
   },
   {
-    label: 'En établissement de santé (IFSI, écoles paramédicales…)',
+    label: 'En établissement de santé',
+    hint: 'IFSI, écoles paramédicales…',
     value: 'health',
   },
   {
@@ -78,23 +83,28 @@ const STUDY_LEVELS = [
     value: 'daeu',
   },
   {
-    label: 'Bac + 1 (L1, CPGE1, BTS1, prépa intégrée 1e année…)',
+    label: 'Bac + 1',
+    hint: 'L1, CPGE1, BTS1, prépa intégrée 1e année…',
     value: 'bac_plus_un',
   },
   {
-    label: 'Bac +2 (L2, CPGE2, BTS2, prépa intégrée 2e année…)',
+    label: 'Bac +2',
+    hint: 'L2, CPGE2, BTS2, prépa intégrée 2e année…',
     value: 'bac_plus_deux',
   },
   {
-    label: 'Bac + 3 (L3, 1e année école ingénieur / du cycle grande école, année de spécialisation post BTS…)',
+    label: 'Bac + 3',
+    hint: 'L3, 1e année école ingénieur / du cycle grande école, année de spécialisation post BTS…',
     value: 'bac_plus_trois',
   },
   {
-    label: 'Bac +4 (M1, 2e année école ingénieur / du cycle grande école…)',
+    label: 'Bac +4',
+    hint: 'M1, 2e année école ingénieur / du cycle grande école…',
     value: 'bac_plus_quatre',
   },
   {
-    label: 'Bac +5 (M2, 3e année école ingénieur / du cycle grande école…)',
+    label: 'Bac +5',
+    hint: 'M2, 3e année école ingénieur / du cycle grande école…',
     value: 'bac_plus_cinq',
   },
   {
@@ -198,6 +208,18 @@ const StudentQuestionnaire = () => {
   const [gender, setGender] = useState(null);
   const [livingPostcode, setLivingPostcode] = useState('');
 
+  useEffect(() => {
+    setSelectedUniversity('');
+    setUniversitySearch('');
+  }, [schoolType])
+
+  useEffect(() => {
+    const element = document.getElementById('questionnaire-wrapper');
+      if (element) {
+      element.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      }
+  }, [step])
+
   const signIn = async () => {
     try {
       await agent.Student.signIn({
@@ -208,7 +230,7 @@ const StudentQuestionnaire = () => {
         email,
         acceptedCGUs: true,
         schoolType,
-        schoolName: selectedUniversity ? `Université ${selectedUniversity}` : schoolName,
+        schoolName: selectedUniversity || schoolName,
         schoolPostcode,
         studyLevel,
         studyField,
@@ -277,7 +299,7 @@ const StudentQuestionnaire = () => {
 
   return (
     <StudentSignInHeader>
-      <div className={styles.wrapper}>
+      <div className={styles.wrapper} id='questionnaire-wrapper'>
         <h2 className={styles.title}>{STEPS[step].title}</h2>
         {STEPS[step].privacyHidden && (
           <div className={styles.privacyBanner}>
@@ -324,8 +346,8 @@ const StudentQuestionnaire = () => {
               onChange={value => setSchoolType(value)}
               required
             >
-              {SCHOOL_TYPES.map(({ value, label }) => (
-                <Radio key={value} label={label} value={value} />
+              {SCHOOL_TYPES.map(({ value, label, hint }) => (
+                <Radio key={value} label={label} value={value} hint={hint}/>
               ))}
             </RadioGroup>
             {schoolType === 'university' && (
@@ -390,7 +412,6 @@ const StudentQuestionnaire = () => {
                 const postcode = e.target.value.replace(/\D/g, '');
                 if (postcode.length <= 5) setSchoolPostcode(postcode);
               }}
-              className="short-input"
             />
           </>
         )}
@@ -404,8 +425,8 @@ const StudentQuestionnaire = () => {
               onChange={value => setStudyLevel(value)}
               required
             >
-              {STUDY_LEVELS.map(({ label, value }) => (
-                <Radio key={value} label={label} value={value} />
+              {STUDY_LEVELS.map(({ label, value, hint }) => (
+                <Radio key={value} label={label} value={value} hint={hint}/>
               ))}
             </RadioGroup>
             <RadioGroup
