@@ -131,6 +131,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       schoolPostcode,
       studyLevel,
       studyField,
+      studyFieldOther,
       gender,
       livingPostcode,
     } = req.body;
@@ -219,6 +220,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         schoolPostcode,
         studyLevel,
         studyField,
+        studyFieldOther,
         gender,
         livingPostcode,
       });

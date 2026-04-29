@@ -54,6 +54,7 @@ type CreateStudentParams = {
   schoolPostcode?: string;
   studyLevel?: string;
   studyField?: string;
+  studyFieldOther?: string;
   gender?: string;
   livingPostcode?: string;
 };
@@ -70,6 +71,7 @@ const create = async ({
   schoolPostcode,
   studyLevel,
   studyField,
+  studyFieldOther,
   gender,
   livingPostcode,
 }: CreateStudentParams): Promise<Student> => {
@@ -87,6 +89,7 @@ const create = async ({
         school_name: schoolName,
         study_level: studyLevel,
         study_field: studyField,
+        study_field_other: studyFieldOther,
         gender,
         school_postcode: schoolPostcode,
         living_postcode: livingPostcode,
