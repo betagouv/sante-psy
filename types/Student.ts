@@ -9,8 +9,7 @@ export type Student = {
   updatedAt?: Date;
   has_accepted_cgu?: boolean;
   school_type?: string;
-  school_type_other?: string;
-  university_name?: string;
+  school_name?: string;
   study_level?: string;
   study_field?: string;
   study_field_other?: string;

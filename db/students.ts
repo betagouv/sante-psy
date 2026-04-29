@@ -50,8 +50,7 @@ type CreateStudentParams = {
   dateOfBirth: Date;
   acceptedCGUs?: boolean;
   schoolType?: string;
-  selectedUniversity?: string;
-  otherSchoolType?: string;
+  schoolName?: string;
   schoolPostcode?: string;
   studyLevel?: string;
   studyField?: string;
@@ -67,8 +66,7 @@ const create = async ({
   dateOfBirth,
   acceptedCGUs,
   schoolType,
-  selectedUniversity,
-  otherSchoolType,
+  schoolName,
   schoolPostcode,
   studyLevel,
   studyField,
@@ -86,8 +84,7 @@ const create = async ({
         createdAt: date.now(),
         has_accepted_cgu: acceptedCGUs,
         school_type: schoolType,
-        school_type_other: otherSchoolType,
-        university_name: selectedUniversity,
+        school_name: schoolName,
         study_level: studyLevel,
         study_field: studyField,
         gender,

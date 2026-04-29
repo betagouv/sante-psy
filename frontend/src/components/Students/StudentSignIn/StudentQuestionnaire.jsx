@@ -186,7 +186,7 @@ const StudentQuestionnaire = () => {
   // step 1
   const [schoolType, setSchoolType] = useState(null);
   const [selectedUniversity, setSelectedUniversity] = useState('');
-  const [otherSchoolType, setOtherSchoolType] = useState('');
+  const [schoolName, setSchoolName] = useState('');
   const [schoolPostcode, setSchoolPostcode] = useState('');
   const [universitySearch, setUniversitySearch] = useState('');
   const [showUnivList, setShowUnivList] = useState(false);
@@ -208,8 +208,7 @@ const StudentQuestionnaire = () => {
         email,
         acceptedCGUs: true,
         schoolType,
-        selectedUniversity,
-        otherSchoolType,
+        schoolName: selectedUniversity ? `Université ${selectedUniversity}` : schoolName,
         schoolPostcode,
         studyLevel,
         studyField,
@@ -234,7 +233,7 @@ const StudentQuestionnaire = () => {
   );
 
   const onClickNext = () => {
-    if (step === 4) {
+    if (step === 3) {
       signIn();
       return;
     }
@@ -252,7 +251,7 @@ const StudentQuestionnaire = () => {
     if (step === 1) {
     return !!schoolType && 
       schoolPostcode.length === 5 &&
-      (schoolType === 'university' || !!otherSchoolType) && 
+      (schoolType === 'university' || !!schoolName) && 
       (schoolType !== 'university' || !!selectedUniversity);
     }
     if (step === 2) {
@@ -270,7 +269,7 @@ const StudentQuestionnaire = () => {
     gender,
     schoolPostcode,
     selectedUniversity,
-    otherSchoolType,
+    schoolName,
     studyField,
     studyFieldOther,
     livingPostcode,
@@ -377,14 +376,15 @@ const StudentQuestionnaire = () => {
               <TextInput
                 required
                 label="Quel est le nom de ton établissement ?"
-                value={otherSchoolType}
-                onChange={e => setOtherSchoolType(e.target.value)}
+                value={schoolName}
+                onChange={e => setSchoolName(e.target.value)}
               />
             )}
             <TextInput
               required
               label="Où se situe ton établissement ?"
               hint="Indique le code postal"
+              placeholder='75001'
               value={schoolPostcode}
               onChange={e => {
                 const postcode = e.target.value.replace(/\D/g, '');
