@@ -32,7 +32,7 @@ const sendStudentSecondStepMail = async (
     const existingPsy = await db(psychologistsTable).where({ email }).first();
     if (existingPsy) {
       res.json({
-        message: 'Consultez votre boîte mail',
+        message: 'Consulte ta boîte mail',
       });
       return;
     }
@@ -58,7 +58,7 @@ const sendStudentSecondStepMail = async (
     }
 
     res.json({
-      message: 'Consultez votre boîte mail',
+      message: 'Consulte ta boîte mail',
     });
   } catch (err) {
     console.error(err);

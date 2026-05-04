@@ -68,7 +68,11 @@ const create = async (req: Request, res: Response): Promise<void> => {
 
   notifyStudentNewAppointment(student);
 
-  res.json({ message: `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.` });
+  res.json({
+    message:
+      `La séance du ${dateUtils.formatFrenchDate(date)} ` +
+      `a bien été créée et l'étudiant en a été notifié par email.`
+  });
 };
 
 const deleteValidators = [
