@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, Badge, Button, Callout, CalloutText } from '@dataesr/react-dsfr';
+import { Alert, Badge, Button } from '@dataesr/react-dsfr';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 import Page from 'components/Page/Page';
@@ -169,28 +169,24 @@ const ContactSection = ({ psychologist }) => {
           <Alert
             type="warning"
             title="Pour obtenir les coordonnées du psychologue, il te faut créer ton espace étudiant."
-            description="Tu ne pourras pas bénéficier de séances gratuites si tu n'as pas créé ton espace étudiant au préalable."
+            description={
+              <>
+                <p>Tu ne pourras pas bénéficier de séances gratuites si tu n&apos;as pas créé ton espace étudiant au préalable.</p>
+                <p>Tu pourras y retrouver ton historique des séances.</p>
+                <br />
+                <Button
+                  tertiary
+                  icon="ri-information-line"
+                  size="sm"
+                  iconPosition="left"
+                  onClick={() => navigate('/espace-etudiant')}
+                >
+                  En savoir plus
+                </Button>
+              </>
+            }
           />
           <ButtonLogin onClick={() => navigate('/inscription')}>Créer mon espace étudiant</ButtonLogin>
-          <Callout hasInfoIcon={false}>
-            <CalloutText size="md">
-              <span style={{ fontWeight: 'bold' }}>Avec ton espace étudiant, tu pourras</span>
-              <ul>
-                <li>Retrouver l&apos;historique de tes séances</li>
-                <li>Accéder plus simplement à la prise de rendez-vous avec un psychologue</li>
-                <li>Avoir une vision claire de ton parcours</li>
-              </ul>
-              <Button
-                tertiary
-                icon="ri-information-line"
-                size="sm"
-                iconPosition="left"
-                onClick={() => navigate('/espace-etudiant')}
-              >
-                En savoir plus
-              </Button>
-            </CalloutText>
-          </Callout>
         </div>
       )}
     </>
