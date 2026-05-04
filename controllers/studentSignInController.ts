@@ -145,95 +145,94 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       throw new CustomError('Token expiré', 401);
     }
 
-    const currentAttempts = tokenRow.signInAttempts;
-    const duplicateCheck = await dbStudents.checkDuplicates(email, ine);
+    if (dryRun) {
+      const currentAttempts = tokenRow.signInAttempts;
+      const duplicateCheck = await dbStudents.checkDuplicates(email, ine);
 
-    if (duplicateCheck.status === 'alreadyRegistered') {
-      const token = loginInformations.generateToken(32);
-      const expiresAt = date.getDatePlusHours(2);
+      if (duplicateCheck.status === 'alreadyRegistered') {
+        const token = loginInformations.generateToken(32);
+        const expiresAt = date.getDatePlusHours(2);
 
-      await dbLoginToken.upsert(token, email, expiresAt, 'student');
-      console.log(
-        `--login (via signin step 2) - alreadyRegistered - token created for ${email} token=${token.slice(0, 6)}...`,
-      );
-      await loginController.sendStudentLoginEmail(
-        email,
-        loginInformations.generateLoginUrl(),
-        token,
-      );
-      res.status(200).json({
-        message: 'Un email vous a été envoyé.',
-      });
-      return;
-    }
-
-    if (duplicateCheck.status === 'conflict') {
-      const { shouldSendCertificate } =
-        await signInAttempts.checkAndIncrementAttempts(
-          tokenRow.token,
-          currentAttempts,
+        await dbLoginToken.upsert(token, email, expiresAt, 'student');
+        console.log(
+          `--login (via signin step 2) - alreadyRegistered - token created for ${email} token=${token.slice(0, 6)}...`,
         );
-
-      if (shouldSendCertificate) {
-        await dbLoginToken.delete(tokenRow.token);
+        await loginController.sendStudentLoginEmail(
+          email,
+          loginInformations.generateLoginUrl(),
+          token,
+        );
+        res.status(200).json({
+          message: 'Un email vous a été envoyé.',
+        });
+        return;
       }
 
-      // TODO: 429 is not adequat for this error, find a code similar to all errors here so we don't differentiate them
-      res.status(429).json({
-        shouldContact: shouldSendCertificate,
-      });
-      return;
-    }
+      if (duplicateCheck.status === 'conflict') {
+        const { shouldSendCertificate } =
+          await signInAttempts.checkAndIncrementAttempts(
+            tokenRow.token,
+            currentAttempts,
+          );
 
-    if (currentAttempts >= config.maxSignInAttempts) {
-      res.status(429).json({
-        shouldSendCertificate: true,
-      });
-      return;
-    }
+        if (shouldSendCertificate) {
+          await dbLoginToken.delete(tokenRow.token);
+        }
 
-    const isINEValid = await verifyINEWithBirthDate(ine, rawDateOfBirth);
+        res.status(422).json({
+          shouldContact: shouldSendCertificate,
+        });
+        return;
+      }
 
-    if (!isINEValid) {
-      const { shouldSendCertificate } =
-        await signInAttempts.checkAndIncrementAttempts(
-          tokenRow.token,
-          currentAttempts,
-        );
+      if (currentAttempts >= config.maxSignInAttempts) {
+        res.status(422).json({
+          shouldSendCertificate: true,
+        });
+        return;
+      }
 
-      res.status(429).json({
-        shouldSendCertificate,
-      });
-      return;
-    }
+      const isINEValid = await verifyINEWithBirthDate(ine, rawDateOfBirth);
 
-    if (!dryRun) {
-      await dbStudents.create({
-        email,
-        ine,
-        firstNames,
-        lastName,
-        dateOfBirth: date.parseForm(rawDateOfBirth),
-        acceptedCGUs,
-        schoolType,
-        schoolName,
-        schoolPostcode,
-        studyLevel,
-        studyField,
-        studyFieldOther,
-        gender,
-        livingPostcode,
-      });
+      if (!isINEValid) {
+        const { shouldSendCertificate } =
+          await signInAttempts.checkAndIncrementAttempts(
+            tokenRow.token,
+            currentAttempts,
+          );
 
-      await sendWelcomeMail(email);
-
-      res.status(200).json({
-        message: 'Un email vous a été envoyé.',
-      });
-    } else {
+        res.status(422).json({
+          shouldSendCertificate,
+        });
+        return;
+      }
       res.status(200).json({
         message: "L'étudiant peut être créé sans erreur.",
       });
+    } else {
+
+      await dbStudents.create({
+          email,
+          ine,
+          firstNames,
+          lastName,
+          dateOfBirth: date.parseForm(rawDateOfBirth),
+          acceptedCGUs,
+          schoolType,
+          schoolName,
+          schoolPostcode,
+          studyLevel,
+          studyField,
+          studyFieldOther,
+          gender,
+          livingPostcode,
+        });
+
+        await sendWelcomeMail(email);
+
+        res.status(200).json({
+          message: 'Un email vous a été envoyé.',
+        });
     }
   } catch (err) {
     console.error(err);
