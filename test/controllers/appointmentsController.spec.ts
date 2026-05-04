@@ -66,7 +66,9 @@ describe('appointmentsController', () => {
         .then(async (res) => {
           const formattedDate = dateUtils.formatFrenchDate(validDate);
           res.status.should.equal(200);
-          res.body.message.should.equal(`La séance du ${formattedDate} a bien été créée.`);
+          res.body.message.should.equal(
+            `La séance du ${formattedDate} a bien été créée et l'étudiant en a été notifié par email.`
+          );
 
           const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
           expect(appointmentArray).to.have.length(1);
