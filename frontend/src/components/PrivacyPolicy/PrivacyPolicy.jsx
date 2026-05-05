@@ -10,18 +10,20 @@ const dataConservation = [
     'Durée de conservation': '3 ans à compter de la dernière connexion',
   },
   {
+    'Catégories de données': 'Données relatives aux étudiants',
+    'Durée de conservation': '3 ans à compter de la dernière connexion',
+  },
+  {
     'Catégories de données': 'Données relatives au formulaire de contact',
     'Durée de conservation': '6 mois à compter de la réception du message',
+  },
+  {
+    'Catégories de données': 'Données relatives à la traçabilité (logs, adresse IP)',
+    'Durée de conservation': '1 an',
   },
 ];
 
 const dataSubcontractor = [
-  {
-    Partenaire: 'Heroku',
-    Pays: 'Etats-Unis',
-    'Traitement réalisé': 'Hébergeur',
-    Garanties: <a href="https://www.salesforce.com/content/dam/web/en_us/www/documents/legal/Agreements/data-processing-addendum.pdf" target="_blank" rel="noreferrer">https://www.salesforce.com/content/dam/web/en_us/www/documents/legal/Agreements/data-processing-addendum.pdf</a>,
-  },
   {
     Partenaire: 'Scalingo',
     Pays: 'France',
@@ -56,7 +58,6 @@ const dataCookies = [
   </>,
     'Base juridique': 'Consentement',
     Garanties: <a href="https://www.facebook.com/legal/terms/dataprocessing" target="_blank" rel="noreferrer">https://www.facebook.com/legal/terms/dataprocessing</a>,
-
   },
 ];
 
@@ -69,19 +70,21 @@ const PrivacyPolicy = () => (
     <h1 className="secondaryPageTitle">Politique de confidentialité</h1>
     <Section title="Qui sommes-nous ?">
       <p>
-        Santé Psy Étudiant est un service numérique porté depuis février 2021 par le ministère chargé de l’enseignement supérieur, de la recherche et de l’espace (MESRE). Il vise à mettre en relation les étudiants et des psychologues habilités par les services de santé étudiante (SSE), dans le but de faire bénéficier aux étudiants de 12 séances gratuites avec un psychologue.
+        Santé Psy Étudiant est un produit numérique porté depuis février 2021 par le ministère chargé de l’enseignement supérieur, de la recherche et de l’espace (MESRE). Il vise à mettre en relation les étudiants et des psychologues habilités par les services de santé étudiante (SSE), dans le but de faire bénéficier aux étudiants de 12 séances gratuites avec un psychologue.
       </p>
     </Section>
     <Section title="Pourquoi traitons-nous des données à caractère personnel ?">
-      <p>
-        Santé Psy Étudiant traite des données à caractère personnel pour permettre aux psychologues de se connecter à leurs espaces personnels, mettre en place un observatoire statistique relatif à la santé mentale des jeunes et à toute personne notamment les étudiants et psychologues, de prendre contact avec l’équipe de Santé Psy Étudiant.
-      </p>
+      <ul className="fr-list">
+        <li>Permettre aux psychologues et aux étudiants de se connecter à leurs espaces personnels notamment pour le suivi des séances et la facturation ;</li>
+        <li>Mettre en place un observatoire statistique relatif à la santé mentale des jeunes ;</li>
+        <li>Répondre aux demandes de contact.</li>
+      </ul>
     </Section>
     <Section title="Quelles sont les données à caractère personnel que nous traitons ?">
       <ul className="fr-list">
-        <li> Données relatives aux psychologues : nom, prénom, numéro de téléphone professionnel, adresse courriel, logs et adresse IP ; </li>
-        <li> Données relatives aux étudiants : nom, prénom, numéro INE, école, date de naissance, genre ; </li>
-        <li> Données relatives au formulaire de contact : nom, prénom, adresse courriel, champs libres. </li>
+        <li>Données relatives aux psychologues : nom, prénom, numéro de téléphone professionnel, adresse courriel, données de facturation, adresse postale professionnelle, logs et adresse IP ;</li>
+        <li>Données relatives aux étudiants : nom, prénom, numéro INE, école, date de naissance, genre, adresse courriel, certificat de scolarité, nom de l’établissement, type d’établissement, localisation de l’établissement, niveau d’études, domaine d’études, zone géographique de recherche, logs et adresse IP ;</li>
+        <li>Données relatives au formulaire de contact : nom, prénom, adresse courriel, champs libres.</li>
       </ul>
     </Section>
     <Section title="Qu’est-ce qui nous autorise à traiter des données à caractère personnel ?">
@@ -93,9 +96,6 @@ const PrivacyPolicy = () => (
       <SimpleTable data={dataConservation} />
     </Section>
     <Section title="Quels sont vos droits ? ">
-      <p>
-        Vous disposez des droits suivants concernant vos données à caractère personnel:
-      </p>
       <ul className="fr-list">
         <li>
           Droit d’information et droit d’accès aux données;
@@ -189,44 +189,32 @@ const PrivacyPolicy = () => (
       </p>
     </Section>
     <Section title="Qui va avoir accès à vos données ? ">
-      <p>
-        Le responsable de traitement s‘engage à ce que les données à caractères personnels soient traitées par les seules personnes autorisées:
-      </p>
       <ul className="fr-list">
-        <li>
-          Les membres habilités de l’équipe de Santé Psy Étudiant.
-        </li>
+        <li>Les membres habilités de l’équipe de Santé Psy Étudiant ;</li>
+        <li>Les psychologues et les médecins habilités ;</li>
+        <li>Les services de santé étudiante et les universités.</li>
       </ul>
     </Section>
     <Section title="Qui nous aide à traiter vos données à caractère personnel ?">
-      <p>
-        Certaines des données sont envoyées à des sous-traitants pour
-        réaliser certaines missions. Le responsable de traitement s’est
-        assuré de la mise en œuvre par ses sous-traitants de garanties
-        adéquates et du respect de conditions strictes de confidentialité,
-        d’usage et de protection des données.
-      </p>
       <SimpleTable data={dataSubcontractor} />
     </Section>
     <Section title="Sécurité et confidentialité des données">
       <p>
-        Le responsable de traitements prend les mesures techniques et
+        Le responsable de traitement prend les mesures techniques et
         opérationnelles nécessaires afin d’assurer la sécurité et la
         confidentialité des données telles que le chiffrement et le
         cloisonnement des accès. Des audits et analyses de code sont
         également effectués.
       </p>
       <p>
-        En ce sens les données introduites par le psychologue pour générer
+        En ce sens, les données introduites par le psychologue pour générer
         la facture sont collectées localement, de ce fait elles ne sont pas
         traitées par Santé Psy Etudiant. De même, lorsque l’utilisateur recherche un psychologue autour de son emplacement, les données de géolocalisation sont collectées par le navigateur et ne sont pas remontées à l’équipe de Santé Psy Étudiant.
       </p>
     </Section>
     <Section title="Témoins de connexion et traceurs">
       <p>
-        Un témoin de connexion est un fichier déposé sur votre terminal lors de la visite d’un site. Il a pour but de collecter des informations relatives à votre navigation et de vous adresser des services adaptés à votre terminal (ordinateur, mobile ou tablette).
-        Santé Psy Étudiant dépose des témoins de connexion, notamment pour la mesure d’audience sur son service. Le dépôt s’effectue uniquement lorsque l’utilisateur a consenti via le bandeau prévu à cet effet. L’utilisateur peut à tout moment revenir sur son choix.
-        Témoins de connexion déposés :
+        Un témoin de connexion est un fichier déposé sur votre terminal lors de la visite d’un site. Il a pour but de collecter des informations relatives à votre navigation et de vous adresser des services adaptés à votre terminal (ordinateur, mobile ou tablette). Santé Psy Étudiant dépose des témoins de connexion, notamment pour la mesure d’audience sur son service. Le dépôt s’effectue uniquement lorsque l’utilisateur a consenti via le bandeau prévu à cet effet. L’utilisateur peut à tout moment revenir sur son choix.
       </p>
       <SimpleTable data={dataCookies} />
       <p>Nous utilisons également l’outil de mesure d’audience Matomo, configuré en mode “exempté” et ne nécessitant pas le recueil de votre consentement conformément aux recommandations de la CNIL.</p>
