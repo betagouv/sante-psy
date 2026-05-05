@@ -74,7 +74,7 @@ const departementToUniversityName = {
   72: 'Le Mans Université',
   73: 'Savoie Mont-Blanc',
   74: 'Savoie Mont-Blanc',
-  75: 'Paris Descartes (Université de Paris)',
+  75: 'Université Paris Cité',
   76: 'cas particulier',
   77: 'Paris Est Créteil (UPEC)',
   78: 'Versailles Saint-Quentin (UVSQ)',

@@ -83,13 +83,13 @@ describe('DB Students', () => {
 
   describe('create', () => {
     it('should create a student and return the student object', async () => {
-      const student = await dbStudents.create(
+      const student = await dbStudents.create({
         email,
         ine,
         firstNames,
         lastName,
         dateOfBirth,
-      );
+      });
 
       expect(student).to.have.property('email', email);
       expect(student).to.have.property('ine', ine);
@@ -105,7 +105,13 @@ describe('DB Students', () => {
       await create.insertOneStudent({ ine });
 
       try {
-        await dbStudents.create(email, ine, firstNames, lastName, dateOfBirth);
+        await dbStudents.create({
+          email,
+          ine,
+          firstNames,
+          lastName,
+          dateOfBirth,
+        });
         expect.fail('Should have thrown an error');
       } catch (err) {
         expect(err).to.exist;

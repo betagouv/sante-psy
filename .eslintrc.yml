@@ -49,6 +49,7 @@ rules:
   '@typescript-eslint/no-var-requires': 'off'
   mocha-no-only/mocha-no-only: ['error']
   import/extensions: ['error', { js: 'never', ts: 'never' }]
+  import/prefer-default-export: 'off'
 
 overrides:
   - files:

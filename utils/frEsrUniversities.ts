@@ -334,7 +334,7 @@ const frEsrUniversities = [
     city: 'Orléans CEDEX 2',
   },
   {
-    name: 'Paris Descartes (Université de Paris)',
+    name: 'Université Paris Cité',
     siret: '13002573700011',
     address1: '',
     address2: '85 boulevard Saint-Germain',

@@ -7,6 +7,7 @@ import {
   universitiesTable,
   suspensionReasonsTable,
   lastConnectionsTable,
+  lastConnectionsStudentsTable,
   studentsTable,
   studentsNewsletterTable,
 } from '../../db/tables';
@@ -16,6 +17,7 @@ export const seed = async (knex: Knex): Promise<void> => {
   console.log('Clean database information');
 
   await knex(lastConnectionsTable).del();
+  await knex(lastConnectionsStudentsTable).del();
   await knex(suspensionReasonsTable).del();
   await knex(loginTokenTable).del();
   await knex(appointmentsTable).del();

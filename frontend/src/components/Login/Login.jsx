@@ -13,6 +13,12 @@ import agent from 'services/agent';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import styles from './login.cssmodule.scss';
 
+export const ButtonLogin = ({ children, ...props }) => (
+  <Button className={styles.loginButton} {...props}>
+    {children}
+  </Button>
+);
+
 const Login = () => {
   const {
     commonStore: { config, setNotification },
@@ -119,14 +125,13 @@ const Login = () => {
               />
             </Col>
             <Col>
-              <Button
+              <ButtonLogin
                 submit
-                className={styles.loginButton}
                 data-test-id="email-button"
                 disabled={!canSendEmail}
               >
                 Recevoir le lien de connexion
-              </Button>
+              </ButtonLogin>
             </Col>
           </Row>
           <br />
@@ -157,23 +162,19 @@ const Login = () => {
         <Row>
           <Col>
             <p>Étudiants, c&lsquo;est par ici pour s&lsquo;inscrire</p>
-            <Button
-              onClick={() => navigate('/inscription')}
-              className={styles.loginButton}
-            >
+            <ButtonLogin onClick={() => navigate('/inscription')}>
               Créer mon espace étudiant
-            </Button>
+            </ButtonLogin>
           </Col>
           <Col>
             <p>Psychologues, créez votre dossier</p>
-            <Button
+            <ButtonLogin
               onClick={() =>
                 window.open('https://www.demarches-simplifiees.fr/', '_blank')
               }
-              className={styles.loginButton}
             >
               Déposer un dossier psychologue
-            </Button>
+            </ButtonLogin>
           </Col>
         </Row>
       </Section>

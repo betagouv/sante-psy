@@ -34,12 +34,12 @@
 }
 
 .columnSeparator {
-  border-top: solid 1px #E5E5E5;
+  border-top: solid 1px #e5e5e5;
 }
 
 .optionalSeparator,
 .separator {
-  border-top: solid 1px #E5E5E5;
+  border-top: solid 1px #e5e5e5;
   margin: 32px 0;
 }
 
@@ -70,7 +70,7 @@
 
   .psyInfo {
     flex-direction: row;
-  }  
+  }
 
   .column {
     width: 50%;
@@ -88,7 +88,7 @@
   .map {
     width: calc(100% + 128px);
     margin-left: -64px;
-  }  
+  }
 
   .displayDesktop {
     display: block;
@@ -96,5 +96,11 @@
 
   .displayMobile {
     display: none;
+  }
+
+  .flexColumn {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
   }
 }

@@ -1,21 +1,19 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link, Pagination, Icon, Badge } from '@dataesr/react-dsfr';
+import { useStore } from 'stores/index';
 import styles from './psyTable.cssmodule.scss';
 
-const PsyTable = ({
-  page,
-  setPage,
-  psychologists,
-  nameFilter,
-  addressFilter,
-  languageFilter,
-  teleconsultation,
-}) => {
+const PsyTable = ({ page, setPage, psychologists, nameFilter, addressFilter, languageFilter, teleconsultation }) => {
   const [surrendingPages, setSurrendingPages] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
   const table = useRef(null);
+  const {
+    userStore: { user },
+  } = useStore();
+
+  const isUserConnected = !!user;
 
   const goToProfile = psychologist => {
     const searchPath = `?page=${page}&name=${nameFilter}&address=${addressFilter}&teleconsultation=${teleconsultation}&language=${languageFilter}`;
@@ -71,19 +69,13 @@ const PsyTable = ({
                 <Icon className={styles.userIcon} name="ri-user-line" size="2x" />
                 <div>
                   <h6>
-                    {psychologist.lastName.toUpperCase()}
-                    {' '}
-                    {psychologist.firstNames}
+                    {psychologist.lastName.toUpperCase()} {psychologist.firstNames}
                   </h6>
                   <div className={styles.addressInfo}>
                     <div>
                       <Icon className="fr-mr-1w" name="ri-map-pin-2-fill" size="lg" />
                       <span>
-                        {
-                          psychologist.city
-                            ? `${psychologist.city} • ${psychologist.postcode}`
-                            : psychologist.address
-                        }
+                        {psychologist.city ? `${psychologist.city} • ${psychologist.postcode}` : psychologist.address}
                       </span>
                       {psychologist.otherCity && psychologist.otherCity !== psychologist.city && (
                         <>
@@ -108,24 +100,32 @@ const PsyTable = ({
               </div>
               <div className={styles.horizontalSeparator} />
               <div className={styles.contactInfo}>
-                <div
-                  onClick={() => { window.location.href = `mailto:${psychologist.email}`; }}
-                >
-                  <Icon name="ri-mail-fill" size="2x" />
-                </div>
-                <div className={styles.bigSeparator} />
-                <div
-                  onClick={() => { window.location.href = `tel:${psychologist.phone}`; }}
-                >
-                  <Icon name="ri-phone-fill" size="2x" />
-                </div>
+                {isUserConnected && (
+                  <>
+                    <div
+                      onClick={() => {
+                        window.location.href = `mailto:${psychologist.email}`;
+                      }}
+                    >
+                      <Icon name="ri-mail-fill" size="2x" />
+                    </div>
+                    <div className={styles.bigSeparator} />
+                    <div
+                      onClick={() => {
+                        window.location.href = `tel:${psychologist.phone}`;
+                      }}
+                    >
+                      <Icon name="ri-phone-fill" size="2x" />
+                    </div>
+                  </>
+                )}
                 <Link
                   data-test-id="psy-table-row-profil-button"
                   href={`/trouver-un-psychologue/${psychologist.dossierNumber}`}
                   onClick={() => goToProfile(psychologist)}
                   className="fr-btn fr-btn--secondary"
                 >
-                  Prendre rendez-vous
+                  {isUserConnected ? 'Prendre rendez-vous' : 'Accéder à la fiche du psychologue'}
                 </Link>
               </div>
             </div>

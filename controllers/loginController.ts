@@ -8,6 +8,7 @@ import dbStudents from '../db/students';
 import dbSuspensions from '../db/suspensionReasons';
 import dbLoginToken from '../db/loginToken';
 import dbLastConnection from '../db/lastConnections';
+import dbLastConnectionStudent from '../db/lastConnectionsStudents';
 import date from '../utils/date';
 import cookie from '../utils/cookie';
 import logs from '../utils/logs';
@@ -114,43 +115,6 @@ async function saveStudentToken(email: string, token: string): Promise<void> {
 const deleteToken = (req: Request, res: Response): void => {
   cookie.clearJwtCookie(res);
   res.json({});
-};
-
-const login = async (req: Request, res: Response): Promise<void> => {
-  // Save a token that expire after config.sessionDurationHours hours if user is logged
-  if (req.body.token) {
-    const token = DOMPurify.sanitize(req.body.token);
-    const dbToken = await dbLoginToken.getByToken(token);
-
-    if (dbToken) {
-      const psychologistData = await dbPsychologists.getAcceptedByEmail(
-        dbToken.email,
-      );
-      const xsrfToken = loginInformations.generateToken();
-      cookie.createAndSetJwtCookie(
-        res,
-        psychologistData.dossierNumber,
-        xsrfToken,
-        'psy',
-      );
-      console.log(`Successful authentication for ${logs.hash(dbToken.email)}`);
-
-      dbLoginToken.delete(token);
-      dbLastConnection.upsert(psychologistData.dossierNumber);
-
-      res.json(xsrfToken);
-      return;
-    }
-
-    console.log(
-      `Invalid or expired token received : ${token.substring(0, 5)}...`,
-    );
-  }
-
-  throw new CustomError(
-    'Ce lien est invalide ou expiré. Indiquez votre email ci-dessous pour en avoir un nouveau.',
-    401,
-  );
 };
 
 /**
@@ -296,6 +260,8 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
         `--login - student - email=${email} token ${token.slice(0, 6)}... deleted`,
       );
 
+      await dbLastConnectionStudent.upsert(student.id);
+
       res.json({ xsrfToken, role: 'student' });
       return;
     }
@@ -422,7 +388,6 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
 
 export default {
   emailValidators,
-  login: asyncHelper(login),
   sendStudentMail: asyncHelper(sendStudentMail),
   sendStudentLoginEmail,
   deleteToken,

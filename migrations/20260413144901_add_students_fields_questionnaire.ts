@@ -1,0 +1,29 @@
+import { Knex } from 'knex';
+
+export async function up(knex: Knex): Promise<void> {
+  return knex.schema.table('students', table => {
+    table.boolean('has_accepted_cgu').notNullable().defaultTo(false);
+    table.string('school_type').nullable();
+    table.string('school_name').nullable();
+    table.string('study_level').nullable();
+    table.string('study_field').nullable();
+    table.string('study_field_other').nullable();
+    table.string('gender').nullable();
+    table.string('school_postcode').nullable();
+    table.string('living_postcode').nullable();
+  });
+}
+
+export async function down(knex: Knex): Promise<void> {
+  return knex.schema.table('students', table => {
+    table.dropColumn('has_accepted_cgu');
+    table.dropColumn('school_type');
+    table.dropColumn('school_name');
+    table.dropColumn('study_level');
+    table.dropColumn('study_field');
+    table.dropColumn('study_field_other');
+    table.dropColumn('gender');
+    table.dropColumn('school_postcode');
+    table.dropColumn('living_postcode');
+  });
+}
