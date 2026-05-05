@@ -32,7 +32,7 @@ const sendStudentSecondStepMail = async (
     const existingPsy = await db(psychologistsTable).where({ email }).first();
     if (existingPsy) {
       res.json({
-        message: 'Consultez votre boîte mail',
+        message: 'Consulte ta boîte mail',
       });
       return;
     }
@@ -58,7 +58,7 @@ const sendStudentSecondStepMail = async (
     }
 
     res.json({
-      message: 'Consultez votre boîte mail',
+      message: 'Consulte ta boîte mail',
     });
   } catch (err) {
     console.error(err);
@@ -124,8 +124,17 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       dateOfBirth: rawDateOfBirth,
       ine,
       email,
+      dryRun = false, // if true, student will not be created for now,
+      acceptedCGUs,
+      schoolType,
+      schoolName,
+      schoolPostcode,
+      studyLevel,
+      studyField,
+      studyFieldOther,
+      gender,
+      livingPostcode,
     } = req.body;
-
     const tokenRow = await dbLoginToken.getByEmail(email);
 
     if (!tokenRow) {
@@ -136,81 +145,95 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       throw new CustomError('Token expiré', 401);
     }
 
-    const currentAttempts = tokenRow.signInAttempts;
-    const duplicateCheck = await dbStudents.checkDuplicates(email, ine);
+    if (dryRun) {
+      const currentAttempts = tokenRow.signInAttempts;
+      const duplicateCheck = await dbStudents.checkDuplicates(email, ine);
 
-    if (duplicateCheck.status === 'alreadyRegistered') {
-      const token = loginInformations.generateToken(32);
-      const expiresAt = date.getDatePlusHours(2);
+      if (duplicateCheck.status === 'alreadyRegistered') {
+        const token = loginInformations.generateToken(32);
+        const expiresAt = date.getDatePlusHours(2);
 
-      await dbLoginToken.upsert(token, email, expiresAt, 'student');
-      console.log(
-        `--login (via signin step 2) - alreadyRegistered - token created for ${email} token=${token.slice(0, 6)}...`,
-      );
-      await loginController.sendStudentLoginEmail(
-        email,
-        loginInformations.generateLoginUrl(),
-        token,
-      );
-      res.status(200).json({
-        message: 'Un email vous a été envoyé.',
-      });
-      return;
-    }
-
-    if (duplicateCheck.status === 'conflict') {
-      const { shouldSendCertificate } =
-        await signInAttempts.checkAndIncrementAttempts(
-          tokenRow.token,
-          currentAttempts,
+        await dbLoginToken.upsert(token, email, expiresAt, 'student');
+        console.log(
+          `--login (via signin step 2) - alreadyRegistered - token created for ${email} token=${token.slice(0, 6)}...`,
         );
-
-      if (shouldSendCertificate) {
-        await dbLoginToken.delete(tokenRow.token);
+        await loginController.sendStudentLoginEmail(
+          email,
+          loginInformations.generateLoginUrl(),
+          token,
+        );
+        res.status(200).json({
+          message: 'Un email vous a été envoyé.',
+        });
+        return;
       }
 
-      // TODO: 429 is not adequat for this error, find a code similar to all errors here so we don't differentiate them
-      res.status(429).json({
-        shouldContact: shouldSendCertificate,
+      if (duplicateCheck.status === 'conflict') {
+        const { shouldSendCertificate } =
+          await signInAttempts.checkAndIncrementAttempts(
+            tokenRow.token,
+            currentAttempts,
+          );
+
+        if (shouldSendCertificate) {
+          await dbLoginToken.delete(tokenRow.token);
+        }
+
+        res.status(422).json({
+          shouldContact: shouldSendCertificate,
+        });
+        return;
+      }
+
+      if (currentAttempts >= config.maxSignInAttempts) {
+        res.status(422).json({
+          shouldSendCertificate: true,
+        });
+        return;
+      }
+
+      const isINEValid = await verifyINEWithBirthDate(ine, rawDateOfBirth);
+
+      if (!isINEValid) {
+        const { shouldSendCertificate } =
+          await signInAttempts.checkAndIncrementAttempts(
+            tokenRow.token,
+            currentAttempts,
+          );
+
+        res.status(422).json({
+          shouldSendCertificate,
+        });
+        return;
+      }
+      res.status(200).json({
+        message: "L'étudiant peut être créé sans erreur.",
       });
-      return;
+    } else {
+
+      await dbStudents.create({
+          email,
+          ine,
+          firstNames,
+          lastName,
+          dateOfBirth: date.parseForm(rawDateOfBirth),
+          acceptedCGUs,
+          schoolType,
+          schoolName,
+          schoolPostcode,
+          studyLevel,
+          studyField,
+          studyFieldOther,
+          gender,
+          livingPostcode,
+        });
+
+        await sendWelcomeMail(email);
+
+        res.status(200).json({
+          message: 'Un email vous a été envoyé.',
+        });
     }
-
-    if (currentAttempts >= config.maxSignInAttempts) {
-      res.status(429).json({
-        shouldSendCertificate: true,
-      });
-      return;
-    }
-
-    const isINEValid = await verifyINEWithBirthDate(ine, rawDateOfBirth);
-
-    if (!isINEValid) {
-      const { shouldSendCertificate } =
-        await signInAttempts.checkAndIncrementAttempts(
-          tokenRow.token,
-          currentAttempts,
-        );
-
-      res.status(429).json({
-        shouldSendCertificate,
-      });
-      return;
-    }
-
-    await dbStudents.create(
-      email,
-      ine,
-      firstNames,
-      lastName,
-      date.parseForm(rawDateOfBirth),
-    );
-
-    await sendWelcomeMail(email);
-
-    res.status(200).json({
-      message: 'Un email vous a été envoyé.',
-    });
   } catch (err) {
     console.error(err);
 
@@ -224,7 +247,7 @@ const sendCertificate = async (
   req: MulterRequest,
   res: Response,
 ): Promise<void> => {
-  const { email, ine, firstNames, lastName, dateOfBirth } = req.body;
+  const { email, ine } = req.body;
 
   // TODO gérer ça dans un validator
   if (!req.file || !email || !ine) {
@@ -246,14 +269,6 @@ const sendCertificate = async (
     },
   );
 
-  await dbStudents.create(
-    email,
-    ine,
-    firstNames,
-    lastName,
-    date.parseForm(dateOfBirth),
-  );
-
   await send(
     // TODO : replace mail by env var
     'support-santepsyetudiant@beta.gouv.fr',
@@ -267,10 +282,8 @@ const sendCertificate = async (
     ],
   );
 
-  await sendWelcomeMail(email);
-
   res.status(200).json({
-    message: 'Certificat envoyé et inscription validée.',
+    message: 'Certificat envoyé.',
   });
 };
 

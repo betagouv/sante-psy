@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Page from 'components/Page/Page';
 import agent from 'services/agent';
 import validateEmailFormat from 'src/utils/validateEmailFormat';
 import styles from './studentSignIn.cssmodule.scss';
+import StudentSignInHeader from './StudentSignInHeader';
 
 const StudentSignInStepOne = () => {
   const [email, setEmail] = useState('');
@@ -28,6 +28,8 @@ const StudentSignInStepOne = () => {
     return true;
   };
 
+  useEffect(() => setCanSendEmail(true), [email]);
+
   const sendStudentSecondStepMail = async (e) => {
     setCanSendEmail(false);
     e.preventDefault();
@@ -35,6 +37,7 @@ const StudentSignInStepOne = () => {
     if (!isValid) return;
 
     try {
+      setCanSendEmail(false);
       const response = await agent.Student.sendStudentSecondStepMail(email);
       setNotification({ type: 'success', message: response.message });
     } catch (error) {
@@ -46,16 +49,7 @@ const StudentSignInStepOne = () => {
   };
 
   return (
-    <Page
-      withStats
-      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
-      title={
-        <>
-          Inscription à ton <b>Espace Étudiant</b>
-        </>
-      }
-      description="Ton identifiant sera ton email"
-    >
+    <StudentSignInHeader description="Ton identifiant sera ton email">
       <form onSubmit={sendStudentSecondStepMail}>
         {notification && (
           <div
@@ -112,7 +106,7 @@ const StudentSignInStepOne = () => {
           </button>
         </div>
       </form>
-    </Page>
+    </StudentSignInHeader>
   );
 };
 

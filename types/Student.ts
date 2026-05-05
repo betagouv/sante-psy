@@ -1,10 +1,19 @@
 export type Student = {
-  id: string,
-  firstNames: string,
-  lastName: string,
-  email: string,
-  dateOfBirth: Date,
-  ine: string,
-  createdAt: Date,
-  updatedAt?: Date
-}
+  id: string;
+  firstNames: string;
+  lastName: string;
+  email: string;
+  dateOfBirth: Date;
+  ine: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  has_accepted_cgu?: boolean;
+  school_type?: string;
+  school_name?: string;
+  study_level?: string;
+  study_field?: string;
+  study_field_other?: string;
+  gender?: string;
+  school_postcode?: string;
+  living_postcode?: string;
+};

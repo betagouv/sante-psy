@@ -4,6 +4,7 @@ import { check } from 'express-validator';
 import dbAppointments from '../db/appointments';
 import dbPatient from '../db/patients';
 import dbPsychologists from '../db/psychologists';
+import dbStudents from '../db/students';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { getAppointmentWithBadges } from '../services/getBadges';
@@ -11,6 +12,7 @@ import dateUtils from '../utils/date';
 import validation from '../utils/validation';
 import { AppointmentByYear } from '../types/Appointment';
 import _ from 'lodash';
+import { notifyStudentNewAppointment } from '../services/notifications';
 
 const createValidators = [
   check('date')
@@ -61,7 +63,16 @@ const create = async (req: Request, res: Response): Promise<void> => {
   await dbAppointments.insert(date, patientId, psyId);
   console.log(`Appointment created for patient id ${patientId} by psy id ${psyId}`);
 
-  res.json({ message: `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.` });
+  const { INE, email } = patientExist;
+  const student = await dbStudents.getByEmailAndIne(INE, email);
+
+  notifyStudentNewAppointment(student);
+
+  res.json({
+    message:
+      `La séance du ${dateUtils.formatFrenchDate(date)} ` +
+      `a bien été créée et l'étudiant en a été notifié par email.`
+  });
 };
 
 const deleteValidators = [
