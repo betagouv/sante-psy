@@ -20,17 +20,20 @@ const AddEditPatient = () => {
   const { patientId } = useParams();
   const appointmentDate = new URLSearchParams(search).get('appointmentDate');
   const addAppointment = new URLSearchParams(search).get('addAppointment');
-  const { userStore: { user } } = useStore();
+  const {
+    userStore: { user },
+  } = useStore();
   const [patient, setPatient] = useState();
   const [customINESError, setCustomINESError] = useState(false);
   const [customErrorsAlert, setCustomErrorsAlert] = useState(false);
   const [createdPatientId, setCreatedPatientId] = useState(null);
   const [errors, setErrors] = useState({ dateOfBirth: false, ine: false });
   const badges = getBadgeInfos();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (patientId) {
-      agent.Patient.getOne(patientId).then(response => {
+      agent.Patient.getOne(patientId).then((response) => {
         setPatient({
           ...response,
           dateOfBirth: response.dateOfBirth
@@ -69,20 +72,21 @@ const AddEditPatient = () => {
     icon: patientId ? 'fr-fi-check-line' : 'fr-fi-add-line',
     text: patientId ? 'Valider les modifications' : "Ajouter l'étudiant",
   };
-  const save = e => {
+  const save = (e) => {
     e.preventDefault();
-    if (Object.values(errors).some(error => error)) {
+    if (Object.values(errors).some((error) => error)) {
       setCustomErrorsAlert(true);
       window.scrollTo(0, 0);
       return;
     }
     setCustomErrorsAlert(false);
+    setIsSubmitting(true);
 
     const action = patientId
       ? agent.Patient.update(patientId, patient)
       : agent.Patient.create(patient);
     action
-      .then(response => {
+      .then((response) => {
         if (!response?.isINESvalid) {
           setCustomINESError(true);
           setCreatedPatientId(response?.patientId);
@@ -93,54 +97,61 @@ const AddEditPatient = () => {
             { state: { notification: response } },
           );
         } else if (addAppointment) {
-          navigate(`/psychologue/nouvelle-seance/${patientId || response.patientId}`, { state: { notification: response } });
+          navigate(
+            `/psychologue/nouvelle-seance/${patientId || response.patientId}`,
+            { state: { notification: response } },
+          );
         } else {
-          navigate('/psychologue/mes-etudiants', { state: { notification: response } });
+          navigate('/psychologue/mes-etudiants', {
+            state: { notification: response },
+          });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err?.response?.data?.message);
         window.scrollTo(0, 0);
+        setIsSubmitting(false);
       });
   };
 
   return (
     <div className="fr-my-2w">
-      {patientId && !patient?.isINESvalid && !customINESError && !customErrorsAlert && (
-        <Notification type="info">
-          <b>Contrôle de l&apos;INE</b>
-          <br />
-          {' '}
-          Veuillez confirmer les informations du patient afin que le numéro INE puisse être vérifié automatiquement.
-          <br />
-          Attention, vous ne pourrez pas créer de nouvelle séance pour ce patient tant que son numéro INE ne sera pas validé.
-          <br />
-          <br />
-          <Button
-            onClick={save}
-          >
-            Je confirme ces informations
-          </Button>
-        </Notification>
-      )}
+      {patientId &&
+        !patient?.isINESvalid &&
+        !customINESError &&
+        !customErrorsAlert && (
+          <Notification type="info">
+            <b>Contrôle de l&apos;INE</b>
+            <br /> Veuillez confirmer les informations du patient afin que le
+            numéro INE puisse être vérifié automatiquement.
+            <br />
+            Attention, vous ne pourrez pas créer de nouvelle séance pour ce
+            patient tant que son numéro INE ne sera pas validé.
+            <br />
+            <br />
+            <Button onClick={save}>Je confirme ces informations</Button>
+          </Notification>
+        )}
       {customINESError && (
         <Notification type="warning">
           <b>Etudiant non reconnu</b>
+          <br /> Le numéro INE et/ou la date naissance indiqué n&apos;est pas
+          relié à un étudiant.
           <br />
-          {' '}
-          Le numéro INE et/ou la date naissance indiqué n&apos;est pas relié à un étudiant.
-          <br />
-          La bonne date de naissance et un numéro INE valable doivent être indiqués.
+          La bonne date de naissance et un numéro INE valable doivent être
+          indiqués.
           <br />
           <br />
           <Button
-            onClick={() => navigate('/psychologue/envoi-certificat', {
-              state: {
-                patientId: createdPatientId || patientId,
-                patientName: `${patient.firstNames} ${patient.lastName}`,
-                psychologistId: user.dossierNumber,
-              },
-            })}
+            onClick={() =>
+              navigate('/psychologue/envoi-certificat', {
+                state: {
+                  patientId: createdPatientId || patientId,
+                  patientName: `${patient.firstNames} ${patient.lastName}`,
+                  psychologistId: user.dossierNumber,
+                },
+              })
+            }
           >
             Fournir le certificat de scolarité
           </Button>
@@ -160,11 +171,12 @@ const AddEditPatient = () => {
         <form onSubmit={save}>
           <div>
             {patientId && (
-              <section id="anchor-student-file" className={styles.studentSectionTitle}>
+              <section
+                id="anchor-student-file"
+                className={styles.studentSectionTitle}
+              >
                 <h2>
-                  {patient.firstNames}
-                  {' '}
-                  {patient.lastName}
+                  {patient.firstNames} {patient.lastName}
                 </h2>
                 {patient.badges.includes(badges.student_ine.key)
                   ? renderBadge({ badge: badges.student_ine.key })
@@ -173,15 +185,17 @@ const AddEditPatient = () => {
             )}
             <p className="fr-text--sm fr-mb-1v">
               Les champs avec une astérisque (
-              <span className="red-text">*</span>
-              )
-              sont obligatoires.
+              <span className="red-text">*</span>) sont obligatoires.
             </p>
             <p className="fr-text--sm fr-mb-1v">
               S&lsquo;il vous manque des champs non-obligatoires, vous pourrez y
               revenir plus tard pour compléter le dossier.
             </p>
-            <PatientInfo patient={patient} changePatient={changePatient} handleFormErrors={handleFormErrors} />
+            <PatientInfo
+              patient={patient}
+              changePatient={changePatient}
+              handleFormErrors={handleFormErrors}
+            />
           </div>
           <div className="fr-my-5w">
             <Button
@@ -189,13 +203,17 @@ const AddEditPatient = () => {
               id="save-etudiant-button"
               data-test-id="save-etudiant-button"
               icon={button.icon}
+              disabled={isSubmitting}
             >
               {button.text}
             </Button>
           </div>
           <div>
             {patientId && (
-              <div id="anchor-student-list" className={styles.patientAppointments}>
+              <div
+                id="anchor-student-list"
+                className={styles.patientAppointments}
+              >
                 <PatientAppointments patientId={patientId} />
               </div>
             )}
