@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
@@ -34,7 +34,9 @@ const Login = () => {
 
   const [email, setEmail] = useState('');
 
-  useEffect(() => setCanSendEmail(!!email), [email]);
+  const cleanEmail = useMemo(() => email.trim().toLowerCase(), [email]);
+
+  useEffect(() => setCanSendEmail(!!cleanEmail), [cleanEmail]);
 
   useEffect(() => {
     const isOnLoginPage =
@@ -99,7 +101,7 @@ const Login = () => {
   const loginUser = (e) => {
     setCanSendEmail(false);
     e.preventDefault();
-    agent.Auth.sendLoginMail(email).then(setNotification);
+    agent.Auth.sendLoginMail(cleanEmail).then(setNotification);
   };
 
   return (
