@@ -17,10 +17,6 @@ const items = {
         href: '/static/documents/parcours_psychologue_sante_psy_etudiant.pdf',
         title: 'Parcours psychologue',
       },
-      {
-        href: '/static/documents/flyer_psychologues.pdf',
-        title: 'Voir le dépliant',
-      },
     ],
     sections: [
       { title: 'Éligibilité', name: 'psyEligibility' },
