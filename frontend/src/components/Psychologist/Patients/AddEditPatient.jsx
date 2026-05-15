@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@dataesr/react-dsfr';
 
 import { formatDDMMYYYY } from 'services/date';
@@ -16,10 +16,7 @@ import PatientInfo from './AddEditPatientInfo';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
-  const { search } = useLocation();
   const { patientId } = useParams();
-  const appointmentDate = new URLSearchParams(search).get('appointmentDate');
-  const addAppointment = new URLSearchParams(search).get('addAppointment');
   const {
     userStore: { user },
   } = useStore();
@@ -91,16 +88,6 @@ const AddEditPatient = () => {
           setCustomINESError(true);
           setCreatedPatientId(response?.patientId);
           window.scrollTo(0, 0);
-        } else if (appointmentDate) {
-          navigate(
-            `/psychologue/nouvelle-seance/${patientId || response.patientId}?date=${appointmentDate}`,
-            { state: { notification: response } },
-          );
-        } else if (addAppointment) {
-          navigate(
-            `/psychologue/nouvelle-seance/${patientId || response.patientId}`,
-            { state: { notification: response } },
-          );
         } else {
           navigate('/psychologue/mes-etudiants', {
             state: { notification: response },
