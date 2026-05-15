@@ -2,12 +2,23 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
-import { Alert, Button, Checkbox, SearchableSelect, Select } from '@dataesr/react-dsfr';
+import {
+  Alert,
+  Button,
+  Checkbox,
+  SearchableSelect,
+  Select,
+} from '@dataesr/react-dsfr';
 
 import DateInput from 'components/Date/DateInput';
 
 import agent from 'services/agent';
-import { convertLocalToUTCDate, formatDDMMYYYY, getFirstDayOfLastMonth, parseDateForm } from 'services/date';
+import {
+  convertLocalToUTCDate,
+  formatDDMMYYYY,
+  getFirstDayOfLastMonth,
+  parseDateForm,
+} from 'services/date';
 
 import { useStore } from 'stores/';
 import { observer } from 'mobx-react';
@@ -44,25 +55,39 @@ const NewAppointment = () => {
     agent.Patient.get().then(setPatients);
   }, []);
 
-  const patient = useMemo(() => patients?.find(p => p.id === patientId), [patients, patientId]);
+  const patient = useMemo(
+    () => patients?.find((p) => p.id === patientId),
+    [patients, patientId],
+  );
   const INEhasBeenValidated = patient?.isINESvalid;
-  const tooMuchAppointments = useMemo(() => patient && patient.countedAppointments >= MAX_APPOINTMENT, [patient]);
-  const hasAllCompulsoryInfo = useMemo(
-    () => patient && patient.INE && patient.dateOfBirth && patient.gender && INEhasBeenValidated && patient.email,
+  const tooMuchAppointments = useMemo(
+    () => patient && patient.countedAppointments >= MAX_APPOINTMENT,
     [patient],
   );
-  const createNewAppointment = e => {
+  const hasAllCompulsoryInfo = useMemo(
+    () =>
+      patient &&
+      patient.INE &&
+      patient.dateOfBirth &&
+      patient.gender &&
+      INEhasBeenValidated &&
+      patient.email,
+    [patient],
+  );
+  const createNewAppointment = (e) => {
     e.preventDefault();
     setNotification({});
-    agent.Appointment.add(patientId, date).then(response => {
-      navigate('/psychologue/mes-seances', { state: { notification: response } });
+    agent.Appointment.add(patientId, date).then((response) => {
+      navigate('/psychologue/mes-seances', {
+        state: { notification: response },
+      });
     });
   };
 
   const beginningDate = getFirstDayOfLastMonth();
   const maxDate = new Date();
 
-  const patientsMap = patients.map(p => ({
+  const patientsMap = patients.map((p) => ({
     value: p.id,
     label: `${p.lastName} ${p.firstNames}`,
   }));
@@ -79,7 +104,10 @@ const NewAppointment = () => {
 
   return (
     <>
-      <Alert type="warning" description="L’étudiant recevra une notification par mail pour toute séance ajoutée." />
+      <Alert
+        type="warning"
+        description="L’étudiant recevra une notification par mail pour toute séance ajoutée."
+      />
       <div className={styles.newAppointmentWrapper}>
         <form onSubmit={createNewAppointment} className="fr-my-2w">
           <div id="patients-list" className="fr-mb-2w">
@@ -102,7 +130,7 @@ const NewAppointment = () => {
                     </HashLink>
                   </>
                 }
-                onChange={e => {
+                onChange={(e) => {
                   setPatientId(e);
                 }}
                 required
@@ -142,15 +170,18 @@ const NewAppointment = () => {
                 label="Date de la séance"
                 hint={
                   <>
-                    Les séances doivent être déclarées au plus tard le dernier jour du mois suivant leur réalisation.
-                    Pour toute aide, <HashLink to="/contact/formulaire">contactez le support.</HashLink>
+                    Les séances doivent être déclarées au plus tard le dernier
+                    jour du mois suivant leur réalisation. Pour toute aide,{' '}
+                    <HashLink to="/contact/formulaire">
+                      contactez le support.
+                    </HashLink>
                   </>
                 }
                 dataTestId="new-appointment-date-input"
                 disabled={!hasAllCompulsoryInfo}
               />
             }
-            onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
+            onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
             required
             disabled={!hasAllCompulsoryInfo}
           />
@@ -163,14 +194,20 @@ const NewAppointment = () => {
                 title="Problème avec le dossier étudiant"
                 description={
                   <>
-                    Le dossier de l&apos;étudiant doit être complet pour ajouter des séances : email, INE valide, date
-                    de naissance, genre...
+                    Le dossier de l&apos;étudiant doit être complet pour ajouter
+                    des séances : email, INE valide, date de naissance, genre...
                     <br />
                   </>
                 }
               />
               <br />
-              <Button onClick={() => navigate(`/psychologue/modifier-etudiant/${patientId}?addAppointment=true`)}>
+              <Button
+                onClick={() =>
+                  navigate(
+                    `/psychologue/modifier-etudiant/${patientId}?addAppointment=true`,
+                  )
+                }
+              >
                 Compléter le dossier étudiant
               </Button>
             </>
@@ -180,14 +217,17 @@ const NewAppointment = () => {
               <Alert
                 className="fr-mt-2w"
                 description={
-                  <>Attention ! Vous avez dépassé le nombre de séances prévues dans le cadre de ce dispositif.</>
+                  <>
+                    Attention ! Vous avez dépassé le nombre de séances prévues
+                    dans le cadre de ce dispositif.
+                  </>
                 }
               />
               <Checkbox
                 className="fr-mt-1w"
                 data-test-id="new-appointment-understand"
                 label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances seront prises en charge par année universitaire.`}
-                onChange={e => setUnderstand(e.target.checked)}
+                onChange={(e) => setUnderstand(e.target.checked)}
               />
             </>
           )}
@@ -198,16 +238,24 @@ const NewAppointment = () => {
               submit
               icon="ri-add-line"
               className="fr-mt-4w"
-              disabled={(tooMuchAppointments && !understand) || !hasAllCompulsoryInfo}
+              disabled={
+                (tooMuchAppointments && !understand) || !hasAllCompulsoryInfo
+              }
             >
               Créer la séance
             </Button>
-            <Button secondary className="fr-mt-4w" onClick={() => navigate('/psychologue/mes-seances')}>
+            <Button
+              secondary
+              className="fr-mt-4w"
+              onClick={() => navigate('/psychologue/mes-seances')}
+            >
               Annuler
             </Button>
           </div>
         </form>
-        {patientId && <PatientAppointments showCreateButton={false} patientId={patientId} />}
+        {patientId && (
+          <PatientAppointments showCreateButton={false} patientId={patientId} />
+        )}
       </div>
     </>
   );
