@@ -79,7 +79,8 @@ const NewAppointment = () => {
   );
 
   const canCreateAppointment = useMemo(
-    () => !!date && hasAllCompulsoryInfo && !tooMuchAppointments && hasChangedInput,
+    () =>
+      !!date && hasAllCompulsoryInfo && !tooMuchAppointments && hasChangedInput,
     [date, hasAllCompulsoryInfo, tooMuchAppointments, hasChangedInput],
   );
 
@@ -126,10 +127,7 @@ const NewAppointment = () => {
               hint={
                 <>
                   Votre étudiant n&lsquo;est pas dans la liste ?{' '}
-                  <HashLink
-                    to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}
-                    id="new-patient"
-                  >
+                  <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">
                     Ajoutez un nouvel étudiant
                   </HashLink>
                 </>
@@ -226,8 +224,7 @@ const NewAppointment = () => {
                 Cet étudiant a atteint le nombre maximum de séances prises en
                 charge pour l&apos;année scolaire en cours. Il n&apos;est pas
                 possible d&apos;en déclarer de nouvelles avant la prochaine
-                rentrée. Si vous constatez une erreur dans le décompte,
-                veuillez{' '}
+                rentrée. Si vous constatez une erreur dans le décompte, veuillez{' '}
                 <HashLink to="/contact/formulaire">
                   contacter le support
                 </HashLink>
