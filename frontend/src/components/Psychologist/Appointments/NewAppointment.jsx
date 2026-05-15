@@ -95,7 +95,7 @@ const NewAppointment = () => {
                   <>
                     Votre étudiant n&lsquo;est pas dans la liste ?{' '}
                     <HashLink
-                      to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}
+                      to="/psychologue/nouvel-etudiant"
                       id="new-patient"
                     >
                       Ajoutez un nouvel étudiant
