@@ -8,6 +8,7 @@ import Appointments from 'components/Psychologist/Appointments/Appointments';
 import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
 import Patients from 'components/Psychologist/Patients/Patients';
 import AddEditPatient from 'components/Psychologist/Patients/AddEditPatient';
+import AddNewPatient from 'components/Psychologist/Patients/AddNewPatient';
 import PsyProfile from 'components/Psychologist/PsyDashboard/PsyDashboard';
 import Page from 'components/Page/Page';
 import Notification from 'components/Notification/Notification';
@@ -219,9 +220,17 @@ const PsychologistRouter = () => {
         <Route exact path="/nouvelle-seance" element={<NewAppointment />} />
         <Route exact path="/nouvelle-seance/:patientId" element={<NewAppointment />} />
         <Route exact path="/mes-etudiants" element={<Patients />} />
-        <Route exact path="/nouvel-etudiant" element={<AddEditPatient />} />
-        <Route exact path="/modifier-etudiant/:patientId" element={<AddEditPatient />} />
-        <Route exact path="/envoi-certificat" element={<SendPatientCertificate />} />
+        <Route exact path="/nouvel-etudiant" element={<AddNewPatient />} />
+        <Route
+          exact
+          path="/modifier-etudiant/:patientId"
+          element={<AddEditPatient />}
+        />
+        <Route
+          exact
+          path="/envoi-certificat"
+          element={<SendPatientCertificate />}
+        />
         <Route exact path="/mes-remboursements" element={<Billing />} />
         <Route exact path="/informations-facturation" element={<BillingInfoPage />} />
         <Route exact path="/ma-convention" element={<ConventionForm checkDefaultValue />} />

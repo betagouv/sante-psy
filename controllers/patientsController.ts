@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import dbPatients from '../db/patients';
 import dbAppointments from '../db/appointments';
+import dbStudents from '../db/students';
 import validation from '../utils/validation';
 import date from '../utils/date';
 import ejs from 'ejs';
@@ -118,46 +119,27 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
 const create = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
-  const {
-    firstNames, lastName, gender, INE, institutionName, doctorName, dateOfBirth: rawDateOfBirth, email,
-  } = req.body;
-
-  const isINESvalid = await verifyINEWithBirthDate(INE, rawDateOfBirth);
-
-  const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
+  const { ine, birthDate: rawDateOfBirth } = req.body;
+  const [day, month, year] = rawDateOfBirth.split('/');
+  const birthDate = `${year}-${month}-${day}`;
 
   const psychologistId = req.auth.userId || req.auth.psychologist;
 
-  const addedPatient = await dbPatients.insert(
-    firstNames,
-    lastName,
-    date.parseForm(rawDateOfBirth),
-    gender,
-    INE,
-    isINESvalid,
-    email,
-    institutionName,
-    isStudentStatusVerified,
-    psychologistId,
-    doctorName,
-  );
+  const student = await dbStudents.getByEmailAndBirthDate(ine, birthDate);
 
-  await sendSecondStepMail.inviteNewStudentToCreateAccount(
-    email,
-    'studentInvitationFromPsy',
-    'Création de votre espace étudiant',
-  );
-
-  let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
-  if (!institutionName || !doctorName || !isStudentStatusVerified) {
-    infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
-        + ' en cliquant le bouton "Modifier" du patient.';
+  if (!student) {
+    res.status(404);
+    res.json({
+      message: "L'étudiant n'existe pas.",
+    });
+    return;
   }
-  console.log(`Patient created by psy id ${psychologistId}`);
+
+  // l'etudiant est deja un patient du psy
+  const newPatient = await dbPatients.insert(psychologistId, student.id);
+
   res.json({
-    message: infoMessage,
-    patientId: addedPatient.id,
-    isINESvalid,
+    patientCreated: !!newPatient,
   });
 };
 
