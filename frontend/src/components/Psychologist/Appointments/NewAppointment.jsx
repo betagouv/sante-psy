@@ -59,19 +59,8 @@ const NewAppointment = () => {
     () => patients?.find((p) => p.id === patientId),
     [patients, patientId],
   );
-  const INEhasBeenValidated = patient?.isINESvalid;
   const tooMuchAppointments = useMemo(
     () => patient && patient.countedAppointments >= MAX_APPOINTMENT,
-    [patient],
-  );
-  const hasAllCompulsoryInfo = useMemo(
-    () =>
-      patient &&
-      patient.INE &&
-      patient.dateOfBirth &&
-      patient.gender &&
-      INEhasBeenValidated &&
-      patient.email,
     [patient],
   );
   const createNewAppointment = (e) => {
@@ -178,40 +167,11 @@ const NewAppointment = () => {
                   </>
                 }
                 dataTestId="new-appointment-date-input"
-                disabled={!hasAllCompulsoryInfo}
               />
             }
             onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
             required
-            disabled={!hasAllCompulsoryInfo}
           />
-          {patientId && !hasAllCompulsoryInfo && (
-            <>
-              <Alert
-                className="fr-mt-2w"
-                type="warning"
-                data-test-id="alert-missing-data"
-                title="Problème avec le dossier étudiant"
-                description={
-                  <>
-                    Le dossier de l&apos;étudiant doit être complet pour ajouter
-                    des séances : email, INE valide, date de naissance, genre...
-                    <br />
-                  </>
-                }
-              />
-              <br />
-              <Button
-                onClick={() =>
-                  navigate(
-                    `/psychologue/etudiant/${patientId}?addAppointment=true`,
-                  )
-                }
-              >
-                Compléter le dossier étudiant
-              </Button>
-            </>
-          )}
           {tooMuchAppointments && (
             <>
               <Alert
@@ -238,9 +198,7 @@ const NewAppointment = () => {
               submit
               icon="ri-add-line"
               className="fr-mt-4w"
-              disabled={
-                (tooMuchAppointments && !understand) || !hasAllCompulsoryInfo
-              }
+              disabled={tooMuchAppointments && !understand}
             >
               Créer la séance
             </Button>
