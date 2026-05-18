@@ -1,6 +1,5 @@
-import { check, oneOf } from 'express-validator';
+import { check } from 'express-validator';
 import { purifySanitizer } from '../../services/sanitizer';
-import { allGenders } from '../../types/Genders';
 import date from '../../utils/date';
 
 export const inePatterns = [
