@@ -12,7 +12,9 @@ import styles from './patients.cssmodule.scss';
 import Badges from '../../Badges/Badges';
 
 const Patients = () => {
-  const { commonStore: { setNotification } } = useStore();
+  const {
+    commonStore: { setNotification },
+  } = useStore();
   const [patients, setPatients] = useState([]);
   const [filterBadgeValue, setFilterBadgeValue] = useState('');
   const [filteredPatients, setfilteredPatients] = useState([]);
@@ -37,19 +39,20 @@ const Patients = () => {
 
   const renderFilterOptions = () => {
     const uniqueBadges = patients
-      .flatMap(patient => patient.badges)
+      .flatMap((patient) => patient.badges)
       .filter((value, index, array) => array.indexOf(value) === index);
 
-    const uniqueBadgesOptions = uniqueBadges.map(badge => (
-      { label: badgeInfo[badge].text, value: badge }
-    ));
+    const uniqueBadgesOptions = uniqueBadges.map((badge) => ({
+      label: badgeInfo[badge].text,
+      value: badge,
+    }));
     uniqueBadgesOptions.splice(0, 0, { label: 'Tous', value: 'all' });
 
     return uniqueBadgesOptions;
   };
 
   useEffect(() => {
-    agent.Patient.get().then(response => {
+    agent.Patient.get().then((response) => {
       setPatients(response);
     });
 
@@ -94,35 +97,42 @@ const Patients = () => {
     }
   };
 
-  const deletePatient = patientId => {
+  const deletePatient = (patientId) => {
     setNotification({});
-    agent.Patient.delete(patientId).then(response => {
-      const newFilteredPatients = patients.filter(patient => patient.id !== patientId);
+    agent.Patient.delete(patientId).then((response) => {
+      const newFilteredPatients = patients.filter(
+        (patient) => patient.id !== patientId,
+      );
       setPatients(newFilteredPatients);
       setNotification(response);
     });
   };
 
-  const handleFilterChange = badgeType => {
+  const handleFilterChange = (badgeType) => {
     if (badgeType.target.value === 'all') {
       setFilterBadgeValue('');
       setfilteredPatients(patients);
       return;
     }
     setFilterBadgeValue(badgeType.target.value);
-    const newFilteredPatients = patients.filter(patient => patient.badges.includes(badgeType.target.value));
+    const newFilteredPatients = patients.filter((patient) =>
+      patient.badges.includes(badgeType.target.value),
+    );
     setfilteredPatients(newFilteredPatients);
   };
 
-  const handleSearch = e => {
+  const handleSearch = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setFilterBadgeValue('');
-    const newFilteredPatients = patients.filter(patient => patient.lastName.toLowerCase().includes(e.target.value.toLowerCase())
-      || patient.firstNames.toLowerCase().includes(e.target.value.toLowerCase()));
+    const newFilteredPatients = patients.filter(
+      (patient) =>
+        patient.lastName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        patient.firstNames.toLowerCase().includes(e.target.value.toLowerCase()),
+    );
     setfilteredPatients(newFilteredPatients);
   };
-  const handleSearchClick = e => {
+  const handleSearchClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
   };
@@ -133,10 +143,12 @@ const Patients = () => {
     columns.push({
       name: 'select-action',
       label: 'Actions',
-      render: patient => (
+      render: (patient) => (
         <Select
           selected={null}
-          onChange={e => { onChangeAction(e, patient.id); }}
+          onChange={(e) => {
+            onChangeAction(e, patient.id);
+          }}
           options={actionOptions}
           className={styles.selectAction}
         />
@@ -156,23 +168,30 @@ const Patients = () => {
             onChange={handleSearch}
             placeholder="Rechercher"
             className={styles.filter}
-        />
+          />
         </div>
       ),
-      render: patient => (
-        <div data-test-id="etudiant-name" className={styles.hoverElement} onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`)}>
+      render: (patient) => (
+        <div
+          data-test-id="etudiant-name"
+          className={styles.hoverElement}
+          onClick={() =>
+            navigate(`/psychologue/etudiant/${patient.id}/#anchor-student-file`)
+          }
+        >
           <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
-          {patient.lastName.toUpperCase()}
-          {' '}
-          {patient.firstNames}
+          {patient.lastName?.toUpperCase()} {patient.firstNames}
         </div>
       ),
       sortable: true,
-      sort: (a, b) => (`${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`),
+      sort: (a, b) =>
+        `${a.lastName.toUpperCase()} ${a.firstNames}`.localeCompare(
+          `${b.lastName.toUpperCase()} ${b.firstNames}`,
+        ),
     },
     {
       name: 'update-etudiant-button',
-      render: patient => (
+      render: (patient) => (
         <div className={styles.hoverElement}>
           <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
           <Button
@@ -195,8 +214,7 @@ const Patients = () => {
       name: 'status',
       label: (
         <div className={styles.informationColumn}>
-          Information
-          {' '}
+          Information{' '}
           <Select
             onChange={handleFilterChange}
             options={filterOptions}
@@ -205,7 +223,9 @@ const Patients = () => {
           />
         </div>
       ),
-      render: patient => <Badges badges={patient.badges} univYear={currentYear} />,
+      render: (patient) => (
+        <Badges badges={patient.badges} univYear={currentYear} />
+      ),
     },
     {
       name: 'countedAppointments',
@@ -216,7 +236,7 @@ const Patients = () => {
     {
       name: 'appointments-list-button',
       label: 'Liste des séances',
-      render: patient => (
+      render: (patient) => (
         <div className={styles.hoverElement}>
           <span className={styles.tooltip}>Liste des séances</span>
           <Button
@@ -238,7 +258,7 @@ const Patients = () => {
     {
       name: 'appointment-etudiant-button',
       label: 'Déclarer une séance',
-      render: patient => (
+      render: (patient) => (
         <div className={styles.hoverElement}>
           <span className={styles.tooltip}>Déclarer une séance</span>
           <Button
@@ -256,9 +276,13 @@ const Patients = () => {
     {
       name: 'delete-etudiant-button',
       label: "Supprimer l'étudiant",
-      render: patient => (
+      render: (patient) => (
         <div className={styles.hoverElement}>
-          <span className={styles.tooltip}>{patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : 'Supprimer'}</span>
+          <span className={styles.tooltip}>
+            {patient.appointmentsCount !== '0'
+              ? 'Vous ne pouvez pas supprimer un étudiant avec des séances'
+              : 'Supprimer'}
+          </span>
           <Button
             data-test-id="delete-etudiant-button"
             onClick={() => deletePatient(patient.id)}
@@ -297,8 +321,10 @@ const Patients = () => {
             columns={seeAppointments ? columns : convertToMobileView(columns)}
             data={filteredPatients.length > 0 ? filteredPatients : patients}
             rowKey="id"
-            />
-        ) : (<span>Vous n&lsquo;avez pas encore déclaré d&lsquo;étudiants.</span>)}
+          />
+        ) : (
+          <span>Vous n&lsquo;avez pas encore déclaré d&lsquo;étudiants.</span>
+        )}
       </div>
     </>
   );
