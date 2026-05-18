@@ -11,7 +11,10 @@ import { getPatientWithBadges } from '../services/getBadges';
 import { Patient } from '../types/Patient';
 import getAppointmentsCount from '../services/getAppointmentsCount';
 import {
-  updateValidators, getOneValidators, patientValidators, deleteValidators,
+  updateValidators,
+  getOneValidators,
+  patientValidators,
+  deleteValidators,
 } from './validators/patientValidators';
 import sendSecondStepMail from '../services/sendSecondStepMail';
 import send from '../utils/email';
@@ -19,9 +22,10 @@ import verifyINEWithBirthDate from '../services/verifyStudentINE';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
-const sortData = (a: Patient, b: Patient): number => (
-  `${a.lastName.toUpperCase()} ${a.firstNames}`.localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`)
-);
+const sortData = (a: Patient, b: Patient): number =>
+  `${a.lastName.toUpperCase()} ${a.firstNames}`.localeCompare(
+    `${b.lastName.toUpperCase()} ${b.firstNames}`,
+  );
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.userId || req.auth.psychologist;
@@ -55,7 +59,9 @@ const update = async (req: Request, res: Response): Promise<void> => {
     await dbPatients.updateIsINESValidOnly(patientId, false);
   }
 
-  const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
+  const patientIsStudentStatusVerified = Boolean(
+    req.body.isStudentStatusVerified,
+  );
 
   const psychologistId = req.auth.userId || req.auth.psychologist;
 
@@ -75,8 +81,10 @@ const update = async (req: Request, res: Response): Promise<void> => {
   );
 
   if (updated === 0) {
-    console.log(`Patient ${patientId} not updated by probably other psy id ${psychologistId}`);
-    throw new CustomError('Ce patient n\'existe pas.', 404);
+    console.log(
+      `Patient ${patientId} not updated by probably other psy id ${psychologistId}`,
+    );
+    throw new CustomError("Ce patient n'existe pas.", 404);
   }
 
   try {
@@ -90,9 +98,14 @@ const update = async (req: Request, res: Response): Promise<void> => {
   }
 
   let infoMessage = `L'étudiant ${patientFirstNames} ${patientLastName} a bien été modifié.`;
-  if (!patientInstitutionName || !patientIsStudentStatusVerified || !doctorName) {
-    infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
-        + ' en cliquant le bouton "Modifier" du patient.';
+  if (
+    !patientInstitutionName ||
+    !patientIsStudentStatusVerified ||
+    !doctorName
+  ) {
+    infoMessage +=
+      ' Vous pourrez renseigner les champs manquants plus tard' +
+      ' en cliquant le bouton "Modifier" du patient.';
   }
   console.log(`Patient ${patientId} updated by psy id ${psychologistId}`);
   res.json({ message: infoMessage, isINESvalid });
@@ -107,7 +120,10 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
   const patient = await dbPatients.getById(patientId, psychologistId);
 
   if (!patient) {
-    throw new CustomError('Ce patient n\'existe pas. Vous ne pouvez pas le modifier.', 404);
+    throw new CustomError(
+      "Ce patient n'existe pas. Vous ne pouvez pas le modifier.",
+      404,
+    );
   }
 
   const patientWithBadges = getPatientWithBadges([patient])[0];
@@ -152,13 +168,18 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
   const patientAppointment = await dbAppointments.countByPatient(patientId);
 
   if (patientAppointment[0].count > 0) {
-    throw new CustomError('Vous ne pouvez pas supprimer un étudiant avec des séances.', 400);
+    throw new CustomError(
+      'Vous ne pouvez pas supprimer un étudiant avec des séances.',
+      400,
+    );
   }
 
   const deleted = await dbPatients.delete(patientId, psychologistId);
 
   if (deleted === 0) {
-    console.log(`Patient ${patientId} not deleted by probably other psy id ${psychologistId}`);
+    console.log(
+      `Patient ${patientId} not deleted by probably other psy id ${psychologistId}`,
+    );
     throw new CustomError('Vous devez spécifier un étudiant à supprimer.', 404);
   }
 
@@ -178,7 +199,10 @@ const sendCertificate = async (
   const psychologistId = req.auth.userId || req.auth.psychologist;
 
   if (!req.file || !patientId || !psychologistId) {
-    throw new CustomError('Certificat, patientId ou psychologistId manquant.', 400);
+    throw new CustomError(
+      'Certificat, patientId ou psychologistId manquant.',
+      400,
+    );
   }
 
   try {
