@@ -2,6 +2,18 @@ import date from '../utils/date';
 import { patientsTable } from './tables';
 import db from './db';
 import { Patient } from '../types/Patient';
+import { Student } from '../types/Student';
+
+const enrichPatientWithStudent = (
+  patient: Patient,
+  student: Student | null,
+): Patient => ({
+  ...patient,
+  student,
+  firstNames: student?.firstNames ?? patient.firstNames,
+  lastName: student?.lastName ?? patient.lastName,
+  INE: student?.ine ?? patient.INE,
+});
 
 const getById = async (
   patientId: string,
@@ -17,12 +29,7 @@ const getById = async (
       ? await db('students').where('id', patient.student_id).first()
       : null;
 
-    return {
-      ...patient,
-      firstNames: student?.firstNames || patient.firstNames,
-      lastName: student?.lastName || patient.lastName,
-      INE: student?.ine || patient.INE,
-    };
+    return enrichPatientWithStudent(patient, student);
   } catch (err) {
     console.error('Erreur de récupération du patient', err);
     throw new Error('Erreur de récupération du patient');
@@ -55,12 +62,9 @@ const getAll = async (
       const student = p.student_id
         ? (studentsById[p.student_id] ?? null)
         : null;
-      return {
-        ...p,
-        student,
-        firstNames: student?.firstNames || p.firstNames,
-        lastName: student?.lastName || p.lastName,
-        INE: student?.ine || p.INE,
+      return enrichPatientWithStudent(p, student) as Patient & {
+        appointmentsCount: string;
+        appointmentsYearCount: string;
       };
     });
   } catch (err) {
