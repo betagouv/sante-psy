@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Table, Callout, CalloutText, Icon, Button, Select, TextInput } from '@dataesr/react-dsfr';
+import { Table, Icon, Button, Select, TextInput } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { currentUnivYear } from 'services/univYears';
@@ -265,20 +265,6 @@ const Patients = () => {
 
   return (
     <>
-      <Callout
-        hasInfoIcon={false}
-        colorFamily="blue-cumulus"
-      >
-        <CalloutText size="md">
-          L&apos;email des patients est désormais obligatoire pour pouvoir déclarer des séances.
-          {' '}
-          <br />
-          {' '}
-          <br />
-          Si les alertes apparaissent pour d&apos;anciens étudiants, nous admettons que vous ne pouvez pas tout remplir à nouveau.
-          Vous pourrez les compléter pour les nouveaux étudiants à venir.
-        </CalloutText>
-      </Callout>
       <div className="fr-my-2w">
         <Link
           data-test-id="new-student-button"
