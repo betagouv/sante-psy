@@ -177,12 +177,10 @@ const Patients = () => {
           tooltip="Dossier de l'étudiant"
           data-test-id="etudiant-name"
           onClick={() =>
-            navigate(
-              `/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`,
-            )
+            navigate(`/psychologue/etudiant/${patient.id}/#anchor-student-file`)
           }
         >
-          {patient.lastName.toUpperCase()} {patient.firstNames}
+          {patient.lastName?.toUpperCase()} {patient.firstNames}
         </Tooltip>
       ),
       sortable: true,
