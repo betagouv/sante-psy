@@ -34,36 +34,23 @@ const getAll = async (psychologistId: string): Promise<(Patient &
 };
 
 const insert = async (
-  firstNames: string,
-  lastName: string,
-  dateOfBirth: Date,
-  gender: string,
-  INE: string,
-  isINESvalid: boolean,
-  email: string,
-  institutionName?: string,
-  isStudentStatusVerified?: boolean,
-  psychologistId?: string,
-  doctorName?: string,
+  psychologistId: string,
+  studentId: string,
 ): Promise<Patient> => {
   try {
-    const patientsArray = await db(patientsTable).insert({
-      firstNames,
-      lastName,
-      dateOfBirth,
-      gender,
-      INE,
-      isINESvalid,
-      email,
-      institutionName,
-      isStudentStatusVerified,
-      psychologistId,
-      doctorName,
-    }).returning('*');
-    return patientsArray[0];
+    const [patient] = await db(patientsTable)
+      .insert({
+        student_id: studentId,
+        psychologistId,
+      })
+      .returning('*');
+    return patient;
   } catch (err) {
-    console.error('Erreur de sauvegarde du patient', err);
-    throw new Error('Erreur de sauvegarde du patient');
+    if (err.code === '23505' && err.constraint === 'uq_psy_student') {
+      throw new Error('Cet étudiant est déjà un patient de ce psychologue');
+    }
+    console.error('Erreur lors de la création du patient', err);
+    throw err;
   }
 };
 
