@@ -6,7 +6,6 @@ import validation from '../utils/validation';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { getPatientWithBadges } from '../services/getBadges';
-import { PatientWithStudent } from '../types/Patient';
 import getAppointmentsCount from '../services/getAppointmentsCount';
 import {
   getOneValidators,
@@ -14,13 +13,14 @@ import {
   deleteValidators,
 } from './validators/patientValidators';
 import { Student } from '../types/Student';
+import { Patient } from '../types/Patient';
 
-const getSortName = (item: PatientWithStudent | Student): string =>
+const getSortName = (item: Patient | Student): string =>
   `${item.lastName.toUpperCase()} ${item.firstNames}`;
 
-const sortData = (a: PatientWithStudent, b: PatientWithStudent): number => {
-  const aName = getSortName(a.student || a);
-  const bName = getSortName(b.student || b);
+const sortData = (a: Patient, b: Patient): number => {
+  const aName = getSortName(a);
+  const bName = getSortName(b);
   return aName.localeCompare(bName);
 };
 

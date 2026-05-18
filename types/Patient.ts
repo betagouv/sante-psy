@@ -21,8 +21,6 @@ export type Patient = {
   countedAppointments?: string;
   countCertificatesSent?: number;
   badges?: string[];
-};
-
-export type PatientWithStudent = Patient & {
+} & {
   student: Student | null;
 };
