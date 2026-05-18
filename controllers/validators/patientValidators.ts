@@ -51,19 +51,23 @@ export const patientValidators = [
 
 export const updateValidators = [
   check('patientId')
-    .trim().not().isEmpty()
-    .withMessage('Ce patient n\'existe pas.')
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Ce patient n'existe pas.")
     .isUUID()
-    .withMessage('Ce patient n\'existe pas.'),
+    .withMessage("Ce patient n'existe pas."),
   ...patientValidators,
 ];
 
 export const getOneValidators = [
   check('patientId')
-    .trim().not().isEmpty()
-    .withMessage('Ce patient n\'existe pas.')
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Ce patient n'existe pas.")
     .isUUID()
-    .withMessage('Ce patient n\'existe pas.'),
+    .withMessage("Ce patient n'existe pas."),
 ];
 
 export const deleteValidators = [
