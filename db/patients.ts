@@ -13,7 +13,16 @@ const getById = async (
       .where('psychologistId', psychologistId)
       .first();
 
-    return patient;
+    const student = patient.student_id
+      ? await db('students').where('id', patient.student_id).first()
+      : null;
+
+    return {
+      ...patient,
+      firstNames: student?.firstNames || patient.firstNames,
+      lastName: student?.lastName || patient.lastName,
+      INE: student?.ine || patient.INE,
+    };
   } catch (err) {
     console.error('Erreur de récupération du patient', err);
     throw new Error('Erreur de récupération du patient');
@@ -23,7 +32,10 @@ const getById = async (
 const getAll = async (
   psychologistId: string,
 ): Promise<
-  (Patient & { appointmentsCount: string; appointmentsYearCount: string })[]
+  (Patient & {
+    appointmentsCount: string;
+    appointmentsYearCount: string;
+  })[]
 > => {
   try {
     // Get all patients of psychologist
@@ -39,10 +51,18 @@ const getAll = async (
       : [];
     const studentsById = Object.fromEntries(students.map((s) => [s.id, s]));
 
-    return patients.map((p) => ({
-      ...p,
-      student: p.student_id ? (studentsById[p.student_id] ?? null) : null,
-    }));
+    return patients.map((p) => {
+      const student = p.student_id
+        ? (studentsById[p.student_id] ?? null)
+        : null;
+      return {
+        ...p,
+        student,
+        firstNames: student?.firstNames || p.firstNames,
+        lastName: student?.lastName || p.lastName,
+        INE: student?.ine || p.INE,
+      };
+    });
   } catch (err) {
     console.error('Impossible de récupérer les patients', err);
     throw new Error('Impossible de récupérer les patients');
