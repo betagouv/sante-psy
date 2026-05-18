@@ -56,7 +56,6 @@ const NewAppointment = () => {
     () => patients?.find((p) => p.id === patientId),
     [patients, patientId],
   );
-  const INEhasBeenValidated = patient?.isINESvalid;
   const tooMuchAppointments = useMemo(
     () => patient && patient.countedAppointments >= MAX_APPOINTMENT,
     [patient],
