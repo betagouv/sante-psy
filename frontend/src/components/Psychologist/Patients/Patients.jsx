@@ -78,10 +78,10 @@ const Patients = () => {
     e.stopPropagation();
     switch (e.target.value) {
       case 'student_file':
-        navigate(`/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`);
+        navigate(`/psychologue/etudiant/${patientId}/#anchor-student-file`);
         break;
       case 'appointment_list':
-        navigate(`/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`);
+        navigate(`/psychologue/etudiant/${patientId}/#anchor-student-file`);
         break;
       case 'appointment_create':
         navigate(`/psychologue/nouvelle-seance/${patientId}`);
@@ -177,7 +177,11 @@ const Patients = () => {
           <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
           <Button
             data-test-id="update-etudiant-button"
-            onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`)}
+            onClick={() =>
+              navigate(
+                `/psychologue/etudiant/${patient.id}/#anchor-student-file`,
+              )
+            }
             secondary
             size="sm"
             icon="ri-folder-line"
@@ -217,7 +221,11 @@ const Patients = () => {
           <span className={styles.tooltip}>Liste des séances</span>
           <Button
             data-test-id="seances-etudiant-button"
-            onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}/#anchor-student-list`)}
+            onClick={() =>
+              navigate(
+                `/psychologue/etudiant/${patient.id}/#anchor-student-list`,
+              )
+            }
             secondary
             size="sm"
             icon="ri-list-unordered"
@@ -235,7 +243,9 @@ const Patients = () => {
           <span className={styles.tooltip}>Déclarer une séance</span>
           <Button
             data-test-id="appointment-etudiant-button"
-            onClick={() => navigate(`/psychologue/nouvelle-seance/${patient.id}`)}
+            onClick={() =>
+              navigate(`/psychologue/nouvelle-seance/${patient.id}`)
+            }
             size="sm"
             icon="ri-calendar-line"
             aria-label="Déclarer une séance"

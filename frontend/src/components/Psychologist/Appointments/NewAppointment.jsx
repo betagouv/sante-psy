@@ -204,7 +204,7 @@ const NewAppointment = () => {
               <Button
                 onClick={() =>
                   navigate(
-                    `/psychologue/modifier-etudiant/${patientId}?addAppointment=true`,
+                    `/psychologue/etudiant/${patientId}?addAppointment=true`,
                   )
                 }
               >
