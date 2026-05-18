@@ -61,50 +61,6 @@ const insert = async (
   }
 };
 
-const update = async (
-  id: string,
-  firstNames: string,
-  lastName: string,
-  dateOfBirth: Date,
-  gender: string,
-  INE: string,
-  isINESvalid: boolean,
-  email: string,
-  institutionName: string,
-  isStudentStatusVerified: boolean,
-  psychologistId: string,
-  doctorName: string,
-): Promise<number> => {
-  try {
-    return await db(patientsTable)
-      .where('id', id)
-      .where('psychologistId', psychologistId)
-      .update({
-        firstNames,
-        lastName,
-        dateOfBirth,
-        gender,
-        INE,
-        email,
-        institutionName,
-        isStudentStatusVerified,
-        psychologistId,
-        doctorName,
-        updatedAt: date.now(),
-        isINESvalid,
-      });
-  } catch (err) {
-    console.error('Erreur de modification du patient', err);
-    throw new Error('Erreur de modification du patient');
-  }
-};
-
-const updateIsINESValidOnly = async (
-  patientId: string,
-  isINESvalid: boolean,
-): Promise<number> =>
-  db('patients').where({ id: patientId }).update({ isINESvalid });
-
 const deleteOne = async (
   id: string,
   psychologistId: string,
@@ -124,21 +80,6 @@ const deleteOne = async (
   } catch (err) {
     console.error('Erreur de suppression du patient', err);
     throw new Error('Erreur de suppression du patient');
-  }
-};
-
-const updateCertificateChecked = async (patientId: string): Promise<void> => {
-  try {
-    await db('patients')
-      .where({ id: patientId })
-      .update({ isINESvalid: true })
-      .increment('countCertificatesSent', 1);
-  } catch (err) {
-    console.error(
-      'Erreur lors de la mise à jour de la colonne isINESvalid',
-      err,
-    );
-    throw new Error('Erreur lors de la mise à jour de la colonne isINESvalid');
   }
 };
 
@@ -163,9 +104,6 @@ export default {
   getById,
   getAll,
   insert,
-  update,
-  updateIsINESValidOnly,
   delete: deleteOne,
-  updateCertificateChecked,
   getByStudentEmailAndIne,
 };

@@ -7,7 +7,7 @@ import Announcement from 'components/Notification/Announcement';
 import Appointments from 'components/Psychologist/Appointments/Appointments';
 import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
 import Patients from 'components/Psychologist/Patients/Patients';
-import AddEditPatient from 'components/Psychologist/Patients/AddEditPatient';
+import SeePatient from 'components/Psychologist/Patients/SeePatient';
 import AddNewPatient from 'components/Psychologist/Patients/AddNewPatient';
 import PsyProfile from 'components/Psychologist/PsyDashboard/PsyDashboard';
 import Page from 'components/Page/Page';
@@ -111,11 +111,11 @@ const PsychologistRouter = () => {
           ),
           tutorial: 'new-student',
         };
-      case 'modifier-etudiant':
+      case 'etudiant':
         return {
           title: (
             <>
-              Modifier le <b>dossier</b>
+              Mon <b>étudiant</b>
             </>
           ),
           tutorial: 'new-student',
@@ -212,11 +212,7 @@ const PsychologistRouter = () => {
         />
         <Route exact path="/mes-etudiants" element={<Patients />} />
         <Route exact path="/nouvel-etudiant" element={<AddNewPatient />} />
-        <Route
-          exact
-          path="/modifier-etudiant/:patientId"
-          element={<AddEditPatient />}
-        />
+        <Route exact path="/etudiant/:patientId" element={<SeePatient />} />
         <Route
           exact
           path="/envoi-certificat"

@@ -83,14 +83,10 @@ const Patients = () => {
     e.stopPropagation();
     switch (e.target.value) {
       case 'student_file':
-        navigate(
-          `/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`,
-        );
+        navigate(`/psychologue/etudiant/${patientId}/#anchor-student-file`);
         break;
       case 'appointment_list':
-        navigate(
-          `/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`,
-        );
+        navigate(`/psychologue/etudiant/${patientId}/#anchor-student-file`);
         break;
       case 'appointment_create':
         navigate(`/psychologue/nouvelle-seance/${patientId}`);
@@ -204,7 +200,7 @@ const Patients = () => {
             data-test-id="update-etudiant-button"
             onClick={() =>
               navigate(
-                `/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`,
+                `/psychologue/etudiant/${patient.id}/#anchor-student-file`,
               )
             }
             secondary
@@ -248,7 +244,7 @@ const Patients = () => {
             data-test-id="seances-etudiant-button"
             onClick={() =>
               navigate(
-                `/psychologue/modifier-etudiant/${patient.id}/#anchor-student-list`,
+                `/psychologue/etudiant/${patient.id}/#anchor-student-list`,
               )
             }
             secondary
