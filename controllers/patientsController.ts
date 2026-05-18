@@ -6,23 +6,23 @@ import validation from '../utils/validation';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { getPatientWithBadges } from '../services/getBadges';
-import { Patient } from '../types/Patient';
+import { PatientWithStudent } from '../types/Patient';
 import getAppointmentsCount from '../services/getAppointmentsCount';
 import {
   getOneValidators,
   patientValidators,
   deleteValidators,
 } from './validators/patientValidators';
-import sendSecondStepMail from '../services/sendSecondStepMail';
-import send from '../utils/email';
-import verifyINEWithBirthDate from '../services/verifyStudentINE';
+import { Student } from '../types/Student';
 
-type MulterRequest = Request & { file: Express.Multer.File };
+const getSortName = (item: PatientWithStudent | Student): string =>
+  `${item.lastName.toUpperCase()} ${item.firstNames}`;
 
-const sortData = (a: Patient, b: Patient): number =>
-  `${a.lastName.toUpperCase()} ${a.firstNames}`.localeCompare(
-    `${b.lastName.toUpperCase()} ${b.firstNames}`,
-  );
+const sortData = (a: PatientWithStudent, b: PatientWithStudent): number => {
+  const aName = getSortName(a.student || a);
+  const bName = getSortName(b.student || b);
+  return aName.localeCompare(bName);
+};
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.userId || req.auth.psychologist;

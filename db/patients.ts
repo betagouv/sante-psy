@@ -33,7 +33,16 @@ const getAll = async (
       .where('psychologistId', psychologistId)
       .andWhere('deleted', false);
 
-    return patients;
+    const studentIds = patients.map((p) => p.student_id).filter(Boolean);
+    const students = studentIds.length
+      ? await db('students').whereIn('id', studentIds)
+      : [];
+    const studentsById = Object.fromEntries(students.map((s) => [s.id, s]));
+
+    return patients.map((p) => ({
+      ...p,
+      student: p.student_id ? (studentsById[p.student_id] ?? null) : null,
+    }));
   } catch (err) {
     console.error('Impossible de récupérer les patients', err);
     throw new Error('Impossible de récupérer les patients');
