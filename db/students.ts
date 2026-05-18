@@ -140,10 +140,27 @@ const getByEmailAndIne = async (
   }
 };
 
+const getByEmailAndBirthDate = async (
+  ine: string,
+  birthDate: string,
+): Promise<Student | null> => {
+  try {
+    const result = await db(studentsTable)
+      .where('dateOfBirth', birthDate)
+      .andWhere('ine', ine)
+      .first();
+    return result;
+  } catch (err) {
+    console.error('Error while getting the student by birthDate and ine', err);
+    return null;
+  }
+};
+
 export default {
   checkDuplicates,
   create,
   getById,
   getByEmail,
   getByEmailAndIne,
+  getByEmailAndBirthDate,
 };

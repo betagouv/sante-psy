@@ -12,41 +12,28 @@ export const inePatterns = [
 ];
 
 export const patientValidators = [
-  check('firstNames')
-    .trim().not().isEmpty()
-    .customSanitizer(purifySanitizer)
-    .withMessage('Vous devez spécifier le.s prénom.s du patient.'),
-  check('lastName')
-    .trim().not().isEmpty()
-    .customSanitizer(purifySanitizer)
-    .withMessage('Vous devez spécifier le nom du patient.'),
-  check('gender')
-    .trim().not().isEmpty()
-    .withMessage('Vous devez spécifier le genre du patient.')
-    .customSanitizer(purifySanitizer)
-    .isIn(allGenders)
-    .withMessage('Le genre du patient n\'est pas valide.'),
-  check('email')
-    .trim().not().isEmpty()
-    .withMessage('Vous devez spécifier un email valide.')
-    .isEmail()
-    .customSanitizer(purifySanitizer)
-    .withMessage('Email invalide.'),
-  check('INE')
-    .trim().not().isEmpty()
+  check('ine')
+    .trim()
+    .not()
+    .isEmpty()
     .withMessage('Le numéro INE est obligatoire.')
     .customSanitizer(purifySanitizer)
     .custom((value) => {
       const isValid = inePatterns.some((pattern) => pattern.test(value));
       if (!isValid) {
-        throw new Error('Le numéro INE est invalide. Veuillez vérifier le format.');
+        throw new Error(
+          'Le numéro INE est invalide. Veuillez vérifier le format.',
+        );
       }
       return true;
     }),
-  check('dateOfBirth')
-    .trim().isDate({ format: date.formatFrenchDateForm })
+  check('birthDate')
+    .trim()
+    .isDate({ format: date.formatFrenchDateForm })
     .customSanitizer(purifySanitizer)
-    .withMessage('La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.')
+    .withMessage(
+      "La date de naissance n'est pas valide, le format doit être JJ/MM/AAAA.",
+    )
     .custom((value) => {
       const [day, month, year] = value.split('/').map(Number);
       const birthDate = new Date(year, month - 1, day);
@@ -57,19 +44,10 @@ export const patientValidators = [
         now.getDate(),
       );
       if (birthDate > minAllowedDate) {
-        throw new Error('La date de naissance n\'est pas valide.');
+        throw new Error("La date de naissance n'est pas valide.");
       }
       return true;
     }),
-  check('institutionName')
-    .trim()
-    .customSanitizer(purifySanitizer),
-  oneOf([
-    check('doctorName').trim().isEmpty(),
-    check('doctorName')
-      .trim()
-      .customSanitizer(purifySanitizer),
-  ]),
 ];
 
 export const updateValidators = [
