@@ -3,7 +3,10 @@ import { patientsTable } from './tables';
 import db from './db';
 import { Patient } from '../types/Patient';
 
-const getById = async (patientId: string, psychologistId: string): Promise<Patient> => {
+const getById = async (
+  patientId: string,
+  psychologistId: string,
+): Promise<Patient> => {
   try {
     const patient = await db(patientsTable)
       .where('id', patientId)
@@ -17,14 +20,18 @@ const getById = async (patientId: string, psychologistId: string): Promise<Patie
   }
 };
 
-const getAll = async (psychologistId: string): Promise<(Patient &
-  { appointmentsCount: string, appointmentsYearCount: string })[]> => {
+const getAll = async (
+  psychologistId: string,
+): Promise<
+  (Patient & { appointmentsCount: string; appointmentsYearCount: string })[]
+> => {
   try {
     // Get all patients of psychologist
-    const patients = await db.select('*')
-        .from(patientsTable)
-        .where('psychologistId', psychologistId)
-        .andWhere('deleted', false);
+    const patients = await db
+      .select('*')
+      .from(patientsTable)
+      .where('psychologistId', psychologistId)
+      .andWhere('deleted', false);
 
     return patients;
   } catch (err) {
@@ -92,11 +99,16 @@ const update = async (
   }
 };
 
-const updateIsINESValidOnly = async (patientId: string, isINESvalid: boolean): Promise<number> => db('patients')
-    .where({ id: patientId })
-    .update({ isINESvalid });
+const updateIsINESValidOnly = async (
+  patientId: string,
+  isINESvalid: boolean,
+): Promise<number> =>
+  db('patients').where({ id: patientId }).update({ isINESvalid });
 
-const deleteOne = async (id: string, psychologistId: string): Promise<number> => {
+const deleteOne = async (
+  id: string,
+  psychologistId: string,
+): Promise<number> => {
   try {
     const deletedPatient = await db(patientsTable)
       .where('id', id)
@@ -122,7 +134,10 @@ const updateCertificateChecked = async (patientId: string): Promise<void> => {
       .update({ isINESvalid: true })
       .increment('countCertificatesSent', 1);
   } catch (err) {
-    console.error('Erreur lors de la mise à jour de la colonne isINESvalid', err);
+    console.error(
+      'Erreur lors de la mise à jour de la colonne isINESvalid',
+      err,
+    );
     throw new Error('Erreur lors de la mise à jour de la colonne isINESvalid');
   }
 };
