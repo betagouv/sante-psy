@@ -38,12 +38,7 @@ const sendStudentSecondStepMail = async (
     }
     const existingStudent = await db(studentsTable).where({ email }).first();
     if (existingStudent) {
-      const token = loginInformations.generateToken(32);
-      const expiresAt = date.getDatePlusHours(2);
-      await dbLoginToken.upsert(token, email, expiresAt, 'student');
-      console.log(
-        `--login (via signin) - existing student - token created for ${email} token=${token.slice(0, 6)}...`,
-      );
+      const token = await loginController.getOrCreateToken(email, 'student', 2);
       await loginController.sendStudentLoginEmail(
         email,
         loginInformations.generateLoginUrl(),
@@ -71,13 +66,7 @@ const sendStudentSecondStepMail = async (
 const sendWelcomeMail = async (email): Promise<void> => {
   try {
     const loginUrl = loginInformations.generateLoginUrl();
-    const token = loginInformations.generateToken(32);
-    const expiresAt = date.getDatePlusHours(2);
-
-    await dbLoginToken.upsert(token, email, expiresAt, 'student');
-    console.log(
-      `--login (via signin step 2) - user creation - token created for ${email} token=${token.slice(0, 6)}...`,
-    );
+    const token = await loginController.getOrCreateToken(email, 'student', 2);
     await sendStudentMailTemplate(
       email,
       loginUrl,
@@ -154,9 +143,6 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         const expiresAt = date.getDatePlusHours(2);
 
         await dbLoginToken.upsert(token, email, expiresAt, 'student');
-        console.log(
-          `--login (via signin step 2) - alreadyRegistered - token created for ${email} token=${token.slice(0, 6)}...`,
-        );
         await loginController.sendStudentLoginEmail(
           email,
           loginInformations.generateLoginUrl(),
@@ -210,29 +196,28 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         message: "L'étudiant peut être créé sans erreur.",
       });
     } else {
-
       await dbStudents.create({
-          email,
-          ine,
-          firstNames,
-          lastName,
-          dateOfBirth: date.parseForm(rawDateOfBirth),
-          acceptedCGUs,
-          schoolType,
-          schoolName,
-          schoolPostcode,
-          studyLevel,
-          studyField,
-          studyFieldOther,
-          gender,
-          livingPostcode,
-        });
+        email,
+        ine,
+        firstNames,
+        lastName,
+        dateOfBirth: date.parseForm(rawDateOfBirth),
+        acceptedCGUs,
+        schoolType,
+        schoolName,
+        schoolPostcode,
+        studyLevel,
+        studyField,
+        studyFieldOther,
+        gender,
+        livingPostcode,
+      });
 
-        await sendWelcomeMail(email);
+      await sendWelcomeMail(email);
 
-        res.status(200).json({
-          message: 'Un email vous a été envoyé.',
-        });
+      res.status(200).json({
+        message: 'Un email vous a été envoyé.',
+      });
     }
   } catch (err) {
     console.error(err);
