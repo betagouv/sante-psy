@@ -110,14 +110,6 @@ async function getOrCreateToken(
   }
 }
 
-async function savePsyToken(email: string, token: string): Promise<void> {
-  return saveToken(email, token, 'psy', 1);
-}
-
-async function saveStudentToken(email: string, token: string): Promise<void> {
-  return saveToken(email, token, 'student', 2);
-}
-
 const deleteToken = (req: Request, res: Response): void => {
   cookie.clearJwtCookie(res);
   res.json({});
@@ -151,10 +143,9 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
     );
   }
 
-  const token = loginInformations.generateToken(32);
   const loginUrl = loginInformations.generateLoginUrl();
+  const token = await getOrCreateToken(email, 'psy', 1);
   await sendPsyLoginEmail(email, loginUrl, token);
-  await savePsyToken(email, token);
   res.json({
     message: CONNEXION_EMAIL_SENT_MESSAGE,
   });
@@ -165,24 +156,10 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   const { email } = req.body;
 
   const studentIsRegistered = await dbStudents.getByEmail(email);
-  const existingToken = await dbLoginToken.getByEmail(email);
-  let token;
-
-  if (existingToken) {
-    token = existingToken.token;
-    console.log(
-      `--login - student - token existed for email ${email} token=${token.slice(0, 6)}...`,
-    );
-  } else {
-    token = loginInformations.generateToken(32);
-    console.log(
-      `--login - student - token did not exist for email ${email}, create a new one token=${token.slice(0, 6)}...`,
-    );
-  }
 
   if (studentIsRegistered) {
     const loginUrl = loginInformations.generateLoginUrl();
-    await saveStudentToken(email, token);
+    const token = await getOrCreateToken(email, 'student', 2);
     await sendStudentLoginEmail(email, loginUrl, token);
   }
 
@@ -400,4 +377,5 @@ export default {
   sendUserLoginMail: asyncHelper(sendUserLoginMail),
   userLogin: asyncHelper(userLogin),
   userConnected: asyncHelper(userConnected),
+  getOrCreateToken,
 };
