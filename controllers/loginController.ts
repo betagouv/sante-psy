@@ -86,21 +86,27 @@ async function sendNotYetAcceptedEmail(email: string): Promise<void> {
   }
 }
 
-async function saveToken(
+async function getOrCreateToken(
   email: string,
-  token: string,
   role: 'psy' | 'student',
   expiresInNHours: number,
-): Promise<void> {
+): Promise<string> {
   try {
+    const loginToken = await dbLoginToken.getByEmail(email);
+
+    // delete expired token
+    if (loginToken && loginToken.expiresAt < new Date()) {
+      await dbLoginToken.delete(loginToken.token);
+    }
+
+    const token = loginToken?.token || loginInformations.generateToken(32);
     const expiredAt = date.getDatePlusHours(expiresInNHours);
     await dbLoginToken.upsert(token, email, expiredAt, role);
-    console.log(
-      `--login - ${role} - token created for ${email} token=${token.slice(0, 6)}...`,
-    );
+
+    return token;
   } catch (err) {
-    console.error(`Erreur de sauvegarde du token : ${err}`);
-    throw new Error('Erreur de sauvegarde du token');
+    console.error('Erreur de récupération du token', err);
+    throw err;
   }
 }
 
