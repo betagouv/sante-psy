@@ -175,7 +175,6 @@ const sendUserLoginMail = async (
   validation.checkErrors(req);
   const { email } = req.body;
 
-  console.log(`--login sendUserLoginMail for email ${email}`);
   const student = await dbStudents.getByEmail(email);
   if (student) {
     await sendStudentMail(req, res);
@@ -223,9 +222,6 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
       console.log(`Successful authentication for psy ${logs.hash(email)}`);
 
       await dbLoginToken.delete(token);
-      console.log(
-        `--login - psy - email=${email} token ${token.slice(0, 6)}... deleted`,
-      );
 
       await dbLastConnection.upsert(psy.dossierNumber);
 
@@ -239,9 +235,6 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
       console.log(`Successful authentication for student ${logs.hash(email)}`);
 
       await dbLoginToken.delete(token);
-      console.log(
-        `--login - student - email=${email} token ${token.slice(0, 6)}... deleted`,
-      );
 
       await dbLastConnectionStudent.upsert(student.id);
 

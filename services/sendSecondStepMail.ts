@@ -14,9 +14,6 @@ const sendStudentSecondStepInvitation = async (
   title: string,
 ): Promise<void> => {
   const token = await loginController.getOrCreateToken(email, 'student', 48);
-  console.log(
-    `--login (via signin) - new student - token created for ${email} token=${token.slice(0, 6)}...`,
-  );
   await sendStudentMailTemplate(
     email,
     loginInformations.generateStudentSignInStepTwoUrl(),
