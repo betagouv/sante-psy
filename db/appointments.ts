@@ -68,10 +68,16 @@ const getAll = async (
   orderBy: OrderByColumn[] = [],
 ): Promise<AppointmentWithPatient[]> => {
   try {
-    const query = db.from(patientsTable)
-    .innerJoin(appointmentsTable, `${patientsTable}.id`, `${appointmentsTable}.patientId`)
-    .where(`${appointmentsTable}.psychologistId`, psychologistId)
-    .whereNot(`${appointmentsTable}.deleted`, true);
+    const query = db
+      .from(patientsTable)
+      .innerJoin(
+        appointmentsTable,
+        `${patientsTable}.id`,
+        `${appointmentsTable}.patientId`,
+      )
+      .leftJoin('students', 'students.id', `${patientsTable}.student_id`)
+      .where(`${appointmentsTable}.psychologistId`, psychologistId)
+      .whereNot(`${appointmentsTable}.deleted`, true);
 
     if (period) {
       query.whereRaw(
@@ -89,13 +95,21 @@ const getAll = async (
             ELSE CONCAT(EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate"), 
             '-', EXTRACT(YEAR FROM ${appointmentsTable}."appointmentDate") + 1)
         END AS "univYear",
-        ${patientsTable}.*,
-        ${appointmentsTable}.*
+         ${appointmentsTable}.*,
+          ${patientsTable}.id as "patientId",
+          COALESCE(students."firstNames", ${patientsTable}."firstNames") AS "firstNames",
+          COALESCE(students."lastName", ${patientsTable}."lastName") AS "lastName",
+          ${patientsTable}."INE",
+          ${patientsTable}."student_id"
       `),
     );
 
     orderBy.forEach((order) => {
-      query.orderBy(order.column, order.order || 'asc');
+      const column =
+        order.column === 'patientId'
+          ? `${appointmentsTable}.patientId`
+          : order.column;
+      query.orderBy(column, order.order || 'asc');
     });
 
     const appointments = await query;

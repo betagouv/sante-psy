@@ -22,5 +22,5 @@ export type Patient = {
   countCertificatesSent?: number;
   badges?: string[];
 } & {
-  student: Student | null;
+  student?: Student | null;
 };
