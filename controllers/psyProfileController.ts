@@ -10,6 +10,7 @@ import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
 import getAddressCoordinates from '../services/getAddressCoordinates';
 import { Coordinates } from '../types/Coordinates';
+import { checkDateOfBirth, checkIne } from './validators/common';
 
 const getValidators = [
   param('psyId')
@@ -88,6 +89,8 @@ const get = async (req: Request, res: Response): Promise<void> => {
     adeli,
   });
 };
+
+const findStudentValidators = [checkIne, checkDateOfBirth];
 
 const updateValidators = [
   check('personalEmail')
