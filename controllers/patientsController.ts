@@ -65,7 +65,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
 
   const psychologistId = req.auth.userId || req.auth.psychologist;
 
-  const student = await dbStudents.getByEmailAndBirthDate(ine, birthDate);
+  const student = await dbStudents.getByIneAndBirthDate(ine, birthDate);
 
   if (!student) {
     res.status(404);
