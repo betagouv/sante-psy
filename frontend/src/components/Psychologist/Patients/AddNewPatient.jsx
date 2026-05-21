@@ -114,7 +114,13 @@ const AddNewPatient = () => {
             className={classNames(styles.ineInput, 'midlength-input')}
             data-test-id="etudiant-ine-input"
             label="Numéro INE de l'étudiant"
-            hint="Il fait 11 caractères (chiffres et lettres). Il peut être présent sur la carte d'étudiant ou le certificat de scolarité."
+            hint={
+              <>
+                <b>11 chiffres ou lettres</b> présent sur le certificat de
+                scolarité. Attention, il est différent du numéro étudiant, ou du
+                numéro PIC de l&apos;université.
+              </>
+            }
             value={ine}
             onChange={handleINEChange}
             required
@@ -125,11 +131,6 @@ const AddNewPatient = () => {
               data-test-id="etudiant-ine-error"
             />
           )}
-          <Notification type="info">
-            <b>L&apos;INE : 11 chiffres ou lettres</b> présent sur le certificat
-            de scolarité. Attention, il est différent du numéro étudiant, ou du
-            numéro PIC de l&apos;université.
-          </Notification>
           <Button
             submit
             id="app-patient-button"
