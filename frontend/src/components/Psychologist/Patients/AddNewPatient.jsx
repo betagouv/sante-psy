@@ -14,34 +14,34 @@ const AddNewPatient = () => {
   const {
     commonStore: { setNotification },
   } = useStore();
-  const [birthDate, setBirthDate] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
   const [ine, setIne] = useState('');
 
-  const [birthDateError, setBirthDateError] = useState('');
+  const [dateOfBirthError, setDateOfBirthError] = useState('');
   const [ineError, setIneError] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [patientAdded, setPatientAdded] = useState(false);
 
-  useEffect(() => setIsSubmitting(false), [birthDate, ine]);
+  useEffect(() => setIsSubmitting(false), [dateOfBirth, ine]);
 
   const validateDateOfBirth = (value) => {
     if (value === '') {
-      setBirthDateError('');
+      setDateOfBirthError('');
       return;
     }
 
     if (!isValidBirthDate(value)) {
-      setBirthDateError("La date de naissance entrée n'est pas valide.");
+      setDateOfBirthError("La date de naissance entrée n'est pas valide.");
       return;
     }
-    setBirthDateError('');
+    setDateOfBirthError('');
   };
 
-  const handleBirthDateChange = (e) => {
+  const handleDateOfBirthChange = (e) => {
     const { value } = e.target;
     const formattedValue = addAutoSlashToDate(value);
-    setBirthDate(formattedValue);
+    setDateOfBirth(formattedValue);
     validateDateOfBirth(formattedValue);
   };
 
@@ -67,8 +67,8 @@ const AddNewPatient = () => {
   };
 
   const canAddPatient = useMemo(
-    () => ine && birthDate && !ineError && !birthDateError && !isSubmitting,
-    [ine, birthDate, ineError, birthDateError, isSubmitting],
+    () => ine && dateOfBirth && !ineError && !dateOfBirthError && !isSubmitting,
+    [ine, dateOfBirth, ineError, dateOfBirthError, isSubmitting],
   );
 
   const addPatient = async (e) => {
@@ -76,11 +76,11 @@ const AddNewPatient = () => {
     setNotification(null);
     setIsSubmitting(true);
     try {
-      await agent.Patient.create({
+      const res = await agent.Psychologist.findStudent({
         ine,
-        birthDate,
+        dateOfBirth,
       });
-      setPatientAdded(true);
+      console.log('res', res);
     } catch (err) {
       console.error(err);
     }
@@ -97,16 +97,16 @@ const AddNewPatient = () => {
             data-test-id="etudiant-birth-date-input"
             label="Date de naissance"
             hint="Format JJ/MM/AAAA, par exemple : 25/01/1987"
-            value={birthDate}
+            value={dateOfBirth}
             type="text"
-            onChange={handleBirthDateChange}
+            onChange={handleDateOfBirthChange}
             pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
             placeholder="JJ/MM/AAAA"
             required
           />
-          {birthDateError && (
+          {dateOfBirthError && (
             <ErrorMessage
-              message={birthDateError}
+              message={dateOfBirthError}
               data-test-id="etudiant-birth-date-error"
             />
           )}
