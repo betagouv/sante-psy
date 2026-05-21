@@ -21,6 +21,12 @@ router.post(
   psyProfileController.suspend,
 );
 
+router.post(
+  '/student-find',
+  psyProfileController.findStudentValidators,
+  psyProfileController.findStudent,
+);
+
 router.put('/seeTutorial', psyProfileController.seeTutorial);
 
 router.put(
