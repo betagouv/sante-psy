@@ -249,7 +249,7 @@ const updatePersonalData = async (
   }
 };
 
-const getByEmailAndBirthDate = async (
+const getByIneAndBirthDate = async (
   ine: string,
   birthDate: string,
 ): Promise<Student | null> => {
@@ -276,5 +276,5 @@ export default {
   confirmEmailChange,
   deleteEmailChangeInfo,
   updatePersonalData,
-  getByEmailAndBirthDate,
+  getByIneAndBirthDate,
 };
