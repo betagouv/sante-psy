@@ -36,6 +36,17 @@ const getById = async (
   }
 };
 
+const getByStudentId = async (
+  studentId: string,
+  psychologistId: string,
+): Promise<Patient> => {
+  const patient = await db(patientsTable)
+    .where('student_id', studentId)
+    .where('psychologistId', psychologistId)
+    .first();
+  return patient;
+};
+
 const getAll = async (
   psychologistId: string,
 ): Promise<
@@ -139,4 +150,5 @@ export default {
   insert,
   delete: deleteOne,
   getByStudentEmailAndIne,
+  getByStudentId,
 };

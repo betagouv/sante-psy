@@ -5,6 +5,8 @@ import { purifySanitizer } from '../services/sanitizer';
 import geo from '../utils/geo';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
+import dbStudents from '../db/students';
+import dbPatients from '../db/patients';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
@@ -265,13 +267,49 @@ const seeTutorial = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+const findStudent = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+  const { ine, dateOfBirth } = req.body;
+
+  const student = await dbStudents.getByIneAndBirthDate(ine, dateOfBirth);
+
+  if (!student) {
+    res.json({
+      studentExists: false,
+      alreadyPatient: false,
+      message: "Le compte étudiant n'existe pas",
+    });
+    return;
+  }
+
+  const patient = await dbPatients.getByStudentId(student.id, psychologistId);
+  if (patient) {
+    res.json({
+      studentExists: true,
+      alreadyPatient: true,
+      message: 'Cet étudiant est déja un patient pour ce psychologue',
+    });
+    return;
+  }
+
+  res.json({
+    studentExists: true,
+    alreadyPatient: false,
+    message: 'Le compte étudiant existe',
+    student,
+  });
+};
+
 export default {
   getValidators,
   updateValidators,
   suspendValidators,
+  findStudentValidators,
   get: asyncHelper(get),
   update: asyncHelper(update),
   activate: asyncHelper(activate),
   suspend: asyncHelper(suspend),
   seeTutorial: asyncHelper(seeTutorial),
+  findStudent: asyncHelper(findStudent),
 };
