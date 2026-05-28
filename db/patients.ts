@@ -28,6 +28,10 @@ const getById = async (
       .where('psychologistId', psychologistId)
       .first();
 
+    if (!patient) {
+      return null;
+    }
+
     const student = patient.student_id
       ? await db('students').where('id', patient.student_id).first()
       : null;
