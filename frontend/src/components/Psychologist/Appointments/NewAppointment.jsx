@@ -31,12 +31,14 @@ export const MAX_APPOINTMENT = 12;
 
 const NewAppointment = () => {
   const navigate = useNavigate();
-  const { search } = useLocation();
+  const { search, state } = useLocation();
   // TODO understand why we use this url param
   const queryDate = new URLSearchParams(search).get('date');
   const [date, setDate] = useState();
   const params = useParams();
-  const [patientId, setPatientId] = useState(params.patientId);
+  const [patientId, setPatientId] = useState(
+    state?.patientId || params.patientId,
+  );
   const [patients, setPatients] = useState([]);
   const [understand, setUnderstand] = useState(false);
 
