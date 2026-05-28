@@ -18,6 +18,7 @@ export async function up(knex: Knex): Promise<void> {
     CREATE UNIQUE INDEX uq_psy_student
     ON patients ("psychologistId", student_id)
     WHERE student_id IS NOT NULL
+    AND (deleted IS NULL OR deleted = false)
   `);
 }
 
