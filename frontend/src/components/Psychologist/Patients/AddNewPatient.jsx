@@ -5,25 +5,36 @@ import styles from './addNewPatient.cssmodule.scss';
 import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import ErrorMessage from 'components/Forms/ErrorMessage';
 import validateIneFormat from 'src/utils/validateIneFormat';
-import Notification from 'components/Notification/Notification';
 import { Button } from '@dataesr/react-dsfr';
 import agent from 'services/agent';
 import { useStore } from 'stores/index';
+import { Alert } from '@dataesr/react-dsfr';
+import InviteStudent from './InviteStudent';
+import ConfirmNewPatient from './ConfirmNewPatient';
 
 const AddNewPatient = () => {
   const {
     commonStore: { setNotification },
   } = useStore();
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [ine, setIne] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('01/01/1990');
+  const [ine, setIne] = useState('66154435639');
 
   const [dateOfBirthError, setDateOfBirthError] = useState('');
   const [ineError, setIneError] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [patientAdded, setPatientAdded] = useState(false);
 
-  useEffect(() => setIsSubmitting(false), [dateOfBirth, ine]);
+  const [foundStudent, setFoundStudent] = useState(null);
+  const [tryCount, setTryCount] = useState(0);
+
+  const [didNotFindStudent, setDidNotFindStudent] = useState(false);
+  const [alreadyAPatient, setAlreadyAPatient] = useState(false);
+
+  useEffect(() => {
+    setIsSubmitting(false);
+    setDidNotFindStudent(false);
+    setAlreadyAPatient(false);
+  }, [dateOfBirth, ine]);
 
   const validateDateOfBirth = (value) => {
     if (value === '') {
@@ -66,12 +77,14 @@ const AddNewPatient = () => {
     validateINE(upperCaseValue);
   };
 
-  const canAddPatient = useMemo(
+  const canFindStudent = useMemo(
     () => ine && dateOfBirth && !ineError && !dateOfBirthError && !isSubmitting,
     [ine, dateOfBirth, ineError, dateOfBirthError, isSubmitting],
   );
 
-  const addPatient = async (e) => {
+  const inviteStudent = useMemo(() => tryCount >= 3, [tryCount]);
+
+  const findStudent = async (e) => {
     e.preventDefault();
     setNotification(null);
     setIsSubmitting(true);
@@ -81,17 +94,42 @@ const AddNewPatient = () => {
         dateOfBirth,
       });
       console.log('res', res);
+      if (res.student) {
+        setFoundStudent(res.student);
+        return;
+      }
+      if (!res.studentExists) {
+        onDidNotFindStudent();
+        return;
+      }
+      setAlreadyAPatient(true);
     } catch (err) {
       console.error(err);
     }
   };
 
+  const onCancelConfirmStudent = () => {
+    setIne('');
+    setDateOfBirth('');
+    setFoundStudent(null);
+  };
+
+  const onDidNotFindStudent = () => {
+    setTryCount((prevCount) => setTryCount(prevCount + 1));
+    setDidNotFindStudent(true);
+  };
+
   return (
     <div className="fr-my-2w">
-      {patientAdded ? (
-        <Notification message="L'étudiant a bien été ajouté" type="success" />
+      {inviteStudent ? (
+        <InviteStudent />
+      ) : foundStudent ? (
+        <ConfirmNewPatient
+          foundStudent={foundStudent}
+          onCancel={onCancelConfirmStudent}
+        />
       ) : (
-        <form onSubmit={addPatient}>
+        <form onSubmit={findStudent}>
           <TextInput
             className="midlength-input"
             data-test-id="etudiant-birth-date-input"
@@ -136,10 +174,23 @@ const AddNewPatient = () => {
             id="app-patient-button"
             data-test-id="add-patient-button"
             icon="fr-fi-add-line"
-            disabled={!canAddPatient}
+            disabled={!canFindStudent}
+            className={styles.submitButton}
           >
             Rechercher l'étudiant
           </Button>
+          {didNotFindStudent && (
+            <Alert
+              type="warning"
+              description="Cet étudiant n'existe pas ou bien n'a pas créé son compte"
+            />
+          )}
+          {alreadyAPatient && (
+            <Alert
+              type="success"
+              description="Cet étudiant est déja un de vos patients"
+            />
+          )}
         </form>
       )}
     </div>
