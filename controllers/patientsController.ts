@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import dbPatients from '../db/patients';
+import dbPatients, {
+  ERROR_MESSAGE_STUDENT_ALREADY_PATIENT,
+} from '../db/patients';
 import dbAppointments from '../db/appointments';
-import dbStudents from '../db/students';
 import validation from '../utils/validation';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
@@ -57,30 +58,26 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
 };
 
 const create = async (req: Request, res: Response): Promise<void> => {
-  validation.checkErrors(req);
+  try {
+    validation.checkErrors(req);
+    const psychologistId = req.auth.userId || req.auth.psychologist;
 
-  const { ine, birthDate: rawDateOfBirth } = req.body;
-  const [day, month, year] = rawDateOfBirth.split('/');
-  const birthDate = `${year}-${month}-${day}`;
+    const { studentId } = req.body;
 
-  const psychologistId = req.auth.userId || req.auth.psychologist;
+    const newPatient = await dbPatients.insert(psychologistId, studentId);
 
-  const student = await dbStudents.getByIneAndBirthDate(ine, birthDate);
-
-  if (!student) {
-    res.status(404);
     res.json({
-      message: "L'étudiant n'existe pas.",
+      newPatient,
     });
-    return;
+  } catch (err) {
+    if (err.message === ERROR_MESSAGE_STUDENT_ALREADY_PATIENT) {
+      res
+        .status(409)
+        .json({ message: 'Cet étudiant est déja un de vos patients' });
+    }
+    console.error('Unexpected error in patient.create', err);
+    res.status(500).json({ message: 'Une erreur est survenue' });
   }
-
-  // l'etudiant est deja un patient du psy
-  const newPatient = await dbPatients.insert(psychologistId, student.id);
-
-  res.json({
-    patientCreated: !!newPatient,
-  });
 };
 
 const deleteOne = async (req: Request, res: Response): Promise<void> => {

@@ -1,7 +1,14 @@
 import { check } from 'express-validator';
-import { checkDateOfBirth, checkIne } from './common';
 
-export const patientValidators = [checkIne, checkDateOfBirth];
+export const patientValidators = [
+  check('studentId')
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Ce patient n'existe pas.")
+    .isUUID()
+    .withMessage("Ce patient n'existe pas."),
+];
 
 export const getOneValidators = [
   check('patientId')
