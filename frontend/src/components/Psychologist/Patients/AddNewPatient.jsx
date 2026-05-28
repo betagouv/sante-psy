@@ -1,12 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { TextInput } from '@dataesr/react-dsfr';
+import { TextInput, Button, Alert } from '@dataesr/react-dsfr';
 import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import ErrorMessage from 'components/Forms/ErrorMessage';
 import validateIneFormat from 'src/utils/validateIneFormat';
-import { Button } from '@dataesr/react-dsfr';
 import agent from 'services/agent';
 import { useStore } from 'stores/index';
-import { Alert } from '@dataesr/react-dsfr';
 import InviteStudent from './InviteStudent';
 import ConfirmNewPatient from './ConfirmNewPatient';
 import { Stack } from 'components/Utils/Stack';
