@@ -14,7 +14,9 @@ dotEnv.config();
 
 async function createPatientForPsy(psy: Psychologist) {
   const student = await create.insertOneStudent();
-  return dbPatients.insert(psy.dossierNumber, student.id);
+  const patient = await dbPatients.insert(psy.dossierNumber, student.id);
+  const dbPatient = await dbPatients.getById(patient.id, psy.dossierNumber);
+  return dbPatient;
 }
 
 describe('DB Appointments', () => {
@@ -22,12 +24,14 @@ describe('DB Appointments', () => {
     await clean.patients();
     await clean.psychologists();
     await clean.appointments();
+    await clean.students();
   });
 
   afterEach(async () => {
     await clean.patients();
     await clean.psychologists();
     await clean.appointments();
+    await clean.students();
   });
 
   describe('delete', () => {
