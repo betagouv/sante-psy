@@ -87,7 +87,8 @@ const Psychologist = {
   updateProfile: psychologist => client
     .put(`/psychologist/${store.userStore.user.dossierNumber}`, psychologist),
   seeTutorial: () => client.put(`/psychologist/${store.userStore.user.dossierNumber}/seeTutorial`),
-  findStudent: params => client.post(`/psychologist/${store.userStore.user.dossierNumber}/student-find`, params)
+  findStudent: params => client.post(`/psychologist/${store.userStore.user.dossierNumber}/student-find`, params),
+  inviteStudent: params => client.post(`/psychologist/${store.userStore.user.dossierNumber}/invite-student`, params)
 };
 
 const Statistics = { getAll: () => client.get('/statistics') };
