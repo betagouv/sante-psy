@@ -4,6 +4,7 @@ import { TextInput } from '@dataesr/react-dsfr';
 import { Alert } from '@dataesr/react-dsfr';
 import ErrorMessage from 'components/Forms/ErrorMessage';
 import { validateEmailField } from 'src/utils/validateEmailFormat';
+import { Stack } from 'components/Utils/Stack';
 
 const InviteStudent = () => {
   const emailRef = useRef();
@@ -35,7 +36,7 @@ const InviteStudent = () => {
   }, [cleanInviteEmail]);
 
   return (
-    <>
+    <Stack>
       <Alert
         type="warning"
         description="L'étudiant que vous recherchez ne semble pas avoir créé de compte. Invitez le en entrant son email ci-dessous"
@@ -70,7 +71,7 @@ const InviteStudent = () => {
           Inviter l'étudiant
         </Button>
       </form>
-    </>
+    </Stack>
   );
 };
 

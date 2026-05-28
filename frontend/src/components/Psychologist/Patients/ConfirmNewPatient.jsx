@@ -7,6 +7,7 @@ import { Button } from '@dataesr/react-dsfr';
 import { Alert } from '@dataesr/react-dsfr';
 import { HashLink } from 'react-router-hash-link';
 import { Icon } from '@dataesr/react-dsfr';
+import { Stack } from 'components/Utils/Stack';
 
 const getStudentData = (student) => [
   {
@@ -63,7 +64,7 @@ const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
   };
 
   const displayStudentInfo = (student) => (
-    <div className={styles.infoList}>
+    <div>
       {getStudentData(student).map(({ key, title, value }) => (
         <div key={key} className={styles.infoRow}>
           <span className={styles.infoTitle}>{title}</span>
@@ -79,24 +80,28 @@ const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
       {displayStudentInfo(foundStudent)}
       {!addedPatient && (
         <form onSubmit={addPatient}>
-          <Checkbox
-            label="J'ai bien comparé l'identité de l'étudiant avec le certificat de scolarité"
-            onChange={(e) => setCheckCertifIdentity(e.target.checked)}
-            checked={checkCertifIdentity}
-          />
-          <Checkbox
-            label="J'ai vérifié que le certificat de scolarité est valable sur la période en cours"
-            onChange={(e) => setCheckCertifValidity(e.target.checked)}
-            checked={checkCertifValidity}
-          />
-          <ButtonGroup isInlineFrom="xs">
-            <Button secondary onClick={onCancel}>
-              Annuler
-            </Button>
-            <Button disabled={!canConfirmPatient} submit>
-              Confirmer
-            </Button>
-          </ButtonGroup>
+          <Stack>
+            <div>
+              <Checkbox
+                label="J'ai bien comparé l'identité de l'étudiant avec le certificat de scolarité"
+                onChange={(e) => setCheckCertifIdentity(e.target.checked)}
+                checked={checkCertifIdentity}
+              />
+              <Checkbox
+                label="J'ai vérifié que le certificat de scolarité est valable sur la période en cours"
+                onChange={(e) => setCheckCertifValidity(e.target.checked)}
+                checked={checkCertifValidity}
+              />
+            </div>
+            <ButtonGroup isInlineFrom="xs">
+              <Button secondary onClick={onCancel}>
+                Annuler
+              </Button>
+              <Button disabled={!canConfirmPatient} submit>
+                Confirmer
+              </Button>
+            </ButtonGroup>
+          </Stack>
         </form>
       )}
       {addedPatient && (
@@ -106,22 +111,24 @@ const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
             description="Vous pouvez dès à présent déclarer des séances pour cet étudiant"
             title="Étudiant ajouté"
           />
-          <HashLink
-            to="/psychologue/nouvelle-seance"
-            state={{ patientId: addedPatient.id }}
-            className="fr-btn"
-          >
-            <div>
-              <Icon name="ri-add-line" />
-              Nouvelle séance
-            </div>
-          </HashLink>
-          <HashLink
-            to={`/psychologue/etudiant/${addedPatient.id}`}
-            className="fr-btn"
-          >
-            <div>Voir le dossier</div>
-          </HashLink>
+          <ButtonGroup isInlineFrom="xs">
+            <HashLink
+              to="/psychologue/nouvelle-seance"
+              state={{ patientId: addedPatient.id }}
+              className="fr-btn"
+            >
+              <div>
+                <Icon name="ri-add-line" />
+                Nouvelle séance
+              </div>
+            </HashLink>
+            <HashLink
+              to={`/psychologue/etudiant/${addedPatient.id}`}
+              className="fr-btn"
+            >
+              <div>Voir le dossier</div>
+            </HashLink>
+          </ButtonGroup>
         </>
       )}
     </>
