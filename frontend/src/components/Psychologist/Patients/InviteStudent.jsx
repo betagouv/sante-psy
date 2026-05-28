@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Button } from '@dataesr/react-dsfr';
-import { TextInput } from '@dataesr/react-dsfr';
-import { Alert } from '@dataesr/react-dsfr';
+import { Button, TextInput, Alert } from '@dataesr/react-dsfr';
 import ErrorMessage from 'components/Forms/ErrorMessage';
 import { validateEmailField } from 'src/utils/validateEmailFormat';
 import { Stack } from 'components/Utils/Stack';

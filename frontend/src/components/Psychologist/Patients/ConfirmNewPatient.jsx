@@ -1,12 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import styles from './confirmNewPatient.cssmodule.scss';
 import agent from 'services/agent';
-import { Checkbox } from '@dataesr/react-dsfr';
-import { ButtonGroup } from '@dataesr/react-dsfr';
-import { Button } from '@dataesr/react-dsfr';
-import { Alert } from '@dataesr/react-dsfr';
+import {
+  Checkbox,
+  ButtonGroup,
+  Button,
+  Alert,
+  Icon,
+} from '@dataesr/react-dsfr';
 import { HashLink } from 'react-router-hash-link';
-import { Icon } from '@dataesr/react-dsfr';
 import { Stack } from 'components/Utils/Stack';
 
 const getStudentData = (student) => [
