@@ -4,6 +4,9 @@ import db from './db';
 import { Patient } from '../types/Patient';
 import { Student } from '../types/Student';
 
+export const ERROR_MESSAGE_STUDENT_ALREADY_PATIENT =
+  'Cet étudiant est déjà un patient de ce psychologue';
+
 const enrichPatientWithStudent = (
   patient: Patient,
   student: Student | null,
@@ -98,7 +101,7 @@ const insert = async (
     return patient;
   } catch (err) {
     if (err.code === '23505' && err.constraint === 'uq_psy_student') {
-      throw new Error('Cet étudiant est déjà un patient de ce psychologue');
+      throw new Error(ERROR_MESSAGE_STUDENT_ALREADY_PATIENT);
     }
     console.error('Erreur lors de la création du patient', err);
     throw err;
