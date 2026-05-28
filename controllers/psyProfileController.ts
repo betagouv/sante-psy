@@ -9,6 +9,7 @@ import dbPatients from '../db/patients';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
+import sendSecondStepMail from '../services/sendSecondStepMail';
 
 const getValidators = [
   param('psyId')
@@ -270,15 +271,36 @@ const findStudent = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+const inviteStudent = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+  const { email } = req.body;
+
+  try {
+    await sendSecondStepMail.inviteNewStudentToCreateAccount(
+      email,
+      'studentInvitationFromPsy',
+      'Création de votre espace étudiant',
+    );
+  } catch (err) {
+    console.error('Failed to send student invitation from psy', err);
+    throw new CustomError(
+      "Une erreur est survenue lors de l'envoi de l'invitation",
+    );
+  }
+  res.status(200).json({
+    message: "L'invitation a bien été envoyée.",
+  });
+};
+
 export default {
   getValidators,
   updateValidators,
   suspendValidators,
-  findStudentValidators,
   get: asyncHelper(get),
   update: asyncHelper(update),
   activate: asyncHelper(activate),
   suspend: asyncHelper(suspend),
   seeTutorial: asyncHelper(seeTutorial),
   findStudent: asyncHelper(findStudent),
+  inviteStudent: asyncHelper(inviteStudent),
 };

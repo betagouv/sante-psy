@@ -5,6 +5,7 @@ import { Alert } from '@dataesr/react-dsfr';
 import ErrorMessage from 'components/Forms/ErrorMessage';
 import { validateEmailField } from 'src/utils/validateEmailFormat';
 import { Stack } from 'components/Utils/Stack';
+import agent from 'services/agent';
 
 const InviteStudent = () => {
   const emailRef = useRef();
@@ -18,13 +19,16 @@ const InviteStudent = () => {
   const [inviteEmail, setInviteEmail] = useState('');
   const [emailError, setEmailError] = useState('');
 
+  const [invitationSent, setInvitationSent] = useState(false);
+  const [invitationSuccess, setInvitationSuccess] = useState(false);
+
   const cleanInviteEmail = useMemo(
     () => inviteEmail.trim().toLowerCase(),
     [inviteEmail],
   );
   const canInvite = useMemo(
-    () => cleanInviteEmail && !emailError,
-    [cleanInviteEmail, emailError],
+    () => cleanInviteEmail && !emailError && !invitationSent,
+    [cleanInviteEmail, emailError, invitationSent],
   );
 
   useEffect(() => {
@@ -35,18 +39,33 @@ const InviteStudent = () => {
     validateEmailField(cleanInviteEmail, setEmailError);
   }, [cleanInviteEmail]);
 
+  const inviteStudent = async (e) => {
+    e.preventDefault();
+    try {
+      await agent.Psychologist.inviteStudent({
+        email: cleanInviteEmail,
+      });
+      setInvitationSuccess(true);
+    } catch (err) {
+      console.error(err);
+    }
+    setInvitationSent(true);
+  };
+
   return (
     <Stack>
-      <Alert
-        type="warning"
-        description="L'étudiant que vous recherchez ne semble pas avoir créé de compte. Invitez le en entrant son email ci-dessous"
-      />
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log('invite student');
-        }}
-      >
+      {invitationSuccess ? (
+        <Alert type="success" description="L'invitation a bien été envoyée" />
+      ) : (
+        !invitationSent && (
+          <Alert
+            type="warning"
+            description="L'étudiant que vous recherchez ne semble pas avoir créé de compte. Invitez le en entrant son email ci-dessous"
+          />
+        )
+      )}
+
+      <form onSubmit={inviteStudent}>
         <TextInput
           label="Email de l'étudiant"
           ref={emailRef}
@@ -55,6 +74,7 @@ const InviteStudent = () => {
           value={inviteEmail}
           type="email"
           onChange={(e) => setInviteEmail(e.target.value)}
+          disabled={invitationSent}
         />
         {emailError && (
           <ErrorMessage

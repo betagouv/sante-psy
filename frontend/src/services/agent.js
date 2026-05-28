@@ -113,6 +113,11 @@ const Psychologist = {
       `/psychologist/${store.userStore.user.dossierNumber}/student-find`,
       params,
     ),
+  inviteStudent: (params) =>
+    client.post(
+      `/psychologist/${store.userStore.user.dossierNumber}/invite-student`,
+      params,
+    ),
 };
 
 const Statistics = { getAll: () => client.get('/statistics') };
