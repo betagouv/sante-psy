@@ -10,12 +10,17 @@ const getAppointmentsCount = async (
 ): Promise<Patient[] | AppointmentWithPatient[]> =>
   Promise.all(
     patients.map(async (patient) => {
-      // if patient has a student => join appointments based on patientId
-      const isValidINE = !patient.student && patient.INE?.trim() !== '';
+      const isValidINE = patient.INE?.trim() !== '';
 
-      const patientFilter = isValidINE
-        ? { 'p.INE': patient.INE }
-        : { 'a.patientId': patient.id };
+      let patientFilter = {};
+      if (patient.student_id) {
+        // patient has a student_id => we find all patients which have the same
+        patientFilter = { 'p.student_id': patient.student_id };
+      } else {
+        patientFilter = isValidINE
+          ? { 'p.INE': patient.INE }
+          : { 'a.patientId': patient.id };
+      }
 
       const appointmentsData = await db(`${appointmentsTable} as a`)
         .select('a.id', 'a.appointmentDate')
