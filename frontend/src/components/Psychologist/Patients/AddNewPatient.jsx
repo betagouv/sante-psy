@@ -15,8 +15,8 @@ const AddNewPatient = () => {
   const {
     commonStore: { setNotification },
   } = useStore();
-  const [dateOfBirth, setDateOfBirth] = useState('01/01/1990');
-  const [ine, setIne] = useState('66154435639');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [ine, setIne] = useState('');
 
   const [dateOfBirthError, setDateOfBirthError] = useState('');
   const [ineError, setIneError] = useState('');
@@ -92,7 +92,6 @@ const AddNewPatient = () => {
         ine,
         dateOfBirth,
       });
-      console.log('res', res);
       if (res.student) {
         setFoundStudent(res.student);
         return;
