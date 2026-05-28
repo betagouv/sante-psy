@@ -4,7 +4,6 @@ import app from '../../index';
 import clean from '../helper/clean';
 import create from '../helper/create';
 import cookie from '../../utils/cookie';
-import date from '../../utils/date';
 import dbPatients from '../../db/patients';
 import dbAppointments from '../../db/appointments';
 import dbPsychologists from '../../db/psychologists';
@@ -18,19 +17,10 @@ const makePatient = async (psychologistId, INE = '12345678901') => {
   psy.dossierNumber = psychologistId;
   await dbPsychologists.upsertMany([psy]);
   // Insert an appointment and a patient
-  const patient = await dbPatients.insert(
-    'Ada',
-    'Lovelace',
-    date.parseForm(dateOfBirth),
-    gender,
-    INE,
-    false,
-    'patient@beta.gouv.fr',
-    '42',
-    false,
-    psychologistId,
-    doctorName,
-  );
+  const student = await create.insertOneStudent({
+    ine: INE,
+  });
+  const patient = await dbPatients.insert(psychologistId, student.id);
   // Check patient is inserted
   const createdPatient = await dbPatients.getById(patient.id, psychologistId);
   chai.assert.exists(createdPatient);
@@ -54,12 +44,20 @@ describe('patientsController', () => {
         email: 'valid@valid.org',
       };
       const myPatient = await makePatient(psy.dossierNumber);
-      await dbAppointments.insert(new Date('2021-04-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(
+        new Date('2021-04-01'),
+        myPatient.id,
+        psy.dossierNumber,
+      );
       await dbAppointments.insert(new Date(), myPatient.id, psy.dossierNumber);
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get('/api/patients')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           expect(res.status).to.equal(200);
@@ -71,7 +69,9 @@ describe('patientsController', () => {
           res.body[0].id.should.equal(myPatient.id);
           res.body[0].institutionName.should.equal(myPatient.institutionName);
           res.body[0].doctorName.should.equal(myPatient.doctorName);
-          res.body[0].dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
+          res.body[0].dateOfBirth.should.equal(
+            myPatient.dateOfBirth.toISOString(),
+          );
           res.body[0].appointmentsCount.should.equal('2');
           res.body[0].appointmentsYearCount.should.equal('1');
 
@@ -89,19 +89,42 @@ describe('patientsController', () => {
         email: 'other@valid.org',
       };
       const myPatient = await makePatient(psy.dossierNumber, '12345698563');
-      const myPatientOtherPsy = await makePatient(anotherPsy.dossierNumber, '12345698563');
+      const myPatientOtherPsy = await dbPatients.insert(
+        anotherPsy.dossierNumber,
+        myPatient.student.id,
+      );
 
-      await dbAppointments.insert(new Date('2021-04-01'), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(
+        new Date('2021-04-01'),
+        myPatient.id,
+        psy.dossierNumber,
+      );
       await dbAppointments.insert(new Date(), myPatient.id, psy.dossierNumber);
-      const toDelete = await dbAppointments.insert(new Date(), myPatient.id, psy.dossierNumber);
+      const toDelete = await dbAppointments.insert(
+        new Date(),
+        myPatient.id,
+        psy.dossierNumber,
+      );
       dbAppointments.delete(toDelete.id, psy.dossierNumber);
 
-      await dbAppointments.insert(new Date(), myPatientOtherPsy.id, anotherPsy.dossierNumber);
-      await dbAppointments.insert(new Date(), myPatientOtherPsy.id, anotherPsy.dossierNumber);
+      await dbAppointments.insert(
+        new Date(),
+        myPatientOtherPsy.id,
+        anotherPsy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(),
+        myPatientOtherPsy.id,
+        anotherPsy.dossierNumber,
+      );
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get('/api/patients')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           expect(res.status).to.equal(200);
@@ -113,7 +136,9 @@ describe('patientsController', () => {
           res.body[0].id.should.equal(myPatient.id);
           res.body[0].institutionName.should.equal(myPatient.institutionName);
           res.body[0].doctorName.should.equal(myPatient.doctorName);
-          res.body[0].dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
+          res.body[0].dateOfBirth.should.equal(
+            myPatient.dateOfBirth.toISOString(),
+          );
           res.body[0].appointmentsCount.should.equal('4');
           res.body[0].appointmentsYearCount.should.equal('3');
 
@@ -142,25 +167,81 @@ describe('patientsController', () => {
       const currentSchoolYear = getCurrentSchoolYear();
 
       // former school year
-      await dbAppointments.insert(new Date(`${currentSchoolYear - 1}-11-01`), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date(`${currentSchoolYear - 1}-12-02`), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date(`${currentSchoolYear}-02-04`), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date(`${currentSchoolYear}-05-06`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear - 1}-11-01`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear - 1}-12-02`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear}-02-04`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear}-05-06`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
 
       // current school year
-      await dbAppointments.insert(new Date(`${currentSchoolYear}-09-01`), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date(`${currentSchoolYear}-10-01`), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date(`${currentSchoolYear}-11-01`), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date(`${currentSchoolYear}-12-01`), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date(`${currentSchoolYear + 1}-04-01`), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date(`${currentSchoolYear + 1}-05-01`), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date(`${currentSchoolYear + 1}-07-01`), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date(`${currentSchoolYear + 1}-07-05`), myPatient.id, psy.dossierNumber);
-      await dbAppointments.insert(new Date(`${currentSchoolYear + 1}-07-20`), myPatient.id, psy.dossierNumber);
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear}-09-01`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear}-10-01`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear}-11-01`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear}-12-01`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear + 1}-04-01`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear + 1}-05-01`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear + 1}-07-01`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear + 1}-07-05`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
+      await dbAppointments.insert(
+        new Date(`${currentSchoolYear + 1}-07-20`),
+        myPatient.id,
+        psy.dossierNumber,
+      );
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get('/api/patients')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           expect(res.status).to.equal(200);
@@ -172,7 +253,9 @@ describe('patientsController', () => {
           res.body[0].id.should.equal(myPatient.id);
           res.body[0].institutionName.should.equal(myPatient.institutionName);
           res.body[0].doctorName.should.equal(myPatient.doctorName);
-          res.body[0].dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
+          res.body[0].dateOfBirth.should.equal(
+            myPatient.dateOfBirth.toISOString(),
+          );
           res.body[0].gender.should.equal('female');
           res.body[0].appointmentsCount.should.equal('13');
           res.body[0].appointmentsYearCount.should.equal('9');
@@ -195,9 +278,13 @@ describe('patientsController', () => {
     it('should create patient', async () => {
       const psy = await create.insertOnePsy();
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .post('/api/patients')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           lastName: 'Lovelace',
@@ -213,8 +300,8 @@ describe('patientsController', () => {
         .then(async (res) => {
           res.status.should.equal(200);
           res.body.message.should.equal(
-            "L'étudiant Ada Lovelace a bien été créé. Vous pourrez renseigner les champs manquants plus tard"
-            + ' en cliquant le bouton "Modifier" du patient.',
+            "L'étudiant Ada Lovelace a bien été créé. Vous pourrez renseigner les champs manquants plus tard" +
+              ' en cliquant le bouton "Modifier" du patient.',
           );
 
           const patientsArray = await dbPatients.getAll(psy.dossierNumber);
@@ -231,8 +318,9 @@ describe('patientsController', () => {
         email: 'prenom.nom@beta.gouv.fr',
       };
 
-      return chai.request(app)
-      .post('/api/patients')
+      return chai
+        .request(app)
+        .post('/api/patients')
         .send({
           lastName: 'Lovelace',
           firstNames: 'Ada',
@@ -260,19 +348,21 @@ describe('patientsController', () => {
     let insertPatientStub;
 
     beforeEach(async () => {
-      insertPatientStub = sinon.stub(dbPatients, 'insert')
-        .returns(Promise.resolve([{
-          firstNames: 'prenom',
-          lastName: 'nom',
-          INE: 'studentNumber',
-          isINESvalid: false,
-          institutionName: '42',
-          isStudentStatusVerified: false,
-          doctorName,
-          dateOfBirth,
-          gender,
-        },
-        ]));
+      insertPatientStub = sinon.stub(dbPatients, 'insert').returns(
+        Promise.resolve([
+          {
+            firstNames: 'prenom',
+            lastName: 'nom',
+            INE: 'studentNumber',
+            isINESvalid: false,
+            institutionName: '42',
+            isStudentStatusVerified: false,
+            doctorName,
+            dateOfBirth,
+            gender,
+          },
+        ]),
+      );
       return Promise.resolve();
     });
 
@@ -281,15 +371,23 @@ describe('patientsController', () => {
       return Promise.resolve();
     });
 
-    const shouldFailCreatePatientInputValidation = (done, postData, message) => {
+    const shouldFailCreatePatientInputValidation = (
+      done,
+      postData,
+      message,
+    ) => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'prenom.nom@beta.gouv.fr',
       };
 
-      chai.request(app)
+      chai
+        .request(app)
         .post('/api/patients')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
@@ -303,78 +401,98 @@ describe('patientsController', () => {
     };
 
     it('should refuse empty firstNames', (done) => {
-      shouldFailCreatePatientInputValidation(done, {
-        // no firstNames
-        lastName: 'Nom',
-        INE: '1234567890A',
-        isINESvalid: false,
-        email: 'ada@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth,
-        gender,
-      }, 'Vous devez spécifier le.s prénom.s du patient.');
+      shouldFailCreatePatientInputValidation(
+        done,
+        {
+          // no firstNames
+          lastName: 'Nom',
+          INE: '1234567890A',
+          isINESvalid: false,
+          email: 'ada@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth,
+          gender,
+        },
+        'Vous devez spécifier le.s prénom.s du patient.',
+      );
     });
 
     it('should refuse empty lastName', (done) => {
-      shouldFailCreatePatientInputValidation(done, {
-        firstNames: 'Blou Blou',
-        // no lastName
-        INE: '1234567890A',
-        isINESvalid: false,
-        email: 'ada@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth,
-        gender,
-      }, 'Vous devez spécifier le nom du patient.');
+      shouldFailCreatePatientInputValidation(
+        done,
+        {
+          firstNames: 'Blou Blou',
+          // no lastName
+          INE: '1234567890A',
+          isINESvalid: false,
+          email: 'ada@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth,
+          gender,
+        },
+        'Vous devez spécifier le nom du patient.',
+      );
     });
 
     it('should refuse whitespace firstNames', (done) => {
-      shouldFailCreatePatientInputValidation(done, {
-        firstNames: '   ',
-        lastName: 'Nom',
-        INE: '1234567890A',
-        isINESvalid: false,
-        email: 'ada@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth,
-        gender,
-      }, 'Vous devez spécifier le.s prénom.s du patient.');
+      shouldFailCreatePatientInputValidation(
+        done,
+        {
+          firstNames: '   ',
+          lastName: 'Nom',
+          INE: '1234567890A',
+          isINESvalid: false,
+          email: 'ada@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth,
+          gender,
+        },
+        'Vous devez spécifier le.s prénom.s du patient.',
+      );
     });
 
     it('should refuse whitespace lastName', (done) => {
-      shouldFailCreatePatientInputValidation(done, {
-        firstNames: 'Blou Blou',
-        lastName: '   ',
-        INE: '1234567890A',
-        isINESvalid: false,
-        email: 'ada@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth,
-        gender,
-      }, 'Vous devez spécifier le nom du patient.');
+      shouldFailCreatePatientInputValidation(
+        done,
+        {
+          firstNames: 'Blou Blou',
+          lastName: '   ',
+          INE: '1234567890A',
+          isINESvalid: false,
+          email: 'ada@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth,
+          gender,
+        },
+        'Vous devez spécifier le nom du patient.',
+      );
     });
 
     it('should refuse INE with non-aphanumeric chars', (done) => {
-      shouldFailCreatePatientInputValidation(done, {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '1234567890à',
-        isINESvalid: false,
-        email: 'ada@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth,
-        gender,
-      }, 'Le numéro INE est invalide. Veuillez vérifier le format.');
+      shouldFailCreatePatientInputValidation(
+        done,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '1234567890à',
+          isINESvalid: false,
+          email: 'ada@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth,
+          gender,
+        },
+        'Le numéro INE est invalide. Veuillez vérifier le format.',
+      );
     });
 
     const shouldPassCreatePatientInputValidation = (done, postData) => {
@@ -383,16 +501,20 @@ describe('patientsController', () => {
         email: 'valid@valid.org',
       };
 
-      chai.request(app)
+      chai
+        .request(app)
         .post('/api/patients')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
           res.status.should.equal(200);
           res.body.message.should.equal(
-            "L'étudiant Blou Blou Nom a bien été créé. Vous pourrez renseigner les champs manquants plus tard"
-              + ' en cliquant le bouton "Modifier" du patient.',
+            "L'étudiant Blou Blou Nom a bien été créé. Vous pourrez renseigner les champs manquants plus tard" +
+              ' en cliquant le bouton "Modifier" du patient.',
           );
 
           sinon.assert.called(insertPatientStub);
@@ -400,79 +522,99 @@ describe('patientsController', () => {
         });
     };
 
-    it('shouldn\'t pass INE with length not 11 chars', (done) => {
-      shouldFailCreatePatientInputValidation(done, {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '1234567890AA',
-        isINESvalid: false,
-        email: 'ada@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth,
-        gender,
-      }, 'Le numéro INE est invalide. Veuillez vérifier le format.');
+    it("shouldn't pass INE with length not 11 chars", (done) => {
+      shouldFailCreatePatientInputValidation(
+        done,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '1234567890AA',
+          isINESvalid: false,
+          email: 'ada@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth,
+          gender,
+        },
+        'Le numéro INE est invalide. Veuillez vérifier le format.',
+      );
     });
 
-    it('shouldn\'t pass patient with no dateOfBirth', (done) => {
-      shouldFailCreatePatientInputValidation(done, {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '123456780AA',
-        isINESvalid: false,
-        email: 'ada@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth: '',
-        gender,
-      }, 'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.');
+    it("shouldn't pass patient with no dateOfBirth", (done) => {
+      shouldFailCreatePatientInputValidation(
+        done,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '123456780AA',
+          isINESvalid: false,
+          email: 'ada@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth: '',
+          gender,
+        },
+        "La date de naissance n'est pas valide, le format doit être JJ/MM/AAAA.",
+      );
     });
 
     it('should NOT pass validation when INE is missing', (done) => {
-      shouldFailCreatePatientInputValidation(done, {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '',
-        isINESvalid: false,
-        email: 'ada@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth,
-        gender,
-      }, 'Le numéro INE est obligatoire.');
+      shouldFailCreatePatientInputValidation(
+        done,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '',
+          isINESvalid: false,
+          email: 'ada@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth,
+          gender,
+        },
+        'Le numéro INE est obligatoire.',
+      );
     });
 
-    it('shouldn\'t pass patient without email', (done) => {
-      shouldFailCreatePatientInputValidation(done, {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '123456790AA',
-        isINESvalid: false,
-        email: undefined,
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth,
-        gender,
-      }, 'Vous devez spécifier un email valide.');
+    it("shouldn't pass patient without email", (done) => {
+      shouldFailCreatePatientInputValidation(
+        done,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '123456790AA',
+          isINESvalid: false,
+          email: undefined,
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth,
+          gender,
+        },
+        'Vous devez spécifier un email valide.',
+      );
     });
 
-    it('shouldn\'t pass patient without gender', (done) => {
-      shouldFailCreatePatientInputValidation(done, {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '123456790AA',
-        isINESvalid: false,
-        email: 'ada@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth,
-        gender: '',
-      }, 'Vous devez spécifier le genre du patient.');
+    it("shouldn't pass patient without gender", (done) => {
+      shouldFailCreatePatientInputValidation(
+        done,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '123456790AA',
+          isINESvalid: false,
+          email: 'ada@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth,
+          gender: '',
+        },
+        'Vous devez spécifier le genre du patient.',
+      );
     });
 
     it('should pass validation when all fields are correct', (done) => {
@@ -522,16 +664,20 @@ describe('patientsController', () => {
         isStudentStatusVerified: undefined,
       };
 
-      chai.request(app)
-      .post('/api/patients')
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+      chai
+        .request(app)
+        .post('/api/patients')
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
+        .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
           res.status.should.equal(200);
           res.body.message.should.equal(
-            "L'étudiant Blou Blou<div></div> Nom&lt;/ a bien été créé. Vous pourrez renseigner"
-              + ' les champs manquants plus tard en cliquant le bouton "Modifier" du patient.',
+            "L'étudiant Blou Blou<div></div> Nom&lt;/ a bien été créé. Vous pourrez renseigner" +
+              ' les champs manquants plus tard en cliquant le bouton "Modifier" du patient.',
           );
           sinon.assert.called(insertPatientStub);
           const expected = [
@@ -568,9 +714,13 @@ describe('patientsController', () => {
       };
       const myPatient = await makePatient(psy.dossierNumber);
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get(`/api/patients/${myPatient.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           expect(res.status).to.equal(200);
@@ -582,7 +732,9 @@ describe('patientsController', () => {
           res.body.id.should.equal(myPatient.id);
           res.body.institutionName.should.equal(myPatient.institutionName);
           res.body.doctorName.should.equal(myPatient.doctorName);
-          res.body.dateOfBirth.should.equal(myPatient.dateOfBirth.toISOString());
+          res.body.dateOfBirth.should.equal(
+            myPatient.dateOfBirth.toISOString(),
+          );
           res.body.email.should.equal(myPatient.email.toString());
 
           return Promise.resolve();
@@ -597,13 +749,19 @@ describe('patientsController', () => {
       const anotherPsyId = 'e43b8668-621d-40a7-86e0-c563b6b05509';
       const notMyPatient = await makePatient(anotherPsyId);
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get(`/api/patients/${notMyPatient.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(404);
-          res.body.message.should.equal('Ce patient n\'existe pas. Vous ne pouvez pas le modifier.');
+          res.body.message.should.equal(
+            "Ce patient n'existe pas. Vous ne pouvez pas le modifier.",
+          );
           // The page does not display patient
           chai.assert.isUndefined(res.body.firstNames);
           chai.assert.isUndefined(res.body.lastName);
@@ -620,13 +778,17 @@ describe('patientsController', () => {
         email: 'valid@valid.org',
       };
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get('/api/patients/notavalid-uuid')
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(400);
-          res.body.message.should.equal('Ce patient n\'existe pas.');
+          res.body.message.should.equal("Ce patient n'existe pas.");
 
           return Promise.resolve();
         });
@@ -655,9 +817,13 @@ describe('patientsController', () => {
       const updatedFirstName = 'Adakkk';
       const updatedEmail = 'lovelace@beta.gouv.fr';
       const updatedInstitution = 'polytech';
-      return chai.request(app)
+      return chai
+        .request(app)
         .put(`/api/patients/${patient.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           lastName: updatedLastName,
@@ -673,8 +839,8 @@ describe('patientsController', () => {
         .then(async (res) => {
           res.status.should.equal(200);
           res.body.message.should.equal(
-            "L'étudiant Adakkk Lovelacekkk a bien été modifié. Vous pourrez renseigner les champs"
-            + ' manquants plus tard en cliquant le bouton "Modifier" du patient.',
+            "L'étudiant Adakkk Lovelacekkk a bien été modifié. Vous pourrez renseigner les champs" +
+              ' manquants plus tard en cliquant le bouton "Modifier" du patient.',
           );
 
           const patientsArray = await dbPatients.getAll(psy.dossierNumber);
@@ -701,9 +867,13 @@ describe('patientsController', () => {
         email: 'prenom.nom@beta.gouv.fr',
       };
       const patient = await makePatient(psy.dossierNumber);
-      return chai.request(app)
+      return chai
+        .request(app)
         .put(`/api/patients/${patient.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           lastName: patient.lastName,
@@ -746,9 +916,13 @@ describe('patientsController', () => {
       };
       const anotherPsyId = '495614e8-89af-4406-ba02-9fc038b991f9';
       const patient = await makePatient(anotherPsyId);
-      return chai.request(app)
+      return chai
+        .request(app)
         .put(`/api/patients/${patient.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           lastName: 'Lovelacekkk',
@@ -764,7 +938,7 @@ describe('patientsController', () => {
         })
         .then(async (res) => {
           res.status.should.equal(404);
-          res.body.message.should.equal('Ce patient n\'existe pas.');
+          res.body.message.should.equal("Ce patient n'existe pas.");
 
           // Patient was not updated
           const patientsArray = await dbPatients.getAll(anotherPsyId);
@@ -774,8 +948,12 @@ describe('patientsController', () => {
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames);
           expect(patientsArray[0].INE).to.equal(patient.INE);
           expect(patientsArray[0].email).to.equal(patient.email);
-          expect(patientsArray[0].institutionName).to.equal(patient.institutionName);
-          expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
+          expect(patientsArray[0].institutionName).to.equal(
+            patient.institutionName,
+          );
+          expect(patientsArray[0].isStudentStatusVerified).to.equal(
+            patient.isStudentStatusVerified,
+          );
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
             new Date('1980/01/20').getTime(),
           );
@@ -792,7 +970,8 @@ describe('patientsController', () => {
       };
       const patient = await makePatient(psy.dossierNumber);
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .put(`/api/patients/${patient.id}`)
         .send({
           lastName: 'Lovelacekkk',
@@ -816,8 +995,12 @@ describe('patientsController', () => {
           expect(patientsArray[0].firstNames).to.equal(patient.firstNames);
           expect(patientsArray[0].INE).to.equal(patient.INE);
           expect(patientsArray[0].email).to.equal(patient.email);
-          expect(patientsArray[0].institutionName).to.equal(patient.institutionName);
-          expect(patientsArray[0].isStudentStatusVerified).to.equal(patient.isStudentStatusVerified);
+          expect(patientsArray[0].institutionName).to.equal(
+            patient.institutionName,
+          );
+          expect(patientsArray[0].isStudentStatusVerified).to.equal(
+            patient.isStudentStatusVerified,
+          );
           expect(patientsArray[0].dateOfBirth.getTime()).to.equal(
             new Date('1980/01/20').getTime(),
           );
@@ -841,15 +1024,24 @@ describe('patientsController', () => {
       return Promise.resolve();
     });
 
-    const shouldFailUpdatePatientInputValidation = (done, patientId, postData, message) => {
+    const shouldFailUpdatePatientInputValidation = (
+      done,
+      patientId,
+      postData,
+      message,
+    ) => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       };
 
-      chai.request(app)
+      chai
+        .request(app)
         .put(`/api/patients/${patientId}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
@@ -867,7 +1059,7 @@ describe('patientsController', () => {
         done,
         patientId,
         {
-        // no firstNames
+          // no firstNames
           lastName: 'Nom',
           INE: '1234567890A',
           isINESvalid: false,
@@ -1003,7 +1195,7 @@ describe('patientsController', () => {
           dateOfBirth,
           gender,
         },
-        'Ce patient n\'existe pas.',
+        "Ce patient n'existe pas.",
       );
     });
 
@@ -1024,7 +1216,7 @@ describe('patientsController', () => {
           dateOfBirth: 'pizza time',
           gender,
         },
-        'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.',
+        "La date de naissance n'est pas valide, le format doit être JJ/MM/AAAA.",
       );
     });
 
@@ -1045,7 +1237,7 @@ describe('patientsController', () => {
           dateOfBirth: '',
           gender,
         },
-        'La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.',
+        "La date de naissance n'est pas valide, le format doit être JJ/MM/AAAA.",
       );
     });
 
@@ -1070,116 +1262,152 @@ describe('patientsController', () => {
       );
     });
 
-    const shouldPassUpdatePatientInputValidation = (done, patientId, postData) => {
+    const shouldPassUpdatePatientInputValidation = (
+      done,
+      patientId,
+      postData,
+    ) => {
       const psy = {
         dossierNumber: '9a42d12f-8328-4545-8da3-11250f876146',
         email: 'valid@valid.org',
       };
 
-      chai.request(app)
+      chai
+        .request(app)
         .put(`/api/patients/${patientId}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
           sinon.assert.called(updatePatientStub);
           res.status.should.equal(200);
           res.body.message.should.equal(
-            "L'étudiant Blou Blou Nom a bien été modifié. Vous pourrez renseigner les champs manquants plus tard"
-            + ' en cliquant le bouton "Modifier" du patient.',
+            "L'étudiant Blou Blou Nom a bien été modifié. Vous pourrez renseigner les champs manquants plus tard" +
+              ' en cliquant le bouton "Modifier" du patient.',
           );
           done();
         });
     };
 
     it('should pass validation when all fields are correct', (done) => {
-      shouldPassUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '1234567890A',
-        isINESvalid: false,
-        email: 'lovelace@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth,
-        gender,
-      });
+      shouldPassUpdatePatientInputValidation(
+        done,
+        '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '1234567890A',
+          isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth,
+          gender,
+        },
+      );
     });
 
     it('should not pass validation with INE length not 11 chars', (done) => {
       const patientId = '67687f5a-b9cf-4023-9258-fa72d8f1b4b3';
-      shouldFailUpdatePatientInputValidation(done, patientId, {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '1234567890AA',
-        isINESvalid: false,
-        email: 'lovelace@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-        dateOfBirth,
-        gender,
-      }, 'Le numéro INE est invalide. Veuillez vérifier le format.');
+      shouldFailUpdatePatientInputValidation(
+        done,
+        patientId,
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '1234567890AA',
+          isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+          dateOfBirth,
+          gender,
+        },
+        'Le numéro INE est invalide. Veuillez vérifier le format.',
+      );
     });
 
     it('should not pass validation when INE is missing', (done) => {
-      shouldFailUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        dateOfBirth,
-        gender,
-        INE: '',
-        isINESvalid: false,
-        email: 'lovelace@beta.gouv.fr',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-      }, 'Le numéro INE est obligatoire.');
+      shouldFailUpdatePatientInputValidation(
+        done,
+        '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          dateOfBirth,
+          gender,
+          INE: '',
+          isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+        },
+        'Le numéro INE est obligatoire.',
+      );
     });
 
     it('should not pass validation when email is missing', (done) => {
-      shouldFailUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        dateOfBirth,
-        gender,
-        INE: '12345678912',
-        isINESvalid: false,
-        email: '',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-      }, 'Vous devez spécifier un email valide.');
+      shouldFailUpdatePatientInputValidation(
+        done,
+        '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          dateOfBirth,
+          gender,
+          INE: '12345678912',
+          isINESvalid: false,
+          email: '',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+        },
+        'Vous devez spécifier un email valide.',
+      );
     });
 
     it('should not pass validation when email is invalid format', (done) => {
-      shouldFailUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        dateOfBirth,
-        gender,
-        INE: '12345678912',
-        isINESvalid: false,
-        email: 'bloublou@',
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-        doctorName,
-      }, 'Email invalide.');
+      shouldFailUpdatePatientInputValidation(
+        done,
+        '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          dateOfBirth,
+          gender,
+          INE: '12345678912',
+          isINESvalid: false,
+          email: 'bloublou@',
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+          doctorName,
+        },
+        'Email invalide.',
+      );
     });
 
     it('should pass validation if doctor name is missing', (done) => {
-      shouldPassUpdatePatientInputValidation(done, '67687f5a-b9cf-4023-9258-fa72d8f1b4b3', {
-        firstNames: 'Blou Blou',
-        lastName: 'Nom',
-        INE: '1234567890A',
-        isINESvalid: false,
-        email: 'lovelace@beta.gouv.fr',
-        dateOfBirth,
-        gender,
-        institutionName: '42',
-        isStudentStatusVerified: undefined,
-      });
+      shouldPassUpdatePatientInputValidation(
+        done,
+        '67687f5a-b9cf-4023-9258-fa72d8f1b4b3',
+        {
+          firstNames: 'Blou Blou',
+          lastName: 'Nom',
+          INE: '1234567890A',
+          isINESvalid: false,
+          email: 'lovelace@beta.gouv.fr',
+          dateOfBirth,
+          gender,
+          institutionName: '42',
+          isStudentStatusVerified: undefined,
+        },
+      );
     });
   });
 
@@ -1201,9 +1429,13 @@ describe('patientsController', () => {
       };
       const patient = await makePatient(psy.dossierNumber);
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .delete(`/api/patients/${patient.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(200);
@@ -1225,13 +1457,19 @@ describe('patientsController', () => {
       const anotherPsyId = 'ccb6f32b-8c55-4322-8ecc-556e6900b4ea';
       const patient = await makePatient(anotherPsyId);
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .delete(`/api/patients/${patient.id}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(404);
-          res.body.message.should.equal('Vous devez spécifier un étudiant à supprimer.');
+          res.body.message.should.equal(
+            'Vous devez spécifier un étudiant à supprimer.',
+          );
           // Patient is not deleted
           const patientsArray = await dbPatients.getAll(anotherPsyId);
           expect(patientsArray).to.have.length(1);
@@ -1247,13 +1485,19 @@ describe('patientsController', () => {
       };
       const patient = await makePatient(psy.dossierNumber);
 
-      return chai.request(app)
-      .delete(`/api/patients/${patient.id}4`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+      return chai
+        .request(app)
+        .delete(`/api/patients/${patient.id}4`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(400);
-          res.body.message.should.equal('Vous devez spécifier un étudiant à supprimer.');
+          res.body.message.should.equal(
+            'Vous devez spécifier un étudiant à supprimer.',
+          );
 
           // Patient is not deleted
           const patientsArray = await dbPatients.getAll(psy.dossierNumber);
@@ -1269,15 +1513,25 @@ describe('patientsController', () => {
         email: 'prenom.nom@beta.gouv.fr',
       };
       const patient = await makePatient(psy.dossierNumber);
-      await dbAppointments.insert(new Date('2022-01-01'), patient.id, psy.dossierNumber);
+      await dbAppointments.insert(
+        new Date('2022-01-01'),
+        patient.id,
+        psy.dossierNumber,
+      );
 
-      return chai.request(app)
-      .delete(`/api/patients/${patient.id}`)
-      .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
-      .set('xsrf-token', 'randomXSRFToken')
+      return chai
+        .request(app)
+        .delete(`/api/patients/${patient.id}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
+        .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(400);
-          res.body.message.should.equal('Vous ne pouvez pas supprimer un étudiant avec des séances.');
+          res.body.message.should.equal(
+            'Vous ne pouvez pas supprimer un étudiant avec des séances.',
+          );
 
           // Patient is not deleted
           const patientsArray = await dbPatients.getAll(psy.dossierNumber);
@@ -1294,8 +1548,9 @@ describe('patientsController', () => {
       };
       const patient = await makePatient(psy.dossierNumber);
 
-      return chai.request(app)
-      .delete(`/api/patients/${patient.id}`)
+      return chai
+        .request(app)
+        .delete(`/api/patients/${patient.id}`)
         .then(async (res) => {
           res.status.should.equal(401);
 
