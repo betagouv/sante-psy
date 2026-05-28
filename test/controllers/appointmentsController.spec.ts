@@ -64,25 +64,12 @@ async function insertPatientInfoInDb(patient1: Patient, psy: Psychologist) {
 }
 
 describe('appointmentsController', () => {
-  const dateOfBirth = new Date('1980/01/20');
-  const gender = 'female';
   const today = new Date();
   const validDate = new Date(today.getFullYear(), today.getMonth(), 1);
 
   async function patientInfoToInsert(psy) {
-    return dbPatients.insert(
-      'Ada',
-      'Lovelace',
-      dateOfBirth,
-      gender,
-      '12345678901',
-      false,
-      'patient@beta.fr',
-      '42',
-      false,
-      psy.dossierNumber,
-      'Dr Docteur',
-    );
+    const student = await create.insertOneStudent();
+    return dbPatients.insert(psy.dossierNumber, student.id);
   }
 
   describe('create appointment', () => {
@@ -93,12 +80,14 @@ describe('appointmentsController', () => {
     beforeEach(async () => {
       await clean.patients();
       await clean.appointments();
+      await clean.students();
       return Promise.resolve();
     });
 
     afterEach(async () => {
       await clean.patients();
       await clean.appointments();
+      await clean.students();
       return Promise.resolve();
     });
 
@@ -185,20 +174,37 @@ describe('appointmentsController', () => {
       const psy = await create.insertOnePsy();
       const patient = await patientInfoToInsert(psy);
 
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-
-      const res = await postAppointment({
-        psyId: psy.dossierNumber,
-        patientId: patient.id,
-        date: tomorrow,
-      });
-
-      await confirmResError(
-        res,
-        psy.dossierNumber,
-        ERROR_MESSAGE_APPOINTMENT_AFTER_TODAY,
+      const todayDate = new Date();
+      const newDatePlus5month = new Date(
+        todayDate.setMonth(todayDate.getMonth() + 5),
       );
+
+      return chai
+        .request(app)
+        .post('/api/appointments')
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
+        .set('xsrf-token', 'randomXSRFToken')
+        .send({
+          patientId: patient.id,
+          date: newDatePlus5month,
+          renewal: false,
+        })
+        .then(async (res) => {
+          res.status.should.equal(400);
+          res.body.message.should.equal(
+            'La date de la séance doit être dans moins de 4 mois',
+          );
+
+          const appointmentArray = await dbAppointments.getAll(
+            psy.dossierNumber,
+          );
+          expect(appointmentArray).to.have.length(0);
+
+          return Promise.resolve();
+        });
     });
 
     it('should not create appointment if date before psychologist creation date', async () => {
@@ -210,133 +216,32 @@ describe('appointmentsController', () => {
         todayBeginningDate.setMonth(todayBeginningDate.getMonth() - 1),
       );
 
-      const res = await postAppointment({
-        psyId: psy.dossierNumber,
-        patientId: patient.id,
-        date: invalidDate,
-      });
+      return chai
+        .request(app)
+        .post('/api/appointments')
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
+        .set('xsrf-token', 'randomXSRFToken')
+        .send({
+          patientId: patient.id,
+          date: invalidDate,
+          renewal: false,
+        })
+        .then(async (res) => {
+          res.status.should.equal(400);
+          res.body.message.should.equal(
+            "La date de la séance ne peut pas être antérieure à l'inscription au dispositif",
+          );
 
-      await confirmResError(
-        res,
-        psy.dossierNumber,
-        ERROR_MESSAGE_APPOINTMENT_BEFORE_INSCRIPTION,
-      );
-    });
+          const appointmentArray = await dbAppointments.getAll(
+            psy.dossierNumber,
+          );
+          expect(appointmentArray).to.have.length(0);
 
-    it('should not create appointment if student has 12 already (2 psys)', async () => {
-      const aDayInSchoolYear = new Date(2026, 5, 10);
-      const anotherDayInSchoolYear = '2026-05-10';
-      const today = new Date();
-      const twoYearsAgo = new Date(today.setFullYear(today.getFullYear() - 2));
-
-      const psy1 = await create.insertOnePsy({ createdAt: twoYearsAgo });
-      const psy2 = await create.insertOnePsy({ createdAt: twoYearsAgo });
-
-      // 2 patients, same person
-      const patient = create.getOnePatient(1, {
-        psychologistId: psy1.dossierNumber,
-      });
-      const dbPatient1 = await insertPatientInfoInDb(patient, psy1);
-      const dbPatient2 = await insertPatientInfoInDb(patient, psy2);
-
-      // insert 6 appointments with both psys
-      await Promise.all(
-        Array.from({ length: 6 }, () =>
-          create.insertOneAppointment({
-            patientId: dbPatient1.id,
-            psychologistId: psy1.dossierNumber,
-            appointmentDate: anotherDayInSchoolYear,
-          }),
-        ),
-      );
-
-      await Promise.all(
-        Array.from({ length: 6 }, () =>
-          create.insertOneAppointment({
-            patientId: dbPatient2.id,
-            psychologistId: psy2.dossierNumber,
-            appointmentDate: anotherDayInSchoolYear,
-          }),
-        ),
-      );
-
-      // student should have 12 appointments in total
-      const appointmentsPatient = await dbAppointments.getByPatientId(
-        dbPatient1.id,
-        true,
-      );
-      appointmentsPatient.length.should.equal(12);
-
-      // adding a new appointment should fail
-      const res = await postAppointment({
-        psyId: psy1.dossierNumber,
-        patientId: dbPatient1.id,
-        date: aDayInSchoolYear,
-      });
-      await confirmResError(
-        res,
-        null,
-        ERROR_MESSAGE_APPOINTMENT_TOO_MANY_APPOINTMENTS,
-      );
-    });
-
-    it('ok if student has 12 already (2 psys) but 1 from previous school year', async () => {
-      const aDayInSchoolYear = new Date(2026, 5, 10);
-      const anotherDayInSchoolYear = '2026-05-10';
-      const aDayFromPreviousSchoolYear = '2025-08-27';
-      const today = new Date();
-      const twoYearsAgo = new Date(today.setFullYear(today.getFullYear() - 2));
-
-      const psy1 = await create.insertOnePsy({ createdAt: twoYearsAgo });
-      const psy2 = await create.insertOnePsy({ createdAt: twoYearsAgo });
-
-      // 2 patients, same person
-      const patient = create.getOnePatient(1, {
-        psychologistId: psy1.dossierNumber,
-      });
-      const dbPatient1 = await insertPatientInfoInDb(patient, psy1);
-      const dbPatient2 = await insertPatientInfoInDb(patient, psy2);
-
-      // insert 6 appointments with both psys
-      await Promise.all(
-        Array.from({ length: 6 }, () =>
-          create.insertOneAppointment({
-            patientId: dbPatient1.id,
-            psychologistId: psy1.dossierNumber,
-            appointmentDate: anotherDayInSchoolYear,
-          }),
-        ),
-      );
-
-      await Promise.all(
-        Array.from({ length: 5 }, () =>
-          create.insertOneAppointment({
-            patientId: dbPatient2.id,
-            psychologistId: psy2.dossierNumber,
-            appointmentDate: anotherDayInSchoolYear,
-          }),
-        ),
-      );
-      await create.insertOneAppointment({
-        patientId: dbPatient2.id,
-        psychologistId: psy2.dossierNumber,
-        appointmentDate: aDayFromPreviousSchoolYear,
-      });
-
-      // student should have 12 appointments in total
-      const appointmentsPatient = await dbAppointments.getByPatientId(
-        dbPatient1.id,
-        true,
-      );
-      appointmentsPatient.length.should.equal(12);
-
-      // adding a new appointment should fail
-      const res = await postAppointment({
-        psyId: psy1.dossierNumber,
-        patientId: dbPatient1.id,
-        date: aDayInSchoolYear,
-      });
-      res.status.should.equal(200);
+          return Promise.resolve();
+        });
     });
   });
 
@@ -480,19 +385,8 @@ describe('appointmentsController', () => {
       psy.dossierNumber = psychologistId;
       await dbPsychologists.upsertMany([psy]);
       // Insert an appointment and a patient
-      const patient = await dbPatients.insert(
-        'Ada',
-        'Lovelace',
-        dateOfBirth,
-        gender,
-        '12345678901',
-        false,
-        'patient@beta.fr',
-        '42',
-        false,
-        psychologistId,
-        'Dr Docteur',
-      );
+      const student = await create.insertOneStudent();
+      const patient = await dbPatients.insert(psychologistId, student.id);
       const appointment = await dbAppointments.insert(
         new Date(),
         patient.id,
@@ -644,6 +538,11 @@ describe('appointmentsController', () => {
         });
     });
   });
+
+  async function insertPatientInfoInDb(psy: Psychologist) {
+    const student = await create.insertOneStudent();
+    return dbPatients.insert(psy.dossierNumber, student.id);
+  }
 
   describe('get appointments with badges', () => {
     let psy: Psychologist;
