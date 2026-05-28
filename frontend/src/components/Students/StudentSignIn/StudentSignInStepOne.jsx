@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import agent from 'services/agent';
-import validateEmailFormat from 'src/utils/validateEmailFormat';
 import styles from './studentSignIn.cssmodule.scss';
 import StudentSignInHeader from './StudentSignInHeader';
+import { validateEmailField } from 'src/utils/validateEmailFormat';
 
 const StudentSignInStepOne = () => {
   const [email, setEmail] = useState('');
@@ -12,28 +12,10 @@ const StudentSignInStepOne = () => {
 
   useEffect(() => setCanSendEmail(!!email), [email]);
 
-  const validateEmail = (value) => {
-    const isValidEmail = validateEmailFormat(value);
-    if (!isValidEmail) {
-      setEmailError("Format incorrect de l'email.");
-      return false;
-    }
-    if (value.toLowerCase().includes('santepsyetudiant')) {
-      setEmailError(
-        "Cette adresse email n'est pas autorisée à créer un compte étudiant.",
-      );
-      return false;
-    }
-    setEmailError('');
-    return true;
-  };
-
-  useEffect(() => setCanSendEmail(true), [email]);
-
   const sendStudentSecondStepMail = async (e) => {
     setCanSendEmail(false);
     e.preventDefault();
-    const isValid = validateEmail(email);
+    const isValid = validateEmailField(email, setEmailError);
     if (!isValid) return;
 
     try {
@@ -93,7 +75,7 @@ const StudentSignInStepOne = () => {
               placeholder="Ton email"
               value={email}
               onChange={(e) => setEmail(e.target.value.toLowerCase())}
-              onBlur={() => validateEmail(email)}
+              onBlur={() => validateEmailField(email, setEmailError)}
               required
             />
             {emailError && <p className="fr-error-text">{emailError}</p>}
