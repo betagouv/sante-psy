@@ -542,7 +542,8 @@ describe('appointmentsController', () => {
 
   async function insertPatientInfoInDb(psy: Psychologist) {
     const student = await create.insertOneStudent();
-    return dbPatients.insert(psy.dossierNumber, student.id);
+    const patient = await dbPatients.insert(psy.dossierNumber, student.id);
+    return dbPatients.getById(patient.id, psy.dossierNumber);
   }
 
   describe('get appointments with badges', () => {
@@ -553,12 +554,14 @@ describe('appointmentsController', () => {
     beforeEach(async () => {
       await clean.patients();
       await clean.appointments();
+      await clean.students();
       return Promise.resolve();
     });
 
     afterEach(async () => {
       await clean.patients();
       await clean.appointments();
+      await clean.students();
       return Promise.resolve();
     });
 
@@ -855,7 +858,6 @@ describe('appointmentsController', () => {
         anotherPsy.dossierNumber,
         dbPatient1.student.id,
       );
-      await insertPatientInfoInDb(anotherPsy);
 
       await dbAppointments.insert(
         new Date('2023-09-03'),
