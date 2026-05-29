@@ -43,15 +43,16 @@ const getById = async (
   }
 };
 
-const getByStudentId = async (
+const isAlreadyAPatient = async (
   studentId: string,
   psychologistId: string,
-): Promise<Patient> => {
+): Promise<boolean> => {
   const patient = await db(patientsTable)
     .where('student_id', studentId)
     .where('psychologistId', psychologistId)
+    .where('deleted', false)
     .first();
-  return patient;
+  return !!patient;
 };
 
 const getAll = async (
@@ -157,5 +158,5 @@ export default {
   insert,
   delete: deleteOne,
   getByStudentEmailAndIne,
-  getByStudentId,
+  isAlreadyAPatient,
 };
