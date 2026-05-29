@@ -44,6 +44,11 @@ export const checkDateOfBirth = check('dateOfBirth')
       throw new Error("La date de naissance n'est pas valide.");
     }
     return true;
+  })
+  .customSanitizer((value) => {
+    // Convertit JJ/MM/AAAA → YYYY-MM-DD pour la DB
+    const [day, month, year] = value.split('/');
+    return `${year}-${month}-${day}`;
   });
 
 export const checkIne = check('ine')

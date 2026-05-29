@@ -15,6 +15,12 @@ import { Coordinates } from '../types/Coordinates';
 import { checkDateOfBirth, checkIne } from './validators/common';
 import sendSecondStepMail from '../services/sendSecondStepMail';
 
+export const FIND_STUDENT_MESSAGE_STUDENT_EXISTS = 'Le compte étudiant existe';
+export const FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST =
+  "Le compte étudiant n'existe pas";
+export const FIND_STUDENT_MESSAGE_ALREADY_PATIENT =
+  'Cet étudiant est déja un patient pour ce psychologue';
+
 const getValidators = [
   param('psyId')
     .isUUID()
@@ -276,17 +282,20 @@ const findStudent = async (req: Request, res: Response): Promise<void> => {
     res.json({
       studentExists: false,
       alreadyPatient: false,
-      message: "Le compte étudiant n'existe pas",
+      message: FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST,
     });
     return;
   }
 
-  const patient = await dbPatients.getByStudentId(student.id, psychologistId);
-  if (patient) {
+  const alreadyPatient = await dbPatients.isAlreadyAPatient(
+    student.id,
+    psychologistId,
+  );
+  if (alreadyPatient) {
     res.json({
       studentExists: true,
       alreadyPatient: true,
-      message: 'Cet étudiant est déja un patient pour ce psychologue',
+      message: FIND_STUDENT_MESSAGE_ALREADY_PATIENT,
     });
     return;
   }
@@ -294,7 +303,7 @@ const findStudent = async (req: Request, res: Response): Promise<void> => {
   res.json({
     studentExists: true,
     alreadyPatient: false,
-    message: 'Le compte étudiant existe',
+    message: FIND_STUDENT_MESSAGE_STUDENT_EXISTS,
     student,
   });
 };
