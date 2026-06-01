@@ -12,7 +12,12 @@ import {
 import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
-import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
+import {
+  formatFrenchDate,
+  formatMonth,
+  getFirstDayOfLastMonth,
+  utcDate,
+} from 'services/date';
 import Badges from 'components/Badges/Badges';
 import { useStore } from 'stores/';
 import getBadgeInfos from 'src/utils/badges';
@@ -32,6 +37,8 @@ const Appointments = () => {
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1,
   });
+
+  const cantDeleteBefore = getFirstDayOfLastMonth();
 
   const navigate = useNavigate();
   const badges = getBadgeInfos();
@@ -187,29 +194,36 @@ const Appointments = () => {
     {
       name: 'actions',
       label: '',
-      render: (appointment) => (
-        <>
-          <Button
-            data-test-id="delete-appointment-button-small"
-            onClick={() => deleteAppointment(appointment.id)}
-            secondary
-            size="sm"
-            icon="ri-delete-bin-line"
-            className="fr-unhidden fr-hidden-sm fr-float-right"
-            aria-label="Supprimer"
-          />
-          <Button
-            data-test-id="delete-appointment-button-large"
-            secondary
-            size="sm"
-            onClick={() => deleteAppointment(appointment.id)}
-            icon="ri-delete-bin-line"
-            className="fr-hidden fr-unhidden-sm fr-float-right"
-          >
-            Supprimer
-          </Button>
-        </>
-      ),
+      render: (appointment) => {
+        const canDelete =
+          Date.parse(appointment.appointmentDate) >= cantDeleteBefore;
+        if (!canDelete) {
+          return null;
+        }
+        return (
+          <>
+            <Button
+              data-test-id="delete-appointment-button-small"
+              onClick={() => deleteAppointment(appointment.id)}
+              secondary
+              size="sm"
+              icon="ri-delete-bin-line"
+              className="fr-unhidden fr-hidden-sm fr-float-right"
+              aria-label="Supprimer"
+            />
+            <Button
+              data-test-id="delete-appointment-button-large"
+              secondary
+              size="sm"
+              onClick={() => deleteAppointment(appointment.id)}
+              icon="ri-delete-bin-line"
+              className="fr-hidden fr-unhidden-sm fr-float-right"
+            >
+              Supprimer
+            </Button>
+          </>
+        );
+      },
     },
   ];
 
