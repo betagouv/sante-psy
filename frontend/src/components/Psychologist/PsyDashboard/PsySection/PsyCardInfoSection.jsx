@@ -33,14 +33,8 @@ const PsyCardInfo = ({ psychologist, user }) => {
         </b>
       </div>
       <div className={styles.psyDashboardCardSecondColumn}>
-        <p>
-          {psychologist.address}
-        </p>
-        <p>
-          ADELI :
-          {' '}
-          {psychologist.adeli}
-        </p>
+        <p>{psychologist.address}</p>
+        <p>ADELI/RPPS : {psychologist.adeli}</p>
         <span className={styles.emailPhoneContainer}>
           <p>{psychologist.email}</p>
           {' '}
