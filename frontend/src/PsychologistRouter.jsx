@@ -109,7 +109,6 @@ const PsychologistRouter = () => {
               Nouvel <b>étudiant</b>
             </>
           ),
-          tutorial: 'new-student',
         };
       case 'etudiant':
         return {
@@ -118,7 +117,6 @@ const PsychologistRouter = () => {
               Mon <b>étudiant</b>
             </>
           ),
-          tutorial: 'new-student',
         };
       case 'envoi-certificat':
         return {
