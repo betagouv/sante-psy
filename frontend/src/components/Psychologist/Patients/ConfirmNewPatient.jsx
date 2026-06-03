@@ -19,7 +19,7 @@ const getStudentData = (student) => [
   },
   {
     key: 'firstname',
-    title: 'Nom',
+    title: 'Prénom',
     value: student.firstNames,
   },
   {
