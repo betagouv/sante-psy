@@ -152,6 +152,23 @@ const getByStudentEmailAndIne = async (
   }
 };
 
+const getByStudent = async (student: Student): Promise<Patient[]> => {
+  try {
+    return await db(patientsTable)
+      .where('deleted', false)
+      .andWhere((outer) => {
+        outer.where('student_id', student.id).orWhere((inner) => {
+          inner
+            .where('INE', student.ine)
+            .andWhere('dateOfBirth', student.dateOfBirth);
+        });
+      });
+  } catch (err) {
+    console.error('Erreur récupération patients étudiant', err);
+    throw new Error('Erreur récupération patients étudiant');
+  }
+};
+
 export default {
   getById,
   getAll,
@@ -159,4 +176,5 @@ export default {
   delete: deleteOne,
   getByStudentEmailAndIne,
   isAlreadyAPatient,
+  getByStudent,
 };

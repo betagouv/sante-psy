@@ -14,8 +14,7 @@ interface StudentAppointment {
 const getStudentAppointments = async (
   student: Student,
 ): Promise<Record<string, StudentAppointment[]>> => {
-  const { email, ine } = student;
-  const matchedPatients = await patients.getByStudentEmailAndIne(email, ine);
+  const matchedPatients = await patients.getByStudent(student);
 
   if (matchedPatients.length === 0) {
     return {};
