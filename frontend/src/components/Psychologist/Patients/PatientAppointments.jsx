@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { currentUnivYear } from 'services/univYears';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './patientAppointments.cssmodule.scss';
+import { getFirstDayOfLastMonth } from 'services/date';
 
 const PatientAppointments = ({ showCreateButton = true, patientId }) => {
   const { commonStore: { setNotification } } = useStore();
@@ -95,6 +96,8 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
     const isInactiveRow = isInactive && appointment.badges.includes(badges.exceeded.key);
     const rowClass = isInactiveRow ? styles.grayedRow : '';
 
+    const cantDeleteBefore = new Date(appointment.appointmentDate) < getFirstDayOfLastMonth();
+
     return (
       <tr key={appointment.id} className={rowClass}>
         <td>{appointment.index}</td>
@@ -133,7 +136,10 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
             icon="ri-delete-bin-line"
             className="fr-float-right"
             aria-label="Supprimer"
-            disabled={appointment.badges && appointment.badges.includes(badges.other_psychologist.key)}
+            disabled={
+              cantDeleteBefore ||
+              (appointment.badges && appointment.badges.includes(badges.other_psychologist.key))
+            }
           />
         </td>
       </tr>
