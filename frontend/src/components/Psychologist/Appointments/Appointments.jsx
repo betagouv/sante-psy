@@ -192,29 +192,6 @@ const Appointments = () => {
     {
       name: 'actions',
       label: '',
-      render: (appointment) => (
-        <>
-          <Button
-            data-test-id="delete-appointment-button-small"
-            onClick={() => deleteAppointment(appointment.id)}
-            secondary
-            size="sm"
-            icon="ri-delete-bin-line"
-            className="fr-unhidden fr-hidden-sm fr-float-right"
-            aria-label="Supprimer"
-          />
-          <Button
-            data-test-id="delete-appointment-button-large"
-            secondary
-            size="sm"
-            onClick={() => deleteAppointment(appointment.id)}
-            icon="ri-delete-bin-line"
-            className="fr-hidden fr-unhidden-sm fr-float-right"
-          >
-            Supprimer
-          </Button>
-        </>
-      ),
       render: (appointment) => {
         const canDelete =
           Date.parse(appointment.appointmentDate) >= cantDeleteBefore;
