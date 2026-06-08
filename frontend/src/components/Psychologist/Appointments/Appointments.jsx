@@ -23,6 +23,7 @@ import { useStore } from 'stores/';
 import getBadgeInfos from 'src/utils/badges';
 import { useNavigate } from 'react-router-dom';
 import styles from './appointments.cssmodule.scss';
+import { Tooltip } from 'components/Tooltip/Tooltip';
 
 const Appointments = () => {
   const {
@@ -175,20 +176,19 @@ const Appointments = () => {
         </div>
       ),
       render: ({ patientId, firstNames, lastName }) => (
-        <div
+        <Tooltip
+          tooltip="Séances de l'étudiant"
           data-test-id="etudiant-name"
-          className={styles.hoverElement}
           onClick={() =>
             navigate(
               `/psychologue/modifier-etudiant/${patientId}/#anchor-student-list`,
             )
           }
         >
-          <span className={styles.tooltip}>Séances de l&apos;étudiant</span>
           <div>
             {firstNames} {lastName}
           </div>
-        </div>
+        </Tooltip>
       ),
     },
     {
@@ -197,7 +197,8 @@ const Appointments = () => {
       render: (appointment) => {
         const canDelete =
           Date.parse(appointment.appointmentDate) >= cantDeleteBefore;
-        return (
+
+        const buttons = (
           <>
             <Button
               data-test-id="delete-appointment-button-small"
@@ -222,6 +223,17 @@ const Appointments = () => {
             </Button>
           </>
         );
+        if (!canDelete) {
+          return (
+            <Tooltip
+              tooltip="Vous ne pouvez supprimer une séance que sur le mois en cours ou le mois précédent.
+          Pour toute annulation antérieure, veuillez contacter le support."
+            >
+              {buttons}
+            </Tooltip>
+          );
+        }
+        return buttons;
       },
     },
   ];
