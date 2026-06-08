@@ -115,7 +115,7 @@ const addAutoSlashToDate = value => {
   return formattedValue;
 };
 
-const isValidBirthDate = (value, minAge = 15) => {
+const isValidBirthDate = (value, minAge = 15, maxAge = 100) => {
   if (!value) return false;
 
   const regex = /^([0-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4}$/;
@@ -132,8 +132,13 @@ const isValidBirthDate = (value, minAge = 15) => {
     today.getMonth(),
     today.getDate(),
   );
+  const maxDate = new Date(
+    today.getFullYear() - maxAge,
+    today.getMonth(),
+    today.getDate(),
+  );
 
-  return birthDate <= minDate;
+  return birthDate <= minDate && birthDate >= maxDate;
 };
 
 const getFirstDayOfLastMonth = () => {

@@ -3,6 +3,7 @@ import express from 'express';
 import psyProfileController from '../controllers/psyProfileController';
 import conventionController from '../controllers/conventionController';
 import access from '../utils/access';
+import { emailValidator } from '../controllers/validators/studentValidators';
 
 const router = express.Router();
 
@@ -19,6 +20,18 @@ router.post(
   '/suspend',
   psyProfileController.suspendValidators,
   psyProfileController.suspend,
+);
+
+router.post(
+  '/student-find',
+  psyProfileController.findStudentValidators,
+  psyProfileController.findStudent,
+);
+
+router.post(
+  '/invite-student',
+  emailValidator,
+  psyProfileController.inviteStudent,
 );
 
 router.put('/seeTutorial', psyProfileController.seeTutorial);

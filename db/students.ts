@@ -2,6 +2,7 @@ import db from './db';
 import { Student } from '../types/Student';
 import { studentsTable } from './tables';
 import date from '../utils/date';
+import { Patient } from '../types/Patient';
 
 type DuplicateCheckResult =
   | { status: 'alreadyRegistered' }
@@ -140,10 +141,42 @@ const getByEmailAndIne = async (
   }
 };
 
+const getByIneAndBirthDate = async (
+  ine: string,
+  birthDate: string | Date,
+): Promise<Student | null> => {
+  try {
+    const result = await db(studentsTable)
+      .where('dateOfBirth', birthDate)
+      .andWhere('ine', ine)
+      .first();
+    return result;
+  } catch (err) {
+    console.error('Error while getting the student by birthDate and ine', err);
+    return null;
+  }
+};
+
+const getFromPatient = async (
+  patient: Patient,
+): Promise<Student | undefined> => {
+  try {
+    if (patient.student_id) {
+      return await db(studentsTable).where('id', patient.student_id).first();
+    }
+    return await getByIneAndBirthDate(patient.INE, patient.dateOfBirth);
+  } catch (err) {
+    console.error('Error while getting a student from a patient', err);
+    return undefined;
+  }
+};
+
 export default {
   checkDuplicates,
   create,
   getById,
   getByEmail,
   getByEmailAndIne,
+  getByIneAndBirthDate,
+  getFromPatient,
 };
