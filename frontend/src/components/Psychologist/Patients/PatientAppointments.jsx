@@ -10,9 +10,12 @@ import { currentUnivYear } from 'services/univYears';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './patientAppointments.cssmodule.scss';
 import { getFirstDayOfLastMonth } from 'services/date';
+import { Tooltip } from 'components/Tooltip/Tooltip';
 
 const PatientAppointments = ({ showCreateButton = true, patientId }) => {
-  const { commonStore: { setNotification } } = useStore();
+  const {
+    commonStore: { setNotification },
+  } = useStore();
 
   const [patientAppointments, setPatientAppointments] = useState({});
   const [dataWithIndex, setDataWithIndex] = useState([]);
@@ -27,16 +30,15 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
 
   useEffect(() => {
     if (patientId) {
-      agent.Appointment.getByPatientId(patientId)
-        .then(response => {
-          const years = Object.keys(response).reverse();
-          setPatientAppointments(response);
-          setUnivYears(years);
+      agent.Appointment.getByPatientId(patientId).then((response) => {
+        const years = Object.keys(response).reverse();
+        setPatientAppointments(response);
+        setUnivYears(years);
 
-          if (!years.includes(currentYear)) {
-            setSelectedYear(years[0]);
-          }
-        });
+        if (!years.includes(currentYear)) {
+          setSelectedYear(years[0]);
+        }
+      });
     }
   }, [patientId]);
 
@@ -46,8 +48,12 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
       const reversedArray = originalArray.slice().reverse();
 
       let lastIndex = 0;
-      const indexedArray = reversedArray.map(item => {
-        const currentIndex = item.badges.includes(badges.inactive.key) && item.badges.includes(badges.exceeded.key) ? '-' : ++lastIndex;
+      const indexedArray = reversedArray.map((item) => {
+        const currentIndex =
+          item.badges.includes(badges.inactive.key) &&
+          item.badges.includes(badges.exceeded.key)
+            ? '-'
+            : ++lastIndex;
         return { ...item, index: currentIndex };
       });
 
@@ -60,30 +66,38 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
     }
   }, [patientAppointments, selectedYear]);
 
-  const handleTabChange = index => {
+  const handleTabChange = (index) => {
     setSelectedYear(univYears[index]);
   };
 
-  const deleteAppointment = appointmentId => {
+  const deleteAppointment = (appointmentId) => {
     setNotification({});
-    agent.Appointment.delete(appointmentId).then(response => {
+    agent.Appointment.delete(appointmentId).then((response) => {
       setNotification(response);
-      setPatientAppointments({ ...patientAppointments, [selectedYear]: patientAppointments[selectedYear].filter(appointment => appointment.id !== appointmentId) });
+      setPatientAppointments({
+        ...patientAppointments,
+        [selectedYear]: patientAppointments[selectedYear].filter(
+          (appointment) => appointment.id !== appointmentId,
+        ),
+      });
     });
   };
 
-  const renderDeclareSessionButton = () => showCreateButton && (
-  <Button
-    className={isSmallScreen ? styles.smallCreateButton : styles.createButton}
-    icon="ri-add-line"
-    size="sm"
-    onClick={() => navigate(`/psychologue/nouvelle-seance/${patientId}`)}
+  const renderDeclareSessionButton = () =>
+    showCreateButton && (
+      <Button
+        className={
+          isSmallScreen ? styles.smallCreateButton : styles.createButton
+        }
+        icon="ri-add-line"
+        size="sm"
+        onClick={() => navigate(`/psychologue/nouvelle-seance/${patientId}`)}
       >
-    Déclarer une séance
-  </Button>
-  );
+        Déclarer une séance
+      </Button>
+    );
 
-  const handleIconClick = id => {
+  const handleIconClick = (id) => {
     if (showTooltip === id) {
       setShowTooltip(null);
     } else {
@@ -91,20 +105,41 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
     }
   };
 
-  const renderRow = appointment => {
-    const isInactive = appointment.badges && appointment.badges.includes(badges.inactive.key);
-    const isInactiveRow = isInactive && appointment.badges.includes(badges.exceeded.key);
+  const renderRow = (appointment) => {
+    const isInactive =
+      appointment.badges && appointment.badges.includes(badges.inactive.key);
+    const isInactiveRow =
+      isInactive && appointment.badges.includes(badges.exceeded.key);
     const rowClass = isInactiveRow ? styles.grayedRow : '';
 
-    const cantDeleteBefore = new Date(appointment.appointmentDate) < getFirstDayOfLastMonth();
+    const cantDeleteBefore =
+      new Date(appointment.appointmentDate) < getFirstDayOfLastMonth();
+
+    const deleteButton = (
+      <Button
+        data-test-id="delete-appointment-button-small"
+        onClick={() => deleteAppointment(appointment.id)}
+        secondary
+        size="sm"
+        icon="ri-delete-bin-line"
+        className="fr-float-right"
+        aria-label="Supprimer"
+        disabled={
+          cantDeleteBefore ||
+          (appointment.badges &&
+            appointment.badges.includes(badges.other_psychologist.key))
+        }
+      />
+    );
 
     return (
       <tr key={appointment.id} className={rowClass}>
         <td>{appointment.index}</td>
         <td className={styles.date}>
-          <div>{new Date(appointment.appointmentDate).toLocaleDateString()}</div>
-          {appointment.badges.includes(badges.switch_rule_notice.key)
-            && (
+          <div>
+            {new Date(appointment.appointmentDate).toLocaleDateString()}
+          </div>
+          {appointment.badges.includes(badges.switch_rule_notice.key) && (
             <div
               className={styles.clickableElement}
               onClick={() => handleIconClick(appointment.id)}
@@ -114,40 +149,41 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
                 size="lg"
                 color="#000091"
                 iconPosition="right"
-
               />
               {showTooltip === appointment.id && (
-              <span className={styles.tooltip}>
-                {badges.switch_rule_notice.tooltip}
-              </span>
+                <span className={styles.tooltip}>
+                  {badges.switch_rule_notice.tooltip}
+                </span>
               )}
             </div>
-            )}
+          )}
         </td>
         <td data-column="badges">
-          <Badges isInactive={isInactive} badges={appointment.badges} univYear={selectedYear} />
-        </td>
-        <td>
-          <Button
-            data-test-id="delete-appointment-button-small"
-            onClick={() => deleteAppointment(appointment.id)}
-            secondary
-            size="sm"
-            icon="ri-delete-bin-line"
-            className="fr-float-right"
-            aria-label="Supprimer"
-            disabled={
-              cantDeleteBefore ||
-              (appointment.badges && appointment.badges.includes(badges.other_psychologist.key))
-            }
+          <Badges
+            isInactive={isInactive}
+            badges={appointment.badges}
+            univYear={selectedYear}
           />
+        </td>
+        <td style={{ width: '200px' }}>
+          <Tooltip
+            tooltip={
+              cantDeleteBefore
+                ? 'Vous ne pouvez supprimer une séance que sur le mois en cours ou le mois précédent. Pour toute annulation antérieure, veuillez contacter le support.'
+                : ''
+            }
+          >
+            {deleteButton}
+          </Tooltip>
         </td>
       </tr>
     );
   };
 
   const renderTable = () => (
-    <div className={`${'fr-table fr-table--bordered'} ${styles.tableAppointments}`}>
+    <div
+      className={`${'fr-table fr-table--bordered'} ${styles.tableAppointments}`}
+    >
       <table>
         <thead>
           <tr>
@@ -165,7 +201,7 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
           </tr>
         </thead>
         <tbody>
-          {dataWithIndex.map(appointment => renderRow(appointment))}
+          {dataWithIndex.map((appointment) => renderRow(appointment))}
         </tbody>
       </table>
     </div>
@@ -182,7 +218,7 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
               defaultActiveTab={univYears.indexOf(selectedYear)}
               onChange={handleTabChange}
               className={styles.tabs}
-        >
+            >
               {univYears.map((univYear, index) => (
                 <Tab
                   key={univYear}
@@ -200,7 +236,9 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
         </>
       ) : (
         <div className={styles.noAppointmentsWrapper}>
-          <h3 className={styles.noAppointmentsTitle}>Pas de séances déclarées</h3>
+          <h3 className={styles.noAppointmentsTitle}>
+            Pas de séances déclarées
+          </h3>
           {renderDeclareSessionButton()}
         </div>
       )}
