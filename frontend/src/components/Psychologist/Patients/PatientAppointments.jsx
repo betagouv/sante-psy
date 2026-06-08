@@ -158,7 +158,7 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
             </div>
           )}
         </td>
-        <td data-column="badges">
+        <td data-column="badges" style={{ minWidth: '250px' }}>
           <Badges
             isInactive={isInactive}
             badges={appointment.badges}
