@@ -197,9 +197,6 @@ const Appointments = () => {
       render: (appointment) => {
         const canDelete =
           Date.parse(appointment.appointmentDate) >= cantDeleteBefore;
-        if (!canDelete) {
-          return null;
-        }
         return (
           <>
             <Button
@@ -210,6 +207,7 @@ const Appointments = () => {
               icon="ri-delete-bin-line"
               className="fr-unhidden fr-hidden-sm fr-float-right"
               aria-label="Supprimer"
+              disabled={!canDelete}
             />
             <Button
               data-test-id="delete-appointment-button-large"
@@ -218,6 +216,7 @@ const Appointments = () => {
               onClick={() => deleteAppointment(appointment.id)}
               icon="ri-delete-bin-line"
               className="fr-hidden fr-unhidden-sm fr-float-right"
+              disabled={!canDelete}
             >
               Supprimer
             </Button>
