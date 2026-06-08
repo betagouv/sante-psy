@@ -1,28 +1,25 @@
-@use 'src/tooltip.scss' as *;
-
-.answerWithTooltip  {
-    display: flex;
-    height: fit-content;
+.answerWithTooltip {
+  display: flex;
+  height: fit-content;
 }
 
 .eligibilityForm {
-    margin: 16px;
+  margin: 16px;
 }
 
 .purpleBackgroundText {
-    background-color: var(--light-purple);
-    border-radius: 16px;
-    padding: 16px;
+  background-color: var(--light-purple);
+  border-radius: 16px;
+  padding: 16px;
 }
 
 .optionWrapper {
-    @include tooltip;
-    margin-left: 16px;
-    margin-bottom: 16px;
-    display: flex;
-    height: 32px;
+  margin-left: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  height: 32px;
 }
 
 .iconInfo {
-    margin-left: 8px;
+  margin-left: 8px;
 }

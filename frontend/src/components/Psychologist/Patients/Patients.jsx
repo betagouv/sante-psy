@@ -2,7 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Table, Callout, CalloutText, Icon, Button, Select, TextInput } from '@dataesr/react-dsfr';
+import {
+  Table,
+  Callout,
+  CalloutText,
+  Icon,
+  Button,
+  Select,
+  TextInput,
+} from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { currentUnivYear } from 'services/univYears';
@@ -10,9 +18,12 @@ import { useStore } from 'stores/';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './patients.cssmodule.scss';
 import Badges from '../../Badges/Badges';
+import { Tooltip } from 'components/Tooltip/Tooltip';
 
 const Patients = () => {
-  const { commonStore: { setNotification } } = useStore();
+  const {
+    commonStore: { setNotification },
+  } = useStore();
   const [patients, setPatients] = useState([]);
   const [filterBadgeValue, setFilterBadgeValue] = useState('');
   const [filteredPatients, setfilteredPatients] = useState([]);
@@ -37,19 +48,20 @@ const Patients = () => {
 
   const renderFilterOptions = () => {
     const uniqueBadges = patients
-      .flatMap(patient => patient.badges)
+      .flatMap((patient) => patient.badges)
       .filter((value, index, array) => array.indexOf(value) === index);
 
-    const uniqueBadgesOptions = uniqueBadges.map(badge => (
-      { label: badgeInfo[badge].text, value: badge }
-    ));
+    const uniqueBadgesOptions = uniqueBadges.map((badge) => ({
+      label: badgeInfo[badge].text,
+      value: badge,
+    }));
     uniqueBadgesOptions.splice(0, 0, { label: 'Tous', value: 'all' });
 
     return uniqueBadgesOptions;
   };
 
   useEffect(() => {
-    agent.Patient.get().then(response => {
+    agent.Patient.get().then((response) => {
       setPatients(response);
     });
 
@@ -78,10 +90,14 @@ const Patients = () => {
     e.stopPropagation();
     switch (e.target.value) {
       case 'student_file':
-        navigate(`/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`);
+        navigate(
+          `/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`,
+        );
         break;
       case 'appointment_list':
-        navigate(`/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`);
+        navigate(
+          `/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`,
+        );
         break;
       case 'appointment_create':
         navigate(`/psychologue/nouvelle-seance/${patientId}`);
@@ -94,35 +110,42 @@ const Patients = () => {
     }
   };
 
-  const deletePatient = patientId => {
+  const deletePatient = (patientId) => {
     setNotification({});
-    agent.Patient.delete(patientId).then(response => {
-      const newFilteredPatients = patients.filter(patient => patient.id !== patientId);
+    agent.Patient.delete(patientId).then((response) => {
+      const newFilteredPatients = patients.filter(
+        (patient) => patient.id !== patientId,
+      );
       setPatients(newFilteredPatients);
       setNotification(response);
     });
   };
 
-  const handleFilterChange = badgeType => {
+  const handleFilterChange = (badgeType) => {
     if (badgeType.target.value === 'all') {
       setFilterBadgeValue('');
       setfilteredPatients(patients);
       return;
     }
     setFilterBadgeValue(badgeType.target.value);
-    const newFilteredPatients = patients.filter(patient => patient.badges.includes(badgeType.target.value));
+    const newFilteredPatients = patients.filter((patient) =>
+      patient.badges.includes(badgeType.target.value),
+    );
     setfilteredPatients(newFilteredPatients);
   };
 
-  const handleSearch = e => {
+  const handleSearch = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setFilterBadgeValue('');
-    const newFilteredPatients = patients.filter(patient => patient.lastName.toLowerCase().includes(e.target.value.toLowerCase())
-      || patient.firstNames.toLowerCase().includes(e.target.value.toLowerCase()));
+    const newFilteredPatients = patients.filter(
+      (patient) =>
+        patient.lastName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        patient.firstNames.toLowerCase().includes(e.target.value.toLowerCase()),
+    );
     setfilteredPatients(newFilteredPatients);
   };
-  const handleSearchClick = e => {
+  const handleSearchClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
   };
@@ -133,10 +156,12 @@ const Patients = () => {
     columns.push({
       name: 'select-action',
       label: 'Actions',
-      render: patient => (
+      render: (patient) => (
         <Select
           selected={null}
-          onChange={e => { onChangeAction(e, patient.id); }}
+          onChange={(e) => {
+            onChangeAction(e, patient.id);
+          }}
           options={actionOptions}
           className={styles.selectAction}
         />
@@ -156,43 +181,53 @@ const Patients = () => {
             onChange={handleSearch}
             placeholder="Rechercher"
             className={styles.filter}
-        />
+          />
         </div>
       ),
-      render: patient => (
-        <div data-test-id="etudiant-name" className={styles.hoverElement} onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`)}>
-          <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
-          {patient.lastName.toUpperCase()}
-          {' '}
-          {patient.firstNames}
-        </div>
+      render: (patient) => (
+        <Tooltip
+          tooltip="Dossier de l'étudiant"
+          data-test-id="etudiant-name"
+          onClick={() =>
+            navigate(
+              `/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`,
+            )
+          }
+        >
+          {patient.lastName.toUpperCase()} {patient.firstNames}
+        </Tooltip>
       ),
       sortable: true,
-      sort: (a, b) => (`${a.lastName.toUpperCase()} ${a.firstNames}`).localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`),
+      sort: (a, b) =>
+        `${a.lastName.toUpperCase()} ${a.firstNames}`.localeCompare(
+          `${b.lastName.toUpperCase()} ${b.firstNames}`,
+        ),
     },
     {
       name: 'update-etudiant-button',
-      render: patient => (
-        <div className={styles.hoverElement}>
-          <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
+      render: (patient) => (
+        <Tooltip tooltip="Dossier de l'étudiant">
           <Button
             data-test-id="update-etudiant-button"
-            onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`)}
+            onClick={() =>
+              navigate(
+                `/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`,
+              )
+            }
             secondary
             size="sm"
             icon="ri-folder-line"
             aria-label="Dossier de l'étudiant"
             title="Dossier de l'étudiant"
           />
-        </div>
+        </Tooltip>
       ),
     },
     {
       name: 'status',
       label: (
         <div className={styles.informationColumn}>
-          Information
-          {' '}
+          Information{' '}
           <Select
             onChange={handleFilterChange}
             options={filterOptions}
@@ -201,7 +236,9 @@ const Patients = () => {
           />
         </div>
       ),
-      render: patient => <Badges badges={patient.badges} univYear={currentYear} />,
+      render: (patient) => (
+        <Badges badges={patient.badges} univYear={currentYear} />
+      ),
     },
     {
       name: 'countedAppointments',
@@ -212,43 +249,52 @@ const Patients = () => {
     {
       name: 'appointments-list-button',
       label: 'Liste des séances',
-      render: patient => (
-        <div className={styles.hoverElement}>
-          <span className={styles.tooltip}>Liste des séances</span>
+      render: (patient) => (
+        <Tooltip tooltip="Liste des séances">
           <Button
             data-test-id="seances-etudiant-button"
-            onClick={() => navigate(`/psychologue/modifier-etudiant/${patient.id}/#anchor-student-list`)}
+            onClick={() =>
+              navigate(
+                `/psychologue/modifier-etudiant/${patient.id}/#anchor-student-list`,
+              )
+            }
             secondary
             size="sm"
             icon="ri-list-unordered"
             aria-label="Liste des séances"
             title="Liste des séances"
           />
-        </div>
+        </Tooltip>
       ),
     },
     {
       name: 'appointment-etudiant-button',
       label: 'Déclarer une séance',
-      render: patient => (
-        <div className={styles.hoverElement}>
-          <span className={styles.tooltip}>Déclarer une séance</span>
+      render: (patient) => (
+        <Tooltip tooltip="Déclarer une séance">
           <Button
             data-test-id="appointment-etudiant-button"
-            onClick={() => navigate(`/psychologue/nouvelle-seance/${patient.id}`)}
+            onClick={() =>
+              navigate(`/psychologue/nouvelle-seance/${patient.id}`)
+            }
             size="sm"
             icon="ri-calendar-line"
             aria-label="Déclarer une séance"
           />
-        </div>
+        </Tooltip>
       ),
     },
     {
       name: 'delete-etudiant-button',
       label: "Supprimer l'étudiant",
-      render: patient => (
-        <div className={styles.hoverElement}>
-          <span className={styles.tooltip}>{patient.appointmentsCount !== '0' ? 'Vous ne pouvez pas supprimer un étudiant avec des séances' : 'Supprimer'}</span>
+      render: (patient) => (
+        <Tooltip
+          tooltip={
+            patient.appointmentsCount !== '0'
+              ? 'Vous ne pouvez pas supprimer un étudiant avec des séances'
+              : 'Supprimer'
+          }
+        >
           <Button
             data-test-id="delete-etudiant-button"
             onClick={() => deletePatient(patient.id)}
@@ -258,25 +304,20 @@ const Patients = () => {
             icon="ri-delete-bin-line"
             aria-label="Supprimer"
           />
-        </div>
+        </Tooltip>
       ),
     },
   ];
 
   return (
     <>
-      <Callout
-        hasInfoIcon={false}
-        colorFamily="blue-cumulus"
-      >
+      <Callout hasInfoIcon={false} colorFamily="blue-cumulus">
         <CalloutText size="md">
-          L&apos;email des patients est désormais obligatoire pour pouvoir déclarer des séances.
-          {' '}
-          <br />
-          {' '}
-          <br />
-          Si les alertes apparaissent pour d&apos;anciens étudiants, nous admettons que vous ne pouvez pas tout remplir à nouveau.
-          Vous pourrez les compléter pour les nouveaux étudiants à venir.
+          L&apos;email des patients est désormais obligatoire pour pouvoir
+          déclarer des séances. <br /> <br />
+          Si les alertes apparaissent pour d&apos;anciens étudiants, nous
+          admettons que vous ne pouvez pas tout remplir à nouveau. Vous pourrez
+          les compléter pour les nouveaux étudiants à venir.
         </CalloutText>
       </Callout>
       <div className="fr-my-2w">
@@ -301,8 +342,10 @@ const Patients = () => {
             columns={seeAppointments ? columns : convertToMobileView(columns)}
             data={filteredPatients.length > 0 ? filteredPatients : patients}
             rowKey="id"
-            />
-        ) : (<span>Vous n&lsquo;avez pas encore déclaré d&lsquo;étudiants.</span>)}
+          />
+        ) : (
+          <span>Vous n&lsquo;avez pas encore déclaré d&lsquo;étudiants.</span>
+        )}
       </div>
     </>
   );
