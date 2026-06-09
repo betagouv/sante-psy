@@ -10,23 +10,19 @@ const START_NEW_RULES = new Date('2024-07-01T00:00:00Z');
 const MAX_APPOINTMENT_OLD = 8;
 const MAX_APPOINTMENT_NEW = 12;
 
-const areStudentINEFilled = (
-  appointment: AppointmentWithPatient | Patient,
-): boolean => {
-  const { INE } = appointment;
+const areStudentINEFilled = (appointment: AppointmentWithPatient | Patient): boolean => {
+  const {
+    INE,
+  } = appointment;
   return !!INE;
 };
 
-const addBadges = (
-  count: number,
-  max: number,
-  countFirsts = true,
-): string[] => {
+const addBadges = (count: number, max: number, countFirsts = true): string[] => {
   const badges = [];
 
   if (countFirsts && count === 1) {
     badges.push(appointmentBadges.first);
-  } else if (count === max - 1) {
+  } else if (count === (max - 1)) {
     badges.push(appointmentBadges.before_max);
   } else if (count === max) {
     badges.push(appointmentBadges.max);
@@ -37,9 +33,7 @@ const addBadges = (
   return badges;
 };
 
-const getPatientBadges = (
-  patient: AppointmentWithPatient | Patient,
-): string[] => {
+const getPatientBadges = (patient: AppointmentWithPatient | Patient): string[] => {
   const countedAppointments = parseInt(patient.countedAppointments);
   let badges = [];
 
@@ -47,11 +41,7 @@ const getPatientBadges = (
     badges.push(appointmentBadges.student_ine);
   }
 
-  const badgesToAdd = addBadges(
-    countedAppointments,
-    MAX_APPOINTMENT_NEW,
-    false,
-  );
+  const badgesToAdd = addBadges(countedAppointments, MAX_APPOINTMENT_NEW, false);
   badges = badges.concat(badgesToAdd);
 
   if (badges.length === 0) {
@@ -60,7 +50,9 @@ const getPatientBadges = (
   return badges;
 };
 
-const getPatientWithBadges = (patients: Patient[]): Patient[] => {
+const getPatientWithBadges = (
+  patients: Patient[],
+): Patient[] => {
   const patientsWithBadges = [];
   patients.forEach((patient) => {
     const badges = getPatientBadges(patient);
@@ -73,14 +65,14 @@ const getPatientWithBadges = (patients: Patient[]): Patient[] => {
   return patientsWithBadges;
 };
 
-const containBadges = (badges: string[], badgesToCheck: string[]): boolean =>
-  badgesToCheck.some((string) => badges.includes(string));
+const containBadges = (badges: string[], badgesToCheck: string[])
+  : boolean => badgesToCheck.some((string) => badges.includes(string));
 
-const getMaxAppointmentCount = (date: Date): number =>
-  date >= START_NEW_RULES ? MAX_APPOINTMENT_NEW : MAX_APPOINTMENT_OLD;
+const getMaxAppointmentCount = (date: Date): number => (
+  date >= START_NEW_RULES ? MAX_APPOINTMENT_NEW : MAX_APPOINTMENT_OLD
+);
 
-const getCuratedPatient = (appointment: AppointmentWithPatient): string =>
-  appointment.student_id || appointment.INE || appointment.patientId;
+const getCuratedPatient = (appointment: AppointmentWithPatient): string => appointment.INE || appointment.patientId;
 
 const createAppointmentInfo = (
   previousAppointment: AppointmentInfo | undefined,
@@ -94,15 +86,11 @@ const createAppointmentInfo = (
   };
 
   /* New rule */
-  if (
-    previousAppointment &&
-    applyNewRules &&
-    previousAppointment.date < START_NEW_RULES &&
-    containBadges(previousAppointment.badges, [
-      appointmentBadges.exceeded,
-      appointmentBadges.before_max,
-      appointmentBadges.max,
-    ])
+  if (previousAppointment && applyNewRules && previousAppointment.date < START_NEW_RULES
+    && containBadges(
+      previousAppointment.badges,
+      [appointmentBadges.exceeded, appointmentBadges.before_max, appointmentBadges.max],
+    )
   ) {
     appointmentInfo.count = MAX_APPOINTMENT_OLD + 1;
   }
@@ -123,33 +111,16 @@ const processNextAppointment = (
 ): void => {
   if (!nextAppointment) return;
 
-  const nextAppointmentDate = dateUtils.getUTCDate(
-    new Date(nextAppointment.appointmentDate),
-  );
+  const nextAppointmentDate = dateUtils.getUTCDate(new Date(nextAppointment.appointmentDate));
   const nextIsSameCycle = cycle === getUnivYear(nextAppointmentDate);
-  const nextPatient =
-    nextAppointment.student_id ||
-    nextAppointment.INE ||
-    nextAppointment.patientId;
-  const nextAppointmentChangeRule =
-    !applyNewRules &&
-    nextAppointmentDate >= START_NEW_RULES &&
-    nextIsSameCycle &&
-    curatedPatient === nextPatient;
+  const nextPatient = nextAppointment.INE ? nextAppointment.INE : nextAppointment.patientId;
+  const nextAppointmentChangeRule = !applyNewRules && nextAppointmentDate >= START_NEW_RULES
+                                    && nextIsSameCycle && curatedPatient === nextPatient;
 
-  if (
-    nextAppointmentChangeRule &&
-    containBadges(appointmentInfo.badges, warningBadges)
-  ) {
-    appointmentInfo.badges.push(
-      appointmentBadges.inactive,
-      appointmentBadges.switch_rule_notice,
-    );
+  if (nextAppointmentChangeRule && containBadges(appointmentInfo.badges, warningBadges)) {
+    appointmentInfo.badges.push(appointmentBadges.inactive, appointmentBadges.switch_rule_notice);
     patientAppointments.forEach((previous) => {
-      if (
-        previous.date >= startCycleDate &&
-        containBadges(previous.badges, warningBadges)
-      ) {
+      if (previous.date >= startCycleDate && containBadges(previous.badges, warningBadges)) {
         previous.badges.push(appointmentBadges.inactive);
       }
     });
@@ -164,11 +135,8 @@ const addBillingBadges = (
   startCycleDate: Date,
   startFirstDate: Date,
 ): void => {
-  if (
-    appointmentInfo.count === 1 &&
-    !applyNewRules &&
-    !(appointmentDate >= startCycleDate && appointmentDate <= startFirstDate)
-  ) {
+  if (appointmentInfo.count === 1 && !applyNewRules
+      && !(appointmentDate >= startCycleDate && appointmentDate <= startFirstDate)) {
     appointmentInfo.badges.push(appointmentBadges.first);
   } else if (appointmentInfo.count > maxAppointment) {
     appointmentInfo.badges.push(appointmentBadges.exceeded);
@@ -185,32 +153,21 @@ const addNonBillingBadges = (
   if (psychologistId && appointment.psychologistId !== psychologistId) {
     appointmentInfo.badges.push(appointmentBadges.other_psychologist);
   }
-  appointmentInfo.badges.push(
-    ...addBadges(appointmentInfo.count, maxAppointment, !applyNewRules),
-  );
+  appointmentInfo.badges.push(...addBadges(appointmentInfo.count, maxAppointment, !applyNewRules));
 };
 
 const getAppointmentWithBadges = (
   appointments: AppointmentWithPatient[],
   isBillingPurposes: boolean,
-  period?: { month: number; year: number },
+  period?: { month: number, year: number },
   psychologistId?: string,
 ): AppointmentWithPatient[] => {
-  const warningBadges = [
-    appointmentBadges.exceeded,
-    appointmentBadges.before_max,
-    appointmentBadges.max,
-  ];
+  const warningBadges = [appointmentBadges.exceeded, appointmentBadges.before_max, appointmentBadges.max];
   const appointmentsWithBadges: AppointmentWithPatient[] = [];
-  const appointmentsCountByPatient = new Map<
-    string,
-    Map<string, AppointmentInfo[]>
-  >();
+  const appointmentsCountByPatient = new Map<string, Map<string, AppointmentInfo[]>>();
 
   appointments.forEach((appointment, i) => {
-    const appointmentDate = dateUtils.getUTCDate(
-      new Date(appointment.appointmentDate),
-    );
+    const appointmentDate = dateUtils.getUTCDate(new Date(appointment.appointmentDate));
     const cycle = getUnivYear(appointmentDate);
     const currentMonth = appointmentDate.getMonth() + 1;
     const isInPeriod = period ? currentMonth === period.month : true;
@@ -218,15 +175,10 @@ const getAppointmentWithBadges = (
     const applyNewRules = appointmentDate >= START_NEW_RULES;
     const MAX_APPOINTMENT = getMaxAppointmentCount(appointmentDate);
 
-    const patientAppointments =
-      appointmentsCountByPatient.get(cycle)?.get(curatedPatient) || [];
+    const patientAppointments = appointmentsCountByPatient.get(cycle)?.get(curatedPatient) || [];
     const previousAppointment = patientAppointments.slice(-1)[0];
 
-    const appointmentInfo = createAppointmentInfo(
-      previousAppointment,
-      appointmentDate,
-      applyNewRules,
-    );
+    const appointmentInfo = createAppointmentInfo(previousAppointment, appointmentDate, applyNewRules);
 
     /* New rule */
     if (applyNewRules && appointmentInfo.count <= MAX_APPOINTMENT) {
@@ -244,28 +196,17 @@ const getAppointmentWithBadges = (
         START_FIRST_DATE,
       );
     } else {
-      addNonBillingBadges(
-        appointmentInfo,
-        psychologistId,
-        appointment,
-        MAX_APPOINTMENT,
-        applyNewRules,
-      );
+      addNonBillingBadges(appointmentInfo, psychologistId, appointment, MAX_APPOINTMENT, applyNewRules);
     }
 
     /* New rule */
     const nextAppointment = appointments[i + 1];
-    const isLastAppointment =
-      !nextAppointment ||
-      (nextAppointment.INE !== curatedPatient &&
-        cycle !== getUnivYear(new Date(nextAppointment.appointmentDate)));
+    const isLastAppointment = !nextAppointment || (nextAppointment.INE !== curatedPatient
+      && cycle !== getUnivYear(new Date(nextAppointment.appointmentDate)));
 
-    if (
-      !applyNewRules &&
-      appointmentDate > START_CYCLE_DATE &&
-      isLastAppointment &&
-      containBadges(appointmentInfo.badges, warningBadges)
-    ) {
+    if (!applyNewRules && appointmentDate > START_CYCLE_DATE
+      && isLastAppointment
+      && containBadges(appointmentInfo.badges, warningBadges)) {
       appointmentInfo.badges.push(appointmentBadges.switch_rule_notice);
     }
 
@@ -281,15 +222,8 @@ const getAppointmentWithBadges = (
     );
     /* End new rule */
 
-    if (
-      (!isBillingPurposes ||
-        !appointmentInfo.badges.includes(appointmentBadges.exceeded)) &&
-      isInPeriod
-    ) {
-      appointmentsWithBadges.push({
-        ...appointment,
-        badges: appointmentInfo.badges,
-      });
+    if ((!isBillingPurposes || !appointmentInfo.badges.includes(appointmentBadges.exceeded)) && isInPeriod) {
+      appointmentsWithBadges.push({ ...appointment, badges: appointmentInfo.badges });
     }
 
     if (!appointmentsCountByPatient.has(cycle)) {
@@ -302,11 +236,11 @@ const getAppointmentWithBadges = (
     cycleAppointments.get(curatedPatient).push(appointmentInfo);
   });
 
-  return appointmentsWithBadges.sort(
-    (a, b) =>
-      new Date(b.appointmentDate).getTime() -
-      new Date(a.appointmentDate).getTime(),
-  );
+  return appointmentsWithBadges.sort((a, b) => new
+  Date(b.appointmentDate).getTime() - new Date(a.appointmentDate).getTime());
 };
 
-export { getAppointmentWithBadges, getPatientWithBadges };
+export {
+  getAppointmentWithBadges,
+  getPatientWithBadges,
+};

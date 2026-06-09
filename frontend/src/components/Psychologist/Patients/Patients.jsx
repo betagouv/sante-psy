@@ -2,7 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Table, Icon, Button, Select, TextInput } from '@dataesr/react-dsfr';
+import {
+  Table,
+  Callout,
+  CalloutText,
+  Icon,
+  Button,
+  Select,
+  TextInput,
+} from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
 import { currentUnivYear } from 'services/univYears';
@@ -82,10 +90,14 @@ const Patients = () => {
     e.stopPropagation();
     switch (e.target.value) {
       case 'student_file':
-        navigate(`/psychologue/etudiant/${patientId}/#anchor-student-file`);
+        navigate(
+          `/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`,
+        );
         break;
       case 'appointment_list':
-        navigate(`/psychologue/etudiant/${patientId}/#anchor-student-file`);
+        navigate(
+          `/psychologue/modifier-etudiant/${patientId}/#anchor-student-file`,
+        );
         break;
       case 'appointment_create':
         navigate(`/psychologue/nouvelle-seance/${patientId}`);
@@ -177,10 +189,12 @@ const Patients = () => {
           tooltip="Dossier de l'étudiant"
           data-test-id="etudiant-name"
           onClick={() =>
-            navigate(`/psychologue/etudiant/${patient.id}/#anchor-student-file`)
+            navigate(
+              `/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`,
+            )
           }
         >
-          {patient.lastName?.toUpperCase()} {patient.firstNames}
+          {patient.lastName.toUpperCase()} {patient.firstNames}
         </Tooltip>
       ),
       sortable: true,
@@ -197,7 +211,7 @@ const Patients = () => {
             data-test-id="update-etudiant-button"
             onClick={() =>
               navigate(
-                `/psychologue/etudiant/${patient.id}/#anchor-student-file`,
+                `/psychologue/modifier-etudiant/${patient.id}/#anchor-student-file`,
               )
             }
             secondary
@@ -241,7 +255,7 @@ const Patients = () => {
             data-test-id="seances-etudiant-button"
             onClick={() =>
               navigate(
-                `/psychologue/etudiant/${patient.id}/#anchor-student-list`,
+                `/psychologue/modifier-etudiant/${patient.id}/#anchor-student-list`,
               )
             }
             secondary
@@ -297,6 +311,15 @@ const Patients = () => {
 
   return (
     <>
+      <Callout hasInfoIcon={false} colorFamily="blue-cumulus">
+        <CalloutText size="md">
+          L&apos;email des patients est désormais obligatoire pour pouvoir
+          déclarer des séances. <br /> <br />
+          Si les alertes apparaissent pour d&apos;anciens étudiants, nous
+          admettons que vous ne pouvez pas tout remplir à nouveau. Vous pourrez
+          les compléter pour les nouveaux étudiants à venir.
+        </CalloutText>
+      </Callout>
       <div className="fr-my-2w">
         <Link
           data-test-id="new-student-button"
