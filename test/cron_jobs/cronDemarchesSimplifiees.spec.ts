@@ -107,6 +107,7 @@ describe('DS integration tests', () => {
   const anaisId = 'a8f759ce-3a30-52ae-a95e-2551d5cc5910';
   const anais = {
     adeli: '012345678',
+    rpps: null,
     title: 'Mme',
     firstNames: 'Anais',
     lastName: 'Alt',
@@ -143,6 +144,7 @@ describe('DS integration tests', () => {
   const doniaId = 'a767ecdf-e565-5c1b-8169-e95116e8d126';
   const donia = {
     adeli: '95829302942',
+    rpps: null,
     title: 'Mme',
     firstNames: 'Donia',
     lastName: 'Benharara',
