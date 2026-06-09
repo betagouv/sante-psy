@@ -1,6 +1,7 @@
 import appointmentsSteps from './appointments';
 import newAppointmentSteps from './newAppointment';
 import studentsSteps from './students';
+import newStudentsSteps from './newStudent';
 import dashboardSteps from './dashboard';
 import billingSteps from './billing';
 import billingInfoSteps from './billingInfo';
@@ -14,6 +15,8 @@ const getSteps = id => {
       return newAppointmentSteps;
     case 'students':
       return studentsSteps;
+    case 'new-student':
+      return newStudentsSteps;
     case 'dashboard':
       return dashboardSteps;
     case 'billing':

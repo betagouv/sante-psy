@@ -10,9 +10,21 @@ import dotEnv from 'dotenv';
 dotEnv.config();
 
 describe('DB Patients', () => {
-  async function testDataPatientsExist(studentId) {
+  const firstNames = 'Harry James';
+  const lastName = 'Potter';
+  const dateOfBirth = new Date('1980/01/20');
+  const gender = 'female';
+  const studentNumber = '12345678901';
+  const isINESvalid = false;
+  const email = 'patient@beta.gouv.fr';
+  const anotherStudentNumber = '10987654321';
+  const institutionName = 'Pouldard';
+  const isStudentStatusVerified = false;
+  const doctorName = 'doctorName';
+
+  async function testDataPatientsExist(lastName) {
     const exist = await db(patientsTable)
-      .where('student_id', studentId)
+      .where('lastName', lastName)
       .first();
     if (exist) {
       return true;
@@ -28,43 +40,161 @@ describe('DB Patients', () => {
   describe('insert', () => {
     it('should insert one patient in PG', async () => {
       const psy = await create.insertOnePsy();
-      const student = await create.insertOneStudent();
-      await dbPatients.insert(psy.dossierNumber, student.id);
+      await dbPatients.insert(
+        firstNames,
+        lastName,
+        dateOfBirth,
+        gender,
+        studentNumber,
+        isINESvalid,
+        email,
+        institutionName,
+        isStudentStatusVerified,
+        psy.dossierNumber,
+        doctorName,
+      );
 
-      const exist = await testDataPatientsExist(student.id);
+      const exist = await testDataPatientsExist(lastName);
       exist.should.be.equal(true);
+    });
+
+    it('should accept insert INE with more than 11 characters in PG', async () => {
+      const psy = await create.insertOnePsy();
+      try {
+        await dbPatients.insert(
+          firstNames,
+          lastName,
+          dateOfBirth,
+          gender,
+          '1'.repeat(12),
+          isINESvalid,
+          email,
+          institutionName,
+          isStudentStatusVerified,
+          psy.dossierNumber,
+          doctorName,
+        );
+        const exist = await testDataPatientsExist(lastName);
+        exist.should.be.equal(true);
+      } catch (error) {
+        expect(error).to.be.an('Error');
+      }
+    });
+
+    it('should refuse insert for INE with more than 50 characters in PG', async () => {
+      const psy = await create.insertOnePsy();
+      try {
+        await dbPatients.insert(
+          firstNames,
+          lastName,
+          dateOfBirth,
+          gender,
+          '1'.repeat(51),
+          isINESvalid,
+          institutionName,
+          email,
+          isStudentStatusVerified,
+          psy.dossierNumber,
+          doctorName,
+        );
+        assert.fail('insert patient should have failed');
+      } catch (error) {
+        expect(error).to.be.an('Error');
+      }
+    });
+
+    it('should refuse insert without mandatory params in PG', async () => {
+      try {
+        await dbPatients.insert(firstNames, null, dateOfBirth, gender, '123456789213', isINESvalid, email);
+      } catch (error) {
+        expect(error).to.be.an('Error');
+      }
     });
 
     it('should set deleted to false by default in PG', async () => {
       const psy = await create.insertOnePsy();
-      const student = await create.insertOneStudent();
       const insertedPatient = await dbPatients.insert(
+        firstNames,
+        lastName,
+        dateOfBirth,
+        gender,
+        studentNumber,
+        isINESvalid,
+        institutionName,
+        email,
+        isStudentStatusVerified,
         psy.dossierNumber,
-        student.id,
+        doctorName,
       );
+
       expect(insertedPatient.deleted).equal(false);
+    });
+  });
+
+  describe('update', () => {
+    it('should Update one patient in PG', async () => {
+      const psy = await create.insertOnePsy();
+      await dbPatients.insert(
+        firstNames,
+        lastName,
+        dateOfBirth,
+        gender,
+        studentNumber,
+        isINESvalid,
+        email,
+        institutionName,
+        isStudentStatusVerified,
+        psy.dossierNumber,
+        doctorName,
+      );
+
+      const newLastName = 'NewName';
+      const patients = await dbPatients.getAll(psy.dossierNumber);
+      const oldPatient = patients[0];
+
+      await dbPatients.update(
+        oldPatient.id,
+        oldPatient.firstNames,
+        newLastName,
+        dateOfBirth,
+        gender,
+        oldPatient.INE,
+        isINESvalid,
+        oldPatient.email,
+        oldPatient.institutionName,
+        oldPatient.isStudentStatusVerified,
+        psy.dossierNumber,
+        doctorName,
+      );
+      const newPatient = await dbPatients.getById(oldPatient.id, psy.dossierNumber);
+      expect(newPatient.lastName).equal(newLastName);
     });
   });
 
   describe('delete', () => {
     it('should change deleted boolean to true and update updatedAt field', async () => {
       const psy = await create.insertOnePsy();
-      const student = await create.insertOneStudent();
-      const patient = await dbPatients.insert(psy.dossierNumber, student.id);
-
-      const patientBeforeDelete = await dbPatients.getById(
-        patient.id,
+      const patient = await dbPatients.insert(
+        firstNames,
+        lastName,
+        dateOfBirth,
+        gender,
+        studentNumber,
+        isINESvalid,
+        email,
+        institutionName,
+        isStudentStatusVerified,
         psy.dossierNumber,
+        doctorName,
       );
+
+      const patientBeforeDelete = await dbPatients.getById(patient.id, psy.dossierNumber);
 
       assert.isNull(patientBeforeDelete.updatedAt);
       assert.isFalse(patientBeforeDelete.deleted);
       await dbPatients.delete(patientBeforeDelete.id, psy.dossierNumber);
 
-      const patientAfterDelete = await dbPatients.getById(
-        patient.id,
-        psy.dossierNumber,
-      );
+      const patientAfterDelete = await dbPatients.getById(patient.id, psy.dossierNumber);
       assert.isTrue(patientAfterDelete.deleted);
       assert.isNotNull(patientAfterDelete.updatedAt);
     });
@@ -73,21 +203,53 @@ describe('DB Patients', () => {
   describe('getAll', () => {
     it('should return psy patients', async () => {
       const psy = await create.insertOnePsy();
-      const student1 = await create.insertOneStudent();
-      const student2 = await create.insertOneStudent();
-      await dbPatients.insert(psy.dossierNumber, student1.id);
-      await dbPatients.insert(psy.dossierNumber, student2.id);
-
-      const patients = (await dbPatients.getAll(psy.dossierNumber)).sort(
-        (a, b) => parseInt(a.appointmentsCount) - parseInt(b.appointmentsCount),
+      await dbPatients.insert(
+        firstNames,
+        lastName,
+        dateOfBirth,
+        gender,
+        studentNumber,
+        isINESvalid,
+        email,
+        institutionName,
+        isStudentStatusVerified,
+        psy.dossierNumber,
+        doctorName,
       );
+      await dbPatients.insert(
+        firstNames,
+        lastName,
+        dateOfBirth,
+        gender,
+        anotherStudentNumber,
+        isINESvalid,
+        email,
+        institutionName,
+        isStudentStatusVerified,
+        psy.dossierNumber,
+        doctorName,
+      );
+
+      const patients = (await dbPatients.getAll(psy.dossierNumber))
+      .sort((a, b) => parseInt(a.appointmentsCount) - parseInt(b.appointmentsCount));
       expect(patients).to.have.length(2);
     });
 
     it('should not return deleted patients', async () => {
       const psy = await create.insertOnePsy();
-      const student = await create.insertOneStudent();
-      const patient = await dbPatients.insert(psy.dossierNumber, student.id);
+      const patient = await dbPatients.insert(
+        firstNames,
+        lastName,
+        dateOfBirth,
+        gender,
+        studentNumber,
+        isINESvalid,
+        email,
+        institutionName,
+        isStudentStatusVerified,
+        psy.dossierNumber,
+        doctorName,
+      );
       await dbPatients.delete(patient.id, psy.dossierNumber);
 
       const patients = await dbPatients.getAll(psy.dossierNumber);

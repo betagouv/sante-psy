@@ -2,90 +2,31 @@ import date from '../utils/date';
 import { patientsTable } from './tables';
 import db from './db';
 import { Patient } from '../types/Patient';
-import { Student } from '../types/Student';
 
-export const ERROR_MESSAGE_STUDENT_ALREADY_PATIENT =
-  'Cet étudiant est déjà un patient de ce psychologue';
-
-const enrichPatientWithStudent = (
-  patient: Patient,
-  student: Student | null,
-): Patient => ({
-  ...patient,
-  student,
-  firstNames: student?.firstNames ?? patient.firstNames,
-  lastName: student?.lastName ?? patient.lastName,
-  INE: student?.ine ?? patient.INE,
-});
-
-const getById = async (
-  patientId: string,
-  psychologistId: string,
-): Promise<Patient> => {
+const getById = async (patientId: string, psychologistId: string): Promise<Patient> => {
   try {
     const patient = await db(patientsTable)
       .where('id', patientId)
       .where('psychologistId', psychologistId)
       .first();
 
-    if (!patient) {
-      return null;
-    }
-
-    const student = patient.student_id
-      ? await db('students').where('id', patient.student_id).first()
-      : null;
-
-    return enrichPatientWithStudent(patient, student);
+    return patient;
   } catch (err) {
     console.error('Erreur de récupération du patient', err);
     throw new Error('Erreur de récupération du patient');
   }
 };
 
-const isAlreadyAPatient = async (
-  studentId: string,
-  psychologistId: string,
-): Promise<boolean> => {
-  const patient = await db(patientsTable)
-    .where('student_id', studentId)
-    .where('psychologistId', psychologistId)
-    .where('deleted', false)
-    .first();
-  return !!patient;
-};
-
-const getAll = async (
-  psychologistId: string,
-): Promise<
-  (Patient & {
-    appointmentsCount: string;
-    appointmentsYearCount: string;
-  })[]
-> => {
+const getAll = async (psychologistId: string): Promise<(Patient &
+  { appointmentsCount: string, appointmentsYearCount: string })[]> => {
   try {
     // Get all patients of psychologist
-    const patients = await db
-      .select('*')
-      .from(patientsTable)
-      .where('psychologistId', psychologistId)
-      .andWhere('deleted', false);
+    const patients = await db.select('*')
+        .from(patientsTable)
+        .where('psychologistId', psychologistId)
+        .andWhere('deleted', false);
 
-    const studentIds = patients.map((p) => p.student_id).filter(Boolean);
-    const students = studentIds.length
-      ? await db('students').whereIn('id', studentIds)
-      : [];
-    const studentsById = Object.fromEntries(students.map((s) => [s.id, s]));
-
-    return patients.map((p) => {
-      const student = p.student_id
-        ? (studentsById[p.student_id] ?? null)
-        : null;
-      return enrichPatientWithStudent(p, student) as Patient & {
-        appointmentsCount: string;
-        appointmentsYearCount: string;
-      };
-    });
+    return patients;
   } catch (err) {
     console.error('Impossible de récupérer les patients', err);
     throw new Error('Impossible de récupérer les patients');
@@ -93,30 +34,82 @@ const getAll = async (
 };
 
 const insert = async (
-  psychologistId: string,
-  studentId: string,
+  firstNames: string,
+  lastName: string,
+  dateOfBirth: Date,
+  gender: string,
+  INE: string,
+  isINESvalid: boolean,
+  email: string,
+  institutionName?: string,
+  isStudentStatusVerified?: boolean,
+  psychologistId?: string,
+  doctorName?: string,
 ): Promise<Patient> => {
   try {
-    const [patient] = await db(patientsTable)
-      .insert({
-        student_id: studentId,
-        psychologistId,
-      })
-      .returning('*');
-    return patient;
+    const patientsArray = await db(patientsTable).insert({
+      firstNames,
+      lastName,
+      dateOfBirth,
+      gender,
+      INE,
+      isINESvalid,
+      email,
+      institutionName,
+      isStudentStatusVerified,
+      psychologistId,
+      doctorName,
+    }).returning('*');
+    return patientsArray[0];
   } catch (err) {
-    if (err.code === '23505' && err.constraint === 'uq_psy_student') {
-      throw new Error(ERROR_MESSAGE_STUDENT_ALREADY_PATIENT);
-    }
-    console.error('Erreur lors de la création du patient', err);
-    throw err;
+    console.error('Erreur de sauvegarde du patient', err);
+    throw new Error('Erreur de sauvegarde du patient');
   }
 };
 
-const deleteOne = async (
+const update = async (
   id: string,
+  firstNames: string,
+  lastName: string,
+  dateOfBirth: Date,
+  gender: string,
+  INE: string,
+  isINESvalid: boolean,
+  email: string,
+  institutionName: string,
+  isStudentStatusVerified: boolean,
   psychologistId: string,
+  doctorName: string,
 ): Promise<number> => {
+  try {
+    return await db(patientsTable)
+      .where('id', id)
+      .where('psychologistId', psychologistId)
+      .update({
+        firstNames,
+        lastName,
+        dateOfBirth,
+        gender,
+        INE,
+        email,
+        institutionName,
+        isStudentStatusVerified,
+        psychologistId,
+        doctorName,
+        updatedAt: date.now(),
+        isINESvalid,
+      });
+  } catch (err) {
+    console.error('Erreur de modification du patient', err);
+    throw new Error('Erreur de modification du patient');
+  }
+};
+
+const updateIsINESValidOnly = async (patientId: string, isINESvalid: boolean): Promise<number> => db('patients')
+    .where({ id: patientId })
+    .update({ isINESvalid });
+
+const deleteOne = async (id: string, psychologistId: string): Promise<number> => {
   try {
     const deletedPatient = await db(patientsTable)
       .where('id', id)
@@ -132,6 +125,18 @@ const deleteOne = async (
   } catch (err) {
     console.error('Erreur de suppression du patient', err);
     throw new Error('Erreur de suppression du patient');
+  }
+};
+
+const updateCertificateChecked = async (patientId: string): Promise<void> => {
+  try {
+    await db('patients')
+      .where({ id: patientId })
+      .update({ isINESvalid: true })
+      .increment('countCertificatesSent', 1);
+  } catch (err) {
+    console.error('Erreur lors de la mise à jour de la colonne isINESvalid', err);
+    throw new Error('Erreur lors de la mise à jour de la colonne isINESvalid');
   }
 };
 
@@ -152,29 +157,13 @@ const getByStudentEmailAndIne = async (
   }
 };
 
-const getByStudent = async (student: Student): Promise<Patient[]> => {
-  try {
-    return await db(patientsTable)
-      .where('deleted', false)
-      .andWhere((outer) => {
-        outer.where('student_id', student.id).orWhere((inner) => {
-          inner
-            .where('INE', student.ine)
-            .andWhere('dateOfBirth', student.dateOfBirth);
-        });
-      });
-  } catch (err) {
-    console.error('Erreur récupération patients étudiant', err);
-    throw new Error('Erreur récupération patients étudiant');
-  }
-};
-
 export default {
   getById,
   getAll,
   insert,
+  update,
+  updateIsINESValidOnly,
   delete: deleteOne,
+  updateCertificateChecked,
   getByStudentEmailAndIne,
-  isAlreadyAPatient,
-  getByStudent,
 };

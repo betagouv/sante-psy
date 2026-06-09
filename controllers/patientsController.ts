@@ -1,29 +1,26 @@
 import { Request, Response } from 'express';
-import dbPatients, {
-  ERROR_MESSAGE_STUDENT_ALREADY_PATIENT,
-} from '../db/patients';
+import dbPatients from '../db/patients';
 import dbAppointments from '../db/appointments';
 import validation from '../utils/validation';
+import date from '../utils/date';
+import ejs from 'ejs';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { getPatientWithBadges } from '../services/getBadges';
+import { Patient } from '../types/Patient';
 import getAppointmentsCount from '../services/getAppointmentsCount';
 import {
-  getOneValidators,
-  patientValidators,
-  deleteValidators,
+  updateValidators, getOneValidators, patientValidators, deleteValidators,
 } from './validators/patientValidators';
-import { Student } from '../types/Student';
-import { Patient } from '../types/Patient';
+import sendSecondStepMail from '../services/sendSecondStepMail';
+import send from '../utils/email';
+import verifyINEWithBirthDate from '../services/verifyStudentINE';
 
-const getSortName = (item: Patient | Student): string =>
-  `${item.lastName.toUpperCase()} ${item.firstNames}`;
+type MulterRequest = Request & { file: Express.Multer.File };
 
-const sortData = (a: Patient, b: Patient): number => {
-  const aName = getSortName(a);
-  const bName = getSortName(b);
-  return aName.localeCompare(bName);
-};
+const sortData = (a: Patient, b: Patient): number => (
+  `${a.lastName.toUpperCase()} ${a.firstNames}`.localeCompare(`${b.lastName.toUpperCase()} ${b.firstNames}`)
+);
 
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const psychologistId = req.auth.userId || req.auth.psychologist;
@@ -36,6 +33,70 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
   res.json(sortedData);
 };
 
+const update = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+
+  const { patientId } = req.params;
+  const {
+    firstNames: patientFirstNames,
+    lastName: patientLastName,
+    gender: patientGender,
+    dateOfBirth: rawDateOfBirth,
+    INE: patientINE,
+    institutionName: patientInstitutionName,
+    doctorName,
+    email,
+  } = req.body;
+
+  const isINESvalid = await verifyINEWithBirthDate(patientINE, rawDateOfBirth);
+
+  if (!isINESvalid) {
+    await dbPatients.updateIsINESValidOnly(patientId, false);
+  }
+
+  const patientIsStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
+
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  const updated = await dbPatients.update(
+    patientId,
+    patientFirstNames,
+    patientLastName,
+    date.parseForm(rawDateOfBirth),
+    patientGender,
+    patientINE,
+    isINESvalid,
+    email,
+    patientInstitutionName,
+    patientIsStudentStatusVerified,
+    psychologistId,
+    doctorName,
+  );
+
+  if (updated === 0) {
+    console.log(`Patient ${patientId} not updated by probably other psy id ${psychologistId}`);
+    throw new CustomError('Ce patient n\'existe pas.', 404);
+  }
+
+  try {
+    await sendSecondStepMail.inviteNewStudentToCreateAccount(
+      email,
+      'studentInvitationFromPsy',
+      'Création de votre espace étudiant',
+    );
+  } catch (err) {
+    console.error('Failed to send student invitation from psy', err);
+  }
+
+  let infoMessage = `L'étudiant ${patientFirstNames} ${patientLastName} a bien été modifié.`;
+  if (!patientInstitutionName || !patientIsStudentStatusVerified || !doctorName) {
+    infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
+        + ' en cliquant le bouton "Modifier" du patient.';
+  }
+  console.log(`Patient ${patientId} updated by psy id ${psychologistId}`);
+  res.json({ message: infoMessage, isINESvalid });
+};
+
 const getOne = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
@@ -45,10 +106,7 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
   const patient = await dbPatients.getById(patientId, psychologistId);
 
   if (!patient) {
-    throw new CustomError(
-      "Ce patient n'existe pas. Vous ne pouvez pas le modifier.",
-      404,
-    );
+    throw new CustomError('Ce patient n\'existe pas. Vous ne pouvez pas le modifier.', 404);
   }
 
   const patientWithBadges = getPatientWithBadges([patient])[0];
@@ -58,26 +116,49 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
 };
 
 const create = async (req: Request, res: Response): Promise<void> => {
-  try {
-    validation.checkErrors(req);
-    const psychologistId = req.auth.userId || req.auth.psychologist;
+  validation.checkErrors(req);
 
-    const { studentId } = req.body;
+  const {
+    firstNames, lastName, gender, INE, institutionName, doctorName, dateOfBirth: rawDateOfBirth, email,
+  } = req.body;
 
-    const newPatient = await dbPatients.insert(psychologistId, studentId);
+  const isINESvalid = await verifyINEWithBirthDate(INE, rawDateOfBirth);
 
-    res.json({
-      newPatient,
-    });
-  } catch (err) {
-    if (err.message === ERROR_MESSAGE_STUDENT_ALREADY_PATIENT) {
-      res
-        .status(409)
-        .json({ message: 'Cet étudiant est déja un de vos patients' });
-    }
-    console.error('Unexpected error in patient.create', err);
-    res.status(500).json({ message: 'Une erreur est survenue' });
+  const isStudentStatusVerified = Boolean(req.body.isStudentStatusVerified);
+
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  const addedPatient = await dbPatients.insert(
+    firstNames,
+    lastName,
+    date.parseForm(rawDateOfBirth),
+    gender,
+    INE,
+    isINESvalid,
+    email,
+    institutionName,
+    isStudentStatusVerified,
+    psychologistId,
+    doctorName,
+  );
+
+  await sendSecondStepMail.inviteNewStudentToCreateAccount(
+    email,
+    'studentInvitationFromPsy',
+    'Création de votre espace étudiant',
+  );
+
+  let infoMessage = `L'étudiant ${firstNames} ${lastName} a bien été créé.`;
+  if (!institutionName || !doctorName || !isStudentStatusVerified) {
+    infoMessage += ' Vous pourrez renseigner les champs manquants plus tard'
+        + ' en cliquant le bouton "Modifier" du patient.';
   }
+  console.log(`Patient created by psy id ${psychologistId}`);
+  res.json({
+    message: infoMessage,
+    patientId: addedPatient.id,
+    isINESvalid,
+  });
 };
 
 const deleteOne = async (req: Request, res: Response): Promise<void> => {
@@ -89,18 +170,13 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
   const patientAppointment = await dbAppointments.countByPatient(patientId);
 
   if (patientAppointment[0].count > 0) {
-    throw new CustomError(
-      'Vous ne pouvez pas supprimer un étudiant avec des séances.',
-      400,
-    );
+    throw new CustomError('Vous ne pouvez pas supprimer un étudiant avec des séances.', 400);
   }
 
   const deleted = await dbPatients.delete(patientId, psychologistId);
 
   if (deleted === 0) {
-    console.log(
-      `Patient ${patientId} not deleted by probably other psy id ${psychologistId}`,
-    );
+    console.log(`Patient ${patientId} not deleted by probably other psy id ${psychologistId}`);
     throw new CustomError('Vous devez spécifier un étudiant à supprimer.', 404);
   }
 
@@ -110,12 +186,55 @@ const deleteOne = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+// TODO : mutualize this with Student sendCertificate
+const sendCertificate = async (
+  req: MulterRequest,
+  res: Response,
+): Promise<void> => {
+  const { patientId } = req.body;
+  // TODO: delete psychologist from JWT after MEP
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+
+  if (!req.file || !patientId || !psychologistId) {
+    throw new CustomError('Certificat, patientId ou psychologistId manquant.', 400);
+  }
+
+  try {
+    const html = await ejs.renderFile('./views/emails/sendCertificate.ejs', {
+      patientId,
+      psychologistId,
+    });
+
+    await send(
+      'support-santepsyetudiant@beta.gouv.fr',
+      'Nouveau certificat de scolarité reçu',
+      html,
+      [
+        {
+          filename: req.file.originalname,
+          content: req.file.buffer,
+        },
+      ],
+    );
+
+    await dbPatients.updateCertificateChecked(patientId);
+
+    res.json({ message: 'Certificat envoyé avec succès.' });
+  } catch (err) {
+    console.error(err);
+    throw new CustomError("Erreur lors de l'envoi du certificat.", 500);
+  }
+};
+
 export default {
+  updateValidators,
   getOneValidators,
   createValidators: patientValidators,
   deleteValidators,
   getAll: asyncHelper(getAll),
+  update: asyncHelper(update),
   getOne: asyncHelper(getOne),
   create: asyncHelper(create),
   delete: asyncHelper(deleteOne),
+  sendCertificate,
 };

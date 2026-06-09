@@ -7,8 +7,7 @@ import Announcement from 'components/Notification/Announcement';
 import Appointments from 'components/Psychologist/Appointments/Appointments';
 import NewAppointment from 'components/Psychologist/Appointments/NewAppointment';
 import Patients from 'components/Psychologist/Patients/Patients';
-import SeePatient from 'components/Psychologist/Patients/SeePatient';
-import AddNewPatient from 'components/Psychologist/Patients/AddNewPatient';
+import AddEditPatient from 'components/Psychologist/Patients/AddEditPatient';
 import PsyProfile from 'components/Psychologist/PsyDashboard/PsyDashboard';
 import Page from 'components/Page/Page';
 import Notification from 'components/Notification/Notification';
@@ -29,58 +28,54 @@ import './custom-month-picker.css';
 import './custom-date-picker.css';
 
 const PsychologistRouter = () => {
-  const {
-    userStore: { user, role },
-  } = useStore();
+  const { userStore: { user, role } } = useStore();
   const { pathname } = useLocation();
 
   if (!user || role !== 'psy') {
     return <Navigate to="/login" replace />;
   }
 
-  const hasSignedConvention =
-    user.convention && user.convention.isConventionSigned;
-  const modal =
-    hasSignedConvention || !shouldCheckConventionAgain() ? null : (
-      <ConventionModal currentConvention={user.convention} />
-    );
+  const hasSignedConvention = user.convention && user.convention.isConventionSigned;
+  const modal = hasSignedConvention || !shouldCheckConventionAgain()
+    ? null
+    : <ConventionModal currentConvention={user.convention} />;
 
   const getPageProps = () => {
     const page = pathname.split('/')[2];
     switch (page) {
       case 'modifier-profil':
         return {
-          breadCrumbs: [
-            { href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' },
-          ],
+          breadCrumbs: [{ href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' }],
           currentBreadCrumb: 'Modifier mon profil',
           title: (
             <>
-              Mes informations <b>Annuaire</b>
+              Mes informations
+              {' '}
+              <b>Annuaire</b>
             </>
           ),
         };
       case 'ma-convention':
         return {
-          breadCrumbs: [
-            { href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' },
-          ],
+          breadCrumbs: [{ href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' }],
           currentBreadCrumb: 'Ma convention',
           title: (
             <>
-              Ma <b>convention</b>
+              Ma
+              {' '}
+              <b>convention</b>
             </>
           ),
         };
       case 'ma-disponibilite':
         return {
-          breadCrumbs: [
-            { href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' },
-          ],
+          breadCrumbs: [{ href: '/psychologue/tableau-de-bord', label: 'Tableau de bord' }],
           currentBreadCrumb: 'Ma disponibilité',
           title: (
             <>
-              Mon statut <b>Annuaire</b>
+              Mon statut
+              {' '}
+              <b>Annuaire</b>
             </>
           ),
         };
@@ -88,7 +83,9 @@ const PsychologistRouter = () => {
         return {
           title: (
             <>
-              Nouvelle <b>séance</b>
+              Nouvelle
+              {' '}
+              <b>séance</b>
             </>
           ),
           tutorial: 'new-appointment',
@@ -97,7 +94,9 @@ const PsychologistRouter = () => {
         return {
           title: (
             <>
-              Gérer mes <b>étudiants</b>
+              Gérer mes
+              {' '}
+              <b>étudiants</b>
             </>
           ),
           tutorial: 'students',
@@ -106,27 +105,33 @@ const PsychologistRouter = () => {
         return {
           title: (
             <>
-              Nouvel <b>étudiant</b>
+              Nouvel
+              {' '}
+              <b>étudiant</b>
             </>
           ),
+          tutorial: 'new-student',
         };
-      case 'etudiant':
+      case 'modifier-etudiant':
         return {
           title: (
             <>
-              Mon <b>étudiant</b>
+              Modifier le
+              {' '}
+              <b>dossier</b>
             </>
           ),
+          tutorial: 'new-student',
         };
       case 'envoi-certificat':
         return {
-          breadCrumbs: [
-            { href: '/psychologue/mes-etudiants', label: 'Suivi étudiants' },
-          ],
+          breadCrumbs: [{ href: '/psychologue/mes-etudiants', label: 'Suivi étudiants' }],
           currentBreadCrumb: 'Ajout certificat scolarité',
           title: (
             <>
-              Ajout <b>certificat scolarité</b>
+              Ajout
+              {' '}
+              <b>certificat scolarité</b>
             </>
           ),
         };
@@ -134,7 +139,9 @@ const PsychologistRouter = () => {
         return {
           title: (
             <>
-              Gérer mes <b>facturations</b>
+              Gérer mes
+              {' '}
+              <b>facturations</b>
             </>
           ),
           tutorial: 'billing',
@@ -143,7 +150,9 @@ const PsychologistRouter = () => {
         return {
           title: (
             <>
-              Modifier <b>mes données de facturation</b>
+              Modifier
+              {' '}
+              <b>mes données de facturation</b>
             </>
           ),
           tutorial: 'billing-info',
@@ -152,7 +161,9 @@ const PsychologistRouter = () => {
         return {
           title: (
             <>
-              Tableau de <b>bord</b>
+              Tableau de
+              {' '}
+              <b>bord</b>
             </>
           ),
           withoutHeader: true,
@@ -162,7 +173,9 @@ const PsychologistRouter = () => {
         return {
           title: (
             <>
-              Déclarer mes <b>séances</b>
+              Déclarer mes
+              {' '}
+              <b>séances</b>
             </>
           ),
           tutorial: 'appointments',
@@ -173,65 +186,47 @@ const PsychologistRouter = () => {
   };
 
   return (
-    <Page {...getPageProps()} psyPage withContact>
+    <Page
+      {...getPageProps()}
+      psyPage
+      withContact
+    >
       <Announcement />
       {modal}
       {user.convention && user.convention.isConventionSigned === null && (
         <Notification type="info">
-          Veuillez indiquer l&lsquo;état de votre conventionnement sur la page{' '}
+          Veuillez indiquer l&lsquo;état de votre conventionnement sur la page
+          {' '}
           <HashLink to="/psychologue/ma-convention">Ma convention</HashLink>
         </Notification>
       )}
       {user && !user.active && (
         <Notification type="warning">
-          Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire.{' '}
-          {getInactiveMessage(user)}{' '}
-          <HashLink to="/psychologue/ma-disponibilite">
-            Ma disponibilité
-          </HashLink>
+          Votre profil n&lsquo;est plus visible dans l&lsquo;annuaire.
+          {' '}
+          {getInactiveMessage(user)}
+          {' '}
+          <HashLink to="/psychologue/ma-disponibilite">Ma disponibilité</HashLink>
           .
         </Notification>
       )}
       <GlobalNotification className="fr-my-2w" />
       <Routes>
-        <Route
-          exact
-          path="/"
-          element={<Navigate to="/psychologue/tableau-de-bord" replace />}
-        />
+        <Route exact path="/" element={<Navigate to="/psychologue/tableau-de-bord" replace />} />
         <Route exact path="/tableau-de-bord" element={<PsyProfile />} />
         <Route exact path="/modifier-profil" element={<EditProfile />} />
         <Route exact path="/mes-seances" element={<Appointments />} />
         <Route exact path="/nouvelle-seance" element={<NewAppointment />} />
-        <Route
-          exact
-          path="/nouvelle-seance/:patientId"
-          element={<NewAppointment />}
-        />
+        <Route exact path="/nouvelle-seance/:patientId" element={<NewAppointment />} />
         <Route exact path="/mes-etudiants" element={<Patients />} />
-        <Route exact path="/nouvel-etudiant" element={<AddNewPatient />} />
-        <Route exact path="/etudiant/:patientId" element={<SeePatient />} />
-        <Route
-          exact
-          path="/envoi-certificat"
-          element={<SendPatientCertificate />}
-        />
+        <Route exact path="/nouvel-etudiant" element={<AddEditPatient />} />
+        <Route exact path="/modifier-etudiant/:patientId" element={<AddEditPatient />} />
+        <Route exact path="/envoi-certificat" element={<SendPatientCertificate />} />
         <Route exact path="/mes-remboursements" element={<Billing />} />
-        <Route
-          exact
-          path="/informations-facturation"
-          element={<BillingInfoPage />}
-        />
-        <Route
-          exact
-          path="/ma-convention"
-          element={<ConventionForm checkDefaultValue />}
-        />
+        <Route exact path="/informations-facturation" element={<BillingInfoPage />} />
+        <Route exact path="/ma-convention" element={<ConventionForm checkDefaultValue />} />
         <Route exact path="/ma-disponibilite" element={<SuspendProfile />} />
-        <Route
-          path="/*"
-          element={<Navigate to="/psychologue/tableau-de-bord" />}
-        />
+        <Route path="/*" element={<Navigate to="/psychologue/tableau-de-bord" />} />
       </Routes>
     </Page>
   );

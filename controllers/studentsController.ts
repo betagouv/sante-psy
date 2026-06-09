@@ -22,8 +22,9 @@ const getStudentAppointments = async (
 
     const student = await dbStudents.getById(studentId);
 
-    const appointments =
-      await studentAppointments.getStudentAppointments(student);
+    const { email, ine } = student;
+
+    const appointments = await studentAppointments.getStudentAppointments(email, ine);
 
     res.json(appointments);
     // TODO : nombreux try catch qui servent pas car error deja géré dans méthode ! à enlever partout
