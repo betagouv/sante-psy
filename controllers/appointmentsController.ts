@@ -13,6 +13,7 @@ import validation from '../utils/validation';
 import { AppointmentByYear } from '../types/Appointment';
 import _ from 'lodash';
 import { notifyStudentNewAppointment } from '../services/notifications';
+import { getUnivYear } from '../utils/univYears';
 
 export const ERROR_MESSAGE_APPOINTMENT_BEFORE_INSCRIPTION =
   "La date de la séance ne peut pas être antérieure à l'inscription au dispositif";
@@ -25,6 +26,9 @@ export const ERROR_MESSAGE_APPOINTMENT_AFTER_FOUR_MONTHS =
 
 export const ERROR_MESSAGE_APPOINTMENT_TOO_MANY_APPOINTMENTS =
   "L'étudiant a déja réalisé 12 séances sur l'année en cours";
+
+const MAX_NB_APPOINTMENTS_BY_SCHOOL_YEAR = 12;
+
 const createValidators = [
   check('date')
     .isISO8601()
@@ -48,8 +52,8 @@ const create = async (req: Request, res: Response): Promise<void> => {
   // TODO limitDate 4 month not true anymore, change this and test
   const limitDate = new Date(today.setMonth(today.getMonth() + 4));
 
-  const patientExist = await dbPatient.getById(patientId, psyId);
-  if (!patientExist) {
+  const patient = await dbPatient.getById(patientId, psyId);
+  if (!patient) {
     console.warn(
       `Patient id ${patientId} does not exist for psy id : ${psyId}`,
     );
@@ -58,7 +62,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     );
   }
 
-  // TODO : should we put all sentences in env var?
+  // TODO : should we put all sentences in env var? GOD NO
   const psy = await dbPsychologists.getById(psyId);
   if (date < psy.createdAt) {
     console.warn(
@@ -79,12 +83,36 @@ const create = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError(ERROR_MESSAGE_APPOINTMENT_AFTER_FOUR_MONTHS, 400);
   }
 
+  if (patient.INE) {
+    const appointmentSchoolYear = getUnivYear(date);
+
+    // find out how many appointments student has on the school year of the new appointment
+    const studentAppointments = await dbAppointments.getByPatientId(
+      patient.id,
+      true,
+    );
+    const nbAppointmentsOnSchoolYear = studentAppointments
+      .map((app) => getUnivYear(new Date(app.appointmentDate)))
+      .filter((schoolYear) => schoolYear === appointmentSchoolYear).length;
+
+    // check if below max
+    if (nbAppointmentsOnSchoolYear >= MAX_NB_APPOINTMENTS_BY_SCHOOL_YEAR) {
+      console.warn(
+        `Already ${MAX_NB_APPOINTMENTS_BY_SCHOOL_YEAR} appointments this year (${appointmentSchoolYear}) for student`,
+      );
+      throw new CustomError(
+        ERROR_MESSAGE_APPOINTMENT_TOO_MANY_APPOINTMENTS,
+        400,
+      );
+    }
+  }
+
   await dbAppointments.insert(date, patientId, psyId);
   console.log(
     `Appointment created for patient id ${patientId} by psy id ${psyId}`,
   );
 
-  const { INE, email } = patientExist;
+  const { INE, email } = patient;
   const student = await dbStudents.getByEmailAndIne(INE, email);
 
   notifyStudentNewAppointment(student);
