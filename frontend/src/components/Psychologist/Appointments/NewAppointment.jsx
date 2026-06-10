@@ -212,9 +212,10 @@ const NewAppointment = () => {
               description={
                 <>
                   Cet étudiant a atteint le nombre maximum de séances prises en
-                  charge pour l'année scolaire en cours. Il n'est pas possible
-                  d'en déclarer de nouvelles avant la prochaine rentrée. Si vous
-                  constatez une erreur dans le décompte, veuillez{' '}
+                  charge pour l&apos;année scolaire en cours. Il n&apos;est pas
+                  possible d&apos;en déclarer de nouvelles avant la prochaine
+                  rentrée. Si vous constatez une erreur dans le décompte,
+                  veuillez{' '}
                   <HashLink to="/contact/formulaire">
                     contacter le support
                   </HashLink>

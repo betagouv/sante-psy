@@ -273,7 +273,7 @@ const Patients = () => {
       label: 'Déclarer une séance',
       render: (patient) => {
         const tooManyAppointments =
-          (parseInt(patient.countedAppointments) || 0) >= MAX_APPOINTMENT;
+          (parseInt(patient.countedAppointments, 10) || 0) >= MAX_APPOINTMENT;
         return (
           <Tooltip
             tooltip={
