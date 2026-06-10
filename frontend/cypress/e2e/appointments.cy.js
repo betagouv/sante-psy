@@ -3,7 +3,6 @@ const {
 } = require('../../src/services/conventionVerification');
 const { loginDefaultPsy } = require('./utils/login');
 const { resetDB } = require('./utils/db');
-const { selectPreviousCalendarDate } = require('./utils/calendar');
 const { removeConvention, suspend } = require('./utils/psychologist');
 
 describe('Appointments', () => {
