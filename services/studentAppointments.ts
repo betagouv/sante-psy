@@ -2,6 +2,7 @@ import patients from '../db/patients';
 import appointments from '../db/appointments';
 import psychologists from '../db/psychologists';
 import dateUtils from '../utils/date';
+import { Student } from '../types/Student';
 
 interface StudentAppointment {
   univYear: string;
@@ -11,17 +12,18 @@ interface StudentAppointment {
 
 // TODO unit tests please
 const getStudentAppointments = async (
-  email: string,
-  INE: string,
+  student: Student,
 ): Promise<Record<string, StudentAppointment[]>> => {
-  const matchedPatients = await patients.getByStudentEmailAndIne(email, INE);
+  const matchedPatients = await patients.getByStudent(student);
 
   if (matchedPatients.length === 0) {
     return {};
   }
 
   const appointmentsArrays = await Promise.all(
-    matchedPatients.map((patient) => appointments.getByPatientId(patient.id, true)),
+    matchedPatients.map((patient) =>
+      appointments.getByPatientId(patient.id, true),
+    ),
   );
 
   const flatAppointments = appointmentsArrays.flat();
@@ -42,28 +44,28 @@ const getStudentAppointments = async (
     psychologistIds.map((id) => psychologists.getById(id)),
   );
 
-  const psychologistNameById = psychologistsArray.reduce<Record<string, string>>(
-    (acc, psy) => {
-      if (psy) {
-        acc[psy.dossierNumber] = `${psy.useFirstNames || psy.firstNames} ${psy.useLastName || psy.lastName}`;
-      }
-      return acc;
-    },
-    {},
-  );
+  const psychologistNameById = psychologistsArray.reduce<
+    Record<string, string>
+  >((acc, psy) => {
+    if (psy) {
+      acc[psy.dossierNumber] =
+        `${psy.useFirstNames || psy.firstNames} ${psy.useLastName || psy.lastName}`;
+    }
+    return acc;
+  }, {});
 
   const mappedAppointments: StudentAppointment[] = uniqueAppointments
-  .map((appt) => ({
-    univYear: appt.univYear || 'unknown',
-    appointmentDate: appt.appointmentDate,
-    psychologistName:
-      psychologistNameById[appt.psychologistId]
-      ?? 'Psychologue inconnu',
-  }))
-  .sort(
-    (a, b) => new Date(a.appointmentDate).getTime()
-      - new Date(b.appointmentDate).getTime(),
-  );
+    .map((appt) => ({
+      univYear: appt.univYear || 'unknown',
+      appointmentDate: appt.appointmentDate,
+      psychologistName:
+        psychologistNameById[appt.psychologistId] ?? 'Psychologue inconnu',
+    }))
+    .sort(
+      (a, b) =>
+        new Date(a.appointmentDate).getTime() -
+        new Date(b.appointmentDate).getTime(),
+    );
 
   return mappedAppointments.reduce<Record<string, StudentAppointment[]>>(
     (acc, appointment) => {

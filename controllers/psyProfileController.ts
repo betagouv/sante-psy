@@ -5,11 +5,21 @@ import { purifySanitizer } from '../services/sanitizer';
 import geo from '../utils/geo';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
+import dbStudents from '../db/students';
+import dbPatients from '../db/patients';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
 import getAddressCoordinates from '../services/getAddressCoordinates';
 import { Coordinates } from '../types/Coordinates';
+import { checkDateOfBirth, checkIne } from './validators/common';
+import sendSecondStepMail from '../services/sendSecondStepMail';
+
+export const FIND_STUDENT_MESSAGE_STUDENT_EXISTS = 'Le compte étudiant existe';
+export const FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST =
+  "Le compte étudiant n'existe pas";
+export const FIND_STUDENT_MESSAGE_ALREADY_PATIENT =
+  'Cet étudiant est déja un patient pour ce psychologue';
 
 const getValidators = [
   param('psyId')
@@ -26,7 +36,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
   }
 
   const tokenData = cookie.verifyJwt(req, res);
-  const userId = tokenData ? (tokenData.userId || tokenData.psychologist) : null;
+  const userId = tokenData ? tokenData.userId || tokenData.psychologist : null;
   const extraInfo = tokenData && userId === req.params.psyId;
 
   if (!extraInfo && !psychologist.active) {
@@ -89,6 +99,8 @@ const get = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+const findStudentValidators = [checkIne, checkDateOfBirth];
+
 const updateValidators = [
   check('personalEmail')
     .trim()
@@ -102,9 +114,7 @@ const updateValidators = [
     .notEmpty()
     .customSanitizer(purifySanitizer)
     .withMessage("Vous devez spécifier l'adresse de votre cabinet."),
-  check('otherAddress')
-    .trim()
-    .customSanitizer(purifySanitizer),
+  check('otherAddress').trim().customSanitizer(purifySanitizer),
   check('departement')
     .trim()
     .notEmpty()
@@ -120,23 +130,17 @@ const updateValidators = [
     .notEmpty()
     .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier les langues parlées.'),
-  oneOf([
-    // Two valid possibilities : email is empty, or email is valid format.
-    check('email').trim().isEmpty(),
-    check('email')
-      .trim()
-      .customSanitizer(purifySanitizer)
-      .isEmail(),
-  ], 'Vous devez spécifier un email valide.'),
-  check('description')
-    .trim()
-    .customSanitizer(purifySanitizer),
-  check('website')
-    .trim()
-    .customSanitizer(purifySanitizer),
-  check('appointmentLink')
-    .trim()
-    .customSanitizer(purifySanitizer),
+  oneOf(
+    [
+      // Two valid possibilities : email is empty, or email is valid format.
+      check('email').trim().isEmpty(),
+      check('email').trim().customSanitizer(purifySanitizer).isEmail(),
+    ],
+    'Vous devez spécifier un email valide.',
+  ),
+  check('description').trim().customSanitizer(purifySanitizer),
+  check('website').trim().customSanitizer(purifySanitizer),
+  check('appointmentLink').trim().customSanitizer(purifySanitizer),
   check('teleconsultation')
     .isBoolean()
     .withMessage('Vous devez spécifier si vous proposez la téléconsultation.'),
@@ -178,7 +182,6 @@ const update = async (req: Request, res: Response): Promise<void> => {
         latitude: psychologist.otherLatitude,
         city: psychologist.otherCity,
         postcode: psychologist.otherPostcode,
-
       };
     }
   }
@@ -213,18 +216,24 @@ const activate = async (req: Request, res: Response): Promise<void> => {
   await dbPsychologists.activate(psychologistId);
 
   res.json({
-    message: 'Vos informations sont de nouveau visibles sur l\'annuaire.',
+    message: "Vos informations sont de nouveau visibles sur l'annuaire.",
   });
 };
 
 const suspendValidators = [
   check('date')
     .isISO8601()
-    .withMessage('Vous devez spécifier une date de fin de suspension dans le futur.')
+    .withMessage(
+      'Vous devez spécifier une date de fin de suspension dans le futur.',
+    )
     .isAfter()
-    .withMessage('Vous devez spécifier une date de fin de suspension dans le futur.'),
+    .withMessage(
+      'Vous devez spécifier une date de fin de suspension dans le futur.',
+    ),
   check('reason')
-    .trim().not().isEmpty()
+    .trim()
+    .not()
+    .isEmpty()
     .withMessage('Vous devez spécifier une raison.')
     .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier une raison.'),
@@ -243,7 +252,7 @@ const suspend = async (req: Request, res: Response): Promise<void> => {
   await dbPsychologists.suspend(psychologistId, req.body.date, req.body.reason);
 
   res.json({
-    message: 'Vos informations ne sont plus visibles sur l\'annuaire.',
+    message: "Vos informations ne sont plus visibles sur l'annuaire.",
   });
 };
 
@@ -262,13 +271,74 @@ const seeTutorial = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+const findStudent = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+  const { ine, dateOfBirth } = req.body;
+
+  const student = await dbStudents.getByIneAndBirthDate(ine, dateOfBirth);
+
+  if (!student) {
+    res.json({
+      studentExists: false,
+      alreadyPatient: false,
+      message: FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST,
+    });
+    return;
+  }
+
+  const alreadyPatient = await dbPatients.isAlreadyAPatient(
+    student.id,
+    psychologistId,
+  );
+  if (alreadyPatient) {
+    res.json({
+      studentExists: true,
+      alreadyPatient: true,
+      message: FIND_STUDENT_MESSAGE_ALREADY_PATIENT,
+    });
+    return;
+  }
+
+  res.json({
+    studentExists: true,
+    alreadyPatient: false,
+    message: FIND_STUDENT_MESSAGE_STUDENT_EXISTS,
+    student,
+  });
+};
+
+const inviteStudent = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+  const { email } = req.body;
+
+  try {
+    await sendSecondStepMail.inviteNewStudentToCreateAccount(
+      email,
+      'studentInvitationFromPsy',
+      'Création de votre espace étudiant',
+    );
+  } catch (err) {
+    console.error('Failed to send student invitation from psy', err);
+    throw new CustomError(
+      "Une erreur est survenue lors de l'envoi de l'invitation",
+    );
+  }
+  res.status(200).json({
+    message: "L'invitation a bien été envoyée.",
+  });
+};
+
 export default {
   getValidators,
   updateValidators,
   suspendValidators,
+  findStudentValidators,
   get: asyncHelper(get),
   update: asyncHelper(update),
   activate: asyncHelper(activate),
   suspend: asyncHelper(suspend),
   seeTutorial: asyncHelper(seeTutorial),
+  findStudent: asyncHelper(findStudent),
+  inviteStudent: asyncHelper(inviteStudent),
 };
