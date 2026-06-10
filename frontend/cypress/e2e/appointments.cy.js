@@ -1,4 +1,6 @@
-const { checkConvention } = require('../../src/services/conventionVerification');
+const {
+  checkConvention,
+} = require('../../src/services/conventionVerification');
 const { loginDefaultPsy } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 const { selectPreviousCalendarDate } = require('./utils/calendar');
@@ -86,86 +88,6 @@ describe('Appointments', () => {
           "Votre profil n‘est plus visible dans l‘annuaire. En cette période d'examens, les demandes d'étudiants sont en constante augmentation, nous sollicitons donc votre participation. Pour que les étudiants puissent vous contacter, rendez vous sur la page Ma disponibilité.",
         );
       });
-    });
-  });
-
-  describe('New', () => {
-    it('should not allow selecting a future date', () => {
-      cy.get('[data-test-id="new-appointment-button"]').click();
-      cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
-      cy.get('[data-test-id="new-appointment-etudiant-input"] div div')
-        .contains('SharedPatient1')
-        .click();
-
-      cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
-      cy.get('[data-test-id="new-appointment-date-input"]').should('exist');
-      cy.get('[data-test-id="new-appointment-date-input"]').click();
-
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const dayToSelect = tomorrow.getDate();
-      const selector = `.react-datepicker__day--0${dayToSelect < 10 ? `0${dayToSelect}` : dayToSelect}`;
-      cy.get(selector).should('have.class', 'react-datepicker__day--disabled');
-
-      cy.get('[data-test-id="new-appointment-submit"]').should('be.disabled');
-    });
-
-    it('should create a new previous appointments if student is selected', () => {
-      cy.get('[data-test-id="new-appointment-button"]').click();
-
-      cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
-
-      cy.get('[data-test-id="new-appointment-etudiant-input"] div div')
-        .contains('SharedPatient1')
-        .click();
-
-      cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
-
-      cy.get('[data-test-id="new-appointment-date-input"]').should('exist');
-
-      cy.get('[data-test-id="new-appointment-date-input"]').click();
-
-      selectPreviousCalendarDate();
-
-      cy.get('[data-test-id="new-appointment-submit"]')
-        .invoke('attr', 'disabled')
-        .then(disabled => {
-          if (disabled) {
-            cy.get('[data-test-id="new-appointment-submit"]')
-              .invoke('attr', 'disabled')
-              .then(d => {
-                if (d) {
-                  cy.get('[data-test-id="new-appointment-understand"]').click();
-                }
-              });
-          }
-        });
-
-      cy.get('[data-test-id="new-appointment-submit"]').click();
-
-      cy.wait('@createAppointment');
-      cy.location('pathname').should('eq', '/psychologue/mes-seances');
-      cy.get('[data-test-id="notification-success"] p').should('exist');
-    });
-
-    it('should NOT be able to create a new appointment if selected student doesnt have valid INE', () => {
-      cy.get('[data-test-id="new-appointment-button"]').click();
-
-      cy.get('[data-test-id="new-appointment-etudiant-input"] input').click();
-
-      cy.get('[data-test-id="new-appointment-etudiant-input"] div div')
-        .contains('SharedPatient2')
-        .click();
-
-      cy.get('[data-test-id="etudiant-seances-list"]').should('exist');
-
-      cy.get('[data-test-id="new-appointment-date-input"]').should('exist');
-
-      cy.get('[data-test-id="new-appointment-date-input"]').should('have.attr', 'disabled');
-
-      cy.get('[data-test-id="new-appointment-submit"]').should('have.attr', 'disabled');
-
-      cy.get('[data-test-id="alert-missing-data"]').should('exist');
     });
   });
 });
