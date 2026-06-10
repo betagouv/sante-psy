@@ -157,34 +157,34 @@ const NewAppointment = () => {
               />
             )}
           </div>
-          <DatePicker
-            id="new-appointment-date-input"
-            className="date-picker"
-            selected={date}
-            minDate={beginningDate}
-            maxDate={maxDate}
-            dateFormat="dd/MM/yyyy"
-            showPopperArrow={false}
-            customInput={
-              <DateInput
-                label="Date de la séance"
-                hint={
-                  <>
-                    Les séances doivent être déclarées au plus tard le dernier
-                    jour du mois suivant leur réalisation. Pour toute aide,{' '}
-                    <HashLink to="/contact/formulaire">
-                      contactez le support.
-                    </HashLink>
-                  </>
-                }
-                dataTestId="new-appointment-date-input"
-                disabled={!hasAllCompulsoryInfo}
-              />
-            }
-            onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
-            required
-            disabled={!hasAllCompulsoryInfo}
-          />
+          {hasAllCompulsoryInfo && !tooMuchAppointments && (
+            <DatePicker
+              id="new-appointment-date-input"
+              className="date-picker"
+              selected={date}
+              minDate={beginningDate}
+              maxDate={maxDate}
+              dateFormat="dd/MM/yyyy"
+              showPopperArrow={false}
+              customInput={
+                <DateInput
+                  label="Date de la séance"
+                  hint={
+                    <>
+                      Les séances doivent être déclarées au plus tard le dernier
+                      jour du mois suivant leur réalisation. Pour toute aide,{' '}
+                      <HashLink to="/contact/formulaire">
+                        contactez le support.
+                      </HashLink>
+                    </>
+                  }
+                  dataTestId="new-appointment-date-input"
+                />
+              }
+              onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
+              required
+            />
+          )}
           {patientId && !hasAllCompulsoryInfo && (
             <>
               <Alert
