@@ -2,13 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
-import {
-  Alert,
-  Button,
-  Checkbox,
-  SearchableSelect,
-  Select,
-} from '@dataesr/react-dsfr';
+import { Alert, Button, SearchableSelect, Select } from '@dataesr/react-dsfr';
 
 import DateInput from 'components/Date/DateInput';
 
@@ -38,7 +32,6 @@ const NewAppointment = () => {
   const params = useParams();
   const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
-  const [understand, setUnderstand] = useState(false);
 
   const {
     commonStore: { setNotification },
@@ -213,23 +206,15 @@ const NewAppointment = () => {
             </>
           )}
           {tooMuchAppointments && (
-            <>
-              <Alert
-                className="fr-mt-2w"
-                description={
-                  <>
-                    Attention ! Vous avez dépassé le nombre de séances prévues
-                    dans le cadre de ce dispositif.
-                  </>
-                }
-              />
-              <Checkbox
-                className="fr-mt-1w"
-                data-test-id="new-appointment-understand"
-                label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances seront prises en charge par année universitaire.`}
-                onChange={(e) => setUnderstand(e.target.checked)}
-              />
-            </>
+            <Alert
+              className="fr-mt-2w"
+              description={
+                <>
+                  Attention ! Vous avez dépassé le nombre de séances prévues
+                  dans le cadre de ce dispositif.
+                </>
+              }
+            />
           )}
           <div className={styles.submitCancelButtonsWrapper}>
             <Button
@@ -238,9 +223,7 @@ const NewAppointment = () => {
               submit
               icon="ri-add-line"
               className="fr-mt-4w"
-              disabled={
-                (tooMuchAppointments && !understand) || !hasAllCompulsoryInfo
-              }
+              disabled={tooMuchAppointments || !hasAllCompulsoryInfo}
             >
               Créer la séance
             </Button>
