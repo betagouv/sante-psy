@@ -14,6 +14,15 @@ import { AppointmentByYear } from '../types/Appointment';
 import _ from 'lodash';
 import { notifyStudentNewAppointment } from '../services/notifications';
 
+export const ERROR_MESSAGE_APPOINTMENT_BEFORE_INSCRIPTION =
+  "La date de la séance ne peut pas être antérieure à l'inscription au dispositif";
+
+export const ERROR_MESSAGE_APPOINTMENT_BEFORE_LAST_MONTH =
+  'La date de la séance ne peut pas être antérieure au 1er du mois précédent';
+
+export const ERROR_MESSAGE_APPOINTMENT_AFTER_FOUR_MONTHS =
+  'La date de la séance doit être dans moins de 4 mois';
+
 const createValidators = [
   check('date')
     .isISO8601()
@@ -53,28 +62,19 @@ const create = async (req: Request, res: Response): Promise<void> => {
     console.warn(
       "It's impossible to declare an appointment before psychologist creation date",
     );
-    throw new CustomError(
-      "La date de la séance ne peut pas être antérieure à l'inscription au dispositif",
-      400,
-    );
+    throw new CustomError(ERROR_MESSAGE_APPOINTMENT_BEFORE_INSCRIPTION, 400);
   }
 
   if (date < firstDayOfLastMonth) {
     console.warn('The appointment date is before the first day of last month');
-    throw new CustomError(
-      'La date de la séance ne peut pas être antérieure au 1er du mois précédent',
-      400,
-    );
+    throw new CustomError(ERROR_MESSAGE_APPOINTMENT_BEFORE_LAST_MONTH, 400);
   }
 
   if (date > limitDate) {
     console.warn(
       'The difference between today and the declaration date is beyond 4 month',
     );
-    throw new CustomError(
-      'La date de la séance doit être dans moins de 4 mois',
-      400,
-    );
+    throw new CustomError(ERROR_MESSAGE_APPOINTMENT_AFTER_FOUR_MONTHS, 400);
   }
 
   await dbAppointments.insert(date, patientId, psyId);
