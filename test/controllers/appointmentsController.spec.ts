@@ -318,7 +318,7 @@ describe('appointmentsController', () => {
           }),
         ),
       );
-      create.insertOneAppointment({
+      await create.insertOneAppointment({
         patientId: dbPatient2.id,
         psychologistId: psy2.dossierNumber,
         appointmentDate: aDayFromPreviousSchoolYear,
