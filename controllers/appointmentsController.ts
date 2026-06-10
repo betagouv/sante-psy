@@ -23,6 +23,8 @@ export const ERROR_MESSAGE_APPOINTMENT_BEFORE_LAST_MONTH =
 export const ERROR_MESSAGE_APPOINTMENT_AFTER_FOUR_MONTHS =
   'La date de la séance doit être dans moins de 4 mois';
 
+export const ERROR_MESSAGE_APPOINTMENT_TOO_MANY_APPOINTMENTS =
+  "L'étudiant a déja réalisé 12 séances sur l'année en cours";
 const createValidators = [
   check('date')
     .isISO8601()
