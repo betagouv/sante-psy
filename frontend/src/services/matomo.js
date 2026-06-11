@@ -3,6 +3,7 @@ import { AROUND_ME } from 'components/PsyListing/PsyListing';
 export const trackSearchPsychologists = (
   nameAndSpecialityFilter,
   languageFilter,
+  addressFilter,
   addressFilterObject,
   teleconsultation,
 ) => {
