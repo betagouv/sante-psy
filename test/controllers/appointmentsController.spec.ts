@@ -12,7 +12,7 @@ import appointmentBadges from '../../utils/badges';
 import dateUtils from '../../utils/date';
 import { Patient } from '../../types/Patient';
 import {
-  ERROR_MESSAGE_APPOINTMENT_AFTER_FOUR_MONTHS,
+  ERROR_MESSAGE_APPOINTMENT_AFTER_TODAY,
   ERROR_MESSAGE_APPOINTMENT_BEFORE_INSCRIPTION,
   ERROR_MESSAGE_APPOINTMENT_BEFORE_LAST_MONTH,
   ERROR_MESSAGE_APPOINTMENT_TOO_MANY_APPOINTMENTS,
@@ -181,24 +181,23 @@ describe('appointmentsController', () => {
       );
     });
 
-    it('should not create appointment if diff in month > 4', async () => {
+    it('should not create appointment in the future', async () => {
       const psy = await create.insertOnePsy();
       const patient = await patientInfoToInsert(psy);
 
-      const todayDate = new Date();
-      const newDatePlus5month = new Date(
-        todayDate.setMonth(todayDate.getMonth() + 5),
-      );
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
       const res = await postAppointment({
         psyId: psy.dossierNumber,
         patientId: patient.id,
-        date: newDatePlus5month,
+        date: tomorrow,
       });
 
       await confirmResError(
         res,
         psy.dossierNumber,
-        ERROR_MESSAGE_APPOINTMENT_AFTER_FOUR_MONTHS,
+        ERROR_MESSAGE_APPOINTMENT_AFTER_TODAY,
       );
     });
 

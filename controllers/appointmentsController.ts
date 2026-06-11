@@ -8,7 +8,7 @@ import dbStudents from '../db/students';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { getAppointmentWithBadges } from '../services/getBadges';
-import dateUtils from '../utils/date';
+import dateUtils, { tomorrow } from '../utils/date';
 import validation from '../utils/validation';
 import { AppointmentByYear } from '../types/Appointment';
 import _ from 'lodash';
@@ -21,8 +21,8 @@ export const ERROR_MESSAGE_APPOINTMENT_BEFORE_INSCRIPTION =
 export const ERROR_MESSAGE_APPOINTMENT_BEFORE_LAST_MONTH =
   'La date de la séance ne peut pas être antérieure au 1er du mois précédent';
 
-export const ERROR_MESSAGE_APPOINTMENT_AFTER_FOUR_MONTHS =
-  'La date de la séance doit être dans moins de 4 mois';
+export const ERROR_MESSAGE_APPOINTMENT_AFTER_TODAY =
+  'La date de la séance ne peut pas être dans le futur';
 
 export const ERROR_MESSAGE_APPOINTMENT_TOO_MANY_APPOINTMENTS =
   "L'étudiant a déja réalisé 12 séances sur l'année en cours";
@@ -46,11 +46,9 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const psyId = req.auth.userId || req.auth.psychologist;
 
   const date = new Date(req.body.date);
-  const today = new Date();
   const firstDayOfLastMonth = dateUtils.getFirstDayOfLastMonth();
 
-  // TODO limitDate 4 month not true anymore, change this and test
-  const limitDate = new Date(today.setMonth(today.getMonth() + 4));
+  const limitDate = tomorrow();
 
   const patient = await dbPatient.getById(patientId, psyId);
   if (!patient) {
@@ -75,11 +73,9 @@ const create = async (req: Request, res: Response): Promise<void> => {
     throw new CustomError(ERROR_MESSAGE_APPOINTMENT_BEFORE_LAST_MONTH, 400);
   }
 
-  if (date > limitDate) {
-    console.warn(
-      'The difference between today and the declaration date is beyond 4 month',
-    );
-    throw new CustomError(ERROR_MESSAGE_APPOINTMENT_AFTER_FOUR_MONTHS, 400);
+  if (date >= limitDate) {
+    console.warn('The declaration date is after today');
+    throw new CustomError(ERROR_MESSAGE_APPOINTMENT_AFTER_TODAY, 400);
   }
 
   if (patient.INE) {
