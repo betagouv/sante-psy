@@ -293,32 +293,37 @@ const getAllActive = async (
     }
   }
 
-  res.json(
-    reduced
-      ? filteredPsyList.map((psy) => ({
-          dossierNumber: psy.dossierNumber,
-          firstNames: psy.useFirstNames || psy.firstNames,
-          lastName: psy.useLastName || psy.lastName,
-          teleconsultation: psy.teleconsultation,
-          departement: psy.departement,
-          region: psy.region,
-          address: psy.address,
-          longitude: psy.longitude,
-          latitude: psy.latitude,
-          city: psy.city,
-          postcode: psy.postcode,
-          otherAddress: psy.otherAddress,
-          otherLongitude: psy.otherLongitude,
-          otherLatitude: psy.otherLatitude,
-          otherCity: psy.otherCity,
-          otherPostcode: psy.otherPostcode,
-          languages: psy.languages,
-          email: psy.email,
-          phone: psy.phone,
-          description: psy.description,
-        }))
-      : filteredPsyList,
+  const finalList = reduced
+    ? filteredPsyList.map((psy) => ({
+        dossierNumber: psy.dossierNumber,
+        firstNames: psy.useFirstNames || psy.firstNames,
+        lastName: psy.useLastName || psy.lastName,
+        teleconsultation: psy.teleconsultation,
+        departement: psy.departement,
+        region: psy.region,
+        address: psy.address,
+        longitude: psy.longitude,
+        latitude: psy.latitude,
+        city: psy.city,
+        postcode: psy.postcode,
+        otherAddress: psy.otherAddress,
+        otherLongitude: psy.otherLongitude,
+        otherLatitude: psy.otherLatitude,
+        otherCity: psy.otherCity,
+        otherPostcode: psy.otherPostcode,
+        languages: psy.languages,
+        email: psy.email,
+        phone: psy.phone,
+        description: psy.description,
+      }))
+    : filteredPsyList;
+
+  finalList.sort((psy1, psy2) =>
+    `${psy1.lastName.toUpperCase()} ${psy1.firstNames}`.localeCompare(
+      `${psy2.lastName.toUpperCase()} ${psy2.firstNames}`,
+    ),
   );
+  res.json(finalList);
 };
 
 export default {
