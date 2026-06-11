@@ -62,7 +62,6 @@ const create = async (req: Request, res: Response): Promise<void> => {
     );
   }
 
-  // TODO : should we put all sentences in env var? GOD NO
   const psy = await dbPsychologists.getById(psyId);
   if (date < psy.createdAt) {
     console.warn(
