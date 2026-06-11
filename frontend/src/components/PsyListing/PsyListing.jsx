@@ -15,6 +15,7 @@ import PsyTable from './PsyTable';
 import NoResultPsyTable from './NoResultPsyTable';
 
 import styles from './psyListing.cssmodule.scss';
+import { trackSearchPsychologists } from 'services/matomo';
 
 const AROUND_ME = 'Autour de moi';
 
@@ -81,64 +82,12 @@ const PsyListing = () => {
       setFilteredPsychologists(response);
 
       if (__MATOMO__) {
-        const usedFilters = [];
-
-        if (nameAndSpecialityFilter && nameAndSpecialityFilter.trim()) {
-          _paq.push([
-            'trackEvent',
-            'AnnuairePsy',
-            'SpecialitySearch',
-            nameAndSpecialityFilter.trim(),
-          ]);
-          usedFilters.push('speciality');
-        }
-
-        if (languageFilter && languageFilter.trim()) {
-          _paq.push([
-            'trackEvent',
-            'AnnuairePsy',
-            'LanguageSearch',
-            languageFilter.trim(),
-          ]);
-          usedFilters.push('language');
-        }
-
-        if (addressFilterObject && addressFilterObject.label) {
-          _paq.push([
-            'trackEvent',
-            'AnnuairePsy',
-            'LocationSearch',
-            addressFilterObject.label,
-          ]);
-          usedFilters.push('location');
-        } else if (addressFilter === AROUND_ME) {
-          _paq.push([
-            'trackEvent',
-            'AnnuairePsy',
-            'LocationSearch',
-            'Géolocalisation',
-          ]);
-          usedFilters.push('location');
-        }
-
-        _paq.push([
-          'trackEvent',
-          'AnnuairePsy',
-          'TeleconsultationFilter',
-          teleconsultation ? 'enabled' : 'disabled',
-        ]);
-        if (teleconsultation) {
-          usedFilters.push('teleconsultation');
-        }
-
-        if (usedFilters.length > 0) {
-          _paq.push([
-            'trackEvent',
-            'AnnuairePsy',
-            'SearchProfile',
-            usedFilters.sort().join('+'),
-          ]);
-        }
+        trackSearchPsychologists(
+          nameAndSpecialityFilter,
+          languageFilter,
+          addressFilterObject,
+          teleconsultation,
+        );
       }
     } catch (error) {
       console.error('Erreur lors de la récupération des psychologues :', error);
