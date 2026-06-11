@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { Checkbox, TextInput, Alert, Button } from '@dataesr/react-dsfr';
 import { observer } from 'mobx-react';
 
@@ -14,6 +13,7 @@ import GlobalNotification from 'components/Notification/GlobalNotification';
 import PsyTable from './PsyTable';
 import NoResultPsyTable from './NoResultPsyTable';
 
+import { useSearchParams } from 'react-router-dom';
 import styles from './psyListing.cssmodule.scss';
 import { trackSearchPsychologists } from 'services/matomo';
 
