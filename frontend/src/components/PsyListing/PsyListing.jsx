@@ -17,7 +17,7 @@ import { useSearchParams } from 'react-router-dom';
 import styles from './psyListing.cssmodule.scss';
 import { trackSearchPsychologists } from 'services/matomo';
 
-const AROUND_ME = 'Autour de moi';
+export const AROUND_ME = 'Autour de moi';
 
 const geoStatusEnum = {
   UNSUPPORTED: -2,
@@ -56,41 +56,51 @@ const PsyListing = () => {
   );
   const [page, setPage] = useState(parseInt(searchParams.get('page') || '0'));
 
-  const fetchPsychologists = async () => {
-    let addressValue = addressFilter !== AROUND_ME ? addressFilter : undefined;
+  const fetchPsychologists = async ({
+    name,
+    address,
+    addressObject,
+    language,
+    teleconsultation,
+    currentCoords,
+    page,
+  }) => {
+    let addressValue = address !== AROUND_ME ? address : undefined;
 
-    if (addressFilterObject && typeof addressFilterObject === 'object') {
+    if (addressObject && typeof addressObject === 'object') {
       addressValue = JSON.stringify({
-        label: addressFilterObject.label,
-        value: addressFilterObject.value,
-        type: addressFilterObject.type,
-        postcode: addressFilterObject.postcode,
-        city: addressFilterObject.city,
-        context: addressFilterObject.context,
+        label: addressObject.label,
+        value: addressObject.value,
+        type: addressObject.type,
+        postcode: addressObject.postcode,
+        city: addressObject.city,
+        context: addressObject.context,
       });
     }
 
     const filters = {
-      nameAndSpeciality: nameAndSpecialityFilter || undefined,
+      nameAndSpeciality: name || undefined,
       address: addressValue,
       teleconsultation,
-      language: languageFilter || undefined,
+      language: language || undefined,
       coords:
-        addressFilter === AROUND_ME && coords
-          ? `${coords.latitude},${coords.longitude}`
+        address === AROUND_ME && currentCoords
+          ? `${currentCoords.latitude},${currentCoords.longitude}`
           : undefined,
     };
 
     try {
       const response = await agent.Psychologist.find(filters);
-      setPsychologists(response);
+      setHasSearched(true);
       setFilteredPsychologists(response);
+      setPage(page);
 
       if (__MATOMO__) {
         trackSearchPsychologists(
-          nameAndSpecialityFilter,
-          languageFilter,
-          addressFilterObject,
+          name,
+          language,
+          address,
+          addressObject,
           teleconsultation,
         );
       }
@@ -99,7 +109,16 @@ const PsyListing = () => {
     }
   };
 
-  const handleSearch = () => {
+  useEffect(() => {
+    const name = searchParams.get('name') || '';
+    const language = searchParams.get('language') || '';
+    const teleconsultation =
+      searchParams.get('teleconsultation') === 'true' || false;
+    const address = searchParams.get('address') || '';
+    const addressObject = JSON.parse(searchParams.get('addressObject')) || null;
+    const currentCoords = coords;
+    const page = parseInt(searchParams.get('page') || '0');
+
     const isAddressValid =
       !addressFilter || addressFilter === AROUND_ME || addressFilterObject;
 
@@ -115,16 +134,7 @@ const PsyListing = () => {
       return;
     }
 
-    if (
-      nameAndSpecialityFilter.trim() ||
-      languageFilter.trim() ||
-      addressFilter.trim() ||
-      teleconsultation
-    ) {
-      setNotification(null);
-      fetchPsychologists();
-      setPage(1);
-    } else {
+    if (!name && !language && !address) {
       setFilteredPsychologists([]);
       setPage(0);
       setNotification(
@@ -134,7 +144,30 @@ const PsyListing = () => {
         false,
         false,
       );
+      return;
     }
+    setNotification(null);
+
+    fetchPsychologists({
+      name,
+      language,
+      address,
+      addressObject,
+      teleconsultation,
+      currentCoords,
+      page,
+    });
+  }, [searchParams]);
+
+  const handleSearch = () => {
+    setSearchParams({
+      name: nameAndSpecialityFilter,
+      language: languageFilter,
+      teleconsultation,
+      address: addressFilter,
+      addressObject: JSON.stringify(addressFilterObject),
+      page: 1,
+    });
   };
 
   useEffect(() => {
@@ -182,7 +215,6 @@ const PsyListing = () => {
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
-    fetchPsychologists();
   };
 
   return (
