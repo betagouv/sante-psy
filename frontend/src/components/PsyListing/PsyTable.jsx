@@ -10,6 +10,7 @@ const PsyTable = ({
   psychologists,
   nameFilter,
   addressFilter,
+  addressFilterObject,
   languageFilter,
   teleconsultation,
 }) => {
@@ -24,7 +25,7 @@ const PsyTable = ({
   const isUserConnected = !!user;
 
   const goToProfile = (psychologist) => {
-    const searchPath = `?page=${page}&name=${nameFilter}&address=${addressFilter}&teleconsultation=${teleconsultation}&language=${languageFilter}`;
+    const searchPath = `?page=${page}&name=${nameFilter}&address=${addressFilter}&addressObject=${JSON.stringify(addressFilterObject)}&teleconsultation=${teleconsultation}&language=${languageFilter}`;
     if (location.search !== searchPath) {
       navigate(`/trouver-un-psychologue${searchPath}`);
     }

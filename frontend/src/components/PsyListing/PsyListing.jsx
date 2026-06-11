@@ -28,28 +28,33 @@ const geoStatusEnum = {
 
 const PsyListing = () => {
   const {
-    commonStore: { setNotification, psychologists, setPsychologists },
+    commonStore: { setNotification },
   } = useStore();
-  const query = new URLSearchParams(useLocation().search);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [hasSearched, setHasSearched] = useState(false);
 
   const [coords, setCoords] = useState();
   const [filteredPsychologists, setFilteredPsychologists] = useState([]);
   const [geoStatus, setGeoStatus] = useState(geoStatusEnum.UNKNOWN);
   const [geoLoading, setGeoLoading] = useState(false);
   const [nameAndSpecialityFilter, setNameAndSpecialityFilter] = useState(
-    query.get('nameAndSpeciality') || '',
+    searchParams.get('name') || '',
   );
   const [languageFilter, setLanguageFilter] = useState(
-    query.get('language') || '',
+    searchParams.get('language') || '',
   );
   const [addressFilter, setAddressFilter] = useState(
-    query.get('address') || '',
+    searchParams.get('address') || '',
   );
-  const [addressFilterObject, setAddressFilterObject] = useState(null);
+  const [addressFilterObject, setAddressFilterObject] = useState(
+    JSON.parse(searchParams.get('addressObject')) || null,
+  );
   const [teleconsultation, setTeleconsultation] = useState(
-    query.get('teleconsultation') === 'true' || false,
+    searchParams.get('teleconsultation') === 'true' || false,
   );
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(parseInt(searchParams.get('page') || '0'));
 
   const fetchPsychologists = async () => {
     let addressValue = addressFilter !== AROUND_ME ? addressFilter : undefined;
@@ -190,7 +195,7 @@ const PsyListing = () => {
         </>
       }
       description={
-        psychologists
+        hasSearched
           ? 'Parmi plus de 1 200 psychologues partenaires partout en France'
           : 'Chargement de la liste des psychologues'
       }
@@ -302,9 +307,11 @@ const PsyListing = () => {
           psychologists={filteredPsychologists || []}
           nameAndSpecialityFilter={nameAndSpecialityFilter}
           addressFilter={addressFilter}
+          addressFilterObject={addressFilterObject}
           languageFilter={languageFilter}
           teleconsultation={teleconsultation}
           geoLoading={geoLoading}
+          nameFilter={nameAndSpecialityFilter}
         />
         {page !== 0 &&
         filteredPsychologists &&
