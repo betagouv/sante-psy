@@ -35,7 +35,14 @@ const PsyListing = () => {
 
   const [hasSearched, setHasSearched] = useState(false);
 
-  const [coords, setCoords] = useState();
+  const [coords, setCoords] = useState(
+    searchParams.get('lat') && searchParams.get('lon')
+      ? {
+          latitude: searchParams.get('lat'),
+          longitude: searchParams.get('lon'),
+        }
+      : null,
+  );
   const [filteredPsychologists, setFilteredPsychologists] = useState([]);
   const [geoStatus, setGeoStatus] = useState(geoStatusEnum.UNKNOWN);
   const [geoLoading, setGeoLoading] = useState(false);
@@ -65,8 +72,12 @@ const PsyListing = () => {
     currentCoords,
     page,
   }) => {
-    let addressValue = address !== AROUND_ME ? address : undefined;
+    let coords = undefined;
+    if (address === AROUND_ME && currentCoords) {
+      coords = `${currentCoords.latitude},${currentCoords.longitude}`;
+    }
 
+    let addressValue = address !== AROUND_ME ? address : undefined;
     if (addressObject && typeof addressObject === 'object') {
       addressValue = JSON.stringify({
         label: addressObject.label,
@@ -83,10 +94,7 @@ const PsyListing = () => {
       address: addressValue,
       teleconsultation,
       language: language || undefined,
-      coords:
-        address === AROUND_ME && currentCoords
-          ? `${currentCoords.latitude},${currentCoords.longitude}`
-          : undefined,
+      coords,
     };
 
     try {
@@ -166,6 +174,7 @@ const PsyListing = () => {
       teleconsultation,
       address: addressFilter,
       addressObject: JSON.stringify(addressFilterObject),
+      currentCoords: coords,
       page: 1,
     });
   };
