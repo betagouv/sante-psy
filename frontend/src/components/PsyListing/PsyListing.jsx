@@ -61,7 +61,9 @@ const PsyListing = () => {
   const [teleconsultation, setTeleconsultation] = useState(
     searchParams.get('teleconsultation') === 'true' || false,
   );
-  const [page, setPage] = useState(parseInt(searchParams.get('page') || '0'));
+  const [page, setPage] = useState(
+    parseInt(searchParams.get('page') || '0', 10),
+  );
 
   const fetchPsychologists = async ({
     name,
@@ -72,7 +74,7 @@ const PsyListing = () => {
     currentCoords,
     page,
   }) => {
-    let coords = undefined;
+    let coords;
     if (address === AROUND_ME && currentCoords) {
       coords = `${currentCoords.latitude},${currentCoords.longitude}`;
     }
@@ -124,7 +126,7 @@ const PsyListing = () => {
     const address = searchParams.get('address') || '';
     const addressObject = JSON.parse(searchParams.get('addressObject')) || null;
     const currentCoords = coords;
-    const page = parseInt(searchParams.get('page') || '0');
+    const page = parseInt(searchParams.get('page') || '0', 10);
 
     const isAddressValid =
       !addressFilter || addressFilter === AROUND_ME || addressFilterObject;

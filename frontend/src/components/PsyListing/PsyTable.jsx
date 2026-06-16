@@ -28,8 +28,7 @@ const PsyTable = ({
   const goToProfile = (psychologist) => {
     let searchPath = `?page=${page}&name=${nameFilter}&address=${addressFilter}&addressObject=${JSON.stringify(addressFilterObject)}&teleconsultation=${teleconsultation}&language=${languageFilter}`;
     if (coords?.latitude && coords?.longitude) {
-      searchPath =
-        searchPath + `&lat=${coords.latitude}&lon=${coords.longitude}`;
+      searchPath += `&lat=${coords.latitude}&lon=${coords.longitude}`;
     }
     if (location.search !== searchPath) {
       navigate(`/trouver-un-psychologue${searchPath}`);
