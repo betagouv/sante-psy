@@ -99,7 +99,6 @@ const PsyListing = () => {
 
     try {
       const response = await agent.Psychologist.find(filters);
-      setHasSearched(true);
       setFilteredPsychologists(response);
       setPage(page);
 
@@ -145,13 +144,15 @@ const PsyListing = () => {
     if (!name && !language && !address) {
       setFilteredPsychologists([]);
       setPage(0);
-      setNotification(
-        {
-          message: 'Veuillez entrer au moins un critère de recherche.',
-        },
-        false,
-        false,
-      );
+      if (hasSearched) {
+        setNotification(
+          {
+            message: 'Veuillez entrer au moins un critère de recherche.',
+          },
+          false,
+          false,
+        );
+      }
       return;
     }
     setNotification(null);
@@ -168,6 +169,7 @@ const PsyListing = () => {
   }, [searchParams]);
 
   const handleSearch = () => {
+    setHasSearched(true);
     setSearchParams({
       name: nameAndSpecialityFilter,
       language: languageFilter,
@@ -353,6 +355,7 @@ const PsyListing = () => {
           teleconsultation={teleconsultation}
           geoLoading={geoLoading}
           nameFilter={nameAndSpecialityFilter}
+          coords={coords}
         />
         {page !== 0 &&
         filteredPsychologists &&
