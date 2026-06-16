@@ -57,6 +57,11 @@ const NewAppointment = () => {
     () => patient && patient.countedAppointments >= MAX_APPOINTMENT,
     [patient],
   );
+
+  const onUpdatePatientAppointments = () => {
+    agent.Patient.get().then(setPatients);
+  };
+
   const hasAllCompulsoryInfo = useMemo(
     () =>
       patient &&
@@ -245,7 +250,11 @@ const NewAppointment = () => {
           </div>
         </form>
         {patientId && (
-          <PatientAppointments showCreateButton={false} patientId={patientId} />
+          <PatientAppointments
+            showCreateButton={false}
+            patientId={patientId}
+            onUpdatePatientAppointments={onUpdatePatientAppointments}
+          />
         )}
       </div>
     </>
