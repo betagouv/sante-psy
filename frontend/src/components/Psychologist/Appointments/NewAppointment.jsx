@@ -32,6 +32,7 @@ const NewAppointment = () => {
   const params = useParams();
   const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
+  const [appointmentsRefreshKey, setAppointmentsRefreshKey] = useState(0);
 
   const {
     commonStore: { setNotification },
@@ -60,6 +61,7 @@ const NewAppointment = () => {
 
   const onUpdatePatientAppointments = () => {
     agent.Patient.get().then(setPatients);
+    setAppointmentsRefreshKey((prev) => prev + 1);
   };
 
   const hasAllCompulsoryInfo = useMemo(
@@ -76,9 +78,8 @@ const NewAppointment = () => {
     e.preventDefault();
     setNotification({});
     agent.Appointment.add(patientId, date).then((response) => {
-      navigate('/psychologue/mes-seances', {
-        state: { notification: response },
-      });
+      setNotification(response);
+      onUpdatePatientAppointments();
     });
   };
 
@@ -130,6 +131,7 @@ const NewAppointment = () => {
                 }
                 onChange={(e) => {
                   setPatientId(e);
+                  setNotification({});
                 }}
                 required
                 options={allOptions}
@@ -254,6 +256,7 @@ const NewAppointment = () => {
             showCreateButton={false}
             patientId={patientId}
             onUpdatePatientAppointments={onUpdatePatientAppointments}
+            refreshKey={appointmentsRefreshKey}
           />
         )}
       </div>

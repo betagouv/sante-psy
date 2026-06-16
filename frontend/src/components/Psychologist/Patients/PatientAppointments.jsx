@@ -16,6 +16,7 @@ const PatientAppointments = ({
   showCreateButton = true,
   patientId,
   onUpdatePatientAppointments,
+  refreshKey,
 }) => {
   const {
     commonStore: { setNotification },
@@ -44,7 +45,7 @@ const PatientAppointments = ({
         }
       });
     }
-  }, [patientId]);
+  }, [patientId, refreshKey]);
 
   useEffect(() => {
     if (selectedYear && patientAppointments[selectedYear]) {
