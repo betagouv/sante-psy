@@ -46,19 +46,19 @@ describe('psyListingController', () => {
       expect(res.status).to.equal(200);
       expect(res.body).to.have.length(2);
 
-      const resultPsyActive2 = res.body[0];
-      expect(resultPsyActive2.dossierNumber).to.equals(
-        psyActive2.dossierNumber,
-      );
-      expect(resultPsyActive2.firstNames).to.equals('Géorgïe');
-      expect(resultPsyActive2.lastName).to.equals('Sand');
-
-      const resultPsyActive1 = res.body[1];
+      const resultPsyActive1 = res.body[0];
       expect(resultPsyActive1.dossierNumber).to.equals(
         psyActive1.dossierNumber,
       );
       expect(resultPsyActive1.firstNames).to.equals('Victor');
       expect(resultPsyActive1.lastName).to.equals('Hugo');
+
+      const resultPsyActive2 = res.body[1];
+      expect(resultPsyActive2.dossierNumber).to.equals(
+        psyActive2.dossierNumber,
+      );
+      expect(resultPsyActive2.firstNames).to.equals('Géorgïe');
+      expect(resultPsyActive2.lastName).to.equals('Sand');
 
       const expectedKeys = [
         'dossierNumber',
