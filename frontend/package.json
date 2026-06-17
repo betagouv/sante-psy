@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=18 <19",
-    "pnpm": ">=10"
+    "node": ">=24"
   },
   "dependencies": {
     "@dataesr/react-dsfr": "^3.10.0",
