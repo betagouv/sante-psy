@@ -45,7 +45,6 @@ const PsyListing = () => {
   );
   const [filteredPsychologists, setFilteredPsychologists] = useState([]);
   const [geoStatus, setGeoStatus] = useState(geoStatusEnum.UNKNOWN);
-  const [geoLoading, setGeoLoading] = useState(false);
   const [nameAndSpecialityFilter, setNameAndSpecialityFilter] = useState(
     searchParams.get('name') || '',
   );
@@ -193,7 +192,6 @@ const PsyListing = () => {
     const { longitude, latitude } = pos.coords;
     setCoords({ longitude, latitude });
     setGeoStatus(geoStatusEnum.GRANTED);
-    setGeoLoading(false);
   };
 
   const errors = () => {
@@ -204,10 +202,8 @@ const PsyListing = () => {
 
   const getGeolocation = (state) => {
     if (state === 'granted') {
-      setGeoLoading(true);
       navigator.geolocation.getCurrentPosition(success);
     } else if (state === 'prompt') {
-      setGeoLoading(true);
       navigator.geolocation.getCurrentPosition(success, errors);
     } else if (state === 'denied') {
       setGeoStatus(geoStatusEnum.DENIED);
@@ -355,7 +351,6 @@ const PsyListing = () => {
           addressFilterObject={addressFilterObject}
           languageFilter={languageFilter}
           teleconsultation={teleconsultation}
-          geoLoading={geoLoading}
           nameFilter={nameAndSpecialityFilter}
           coords={coords}
         />
