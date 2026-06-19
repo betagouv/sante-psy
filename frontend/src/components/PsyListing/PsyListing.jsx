@@ -236,9 +236,7 @@ const PsyListing = () => {
         </>
       }
       description={
-        hasSearched
-          ? 'Parmi plus de 1 200 psychologues partenaires partout en France'
-          : 'Chargement de la liste des psychologues'
+        'Parmi plus de 5 000 psychologues partenaires partout en France'
       }
       dataTestId="psyListPage"
     >
