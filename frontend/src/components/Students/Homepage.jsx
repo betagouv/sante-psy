@@ -36,7 +36,7 @@ const StudentHomepage = () => {
             rel="noopener noreferrer"
             className="fr-btn fr-btn--primary"
           >
-            Prendre RDV
+            Trouver un psychologue
           </Link>
         </div>
         <StudentHistory />

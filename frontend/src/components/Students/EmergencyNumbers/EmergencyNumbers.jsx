@@ -47,7 +47,7 @@ const EmergencyNumbers = () => (
         rel="noopener noreferrer"
         className={styles.ctaBtn}
       >
-        Prendre RDV avec un psychologue
+        Trouver un psychologue
       </Link>
     </div>
     <ul className={styles.numbersList}>
