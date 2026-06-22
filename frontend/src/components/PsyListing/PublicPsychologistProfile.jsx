@@ -15,7 +15,7 @@ import { useStore } from 'stores/index';
 import { ButtonLogin } from 'components/Login/Login';
 import styles from './publicPsychologistProfile.cssmodule.scss';
 
-const getZoomLevel = psychologist => {
+const getZoomLevel = (psychologist) => {
   if (!psychologist.otherLongitude || !psychologist.otherLatitude) {
     return 13;
   }
@@ -65,7 +65,12 @@ const ContactSection = ({ psychologist }) => {
                 secondary
                 onClick={() => {
                   if (__MATOMO__) {
-                    _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'phone']);
+                    _paq.push([
+                      'trackEvent',
+                      'PsychologistProfile',
+                      'Contact',
+                      'phone',
+                    ]);
                   }
                   window.location.href = `tel:${psychologist.phone}`;
                 }}
@@ -83,7 +88,12 @@ const ContactSection = ({ psychologist }) => {
                 secondary
                 onClick={() => {
                   if (__MATOMO__) {
-                    _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'email']);
+                    _paq.push([
+                      'trackEvent',
+                      'PsychologistProfile',
+                      'Contact',
+                      'email',
+                    ]);
                   }
                   window.location.href = `mailto:${psychologist.email}`;
                 }}
@@ -104,7 +114,11 @@ const ContactSection = ({ psychologist }) => {
             <div className={styles.contactInfo}>
               <div>
                 <h5>Site web</h5>
-                <a href={string.prefixUrl(psychologist.website)} target="_blank" rel="noreferrer">
+                <a
+                  href={string.prefixUrl(psychologist.website)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   {psychologist.website}
                 </a>
               </div>
@@ -112,7 +126,12 @@ const ContactSection = ({ psychologist }) => {
                 secondary
                 onClick={() => {
                   if (__MATOMO__) {
-                    _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'website']);
+                    _paq.push([
+                      'trackEvent',
+                      'PsychologistProfile',
+                      'Contact',
+                      'website',
+                    ]);
                   }
                   window.open(string.prefixUrl(psychologist.website), '_blank');
                 }}
@@ -131,9 +150,17 @@ const ContactSection = ({ psychologist }) => {
                   secondary
                   onClick={() => {
                     if (__MATOMO__) {
-                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
+                      _paq.push([
+                        'trackEvent',
+                        'PsychologistProfile',
+                        'Contact',
+                        'appointment',
+                      ]);
                     }
-                    window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
+                    window.open(
+                      string.prefixUrl(psychologist.appointmentLink),
+                      '_blank',
+                    );
                   }}
                   icon="ri-calendar-fill"
                 >
@@ -144,9 +171,17 @@ const ContactSection = ({ psychologist }) => {
                   secondary
                   onClick={() => {
                     if (__MATOMO__) {
-                      _paq.push(['trackEvent', 'PsychologistProfile', 'Contact', 'appointment']);
+                      _paq.push([
+                        'trackEvent',
+                        'PsychologistProfile',
+                        'Contact',
+                        'appointment',
+                      ]);
                     }
-                    window.open(string.prefixUrl(psychologist.appointmentLink), '_blank');
+                    window.open(
+                      string.prefixUrl(psychologist.appointmentLink),
+                      '_blank',
+                    );
                   }}
                 >
                   Prendre rendez-vous
@@ -171,7 +206,10 @@ const ContactSection = ({ psychologist }) => {
             title="Pour obtenir les coordonnées du psychologue, il te faut créer ton espace étudiant."
             description={
               <>
-                <p>Tu ne pourras pas bénéficier de séances gratuites si tu n&apos;as pas créé ton espace étudiant au préalable.</p>
+                <p>
+                  Tu ne pourras pas bénéficier de séances gratuites si tu
+                  n&apos;as pas créé ton espace étudiant au préalable.
+                </p>
                 <p>Tu pourras y retrouver ton historique des séances.</p>
                 <br />
                 <Button
@@ -186,7 +224,9 @@ const ContactSection = ({ psychologist }) => {
               </>
             }
           />
-          <ButtonLogin onClick={() => navigate('/inscription')}>Créer mon espace étudiant</ButtonLogin>
+          <ButtonLogin onClick={() => navigate('/inscription')}>
+            Créer mon espace étudiant
+          </ButtonLogin>
         </div>
       )}
     </>
@@ -201,7 +241,7 @@ const PublicPsychologistProfile = () => {
   useEffect(() => {
     setError();
     agent.Psychologist.getProfile(psyId)
-      .then(response => {
+      .then((response) => {
         setPsychologist(response);
         if (__MATOMO__) {
           _paq.push(['trackEvent', 'PsychologistProfile', 'View', psyId]);
@@ -231,9 +271,16 @@ const PublicPsychologistProfile = () => {
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={[psychologist.latitude, psychologist.longitude]} />
+            <Marker
+              position={[psychologist.latitude, psychologist.longitude]}
+            />
             {psychologist.otherLongitude && psychologist.otherLatitude && (
-              <Marker position={[psychologist.otherLatitude, psychologist.otherLongitude]} />
+              <Marker
+                position={[
+                  psychologist.otherLatitude,
+                  psychologist.otherLongitude,
+                ]}
+              />
             )}
           </MapContainer>
         </div>
@@ -246,9 +293,15 @@ const PublicPsychologistProfile = () => {
         { href: '/', label: 'Accueil' },
         { href: '/trouver-un-psychologue', label: 'Trouver un psychologue' },
       ]}
-      currentBreadCrumb={psychologist && `${psychologist.firstNames} ${psychologist.lastName.toUpperCase()}`}
+      currentBreadCrumb={
+        psychologist &&
+        `${psychologist.firstNames} ${psychologist.lastName.toUpperCase()}`
+      }
       title={<b>Psychologue</b>}
-      description={psychologist && `${psychologist.firstNames} ${psychologist.lastName.toUpperCase()}`}
+      description={
+        psychologist &&
+        `${psychologist.firstNames} ${psychologist.lastName.toUpperCase()}`
+      }
       dataTestId="publicPsyProfilePage"
     >
       {error && <Notification message={error} type="error" />}
@@ -258,12 +311,18 @@ const PublicPsychologistProfile = () => {
             <h3 className={styles.title} data-test-id="psy-info">
               Présentation
             </h3>
-            <div className={styles.descriptionInput}>{psychologist.description}</div>
+            <div className={styles.descriptionInput}>
+              {psychologist.description}
+            </div>
             {psychologist.teleconsultation && (
               <>
                 <div className={styles.separator} />
                 <h5>Consultation à distance</h5>
-                <Badge icon="ri-webcam-fill" text="Téléconsultation disponible" colorFamily="green-bourgeon" />
+                <Badge
+                  icon="ri-webcam-fill"
+                  text="Téléconsultation disponible"
+                  colorFamily="green-bourgeon"
+                />
               </>
             )}
             <div className={styles.displayDesktop}>{otherInfo}</div>
