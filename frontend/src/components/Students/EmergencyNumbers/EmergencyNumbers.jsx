@@ -19,7 +19,8 @@ const numbers = [
   {
     title: 'CNAÉ',
     subtitle: '10h–21h en semaine · 10h–14h en week-end',
-    description: "Ligne d'écoute professionnelle d'accompagnement et de signalement (situations de mal-être, violence, discrimination)",
+    description:
+      "Ligne d'écoute professionnelle d'accompagnement et de signalement (situations de mal-être, violence, discrimination)",
     number: '0 800 737 800',
     colorClass: styles.badgeNavy,
   },
@@ -35,7 +36,8 @@ const EmergencyNumbers = () => (
       />
       <p className={styles.bearText}>Ta santé mentale compte.</p>
       <p className={styles.bearText}>
-        Si tu traverses une période difficile, n&apos;hésite jamais à appeler si tu en ressens le besoin.
+        Si tu traverses une période difficile, n&apos;hésite jamais à appeler si
+        tu en ressens le besoin.
       </p>
     </div>
     <div className={styles.ctaRow}>
@@ -49,16 +51,12 @@ const EmergencyNumbers = () => (
       </Link>
     </div>
     <ul className={styles.numbersList}>
-      {numbers.map(item => (
+      {numbers.map((item) => (
         <NumbersItems key={item.number} {...item} />
       ))}
     </ul>
     <div className={styles.supportRow}>
-      <Link
-        to="/contact/formulaire"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <Link to="/contact/formulaire" target="_blank" rel="noopener noreferrer">
         Contacter le support
       </Link>
     </div>
