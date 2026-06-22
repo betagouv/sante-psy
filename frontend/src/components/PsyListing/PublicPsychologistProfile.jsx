@@ -227,6 +227,9 @@ const ContactSection = ({ psychologist }) => {
           <ButtonLogin onClick={() => navigate('/inscription')}>
             Créer mon espace étudiant
           </ButtonLogin>
+          <ButtonLogin secondary onClick={() => navigate('/login')}>
+            Me connecter
+          </ButtonLogin>
         </div>
       )}
     </>

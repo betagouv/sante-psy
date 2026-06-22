@@ -97,10 +97,11 @@
   .displayMobile {
     display: none;
   }
+}
 
-  .flexColumn {
-    display: flex;
-    flex-direction: column;
-    row-gap: 2rem;
-  }
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  align-items: center;
 }
