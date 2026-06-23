@@ -13,6 +13,11 @@ const EditProfile = () => {
   const [newEmail, setNewEmail] = useState('');
   const [attempts, setAttempts] = useState(0);
   const [error, setError] = useState(null);
+  const [hasChangedEmail, setHasChangedEmail] = useState(false);
+
+  const cleanNewEmail = useMemo(() => newEmail.trim().toLowerCase(), [newEmail]);
+
+  useEffect(() => setHasChangedEmail(!!cleanNewEmail), [cleanNewEmail]);
 
   useEffect(() => {
     const load = async () => {
@@ -32,6 +37,7 @@ const EditProfile = () => {
       await agent.Student.requestEmailChange(newEmail);
       setStep('pending');
     } catch (err) {
+      setHasChangedEmail(false);
       const next = attempts + 1;
       setAttempts(next);
       if (next >= config.maxValidEmailAttempts) {
@@ -111,7 +117,7 @@ const EditProfile = () => {
         </Button>
         <Button
           submit
-          disabled={tooManyAttempts || !newEmail}
+          disabled={tooManyAttempts || !newEmail || !hasChangedEmail}
         >
           Valider la modification
         </Button>

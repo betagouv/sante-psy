@@ -15,6 +15,9 @@ const ConfirmEmailChange = () => {
   const [error, setError] = useState(null);
   const [tokenError, setTokenError] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
+  const [hasChangedDob, setHasChangedDob] = useState(false);
+
+  useEffect(() => setHasChangedDob(!!dateOfBirth), [dateOfBirth]);
 
   useEffect(() => {
     const fetchPendingEmail = async () => {
@@ -31,6 +34,7 @@ const ConfirmEmailChange = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     setError(null);
+    setHasChangedDob(false);
 
     try {
       await agent.Student.confirmEmailChange(token, { dateOfBirth });
@@ -112,7 +116,7 @@ const ConfirmEmailChange = () => {
       <div className="fr-btns-group fr-btns-group--inline-sm fr-mt-3w">
         <Button
           submit
-          disabled={tooManyAttempts || !dateOfBirth}
+          disabled={tooManyAttempts || !dateOfBirth || !hasChangedDob}
         >
           Confirmer le changement
         </Button>
