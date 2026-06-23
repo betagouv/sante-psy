@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, TextInput, ButtonGroup, Alert } from '@dataesr/react-dsfr';
 import { useNavigate } from 'react-router-dom';
 import agent from 'services/agent';
@@ -42,9 +42,7 @@ const EditProfile = () => {
       setAttempts(next);
       if (next >= config.maxValidEmailAttempts) {
         setError('Trop de tentatives. Contacte le support pour modifier ton adresse email.');
-      } 
-      
-      if (err.response?.data?.code === 'SAME_EMAIL') {
+      } else if (err.response?.data?.code === 'SAME_EMAIL') {
         setError("Cette adresse est identique à ton adresse actuelle.");
       } else {
           setError(
@@ -59,7 +57,7 @@ const EditProfile = () => {
       <div>
         <p className={`fr-text--lead ${styles.mailTitle}`}>Consulte ta boîte mail</p>
         <p>
-          Un mail de validation vient d&apos;être envoyé à {newEmail}.
+          Un email de validation vient d&apos;être envoyé à <b>{newEmail}</b>.
         </p>
         <p>Clique sur le lien dans l&apos;email pour continuer.</p>
         <Button

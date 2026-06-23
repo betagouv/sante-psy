@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
-  gap: 0.5rem;
+  gap: 0.75rem;
   font-size: large;
   margin: 20px;
   font-weight: 500;
@@ -21,9 +21,8 @@
 .firstNameGroup {
   display: inline-flex;
   color: var(--text-active-blue-france);
-  a {
-    text-decoration: none;
-  }
+  background-image: none;
+  gap: 0.2rem;
 }
 
 .ctaBtn {
