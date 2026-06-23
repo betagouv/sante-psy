@@ -140,10 +140,35 @@ const getByEmailAndIne = async (
   }
 };
 
+const savePendingEmailChange = async (
+  studentId: string,
+  pendingEmail: string,
+  token: string,
+): Promise<string> => {
+  try {
+
+    const expirationDate = date.getDatePlusHours(2);
+
+    await db(studentsTable)
+      .where({ id: studentId })
+      .update({
+        pending_email: pendingEmail.toLowerCase(),
+        pending_email_token: token,
+        pending_email_expiration_date: expirationDate,
+      });
+
+    return token;
+  } catch (err) {
+    console.error('Error while saving pending email change', err);
+    throw new Error("Erreur lors de la sauvegarde de la demande de changement d'email");
+  }
+};
+
 export default {
   checkDuplicates,
   create,
   getById,
   getByEmail,
   getByEmailAndIne,
+  savePendingEmailChange,
 };

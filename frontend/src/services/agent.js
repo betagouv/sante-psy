@@ -105,6 +105,7 @@ const Student = {
   sendStudentWelcomeMail: email => client.post('/student/sendWelcomeMail', { email }),
   sendCertificate: formData => client.post('/student/send-certificate', formData),
   getAppointments: () => client.get(`/student/${store.userStore.user.id}/appointments`),
+  requestEmailChange: email => client.post('/student/request-email-change', { email }),
 };
 
 const StudentNewsletter = {
