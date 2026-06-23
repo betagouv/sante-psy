@@ -164,6 +164,46 @@ const savePendingEmailChange = async (
   }
 };
 
+const getByEmailChangeToken = async (token: string): Promise<Student | null> => {
+  try {
+    const student = await db(studentsTable)
+      .where({ pending_email_token: token })
+      .where('pending_email_expiration_date', '>', new Date())
+      .first();
+
+    return student ?? null;
+  } catch (err) {
+    console.error('Error while getting student by email change token', err);
+    throw new Error('Erreur lors de la vérification du token');
+  }
+};
+
+const confirmEmailChange = async (studentId: string): Promise<void> => {
+  try {
+    const student = await db(studentsTable).where({ id: studentId }).first();
+
+    await db(studentsTable).where({ id: studentId }).update({
+      email: student.pending_email,
+      pending_email: null,
+      pending_email_token: null,
+      pending_email_expiration_date: null,
+    });
+  } catch (err) {
+    console.error('Error while confirming email change', err);
+    throw new Error('Erreur lors de la confirmation du changement d\'email');
+  }
+};
+
+const deleteEmailChangeInfo = async (token: string): Promise<void> => {
+  await db(studentsTable)
+    .where({ pending_email_token: token })
+    .update({
+      pending_email: null,
+      pending_email_token: null,
+      pending_email_expiration_date: null,
+    });
+};
+
 export default {
   checkDuplicates,
   create,
@@ -171,4 +211,7 @@ export default {
   getByEmail,
   getByEmailAndIne,
   savePendingEmailChange,
+  getByEmailChangeToken,
+  confirmEmailChange,
+  deleteEmailChangeInfo,
 };

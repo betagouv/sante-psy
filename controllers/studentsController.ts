@@ -85,3 +85,80 @@ const requestEmailChange = async (
     res.status(500).json({ error: 'Erreur interne, réessaye plus tard.' });
   }
 };
+
+const getEmailChangeRequest = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const { token } = req.params;
+
+    const student = await dbStudents.getByEmailChangeToken(token);
+
+    if (!student) {
+      res.status(404).json({ error: 'Ce lien est invalide ou a expiré.' });
+      return;
+    }
+
+    res.json({ pendingEmail: student.pending_email });
+  } catch (err) {
+    console.error('Error in getEmailChangeRequest:', err);
+    res.status(500).json({ error: "Erreur lors de la demande de changement d'email." });
+  }
+};
+
+const confirmEmailChange = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const { token } = req.params;
+    const { dateOfBirth } = req.body;
+
+    if (!dateOfBirth) {
+      res.status(400).json({ error: 'Date de naissance manquante.' });
+      return;
+    }
+
+    const student = await dbStudents.getByEmailChangeToken(token);
+
+    if (!student) {
+      res.status(404).json({ error: 'Ce lien est invalide ou a expiré.' });
+      return;
+    }
+
+    const storedDob = new Date(student.dateOfBirth).toISOString().slice(0, 10);
+    const providedDob = new Date(dateOfBirth).toISOString().slice(0, 10);
+
+    if (storedDob !== providedDob) {
+      res.status(400).json({ error: 'Date de naissance incorrecte.' });
+      return;
+    }
+
+    await dbStudents.confirmEmailChange(student.id);
+
+    res.json({ message: 'Ton adresse email a bien été mise à jour.' });
+  } catch (err) {
+    console.error('Error in confirmEmailChange:', err);
+    res.status(500).json({ error: 'Erreur interne, réessaye plus tard.' });
+  }
+};
+
+const deleteEmailChangeInfo = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { token } = req.params;
+    await dbStudents.deleteEmailChangeInfo(token);
+    res.status(204).send();
+  } catch (err) {
+    console.error('Error in deleteEmailChangeInfo:', err);
+    res.status(500).json({ error: "Erreur lors de l'annulation du changement d'email." });
+  }
+};
+
+export default {
+  getStudentAppointments,
+  requestEmailChange,
+  getEmailChangeRequest,
+  confirmEmailChange,
+  deleteEmailChangeInfo,
+};
