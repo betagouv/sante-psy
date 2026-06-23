@@ -31,18 +31,22 @@ const EditProfile = () => {
     try {
       await agent.Student.requestEmailChange(newEmail);
       setStep('pending');
-    } catch {
+    } catch (error) {
       const next = attempts + 1;
       setAttempts(next);
       if (next >= config.maxValidEmailAttempts) {
         setError('Trop de tentatives. Contacte le support pour modifier ton adresse email.');
+      } 
+      
+      if (error.response?.data?.code === 'SAME_EMAIL') {
+        setError("Cette adresse est identique à ton adresse actuelle.");
       } else {
-        setError(
-          "Une erreur est survenue, vérifie l'email entré et recommence",
-        );
-      }
-    };
-  }
+          setError(
+            "Une erreur est survenue, vérifie l'email entré et recommence",
+          );
+        }
+      };
+    }
 
   if (step === 'pending') {
     return (

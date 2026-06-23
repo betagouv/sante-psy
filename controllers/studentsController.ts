@@ -60,7 +60,10 @@ const requestEmailChange = async (
 
     const duplicate = await dbStudents.checkDuplicates(newEmail, student.ine);
     if (duplicate.status === 'alreadyRegistered') {
-      res.status(400).json({ error: "Nouvel email souhaité similaire à l'ancien" });
+      res.status(400).json({
+        error: "Nouvel email souhaité similaire à l'ancien",
+        code: 'SAME_EMAIL',
+      });
       return;
     }
 
