@@ -38,7 +38,7 @@ const StudentRouter = () => {
         return { 
           title: (
             <>
-              Modification d'email
+              Modification d&apos;email
             </>
           )};;
       default:

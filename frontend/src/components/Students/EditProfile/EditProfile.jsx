@@ -31,14 +31,14 @@ const EditProfile = () => {
     try {
       await agent.Student.requestEmailChange(newEmail);
       setStep('pending');
-    } catch (error) {
+    } catch (err) {
       const next = attempts + 1;
       setAttempts(next);
       if (next >= config.maxValidEmailAttempts) {
         setError('Trop de tentatives. Contacte le support pour modifier ton adresse email.');
       } 
       
-      if (error.response?.data?.code === 'SAME_EMAIL') {
+      if (err.response?.data?.code === 'SAME_EMAIL') {
         setError("Cette adresse est identique à ton adresse actuelle.");
       } else {
           setError(
@@ -76,7 +76,7 @@ const EditProfile = () => {
         className="midlength-input"
         label="Nouvelle adresse email"
         value={newEmail}
-        onChange={e => setNewEmail(e.target.value)}
+        onChange={e => setNewEmail(e.target.value.toLowerCase())}
         type="email"
         required
         disabled={tooManyAttempts}
