@@ -1,7 +1,9 @@
 <%- include('header'); -%>
     <p>Bonjour ! 👋</p>
-    <p>Tu es en cours de modification de ton Espace Étudiant sur Santé Psy Étudiant. Tu peux confirmer ton adresse email en cliquant sur ce bouton :</p>
-    <a href="<%= loginUrlWithToken %>" class="loginButton">Confirmer mon adresse </a>
-    <p>Lien expirant dans 2 heures.</p>
-    <p>Valable un seule fois</p>
+    <p>Tu as demandé à modifier l'adresse email associée à ton compte Santé Psy Étudiant.</p>
+    <p>Pour confirmer cette demande, clique sur le bouton ci-dessous :</p>
+    <a href="<%= loginUrlWithToken %>" class="loginButton">Confirmer le changement d'adresse email</a>
+    <p>Ce lien est valable une seule fois pendant 2 heures.</p>
+    <p>Si tu n'es pas à l'origine de cette demande, ignore cet email — ton adresse actuelle restera inchangée.</p>
+    <p>Si le lien ne fonctionne pas, n'hésite pas à répondre à cet email, notre équipe de support se fera un plaisir de t'aider.</p>
 <%- include('footer'); -%>
