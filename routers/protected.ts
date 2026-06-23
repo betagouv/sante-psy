@@ -39,9 +39,15 @@ router.use('/universities', universitiesRouter);
 router.use('/psychologist/:psyId', access.checkPsyParam, psychologistRouter);
 
 router.post('/student/request-email-change', studentsController.requestEmailChange);
-router.get('/student/confirm-email-change/:token', studentsController.getEmailChangeRequest);
-router.post('/student/confirm-email-change/:token', studentsController.confirmEmailChange);
-router.delete('/students/delete-email-change/:token', studentsController.deleteEmailChangeInfo);
+router.get(
+  '/student/confirm-email-change/:token', access.checkEmailChangeToken, studentsController.getEmailChangeRequest
+);
+router.post(
+  '/student/confirm-email-change/:token', access.checkEmailChangeToken, studentsController.confirmEmailChange
+);
+router.delete(
+  '/students/delete-email-change/:token', access.checkEmailChangeToken, studentsController.deleteEmailChangeInfo
+);
 
 router.use('/student/:studentId', access.checkStudentParam, studentsRouter);
 // todo: ajouter les nouvelles routes dans test/middlewares/xsrfProtection.spec.ts pour tester la sécurité
