@@ -20,7 +20,10 @@
 
 .firstNameGroup {
   display: inline-flex;
-  color: var(--text-active-blue-france)
+  color: var(--text-active-blue-france);
+  a {
+    text-decoration: none;
+  }
 }
 
 .ctaBtn {
