@@ -1,0 +1,35 @@
+<%- include('header'); -%>
+    <p>Bonjour ! 👋</p>
+    <p>
+        <%= nbPsys> 1 ? nbPsys : 'Un' %> psychologue<%= nbPsys> 1 ? 's viennent' : ' vient' %>
+                de
+                déclarer
+                <%= appointments.length %> séance<%= appointments.length> 1 ? 's' : '' %>
+                        te concernant.
+    </p>
+    <ul>
+        <% appointments.forEach(function(appointment) { %>
+            <li>Une séance le <%= appointment.date %>
+            </li>
+            <% }); %>
+    </ul>
+    <% if (remainingSessions> 0) { %>
+        <p>
+            Il te reste <b><%= remainingSessions %></b> séance<%= remainingSessions> 1 ? 's' : '' %>
+                    sur tes 12 séances gratuites pour cette année universitaire.
+        </p>
+    <% } else { %>
+        <p>
+            <b>Tu as utilisé toutes tes séances gratuites pour cette année universitaire.</b>
+        </p>
+        <% } 
+    %>
+    <p>Tu peux retrouver le détail des séances dans ton espace.</p>
+    <a href="<%= loginLink %>" class="loginButton">
+        Mon espace </a>
+    <p>
+        Si tu constates une anomalie, n'hésite pas à
+        <a href="<%= contactLink %>">nous écrire</a>.
+    </p>
+    <p>L'équipe Santé Psy Étudiant te souhaite une bonne journée.</p>
+<%- include('footer'); -%>

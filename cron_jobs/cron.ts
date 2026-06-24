@@ -5,10 +5,13 @@ import cronPsychologists from './cronPsychologists';
 import cronStudents from './cronStudents';
 import config from '../utils/config';
 import sentry from '../utils/sentry';
+import { notifyStudentsAppointments } from './cronAppointmentsNotifications';
 
 // Desactivate debug log for production as they are a bit too verbose
 if (!config.activateDebug) {
-  console.log('console.debug is not active - thanks to ACTIVATE_DEBUG_LOG env variable');
+  console.log(
+    'console.debug is not active - thanks to ACTIVATE_DEBUG_LOG env variable',
+  );
   console.debug = (): void => {};
 }
 
@@ -96,6 +99,14 @@ const jobs = [
     timeZone: 'Europe/Paris',
     isActive: true,
     name: 'Check active boolean on every Psychologist',
+  },
+  {
+    cronTime: '15 6 * * *', // every day at 6:15am
+    onTick: notifyStudentsAppointments,
+    start: true,
+    timeZone: 'Europe/Paris',
+    isActive: true,
+    name: 'Notify students a psychologist has created appointments for them',
   },
 ];
 

@@ -4,7 +4,6 @@ import { check } from 'express-validator';
 import dbAppointments from '../db/appointments';
 import dbPatient from '../db/patients';
 import dbPsychologists from '../db/psychologists';
-import dbStudents from '../db/students';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { getAppointmentWithBadges } from '../services/getBadges';
@@ -12,7 +11,6 @@ import dateUtils, { tomorrow } from '../utils/date';
 import validation from '../utils/validation';
 import { AppointmentByYear } from '../types/Appointment';
 import _ from 'lodash';
-import { notifyStudentNewAppointment } from '../services/notifications';
 import { getUnivYear } from '../utils/univYears';
 
 export const ERROR_MESSAGE_APPOINTMENT_BEFORE_INSCRIPTION =
@@ -107,15 +105,8 @@ const create = async (req: Request, res: Response): Promise<void> => {
     `Appointment created for patient id ${patientId} by psy id ${psyId}`,
   );
 
-  const { INE, email } = patient;
-  const student = await dbStudents.getByEmailAndIne(INE, email);
-
-  notifyStudentNewAppointment(student);
-
   res.json({
-    message:
-      `La séance du ${dateUtils.formatFrenchDate(date)} ` +
-      `a bien été créée et l'étudiant en a été notifié par email.`,
+    message: `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`,
   });
 };
 

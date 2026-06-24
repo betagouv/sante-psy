@@ -8,7 +8,7 @@ const START_CYCLE_DATE = new Date('2023-09-01T00:00:00Z');
 const START_FIRST_DATE = new Date('2024-01-01T00:00:00Z');
 const START_NEW_RULES = new Date('2024-07-01T00:00:00Z');
 const MAX_APPOINTMENT_OLD = 8;
-const MAX_APPOINTMENT_NEW = 12;
+export const MAX_APPOINTMENT_NEW = 12;
 
 const areStudentINEFilled = (appointment: AppointmentWithPatient | Patient): boolean => {
   const {
