@@ -68,5 +68,3 @@ export const notifyStudentsAppointments = async (): Promise<boolean> => {
     return false;
   }
 };
-
-notifyStudentsAppointments();
