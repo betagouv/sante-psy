@@ -235,7 +235,7 @@ const PsyListing = () => {
           Trouver un <b>psychologue</b>
         </>
       }
-      description="Parmi plus de 5 000 psychologues partenaires partout en France"
+      description="Parmi plus de 1 600 psychologues partenaires partout en France"
       dataTestId="psyListPage"
     >
       <>

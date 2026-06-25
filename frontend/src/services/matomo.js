@@ -9,7 +9,6 @@ export const trackSearchPsychologists = (
 ) => {
   const usedFilters = [];
 
-  console.log('hello', nameAndSpecialityFilter);
   if (nameAndSpecialityFilter && nameAndSpecialityFilter.trim()) {
     _paq.push([
       'trackEvent',
