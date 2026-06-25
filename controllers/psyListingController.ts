@@ -6,6 +6,7 @@ import { PsychologistFilters } from '../types/Psychologist';
 import distanceKm from '../services/distance';
 import validation from '../utils/validation';
 import getAddressCoordinates from '../services/getAddressCoordinates';
+import { shuffleBasedOnHour } from '../utils/shuffle';
 
 const getValidators = [
   query('nameAndSpeciality')
@@ -317,11 +318,7 @@ const getAllActive = async (
       }))
     : filteredPsyList;
 
-  finalList.sort((psy1, psy2) =>
-    `${psy1.lastName.toUpperCase()} ${psy1.firstNames}`.localeCompare(
-      `${psy2.lastName.toUpperCase()} ${psy2.firstNames}`,
-    ),
-  );
+  shuffleBasedOnHour(finalList);
   res.json(finalList);
 };
 
