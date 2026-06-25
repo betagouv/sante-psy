@@ -70,14 +70,9 @@ const PsyListing = () => {
     addressObject,
     language,
     teleconsultation,
-    currentCoords,
+    coords,
     page,
   }) => {
-    let coords;
-    if (address === AROUND_ME && currentCoords) {
-      coords = `${currentCoords.latitude},${currentCoords.longitude}`;
-    }
-
     let addressValue = address !== AROUND_ME ? address : undefined;
     if (addressObject && typeof addressObject === 'object') {
       addressValue = JSON.stringify({
@@ -90,13 +85,19 @@ const PsyListing = () => {
       });
     }
 
-    const filters = {
+    let filters = {
       nameAndSpeciality: name || undefined,
       address: addressValue,
       teleconsultation,
       language: language || undefined,
-      coords,
     };
+
+    if (address === AROUND_ME) {
+      filters = {
+        ...filters,
+        coords,
+      };
+    }
 
     try {
       const response = await agent.Psychologist.find(filters);
@@ -124,7 +125,13 @@ const PsyListing = () => {
       searchParams.get('teleconsultation') === 'true' || false;
     const address = searchParams.get('address') || '';
     const addressObject = JSON.parse(searchParams.get('addressObject')) || null;
-    const currentCoords = coords;
+    const coords =
+      searchParams.get('lat') && searchParams.get('lon')
+        ? {
+            latitude: parseFloat(searchParams.get('lat')),
+            longitude: parseFloat(searchParams.get('lon')),
+          }
+        : null;
     const page = parseInt(searchParams.get('page') || '0', 10);
 
     const isAddressValid =
@@ -164,7 +171,7 @@ const PsyListing = () => {
       address,
       addressObject,
       teleconsultation,
-      currentCoords,
+      coords,
       page,
     });
   }, [searchParams]);
@@ -177,7 +184,8 @@ const PsyListing = () => {
       teleconsultation,
       address: addressFilter,
       addressObject: JSON.stringify(addressFilterObject),
-      currentCoords: coords,
+      lat: coords.latitude,
+      lon: coords.longitude,
       page: 1,
     });
   };

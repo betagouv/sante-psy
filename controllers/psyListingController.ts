@@ -65,7 +65,6 @@ const getAllActive = async (
   if (rawFilters) {
     psychologistFilters = preprocessFilters(rawFilters);
   }
-
   const filtersForDb = { ...psychologistFilters };
   if (
     (psychologistFilters.address && !psychologistFilters.coords) ||
@@ -83,7 +82,7 @@ const getAllActive = async (
   let filteredPsyList = psyList;
 
   if (psychologistFilters.coords) {
-    const [lat, lon] = psychologistFilters.coords.split(',').map(Number);
+    const { latitude: lat, longitude: lon } = psychologistFilters.coords;
     filteredPsyList = psyList
       .filter((psy) => psy.latitude && psy.longitude)
       .filter((psy) => {
