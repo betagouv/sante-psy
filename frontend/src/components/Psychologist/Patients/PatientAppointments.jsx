@@ -12,7 +12,12 @@ import styles from './patientAppointments.cssmodule.scss';
 import { getFirstDayOfLastMonth } from 'services/date';
 import { Tooltip } from 'components/Tooltip/Tooltip';
 
-const PatientAppointments = ({ showCreateButton = true, patientId }) => {
+const PatientAppointments = ({
+  showCreateButton = true,
+  patientId,
+  onUpdatePatientAppointments,
+  refreshKey,
+}) => {
   const {
     commonStore: { setNotification },
   } = useStore();
@@ -40,7 +45,7 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
         }
       });
     }
-  }, [patientId]);
+  }, [patientId, refreshKey]);
 
   useEffect(() => {
     if (selectedYear && patientAppointments[selectedYear]) {
@@ -80,6 +85,7 @@ const PatientAppointments = ({ showCreateButton = true, patientId }) => {
           (appointment) => appointment.id !== appointmentId,
         ),
       });
+      onUpdatePatientAppointments();
     });
   };
 

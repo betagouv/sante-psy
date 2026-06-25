@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import dbStudents from '../db/students';
 
 /**
  * Check that user is a psychologist and psyId param matches their ID
@@ -132,9 +133,40 @@ const requireStudentRole = (req: Request, res: Response, next: NextFunction) : v
   next();
 };
 
+const checkEmailChangeToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const studentId = req.auth.userId;
+  const { token } = req.params;
+
+  const student = await dbStudents.getByEmailChangeToken(token);
+
+  if (!student) {
+    console.warn('⚠️ Access denied - Invalid or expired email change token:', {
+      studentId,
+      path: req.path,
+      method: req.method,
+    });
+    res.status(404).send();
+    return;
+  }
+
+  if (student.id !== studentId) {
+    console.warn('⚠️ Access denied - Email change token does not belong to student:', {
+      tokenStudentId: student.id,
+      requestStudentId: studentId,
+      path: req.path,
+      method: req.method,
+    });
+    res.status(403).send();
+    return;
+  }
+
+  next();
+};
+
 export default {
   checkPsyParam,
   requirePsyRole,
   checkStudentParam,
   requireStudentRole,
+  checkEmailChangeToken,
 };

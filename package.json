@@ -2,8 +2,7 @@
   "name": "sante-psy",
   "version": "1.0.0",
   "engines": {
-    "node": ">=18 <19",
-    "pnpm": ">=10"
+    "node": ">=24"
   },
   "description": "Accompagnement Psychologique pour les étudiants",
   "main": "index.ts",
@@ -51,7 +50,7 @@
     "@types/chai": "^4.3.4",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.11.18",
-    "axios": "^1.15.0",
+    "axios": "^1.16.0",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

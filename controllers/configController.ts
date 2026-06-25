@@ -14,6 +14,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
     statistics: config.statistics,
     crispWebsite: config.crisp.website,
     maxSignInAttempts: config.maxSignInAttempts,
+    maxValidEmailAttempts: config.maxValidEmailAttempts,
   });
 };
 

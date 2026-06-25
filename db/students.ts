@@ -140,10 +140,76 @@ const getByEmailAndIne = async (
   }
 };
 
+const savePendingEmailChange = async (
+  studentId: string,
+  pendingEmail: string,
+  token: string,
+  expiresAt: Date,
+): Promise<string> => {
+  try {
+    await db(studentsTable)
+      .where({ id: studentId })
+      .update({
+        pending_email: pendingEmail.toLowerCase(),
+        pending_email_token: token,
+        pending_email_expiration_date: expiresAt,
+      });
+
+    return token;
+  } catch (err) {
+    console.error('Error while saving pending email change', err);
+    throw new Error("Erreur lors de la sauvegarde de la demande de changement d'email");
+  }
+};
+
+const getByEmailChangeToken = async (token: string): Promise<Student | null> => {
+  try {
+    const student = await db(studentsTable)
+      .where({ pending_email_token: token })
+      .where('pending_email_expiration_date', '>', new Date())
+      .first();
+
+    return student ?? null;
+  } catch (err) {
+    console.error('Error while getting student by email change token', err);
+    throw new Error('Erreur lors de la vérification du token');
+  }
+};
+
+const confirmEmailChange = async (studentId: string): Promise<void> => {
+  try {
+    const student = await db(studentsTable).where({ id: studentId }).first();
+
+    await db(studentsTable).where({ id: studentId }).update({
+      email: student.pending_email,
+      pending_email: null,
+      pending_email_token: null,
+      pending_email_expiration_date: null,
+    });
+  } catch (err) {
+    console.error('Error while confirming email change', err);
+    throw new Error('Erreur lors de la confirmation du changement d\'email');
+  }
+};
+
+const deleteEmailChangeInfo = async (token: string): Promise<void> => {
+  await db(studentsTable)
+    .where({ pending_email_token: token })
+    .update({
+      pending_email: null,
+      pending_email_token: null,
+      pending_email_expiration_date: null,
+    });
+};
+
 export default {
   checkDuplicates,
   create,
   getById,
   getByEmail,
   getByEmailAndIne,
+  savePendingEmailChange,
+  getByEmailChangeToken,
+  confirmEmailChange,
+  deleteEmailChangeInfo,
 };

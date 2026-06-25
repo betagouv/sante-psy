@@ -70,6 +70,13 @@ const getFirstDayOfLastMonth = (): Date => {
   return new Date(today.getFullYear(), today.getMonth() - 1, 1);
 };
 
+export const tomorrow = (): Date => {
+  const tomorrow_ = new Date();
+  tomorrow_.setDate(tomorrow_.getDate() + 1);
+  tomorrow_.setHours(0, 0, 0, 0);
+  return tomorrow_;
+};
+
 export default {
   formatFrenchDateForm: 'DD/MM/YYYY',
   formatFrenchDate: dateFormatter.format,

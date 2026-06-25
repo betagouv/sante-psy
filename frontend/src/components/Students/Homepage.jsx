@@ -5,7 +5,9 @@ import StudentHistory from './StudentHistory/StudentHistory';
 import styles from './homepage.cssmodule.scss';
 
 const StudentHomepage = () => {
-  const { userStore: { user, pullUser } } = useStore();
+  const {
+    userStore: { user, pullUser },
+  } = useStore();
 
   useEffect(() => {
     pullUser();
@@ -15,18 +17,16 @@ const StudentHomepage = () => {
     <>
       <div className={styles.header}>
         <div className={styles.firstNameGroup}>
-          <span className="fr-icon-user-line" aria-hidden="true" />
-          <strong>
-            Bonjour
-            {' '}
-            {user.firstNames}
-          </strong>
+          <span className="fr-icon-psychotherapy-line" aria-hidden="true" />
+          <strong>{user.firstNames}</strong>
         </div>
-        <p>
-          INE :
-          {' '}
-          {user.ine}
-        </p>
+        <Link
+          to="/etudiant/editer-profil"
+          className={styles.firstNameGroup}
+        >
+          <span className="fr-icon-edit-line" aria-hidden="true" />
+          Mon compte
+        </Link>
         <Link
           to="/etudiant/numeros-urgence"
           className={styles.ctaBtn}
@@ -38,16 +38,14 @@ const StudentHomepage = () => {
 
       <div className={styles.container} data-test-id="dashboard_student">
         <div className={styles.titleRow}>
-          <h2>
-            Mes RDV passés
-          </h2>
+          <h2>Mes RDV passés</h2>
           <Link
             to="/trouver-un-psychologue"
             target="_blank"
             rel="noopener noreferrer"
             className="fr-btn fr-btn--primary"
           >
-            Prendre RDV
+            Trouver un psychologue
           </Link>
         </div>
         <StudentHistory />

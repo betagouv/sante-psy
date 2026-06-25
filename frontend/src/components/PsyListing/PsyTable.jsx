@@ -160,7 +160,7 @@ const PsyTable = ({
                   className="fr-btn fr-btn--secondary"
                 >
                   {isUserConnected
-                    ? 'Prendre rendez-vous'
+                    ? 'Contacter le psychologue'
                     : 'Accéder à la fiche du psychologue'}
                 </Link>
               </div>

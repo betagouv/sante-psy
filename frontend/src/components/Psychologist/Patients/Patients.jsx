@@ -19,6 +19,7 @@ import getBadgeInfos from 'src/utils/badges';
 import styles from './patients.cssmodule.scss';
 import Badges from '../../Badges/Badges';
 import { Tooltip } from 'components/Tooltip/Tooltip';
+import { MAX_APPOINTMENT } from '../Appointments/NewAppointment';
 
 const Patients = () => {
   const {
@@ -270,19 +271,30 @@ const Patients = () => {
     {
       name: 'appointment-etudiant-button',
       label: 'Déclarer une séance',
-      render: (patient) => (
-        <Tooltip tooltip="Déclarer une séance">
-          <Button
-            data-test-id="appointment-etudiant-button"
-            onClick={() =>
-              navigate(`/psychologue/nouvelle-seance/${patient.id}`)
+      render: (patient) => {
+        const tooManyAppointments =
+          (parseInt(patient.countedAppointments, 10) || 0) >= MAX_APPOINTMENT;
+        return (
+          <Tooltip
+            tooltip={
+              tooManyAppointments
+                ? "Nombre de séances maximum atteint pour l'année en cours. En cas d'erreur, contactez le support"
+                : 'Déclarer une séance'
             }
-            size="sm"
-            icon="ri-calendar-line"
-            aria-label="Déclarer une séance"
-          />
-        </Tooltip>
-      ),
+          >
+            <Button
+              data-test-id="appointment-etudiant-button"
+              onClick={() =>
+                navigate(`/psychologue/nouvelle-seance/${patient.id}`)
+              }
+              size="sm"
+              icon="ri-calendar-line"
+              aria-label="Déclarer une séance"
+              disabled={tooManyAppointments}
+            />
+          </Tooltip>
+        );
+      },
     },
     {
       name: 'delete-etudiant-button',
