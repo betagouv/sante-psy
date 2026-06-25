@@ -184,8 +184,8 @@ const PsyListing = () => {
       teleconsultation,
       address: addressFilter,
       addressObject: JSON.stringify(addressFilterObject),
-      lat: coords.latitude,
-      lon: coords.longitude,
+      lat: coords?.latitude,
+      lon: coords?.longitude,
       page: 1,
     });
   };
