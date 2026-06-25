@@ -144,17 +144,15 @@ const savePendingEmailChange = async (
   studentId: string,
   pendingEmail: string,
   token: string,
+  expiresAt: Date,
 ): Promise<string> => {
   try {
-
-    const expirationDate = date.getDatePlusHours(2);
-
     await db(studentsTable)
       .where({ id: studentId })
       .update({
         pending_email: pendingEmail.toLowerCase(),
         pending_email_token: token,
-        pending_email_expiration_date: expirationDate,
+        pending_email_expiration_date: expiresAt,
       });
 
     return token;

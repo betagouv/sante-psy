@@ -4,6 +4,8 @@ import dbStudents from '../db/students';
 import sendModifyEmailLink from '../services/email/sendModifyEmailLink';
 import loginInformations from '../services/loginInformations';
 import config from '../utils/config';
+import date from '../utils/date';
+import { emailValidator } from './validators/studentValidators';
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -51,15 +53,9 @@ const requestEmailChange = async (
       return;
     }
 
-    if (!newEmail || typeof newEmail !== 'string') {
-      res.status(400).json({ error: 'Nouvel email souhaité manquant ou invalide' });
-      return;
-    }
-
     const student = await dbStudents.getById(studentId);
 
-    const duplicate = await dbStudents.checkDuplicates(newEmail, student.ine);
-    if (duplicate.status === 'alreadyRegistered') {
+    if (newEmail === student.email) {
       res.status(400).json({
         error: "Nouvel email souhaité similaire à l'ancien",
         code: 'SAME_EMAIL',
@@ -74,8 +70,9 @@ const requestEmailChange = async (
     }
 
     const token = loginInformations.generateToken(32);
+    const expiresAt = date.getDatePlusHours(2);
     const modifyEmailUrl = `${config.hostnameWithProtocol}/etudiant/confirmer-email`
-    await dbStudents.savePendingEmailChange(studentId, newEmail, token);
+    await dbStudents.savePendingEmailChange(studentId, newEmail, token, expiresAt);
     sendModifyEmailLink(
       newEmail,
       modifyEmailUrl,
@@ -161,6 +158,7 @@ const deleteEmailChangeInfo = async (req: Request, res: Response): Promise<void>
 export default {
   getStudentAppointments,
   requestEmailChange,
+  emailValidator,
   getEmailChangeRequest,
   confirmEmailChange,
   deleteEmailChangeInfo,

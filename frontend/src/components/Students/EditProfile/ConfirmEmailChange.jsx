@@ -71,8 +71,14 @@ const ConfirmEmailChange = () => {
           className="fr-mb-3w"
           type="success"
           title="Ton email a bien été vérifié."
-          description="Consulte tes mails pour te connecter à ton espace avec ta nouvelle adresse."
+          description="Tu devras désormais utiliser ton nouvel email pour te connecter."
         />
+        <Button
+          onClick={() => navigate('/etudiant/mes-seances')}
+          secondary
+        >
+          Retour à mes séances
+        </Button>
       </div>
     );
   }

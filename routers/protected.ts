@@ -38,7 +38,11 @@ router.use('/patients', patientsRouter);
 router.use('/universities', universitiesRouter);
 router.use('/psychologist/:psyId', access.checkPsyParam, psychologistRouter);
 
-router.post('/student/request-email-change', studentsController.requestEmailChange);
+router.post(
+  '/student/request-email-change',
+  studentsController.emailValidator,
+  studentsController.requestEmailChange
+);
 router.get(
   '/student/confirm-email-change/:token', access.checkEmailChangeToken, studentsController.getEmailChangeRequest
 );
