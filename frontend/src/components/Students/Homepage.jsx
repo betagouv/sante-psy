@@ -5,7 +5,9 @@ import StudentHistory from './StudentHistory/StudentHistory';
 import styles from './homepage.cssmodule.scss';
 
 const StudentHomepage = () => {
-  const { userStore: { user, pullUser } } = useStore();
+  const {
+    userStore: { user, pullUser },
+  } = useStore();
 
   useEffect(() => {
     pullUser();
@@ -36,16 +38,14 @@ const StudentHomepage = () => {
 
       <div className={styles.container} data-test-id="dashboard_student">
         <div className={styles.titleRow}>
-          <h2>
-            Mes RDV passés
-          </h2>
+          <h2>Mes RDV passés</h2>
           <Link
             to="/trouver-un-psychologue"
             target="_blank"
             rel="noopener noreferrer"
             className="fr-btn fr-btn--primary"
           >
-            Prendre RDV
+            Trouver un psychologue
           </Link>
         </div>
         <StudentHistory />
