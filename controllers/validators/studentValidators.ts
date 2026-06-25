@@ -9,7 +9,7 @@ export const emailValidator = [
     .withMessage('Vous devez spécifier un email valide.')
     .custom((value) => {
       if (value.toLowerCase().includes('santepsyetudiant')) {
-        throw new Error('Cette adresse email n\'est pas autorisée à créer un compte étudiant.');
+        throw new Error('Cette adresse email n\'est pas autorisée.');
       }
       return true;
     }),

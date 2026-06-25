@@ -360,7 +360,7 @@ const getOneStudent = (student: Partial<Student> = {}): Student => {
     firstNames: firstName,
     lastName,
     email,
-    dateOfBirth: faker.date.past(),
+    dateOfBirth: faker.date.past(50, new Date(new Date().setFullYear(new Date().getFullYear() - 15))),
     ine: faker.phone.number('###########'),
     createdAt: new Date(),
     ...student,

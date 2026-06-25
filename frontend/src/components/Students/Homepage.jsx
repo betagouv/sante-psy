@@ -17,11 +17,20 @@ const StudentHomepage = () => {
     <>
       <div className={styles.header}>
         <div className={styles.firstNameGroup}>
-          <span className="fr-icon-user-line" aria-hidden="true" />
-          <strong>Bonjour {user.firstNames}</strong>
+          <span className="fr-icon-psychotherapy-line" aria-hidden="true" />
+          <strong>{user.firstNames}</strong>
         </div>
-        <p>INE : {user.ine}</p>
-        <Link to="/etudiant/numeros-urgence" className={styles.ctaBtn}>
+        <Link
+          to="/etudiant/editer-profil"
+          className={styles.firstNameGroup}
+        >
+          <span className="fr-icon-edit-line" aria-hidden="true" />
+          Mon compte
+        </Link>
+        <Link
+          to="/etudiant/numeros-urgence"
+          className={styles.ctaBtn}
+        >
           <span className="fr-icon-phone-line" aria-hidden="true" />
           Je me sens mal
         </Link>

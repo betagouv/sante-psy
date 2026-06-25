@@ -10,6 +10,8 @@ import './custom-month-picker.css';
 import './custom-date-picker.css';
 import StudentPage from 'components/Page/StudentPage';
 import EmergyNumbers from 'components/Students/EmergencyNumbers/EmergencyNumbers';
+import EditProfile from 'components/Students/EditProfile/EditProfile';
+import ConfirmEmailChange from 'components/Students/EditProfile/ConfirmEmailChange';
 
 const StudentRouter = () => {
   const { userStore: { user, role } } = useStore();
@@ -25,6 +27,20 @@ const StudentRouter = () => {
     switch (page) {
       case 'mes-seances':
         return {};
+      case 'editer-profil':
+        return { 
+          title: (
+            <>
+              Modification de compte
+            </>
+          )};
+      case 'confirmer-email': 
+        return { 
+          title: (
+            <>
+              Modification d&apos;email
+            </>
+          )};;
       default:
         return {};
     }
@@ -44,6 +60,14 @@ const StudentRouter = () => {
         <Route
           path="/numeros-urgence"
           element={<EmergyNumbers />}
+        />
+        <Route
+          path="/editer-profil"
+          element={<EditProfile />}
+        />
+        <Route
+          path="/confirmer-email/:token"
+          element={<ConfirmEmailChange />}
         />
         <Route
           path="/*"

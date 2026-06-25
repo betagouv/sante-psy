@@ -19,6 +19,7 @@ describe('configController', () => {
             },
             sessionDuration: '2',
             maxSignInAttempts: 2,
+            maxValidEmailAttempts: 3,
           });
         }));
 });
