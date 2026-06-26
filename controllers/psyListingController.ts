@@ -74,11 +74,8 @@ const getAllActive = async (
     delete filtersForDb.address;
   }
 
-  const [veryAvailablePsys, notVeryAvailablePsys] = await Promise.all([
-    dbPsychologists.getAllActiveByAvailability(true, filtersForDb),
-    dbPsychologists.getAllActiveByAvailability(false, filtersForDb),
-  ]);
-  const psyList = veryAvailablePsys.concat(notVeryAvailablePsys);
+  const psyList =
+    await dbPsychologists.getAllActiveByAvailability(filtersForDb);
 
   let filteredPsyList = psyList;
 
