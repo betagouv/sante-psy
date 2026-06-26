@@ -9,3 +9,5 @@ chai.use(chaiHttp);
 chai.should();
 
 console.log('Done test setup');
+
+console.log = () => {};
