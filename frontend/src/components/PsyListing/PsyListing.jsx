@@ -35,6 +35,8 @@ const PsyListing = () => {
 
   const [hasSearched, setHasSearched] = useState(false);
 
+  const [userCoords, setUserCoords] = useState(null);
+
   const [coords, setCoords] = useState(
     searchParams.get('lat') && searchParams.get('lon')
       ? {
@@ -90,7 +92,7 @@ const PsyListing = () => {
       address: addressValue,
       teleconsultation,
       language: language || undefined,
-      coords,
+      ...(coords !== null && { coords }),
     };
 
     try {
@@ -178,26 +180,31 @@ const PsyListing = () => {
       teleconsultation,
       address: addressFilter,
       addressObject: JSON.stringify(addressFilterObject),
-      lat: coords?.latitude,
-      lon: coords?.longitude,
+      ...(coords?.latitude && { lat: coords?.latitude }),
+      ...(coords?.longitude && { lon: coords?.longitude }),
       page: 1,
     });
   };
 
   useEffect(() => {
-    if (addressFilter === AROUND_ME) {
-      checkGeolocationPermission();
+    checkGeolocationPermission();
+  }, []);
+
+  useEffect(() => {
+    if (addressFilter === AROUND_ME && userCoords) {
+      setCoords(userCoords);
     }
-  }, [addressFilter, coords]);
+  }, [addressFilter]);
 
   const success = (pos) => {
     const { longitude, latitude } = pos.coords;
-    setCoords({ longitude, latitude });
+    setUserCoords({ longitude, latitude });
     setGeoStatus(geoStatusEnum.GRANTED);
   };
 
   const errors = () => {
     setGeoStatus(geoStatusEnum.DENIED);
+    setUserCoords(null);
   };
 
   const searchButtonRef = useRef(null);
@@ -213,14 +220,12 @@ const PsyListing = () => {
   };
 
   const checkGeolocationPermission = () => {
-    if (!coords) {
-      if (navigator.geolocation) {
-        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-          getGeolocation(result.state);
-        });
-      } else {
-        setGeoStatus(geoStatusEnum.UNSUPPORTED);
-      }
+    if (navigator.geolocation) {
+      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+        getGeolocation(result.state);
+      });
+    } else {
+      setGeoStatus(geoStatusEnum.UNSUPPORTED);
     }
   };
 
@@ -267,12 +272,10 @@ const PsyListing = () => {
                         longitude,
                       });
                     }
-                  } else if (typeof value === 'string') {
-                    setAddressFilter(value);
-                    setAddressFilterObject(null);
                   } else {
                     setAddressFilter('');
                     setAddressFilterObject(null);
+                    setCoords(null);
                   }
                 }}
                 placeholder="Ville, code postal ou région"
