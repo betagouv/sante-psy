@@ -8,9 +8,9 @@ Accompagnement psychologique pour les étudiants
 
 ### Prérequis
 
-* node >= 18
-* pnpm
-* docker compose (docker-compose avec tiret selon votre version)
+- node >= 18
+- pnpm
+- docker compose (docker-compose avec tiret selon votre version)
 
 ### Installation avec docker-compose
 
@@ -25,8 +25,8 @@ Vous pouvez accéder au site sur <http://localhost:3000>.
 
 Vous pouvez vous connecter à l'espace psy avec les emails
 
-* login@beta.gouv.fr (compte avec des données) ou
-* empty@beta.gouv.fr (compte sans données)
+- login@beta.gouv.fr (compte avec des données) ou
+- empty@beta.gouv.fr (compte sans données)
 
 Vous pouvez accéder voir les emails envoyés sur <http://localhost:1080>.
 
@@ -72,11 +72,13 @@ docker-compose up # docker-compose avec ou sans tiret selon votre version
 cd frontend
 pnpm run cy:run
 ```
+
 ou
 
 ```bash
 pnpm run cy:open
 ```
+
 pour visualiser et simuler les tests sur un navigateur
 
 #### Back
@@ -93,7 +95,7 @@ pnpm test
 Pour lancer uniquement un test
 
 ```bash
-pnpm run test:backend --grep "should create appointments"
+npx ts-mocha --config .mocharc.local.yml test/path/to/your.spec.ts
 ```
 
 #### Code coverage
@@ -104,7 +106,7 @@ pnpm run coverage
 
 Ensuite, visiter avec votre navigateur pour visualiser le dossier `./coverage` :
 
-* $REPO_PATH/sante-psy/coverage/index.html
+- $REPO_PATH/sante-psy/coverage/index.html
 
 ### Serveur SMTP Maildev
 
@@ -114,7 +116,7 @@ Une fois installé et lancé, il suffit de mettre la variable d'environnement MA
 
 Tous les emails envoyés par le code seront visibles depuis l'interface web de Maildev :
 
-* <http://localhost:1080/>
+- <http://localhost:1080/>
 
 ## Déploiement en production
 
@@ -241,8 +243,8 @@ Cependant, certaines données dans DS vont être modifiées au fil du temps, et 
 
 API de démarches simplifiées :
 
-* Documentation : <https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/graphql>
-* Schema: <https://demarches-simplifiees-graphql.netlify.app/query.doc.html>
+- Documentation : <https://doc.demarches-simplifiees.fr/pour-aller-plus-loin/graphql>
+- Schema: <https://demarches-simplifiees-graphql.netlify.app/query.doc.html>
 
 Pour mettre à jour toutes les données venant de DS vers PG, un cron est lancé à intervalle régulier (voir la page containers de Scalingo) :
 
