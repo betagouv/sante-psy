@@ -79,6 +79,38 @@ const getAllActive = async (
 
   let filteredPsyList = psyList;
 
+  // teleconsultation: return 50 random psys that match text filters
+  if (psychologistFilters.teleconsultation) {
+    shuffleBasedOnHour(filteredPsyList);
+
+    const finalList = reduced
+      ? filteredPsyList.map((psy) => ({
+          dossierNumber: psy.dossierNumber,
+          firstNames: psy.useFirstNames || psy.firstNames,
+          lastName: psy.useLastName || psy.lastName,
+          teleconsultation: psy.teleconsultation,
+          departement: psy.departement,
+          region: psy.region,
+          address: psy.address,
+          longitude: psy.longitude,
+          latitude: psy.latitude,
+          city: psy.city,
+          postcode: psy.postcode,
+          otherAddress: psy.otherAddress,
+          otherLongitude: psy.otherLongitude,
+          otherLatitude: psy.otherLatitude,
+          otherCity: psy.otherCity,
+          otherPostcode: psy.otherPostcode,
+          languages: psy.languages,
+          email: psy.email,
+          phone: psy.phone,
+          description: psy.description,
+        }))
+      : filteredPsyList;
+    res.json(finalList.slice(0, 50));
+    return;
+  }
+
   if (psychologistFilters.coords) {
     const { latitude: lat, longitude: lon } = psychologistFilters.coords;
     filteredPsyList = psyList
