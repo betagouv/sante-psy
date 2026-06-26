@@ -1,0 +1,4 @@
+require:
+  - '@babel/register'
+  - test/setup.ts
+exit: true
