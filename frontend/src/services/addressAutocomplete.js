@@ -9,7 +9,7 @@ const ADDRESS_API_URL = 'https://data.geopf.fr/geocodage/search/';
  * @returns {Promise<Array>} Address suggestions
  */
 const searchAddresses = async (query, limit = 5) => {
-  if (!query || query.length < 2) {
+  if (!query || query.length <= 2) {
     return [];
   }
 
