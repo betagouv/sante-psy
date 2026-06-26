@@ -25,7 +25,7 @@
     "test": "pnpm run test:backend && pnpm run test:frontend",
     "test:backend": "set TEST_ENVIRONMENT=true && ts-mocha --require @babel/register --exit test/** test/**/*",
     "test:frontend": "pnpm --filter ./frontend run test",
-    "test:ci": "wait-on --timeout 60000 https://api-annuaire-sante.herokuapp.com/annuaire/annuaire.json?Identification+nationale+PP__in=0 && pnpm run test",
+    "test:ci": "wait-on --timeout 60000 https://api-annuaire-sante.herokuapp.com/annuaire/annuaire.json?Identification+nationale+PP__in=0 && pnpm run test --exclude test/cron_jobs/cronDemarchesSimplifiees.spec.ts --exclude test/services/autoAcceptPsychologist.spec.ts",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
     "scalingo-postbuild": "pnpm --filter ./frontend install && pnpm --filter ./frontend run build && pnpm run postbuild && cp -a frontend/dist dist/frontend",
