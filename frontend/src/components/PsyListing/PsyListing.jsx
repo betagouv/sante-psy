@@ -90,14 +90,8 @@ const PsyListing = () => {
       address: addressValue,
       teleconsultation,
       language: language || undefined,
+      coords,
     };
-
-    if (address === AROUND_ME) {
-      filters = {
-        ...filters,
-        coords,
-      };
-    }
 
     try {
       const response = await agent.Psychologist.find(filters);
@@ -266,6 +260,13 @@ const PsyListing = () => {
                   if (typeof value === 'object' && value !== null) {
                     setAddressFilter(value.label || value.value || '');
                     setAddressFilterObject(value);
+                    if (value.coordinates) {
+                      const [longitude, latitude] = value.coordinates;
+                      setCoords({
+                        latitude,
+                        longitude,
+                      });
+                    }
                   } else if (typeof value === 'string') {
                     setAddressFilter(value);
                     setAddressFilterObject(null);
