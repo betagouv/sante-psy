@@ -145,7 +145,7 @@ const PsyListing = () => {
       return;
     }
 
-    if (!name && !language && !address) {
+    if (!name && !language && !address && !teleconsultation) {
       setFilteredPsychologists([]);
       setPage(0);
       if (hasSearched) {
