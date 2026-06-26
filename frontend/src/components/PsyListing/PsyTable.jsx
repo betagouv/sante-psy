@@ -108,7 +108,7 @@ const PsyTable = ({
                       <span>
                         {psychologist.city
                           ? `${psychologist.city} • ${psychologist.postcode}`
-                          : psychologist.address}
+                          : psychologist.address}{' '}
                       </span>
                       {psychologist.otherCity &&
                         psychologist.otherCity !== psychologist.city && (
@@ -117,6 +117,9 @@ const PsyTable = ({
                             <span>{`${psychologist.otherCity} • ${psychologist.otherPostcode}`}</span>
                           </>
                         )}
+                      {psychologist.distanceToUser && (
+                        <span> {psychologist.distanceToUser.toFixed(1)}km</span>
+                      )}
                     </div>
                     {psychologist.teleconsultation && (
                       <>

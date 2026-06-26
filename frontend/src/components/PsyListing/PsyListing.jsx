@@ -35,6 +35,8 @@ const PsyListing = () => {
 
   const [hasSearched, setHasSearched] = useState(false);
 
+  const [userCoords, setUserCoords] = useState(null);
+
   const [coords, setCoords] = useState(
     searchParams.get('lat') && searchParams.get('lon')
       ? {
@@ -90,14 +92,8 @@ const PsyListing = () => {
       address: addressValue,
       teleconsultation,
       language: language || undefined,
+      ...(coords !== null && { coords }),
     };
-
-    if (address === AROUND_ME) {
-      filters = {
-        ...filters,
-        coords,
-      };
-    }
 
     try {
       const response = await agent.Psychologist.find(filters);
@@ -149,7 +145,7 @@ const PsyListing = () => {
       return;
     }
 
-    if (!name && !language && !address) {
+    if (!name && !language && !address && !teleconsultation) {
       setFilteredPsychologists([]);
       setPage(0);
       if (hasSearched) {
@@ -184,26 +180,31 @@ const PsyListing = () => {
       teleconsultation,
       address: addressFilter,
       addressObject: JSON.stringify(addressFilterObject),
-      lat: coords?.latitude,
-      lon: coords?.longitude,
+      ...(coords?.latitude && { lat: coords?.latitude }),
+      ...(coords?.longitude && { lon: coords?.longitude }),
       page: 1,
     });
   };
 
   useEffect(() => {
-    if (addressFilter === AROUND_ME) {
-      checkGeolocationPermission();
+    checkGeolocationPermission();
+  }, []);
+
+  useEffect(() => {
+    if (addressFilter === AROUND_ME && userCoords) {
+      setCoords(userCoords);
     }
-  }, [addressFilter, coords]);
+  }, [addressFilter]);
 
   const success = (pos) => {
     const { longitude, latitude } = pos.coords;
-    setCoords({ longitude, latitude });
+    setUserCoords({ longitude, latitude });
     setGeoStatus(geoStatusEnum.GRANTED);
   };
 
   const errors = () => {
     setGeoStatus(geoStatusEnum.DENIED);
+    setUserCoords(null);
   };
 
   const searchButtonRef = useRef(null);
@@ -219,14 +220,12 @@ const PsyListing = () => {
   };
 
   const checkGeolocationPermission = () => {
-    if (!coords) {
-      if (navigator.geolocation) {
-        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-          getGeolocation(result.state);
-        });
-      } else {
-        setGeoStatus(geoStatusEnum.UNSUPPORTED);
-      }
+    if (navigator.geolocation) {
+      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+        getGeolocation(result.state);
+      });
+    } else {
+      setGeoStatus(geoStatusEnum.UNSUPPORTED);
     }
   };
 
@@ -266,12 +265,17 @@ const PsyListing = () => {
                   if (typeof value === 'object' && value !== null) {
                     setAddressFilter(value.label || value.value || '');
                     setAddressFilterObject(value);
-                  } else if (typeof value === 'string') {
-                    setAddressFilter(value);
-                    setAddressFilterObject(null);
+                    if (value.coordinates) {
+                      const [longitude, latitude] = value.coordinates;
+                      setCoords({
+                        latitude,
+                        longitude,
+                      });
+                    }
                   } else {
                     setAddressFilter('');
                     setAddressFilterObject(null);
+                    setCoords(null);
                   }
                 }}
                 placeholder="Ville, code postal ou région"

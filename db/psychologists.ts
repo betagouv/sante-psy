@@ -93,8 +93,9 @@ const getAllActive = async (): Promise<Psychologist[]> => {
   }
 };
 
-const getAllActiveByAvailability = async (isVeryAvailable: boolean, filters?: PsychologistFilters)
-: Promise<Psychologist[]> => {
+const getAllActiveByAvailability = async (
+  filters?: PsychologistFilters,
+): Promise<Psychologist[]> => {
   try {
     let query = db.select(selectFields())
       .select()
@@ -103,8 +104,7 @@ const getAllActiveByAvailability = async (isVeryAvailable: boolean, filters?: Ps
       .where('state', DossierState.accepte)
       .andWhere('active', true)
       .whereNotNull('assignedUniversityId')
-      .andWhere('isConventionSigned', true)
-      .andWhere('isVeryAvailable', isVeryAvailable);
+      .andWhere('isConventionSigned', true);
 
     /* Filters */
     if (filters.nameAndSpeciality) {
