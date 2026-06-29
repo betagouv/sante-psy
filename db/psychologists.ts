@@ -146,7 +146,7 @@ const getAllActiveByAvailability = async (isVeryAvailable: boolean, filters?: Ps
       query = query.andWhere('teleconsultation', filters.teleconsultation);
     }
 
-    return query.orderByRaw('RANDOM()');
+    return query;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
     throw new Error('Impossible de récupérer les psychologistes');
