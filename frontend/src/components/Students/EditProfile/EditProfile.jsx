@@ -60,6 +60,7 @@ const EditProfile = () => {
           Un email de validation vient d&apos;être envoyé à <b>{newEmail}</b>.
         </p>
         <p>Clique sur le lien dans l&apos;email pour continuer.</p>
+        <p>Tu dois être connecté à ton compte pour que la modification soit prise en compte.</p>
         <Button
           onClick={() => navigate('/etudiant/mes-seances')}
           secondary
