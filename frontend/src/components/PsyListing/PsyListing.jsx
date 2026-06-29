@@ -273,7 +273,7 @@ const PsyListing = () => {
                       });
                     }
                   } else {
-                    setAddressFilter('');
+                    setAddressFilter(value);
                     setAddressFilterObject(null);
                     setCoords(null);
                   }
