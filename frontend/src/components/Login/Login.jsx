@@ -137,7 +137,7 @@ const Login = () => {
             </Col>
           </Row>
           <br />
-          <p>Pas de mot de passe !</p>
+          <p><b>Pas de mot de passe</b> !</p>
           <p>
             Vous recevrez un lien de connexion par email qui vous permettra
             d&lsquo;être connecté pendant
@@ -147,17 +147,11 @@ const Login = () => {
         </form>
       </Section>
 
-      <Section title="Un problème ?">
+      <Section title="Vous ne recevez pas le lien de connexion ?">
         <ul>
-          <li>Indiquez l&lsquo;email utilisé lors de votre inscription</li>
-
-          <li>
-            Si vous ne recevez pas l&lsquo;email de connexion :
-            <ul>
-              <li>Vérifiez vos spams</li>
-              <li>Attendez quelques minutes</li>
-            </ul>
-          </li>
+          <li>Vérifiez que vous utilisez bien l&lsquo;adresse email avec laquelle vous vous êtes inscrit</li>
+          <li>Vérifiez vos spams</li>
+          <li>Attendez quelques minutes</li>
         </ul>
       </Section>
       <Section title="Vous n&lsquo;avez pas encore créé votre espace ?">
