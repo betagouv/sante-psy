@@ -93,7 +93,7 @@ const getAllActive = async (): Promise<Psychologist[]> => {
   }
 };
 
-const getAllActiveByAvailability = async (
+const getAllActiveFiltered = async (
   filters?: PsychologistFilters,
 ): Promise<Psychologist[]> => {
   try {
@@ -454,7 +454,7 @@ const seeTutorial = async (dossierNumber: string): Promise<number> => {
 
 export default {
   getAllActive,
-  getAllActiveByAvailability,
+  getAllActiveFiltered,
   getById,
   getAcceptedByEmail,
   getNotYetAcceptedByEmail,

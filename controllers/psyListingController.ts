@@ -73,8 +73,7 @@ const getAllActive = async (
     delete filtersForDb.address;
   }
 
-  const psyList =
-    await dbPsychologists.getAllActiveByAvailability(filtersForDb);
+  const psyList = await dbPsychologists.getAllActiveFiltered(filtersForDb);
 
   let filteredPsyList = psyList as (Psychologist & {
     distanceToUser?: number;
@@ -94,6 +93,8 @@ const getAllActive = async (
     filteredPsyList.sort(
       (psy1, psy2) => psy1.distanceToUser - psy2.distanceToUser,
     );
+  } else {
+    shuffleBasedOnHour(filteredPsyList);
   }
 
   const finalList = reduced
