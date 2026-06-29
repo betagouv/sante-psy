@@ -78,20 +78,27 @@ const EditProfile = () => {
       <p className="fr-mb-3w">Voici les informations te concernant :</p>
       <TextInput
         className="midlength-input"
+        label="INE (non modifiable)"
+        hint="Si ton INE change, tu dois recréer un compte"
+        value={user.ine}
+        disabled
+        aria-readonly="true"
+      />
+      <TextInput
+        className="midlength-input"
+        label="Adresse email actuelle (non modifiable)"
+        value={user.email}
+        disabled
+        aria-readonly="true"
+      />
+      <TextInput
+        className="midlength-input"
         label="Nouvelle adresse email"
         value={newEmail}
         onChange={e => setNewEmail(e.target.value.toLowerCase())}
         type="email"
         required
         disabled={tooManyAttempts}
-      />
-      <TextInput
-        className="midlength-input"
-        label="INE (non modifiable)"
-        hint="Si ton INE change, tu dois recréer un compte"
-        value={user.ine}
-        disabled
-        aria-readonly="true"
       />
 
       {error && (
