@@ -2,20 +2,21 @@ import { Request, Response } from 'express';
 import { check, param, oneOf } from 'express-validator';
 import { purifySanitizer } from '../services/sanitizer';
 
-import geo from '../utils/geo';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
-import getAddressCoordinates from '../services/getAddressCoordinates';
-import { Coordinates } from '../types/Coordinates';
 
 const getValidators = [
   param('psyId')
     .isUUID()
     .withMessage('Vous devez spécifier un identifiant valide.'),
 ];
+
+export const INVALID_ADDRESS_FORMAT = "L'adresse n'a pas un format valide.";
+export const MANDATORY_POSTCODE =
+  'Vous devez spécifier le code postal de votre cabinet.';
 
 const get = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
@@ -26,7 +27,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
   }
 
   const tokenData = cookie.verifyJwt(req, res);
-  const userId = tokenData ? (tokenData.userId || tokenData.psychologist) : null;
+  const userId = tokenData ? tokenData.userId || tokenData.psychologist : null;
   const extraInfo = tokenData && userId === req.params.psyId;
 
   if (!extraInfo && !psychologist.active) {
@@ -98,18 +99,19 @@ const updateValidators = [
     .isEmail()
     .withMessage('Vous devez spécifier un email valide.'),
   check('address')
+    .optional({ nullable: true })
+    .isObject()
+    .withMessage(INVALID_ADDRESS_FORMAT)
+    .bail(),
+  check('address.postcode')
+    .if(check('address').exists())
     .trim()
     .notEmpty()
-    .customSanitizer(purifySanitizer)
-    .withMessage("Vous devez spécifier l'adresse de votre cabinet."),
+    .withMessage(MANDATORY_POSTCODE),
   check('otherAddress')
-    .trim()
-    .customSanitizer(purifySanitizer),
-  check('departement')
-    .trim()
-    .notEmpty()
-    .customSanitizer(purifySanitizer)
-    .withMessage('Vous devez spécifier votre département.'),
+    .optional({ nullable: true })
+    .isObject()
+    .withMessage(INVALID_ADDRESS_FORMAT),
   check('phone')
     .trim()
     .notEmpty()
@@ -120,23 +122,17 @@ const updateValidators = [
     .notEmpty()
     .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier les langues parlées.'),
-  oneOf([
-    // Two valid possibilities : email is empty, or email is valid format.
-    check('email').trim().isEmpty(),
-    check('email')
-      .trim()
-      .customSanitizer(purifySanitizer)
-      .isEmail(),
-  ], 'Vous devez spécifier un email valide.'),
-  check('description')
-    .trim()
-    .customSanitizer(purifySanitizer),
-  check('website')
-    .trim()
-    .customSanitizer(purifySanitizer),
-  check('appointmentLink')
-    .trim()
-    .customSanitizer(purifySanitizer),
+  oneOf(
+    [
+      // Two valid possibilities : email is empty, or email is valid format.
+      check('email').trim().isEmpty(),
+      check('email').trim().customSanitizer(purifySanitizer).isEmail(),
+    ],
+    'Vous devez spécifier un email valide.',
+  ),
+  check('description').trim().customSanitizer(purifySanitizer),
+  check('website').trim().customSanitizer(purifySanitizer),
+  check('appointmentLink').trim().customSanitizer(purifySanitizer),
   check('teleconsultation')
     .isBoolean()
     .withMessage('Vous devez spécifier si vous proposez la téléconsultation.'),
@@ -144,10 +140,6 @@ const updateValidators = [
 
 const update = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
-  const region = geo.departementToRegion[req.body.departement];
-  if (!region) {
-    throw new CustomError('Departement invalide', 400);
-  }
 
   const psychologistId = req.auth.userId || req.auth.psychologist;
 
@@ -156,45 +148,19 @@ const update = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  let coordinates: Coordinates;
-  let otherCoordinates: Coordinates;
-  const psychologist = await dbPsychologists.getById(psychologistId);
-  if (psychologist) {
-    if (psychologist.address !== req.body.address) {
-      coordinates = await getAddressCoordinates(req.body.address);
-    } else {
-      coordinates = {
-        longitude: psychologist.longitude,
-        latitude: psychologist.latitude,
-        city: psychologist.city,
-        postcode: psychologist.postcode,
-      };
-    }
-    if (psychologist.otherAddress !== req.body.otherAddress) {
-      otherCoordinates = await getAddressCoordinates(req.body.otherAddress);
-    } else {
-      otherCoordinates = {
-        longitude: psychologist.otherLongitude,
-        latitude: psychologist.otherLatitude,
-        city: psychologist.otherCity,
-        postcode: psychologist.otherPostcode,
-
-      };
-    }
-  }
+  const { address, otherAddress, ...otherFields } = req.body;
 
   await dbPsychologists.update({
-    ...req.body,
+    ...otherFields,
     dossierNumber: psychologistId,
-    region,
-    longitude: coordinates ? coordinates.longitude : null,
-    latitude: coordinates ? coordinates.latitude : null,
-    city: coordinates ? coordinates.city : null,
-    postcode: coordinates ? coordinates.postcode : null,
-    otherLongitude: otherCoordinates ? otherCoordinates.longitude : null,
-    otherLatitude: otherCoordinates ? otherCoordinates.latitude : null,
-    otherCity: otherCoordinates ? otherCoordinates.city : null,
-    otherPostcode: otherCoordinates ? otherCoordinates.postcode : null,
+    ...(address && { ...address }),
+    ...(otherAddress && {
+      otherCity: otherAddress.city,
+      otherPostcode: otherAddress.postcode,
+      otherLongitude: otherAddress.longitude,
+      otherLatitude: otherAddress.latitude,
+      otherAddress: otherAddress.address,
+    }),
   });
 
   res.json({
@@ -213,18 +179,24 @@ const activate = async (req: Request, res: Response): Promise<void> => {
   await dbPsychologists.activate(psychologistId);
 
   res.json({
-    message: 'Vos informations sont de nouveau visibles sur l\'annuaire.',
+    message: "Vos informations sont de nouveau visibles sur l'annuaire.",
   });
 };
 
 const suspendValidators = [
   check('date')
     .isISO8601()
-    .withMessage('Vous devez spécifier une date de fin de suspension dans le futur.')
+    .withMessage(
+      'Vous devez spécifier une date de fin de suspension dans le futur.',
+    )
     .isAfter()
-    .withMessage('Vous devez spécifier une date de fin de suspension dans le futur.'),
+    .withMessage(
+      'Vous devez spécifier une date de fin de suspension dans le futur.',
+    ),
   check('reason')
-    .trim().not().isEmpty()
+    .trim()
+    .not()
+    .isEmpty()
     .withMessage('Vous devez spécifier une raison.')
     .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier une raison.'),
@@ -243,7 +215,7 @@ const suspend = async (req: Request, res: Response): Promise<void> => {
   await dbPsychologists.suspend(psychologistId, req.body.date, req.body.reason);
 
   res.json({
-    message: 'Vos informations ne sont plus visibles sur l\'annuaire.',
+    message: "Vos informations ne sont plus visibles sur l'annuaire.",
   });
 };
 

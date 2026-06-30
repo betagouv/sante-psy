@@ -6,6 +6,10 @@ import app from '../../index';
 import clean from '../helper/clean';
 import create from '../helper/create';
 import dbPsychologists from '../../db/psychologists';
+import {
+  INVALID_ADDRESS_FORMAT,
+  MANDATORY_POSTCODE,
+} from '../../controllers/psyProfileController';
 
 const getAddressCoordinates = require('../../services/getAddressCoordinates');
 
@@ -76,7 +80,8 @@ describe('psyProfileController', () => {
     it('should return basic info if user is not logged in', async () => {
       const psy = await create.insertOnePsy();
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get(`/api/psychologist/${psy.dossierNumber}`)
         .then(async (res) => {
           res.status.should.equal(200);
@@ -87,9 +92,13 @@ describe('psyProfileController', () => {
     it('should return basic info if user is logged in but ask for someone else', async () => {
       const psy = await create.insertOnePsy();
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get(`/api/psychologist/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(200);
@@ -100,9 +109,13 @@ describe('psyProfileController', () => {
     it('should return full psy profile if connected', async () => {
       const psy = await create.insertOnePsy();
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get(`/api/psychologist/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(200);
@@ -113,18 +126,25 @@ describe('psyProfileController', () => {
     it('should fail if param is not a uuid', async () => {
       const invalidUuid = 'yakalelo.com';
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get(`/api/psychologist/${invalidUuid}`)
         .then(async (res) => {
           res.status.should.equal(400);
-          res.body.message.should.equal('Vous devez spécifier un identifiant valide.');
+          res.body.message.should.equal(
+            'Vous devez spécifier un identifiant valide.',
+          );
         });
     });
 
     it('should return use first and last names if exists', async () => {
-      const psy = await create.insertOnePsy({ useFirstNames: 'Georges', useLastName: 'Sand' });
+      const psy = await create.insertOnePsy({
+        useFirstNames: 'Georges',
+        useLastName: 'Sand',
+      });
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get(`/api/psychologist/${psy.dossierNumber}`)
         .then(async (res) => {
           res.status.should.equal(200);
@@ -136,7 +156,8 @@ describe('psyProfileController', () => {
     it('should fail to retrieve inactive psy if user is not logged in', async () => {
       const psy = await create.insertOnePsy({ active: false });
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get(`/api/psychologist/${psy.dossierNumber}`)
         .then(async (res) => {
           res.status.should.equal(500);
@@ -147,9 +168,13 @@ describe('psyProfileController', () => {
     it('should fail to retrieve inactive psy if user is logged in but ask for someone else', async () => {
       const psy = await create.insertOnePsy({ active: false });
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get(`/api/psychologist/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(uuidv4(), 'randomXSRFToken')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(500);
@@ -160,9 +185,13 @@ describe('psyProfileController', () => {
     it('should succeed if user connected is targetted inactive psy', async () => {
       const psy = await create.insertOnePsy({ active: false });
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .get(`/api/psychologist/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(200);
@@ -189,234 +218,266 @@ describe('psyProfileController', () => {
         email: 'prenom.nom@beta.gouv.fr',
       };
 
-      const res = await chai.request(app)
+      const res = await chai
+        .request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send(postData);
 
       sinon.assert.notCalled(updatePsyStub);
 
       res.status.should.equal(400);
-      res.body.message.should.equal(message);
+      res.body.message.should.include(message);
     };
 
     it('should refuse empty personalEmail', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        // no personalEmail
-      }, 'Vous devez spécifier un email valide.');
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
+          phone: '01 02 03 04 05',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          languages: 'Français, Anglais',
+          // no personalEmail
+        },
+        'Vous devez spécifier un email valide.',
+      );
     });
 
     it('should refuse whitespace personalEmail', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: '  ',
-      }, 'Vous devez spécifier un email valide.');
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
+          phone: '01 02 03 04 05',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          languages: 'Français, Anglais',
+          personalEmail: '  ',
+        },
+        'Vous devez spécifier un email valide.',
+      );
     });
 
-    it('should refuse empty address', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        // no address
-        departement: '59 - Nord',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, "Vous devez spécifier l'adresse de votre cabinet.");
+    it('should refuse text address', async () => {
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: 'salut',
+          departement: '59 - Nord',
+          phone: '01 02 03 04 05',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          languages: 'Français, Anglais',
+          personalEmail: 'perso@email.com',
+        },
+        INVALID_ADDRESS_FORMAT,
+      );
     });
 
-    it('should refuse whitespace address', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '      ',
-        departement: '59 - Nord',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, "Vous devez spécifier l'adresse de votre cabinet.");
-    });
-
-    it('should refuse empty departement', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        // no departement
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier votre département.');
-    });
-
-    it('should refuse whitespace departement', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '   ',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier votre département.');
-    });
-
-    it('should refuse non existing departement', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '9cube - Seine St Denis Style',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, 'Departement invalide');
+    it('should refuse empty postcode', async () => {
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: {
+            address: '1 rue du Pôle Nord',
+          },
+          phone: '01 02 03 04 05',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          languages: 'Français, Anglais',
+          personalEmail: 'perso@email.com',
+        },
+        MANDATORY_POSTCODE,
+      );
     });
 
     it('should refuse empty phone', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        // no phone
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier le téléphone du secrétariat.');
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
+          // no phone
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          languages: 'Français, Anglais',
+          personalEmail: 'perso@email.com',
+        },
+        'Vous devez spécifier le téléphone du secrétariat.',
+      );
     });
 
     it('should refuse whitespace phone', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        phone: '  ',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier le téléphone du secrétariat.');
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
+          phone: '  ',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          languages: 'Français, Anglais',
+          personalEmail: 'perso@email.com',
+        },
+        'Vous devez spécifier le téléphone du secrétariat.',
+      );
     });
 
     it('should refuse empty languages', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        // no languages
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier les langues parlées.');
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
+          phone: '01 02 03 04 05',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          // no languages
+          personalEmail: 'perso@email.com',
+        },
+        'Vous devez spécifier les langues parlées.',
+      );
     });
 
     it('should refuse whitespace languages', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: '   ',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier les langues parlées.');
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
+          phone: '01 02 03 04 05',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          languages: '   ',
+          personalEmail: 'perso@email.com',
+        },
+        'Vous devez spécifier les langues parlées.',
+      );
     });
 
     it('should refuse when teleconsultation is missing', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        // teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier si vous proposez la téléconsultation.');
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
+          phone: '01 02 03 04 05',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          // teleconsultation: true,
+          languages: 'Français, Anglais',
+          personalEmail: 'perso@email.com',
+        },
+        'Vous devez spécifier si vous proposez la téléconsultation.',
+      );
     });
 
     it('should refuse when teleconsultation is invalid', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: 'yes',
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier si vous proposez la téléconsultation.');
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
+          phone: '01 02 03 04 05',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: 'yes',
+          languages: 'Français, Anglais',
+          personalEmail: 'perso@email.com',
+        },
+        'Vous devez spécifier si vous proposez la téléconsultation.',
+      );
     });
 
     it('should refuse invalid email', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso@email.com',
-      }, 'Vous devez spécifier un email valide.');
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
+          phone: '01 02 03 04 05',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          languages: 'Français, Anglais',
+          personalEmail: 'perso@email.com',
+        },
+        'Vous devez spécifier un email valide.',
+      );
     });
 
     it('should refuse invalid personalEmail', async () => {
-      await shouldFailUpdatePsyInputValidation({
-        email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
-        phone: '01 02 03 04 05',
-        website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement',
-        teleconsultation: true,
-        languages: 'Français, Anglais',
-        personalEmail: 'perso',
-      }, 'Vous devez spécifier un email valide.');
+      await shouldFailUpdatePsyInputValidation(
+        {
+          email: 'public@email.com',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
+          phone: '01 02 03 04 05',
+          website: 'https://monwebsite.fr',
+          description: 'Consultez un psychologue gratuitement',
+          teleconsultation: true,
+          languages: 'Français, Anglais',
+          personalEmail: 'perso',
+        },
+        'Vous devez spécifier un email valide.',
+      );
     });
 
     it('should refuse multiple invalid fields', async () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '',
           website: 'http://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -431,23 +492,32 @@ describe('psyProfileController', () => {
     const shouldPassUpdatePsyInputValidation = async (postData) => {
       const psy = await create.insertOnePsy();
 
-      const res = await chai.request(app)
+      const res = await chai
+        .request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send(postData);
 
       sinon.assert.called(updatePsyStub);
 
       res.status.should.equal(200);
-      res.body.message.should.equal('Vos informations ont bien été mises à jour.');
+      res.body.message.should.equal(
+        'Vos informations ont bien été mises à jour.',
+      );
     };
 
     it('should pass validation when email is missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: '',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
+        address: {
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          postcode: '59000',
+        },
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -460,8 +530,11 @@ describe('psyProfileController', () => {
     it('should pass validation when website is missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
+        address: {
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          postcode: '59000',
+        },
         phone: '01 02 03 04 05',
         website: '',
         description: 'Consultez un psychologue gratuitement',
@@ -474,8 +547,11 @@ describe('psyProfileController', () => {
     it('should pass validation when appointmentLink is missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
+        address: {
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          postcode: '59000',
+        },
         phone: '01 02 03 04 05',
         adeli: '123456789',
         website: 'https://monwebsite.fr',
@@ -490,8 +566,11 @@ describe('psyProfileController', () => {
     it('should pass validation when description is missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
+        address: {
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          postcode: '59000',
+        },
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: '',
@@ -504,8 +583,11 @@ describe('psyProfileController', () => {
     it('should pass validation when optional fields are missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
+        address: {
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          postcode: '59000',
+        },
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: '',
@@ -523,33 +605,35 @@ describe('psyProfileController', () => {
 
       const postData = {
         email: 'public@email.com',
-        address: '1 rue du Pôle Nord<div>',
-        otherAddress: '2 rue du Pôle Nord<div>',
-        departement: '59 - Nord',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
-        description: 'Consultez un psychologue gratuitement<script>evil</script>',
+        description:
+          'Consultez un psychologue gratuitement<script>evil</script>',
         teleconsultation: true,
         languages: 'Français, Anglais</',
         personalEmail: 'perso@email.com',
       };
 
-      chai.request(app)
+      chai
+        .request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send(postData)
         .end((err, res) => {
           res.status.should.equal(200);
           sinon.assert.called(updatePsyStub);
-          sinon.assert.calledWith(updatePsyStub, sinon.match({
-            ...postData,
-            address: '1 rue du Pôle Nord<div></div>',
-            otherAddress: '2 rue du Pôle Nord<div></div>',
-            departement: '59 - Nord',
-            description: 'Consultez un psychologue gratuitement',
-            languages: 'Français, Anglais&lt;/',
-          }));
+          sinon.assert.calledWith(
+            updatePsyStub,
+            sinon.match({
+              ...postData,
+              description: 'Consultez un psychologue gratuitement',
+              languages: 'Français, Anglais&lt;/',
+            }),
+          );
 
           done();
         });
@@ -571,7 +655,8 @@ describe('psyProfileController', () => {
     it('should return 401 if user is not logged in', async () => {
       const psy = await create.insertOnePsy();
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
         .then(async (res) => {
           res.status.should.equal(401);
@@ -580,11 +665,17 @@ describe('psyProfileController', () => {
 
     it('should return 403 if user token does not match the param', async () => {
       const loggedPsy = await create.insertOnePsy();
-      const targetPsy = await create.insertOnePsy({ personalEmail: 'other@psy.fr' });
+      const targetPsy = await create.insertOnePsy({
+        personalEmail: 'other@psy.fr',
+      });
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .put(`/api/psychologist/${targetPsy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
@@ -605,14 +696,21 @@ describe('psyProfileController', () => {
     it('should do nothing if it does not exists', async () => {
       const psy = create.getOnePsy();
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -622,7 +720,9 @@ describe('psyProfileController', () => {
         })
         .then(async (res) => {
           res.status.should.equal(200);
-          res.body.message.should.equal('Vos informations ont bien été mises à jour.');
+          res.body.message.should.equal(
+            'Vos informations ont bien été mises à jour.',
+          );
         });
     });
 
@@ -631,16 +731,31 @@ describe('psyProfileController', () => {
       const LONGITUDE_PARIS = 2.3488;
       const LATITUDE_PARIS = 48.85341;
 
-      getAddressCoordinatesStub.returns({ longitude: LONGITUDE_PARIS, latitude: LATITUDE_PARIS });
-      return chai.request(app)
+      return chai
+        .request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
-          otherAddress: '2 rue du Pôle Sud',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+            longitude: LONGITUDE_PARIS,
+            latitude: LATITUDE_PARIS,
+            region: 'Hauts-de-France',
+          },
+          otherAddress: {
+            address: '2 rue du Pôle Sud',
+            departement: '59 - Nord',
+            postcode: '59000',
+            longitude: LONGITUDE_PARIS,
+            latitude: LATITUDE_PARIS,
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           appointmentLink: 'https://monwebsite.fr',
@@ -651,7 +766,9 @@ describe('psyProfileController', () => {
         })
         .then(async (res) => {
           res.status.should.equal(200);
-          res.body.message.should.equal('Vos informations ont bien été mises à jour.');
+          res.body.message.should.equal(
+            'Vos informations ont bien été mises à jour.',
+          );
 
           const updatedPsy = await dbPsychologists.getById(psy.dossierNumber);
           expect(updatedPsy.email).to.eql('public@email.com');
@@ -661,12 +778,12 @@ describe('psyProfileController', () => {
           expect(updatedPsy.longitude).to.eql(LONGITUDE_PARIS);
           expect(updatedPsy.latitude).to.eql(LATITUDE_PARIS);
           expect(updatedPsy.otherAddress).to.eql('2 rue du Pôle Sud');
-          expect(updatedPsy.otherLongitude).to.eql(LONGITUDE_PARIS);
-          expect(updatedPsy.otherLatitude).to.eql(LATITUDE_PARIS);
           expect(updatedPsy.phone).to.eql('01 02 03 04 05');
           expect(updatedPsy.website).to.eql('https://monwebsite.fr');
           expect(updatedPsy.appointmentLink).to.eql('https://monwebsite.fr');
-          expect(updatedPsy.description).to.eql('Consultez un psychologue gratuitement');
+          expect(updatedPsy.description).to.eql(
+            'Consultez un psychologue gratuitement',
+          );
           expect(updatedPsy.teleconsultation).to.eql(true);
           expect(updatedPsy.languages).to.eql('Français, Anglais');
           expect(updatedPsy.personalEmail).to.eql('perso@email.com');
@@ -676,15 +793,22 @@ describe('psyProfileController', () => {
     it('should ignore extra info on psy profile', async () => {
       const psy = await create.insertOnePsy();
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
-          region: 'La bas',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+            region: 'Hauts-de-France',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -696,7 +820,9 @@ describe('psyProfileController', () => {
         })
         .then(async (res) => {
           res.status.should.equal(200);
-          res.body.message.should.equal('Vos informations ont bien été mises à jour.');
+          res.body.message.should.equal(
+            'Vos informations ont bien été mises à jour.',
+          );
 
           const updatedPsy = await dbPsychologists.getById(psy.dossierNumber);
           expect(updatedPsy.email).to.eql('public@email.com');
@@ -705,7 +831,9 @@ describe('psyProfileController', () => {
           expect(updatedPsy.region).to.eql('Hauts-de-France');
           expect(updatedPsy.phone).to.eql('01 02 03 04 05');
           expect(updatedPsy.website).to.eql('https://monwebsite.fr');
-          expect(updatedPsy.description).to.eql('Consultez un psychologue gratuitement');
+          expect(updatedPsy.description).to.eql(
+            'Consultez un psychologue gratuitement',
+          );
           expect(updatedPsy.teleconsultation).to.eql(true);
           expect(updatedPsy.languages).to.eql('Français, Anglais');
           expect(updatedPsy.personalEmail).to.eql('perso@email.com');
@@ -726,7 +854,8 @@ describe('psyProfileController', () => {
     it('should return 401 if user is not logged in', async () => {
       const psy = await create.insertOnePsy();
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .post(`/api/psychologist/${psy.dossierNumber}/activate`)
         .then(async (res) => {
           res.status.should.equal(401);
@@ -736,11 +865,17 @@ describe('psyProfileController', () => {
 
     it('should return 403 if user token does not match the param', async () => {
       const loggedPsy = await create.insertOnePsy();
-      const targetPsy = await create.insertOnePsy({ personalEmail: 'other@psy.fr' });
+      const targetPsy = await create.insertOnePsy({
+        personalEmail: 'other@psy.fr',
+      });
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .post(`/api/psychologist/${targetPsy.dossierNumber}/activate`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(403);
@@ -752,13 +887,19 @@ describe('psyProfileController', () => {
       const psy = create.getOneInactivePsy();
       await dbPsychologists.upsertMany([psy]);
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .post(`/api/psychologist/${psy.dossierNumber}/activate`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(200);
-          res.body.message.should.equal('Vos informations sont de nouveau visibles sur l\'annuaire.');
+          res.body.message.should.equal(
+            "Vos informations sont de nouveau visibles sur l'annuaire.",
+          );
 
           sinon.assert.calledWith(activatePsyStub, psy.dossierNumber);
         });
@@ -781,9 +922,13 @@ describe('psyProfileController', () => {
         email: 'prenom.nom@beta.gouv.fr',
       };
 
-      const res = await chai.request(app)
+      const res = await chai
+        .request(app)
         .post(`/api/psychologist/${psy.dossierNumber}/suspend`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .send(postData);
 
@@ -796,7 +941,8 @@ describe('psyProfileController', () => {
     it('should return 401 if user is not logged in', async () => {
       const psy = await create.insertOnePsy();
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .post(`/api/psychologist/${psy.dossierNumber}/suspend`)
         .then(async (res) => {
           res.status.should.equal(401);
@@ -806,11 +952,17 @@ describe('psyProfileController', () => {
 
     it('should return 403 if user token does not match the param', async () => {
       const loggedPsy = await create.insertOnePsy();
-      const targetPsy = await create.insertOnePsy({ personalEmail: 'other@psy.fr' });
+      const targetPsy = await create.insertOnePsy({
+        personalEmail: 'other@psy.fr',
+      });
 
-      return chai.request(app)
+      return chai
+        .request(app)
         .post(`/api/psychologist/${targetPsy.dossierNumber}/suspend`)
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(loggedPsy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(403);
@@ -824,53 +976,73 @@ describe('psyProfileController', () => {
 
       const nextDate = new Date();
       nextDate.setDate(nextDate.getDate() + 2);
-      return chai.request(app)
+      return chai
+        .request(app)
         .post(`/api/psychologist/${psy.dossierNumber}/suspend`)
         .send({
           date: nextDate,
           reason: 'Why are you asking ? are you the police ?',
         })
-        .set('Cookie', `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
         .set('xsrf-token', 'randomXSRFToken')
         .then(async (res) => {
           res.status.should.equal(200);
-          res.body.message.should.equal('Vos informations ne sont plus visibles sur l\'annuaire.');
+          res.body.message.should.equal(
+            "Vos informations ne sont plus visibles sur l'annuaire.",
+          );
 
           sinon.assert.calledWith(
             suspendPsyStub,
             psy.dossierNumber,
-            sinon.match((date) => (new Date(date)).getTime() === nextDate.getTime()),
+            sinon.match(
+              (date) => new Date(date).getTime() === nextDate.getTime(),
+            ),
             'Why are you asking ? are you the police ?',
           );
         });
     });
 
     it('should not suspend psy if no reason', async () => {
-      await shouldFailSuspendPsyInputValidation({
-        date: new Date(),
-      }, 'Vous devez spécifier une raison.');
+      await shouldFailSuspendPsyInputValidation(
+        {
+          date: new Date(),
+        },
+        'Vous devez spécifier une raison.',
+      );
     });
 
     it('should not suspend psy if empty reason', async () => {
-      await shouldFailSuspendPsyInputValidation({
-        date: new Date(),
-        reason: '    ',
-      }, 'Vous devez spécifier une raison.');
+      await shouldFailSuspendPsyInputValidation(
+        {
+          date: new Date(),
+          reason: '    ',
+        },
+        'Vous devez spécifier une raison.',
+      );
     });
 
     it('should not suspend psy if no date', async () => {
-      await shouldFailSuspendPsyInputValidation({
-        reason: 'yeah',
-      }, 'Vous devez spécifier une date de fin de suspension dans le futur.');
+      await shouldFailSuspendPsyInputValidation(
+        {
+          reason: 'yeah',
+        },
+        'Vous devez spécifier une date de fin de suspension dans le futur.',
+      );
     });
 
     it('should not suspend psy if date is in the past', async () => {
       const previousDate = new Date();
       previousDate.setDate(previousDate.getDate() - 2);
-      await shouldFailSuspendPsyInputValidation({
-        date: previousDate,
-        reason: 'yeah',
-      }, 'Vous devez spécifier une date de fin de suspension dans le futur.');
+      await shouldFailSuspendPsyInputValidation(
+        {
+          date: previousDate,
+          reason: 'yeah',
+        },
+        'Vous devez spécifier une date de fin de suspension dans le futur.',
+      );
     });
   });
 });
