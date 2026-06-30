@@ -4,7 +4,6 @@ import {
   RadioGroup,
   Radio,
   TextInput,
-  SearchableSelect,
   ButtonGroup,
 } from '@dataesr/react-dsfr';
 import { useLocation, useNavigate } from 'react-router-dom';
