@@ -6,16 +6,16 @@ const departementToRegion = {
   '01 - Ain': 'Auvergne-Rhône-Alpes',
   '02 - Aisne': 'Hauts-de-France',
   '03 - Allier': 'Auvergne-Rhône-Alpes',
-  '04 - Alpes-de-Haute-Provence': 'Provence-Alpes-Côte d\'Azur',
-  '05 - Hautes-Alpes': 'Provence-Alpes-Côte d\'Azur',
-  '06 - Alpes-Maritimes': 'Provence-Alpes-Côte d\'Azur',
+  '04 - Alpes-de-Haute-Provence': "Provence-Alpes-Côte d'Azur",
+  '05 - Hautes-Alpes': "Provence-Alpes-Côte d'Azur",
+  '06 - Alpes-Maritimes': "Provence-Alpes-Côte d'Azur",
   '07 - Ardèche': 'Auvergne-Rhône-Alpes',
   '08 - Ardennes': 'Grand Est',
   '09 - Ariège': 'Occitanie',
   '10 - Aube': 'Grand Est',
   '11 - Aude': 'Occitanie',
   '12 - Aveyron': 'Occitanie',
-  '13 - Bouches-du-Rhône': 'Provence-Alpes-Côte d\'Azur',
+  '13 - Bouches-du-Rhône': "Provence-Alpes-Côte d'Azur",
   '14 - Calvados': 'Normandie',
   '15 - Cantal': 'Auvergne-Rhône-Alpes',
   '16 - Charente': 'Nouvelle-Aquitaine',
@@ -86,8 +86,8 @@ const departementToRegion = {
   '80 - Somme': 'Hauts-de-France',
   '81 - Tarn': 'Occitanie',
   '82 - Tarn-et-Garonne': 'Occitanie',
-  '83 - Var': 'Provence-Alpes-Côte d\'Azur',
-  '84 - Vaucluse': 'Provence-Alpes-Côte d\'Azur',
+  '83 - Var': "Provence-Alpes-Côte d'Azur",
+  '84 - Vaucluse': "Provence-Alpes-Côte d'Azur",
   '85 - Vendée': 'Pays de la Loire',
   '86 - Vienne': 'Nouvelle-Aquitaine',
   '87 - Haute-Vienne': 'Nouvelle-Aquitaine',
@@ -112,13 +112,19 @@ const regions = [...new Set(Object.values(departementToRegion))];
 /**
  * Search in local departments and regions data
  */
-const searchLocalData = query => {
-  const normalizedQuery = query.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const searchLocalData = (query) => {
+  const normalizedQuery = query
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
   const results = [];
 
   // Search in regions
-  regions.forEach(region => {
-    const normalizedRegion = region.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  regions.forEach((region) => {
+    const normalizedRegion = region
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
     if (normalizedRegion.includes(normalizedQuery)) {
       results.push({
         value: region,
@@ -130,8 +136,11 @@ const searchLocalData = query => {
   });
 
   // Search in departments (by code and name)
-  Object.keys(departementToRegion).forEach(dept => {
-    const normalizedDept = dept.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  Object.keys(departementToRegion).forEach((dept) => {
+    const normalizedDept = dept
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
     const deptCode = dept.split(' - ')[0];
     const deptName = dept.split(' - ')[1];
 
@@ -143,7 +152,14 @@ const searchLocalData = query => {
         type: 'departement',
         context: departementToRegion[dept],
       });
-    } else if (deptName && deptName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(normalizedQuery)) {
+    } else if (
+      deptName &&
+      deptName
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .includes(normalizedQuery)
+    ) {
       // Search by department name
       results.push({
         value: dept,
@@ -182,7 +198,12 @@ const searchAddresses = async (query, limit = 5, type = 'municipality') => {
 
     // Track local search usage
     if (typeof window !== 'undefined' && window._paq && window.__MATOMO__) {
-      window._paq.push(['trackEvent', 'AddressAutocomplete', 'LocalSearch', localResults.length.toString()]);
+      window._paq.push([
+        'trackEvent',
+        'AddressAutocomplete',
+        'LocalSearch',
+        localResults.length.toString(),
+      ]);
     }
 
     // For short queries (2-3 chars), prioritize local results
@@ -206,24 +227,34 @@ const searchAddresses = async (query, limit = 5, type = 'municipality') => {
 
     const response = await axios.get(ADDRESS_API_URL, { params: apiParams });
 
-    const apiResults = response.data?.features ? response.data.features.map(feature => ({
-      value: feature.properties.label,
-      label: feature.properties.label,
-      city: feature.properties.city,
-      postcode: feature.properties.postcode,
-      context: feature.properties.context,
-      coordinates: feature.geometry.coordinates,
-      type: feature.properties.type,
-    })) : [];
+    const apiResults = response.data?.features
+      ? response.data.features.map((feature) => ({
+          value: feature.properties.label,
+          label: feature.properties.label,
+          city: feature.properties.city,
+          postcode: feature.properties.postcode,
+          context: feature.properties.context,
+          coordinates: feature.geometry.coordinates,
+          type: feature.properties.type,
+        }))
+      : [];
 
     // Track API usage
     if (typeof window !== 'undefined' && window._paq && window.__MATOMO__) {
-      window._paq.push(['trackEvent', 'AddressAutocomplete', 'APICall', apiResults.length.toString()]);
+      window._paq.push([
+        'trackEvent',
+        'AddressAutocomplete',
+        'APICall',
+        apiResults.length.toString(),
+      ]);
     }
 
     const allResults = [...localResults, ...apiResults];
 
-    const uniqueResults = allResults.filter((result, index, self) => index === self.findIndex(r => r.label === result.label));
+    const uniqueResults = allResults.filter(
+      (result, index, self) =>
+        index === self.findIndex((r) => r.label === result.label),
+    );
 
     return uniqueResults.slice(0, limit);
   } catch (error) {
@@ -231,7 +262,12 @@ const searchAddresses = async (query, limit = 5, type = 'municipality') => {
 
     // Track API errors
     if (typeof window !== 'undefined' && window._paq && window.__MATOMO__) {
-      window._paq.push(['trackEvent', 'AddressAutocomplete', 'Error', 'api_error']);
+      window._paq.push([
+        'trackEvent',
+        'AddressAutocomplete',
+        'Error',
+        'api_error',
+      ]);
     }
 
     return searchLocalData(query).slice(0, limit);
