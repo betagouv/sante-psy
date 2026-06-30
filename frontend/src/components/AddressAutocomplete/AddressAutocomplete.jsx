@@ -8,7 +8,18 @@ import styles from './addressAutocomplete.cssmodule.scss';
 
 const AROUND_ME = 'Autour de moi';
 
-const AddressAutocomplete = ({ id, label, className, selected, onChange, placeholder }) => {
+const AddressAutocomplete = ({
+  id,
+  label,
+  className,
+  selected,
+  onChange,
+  placeholder,
+  hint,
+  required = false,
+  isMunicipalities = true,
+  aroundMe = true,
+}) => {
   const selectId = useRef(id || uuidv4());
   const optionsRef = useRef([]);
   const optionsContainerRef = useRef();
@@ -20,7 +31,7 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
   const [isValidSelection, setIsValidSelection] = useState(false);
   const debounceRef = useRef();
 
-  const fixedOptions = [{ value: AROUND_ME, label: AROUND_ME }];
+  const fixedOptions = aroundMe ? [{ value: AROUND_ME, label: AROUND_ME }] : [];
   const allOptions = [...fixedOptions, ...suggestions];
 
   if (allOptions.length !== optionsRef.current.length) {
@@ -59,7 +70,11 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
 
     setIsLoading(true);
     try {
-      const results = await addressAutocomplete.searchAddresses(query, 5);
+      const results = await addressAutocomplete.searchAddresses(
+        query,
+        5,
+        isMunicipalities ? 'municipality' : 'housenumber',
+      );
       setSuggestions(results);
     } catch (error) {
       console.error('Autocomplete error:', error);
@@ -136,6 +151,8 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
     <div className={className}>
       <label className="fr-label" htmlFor={selectId.current}>
         {label}
+        {required && <span className="error"> *</span>}
+        {hint && <p className="fr-hint-text">{hint}</p>}
       </label>
       <div className={styles.addressAutocomplete}>
         <input

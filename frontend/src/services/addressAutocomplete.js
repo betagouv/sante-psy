@@ -169,9 +169,10 @@ const searchLocalData = query => {
  * Search addresses
  * @param {string} query - Search text
  * @param {number} limit - Max results (default: 5)
+ * @param {'municipality' | 'housenumber'} type - Search type (cities or addresses)
  * @returns {Promise<Array>} Address suggestions
  */
-const searchAddresses = async (query, limit = 5) => {
+const searchAddresses = async (query, limit = 5, type = 'municipality') => {
   if (!query || query.length < 2) {
     return [];
   }
@@ -200,7 +201,7 @@ const searchAddresses = async (query, limit = 5) => {
     if (/^\d+$/.test(query)) {
       delete apiParams.type;
     } else {
-      apiParams.type = 'municipality';
+      apiParams.type = type;
     }
 
     const response = await axios.get(ADDRESS_API_URL, { params: apiParams });
