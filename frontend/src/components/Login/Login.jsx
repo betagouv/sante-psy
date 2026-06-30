@@ -138,8 +138,8 @@ const Login = () => {
           </Row>
           <br />
           <p>
-            <b>Pas de mot de passe</b> ! Utilisez l'adresse email utilisée lors
-            de votre inscription.
+            <b>Pas de mot de passe</b> ! Utilisez l&lsquo;adresse email utilisée
+            lors de votre inscription.
           </p>
           <p>
             Vous recevrez un lien de connexion par email qui vous permettra
