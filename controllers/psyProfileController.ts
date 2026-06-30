@@ -95,12 +95,11 @@ const updateValidators = [
     .isEmail()
     .withMessage('Vous devez spécifier un email valide.'),
   check('address')
-    .exists({ checkNull: true })
-    .withMessage("Vous devez spécifier l'adresse de votre cabinet.")
-    .bail()
+    .optional({ nullable: true })
     .isObject()
     .withMessage("L'adresse n'a pas un format valide."),
   check('address.postcode')
+    .if(check('address').exists())
     .trim()
     .notEmpty()
     .withMessage('Vous devez spécifier le code postal de votre cabinet.'),
