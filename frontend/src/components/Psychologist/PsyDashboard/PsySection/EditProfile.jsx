@@ -10,7 +10,6 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import agent from 'services/agent';
 import string from 'services/string';
-import DEPARTEMENTS from 'src/utils/departments';
 import { useStore } from 'stores/index';
 import styles from './psySection.cssmodule.scss';
 import AddressAutocomplete from 'components/AddressAutocomplete/AddressAutocomplete';
@@ -24,7 +23,6 @@ const EditProfile = () => {
   const [psychologist, setPsychologist] = useState(
     location.state?.psychologist || {
       personalEmail: '',
-      departement: '',
       address: '',
       otherAddress: '',
       phone: '',
@@ -36,6 +34,8 @@ const EditProfile = () => {
       description: '',
     },
   );
+  const [newAddress, setNewAddress] = useState(null);
+  const [newOtherAddress, setNewOtherAddress] = useState(null);
   const [isLoaded, setIsLoaded] = useState(!!location.state?.psychologist);
 
   useEffect(() => {
@@ -91,6 +91,42 @@ const EditProfile = () => {
     }
   };
 
+  const handleAddress = (value, setAddress) => {
+    if (typeof value === 'object' && value !== null) {
+      const { city, postcode, context, label, coordinates } = value;
+      const splitContext = context.split(',').map((item) => item.trim());
+      const [numDep, labelDepartement, region] = splitContext;
+      const departement = `${numDep} - ${labelDepartement}`;
+      const [longitude, latitude] = coordinates;
+
+      if (
+        city &&
+        postcode &&
+        label &&
+        departement &&
+        region &&
+        longitude &&
+        latitude
+      ) {
+        setAddress({
+          city,
+          postcode,
+          label,
+          departement,
+          region,
+          longitude,
+          latitude,
+        });
+      }
+    } else {
+      setAddress(null);
+    }
+  };
+
+  const handleNewAddress = (value) => handleAddress(value, setNewAddress);
+  const handleNewOtherAddress = (value) =>
+    handleAddress(value, setNewOtherAddress);
+
   return (
     isLoaded && (
       <form data-test-id="edit-profile-form" onSubmit={save}>
@@ -109,57 +145,24 @@ const EditProfile = () => {
           type="email"
           required
         />
-        <SearchableSelect
-          className="midlength-select"
-          label="Votre département"
-          field="departement"
-          data-test-id="psy-departement-select"
-          selected={psychologist.departement}
-          onChange={(e) => changePsychologist(e, 'departement')}
-          options={DEPARTEMENTS.map((departement) => ({
-            value: departement,
-            label: departement,
-          }))}
+        <AddressAutocomplete
+          label="Adresse du cabinet"
+          hint="Adresse où se rendre pour le rendez-vous."
+          aroundMe={false}
+          className="midlength-input fr-input-group"
+          selected={psychologist.address}
+          onChange={handleNewAddress}
+          isMunicipalities={false}
           required
         />
         <AddressAutocomplete
-          selected={psychologist.address}
-          onChange={(value) => {
-            if (typeof value === 'object' && value !== null) {
-              console.log('value', value);
-              // setAddressFilter(value.label || value.value || '');
-              // setAddressFilterObject(value);
-              // if (value.coordinates) {
-              //   const [longitude, latitude] = value.coordinates;
-              //   setCoords({
-              //     latitude,
-              //     longitude,
-              //   });
-              // }
-            } else {
-              // setAddressFilter(null);
-              // setAddressFilterObject(null);
-              // setCoords(null);
-            }
-          }}
-          placeholder="Adresse où se rendre pour le rendez-vous."
-        />
-        {/* <TextInput
-        className="midlength-input"
-        label="Adresse du cabinet"
-        hint="Adresse où se rendre pour le rendez-vous."
-        data-test-id="psy-address-input"
-        value={psychologist.address}
-        onChange={e => changePsychologist(e.target.value, 'address')}
-        required
-      /> */}
-        <TextInput
-          className="midlength-input"
           label="Autre adresse du cabinet"
           hint="Si vous avez un deuxième cabinet vous pouvez indiquer son adresse ici"
-          data-test-id="psy-other-address-input"
-          value={psychologist.otherAddress}
-          onChange={(e) => changePsychologist(e.target.value, 'otherAddress')}
+          aroundMe={false}
+          className="midlength-input fr-input-group"
+          selected={psychologist.otherAddress}
+          onChange={handleNewOtherAddress}
+          isMunicipalities={false}
         />
         <TextInput
           className="midlength-input"
