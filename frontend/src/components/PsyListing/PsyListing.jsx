@@ -87,7 +87,7 @@ const PsyListing = () => {
       });
     }
 
-    let filters = {
+    const filters = {
       nameAndSpeciality: name || undefined,
       address: addressValue,
       teleconsultation,
