@@ -186,6 +186,7 @@ const AddressAutocomplete = ({
           onKeyDown={onInternalKeyDown}
           value={internalLabel}
           placeholder={placeholder}
+          required={required}
         />
 
         {!isValidSelection &&
