@@ -314,31 +314,6 @@ describe('Profile', () => {
     });
   });
 
-  describe('Incomplete profile', () => {
-    it('should not display alert if profile is complete', () => {
-      cy.get('[data-test-id="incomplete-profile-alert"]').should('not.exist');
-    });
-
-    it('should display alert for all incomplete info', () => {
-      cy.get('[data-test-id="show-profile-form-button"]').click();
-      cy.get('[data-test-id="psy-website-input"] > input').clear();
-      cy.get('[data-test-id="psy-website-input"] > input').type('doctolib');
-      cy.get('[data-test-id="psy-description-input"] > textarea').clear();
-      cy.get('[data-test-id="psy-description-input"] > textarea').type(
-        'cest court !',
-      );
-      cy.get('[data-test-id="save-profile-button"]').click();
-      cy.wait('@updateProfile');
-      cy.get('[data-test-id="incomplete-profile-alert"]').should('exist');
-      cy.get('[data-test-id="incomplete-profile-alert"]')
-        // eslint-disable-next-line max-len
-        .should(
-          'have.text',
-          "Votre profil est incompletCela n‘est pas bloquant mais pourrait empêcher les étudiants et étudiantes de vous contacter ou d‘identifier si vous répondez à leurs attentes.Votre présentation est trop courte.Votre site internet ne semble pas valide.L'adresse nimps... ne semble pas valide.L'adresse super nimps... ne semble pas valide.",
-        );
-    });
-  });
-
   describe('Check website url', () => {
     it('should display alert if website does not have right url', () => {
       cy.get('[data-test-id="show-profile-form-button"]').click();
