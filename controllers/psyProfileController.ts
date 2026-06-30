@@ -23,7 +23,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
   }
 
   const tokenData = cookie.verifyJwt(req, res);
-  const userId = tokenData ? (tokenData.userId || tokenData.psychologist) : null;
+  const userId = tokenData ? tokenData.userId || tokenData.psychologist : null;
   const extraInfo = tokenData && userId === req.params.psyId;
 
   if (!extraInfo && !psychologist.active) {
@@ -118,23 +118,17 @@ const updateValidators = [
     .notEmpty()
     .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier les langues parlées.'),
-  oneOf([
-    // Two valid possibilities : email is empty, or email is valid format.
-    check('email').trim().isEmpty(),
-    check('email')
-      .trim()
-      .customSanitizer(purifySanitizer)
-      .isEmail(),
-  ], 'Vous devez spécifier un email valide.'),
-  check('description')
-    .trim()
-    .customSanitizer(purifySanitizer),
-  check('website')
-    .trim()
-    .customSanitizer(purifySanitizer),
-  check('appointmentLink')
-    .trim()
-    .customSanitizer(purifySanitizer),
+  oneOf(
+    [
+      // Two valid possibilities : email is empty, or email is valid format.
+      check('email').trim().isEmpty(),
+      check('email').trim().customSanitizer(purifySanitizer).isEmail(),
+    ],
+    'Vous devez spécifier un email valide.',
+  ),
+  check('description').trim().customSanitizer(purifySanitizer),
+  check('website').trim().customSanitizer(purifySanitizer),
+  check('appointmentLink').trim().customSanitizer(purifySanitizer),
   check('teleconsultation')
     .isBoolean()
     .withMessage('Vous devez spécifier si vous proposez la téléconsultation.'),
@@ -181,18 +175,24 @@ const activate = async (req: Request, res: Response): Promise<void> => {
   await dbPsychologists.activate(psychologistId);
 
   res.json({
-    message: 'Vos informations sont de nouveau visibles sur l\'annuaire.',
+    message: "Vos informations sont de nouveau visibles sur l'annuaire.",
   });
 };
 
 const suspendValidators = [
   check('date')
     .isISO8601()
-    .withMessage('Vous devez spécifier une date de fin de suspension dans le futur.')
+    .withMessage(
+      'Vous devez spécifier une date de fin de suspension dans le futur.',
+    )
     .isAfter()
-    .withMessage('Vous devez spécifier une date de fin de suspension dans le futur.'),
+    .withMessage(
+      'Vous devez spécifier une date de fin de suspension dans le futur.',
+    ),
   check('reason')
-    .trim().not().isEmpty()
+    .trim()
+    .not()
+    .isEmpty()
     .withMessage('Vous devez spécifier une raison.')
     .customSanitizer(purifySanitizer)
     .withMessage('Vous devez spécifier une raison.'),
@@ -211,7 +211,7 @@ const suspend = async (req: Request, res: Response): Promise<void> => {
   await dbPsychologists.suspend(psychologistId, req.body.date, req.body.reason);
 
   res.json({
-    message: 'Vos informations ne sont plus visibles sur l\'annuaire.',
+    message: "Vos informations ne sont plus visibles sur l'annuaire.",
   });
 };
 
