@@ -2,14 +2,11 @@ import { Request, Response } from 'express';
 import { check, param, oneOf } from 'express-validator';
 import { purifySanitizer } from '../services/sanitizer';
 
-import geo from '../utils/geo';
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
-import getAddressCoordinates from '../services/getAddressCoordinates';
-import { Coordinates } from '../types/Coordinates';
 
 const getValidators = [
   param('psyId')
@@ -98,18 +95,19 @@ const updateValidators = [
     .isEmail()
     .withMessage('Vous devez spécifier un email valide.'),
   check('address')
+    .exists({ checkNull: true })
+    .withMessage("Vous devez spécifier l'adresse de votre cabinet.")
+    .bail()
+    .isObject()
+    .withMessage("L'adresse n'a pas un format valide."),
+  check('address.postcode')
     .trim()
     .notEmpty()
-    .customSanitizer(purifySanitizer)
-    .withMessage("Vous devez spécifier l'adresse de votre cabinet."),
+    .withMessage('Vous devez spécifier le code postal de votre cabinet.'),
   check('otherAddress')
-    .trim()
-    .customSanitizer(purifySanitizer),
-  check('departement')
-    .trim()
-    .notEmpty()
-    .customSanitizer(purifySanitizer)
-    .withMessage('Vous devez spécifier votre département.'),
+    .optional({ nullable: true })
+    .isObject()
+    .withMessage("L'adresse n'a pas un format valide."),
   check('phone')
     .trim()
     .notEmpty()
@@ -144,10 +142,6 @@ const updateValidators = [
 
 const update = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
-  const region = geo.departementToRegion[req.body.departement];
-  if (!region) {
-    throw new CustomError('Departement invalide', 400);
-  }
 
   const psychologistId = req.auth.userId || req.auth.psychologist;
 
@@ -156,45 +150,19 @@ const update = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  let coordinates: Coordinates;
-  let otherCoordinates: Coordinates;
-  const psychologist = await dbPsychologists.getById(psychologistId);
-  if (psychologist) {
-    if (psychologist.address !== req.body.address) {
-      coordinates = await getAddressCoordinates(req.body.address);
-    } else {
-      coordinates = {
-        longitude: psychologist.longitude,
-        latitude: psychologist.latitude,
-        city: psychologist.city,
-        postcode: psychologist.postcode,
-      };
-    }
-    if (psychologist.otherAddress !== req.body.otherAddress) {
-      otherCoordinates = await getAddressCoordinates(req.body.otherAddress);
-    } else {
-      otherCoordinates = {
-        longitude: psychologist.otherLongitude,
-        latitude: psychologist.otherLatitude,
-        city: psychologist.otherCity,
-        postcode: psychologist.otherPostcode,
-
-      };
-    }
-  }
+  const { address, otherAddress, ...otherFields } = req.body;
 
   await dbPsychologists.update({
-    ...req.body,
+    ...otherFields,
     dossierNumber: psychologistId,
-    region,
-    longitude: coordinates ? coordinates.longitude : null,
-    latitude: coordinates ? coordinates.latitude : null,
-    city: coordinates ? coordinates.city : null,
-    postcode: coordinates ? coordinates.postcode : null,
-    otherLongitude: otherCoordinates ? otherCoordinates.longitude : null,
-    otherLatitude: otherCoordinates ? otherCoordinates.latitude : null,
-    otherCity: otherCoordinates ? otherCoordinates.city : null,
-    otherPostcode: otherCoordinates ? otherCoordinates.postcode : null,
+    ...(address && { ...address }),
+    ...(otherAddress && {
+      otherCity: otherAddress.city,
+      otherPostcode: otherAddress.postcode,
+      otherLongitude: otherAddress.longitude,
+      otherLatitude: otherAddress.latitude,
+      otherAddress: otherAddress.address,
+    }),
   });
 
   res.json({

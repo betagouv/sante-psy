@@ -57,7 +57,19 @@ const EditProfile = () => {
   const save = async (e) => {
     e.preventDefault();
     try {
-      const response = await agent.Psychologist.updateProfile(psychologist);
+      const updatePsy = {
+        personalEmail: psychologist.personalEmail,
+        email: psychologist.email,
+        phone: psychologist.phone,
+        teleconsultation: psychologist.teleconsultation,
+        languages: psychologist.languages,
+        website: psychologist.website,
+        appointmentLink: psychologist.appointmentLink,
+        description: psychologist.description,
+        ...(!!newAddress && { address: newAddress }),
+        ...(!!newOtherAddress && { otherAddress: newOtherAddress }),
+      };
+      const response = await agent.Psychologist.updateProfile(updatePsy);
       updatePsyList();
       navigate('/psychologue/tableau-de-bord', {
         state: { notification: response },
@@ -99,21 +111,13 @@ const EditProfile = () => {
       const departement = `${numDep} - ${labelDepartement}`;
       const [longitude, latitude] = coordinates;
 
-      if (
-        city &&
-        postcode &&
-        label &&
-        departement &&
-        region &&
-        longitude &&
-        latitude
-      ) {
+      if (city && postcode && label && departement && longitude && latitude) {
         setAddress({
           city,
           postcode,
-          label,
+          address: label,
           departement,
-          region,
+          region: region || '',
           longitude,
           latitude,
         });
