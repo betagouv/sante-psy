@@ -137,19 +137,25 @@ const Login = () => {
             </Col>
           </Row>
           <br />
-          <p><b>Pas de mot de passe</b> !</p>
+          <p>
+            <b>Pas de mot de passe</b> ! Utilisez l'adresse email utilisée lors
+            de votre inscription.
+          </p>
           <p>
             Vous recevrez un lien de connexion par email qui vous permettra
             d&lsquo;être connecté pendant
             {` ${config.sessionDuration} `}
-            heures
+            heures.
           </p>
         </form>
       </Section>
 
       <Section title="Vous ne recevez pas le lien de connexion ?">
         <ul>
-          <li>Vérifiez que vous utilisez bien l&lsquo;adresse email avec laquelle vous vous êtes inscrit</li>
+          <li>
+            Vérifiez que vous utilisez bien l&lsquo;adresse email avec laquelle
+            vous vous êtes inscrit
+          </li>
           <li>Vérifiez vos spams</li>
           <li>Attendez quelques minutes</li>
         </ul>
