@@ -14,6 +14,10 @@ const getValidators = [
     .withMessage('Vous devez spécifier un identifiant valide.'),
 ];
 
+export const INVALID_ADDRESS_FORMAT = "L'adresse n'a pas un format valide.";
+export const MANDATORY_POSTCODE =
+  'Vous devez spécifier le code postal de votre cabinet.';
+
 const get = async (req: Request, res: Response): Promise<void> => {
   validation.checkErrors(req);
 
@@ -97,16 +101,17 @@ const updateValidators = [
   check('address')
     .optional({ nullable: true })
     .isObject()
-    .withMessage("L'adresse n'a pas un format valide."),
+    .withMessage(INVALID_ADDRESS_FORMAT)
+    .bail(),
   check('address.postcode')
     .if(check('address').exists())
     .trim()
     .notEmpty()
-    .withMessage('Vous devez spécifier le code postal de votre cabinet.'),
+    .withMessage(MANDATORY_POSTCODE),
   check('otherAddress')
     .optional({ nullable: true })
     .isObject()
-    .withMessage("L'adresse n'a pas un format valide."),
+    .withMessage(INVALID_ADDRESS_FORMAT),
   check('phone')
     .trim()
     .notEmpty()
