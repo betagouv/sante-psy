@@ -101,7 +101,7 @@ const jobs = [
     name: 'Check active boolean on every Psychologist',
   },
   {
-    cronTime: '15 6 * * *', // every day at 6:15am
+    cronTime: '0 8 * * *', // every day at 6:15am
     onTick: notifyStudentsAppointments,
     start: true,
     timeZone: 'Europe/Paris',
