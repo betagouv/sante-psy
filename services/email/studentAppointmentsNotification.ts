@@ -16,7 +16,7 @@ export const sendAppointmentsNotificationEmail = async (
   const html = await ejs.renderFile(
     './views/emails/appointmentsNotification.ejs',
     {
-      loginLink: `${config.hostnameWithProtocol}/espace-etudiant`,
+      loginLink: `${config.hostnameWithProtocol}/login`,
       contactLink: `${config.hostnameWithProtocol}/contact/formulaire`,
       remainingSessions: remainingAppointments,
       nbPsys,
