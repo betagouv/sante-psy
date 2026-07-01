@@ -24,7 +24,6 @@ describe('psyListingController', () => {
       lastName: 'Dupin',
       useFirstNames: 'Géorgïe',
       useLastName: 'Sand',
-      isVeryAvailable: true,
       description: 'Psychologue en gestion du stress et amie de Victor',
       languages: 'Francais, espagnol',
       isConventionSigned: true,
