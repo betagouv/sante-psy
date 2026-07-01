@@ -36,4 +36,12 @@ module.exports = () => [
     Si l'étudiant a déjà bénéficié du dispositif, il peut de nouveau en bénéficier sur l'année universitaire suivante, \
     sous réserve qu'il soit toujours étudiant sur la période de suivi.",
   },
+  {
+    question: "Y a-t-il une durée standard de séance ?",
+    answer: "Non. Il n’existe pas de durée standard applicable à toutes les séances. La durée d’une séance peut varier en fonction de la pratique clinique du psychologue, du travail thérapeutique engagé et des besoins de l'étudiant.",
+  },
+  {
+    question: "Ma consultation m’a semblé courte, est-ce normal ?",
+    answer: "Si la durée d’une séance vous interroge, nous vous invitons d’abord à en parler avec votre praticien. En cas de difficulté persistante, vous pouvez contacter le support de Santé Psy Étudiant.",
+  },
 ];
