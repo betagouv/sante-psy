@@ -7,6 +7,9 @@ import validation from '../utils/validation';
 import { shuffleBasedOnHour } from '../utils/shuffle';
 import { getPsyDistanceKm } from '../utils/distance';
 
+const MAX_DISTANCE_KM = 150;
+const MAX_NB_RESULTS = 50;
+
 const getValidators = [
   query('nameAndSpeciality')
     .optional()
@@ -80,16 +83,16 @@ const getAllActive = async (
   })[];
 
   if (psychologistFilters.teleconsultation) {
-    // teleconsultation: return 50 random psys that match text filters
+    // teleconsultation: return MAX_NB_RESULTS random psys that match text filters
     shuffleBasedOnHour(filteredPsyList);
   } else if (psychologistFilters.coords) {
-    // if we have coordinates, return 50 closest psys (max 150km)
+    // if we have coordinates, return MAX_NB_RESULTS closest psys (max MAX_DISTANCE_KM km)
     filteredPsyList = filteredPsyList
       .map((psy) => ({
         ...psy,
         distanceToUser: getPsyDistanceKm(psy, psychologistFilters.coords),
       }))
-      .filter((psy) => psy.distanceToUser <= 150);
+      .filter((psy) => psy.distanceToUser <= MAX_DISTANCE_KM);
     filteredPsyList.sort(
       (psy1, psy2) => psy1.distanceToUser - psy2.distanceToUser,
     );
@@ -123,7 +126,7 @@ const getAllActive = async (
       }))
     : filteredPsyList;
 
-  res.json(finalList.slice(0, 50));
+  res.json(finalList.slice(0, MAX_NB_RESULTS));
 };
 
 export default {
