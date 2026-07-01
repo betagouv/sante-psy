@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button, TextInput, ButtonGroup, Alert } from '@dataesr/react-dsfr';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Link } from 'react-router-dom';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
 import styles from './editProfile.cssmodule.scss';
@@ -112,6 +112,10 @@ const EditProfile = () => {
 
       <p className="fr-mt-3w">
         N&apos;oublie pas de prévenir ton psychologue si tu changes ton adresse email.
+      </p>
+
+      <p>
+          <em>Tu souhaites supprimer ton compte ? <Link to="/contact">Contacte-nous</Link></em>
       </p>
 
       <ButtonGroup isInlineFrom="xs" className="fr-mt-3w">
