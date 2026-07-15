@@ -33,10 +33,13 @@ const NewAppointment = () => {
   const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
   const [appointmentsRefreshKey, setAppointmentsRefreshKey] = useState(0);
+  const [hasChangedInput, setHasChangedInput] = useState(true);
 
   const {
     commonStore: { setNotification },
   } = useStore();
+
+  useEffect(() => setHasChangedInput(true), [date, patientId]);
 
   useEffect(() => {
     if (queryDate) {
@@ -74,8 +77,15 @@ const NewAppointment = () => {
       patient.email,
     [patient],
   );
+
+  const canCreateAppointment = useMemo(
+    () => !!date && hasAllCompulsoryInfo && !tooMuchAppointments && hasChangedInput,
+    [date, hasAllCompulsoryInfo, tooMuchAppointments, hasChangedInput],
+  );
+
   const createNewAppointment = (e) => {
     e.preventDefault();
+    setHasChangedInput(false);
     setNotification({});
     agent.Appointment.add(patientId, date).then((response) => {
       setNotification(response);
@@ -102,165 +112,159 @@ const NewAppointment = () => {
   const allOptions = defaultString.concat(patientsMap);
 
   return (
-    <>
-      <Alert
-        type="warning"
-        description="L’étudiant recevra une notification par mail pour toute séance ajoutée."
-      />
-      <div className={styles.newAppointmentWrapper}>
-        <form onSubmit={createNewAppointment} className="fr-my-2w">
-          <div id="patients-list" className="fr-mb-2w">
-            {patients.length > 0 ? (
-              <SearchableSelect
-                className="midlength-select"
-                data-test-id="new-appointment-etudiant-input"
-                id="etudiants"
-                name="patientId"
-                label="Etudiant"
-                selected={patientId}
-                hint={
-                  <>
-                    Votre étudiant n&lsquo;est pas dans la liste ?{' '}
-                    <HashLink
-                      to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}
-                      id="new-patient"
-                    >
-                      Ajoutez un nouvel étudiant
-                    </HashLink>
-                  </>
-                }
-                onChange={(e) => {
-                  setPatientId(e);
-                  setNotification({});
-                }}
-                required
-                options={allOptions}
-              />
-            ) : (
-              <Select
-                className="midlength-select"
-                label="Etudiant"
-                disabled
-                required
-                options={[]}
-                hint={
-                  <>
-                    Vous n&lsquo;avez aucun étudiant dans votre liste !{' '}
-                    <HashLink
-                      to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}
-                      id="new-patient"
-                    >
-                      Ajoutez un nouvel étudiant
-                    </HashLink>
-                  </>
-                }
-              />
-            )}
-          </div>
-          {hasAllCompulsoryInfo && !tooMuchAppointments && (
-            <DatePicker
-              id="new-appointment-date-input"
-              className="date-picker"
-              selected={date}
-              minDate={beginningDate}
-              maxDate={maxDate}
-              dateFormat="dd/MM/yyyy"
-              showPopperArrow={false}
-              customInput={
-                <DateInput
-                  label="Date de la séance"
-                  hint={
-                    <>
-                      Les séances doivent être déclarées au plus tard le dernier
-                      jour du mois suivant leur réalisation. Pour toute aide,{' '}
-                      <HashLink to="/contact/formulaire">
-                        contactez le support.
-                      </HashLink>
-                    </>
-                  }
-                  dataTestId="new-appointment-date-input"
-                />
-              }
-              onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
-              required
-            />
-          )}
-          {patientId && !hasAllCompulsoryInfo && (
-            <>
-              <Alert
-                className="fr-mt-2w"
-                type="warning"
-                data-test-id="alert-missing-data"
-                title="Problème avec le dossier étudiant"
-                description={
-                  <>
-                    Le dossier de l&apos;étudiant doit être complet pour ajouter
-                    des séances : email, INE valide, date de naissance, genre...
-                    <br />
-                  </>
-                }
-              />
-              <br />
-              <Button
-                onClick={() =>
-                  navigate(
-                    `/psychologue/modifier-etudiant/${patientId}?addAppointment=true`,
-                  )
-                }
-              >
-                Compléter le dossier étudiant
-              </Button>
-            </>
-          )}
-          {tooMuchAppointments && (
-            <Alert
-              className="fr-mt-2w"
-              type="warning"
-              description={
+    <div className={styles.newAppointmentWrapper}>
+      <form onSubmit={createNewAppointment} className="fr-my-2w">
+        <div id="patients-list" className="fr-mb-2w">
+          {patients.length > 0 ? (
+            <SearchableSelect
+              className="midlength-select"
+              data-test-id="new-appointment-etudiant-input"
+              id="etudiants"
+              name="patientId"
+              label="Etudiant"
+              selected={patientId}
+              hint={
                 <>
-                  Cet étudiant a atteint le nombre maximum de séances prises en
-                  charge pour l&apos;année scolaire en cours. Il n&apos;est pas
-                  possible d&apos;en déclarer de nouvelles avant la prochaine
-                  rentrée. Si vous constatez une erreur dans le décompte,
-                  veuillez{' '}
-                  <HashLink to="/contact/formulaire">
-                    contacter le support
+                  Votre étudiant n&lsquo;est pas dans la liste ?{' '}
+                  <HashLink
+                    to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}
+                    id="new-patient"
+                  >
+                    Ajoutez un nouvel étudiant
                   </HashLink>
-                  .
+                </>
+              }
+              onChange={(e) => {
+                setPatientId(e);
+                setNotification({});
+              }}
+              required
+              options={allOptions}
+            />
+          ) : (
+            <Select
+              className="midlength-select"
+              label="Etudiant"
+              disabled
+              required
+              options={[]}
+              hint={
+                <>
+                  Vous n&lsquo;avez aucun étudiant dans votre liste !{' '}
+                  <HashLink
+                    to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}
+                    id="new-patient"
+                  >
+                    Ajoutez un nouvel étudiant
+                  </HashLink>
                 </>
               }
             />
           )}
-          <div className={styles.submitCancelButtonsWrapper}>
-            <Button
-              id="new-appointment-submit"
-              data-test-id="new-appointment-submit"
-              submit
-              icon="ri-add-line"
-              className="fr-mt-4w"
-              disabled={tooMuchAppointments || !hasAllCompulsoryInfo}
-            >
-              Créer la séance
-            </Button>
-            <Button
-              secondary
-              className="fr-mt-4w"
-              onClick={() => navigate('/psychologue/mes-seances')}
-            >
-              Annuler
-            </Button>
-          </div>
-        </form>
-        {patientId && (
-          <PatientAppointments
-            showCreateButton={false}
-            patientId={patientId}
-            onUpdatePatientAppointments={onUpdatePatientAppointments}
-            refreshKey={appointmentsRefreshKey}
+        </div>
+        {hasAllCompulsoryInfo && !tooMuchAppointments && (
+          <DatePicker
+            id="new-appointment-date-input"
+            className="date-picker"
+            selected={date}
+            minDate={beginningDate}
+            maxDate={maxDate}
+            dateFormat="dd/MM/yyyy"
+            showPopperArrow={false}
+            customInput={
+              <DateInput
+                label="Date de la séance"
+                hint={
+                  <>
+                    Les séances doivent être déclarées au plus tard le dernier
+                    jour du mois suivant leur réalisation. Pour toute aide,{' '}
+                    <HashLink to="/contact/formulaire">
+                      contactez le support.
+                    </HashLink>
+                  </>
+                }
+                dataTestId="new-appointment-date-input"
+              />
+            }
+            onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
+            required
           />
         )}
-      </div>
-    </>
+        {patientId && !hasAllCompulsoryInfo && (
+          <>
+            <Alert
+              className="fr-mt-2w"
+              type="warning"
+              data-test-id="alert-missing-data"
+              title="Problème avec le dossier étudiant"
+              description={
+                <>
+                  Le dossier de l&apos;étudiant doit être complet pour ajouter
+                  des séances : email, INE valide, date de naissance, genre...
+                  <br />
+                </>
+              }
+            />
+            <br />
+            <Button
+              onClick={() =>
+                navigate(
+                  `/psychologue/modifier-etudiant/${patientId}?addAppointment=true`,
+                )
+              }
+            >
+              Compléter le dossier étudiant
+            </Button>
+          </>
+        )}
+        {tooMuchAppointments && (
+          <Alert
+            className="fr-mt-2w"
+            type="warning"
+            description={
+              <>
+                Cet étudiant a atteint le nombre maximum de séances prises en
+                charge pour l&apos;année scolaire en cours. Il n&apos;est pas
+                possible d&apos;en déclarer de nouvelles avant la prochaine
+                rentrée. Si vous constatez une erreur dans le décompte,
+                veuillez{' '}
+                <HashLink to="/contact/formulaire">
+                  contacter le support
+                </HashLink>
+                .
+              </>
+            }
+          />
+        )}
+        <div className={styles.submitCancelButtonsWrapper}>
+          <Button
+            id="new-appointment-submit"
+            data-test-id="new-appointment-submit"
+            submit
+            icon="ri-add-line"
+            className="fr-mt-4w"
+            disabled={!canCreateAppointment}
+          >
+            Créer la séance
+          </Button>
+          <Button
+            secondary
+            className="fr-mt-4w"
+            onClick={() => navigate('/psychologue/mes-seances')}
+          >
+            Annuler
+          </Button>
+        </div>
+      </form>
+      {patientId && (
+        <PatientAppointments
+          showCreateButton={false}
+          patientId={patientId}
+          onUpdatePatientAppointments={onUpdatePatientAppointments}
+          refreshKey={appointmentsRefreshKey}
+        />
+      )}
+    </div>
   );
 };
 
