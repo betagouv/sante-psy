@@ -33,13 +33,13 @@ const NewAppointment = () => {
   const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
   const [appointmentsRefreshKey, setAppointmentsRefreshKey] = useState(0);
-  const [hasChangedDate, setHasChangedDate] = useState(true);
+  const [hasChangedInput, setHasChangedInput] = useState(true);
 
   const {
     commonStore: { setNotification },
   } = useStore();
 
-  useEffect(() => setHasChangedDate(true), [date, patientId]);
+  useEffect(() => setHasChangedInput(true), [date, patientId]);
 
   useEffect(() => {
     if (queryDate) {
@@ -79,13 +79,13 @@ const NewAppointment = () => {
   );
 
   const canCreateAppointment = useMemo(
-    () => !!date && hasAllCompulsoryInfo && !tooMuchAppointments && hasChangedDate,
-    [date, hasAllCompulsoryInfo, tooMuchAppointments, hasChangedDate],
+    () => !!date && hasAllCompulsoryInfo && !tooMuchAppointments && hasChangedInput,
+    [date, hasAllCompulsoryInfo, tooMuchAppointments, hasChangedInput],
   );
 
   const createNewAppointment = (e) => {
     e.preventDefault();
-    setHasChangedDate(false);
+    setHasChangedInput(false);
     setNotification({});
     agent.Appointment.add(patientId, date).then((response) => {
       setNotification(response);
