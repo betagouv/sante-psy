@@ -33,10 +33,13 @@ const NewAppointment = () => {
   const [patientId, setPatientId] = useState(params.patientId);
   const [patients, setPatients] = useState([]);
   const [appointmentsRefreshKey, setAppointmentsRefreshKey] = useState(0);
+  const [hasChangedDate, setHasChangedDate] = useState(true);
 
   const {
     commonStore: { setNotification },
   } = useStore();
+
+  useEffect(() => setHasChangedDate(true), [date, patientId]);
 
   useEffect(() => {
     if (queryDate) {
@@ -74,8 +77,15 @@ const NewAppointment = () => {
       patient.email,
     [patient],
   );
+
+  const canCreateAppointment = useMemo(
+    () => !!date && hasAllCompulsoryInfo && !tooMuchAppointments && hasChangedDate,
+    [date, hasAllCompulsoryInfo, tooMuchAppointments, hasChangedDate],
+  );
+
   const createNewAppointment = (e) => {
     e.preventDefault();
+    setHasChangedDate(false);
     setNotification({});
     agent.Appointment.add(patientId, date).then((response) => {
       setNotification(response);
@@ -238,7 +248,7 @@ const NewAppointment = () => {
               submit
               icon="ri-add-line"
               className="fr-mt-4w"
-              disabled={tooMuchAppointments || !hasAllCompulsoryInfo}
+              disabled={!canCreateAppointment}
             >
               Créer la séance
             </Button>
