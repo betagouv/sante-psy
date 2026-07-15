@@ -113,10 +113,6 @@ const NewAppointment = () => {
 
   return (
     <>
-      <Alert
-        type="warning"
-        description="L’étudiant recevra une notification par mail pour toute séance ajoutée."
-      />
       <div className={styles.newAppointmentWrapper}>
         <form onSubmit={createNewAppointment} className="fr-my-2w">
           <div id="patients-list" className="fr-mb-2w">

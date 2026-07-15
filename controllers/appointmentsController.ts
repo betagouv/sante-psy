@@ -106,7 +106,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
   );
 
   res.json({
-    message: `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée.`,
+    message: `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée, et l'étudiant en a été informé par email.`,
   });
 };
 
