@@ -85,7 +85,7 @@ describe('appointmentsController', () => {
     );
   }
 
-  describe.only('create appointment', () => {
+  describe('create appointment', () => {
     let psy: Psychologist;
     before(async () => {
       psy = await create.insertOnePsy({ createdAt: new Date('2021-05-22') });
