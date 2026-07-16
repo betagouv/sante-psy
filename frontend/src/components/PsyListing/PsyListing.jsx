@@ -56,9 +56,6 @@ const PsyListing = () => {
   const [addressFilter, setAddressFilter] = useState(
     searchParams.get('address') || '',
   );
-  const [addressFilterObject, setAddressFilterObject] = useState(
-    JSON.parse(searchParams.get('addressObject')) || null,
-  );
   const [teleconsultation, setTeleconsultation] = useState(
     searchParams.get('teleconsultation') === 'true' || false,
   );
@@ -131,7 +128,7 @@ const PsyListing = () => {
     const page = parseInt(searchParams.get('page') || '0', 10);
 
     const isAddressValid =
-      !addressFilter || addressFilter === AROUND_ME || addressFilterObject;
+      !addressFilter || addressFilter === AROUND_ME || coords;
 
     if (!isAddressValid) {
       setNotification(
@@ -179,7 +176,6 @@ const PsyListing = () => {
       language: languageFilter,
       teleconsultation,
       address: addressFilter,
-      addressObject: JSON.stringify(addressFilterObject),
       ...(coords?.latitude && { lat: coords?.latitude }),
       ...(coords?.longitude && { lon: coords?.longitude }),
       page: 1,
@@ -264,7 +260,6 @@ const PsyListing = () => {
                 onChange={(value) => {
                   if (typeof value === 'object' && value !== null) {
                     setAddressFilter(value.label || value.value || '');
-                    setAddressFilterObject(value);
                     if (value.coordinates) {
                       const [longitude, latitude] = value.coordinates;
                       setCoords({
@@ -274,7 +269,6 @@ const PsyListing = () => {
                     }
                   } else {
                     setAddressFilter(value);
-                    setAddressFilterObject(null);
                     setCoords(null);
                   }
                 }}
@@ -356,7 +350,6 @@ const PsyListing = () => {
           psychologists={filteredPsychologists || []}
           nameAndSpecialityFilter={nameAndSpecialityFilter}
           addressFilter={addressFilter}
-          addressFilterObject={addressFilterObject}
           languageFilter={languageFilter}
           teleconsultation={teleconsultation}
           nameFilter={nameAndSpecialityFilter}
