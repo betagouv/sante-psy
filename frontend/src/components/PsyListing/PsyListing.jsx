@@ -272,7 +272,7 @@ const PsyListing = () => {
                     setCoords(null);
                   }
                 }}
-                placeholder="Ville, code postal ou région"
+                placeholder="Ville ou code postal"
               />
             </div>
             <div className={styles.inputMd}>
