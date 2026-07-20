@@ -287,7 +287,7 @@ const StudentSignInStepTwo = () => {
           >
             Contacte notre support
           </a>
-          , on est là pour t'aider.
+          , on est là pour t&lsquo;aider.
         </p>
       </form>
     </StudentSignInHeader>
