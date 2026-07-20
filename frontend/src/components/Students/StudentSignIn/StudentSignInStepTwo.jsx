@@ -51,7 +51,7 @@ const StudentSignInStepTwo = () => {
 
   if (!valid) return null;
 
-  const validateFirstNames = value => {
+  const validateFirstNames = (value) => {
     if (!validateNameFormat(value)) {
       setFirstNamesError('Format incorrect du prénom.');
       return false;
@@ -60,7 +60,7 @@ const StudentSignInStepTwo = () => {
     return true;
   };
 
-  const validateLastName = value => {
+  const validateLastName = (value) => {
     if (!validateNameFormat(value)) {
       setLastNameError('Format incorrect du nom.');
       return false;
@@ -69,7 +69,7 @@ const StudentSignInStepTwo = () => {
     return true;
   };
 
-  const validateDateOfBirth = value => {
+  const validateDateOfBirth = (value) => {
     if (!value) {
       setDateOfBirthError('Date de naissance requise.');
       return false;
@@ -82,13 +82,13 @@ const StudentSignInStepTwo = () => {
     return true;
   };
 
-  const handleDateOfBirthChange = e => {
+  const handleDateOfBirthChange = (e) => {
     const formattedValue = addAutoSlashToDate(e.target.value);
     setDateOfBirth(formattedValue);
     validateDateOfBirth(formattedValue);
   };
 
-  const validateINE = value => {
+  const validateINE = (value) => {
     if (!validateIneFormat(value)) {
       setIneError('Format incorrect du numéro INE.');
       return false;
@@ -97,7 +97,7 @@ const StudentSignInStepTwo = () => {
     return true;
   };
 
-  const signIn = async e => {
+  const signIn = async (e) => {
     e.preventDefault();
 
     const isFormValid =
@@ -169,7 +169,7 @@ const StudentSignInStepTwo = () => {
               id="first-names-input"
               type="text"
               value={firstNames}
-              onChange={e => setFirstNames(e.target.value)}
+              onChange={(e) => setFirstNames(e.target.value)}
               onBlur={() => validateFirstNames(firstNames)}
               required
               disabled={isBlocked}
@@ -188,7 +188,7 @@ const StudentSignInStepTwo = () => {
               id="last-name-input"
               value={lastName}
               type="text"
-              onChange={e => setLastName(e.target.value)}
+              onChange={(e) => setLastName(e.target.value)}
               onBlur={() => validateLastName(lastName)}
               required
               disabled={isBlocked}
@@ -232,7 +232,7 @@ const StudentSignInStepTwo = () => {
               id="ine-input"
               type="text"
               value={ine}
-              onChange={e => setIne(e.target.value.toUpperCase())}
+              onChange={(e) => setIne(e.target.value.toUpperCase())}
               onBlur={() => validateINE(ine)}
               required
               disabled={isBlocked}
@@ -265,7 +265,9 @@ const StudentSignInStepTwo = () => {
         )}
         <div className="fr-alert fr-alert--warning fr-mb-3w" role="alert">
           <p>
-            <strong>Cette étape n&apos;est pas la dernière !</strong> Tu ne seras définitivement inscrit qu&apos;après avoir complété toutes les étapes du questionnaire.
+            <strong>Cette étape n&apos;est pas la dernière !</strong> Tu ne
+            seras définitivement inscrit qu&apos;après avoir complété toutes les
+            étapes du questionnaire.
           </p>
         </div>
         <div className="fr-mb-4w fr-mt-2w">
@@ -275,6 +277,18 @@ const StudentSignInStepTwo = () => {
               : 'Continuer mon inscription'}
           </button>
         </div>
+        <p>
+          Une difficulté pour créer ton compte ?{' '}
+          <a
+            href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
+            className="fr-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Contacte notre support
+          </a>
+          , on est là pour t'aider.
+        </p>
       </form>
     </StudentSignInHeader>
   );
