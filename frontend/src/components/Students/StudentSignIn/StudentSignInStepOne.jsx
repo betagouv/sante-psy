@@ -63,7 +63,8 @@ const StudentSignInStepOne = () => {
                 adresse email est correcte et n&apos;a pas déjà été utilisée
                 pour un autre compte.
                 <br />
-                Si tu suspectes une usurpation ou une erreur, tu peux nous
+                Si tu suspectes une usurpation ou une erreur, ou si tu
+                rencontres des difficultés pour créer ton compte, tu peux nous
                 contacter via le{' '}
                 <a
                   href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
