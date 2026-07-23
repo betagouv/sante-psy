@@ -18,16 +18,18 @@ import studentsController from '../controllers/studentsController';
 
 const router = express.Router();
 
-router.use(expressjwt({
-  secret: config.secret,
-  algorithms: ['HS256'],
-  getToken: (req) => {
-    if (req.cookies !== undefined) {
-      return req.cookies.token;
-    }
-    return null;
-  },
-}));
+router.use(
+  expressjwt({
+    secret: config.secret,
+    algorithms: ['HS256'],
+    getToken: (req) => {
+      if (req.cookies !== undefined) {
+        return req.cookies.token;
+      }
+      return null;
+    },
+  }),
+);
 router.use(xsrfProtection);
 router.use(refreshToken);
 
@@ -41,20 +43,30 @@ router.use('/psychologist/:psyId', access.checkPsyParam, psychologistRouter);
 router.post(
   '/student/request-email-change',
   studentsController.emailValidator,
-  studentsController.requestEmailChange
+  studentsController.requestEmailChange,
 );
 router.get(
-  '/student/confirm-email-change/:token', access.checkEmailChangeToken, studentsController.getEmailChangeRequest
+  '/student/confirm-email-change/:token',
+  access.checkEmailChangeToken,
+  studentsController.getEmailChangeRequest,
 );
 router.post(
-  '/student/confirm-email-change/:token', access.checkEmailChangeToken, studentsController.confirmEmailChange
+  '/student/confirm-email-change/:token',
+  access.checkEmailChangeToken,
+  studentsController.confirmEmailChange,
 );
 router.delete(
-  '/students/delete-email-change/:token', access.checkEmailChangeToken, studentsController.deleteEmailChangeInfo
+  '/students/delete-email-change/:token',
+  access.checkEmailChangeToken,
+  studentsController.deleteEmailChangeInfo,
 );
 
 router.use('/student', studentsRouter);
 // todo: ajouter les nouvelles routes dans test/middlewares/xsrfProtection.spec.ts pour tester la sécurité
-router.use('/student/:studentId/appointments', access.checkStudentParam, studentsController.getStudentAppointments);
+router.use(
+  '/student/:studentId/appointments',
+  access.checkStudentParam,
+  studentsController.getStudentAppointments,
+);
 
 export default router;
