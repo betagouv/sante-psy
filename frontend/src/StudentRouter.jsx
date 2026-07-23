@@ -44,10 +44,6 @@ const StudentRouter = () => {
         return {
           title: <>Modification d&apos;email</>,
         };
-      case 'update-personal-data':
-        return {
-          title: <>Mise à jour des données</>,
-        };
       default:
         return {};
     }
