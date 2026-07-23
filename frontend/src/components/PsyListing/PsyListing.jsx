@@ -16,6 +16,7 @@ import NoResultPsyTable from './NoResultPsyTable';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import styles from './psyListing.cssmodule.scss';
 import { trackSearchPsychologists } from 'services/matomo';
+import { Navigate } from 'react-router-dom';
 
 export const AROUND_ME = 'Autour de moi';
 
