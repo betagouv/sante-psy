@@ -3,11 +3,13 @@ import { useStore } from 'stores/index';
 import StudentQuestionnaire from '../Questionnaire/StudentQuestionnaire';
 import Page from 'components/Page/Page';
 import agent from 'services/agent';
+import { useNavigate } from 'react-router-dom';
 
 const UpdatePersonalData = () => {
   const {
-    userStore: { user },
+    userStore: { user, pullUser },
   } = useStore();
+  const navigate = useNavigate();
 
   const defaultValues = {
     acceptedCGUs: user.has_accepted_cgu,
@@ -43,6 +45,8 @@ const UpdatePersonalData = () => {
         gender,
         livingPostcode,
       });
+      await pullUser();
+      navigate('/etudiant');
     } catch (error) {
       console.error(error);
     }
