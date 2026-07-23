@@ -202,6 +202,53 @@ const deleteEmailChangeInfo = async (token: string): Promise<void> => {
     });
 };
 
+type UpdatePersonalDataParams = {
+  acceptedCGUs?: boolean;
+  schoolType?: string;
+  schoolName?: string;
+  schoolPostcode?: string;
+  studyLevel?: string;
+  studyField?: string;
+  studyFieldOther?: string | null;
+  gender?: string;
+  livingPostcode?: string;
+};
+
+const updatePersonalData = async (
+  studentId: string,
+  {
+    acceptedCGUs,
+    schoolType,
+    schoolName,
+    schoolPostcode,
+    studyLevel,
+    studyField,
+    studyFieldOther,
+    gender,
+    livingPostcode,
+  }: UpdatePersonalDataParams,
+): Promise<number> => {
+  try {
+    const updated = await db(studentsTable).where({ id: studentId }).update({
+      has_accepted_cgu: acceptedCGUs,
+      school_type: schoolType,
+      school_name: schoolName,
+      school_postcode: schoolPostcode,
+      study_level: studyLevel,
+      study_field: studyField,
+      study_field_other: studyFieldOther,
+      gender,
+      living_postcode: livingPostcode,
+      last_update_personal_data: date.now(),
+    });
+
+    return updated;
+  } catch (err) {
+    console.error('Error while updating student personal data', err);
+    throw new Error("Erreur lors de la mise à jour des données de l'étudiant");
+  }
+};
+
 export default {
   checkDuplicates,
   create,
@@ -212,4 +259,5 @@ export default {
   getByEmailChangeToken,
   confirmEmailChange,
   deleteEmailChangeInfo,
+  updatePersonalData,
 };

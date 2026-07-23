@@ -2,6 +2,7 @@ import React from 'react';
 import { useStore } from 'stores/index';
 import StudentQuestionnaire from '../Questionnaire/StudentQuestionnaire';
 import Page from 'components/Page/Page';
+import agent from 'services/agent';
 
 const UpdatePersonalData = () => {
   const {
@@ -13,11 +14,38 @@ const UpdatePersonalData = () => {
     schoolType: user.school_type,
     schoolName: user.school_name,
     schoolPostcode: user.school_postcode,
-    studyLevel: user.study_level,
     studyField: user.study_field,
     studyFieldOther: user.study_field_other,
     gender: user.gender,
     livingPostcode: user.living_postcode,
+  };
+
+  const updateData = async (res) => {
+    const {
+      schoolType,
+      schoolName,
+      schoolPostcode,
+      studyLevel,
+      studyField,
+      studyFieldOther,
+      gender,
+      livingPostcode,
+    } = res;
+    try {
+      await agent.Student.updatePersonalData(user.id, {
+        acceptedCGUs: true,
+        schoolType,
+        schoolName,
+        schoolPostcode,
+        studyLevel,
+        studyField,
+        studyFieldOther,
+        gender,
+        livingPostcode,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -30,9 +58,9 @@ const UpdatePersonalData = () => {
       description="D'une année à l'autre, ta situation peut changer : on fait le point avec toi."
     >
       <StudentQuestionnaire
-        onFinish={() => console.log('hello')}
+        onFinish={updateData}
         defaultValues={defaultValues}
-        nextLabel="Confirmer mes informations"
+        newStudent={false}
       />
     </Page>
   );

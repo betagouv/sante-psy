@@ -6,6 +6,9 @@ import loginInformations from '../services/loginInformations';
 import config from '../utils/config';
 import date from '../utils/date';
 import { emailValidator } from './validators/studentValidators';
+import asyncHelper from '../utils/async-helper';
+import validation from '../utils/validation';
+import CustomError from '../utils/CustomError';
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -155,6 +158,42 @@ const deleteEmailChangeInfo = async (req: Request, res: Response): Promise<void>
   }
 };
 
+const update = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+
+  const { studentId } = req.params;
+
+  const {
+    acceptedCGUs,
+    schoolType,
+    schoolName,
+    schoolPostcode,
+    studyLevel,
+    studyField,
+    studyFieldOther,
+    gender,
+    livingPostcode,
+  } = req.body;
+  const updated = await dbStudents.updatePersonalData(studentId, {
+    acceptedCGUs,
+    schoolType,
+    schoolName,
+    schoolPostcode,
+    studyLevel,
+    studyField,
+    studyFieldOther,
+    gender,
+    livingPostcode,
+  });
+
+  if (updated === 0) {
+    console.log(`Student ${studentId} not updated, possibly does not exist`);
+    throw new CustomError("Cet étudiant n'existe pas.", 404);
+  }
+
+  res.json({ message: 'ok' });
+};
+
 export default {
   getStudentAppointments,
   requestEmailChange,
@@ -162,4 +201,5 @@ export default {
   getEmailChangeRequest,
   confirmEmailChange,
   deleteEmailChangeInfo,
+  update: asyncHelper(update),
 };

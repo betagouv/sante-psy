@@ -177,7 +177,7 @@ const GENDERS = [
 const StudentQuestionnaire = ({
   onFinish,
   defaultValues = {},
-  nextLabel = 'suivant',
+  newStudent = true,
 }) => {
   const prevSchoolType = useRef(defaultValues.schoolType ?? null);
   const [step, setStep] = useState(defaultValues.acceptedCGUs ? 1 : 0);
@@ -224,6 +224,9 @@ const StudentQuestionnaire = ({
   const [livingPostcode, setLivingPostcode] = useState(
     defaultValues.livingPostcode ?? '',
   );
+
+  const nextLabel = newStudent ? 'Suivant' : 'Confirmer mes informations';
+  const submitLabel = newStudent ? "M'inscrire" : 'Confirmer mes informations';
 
   useEffect(() => {
     if (prevSchoolType.current === schoolType) return;
@@ -501,7 +504,7 @@ const StudentQuestionnaire = ({
           Retour
         </Button>
         <Button onClick={onClickNext} disabled={!isButtonEnabled}>
-          {step < 3 ? nextLabel : "M'inscrire"}
+          {step < 3 ? nextLabel : submitLabel}
         </Button>
       </ButtonGroup>
     </div>

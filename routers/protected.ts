@@ -53,7 +53,7 @@ router.delete(
   '/students/delete-email-change/:token', access.checkEmailChangeToken, studentsController.deleteEmailChangeInfo
 );
 
-router.use('/student/:studentId', access.checkStudentParam, studentsRouter);
+router.use('/student', studentsRouter);
 // todo: ajouter les nouvelles routes dans test/middlewares/xsrfProtection.spec.ts pour tester la sécurité
 router.use('/student/:studentId/appointments', access.checkStudentParam, studentsController.getStudentAppointments);
 
