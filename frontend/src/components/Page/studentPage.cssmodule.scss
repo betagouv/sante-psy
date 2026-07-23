@@ -2,7 +2,8 @@
 
 .studentHeader {
   margin: auto;
-    >* {
+  padding: 0px 16px;
+  > * {
     max-width: 1200px;
     margin: auto;
   }
@@ -46,10 +47,10 @@
   padding: 24px 0px;
 
   @media (max-width: 1024px) {
-    padding: 24px 20px;
+    padding: 24px 0px;
   }
 
   @media (max-width: 480px) {
-    padding: 16px 16px;
+    padding: 16px 0px;
   }
 }

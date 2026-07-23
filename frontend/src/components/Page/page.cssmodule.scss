@@ -7,9 +7,9 @@
 .header {
   position: relative;
   background-color: $primary-color;
-  padding: 16px 16px 96px 16px;
+  padding: 16px 16px 48px 16px;
   margin-bottom: -48px;
-  >* {
+  > * {
     max-width: 1200px;
     margin: auto;
   }
@@ -21,7 +21,7 @@
   padding: 24px 16px;
   position: relative;
   margin: auto;
-  box-shadow: 0 2px 7px 0 rgba(0,0,0,0.21);
+  box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.21);
 }
 
 .breadCrumbsWithoutHeader {
@@ -29,7 +29,7 @@
 }
 
 .breadCrumbs {
-  color: #CACAFB;
+  color: #cacafb;
 
   .currentBreadCrumb a {
     color: white !important;
@@ -44,7 +44,7 @@
 
 .title {
   color: white;
-  font-size: 40px;
+  font-size: 2rem;
   line-height: 48px;
   font-weight: 700;
   margin-bottom: 12px;
@@ -59,7 +59,8 @@
   line-height: 28px;
 }
 
-.tutorial, .headerIconOnly {
+.tutorial,
+.headerIconOnly {
   display: none;
   color: $primary-color;
   cursor: pointer;
@@ -80,7 +81,7 @@
     background-color: white;
     align-items: center;
     justify-content: space-between;
-    >* {
+    > * {
       margin: 0%;
       padding: 0%;
     }
@@ -90,7 +91,6 @@
     padding: 16px 32px;
     box-shadow: none;
   }
-
 
   .breadCrumbs {
     width: 100%;
@@ -129,7 +129,7 @@
   .container {
     padding: 24px;
   }
-  
+
   .header {
     padding: 32px 32px 96px 32px;
   }
@@ -141,10 +141,10 @@
   .title {
     font-size: 56px;
     line-height: 65px;
-  }  
-  
+  }
+
   .description {
     font-size: 28px;
     line-height: 40px;
-  }  
+  }
 }

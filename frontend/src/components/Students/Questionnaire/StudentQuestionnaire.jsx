@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Button,
   Radio,
@@ -174,27 +174,60 @@ const GENDERS = [
   },
 ];
 
-const StudentQuestionnaire = ({ onFinish }) => {
-  const [step, setStep] = useState(0);
+const StudentQuestionnaire = ({
+  onFinish,
+  defaultValues = {},
+  nextLabel = 'suivant',
+}) => {
+  const prevSchoolType = useRef(defaultValues.schoolType ?? null);
+  const [step, setStep] = useState(defaultValues.acceptedCGUs ? 1 : 0);
 
   // step 0
-  const [acceptedCGUs, setAcceptedCGUs] = useState(false);
+  const [acceptedCGUs, setAcceptedCGUs] = useState(
+    defaultValues.acceptedCGUs ?? false,
+  );
   // step 1
-  const [schoolType, setSchoolType] = useState(null);
-  const [selectedUniversity, setSelectedUniversity] = useState('');
-  const [schoolName, setSchoolName] = useState('');
-  const [schoolPostcode, setSchoolPostcode] = useState('');
-  const [universitySearch, setUniversitySearch] = useState('');
+  const [schoolType, setSchoolType] = useState(
+    defaultValues.schoolType ?? null,
+  );
+  const [selectedUniversity, setSelectedUniversity] = useState(
+    defaultValues.schoolName && defaultValues.schoolType === 'university'
+      ? defaultValues.schoolName
+      : '',
+  );
+  const [schoolName, setSchoolName] = useState(
+    defaultValues.schoolName && defaultValues.schoolType !== 'university'
+      ? defaultValues.schoolName
+      : '',
+  );
+  const [schoolPostcode, setSchoolPostcode] = useState(
+    defaultValues.schoolPostcode ?? '',
+  );
+  const [universitySearch, setUniversitySearch] = useState(
+    defaultValues.schoolName && defaultValues.schoolType === 'university'
+      ? defaultValues.schoolName
+      : '',
+  );
   const [showUnivList, setShowUnivList] = useState(false);
   // step 2
-  const [studyLevel, setStudyLevel] = useState(null);
-  const [studyField, setStudyField] = useState(null);
-  const [studyFieldOther, setStudyFieldOther] = useState(null);
+  const [studyLevel, setStudyLevel] = useState(
+    defaultValues.studyLevel ?? null,
+  );
+  const [studyField, setStudyField] = useState(
+    defaultValues.studyField ?? null,
+  );
+  const [studyFieldOther, setStudyFieldOther] = useState(
+    defaultValues.studyFieldOther ?? null,
+  );
   // step 3
-  const [gender, setGender] = useState(null);
-  const [livingPostcode, setLivingPostcode] = useState('');
+  const [gender, setGender] = useState(defaultValues.gender ?? null);
+  const [livingPostcode, setLivingPostcode] = useState(
+    defaultValues.livingPostcode ?? '',
+  );
 
   useEffect(() => {
+    if (prevSchoolType.current === schoolType) return;
+    prevSchoolType.current = schoolType;
     setSelectedUniversity('');
     setUniversitySearch('');
   }, [schoolType]);
@@ -468,7 +501,7 @@ const StudentQuestionnaire = ({ onFinish }) => {
           Retour
         </Button>
         <Button onClick={onClickNext} disabled={!isButtonEnabled}>
-          {step < 3 ? 'Suivant' : "M'inscrire"}
+          {step < 3 ? nextLabel : "M'inscrire"}
         </Button>
       </ButtonGroup>
     </div>
