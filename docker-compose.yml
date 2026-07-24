@@ -36,6 +36,7 @@ services:
       USE_CORS: 'true'
       SPEED_LIMITATION: 'false'
       TEST_ENVIRONMENT: 'true'
+      NODE_ENV: 'development'
       # INSTAGRAM_FOLLOWER: "20 000"
     ports:
       - '8080:8080'
