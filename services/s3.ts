@@ -3,8 +3,6 @@ import {
   PutObjectCommand,
   CopyObjectCommand,
   DeleteObjectCommand,
-  HeadBucketCommand,
-  CreateBucketCommand,
   S3ServiceException,
 } from '@aws-sdk/client-s3';
 import CustomError from '../utils/CustomError';
@@ -88,28 +86,9 @@ const finalizePendingCertificate = async (
   }
 };
 
-const ensureBucketExists = async (): Promise<void> => {
-  try {
-    await s3.send(new HeadBucketCommand({ Bucket: S3_BUCKET }));
-    console.log(`✔ Bucket "${S3_BUCKET}" already exists.`);
-  } catch (err) {
-    if (
-      err instanceof S3ServiceException &&
-      err.$metadata?.httpStatusCode === 404
-    ) {
-      await s3.send(new CreateBucketCommand({ Bucket: S3_BUCKET }));
-      console.log(`✔ Bucket "${S3_BUCKET}" created.`);
-    } else {
-      logS3Error('ensureBucketExists', err);
-      throw err;
-    }
-  }
-};
-
 export default {
   s3,
   S3_BUCKET,
   uploadPendingCertificate,
   finalizePendingCertificate,
-  ensureBucketExists,
 };
