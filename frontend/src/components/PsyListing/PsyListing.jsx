@@ -13,7 +13,7 @@ import GlobalNotification from 'components/Notification/GlobalNotification';
 import PsyTable from './PsyTable';
 import NoResultPsyTable from './NoResultPsyTable';
 
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Navigate } from 'react-router-dom';
 import styles from './psyListing.cssmodule.scss';
 import { trackSearchPsychologists } from 'services/matomo';
 
@@ -29,7 +29,12 @@ const geoStatusEnum = {
 const PsyListing = () => {
   const {
     commonStore: { setNotification },
+    userStore: { user, role },
   } = useStore();
+
+  if (user && role === 'student' && user.needsToUpdatePersonalData) {
+    return <Navigate to="/etudiant/update-personal-data" replace />;
+  }
 
   const [searchParams, setSearchParams] = useSearchParams();
 

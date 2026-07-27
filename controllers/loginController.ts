@@ -19,6 +19,7 @@ import CustomError from '../utils/CustomError';
 import { checkXsrf } from '../middlewares/xsrfProtection';
 import loginInformations from '../services/loginInformations';
 import DOMPurify from '../services/sanitizer';
+import { startCurrentUnivYear } from '../utils/univYears';
 
 const CONNEXION_EMAIL_SENT_MESSAGE = `Un email de connexion vient de vous être envoyé si votre adresse email 
       correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
@@ -309,11 +310,17 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
       return;
     }
   } else if (role === 'student') {
+    const startUnivYear = new Date(startCurrentUnivYear());
     const student = await dbStudents.getById(userId);
     if (student) {
       res.json({
         role: 'student',
-        user: { ...student },
+        user: {
+          ...student,
+          needsToUpdatePersonalData:
+            !student.last_update_personal_data ||
+            new Date(student.last_update_personal_data) < startUnivYear,
+        },
       });
       return;
     }

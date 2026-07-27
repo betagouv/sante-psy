@@ -9,7 +9,7 @@ export const emailValidator = [
     .withMessage('Vous devez spécifier un email valide.')
     .custom((value) => {
       if (value.toLowerCase().includes('santepsyetudiant')) {
-        throw new Error('Cette adresse email n\'est pas autorisée.');
+        throw new Error("Cette adresse email n'est pas autorisée.");
       }
       return true;
     }),
@@ -17,14 +17,16 @@ export const emailValidator = [
 
 export const signInValidator = [
   check('email')
-      .isEmail()
-      .withMessage('Vous devez spécifier un email valide.')
-      .custom((value) => {
-        if (value.toLowerCase().includes('santepsyetudiant')) {
-          throw new Error('Cette adresse email n\'est pas autorisée à créer un compte étudiant.');
-        }
-        return true;
-      }),
+    .isEmail()
+    .withMessage('Vous devez spécifier un email valide.')
+    .custom((value) => {
+      if (value.toLowerCase().includes('santepsyetudiant')) {
+        throw new Error(
+          "Cette adresse email n'est pas autorisée à créer un compte étudiant.",
+        );
+      }
+      return true;
+    }),
   check('firstNames')
     .isString()
     .trim()
@@ -32,7 +34,9 @@ export const signInValidator = [
     .withMessage('Le prénom est obligatoire.')
     .customSanitizer(purifySanitizer),
   check('lastName')
-    .trim().not().isEmpty()
+    .trim()
+    .not()
+    .isEmpty()
     .customSanitizer(purifySanitizer)
     .withMessage('Le nom est obligatoire'),
   check('ine')
@@ -42,13 +46,19 @@ export const signInValidator = [
     .customSanitizer(purifySanitizer)
     .custom((value) => {
       const isValid = inePatterns.some((pattern) => pattern.test(value));
-      if (!isValid) throw new Error('Le numéro INE est invalide. Veuillez vérifier le format.');
+      if (!isValid)
+        throw new Error(
+          'Le numéro INE est invalide. Veuillez vérifier le format.',
+        );
       return true;
     }),
   check('dateOfBirth')
-    .trim().isDate({ format: date.formatFrenchDateForm })
+    .trim()
+    .isDate({ format: date.formatFrenchDateForm })
     .customSanitizer(purifySanitizer)
-    .withMessage('La date de naissance n\'est pas valide, le format doit être JJ/MM/AAAA.')
+    .withMessage(
+      "La date de naissance n'est pas valide, le format doit être JJ/MM/AAAA.",
+    )
     .custom((value) => {
       const [day, month, year] = value.split('/').map(Number);
       const birthDate = new Date(year, month - 1, day);
@@ -59,8 +69,18 @@ export const signInValidator = [
         now.getDate(),
       );
       if (birthDate > minAllowedDate) {
-        throw new Error('La date de naissance n\'est pas valide.');
+        throw new Error("La date de naissance n'est pas valide.");
       }
       return true;
     }),
+];
+
+export const updateValidators = [
+  check('studentId')
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Cet étudiant n'existe pas.")
+    .isUUID()
+    .withMessage("Cet étudiant n'existe pas."),
 ];
