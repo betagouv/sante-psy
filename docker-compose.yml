@@ -2,7 +2,7 @@ services:
   db:
     image: postgres:14.20
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U santepsy"]
+      test: ['CMD-SHELL', 'pg_isready -U santepsy']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: santepsy
       POSTGRES_PASSWORD: santepsy
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
   maildev:
     image: maildev/maildev
@@ -18,8 +18,8 @@ services:
       MAILDEV_INCOMING_USER: mailuser
       MAILDEV_INCOMING_PASS: mailpassword
     ports:
-      - "1080:1080"
-      - "1025:1025"
+      - '1080:1080'
+      - '1025:1025'
 
   web:
     build: .
@@ -28,17 +28,18 @@ services:
       - .env
     environment:
       DATABASE_URL: postgres://santepsy:santepsy@db:5432/santepsy
-      ANNOUNCEMENT: "(Docker-compose variable) Very important announcement."
-      PUBLIC_ANNOUNCEMENT: "(Docker-compose variable) Very important public announcement."
-      SECRET_LOGS: "production_value_should_be_set_in_.env"
-      SECRET: "production_value_should_be_set_in_.env"
-      HOSTNAME_WITH_PROTOCOL: "http://localhost:3000"
-      USE_CORS: "true"
-      SPEED_LIMITATION: "false"
-      TEST_ENVIRONMENT: "true"
+      ANNOUNCEMENT: '(Docker-compose variable) Very important announcement.'
+      PUBLIC_ANNOUNCEMENT: '(Docker-compose variable) Very important public announcement.'
+      SECRET_LOGS: 'production_value_should_be_set_in_.env'
+      SECRET: 'production_value_should_be_set_in_.env'
+      HOSTNAME_WITH_PROTOCOL: 'http://localhost:3000'
+      USE_CORS: 'true'
+      SPEED_LIMITATION: 'false'
+      TEST_ENVIRONMENT: 'true'
+      NODE_ENV: 'development'
       # INSTAGRAM_FOLLOWER: "20 000"
     ports:
-      - "8080:8080"
+      - '8080:8080'
     volumes:
       - .:/app
     depends_on:
@@ -50,8 +51,39 @@ services:
       context: .
       dockerfile: frontend/Dockerfile
     working_dir: /app/frontend
-    command: ["pnpm", "run", "dev"]
+    command: ['pnpm', 'run', 'dev']
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - .:/app
+
+  minio:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio-init:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      sh -c "
+      mc alias set local http://minio:9000 minioadmin minioadmin &&
+      mc mb --ignore-existing local/certificates-local
+      "
+
+volumes:
+  minio-data:
