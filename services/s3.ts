@@ -23,10 +23,10 @@ const s3 = new S3Client({
 const S3_BUCKET = process.env.S3_BUCKET as string;
 
 const getPendingCertificateKey = (token: string): string =>
-  `pending-certificates/${token}.pdf`;
+  `certificates/pending-certificates/${token}.pdf`;
 
 const getStudentCertificateKey = (token: string): string =>
-  `students/${token}/certificate.pdf`;
+  `certificates/students/${token}/certificate.pdf`;
 
 const logS3Error = (context: string, err: unknown): void => {
   if (err instanceof S3ServiceException) {
