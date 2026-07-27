@@ -13,10 +13,9 @@ import GlobalNotification from 'components/Notification/GlobalNotification';
 import PsyTable from './PsyTable';
 import NoResultPsyTable from './NoResultPsyTable';
 
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Navigate } from 'react-router-dom';
 import styles from './psyListing.cssmodule.scss';
 import { trackSearchPsychologists } from 'services/matomo';
-import { Navigate } from 'react-router-dom';
 
 export const AROUND_ME = 'Autour de moi';
 
