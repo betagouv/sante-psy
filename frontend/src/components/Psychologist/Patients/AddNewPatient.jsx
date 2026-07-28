@@ -8,6 +8,8 @@ import { useStore } from 'stores/index';
 import InviteStudent from './InviteStudent';
 import ConfirmNewPatient from './ConfirmNewPatient';
 import { Stack } from 'components/Utils/Stack';
+import { ButtonGroup } from '@dataesr/react-dsfr';
+import { HashLink } from 'react-router-hash-link';
 
 const AddNewPatient = () => {
   const {
@@ -167,15 +169,24 @@ const AddNewPatient = () => {
                   data-test-id="etudiant-ine-error"
                 />
               )}
-              <Button
-                submit
-                id="app-patient-button"
-                data-test-id="add-patient-button"
-                icon="fr-fi-add-line"
-                disabled={!canFindStudent}
-              >
-                Rechercher l'étudiant
-              </Button>
+              <ButtonGroup isInlineFrom="xs">
+                <HashLink
+                  className="fr-btn fr-btn--secondary"
+                  to="/psychologue/mes-etudiants"
+                  title="Annuler"
+                >
+                  Annuler
+                </HashLink>
+                <Button
+                  submit
+                  id="add-patient-button"
+                  data-test-id="add-patient-button"
+                  icon="fr-fi-add-line"
+                  disabled={!canFindStudent}
+                >
+                  Rechercher l'étudiant
+                </Button>
+              </ButtonGroup>
             </form>
             {didNotFindStudent && (
               <Alert
