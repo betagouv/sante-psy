@@ -62,10 +62,10 @@ module.exports = {
     ],
     'react/static-property-placement': 'off',
     'react/function-component-definition': 'off',
-    "import/order": "off",
+    'import/order': 'off',
     'import/prefer-default-export': 'off',
     'react/no-unescaped-entities': 'off',
-    'no-nested-ternary': 'off'
+    'no-nested-ternary': 'off',
   },
   settings: {
     'import/resolver': { webpack: { config: 'config/webpack.base.js' } },

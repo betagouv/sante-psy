@@ -1,57 +1,54 @@
-@use 'src/tooltip.scss' as *;
-
 .table {
-    @include tooltip;
-    overflow: visible !important;
+  overflow: visible !important;
 }
 
 .tableAppointments {
-    width: 80%;
-    max-height: 560px;
-    overflow-y: auto;
+  width: 80%;
+  max-height: 560px;
+  overflow-y: auto;
 }
 
 .badgesColumn {
-    width: 80%;
+  width: 80%;
 }
 
 .filter {
-    input, select {
-        font-size: 0.8rem;
-        padding-left: 0;
-        line-height: 1rem;
-    }
+  input,
+  select {
+    font-size: 0.8rem;
+    padding-left: 0;
+    line-height: 1rem;
+  }
 
-    select {
-        box-shadow: none;
-        width: 30%;
-    }
+  select {
+    box-shadow: none;
+    width: 30%;
+  }
 }
 
 .selectAction {
-    select {
-        box-shadow: none;
-        width: 50%;
-        background-position: center;
-        font-size: 0.8rem;
-        padding-left: 0.2rem;
-        line-height: 1rem;
-    }
+  select {
+    box-shadow: none;
+    width: 50%;
+    background-position: center;
+    font-size: 0.8rem;
+    padding-left: 0.2rem;
+    line-height: 1rem;
+  }
 }
 
-
 .informationColumn {
-    width: 300px;
+  width: 300px;
 }
 
 @media (max-width: 768px) {
-    .informationColumn {
-        width: 100%;
-    }
+  .informationColumn {
+    width: 100%;
+  }
 
-    .filter {
-        select {
-            width: 100%;
-        }
+  .filter {
+    select {
+      width: 100%;
     }
+  }
 }

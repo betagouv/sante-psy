@@ -4,8 +4,15 @@ import { Badge } from '@dataesr/react-dsfr';
 import useScreenSize from 'src/utils/useScreenSize';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './badges.cssmodule.scss';
+import { Tooltip } from 'components/Tooltip/Tooltip';
 
-export const renderBadge = ({ badge, univYear, appointmentDate, isSmallScreen = false, isInactive = false }) => {
+export const renderBadge = ({
+  badge,
+  univYear,
+  appointmentDate,
+  isSmallScreen = false,
+  isInactive = false,
+}) => {
   const badgeUnivYear = univYear ?? getUnivYear(appointmentDate);
   const badges = getBadgeInfos(isSmallScreen, badgeUnivYear);
   if (!badge || badge === badges.other.key) {
@@ -15,17 +22,28 @@ export const renderBadge = ({ badge, univYear, appointmentDate, isSmallScreen = 
   const { icon, text, severity, className, tooltip } = badges[badge];
   const inactiveBadge = isInactive ? styles.inactiveBadge : '';
 
-  return text && (
-    <div>
-      {tooltip
-        ? (
-          <div className={styles.hoverElement}>
-            <span className={styles.tooltip}>{tooltip}</span>
-            <Badge icon={icon} text={text} type={severity} className={`${className} ${styles.badge} ${inactiveBadge}`} />
-          </div>
-        )
-        : <Badge icon={icon} text={text} type={severity} className={`${className} ${styles.badge} ${inactiveBadge}`} />}
-    </div>
+  return (
+    text && (
+      <div>
+        {tooltip ? (
+          <Tooltip tooltip={tooltip}>
+            <Badge
+              icon={icon}
+              text={text}
+              type={severity}
+              className={`${className} ${styles.badge} ${inactiveBadge}`}
+            />
+          </Tooltip>
+        ) : (
+          <Badge
+            icon={icon}
+            text={text}
+            type={severity}
+            className={`${className} ${styles.badge} ${inactiveBadge}`}
+          />
+        )}
+      </div>
+    )
   );
 };
 
@@ -34,9 +52,9 @@ const Badges = ({ badges, univYear, isInactive = false }) => {
 
   return (
     <div className={styles.badgeWrapper} data-test-id="etudiant-badges">
-      {badges.map(badge => (
-        renderBadge({ badge, univYear, isSmallScreen, isInactive })
-      ))}
+      {badges.map((badge) =>
+        renderBadge({ badge, univYear, isSmallScreen, isInactive }),
+      )}
     </div>
   );
 };

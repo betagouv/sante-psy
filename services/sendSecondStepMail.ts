@@ -1,8 +1,7 @@
 import dbStudents from '../db/students';
-import dbLoginToken from '../db/loginToken';
 import sendStudentMailTemplate from './sendStudentMailTemplate';
 import loginInformations from './loginInformations';
-import date from '../utils/date';
+import loginController from '../controllers/loginController';
 
 const studentHasAccount = async (email: string): Promise<boolean> => {
   const student = await dbStudents.getByEmail?.(email);
@@ -14,13 +13,7 @@ const sendStudentSecondStepInvitation = async (
   template: string,
   title: string,
 ): Promise<void> => {
-  const token = loginInformations.generateToken(32);
-  const expiresAt = date.getDatePlusHours(48);
-
-  await dbLoginToken.upsert(token, email, expiresAt, 'student');
-  console.log(
-    `--login (via signin) - new student - token created for ${email} token=${token.slice(0, 6)}...`,
-  );
+  const token = await loginController.getOrCreateToken(email, 'student', 48);
   await sendStudentMailTemplate(
     email,
     loginInformations.generateStudentSignInStepTwoUrl(),

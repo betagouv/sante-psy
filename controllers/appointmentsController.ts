@@ -82,8 +82,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
     `Appointment created for patient id ${patientId} by psy id ${psyId}`,
   );
 
-  const { INE, email } = patientExist;
-  const student = await dbStudents.getByEmailAndIne(INE, email);
+  const student = await dbStudents.getFromPatient(patientExist);
 
   notifyStudentNewAppointment(student);
 

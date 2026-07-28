@@ -12,12 +12,18 @@ import {
 import MonthPicker from 'components/Date/MonthPicker';
 
 import agent from 'services/agent';
-import { formatFrenchDate, formatMonth, utcDate } from 'services/date';
+import {
+  formatFrenchDate,
+  formatMonth,
+  getFirstDayOfLastMonth,
+  utcDate,
+} from 'services/date';
 import Badges from 'components/Badges/Badges';
 import { useStore } from 'stores/';
 import getBadgeInfos from 'src/utils/badges';
 import { useNavigate } from 'react-router-dom';
 import styles from './appointments.cssmodule.scss';
+import { Tooltip } from 'components/Tooltip/Tooltip';
 
 const Appointments = () => {
   const {
@@ -32,6 +38,8 @@ const Appointments = () => {
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1,
   });
+
+  const cantDeleteBefore = getFirstDayOfLastMonth();
 
   const navigate = useNavigate();
   const badges = getBadgeInfos();
@@ -116,23 +124,23 @@ const Appointments = () => {
           <div>{formatFrenchDate(utcDate(appointment.appointmentDate))}</div>
           {(appointment.badges.includes(badges.switch_rule_notice.key) ||
             appointment.badges.includes(badges.inactive.key)) && (
-            <div
-              className={styles.clickableElement}
-              onClick={() => handleIconClick(appointment.id)}
-            >
-              <Icon
-                name="ri-information-line"
-                size="lg"
-                color="#000091"
-                iconPosition="right"
-              />
-              {showTooltip === appointment.id && (
-                <span className={styles.tooltip}>
-                  {badges.switch_rule_notice.tooltip}
-                </span>
-              )}
-            </div>
-          )}
+              <div
+                className={styles.clickableElement}
+                onClick={() => handleIconClick(appointment.id)}
+              >
+                <Icon
+                  name="ri-information-line"
+                  size="lg"
+                  color="#000091"
+                  iconPosition="right"
+                />
+                {showTooltip === appointment.id && (
+                  <span className={styles.tooltip}>
+                    {badges.switch_rule_notice.tooltip}
+                  </span>
+                )}
+              </div>
+            )}
         </div>
       ),
       sortable: true,
@@ -168,46 +176,63 @@ const Appointments = () => {
         </div>
       ),
       render: ({ patientId, firstNames, lastName }) => (
-        <div
+        <Tooltip
+          tooltip="Séances de l'étudiant"
           data-test-id="etudiant-name"
-          className={styles.hoverElement}
           onClick={() =>
             navigate(`/psychologue/etudiant/${patientId}/#anchor-student-list`)
           }
         >
-          <span className={styles.tooltip}>Séances de l&apos;étudiant</span>
           <div>
             {firstNames} {lastName}
           </div>
-        </div>
+        </Tooltip>
       ),
     },
     {
       name: 'actions',
       label: '',
-      render: (appointment) => (
-        <>
-          <Button
-            data-test-id="delete-appointment-button-small"
-            onClick={() => deleteAppointment(appointment.id)}
-            secondary
-            size="sm"
-            icon="ri-delete-bin-line"
-            className="fr-unhidden fr-hidden-sm fr-float-right"
-            aria-label="Supprimer"
-          />
-          <Button
-            data-test-id="delete-appointment-button-large"
-            secondary
-            size="sm"
-            onClick={() => deleteAppointment(appointment.id)}
-            icon="ri-delete-bin-line"
-            className="fr-hidden fr-unhidden-sm fr-float-right"
-          >
-            Supprimer
-          </Button>
-        </>
-      ),
+      render: (appointment) => {
+        const canDelete =
+          Date.parse(appointment.appointmentDate) >= cantDeleteBefore;
+
+        const buttons = (
+          <>
+            <Button
+              data-test-id="delete-appointment-button-small"
+              onClick={() => deleteAppointment(appointment.id)}
+              secondary
+              size="sm"
+              icon="ri-delete-bin-line"
+              className="fr-unhidden fr-hidden-sm fr-float-right"
+              aria-label="Supprimer"
+              disabled={!canDelete}
+            />
+            <Button
+              data-test-id="delete-appointment-button-large"
+              secondary
+              size="sm"
+              onClick={() => deleteAppointment(appointment.id)}
+              icon="ri-delete-bin-line"
+              className="fr-hidden fr-unhidden-sm fr-float-right"
+              disabled={!canDelete}
+            >
+              Supprimer
+            </Button>
+          </>
+        );
+        if (!canDelete) {
+          return (
+            <Tooltip
+              tooltip="Vous ne pouvez supprimer une séance que sur le mois en cours ou le mois précédent.
+          Pour toute annulation antérieure, veuillez contacter le support."
+            >
+              {buttons}
+            </Tooltip>
+          );
+        }
+        return buttons;
+      },
     },
   ];
 

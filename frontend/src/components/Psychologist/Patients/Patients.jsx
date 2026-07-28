@@ -10,6 +10,7 @@ import { useStore } from 'stores/';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './patients.cssmodule.scss';
 import Badges from '../../Badges/Badges';
+import { Tooltip } from 'components/Tooltip/Tooltip';
 
 const Patients = () => {
   const {
@@ -172,16 +173,15 @@ const Patients = () => {
         </div>
       ),
       render: (patient) => (
-        <div
+        <Tooltip
+          tooltip="Dossier de l'étudiant"
           data-test-id="etudiant-name"
-          className={styles.hoverElement}
           onClick={() =>
             navigate(`/psychologue/etudiant/${patient.id}/#anchor-student-file`)
           }
         >
-          <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
           {patient.lastName?.toUpperCase()} {patient.firstNames}
-        </div>
+        </Tooltip>
       ),
       sortable: true,
       sort: (a, b) =>
@@ -192,8 +192,7 @@ const Patients = () => {
     {
       name: 'update-etudiant-button',
       render: (patient) => (
-        <div className={styles.hoverElement}>
-          <span className={styles.tooltip}>Dossier de l&apos;étudiant</span>
+        <Tooltip tooltip="Dossier de l'étudiant">
           <Button
             data-test-id="update-etudiant-button"
             onClick={() =>
@@ -207,7 +206,7 @@ const Patients = () => {
             aria-label="Dossier de l'étudiant"
             title="Dossier de l'étudiant"
           />
-        </div>
+        </Tooltip>
       ),
     },
     {
@@ -237,8 +236,7 @@ const Patients = () => {
       name: 'appointments-list-button',
       label: 'Liste des séances',
       render: (patient) => (
-        <div className={styles.hoverElement}>
-          <span className={styles.tooltip}>Liste des séances</span>
+        <Tooltip tooltip="Liste des séances">
           <Button
             data-test-id="seances-etudiant-button"
             onClick={() =>
@@ -252,15 +250,14 @@ const Patients = () => {
             aria-label="Liste des séances"
             title="Liste des séances"
           />
-        </div>
+        </Tooltip>
       ),
     },
     {
       name: 'appointment-etudiant-button',
       label: 'Déclarer une séance',
       render: (patient) => (
-        <div className={styles.hoverElement}>
-          <span className={styles.tooltip}>Déclarer une séance</span>
+        <Tooltip tooltip="Déclarer une séance">
           <Button
             data-test-id="appointment-etudiant-button"
             onClick={() =>
@@ -270,19 +267,20 @@ const Patients = () => {
             icon="ri-calendar-line"
             aria-label="Déclarer une séance"
           />
-        </div>
+        </Tooltip>
       ),
     },
     {
       name: 'delete-etudiant-button',
       label: "Supprimer l'étudiant",
       render: (patient) => (
-        <div className={styles.hoverElement}>
-          <span className={styles.tooltip}>
-            {patient.appointmentsCount !== '0'
+        <Tooltip
+          tooltip={
+            patient.appointmentsCount !== '0'
               ? 'Vous ne pouvez pas supprimer un étudiant avec des séances'
-              : 'Supprimer'}
-          </span>
+              : 'Supprimer'
+          }
+        >
           <Button
             data-test-id="delete-etudiant-button"
             onClick={() => deletePatient(patient.id)}
@@ -292,7 +290,7 @@ const Patients = () => {
             icon="ri-delete-bin-line"
             aria-label="Supprimer"
           />
-        </div>
+        </Tooltip>
       ),
     },
   ];

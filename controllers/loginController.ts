@@ -86,30 +86,28 @@ async function sendNotYetAcceptedEmail(email: string): Promise<void> {
   }
 }
 
-async function saveToken(
+async function getOrCreateToken(
   email: string,
-  token: string,
   role: 'psy' | 'student',
   expiresInNHours: number,
-): Promise<void> {
+): Promise<string> {
   try {
+    const loginToken = await dbLoginToken.getByEmail(email);
+
+    // delete expired token
+    if (loginToken && loginToken.expiresAt < new Date()) {
+      await dbLoginToken.delete(loginToken.token);
+    }
+
+    const token = loginToken?.token || loginInformations.generateToken(32);
     const expiredAt = date.getDatePlusHours(expiresInNHours);
     await dbLoginToken.upsert(token, email, expiredAt, role);
-    console.log(
-      `--login - ${role} - token created for ${email} token=${token.slice(0, 6)}...`,
-    );
+
+    return token;
   } catch (err) {
-    console.error(`Erreur de sauvegarde du token : ${err}`);
-    throw new Error('Erreur de sauvegarde du token');
+    console.error('Erreur de récupération du token', err);
+    throw err;
   }
-}
-
-async function savePsyToken(email: string, token: string): Promise<void> {
-  return saveToken(email, token, 'psy', 1);
-}
-
-async function saveStudentToken(email: string, token: string): Promise<void> {
-  return saveToken(email, token, 'student', 2);
 }
 
 const deleteToken = (req: Request, res: Response): void => {
@@ -145,10 +143,9 @@ const sendMail = async (req: Request, res: Response): Promise<void> => {
     );
   }
 
-  const token = loginInformations.generateToken(32);
   const loginUrl = loginInformations.generateLoginUrl();
+  const token = await getOrCreateToken(email, 'psy', 1);
   await sendPsyLoginEmail(email, loginUrl, token);
-  await savePsyToken(email, token);
   res.json({
     message: CONNEXION_EMAIL_SENT_MESSAGE,
   });
@@ -159,24 +156,10 @@ const sendStudentMail = async (req: Request, res: Response): Promise<void> => {
   const { email } = req.body;
 
   const studentIsRegistered = await dbStudents.getByEmail(email);
-  const existingToken = await dbLoginToken.getByEmail(email);
-  let token;
-
-  if (existingToken) {
-    token = existingToken.token;
-    console.log(
-      `--login - student - token existed for email ${email} token=${token.slice(0, 6)}...`,
-    );
-  } else {
-    token = loginInformations.generateToken(32);
-    console.log(
-      `--login - student - token did not exist for email ${email}, create a new one token=${token.slice(0, 6)}...`,
-    );
-  }
 
   if (studentIsRegistered) {
     const loginUrl = loginInformations.generateLoginUrl();
-    await saveStudentToken(email, token);
+    const token = await getOrCreateToken(email, 'student', 2);
     await sendStudentLoginEmail(email, loginUrl, token);
   }
 
@@ -192,7 +175,6 @@ const sendUserLoginMail = async (
   validation.checkErrors(req);
   const { email } = req.body;
 
-  console.log(`--login sendUserLoginMail for email ${email}`);
   const student = await dbStudents.getByEmail(email);
   if (student) {
     await sendStudentMail(req, res);
@@ -240,9 +222,6 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
       console.log(`Successful authentication for psy ${logs.hash(email)}`);
 
       await dbLoginToken.delete(token);
-      console.log(
-        `--login - psy - email=${email} token ${token.slice(0, 6)}... deleted`,
-      );
 
       await dbLastConnection.upsert(psy.dossierNumber);
 
@@ -256,9 +235,6 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
       console.log(`Successful authentication for student ${logs.hash(email)}`);
 
       await dbLoginToken.delete(token);
-      console.log(
-        `--login - student - email=${email} token ${token.slice(0, 6)}... deleted`,
-      );
 
       await dbLastConnectionStudent.upsert(student.id);
 
@@ -394,4 +370,5 @@ export default {
   sendUserLoginMail: asyncHelper(sendUserLoginMail),
   userLogin: asyncHelper(userLogin),
   userConnected: asyncHelper(userConnected),
+  getOrCreateToken,
 };
