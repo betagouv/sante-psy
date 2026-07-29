@@ -12,7 +12,6 @@ import StudentPage from 'components/Page/StudentPage';
 import EmergyNumbers from 'components/Students/EmergencyNumbers/EmergencyNumbers';
 import EditProfile from 'components/Students/EditProfile/EditProfile';
 import ConfirmEmailChange from 'components/Students/EditProfile/ConfirmEmailChange';
-import UpdatePersonalData from 'components/Students/UpdatePersonalData/UpdatePersonalData';
 
 const StudentRouter = () => {
   const {
@@ -25,10 +24,10 @@ const StudentRouter = () => {
     return <Navigate to="/login" replace />;
   }
 
-  const isOnQuestionnairePage = pathname === '/etudiant/update-personal-data';
+  const isOnQuestionnairePage = pathname === '/update-personal-data';
 
   if (user.needsToUpdatePersonalData && !isOnQuestionnairePage) {
-    return <Navigate to="/etudiant/update-personal-data" replace />;
+    return <Navigate to="/update-personal-data" replace />;
   }
 
   const getPageProps = () => {
@@ -63,7 +62,6 @@ const StudentRouter = () => {
           path="/confirmer-email/:token"
           element={<ConfirmEmailChange />}
         />
-        <Route path="/update-personal-data" element={<UpdatePersonalData />} />
         <Route path="/*" element={<Navigate to="/etudiant/mes-seances" />} />
       </Routes>
     </StudentPage>
