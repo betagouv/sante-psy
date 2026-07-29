@@ -6,6 +6,7 @@ import {
   Alert,
   Button,
   Checkbox,
+  CheckboxGroup,
   SearchableSelect,
   Select,
 } from '@dataesr/react-dsfr';
@@ -41,6 +42,8 @@ const NewAppointment = () => {
   );
   const [patients, setPatients] = useState([]);
   const [understand, setUnderstand] = useState(false);
+  const [checkCertifIdentity, setCheckCertifIdentity] = useState(false);
+  const [checkCertifValidity, setCheckCertifValidity] = useState(false);
 
   const {
     commonStore: { setNotification },
@@ -57,13 +60,34 @@ const NewAppointment = () => {
     agent.Patient.get().then(setPatients);
   }, []);
 
+  useEffect(() => {
+    setCheckCertifIdentity(false);
+    setCheckCertifValidity(false);
+  }, [patientId]);
+
   const patient = useMemo(
     () => patients?.find((p) => p.id === patientId),
     [patients, patientId],
   );
   const tooMuchAppointments = useMemo(
-    () => patient && patient.countedAppointments >= MAX_APPOINTMENT,
+    () => patient && Number(patient.countedAppointments) >= MAX_APPOINTMENT,
     [patient],
+  );
+  const isFirstAppointmentEver = useMemo(
+    () => patient && Number(patient.appointmentsCount) === 0,
+    [patient],
+  );
+  const isFirstAppointmentOfTheYear = useMemo(
+    () =>
+      patient &&
+      Number(patient.countedAppointments) === 0 &&
+      Number(patient.appointmentsCount) !== 0,
+    [patient],
+  );
+  const requiresCertificateCheck = isFirstAppointmentEver || isFirstAppointmentOfTheYear;
+  const canConfirmPatient = useMemo(
+    () => checkCertifIdentity && checkCertifValidity,
+    [checkCertifIdentity, checkCertifValidity],
   );
   const createNewAppointment = (e) => {
     e.preventDefault();
@@ -174,6 +198,32 @@ const NewAppointment = () => {
             onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
             required
           />
+          {requiresCertificateCheck && (
+            <>
+              <Alert
+                className="fr-my-3w"
+                type="info"
+                description={
+                  isFirstAppointmentEver
+                    ? "Première séance avec cet étudiant - veuillez vérifier le certificat de scolarité avant de confirmer."
+                    : "Première séance avec cet étudiant pour la nouvelle année universitaire - veuillez vérifier le certificat de scolarité avant de confirmer."
+                }
+              />
+              <CheckboxGroup>
+                <Checkbox
+                  label="J'ai bien comparé l'identité de l'étudiant avec le certificat de scolarité"
+                  onChange={(e) => setCheckCertifIdentity(e.target.checked)}
+                  checked={checkCertifIdentity}
+                  hint="ou l'attestation CVEC fournie"
+                />
+                <Checkbox
+                  label="J'ai vérifié que le certificat de scolarité est valable sur la période en cours"
+                  onChange={(e) => setCheckCertifValidity(e.target.checked)}
+                  checked={checkCertifValidity}
+                />
+              </CheckboxGroup>
+            </>
+          )}
           {tooMuchAppointments && (
             <>
               <Alert
@@ -200,7 +250,10 @@ const NewAppointment = () => {
               submit
               icon="ri-add-line"
               className="fr-mt-4w"
-              disabled={tooMuchAppointments && !understand}
+              disabled={
+                (tooMuchAppointments && !understand) ||
+                (requiresCertificateCheck && !canConfirmPatient)
+              }
             >
               Créer la séance
             </Button>

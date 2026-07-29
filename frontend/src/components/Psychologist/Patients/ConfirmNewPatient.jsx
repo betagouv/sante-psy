@@ -1,8 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './confirmNewPatient.cssmodule.scss';
 import agent from 'services/agent';
 import {
-  Checkbox,
   ButtonGroup,
   Button,
   Alert,
@@ -41,15 +40,7 @@ const getStudentData = (student) => [
 ];
 
 const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
-  const [checkCertifIdentity, setCheckCertifIdentity] = useState(false);
-  const [checkCertifValidity, setCheckCertifValidity] = useState(false);
-
   const [addedPatient, setAddedPatient] = useState(null);
-
-  const canConfirmPatient = useMemo(
-    () => checkCertifIdentity && checkCertifValidity,
-    [checkCertifIdentity, checkCertifValidity],
-  );
 
   const addPatient = async (e) => {
     e.preventDefault();
@@ -83,23 +74,12 @@ const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
       {!addedPatient && (
         <form onSubmit={addPatient}>
           <Stack>
-            <div>
-              <Checkbox
-                label="J'ai bien comparé l'identité de l'étudiant avec le certificat de scolarité"
-                onChange={(e) => setCheckCertifIdentity(e.target.checked)}
-                checked={checkCertifIdentity}
-              />
-              <Checkbox
-                label="J'ai vérifié que le certificat de scolarité est valable sur la période en cours"
-                onChange={(e) => setCheckCertifValidity(e.target.checked)}
-                checked={checkCertifValidity}
-              />
-            </div>
+            <p>Veuillez vérifier, lors de la première séance, que l'identité de l'étudiant correspond au certificat de scolarité et que celui-ci est valable sur la période en cours.</p>
             <ButtonGroup isInlineFrom="xs">
               <Button secondary onClick={onCancel}>
                 Annuler
               </Button>
-              <Button disabled={!canConfirmPatient} submit>
+              <Button submit>
                 Confirmer
               </Button>
             </ButtonGroup>
