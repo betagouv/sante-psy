@@ -7,6 +7,7 @@ import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import { useStore } from 'stores/';
 import styles from './studentSignIn.cssmodule.scss';
 import StudentSignInHeader from './StudentSignInHeader';
+import { Alert } from '@dataesr/react-dsfr';
 
 const StudentSignInStepTwo = () => {
   const {
@@ -248,9 +249,9 @@ const StudentSignInStepTwo = () => {
             </h3>
             <p>
               Vérifie que toutes tes informations sont correctes / n&apos;ont
-              pas déjà été utilisées.
+              pas déjà été utilisées, puis réessaye en réappuyant sur le bouton.
               <br />
-              Autrement,{' '}
+              Si le problème persiste,{' '}
               <a
                 href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
                 className="fr-link"
@@ -270,6 +271,11 @@ const StudentSignInStepTwo = () => {
             étapes du questionnaire.
           </p>
         </div>
+        <Alert
+          className="fr-mb-2w"
+          type="warning"
+          description="Nous rencontrons actuellement des problèmes techniques ralentissant le processus d'inscription. Patiente quelques instants après avoir cliqué sur le bouton."
+        />
         <div className="fr-mb-4w fr-mt-2w">
           <button className="fr-btn" type="submit" disabled={isBlocked}>
             {notification?.type === 'error'

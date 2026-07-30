@@ -13,6 +13,7 @@ import { useStore } from 'stores/index';
 import styles from './addEditPatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
 import PatientInfo from './AddEditPatientInfo';
+import { Alert } from '@dataesr/react-dsfr';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
@@ -198,6 +199,11 @@ const AddEditPatient = () => {
             />
           </div>
           <div className="fr-my-5w">
+            <Alert
+              className="fr-mb-2w"
+              type="warning"
+              description="Nous rencontrons actuellement des problèmes techniques ralentissant le processus d'ajout de nouvel étudiant. Veuillez patienter quelques instants après avoir cliqué sur le bouton."
+            />
             <Button
               submit
               id="save-etudiant-button"
