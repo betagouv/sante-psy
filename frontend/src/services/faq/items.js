@@ -6,7 +6,7 @@ const items = {
       { title: 'Éligibilité', name: 'eligibility' },
       { title: 'Prendre rendez-vous', name: 'studentProcess' },
       { title: 'Séances', name: 'session' },
-      { title: 'Problème avec un psychologue', name: 'problem' },
+      { title: 'Difficultés avec un psychologue', name: 'problem' },
     ],
   },
   psychologue: {

@@ -102,8 +102,7 @@ const getAllActive = async (): Promise<Psychologist[]> => {
   }
 };
 
-const getAllActiveByAvailability = async (
-  isVeryAvailable: boolean,
+const getAllActiveFiltered = async (
   filters?: PsychologistFilters,
 ): Promise<Psychologist[]> => {
   try {
@@ -115,8 +114,7 @@ const getAllActiveByAvailability = async (
       .where('state', DossierState.accepte)
       .andWhere('active', true)
       .whereNotNull('assignedUniversityId')
-      .andWhere('isConventionSigned', true)
-      .andWhere('isVeryAvailable', isVeryAvailable);
+      .andWhere('isConventionSigned', true);
 
     /* Filters */
     if (filters.nameAndSpeciality) {
@@ -170,7 +168,7 @@ const getAllActiveByAvailability = async (
       query = query.andWhere('teleconsultation', filters.teleconsultation);
     }
 
-    return query.orderByRaw('RANDOM()');
+    return query;
   } catch (err) {
     console.error('Impossible de récupérer les psychologistes', err);
     throw new Error('Impossible de récupérer les psychologistes');
@@ -485,7 +483,7 @@ const seeTutorial = async (dossierNumber: string): Promise<number> => {
 
 export default {
   getAllActive,
-  getAllActiveByAvailability,
+  getAllActiveFiltered,
   getById,
   getAcceptedByEmail,
   getNotYetAcceptedByEmail,

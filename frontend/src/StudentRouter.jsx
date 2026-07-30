@@ -10,9 +10,14 @@ import './custom-month-picker.css';
 import './custom-date-picker.css';
 import StudentPage from 'components/Page/StudentPage';
 import EmergyNumbers from 'components/Students/EmergencyNumbers/EmergencyNumbers';
+import EditProfile from 'components/Students/EditProfile/EditProfile';
+import ConfirmEmailChange from 'components/Students/EditProfile/ConfirmEmailChange';
+import UpdatePersonalData from 'components/Students/UpdatePersonalData/UpdatePersonalData';
 
 const StudentRouter = () => {
-  const { userStore: { user, role } } = useStore();
+  const {
+    userStore: { user, role },
+  } = useStore();
   const location = useLocation();
   const { pathname } = location;
 
@@ -20,11 +25,25 @@ const StudentRouter = () => {
     return <Navigate to="/login" replace />;
   }
 
+  const isOnQuestionnairePage = pathname === '/etudiant/update-personal-data';
+
+  if (user.needsToUpdatePersonalData && !isOnQuestionnairePage) {
+    return <Navigate to="/etudiant/update-personal-data" replace />;
+  }
+
   const getPageProps = () => {
     const page = pathname.split('/')[2];
     switch (page) {
       case 'mes-seances':
         return {};
+      case 'editer-profil':
+        return {
+          title: <>Modification de compte</>,
+        };
+      case 'confirmer-email':
+        return {
+          title: <>Modification d&apos;email</>,
+        };
       default:
         return {};
     }
@@ -37,18 +56,15 @@ const StudentRouter = () => {
           path="/"
           element={<Navigate to="/etudiant/mes-seances" replace />}
         />
+        <Route path="/mes-seances" element={<StudentHomepage />} />
+        <Route path="/numeros-urgence" element={<EmergyNumbers />} />
+        <Route path="/editer-profil" element={<EditProfile />} />
         <Route
-          path="/mes-seances"
-          element={<StudentHomepage />}
+          path="/confirmer-email/:token"
+          element={<ConfirmEmailChange />}
         />
-        <Route
-          path="/numeros-urgence"
-          element={<EmergyNumbers />}
-        />
-        <Route
-          path="/*"
-          element={<Navigate to="/etudiant/mes-seances" />}
-        />
+        <Route path="/update-personal-data" element={<UpdatePersonalData />} />
+        <Route path="/*" element={<Navigate to="/etudiant/mes-seances" />} />
       </Routes>
     </StudentPage>
   );

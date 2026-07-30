@@ -20,6 +20,7 @@ import verifyINEWithBirthDate from '../services/verifyStudentINE';
 import send from '../utils/email';
 import signInAttempts from '../services/signInAttempts';
 import config from '../utils/config';
+import s3Service from '../services/s3';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
@@ -196,7 +197,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         message: "L'étudiant peut être créé sans erreur.",
       });
     } else {
-      await dbStudents.create({
+      const student = await dbStudents.create({
         email,
         ine,
         firstNames,
@@ -212,7 +213,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         gender,
         livingPostcode,
       });
-
+      await s3Service.finalizePendingCertificate(tokenRow.token, student.id);
       await sendWelcomeMail(email);
 
       res.status(200).json({
@@ -245,6 +246,8 @@ const sendCertificate = async (
   if (new Date(tokenRow.expiresAt) < new Date()) {
     throw new CustomError('Token expiré', 401);
   }
+
+  await s3Service.uploadPendingCertificate(tokenRow.token, req.file);
 
   const html = await ejs.renderFile(
     './views/emails/sendStudentCertificate.ejs',

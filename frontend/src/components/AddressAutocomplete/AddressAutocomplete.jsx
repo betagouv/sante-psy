@@ -8,7 +8,18 @@ import styles from './addressAutocomplete.cssmodule.scss';
 
 const AROUND_ME = 'Autour de moi';
 
-const AddressAutocomplete = ({ id, label, className, selected, onChange, placeholder }) => {
+const AddressAutocomplete = ({
+  id,
+  label,
+  className,
+  selected,
+  onChange,
+  placeholder,
+  hint,
+  required = false,
+  isMunicipalities = true,
+  aroundMe = true,
+}) => {
   const selectId = useRef(id || uuidv4());
   const optionsRef = useRef([]);
   const optionsContainerRef = useRef();
@@ -20,7 +31,7 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
   const [isValidSelection, setIsValidSelection] = useState(false);
   const debounceRef = useRef();
 
-  const fixedOptions = [{ value: AROUND_ME, label: AROUND_ME }];
+  const fixedOptions = aroundMe ? [{ value: AROUND_ME, label: AROUND_ME }] : [];
   const allOptions = [...fixedOptions, ...suggestions];
 
   if (allOptions.length !== optionsRef.current.length) {
@@ -44,14 +55,21 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
   }, [selected]);
 
   useEffect(() => {
-    if (arrowSelected !== null && optionsContainerRef.current && optionsRef.current[arrowSelected]) {
-      optionsContainerRef.current.scrollTop = Math.max(0, optionsRef.current[arrowSelected].current.offsetTop - 20);
+    if (
+      arrowSelected !== null &&
+      optionsContainerRef.current &&
+      optionsRef.current[arrowSelected]
+    ) {
+      optionsContainerRef.current.scrollTop = Math.max(
+        0,
+        optionsRef.current[arrowSelected].current.offsetTop - 20,
+      );
     } else if (optionsContainerRef.current) {
       optionsContainerRef.current.scrollTop = 0;
     }
   }, [arrowSelected]);
 
-  const searchAddresses = async query => {
+  const searchAddresses = async (query) => {
     if (!query || query.length < 2 || query === AROUND_ME) {
       setSuggestions([]);
       return;
@@ -59,7 +77,11 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
 
     setIsLoading(true);
     try {
-      const results = await addressAutocomplete.searchAddresses(query, 5);
+      const results = await addressAutocomplete.searchAddresses(
+        query,
+        5,
+        isMunicipalities ? 'municipality' : 'housenumber',
+      );
       setSuggestions(results);
     } catch (error) {
       console.error('Autocomplete error:', error);
@@ -69,7 +91,12 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
     }
   };
 
-  const onInternalChange = (newValue, newLabel, fromSelection = false, fullOption = null) => {
+  const onInternalChange = (
+    newValue,
+    newLabel,
+    fromSelection = false,
+    fullOption = null,
+  ) => {
     setInternalLabel(newLabel || newValue);
     setIsValidSelection(fromSelection);
 
@@ -101,19 +128,23 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
     }, 200);
   };
 
-  const onInternalKeyDown = e => {
+  const onInternalKeyDown = (e) => {
     const { key } = e;
 
     if (suggestions.length === 0) return;
 
     if (key === 'ArrowDown') {
       e.preventDefault();
-      setArrowSelected(prev => (prev < suggestions.length - 1 ? prev + 1 : 0));
+      setArrowSelected((prev) =>
+        prev < suggestions.length - 1 ? prev + 1 : 0,
+      );
     }
 
     if (key === 'ArrowUp') {
       e.preventDefault();
-      setArrowSelected(prev => (prev > 0 ? prev - 1 : suggestions.length - 1));
+      setArrowSelected((prev) =>
+        prev > 0 ? prev - 1 : suggestions.length - 1,
+      );
     }
 
     if (key === 'Enter' && arrowSelected >= 0) {
@@ -127,7 +158,7 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
     }
   };
 
-  const selectOption = option => {
+  const selectOption = (option) => {
     onInternalChange(option.value, option.label, true, option);
     setShowOptions(false);
   };
@@ -136,26 +167,36 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
     <div className={className}>
       <label className="fr-label" htmlFor={selectId.current}>
         {label}
+        {required && <span className="error"> *</span>}
+        {hint && <p className="fr-hint-text">{hint}</p>}
       </label>
       <div className={styles.addressAutocomplete}>
         <input
           id={selectId.current}
           className={classNames(
             'fr-input',
-            !isValidSelection && internalLabel && internalLabel !== AROUND_ME ? 'fr-input--error' : null,
+            !isValidSelection && internalLabel && internalLabel !== AROUND_ME
+              ? 'fr-input--error'
+              : null,
           )}
           autoComplete="on"
-          onChange={e => onInternalChange(e.target.value)}
+          onChange={(e) => onInternalChange(e.target.value)}
           onFocus={onInternalFocus}
           onBlur={onInternalBlur}
           onKeyDown={onInternalKeyDown}
           value={internalLabel}
           placeholder={placeholder}
+          required={required}
         />
 
-        {!isValidSelection && internalLabel && internalLabel !== AROUND_ME && !showOptions && (
-          <p className="fr-error-text">Veuillez sélectionner une option dans la liste</p>
-        )}
+        {!isValidSelection &&
+          internalLabel &&
+          internalLabel !== AROUND_ME &&
+          !showOptions && (
+            <p className="fr-error-text">
+              Veuillez sélectionner une option dans la liste
+            </p>
+          )}
 
         {showOptions && (
           <div ref={optionsContainerRef} className={styles.addressOptions}>
@@ -178,19 +219,29 @@ const AddressAutocomplete = ({ id, label, className, selected, onChange, placeho
               >
                 <div className={styles.addressLabel}>
                   {option.label}
-                  {option.type === 'region' && <span className={styles.addressType}> (région)</span>}
-                  {option.type === 'departement' && <span className={styles.addressType}> (département)</span>}
-                  {option.type === 'municipality' && <span className={styles.addressType}> (ville)</span>}
+                  {option.type === 'region' && (
+                    <span className={styles.addressType}> (région)</span>
+                  )}
+                  {option.type === 'departement' && (
+                    <span className={styles.addressType}> (département)</span>
+                  )}
+                  {option.type === 'municipality' && (
+                    <span className={styles.addressType}> (ville)</span>
+                  )}
                 </div>
-                {option.context && <div className={styles.addressContext}>{option.context}</div>}
+                {option.context && (
+                  <div className={styles.addressContext}>{option.context}</div>
+                )}
               </div>
             ))}
 
-            {!isLoading
-              && suggestions.length === 0
-              && internalLabel
-              && internalLabel.length >= 2
-              && internalLabel !== AROUND_ME && <div className={styles.addressOption}>Aucun résultat</div>}
+            {!isLoading &&
+              suggestions.length === 0 &&
+              internalLabel &&
+              internalLabel.length >= 2 &&
+              internalLabel !== AROUND_ME && (
+                <div className={styles.addressOption}>Aucun résultat</div>
+              )}
           </div>
         )}
       </div>

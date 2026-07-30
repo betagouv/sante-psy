@@ -16,4 +16,8 @@ export type Student = {
   gender?: string;
   school_postcode?: string;
   living_postcode?: string;
+  pending_email?: string;
+  pending_email_token?: string;
+  pending_email_expiration_date?: Date;
+  last_update_personal_data?: Date;
 };

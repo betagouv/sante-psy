@@ -6,13 +6,15 @@ import app from '../../index';
 import clean from '../helper/clean';
 import create from '../helper/create';
 import dbPsychologists from '../../db/psychologists';
-import dbPatients from '../../db/patients';
-import { Psychologist } from '../../types/Psychologist';
 import {
+  INVALID_ADDRESS_FORMAT,
+  MANDATORY_POSTCODE,
   FIND_STUDENT_MESSAGE_ALREADY_PATIENT,
   FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST,
   FIND_STUDENT_MESSAGE_STUDENT_EXISTS,
 } from '../../controllers/psyProfileController';
+import dbPatients from '../../db/patients';
+import { Psychologist } from '../../types/Psychologist';
 import date from '../../utils/date';
 
 const getAddressCoordinates = require('../../services/getAddressCoordinates');
@@ -235,15 +237,18 @@ describe('psyProfileController', () => {
       sinon.assert.notCalled(updatePsyStub);
 
       res.status.should.equal(400);
-      res.body.message.should.equal(message);
+      res.body.message.should.include(message);
     };
 
     it('should refuse empty personalEmail', async () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -259,8 +264,11 @@ describe('psyProfileController', () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -272,11 +280,11 @@ describe('psyProfileController', () => {
       );
     });
 
-    it('should refuse empty address', async () => {
+    it('should refuse text address', async () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          // no address
+          address: 'salut',
           departement: '59 - Nord',
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
@@ -285,16 +293,17 @@ describe('psyProfileController', () => {
           languages: 'Français, Anglais',
           personalEmail: 'perso@email.com',
         },
-        "Vous devez spécifier l'adresse de votre cabinet.",
+        INVALID_ADDRESS_FORMAT,
       );
     });
 
-    it('should refuse whitespace address', async () => {
+    it('should refuse empty postcode', async () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '      ',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -302,58 +311,7 @@ describe('psyProfileController', () => {
           languages: 'Français, Anglais',
           personalEmail: 'perso@email.com',
         },
-        "Vous devez spécifier l'adresse de votre cabinet.",
-      );
-    });
-
-    it('should refuse empty departement', async () => {
-      await shouldFailUpdatePsyInputValidation(
-        {
-          email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          // no departement
-          phone: '01 02 03 04 05',
-          website: 'https://monwebsite.fr',
-          description: 'Consultez un psychologue gratuitement',
-          teleconsultation: true,
-          languages: 'Français, Anglais',
-          personalEmail: 'perso@email.com',
-        },
-        'Vous devez spécifier votre département.',
-      );
-    });
-
-    it('should refuse whitespace departement', async () => {
-      await shouldFailUpdatePsyInputValidation(
-        {
-          email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '   ',
-          phone: '01 02 03 04 05',
-          website: 'https://monwebsite.fr',
-          description: 'Consultez un psychologue gratuitement',
-          teleconsultation: true,
-          languages: 'Français, Anglais',
-          personalEmail: 'perso@email.com',
-        },
-        'Vous devez spécifier votre département.',
-      );
-    });
-
-    it('should refuse non existing departement', async () => {
-      await shouldFailUpdatePsyInputValidation(
-        {
-          email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '9cube - Seine St Denis Style',
-          phone: '01 02 03 04 05',
-          website: 'https://monwebsite.fr',
-          description: 'Consultez un psychologue gratuitement',
-          teleconsultation: true,
-          languages: 'Français, Anglais',
-          personalEmail: 'perso@email.com',
-        },
-        'Departement invalide',
+        MANDATORY_POSTCODE,
       );
     });
 
@@ -361,8 +319,11 @@ describe('psyProfileController', () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           // no phone
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -378,8 +339,11 @@ describe('psyProfileController', () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '  ',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -395,8 +359,11 @@ describe('psyProfileController', () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -412,8 +379,11 @@ describe('psyProfileController', () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -429,8 +399,11 @@ describe('psyProfileController', () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -446,8 +419,11 @@ describe('psyProfileController', () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -463,8 +439,11 @@ describe('psyProfileController', () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -480,8 +459,11 @@ describe('psyProfileController', () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -497,8 +479,11 @@ describe('psyProfileController', () => {
       await shouldFailUpdatePsyInputValidation(
         {
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '',
           website: 'http://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -534,8 +519,11 @@ describe('psyProfileController', () => {
     it('should pass validation when email is missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: '',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
+        address: {
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          postcode: '59000',
+        },
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: 'Consultez un psychologue gratuitement',
@@ -548,8 +536,11 @@ describe('psyProfileController', () => {
     it('should pass validation when website is missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
+        address: {
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          postcode: '59000',
+        },
         phone: '01 02 03 04 05',
         website: '',
         description: 'Consultez un psychologue gratuitement',
@@ -562,8 +553,11 @@ describe('psyProfileController', () => {
     it('should pass validation when appointmentLink is missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
+        address: {
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          postcode: '59000',
+        },
         phone: '01 02 03 04 05',
         adeli: '123456789',
         website: 'https://monwebsite.fr',
@@ -578,8 +572,11 @@ describe('psyProfileController', () => {
     it('should pass validation when description is missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
+        address: {
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          postcode: '59000',
+        },
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: '',
@@ -592,8 +589,11 @@ describe('psyProfileController', () => {
     it('should pass validation when optional fields are missing', async () => {
       await shouldPassUpdatePsyInputValidation({
         email: 'public@email.com',
-        address: '1 rue du Pôle Nord',
-        departement: '59 - Nord',
+        address: {
+          address: '1 rue du Pôle Nord',
+          departement: '59 - Nord',
+          postcode: '59000',
+        },
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description: '',
@@ -611,9 +611,6 @@ describe('psyProfileController', () => {
 
       const postData = {
         email: 'public@email.com',
-        address: '1 rue du Pôle Nord<div>',
-        otherAddress: '2 rue du Pôle Nord<div>',
-        departement: '59 - Nord',
         phone: '01 02 03 04 05',
         website: 'https://monwebsite.fr',
         description:
@@ -639,9 +636,6 @@ describe('psyProfileController', () => {
             updatePsyStub,
             sinon.match({
               ...postData,
-              address: '1 rue du Pôle Nord<div></div>',
-              otherAddress: '2 rue du Pôle Nord<div></div>',
-              departement: '59 - Nord',
               description: 'Consultez un psychologue gratuitement',
               languages: 'Français, Anglais&lt;/',
             }),
@@ -718,8 +712,11 @@ describe('psyProfileController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -740,10 +737,6 @@ describe('psyProfileController', () => {
       const LONGITUDE_PARIS = 2.3488;
       const LATITUDE_PARIS = 48.85341;
 
-      getAddressCoordinatesStub.returns({
-        longitude: LONGITUDE_PARIS,
-        latitude: LATITUDE_PARIS,
-      });
       return chai
         .request(app)
         .put(`/api/psychologist/${psy.dossierNumber}`)
@@ -754,9 +747,21 @@ describe('psyProfileController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
-          otherAddress: '2 rue du Pôle Sud',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+            longitude: LONGITUDE_PARIS,
+            latitude: LATITUDE_PARIS,
+            region: 'Hauts-de-France',
+          },
+          otherAddress: {
+            address: '2 rue du Pôle Sud',
+            departement: '59 - Nord',
+            postcode: '59000',
+            longitude: LONGITUDE_PARIS,
+            latitude: LATITUDE_PARIS,
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           appointmentLink: 'https://monwebsite.fr',
@@ -779,8 +784,6 @@ describe('psyProfileController', () => {
           expect(updatedPsy.longitude).to.eql(LONGITUDE_PARIS);
           expect(updatedPsy.latitude).to.eql(LATITUDE_PARIS);
           expect(updatedPsy.otherAddress).to.eql('2 rue du Pôle Sud');
-          expect(updatedPsy.otherLongitude).to.eql(LONGITUDE_PARIS);
-          expect(updatedPsy.otherLatitude).to.eql(LATITUDE_PARIS);
           expect(updatedPsy.phone).to.eql('01 02 03 04 05');
           expect(updatedPsy.website).to.eql('https://monwebsite.fr');
           expect(updatedPsy.appointmentLink).to.eql('https://monwebsite.fr');
@@ -806,9 +809,12 @@ describe('psyProfileController', () => {
         .set('xsrf-token', 'randomXSRFToken')
         .send({
           email: 'public@email.com',
-          address: '1 rue du Pôle Nord',
-          departement: '59 - Nord',
-          region: 'La bas',
+          address: {
+            address: '1 rue du Pôle Nord',
+            departement: '59 - Nord',
+            postcode: '59000',
+            region: 'Hauts-de-France',
+          },
           phone: '01 02 03 04 05',
           website: 'https://monwebsite.fr',
           description: 'Consultez un psychologue gratuitement',
@@ -1037,10 +1043,12 @@ describe('psyProfileController', () => {
       const previousDate = new Date();
       previousDate.setDate(previousDate.getDate() - 2);
       await shouldFailSuspendPsyInputValidation(
+
         {
           date: previousDate,
           reason: 'yeah',
         },
+
         'Vous devez spécifier une date de fin de suspension dans le futur.',
       );
     });

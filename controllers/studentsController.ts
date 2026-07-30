@@ -1,6 +1,14 @@
 import { Request, Response } from 'express';
 import studentAppointments from '../services/studentAppointments';
 import dbStudents from '../db/students';
+import sendModifyEmailLink from '../services/email/sendModifyEmailLink';
+import loginInformations from '../services/loginInformations';
+import config from '../utils/config';
+import date from '../utils/date';
+import { emailValidator } from './validators/studentValidators';
+import asyncHelper from '../utils/async-helper';
+import validation from '../utils/validation';
+import CustomError from '../utils/CustomError';
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -22,8 +30,12 @@ const getStudentAppointments = async (
 
     const student = await dbStudents.getById(studentId);
 
-    const appointments =
-      await studentAppointments.getStudentAppointments(student);
+    const { email, ine } = student;
+
+    const appointments = await studentAppointments.getStudentAppointments(
+      email,
+      ine,
+    );
 
     res.json(appointments);
     // TODO : nombreux try catch qui servent pas car error deja géré dans méthode ! à enlever partout
@@ -34,4 +46,173 @@ const getStudentAppointments = async (
   }
 };
 
-export default { getStudentAppointments };
+const requestEmailChange = async (
+  req: AuthenticatedRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const studentId = req.auth.userId;
+    const { email: newEmail } = req.body;
+
+    if (!studentId) {
+      res.status(401).json({ error: 'Étudiant non authentifié' });
+      return;
+    }
+
+    const student = await dbStudents.getById(studentId);
+
+    if (newEmail === student.email) {
+      res.status(400).json({
+        error: "Nouvel email souhaité similaire à l'ancien",
+        code: 'SAME_EMAIL',
+      });
+      return;
+    }
+
+    const emailAlreadyUsed = await dbStudents.getByEmail(newEmail);
+    if (emailAlreadyUsed) {
+      res
+        .status(400)
+        .json({ error: 'Erreur. Réessaye ou contacte le support.' });
+      return;
+    }
+
+    const token = loginInformations.generateToken(32);
+    const expiresAt = date.getDatePlusHours(2);
+    const modifyEmailUrl = `${config.hostnameWithProtocol}/etudiant/confirmer-email`;
+    await dbStudents.savePendingEmailChange(
+      studentId,
+      newEmail,
+      token,
+      expiresAt,
+    );
+    sendModifyEmailLink(newEmail, modifyEmailUrl, token);
+
+    res.json({ message: 'Demande enregistrée.' });
+  } catch (err) {
+    console.error('Error in requestEmailChange:', err);
+    res.status(500).json({ error: 'Erreur interne, réessaye plus tard.' });
+  }
+};
+
+const getEmailChangeRequest = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const { token } = req.params;
+
+    const student = await dbStudents.getByEmailChangeToken(token);
+
+    if (!student) {
+      res.status(404).json({ error: 'Ce lien est invalide ou a expiré.' });
+      return;
+    }
+
+    res.json({ pendingEmail: student.pending_email });
+  } catch (err) {
+    console.error('Error in getEmailChangeRequest:', err);
+    res
+      .status(500)
+      .json({ error: "Erreur lors de la demande de changement d'email." });
+  }
+};
+
+const confirmEmailChange = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const { token } = req.params;
+    const { dateOfBirth } = req.body;
+
+    if (!dateOfBirth) {
+      res.status(400).json({ error: 'Date de naissance manquante.' });
+      return;
+    }
+
+    const student = await dbStudents.getByEmailChangeToken(token);
+
+    if (!student) {
+      res.status(404).json({ error: 'Ce lien est invalide ou a expiré.' });
+      return;
+    }
+
+    const storedDob = new Date(student.dateOfBirth).toISOString().slice(0, 10);
+    const providedDob = new Date(dateOfBirth).toISOString().slice(0, 10);
+
+    if (storedDob !== providedDob) {
+      res.status(400).json({ error: 'Date de naissance incorrecte.' });
+      return;
+    }
+
+    await dbStudents.confirmEmailChange(student.id);
+
+    res.json({ message: 'Ton adresse email a bien été mise à jour.' });
+  } catch (err) {
+    console.error('Error in confirmEmailChange:', err);
+    res.status(500).json({ error: 'Erreur interne, réessaye plus tard.' });
+  }
+};
+
+const deleteEmailChangeInfo = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const { token } = req.params;
+    await dbStudents.deleteEmailChangeInfo(token);
+    res.status(204).send();
+  } catch (err) {
+    console.error('Error in deleteEmailChangeInfo:', err);
+    res
+      .status(500)
+      .json({ error: "Erreur lors de l'annulation du changement d'email." });
+  }
+};
+
+const update = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+
+  const { studentId } = req.params;
+
+  const {
+    acceptedCGUs,
+    schoolType,
+    schoolName,
+    schoolPostcode,
+    studyLevel,
+    studyField,
+    studyFieldOther,
+    gender,
+    livingPostcode,
+  } = req.body;
+  const updated = await dbStudents.updatePersonalData(studentId, {
+    acceptedCGUs,
+    schoolType,
+    schoolName,
+    schoolPostcode,
+    studyLevel,
+    studyField,
+    studyFieldOther,
+    gender,
+    livingPostcode,
+  });
+
+  if (updated === 0) {
+    console.log(`Student ${studentId} not updated, possibly does not exist`);
+    throw new CustomError("Cet étudiant n'existe pas.", 404);
+  }
+
+  res.json({ message: 'ok' });
+};
+
+export default {
+  getStudentAppointments,
+  requestEmailChange,
+  emailValidator,
+  getEmailChangeRequest,
+  confirmEmailChange,
+  deleteEmailChangeInfo,
+  update: asyncHelper(update),
+};

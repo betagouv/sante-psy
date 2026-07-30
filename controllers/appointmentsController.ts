@@ -4,15 +4,28 @@ import { check } from 'express-validator';
 import dbAppointments from '../db/appointments';
 import dbPatient from '../db/patients';
 import dbPsychologists from '../db/psychologists';
-import dbStudents from '../db/students';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import { getAppointmentWithBadges } from '../services/getBadges';
-import dateUtils from '../utils/date';
+import dateUtils, { tomorrow } from '../utils/date';
 import validation from '../utils/validation';
 import { AppointmentByYear } from '../types/Appointment';
 import _ from 'lodash';
-import { notifyStudentNewAppointment } from '../services/notifications';
+import { getUnivYear } from '../utils/univYears';
+
+export const ERROR_MESSAGE_APPOINTMENT_BEFORE_INSCRIPTION =
+  "La date de la séance ne peut pas être antérieure à l'inscription au dispositif";
+
+export const ERROR_MESSAGE_APPOINTMENT_BEFORE_LAST_MONTH =
+  'La date de la séance ne peut pas être antérieure au 1er du mois précédent';
+
+export const ERROR_MESSAGE_APPOINTMENT_AFTER_TODAY =
+  'La date de la séance ne peut pas être dans le futur';
+
+export const ERROR_MESSAGE_APPOINTMENT_TOO_MANY_APPOINTMENTS =
+  "L'étudiant a déja réalisé 12 séances sur l'année en cours";
+
+const MAX_NB_APPOINTMENTS_BY_SCHOOL_YEAR = 12;
 
 const createValidators = [
   check('date')
@@ -31,14 +44,12 @@ const create = async (req: Request, res: Response): Promise<void> => {
   const psyId = req.auth.userId || req.auth.psychologist;
 
   const date = new Date(req.body.date);
-  const today = new Date();
   const firstDayOfLastMonth = dateUtils.getFirstDayOfLastMonth();
 
-  // TODO limitDate 4 month not true anymore, change this and test
-  const limitDate = new Date(today.setMonth(today.getMonth() + 4));
+  const limitDate = tomorrow();
 
-  const patientExist = await dbPatient.getById(patientId, psyId);
-  if (!patientExist) {
+  const patient = await dbPatient.getById(patientId, psyId);
+  if (!patient) {
     console.warn(
       `Patient id ${patientId} does not exist for psy id : ${psyId}`,
     );
@@ -47,34 +58,46 @@ const create = async (req: Request, res: Response): Promise<void> => {
     );
   }
 
-  // TODO : should we put all sentences in env var?
   const psy = await dbPsychologists.getById(psyId);
   if (date < psy.createdAt) {
     console.warn(
       "It's impossible to declare an appointment before psychologist creation date",
     );
-    throw new CustomError(
-      "La date de la séance ne peut pas être antérieure à l'inscription au dispositif",
-      400,
-    );
+    throw new CustomError(ERROR_MESSAGE_APPOINTMENT_BEFORE_INSCRIPTION, 400);
   }
 
   if (date < firstDayOfLastMonth) {
     console.warn('The appointment date is before the first day of last month');
-    throw new CustomError(
-      'La date de la séance ne peut pas être antérieure au 1er du mois précédent',
-      400,
-    );
+    throw new CustomError(ERROR_MESSAGE_APPOINTMENT_BEFORE_LAST_MONTH, 400);
   }
 
-  if (date > limitDate) {
-    console.warn(
-      'The difference between today and the declaration date is beyond 4 month',
+  if (date >= limitDate) {
+    console.warn('The declaration date is after today');
+    throw new CustomError(ERROR_MESSAGE_APPOINTMENT_AFTER_TODAY, 400);
+  }
+
+  if (patient.INE) {
+    const appointmentSchoolYear = getUnivYear(date);
+
+    // find out how many appointments student has on the school year of the new appointment
+    const studentAppointments = await dbAppointments.getByPatientId(
+      patient.id,
+      true,
     );
-    throw new CustomError(
-      'La date de la séance doit être dans moins de 4 mois',
-      400,
-    );
+    const nbAppointmentsOnSchoolYear = studentAppointments
+      .map((app) => getUnivYear(new Date(app.appointmentDate)))
+      .filter((schoolYear) => schoolYear === appointmentSchoolYear).length;
+
+    // check if below max
+    if (nbAppointmentsOnSchoolYear >= MAX_NB_APPOINTMENTS_BY_SCHOOL_YEAR) {
+      console.warn(
+        `Already ${MAX_NB_APPOINTMENTS_BY_SCHOOL_YEAR} appointments this year (${appointmentSchoolYear}) for student`,
+      );
+      throw new CustomError(
+        ERROR_MESSAGE_APPOINTMENT_TOO_MANY_APPOINTMENTS,
+        400,
+      );
+    }
   }
 
   await dbAppointments.insert(date, patientId, psyId);
@@ -82,14 +105,9 @@ const create = async (req: Request, res: Response): Promise<void> => {
     `Appointment created for patient id ${patientId} by psy id ${psyId}`,
   );
 
-  const student = await dbStudents.getFromPatient(patientExist);
-
-  notifyStudentNewAppointment(student);
-
   res.json({
     message:
-      `La séance du ${dateUtils.formatFrenchDate(date)} ` +
-      `a bien été créée et l'étudiant en a été notifié par email.`,
+      `La séance du ${dateUtils.formatFrenchDate(date)} a bien été créée, et l'étudiant en a été informé par email.`,
   });
 };
 

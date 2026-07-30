@@ -101,7 +101,7 @@ pnpm test
 Pour lancer uniquement un test
 
 ```bash
-pnpm run test:backend --grep "should create appointments"
+npx ts-mocha --config .mocharc.local.yml test/path/to/your.spec.ts
 ```
 
 #### Code coverage

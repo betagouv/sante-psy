@@ -23,4 +23,7 @@ module.exports = () => [
     question: "Je reçois beaucoup de demandes d'étudiants, je souhaite ne plus être affiché dans la liste publique des psychologues partenaires, tout en restant dans le dispositif. Est-ce possible ?",
     answer: "Dans le cas d'une forte demande ou d'indisponibilité de votre part, vous avez la possibilité de vous retirer temporairement de l'annuaire public depuis votre espace psychologue sur votre tableau de bord. Votre demande sera automatiquement prise en compte. Vous gardez l'accès à votre espace psychologue dans le cas de remboursements en cours ou si vous souhaitez de nouveau rejoindre le dispositif.",
   },
+  {
+    question: "Quelle est la durée des séances ?",
+    answer: "Chaque séance s’inscrit dans un cadre thérapeutique défini par le psychologue, en fonction de la situation de l’étudiant de sa demande et de l’expertise clinique du psychologue. À titre indicatif, les consultations psychologiques s’inscrivent généralement dans des formats habituels de la profession, souvent compris entre 30 et 60 minutes. Cette référence ne constitue pas une norme et peut varier en fonction des indications cliniques. Toute appréciation d’une pratique doit se fonder sur la cohérence du cadre thérapeutique et les éléments cliniques, et ne saurait reposer sur le seul critère de la durée. Santé Psy Étudiant n’intervient pas dans les choix cliniques ni dans l’organisation des séances."  },  
 ];

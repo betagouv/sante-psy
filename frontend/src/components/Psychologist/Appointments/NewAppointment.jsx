@@ -42,12 +42,16 @@ const NewAppointment = () => {
   );
   const [patients, setPatients] = useState([]);
   const [understand, setUnderstand] = useState(false);
+  const [appointmentsRefreshKey, setAppointmentsRefreshKey] = useState(0);
+  const [hasChangedInput, setHasChangedInput] = useState(true);
   const [checkCertifIdentity, setCheckCertifIdentity] = useState(false);
   const [checkCertifValidity, setCheckCertifValidity] = useState(false);
 
   const {
     commonStore: { setNotification },
   } = useStore();
+
+  useEffect(() => setHasChangedInput(true), [date, patientId]);
 
   useEffect(() => {
     if (queryDate) {
@@ -84,18 +88,38 @@ const NewAppointment = () => {
       Number(patient.appointmentsCount) !== 0,
     [patient],
   );
+
   const requiresCertificateCheck = isFirstAppointmentEver || isFirstAppointmentOfTheYear;
-  const canConfirmPatient = useMemo(
-    () => checkCertifIdentity && checkCertifValidity,
-    [checkCertifIdentity, checkCertifValidity],
+
+  const onUpdatePatientAppointments = () => {
+    agent.Patient.get().then(setPatients);
+    setAppointmentsRefreshKey((prev) => prev + 1);
+  };
+
+  const canCreateAppointment = useMemo(
+    () =>
+      !!date &&
+      hasChangedInput &&
+      (!tooMuchAppointments || understand) &&
+      (!requiresCertificateCheck || (checkCertifIdentity && checkCertifValidity)),
+    [
+      date,
+      hasChangedInput,
+      tooMuchAppointments,
+      understand,
+      requiresCertificateCheck,
+      checkCertifIdentity,
+      checkCertifValidity,
+    ],
   );
-  const createNewAppointment = (e) => {
+
+  const createNewAppointment = e => {
     e.preventDefault();
+    setHasChangedInput(false);
     setNotification({});
     agent.Appointment.add(patientId, date).then((response) => {
-      navigate('/psychologue/mes-seances', {
-        state: { notification: response },
-      });
+      setNotification(response);
+      onUpdatePatientAppointments();
     });
   };
 
@@ -118,159 +142,156 @@ const NewAppointment = () => {
   const allOptions = defaultString.concat(patientsMap);
 
   return (
-    <>
-      <Alert
-        type="warning"
-        description="L’étudiant recevra une notification par mail pour toute séance ajoutée."
-      />
-      <div className={styles.newAppointmentWrapper}>
-        <form onSubmit={createNewAppointment} className="fr-my-2w">
-          <div id="patients-list" className="fr-mb-2w">
-            {patients.length > 0 ? (
-              <SearchableSelect
-                className="midlength-select"
-                data-test-id="new-appointment-etudiant-input"
-                id="etudiants"
-                name="patientId"
-                label="Etudiant"
-                selected={patientId}
-                hint={
-                  <>
-                    Votre étudiant n&lsquo;est pas dans la liste ?{' '}
-                    <HashLink
-                      to="/psychologue/nouvel-etudiant"
-                      id="new-patient"
-                    >
-                      Ajoutez un nouvel étudiant
-                    </HashLink>
-                  </>
-                }
-                onChange={(e) => {
-                  setPatientId(e);
-                }}
-                required
-                options={allOptions}
-              />
-            ) : (
-              <Select
-                className="midlength-select"
-                label="Etudiant"
-                disabled
-                required
-                options={[]}
-                hint={
-                  <>
-                    Vous n&lsquo;avez aucun étudiant dans votre liste !{' '}
-                    <HashLink
-                      to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}
-                      id="new-patient"
-                    >
-                      Ajoutez un nouvel étudiant
-                    </HashLink>
-                  </>
-                }
-              />
-            )}
-          </div>
-          <DatePicker
-            id="new-appointment-date-input"
-            className="date-picker"
-            selected={date}
-            minDate={beginningDate}
-            maxDate={maxDate}
-            dateFormat="dd/MM/yyyy"
-            showPopperArrow={false}
-            customInput={
-              <DateInput
-                label="Date de la séance"
-                hint={
-                  <>
-                    Les séances doivent être déclarées au plus tard le dernier
-                    jour du mois suivant leur réalisation. Pour toute aide,{' '}
-                    <HashLink to="/contact/formulaire">
-                      contactez le support.
-                    </HashLink>
-                  </>
-                }
-                dataTestId="new-appointment-date-input"
-              />
-            }
-            onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
-            required
-          />
-          {requiresCertificateCheck && (
-            <>
-              <Alert
-                className="fr-my-3w"
-                type="info"
-                description={
-                  isFirstAppointmentEver
-                    ? "Première séance avec cet étudiant - veuillez vérifier le certificat de scolarité avant de confirmer."
-                    : "Première séance avec cet étudiant pour la nouvelle année universitaire - veuillez vérifier le certificat de scolarité avant de confirmer."
-                }
-              />
-              <CheckboxGroup>
-                <Checkbox
-                  label="J'ai bien comparé l'identité de l'étudiant avec le certificat de scolarité"
-                  onChange={(e) => setCheckCertifIdentity(e.target.checked)}
-                  checked={checkCertifIdentity}
-                  hint="ou l'attestation CVEC fournie"
-                />
-                <Checkbox
-                  label="J'ai vérifié que le certificat de scolarité est valable sur la période en cours"
-                  onChange={(e) => setCheckCertifValidity(e.target.checked)}
-                  checked={checkCertifValidity}
-                />
-              </CheckboxGroup>
-            </>
+    <div className={styles.newAppointmentWrapper}>
+      <form onSubmit={createNewAppointment} className="fr-my-2w">
+        <div id="patients-list" className="fr-mb-2w">
+          {patients.length > 0 ? (
+            <SearchableSelect
+              className="midlength-select"
+              data-test-id="new-appointment-etudiant-input"
+              id="etudiants"
+              name="patientId"
+              label="Etudiant"
+              selected={patientId}
+              hint={
+                <>
+                  Votre étudiant n&lsquo;est pas dans la liste ?{' '}
+                  <HashLink
+                    to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}
+                    id="new-patient"
+                  >
+                    Ajoutez un nouvel étudiant
+                  </HashLink>
+                </>
+              }
+              onChange={(e) => {
+                setPatientId(e);
+                setNotification({});
+              }}
+              required
+              options={allOptions}
+            />
+          ) : (
+            <Select
+              className="midlength-select"
+              label="Etudiant"
+              disabled
+              required
+              options={[]}
+              hint={
+                <>
+                  Vous n&lsquo;avez aucun étudiant dans votre liste !{' '}
+                  <HashLink
+                    to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}
+                    id="new-patient"
+                  >
+                    Ajoutez un nouvel étudiant
+                  </HashLink>
+                </>
+              }
+            />
           )}
-          {tooMuchAppointments && (
-            <>
-              <Alert
-                className="fr-mt-2w"
-                description={
-                  <>
-                    Attention ! Vous avez dépassé le nombre de séances prévues
-                    dans le cadre de ce dispositif.
-                  </>
-                }
+        </div>
+        <DatePicker
+          id="new-appointment-date-input"
+          className="date-picker"
+          selected={date}
+          minDate={beginningDate}
+          maxDate={maxDate}
+          dateFormat="dd/MM/yyyy"
+          showPopperArrow={false}
+          customInput={
+            <DateInput
+              label="Date de la séance"
+              hint={
+                <>
+                  Les séances doivent être déclarées au plus tard le dernier
+                  jour du mois suivant leur réalisation. Pour toute aide,{' '}
+                  <HashLink to="/contact/formulaire">
+                    contactez le support.
+                  </HashLink>
+                </>
+              }
+              dataTestId="new-appointment-date-input"
+            />
+          }
+          onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
+          required
+        />
+        {requiresCertificateCheck && (
+          <>
+            <Alert
+              className="fr-my-3w"
+              type="info"
+              description={
+                isFirstAppointmentEver
+                  ? "Première séance avec cet étudiant - veuillez vérifier le certificat de scolarité avant de confirmer."
+                  : "Première séance avec cet étudiant pour la nouvelle année universitaire - veuillez vérifier le certificat de scolarité avant de confirmer."
+              }
+            />
+            <CheckboxGroup>
+              <Checkbox
+                label="J'ai bien comparé l'identité de l'étudiant avec le certificat de scolarité"
+                onChange={(e) => setCheckCertifIdentity(e.target.checked)}
+                checked={checkCertifIdentity}
+                hint="ou l'attestation CVEC fournie"
               />
               <Checkbox
-                className="fr-mt-1w"
-                data-test-id="new-appointment-understand"
-                label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances seront prises en charge par année universitaire.`}
-                onChange={(e) => setUnderstand(e.target.checked)}
+                label="J'ai vérifié que le certificat de scolarité est valable sur la période en cours"
+                onChange={(e) => setCheckCertifValidity(e.target.checked)}
+                checked={checkCertifValidity}
               />
-            </>
-          )}
-          <div className={styles.submitCancelButtonsWrapper}>
-            <Button
-              id="new-appointment-submit"
-              data-test-id="new-appointment-submit"
-              submit
-              icon="ri-add-line"
-              className="fr-mt-4w"
-              disabled={
-                (tooMuchAppointments && !understand) ||
-                (requiresCertificateCheck && !canConfirmPatient)
-              }
-            >
-              Créer la séance
-            </Button>
-            <Button
-              secondary
-              className="fr-mt-4w"
-              onClick={() => navigate('/psychologue/mes-seances')}
-            >
-              Annuler
-            </Button>
-          </div>
-        </form>
-        {patientId && (
-          <PatientAppointments showCreateButton={false} patientId={patientId} />
+            </CheckboxGroup>
+          </>
         )}
-      </div>
-    </>
+        {tooMuchAppointments && (
+          <>
+            <Alert
+              className="fr-mt-2w"
+              description={
+                <>
+                  Attention ! Vous avez dépassé le nombre de séances prévues
+                  dans le cadre de ce dispositif.
+                </>
+              }
+            />
+            <Checkbox
+              className="fr-mt-1w"
+              data-test-id="new-appointment-understand"
+              label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances seront prises en charge par année universitaire.`}
+              onChange={(e) => setUnderstand(e.target.checked)}
+            />
+          </>
+        )}
+        <div className={styles.submitCancelButtonsWrapper}>
+          <Button
+            id="new-appointment-submit"
+            data-test-id="new-appointment-submit"
+            submit
+            icon="ri-add-line"
+            className="fr-mt-4w"
+            disabled={!canCreateAppointment}
+          >
+            Créer la séance
+          </Button>
+          <Button
+            secondary
+            className="fr-mt-4w"
+            onClick={() => navigate('/psychologue/mes-seances')}
+          >
+            Annuler
+          </Button>
+        </div>
+      </form>
+      {patientId && (
+        <PatientAppointments
+          showCreateButton={false}
+          patientId={patientId}
+          onUpdatePatientAppointments={onUpdatePatientAppointments}
+          refreshKey={appointmentsRefreshKey}
+        />
+      )}
+    </div>
   );
 };
 

@@ -30,19 +30,17 @@ const StudentPage = ({
   }, [title]);
 
   return (
-    <main>
+    <main className={styles.container}>
       <header className={styles.studentHeader}>
         {title && (
-        <div className={styles.titleContainer}>
           <h1 className={styles.title}>{title}</h1>
-        </div>
         )}
       </header>
       <div
         className={classNames(styles.background, className)}
         data-test-id={dataTestId}
       >
-        <div className={styles.container}>
+        <div>
           {children}
         </div>
       </div>

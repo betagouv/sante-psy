@@ -24,7 +24,6 @@ describe('psyListingController', () => {
       lastName: 'Dupin',
       useFirstNames: 'Géorgïe',
       useLastName: 'Sand',
-      isVeryAvailable: true,
       description: 'Psychologue en gestion du stress et amie de Victor',
       languages: 'Francais, espagnol',
       isConventionSigned: true,
@@ -39,21 +38,24 @@ describe('psyListingController', () => {
 
   describe('getReducedActive', () => {
     it('should return all active psy', async () => {
-      const res = await chai.request(app)
+      const res = await chai
+        .request(app)
         .get('/api/trouver-un-psychologue/reduced');
 
       expect(res.status).to.equal(200);
       expect(res.body).to.have.length(2);
 
-      const resultPsyActive2 = res.body[0];
-      expect(resultPsyActive2.dossierNumber).to.equals(psyActive2.dossierNumber);
-      expect(resultPsyActive2.firstNames).to.equals('Géorgïe');
-      expect(resultPsyActive2.lastName).to.equals('Sand');
-
-      const resultPsyActive1 = res.body[1];
-      expect(resultPsyActive1.dossierNumber).to.equals(psyActive1.dossierNumber);
+      const resultPsyActive1 = res.body.find(
+        (item) => item.dossierNumber === psyActive1.dossierNumber,
+      );
       expect(resultPsyActive1.firstNames).to.equals('Victor');
       expect(resultPsyActive1.lastName).to.equals('Hugo');
+
+      const resultPsyActive2 = res.body.find(
+        (item) => item.dossierNumber === psyActive2.dossierNumber,
+      );
+      expect(resultPsyActive2.firstNames).to.equals('Géorgïe');
+      expect(resultPsyActive2.lastName).to.equals('Sand');
 
       const expectedKeys = [
         'dossierNumber',
@@ -82,7 +84,8 @@ describe('psyListingController', () => {
     });
 
     it('should filter psy by name', async () => {
-      const res = await chai.request(app)
+      const res = await chai
+        .request(app)
         .get('/api/trouver-un-psychologue/reduced')
         .query({ filters: { nameAndSpeciality: 'georgie' } });
 
@@ -94,7 +97,8 @@ describe('psyListingController', () => {
     });
 
     it('should filter psy by speciality', async () => {
-      const res = await chai.request(app)
+      const res = await chai
+        .request(app)
         .get('/api/trouver-un-psychologue/reduced')
         .query({ filters: { nameAndSpeciality: 'Anxiete' } });
 
@@ -105,7 +109,8 @@ describe('psyListingController', () => {
     });
 
     it('should filter psy by name and speciality', async () => {
-      const res = await chai.request(app)
+      const res = await chai
+        .request(app)
         .get('/api/trouver-un-psychologue/reduced')
         .query({ filters: { nameAndSpeciality: 'victor' } });
 
@@ -114,7 +119,8 @@ describe('psyListingController', () => {
     });
 
     it('should only return if contains all keywords', async () => {
-      const res = await chai.request(app)
+      const res = await chai
+        .request(app)
         .get('/api/trouver-un-psychologue/reduced')
         .query({ filters: { nameAndSpeciality: 'victor anxiete' } });
 
@@ -125,7 +131,8 @@ describe('psyListingController', () => {
     });
 
     it('should filter psy by languages', async () => {
-      const res = await chai.request(app)
+      const res = await chai
+        .request(app)
         .get('/api/trouver-un-psychologue/reduced')
         .query({ filters: { language: 'arabe' } });
 
@@ -136,8 +143,7 @@ describe('psyListingController', () => {
 
   describe('getFullActive', () => {
     it('should return all active psy', async () => {
-      const res = await chai.request(app)
-        .get('/api/trouver-un-psychologue');
+      const res = await chai.request(app).get('/api/trouver-un-psychologue');
 
       expect(res.status).to.equal(200);
       expect(res.body).to.have.length(2);

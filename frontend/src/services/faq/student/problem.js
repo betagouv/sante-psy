@@ -8,7 +8,7 @@ module.exports = () => [
     <a href="https://santepsy.etudiant.gouv.fr/trouver-un-psychologue" target="_blank" rel="noopener noreferrer">Choisir un psychologue et prendre RDV</a>',
   },
   {
-    question: 'Plainte sur un\u00A0/ une psychologue',
+    question: 'Signalement',
     answer: '<a href="https://santepsy.etudiant.gouv.fr/contact/formulaire" target="_blank" rel="noopener noreferrer">Veuillez nous contacter</a>',
   },
   {
