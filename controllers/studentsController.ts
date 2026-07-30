@@ -30,11 +30,8 @@ const getStudentAppointments = async (
 
     const student = await dbStudents.getById(studentId);
 
-    const { email, ine } = student;
-
     const appointments = await studentAppointments.getStudentAppointments(
-      email,
-      ine,
+      student,
     );
 
     res.json(appointments);

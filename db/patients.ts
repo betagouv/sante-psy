@@ -135,23 +135,6 @@ const deleteOne = async (
   }
 };
 
-const getByStudentEmailAndIne = async (
-  email: string,
-  INE: string,
-): Promise<Patient[]> => {
-  try {
-    return await db(patientsTable)
-      .where({
-        email,
-        INE,
-      })
-      .andWhere('deleted', false);
-  } catch (err) {
-    console.error('Erreur récupération patients étudiant', err);
-    throw new Error('Erreur récupération patients étudiant');
-  }
-};
-
 const getByStudent = async (student: Student): Promise<Patient[]> => {
   try {
     return await db(patientsTable)
@@ -174,7 +157,6 @@ export default {
   getAll,
   insert,
   delete: deleteOne,
-  getByStudentEmailAndIne,
   isAlreadyAPatient,
   getByStudent,
 };
