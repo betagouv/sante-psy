@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Button } from '@dataesr/react-dsfr';
+import { Button , Alert } from '@dataesr/react-dsfr';
 
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
@@ -13,7 +13,6 @@ import { useStore } from 'stores/index';
 import styles from './addEditPatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
 import PatientInfo from './AddEditPatientInfo';
-import { Alert } from '@dataesr/react-dsfr';
 
 const AddEditPatient = () => {
   const navigate = useNavigate();
