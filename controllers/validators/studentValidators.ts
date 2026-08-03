@@ -94,23 +94,3 @@ export const updateValidators = [
     .isUUID()
     .withMessage("Cet étudiant n'existe pas."),
 ];
-
-export const updateValidators = [
-  check('studentId')
-    .trim()
-    .not()
-    .isEmpty()
-    .withMessage("Cet étudiant n'existe pas.")
-    .isUUID()
-    .withMessage("Cet étudiant n'existe pas."),
-];
-
-export const updateValidators = [
-  check('studentId')
-    .trim()
-    .not()
-    .isEmpty()
-    .withMessage("Cet étudiant n'existe pas.")
-    .isUUID()
-    .withMessage("Cet étudiant n'existe pas."),
-];

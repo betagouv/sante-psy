@@ -12,7 +12,6 @@ import StudentPage from 'components/Page/StudentPage';
 import EmergyNumbers from 'components/Students/EmergencyNumbers/EmergencyNumbers';
 import EditProfile from 'components/Students/EditProfile/EditProfile';
 import ConfirmEmailChange from 'components/Students/EditProfile/ConfirmEmailChange';
-import UpdatePersonalData from 'components/Students/UpdatePersonalData/UpdatePersonalData';
 
 const StudentRouter = () => {
   const {
