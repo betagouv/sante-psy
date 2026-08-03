@@ -4,7 +4,10 @@ import {
   checkFirstName,
   checkIne,
   checkLastName,
+  inePatterns,
 } from './common';
+import { purifySanitizer } from '../../services/sanitizer';
+import date from '../../utils/date';
 
 export const emailValidator = [
   check('email')
