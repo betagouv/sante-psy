@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { TextInput, Button, Alert } from '@dataesr/react-dsfr';
+import { TextInput, Button, Alert , ButtonGroup } from '@dataesr/react-dsfr';
 import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import ErrorMessage from 'components/Forms/ErrorMessage';
 import validateIneFormat from 'src/utils/validateIneFormat';
@@ -8,7 +8,6 @@ import { useStore } from 'stores/index';
 import InviteStudent from './InviteStudent';
 import ConfirmNewPatient from './ConfirmNewPatient';
 import { Stack } from 'components/Utils/Stack';
-import { ButtonGroup } from '@dataesr/react-dsfr';
 import { HashLink } from 'react-router-hash-link';
 
 const AddNewPatient = () => {
