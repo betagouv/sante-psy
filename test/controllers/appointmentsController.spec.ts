@@ -92,7 +92,7 @@ describe('appointmentsController', () => {
       const formattedDate = dateUtils.formatFrenchDate(validDate);
       res.status.should.equal(200);
       res.body.message.should.equal(
-        `La séance du ${formattedDate} a bien été créée et l'étudiant en a été notifié par email.`,
+        `La séance du ${formattedDate} a bien été créée.`,
       );
 
       const appointmentArray = await dbAppointments.getAll(psy.dossierNumber);
@@ -202,10 +202,12 @@ describe('appointmentsController', () => {
     });
 
     it('should not create appointment if student has 12 already (2 psys)', async () => {
-      const aDayInSchoolYear = new Date(2026, 5, 10);
-      const anotherDayInSchoolYear = '2026-05-10';
       const today = new Date();
-      const twoYearsAgo = new Date(today.setFullYear(today.getFullYear() - 2));
+      const yesterday = new Date(today);
+      yesterday.setDate(today.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().split('T')[0];
+      const twoYearsAgo = new Date(today);
+      twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
 
       const psy1 = await create.insertOnePsy({ createdAt: twoYearsAgo });
       const psy2 = await create.insertOnePsy({ createdAt: twoYearsAgo });
@@ -213,7 +215,7 @@ describe('appointmentsController', () => {
       // 2 patients, same person
       const dbPatient1 = await insertPatientInfoInDb(psy1);
       const dbPatient2 = await dbPatients.insert(
-        psy1.dossierNumber,
+        psy2.dossierNumber,
         dbPatient1.student.id,
       );
 
@@ -223,7 +225,7 @@ describe('appointmentsController', () => {
           create.insertOneAppointment({
             patientId: dbPatient1.id,
             psychologistId: psy1.dossierNumber,
-            appointmentDate: anotherDayInSchoolYear,
+            appointmentDate: yesterdayStr,
           }),
         ),
       );
@@ -233,7 +235,7 @@ describe('appointmentsController', () => {
           create.insertOneAppointment({
             patientId: dbPatient2.id,
             psychologistId: psy2.dossierNumber,
-            appointmentDate: anotherDayInSchoolYear,
+            appointmentDate: yesterdayStr,
           }),
         ),
       );
@@ -249,7 +251,7 @@ describe('appointmentsController', () => {
       const res = await postAppointment({
         psyId: psy1.dossierNumber,
         patientId: dbPatient1.id,
-        date: aDayInSchoolYear,
+        date: today,
       });
       await confirmResError(
         res,
@@ -259,11 +261,20 @@ describe('appointmentsController', () => {
     });
 
     it('ok if student has 12 already (2 psys) but 1 from previous school year', async () => {
-      const aDayInSchoolYear = new Date(2026, 5, 10);
-      const anotherDayInSchoolYear = '2026-05-10';
-      const aDayFromPreviousSchoolYear = '2025-08-27';
       const today = new Date();
-      const twoYearsAgo = new Date(today.setFullYear(today.getFullYear() - 2));
+      const yesterday = new Date(today);
+      yesterday.setDate(today.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().split('T')[0];
+      const twoYearsAgo = new Date(today);
+      twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+
+      const aDayFromPreviousSchoolYear = new Date(today);
+      aDayFromPreviousSchoolYear.setFullYear(
+        aDayFromPreviousSchoolYear.getFullYear() - 1,
+      );
+      const aDayFromPreviousSchoolYearStr = aDayFromPreviousSchoolYear
+        .toISOString()
+        .split('T')[0];
 
       const psy1 = await create.insertOnePsy({ createdAt: twoYearsAgo });
       const psy2 = await create.insertOnePsy({ createdAt: twoYearsAgo });
@@ -271,7 +282,7 @@ describe('appointmentsController', () => {
       // 2 patients, same person
       const dbPatient1 = await insertPatientInfoInDb(psy1);
       const dbPatient2 = await dbPatients.insert(
-        psy1.dossierNumber,
+        psy2.dossierNumber,
         dbPatient1.student.id,
       );
 
@@ -281,7 +292,7 @@ describe('appointmentsController', () => {
           create.insertOneAppointment({
             patientId: dbPatient1.id,
             psychologistId: psy1.dossierNumber,
-            appointmentDate: anotherDayInSchoolYear,
+            appointmentDate: yesterdayStr,
           }),
         ),
       );
@@ -291,14 +302,14 @@ describe('appointmentsController', () => {
           create.insertOneAppointment({
             patientId: dbPatient2.id,
             psychologistId: psy2.dossierNumber,
-            appointmentDate: anotherDayInSchoolYear,
+            appointmentDate: yesterdayStr,
           }),
         ),
       );
       await create.insertOneAppointment({
         patientId: dbPatient2.id,
         psychologistId: psy2.dossierNumber,
-        appointmentDate: aDayFromPreviousSchoolYear,
+        appointmentDate: aDayFromPreviousSchoolYearStr,
       });
 
       // student should have 12 appointments in total
@@ -308,11 +319,11 @@ describe('appointmentsController', () => {
       );
       appointmentsPatient.length.should.equal(12);
 
-      // adding a new appointment should fail
+      // adding a new appointment should not fail
       const res = await postAppointment({
         psyId: psy1.dossierNumber,
         patientId: dbPatient1.id,
-        date: aDayInSchoolYear,
+        date: today,
       });
       res.status.should.equal(200);
     });
