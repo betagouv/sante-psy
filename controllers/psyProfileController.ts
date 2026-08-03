@@ -10,6 +10,7 @@ import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
 import sendSecondStepMail from '../services/sendSecondStepMail';
+import { checkDateOfBirth, checkIne } from './validators/common';
 
 export const FIND_STUDENT_MESSAGE_STUDENT_EXISTS = 'Le compte étudiant existe';
 export const FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST =
@@ -301,10 +302,13 @@ const inviteStudent = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+const findStudentValidators = [checkIne, checkDateOfBirth];
+
 export default {
   getValidators,
   updateValidators,
   suspendValidators,
+  findStudentValidators,
   get: asyncHelper(get),
   update: asyncHelper(update),
   activate: asyncHelper(activate),
