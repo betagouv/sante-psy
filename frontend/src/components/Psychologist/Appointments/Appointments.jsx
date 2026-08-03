@@ -180,9 +180,7 @@ const Appointments = () => {
           tooltip="Séances de l'étudiant"
           data-test-id="etudiant-name"
           onClick={() =>
-            navigate(
-              `/psychologue/modifier-etudiant/${patientId}/#anchor-student-list`,
-            )
+            navigate(`/psychologue/etudiant/${patientId}/#anchor-student-list`)
           }
         >
           <div>

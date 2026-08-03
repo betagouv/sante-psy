@@ -4,9 +4,19 @@ import { purifySanitizer } from '../services/sanitizer';
 
 import validation from '../utils/validation';
 import dbPsychologists from '../db/psychologists';
+import dbStudents from '../db/students';
+import dbPatients from '../db/patients';
 import asyncHelper from '../utils/async-helper';
 import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
+import sendSecondStepMail from '../services/sendSecondStepMail';
+import { checkDateOfBirth, checkIne } from './validators/common';
+
+export const FIND_STUDENT_MESSAGE_STUDENT_EXISTS = 'Le compte étudiant existe';
+export const FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST =
+  "Le compte étudiant n'existe pas";
+export const FIND_STUDENT_MESSAGE_ALREADY_PATIENT =
+  'Cet étudiant est déja un patient pour ce psychologue';
 
 const getValidators = [
   param('psyId')
@@ -234,13 +244,76 @@ const seeTutorial = async (req: Request, res: Response): Promise<void> => {
   });
 };
 
+const findStudent = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+  const psychologistId = req.auth.userId || req.auth.psychologist;
+  const { ine, dateOfBirth } = req.body;
+
+  const student = await dbStudents.getByIneAndBirthDate(ine, dateOfBirth);
+
+  if (!student) {
+    res.json({
+      studentExists: false,
+      alreadyPatient: false,
+      message: FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST,
+    });
+    return;
+  }
+
+  const alreadyPatient = await dbPatients.isAlreadyAPatient(
+    student.id,
+    psychologistId,
+  );
+  if (alreadyPatient) {
+    res.json({
+      studentExists: true,
+      alreadyPatient: true,
+      message: FIND_STUDENT_MESSAGE_ALREADY_PATIENT,
+    });
+    return;
+  }
+
+  res.json({
+    studentExists: true,
+    alreadyPatient: false,
+    message: FIND_STUDENT_MESSAGE_STUDENT_EXISTS,
+    student,
+  });
+};
+
+const inviteStudent = async (req: Request, res: Response): Promise<void> => {
+  validation.checkErrors(req);
+  const { email } = req.body;
+
+  try {
+    await sendSecondStepMail.inviteNewStudentToCreateAccount(
+      email,
+      'studentInvitationFromPsy',
+      'Création de votre espace étudiant',
+    );
+  } catch (err) {
+    console.error('Failed to send student invitation from psy', err);
+    throw new CustomError(
+      "Une erreur est survenue lors de l'envoi de l'invitation",
+    );
+  }
+  res.status(200).json({
+    message: "L'invitation a bien été envoyée.",
+  });
+};
+
+const findStudentValidators = [checkIne, checkDateOfBirth];
+
 export default {
   getValidators,
   updateValidators,
   suspendValidators,
+  findStudentValidators,
   get: asyncHelper(get),
   update: asyncHelper(update),
   activate: asyncHelper(activate),
   suspend: asyncHelper(suspend),
   seeTutorial: asyncHelper(seeTutorial),
+  findStudent: asyncHelper(findStudent),
+  inviteStudent: asyncHelper(inviteStudent),
 };

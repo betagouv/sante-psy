@@ -1,10 +1,8 @@
 import express from 'express';
-import multer from 'multer';
 import patientsController from '../controllers/patientsController';
 import access from '../utils/access';
 
 const router = express.Router();
-const upload = multer({ storage: multer.memoryStorage() });
 
 router.use(access.requirePsyRole);
 
@@ -19,21 +17,10 @@ router.get(
   patientsController.getOneValidators,
   patientsController.getOne,
 );
-router.put(
-  '/:patientId',
-  patientsController.updateValidators,
-  patientsController.update,
-);
 router.delete(
   '/:patientId',
   patientsController.deleteValidators,
   patientsController.delete,
-);
-
-router.post(
-  '/send-certificate',
-  upload.single('file'),
-  patientsController.sendCertificate,
 );
 
 export default router;

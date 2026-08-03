@@ -1,5 +1,11 @@
 import { check } from 'express-validator';
-import { inePatterns } from './patientValidators';
+import {
+  checkDateOfBirth,
+  checkFirstName,
+  checkIne,
+  checkLastName,
+  inePatterns,
+} from './common';
 import { purifySanitizer } from '../../services/sanitizer';
 import date from '../../utils/date';
 
@@ -9,7 +15,9 @@ export const emailValidator = [
     .withMessage('Vous devez spécifier un email valide.')
     .custom((value) => {
       if (value.toLowerCase().includes('santepsyetudiant')) {
-        throw new Error("Cette adresse email n'est pas autorisée.");
+        throw new Error(
+          "Cette adresse email n'est pas autorisée à créer un compte étudiant.",
+        );
       }
       return true;
     }),
@@ -73,6 +81,10 @@ export const signInValidator = [
       }
       return true;
     }),
+  checkFirstName,
+  checkLastName,
+  checkIne,
+  checkDateOfBirth,
 ];
 
 export const updateValidators = [

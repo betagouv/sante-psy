@@ -62,6 +62,12 @@ pnpm run seed
 
 Penser à décommenter les variables d'environnement `SECRET` et `SECRET_LOGS` dans le fichier `.env` avant de lancer les tests localement.
 
+Lancer un fichier de test en local
+
+```
+TEST_ENVIRONMENT=true pnpm ts-mocha --exit test/db/appointments.spec.ts
+```
+
 #### Front
 
 Une fois l'appli lancée normalement, on utilise cypress.

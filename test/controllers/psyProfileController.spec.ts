@@ -9,7 +9,13 @@ import dbPsychologists from '../../db/psychologists';
 import {
   INVALID_ADDRESS_FORMAT,
   MANDATORY_POSTCODE,
+  FIND_STUDENT_MESSAGE_ALREADY_PATIENT,
+  FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST,
+  FIND_STUDENT_MESSAGE_STUDENT_EXISTS,
 } from '../../controllers/psyProfileController';
+import dbPatients from '../../db/patients';
+import { Psychologist } from '../../types/Psychologist';
+import date from '../../utils/date';
 
 const getAddressCoordinates = require('../../services/getAddressCoordinates');
 
@@ -1042,6 +1048,130 @@ describe('psyProfileController', () => {
           reason: 'yeah',
         },
         'Vous devez spécifier une date de fin de suspension dans le futur.',
+      );
+    });
+  });
+
+  describe('find student', () => {
+    let psy: Psychologist;
+
+    const validIne = '123456789AB';
+    const validDateOfBirth = '15/01/2000';
+    const wrongDateOfBirth = '31/12/1999';
+
+    const findStudent = (body: { ine: string; dateOfBirth: string }) =>
+      chai
+        .request(app)
+        .post(`/api/psychologist/${psy.dossierNumber}/student-find`)
+        .set(
+          'Cookie',
+          `token=${cookie.getJwtTokenForUser(psy.dossierNumber, 'randomXSRFToken', 'psy')}`,
+        )
+        .set('xsrf-token', 'randomXSRFToken')
+        .send(body);
+
+    before(async () => {
+      psy = await create.insertOnePsy({ createdAt: new Date('2021-05-22') });
+    });
+
+    beforeEach(async () => {
+      await clean.patients();
+      await clean.students();
+      return Promise.resolve();
+    });
+
+    afterEach(async () => {
+      await clean.patients();
+      await clean.students();
+      return Promise.resolve();
+    });
+
+    it('should return studentExists: false when no student in database', async () =>
+      findStudent({ ine: validIne, dateOfBirth: validDateOfBirth }).then(
+        (res) => {
+          res.status.should.equal(200);
+          expect(res.body.studentExists).to.equal(false);
+          expect(res.body.alreadyPatient).to.equal(false);
+          expect(res.body.message).to.equal(
+            FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST,
+          );
+          return Promise.resolve();
+        },
+      ));
+
+    it('should return studentExists: false when student exists but date of birth does not match', async () => {
+      await create.insertOneStudent({
+        ine: validIne,
+        dateOfBirth: date.parseForm(validDateOfBirth),
+      });
+      return findStudent({ ine: validIne, dateOfBirth: wrongDateOfBirth }) // mauvaise date
+        .then((res) => {
+          res.status.should.equal(200);
+          expect(res.body.studentExists).to.equal(false);
+          expect(res.body.alreadyPatient).to.equal(false);
+          expect(res.body.message).to.equal(
+            FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST,
+          );
+          return Promise.resolve();
+        });
+    });
+
+    it('should return alreadyPatient: true when student is already a patient for this psy', async () => {
+      const student = await create.insertOneStudent({
+        ine: validIne,
+        dateOfBirth: date.parseForm(validDateOfBirth),
+      });
+      await dbPatients.insert(psy.dossierNumber, student.id);
+      return findStudent({ ine: validIne, dateOfBirth: validDateOfBirth }).then(
+        (res) => {
+          res.status.should.equal(200);
+          expect(res.body.studentExists).to.equal(true);
+          expect(res.body.alreadyPatient).to.equal(true);
+          expect(res.body.message).to.equal(
+            FIND_STUDENT_MESSAGE_ALREADY_PATIENT,
+          );
+          return Promise.resolve();
+        },
+      );
+    });
+
+    it('should return alreadyPatient: false when patient exists but is deleted', async () => {
+      const student = await create.insertOneStudent({
+        ine: validIne,
+        dateOfBirth: date.parseForm(validDateOfBirth),
+      });
+      const patient = await dbPatients.insert(psy.dossierNumber, student.id);
+      await dbPatients.delete(patient.id, psy.dossierNumber);
+
+      return findStudent({ ine: validIne, dateOfBirth: validDateOfBirth }).then(
+        (res) => {
+          res.status.should.equal(200);
+          expect(res.body.studentExists).to.equal(true);
+          expect(res.body.alreadyPatient).to.equal(false);
+          expect(res.body.message).to.equal(
+            FIND_STUDENT_MESSAGE_STUDENT_EXISTS,
+          );
+          expect(res.body.student).to.exist;
+          return Promise.resolve();
+        },
+      );
+    });
+
+    it('should return student data when student exists and is not already a patient', async () => {
+      await create.insertOneStudent({
+        ine: validIne,
+        dateOfBirth: date.parseForm(validDateOfBirth),
+      });
+      return findStudent({ ine: validIne, dateOfBirth: validDateOfBirth }).then(
+        (res) => {
+          res.status.should.equal(200);
+          expect(res.body.studentExists).to.equal(true);
+          expect(res.body.alreadyPatient).to.equal(false);
+          expect(res.body.message).to.equal('Le compte étudiant existe');
+          expect(res.body.student).to.exist;
+          expect(res.body.student.ine).to.equal(validIne);
+          return Promise.resolve();
+        },
       );
     });
   });

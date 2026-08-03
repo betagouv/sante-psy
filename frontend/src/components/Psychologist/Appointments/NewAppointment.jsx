@@ -25,12 +25,14 @@ export const MAX_APPOINTMENT = 12;
 
 const NewAppointment = () => {
   const navigate = useNavigate();
-  const { search } = useLocation();
+  const { search, state } = useLocation();
   // TODO understand why we use this url param
   const queryDate = new URLSearchParams(search).get('date');
   const [date, setDate] = useState();
   const params = useParams();
-  const [patientId, setPatientId] = useState(params.patientId);
+  const [patientId, setPatientId] = useState(
+    state?.patientId || params.patientId,
+  );
   const [patients, setPatients] = useState([]);
   const [appointmentsRefreshKey, setAppointmentsRefreshKey] = useState(0);
   const [hasChangedInput, setHasChangedInput] = useState(true);
@@ -56,7 +58,6 @@ const NewAppointment = () => {
     () => patients?.find((p) => p.id === patientId),
     [patients, patientId],
   );
-  const INEhasBeenValidated = patient?.isINESvalid;
   const tooMuchAppointments = useMemo(
     () => patient && patient.countedAppointments >= MAX_APPOINTMENT,
     [patient],
@@ -73,13 +74,13 @@ const NewAppointment = () => {
       patient.INE &&
       patient.dateOfBirth &&
       patient.gender &&
-      INEhasBeenValidated &&
       patient.email,
     [patient],
   );
 
   const canCreateAppointment = useMemo(
-    () => !!date && hasAllCompulsoryInfo && !tooMuchAppointments && hasChangedInput,
+    () =>
+      !!date && hasAllCompulsoryInfo && !tooMuchAppointments && hasChangedInput,
     [date, hasAllCompulsoryInfo, tooMuchAppointments, hasChangedInput],
   );
 
@@ -126,10 +127,7 @@ const NewAppointment = () => {
               hint={
                 <>
                   Votre étudiant n&lsquo;est pas dans la liste ?{' '}
-                  <HashLink
-                    to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}
-                    id="new-patient"
-                  >
+                  <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">
                     Ajoutez un nouvel étudiant
                   </HashLink>
                 </>
@@ -226,8 +224,7 @@ const NewAppointment = () => {
                 Cet étudiant a atteint le nombre maximum de séances prises en
                 charge pour l&apos;année scolaire en cours. Il n&apos;est pas
                 possible d&apos;en déclarer de nouvelles avant la prochaine
-                rentrée. Si vous constatez une erreur dans le décompte,
-                veuillez{' '}
+                rentrée. Si vous constatez une erreur dans le décompte, veuillez{' '}
                 <HashLink to="/contact/formulaire">
                   contacter le support
                 </HashLink>

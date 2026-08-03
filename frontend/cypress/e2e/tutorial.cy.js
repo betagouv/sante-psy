@@ -65,7 +65,6 @@ const tutorials = [
   { page: 'tableau-de-bord', steps: 4 },
   { page: 'mes-seances', steps: 3 },
   { page: 'mes-etudiants', steps: 3 },
-  { page: 'nouvel-etudiant', steps: 3 },
   { page: 'mon-profil', steps: 4 },
 ];
 describe('Other tutorials', () => {
