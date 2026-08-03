@@ -212,7 +212,9 @@ describe('appointmentsController', () => {
     it('should not create appointment if student has 12 already (2 psys)', async () => {
       const today = new Date();
       const aDayInSchoolYear = new Date(today.getFullYear(), today.getMonth(), 1);
-      const anotherDayInSchoolYear = new Date(today.getFullYear(), today.getMonth(), 26);
+      const anotherDayInSchoolYear = dateUtils.dateToDashedString(
+        new Date(today.getFullYear(), today.getMonth(), 26),
+      );
       const twoYearsAgo = new Date(today.getFullYear() - 2, today.getMonth(), today.getDate());
 
       const psy1 = await create.insertOnePsy({ createdAt: twoYearsAgo });
@@ -266,8 +268,10 @@ describe('appointmentsController', () => {
 
     it('ok if student has 12 already (2 psys) but 1 from previous school year', async () => {
       const today = new Date();
-      const aDayInSchoolYear = new Date(today.getFullYear(), today.getMonth(), 1);
-      const anotherDayInSchoolYear = '2026-05-10';
+      const aDayInSchoolYear = new Date(today.getFullYear(), today.getMonth(), 2);
+      const anotherDayInSchoolYear = dateUtils.dateToDashedString(
+        new Date(today.getFullYear(), today.getMonth(), 14),
+      );
       const aDayFromPreviousSchoolYear = '2024-01-15';
       const twoYearsAgo = new Date(today.setFullYear(today.getFullYear() - 2));
 
