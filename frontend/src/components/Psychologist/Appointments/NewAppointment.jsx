@@ -74,7 +74,6 @@ const NewAppointment = () => {
       patient.INE &&
       patient.dateOfBirth &&
       patient.gender &&
-      INEhasBeenValidated &&
       patient.email,
     [patient],
   );
