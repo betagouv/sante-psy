@@ -3,13 +3,21 @@ import { useStore } from 'stores/index';
 import StudentQuestionnaire from '../Questionnaire/StudentQuestionnaire';
 import Page from 'components/Page/Page';
 import agent from 'services/agent';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const UpdatePersonalData = () => {
   const {
-    userStore: { user, pullUser },
+    userStore: { user, role, pullUser },
   } = useStore();
   const navigate = useNavigate();
+
+  if (!user || role !== 'student') {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!user.needsToUpdatePersonalData) {
+    return <Navigate to="/login" replace />;
+  }
 
   const defaultValues = {
     acceptedCGUs: user.has_accepted_cgu,

@@ -2,13 +2,17 @@ import axios, { AxiosError } from 'axios';
 import CustomError from '../utils/CustomError';
 import date from '../utils/date';
 
+const API_INES_TIMEOUT_MS = parseInt(process.env.API_INES_TIMEOUT_MS) || 5000;
+
 const getAccessToken = async (): Promise<string> => {
   const tokenURL = process.env.INES_TOKEN_URL;
   const username = process.env.INES_USERNAME;
   const password = process.env.INES_PASSWORD;
 
   if (!username || !password || !tokenURL) {
-    throw new Error('INES_USERNAME ou INES_PASSWORD ou TOKEN_URL manquant dans les variables d\'environnement');
+    throw new Error(
+      "INES_USERNAME ou INES_PASSWORD ou TOKEN_URL manquant dans les variables d'environnement",
+    );
   }
 
   const credentials = Buffer.from(`${username}:${password}`).toString('base64');
@@ -27,19 +31,24 @@ const getAccessToken = async (): Promise<string> => {
     return response.data.access_token;
   } catch (error) {
     const axiosError = error as AxiosError;
-    throw new Error(`Erreur lors de la récupération du token: ${axiosError.message}`);
+    throw new Error(
+      `Erreur lors de la récupération du token: ${axiosError.message}`,
+    );
   }
 };
 
-const checkApiInesTrue = async (payload: { ine: string; dateNaissance: string }): Promise<
-{ ine: string; dateNaissance: string }
-> => {
+const checkApiInesTrue = async (payload: {
+  ine: string;
+  dateNaissance: string;
+}): Promise<{ ine: string; dateNaissance: string }> => {
   const verificationURL = process.env.INES_VERIFICATION_URL;
   const xChannel = process.env.INES_XCHANNEL;
   const token = await getAccessToken();
 
   if (!verificationURL || !xChannel) {
-    throw new Error('VERIFICATION_URL ou XCHANNEL manquant dans les variables d\'environnement');
+    throw new Error(
+      "VERIFICATION_URL ou XCHANNEL manquant dans les variables d'environnement",
+    );
   }
 
   const headers = {
@@ -50,11 +59,23 @@ const checkApiInesTrue = async (payload: { ine: string; dateNaissance: string })
   };
 
   try {
-    const response = await axios.post(verificationURL, payload, { headers });
+    const response = await axios.post(verificationURL, payload, {
+      headers,
+      timeout: API_INES_TIMEOUT_MS,
+    });
     return response.data;
   } catch (error) {
     const axiosError = error as AxiosError;
-    throw new Error(`Erreur lors de la vérification de l'API INES: ${axiosError.message}`);
+
+    if (axiosError.code === 'ECONNABORTED') {
+      throw new Error(
+        `Timeout: l'API INES n'a pas répondu dans le délai imparti`,
+      );
+    }
+
+    throw new Error(
+      `Erreur lors de la vérification de l'API INES: ${axiosError.message}`,
+    );
   }
 };
 
@@ -67,7 +88,10 @@ const verifyINE = async (INE: string, dateOfBirth: Date): Promise<void> => {
   const verificationResponse = await checkApiInesTrue(verificationPayload);
 
   if (!verificationResponse) {
-    throw new CustomError('INE ou/et date de naissance non trouvé dans API INES', 400);
+    throw new CustomError(
+      'INE ou/et date de naissance non trouvé dans API INES',
+      400,
+    );
   }
 };
 

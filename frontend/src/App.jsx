@@ -47,6 +47,7 @@ import StudentNewsletterUnregister from './components/StudentNewsletterUnregiste
 import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 import StudentRouter from './StudentRouter';
 import StudentQuestionnaire from 'components/Students/StudentSignIn/StudentQuestionnaire';
+import UpdatePersonalData from 'components/Students/UpdatePersonalData/UpdatePersonalData';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
@@ -70,7 +71,7 @@ function App() {
   );
 
   useEffect(() => {
-    agent.Config.get().then(response => setConfig(response.data));
+    agent.Config.get().then((response) => setConfig(response.data));
 
     const isLoginWithToken = location.pathname.startsWith('/login/');
 
@@ -183,6 +184,11 @@ function App() {
                 exact
                 path="/inscription/questionnaire"
                 element={<StudentQuestionnaire />}
+              />
+              <Route
+                exact
+                path="/update-personal-data"
+                element={<UpdatePersonalData />}
               />
               <Route
                 exact

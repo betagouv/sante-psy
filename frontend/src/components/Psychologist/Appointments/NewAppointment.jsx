@@ -41,7 +41,6 @@ const NewAppointment = () => {
     state?.patientId || params.patientId,
   );
   const [patients, setPatients] = useState([]);
-  const [understand, setUnderstand] = useState(false);
   const [appointmentsRefreshKey, setAppointmentsRefreshKey] = useState(0);
   const [hasChangedInput, setHasChangedInput] = useState(true);
   const [checkCertifIdentity, setCheckCertifIdentity] = useState(false);
@@ -50,6 +49,8 @@ const NewAppointment = () => {
   const {
     commonStore: { setNotification },
   } = useStore();
+
+  useEffect(() => setHasChangedInput(true), [date, patientId]);
 
   useEffect(() => setHasChangedInput(true), [date, patientId]);
 
@@ -100,13 +101,12 @@ const NewAppointment = () => {
     () =>
       !!date &&
       hasChangedInput &&
-      (!tooMuchAppointments || understand) &&
+      !tooMuchAppointments &&
       (!requiresCertificateCheck || (checkCertifIdentity && checkCertifValidity)),
     [
       date,
       hasChangedInput,
       tooMuchAppointments,
-      understand,
       requiresCertificateCheck,
       checkCertifIdentity,
       checkCertifValidity,
@@ -192,32 +192,34 @@ const NewAppointment = () => {
             />
           )}
         </div>
-        <DatePicker
-          id="new-appointment-date-input"
-          className="date-picker"
-          selected={date}
-          minDate={beginningDate}
-          maxDate={maxDate}
-          dateFormat="dd/MM/yyyy"
-          showPopperArrow={false}
-          customInput={
-            <DateInput
-              label="Date de la séance"
-              hint={
-                <>
-                  Les séances doivent être déclarées au plus tard le dernier
-                  jour du mois suivant leur réalisation. Pour toute aide,{' '}
-                  <HashLink to="/contact/formulaire">
-                    contactez le support.
-                  </HashLink>
-                </>
-              }
-              dataTestId="new-appointment-date-input"
-            />
-          }
-          onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
-          required
-        />
+        {!tooMuchAppointments && (
+          <DatePicker
+            id="new-appointment-date-input"
+            className="date-picker"
+            selected={date}
+            minDate={beginningDate}
+            maxDate={maxDate}
+            dateFormat="dd/MM/yyyy"
+            showPopperArrow={false}
+            customInput={
+              <DateInput
+                label="Date de la séance"
+                hint={
+                  <>
+                    Les séances doivent être déclarées au plus tard le dernier
+                    jour du mois suivant leur réalisation. Pour toute aide,{' '}
+                    <HashLink to="/contact/formulaire">
+                      contactez le support.
+                    </HashLink>
+                  </>
+                }
+                dataTestId="new-appointment-date-input"
+              />
+            }
+            onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
+            required
+          />
+        )}
         {requiresCertificateCheck && (
           <>
             <Alert
@@ -245,23 +247,15 @@ const NewAppointment = () => {
           </>
         )}
         {tooMuchAppointments && (
-          <>
-            <Alert
-              className="fr-mt-2w"
-              description={
-                <>
-                  Attention ! Vous avez dépassé le nombre de séances prévues
-                  dans le cadre de ce dispositif.
-                </>
-              }
-            />
-            <Checkbox
-              className="fr-mt-1w"
-              data-test-id="new-appointment-understand"
-              label={`J'ai conscience que seules ${MAX_APPOINTMENT} séances seront prises en charge par année universitaire.`}
-              onChange={(e) => setUnderstand(e.target.checked)}
-            />
-          </>
+          <Alert
+            className="fr-mt-2w"
+            description={
+              <>
+                Attention ! Vous avez dépassé le nombre de séances prévues
+                dans le cadre de ce dispositif.
+              </>
+            }
+          />
         )}
         <div className={styles.submitCancelButtonsWrapper}>
           <Button
