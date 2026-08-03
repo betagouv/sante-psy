@@ -52,8 +52,6 @@ const NewAppointment = () => {
 
   useEffect(() => setHasChangedInput(true), [date, patientId]);
 
-  useEffect(() => setHasChangedInput(true), [date, patientId]);
-
   useEffect(() => {
     if (queryDate) {
       const parsedDate = parseDateForm(queryDate);
@@ -164,9 +162,8 @@ const NewAppointment = () => {
                   </HashLink>
                 </>
               }
-              onChange={(e) => {
+              onChange={e => {
                 setPatientId(e);
-                setNotification({});
               }}
               required
               options={allOptions}
@@ -249,10 +246,18 @@ const NewAppointment = () => {
         {tooMuchAppointments && (
           <Alert
             className="fr-mt-2w"
+            type="warning"
             description={
               <>
-                Attention ! Vous avez dépassé le nombre de séances prévues
-                dans le cadre de ce dispositif.
+                Cet étudiant a atteint le nombre maximum de séances prises en
+                charge pour l&apos;année scolaire en cours. Il n&apos;est pas
+                possible d&apos;en déclarer de nouvelles avant la prochaine
+                rentrée. Si vous constatez une erreur dans le décompte,
+                veuillez{' '}
+                <HashLink to="/contact/formulaire">
+                  contacter le support
+                </HashLink>
+                .
               </>
             }
           />
@@ -286,7 +291,7 @@ const NewAppointment = () => {
         />
       )}
     </div>
-  );
+  )
 };
 
 export default observer(NewAppointment);
