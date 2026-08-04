@@ -128,6 +128,7 @@ const StudentSignInStepTwo = () => {
           firstNames,
           lastName,
           dateOfBirth,
+          apiInesCheck: true,
         },
       });
     } catch (error) {

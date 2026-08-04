@@ -29,6 +29,7 @@ const StudentSendCertificate = () => {
             firstNames,
             lastName,
             dateOfBirth,
+            apiInesCheck: false,
           },
         })
       }

@@ -14,7 +14,7 @@ const StudentSignInQuestionnaire = () => {
     }
   }, [location.state, navigate]);
 
-  const { email, ine, firstNames, lastName, dateOfBirth } =
+  const { email, ine, firstNames, lastName, dateOfBirth, apiInesCheck } =
     location.state || {};
 
   const signIn = async (res) => {
@@ -44,6 +44,7 @@ const StudentSignInQuestionnaire = () => {
         studyFieldOther,
         gender,
         livingPostcode,
+        apiInesCheck,
       });
       navigate('/inscription/success');
     } catch (error) {

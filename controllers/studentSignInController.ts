@@ -124,6 +124,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
       studyFieldOther,
       gender,
       livingPostcode,
+      apiInesCheck,
     } = req.body;
     const tokenRow = await dbLoginToken.getByEmail(email);
 
@@ -212,6 +213,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         studyFieldOther,
         gender,
         livingPostcode,
+        apiInesCheck,
       });
       await s3Service.finalizePendingCertificate(tokenRow.token, student.id);
       await sendWelcomeMail(email);
