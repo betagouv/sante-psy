@@ -69,6 +69,11 @@ const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
       {!addedPatient && (
         <form onSubmit={addPatient}>
           <Stack>
+            <p>
+              Veuillez vérifier, lors de la première séance, que l'identité de
+              l'étudiant correspond au certificat de scolarité et que celui-ci
+              est valable sur la période en cours.
+            </p>
             <ButtonGroup isInlineFrom="xs">
               <Button secondary onClick={onCancel}>
                 Annuler
