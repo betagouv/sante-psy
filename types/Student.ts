@@ -20,4 +20,5 @@ export type Student = {
   pending_email_token?: string;
   pending_email_expiration_date?: Date;
   last_update_personal_data?: Date;
+  api_ines_check?: boolean;
 };

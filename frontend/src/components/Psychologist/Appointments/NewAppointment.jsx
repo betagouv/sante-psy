@@ -2,7 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import DatePicker from 'react-datepicker';
-import { Alert, Button, SearchableSelect, Select } from '@dataesr/react-dsfr';
+import {
+  Alert,
+  Button,
+  SearchableSelect,
+  Select,
+  Checkbox,
+  CheckboxGroup,
+} from '@dataesr/react-dsfr';
 
 import DateInput from 'components/Date/DateInput';
 
@@ -36,6 +43,8 @@ const NewAppointment = () => {
   const [patients, setPatients] = useState([]);
   const [appointmentsRefreshKey, setAppointmentsRefreshKey] = useState(0);
   const [hasChangedInput, setHasChangedInput] = useState(true);
+  const [checkCertifIdentity, setCheckCertifIdentity] = useState(false);
+  const [checkCertifValidity, setCheckCertifValidity] = useState(false);
 
   const {
     commonStore: { setNotification },
@@ -54,13 +63,38 @@ const NewAppointment = () => {
     agent.Patient.get().then(setPatients);
   }, []);
 
+  useEffect(() => {
+    setCheckCertifIdentity(false);
+    setCheckCertifValidity(false);
+  }, [patientId]);
+
   const patient = useMemo(
     () => patients?.find((p) => p.id === patientId),
     [patients, patientId],
   );
   const tooMuchAppointments = useMemo(
-    () => patient && patient.countedAppointments >= MAX_APPOINTMENT,
+    () => patient && Number(patient.countedAppointments) >= MAX_APPOINTMENT,
     [patient],
+  );
+
+  const isFirstAppointmentEver = useMemo(
+    () => patient && Number(patient.appointmentsCount) === 0,
+    [patient],
+  );
+  const isFirstAppointmentOfTheYear = useMemo(
+    () =>
+      patient &&
+      Number(patient.countedAppointments) === 0 &&
+      Number(patient.appointmentsCount) !== 0,
+    [patient],
+  );
+  const requiresCertificateCheck =
+    isFirstAppointmentEver || isFirstAppointmentOfTheYear;
+
+  const canConfirmPatient = useMemo(
+    () =>
+      !requiresCertificateCheck || (checkCertifIdentity && checkCertifValidity),
+    [checkCertifIdentity, checkCertifValidity, requiresCertificateCheck],
   );
 
   const onUpdatePatientAppointments = () => {
@@ -68,20 +102,10 @@ const NewAppointment = () => {
     setAppointmentsRefreshKey((prev) => prev + 1);
   };
 
-  const hasAllCompulsoryInfo = useMemo(
-    () =>
-      patient &&
-      patient.INE &&
-      patient.dateOfBirth &&
-      patient.gender &&
-      patient.email,
-    [patient],
-  );
-
   const canCreateAppointment = useMemo(
     () =>
-      !!date && hasAllCompulsoryInfo && !tooMuchAppointments && hasChangedInput,
-    [date, hasAllCompulsoryInfo, tooMuchAppointments, hasChangedInput],
+      canConfirmPatient && !!date && !tooMuchAppointments && hasChangedInput,
+    [date, tooMuchAppointments, hasChangedInput, canConfirmPatient],
   );
 
   const createNewAppointment = (e) => {
@@ -160,7 +184,7 @@ const NewAppointment = () => {
             />
           )}
         </div>
-        {hasAllCompulsoryInfo && !tooMuchAppointments && (
+        {patientId && !tooMuchAppointments && (
           <DatePicker
             id="new-appointment-date-input"
             className="date-picker"
@@ -188,33 +212,6 @@ const NewAppointment = () => {
             required
           />
         )}
-        {patientId && !hasAllCompulsoryInfo && (
-          <>
-            <Alert
-              className="fr-mt-2w"
-              type="warning"
-              data-test-id="alert-missing-data"
-              title="Problème avec le dossier étudiant"
-              description={
-                <>
-                  Le dossier de l&apos;étudiant doit être complet pour ajouter
-                  des séances : email, INE valide, date de naissance, genre...
-                  <br />
-                </>
-              }
-            />
-            <br />
-            <Button
-              onClick={() =>
-                navigate(
-                  `/psychologue/modifier-etudiant/${patientId}?addAppointment=true`,
-                )
-              }
-            >
-              Compléter le dossier étudiant
-            </Button>
-          </>
-        )}
         {tooMuchAppointments && (
           <Alert
             className="fr-mt-2w"
@@ -232,6 +229,32 @@ const NewAppointment = () => {
               </>
             }
           />
+        )}
+        {requiresCertificateCheck && (
+          <>
+            <Alert
+              className="fr-my-3w"
+              type="info"
+              description={
+                isFirstAppointmentEver
+                  ? 'Première séance avec cet étudiant - veuillez vérifier le certificat de scolarité avant de confirmer.'
+                  : 'Première séance avec cet étudiant pour la nouvelle année universitaire - veuillez vérifier le certificat de scolarité avant de confirmer.'
+              }
+            />
+            <CheckboxGroup>
+              <Checkbox
+                label="J'ai bien comparé l'identité de l'étudiant avec le certificat de scolarité"
+                onChange={(e) => setCheckCertifIdentity(e.target.checked)}
+                checked={checkCertifIdentity}
+                hint="ou l'attestation CVEC fournie"
+              />
+              <Checkbox
+                label="J'ai vérifié que le certificat de scolarité est valable sur la période en cours"
+                onChange={(e) => setCheckCertifValidity(e.target.checked)}
+                checked={checkCertifValidity}
+              />
+            </CheckboxGroup>
+          </>
         )}
         <div className={styles.submitCancelButtonsWrapper}>
           <Button

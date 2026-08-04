@@ -6,6 +6,7 @@ import {
   S3ServiceException,
 } from '@aws-sdk/client-s3';
 import CustomError from '../utils/CustomError';
+import { getUnivYear } from '../utils/univYears';
 
 const isLocal =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test';
@@ -25,8 +26,8 @@ const S3_BUCKET = process.env.S3_BUCKET as string;
 const getPendingCertificateKey = (token: string): string =>
   `certificates/pending-certificates/${token}.pdf`;
 
-const getStudentCertificateKey = (token: string): string =>
-  `certificates/students/${token}/certificate.pdf`;
+const getStudentCertificateKey = (token: string, univYear: string): string =>
+  `certificates/students/${token}/${univYear}/certificate.pdf`;
 
 const logS3Error = (context: string, err: unknown): void => {
   if (err instanceof S3ServiceException) {
@@ -63,7 +64,8 @@ const finalizePendingCertificate = async (
   studentId: string,
 ): Promise<void> => {
   const pendingKey = getPendingCertificateKey(token);
-  const finalKey = getStudentCertificateKey(studentId);
+  const univYear = getUnivYear(new Date());
+  const finalKey = getStudentCertificateKey(studentId, univYear);
 
   try {
     await s3.send(

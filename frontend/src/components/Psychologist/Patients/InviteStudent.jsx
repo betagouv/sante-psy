@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, TextInput, Alert } from '@dataesr/react-dsfr';
+import { Button, TextInput, Alert, ButtonGroup } from '@dataesr/react-dsfr';
 import ErrorMessage from 'components/Forms/ErrorMessage';
 import { validateEmailField } from 'src/utils/validateEmailFormat';
 import { Stack } from 'components/Utils/Stack';
 import agent from 'services/agent';
 
-const InviteStudent = () => {
+const InviteStudent = ({ cancelInvite }) => {
   const emailRef = useRef();
 
   useEffect(() => {
@@ -80,14 +80,19 @@ const InviteStudent = () => {
             data-test-id="invite-etudiant-email-error"
           />
         )}
-        <Button
-          submit
-          id="invite-student-button"
-          data-test-id="invite-student-button"
-          disabled={!canInvite}
-        >
-          Inviter l'étudiant
-        </Button>
+        <ButtonGroup isInlineFrom="xs">
+          <Button secondary onClick={cancelInvite}>
+            Annuler
+          </Button>
+          <Button
+            submit
+            id="invite-student-button"
+            data-test-id="invite-student-button"
+            disabled={!canInvite}
+          >
+            Inviter l'étudiant
+          </Button>
+        </ButtonGroup>
       </form>
     </Stack>
   );

@@ -58,6 +58,7 @@ type CreateStudentParams = {
   studyFieldOther?: string;
   gender?: string;
   livingPostcode?: string;
+  apiInesCheck: boolean;
 };
 
 const create = async ({
@@ -75,6 +76,7 @@ const create = async ({
   studyFieldOther,
   gender,
   livingPostcode,
+  apiInesCheck = false,
 }: CreateStudentParams): Promise<Student> => {
   try {
     const [student] = (await db(studentsTable)
@@ -94,6 +96,7 @@ const create = async ({
         gender,
         school_postcode: schoolPostcode,
         living_postcode: livingPostcode,
+        api_ines_check: apiInesCheck,
       })
       .returning('*')) as Student[];
 

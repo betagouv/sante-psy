@@ -14,6 +14,7 @@ describe('DB Students', () => {
   const dateOfBirth = new Date('2000-01-01');
   const ine = '1234567890A';
   const ine2 = 'A0987654321';
+  const apiInesCheck = false;
 
   async function studentExists(email: string) {
     const student = await dbStudents.getByEmail(email);
@@ -89,6 +90,7 @@ describe('DB Students', () => {
         firstNames,
         lastName,
         dateOfBirth,
+        apiInesCheck,
       });
 
       expect(student).to.have.property('email', email);
@@ -111,6 +113,7 @@ describe('DB Students', () => {
           firstNames,
           lastName,
           dateOfBirth,
+          apiInesCheck,
         });
         expect.fail('Should have thrown an error');
       } catch (err) {
