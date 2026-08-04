@@ -42,6 +42,8 @@ const PatientAppointments = ({
 
         if (!years.includes(currentYear)) {
           setSelectedYear(years[0]);
+        } else {
+          setSelectedYear(currentYear);
         }
       });
     }
