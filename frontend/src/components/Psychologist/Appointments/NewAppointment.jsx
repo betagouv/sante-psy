@@ -102,11 +102,11 @@ const NewAppointment = () => {
     setAppointmentsRefreshKey((prev) => prev + 1);
   };
 
-  const canCreateAppointment = useMemo(() => {
-    return (
-      canConfirmPatient && !!date && !tooMuchAppointments && hasChangedInput
-    );
-  }, [date, tooMuchAppointments, hasChangedInput, canConfirmPatient]);
+  const canCreateAppointment = useMemo(
+    () =>
+      canConfirmPatient && !!date && !tooMuchAppointments && hasChangedInput,
+    [date, tooMuchAppointments, hasChangedInput, canConfirmPatient],
+  );
 
   const createNewAppointment = (e) => {
     e.preventDefault();
