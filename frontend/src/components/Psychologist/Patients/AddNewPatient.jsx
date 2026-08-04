@@ -81,6 +81,12 @@ const AddNewPatient = () => {
 
   const inviteStudent = useMemo(() => tryCount >= 3, [tryCount]);
 
+  const cancelInvite = () => {
+    setDateOfBirth('');
+    setIne('');
+    setTryCount(0);
+  };
+
   const findStudent = async (e) => {
     e.preventDefault();
     setNotification(null);
@@ -119,7 +125,7 @@ const AddNewPatient = () => {
     <div className="fr-my-2w">
       <Stack>
         {inviteStudent ? (
-          <InviteStudent />
+          <InviteStudent cancelInvite={cancelInvite} />
         ) : foundStudent ? (
           <ConfirmNewPatient
             foundStudent={foundStudent}
