@@ -97,10 +97,31 @@ const insert = async (
   studentId: string,
 ): Promise<Patient> => {
   try {
+    const existing = await db(patientsTable)
+      .where('psychologistId', psychologistId)
+      .where('student_id', studentId)
+      .first();
+
+    if (existing) {
+      if (!existing.deleted) {
+        throw new Error(ERROR_MESSAGE_STUDENT_ALREADY_PATIENT);
+      }
+
+      const [patient] = await db(patientsTable)
+        .where('id', existing.id)
+        .update({
+          deleted: false,
+          updatedAt: date.now(),
+        })
+        .returning('*');
+      return patient;
+    }
+
     const [patient] = await db(patientsTable)
       .insert({
         student_id: studentId,
         psychologistId,
+        deleted: false,
       })
       .returning('*');
     return patient;
