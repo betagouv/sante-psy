@@ -1,8 +1,12 @@
 import axios, { AxiosError } from 'axios';
-import CustomError from '../utils/CustomError';
 import date from '../utils/date';
 
 const API_INES_TIMEOUT_MS = parseInt(process.env.API_INES_TIMEOUT_MS) || 5000;
+
+export type INEApiResult =
+  | { status: 'found' }
+  | { status: 'not_found' }
+  | { status: 'technical_error'; error: Error };
 
 const getAccessToken = async (): Promise<string> => {
   const tokenURL = process.env.INES_TOKEN_URL;
@@ -40,10 +44,9 @@ const getAccessToken = async (): Promise<string> => {
 const checkApiInesTrue = async (payload: {
   ine: string;
   dateNaissance: string;
-}): Promise<{ ine: string; dateNaissance: string }> => {
+}): Promise<INEApiResult> => {
   const verificationURL = process.env.INES_VERIFICATION_URL;
   const xChannel = process.env.INES_XCHANNEL;
-  const token = await getAccessToken();
 
   if (!verificationURL || !xChannel) {
     throw new Error(
@@ -51,48 +54,55 @@ const checkApiInesTrue = async (payload: {
     );
   }
 
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json',
-    'X-channel': xChannel,
-    'x-jwt-assertion': token,
-  };
-
   try {
-    const response = await axios.post(verificationURL, payload, {
+    const token = await getAccessToken();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'X-channel': xChannel,
+      'x-jwt-assertion': token,
+    };
+    await axios.post(verificationURL, payload, {
       headers,
       timeout: API_INES_TIMEOUT_MS,
     });
-    return response.data;
+    return {
+      status: 'found',
+    };
   } catch (error) {
     const axiosError = error as AxiosError;
 
-    if (axiosError.code === 'ECONNABORTED') {
-      throw new Error(
-        `Timeout: l'API INES n'a pas répondu dans le délai imparti`,
-      );
+    if (axiosError.response?.status === 404) {
+      return { status: 'not_found' };
     }
 
-    throw new Error(
-      `Erreur lors de la vérification de l'API INES: ${axiosError.message}`,
-    );
+    if (axiosError.code === 'ECONNABORTED') {
+      return {
+        status: 'technical_error',
+        error: new Error(
+          `Timeout: l'API INES n'a pas répondu dans le délai imparti`,
+        ),
+      };
+    }
+
+    return {
+      status: 'technical_error',
+      error: new Error(
+        `Erreur lors de la vérification de l'API INES: ${axiosError.message} (status: ${axiosError.response?.status})`,
+      ),
+    };
   }
 };
 
-const verifyINE = async (INE: string, dateOfBirth: Date): Promise<void> => {
+const verifyINE = async (
+  INE: string,
+  dateOfBirth: Date,
+): Promise<INEApiResult> => {
   const verificationPayload = {
     ine: INE,
     dateNaissance: date.dateToDashedString(dateOfBirth),
   };
-
-  const verificationResponse = await checkApiInesTrue(verificationPayload);
-
-  if (!verificationResponse) {
-    throw new CustomError(
-      'INE ou/et date de naissance non trouvé dans API INES',
-      400,
-    );
-  }
+  return checkApiInesTrue(verificationPayload);
 };
 
 export default verifyINE;

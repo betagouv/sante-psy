@@ -1,4 +1,4 @@
-import verifyINE from './inesApi';
+import verifyINE, { INEApiResult } from './inesApi';
 import date from '../utils/date';
 import config from '../utils/config';
 
@@ -6,22 +6,16 @@ import config from '../utils/config';
 const verifyINEWithBirthDate = async (
   ine: string,
   rawDateOfBirth: string,
-): Promise<boolean> => {
+): Promise<INEApiResult> => {
   if (config.testEnvironment) {
     console.log('Call API INES skipped in test env');
-    return true;
+    return {
+      status: 'found',
+    };
   }
 
   const dateOfBirth = date.parseForm(rawDateOfBirth);
-
-  try {
-    await verifyINE(ine, dateOfBirth);
-    return true;
-    // TODO: catch needed or error handled in verifyINE ?
-  } catch (err) {
-    console.warn('Erreur API INES', err);
-    return false;
-  }
+  return verifyINE(ine, dateOfBirth);
 };
 
 export default verifyINEWithBirthDate;

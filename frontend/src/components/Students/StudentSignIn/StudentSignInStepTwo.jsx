@@ -132,9 +132,12 @@ const StudentSignInStepTwo = () => {
         },
       });
     } catch (error) {
+      const status = error?.response?.status;
       const errorData = error?.response?.data;
 
-      if (errorData?.shouldSendCertificate) {
+      if (status === 502) {
+        // technical failure on INES side (timeout, network, auth, etc.)
+        setNotification({ type: 'ines-unavailable' });
         navigate('/inscription/certificat', {
           state: {
             email,
@@ -142,6 +145,18 @@ const StudentSignInStepTwo = () => {
             firstNames,
             lastName,
             dateOfBirth,
+            apiInesCheck: null,
+          },
+        });
+      } else if (errorData?.shouldSendCertificate) {
+        navigate('/inscription/certificat', {
+          state: {
+            email,
+            ine,
+            firstNames,
+            lastName,
+            dateOfBirth,
+            apiInesCheck: false,
           },
         });
       } else if (errorData?.shouldContact) {
