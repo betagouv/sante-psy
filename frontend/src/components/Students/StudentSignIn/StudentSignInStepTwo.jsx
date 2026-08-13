@@ -7,7 +7,6 @@ import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import { useStore } from 'stores/';
 import styles from './studentSignIn.cssmodule.scss';
 import StudentSignInHeader from './StudentSignInHeader';
-import { Alert } from '@dataesr/react-dsfr';
 
 const StudentSignInStepTwo = () => {
   const {
@@ -132,9 +131,11 @@ const StudentSignInStepTwo = () => {
         },
       });
     } catch (error) {
+      const status = error?.response?.status;
       const errorData = error?.response?.data;
 
-      if (errorData?.shouldSendCertificate) {
+      if (status === 502) {
+        // technical failure on INES side (timeout, network, auth, etc.)
         navigate('/inscription/certificat', {
           state: {
             email,
@@ -142,6 +143,18 @@ const StudentSignInStepTwo = () => {
             firstNames,
             lastName,
             dateOfBirth,
+            apiInesCheck: null,
+          },
+        });
+      } else if (errorData?.shouldSendCertificate) {
+        navigate('/inscription/certificat', {
+          state: {
+            email,
+            ine,
+            firstNames,
+            lastName,
+            dateOfBirth,
+            apiInesCheck: false,
           },
         });
       } else if (errorData?.shouldContact) {
@@ -272,11 +285,6 @@ const StudentSignInStepTwo = () => {
             étapes du questionnaire.
           </p>
         </div>
-        <Alert
-          className="fr-mb-2w"
-          type="warning"
-          description="Nous rencontrons actuellement des problèmes techniques ralentissant le processus d'inscription. Patiente quelques instants après avoir cliqué sur le bouton."
-        />
         <div className="fr-mb-4w fr-mt-2w">
           <button className="fr-btn" type="submit" disabled={isBlocked}>
             {notification?.type === 'error'

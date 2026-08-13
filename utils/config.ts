@@ -79,8 +79,6 @@ export default {
     website: process.env.CRISP_WEBSITE,
   },
   minScoreAddress: parseFloat(process.env.MIN_SCORE_ADDRESS || '0.55'),
-  apiIneToken: process.env.API_INE_TOKEN,
-  apiIneUrl: process.env.API_INE_URL,
   maxSignInAttempts: parseInt(process.env.MAX_SIGNIN_ATTEMPTS || '2', 10),
   maxValidEmailAttempts: parseInt(process.env.MAX_VALID_EMAIL_ATTEMPTS || '3', 10),
   brevoApiKey: process.env.BREVO_API_KEY,

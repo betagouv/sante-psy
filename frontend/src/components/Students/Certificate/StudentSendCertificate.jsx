@@ -6,7 +6,7 @@ const StudentSendCertificate = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { email, ine, firstNames, lastName, dateOfBirth } =
+  const { email, ine, firstNames, lastName, dateOfBirth, apiInesCheck } =
     location.state || {};
 
   if (!email || !ine) {
@@ -29,7 +29,7 @@ const StudentSendCertificate = () => {
             firstNames,
             lastName,
             dateOfBirth,
-            apiInesCheck: false,
+            apiInesCheck,
           },
         })
       }

@@ -180,20 +180,28 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         return;
       }
 
-      const isINEValid = await verifyINEWithBirthDate(ine, rawDateOfBirth);
+      const resCheckIne = await verifyINEWithBirthDate(ine, rawDateOfBirth);
 
-      if (!isINEValid) {
+      if (resCheckIne.status === 'technical_error') {
+        console.warn('Erreur API INES', resCheckIne.error);
+        res.status(502).json({
+          message:
+            'Le service de vérification INE est momentanément indisponible',
+        });
+        return;
+      }
+
+      if (resCheckIne.status === 'not_found') {
         const { shouldSendCertificate } =
           await signInAttempts.checkAndIncrementAttempts(
             tokenRow.token,
             currentAttempts,
           );
 
-        res.status(422).json({
-          shouldSendCertificate,
-        });
+        res.status(422).json({ shouldSendCertificate });
         return;
       }
+
       res.status(200).json({
         message: "L'étudiant peut être créé sans erreur.",
       });
