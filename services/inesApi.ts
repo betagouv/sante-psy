@@ -72,7 +72,10 @@ const checkApiInesTrue = async (payload: {
   } catch (error) {
     const axiosError = error as AxiosError;
 
-    if (axiosError.response?.status === 404) {
+    if (
+      axiosError.response?.status === 404 ||
+      axiosError.response?.status === 400
+    ) {
       return { status: 'not_found' };
     }
 
