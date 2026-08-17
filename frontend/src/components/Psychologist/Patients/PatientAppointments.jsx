@@ -16,6 +16,7 @@ const PatientAppointments = ({
   showCreateButton = true,
   patientId,
   onUpdatePatientAppointments,
+  onFetchPatientAppointments,
   refreshKey,
 }) => {
   const {
@@ -33,6 +34,10 @@ const PatientAppointments = ({
   const navigate = useNavigate();
   const badges = getBadgeInfos();
 
+  useEffect(() => {
+    if (onFetchPatientAppointments)
+      onFetchPatientAppointments(patientAppointments);
+  }, [patientAppointments, onFetchPatientAppointments]);
   useEffect(() => {
     if (patientId) {
       agent.Appointment.getByPatientId(patientId).then((response) => {
