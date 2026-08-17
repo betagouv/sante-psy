@@ -27,6 +27,7 @@ import { observer } from 'mobx-react';
 import 'react-datepicker/dist/react-datepicker.css';
 import PatientAppointments from '../Patients/PatientAppointments';
 import styles from './newAppointment.cssmodule.scss';
+import { getUnivYear } from 'services/univYears';
 
 export const MAX_APPOINTMENT = 12;
 
@@ -45,9 +46,11 @@ const NewAppointment = () => {
   const [hasChangedInput, setHasChangedInput] = useState(true);
   const [checkCertifIdentity, setCheckCertifIdentity] = useState(false);
   const [checkCertifValidity, setCheckCertifValidity] = useState(false);
+  const [patientAppointments, setPatientAppointments] = useState([]);
 
   const {
     commonStore: { setNotification },
+    userStore: { user },
   } = useStore();
 
   useEffect(() => setHasChangedInput(true), [date, patientId]);
@@ -68,6 +71,10 @@ const NewAppointment = () => {
     setCheckCertifValidity(false);
   }, [patientId]);
 
+  const selectedUnivYear = useMemo(
+    () => (date ? getUnivYear(date, '-') : ''),
+    [date],
+  );
   const patient = useMemo(
     () => patients?.find((p) => p.id === patientId),
     [patients, patientId],
@@ -76,21 +83,29 @@ const NewAppointment = () => {
     () => patient && Number(patient.countedAppointments) >= MAX_APPOINTMENT,
     [patient],
   );
+  const appointmentsWithPsy = useMemo(
+    () =>
+      Object.values(patientAppointments)
+        .flat()
+        .filter((a) => a.psychologistId === user.dossierNumber),
+    [patientAppointments],
+  );
 
   const isFirstAppointmentEver = useMemo(
-    () => patient && Number(patient.appointmentsCount) === 0,
-    [patient],
+    () => patient && appointmentsWithPsy?.length === 0,
+    [appointmentsWithPsy, patient],
   );
   const isFirstAppointmentOfTheYear = useMemo(
     () =>
       patient &&
-      Number(patient.countedAppointments) === 0 &&
-      Number(patient.appointmentsCount) !== 0,
-    [patient],
+      selectedUnivYear &&
+      appointmentsWithPsy?.filter((a) => a.univYear === selectedUnivYear)
+        .length === 0,
+    [appointmentsWithPsy, patient, selectedUnivYear],
   );
+
   const requiresCertificateCheck =
     isFirstAppointmentEver || isFirstAppointmentOfTheYear;
-
   const canConfirmPatient = useMemo(
     () =>
       !requiresCertificateCheck || (checkCertifIdentity && checkCertifValidity),
@@ -115,6 +130,8 @@ const NewAppointment = () => {
     agent.Appointment.add(patientId, date).then((response) => {
       setNotification(response);
       onUpdatePatientAppointments();
+      setCheckCertifIdentity(false);
+      setCheckCertifValidity(false);
     });
   };
 
@@ -281,6 +298,9 @@ const NewAppointment = () => {
           showCreateButton={false}
           patientId={patientId}
           onUpdatePatientAppointments={onUpdatePatientAppointments}
+          onFetchPatientAppointments={(patientAppointments) =>
+            setPatientAppointments(patientAppointments)
+          }
           refreshKey={appointmentsRefreshKey}
         />
       )}
