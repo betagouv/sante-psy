@@ -109,3 +109,5 @@ frontend/cypress/videos/
 frontend/cypress/screenshots/
 
 .mocharc.js
+
+downloaded-certificates/
