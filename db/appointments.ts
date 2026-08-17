@@ -26,6 +26,9 @@ const getRelatedINEAppointments = async (
   appointments: AppointmentWithPatient[],
   period?: { startDate: Date; endDate: Date },
 ): Promise<AppointmentWithPatient[]> => {
+  if (appointments.length === 0) {
+    return [];
+  }
   try {
     const INEList = appointments.reduce((acc, appointment) => {
       if (appointment.INE && appointment.INE.trim() !== '') {
@@ -72,10 +75,10 @@ const getRelatedINEAppointments = async (
 
     const relatedAppointments = await query;
 
-    appointments.push(...relatedAppointments);
-    appointments.sort(compareAppointments);
+    const allAppointments = appointments.concat(relatedAppointments);
+    allAppointments.sort(compareAppointments);
 
-    return appointments;
+    return allAppointments;
   } catch (err) {
     console.error(
       'Impossible de récupérer les rendez-vous avec les patients',
