@@ -4,9 +4,14 @@ import {
   CopyObjectCommand,
   DeleteObjectCommand,
   S3ServiceException,
+  ListObjectsV2Command,
+  GetObjectCommand,
 } from '@aws-sdk/client-s3';
 import CustomError from '../utils/CustomError';
 import { getUnivYear } from '../utils/univYears';
+import path from 'path';
+import fs from 'fs';
+import { buffer as streamToBuffer } from 'stream/consumers';
 
 const isLocal =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test';
@@ -88,9 +93,47 @@ const finalizePendingCertificate = async (
   }
 };
 
+const listAllKeys = async (prefix: string): Promise<string[]> => {
+  const response = await s3.send(
+    new ListObjectsV2Command({
+      Bucket: S3_BUCKET,
+      Prefix: prefix,
+    }),
+  );
+
+  return (response.Contents || [])
+    .map((obj) => obj.Key)
+    .filter((key): key is string => Boolean(key));
+};
+
+const downloadObject = async (
+  key: string,
+  outputDir: string,
+): Promise<void> => {
+  const response = await s3.send(
+    new GetObjectCommand({ Bucket: S3_BUCKET, Key: key }),
+  );
+
+  const body = response.Body;
+  if (!body) {
+    console.warn(`[S3] No body returned for key "${key}", skipping.`);
+    return;
+  }
+
+  const destPath = path.join(outputDir, key);
+  fs.mkdirSync(path.dirname(destPath), { recursive: true });
+
+  // @ts-expect-error - Node runtime Body is a Readable stream
+  const fileBuffer = await streamToBuffer(body);
+  fs.writeFileSync(destPath, fileBuffer);
+};
+
 export default {
   s3,
   S3_BUCKET,
   uploadPendingCertificate,
   finalizePendingCertificate,
+  logS3Error,
+  listAllKeys,
+  downloadObject,
 };
