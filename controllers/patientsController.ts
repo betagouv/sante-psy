@@ -53,7 +53,6 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
 
   const patientWithBadges = getPatientWithBadges([patient])[0];
 
-  console.debug(`Rendering getEditPatient for ${patientId}`);
   res.json(patientWithBadges);
 };
 
