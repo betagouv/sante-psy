@@ -160,6 +160,11 @@ const getByPatientId = async (
   orderBy: OrderByColumn[] = [],
 ): Promise<AppointmentWithPatient[]> => {
   try {
+    const patient = await db(patientsTable)
+      .select('INE', 'student_id')
+      .where('id', patientId)
+      .first();
+
     const query = db
       .from(patientsTable)
       .leftJoin(
@@ -171,15 +176,13 @@ const getByPatientId = async (
 
     if (relatedINEAppointments) {
       query.where(function () {
-        this.where(`${appointmentsTable}.patientId`, patientId)
-          .orWhere(`${patientsTable}.INE`, function () {
-            this.select('INE').from(patientsTable).where('id', patientId);
-          })
-          .orWhere(`${patientsTable}.student_id`, function () {
-            this.select('student_id')
-              .from(patientsTable)
-              .where('id', patientId);
-          });
+        this.where(`${appointmentsTable}.patientId`, patientId);
+        if (patient?.INE) {
+          this.orWhere(`${patientsTable}.INE`, patient.INE);
+        }
+        if (patient?.student_id) {
+          this.orWhere(`${patientsTable}.student_id`, patient.student_id);
+        }
       });
     } else {
       query.where(`${appointmentsTable}.patientId`, patientId);

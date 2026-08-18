@@ -223,7 +223,7 @@ const getByPatientId = async (req: Request, res: Response): Promise<void> => {
 
   const appointments = await dbAppointments.getByPatientId(
     patientId,
-    patient.INE.trim() !== '' && !patient.student_id,
+    patient.INE.trim() !== '',
     [{ column: 'appointmentDate' }],
   );
   const appointmentsWithBadges = getAppointmentWithBadges(
