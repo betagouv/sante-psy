@@ -152,45 +152,41 @@ const NewAppointment = () => {
   ];
   const allOptions = defaultString.concat(patientsMap);
 
-  return (
-    <div className={styles.newAppointmentWrapper}>
-      <form onSubmit={createNewAppointment} className="fr-my-2w">
-        <NewAppointmentPatientsList
-          patientId={patientId}
-          setPatientId={setPatientId}
-          date={date}
-          isEmpty={patients.length === 0}
-          allOptions={allOptions}
-          setNotification={setNotification}
+  const renderWarningOrForm = () => {
+    if (!patientId) {
+      return;
+    }
+    if (patientHasNoAccount) {
+      return (
+        <Alert
+          className="fr-mt-2w"
+          type="warning"
+          description={<>Cet étudiant n'a pas créé son compte.</>}
         />
-        {patientId && !tooManyAppointments && (
-          <NewAppointmentDatePicker date={date} setDate={setDate} />
-        )}
-        {tooManyAppointments && (
-          <Alert
-            className="fr-mt-2w"
-            type="warning"
-            description={<>Cet étudiant n'a pas créé son compte.</>}
-          />
-        )}
-        {!patientHasNoAccount && tooManyAppointments && (
-          <Alert
-            className="fr-mt-2w"
-            type="warning"
-            description={
-              <>
-                Cet étudiant a atteint le nombre maximum de séances prises en
-                charge pour l&apos;année scolaire en cours. Il n&apos;est pas
-                possible d&apos;en déclarer de nouvelles avant la prochaine
-                rentrée. Si vous constatez une erreur dans le décompte, veuillez{' '}
-                <HashLink to="/contact/formulaire">
-                  contacter le support
-                </HashLink>
-                .
-              </>
-            }
-          />
-        )}
+      );
+    }
+
+    if (tooManyAppointments) {
+      return (
+        <Alert
+          className="fr-mt-2w"
+          type="warning"
+          description={
+            <>
+              Cet étudiant a atteint le nombre maximum de séances prises en
+              charge pour l&apos;année scolaire en cours. Il n&apos;est pas
+              possible d&apos;en déclarer de nouvelles avant la prochaine
+              rentrée. Si vous constatez une erreur dans le décompte, veuillez{' '}
+              <HashLink to="/contact/formulaire">contacter le support</HashLink>
+              .
+            </>
+          }
+        />
+      );
+    }
+    return (
+      <>
+        <NewAppointmentDatePicker date={date} setDate={setDate} />;
         {requiresCertificateCheck && (
           <>
             <Alert
@@ -215,27 +211,43 @@ const NewAppointment = () => {
                 checked={checkCertifValidity}
               />
             </CheckboxGroup>
+            <div className={styles.submitCancelButtonsWrapper}>
+              <Button
+                id="new-appointment-submit"
+                data-test-id="new-appointment-submit"
+                submit
+                icon="ri-add-line"
+                className="fr-mt-4w"
+                disabled={!canCreateAppointment}
+              >
+                Créer la séance
+              </Button>
+              <Button
+                secondary
+                className="fr-mt-4w"
+                onClick={() => navigate('/psychologue/mes-seances')}
+              >
+                Annuler
+              </Button>
+            </div>
           </>
         )}
-        <div className={styles.submitCancelButtonsWrapper}>
-          <Button
-            id="new-appointment-submit"
-            data-test-id="new-appointment-submit"
-            submit
-            icon="ri-add-line"
-            className="fr-mt-4w"
-            disabled={!canCreateAppointment}
-          >
-            Créer la séance
-          </Button>
-          <Button
-            secondary
-            className="fr-mt-4w"
-            onClick={() => navigate('/psychologue/mes-seances')}
-          >
-            Annuler
-          </Button>
-        </div>
+      </>
+    );
+  };
+
+  return (
+    <div className={styles.newAppointmentWrapper}>
+      <form onSubmit={createNewAppointment} className="fr-my-2w">
+        <NewAppointmentPatientsList
+          patientId={patientId}
+          setPatientId={setPatientId}
+          date={date}
+          isEmpty={patients.length === 0}
+          allOptions={allOptions}
+          setNotification={setNotification}
+        />
+        {renderWarningOrForm()}
       </form>
       {patientId && (
         <PatientAppointments
