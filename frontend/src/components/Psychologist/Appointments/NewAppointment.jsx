@@ -1,17 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
-import {
-  Alert,
-  Button,
-  SearchableSelect,
-  Select,
-  Checkbox,
-  CheckboxGroup,
-} from '@dataesr/react-dsfr';
+import { Alert, Button, Checkbox, CheckboxGroup } from '@dataesr/react-dsfr';
 
 import agent from 'services/agent';
-import { formatDDMMYYYY, parseDateForm } from 'services/date';
+import { parseDateForm } from 'services/date';
 
 import { useStore } from 'stores/';
 import { observer } from 'mobx-react';
@@ -20,6 +13,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import PatientAppointments from '../Patients/PatientAppointments';
 import styles from './newAppointment.cssmodule.scss';
 import { getUnivYear } from 'services/univYears';
+import NewAppointmentDatePicker from './NewAppointmentDatePicker';
+import NewAppointmentPatientsList from './NewAppointmentPatientsList';
 
 export const MAX_APPOINTMENT = 12;
 
@@ -145,51 +140,14 @@ const NewAppointment = () => {
   return (
     <div className={styles.newAppointmentWrapper}>
       <form onSubmit={createNewAppointment} className="fr-my-2w">
-        <div id="patients-list" className="fr-mb-2w">
-          {patients.length > 0 ? (
-            <SearchableSelect
-              className="midlength-select"
-              data-test-id="new-appointment-etudiant-input"
-              id="etudiants"
-              name="patientId"
-              label="Etudiant"
-              selected={patientId}
-              hint={
-                <>
-                  Votre étudiant n&lsquo;est pas dans la liste ?{' '}
-                  <HashLink to="/psychologue/nouvel-etudiant" id="new-patient">
-                    Ajoutez un nouvel étudiant
-                  </HashLink>
-                </>
-              }
-              onChange={(e) => {
-                setPatientId(e);
-                setNotification({});
-              }}
-              required
-              options={allOptions}
-            />
-          ) : (
-            <Select
-              className="midlength-select"
-              label="Etudiant"
-              disabled
-              required
-              options={[]}
-              hint={
-                <>
-                  Vous n&lsquo;avez aucun étudiant dans votre liste !{' '}
-                  <HashLink
-                    to={`/psychologue/nouvel-etudiant?addAppointment=true&appointmentDate=${formatDDMMYYYY(date)}`}
-                    id="new-patient"
-                  >
-                    Ajoutez un nouvel étudiant
-                  </HashLink>
-                </>
-              }
-            />
-          )}
-        </div>
+        <NewAppointmentPatientsList
+          patientId={patientId}
+          setPatientId={setPatientId}
+          date={date}
+          isEmpty={patients.length === 0}
+          allOptions={allOptions}
+          setNotification={setNotification}
+        />
         {patientId && !tooMuchAppointments && (
           <NewAppointmentDatePicker date={date} setDate={setDate} />
         )}
