@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
-import DatePicker from 'react-datepicker';
 import {
   Alert,
   Button,
@@ -11,15 +10,8 @@ import {
   CheckboxGroup,
 } from '@dataesr/react-dsfr';
 
-import DateInput from 'components/Date/DateInput';
-
 import agent from 'services/agent';
-import {
-  convertLocalToUTCDate,
-  formatDDMMYYYY,
-  getFirstDayOfLastMonth,
-  parseDateForm,
-} from 'services/date';
+import { formatDDMMYYYY, parseDateForm } from 'services/date';
 
 import { useStore } from 'stores/';
 import { observer } from 'mobx-react';
@@ -135,9 +127,6 @@ const NewAppointment = () => {
     });
   };
 
-  const beginningDate = getFirstDayOfLastMonth();
-  const maxDate = new Date();
-
   const patientsMap = patients.map((p) => ({
     value: p.id,
     label: `${p.lastName} ${p.firstNames}`,
@@ -202,32 +191,7 @@ const NewAppointment = () => {
           )}
         </div>
         {patientId && !tooMuchAppointments && (
-          <DatePicker
-            id="new-appointment-date-input"
-            className="date-picker"
-            selected={date}
-            minDate={beginningDate}
-            maxDate={maxDate}
-            dateFormat="dd/MM/yyyy"
-            showPopperArrow={false}
-            customInput={
-              <DateInput
-                label="Date de la séance"
-                hint={
-                  <>
-                    Les séances doivent être déclarées au plus tard le dernier
-                    jour du mois suivant leur réalisation. Pour toute aide,{' '}
-                    <HashLink to="/contact/formulaire">
-                      contactez le support.
-                    </HashLink>
-                  </>
-                }
-                dataTestId="new-appointment-date-input"
-              />
-            }
-            onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
-            required
-          />
+          <NewAppointmentDatePicker date={date} setDate={setDate} />
         )}
         {tooMuchAppointments && (
           <Alert
