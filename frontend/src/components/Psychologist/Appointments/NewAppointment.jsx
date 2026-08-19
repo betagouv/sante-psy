@@ -66,7 +66,7 @@ const NewAppointment = () => {
     () => patients?.find((p) => p.id === patientId),
     [patients, patientId],
   );
-  const tooMuchAppointments = useMemo(
+  const tooManyAppointments = useMemo(
     () => patient && Number(patient.countedAppointments) >= MAX_APPOINTMENT,
     [patient],
   );
@@ -91,6 +91,11 @@ const NewAppointment = () => {
     [appointmentsWithPsy, patient, selectedUnivYear],
   );
 
+  const patientHasNoAccount = useMemo(
+    () => patient && !patient.student,
+    [patient],
+  );
+
   const requiresCertificateCheck =
     isFirstAppointmentEver || isFirstAppointmentOfTheYear;
   const canConfirmPatient = useMemo(
@@ -106,8 +111,18 @@ const NewAppointment = () => {
 
   const canCreateAppointment = useMemo(
     () =>
-      canConfirmPatient && !!date && !tooMuchAppointments && hasChangedInput,
-    [date, tooMuchAppointments, hasChangedInput, canConfirmPatient],
+      canConfirmPatient &&
+      !!date &&
+      !tooManyAppointments &&
+      hasChangedInput &&
+      !patientHasNoAccount,
+    [
+      date,
+      tooManyAppointments,
+      hasChangedInput,
+      canConfirmPatient,
+      patientHasNoAccount,
+    ],
   );
 
   const createNewAppointment = (e) => {
@@ -148,10 +163,17 @@ const NewAppointment = () => {
           allOptions={allOptions}
           setNotification={setNotification}
         />
-        {patientId && !tooMuchAppointments && (
+        {patientId && !tooManyAppointments && (
           <NewAppointmentDatePicker date={date} setDate={setDate} />
         )}
-        {tooMuchAppointments && (
+        {tooManyAppointments && (
+          <Alert
+            className="fr-mt-2w"
+            type="warning"
+            description={<>Cet étudiant n'a pas créé son compte.</>}
+          />
+        )}
+        {!patientHasNoAccount && tooManyAppointments && (
           <Alert
             className="fr-mt-2w"
             type="warning"
