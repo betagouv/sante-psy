@@ -181,6 +181,7 @@ const StudentQuestionnaire = ({
 }) => {
   const prevSchoolType = useRef(defaultValues.schoolType ?? null);
   const [step, setStep] = useState(defaultValues.acceptedCGUs ? 1 : 0);
+  const [hasClickedFinish, setHasClickedFinish] = useState(false);
 
   // step 0
   const [acceptedCGUs, setAcceptedCGUs] = useState(
@@ -267,6 +268,7 @@ const StudentQuestionnaire = ({
 
   const onClickNext = () => {
     if (step === 3) {
+      setHasClickedFinish(true);
       complete();
       return;
     }
@@ -297,7 +299,7 @@ const StudentQuestionnaire = ({
       );
     }
     if (step === 3) {
-      return !!gender && livingPostcode.length === 5;
+      return !!gender && livingPostcode.length === 5 && !hasClickedFinish;
     }
     return false;
   }, [
@@ -312,6 +314,7 @@ const StudentQuestionnaire = ({
     studyField,
     studyFieldOther,
     livingPostcode,
+    hasClickedFinish,
   ]);
 
   return (
