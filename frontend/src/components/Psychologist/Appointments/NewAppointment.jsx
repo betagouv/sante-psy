@@ -42,7 +42,6 @@ const NewAppointment = () => {
 
   const {
     commonStore: { setNotification },
-    userStore: { user },
   } = useStore();
 
   useEffect(() => {
