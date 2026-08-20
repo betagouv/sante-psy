@@ -33,14 +33,22 @@ const NewAppointment = () => {
   const [hasChangedInput, setHasChangedInput] = useState(true);
   const [checkCertifIdentity, setCheckCertifIdentity] = useState(false);
   const [checkCertifValidity, setCheckCertifValidity] = useState(false);
-  const [patientAppointments, setPatientAppointments] = useState([]);
+  const [serverError, setServerError] = useState(false);
+  const [eligibilityInfo, setEligibilityInfo] = useState(null);
+
+  useEffect(() => {
+    console.log('eligibilityInfo', eligibilityInfo);
+  }, [eligibilityInfo]);
 
   const {
     commonStore: { setNotification },
     userStore: { user },
   } = useStore();
 
-  useEffect(() => setHasChangedInput(true), [date, patientId]);
+  useEffect(() => {
+    setHasChangedInput(true);
+    setServerError(false);
+  }, [date, patientId]);
 
   useEffect(() => {
     if (queryDate) {
@@ -70,26 +78,33 @@ const NewAppointment = () => {
     () => patient && Number(patient.countedAppointments) >= MAX_APPOINTMENT,
     [patient],
   );
-  const appointmentsWithPsy = useMemo(
-    () =>
-      Object.values(patientAppointments)
-        .flat()
-        .filter((a) => a.psychologistId === user.dossierNumber),
-    [patientAppointments],
-  );
 
   const isFirstAppointmentEver = useMemo(
-    () => patient && appointmentsWithPsy?.length === 0,
-    [appointmentsWithPsy, patient],
+    () => eligibilityInfo && !eligibilityInfo.hadAnAppointmentWithPsy,
+    [eligibilityInfo],
   );
   const isFirstAppointmentOfTheYear = useMemo(
-    () =>
-      patient &&
-      selectedUnivYear &&
-      appointmentsWithPsy?.filter((a) => a.univYear === selectedUnivYear)
-        .length === 0,
-    [appointmentsWithPsy, patient, selectedUnivYear],
+    () => eligibilityInfo && !eligibilityInfo.hadAnAppointmentThisYear,
+    [eligibilityInfo],
   );
+
+  useEffect(() => {
+    if (!patient?.student || !selectedUnivYear) {
+      return;
+    }
+    console.log('patient, selectedUnivYear', patient, selectedUnivYear);
+    agent.Psychologist.checkStudentEligibility(
+      selectedUnivYear,
+      patient.student.id,
+    )
+      .then((res) => {
+        setEligibilityInfo(res);
+      })
+      .catch(() => {
+        setServerError(true);
+        setEligibilityInfo(null);
+      });
+  }, [patient, selectedUnivYear]);
 
   const patientHasNoAccount = useMemo(
     () => patient && !patient.student,
@@ -153,7 +168,7 @@ const NewAppointment = () => {
   const allOptions = defaultString.concat(patientsMap);
 
   const renderWarningOrForm = () => {
-    if (!patientId) {
+    if (!patientId || serverError) {
       return;
     }
     if (patientHasNoAccount) {
@@ -254,9 +269,6 @@ const NewAppointment = () => {
           showCreateButton={false}
           patientId={patientId}
           onUpdatePatientAppointments={onUpdatePatientAppointments}
-          onFetchPatientAppointments={(patientAppointments) =>
-            setPatientAppointments(patientAppointments)
-          }
           refreshKey={appointmentsRefreshKey}
         />
       )}
