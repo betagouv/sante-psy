@@ -193,6 +193,26 @@ const getCertificateStream = async (
   }
 };
 
+const uploadStudentCertificate = async (
+  studentId: string,
+  univYear: string,
+  file: Express.Multer.File,
+): Promise<void> => {
+  try {
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: S3_BUCKET,
+        Key: getStudentCertificateKey(studentId, univYear),
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      }),
+    );
+  } catch (err) {
+    logS3Error(`uploadStudentCertificate (student ${studentId})`, err);
+    throw new CustomError('Erreur lors du stockage du certificat.', 500);
+  }
+};
+
 export default {
   s3,
   S3_BUCKET,
@@ -203,4 +223,5 @@ export default {
   downloadObject,
   certificateExists,
   getCertificateStream,
+  uploadStudentCertificate,
 };

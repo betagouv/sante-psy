@@ -134,6 +134,8 @@ const Psy = {
 const Student = {
   signIn: (data) => client.post('/student/signIn', data),
   updatePersonalData: (id, data) => client.put(`/student/${id}`, data),
+  updateCertificate: (id, univYear, file) =>
+    client.put(`/student/${id}/certificate/${univYear}`, file),
   sendStudentSecondStepMail: (email) =>
     client.post('/student/signInSecondStepMail', { email }),
   verifyStudentToken: (token) => client.post(`/student/signIn/${token}`),
