@@ -118,6 +118,10 @@ const Psychologist = {
       `/psychologist/${store.userStore.user.dossierNumber}/invite-student`,
       params,
     ),
+  checkStudentEligibility: (univYear, studentId) =>
+    client.get(
+      `/psychologist/${store.userStore.user.dossierNumber}/check-student-eligibility/${univYear}/${studentId}`,
+    ),
 };
 
 const Statistics = { getAll: () => client.get('/statistics') };
