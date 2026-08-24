@@ -15,6 +15,7 @@ import styles from './newAppointment.cssmodule.scss';
 import { getUnivYear } from 'services/univYears';
 import NewAppointmentDatePicker from './NewAppointmentDatePicker';
 import NewAppointmentPatientsList from './NewAppointmentPatientsList';
+import NewAppointmentSeeCertificate from './NewAppointmentSeeCertificate';
 
 export const MAX_APPOINTMENT = 12;
 
@@ -35,10 +36,6 @@ const NewAppointment = () => {
   const [checkCertifValidity, setCheckCertifValidity] = useState(false);
   const [serverError, setServerError] = useState(false);
   const [eligibilityInfo, setEligibilityInfo] = useState(null);
-
-  useEffect(() => {
-    console.log('eligibilityInfo', eligibilityInfo);
-  }, [eligibilityInfo]);
 
   const {
     commonStore: { setNotification },
@@ -91,7 +88,6 @@ const NewAppointment = () => {
     if (!patient?.student || !selectedUnivYear) {
       return;
     }
-    console.log('patient, selectedUnivYear', patient, selectedUnivYear);
     agent.Psychologist.checkStudentEligibility(
       selectedUnivYear,
       patient.student.id,
@@ -263,13 +259,20 @@ const NewAppointment = () => {
         />
         {renderWarningOrForm()}
       </form>
-      {patientId && (
-        <PatientAppointments
-          showCreateButton={false}
-          patientId={patientId}
-          onUpdatePatientAppointments={onUpdatePatientAppointments}
-          refreshKey={appointmentsRefreshKey}
+      {patient?.student && eligibilityInfo?.shouldShowCertif ? (
+        <NewAppointmentSeeCertificate
+          studentId={patient.student.id}
+          univYear={selectedUnivYear}
         />
+      ) : (
+        patientId && (
+          <PatientAppointments
+            showCreateButton={false}
+            patientId={patientId}
+            onUpdatePatientAppointments={onUpdatePatientAppointments}
+            refreshKey={appointmentsRefreshKey}
+          />
+        )
       )}
     </div>
   );

@@ -120,6 +120,11 @@ const Psychologist = {
     client.get(
       `/psychologist/${store.userStore.user.dossierNumber}/check-student-eligibility/${univYear}/${studentId}`,
     ),
+  seeCertificate: (univYear, studentId) =>
+    client.get(
+      `/psychologist/${store.userStore.user.dossierNumber}/see-certificate/${univYear}/${studentId}`,
+      { responseType: 'blob' },
+    ),
 };
 
 const Statistics = { getAll: () => client.get('/statistics') };

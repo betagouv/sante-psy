@@ -4,7 +4,10 @@ import psyProfileController from '../controllers/psyProfileController';
 import conventionController from '../controllers/conventionController';
 import access from '../utils/access';
 import { emailValidator } from '../controllers/validators/studentValidators';
-import { checkStudentEligibility } from '../controllers/studentEligibilityController';
+import {
+  checkStudentEligibility,
+  seeStudentCertificate,
+} from '../controllers/studentEligibilityController';
 
 const router = express.Router();
 
@@ -47,5 +50,7 @@ router.get(
   '/check-student-eligibility/:univYear/:studentId',
   checkStudentEligibility,
 );
+
+router.get('/see-certificate/:univYear/:studentId', seeStudentCertificate);
 
 export default router;
