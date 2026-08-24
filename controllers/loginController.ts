@@ -21,6 +21,7 @@ import loginInformations from '../services/loginInformations';
 import DOMPurify from '../services/sanitizer';
 import { getUnivYear, startCurrentUnivYear } from '../utils/univYears';
 import s3Service from '../services/s3';
+import { isStudentEligible } from '../db/studentEligibility';
 
 const CONNEXION_EMAIL_SENT_MESSAGE = `Un email de connexion vient de vous être envoyé si votre adresse email 
       correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
@@ -314,6 +315,10 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
     const startUnivYear = new Date(startCurrentUnivYear());
     const student = await dbStudents.getById(userId);
     if (student) {
+      const isEligible = await isStudentEligible(
+        student,
+        getUnivYear(new Date()),
+      );
       res.json({
         role: 'student',
         user: {
@@ -325,6 +330,7 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
             student.id,
             getUnivYear(new Date()),
           )),
+          isEligible,
         },
       });
       return;
