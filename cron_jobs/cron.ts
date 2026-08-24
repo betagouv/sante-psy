@@ -6,6 +6,7 @@ import cronStudents from './cronStudents';
 import config from '../utils/config';
 import sentry from '../utils/sentry';
 import { notifyStudentsAppointments } from './cronAppointmentsNotifications';
+import { checkIneStudents } from './cronApiInes';
 
 // Desactivate debug log for production as they are a bit too verbose
 if (!config.activateDebug) {
@@ -107,6 +108,14 @@ const jobs = [
     timeZone: 'Europe/Paris',
     isActive: true,
     name: 'Notify students a psychologist has created appointments for them',
+  },
+  {
+    cronTime: '0 2 * * *', // every day at 2AM
+    onTick: checkIneStudents,
+    start: true,
+    timeZone: 'Europe/Paris',
+    isActive: true,
+    name: 'Call API Ines on students',
   },
 ];
 

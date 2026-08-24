@@ -1,0 +1,51 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
+import dotenv from 'dotenv';
+import db from '../db/db';
+import { studentsTable } from '../db/tables';
+import verifyINE from '../services/inesApi';
+
+dotenv.config();
+
+const sleep = (ms: number): Promise<void> =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
+export const checkIneStudents = async (n = 500): Promise<void> => {
+  const studentsToCheck = await db(studentsTable)
+    .whereNull('api_ines_check')
+    .orderBy('createdAt', 'desc')
+    .limit(n)
+    .select();
+
+  for (const student of studentsToCheck) {
+    try {
+      const result = await verifyINE(student.ine, student.dateOfBirth);
+
+      let apiInesCheck: boolean | null;
+      if (result.status === 'found') {
+        apiInesCheck = true;
+      } else if (result.status === 'not_found') {
+        apiInesCheck = false;
+      } else {
+        apiInesCheck = null;
+        console.error(
+          `Technical error for student ${student.id}`,
+          result.error,
+        );
+      }
+
+      await db(studentsTable)
+        .where({ id: student.id })
+        .update({ api_ines_check: apiInesCheck });
+
+      console.log(`Student ${student.id}: ${JSON.stringify(result.status)}`);
+    } catch (err) {
+      console.error(`Failed to verify student ${student.id}`, err);
+    }
+
+    await sleep(300);
+  }
+  console.log('Done !');
+};
