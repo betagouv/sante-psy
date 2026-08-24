@@ -9,3 +9,4 @@ export const lastConnectionsTable = 'last_connections';
 export const lastConnectionsStudentsTable = 'last_connections_students';
 export const studentsTable = 'students';
 export const studentsNewsletterTable = 'students_newsletter';
+export const studentEligibilityTable = 'student_eligibility';
