@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import agent from 'services/agent';
 import { getUnivYear } from 'services/univYears';
+import { InputCertificate } from 'components/Certificate/InputCertificate';
 const UpdateCertificate = () => {
   const {
     userStore: { user, role, pullUser },
@@ -24,7 +25,6 @@ const UpdateCertificate = () => {
   }
 
   const handleSendCertificate = async (e) => {
-    console.log('hello');
     e.preventDefault();
 
     if (!file) {
@@ -34,14 +34,14 @@ const UpdateCertificate = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    console.log(formData);
     try {
       const res = await agent.Student.updateCertificate(
         user.id,
         getUnivYear(new Date(), '-'),
         formData,
       );
-      console.log('res', res);
+      await pullUser();
+      navigate('/etudiant');
     } catch {
       setFileError("Erreur lors de l'envoi du certificat. Merci de réessayer.");
     }
@@ -57,20 +57,7 @@ const UpdateCertificate = () => {
       description="D'une année à l'autre, ta situation peut changer : on fait le point avec toi."
     >
       <div>
-        {fileError && (
-          <div className="fr-alert fr-alert--error fr-mb-2w">
-            <h3 className="fr-alert__title">Erreur</h3>
-            <p>{fileError}</p>
-          </div>
-        )}
-        <input
-          className="fr-input"
-          id="file-upload"
-          type="file"
-          accept=".pdf,.jpg,.jpeg,.png"
-          placeholder="Formats supportés : .jpg, .png, .pdf. Un seul fichier possible."
-          onChange={(e) => setFile(e.target.files[0])}
-        />
+        <InputCertificate setFile={setFile} fileError={fileError} />
         <button
           type="button"
           className="fr-btn"
