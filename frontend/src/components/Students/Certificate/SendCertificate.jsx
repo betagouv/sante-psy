@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import agent from 'services/agent';
 import StudentSignInHeader from '../StudentSignIn/StudentSignInHeader';
+import { getUnivYear } from 'services/univYears';
+import { useStore } from 'stores/index';
 
 const SendCertificate = ({
   email,
@@ -12,10 +14,13 @@ const SendCertificate = ({
   onSuccess,
 }) => {
   const navigate = useNavigate();
+  const {
+    commonStore: { config },
+  } = useStore();
   const [file, setFile] = useState(null);
   const [fileError, setFileError] = useState('');
 
-  const handleSendCertificate = async e => {
+  const handleSendCertificate = async (e) => {
     e.preventDefault();
 
     if (!file) {
@@ -41,12 +46,13 @@ const SendCertificate = ({
 
   return (
     <StudentSignInHeader>
-      <h2 className="fr-mt-3w">Ton accès doit être vérifié</h2>
+      <h2 className="fr-mt-3w">
+        Ajoute ton attestation CVEC pour l'année {getUnivYear(new Date(), '-')}
+      </h2>
       <img src="/images/icons/file.svg" alt="" />
       <p className="fr-mb-1v">
-        Ajoute ton certificat de scolarité ou ton attestation CVEC
+        Si tu n'en as pas ajoute ton certificat de scolarité.
       </p>
-      <p>Ton numéro INE doit y être inscrit</p>
       {fileError && (
         <div className="fr-alert fr-alert--error fr-mb-2w">
           <h3 className="fr-alert__title">Erreur</h3>
@@ -63,7 +69,7 @@ const SendCertificate = ({
           type="file"
           accept=".pdf,.jpg,.jpeg,.png"
           placeholder="Formats supportés : .jpg, .png, .pdf. Un seul fichier possible."
-          onChange={e => setFile(e.target.files[0])}
+          onChange={(e) => setFile(e.target.files[0])}
         />
       </div>
 
@@ -86,19 +92,8 @@ const SendCertificate = ({
       </div>
       <div>
         <p className="fr-text--sm fr-mb-1v">
-          Le support Santé Psy Étudiant doit vérifier ton accès à l&apos;espace
-          étudiant.
-        </p>
-        <p className="fr-text--sm fr-mb-1v">
-          Ton numéro INE doit être inscrit sur le document. Il comporte 11
-          chiffres ou lettres.
-        </p>
-        <p className="fr-text--sm fr-mb-1v">
-          Si tu ne le trouves pas, il est sur ton attestation CVEC.
-        </p>
-        <p className="fr-text--sm">
-          Si tu n&apos;as pas ces éléments, il se peut que tu ne sois pas
-          éligible. Vérifie auprès de ton établissement scolaire.
+          Si tu as des questions{' '}
+          <a href={`mailto:${config.contactEmail}`}>contacte le support</a>
         </p>
       </div>
       <a
