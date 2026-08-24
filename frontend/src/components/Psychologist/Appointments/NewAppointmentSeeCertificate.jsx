@@ -7,7 +7,6 @@ const NewAppointmentSeeCertificate = ({ studentId, univYear }) => {
   const [certificateNotFound, setCertificateNotFound] = useState(false);
   useEffect(() => {
     let objectUrl = null;
-    setCertificateLoading(true);
     setCertificateNotFound(false);
 
     const fetchCertificate = async () => {

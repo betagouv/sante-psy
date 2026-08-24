@@ -196,51 +196,59 @@ const NewAppointment = () => {
     }
     return (
       <>
-        <NewAppointmentDatePicker date={date} setDate={setDate} />;
-        {requiresCertificateCheck && (
-          <>
-            <Alert
-              className="fr-my-3w"
-              type="info"
-              description={
-                isFirstAppointmentEver
-                  ? 'Première séance avec cet étudiant - veuillez vérifier le certificat de scolarité avant de confirmer.'
-                  : 'Première séance avec cet étudiant pour la nouvelle année universitaire - veuillez vérifier le certificat de scolarité avant de confirmer.'
-              }
-            />
-            <CheckboxGroup>
-              <Checkbox
-                label="J'ai bien comparé l'identité de l'étudiant avec le certificat de scolarité"
-                onChange={(e) => setCheckCertifIdentity(e.target.checked)}
-                checked={checkCertifIdentity}
-                hint="ou l'attestation CVEC fournie"
+        <NewAppointmentDatePicker date={date} setDate={setDate} />
+        {eligibilityInfo && !eligibilityInfo.isEligible ? (
+          <Alert
+            type="warning"
+            className="fr-my-3w"
+            title="Cet étudiant n'est pas éligible"
+          />
+        ) : (
+          requiresCertificateCheck && (
+            <>
+              <Alert
+                className="fr-my-3w"
+                type="info"
+                description={
+                  isFirstAppointmentEver
+                    ? 'Première séance avec cet étudiant - veuillez vérifier le certificat de scolarité avant de confirmer.'
+                    : 'Première séance avec cet étudiant pour la nouvelle année universitaire - veuillez vérifier le certificat de scolarité avant de confirmer.'
+                }
               />
-              <Checkbox
-                label="J'ai vérifié que le certificat de scolarité est valable sur la période en cours"
-                onChange={(e) => setCheckCertifValidity(e.target.checked)}
-                checked={checkCertifValidity}
-              />
-            </CheckboxGroup>
-            <div className={styles.submitCancelButtonsWrapper}>
-              <Button
-                id="new-appointment-submit"
-                data-test-id="new-appointment-submit"
-                submit
-                icon="ri-add-line"
-                className="fr-mt-4w"
-                disabled={!canCreateAppointment}
-              >
-                Créer la séance
-              </Button>
-              <Button
-                secondary
-                className="fr-mt-4w"
-                onClick={() => navigate('/psychologue/mes-seances')}
-              >
-                Annuler
-              </Button>
-            </div>
-          </>
+              <CheckboxGroup>
+                <Checkbox
+                  label="J'ai bien comparé l'identité de l'étudiant avec le certificat de scolarité"
+                  onChange={(e) => setCheckCertifIdentity(e.target.checked)}
+                  checked={checkCertifIdentity}
+                  hint="ou l'attestation CVEC fournie"
+                />
+                <Checkbox
+                  label="J'ai vérifié que le certificat de scolarité est valable sur la période en cours"
+                  onChange={(e) => setCheckCertifValidity(e.target.checked)}
+                  checked={checkCertifValidity}
+                />
+              </CheckboxGroup>
+              <div className={styles.submitCancelButtonsWrapper}>
+                <Button
+                  id="new-appointment-submit"
+                  data-test-id="new-appointment-submit"
+                  submit
+                  icon="ri-add-line"
+                  className="fr-mt-4w"
+                  disabled={!canCreateAppointment}
+                >
+                  Créer la séance
+                </Button>
+                <Button
+                  secondary
+                  className="fr-mt-4w"
+                  onClick={() => navigate('/psychologue/mes-seances')}
+                >
+                  Annuler
+                </Button>
+              </div>
+            </>
+          )
         )}
       </>
     );
@@ -259,7 +267,10 @@ const NewAppointment = () => {
         />
         {renderWarningOrForm()}
       </form>
-      {patient?.student && eligibilityInfo?.shouldShowCertif ? (
+      {patient?.student &&
+      eligibilityInfo &&
+      eligibilityInfo.shouldShowCertif &&
+      eligibilityInfo.isEligible ? (
         <NewAppointmentSeeCertificate
           studentId={patient.student.id}
           univYear={selectedUnivYear}

@@ -4,6 +4,7 @@ import db from '../db/db';
 import { appointmentsTable, patientsTable, studentsTable } from '../db/tables';
 import { getEndUnivYearStr, getStartUnivYearStr } from '../utils/univYears';
 import s3Service from '../services/s3';
+import { isStudentEligible } from '../db/studentEligibility';
 
 export const checkStudentEligibility = async (
   req: Request,
@@ -35,7 +36,7 @@ export const checkStudentEligibility = async (
     }
 
     // is student eligible ?
-    const isEligible = true;
+    const isEligible = await isStudentEligible(student, univYear);
 
     const startDate = getStartUnivYearStr(univYear);
     const endDate = getEndUnivYearStr(univYear);
