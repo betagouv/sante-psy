@@ -35,7 +35,7 @@ describe('Login Student', () => {
       loginDefaultStudent();
       cy.visit('/etudiant/mes-seances');
       cy.wait('@connectedUser');
-      cy.location('pathname').should('eq', '/etudiant/mes-seances');
+      cy.location('pathname').should('eq', '/update-certificate');
     });
 
     it('should display an error when invalid token is entered', () => {
@@ -75,7 +75,7 @@ describe('Login Student', () => {
     it('Should redirect to login page after expiration', () => {
       loginDefaultStudent('3s');
       cy.visit('/etudiant');
-      cy.location('pathname').should('eq', '/etudiant/mes-seances');
+      cy.location('pathname').should('eq', '/update-certificate');
       cy.wait('@connectedUser');
 
       // We explicitely wait for token to expire
