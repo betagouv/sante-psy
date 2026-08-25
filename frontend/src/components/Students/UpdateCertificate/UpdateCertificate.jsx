@@ -11,7 +11,6 @@ const UpdateCertificate = () => {
     userStore: { user, role, pullUser },
   } = useStore();
   const navigate = useNavigate();
-  console.log('user.needsToUploadCertificate', user.needsToUploadCertificate);
 
   const [file, setFile] = useState(null);
   const [fileError, setFileError] = useState('');

@@ -15,9 +15,6 @@ export const checkStudentEligibility = async (
 
     const { studentId, univYear } = req.params;
     const psychologistId = req.auth.userId || req.auth.psychologist;
-    console.log('studentId', studentId);
-    console.log('univYear', univYear);
-    console.log('psychologistId', psychologistId);
 
     const student = await db(studentsTable).where('id', studentId).first();
     if (!student) {
