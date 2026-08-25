@@ -164,7 +164,7 @@ const NewAppointment = () => {
 
   const renderWarningOrForm = () => {
     if (!patientId || serverError) {
-      return;
+      return null;
     }
     if (patientHasNoAccount) {
       return (
@@ -268,9 +268,9 @@ const NewAppointment = () => {
         {renderWarningOrForm()}
       </form>
       {patient?.student &&
-      eligibilityInfo &&
-      eligibilityInfo.shouldShowCertif &&
-      eligibilityInfo.isEligible ? (
+        eligibilityInfo &&
+        eligibilityInfo.shouldShowCertif &&
+        eligibilityInfo.isEligible ? (
         <NewAppointmentSeeCertificate
           studentId={patient.student.id}
           univYear={selectedUnivYear}

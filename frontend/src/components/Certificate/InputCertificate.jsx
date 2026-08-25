@@ -1,8 +1,7 @@
 import React from 'react';
 import { getUnivYear } from 'services/univYears';
 
-export const InputCertificate = ({ setFile, fileError }) => {
-  return (
+export const InputCertificate = ({ setFile, fileError }) => (
     <>
       <h2 className="fr-mt-3w">
         Ajoute ton attestation CVEC pour l'année {getUnivYear(new Date(), '-')}
@@ -32,4 +31,3 @@ export const InputCertificate = ({ setFile, fileError }) => {
       </div>
     </>
   );
-};

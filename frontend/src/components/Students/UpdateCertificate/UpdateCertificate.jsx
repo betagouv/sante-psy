@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Page from 'components/Page/Page';
 import { useStore } from 'stores/index';
-import { useNavigate } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import agent from 'services/agent';
 import { getUnivYear } from 'services/univYears';
 import { InputCertificate } from 'components/Certificate/InputCertificate';
+
 const UpdateCertificate = () => {
   const {
     userStore: { user, role, pullUser },
@@ -34,7 +34,7 @@ const UpdateCertificate = () => {
     const formData = new FormData();
     formData.append('file', file);
     try {
-      const res = await agent.Student.updateCertificate(
+      await agent.Student.updateCertificate(
         user.id,
         getUnivYear(new Date(), '-'),
         formData,

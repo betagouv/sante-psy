@@ -1,6 +1,5 @@
 import React from 'react';
-import { Select } from '@dataesr/react-dsfr';
-import { SearchableSelect } from '@dataesr/react-dsfr';
+import { Select , SearchableSelect } from '@dataesr/react-dsfr';
 import { HashLink } from 'react-router-hash-link';
 import { formatDDMMYYYY } from 'services/date';
 
@@ -11,8 +10,7 @@ const NewAppointmentPatientsList = ({
   allOptions,
   date,
   setNotification,
-}) => {
-  return (
+}) => (
     <div id="patients-list" className="fr-mb-2w">
       {!isEmpty ? (
         <SearchableSelect
@@ -59,6 +57,5 @@ const NewAppointmentPatientsList = ({
       )}
     </div>
   );
-};
 
 export default NewAppointmentPatientsList;
