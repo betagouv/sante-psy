@@ -214,7 +214,6 @@ const updateCertificate = async (
 
   const { studentId, univYear } = req.params;
 
-  // authorization: only the student themselves can update their own certificate
   if (req.auth.userId !== studentId) {
     res.status(403).json({ message: 'Accès non autorisé' });
     return;

@@ -35,7 +35,6 @@ export const checkStudentEligibility = async (
       return;
     }
 
-    // is student eligible ?
     const isEligible = await isStudentEligible(student, univYear);
 
     const startDate = getStartUnivYearStr(univYear);

@@ -23,6 +23,4 @@ router.put(
 
 router.use(access.requireStudentRole);
 
-// Student routes will be added here as needed
-
 export default router;
