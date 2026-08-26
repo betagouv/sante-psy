@@ -3,6 +3,7 @@ import express from 'express';
 import access from '../utils/access';
 import { updateValidators } from '../controllers/validators/studentValidators';
 import studentsController from '../controllers/studentsController';
+import uploadCertificate from '../middlewares/uploadCertificate';
 
 const router = express.Router();
 
@@ -13,8 +14,13 @@ router.put(
   studentsController.update,
 );
 
-router.use(access.requireStudentRole);
+router.put(
+  '/:studentId/certificate/:univYear',
+  access.checkStudentParam,
+  uploadCertificate.single('file'),
+  studentsController.updateCertificate,
+);
 
-// Student routes will be added here as needed
+router.use(access.requireStudentRole);
 
 export default router;

@@ -120,7 +120,7 @@ const StudentSignInStepTwo = () => {
         dryRun: true,
       });
 
-      navigate('/inscription/questionnaire', {
+      navigate('/inscription/certificat', {
         state: {
           email,
           ine,

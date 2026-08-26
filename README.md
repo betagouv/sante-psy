@@ -207,6 +207,12 @@ Il ne peut pas être exécuté en production.
 ts-node scripts/anonymizeDb.ts
 ```
 
+## Validation de l'éligibilité d'étudiants
+
+```bash
+ts-node scripts/validateCertificatesStudents.ts 2025-2026 xxx1,xxx2
+```
+
 ### Clean des noms d'institutions
 
 Cette tache s'effectue en 3 étapes.

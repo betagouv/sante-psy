@@ -80,8 +80,6 @@ const Patient = {
   get: () => client.get('/patients'),
   getOne: (id) => client.get(`/patients/${id}`),
   update: (id, patient) => client.put(`/patients/${id}`, patient),
-  sendCertificate: (formData) =>
-    client.post('/patients/send-certificate', formData),
 };
 
 const Psychologist = {
@@ -118,6 +116,15 @@ const Psychologist = {
       `/psychologist/${store.userStore.user.dossierNumber}/invite-student`,
       params,
     ),
+  checkStudentEligibility: (univYear, studentId) =>
+    client.get(
+      `/psychologist/${store.userStore.user.dossierNumber}/check-student-eligibility/${univYear}/${studentId}`,
+    ),
+  seeCertificate: (univYear, studentId) =>
+    client.get(
+      `/psychologist/${store.userStore.user.dossierNumber}/see-certificate/${univYear}/${studentId}`,
+      { responseType: 'blob' },
+    ),
 };
 
 const Statistics = { getAll: () => client.get('/statistics') };
@@ -132,6 +139,8 @@ const Psy = {
 const Student = {
   signIn: (data) => client.post('/student/signIn', data),
   updatePersonalData: (id, data) => client.put(`/student/${id}`, data),
+  updateCertificate: (id, univYear, file) =>
+    client.put(`/student/${id}/certificate/${univYear}`, file),
   sendStudentSecondStepMail: (email) =>
     client.post('/student/signInSecondStepMail', { email }),
   verifyStudentToken: (token) => client.post(`/student/signIn/${token}`),

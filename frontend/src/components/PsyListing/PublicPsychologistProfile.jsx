@@ -45,14 +45,17 @@ const getZoomLevel = (psychologist) => {
 
 const ContactSection = ({ psychologist }) => {
   const {
-    userStore: { user },
+    userStore: { user, role },
   } = useStore();
   const isUserConnected = !!user;
+  const isIneligibleStudent = user && role === 'student' && !user?.isEligible;
   const navigate = useNavigate();
   return (
     <>
       <h3>Contacter le psychologue</h3>
-      {isUserConnected ? (
+      {isIneligibleStudent ? (
+        <Alert type="warning" title="Tu n'es pas encore éligible." />
+      ) : isUserConnected ? (
         <>
           <div className={styles.optionalSeparator} />
           {psychologist.phone && (

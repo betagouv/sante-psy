@@ -25,9 +25,14 @@ const StudentRouter = () => {
   }
 
   const isOnQuestionnairePage = pathname === '/update-personal-data';
+  const isOnUpdateCertificatePage = pathname === '/update-certificate';
 
   if (user.needsToUpdatePersonalData && !isOnQuestionnairePage) {
     return <Navigate to="/update-personal-data" replace />;
+  }
+
+  if (user.needsToUploadCertificate && !isOnUpdateCertificatePage) {
+    return <Navigate to="/update-certificate" replace />;
   }
 
   const getPageProps = () => {

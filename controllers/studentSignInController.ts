@@ -223,8 +223,20 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
         livingPostcode,
         apiInesCheck,
       });
-      await s3Service.finalizePendingCertificate(tokenRow.token, student.id);
-      await sendWelcomeMail(email);
+      s3Service
+        .finalizePendingCertificate(tokenRow.token, student.id)
+        .catch((err) => {
+          console.error(
+            `[finalizePendingCertificate] failed for student ${student.id}`,
+            err,
+          );
+        });
+      sendWelcomeMail(email).catch((err) => {
+        console.error(
+          `[sendWelcomeMail] failed for student ${student.id}`,
+          err,
+        );
+      });
 
       res.status(200).json({
         message: 'Un email vous a été envoyé.',

@@ -9,6 +9,9 @@ import { emailValidator } from './validators/studentValidators';
 import asyncHelper from '../utils/async-helper';
 import validation from '../utils/validation';
 import CustomError from '../utils/CustomError';
+import db from '../db/db';
+import { studentsTable } from '../db/tables';
+import s3Service from '../services/s3';
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -203,6 +206,44 @@ const update = async (req: Request, res: Response): Promise<void> => {
   res.json({ message: 'ok' });
 };
 
+const updateCertificate = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  validation.checkErrors(req);
+
+  const { studentId, univYear } = req.params;
+
+  if (req.auth.userId !== studentId) {
+    res.status(403).json({ message: 'Accès non autorisé' });
+    return;
+  }
+
+  const student = await db(studentsTable).where('id', studentId).first();
+  if (!student) {
+    res.status(404).json({ message: "Cet étudiant n'existe pas" });
+    return;
+  }
+
+  const { file } = req;
+  if (!file) {
+    res.status(400).json({ message: 'Aucun fichier fourni' });
+    return;
+  }
+
+  try {
+    await s3Service.uploadStudentCertificate(studentId, univYear, file);
+  } catch (err) {
+    console.error(`[updateCertificate] failed for student ${studentId}`, err);
+    res
+      .status(500)
+      .json({ message: 'Erreur lors de la mise à jour du certificat.' });
+    return;
+  }
+
+  res.status(200).json({ message: 'Certificat mis à jour avec succès.' });
+};
+
 export default {
   getStudentAppointments,
   requestEmailChange,
@@ -211,4 +252,5 @@ export default {
   confirmEmailChange,
   deleteEmailChangeInfo,
   update: asyncHelper(update),
+  updateCertificate: asyncHelper(updateCertificate),
 };

@@ -35,6 +35,9 @@ const PsyListing = () => {
   if (user && role === 'student' && user.needsToUpdatePersonalData) {
     return <Navigate to="/etudiant/update-personal-data" replace />;
   }
+  if (user && role === 'student' && user.needsToUploadCertificate) {
+    return <Navigate to="/etudiant/update-certificate" replace />;
+  }
 
   const [searchParams, setSearchParams] = useSearchParams();
 

@@ -48,6 +48,7 @@ import StudentEligibility from './components/Eligibility/EligibilityFunnel';
 import StudentRouter from './StudentRouter';
 import StudentQuestionnaire from 'components/Students/StudentSignIn/StudentQuestionnaire';
 import UpdatePersonalData from 'components/Students/UpdatePersonalData/UpdatePersonalData';
+import UpdateCertificate from 'components/Students/UpdateCertificate/UpdateCertificate';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
@@ -189,6 +190,11 @@ function App() {
                 exact
                 path="/update-personal-data"
                 element={<UpdatePersonalData />}
+              />
+              <Route
+                exact
+                path="/update-certificate"
+                element={<UpdateCertificate />}
               />
               <Route
                 exact

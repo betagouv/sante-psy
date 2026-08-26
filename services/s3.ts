@@ -6,12 +6,14 @@ import {
   S3ServiceException,
   ListObjectsV2Command,
   GetObjectCommand,
+  HeadObjectCommand,
 } from '@aws-sdk/client-s3';
 import CustomError from '../utils/CustomError';
 import { getUnivYear } from '../utils/univYears';
 import path from 'path';
 import fs from 'fs';
 import { buffer as streamToBuffer } from 'stream/consumers';
+import { Readable } from 'stream';
 
 const isLocal =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test';
@@ -128,6 +130,89 @@ const downloadObject = async (
   fs.writeFileSync(destPath, fileBuffer);
 };
 
+const certificateExists = async (
+  studentId: string,
+  univYear: string,
+): Promise<boolean> => {
+  const key = getStudentCertificateKey(studentId, univYear);
+
+  try {
+    await s3.send(
+      new HeadObjectCommand({
+        Bucket: S3_BUCKET,
+        Key: key,
+      }),
+    );
+    return true;
+  } catch (err) {
+    if (
+      err instanceof S3ServiceException &&
+      (err.$metadata?.httpStatusCode === 404 || err.name === 'NotFound')
+    ) {
+      return false;
+    }
+    logS3Error(`certificateExists`, err);
+    throw new CustomError('Erreur lors de la vérification du certificat.', 500);
+  }
+};
+
+const getCertificateStream = async (
+  studentId: string,
+  univYear: string,
+): Promise<{
+  stream: Readable;
+  contentType?: string;
+  contentLength?: number;
+} | null> => {
+  const key = getStudentCertificateKey(studentId, univYear);
+
+  try {
+    const response = await s3.send(
+      new GetObjectCommand({
+        Bucket: S3_BUCKET,
+        Key: key,
+      }),
+    );
+
+    if (!response.Body) return null;
+
+    return {
+      stream: response.Body as Readable,
+      contentType: response.ContentType,
+      contentLength: response.ContentLength,
+    };
+  } catch (err) {
+    if (
+      err instanceof S3ServiceException &&
+      (err.$metadata?.httpStatusCode === 404 || err.name === 'NoSuchKey')
+    ) {
+      return null;
+    }
+    logS3Error(`getCertificateStream `, err);
+    throw new CustomError('Erreur lors de la récupération du certificat.', 500);
+  }
+};
+
+const uploadStudentCertificate = async (
+  studentId: string,
+  univYear: string,
+  file: Express.Multer.File,
+): Promise<void> => {
+  try {
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: S3_BUCKET,
+        Key: getStudentCertificateKey(studentId, univYear),
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      }),
+    );
+  } catch (err) {
+    logS3Error(`uploadStudentCertificate (student ${studentId})`, err);
+    throw new CustomError('Erreur lors du stockage du certificat.', 500);
+  }
+};
+
 export default {
   s3,
   S3_BUCKET,
@@ -136,4 +221,7 @@ export default {
   logS3Error,
   listAllKeys,
   downloadObject,
+  certificateExists,
+  getCertificateStream,
+  uploadStudentCertificate,
 };
