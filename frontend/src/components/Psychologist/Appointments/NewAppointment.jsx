@@ -197,7 +197,8 @@ const NewAppointment = () => {
     return (
       <>
         <NewAppointmentDatePicker date={date} setDate={setDate} />
-        {eligibilityInfo && !eligibilityInfo.isEligible ? (
+        {eligibilityInfo &&
+        !eligibilityInfo.eligibility?.canPsyDeclareAppointment ? (
           <Alert
             type="warning"
             className="fr-my-3w"
@@ -268,9 +269,9 @@ const NewAppointment = () => {
         {renderWarningOrForm()}
       </form>
       {patient?.student &&
-        eligibilityInfo &&
-        eligibilityInfo.shouldShowCertif &&
-        eligibilityInfo.isEligible ? (
+      eligibilityInfo?.eligibility &&
+      eligibilityInfo.eligibility.uploadedDocument &&
+      eligibilityInfo.eligibility.canPsyDeclareAppointment ? (
         <NewAppointmentSeeCertificate
           studentId={patient.student.id}
           univYear={selectedUnivYear}

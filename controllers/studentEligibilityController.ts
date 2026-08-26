@@ -4,7 +4,7 @@ import db from '../db/db';
 import { appointmentsTable, patientsTable, studentsTable } from '../db/tables';
 import { getEndUnivYearStr, getStartUnivYearStr } from '../utils/univYears';
 import s3Service from '../services/s3';
-import { isStudentEligible } from '../db/studentEligibility';
+import { getStudentEligibility } from '../db/studentEligibility';
 
 export const checkStudentEligibility = async (
   req: Request,
@@ -32,7 +32,7 @@ export const checkStudentEligibility = async (
       return;
     }
 
-    const isEligible = await isStudentEligible(student, univYear);
+    const eligibility = await getStudentEligibility(student, univYear);
 
     const startDate = getStartUnivYearStr(univYear);
     const endDate = getEndUnivYearStr(univYear);
@@ -49,13 +49,10 @@ export const checkStudentEligibility = async (
     const hadAnAppointmentWithPsy = allAppointments.length > 0;
     const hadAnAppointmentThisYear = appointmentsThisYear.length > 0;
 
-    const shouldShowCertif = !hadAnAppointmentThisYear;
-
     res.status(200).json({
-      isEligible,
+      eligibility,
       hadAnAppointmentWithPsy,
       hadAnAppointmentThisYear,
-      shouldShowCertif,
     });
   } catch (err) {
     console.error('error: ', err);
