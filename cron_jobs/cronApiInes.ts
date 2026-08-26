@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import db from '../db/db';
 import { studentsTable } from '../db/tables';
 import verifyINE from '../services/inesApi';
+import { sendWelcomeMail } from '../services/email/sendWelcomeEmail';
 
 dotenv.config();
 
@@ -23,6 +24,8 @@ export const checkIneStudents = async (n = 500): Promise<void> => {
     try {
       const result = await verifyINE(student.ine, student.dateOfBirth);
 
+      const checkBefore = student.api_ines_check;
+
       let apiInesCheck: boolean | null;
       if (result.status === 'found') {
         apiInesCheck = true;
@@ -36,16 +39,27 @@ export const checkIneStudents = async (n = 500): Promise<void> => {
         );
       }
 
+      const checkAfter = apiInesCheck;
+
       await db(studentsTable)
         .where({ id: student.id })
         .update({ api_ines_check: apiInesCheck });
 
-      console.log(`Student ${student.id}: ${JSON.stringify(result.status)}`);
+      if (checkAfter && !checkBefore) {
+        sendWelcomeMail(student.email);
+      }
+
+      console.log(
+        `+++ cron api ines student=${student.id}: ${JSON.stringify(result.status)}`,
+      );
     } catch (err) {
-      console.error(`Failed to verify student ${student.id}`, err);
+      console.error(
+        `--- cron api ines - error - Failed to verify student ${student.id}`,
+        err,
+      );
     }
 
-    await sleep(300);
+    await sleep(100);
   }
   console.log('Done !');
 };
