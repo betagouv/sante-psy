@@ -24,8 +24,6 @@ export const checkIneStudents = async (n = 500): Promise<void> => {
     try {
       const result = await verifyINE(student.ine, student.dateOfBirth);
 
-      const checkBefore = student.api_ines_check;
-
       let apiInesCheck: boolean | null;
       if (result.status === 'found') {
         apiInesCheck = true;
@@ -45,8 +43,12 @@ export const checkIneStudents = async (n = 500): Promise<void> => {
         .where({ id: student.id })
         .update({ api_ines_check: apiInesCheck });
 
-      if (checkAfter && !checkBefore) {
-        sendWelcomeMail(student.email);
+      if (checkAfter) {
+        try {
+          await sendWelcomeMail(student.email);
+        } catch (err) {
+          console.error(`Failed to send welcome mail to ${student.email}`, err);
+        }
       }
 
       console.log(
