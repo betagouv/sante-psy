@@ -4,8 +4,7 @@
 import db from '../db/db';
 import { studentEligibilityTable, studentsTable } from '../db/tables';
 import { sendWelcomeMail } from '../services/email/sendWelcomeEmail';
-
-const UNIV_YEAR_REGEX = /^\d{4}-\d{4}$/;
+import { testArgUnivYear } from './utils';
 
 const makeStudentsEligible = async (
   univYear: string,
@@ -19,11 +18,7 @@ const makeStudentsEligible = async (
   }
 
   try {
-    if (!UNIV_YEAR_REGEX.test(univYear)) {
-      console.log('Invalid univ year format!');
-      console.log('Help: format should be YYYY-YYYY, e.g. 2026-2027');
-      process.exit(1);
-    }
+    testArgUnivYear(univYear);
 
     if (studentIds.length === 0) {
       console.log('No student ids provided!');

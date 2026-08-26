@@ -39,3 +39,5 @@ export const getEndUnivYearStr = (univYear: string): Date => {
   const end = parseInt(univYear.slice(5, 9));
   return new Date(end, SEPTEMBER, 1);
 };
+
+export const UNIV_YEAR_REGEX = /^\d{4}-\d{4}$/;
