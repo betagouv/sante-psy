@@ -36,6 +36,12 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
     severity: 'warning',
     icon: 'fr-icon-warning-fill fr-icon--sm',
   },
+  no_student_account: {
+    key: 'no_student_account',
+    text: 'Pas de compte étudiant',
+    severity: 'warning',
+    icon: 'fr-icon-warning-fill fr-icon--sm',
+  },
   completed: {
     key: 'completed',
     text: 'à jour',
@@ -47,10 +53,15 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
     text: isSmallScreen ? 'Nouveau tarif' : 'Nouveau tarif 50€',
     severity: 'info',
     icon: 'fr-icon-success-fill fr-icon--sm',
-    tooltip: 'A partir du 1er juillet 2024, toutes les séances sont comptabilisées 50€, le nombre maximal de séances passe à 12 au lieu de 8',
+    tooltip:
+      'A partir du 1er juillet 2024, toutes les séances sont comptabilisées 50€, le nombre maximal de séances passe à 12 au lieu de 8',
   },
   other: { key: 'other' },
-  switch_rule_notice: { key: 'switch_rule_notice', tooltip: 'A partir du 1er juillet 2024, toutes les séances sont comptabilisées 50€, le nombre maximal de séances passe à 12 au lieu de 8' },
+  switch_rule_notice: {
+    key: 'switch_rule_notice',
+    tooltip:
+      'A partir du 1er juillet 2024, toutes les séances sont comptabilisées 50€, le nombre maximal de séances passe à 12 au lieu de 8',
+  },
   inactive: { key: 'inactive' },
 });
 

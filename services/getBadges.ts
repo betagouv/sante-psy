@@ -43,6 +43,10 @@ const getPatientBadges = (
   const countedAppointments = parseInt(patient.countedAppointments);
   let badges = [];
 
+  if (!patient.student) {
+    badges.push(appointmentBadges.no_student_account);
+  }
+
   if (!areStudentINEFilled(patient)) {
     badges.push(appointmentBadges.student_ine);
   }
