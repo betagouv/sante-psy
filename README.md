@@ -283,3 +283,11 @@ ts-node scripts/makeStudentsEligible.ts 2025-2026 xxx1,xxx2
 ```bash
 ts-node scripts/makeStudentsNotEligible.ts 2025-2026 xxx1,xxx2
 ```
+
+### Télécharger les certificats d'une liste d'étudiants
+
+Les documents seront téléchargés dans ./downloaded-certificates
+
+```bash
+ts-node scripts/downloadCertificates.ts 2025-2026 xxx1,xxx2
+```
