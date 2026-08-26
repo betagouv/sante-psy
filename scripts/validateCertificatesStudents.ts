@@ -1,5 +1,9 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-continue */
+/* eslint-disable no-restricted-syntax */
 import db from '../db/db';
 import { studentEligibilityTable, studentsTable } from '../db/tables';
+import { sendWelcomeMail } from '../services/email/sendWelcomeEmail';
 
 const UNIV_YEAR_REGEX = /^\d{4}-\d{4}$/;
 
@@ -8,10 +12,10 @@ const validateCertificatesStudents = async (
   studentIds: string[],
   comment: string | null,
 ): Promise<void> => {
-  console.log('Validating certificates for univ year: ', univYear);
-  console.log('Student ids: ', studentIds);
+  console.log('++ Script - Validating eligibilities for univ year: ', univYear);
+  console.log('++ Script - Student ids: ', studentIds);
   if (comment) {
-    console.log('Comment:', comment);
+    console.log('++ Script - Comment:', comment);
   }
 
   try {
@@ -28,8 +32,11 @@ const validateCertificatesStudents = async (
 
     const existingStudents = await db(studentsTable)
       .whereIn('id', studentIds)
-      .select('id');
+      .select('id', 'email');
     const existingStudentIds = existingStudents.map((s) => s.id);
+    const emailByStudentId = new Map(
+      existingStudents.map((s) => [s.id, s.email]),
+    );
 
     const missingStudentIds = studentIds.filter(
       (id) => !existingStudentIds.includes(id),
@@ -47,15 +54,54 @@ const validateCertificatesStudents = async (
       comment: comment || null,
     }));
 
-    await db(studentEligibilityTable)
+    const alreadyEligibleRows = await db(studentEligibilityTable)
+      .whereIn(
+        'student_id',
+        rows.map((r) => r.student_id),
+      )
+      .andWhere('univ_year', univYear)
+      .select('student_id');
+
+    const alreadyEligibleStudentIds = new Set(
+      alreadyEligibleRows.map((r) => r.student_id),
+    );
+
+    const result = await db(studentEligibilityTable)
       .insert(rows)
       .onConflict(['student_id', 'univ_year'])
       .merge({
         validated_by_team: true,
         comment: comment || null,
-      });
+      })
+      .returning('*');
 
-    console.log(`Done! ${rows.length} student(s) validated for ${univYear}.`);
+    const newlyInserted = result.filter(
+      (r) => !alreadyEligibleStudentIds.has(r.student_id),
+    );
+    const updated = result.filter((r) =>
+      alreadyEligibleStudentIds.has(r.student_id),
+    );
+
+    console.log(
+      `Done! ${rows.length} student(s) validated for ${univYear}.` +
+        ` ${newlyInserted.length} new - ${updated.length} updated`,
+    );
+
+    for (const r of newlyInserted) {
+      const email = emailByStudentId.get(r.student_id);
+      if (!email) {
+        console.warn(`No email found for student ${r.student_id}`);
+        continue;
+      }
+
+      console.log('email', email);
+      try {
+        await sendWelcomeMail(email);
+      } catch (err) {
+        console.error(`Failed to send to ${email}`, err);
+      }
+    }
+
     process.exit(0);
   } catch (err) {
     console.error(err);
