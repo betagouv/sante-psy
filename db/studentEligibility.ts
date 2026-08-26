@@ -39,7 +39,7 @@ export const getStudentEligibility = async (
   const startUnivYear = getStartUnivYearStr(univYear);
   const hasStudentAnsweredQuestionnaire =
     !!student.last_update_personal_data &&
-    new Date(student.last_update_personal_data) < startUnivYear;
+    new Date(student.last_update_personal_data) >= startUnivYear;
 
   eligibility.questionnaire = hasStudentAnsweredQuestionnaire;
 
