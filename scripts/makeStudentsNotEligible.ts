@@ -3,16 +3,19 @@
 /* eslint-disable no-restricted-syntax */
 import db from '../db/db';
 import { studentEligibilityTable, studentsTable } from '../db/tables';
-import { sendWelcomeMail } from '../services/email/sendWelcomeEmail';
+import { sendNotEligibleEmail } from '../services/email/sendNotEligibleEmail';
 
 const UNIV_YEAR_REGEX = /^\d{4}-\d{4}$/;
 
-const validateCertificatesStudents = async (
+const makeStudentsNotEligible = async (
   univYear: string,
   studentIds: string[],
   comment: string | null,
 ): Promise<void> => {
-  console.log('++ Script - Validating eligibilities for univ year: ', univYear);
+  console.log(
+    '++ Script - Making students NOT eligible for univ year: ',
+    univYear,
+  );
   console.log('++ Script - Student ids: ', studentIds);
   if (comment) {
     console.log('++ Script - Comment:', comment);
@@ -50,40 +53,41 @@ const validateCertificatesStudents = async (
     const rows = studentIds.map((studentId) => ({
       student_id: studentId,
       univ_year: univYear,
-      validated_by_team: true,
+      validated_by_team: false,
       comment: comment || null,
     }));
 
-    const alreadyEligibleRows = await db(studentEligibilityTable)
+    const alreadyNotEligibleRows = await db(studentEligibilityTable)
       .whereIn(
         'student_id',
         rows.map((r) => r.student_id),
       )
       .andWhere('univ_year', univYear)
+      .andWhere('validated_by_team', false)
       .select('student_id');
 
-    const alreadyEligibleStudentIds = new Set(
-      alreadyEligibleRows.map((r) => r.student_id),
+    const alreadyNotEligibleStudentIds = new Set(
+      alreadyNotEligibleRows.map((r) => r.student_id),
     );
 
     const result = await db(studentEligibilityTable)
       .insert(rows)
       .onConflict(['student_id', 'univ_year'])
       .merge({
-        validated_by_team: true,
+        validated_by_team: false,
         comment: comment || null,
       })
       .returning('*');
 
     const newlyInserted = result.filter(
-      (r) => !alreadyEligibleStudentIds.has(r.student_id),
+      (r) => !alreadyNotEligibleStudentIds.has(r.student_id),
     );
     const updated = result.filter((r) =>
-      alreadyEligibleStudentIds.has(r.student_id),
+      alreadyNotEligibleStudentIds.has(r.student_id),
     );
 
     console.log(
-      `Done! ${rows.length} student(s) validated for ${univYear}.` +
+      `Done! ${rows.length} student(s) not eligible for ${univYear}.` +
         ` ${newlyInserted.length} new - ${updated.length} updated`,
     );
 
@@ -94,9 +98,8 @@ const validateCertificatesStudents = async (
         continue;
       }
 
-      console.log('email', email);
       try {
-        await sendWelcomeMail(email);
+        await sendNotEligibleEmail(email);
       } catch (err) {
         console.error(`Failed to send to ${email}`, err);
       }
@@ -126,4 +129,4 @@ const commentArg = process.argv[4] || null;
 
 const studentIds = studentIdsArg.split(',').map((id) => id.trim());
 
-validateCertificatesStudents(univYearArg, studentIds, commentArg);
+makeStudentsNotEligible(univYearArg, studentIds, commentArg);
