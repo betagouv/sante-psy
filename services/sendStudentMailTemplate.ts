@@ -1,5 +1,4 @@
 import ejs from 'ejs';
-import logs from '../utils/logs';
 import sendEmail from '../utils/email';
 import config from '../utils/config';
 import CustomError from '../utils/CustomError';
@@ -16,10 +15,9 @@ const sendStudentMailTemplate = async (
       loginUrlWithToken: `${loginUrl}/${encodeURIComponent(token)}`,
     });
     await sendEmail(email, `${config.appName} - ${title}`, html);
-    console.log(`Login email sent for ${logs.hash(email)}`);
   } catch (err) {
     console.error(err);
-    throw new CustomError('Erreur lors de l\'envoi de l\'email.', 500);
+    throw new CustomError("Erreur lors de l'envoi de l'email.", 500);
   }
 };
 

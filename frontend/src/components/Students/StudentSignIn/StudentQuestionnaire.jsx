@@ -46,7 +46,9 @@ const StudentSignInQuestionnaire = () => {
         livingPostcode,
         apiInesCheck,
       });
-      navigate('/inscription/success');
+      navigate('/inscription/success', {
+        state: { isEligible: !!apiInesCheck },
+      });
     } catch (error) {
       console.error(error);
     }

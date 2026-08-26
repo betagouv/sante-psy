@@ -13,7 +13,6 @@ import db from '../db/db';
 import ejs from 'ejs';
 import { psychologistsTable, studentsTable } from '../db/tables';
 import loginController from './loginController';
-import sendStudentMailTemplate from '../services/sendStudentMailTemplate';
 import sendSecondStepMail from '../services/sendSecondStepMail';
 import validation from '../utils/validation';
 import verifyINEWithBirthDate from '../services/verifyStudentINE';
@@ -21,6 +20,8 @@ import send from '../utils/email';
 import signInAttempts from '../services/signInAttempts';
 import config from '../utils/config';
 import s3Service from '../services/s3';
+import { sendWelcomeMail as emailWelcome } from '../services/email/sendWelcomeEmail';
+import { sendNotEligibleEmail } from '../services/email/sendNotEligibleEmail';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
@@ -65,22 +66,7 @@ const sendStudentSecondStepMail = async (
 };
 
 const sendWelcomeMail = async (email): Promise<void> => {
-  try {
-    const loginUrl = loginInformations.generateLoginUrl();
-    const token = await loginController.getOrCreateToken(email, 'student', 2);
-    await sendStudentMailTemplate(
-      email,
-      loginUrl,
-      token,
-      'studentWelcome',
-      'Bienvenue !',
-    );
-  } catch (err) {
-    console.error(err);
-    throw err instanceof CustomError
-      ? err
-      : new CustomError("Erreur lors de l'envoi du mail de connexion", 500);
-  }
+  emailWelcome(email);
 };
 
 const verifyStudentToken = async (
@@ -231,12 +217,21 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
             err,
           );
         });
-      sendWelcomeMail(email).catch((err) => {
-        console.error(
-          `[sendWelcomeMail] failed for student ${student.id}`,
-          err,
-        );
-      });
+      if (apiInesCheck) {
+        sendWelcomeMail(email).catch((err) => {
+          console.error(
+            `[sendWelcomeMail] failed for student ${student.id}`,
+            err,
+          );
+        });
+      } else {
+        sendNotEligibleEmail(email).catch((err) => {
+          console.error(
+            `[sendWelcomeMail] failed for student ${student.id}`,
+            err,
+          );
+        });
+      }
 
       res.status(200).json({
         message: 'Un email vous a été envoyé.',
