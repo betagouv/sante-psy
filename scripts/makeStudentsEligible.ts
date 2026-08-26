@@ -112,10 +112,10 @@ const makeStudentsEligible = async (
 if (process.argv.length <= 3) {
   console.log('Invalid: missing arguments');
   console.log(
-    'Usage: ts-node validateCertificatesStudents.ts <univYear> <studentId1,studentId2,...> [comment]',
+    'Usage: ts-node makeStudentsEligible.ts <univYear> <studentId1,studentId2,...> [comment]',
   );
   console.log(
-    'Example: ts-node validateCertificatesStudents.ts 2026-2027 abc-123,def-456 "validated after review"',
+    'Example: ts-node makeStudentsEligible.ts 2026-2027 abc-123,def-456 "validated after review"',
   );
   process.exit(1);
 }
