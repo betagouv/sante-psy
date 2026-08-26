@@ -13,7 +13,6 @@ import db from '../db/db';
 import ejs from 'ejs';
 import { psychologistsTable, studentsTable } from '../db/tables';
 import loginController from './loginController';
-import sendStudentMailTemplate from '../services/sendStudentMailTemplate';
 import sendSecondStepMail from '../services/sendSecondStepMail';
 import validation from '../utils/validation';
 import verifyINEWithBirthDate from '../services/verifyStudentINE';
@@ -21,6 +20,8 @@ import send from '../utils/email';
 import signInAttempts from '../services/signInAttempts';
 import config from '../utils/config';
 import s3Service from '../services/s3';
+import { sendWelcomeMail as emailWelcome } from '../services/email/sendWelcomeEmail';
+import { sendNotEligibleEmail } from '../services/email/sendNotEligibleEmail';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
@@ -64,42 +65,8 @@ const sendStudentSecondStepMail = async (
   }
 };
 
-const sendNotEligibleEmail = async (email: string): Promise<void> => {
-  try {
-    const html = await ejs.renderFile(`./views/emails/studentNotEligible.ejs`);
-    await send(
-      email,
-      `${config.appName} - Ton éligibilité est en cours d’instruction`,
-      html,
-    );
-  } catch (err) {
-    console.error(err);
-    throw err instanceof CustomError
-      ? err
-      : new CustomError(
-          "Erreur lors de l'envoi du mail de non éligibilité",
-          500,
-        );
-  }
-};
-
 const sendWelcomeMail = async (email): Promise<void> => {
-  try {
-    const loginUrl = loginInformations.generateLoginUrl();
-    const token = await loginController.getOrCreateToken(email, 'student', 2);
-    await sendStudentMailTemplate(
-      email,
-      loginUrl,
-      token,
-      'studentWelcome',
-      'Bienvenue !',
-    );
-  } catch (err) {
-    console.error(err);
-    throw err instanceof CustomError
-      ? err
-      : new CustomError("Erreur lors de l'envoi du mail de bienvenue", 500);
-  }
+  emailWelcome(email);
 };
 
 const verifyStudentToken = async (
