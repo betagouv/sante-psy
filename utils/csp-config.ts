@@ -43,7 +43,7 @@ export default helmet.contentSecurityPolicy({
       'https://bid.g.doubleclick.net/',
       'https://game.crisp.chat',
       ...crispDomains,
-      'blob:'
+      'blob:',
     ],
     'connect-src': [
       "'self'",
