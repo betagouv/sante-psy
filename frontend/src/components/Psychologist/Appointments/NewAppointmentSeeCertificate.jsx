@@ -41,7 +41,11 @@ const NewAppointmentSeeCertificate = ({
   }, [univYear, studentId]);
 
   if (certificateNotFound) {
-    return <Alert type="info" title="Aucun certificat n'a été trouvé" />;
+    return (
+      <div style={{ alignSelf: 'flex-start' }}>
+        <Alert type="info" title="Aucun certificat n'a été trouvé" />
+      </div>
+    );
   }
 
   const resolvedStyle = className ? style : { ...DEFAULT_STYLE, ...style };

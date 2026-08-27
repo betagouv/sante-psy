@@ -273,21 +273,21 @@ const NewAppointment = () => {
           type="info"
           description={
             isFirstAppointmentEver
-              ? 'Première séance avec cet étudiant - veuillez vérifier le certificat de scolarité avant de confirmer.'
-              : 'Première séance avec cet étudiant pour la nouvelle année universitaire - veuillez vérifier le certificat de scolarité avant de confirmer.'
+              ? "1ère séance avec cet étudiant - veuillez vérifier le justificatif de scolarité (consulté en ligne ou présenté par l'étudiant) avant de confirmer"
+              : "1ère séance avec cet étudiant pour la nouvelle année universitaire - veuillez vérifier le justificatif de scolarité (consulté en ligne ou présenté par l'étudiant) avant de confirmer"
           }
         />,
       );
       toRender.push(
         <CheckboxGroup key="certif-checkboxes">
           <Checkbox
-            label="J'ai bien comparé l'identité de l'étudiant avec le certificat de scolarité"
+            label="J'ai comparé l'identité de l'étudiant avec le justificatif de scolarité, consulté en ligne ou présenté physiquement par l'étudiant"
             onChange={(e) => setCheckCertifIdentity(e.target.checked)}
             checked={checkCertifIdentity}
             hint="ou l'attestation CVEC fournie"
           />
           <Checkbox
-            label="J'ai vérifié que le certificat de scolarité est valable sur la période en cours"
+            label="J'ai vérifié que le justificatif de scolarité présenté est valable sur l’année universitaire en cours"
             onChange={(e) => setCheckCertifValidity(e.target.checked)}
             checked={checkCertifValidity}
           />
