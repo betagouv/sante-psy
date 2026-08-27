@@ -2,7 +2,7 @@ import { AppointmentWithPatient, AppointmentInfo } from '../types/Appointment';
 import dateUtils from '../utils/date';
 import appointmentBadges from '../utils/badges';
 import { getUnivYear } from '../utils/univYears';
-import { Patient } from '../types/Patient';
+import { EnrichedPatient } from '../types/Patient';
 
 const START_CYCLE_DATE = new Date('2023-09-01T00:00:00Z');
 const START_FIRST_DATE = new Date('2024-01-01T00:00:00Z');
@@ -31,14 +31,33 @@ const addBadges = (
 };
 
 const getPatientBadges = (
-  patient: AppointmentWithPatient | Patient,
+  patient: AppointmentWithPatient | EnrichedPatient,
 ): string[] => {
   const countedAppointments = parseInt(patient.countedAppointments);
   let badges = [];
 
   if (!patient.student) {
     badges.push(appointmentBadges.no_student_account);
+    return badges;
   }
+
+  const eligibility = patient.student?.eligibility ?? null;
+
+  if (eligibility.status === 'NOT_ELIGIBLE') {
+    badges.push(appointmentBadges.not_eligible);
+    return badges;
+  }
+  if (eligibility.status === 'PENDING') {
+    badges.push(appointmentBadges.pending_eligibility);
+    return badges;
+  }
+  if (!eligibility.isProfileComplete) {
+    badges.push(appointmentBadges.incomplete_profile);
+    return badges;
+  }
+
+  // profile is complete and eligible at this point
+  badges.push(appointmentBadges.completed);
 
   const badgesToAdd = addBadges(
     countedAppointments,
@@ -47,13 +66,12 @@ const getPatientBadges = (
   );
   badges = badges.concat(badgesToAdd);
 
-  if (badges.length === 0) {
-    badges.push(appointmentBadges.completed);
-  }
   return badges;
 };
 
-const getPatientWithBadges = (patients: Patient[]): Patient[] => {
+const getPatientWithBadges = (
+  patients: EnrichedPatient[],
+): EnrichedPatient[] => {
   const patientsWithBadges = [];
   patients.forEach((patient) => {
     const badges = getPatientBadges(patient);

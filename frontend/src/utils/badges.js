@@ -33,7 +33,7 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
   no_student_account: {
     key: 'no_student_account',
     text: 'Pas de compte étudiant',
-    severity: 'warning',
+    severity: 'error',
     icon: 'fr-icon-warning-fill fr-icon--sm',
   },
   completed: {
@@ -57,6 +57,28 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
       'A partir du 1er juillet 2024, toutes les séances sont comptabilisées 50€, le nombre maximal de séances passe à 12 au lieu de 8',
   },
   inactive: { key: 'inactive' },
+  pending_eligibility: {
+    key: 'pending_eligibility',
+    text: "En cours d'instruction",
+    severity: 'warning',
+    icon: 'fr-icon-warning-fill fr-icon--sm',
+    tooltip: "L'équipe SPE évalue l'éligibilité de cet étudiant.",
+  },
+  not_eligible: {
+    key: 'not_eligible',
+    text: 'Non éligible',
+    severity: 'error',
+    icon: 'fr-icon-warning-fill fr-icon--sm',
+    tooltip: "Cet étudiant n'est pas éligible au dispositif SPE.",
+  },
+  incomplete_profile: {
+    key: 'incomplete_profile',
+    text: 'Profil incomplet',
+    severity: 'warning',
+    icon: 'fr-icon-warning-fill fr-icon--sm',
+    tooltip:
+      "Cet étudiant n'a pas mis à jour son profil pour l'année scolaire en cours.",
+  },
 });
 
 export default getBadgeInfos;

@@ -10,6 +10,9 @@ const appointmentBadges = {
   switch_rule_notice: 'switch_rule_notice',
   inactive: 'inactive',
   no_student_account: 'no_student_account',
+  pending_eligibility: 'pending_eligibility',
+  not_eligible: 'not_eligible',
+  incomplete_profile: 'incomplete_profile',
 };
 
 export default appointmentBadges;
