@@ -79,7 +79,7 @@ const downloadCertificatesForStudents = async (
   const finalTally = await studentIds.reduce<Promise<Tally>>(
     async (accPromise, studentId) => {
       const acc = await accPromise;
-      const prefix = `${getStudentPrefix(studentId)}/${univYear}`;
+      const prefix = `${getStudentPrefix(studentId)}${univYear}`;
 
       try {
         const keys = await s3.listAllKeys(prefix);
