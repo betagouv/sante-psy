@@ -79,6 +79,14 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
     tooltip:
       "Cet étudiant n'a pas mis à jour son profil pour l'année scolaire en cours.",
   },
+  check_certif: {
+    key: 'check_certif',
+    text: 'Document à valider',
+    severity: 'info',
+    icon: 'fr-icon-info-fill fr-icon--sm',
+    tooltip:
+      "Cet étudiant n'a pas encore effectué de séances cette année. Il vous sera demandé de valider le document fourni par l'étudiant au moment de déclarer la première séance.",
+  },
 });
 
 export default getBadgeInfos;

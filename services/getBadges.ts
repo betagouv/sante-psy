@@ -55,9 +55,12 @@ const getPatientBadges = (
     badges.push(appointmentBadges.incomplete_profile);
     return badges;
   }
-
-  // profile is complete and eligible at this point
-  badges.push(appointmentBadges.completed);
+  if (countedAppointments === 0) {
+    badges.push(appointmentBadges.check_certif);
+  } else {
+    // profile is complete and eligible at this point
+    badges.push(appointmentBadges.completed);
+  }
 
   const badgesToAdd = addBadges(
     countedAppointments,

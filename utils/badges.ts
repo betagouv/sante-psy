@@ -13,6 +13,7 @@ const appointmentBadges = {
   pending_eligibility: 'pending_eligibility',
   not_eligible: 'not_eligible',
   incomplete_profile: 'incomplete_profile',
+  check_certif: 'check_certif',
 };
 
 export default appointmentBadges;
