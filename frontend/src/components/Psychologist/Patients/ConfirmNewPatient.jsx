@@ -4,6 +4,8 @@ import agent from 'services/agent';
 import { ButtonGroup, Button, Alert, Icon } from '@dataesr/react-dsfr';
 import { HashLink } from 'react-router-hash-link';
 import { Stack } from 'components/Utils/Stack';
+import NewAppointmentSeeCertificate from '../Appointments/NewAppointmentSeeCertificate';
+import { getUnivYear } from 'services/univYears';
 
 const getStudentData = (student) => [
   {
@@ -30,7 +32,7 @@ const getStudentData = (student) => [
   {
     key: 'schoolname',
     title: 'Établissement',
-    value: student.schoolName,
+    value: student.school_name,
   },
 ];
 
@@ -52,13 +54,18 @@ const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
   };
 
   const displayStudentInfo = (student) => (
-    <div>
-      {getStudentData(student).map(({ key, title, value }) => (
-        <div key={key} className={styles.infoRow}>
-          <span className={styles.infoTitle}>{title}</span>
-          <span className={styles.infoValue}>{value}</span>
-        </div>
-      ))}
+    <div className={styles.studentInfoWrapper}>
+      <div className={styles.infoColumn}>
+        {getStudentData(student).map(({ key, title, value }) => (
+          <div key={key} className={styles.infoRow}>
+            <span className={styles.infoTitle}>{title}</span>
+            <span className={styles.infoValue}>{value}</span>
+          </div>
+        ))}
+      </div>
+      <div className={styles.certificateColumn}>
+        <NewAppointmentSeeCertificate studentId={student.id} univYear={getUnivYear(new Date(), '-')} />
+      </div>
     </div>
   );
 

@@ -80,16 +80,6 @@ export const seeStudentCertificate = async (
     return;
   }
 
-  const patient = await db(patientsTable)
-    .where('psychologistId', psychologistId)
-    .andWhere('student_id', studentId)
-    .andWhere('deleted', false)
-    .first();
-  if (!patient) {
-    res.status(403).json({ message: 'Accès non autorisé' });
-    return;
-  }
-
   try {
     const result = await s3Service.getCertificateStream(studentId, univYear);
     if (!result) {
