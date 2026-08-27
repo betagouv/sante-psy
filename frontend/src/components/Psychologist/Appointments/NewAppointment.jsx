@@ -238,7 +238,7 @@ const NewAppointment = () => {
           title="Cet étudiant n'est pas éligible au dispositif SPE"
         />,
       );
-      return <>{toRender}</>;
+      return toRender;
     }
 
     if (eligibility?.status === 'PENDING') {
@@ -250,7 +250,7 @@ const NewAppointment = () => {
           title="L'éligibilité de cet étudiant est en cours d'instruction"
         />,
       );
-      return <>{toRender}</>;
+      return toRender;
     }
 
     if (eligibility && !eligibility.isProfileComplete) {
@@ -262,7 +262,7 @@ const NewAppointment = () => {
           title="Le profil de cet étudiant n'est pas à jour"
         />,
       );
-      return <>{toRender}</>;
+      return toRender;
     }
 
     if (requiresCertificateCheck) {
@@ -299,7 +299,7 @@ const NewAppointment = () => {
       <React.Fragment key="buttons">{renderButtons()}</React.Fragment>,
     );
 
-    return <>{toRender}</>;
+    return toRender;
   };
 
   return (
@@ -316,9 +316,9 @@ const NewAppointment = () => {
         {renderWarningOrForm()}
       </form>
       {patient?.student &&
-      eligibilityInfo?.eligibility &&
-      eligibilityInfo?.eligibility.canPsyDeclareAppointment &&
-      requiresCertificateCheck ? (
+        eligibilityInfo?.eligibility &&
+        eligibilityInfo?.eligibility.canPsyDeclareAppointment &&
+        requiresCertificateCheck ? (
         <NewAppointmentSeeCertificate
           studentId={patient.student.id}
           univYear={selectedUnivYear}
