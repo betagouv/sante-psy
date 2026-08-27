@@ -47,9 +47,6 @@ const SeePatient = () => {
               <h2>
                 {patient.firstNames} {patient.lastName}
               </h2>
-              {patient.badges.includes(badges.student_ine.key)
-                ? renderBadge({ badge: badges.student_ine.key })
-                : ''}
             </section>
           )}
           <div>
