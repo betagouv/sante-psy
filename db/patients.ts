@@ -1,27 +1,44 @@
 import date from '../utils/date';
 import { patientsTable } from './tables';
 import db from './db';
-import { Patient } from '../types/Patient';
+import { EnrichedPatient, Patient } from '../types/Patient';
 import { Student } from '../types/Student';
+import { getStudentEligibility } from './studentEligibility';
+import { getUnivYear } from '../utils/univYears';
 
 export const ERROR_MESSAGE_STUDENT_ALREADY_PATIENT =
   'Cet étudiant est déjà un patient de ce psychologue';
 
-const enrichPatientWithStudent = (
+const enrichPatientWithStudent = async (
   patient: Patient,
   student: Student | null,
-): Patient => ({
-  ...patient,
-  student,
-  firstNames: student?.firstNames ?? patient.firstNames,
-  lastName: student?.lastName ?? patient.lastName,
-  INE: student?.ine ?? patient.INE,
-});
+): Promise<EnrichedPatient> => {
+  if (!student) {
+    return {
+      ...patient,
+      student: null,
+    };
+  }
+  const studentEligibility = await getStudentEligibility(
+    student,
+    getUnivYear(new Date()),
+  );
+  return {
+    ...patient,
+    student: {
+      ...student,
+      eligibility: studentEligibility,
+    },
+    firstNames: student.firstNames,
+    lastName: student.lastName,
+    INE: student.ine,
+  };
+};
 
 const getById = async (
   patientId: string,
   psychologistId: string,
-): Promise<Patient> => {
+): Promise<EnrichedPatient> => {
   try {
     const patient = await db(patientsTable)
       .where('id', patientId)
@@ -36,7 +53,7 @@ const getById = async (
       ? await db('students').where('id', patient.student_id).first()
       : null;
 
-    return enrichPatientWithStudent(patient, student);
+    return await enrichPatientWithStudent(patient, student);
   } catch (err) {
     console.error('Erreur de récupération du patient', err);
     throw new Error('Erreur de récupération du patient');
@@ -55,14 +72,7 @@ const isAlreadyAPatient = async (
   return !!patient;
 };
 
-const getAll = async (
-  psychologistId: string,
-): Promise<
-  (Patient & {
-    appointmentsCount: string;
-    appointmentsYearCount: string;
-  })[]
-> => {
+const getAll = async (psychologistId: string): Promise<EnrichedPatient[]> => {
   try {
     // Get all patients of psychologist
     const patients = await db
@@ -77,15 +87,14 @@ const getAll = async (
       : [];
     const studentsById = Object.fromEntries(students.map((s) => [s.id, s]));
 
-    return patients.map((p) => {
-      const student = p.student_id
-        ? (studentsById[p.student_id] ?? null)
-        : null;
-      return enrichPatientWithStudent(p, student) as Patient & {
-        appointmentsCount: string;
-        appointmentsYearCount: string;
-      };
-    });
+    return await Promise.all(
+      patients.map((p) => {
+        const student = p.student_id
+          ? (studentsById[p.student_id] ?? null)
+          : null;
+        return enrichPatientWithStudent(p, student);
+      }),
+    );
   } catch (err) {
     console.error('Impossible de récupérer les patients', err);
     throw new Error('Impossible de récupérer les patients');

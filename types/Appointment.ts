@@ -1,23 +1,25 @@
-import { Patient } from './Patient';
+import { EnrichedPatient } from './Patient';
 
 export type Appointment = {
-    id: string,
-    psychologistId: string,
-    appointmentDate: string,
-    patientId: string,
-    deleted: boolean,
-    updatedAt?: string,
-    createdAt?: string,
-    badges?: string[],
-    univYear?: string,
+  id: string;
+  psychologistId: string;
+  appointmentDate: string;
+  patientId: string;
+  deleted: boolean;
+  updatedAt?: string;
+  createdAt?: string;
+  badges?: string[];
+  univYear?: string;
+};
+
+export type AppointmentWithPatient = Appointment & EnrichedPatient;
+
+export interface AppointmentByYear {
+  [univYear: string]: Appointment[];
 }
-
-export type AppointmentWithPatient = Appointment & Patient;
-
-export interface AppointmentByYear {[univYear: string]: Appointment[]}
 
 export type AppointmentInfo = {
-    date: Date,
-    badges: string[],
-    count: number,
-}
+  date: Date;
+  badges: string[];
+  count: number;
+};
