@@ -88,6 +88,7 @@ export const seeStudentCertificate = async (
     }
 
     res.setHeader('Content-Type', result.contentType || 'application/pdf');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     if (result.contentLength) {
       res.setHeader('Content-Length', result.contentLength.toString());
     }
