@@ -57,6 +57,7 @@ const NewAppointmentSeeCertificate = ({
         title="Certificat étudiant"
         className={className}
         style={{ border: 'none', ...resolvedStyle }}
+        sandbox=""
       />
     )
   );
