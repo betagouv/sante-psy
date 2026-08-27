@@ -7,6 +7,8 @@ import agent from 'services/agent';
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
 import styles from './seePatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
+import NewAppointmentSeeCertificate from '../Appointments/NewAppointmentSeeCertificate';
+import { getUnivYear } from 'services/univYears';
 
 const SeePatient = () => {
   const { patientId } = useParams();
@@ -47,6 +49,17 @@ const SeePatient = () => {
             </section>
           )}
           <div>
+            {patient?.student && (
+              <>
+                <h4>Document pour l'année {getUnivYear(new Date(), '-')}</h4>
+                <NewAppointmentSeeCertificate
+                  studentId={patient.student.id}
+                  univYear={getUnivYear(new Date(), '-')}
+                  className={styles.certificatePreview}
+                />
+              </>
+            )}
+
             {patientId && (
               <div
                 id="anchor-student-list"

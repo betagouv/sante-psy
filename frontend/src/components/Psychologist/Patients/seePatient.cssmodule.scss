@@ -25,8 +25,8 @@
 }
 
 .listSubTitle {
-  color:#9795BF;
-  padding-bottom:60px;
+  color: #9795bf;
+  padding-bottom: 60px;
   font-size: 1.3rem !important;
 }
 
@@ -58,15 +58,22 @@
 .otherInfo {
   margin-top: 18px;
 }
+.certificatePreview {
+  width: 60%;
+  aspect-ratio: 1 / 1.414;
+}
 
 @media (max-width: 768px) {
   .patientAppointments {
-      width: 100%;
+    width: 100%;
   }
 
   .ineWrapper {
     display: flex;
     flex-direction: column;
     align-items: baseline;
+  }
+  .certificatePreview {
+    width: 100%;
   }
 }

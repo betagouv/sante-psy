@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Alert } from '@dataesr/react-dsfr';
 import agent from 'services/agent';
 
-const NewAppointmentSeeCertificate = ({ studentId, univYear }) => {
+const DEFAULT_STYLE = { width: '100%', height: '80vh' };
+
+const NewAppointmentSeeCertificate = ({
+  studentId,
+  univYear,
+  style,
+  className,
+}) => {
   const [certificateUrl, setCertificateUrl] = useState(null);
   const [certificateNotFound, setCertificateNotFound] = useState(false);
   useEffect(() => {
@@ -34,15 +41,18 @@ const NewAppointmentSeeCertificate = ({ studentId, univYear }) => {
   }, [univYear, studentId]);
 
   if (certificateNotFound) {
-    return <Alert type="info">Aucun certificat n'a été trouvé</Alert>;
+    return <Alert type="info" title="Aucun certificat n'a été trouvé" />;
   }
+
+  const resolvedStyle = className ? style : { ...DEFAULT_STYLE, ...style };
 
   return (
     certificateUrl && (
       <iframe
         src={certificateUrl}
         title="Certificat étudiant"
-        style={{ width: '100%', height: '80vh', border: 'none' }}
+        className={className}
+        style={{ border: 'none', ...resolvedStyle }}
       />
     )
   );
