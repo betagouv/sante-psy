@@ -4,7 +4,6 @@ const appointmentBadges = {
   max: 'max',
   before_max: 'before_max',
   other_psychologist: 'other_psychologist',
-  student_ine: 'student_ine',
   other: 'other',
   completed: 'completed',
   new_rules: 'new_rules',

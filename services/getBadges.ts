@@ -10,13 +10,6 @@ const START_NEW_RULES = new Date('2024-07-01T00:00:00Z');
 const MAX_APPOINTMENT_OLD = 8;
 export const MAX_APPOINTMENT_NEW = 12;
 
-const areStudentINEFilled = (
-  appointment: AppointmentWithPatient | Patient,
-): boolean => {
-  const { INE } = appointment;
-  return !!INE;
-};
-
 const addBadges = (
   count: number,
   max: number,
@@ -45,10 +38,6 @@ const getPatientBadges = (
 
   if (!patient.student) {
     badges.push(appointmentBadges.no_student_account);
-  }
-
-  if (!areStudentINEFilled(patient)) {
-    badges.push(appointmentBadges.student_ine);
   }
 
   const badgesToAdd = addBadges(
