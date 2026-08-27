@@ -4,8 +4,6 @@ import { useParams } from 'react-router-dom';
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
 
-import { renderBadge } from 'components/Badges/Badges';
-import getBadgeInfos from 'src/utils/badges';
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
 import styles from './seePatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
@@ -13,7 +11,6 @@ import PatientAppointments from './PatientAppointments';
 const SeePatient = () => {
   const { patientId } = useParams();
   const [patient, setPatient] = useState();
-  const badges = getBadgeInfos();
 
   useEffect(() => {
     if (patientId) {
