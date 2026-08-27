@@ -3,12 +3,16 @@ import send from '../../utils/email';
 import CustomError from '../../utils/CustomError';
 import config from '../../utils/config';
 
-export const sendNotEligibleEmail = async (email: string): Promise<void> => {
+export const sendPendingEligibilityEmail = async (
+  email: string,
+): Promise<void> => {
   try {
-    const html = await ejs.renderFile(`./views/emails/studentNotEligible.ejs`);
+    const html = await ejs.renderFile(
+      `./views/emails/studentPendingEligibility.ejs`,
+    );
     await send(
       email,
-      `${config.appName} - Tu n’es pas éligible au dispositif Santé Psy Etudiant`,
+      `${config.appName} - Ton éligibilité est en cours d’instruction`,
       html,
     );
   } catch (err) {
@@ -16,7 +20,7 @@ export const sendNotEligibleEmail = async (email: string): Promise<void> => {
     throw err instanceof CustomError
       ? err
       : new CustomError(
-          "Erreur lors de l'envoi du mail de non éligibilité",
+          "Erreur lors de l'envoi du mail d'éligibilité en cours d'instruction",
           500,
         );
   }

@@ -4,16 +4,15 @@ import { useParams } from 'react-router-dom';
 import { formatDDMMYYYY } from 'services/date';
 import agent from 'services/agent';
 
-import { renderBadge } from 'components/Badges/Badges';
-import getBadgeInfos from 'src/utils/badges';
 import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
 import styles from './seePatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
+import NewAppointmentSeeCertificate from '../Appointments/NewAppointmentSeeCertificate';
+import { getUnivYear } from 'services/univYears';
 
 const SeePatient = () => {
   const { patientId } = useParams();
   const [patient, setPatient] = useState();
-  const badges = getBadgeInfos();
 
   useEffect(() => {
     if (patientId) {
@@ -47,12 +46,20 @@ const SeePatient = () => {
               <h2>
                 {patient.firstNames} {patient.lastName}
               </h2>
-              {patient.badges.includes(badges.student_ine.key)
-                ? renderBadge({ badge: badges.student_ine.key })
-                : ''}
             </section>
           )}
           <div>
+            {patient?.student && (
+              <>
+                <h4>Document pour l'année {getUnivYear(new Date(), '-')}</h4>
+                <NewAppointmentSeeCertificate
+                  studentId={patient.student.id}
+                  univYear={getUnivYear(new Date(), '-')}
+                  className={styles.certificatePreview}
+                />
+              </>
+            )}
+
             {patientId && (
               <div
                 id="anchor-student-list"

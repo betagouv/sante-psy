@@ -278,13 +278,6 @@ const StudentSignInStepTwo = () => {
             </p>
           </div>
         )}
-        <div className="fr-alert fr-alert--warning fr-mb-3w" role="alert">
-          <p>
-            <strong>Cette étape n&apos;est pas la dernière !</strong> Tu ne
-            seras définitivement inscrit qu&apos;après avoir complété toutes les
-            étapes du questionnaire.
-          </p>
-        </div>
         <div className="fr-mb-4w fr-mt-2w">
           <button className="fr-btn" type="submit" disabled={isBlocked}>
             {notification?.type === 'error'

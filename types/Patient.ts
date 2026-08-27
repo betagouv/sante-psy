@@ -1,4 +1,4 @@
-import { Student } from './Student';
+import { StudentWithEligibility } from './Student';
 
 export type Patient = {
   id: string;
@@ -22,6 +22,8 @@ export type Patient = {
   countCertificatesSent?: number;
   badges?: string[];
   student_id?: string;
-} & {
-  student?: Student | null;
+};
+
+export type EnrichedPatient = Patient & {
+  student: StudentWithEligibility | null;
 };

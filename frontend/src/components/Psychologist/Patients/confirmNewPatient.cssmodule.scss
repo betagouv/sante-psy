@@ -1,3 +1,21 @@
+.studentInfoWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.infoColumn {
+  flex: 0 0 auto;
+  width: fit-content;
+  max-width: 300px;
+  min-width: 250px;
+}
+
+.certificateColumn {
+  flex: 1;
+  min-width: 0;
+}
+
 .infoRow {
   display: flex;
   align-items: baseline;
@@ -6,7 +24,7 @@
 }
 
 .infoTitle {
-  flex: 0 0 15%; /* fixed at 1/4 width, won't grow or shrink */
+  flex: 0 0 40%; /* fixed at 40% width, won't grow or shrink */
   font-size: 1rem;
   font-weight: 500;
 }
@@ -15,4 +33,19 @@
   flex: 1; /* takes the remaining 75% */
   font-size: 1rem;
   font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .studentInfoWrapper {
+    flex-direction: column;
+  }
+
+  .infoColumn {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .certificateColumn {
+    width: 100%;
+  }
 }

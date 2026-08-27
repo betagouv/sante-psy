@@ -161,11 +161,33 @@ const NewAppointment = () => {
     },
   ];
   const allOptions = defaultString.concat(patientsMap);
+  const renderButtons = () => (
+    <div className={styles.submitCancelButtonsWrapper}>
+      <Button
+        id="new-appointment-submit"
+        data-test-id="new-appointment-submit"
+        submit
+        icon="ri-add-line"
+        className="fr-mt-4w"
+        disabled={!canCreateAppointment}
+      >
+        Créer la séance
+      </Button>
+      <Button
+        secondary
+        className="fr-mt-4w"
+        onClick={() => navigate('/psychologue/mes-seances')}
+      >
+        Annuler
+      </Button>
+    </div>
+  );
 
   const renderWarningOrForm = () => {
     if (!patientId || serverError) {
       return null;
     }
+
     if (patientHasNoAccount) {
       return (
         <Alert
@@ -194,65 +216,90 @@ const NewAppointment = () => {
         />
       );
     }
-    return (
-      <>
-        <NewAppointmentDatePicker date={date} setDate={setDate} />
-        {eligibilityInfo &&
-        !eligibilityInfo.eligibility?.canPsyDeclareAppointment ? (
-          <Alert
-            type="warning"
-            className="fr-my-3w"
-            title="Cet étudiant n'est pas éligible"
-          />
-        ) : (
-          requiresCertificateCheck && (
-            <>
-              <Alert
-                className="fr-my-3w"
-                type="info"
-                description={
-                  isFirstAppointmentEver
-                    ? 'Première séance avec cet étudiant - veuillez vérifier le certificat de scolarité avant de confirmer.'
-                    : 'Première séance avec cet étudiant pour la nouvelle année universitaire - veuillez vérifier le certificat de scolarité avant de confirmer.'
-                }
-              />
-              <CheckboxGroup>
-                <Checkbox
-                  label="J'ai bien comparé l'identité de l'étudiant avec le certificat de scolarité"
-                  onChange={(e) => setCheckCertifIdentity(e.target.checked)}
-                  checked={checkCertifIdentity}
-                  hint="ou l'attestation CVEC fournie"
-                />
-                <Checkbox
-                  label="J'ai vérifié que le certificat de scolarité est valable sur la période en cours"
-                  onChange={(e) => setCheckCertifValidity(e.target.checked)}
-                  checked={checkCertifValidity}
-                />
-              </CheckboxGroup>
-              <div className={styles.submitCancelButtonsWrapper}>
-                <Button
-                  id="new-appointment-submit"
-                  data-test-id="new-appointment-submit"
-                  submit
-                  icon="ri-add-line"
-                  className="fr-mt-4w"
-                  disabled={!canCreateAppointment}
-                >
-                  Créer la séance
-                </Button>
-                <Button
-                  secondary
-                  className="fr-mt-4w"
-                  onClick={() => navigate('/psychologue/mes-seances')}
-                >
-                  Annuler
-                </Button>
-              </div>
-            </>
-          )
-        )}
-      </>
+
+    const toRender = [];
+
+    toRender.push(
+      <NewAppointmentDatePicker
+        key="date-picker"
+        date={date}
+        setDate={setDate}
+      />,
     );
+
+    const eligibility = eligibilityInfo ? eligibilityInfo.eligibility : null;
+
+    if (eligibility?.status === 'NOT_ELIGIBLE') {
+      toRender.push(
+        <Alert
+          key="not-eligible-alert"
+          type="warning"
+          className="fr-my-3w"
+          title="Cet étudiant n'est pas éligible au dispositif SPE"
+        />,
+      );
+      return toRender;
+    }
+
+    if (eligibility?.status === 'PENDING') {
+      toRender.push(
+        <Alert
+          key="pending-eligibility-alert"
+          type="warning"
+          className="fr-my-3w"
+          title="L'éligibilité de cet étudiant est en cours d'instruction"
+        />,
+      );
+      return toRender;
+    }
+
+    if (eligibility && !eligibility.isProfileComplete) {
+      toRender.push(
+        <Alert
+          key="incomplete-profile-alert"
+          type="warning"
+          className="fr-my-3w"
+          title="Le profil de cet étudiant n'est pas à jour"
+        />,
+      );
+      return toRender;
+    }
+
+    if (requiresCertificateCheck) {
+      toRender.push(
+        <Alert
+          key="certif-check-alert"
+          className="fr-my-3w"
+          type="info"
+          description={
+            isFirstAppointmentEver
+              ? "1ère séance avec cet étudiant - veuillez vérifier le justificatif de scolarité (consulté en ligne ou présenté par l'étudiant) avant de confirmer"
+              : "1ère séance avec cet étudiant pour la nouvelle année universitaire - veuillez vérifier le justificatif de scolarité (consulté en ligne ou présenté par l'étudiant) avant de confirmer"
+          }
+        />,
+      );
+      toRender.push(
+        <CheckboxGroup key="certif-checkboxes">
+          <Checkbox
+            label="J'ai comparé l'identité de l'étudiant avec le justificatif de scolarité, consulté en ligne ou présenté physiquement par l'étudiant"
+            onChange={(e) => setCheckCertifIdentity(e.target.checked)}
+            checked={checkCertifIdentity}
+            hint="ou l'attestation CVEC fournie"
+          />
+          <Checkbox
+            label="J'ai vérifié que le justificatif de scolarité présenté est valable sur l’année universitaire en cours"
+            onChange={(e) => setCheckCertifValidity(e.target.checked)}
+            checked={checkCertifValidity}
+          />
+        </CheckboxGroup>,
+      );
+    }
+
+    toRender.push(
+      <React.Fragment key="buttons">{renderButtons()}</React.Fragment>,
+    );
+
+    return toRender;
   };
 
   return (
@@ -269,9 +316,9 @@ const NewAppointment = () => {
         {renderWarningOrForm()}
       </form>
       {patient?.student &&
-      eligibilityInfo?.eligibility &&
-      eligibilityInfo.eligibility.uploadedDocument &&
-      eligibilityInfo.eligibility.canPsyDeclareAppointment ? (
+        eligibilityInfo?.eligibility &&
+        eligibilityInfo?.eligibility.canPsyDeclareAppointment &&
+        requiresCertificateCheck ? (
         <NewAppointmentSeeCertificate
           studentId={patient.student.id}
           univYear={selectedUnivYear}

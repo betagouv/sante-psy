@@ -19,9 +19,12 @@ import CustomError from '../utils/CustomError';
 import { checkXsrf } from '../middlewares/xsrfProtection';
 import loginInformations from '../services/loginInformations';
 import DOMPurify from '../services/sanitizer';
-import { getUnivYear, startCurrentUnivYear } from '../utils/univYears';
+import { getUnivYear } from '../utils/univYears';
 import s3Service from '../services/s3';
-import { isStudentEligible } from '../db/studentEligibility';
+import {
+  isStudentEligible,
+  isStudentProfileComplete,
+} from '../db/studentEligibility';
 
 const CONNEXION_EMAIL_SENT_MESSAGE = `Un email de connexion vient de vous être envoyé si votre adresse email 
       correspond bien à un utilisateur inscrit sur Santé Psy Étudiant. 
@@ -312,24 +315,26 @@ const userConnected = async (req: Request, res: Response): Promise<void> => {
       return;
     }
   } else if (role === 'student') {
-    const startUnivYear = new Date(startCurrentUnivYear());
     const student = await dbStudents.getById(userId);
+    const currentUnivYear = getUnivYear(new Date());
+
     if (student) {
-      const isEligible = await isStudentEligible(
+      const isEligible = await isStudentEligible(student, currentUnivYear);
+      const isProfileComplete = isStudentProfileComplete(
         student,
-        getUnivYear(new Date()),
+        currentUnivYear,
       );
+      const hasUploadedCertificate = await s3Service.certificateExists(
+        student.id,
+        currentUnivYear,
+      );
+
       res.json({
         role: 'student',
         user: {
           ...student,
-          needsToUpdatePersonalData:
-            !student.last_update_personal_data ||
-            new Date(student.last_update_personal_data) < startUnivYear,
-          needsToUploadCertificate: !(await s3Service.certificateExists(
-            student.id,
-            getUnivYear(new Date()),
-          )),
+          needsToUpdatePersonalData: !isProfileComplete,
+          needsToUploadCertificate: !hasUploadedCertificate,
           isEligible,
         },
       });

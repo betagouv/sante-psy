@@ -3,7 +3,7 @@ import date from '../utils/date';
 import { appointmentsTable, patientsTable } from '../db/tables';
 import db from '../db/db';
 import { endCurrentUnivYear, startCurrentUnivYear } from '../utils/univYears';
-import { Patient } from '../types/Patient';
+import { EnrichedPatient } from '../types/Patient';
 import { AppointmentWithPatient } from '../types/Appointment';
 
 type AppointmentRow = {
@@ -42,8 +42,8 @@ const buildBucket = async (
 };
 
 const getAppointmentsCount = async (
-  patients: Patient[] | AppointmentWithPatient[],
-): Promise<Patient[] | AppointmentWithPatient[]> => {
+  patients: EnrichedPatient[] | AppointmentWithPatient[],
+): Promise<EnrichedPatient[] | AppointmentWithPatient[]> => {
   const withStudentId = patients.filter((p) => p.student_id);
   const withIne = patients.filter((p) => !p.student_id && p.INE.trim() !== '');
   const withPatientIdOnly = patients.filter(

@@ -1,3 +1,5 @@
+import { Eligibility } from './Eligibility';
+
 export type Student = {
   id: string;
   firstNames: string;
@@ -21,4 +23,8 @@ export type Student = {
   pending_email_expiration_date?: Date;
   last_update_personal_data?: Date;
   api_ines_check?: boolean;
+};
+
+export type StudentWithEligibility = Student & {
+  eligibility: Eligibility;
 };

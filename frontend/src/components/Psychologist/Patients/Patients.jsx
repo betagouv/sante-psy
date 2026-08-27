@@ -214,7 +214,7 @@ const Patients = () => {
       name: 'status',
       label: (
         <div className={styles.informationColumn}>
-          Information{' '}
+          Statut {currentYear}{' '}
           <Select
             onChange={handleFilterChange}
             options={filterOptions}

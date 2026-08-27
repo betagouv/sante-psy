@@ -21,7 +21,7 @@ import signInAttempts from '../services/signInAttempts';
 import config from '../utils/config';
 import s3Service from '../services/s3';
 import { sendWelcomeMail as emailWelcome } from '../services/email/sendWelcomeEmail';
-import { sendNotEligibleEmail } from '../services/email/sendNotEligibleEmail';
+import { sendPendingEligibilityEmail } from '../services/email/sendPendingEligibilityEmail';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
@@ -225,7 +225,7 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
           );
         });
       } else {
-        sendNotEligibleEmail(email).catch((err) => {
+        sendPendingEligibilityEmail(email).catch((err) => {
           console.error(
             `[sendWelcomeMail] failed for student ${student.id}`,
             err,

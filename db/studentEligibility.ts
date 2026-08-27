@@ -1,15 +1,40 @@
+import { Eligibility, EligibilityStatus } from '../types/Eligibility';
 import { Student } from '../types/Student';
 import { getStartUnivYearStr } from '../utils/univYears';
 import db from './db';
 import { studentEligibilityTable } from './tables';
-import s3Service from '../services/s3';
 
-type Eligibility = {
-  apiCheck: boolean;
-  validatedByTeam?: boolean;
-  questionnaire: boolean;
-  uploadedDocument: boolean;
-  canPsyDeclareAppointment: boolean;
+const getStudentEligibilityStatus = async (
+  student: Student,
+  univYear: string,
+): Promise<EligibilityStatus> => {
+  const studentEligibility = await db(studentEligibilityTable)
+    .where({
+      student_id: student.id,
+      univ_year: univYear,
+    })
+    .first();
+
+  if (studentEligibility) {
+    return studentEligibility.validated_by_team ? 'ELIGIBLE' : 'NOT_ELIGIBLE';
+  }
+
+  if (student.api_ines_check) {
+    return 'ELIGIBLE';
+  }
+
+  return 'PENDING';
+};
+
+export const isStudentProfileComplete = (
+  student: Student,
+  univYear: string,
+): boolean => {
+  const startUnivYear = getStartUnivYearStr(univYear);
+  return (
+    !!student.last_update_personal_data &&
+    new Date(student.last_update_personal_data) >= startUnivYear
+  );
 };
 
 export const getStudentEligibility = async (
@@ -18,42 +43,22 @@ export const getStudentEligibility = async (
 ): Promise<Eligibility> => {
   const eligibility = {} as Eligibility;
 
-  eligibility.apiCheck = Boolean(student.api_ines_check);
-  const existingEligibility = await db(studentEligibilityTable)
-    .where({
-      student_id: student.id,
-      validated_by_team: true,
-      univ_year: univYear,
-    })
-    .first();
-  eligibility.validatedByTeam = Boolean(existingEligibility);
-
   if (univYear === '2025-2026') {
-    eligibility.questionnaire = true;
-    eligibility.uploadedDocument = false;
-    eligibility.canPsyDeclareAppointment = true;
-    return eligibility;
+    return {
+      status: 'ELIGIBLE',
+      isProfileComplete: true,
+      canPsyDeclareAppointment: true,
+    };
   }
 
-  // has student answered questionnaire since beginning of univ year ?
-  const startUnivYear = getStartUnivYearStr(univYear);
-  const hasStudentAnsweredQuestionnaire =
-    !!student.last_update_personal_data &&
-    new Date(student.last_update_personal_data) >= startUnivYear;
+  eligibility.status = await getStudentEligibilityStatus(student, univYear);
 
-  eligibility.questionnaire = hasStudentAnsweredQuestionnaire;
-
-  // has student uploaded a document for univ year ?
-  const documentExists = await s3Service.certificateExists(
-    student.id,
-    univYear,
-  );
-  eligibility.uploadedDocument = documentExists;
+  eligibility.isProfileComplete = isStudentProfileComplete(student, univYear);
 
   return {
     ...eligibility,
     canPsyDeclareAppointment:
-      eligibility.questionnaire && eligibility.uploadedDocument,
+      eligibility.isProfileComplete && eligibility.status === 'ELIGIBLE',
   };
 };
 
@@ -62,8 +67,5 @@ export const isStudentEligible = async (
   univYear: string,
 ): Promise<boolean> => {
   const eligibility = await getStudentEligibility(student, univYear);
-  if (!eligibility.apiCheck && !eligibility.validatedByTeam) {
-    return false;
-  }
-  return eligibility.questionnaire && eligibility.uploadedDocument;
+  return eligibility.status === 'ELIGIBLE';
 };
