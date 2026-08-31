@@ -200,7 +200,7 @@ const NewAppointment = () => {
       return null;
     }
 
-    //TODO: put back after 01 October 2026 plz
+    // TODO: put back after 01 October 2026 plz
     // if (patientHasNoAccount) {
     //   return (
     //     <Alert
