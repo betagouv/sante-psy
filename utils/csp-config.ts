@@ -20,10 +20,7 @@ export default helmet.contentSecurityPolicy({
       // Crisp chat script hash
       "'sha256-t4VtNIUiuBKi5VJfKaIxe2Ww1/6O3gae/Qtmhx4B0uE='",
     ],
-    'script-src-attr': [
-      "'self'",
-      "'unsafe-inline'",
-    ],
+    'script-src-attr': ["'self'", "'unsafe-inline'"],
     'img-src': [
       "'self'",
       'https://stats.beta.gouv.fr/',
@@ -43,6 +40,7 @@ export default helmet.contentSecurityPolicy({
       'https://bid.g.doubleclick.net/',
       'https://game.crisp.chat',
       ...crispDomains,
+      'blob:',
     ],
     'connect-src': [
       "'self'",
@@ -57,9 +55,6 @@ export default helmet.contentSecurityPolicy({
       ...crispDomains,
       'https://data.geopf.fr',
     ],
-    'object-src': [
-      "'self'",
-      'blob:',
-    ]
+    'object-src': ["'self'", 'blob:'],
   },
 });
