@@ -64,7 +64,10 @@ const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
         ))}
       </div>
       <div className={styles.certificateColumn}>
-        <NewAppointmentSeeCertificate studentId={student.id} univYear={getUnivYear(new Date(), '-')} />
+        <NewAppointmentSeeCertificate
+          studentId={student.id}
+          univYear={getUnivYear(new Date(), '-')}
+        />
       </div>
     </div>
   );
@@ -77,9 +80,10 @@ const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
         <form onSubmit={addPatient}>
           <Stack>
             <p>
-              Veuillez vérifier, lors de la première séance, que l'identité de
-              l'étudiant correspond au certificat de scolarité et que celui-ci
-              est valable sur la période en cours.
+              Veuillez vérifier que le justificatif est valable sur la période
+              universitaire en cours. Veuillez également vérifier, lors de la
+              première séance, que l’identité de l’étudiant correspond au
+              justificatif de scolarité
             </p>
             <ButtonGroup isInlineFrom="xs">
               <Button secondary onClick={onCancel}>
