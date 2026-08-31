@@ -19,14 +19,13 @@ const StudentSignInSuccess = () => {
     </>
   ) : (
     <>
-      L’équipe SPE vérifie ton éligibilité.
+      L'équipe SPE examine actuellement ton dossier.
       <br />
-      Tu recevras un email pour te dire si ton inscription au dispositif SPE est
-      validée ou non.
+      Un email te sera envoyé pour te dire si ton inscription au dispositif SPE est validée.
     </>
   );
   return (
-    <Page withStats title="Inscription validée">
+    <Page withStats title="Inscription enregistrée">
       <div className="fr-alert fr-alert--success fr-mb-3w">
         <h3 className="fr-alert__title">{title}</h3>
         <p>{desc}</p>
