@@ -60,6 +60,7 @@ const NewAppointment = () => {
   useEffect(() => {
     setCheckCertifIdentity(false);
     setCheckCertifValidity(false);
+    setDate(undefined);
   }, [patientId]);
 
   const selectedUnivYear = useMemo(
@@ -86,6 +87,7 @@ const NewAppointment = () => {
 
   useEffect(() => {
     if (!patient?.student || !selectedUnivYear) {
+      setEligibilityInfo(null);
       return;
     }
     agent.Psychologist.checkStudentEligibility(
@@ -119,21 +121,30 @@ const NewAppointment = () => {
     setAppointmentsRefreshKey((prev) => prev + 1);
   };
 
-  const canCreateAppointment = useMemo(
-    () =>
-      canConfirmPatient &&
-      !!date &&
-      !tooManyAppointments &&
-      hasChangedInput &&
-      !patientHasNoAccount,
-    [
-      date,
-      tooManyAppointments,
-      hasChangedInput,
-      canConfirmPatient,
-      patientHasNoAccount,
-    ],
-  );
+  const canCreateAppointment = useMemo(() => {
+    if (
+      !canConfirmPatient ||
+      !date ||
+      tooManyAppointments ||
+      !hasChangedInput
+    ) {
+      return false;
+    }
+
+    // at this point, we can create appointment only if patient has a student account
+    // except special case 2025-2026
+    if (selectedUnivYear === '2025-2026') {
+      return true;
+    }
+    return !patientHasNoAccount;
+  }, [
+    date,
+    tooManyAppointments,
+    hasChangedInput,
+    canConfirmPatient,
+    patientHasNoAccount,
+    selectedUnivYear,
+  ]);
 
   const createNewAppointment = (e) => {
     e.preventDefault();
@@ -144,6 +155,7 @@ const NewAppointment = () => {
       onUpdatePatientAppointments();
       setCheckCertifIdentity(false);
       setCheckCertifValidity(false);
+      setDate(undefined);
     });
   };
 
@@ -188,15 +200,16 @@ const NewAppointment = () => {
       return null;
     }
 
-    if (patientHasNoAccount) {
-      return (
-        <Alert
-          className="fr-mt-2w"
-          type="warning"
-          description={<>Cet étudiant n'a pas créé son compte.</>}
-        />
-      );
-    }
+    //TODO: put back after 01 October 2026 plz
+    // if (patientHasNoAccount) {
+    //   return (
+    //     <Alert
+    //       className="fr-mt-2w"
+    //       type="warning"
+    //       description={<>Cet étudiant n'a pas créé son compte.</>}
+    //     />
+    //   );
+    // }
 
     if (tooManyAppointments) {
       return (
@@ -265,6 +278,22 @@ const NewAppointment = () => {
       return toRender;
     }
 
+    if (
+      patientHasNoAccount &&
+      selectedUnivYear &&
+      selectedUnivYear !== '2025-2026'
+    ) {
+      toRender.push(
+        <Alert
+          key="not-eligible-alert"
+          type="warning"
+          className="fr-my-3w"
+          description={<>Cet étudiant n'a pas créé son compte.</>}
+        />,
+      );
+      return toRender;
+    }
+
     if (requiresCertificateCheck) {
       toRender.push(
         <Alert
@@ -316,9 +345,10 @@ const NewAppointment = () => {
         {renderWarningOrForm()}
       </form>
       {patient?.student &&
-        eligibilityInfo?.eligibility &&
-        eligibilityInfo?.eligibility.canPsyDeclareAppointment &&
-        requiresCertificateCheck ? (
+      eligibilityInfo?.eligibility &&
+      eligibilityInfo?.eligibility.canPsyDeclareAppointment &&
+      requiresCertificateCheck &&
+      selectedUnivYear ? (
         <NewAppointmentSeeCertificate
           studentId={patient.student.id}
           univYear={selectedUnivYear}
