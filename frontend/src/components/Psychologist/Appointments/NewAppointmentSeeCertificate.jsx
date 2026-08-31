@@ -52,12 +52,11 @@ const NewAppointmentSeeCertificate = ({
 
   return (
     certificateUrl && (
-      <iframe
+      <embed
         src={certificateUrl}
-        title="Certificat étudiant"
+        type="application/pdf"
         className={className}
         style={{ border: 'none', ...resolvedStyle }}
-        sandbox="allow-scripts"
       />
     )
   );

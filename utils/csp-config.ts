@@ -43,7 +43,6 @@ export default helmet.contentSecurityPolicy({
       'https://bid.g.doubleclick.net/',
       'https://game.crisp.chat',
       ...crispDomains,
-      'blob:',
     ],
     'connect-src': [
       "'self'",
@@ -58,5 +57,9 @@ export default helmet.contentSecurityPolicy({
       ...crispDomains,
       'https://data.geopf.fr',
     ],
+    'object-src': [
+      "'self'",
+      'blob:',
+    ]
   },
 });
