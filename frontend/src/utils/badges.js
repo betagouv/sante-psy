@@ -42,14 +42,6 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
     severity: 'success',
     icon: 'fr-icon-success-fill fr-icon--sm',
   },
-  new_rules: {
-    key: 'new_rules',
-    text: isSmallScreen ? 'Nouveau tarif' : 'Nouveau tarif 50€',
-    severity: 'info',
-    icon: 'fr-icon-success-fill fr-icon--sm',
-    tooltip:
-      'A partir du 1er juillet 2024, toutes les séances sont comptabilisées 50€, le nombre maximal de séances passe à 12 au lieu de 8',
-  },
   other: { key: 'other' },
   switch_rule_notice: {
     key: 'switch_rule_notice',
@@ -81,11 +73,11 @@ const getBadgeInfos = (isSmallScreen, univYear) => ({
   },
   check_certif: {
     key: 'check_certif',
-    text: 'Document à valider',
+    text: 'Justificatif à valider',
     severity: 'info',
     icon: 'fr-icon-info-fill fr-icon--sm',
     tooltip:
-      "Cet étudiant n'a pas encore effectué de séances cette année. Il vous sera demandé de valider le document fourni par l'étudiant au moment de déclarer la première séance.",
+      "Cet étudiant n'a pas encore effectué de séances cette année. Il vous sera demandé de valider le justificatif fourni par l'étudiant au moment de déclarer la première séance.",
   },
 });
 
