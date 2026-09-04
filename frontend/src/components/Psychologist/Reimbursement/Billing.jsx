@@ -22,9 +22,15 @@ const Billing = () => {
     month: new Date().getMonth() + 1,
   });
 
-  const { userStore: { user } } = useStore();
+  const {
+    userStore: { user },
+  } = useStore();
 
-  const [valuesByDate, setValuesByDate] = useState({ appointments: {}, firstAppointments: {}, patients: {} });
+  const [valuesByDate, setValuesByDate] = useState({
+    appointments: {},
+    firstAppointments: {},
+    patients: {},
+  });
   const [billingInfo, setBillingInfo] = useState(billingInfoService.get());
 
   const [searchParams] = useSearchParams();
@@ -63,13 +69,15 @@ const Billing = () => {
     <>
       <Callout hasInfoIcon={false}>
         <CalloutText size="md">
-          À la fin de chaque mois, vous devez envoyer votre facture contenant vos séances réalisées à votre université
-          de convention.
+          À la fin de chaque mois, vous devez envoyer votre facture contenant
+          vos séances réalisées à votre université de convention.
           <br />
-          Les modalités d&lsquo;envoi sont précisées par l&lsquo;université lors de l&lsquo;établissement de votre
-          convention (Chorus pro, email ou voie postale).
+          Les modalités d&lsquo;envoi sont précisées par l&lsquo;université lors
+          de l&lsquo;établissement de votre convention (Chorus pro, email ou
+          voie postale).
           <br />
-          L&lsquo;université se chargera du remboursement, dans les 30 jours après la réception de cette facture.
+          L&lsquo;université se chargera du remboursement, dans les 30 jours
+          après la réception de cette facture.
         </CalloutText>
       </Callout>
       <div className="fr-my-2w">
@@ -77,10 +85,12 @@ const Billing = () => {
         {!canGenerateBill && (
           <div id="no-convention-alert">
             <Notification type="info">
-              Veuillez attendre la signature de votre convention avant d&lsquo;envoyer votre facture. Renseignez le
-              statut de votre convention dans la page
-              {' '}
-              <HashLink to="/psychologue/tableau-de-bord">Tableau de bord</HashLink>
+              Veuillez attendre la signature de votre convention avant
+              d&lsquo;envoyer votre facture. Renseignez le statut de votre
+              convention dans la page{' '}
+              <HashLink to="/psychologue/tableau-de-bord">
+                Tableau de bord
+              </HashLink>
             </Notification>
           </div>
         )}
@@ -88,13 +98,17 @@ const Billing = () => {
           <button
             id="billing-info"
             type="button"
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
               window.open('/psychologue/informations-facturation', '_blank');
             }}
             className={styles.editLink}
           >
-            <span className="ri-edit-box-fill" style={{ fontSize: '1em' }} aria-hidden="true" />
+            <span
+              className="ri-edit-box-fill"
+              style={{ fontSize: '1em' }}
+              aria-hidden="true"
+            />
             Modifier le RIB / SIRET / Bon de commande
           </button>
         </div>
@@ -106,14 +120,20 @@ const Billing = () => {
         </div>
         {filteredDates.length > 0 ? (
           <>
-            <div className="fr-mb-2w" style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem' }}>
+            <div
+              className="fr-mb-2w"
+              style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem' }}
+            >
               <div>
                 <TextInput
                   label="Numéro de facture"
                   hint="Correspondant à votre comptabilité"
                   value={billingInfo.billingNumber}
-                  onChange={e => {
-                    const newBillingInfo = { ...billingInfo, billingNumber: e.target.value };
+                  onChange={(e) => {
+                    const newBillingInfo = {
+                      ...billingInfo,
+                      billingNumber: e.target.value,
+                    };
                     setBillingInfo(newBillingInfo);
                     billingInfoService.save(newBillingInfo);
                   }}
@@ -127,7 +147,10 @@ const Billing = () => {
                 onClick={() => {
                   if (canGenerateBill) {
                     billingInfoService.save(billingInfo);
-                    window.open(`/psychologue/bill/${month.month}/${month.year}`, '_blank');
+                    window.open(
+                      `/psychologue/bill/${month.month}/${month.year}`,
+                      '_blank',
+                    );
                   }
                 }}
               >
@@ -141,8 +164,7 @@ const Billing = () => {
             />
             <p className="fr-my-2w" data-test-id="bill-summary-text">
               En
-              {` ${formatMonth(month)}`}
-              , vous avez effectué
+              {` ${formatMonth(month)}`}, vous avez effectué
               <b>
                 {` ${billingDataService.getTotal(filteredDates, valuesByDate.appointments)} `}
               </b>
@@ -160,17 +182,20 @@ const Billing = () => {
               étudiants.
             </p>
             <p>
-              Entre le premier janvier 2024 et le 1er juillet 2024, la première séance par cycle avec un étudiant est facturée 40€, les suivantes 30€.
-              <br />
-              A partir du 1er juillet 2024, toutes les séances sont comptabilisées à 50€, le nombre maximal de séances passe de 12 séances par étudiant par année universitaire (1er septembre au 31 août).
+              Entre le premier janvier 2024 et le 1er juillet 2024, la première
+              séance par cycle avec un étudiant est facturée 40€, les suivantes
+              30€.
+              <br />A partir du 1er juillet 2024, toutes les séances sont
+              comptabilisées à 50€, le nombre maximal de séances passe de 12
+              séances par étudiant par année universitaire (1er septembre au 31
+              août).
             </p>
           </>
         ) : (
           <p className="fr-mb-2w" id="no-appointments">
             Vous n&lsquo;avez pas encore déclaré de séances pour le mois de
-            {` ${formatMonth(month)}`}
-            , vous retrouverez ici votre récapitulatif de séances dans le but de créer vous
-            même votre facture
+            {` ${formatMonth(month)}`}, vous retrouverez ici votre récapitulatif
+            de séances dans le but de créer vous même votre facture
           </p>
         )}
         <BillingHelper />
