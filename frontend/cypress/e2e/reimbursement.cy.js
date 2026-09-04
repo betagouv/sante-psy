@@ -57,7 +57,7 @@ describe('Reimbursement', () => {
         .eq(14)
         .should('have.text', '150€');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(21)
+        .eq(20)
         .should('have.text', '650€');
     });
   });
