@@ -10,7 +10,6 @@ import { formatMonth } from 'services/date';
 import billingInfoService from 'services/billingInfo';
 import billingDataService from 'services/billingData';
 import { useStore } from 'stores/';
-import getBadgeInfos from 'src/utils/badges';
 import BillingTable from './BillingTable';
 import BillingHelper from './BillingHelper';
 import useAppointmentsByDate from './hooks/appointmentsByDate';
@@ -54,8 +53,11 @@ const Billing = () => {
     }
   }, [searchParams]);
 
-  const badges = getBadgeInfos();
-  const filteredDates = billingDataService.getFilteredDates(valuesByDate.appointments, month.month, month.year);
+  const filteredDates = billingDataService.getFilteredDates(
+    valuesByDate.appointments,
+    month.month,
+    month.year,
+  );
   const canGenerateBill = user.convention && user.convention.isConventionSigned;
   return (
     <>
@@ -144,16 +146,15 @@ const Billing = () => {
               <b>
                 {` ${billingDataService.getTotal(filteredDates, valuesByDate.appointments)} `}
               </b>
-              séances, dont
+              séances, auprès de
               <b>
-                {` ${billingDataService.getBadgeTotal(filteredDates, valuesByDate.appointments, badges.first.key)} `}
-              </b>
-              premières séances, auprès de
-              <b>
-                {` ${filteredDates
-                  .flatMap(date => valuesByDate.patients[date])
-                  .filter((value, index, array) => array.indexOf(value) === index)
-                  .length}
+                {` ${
+                  filteredDates
+                    .flatMap((date) => valuesByDate.patients[date])
+                    .filter(
+                      (value, index, array) => array.indexOf(value) === index,
+                    ).length
+                }
              `}
               </b>
               étudiants.
