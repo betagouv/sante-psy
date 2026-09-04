@@ -43,30 +43,21 @@ describe('Reimbursement', () => {
         .should('have.text', '1');
       cy.get('[data-test-id="billing-table"] td')
         .eq(2)
-        .should('have.text', '0');
-      cy.get('[data-test-id="billing-table"] td')
-        .eq(3)
         .should('have.text', '50€');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(13)
+        .eq(9)
         .should('have.text', '2');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(14)
-        .should('have.text', '0');
-      cy.get('[data-test-id="billing-table"] td')
-        .eq(15)
+        .eq(10)
         .should('have.text', '100€');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(17)
+        .eq(11)
         .should('have.text', '3');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(18)
-        .should('have.text', '0');
-      cy.get('[data-test-id="billing-table"] td')
-        .eq(19)
+        .eq(12)
         .should('have.text', '150€');
       cy.get('[data-test-id="billing-table"] td')
-        .eq(27)
+        .eq(18)
         .should('have.text', '650€');
     });
   });
