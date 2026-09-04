@@ -9,6 +9,8 @@ import styles from './seePatient.cssmodule.scss';
 import PatientAppointments from './PatientAppointments';
 import NewAppointmentSeeCertificate from '../Appointments/NewAppointmentSeeCertificate';
 import { getUnivYear } from 'services/univYears';
+import PatientStatus from './PatientStatus';
+import { Stack } from 'components/Utils/Stack';
 
 const SeePatient = () => {
   const { patientId } = useParams();
@@ -48,10 +50,13 @@ const SeePatient = () => {
               </h2>
             </section>
           )}
-          <div>
+          <Stack>
+            {patient && <PatientStatus patient={patient} />}
             {patient?.student?.eligibility?.isProfileComplete && (
               <>
-                <h4>Document pour l'année {getUnivYear(new Date(), '-')}</h4>
+                <h4>
+                  Justificatif pour l'année {getUnivYear(new Date(), '-')}
+                </h4>
                 <NewAppointmentSeeCertificate
                   studentId={patient.student.id}
                   univYear={getUnivYear(new Date(), '-')}
@@ -68,7 +73,7 @@ const SeePatient = () => {
                 <PatientAppointments patientId={patientId} />
               </div>
             )}
-          </div>
+          </Stack>
         </>
       )}
     </div>
