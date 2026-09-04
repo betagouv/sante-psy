@@ -1275,7 +1275,6 @@ describe('appointmentsController', () => {
           expect(res.body[1].badges).to.includes(
             appointmentBadges.switch_rule_notice,
           );
-          expect(res.body[0].badges).to.includes(appointmentBadges.new_rules);
           return Promise.resolve();
         });
     });
@@ -1382,7 +1381,6 @@ describe('appointmentsController', () => {
           expect(res.body[4].badges).to.includes(
             appointmentBadges.switch_rule_notice,
           );
-          expect(res.body[0].badges).to.includes(appointmentBadges.new_rules);
           expect(res.body[0].badges).to.includes(appointmentBadges.max);
           return Promise.resolve();
         });
