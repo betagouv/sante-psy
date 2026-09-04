@@ -49,7 +49,7 @@ const SeePatient = () => {
             </section>
           )}
           <div>
-            {patient?.student && (
+            {patient?.student?.eligibility?.isProfileComplete && (
               <>
                 <h4>Document pour l'année {getUnivYear(new Date(), '-')}</h4>
                 <NewAppointmentSeeCertificate
