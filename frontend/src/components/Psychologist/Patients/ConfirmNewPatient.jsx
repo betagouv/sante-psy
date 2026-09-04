@@ -6,6 +6,11 @@ import { HashLink } from 'react-router-hash-link';
 import { Stack } from 'components/Utils/Stack';
 import NewAppointmentSeeCertificate from '../Appointments/NewAppointmentSeeCertificate';
 import { getUnivYear } from 'services/univYears';
+import {
+  StatusNotEligible,
+  StatusPendingEligibility,
+  StatusUpToDate,
+} from './PatientStatus';
 
 const getStudentData = (student) => [
   {
@@ -79,12 +84,15 @@ const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
       {!addedPatient && (
         <form onSubmit={addPatient}>
           <Stack>
-            <p>
-              Veuillez vérifier que le justificatif est valable sur la période
-              universitaire en cours. Veuillez également vérifier, lors de la
-              première séance, que l’identité de l’étudiant correspond au
-              justificatif de scolarité
-            </p>
+            {foundStudent?.eligibility?.status === 'ELIGIBLE' && (
+              <StatusUpToDate />
+            )}
+            {foundStudent?.eligibility?.status === 'NOT_ELIGIBLE' && (
+              <StatusNotEligible />
+            )}
+            {foundStudent?.eligibility?.status === 'PENDING' && (
+              <StatusPendingEligibility />
+            )}
             <ButtonGroup isInlineFrom="xs">
               <Button secondary onClick={onCancel}>
                 Annuler
