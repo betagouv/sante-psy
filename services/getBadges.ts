@@ -242,12 +242,6 @@ const getAppointmentWithBadges = (
       applyNewRules,
     );
 
-    /* New rule */
-    if (applyNewRules && appointmentInfo.count <= MAX_APPOINTMENT) {
-      appointmentInfo.badges.push(appointmentBadges.new_rules);
-    }
-    /* End new rule */
-
     if (isBillingPurposes) {
       addBillingBadges(
         appointmentInfo,
