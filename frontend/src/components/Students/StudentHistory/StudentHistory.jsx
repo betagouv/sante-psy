@@ -96,41 +96,6 @@ const StudentHistory = () => {
               </div>
             ))}
           </div>
-
-          {(prevYear || nextYear) && (
-            <nav
-              className={styles.navigation}
-              aria-label="Navigation entre années universitaires"
-            >
-              {prevYear && (
-                <button
-                  type="button"
-                  className="fr-btn fr-btn--secondary"
-                  onClick={() => setCurrentYear(prevYear)}
-                >
-                  <span
-                    className="fr-icon-arrow-left-s-first-line"
-                    aria-hidden="true"
-                  />{' '}
-                  Année {prevYear}
-                </button>
-              )}
-
-              {nextYear && (
-                <button
-                  type="button"
-                  className="fr-btn fr-btn--secondary"
-                  onClick={() => setCurrentYear(nextYear)}
-                >
-                  Année {nextYear}{' '}
-                  <span
-                    className="fr-icon-arrow-right-s-last-line"
-                    aria-hidden="true"
-                  />
-                </button>
-              )}
-            </nav>
-          )}
         </>
       ) : (
         <div className={styles.empty}>
@@ -143,6 +108,40 @@ const StudentHistory = () => {
             email à ton psychologue.
           </p>
         </div>
+      )}
+      {(prevYear || nextYear) && (
+        <nav
+          className={styles.navigation}
+          aria-label="Navigation entre années universitaires"
+        >
+          {prevYear && (
+            <button
+              type="button"
+              className="fr-btn fr-btn--secondary"
+              onClick={() => setCurrentYear(prevYear)}
+            >
+              <span
+                className="fr-icon-arrow-left-s-first-line"
+                aria-hidden="true"
+              />{' '}
+              Année {prevYear}
+            </button>
+          )}
+
+          {nextYear && (
+            <button
+              type="button"
+              className="fr-btn fr-btn--secondary"
+              onClick={() => setCurrentYear(nextYear)}
+            >
+              Année {nextYear}{' '}
+              <span
+                className="fr-icon-arrow-right-s-last-line"
+                aria-hidden="true"
+              />
+            </button>
+          )}
+        </nav>
       )}
 
       <button
