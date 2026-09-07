@@ -165,23 +165,6 @@ const deleteOne = async (
   }
 };
 
-const getByStudentEmailAndIne = async (
-  email: string,
-  INE: string,
-): Promise<Patient[]> => {
-  try {
-    return await db(patientsTable)
-      .where({
-        email,
-        INE,
-      })
-      .andWhere('deleted', false);
-  } catch (err) {
-    console.error('Erreur récupération patients étudiant', err);
-    throw new Error('Erreur récupération patients étudiant');
-  }
-};
-
 const getByStudent = async (student: Student): Promise<Patient[]> => {
   try {
     return await db(patientsTable)
@@ -199,12 +182,41 @@ const getByStudent = async (student: Student): Promise<Patient[]> => {
   }
 };
 
+const findUnlinkedMatches = async (
+  ine: string,
+  lastName: string,
+  firstNames: string,
+): Promise<Patient[]> => db(patientsTable)
+  .whereRaw('upper("INE") = upper(?)', [ine])
+  .whereNull('student_id')
+  .andWhereRaw('upper(unaccent("lastName")) = upper(unaccent(?))', [lastName])
+  .andWhereRaw('upper(unaccent("firstNames")) = upper(unaccent(?))', [firstNames]);
+
+const linkToStudent = async (
+  patientId: string,
+  studentId: string,
+): Promise<number> => db(patientsTable).where({ id: patientId }).update({
+  student_id: studentId,
+  firstNames: null,
+  lastName: null,
+  INE: null,
+  institutionName: null,
+  doctorName: null,
+  doctorAddress: null,
+  hasPrescription: null,
+  gender: null,
+  email: null,
+  updatedAt: new Date(),
+  dateOfBirth: null,
+});
+
 export default {
   getById,
   getAll,
   insert,
   delete: deleteOne,
-  getByStudentEmailAndIne,
   isAlreadyAPatient,
   getByStudent,
+  findUnlinkedMatches,
+  linkToStudent,
 };

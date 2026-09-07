@@ -20,6 +20,7 @@ import config from '../utils/config';
 import s3Service from '../services/s3';
 import { sendWelcomeMail as emailWelcome } from '../services/email/sendWelcomeEmail';
 import { sendPendingEligibilityEmail } from '../services/email/sendPendingEligibilityEmail';
+import linkPatientsToStudent from '../services/linkPatientsToStudent';
 
 type MulterRequest = Request & { file: Express.Multer.File };
 
@@ -215,6 +216,14 @@ const signIn = async (req: Request, res: Response): Promise<void> => {
             err,
           );
         });
+
+      linkPatientsToStudent(student).catch((err) => {
+        console.error(
+          `[linkPatientToStudent] failed for student ${student.id}`,
+          err,
+        );
+      });
+
       if (apiInesCheck) {
         sendWelcomeMail(email).catch((err) => {
           console.error(
