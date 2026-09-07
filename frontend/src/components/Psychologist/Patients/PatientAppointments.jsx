@@ -58,7 +58,7 @@ const PatientAppointments = ({
       const indexedArray = reversedArray.map((item) => {
         const currentIndex =
           item.badges.includes(badges.inactive.key) &&
-          item.badges.includes(badges.exceeded.key)
+            item.badges.includes(badges.exceeded.key)
             ? '-'
             : ++lastIndex;
         return { ...item, index: currentIndex };
@@ -173,7 +173,7 @@ const PatientAppointments = ({
             univYear={selectedYear}
           />
         </td>
-        <td style={{ width: '200px' }}>
+        <td style={{ width: '200px', textAlign: 'right' }}>
           <Tooltip
             tooltip={
               cantDeleteBefore

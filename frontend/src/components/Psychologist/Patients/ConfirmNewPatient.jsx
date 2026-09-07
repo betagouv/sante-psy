@@ -106,7 +106,7 @@ const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
         <>
           <Alert
             type="success"
-            description="Vous pouvez dès à présent déclarer des séances pour cet étudiant"
+            description="Vous pouvez dès à présent le retrouver dans votre liste de suivi des étudiants."
             title="Étudiant ajouté"
           />
           <ButtonGroup isInlineFrom="xs">
