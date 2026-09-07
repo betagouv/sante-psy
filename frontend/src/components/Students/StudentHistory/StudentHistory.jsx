@@ -15,7 +15,7 @@ const StudentHistory = () => {
 
   useEffect(() => {
     agent.Student.getAppointments()
-      .then(res => {
+      .then((res) => {
         const data = res || {};
         setAppointments(data);
 
@@ -52,7 +52,8 @@ const StudentHistory = () => {
   });
 
   const currentIndex = univYears.indexOf(currentYear);
-  const prevYear = currentIndex < univYears.length - 1 ? univYears[currentIndex + 1] : null;
+  const prevYear =
+    currentIndex < univYears.length - 1 ? univYears[currentIndex + 1] : null;
   const nextYear = currentIndex > 0 ? univYears[currentIndex - 1] : null;
 
   const yearAppointments = appointments[currentYear] || [];
@@ -62,29 +63,15 @@ const StudentHistory = () => {
     <section className={styles.historyContainer}>
       <header className={styles.title}>
         <span className="fr-icon-calendar-line fr-color" aria-hidden="true" />
-        <h3>
-          Année
-          {' '}
-          {currentYear}
-        </h3>
+        <h3>Année {currentYear}</h3>
       </header>
 
       <p className={styles.period}>
-        Du 1er septembre
-        {' '}
-        {startYear}
-        {' '}
-        au 31 août
-        {' '}
-        {endYear}
+        Du 1er septembre {startYear} au 31 août {endYear}
       </p>
 
       <p className={styles.counter}>
-        {yearAppointments.length}
-        {' '}
-        séances consommées sur
-        {' '}
-        {MAX_SESSIONS}
+        {yearAppointments.length} séances consommées sur {MAX_SESSIONS}
       </p>
 
       {yearAppointments.length > 0 ? (
@@ -95,14 +82,8 @@ const StudentHistory = () => {
             aria-label={`Séances de l'année universitaire ${currentYear}`}
           >
             {yearAppointments.map((appt, index) => (
-              <div
-                key={appt.id}
-                className={styles.card}
-                role="listitem"
-              >
-                <div className={styles.index}>
-                  {index + 1}
-                </div>
+              <div key={appt.id} className={styles.card} role="listitem">
+                <div className={styles.index}>{index + 1}</div>
                 <div>
                   <p className={styles.day}>
                     {appt.appointmentDate.split(' ')[0]}
@@ -110,46 +91,46 @@ const StudentHistory = () => {
                   <p className={styles.date}>
                     {appt.appointmentDate.split(' ').slice(1).join(' ')}
                   </p>
-                  <p className={styles.psychologist}>
-                    {appt.psychologistName}
-                  </p>
+                  <p className={styles.psychologist}>{appt.psychologistName}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {(prevYear || nextYear) && (
-          <nav className={styles.navigation} aria-label="Navigation entre années universitaires">
-            {prevYear && (
-            <button
-              type="button"
-              className="fr-btn fr-btn--secondary"
-              onClick={() => setCurrentYear(prevYear)}
-              >
-              <span className="fr-icon-arrow-left-s-first-line" aria-hidden="true" />
-              {' '}
-              Année
-                {' '}
-              {prevYear}
-            </button>
-            )}
+            <nav
+              className={styles.navigation}
+              aria-label="Navigation entre années universitaires"
+            >
+              {prevYear && (
+                <button
+                  type="button"
+                  className="fr-btn fr-btn--secondary"
+                  onClick={() => setCurrentYear(prevYear)}
+                >
+                  <span
+                    className="fr-icon-arrow-left-s-first-line"
+                    aria-hidden="true"
+                  />{' '}
+                  Année {prevYear}
+                </button>
+              )}
 
-            {nextYear && (
-            <button
-              type="button"
-              className="fr-btn fr-btn--secondary"
-              onClick={() => setCurrentYear(nextYear)}
-              >
-              Année
-                {' '}
-              {nextYear}
-              {' '}
-              <span className="fr-icon-arrow-right-s-last-line" aria-hidden="true" />
-            </button>
-            )}
-          </nav>
+              {nextYear && (
+                <button
+                  type="button"
+                  className="fr-btn fr-btn--secondary"
+                  onClick={() => setCurrentYear(nextYear)}
+                >
+                  Année {nextYear}{' '}
+                  <span
+                    className="fr-icon-arrow-right-s-last-line"
+                    aria-hidden="true"
+                  />
+                </button>
+              )}
+            </nav>
           )}
-
         </>
       ) : (
         <div className={styles.empty}>
@@ -158,7 +139,8 @@ const StudentHistory = () => {
             <div className={styles.placeholderCard} aria-hidden="true" />
           </div>
           <p>
-            Tes séances consommées apparaîtront ici si tu indiques ton adresse email à ton psychologue.
+            Tes séances consommées apparaîtront ici si tu indiques ton adresse
+            email à ton psychologue.
           </p>
         </div>
       )}
@@ -173,14 +155,26 @@ const StudentHistory = () => {
       </button>
 
       {showHelp && (
-      <ul className={styles.help}>
-        <li>les séances futures n&apos;apparaissent pas</li>
-        <li>ton psychologue n&apos;a peut-être pas encore déclaré toutes les séances</li>
-        <li>vérifie avec ton psychologue qu&apos;il a bien indiqué la bonne adresse email</li>
-        <li>vérifie les informations avec ton psychologue : nom, prénom, date de naissance, numéro INE,...</li>
-        <li>cela ne fonctionne toujours pas ? tu n&apos;es pas d&apos;accord avec ton compte de séances ?</li>
-        <Link to="/contact/formulaire">Contacter le support</Link>
-      </ul>
+        <ul className={styles.help}>
+          <li>les séances futures n&apos;apparaissent pas</li>
+          <li>
+            ton psychologue n&apos;a peut-être pas encore déclaré toutes les
+            séances
+          </li>
+          <li>
+            vérifie avec ton psychologue qu&apos;il a bien indiqué la bonne
+            adresse email
+          </li>
+          <li>
+            vérifie les informations avec ton psychologue : nom, prénom, date de
+            naissance, numéro INE,...
+          </li>
+          <li>
+            cela ne fonctionne toujours pas ? tu n&apos;es pas d&apos;accord
+            avec ton compte de séances ?
+          </li>
+          <Link to="/contact/formulaire">Contacter le support</Link>
+        </ul>
       )}
     </section>
   );
