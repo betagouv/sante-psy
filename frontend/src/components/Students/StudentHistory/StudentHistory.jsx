@@ -82,28 +82,26 @@ const StudentHistory = () => {
       </p>
 
       {yearAppointments.length > 0 ? (
-        <>
-          <div
-            className={styles.grid}
-            role="list"
-            aria-label={`Séances de l'année universitaire ${currentYear}`}
-          >
-            {yearAppointments.map((appt, index) => (
-              <div key={appt.id} className={styles.card} role="listitem">
-                <div className={styles.index}>{index + 1}</div>
-                <div>
-                  <p className={styles.day}>
-                    {appt.appointmentDate.split(' ')[0]}
-                  </p>
-                  <p className={styles.date}>
-                    {appt.appointmentDate.split(' ').slice(1).join(' ')}
-                  </p>
-                  <p className={styles.psychologist}>{appt.psychologistName}</p>
-                </div>
+        <div
+          className={styles.grid}
+          role="list"
+          aria-label={`Séances de l'année universitaire ${currentYear}`}
+        >
+          {yearAppointments.map((appt, index) => (
+            <div key={appt.id} className={styles.card} role="listitem">
+              <div className={styles.index}>{index + 1}</div>
+              <div>
+                <p className={styles.day}>
+                  {appt.appointmentDate.split(' ')[0]}
+                </p>
+                <p className={styles.date}>
+                  {appt.appointmentDate.split(' ').slice(1).join(' ')}
+                </p>
+                <p className={styles.psychologist}>{appt.psychologistName}</p>
               </div>
-            ))}
-          </div>
-        </>
+            </div>
+          ))}
+        </div>
       ) : (
         <div className={styles.empty}>
           <div className={styles.placeholders}>
