@@ -16,7 +16,14 @@ const StudentHistory = () => {
   useEffect(() => {
     agent.Student.getAppointments()
       .then((res) => {
-        const data = res || {};
+        let data = res || {};
+        const dataHasCurrentUnivYear = currentUnivYear('-') in data;
+        if (!dataHasCurrentUnivYear) {
+          data = {
+            ...data,
+            [currentUnivYear('-')]: [],
+          };
+        }
         setAppointments(data);
 
         const years = Object.keys(data);
