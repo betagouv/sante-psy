@@ -10,13 +10,11 @@ import {
 import loginInformations from '../services/loginInformations';
 import date from '../utils/date';
 import db from '../db/db';
-import ejs from 'ejs';
 import { psychologistsTable, studentsTable } from '../db/tables';
 import loginController from './loginController';
 import sendSecondStepMail from '../services/sendSecondStepMail';
 import validation from '../utils/validation';
 import verifyINEWithBirthDate from '../services/verifyStudentINE';
-import send from '../utils/email';
 import signInAttempts from '../services/signInAttempts';
 import config from '../utils/config';
 import s3Service from '../services/s3';
@@ -265,27 +263,6 @@ const sendCertificate = async (
   }
 
   await s3Service.uploadPendingCertificate(tokenRow.token, req.file);
-
-  const html = await ejs.renderFile(
-    './views/emails/sendStudentCertificate.ejs',
-    {
-      email,
-      ine,
-    },
-  );
-
-  await send(
-    // TODO : replace mail by env var
-    'support-santepsyetudiant@beta.gouv.fr',
-    'Nouveau certificat de scolarité reçu',
-    html,
-    [
-      {
-        filename: req.file.originalname,
-        content: req.file.buffer,
-      },
-    ],
-  );
 
   res.status(200).json({
     message: 'Certificat envoyé.',
