@@ -199,6 +199,35 @@ const getByStudent = async (student: Student): Promise<Patient[]> => {
   }
 };
 
+const findUnlinkedMatches = async (
+  ine: string,
+  lastName: string,
+  firstNames: string,
+) => {
+  return db(patientsTable)
+    .whereRaw('upper("INE") = upper(?)', [ine])
+    .whereNull('student_id')
+    .andWhereRaw('upper(unaccent("lastName")) = upper(unaccent(?))', [lastName])
+    .andWhereRaw('upper(unaccent("firstNames")) = upper(unaccent(?))', [firstNames]);
+};
+
+const linkToStudent = async (patientId: string, studentId: string) => {
+  return db(patientsTable).where({ id: patientId }).update({
+    student_id: studentId,
+    firstNames: null,
+    lastName: null,
+    INE: null,
+    institutionName: null,
+    doctorName: null,
+    doctorAddress: null,
+    hasPrescription: null,
+    gender: null,
+    email: null,
+    updatedAt: new Date(),
+    dateOfBirth: null,
+  });
+};
+
 export default {
   getById,
   getAll,
@@ -207,4 +236,6 @@ export default {
   getByStudentEmailAndIne,
   isAlreadyAPatient,
   getByStudent,
+  findUnlinkedMatches,
+  linkToStudent,
 };
