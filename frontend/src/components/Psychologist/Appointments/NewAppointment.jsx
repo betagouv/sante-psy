@@ -16,6 +16,12 @@ import { getUnivYear } from 'services/univYears';
 import NewAppointmentDatePicker from './NewAppointmentDatePicker';
 import NewAppointmentPatientsList from './NewAppointmentPatientsList';
 import NewAppointmentSeeCertificate from './NewAppointmentSeeCertificate';
+import {
+  StatusIncompleteProfile,
+  StatusNoStudentAccount,
+  StatusNotEligible,
+  StatusPendingEligibility,
+} from '../Patients/PatientStatus';
 
 export const MAX_APPOINTMENT = 12;
 
@@ -243,38 +249,17 @@ const NewAppointment = () => {
     const eligibility = eligibilityInfo ? eligibilityInfo.eligibility : null;
 
     if (eligibility?.status === 'NOT_ELIGIBLE') {
-      toRender.push(
-        <Alert
-          key="not-eligible-alert"
-          type="warning"
-          className="fr-my-3w"
-          title="Cet étudiant n'est pas éligible au dispositif SPE"
-        />,
-      );
+      toRender.push(<StatusNotEligible />);
       return toRender;
     }
 
     if (eligibility?.status === 'PENDING') {
-      toRender.push(
-        <Alert
-          key="pending-eligibility-alert"
-          type="warning"
-          className="fr-my-3w"
-          title="L'éligibilité de cet étudiant est en cours d'instruction"
-        />,
-      );
+      toRender.push(<StatusPendingEligibility />);
       return toRender;
     }
 
     if (eligibility && !eligibility.isProfileComplete) {
-      toRender.push(
-        <Alert
-          key="incomplete-profile-alert"
-          type="warning"
-          className="fr-my-3w"
-          title="Le profil de cet étudiant n'est pas à jour"
-        />,
-      );
+      toRender.push(<StatusIncompleteProfile />);
       return toRender;
     }
 
@@ -283,14 +268,7 @@ const NewAppointment = () => {
       selectedUnivYear &&
       selectedUnivYear !== '2025-2026'
     ) {
-      toRender.push(
-        <Alert
-          key="not-eligible-alert"
-          type="warning"
-          className="fr-my-3w"
-          description={<>Cet étudiant n'a pas créé son compte.</>}
-        />,
-      );
+      toRender.push(<StatusNoStudentAccount />);
       return toRender;
     }
 

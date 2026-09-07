@@ -51,7 +51,8 @@ const getOne = async (req: Request, res: Response): Promise<void> => {
     );
   }
 
-  const patientWithBadges = getPatientWithBadges([patient])[0];
+  const patientWithCount = await getAppointmentsCount([patient]);
+  const patientWithBadges = getPatientWithBadges(patientWithCount)[0];
 
   res.json(patientWithBadges);
 };
