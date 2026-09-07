@@ -11,6 +11,8 @@ import CustomError from '../utils/CustomError';
 import cookie from '../utils/cookie';
 import sendSecondStepMail from '../services/sendSecondStepMail';
 import { checkDateOfBirth, checkIne } from './validators/common';
+import { getStudentEligibility } from '../db/studentEligibility';
+import { getUnivYear } from '../utils/univYears';
 
 export const FIND_STUDENT_MESSAGE_STUDENT_EXISTS = 'Le compte étudiant existe';
 export const FIND_STUDENT_MESSAGE_STUDENT_DOES_NOT_EXIST =
@@ -260,6 +262,11 @@ const findStudent = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
+  const studentEligibility = await getStudentEligibility(
+    student,
+    getUnivYear(new Date()),
+  );
+
   const alreadyPatient = await dbPatients.isAlreadyAPatient(
     student.id,
     psychologistId,
@@ -277,7 +284,10 @@ const findStudent = async (req: Request, res: Response): Promise<void> => {
     studentExists: true,
     alreadyPatient: false,
     message: FIND_STUDENT_MESSAGE_STUDENT_EXISTS,
-    student,
+    student: {
+      ...student,
+      eligibility: studentEligibility,
+    },
   });
 };
 
