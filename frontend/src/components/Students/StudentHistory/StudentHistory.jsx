@@ -109,8 +109,8 @@ const StudentHistory = () => {
             <div className={styles.placeholderCard} aria-hidden="true" />
           </div>
           <p>
-            Tes séances consommées apparaîtront ici si tu indiques ton adresse
-            email à ton psychologue.
+            Tes séances consommées apparaîtront ici si tu indiques{' '}
+            <b>ton numéro INE et ta date de naissance</b> à ton psychologue.
           </p>
         </div>
       )}
@@ -166,12 +166,8 @@ const StudentHistory = () => {
             séances
           </li>
           <li>
-            vérifie avec ton psychologue qu&apos;il a bien indiqué la bonne
-            adresse email
-          </li>
-          <li>
-            vérifie les informations avec ton psychologue : nom, prénom, date de
-            naissance, numéro INE,...
+            vérifie avec ton psychologue qu&apos;il a bien indiqué{' '}
+            <b>le bon numéro INE et la bonne date de naissance</b>
           </li>
           <li>
             cela ne fonctionne toujours pas ? tu n&apos;es pas d&apos;accord
