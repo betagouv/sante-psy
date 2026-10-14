@@ -299,3 +299,9 @@ scalingo --region osc-fr1 --app sante-psy-etudiant-staging bash
 
 ts-node --transpile-only scripts/makeStudentsEligible.ts 2025-2026 xxx
 ```
+
+### SUPPORT - Déclaration de séances
+
+```bash
+node -r dotenv/config -r ts-node/register scripts/declareAppointments.ts
+```
