@@ -305,3 +305,9 @@ ts-node --transpile-only scripts/makeStudentsEligible.ts 2025-2026 xxx
 ```bash
 node -r dotenv/config -r ts-node/register scripts/declareAppointments.ts
 ```
+
+### SUPPORT - Modification d'étudiants
+
+```bash
+node -r dotenv/config -r ts-node/register scripts/updateStudents.ts
+```
