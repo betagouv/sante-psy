@@ -10,17 +10,6 @@ interface AppointmentEntry {
   dateStr: string;
 }
 
-function parseDates(input: string): string[] {
-  return input
-    .split(',')
-    .map((s) => s.trim())
-    .filter((s) => s.length > 0)
-    .map((s) => {
-      const [day, month, year] = s.split('/');
-      return `20${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-    });
-}
-
 const workAppointmentEntry = async (
   appointmentEntry: AppointmentEntry,
 ): Promise<void> => {
@@ -34,18 +23,16 @@ const workAppointmentEntry = async (
     return;
   }
 
-  const dates = parseDates(appointmentEntry.dateStr);
+  const date = appointmentEntry.dateStr;
 
-  for (const date of dates) {
-    console.log(
-      `-- insert appointment ${date} - ${appointmentEntry.patientId} - ${patient.psychologistId}`,
-    );
-    dbAppointments.insert(
-      new Date(date),
-      appointmentEntry.patientId,
-      patient.psychologistId,
-    );
-  }
+  console.log(
+    `-- insert appointment ${date} - ${appointmentEntry.patientId} - ${patient.psychologistId}`,
+  );
+  dbAppointments.insert(
+    new Date(date),
+    appointmentEntry.patientId,
+    patient.psychologistId,
+  );
 };
 
 const declareAppointments = async (
@@ -58,7 +45,7 @@ const declareAppointments = async (
 };
 
 // format
-// { patientId: 'f78450f1-d8e2-4cc9-b917-xxx', dateStr: '31/08/26' },
+// { patientId: 'f78450f1-d8e2-4cc9-b917-xxx', dateStr: '2026-08-26' },
 const appointmentEntries = [] as AppointmentEntry[];
 
 declareAppointments(appointmentEntries).catch((err) => {
