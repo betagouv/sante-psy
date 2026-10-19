@@ -71,8 +71,16 @@ const Header = () => {
   return (
     <DSHeader>
       <HeaderBody>
-        <Logo asLink={<Link to={publicStudentPage ? '/info-etudiant' : '/'} title="Revenir à l'accueil" />}>
-          Ministère de l&lsquo;Enseignement Supérieur, de la Recherche et de l&lsquo;Espace
+        <Logo
+          asLink={
+            <Link
+              to={publicStudentPage ? '/info-etudiant' : '/'}
+              title="Revenir à l'accueil"
+            />
+          }
+          splitCharacter={8}
+        >
+          République française
         </Logo>
         <Service
           asLink={<Link to={publicStudentPage ? '/info-etudiant' : '/'} />}
