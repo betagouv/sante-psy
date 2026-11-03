@@ -150,7 +150,7 @@ importers:
         specifier: ^7.18.9
         version: 7.29.7(@babel/core@7.29.7)
       '@faker-js/faker':
-        specifier: 7.6.0
+        specifier: ^7.6.0
         version: 7.6.0
       '@types/express':
         specifier: ^4.17.16
