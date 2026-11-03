@@ -37,7 +37,9 @@ const send = (
   };
 
   return new Promise((resolve, reject) => {
-    mailTransport.sendMail(mail, (error, info) => (error ? reject(error) : resolve(info)));
+    mailTransport.sendMail(mail, (error) =>
+      error ? reject(error) : resolve(),
+    );
   });
 };
 
