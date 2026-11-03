@@ -197,16 +197,6 @@ ts-node scripts/matchPsyToUniversities.ts [--dry-run]
 ts-node scripts/matchSpecialPsyToUniversities.ts [--dry-run]
 ```
 
-### Anonymisation des données sensibles
-
-Ce script est utilisé sur l'environnement de staging afin de remplacer les données sensibles et visibles par de fausses informations après la récupération de données réelles (cf #les-donnees).
-
-Il ne peut pas être exécuté en production.
-
-```bash
-ts-node scripts/anonymizeDb.ts
-```
-
 ### Clean des noms d'institutions
 
 Cette tache s'effectue en 3 étapes.
@@ -296,6 +286,7 @@ ts-node scripts/downloadCertificates.ts 2025-2026 xxx1,xxx2
 
 ```bash
 scalingo --region osc-fr1 --app sante-psy-etudiant-staging bash
+scalingo --region osc-secnum-fr1 --app cheque-psy bash
 
 ts-node --transpile-only scripts/makeStudentsEligible.ts 2025-2026 xxx
 ```
