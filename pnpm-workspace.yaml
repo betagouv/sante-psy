@@ -4,6 +4,7 @@ packages:
 minimumReleaseAge: 10080 # wait for a 7 days (in minutes) cooldown period
 minimumReleaseAgeExclude:
   - axios
+  - joi
 
 sideEffectsCache: false
 trustPolicy: no-downgrade
