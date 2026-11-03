@@ -30,6 +30,9 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.1089.0
         version: 3.1089.0
+      '@faker-js/faker':
+        specifier: ^7.6.0
+        version: 7.6.0
       '@sentry/integrations':
         specifier: ^7.33.0
         version: 7.114.0
@@ -154,9 +157,6 @@ importers:
       '@babel/register':
         specifier: ^7.18.9
         version: 7.29.7(@babel/core@7.29.7)
-      '@faker-js/faker':
-        specifier: ^7.6.0
-        version: 7.6.0
       '@types/express':
         specifier: ^4.17.16
         version: 4.17.25
