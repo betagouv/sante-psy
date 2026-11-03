@@ -286,7 +286,6 @@ ts-node scripts/downloadCertificates.ts 2025-2026 xxx1,xxx2
 
 ```bash
 scalingo --region osc-fr1 --app sante-psy-etudiant-staging bash
-scalingo --region osc-secnum-fr1 --app cheque-psy bash
 
 ts-node --transpile-only scripts/makeStudentsEligible.ts 2025-2026 xxx
 ```
