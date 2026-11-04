@@ -109,8 +109,9 @@ const StudentHistory = () => {
             <div className={styles.placeholderCard} aria-hidden="true" />
           </div>
           <p>
-            Tes séances consommées apparaîtront ici si tu indiques{' '}
-            <b>ton numéro INE et ta date de naissance</b> à ton psychologue.
+            Tes séances consommées s’afficheront ici une fois que ton psychologue les
+            aura enregistrées de son côté. Pense à lui communiquer <b>ton numéro INE et
+              ta date de naissance</b> pour qu’elles soient bien rattachées à ton compte.
           </p>
         </div>
       )}
