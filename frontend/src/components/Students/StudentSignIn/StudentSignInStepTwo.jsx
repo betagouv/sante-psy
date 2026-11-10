@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import agent from 'services/agent';
 import validateIneFormat from 'src/utils/validateIneFormat';
@@ -165,6 +165,17 @@ const StudentSignInStepTwo = () => {
     }
   };
 
+  const dateOfBirthStr =
+    dateOfBirthError || !dateOfBirth
+      ? ''
+      : new Date(
+          `${dateOfBirth.split('/').reverse().join('-')}T00:00:00`,
+        ).toLocaleDateString('fr-FR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
+
   return (
     <StudentSignInHeader>
       <div className={styles.privacyBanner}>
@@ -228,6 +239,11 @@ const StudentSignInStepTwo = () => {
             />
             {dateOfBirthError && (
               <p className="fr-error-text">{dateOfBirthError}</p>
+            )}
+            {dateOfBirthStr && (
+              <p className={styles.confirmDateOfBirthText}>
+                Date de naissance : <b>{dateOfBirthStr}</b>. C'est bien ça ?
+              </p>
             )}
           </div>
 
