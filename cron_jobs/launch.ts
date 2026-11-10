@@ -1,5 +1,4 @@
 import cronDemarchesSimplifiees from './cronDemarchesSimplifiees';
-import cronUniversityPayments from './cronUniversityPayments';
 import cronPsychologists from './cronPsychologists';
 import cronStudents from './cronStudents';
 
@@ -20,7 +19,6 @@ const cronJobs = {
   sendStudentsMailJ30: cronStudents.sendStudentsMailJ30,
   sendStudentsMailDoctorAppointment:
     cronStudents.sendStudentsMailDoctorAppointment,
-  sendSummaryMail: cronUniversityPayments.sendSummaryToUniversities,
   importLatestDataFromDS: cronDemarchesSimplifiees.importLatestDataFromDSToPG,
   importEveryDataFromDS: cronDemarchesSimplifiees.importEveryDataFromDSToPG,
   checkForMultipleAcceptedDossiers:
