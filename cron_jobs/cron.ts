@@ -1,6 +1,5 @@
 import cron from 'cron';
 import cronDemarchesSimplifiees from './cronDemarchesSimplifiees';
-import cronUniversityPayments from './cronUniversityPayments';
 import cronPsychologists from './cronPsychologists';
 import cronStudents from './cronStudents';
 import config from '../utils/config';
@@ -19,14 +18,6 @@ if (!config.activateDebug) {
 sentry.initCaptureConsole();
 
 const jobs = [
-  {
-    cronTime: '0 8 1 * *', // first of the month : https://crontab.guru/#0_8_1_*_*
-    onTick: cronUniversityPayments.sendSummaryToUniversities,
-    start: true,
-    timeZone: 'Europe/Paris',
-    isActive: config.feature.sendSummary,
-    name: 'Send monthly appointment summaries to universities',
-  },
   {
     cronTime: '*/5 * * * *', // every 5 minutes
     onTick: cronDemarchesSimplifiees.importLatestDataFromDSToPG,
