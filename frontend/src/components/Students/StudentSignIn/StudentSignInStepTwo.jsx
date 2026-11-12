@@ -167,13 +167,14 @@ const StudentSignInStepTwo = () => {
             validator={isValidBirthDate}
             formatter={addAutoSlashToDate}
             placeholder="JJ/MM/AAAA"
+            successMessage={
+              dateOfBirthStr && (
+                <>
+                  Date de naissance : <b>{dateOfBirthStr}</b>. C'est bien ça ?
+                </>
+              )
+            }
           />
-
-          {/* {dateOfBirthStr && (
-              <p className={styles.confirmDateOfBirthText}>
-                Date de naissance : <b>{dateOfBirthStr}</b>. C'est bien ça ?
-              </p>
-            )} */}
 
           <TextInput
             id="ine"
