@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import StudentHistory from './StudentHistory/StudentHistory';
 import styles from './homepage.cssmodule.scss';
 import { Alert } from '@dataesr/react-dsfr';
+import { formatFrenchDateNoWeekday } from 'services/date';
 
 const StudentHomepage = () => {
   const {
@@ -45,13 +46,7 @@ const StudentHomepage = () => {
               {user.dateOfBirth && (
                 <li>
                   Date de naissance:{' '}
-                  <b>
-                    {new Date(user.dateOfBirth).toLocaleDateString('fr-FR', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                    })}
-                  </b>
+                  <b>{formatFrenchDateNoWeekday(new Date(user.dateOfBirth))}</b>
                 </li>
               )}
             </ul>

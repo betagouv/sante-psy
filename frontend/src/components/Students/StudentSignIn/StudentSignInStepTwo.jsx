@@ -3,7 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import agent from 'services/agent';
 import validateIneFormat from 'src/utils/validateIneFormat';
 import validateNameFormat from 'src/utils/validateNameFormat';
-import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
+import {
+  addAutoSlashToDate,
+  formatFrenchDateNoWeekday,
+  isValidBirthDate,
+} from 'services/date';
 import { useStore } from 'stores/';
 import styles from './studentSignIn.cssmodule.scss';
 import StudentSignInHeader from './StudentSignInHeader';
@@ -119,13 +123,9 @@ const StudentSignInStepTwo = () => {
   };
 
   const dateOfBirthStr = dateOfBirthValid
-    ? new Date(
-        `${dateOfBirth.split('/').reverse().join('-')}T00:00:00`,
-      ).toLocaleDateString('fr-FR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
+    ? formatFrenchDateNoWeekday(
+        new Date(`${dateOfBirth.split('/').reverse().join('-')}T00:00:00`),
+      )
     : '';
 
   return (
