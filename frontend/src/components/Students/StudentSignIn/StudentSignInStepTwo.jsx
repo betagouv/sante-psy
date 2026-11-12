@@ -7,6 +7,7 @@ import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import { useStore } from 'stores/';
 import styles from './studentSignIn.cssmodule.scss';
 import StudentSignInHeader from './StudentSignInHeader';
+import { TextInput } from 'components/Forms/TextInput';
 
 const StudentSignInStepTwo = () => {
   const {
@@ -16,13 +17,14 @@ const StudentSignInStepTwo = () => {
   const navigate = useNavigate();
 
   const [firstNames, setFirstNames] = useState('');
-  const [firstNamesError, setFirstNamesError] = useState('');
+  const [firstNamesValid, setFirstNamesValid] = useState(false);
   const [lastName, setLastName] = useState('');
-  const [lastNameError, setLastNameError] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [dateOfBirthError, setDateOfBirthError] = useState('');
+  const [lastNameValid, setLastNameValid] = useState(false);
   const [ine, setIne] = useState('');
-  const [ineError, setIneError] = useState('');
+  const [ineValid, setIneValid] = useState(false);
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [dateOfBirthValid, setDateOfBirthValid] = useState(false);
+
   const [email, setEmail] = useState('');
   const [notification, setNotification] = useState(null);
   const [valid, setValid] = useState(false);
@@ -51,62 +53,13 @@ const StudentSignInStepTwo = () => {
 
   if (!valid) return null;
 
-  const validateFirstNames = (value) => {
-    if (!validateNameFormat(value)) {
-      setFirstNamesError('Format incorrect du prénom.');
-      return false;
-    }
-    setFirstNamesError('');
-    return true;
-  };
-
-  const validateLastName = (value) => {
-    if (!validateNameFormat(value)) {
-      setLastNameError('Format incorrect du nom.');
-      return false;
-    }
-    setLastNameError('');
-    return true;
-  };
-
-  const validateDateOfBirth = (value) => {
-    if (!value) {
-      setDateOfBirthError('Date de naissance requise.');
-      return false;
-    }
-    if (!isValidBirthDate(value)) {
-      setDateOfBirthError("La date de naissance entrée n'est pas valide.");
-      return false;
-    }
-    setDateOfBirthError('');
-    return true;
-  };
-
-  const handleDateOfBirthChange = (e) => {
-    const formattedValue = addAutoSlashToDate(e.target.value);
-    setDateOfBirth(formattedValue);
-    validateDateOfBirth(formattedValue);
-  };
-
-  const validateINE = (value) => {
-    if (!validateIneFormat(value)) {
-      setIneError('Format incorrect du numéro INE.');
-      return false;
-    }
-    setIneError('');
-    return true;
-  };
+  const canSubmitForm =
+    firstNamesValid && lastNameValid && ineValid && dateOfBirthValid;
 
   const signIn = async (e) => {
     e.preventDefault();
 
-    const isFormValid =
-      validateFirstNames(firstNames) &&
-      validateLastName(lastName) &&
-      validateDateOfBirth(dateOfBirth) &&
-      validateINE(ine);
-
-    if (!isFormValid) return;
+    if (!canSubmitForm) return;
 
     setNotification(null);
 
@@ -165,16 +118,15 @@ const StudentSignInStepTwo = () => {
     }
   };
 
-  const dateOfBirthStr =
-    dateOfBirthError || !dateOfBirth
-      ? ''
-      : new Date(
-          `${dateOfBirth.split('/').reverse().join('-')}T00:00:00`,
-        ).toLocaleDateString('fr-FR', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        });
+  const dateOfBirthStr = dateOfBirthValid
+    ? new Date(
+        `${dateOfBirth.split('/').reverse().join('-')}T00:00:00`,
+      ).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    : '';
 
   return (
     <StudentSignInHeader>
@@ -186,90 +138,55 @@ const StudentSignInStepTwo = () => {
       </div>
       <form onSubmit={signIn}>
         <div className="fr-my-2w">
-          <div className="fr-input-group">
-            <label className="fr-label" htmlFor="first-names-input">
-              Prénom(s)
-            </label>
-            <input
-              className={`fr-input midlength-input ${firstNamesError ? 'fr-input--error' : ''}`}
-              id="first-names-input"
-              type="text"
-              value={firstNames}
-              onChange={(e) => setFirstNames(e.target.value)}
-              onBlur={() => validateFirstNames(firstNames)}
-              required
-              disabled={isBlocked}
-            />
-            {firstNamesError && (
-              <p className="fr-error-text">{firstNamesError}</p>
-            )}
-          </div>
+          <TextInput
+            id="first-names"
+            disabled={isBlocked}
+            label="Prénom(s)"
+            fieldName="prénom"
+            setValid={setFirstNamesValid}
+            setValue={setFirstNames}
+            validator={validateNameFormat}
+          />
+          <TextInput
+            id="last-name"
+            disabled={isBlocked}
+            fieldName="nom"
+            label="Nom"
+            setValid={setLastNameValid}
+            setValue={setLastName}
+            validator={validateNameFormat}
+          />
 
-          <div className="fr-input-group">
-            <label className="fr-label" htmlFor="last-name-input">
-              Nom
-            </label>
-            <input
-              className={`fr-input midlength-input ${lastNameError ? 'fr-input--error' : ''}`}
-              id="last-name-input"
-              value={lastName}
-              type="text"
-              onChange={(e) => setLastName(e.target.value)}
-              onBlur={() => validateLastName(lastName)}
-              required
-              disabled={isBlocked}
-            />
-            {lastNameError && <p className="fr-error-text">{lastNameError}</p>}
-          </div>
+          <TextInput
+            id="date-of-birth"
+            disabled={isBlocked}
+            fieldName="date de naissance"
+            label="Date de naissance"
+            setValid={setDateOfBirthValid}
+            setValue={setDateOfBirth}
+            validator={isValidBirthDate}
+            formatter={addAutoSlashToDate}
+            placeholder="JJ/MM/AAAA"
+          />
 
-          <div className="fr-input-group">
-            <label className="fr-label" htmlFor="dob-input">
-              Date de naissance
-            </label>
-            <input
-              className={`fr-input midlength-input ${dateOfBirthError ? 'fr-input--error' : ''}`}
-              id="dateBirth-input"
-              type="text"
-              value={dateOfBirth}
-              onChange={handleDateOfBirthChange}
-              onBlur={() => validateDateOfBirth(dateOfBirth)}
-              placeholder="JJ/MM/AAAA"
-              required
-              disabled={isBlocked}
-            />
-            {dateOfBirthError && (
-              <p className="fr-error-text">{dateOfBirthError}</p>
-            )}
-            {dateOfBirthStr && (
+          {/* {dateOfBirthStr && (
               <p className={styles.confirmDateOfBirthText}>
                 Date de naissance : <b>{dateOfBirthStr}</b>. C'est bien ça ?
               </p>
-            )}
-          </div>
+            )} */}
 
-          <div className="fr-input-group">
-            <label
-              className={`fr-label ${ineError ? styles.labelError : ''}`}
-              htmlFor="ine-input"
-            >
-              Numéro INE
-              <span className="fr-hint-text">
-                11 chiffres ou lettres, présent sur ton certificat de scolarité
-                ou attestation CVEC
-              </span>
-            </label>
-            <input
-              className={`fr-input midlength-input ${ineError ? 'fr-input--error' : ''}`}
-              id="ine-input"
-              type="text"
-              value={ine}
-              onChange={(e) => setIne(e.target.value.toUpperCase())}
-              onBlur={() => validateINE(ine)}
-              required
-              disabled={isBlocked}
-            />
-            {ineError && <p className="fr-error-text">{ineError}</p>}
-          </div>
+          <TextInput
+            id="ine"
+            disabled={isBlocked}
+            fieldName="numéro INE"
+            label="Numéro INE"
+            hint="11 chiffres ou lettres, présent sur ton certificat de scolarité
+                ou attestation CVEC"
+            setValid={setIneValid}
+            setValue={setIne}
+            validator={validateIneFormat}
+            formatter={(s) => s.toUpperCase()}
+          />
         </div>
 
         {(notification || isBlocked) && (
@@ -295,7 +212,11 @@ const StudentSignInStepTwo = () => {
           </div>
         )}
         <div className="fr-mb-4w fr-mt-2w">
-          <button className="fr-btn" type="submit" disabled={isBlocked}>
+          <button
+            className="fr-btn"
+            type="submit"
+            disabled={isBlocked || !canSubmitForm}
+          >
             {notification?.type === 'error'
               ? 'Confirmer ces informations'
               : 'Continuer mon inscription'}
