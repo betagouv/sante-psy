@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import agent from 'services/agent';
-import styles from './studentSignIn.cssmodule.scss';
 import StudentSignInHeader from './StudentSignInHeader';
-import { validateEmailField } from 'src/utils/validateEmailFormat';
+import { validateEmailFormat } from 'src/utils/validateEmailFormat';
+import { TextInput } from 'components/Forms/TextInput';
 
 const StudentSignInStepOne = () => {
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [emailValid, setEmailValid] = useState('');
   const [notification, setNotification] = useState(null);
   const [canSendEmail, setCanSendEmail] = useState(true);
 
-  useEffect(() => setCanSendEmail(!!email), [email]);
+  useEffect(() => setCanSendEmail(!!email && emailValid), [email, emailValid]);
 
   const sendStudentSecondStepMail = async (e) => {
     setCanSendEmail(false);
     e.preventDefault();
-    const isValid = validateEmailField(email, setEmailError);
-    if (!isValid) return;
+    if (!emailValid) return;
 
     try {
       setCanSendEmail(false);
@@ -62,29 +61,25 @@ const StudentSignInStepOne = () => {
           </div>
         )}
         <div className="fr-my-2w">
-          <div className="fr-input-group">
-            <label
-              className={`fr-label ${emailError ? styles.labelError : ''}`}
-              htmlFor="email-input"
-            >
-              Ton email
-            </label>
-            <input
-              className={`fr-input ${emailError ? 'fr-input--error' : ''}`}
-              id="email-input"
-              type="email"
-              placeholder="Ton email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value.toLowerCase())}
-              onBlur={() => validateEmailField(email, setEmailError)}
-              required
-            />
-            {emailError && <p className="fr-error-text">{emailError}</p>}
-          </div>
+          <TextInput
+            id="email"
+            disabled={false}
+            fieldName="addresse e-mail"
+            label="Ton email"
+            hint="Utilise une adresse email personnelle. Elle te suivra même si tu changes de formation ou d'établissement."
+            setValid={setEmailValid}
+            setValue={setEmail}
+            validator={validateEmailFormat}
+            formatter={(s) => s.toLowerCase()}
+          />
         </div>
 
         <div className="fr-my-4w">
-          <button className="fr-btn" type="submit" disabled={!canSendEmail}>
+          <button
+            className="fr-btn"
+            type="submit"
+            disabled={!canSendEmail || !emailValid}
+          >
             Suivant
           </button>
         </div>
