@@ -3,6 +3,7 @@ import { useStore } from 'stores';
 import { Link } from 'react-router-dom';
 import StudentHistory from './StudentHistory/StudentHistory';
 import styles from './homepage.cssmodule.scss';
+import { Alert } from '@dataesr/react-dsfr';
 
 const StudentHomepage = () => {
   const {
@@ -20,20 +21,42 @@ const StudentHomepage = () => {
           <span className="fr-icon-psychotherapy-line" aria-hidden="true" />
           <strong>{user.firstNames}</strong>
         </div>
-        <Link
-          to="/etudiant/editer-profil"
-          className={styles.firstNameGroup}
-        >
+        <Link to="/etudiant/editer-profil" className={styles.firstNameGroup}>
           <span className="fr-icon-edit-line" aria-hidden="true" />
           Mon compte
         </Link>
-        <Link
-          to="/etudiant/numeros-urgence"
-          className={styles.ctaBtn}
-        >
+        <Link to="/etudiant/numeros-urgence" className={styles.ctaBtn}>
           <span className="fr-icon-phone-line" aria-hidden="true" />
           Je me sens mal
         </Link>
+      </div>
+
+      <div>
+        <Alert
+          type="info"
+          title="Informations à transmettre à ton psychologue"
+          description={
+            <ul>
+              {user.ine && (
+                <li>
+                  INE: <b>{user.ine}</b>
+                </li>
+              )}
+              {user.dateOfBirth && (
+                <li>
+                  Date de naissance:{' '}
+                  <b>
+                    {new Date(user.dateOfBirth).toLocaleDateString('fr-FR', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    })}
+                  </b>
+                </li>
+              )}
+            </ul>
+          }
+        />
       </div>
 
       <div className={styles.container} data-test-id="dashboard_student">
