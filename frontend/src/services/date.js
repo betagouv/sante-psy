@@ -44,9 +44,16 @@ const shortDateFormatter = new Intl.DateTimeFormat('fr-FR', {
   year: 'numeric',
 });
 
-const formatFrenchDate = date => dateFormatter.format(date);
+const formatFrenchDate = (date) => dateFormatter.format(date);
 
-const utcDate = dateString => {
+export const formatFrenchDateNoWeekday = (date) =>
+  date.toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+
+const utcDate = (dateString) => {
   const date = new Date(dateString);
   return new Date(
     date.getUTCFullYear(),
@@ -61,14 +68,14 @@ const utcDate = dateString => {
 /**
  * used to display date in editPatient
  */
-const formatDDMMYYYY = date => {
+const formatDDMMYYYY = (date) => {
   if (date) {
     return shortDateFormatter.format(date);
   }
   return '';
 };
 
-const formatStringToDDMMYYYY = stringDate => {
+const formatStringToDDMMYYYY = (stringDate) => {
   const date = new Date(stringDate);
   if (!date.getTime()) {
     return ''; // handle invalid dates
@@ -76,7 +83,7 @@ const formatStringToDDMMYYYY = stringDate => {
   return formatDDMMYYYY(date);
 };
 
-const parseDateForm = date => {
+const parseDateForm = (date) => {
   if (date) {
     const [day, month, year] = date.split('/');
     // year - month - day
@@ -85,7 +92,7 @@ const parseDateForm = date => {
   return null;
 };
 
-const convertLocalToUTCDate = date => {
+const convertLocalToUTCDate = (date) => {
   if (!date) {
     return date;
   }
@@ -96,12 +103,13 @@ const convertLocalToUTCDate = date => {
   return dateUTC;
 };
 
-const formatMonth = m => {
-  if (m && m.year && m.month) return `${longFrenchMonthNames[m.month - 1]} ${m.year}`;
+const formatMonth = (m) => {
+  if (m && m.year && m.month)
+    return `${longFrenchMonthNames[m.month - 1]} ${m.year}`;
   return '?';
 };
 
-const addAutoSlashToDate = value => {
+const addAutoSlashToDate = (value) => {
   const cleanedValue = value.replace(/\D/g, '');
 
   let formattedValue = cleanedValue;
