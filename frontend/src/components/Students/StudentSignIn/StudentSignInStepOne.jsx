@@ -64,7 +64,7 @@ const StudentSignInStepOne = () => {
           <TextInput
             id="email"
             disabled={false}
-            fieldName="addresse e-mail"
+            fieldName="addresse email"
             label="Ton email"
             hint="Utilise une adresse email personnelle. Elle te suivra même si tu changes de formation ou d'établissement."
             setValid={setEmailValid}
