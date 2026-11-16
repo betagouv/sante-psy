@@ -1,4 +1,4 @@
-import { React, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './TextInput.cssmodule.scss';
 
 export const TextInput = ({
