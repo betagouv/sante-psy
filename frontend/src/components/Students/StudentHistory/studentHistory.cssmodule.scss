@@ -50,7 +50,7 @@
   display: flex;
   gap: 1rem;
   padding: 1rem;
-  background-color: #F9F2FF;
+  background-color: #f9f2ff;
   border-radius: 4px;
 }
 
@@ -59,7 +59,7 @@
   font-weight: 700;
   align-self: center;
   // TODO : ça ne rend surement pas bon en dark mode, besoin de DSFR
-  color: #6F016B;
+  color: #6f016b;
 }
 
 .day {
@@ -70,7 +70,7 @@
 .date {
   font-weight: 700;
   margin: 0;
-  color: #6F016B;
+  color: #6f016b;
 }
 
 .psychologist {
@@ -109,4 +109,8 @@
   width: 100%;
   display: inline-flex;
   justify-content: space-between;
+}
+
+.marginTop {
+  margin-top: 1rem;
 }
