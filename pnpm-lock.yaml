@@ -235,12 +235,9 @@ importers:
 
   frontend:
     dependencies:
-      '@dataesr/react-dsfr':
-        specifier: ^3.10.0
-        version: 3.10.2(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
-      '@gouvfr/dsfr':
-        specifier: ^1.13.0
-        version: 1.14.4
+      '@codegouvfr/react-dsfr':
+        specifier: ^1.36.0
+        version: 1.36.0
       axios:
         specifier: ^1.21.0
         version: 1.21.0
@@ -1225,6 +1222,15 @@ packages:
     resolution: {integrity: sha512-4zBIxpPzowiZpusoFkyGVwakdRJUyuH5PxQ/PrqghfdFWWasvnCdPfQXHrenDai+gyLARulZjZowCOj6fjT4pA==}
     engines: {node: '>=6.9.0'}
 
+  '@codegouvfr/react-dsfr@1.36.0':
+    resolution: {integrity: sha512-+rhqdCynxyzWTeNmUbBTzsnikiTsx5IRvahlMRohObrJEReiZowAs2x8qW/OeewaNLCwyTWzRGg7fbY3Sw1qnw==}
+    hasBin: true
+    peerDependencies:
+      '@gouvfr/dsfr-chart': ^1.0.0
+    peerDependenciesMeta:
+      '@gouvfr/dsfr-chart':
+        optional: true
+
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
@@ -1239,13 +1245,6 @@ packages:
 
   '@cypress/xvfb@1.2.4':
     resolution: {integrity: sha512-skbBzPggOVYCbnGgV+0dmBdW/s77ZkAOXIC1knS8NagwDjBrNC1LuXtQJeiN6l+m7lzmHtaoUw/ctJKdqkG57Q==}
-
-  '@dataesr/react-dsfr@3.10.2':
-    resolution: {integrity: sha512-D1LlVzFOKs78+nT3xhWUWZzRpqG/wNUI540WikAb9HAqE4E19o3elqslIa93NbxxHkSYfGsy/obUQ7A/YiJFeg==}
-    engines: {node: '>=14.18', npm: '>=8.15'}
-    peerDependencies:
-      react: ^18.2.0
-      react-dom: ^18.2.0
 
   '@discoveryjs/json-ext@0.5.7':
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -1299,14 +1298,6 @@ packages:
 
   '@gilbarbara/deep-equal@0.3.1':
     resolution: {integrity: sha512-I7xWjLs2YSVMc5gGx1Z3ZG1lgFpITPndpi8Ku55GeEIKpACCPQNS/OTqQbxgTCfq0Ncvcc+CrFov96itVh6Qvw==}
-
-  '@gouvfr/dsfr@1.14.4':
-    resolution: {integrity: sha512-Ca17apmTyAF2tMFwMcLwQN7fTlbfMFeyYSLUIUmjoSg1XVF4vDDkbvvKBpWJWaoTLDSFZBbvvHzcDyxw9wSkLA==}
-    engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
-
-  '@gouvfr/dsfr@1.7.2':
-    resolution: {integrity: sha512-hPNtz+gHcc8m7ZPANxSOFMz4Ap+M9FHOudqoMR/+Kjl5FCOqwA6u/aoYnMJ8KqedS1k5XThFMp7jiktr53qXYw==}
-    engines: {node: '>=14.18.0'}
 
   '@graphql-typed-document-node/core@3.2.0':
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
@@ -6550,6 +6541,9 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
 
+  tsafe@1.8.12:
+    resolution: {integrity: sha512-nFRqW0ttu/2o6XTXsHiVZWJBCOaxhVqZLg7dgs3coZNsCMPXPfwz+zPHAQA+70fNnVJLAPg1EgGIqK9Q84tvAw==}
+
   tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
 
@@ -8051,6 +8045,11 @@ snapshots:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
+  '@codegouvfr/react-dsfr@1.36.0':
+    dependencies:
+      tsafe: 1.8.12
+      yargs-parser: 21.1.1
+
   '@colors/colors@1.5.0':
     optional: true
 
@@ -8085,16 +8084,6 @@ snapshots:
       lodash.once: 4.1.1
     transitivePeerDependencies:
       - supports-color
-
-  '@dataesr/react-dsfr@3.10.2(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      '@babel/runtime': 7.29.7
-      '@gouvfr/dsfr': 1.7.2
-      classnames: 2.5.1
-      prop-types: 15.8.1
-      react: 18.3.1
-      react-dom: 18.2.0(react@18.3.1)
-      uuid: 9.0.1
 
   '@discoveryjs/json-ext@0.5.7': {}
 
@@ -8151,10 +8140,6 @@ snapshots:
   '@gilbarbara/deep-equal@0.1.2': {}
 
   '@gilbarbara/deep-equal@0.3.1': {}
-
-  '@gouvfr/dsfr@1.14.4': {}
-
-  '@gouvfr/dsfr@1.7.2': {}
 
   '@graphql-typed-document-node/core@3.2.0(graphql@16.14.2)':
     dependencies:
@@ -13986,6 +13971,8 @@ snapshots:
       mkdirp: 0.5.6
       source-map-support: 0.5.21
       yn: 2.0.0
+
+  tsafe@1.8.12: {}
 
   tsconfig-paths@3.15.0:
     dependencies:
