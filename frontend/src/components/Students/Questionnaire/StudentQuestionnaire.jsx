@@ -354,11 +354,16 @@ const StudentQuestionnaire = ({
             Conditions Générales d’Utilisation
           </Link>
           <Checkbox
-            label="J’ai lu et j’accepte les Conditions Générales d’Utilisation"
-            nativeInputProps={{
-              onChange: (e) => setAcceptedCGUs(e.target.checked),
-              checked: acceptedCGUs,
-            }}
+            options={[
+              {
+                label:
+                  'J’ai lu et j’accepte les Conditions Générales d’Utilisation',
+                nativeInputProps: {
+                  onChange: (e) => setAcceptedCGUs(e.target.checked),
+                  checked: acceptedCGUs,
+                },
+              },
+            ]}
           />
         </>
       )}
