@@ -11,7 +11,11 @@ import fr from 'date-fns/locale/fr';
 import Bill from 'components/Psychologist/Reimbursement/Bill';
 import App from './App';
 
-import '@gouvfr/dsfr/dist/utility/icons/icons.min.css';
+import '@codegouvfr/react-dsfr/dsfr/utility/icons/icons.min.css';
+
+import { Link } from 'react-router-dom';
+import { setLink } from '@codegouvfr/react-dsfr/link';
+setLink({ Link });
 
 configure({ enforceActions: 'never' });
 registerLocale('fr', fr);
@@ -25,7 +29,11 @@ root.render(
       <React.StrictMode>
         <BrowserRouter>
           <Routes>
-            <Route exact path="/psychologue/bill/:month/:year" element={<Bill />} />
+            <Route
+              exact
+              path="/psychologue/bill/:month/:year"
+              element={<Bill />}
+            />
             <Route path="/*" element={<App />} />
           </Routes>
         </BrowserRouter>
