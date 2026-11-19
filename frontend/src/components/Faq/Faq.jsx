@@ -25,21 +25,6 @@ const Faq = ({ simplified }) => {
   const {
     userStore: { user },
   } = useStore();
-  const getDefaultTab = () => {
-    const section = query.get('section');
-    if (
-      section &&
-      ['etudiant', 'psychologue', 'ecole', 'espace'].includes(section)
-    ) {
-      return section;
-    }
-
-    if (user) {
-      return 'psychologue';
-    }
-
-    return 'etudiant';
-  };
 
   const getLabel = () => {
     if (tabsRef.current) {
@@ -77,7 +62,6 @@ const Faq = ({ simplified }) => {
           {simplified ? 'Questions fréquentes' : 'Foire aux questions'}
         </h1>
         <Tabs
-          defaultSelectedTabId={getDefaultTab()}
           tabs={[
             {
               tabId: 'etudiant',
