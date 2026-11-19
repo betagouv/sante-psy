@@ -5,6 +5,10 @@ import { useStore } from 'stores/';
 import Page from 'components/Page/Page';
 import Section from 'components/Page/Section';
 
+const SubTitle = ({ children }) => (
+  <h3 style={{ fontSize: '1.357rem' }}>{children}</h3>
+);
+
 const CGU = () => {
   const {
     commonStore: { config },
@@ -87,7 +91,7 @@ const CGU = () => {
           notamment les modalités de déclaration / paiement des séances
           réalisées dans le cadre du dispositif.
         </p>
-        <h3>4.1 Inscription via « démarches simplifiées »</h3>
+        <SubTitle>4.1 Inscription via « démarches simplifiées »</SubTitle>
         <p>
           Pour participer au dispositif Santé Psy Étudiant, les Psychologues
           doivent obligatoirement en faire la demande en renseignant un
@@ -109,7 +113,7 @@ const CGU = () => {
           seront publiées sur l’annuaire de la Plateforme SPE. Les Étudiants
           peuvent choisir parmi cette liste pour prendre un rendez-vous.
         </p>
-        <h3>4.2 Espace Psychologue</h3>
+        <SubTitle>4.2 Espace Psychologue</SubTitle>
         <p>
           Le Psychologue dispose d’un espace dédié sur la Plateforme incluant
         </p>
@@ -132,7 +136,7 @@ const CGU = () => {
           psychologue non conventionné ne peut déclarer des séances et être
           remboursé au titre du dispositif SPE.
         </p>
-        <h3>4.3 Générateur de factures</h3>
+        <SubTitle>4.3 Générateur de factures</SubTitle>
         <p>
           La Plateforme met à disposition du Psychologue un générateur de
           factures afin de faciliter le remboursement des séances. Le
@@ -150,14 +154,14 @@ const CGU = () => {
           disposition reste ainsi de la responsabilité du Psychologue, et tout
           remboursement reste de la responsabilité de l’Université partenaire.
         </p>
-        <h3>4.4 Retrait du dispositif</h3>
+        <SubTitle>4.4 Retrait du dispositif</SubTitle>
         <p>
           Pour être retiré du dispositif Santé Psy Étudiant, le Psychologue se
           dirige vers son espace psychologue sur la page « Mes Informations » et
           clique sur « Retirez mes informations de l’annuaire » en bas de la
           page.
         </p>
-        <h3>4.5 Suivi des Étudiants</h3>
+        <SubTitle>4.5 Suivi des Étudiants</SubTitle>
         <p>
           Les Psychologues disposent d’une vue d’ensemble des Étudiants
           accompagnés avec des informations clés : nombre de séances par
@@ -177,14 +181,14 @@ const CGU = () => {
           genre). L’Étudiant ajouté reçoit un lien magique sur son adresse
           courriel valable pendant 48 heures.
         </p>
-        <h3>4.6 Contacter le support</h3>
+        <SubTitle>4.6 Contacter le support</SubTitle>
         <p>
           En cas de question ou de signalement, le Psychologue peut à tout
           moment contacter le support.
         </p>
       </Section>
       <Section title="Article 5 - Fonctionnalités réservées aux Étudiants">
-        <h3>5.1 Se créer son espace personnel</h3>
+        <SubTitle>5.1 Se créer son espace personnel</SubTitle>
         <p>
           L’Étudiant peut se créer un espace personnel en renseignant ses
           informations personnelles (prénom, nom de famille, numéro INE, date de
@@ -198,7 +202,7 @@ const CGU = () => {
           pendant 48 heures. Il accède ensuite à son espace en indiquant son
           nom, prénom, numéro INE et date de naissance.
         </p>
-        <h3>5.2 Trouver un psychologue</h3>
+        <SubTitle>5.2 Trouver un psychologue</SubTitle>
         <p>
           L’Étudiant peut consulter la liste des psychologues référencés par le
           dispositif SPE et effectuer des recherches par nom, ville, code postal
@@ -208,13 +212,13 @@ const CGU = () => {
           Psychologues référencés en contactant le professionnel au travers des
           moyens de contact renseignés sur la Plateforme.
         </p>
-        <h3>5.3 Changer de Psychologue</h3>
+        <SubTitle>5.3 Changer de Psychologue</SubTitle>
         <p>
           Dans le cadre du dispositif, il est possible à tout moment de changer
           de Psychologue dans la liste des Psychologues partenaires de la
           Plateforme.
         </p>
-        <h3>5.4 Suivre son historique de séances</h3>
+        <SubTitle>5.4 Suivre son historique de séances</SubTitle>
         <p>
           L’Étudiant peut suivre son historique de séances et son solde de
           séances restantes via la consultation de son tableau de bord dans son
@@ -222,7 +226,7 @@ const CGU = () => {
         </p>
       </Section>
       <Section title="Article 6 - Responsabilités">
-        <h3>6.1 L’Éditeur de la Plateforme</h3>
+        <SubTitle>6.1 L’Éditeur de la Plateforme</SubTitle>
         <p>
           Les sources des informations diffusées sur la Plateforme sont réputées
           fiables mais l’Éditeur ne garantit pas qu’elle soit exempte de
@@ -258,7 +262,7 @@ const CGU = () => {
           le compte de l’utilisateur responsable et l’informe des voies et
           délais de recours.
         </p>
-        <h3>6.2 Le Psychologue</h3>
+        <SubTitle>6.2 Le Psychologue</SubTitle>
         <p>
           Le Psychologue s’assure de garder son lien de connexion secret. Toute
           divulgation du lien, quelle que soit sa forme, est interdite. Il
@@ -295,7 +299,7 @@ const CGU = () => {
           certificat de scolarité et de vérifier que ce dernier est valable sur
           la période en cours.
         </p>
-        <h3>6.3 L’Étudiant</h3>
+        <SubTitle>6.3 L’Étudiant</SubTitle>
         <p>
           L’Étudiant s’assure de garder son lien de connexion secret. Toute
           divulgation du lien, quelle que soit sa forme, est interdite. Il
