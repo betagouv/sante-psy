@@ -1,10 +1,10 @@
 import React from 'react';
 import { getUnivYear } from 'services/univYears';
-import { Badge } from '@dataesr/react-dsfr';
 import useScreenSize from 'src/utils/useScreenSize';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './badges.cssmodule.scss';
 import { Tooltip } from 'components/Tooltip/Tooltip';
+import { Badge } from '@codegouvfr/react-dsfr/Badge';
 
 export const renderBadge = ({
   badge,
