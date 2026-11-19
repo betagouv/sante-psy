@@ -21,6 +21,9 @@ configure({ enforceActions: 'never' });
 registerLocale('fr', fr);
 setDefaultLocale('fr');
 
+import { startReactDsfr } from '@codegouvfr/react-dsfr/spa';
+startReactDsfr({ defaultColorScheme: 'system' });
+
 const root = createRoot(document.getElementById('root'));
 
 root.render(
