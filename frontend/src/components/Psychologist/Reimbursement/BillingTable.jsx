@@ -1,5 +1,5 @@
-import { Table } from '@dataesr/react-dsfr';
 import React from 'react';
+import { Table } from '@codegouvfr/react-dsfr/Table';
 
 import { formatDDMMYYYY, utcDate } from 'services/date';
 import billingDataService from 'services/billingData';
@@ -60,14 +60,16 @@ const BillingTable = ({ filteredDates, appointments }) => {
     },
   ];
 
+  const tableData = filteredDates.concat(['total']);
+
   return (
     <Table
       id="billing-table"
-      data-test-id="billing-table"
       caption="Tableau récapitulatif"
-      columns={columns}
-      data={filteredDates.concat(['total'])}
-      rowKey={(x) => x}
+      headers={columns.map((column) => column.label)}
+      data={tableData.map((date) =>
+        columns.map((column) => column.render(date)),
+      )}
     />
   );
 };

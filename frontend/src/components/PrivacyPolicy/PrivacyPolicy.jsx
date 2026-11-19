@@ -1,5 +1,5 @@
 import React from 'react';
-import { SimpleTable } from '@dataesr/react-dsfr';
+import { Table } from '@codegouvfr/react-dsfr/Table';
 
 import Page from 'components/Page/Page';
 import Section from 'components/Page/Section';
@@ -18,7 +18,8 @@ const dataConservation = [
     'Durée de conservation': '6 mois à compter de la réception du message',
   },
   {
-    'Catégories de données': 'Données relatives à la traçabilité (logs, adresse IP)',
+    'Catégories de données':
+      'Données relatives à la traçabilité (logs, adresse IP)',
     'Durée de conservation': '1 an',
   },
 ];
@@ -28,133 +29,193 @@ const dataSubcontractor = [
     Partenaire: 'Scalingo',
     Pays: 'France',
     'Traitement réalisé': 'Hébergeur',
-    Garanties: <a href="https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles" target="_blank" rel="noreferrer">https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles</a>,
+    Garanties: (
+      <a
+        href="https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles"
+        target="_blank"
+        rel="noreferrer"
+      >
+        https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles
+      </a>
+    ),
   },
   {
     Partenaire: 'Crisp',
     Pays: 'France',
     'Traitement réalisé': 'Outil de support et de chat',
-    Garanties: <a href="https://help.crisp.chat/en/article/how-to-sign-my-gdpr-data-processing-agreement-dpa-1wfmngo/" target="_blank" rel="noreferrer">https://help.crisp.chat/en/article/how-to-sign-my-gdpr-data-processing-agreement-dpa-1wfmngo</a>,
+    Garanties: (
+      <a
+        href="https://help.crisp.chat/en/article/how-to-sign-my-gdpr-data-processing-agreement-dpa-1wfmngo/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        https://help.crisp.chat/en/article/how-to-sign-my-gdpr-data-processing-agreement-dpa-1wfmngo
+      </a>
+    ),
   },
 ];
 
 const dataCookies = [
   {
     Cookies: 'Google Ads',
-    'Traitement réalisé':
-  <>
-    <p>Outil de gestion de balises permettant de suivre et mesurer les publicités.</p>
-    <p>Il mesure l’efficacité des campagnes sponsorisées.</p>
-  </>,
+    'Traitement réalisé': (
+      <>
+        <p>
+          Outil de gestion de balises permettant de suivre et mesurer les
+          publicités.
+        </p>
+        <p>Il mesure l’efficacité des campagnes sponsorisées.</p>
+      </>
+    ),
     'Base juridique': 'Consentement',
-    Garanties: <a href="https://www.google.com/analytics/terms/dpa/dataprocessingamendment_20200816.html" target="_blank" rel="noreferrer">https://www.google.com/analytics/terms/dpa/dataprocessingamendment_20200816.html</a>,
+    Garanties: (
+      <a
+        href="https://www.google.com/analytics/terms/dpa/dataprocessingamendment_20200816.html"
+        target="_blank"
+        rel="noreferrer"
+      >
+        https://www.google.com/analytics/terms/dpa/dataprocessingamendment_20200816.html
+      </a>
+    ),
   },
   {
     Cookies: 'Facebook Cookie Pixel',
-    'Traitement réalisé':
-  <>
-    <p>Outil de gestion de balises permettant de suivre et mesurer les publicités.</p>
-    <p>Il identifie les visiteurs en provenance de publications Facebook.</p>
-  </>,
+    'Traitement réalisé': (
+      <>
+        <p>
+          Outil de gestion de balises permettant de suivre et mesurer les
+          publicités.
+        </p>
+        <p>
+          Il identifie les visiteurs en provenance de publications Facebook.
+        </p>
+      </>
+    ),
     'Base juridique': 'Consentement',
-    Garanties: <a href="https://www.facebook.com/legal/terms/dataprocessing" target="_blank" rel="noreferrer">https://www.facebook.com/legal/terms/dataprocessing</a>,
+    Garanties: (
+      <a
+        href="https://www.facebook.com/legal/terms/dataprocessing"
+        target="_blank"
+        rel="noreferrer"
+      >
+        https://www.facebook.com/legal/terms/dataprocessing
+      </a>
+    ),
   },
 ];
 
 const PrivacyPolicy = () => (
-  <Page
-    title="Politique de confidentialité"
-    withoutHeader
-    textContent
-    >
+  <Page title="Politique de confidentialité" withoutHeader textContent>
     <h1 className="secondaryPageTitle">Politique de confidentialité</h1>
     <Section title="Qui sommes-nous ?">
       <p>
-        Santé Psy Étudiant est un produit numérique porté depuis février 2021 par le ministère chargé de l’enseignement supérieur, de la recherche et de l’espace (MESRE). Il vise à mettre en relation les étudiants et des psychologues habilités par les services de santé étudiante (SSE), dans le but de faire bénéficier aux étudiants de 12 séances gratuites avec un psychologue.
+        Santé Psy Étudiant est un produit numérique porté depuis février 2021
+        par le ministère chargé de l’enseignement supérieur, de la recherche et
+        de l’espace (MESRE). Il vise à mettre en relation les étudiants et des
+        psychologues habilités par les services de santé étudiante (SSE), dans
+        le but de faire bénéficier aux étudiants de 12 séances gratuites avec un
+        psychologue.
       </p>
     </Section>
     <Section title="Pourquoi traitons-nous des données à caractère personnel ?">
       <ul className="fr-list">
-        <li>Permettre aux psychologues et aux étudiants de se connecter à leurs espaces personnels notamment pour le suivi des séances et la facturation ;</li>
-        <li>Mettre en place un observatoire statistique relatif à la santé mentale des jeunes ;</li>
+        <li>
+          Permettre aux psychologues et aux étudiants de se connecter à leurs
+          espaces personnels notamment pour le suivi des séances et la
+          facturation ;
+        </li>
+        <li>
+          Mettre en place un observatoire statistique relatif à la santé mentale
+          des jeunes ;
+        </li>
         <li>Répondre aux demandes de contact.</li>
       </ul>
     </Section>
     <Section title="Quelles sont les données à caractère personnel que nous traitons ?">
       <ul className="fr-list">
-        <li>Données relatives aux psychologues : nom, prénom, numéro de téléphone professionnel, adresse courriel, données de facturation, adresse postale professionnelle, logs et adresse IP ;</li>
-        <li>Données relatives aux étudiants : nom, prénom, numéro INE, école, date de naissance, genre, adresse courriel, certificat de scolarité, nom de l’établissement, type d’établissement, localisation de l’établissement, niveau d’études, domaine d’études, zone géographique de recherche, logs et adresse IP ;</li>
-        <li>Données relatives au formulaire de contact : nom, prénom, adresse courriel, champs libres.</li>
+        <li>
+          Données relatives aux psychologues : nom, prénom, numéro de téléphone
+          professionnel, adresse courriel, données de facturation, adresse
+          postale professionnelle, logs et adresse IP ;
+        </li>
+        <li>
+          Données relatives aux étudiants : nom, prénom, numéro INE, école, date
+          de naissance, genre, adresse courriel, certificat de scolarité, nom de
+          l’établissement, type d’établissement, localisation de
+          l’établissement, niveau d’études, domaine d’études, zone géographique
+          de recherche, logs et adresse IP ;
+        </li>
+        <li>
+          Données relatives au formulaire de contact : nom, prénom, adresse
+          courriel, champs libres.
+        </li>
       </ul>
     </Section>
     <Section title="Qu’est-ce qui nous autorise à traiter des données à caractère personnel ?">
-      <p>Nous traitons des données à caractère personnel selon la base légale de la mission d’intérêt public conformément à l’article 6-1 e) du RGPD. </p>
-      <p>Cette mission d’intérêt public se traduit en pratique par le décret n° 2025-12 du 8 janvier 2025 relatif aux attributions du ministre auprès de la ministre d’Etat, ministre de l’éducation nationale, de l’enseignement supérieur, de la recherche et de l’espace, chargé de l’enseignement supérieur, de la recherche et de l’espace. </p>
+      <p>
+        Nous traitons des données à caractère personnel selon la base légale de
+        la mission d’intérêt public conformément à l’article 6-1 e) du
+        RGPD.{' '}
+      </p>
+      <p>
+        Cette mission d’intérêt public se traduit en pratique par le décret n°
+        2025-12 du 8 janvier 2025 relatif aux attributions du ministre auprès de
+        la ministre d’Etat, ministre de l’éducation nationale, de l’enseignement
+        supérieur, de la recherche et de l’espace, chargé de l’enseignement
+        supérieur, de la recherche et de l’espace.{' '}
+      </p>
     </Section>
     <Section title="Pendant combien de temps conservons-nous vos données ?">
       <p>Les données à caractère personnel sont conservées :</p>
-      <SimpleTable data={dataConservation} />
+      <Table
+        headers={['Catégories de données', 'Durée de conservation']}
+        data={dataConservation.map((row) => [
+          row['Catégories de données'],
+          row['Durée de conservation'],
+        ])}
+      />
     </Section>
     <Section title="Quels sont vos droits ? ">
       <ul className="fr-list">
-        <li>
-          Droit d’information et droit d’accès aux données;
-        </li>
-        <li>
-          Droit de rectification;
-        </li>
-        <li>
-          Droit d’opposition;
-        </li>
-        <li>
-          Droit à la limitation du traitement de vos données.
-        </li>
+        <li>Droit d’information et droit d’accès aux données;</li>
+        <li>Droit de rectification;</li>
+        <li>Droit d’opposition;</li>
+        <li>Droit à la limitation du traitement de vos données.</li>
       </ul>
       <p>
-        Par voie électronique : envoyez-nous un courriel à
-        {' '}
+        Par voie électronique : envoyez-nous un courriel à{' '}
         <a
           href="mailto:support-santepsyetudiant@beta.gouv"
           target="_blank"
           rel="noreferrer"
-          >
+        >
           support-santepsyetudiant@beta.gouv
-        </a>
-        {' '}
-        ou contactez-nous sur
-        {' '}
+        </a>{' '}
+        ou contactez-nous sur{' '}
         <a
           href="https://santepsy.etudiant.gouv.fr/contact/formulaire"
           target="_blank"
           rel="noreferrer"
-          >
+        >
           santepsy.etudiant.gouv.fr/contact/formulaire
-        </a>
-        {' '}
+        </a>{' '}
       </p>
       <p>
-        Vous pouvez prendre attache avec le délégué à la protection des données à l’adresse suivante :
-        {' '}
-        <a
-          href="mailto:dpd@education.gouv.fr"
-          target="_blank"
-          rel="noreferrer"
-          >
+        Vous pouvez prendre attache avec le délégué à la protection des données
+        à l’adresse suivante :{' '}
+        <a href="mailto:dpd@education.gouv.fr" target="_blank" rel="noreferrer">
           dpd@education.gouv.fr
-        </a>
-        {' '}
+        </a>{' '}
       </p>
       <p>
-        Via le formulaire de saisine en ligne :
-        {' '}
+        Via le formulaire de saisine en ligne :{' '}
         <a
           href="https://www.enseignementsup-recherche.gouv.fr/fr/nous-contacter-49937#dpd"
           target="_blank"
           rel="noreferrer"
-          >
+        >
           https://www.enseignementsup-recherche.gouv.fr/fr/nous-contacter-49937#dpd
-        </a>
-        {' '}
+        </a>{' '}
       </p>
       <p>Ou par voie postale :</p>
       <p>
@@ -167,25 +228,24 @@ const PrivacyPolicy = () => (
         75231 Paris Cedex 5
       </p>
       <p>
-        En raison de l’obligation de sécurité et de confidentialité
-        dans le traitement des données à caractère personnel qui incombe au
-        responsable de traitement, votre demande ne sera traitée que si vous
-        apportez la preuve de votre identité. Pour vous aider dans votre
-        démarche, vous trouverez
-        {' '}
+        En raison de l’obligation de sécurité et de confidentialité dans le
+        traitement des données à caractère personnel qui incombe au responsable
+        de traitement, votre demande ne sera traitée que si vous apportez la
+        preuve de votre identité. Pour vous aider dans votre démarche, vous
+        trouverez{' '}
         <a
           href="https://www.cnil.fr/fr/modele/courrier/exercer-son-droit-dacces"
           target="_blank"
           rel="noreferrer"
-          >
+        >
           ici
-        </a>
-        {' '}
+        </a>{' '}
         un modèle de courrier élaboré par la CNIL.
       </p>
       <p>
-        Le responsable de traitement s’engage à répondre dans un délai raisonnable qui ne saurait
-        dépasser 1 mois à compter de la réception de votre demande.
+        Le responsable de traitement s’engage à répondre dans un délai
+        raisonnable qui ne saurait dépasser 1 mois à compter de la réception de
+        votre demande.
       </p>
     </Section>
     <Section title="Qui va avoir accès à vos données ? ">
@@ -196,33 +256,65 @@ const PrivacyPolicy = () => (
       </ul>
     </Section>
     <Section title="Qui nous aide à traiter vos données à caractère personnel ?">
-      <SimpleTable data={dataSubcontractor} />
+      <Table
+        headers={['Partenaire', 'Pays', 'Traitement réalisé', 'Garanties']}
+        data={dataSubcontractor.map((row) => [
+          row['Partenaire'],
+          row['Pays'],
+          row['Traitement réalisé'],
+          row['Garanties'],
+        ])}
+      />
     </Section>
     <Section title="Sécurité et confidentialité des données">
       <p>
         Le responsable de traitement prend les mesures techniques et
         opérationnelles nécessaires afin d’assurer la sécurité et la
         confidentialité des données telles que le chiffrement et le
-        cloisonnement des accès. Des audits et analyses de code sont
-        également effectués.
+        cloisonnement des accès. Des audits et analyses de code sont également
+        effectués.
       </p>
       <p>
-        En ce sens, les données introduites par le psychologue pour générer
-        la facture sont collectées localement, de ce fait elles ne sont pas
-        traitées par Santé Psy Etudiant. De même, lorsque l’utilisateur recherche un psychologue autour de son emplacement, les données de géolocalisation sont collectées par le navigateur et ne sont pas remontées à l’équipe de Santé Psy Étudiant.
+        En ce sens, les données introduites par le psychologue pour générer la
+        facture sont collectées localement, de ce fait elles ne sont pas
+        traitées par Santé Psy Etudiant. De même, lorsque l’utilisateur
+        recherche un psychologue autour de son emplacement, les données de
+        géolocalisation sont collectées par le navigateur et ne sont pas
+        remontées à l’équipe de Santé Psy Étudiant.
       </p>
     </Section>
     <Section title="Témoins de connexion et traceurs">
       <p>
-        Un témoin de connexion est un fichier déposé sur votre terminal lors de la visite d’un site. Il a pour but de collecter des informations relatives à votre navigation et de vous adresser des services adaptés à votre terminal (ordinateur, mobile ou tablette). Santé Psy Étudiant dépose des témoins de connexion, notamment pour la mesure d’audience sur son service. Le dépôt s’effectue uniquement lorsque l’utilisateur a consenti via le bandeau prévu à cet effet. L’utilisateur peut à tout moment revenir sur son choix.
+        Un témoin de connexion est un fichier déposé sur votre terminal lors de
+        la visite d’un site. Il a pour but de collecter des informations
+        relatives à votre navigation et de vous adresser des services adaptés à
+        votre terminal (ordinateur, mobile ou tablette). Santé Psy Étudiant
+        dépose des témoins de connexion, notamment pour la mesure d’audience sur
+        son service. Le dépôt s’effectue uniquement lorsque l’utilisateur a
+        consenti via le bandeau prévu à cet effet. L’utilisateur peut à tout
+        moment revenir sur son choix.
       </p>
-      <SimpleTable data={dataCookies} />
-      <p>Nous utilisons également l’outil de mesure d’audience Matomo, configuré en mode “exempté” et ne nécessitant pas le recueil de votre consentement conformément aux recommandations de la CNIL.</p>
-      <iframe title="Matomo opt-out" style={{ border: 'none', width: '90%' }} src="https://stats.beta.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=2f3b6c&fontSize=16px&fontFamily=sans-serif" />
+      <Table
+        headers={['Cookies', 'Traitement réalisé', 'Garanties']}
+        data={dataCookies.map((row) => [
+          row['Cookies'],
+          row['Traitement réalisé'],
+          row['Garanties'],
+        ])}
+      />
       <p>
-        Pour aller plus loin, vous pouvez consulter les fiches proposées par
-        la Commission Nationale de l’Informatique et des Libertés
-        (CNIL) :
+        Nous utilisons également l’outil de mesure d’audience Matomo, configuré
+        en mode “exempté” et ne nécessitant pas le recueil de votre consentement
+        conformément aux recommandations de la CNIL.
+      </p>
+      <iframe
+        title="Matomo opt-out"
+        style={{ border: 'none', width: '90%' }}
+        src="https://stats.beta.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=2f3b6c&fontSize=16px&fontFamily=sans-serif"
+      />
+      <p>
+        Pour aller plus loin, vous pouvez consulter les fiches proposées par la
+        Commission Nationale de l’Informatique et des Libertés (CNIL) :
       </p>
       <ul className="fr-list">
         <li>
@@ -230,7 +322,7 @@ const PrivacyPolicy = () => (
             href="https://www.cnil.fr/fr/cookies-traceurs-que-dit-la-loi"
             target="_blank"
             rel="noreferrer"
-            >
+          >
             Cookies et traceurs : que dit la loi ?
           </a>
         </li>
@@ -239,7 +331,7 @@ const PrivacyPolicy = () => (
             href="https://www.cnil.fr/fr/cookies-les-outils-pour-les-maitriser"
             target="_blank"
             rel="noreferrer"
-            >
+          >
             Cookies : les outils pour les maîtriser
           </a>
         </li>
