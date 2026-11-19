@@ -13,6 +13,7 @@ import PsyCardInfo from './PsySection/PsyCardInfoSection';
 import UnivContact from './UnivSection/Contact';
 import BillingInfoDashboard from './UnivSection/BillingInfo';
 import getPsyProfileIssues from '../../../utils/getPsyProfileIssues';
+import { fr } from '@codegouvfr/react-dsfr';
 
 const PsyProfile = () => {
   const {

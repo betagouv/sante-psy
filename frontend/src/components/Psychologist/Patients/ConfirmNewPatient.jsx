@@ -12,6 +12,7 @@ import {
   StatusPendingEligibility,
   StatusUpToDate,
 } from './PatientStatus';
+import { fr } from '@codegouvfr/react-dsfr';
 
 const getStudentData = (student) => [
   {
