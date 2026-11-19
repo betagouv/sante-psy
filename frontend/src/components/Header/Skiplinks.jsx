@@ -1,12 +1,14 @@
 import React from 'react';
-import { Skiplinks as DSSkiplinks, SkiplinkItem } from '@dataesr/react-dsfr';
+import { SkipLinks } from '@codegouvfr/react-dsfr/SkipLinks';
 
 const Skiplinks = () => (
-  <DSSkiplinks>
-    <SkiplinkItem href="#contenu">Contenu</SkiplinkItem>
-    <SkiplinkItem href="#header-navigation">Menu</SkiplinkItem>
-    <SkiplinkItem href="#footer">Pied de page</SkiplinkItem>
-  </DSSkiplinks>
+  <SkipLinks
+    links={[
+      { anchor: '#contenu', label: 'Contenu' },
+      { anchor: '#header-navigation', label: 'Menu' },
+      { anchor: '#footer', label: 'Pied de page' },
+    ]}
+  />
 );
 
 export default Skiplinks;

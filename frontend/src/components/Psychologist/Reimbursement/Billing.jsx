@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
 import { useSearchParams } from 'react-router-dom';
 
-import { Button, Callout, CalloutText, TextInput } from '@dataesr/react-dsfr';
+import { Input } from '@codegouvfr/react-dsfr/Input';
+import { CallOut } from '@codegouvfr/react-dsfr/CallOut';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import MonthPicker from 'components/Date/MonthPicker';
 import Notification from 'components/Notification/Notification';
 
@@ -67,8 +69,8 @@ const Billing = () => {
   const canGenerateBill = user.convention && user.convention.isConventionSigned;
   return (
     <>
-      <Callout hasInfoIcon={false}>
-        <CalloutText size="md">
+      <CallOut>
+        <p>
           À la fin de chaque mois, vous devez envoyer votre facture contenant
           vos séances réalisées à votre université de convention.
           <br />
@@ -78,8 +80,8 @@ const Billing = () => {
           <br />
           L&lsquo;université se chargera du remboursement, dans les 30 jours
           après la réception de cette facture.
-        </CalloutText>
-      </Callout>
+        </p>
+      </CallOut>
       <div className="fr-my-2w">
         <h3>Générer ma facture</h3>
         {!canGenerateBill && (
@@ -125,25 +127,27 @@ const Billing = () => {
               style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem' }}
             >
               <div>
-                <TextInput
+                <Input
                   label="Numéro de facture"
-                  hint="Correspondant à votre comptabilité"
-                  value={billingInfo.billingNumber}
-                  onChange={(e) => {
-                    const newBillingInfo = {
-                      ...billingInfo,
-                      billingNumber: e.target.value,
-                    };
-                    setBillingInfo(newBillingInfo);
-                    billingInfoService.save(newBillingInfo);
+                  hintText="Correspondant à votre comptabilité"
+                  nativeInputProps={{
+                    value: billingInfo.billingNumber,
+                    onChange: (e) => {
+                      const newBillingInfo = {
+                        ...billingInfo,
+                        billingNumber: e.target.value,
+                      };
+                      setBillingInfo(newBillingInfo);
+                      billingInfoService.save(newBillingInfo);
+                    },
+                    style: { minWidth: '200px' },
                   }}
-                  style={{ minWidth: '200px' }}
                 />
               </div>
               <Button
                 id="billing-generation"
                 disabled={!canGenerateBill}
-                icon="ri-file-download-line"
+                iconId="ri-file-download-line"
                 onClick={() => {
                   if (canGenerateBill) {
                     billingInfoService.save(billingInfo);

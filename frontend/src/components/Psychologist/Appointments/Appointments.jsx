@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
-import {
-  Button,
-  Table,
-  Icon,
-  TextInput,
-  Callout,
-  CalloutText,
-} from '@dataesr/react-dsfr';
+// import { Table } from '@dataesr/react-dsfr';
+import { Input } from '@codegouvfr/react-dsfr/Input';
+import { CallOut } from '@codegouvfr/react-dsfr/CallOut';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 
 import MonthPicker from 'components/Date/MonthPicker';
 
@@ -128,12 +124,12 @@ const Appointments = () => {
               className={styles.clickableElement}
               onClick={() => handleIconClick(appointment.id)}
             >
-              <Icon
-                name="ri-information-line"
-                size="lg"
-                color="#000091"
-                iconPosition="right"
+              <span
+                className="ri-information-line"
+                aria-hidden="true"
+                style={{ fontSize: '1.5rem', color: '#000091' }}
               />
+              No import needed.
               {showTooltip === appointment.id && (
                 <span className={styles.tooltip}>
                   {badges.switch_rule_notice.tooltip}
@@ -167,11 +163,13 @@ const Appointments = () => {
       label: (
         <div>
           Étudiant
-          <TextInput
-            onClick={handleSearchClick}
-            onChange={handleSearch}
-            placeholder="Rechercher"
+          <Input
             className={styles.filter}
+            nativeInputProps={{
+              onClick: handleSearchClick,
+              onChange: handleSearch,
+              placeholder: 'Rechercher',
+            }}
           />
         </div>
       ),
@@ -201,17 +199,17 @@ const Appointments = () => {
             <Button
               data-test-id="delete-appointment-button-small"
               onClick={() => deleteAppointment(appointment.id)}
-              secondary
-              size="sm"
-              icon="ri-delete-bin-line"
+              priority="secondary"
+              size="small"
+              iconId="ri-delete-bin-line"
               className="fr-unhidden fr-hidden-sm fr-float-right"
               aria-label="Supprimer"
               disabled={!canDelete}
             />
             <Button
               data-test-id="delete-appointment-button-large"
-              secondary
-              size="sm"
+              priority="secondary"
+              size="small"
               onClick={() => deleteAppointment(appointment.id)}
               icon="ri-delete-bin-line"
               className="fr-hidden fr-unhidden-sm fr-float-right"
@@ -238,30 +236,28 @@ const Appointments = () => {
 
   return (
     <>
-      <Callout hasInfoIcon={false}>
-        <CalloutText size="md">
-          <span style={{ fontWeight: 'bold' }}>
-            Rappel des conditions de remboursement
-          </span>
-          <ul>
-            <li>
-              <b>Depuis le 1er juillet 2024, 12 séances maximum</b> prises en
-              charge par année universitaire, sans lettre d&apos;orientation, au
-              tarif de 50€.
-            </li>
-            <li>
-              Année universitaire : du <b>1er septembre au 31 août</b> de
-              l&apos;année suivante
-            </li>
-            <li>
-              Nous vous rappelons que dans le cadre du dispositif, il est
-              strictement{' '}
-              <b>interdit de demander aux étudiants une avance de frais</b> ou
-              un complément.
-            </li>
-          </ul>
-        </CalloutText>
-      </Callout>
+      <CallOut>
+        <span style={{ fontWeight: 'bold' }}>
+          Rappel des conditions de remboursement
+        </span>
+        <ul>
+          <li>
+            <b>Depuis le 1er juillet 2024, 12 séances maximum</b> prises en
+            charge par année universitaire, sans lettre d&apos;orientation, au
+            tarif de 50€.
+          </li>
+          <li>
+            Année universitaire : du <b>1er septembre au 31 août</b> de
+            l&apos;année suivante
+          </li>
+          <li>
+            Nous vous rappelons que dans le cadre du dispositif, il est
+            strictement{' '}
+            <b>interdit de demander aux étudiants une avance de frais</b> ou un
+            complément.
+          </li>
+        </ul>
+      </CallOut>
       <div className="fr-my-2w">
         <HashLink
           id="new-appointment-button"
@@ -269,7 +265,7 @@ const Appointments = () => {
           className="fr-btn"
         >
           <div data-test-id="new-appointment-button">
-            <Icon name="ri-add-line" />
+            <span className="ri-add-line" aria-hidden="true" />
             Nouvelle séance
           </div>
         </HashLink>
@@ -285,7 +281,7 @@ const Appointments = () => {
           />
         </div>
       </div>
-      <div id="appointments-table">
+      {/* <div id="appointments-table">
         {filteredMonthAppointments.length > 0 ? (
           <Table
             data-test-id="appointments-table"
@@ -300,7 +296,7 @@ const Appointments = () => {
             {formatMonth(month)}.
           </div>
         )}
-      </div>
+      </div> */}
     </>
   );
 };

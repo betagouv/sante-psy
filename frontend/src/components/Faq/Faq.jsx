@@ -4,12 +4,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
 
-import { Tabs, Tab, Button } from '@dataesr/react-dsfr';
+import { Tabs } from '@codegouvfr/react-dsfr/Tabs';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 
 import Page from 'components/Page/Page';
 import FaqTab from 'components/Faq/FaqTab';
-
-import items from 'services/faq/items';
 
 import { useStore } from 'stores/';
 
@@ -23,18 +22,23 @@ const Faq = ({ simplified }) => {
   const [smallText, setSmallText] = useState(false);
 
   const query = new URLSearchParams(useLocation().search);
-  const { userStore: { user } } = useStore();
+  const {
+    userStore: { user },
+  } = useStore();
   const getDefaultTab = () => {
     const section = query.get('section');
-    if (section && ['etudiant', 'psychologue', 'ecole', 'espace'].includes(section)) {
-      return items[section]?.index || 0;
+    if (
+      section &&
+      ['etudiant', 'psychologue', 'ecole', 'espace'].includes(section)
+    ) {
+      return section;
     }
 
     if (user) {
-      return items.psychologue.index;
+      return 'psychologue';
     }
 
-    return 0;
+    return 'etudiant';
   };
 
   const getLabel = () => {
@@ -65,29 +69,48 @@ const Faq = ({ simplified }) => {
       textContent
     >
       <div className={styles.faq} ref={tabsRef}>
-        <h1 className={classNames(simplified ? styles.simplifiedTitle : 'secondaryPageTitle')}>
+        <h1
+          className={classNames(
+            simplified ? styles.simplifiedTitle : 'secondaryPageTitle',
+          )}
+        >
           {simplified ? 'Questions fréquentes' : 'Foire aux questions'}
         </h1>
-        <Tabs defaultActiveTab={getDefaultTab()}>
-          <Tab label={smallText ? 'Étudiant' : 'Je suis étudiant'}>
-            <FaqTab type="etudiant" simplified={simplified} />
-          </Tab>
-          <Tab label={smallText ? 'Psychologue' : 'Je suis psychologue'}>
-            <FaqTab type="psychologue" simplified={simplified} />
-          </Tab>
-          {!simplified && (
-            <Tab label={smallText ? 'École' : 'Je suis une école'}>
-              <FaqTab type="ecole" simplified={simplified} />
-            </Tab>
-          )}
-          <Tab label="Espace Étudiant">
-            <FaqTab type="espaceEtudiant" simplified={simplified} />
-          </Tab>
-        </Tabs>
+        <Tabs
+          defaultSelectedTabId={getDefaultTab()}
+          tabs={[
+            {
+              tabId: 'etudiant',
+              label: smallText ? 'Étudiant' : 'Je suis étudiant',
+              content: <FaqTab type="etudiant" simplified={simplified} />,
+            },
+            {
+              tabId: 'psychologue',
+              label: smallText ? 'Psychologue' : 'Je suis psychologue',
+              content: <FaqTab type="psychologue" simplified={simplified} />,
+            },
+            ...(!simplified
+              ? [
+                  {
+                    tabId: 'ecole',
+                    label: smallText ? 'École' : 'Je suis une école',
+                    content: <FaqTab type="ecole" simplified={simplified} />,
+                  },
+                ]
+              : []),
+            {
+              tabId: 'espaceEtudiant',
+              label: 'Espace Étudiant',
+              content: <FaqTab type="espaceEtudiant" simplified={simplified} />,
+            },
+          ]}
+        />
       </div>
       {!simplified && (
         <div className={styles.container}>
-          <div className={styles.text}>Vous ne trouvez pas la réponse à votre question&#x00A0;?</div>
+          <div className={styles.text}>
+            Vous ne trouvez pas la réponse à votre question&#x00A0;?
+          </div>
           <Button onClick={() => navigate('/contact/formulaire')}>
             Contactez notre équipe
           </Button>

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Link, Pagination, Icon, Badge } from '@dataesr/react-dsfr';
+import { Badge } from '@codegouvfr/react-dsfr/Badge';
+import { Pagination } from '@codegouvfr/react-dsfr/Pagination';
 import { useStore } from 'stores/index';
 import styles from './psyTable.cssmodule.scss';
 
@@ -87,10 +88,9 @@ const PsyTable = ({
               data-test-id="psy-row"
             >
               <div className={styles.personnalInfo}>
-                <Icon
-                  className={styles.userIcon}
-                  name="ri-user-line"
-                  size="2x"
+                <i
+                  className={`ri-user-line ${styles.userIcon}`}
+                  style={{ fontSize: '2rem' }}
                 />
                 <div>
                   <h6>
@@ -99,10 +99,9 @@ const PsyTable = ({
                   </h6>
                   <div className={styles.addressInfo}>
                     <div>
-                      <Icon
-                        className="fr-mr-1w"
-                        name="ri-map-pin-2-fill"
-                        size="lg"
+                      <i
+                        className="ri-map-pin-2-fill fr-mr-1w"
+                        style={{ fontSize: '1.5rem' }}
                       />
                       <span>
                         {psychologist.city
@@ -125,10 +124,12 @@ const PsyTable = ({
                         <div className={styles.optionalSeparator} />
                         <Badge
                           className={styles.badge}
-                          icon="ri-webcam-fill"
-                          text="Téléconsultation disponible"
-                          colorFamily="green-bourgeon"
-                        />
+                          severity="success"
+                          noIcon
+                        >
+                          <i className="ri-webcam-fill fr-mr-1w" />
+                          Téléconsultation disponible
+                        </Badge>
                       </>
                     )}
                   </div>
@@ -143,7 +144,10 @@ const PsyTable = ({
                         window.location.href = `mailto:${psychologist.email}`;
                       }}
                     >
-                      <Icon name="ri-mail-fill" size="2x" />
+                      <i
+                        className="ri-mail-fill"
+                        style={{ fontSize: '2rem' }}
+                      />{' '}
                     </div>
                     <div className={styles.bigSeparator} />
                     <div
@@ -151,11 +155,14 @@ const PsyTable = ({
                         window.location.href = `tel:${psychologist.phone}`;
                       }}
                     >
-                      <Icon name="ri-phone-fill" size="2x" />
+                      <i
+                        className="ri-phone-fill"
+                        style={{ fontSize: '2rem' }}
+                      />
                     </div>
                   </>
                 )}
-                <Link
+                <a
                   data-test-id="psy-table-row-profil-button"
                   href={`/trouver-un-psychologue/${psychologist.dossierNumber}`}
                   onClick={() => goToProfile(psychologist)}
@@ -164,15 +171,21 @@ const PsyTable = ({
                   {isUserConnected
                     ? 'Contacter le psychologue'
                     : 'Accéder à la fiche du psychologue'}
-                </Link>
+                </a>
               </div>
             </div>
           ))}
+
           <Pagination
-            currentPage={currentPage}
-            surrendingPages={surrendingPages}
-            pageCount={pageCount}
-            onClick={setPage}
+            count={pageCount}
+            defaultPage={currentPage}
+            getPageLinkProps={(page) => ({
+              onClick: (e) => {
+                e.preventDefault();
+                setPage(page);
+              },
+              href: '#',
+            })}
           />
         </div>
       )}
