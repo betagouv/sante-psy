@@ -288,7 +288,6 @@ const PsyListing = () => {
             </div>
             <div className={styles.inputMd}>
               <Input
-                label="Recherche"
                 nativeInputProps={{
                   'data-test-id': 'name-speciality-input',
                   value: nameAndSpecialityFilter,
@@ -299,7 +298,6 @@ const PsyListing = () => {
             </div>
             <div className={styles.input}>
               <Input
-                label="Langue"
                 nativeInputProps={{
                   value: languageFilter,
                   onChange: (e) => setLanguageFilter(e.target.value),
@@ -323,7 +321,7 @@ const PsyListing = () => {
               ref={searchButtonRef}
               data-test-id="psy-search"
               onClick={handleSearch}
-              iconId="ri-search-line"
+              iconId="fr-icon-search-line"
               iconPosition="left"
             >
               Rechercher
