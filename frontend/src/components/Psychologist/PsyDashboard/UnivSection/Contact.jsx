@@ -1,16 +1,20 @@
 import React from 'react';
-import { Button } from '@dataesr/react-dsfr';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import styles from './univSection.cssmodule.scss';
 
 const UnivContact = ({ university }) => {
-  const checkIsEmpty = value => (value?.trim() ? value : '-');
+  const checkIsEmpty = (value) => (value?.trim() ? value : '-');
 
   const fullAddress = university
     ? `${checkIsEmpty(university.address)}, ${checkIsEmpty(university.postal_code)} ${checkIsEmpty(university.city)}`
     : '-';
 
   const renderEmailIcon = (label, emailListRaw) => {
-    const emails = emailListRaw?.split(',').map(email => email.trim()).filter(Boolean) || [];
+    const emails =
+      emailListRaw
+        ?.split(',')
+        .map((email) => email.trim())
+        .filter(Boolean) || [];
     const emailDisplay = emails.length ? emails.join(', ') : '-';
     const mailto = emails.length ? `mailto:${emails.join(',')}` : null;
 
@@ -19,20 +23,21 @@ const UnivContact = ({ university }) => {
         <div className={styles.emailText}>
           <b>
             {label}
-&nbsp;:
+            &nbsp;:
           </b>
           &nbsp;
           <span>{emailDisplay}</span>
         </div>
         {mailto && (
           <Button
-            tertiary
-            size="lg"
-            icon="ri-mail-line"
+            priority="tertiary"
+            size="large"
+            iconId="ri-mail-line"
             className={styles.mailButton}
-            title={`Envoyer un email à ${emails}`}
-            onClick={() => { window.location.href = mailto; }}
-          />
+            onClick={() => {
+              window.location.href = mailto;
+            }}
+          >{`Envoyer un email à ${emails}`}</Button>
         )}
       </section>
     );

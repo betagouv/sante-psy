@@ -1,26 +1,24 @@
 import React from 'react';
 import { HashLink } from 'react-router-hash-link';
-import { ButtonGroup } from '@dataesr/react-dsfr';
 
 const BillingHelper = () => (
   <>
     <h3>Les élements à apparaître sur votre facturation</h3>
     <p className="fr-mb-1w" id="student-billing-info">
-      Le nom des étudiants est couvert par le secret médical,
-      ne le communiquez pas sur la facture.
-      Le nombre d&lsquo;étudiant suffit.
+      Le nom des étudiants est couvert par le secret médical, ne le communiquez
+      pas sur la facture. Le nombre d&lsquo;étudiant suffit.
     </p>
     <p className="fr-mb-1w" id="tva-billing-info">
       « TVA non applicable selon l’article 261-4-1 du Code Général des Impôts »
     </p>
     <p className="fr-mb-1w">
-      Un doute sur le modèle de votre facture ?
-      Vous pouvez prendre exemple sur ces modèles qui contiennent tous les éléments requis pour votre remboursement.
+      Un doute sur le modèle de votre facture ? Vous pouvez prendre exemple sur
+      ces modèles qui contiennent tous les éléments requis pour votre
+      remboursement.
     </p>
-    <p>
-      Modèles pour les séances :
-    </p>
-    <ButtonGroup isInlineFrom="xs" className="fr-my-2w">
+    <p>Modèles pour les séances :</p>
+
+    <div className="fr-btns-group fr-btns-group--inline fr-my-2w">
       <div className="button-secondary-container">
         <a
           className="fr-btn fr-btn--secondary"
@@ -54,9 +52,11 @@ const BillingHelper = () => (
           Libre Office .odt
         </a>
       </div>
-    </ButtonGroup>
+    </div>
+
     <h3>Demander de l&lsquo;aide</h3>
-    <ButtonGroup isInlineFrom="xs">
+
+    <div className="fr-btns-group fr-btns-group--inline">
       <div className="button-secondary-container">
         <HashLink
           className="fr-btn fr-btn--secondary"
@@ -77,7 +77,7 @@ const BillingHelper = () => (
           Tutoriel Chorus PRO
         </a>
       </div>
-    </ButtonGroup>
+    </div>
   </>
 );
 

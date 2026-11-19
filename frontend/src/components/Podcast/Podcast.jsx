@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Page from 'components/Page/Page';
-import { Button, Icon, Link } from '@dataesr/react-dsfr';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import Slice from 'components/Slice/Slice';
 import styles from './podcast.cssmodule.scss';
 
@@ -30,18 +30,39 @@ const Podcast = () => {
     >
       <Slice
         color="white"
-        images={(
+        images={
           <div className={styles.imageResized}>
-            <img src="/images/instagram/kaavan-podcast.png" alt="Kaavan podcast" />
+            <img
+              src="/images/instagram/kaavan-podcast.png"
+              alt="Kaavan podcast"
+            />
           </div>
-        )}
+        }
         customStyle={{ container: styles.podcastSlice }}
-        title={<h2 className={styles.smallerTitle}>Explorons le monde de la santé mentale !</h2>}
-        description={(
+        title={
+          <h2 className={styles.smallerTitle}>
+            Explorons le monde de la santé mentale !
+          </h2>
+        }
+        description={
           <div className={styles.smallerDescription}>
-            <p>Anxiété, mal-être, dépression, hypersensibilité, burn out, addictions, troubles alimentaires... préparez-vous à écouter des histoires inspirantes, des voix authentiques et des conseils pratiques. Que vous soyez vous même touché, ou que vous accompagniez un proche. Personnalités, anonymes, experts, on plonge ensemble dans des discussions intimes et bienveillantes où chacun peut trouver un écho à son propre parcours.</p>
-            <p>Parce que la santé mentale c&apos;est aussi important que la santé physique !</p>
-            <p>Retrouvez plus d&apos;épisodes sur toutes vos plateformes d&apos;écoute préférées:</p>
+            <p>
+              Anxiété, mal-être, dépression, hypersensibilité, burn out,
+              addictions, troubles alimentaires... préparez-vous à écouter des
+              histoires inspirantes, des voix authentiques et des conseils
+              pratiques. Que vous soyez vous même touché, ou que vous
+              accompagniez un proche. Personnalités, anonymes, experts, on
+              plonge ensemble dans des discussions intimes et bienveillantes où
+              chacun peut trouver un écho à son propre parcours.
+            </p>
+            <p>
+              Parce que la santé mentale c&apos;est aussi important que la santé
+              physique !
+            </p>
+            <p>
+              Retrouvez plus d&apos;épisodes sur toutes vos plateformes
+              d&apos;écoute préférées:
+            </p>
             <div className={styles.platformLinks}>
               <a
                 href="https://open.spotify.com/show/1SrePWpXUtUhBqGmZsDRPQ"
@@ -49,7 +70,7 @@ const Podcast = () => {
                 rel="noopener noreferrer"
                 className={styles.platformLink}
               >
-                <Icon name="ri-spotify-line" size="sm" />
+                <i className="ri-spotify-line" />
                 Spotify
               </a>
               <span className={styles.separator}>|</span>
@@ -59,7 +80,7 @@ const Podcast = () => {
                 rel="noopener noreferrer"
                 className={styles.platformLink}
               >
-                <Icon name="ri-apple-line" size="sm" />
+                <i className="ri-apple-line" />
                 Apple Podcasts
               </a>
               <span className={styles.separator}>|</span>
@@ -69,46 +90,68 @@ const Podcast = () => {
                 rel="noopener noreferrer"
                 className={styles.platformLink}
               >
-                <Icon name="ri-music-line" size="sm" />
+                <i className="ri-music-line" />
                 Deezer
               </a>
               <span className={styles.separator}>|</span>
-              <Link
+              <a
                 href="https://www.youtube.com/@KaavanPodcast"
                 target="_blank"
-                rel=" "
+                rel="noreferrer"
                 title="Youtube"
                 className={styles.platformLink}
               >
-                <Icon name="ri-youtube-line" size="sm" />
+                <i className="ri-youtube-line" />
                 Youtube
-              </Link>
+              </a>
             </div>
           </div>
-        )}
+        }
       >
         <div className={styles.buttonsContainer}>
+          //TODO: add a 'to' instead
           <Button
-            icon="ri-play-circle-line"
+            iconId="ri-play-circle-line"
             iconPosition="left"
-            size="sm"
-            onClick={() => window.open('https://linktr.ee/kaavanpodcast', '_blank', 'noopener,noreferrer')}
+            size="small"
+            onClick={() =>
+              window.open(
+                'https://linktr.ee/kaavanpodcast',
+                '_blank',
+                'noopener,noreferrer',
+              )
+            }
           >
             Écouter
           </Button>
           <Button
-            icon="ri-instagram-line"
+            iconId="ri-instagram-line"
             iconPosition="left"
-            size="sm"
-            onClick={() => window.open('https://www.instagram.com/kaavan_podcast/', '_blank', 'noopener,noreferrer')}
+            size="small"
+            onClick={() =>
+              window.open(
+                'https://www.instagram.com/kaavan_podcast/',
+                '_blank',
+                'noopener,noreferrer',
+              )
+            }
           >
             Suivre
           </Button>
-          <div className={styles.rssIcon} onClick={() => window.open('https://feeds.acast.com/public/shows/65cb7c6311e3e5001505d3e6', '_blank', 'noopener,noreferrer')}>
-            <Icon
-              name="ri-signal-tower-fill"
-              color="#000091"
-              size="lg" />
+          <div
+            className={styles.rssIcon}
+            onClick={() =>
+              window.open(
+                'https://feeds.acast.com/public/shows/65cb7c6311e3e5001505d3e6',
+                '_blank',
+                'noopener,noreferrer',
+              )
+            }
+          >
+            <i
+              className="ri-signal-tower-fill"
+              style={{ color: '#000091', fontSize: '1.5rem' }}
+            />{' '}
           </div>
         </div>
       </Slice>
@@ -124,8 +167,8 @@ const Podcast = () => {
       {showScrollTop && (
         <Button
           onClick={scrollToTop}
-          icon="fr-icon-arrow-up-line"
-          size="sm"
+          iconId="fr-icon-arrow-up-line"
+          size="small"
           className={styles.scrollTopButton}
           aria-label="Remonter"
         />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@dataesr/react-dsfr';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './psySection.cssmodule.scss';
@@ -12,12 +12,13 @@ const DescriptionSection = ({ psychologist }) => {
       <b>Description : </b>
       <p>{psychologist.description}</p>
       <Button
-        secondary
-        title="Modify"
-        icon="ri-edit-line"
-        onClick={() => navigate('/psychologue/modifier-profil', { state: { psychologist } })}
+        priority="secondary"
+        iconId="ri-edit-line"
+        onClick={() =>
+          navigate('/psychologue/modifier-profil', { state: { psychologist } })
+        }
         className={styles.buttonEdit}
-    >
+      >
         Modifier
       </Button>
     </section>

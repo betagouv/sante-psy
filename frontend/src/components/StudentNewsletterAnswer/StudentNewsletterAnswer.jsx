@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useStore } from 'stores/';
-import { ButtonGroup, Button } from '@dataesr/react-dsfr';
 import Slice from 'components/Slice/Slice';
+import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import agent from 'services/agent';
 import styles from './studentNewsletterAnswer.cssmodule.scss';
@@ -10,18 +10,20 @@ import styles from './studentNewsletterAnswer.cssmodule.scss';
 const StudentNewsletterAnswer = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
-  const { commonStore: { setNotification } } = useStore();
+  const {
+    commonStore: { setNotification },
+  } = useStore();
   const [success, setSuccess] = useState(false);
 
-  const onClick = referral => {
+  const onClick = (referral) => {
     setSuccess(false);
     setNotification({});
     agent.StudentNewsletter.saveAnswer({ id, referral })
-      .then(notification => {
+      .then((notification) => {
         setSuccess(true);
         setNotification(notification.data, true, false);
       })
-      .catch(e => {
+      .catch((e) => {
         setNotification(e.response.data, false, false);
       });
   };
@@ -41,21 +43,25 @@ const StudentNewsletterAnswer = () => {
       color="secondary"
       centerText
       centerTitle
-      description={(<b>Merci d&lsquo;avoir pris le temps de répondre 🙂</b>)}
+      description={<b>Merci d&lsquo;avoir pris le temps de répondre 🙂</b>}
     >
-      {searchParams.get('appointment') && !success
-        && (
-          <>
-            <div className={styles.question}>
-              Recommanderais-tu Santé Psy Étudiant à d’autres étudiants et étudiantes&nbsp;?
-            </div>
-            <ButtonGroup align="center" isInlineFrom="md">
-              <Button icon="ri-emotion-unhappy-line" onClick={() => onClick(1)}>Non</Button>
-              <Button icon="ri-emotion-normal-line" onClick={() => onClick(2)}>Moyen</Button>
-              <Button icon="ri-emotion-happy-line" onClick={() => onClick(3)}>Oui</Button>
-            </ButtonGroup>
-          </>
-        )}
+      {searchParams.get('appointment') && !success && (
+        <>
+          <div className={styles.question}>
+            Recommanderais-tu Santé Psy Étudiant à d’autres étudiants et
+            étudiantes&nbsp;?
+          </div>
+          <ButtonsGroup
+            inlineLayoutWhen="sm and up"
+            alignment="center"
+            buttons={[
+              { children: 'Non', onClick: () => onClick(1) },
+              { children: 'Moyen', onClick: () => onClick(2) },
+              { children: 'Oui', onClick: () => onClick(3) },
+            ]}
+          />
+        </>
+      )}
       <GlobalNotification />
     </Slice>
   );

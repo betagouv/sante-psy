@@ -1,4 +1,4 @@
-import { Button } from '@dataesr/react-dsfr';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import classNames from 'classnames';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -30,25 +30,38 @@ const Slice = ({
         color ? styles[color] : styles.container,
         reverse ? styles.reverse : '',
         centerText ? styles.centerText : '',
-        (customStyle && customStyle.container) ? customStyle.container : '',
+        customStyle && customStyle.container ? customStyle.container : '',
       )}
     >
-      <div className={classNames((images || imageSrc || Component) ? styles.content : styles.onlyContent, (customStyle && customStyle.content) ? customStyle.content : '')}>
+      <div
+        className={classNames(
+          images || imageSrc || Component ? styles.content : styles.onlyContent,
+          customStyle && customStyle.content ? customStyle.content : '',
+        )}
+      >
         {title && (
-          <h2 className={classNames(styles.title, centerTitle ? styles.centerTitle : '')}>
+          <h2
+            className={classNames(
+              styles.title,
+              centerTitle ? styles.centerTitle : '',
+            )}
+          >
             {title}
           </h2>
         )}
         {description && (
-          <div className={styles.description} data-test-id={descriptionDataTestId}>
+          <div
+            className={styles.description}
+            data-test-id={descriptionDataTestId}
+          >
             {description}
           </div>
         )}
         {buttonText && buttonLink && (
           <div className={styles.button}>
             <Button
-              secondary={!color || buttonSecondary}
-              icon={buttonIcon}
+              priority={!color || buttonSecondary ? 'secondary' : 'primary'}
+              iconId={buttonIcon}
               onClick={() => {
                 if (buttonLink.startsWith('/')) {
                   navigate(buttonLink);
@@ -66,7 +79,11 @@ const Slice = ({
       </div>
       {imageSrc && <img className={styles.image} src={imageSrc} alt="" />}
       {images}
-      {Component && <div className={styles.component}><Component /></div>}
+      {Component && (
+        <div className={styles.component}>
+          <Component />
+        </div>
+      )}
     </div>
   );
 };

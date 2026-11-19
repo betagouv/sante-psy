@@ -1,10 +1,22 @@
 import React from 'react';
-import { Button, Icon } from '@dataesr/react-dsfr';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import { useNavigate } from 'react-router-dom';
 
 import styles from './card.cssmodule.scss';
 
-const Card = ({ customStyles = {}, index, title, description, hint, image, link, buttonText, buttonIcon, fullClickable, anchor }) => {
+const Card = ({
+  customStyles = {},
+  index,
+  title,
+  description,
+  hint,
+  image,
+  link,
+  buttonText,
+  buttonIcon,
+  fullClickable,
+  anchor,
+}) => {
   const navigate = useNavigate();
 
   const navigateToPathOrUrl = () => {
@@ -17,7 +29,9 @@ const Card = ({ customStyles = {}, index, title, description, hint, image, link,
 
   return (
     <div
-      className={customStyles?.card ? styles[customStyles.card] : styles.bigContainer}
+      className={
+        customStyles?.card ? styles[customStyles.card] : styles.bigContainer
+      }
       onClick={fullClickable ? navigateToPathOrUrl : undefined}
     >
       {index && (
@@ -25,12 +39,28 @@ const Card = ({ customStyles = {}, index, title, description, hint, image, link,
           <span id={anchor || undefined}>{index}</span>
         </div>
       )}
-      <img className={customStyles?.image ? styles[customStyles.image] : styles.image} src={`/images/${image}`} alt={title} />
-      <h2 className={customStyles?.title ? styles[customStyles.title] : styles.bigTitle}>{title}</h2>
+      <img
+        className={
+          customStyles?.image ? styles[customStyles.image] : styles.image
+        }
+        src={`/images/${image}`}
+        alt={title}
+      />
+      <h2
+        className={
+          customStyles?.title ? styles[customStyles.title] : styles.bigTitle
+        }
+      >
+        {title}
+      </h2>
       {description && <div className={styles.description}>{description}</div>}
       {link && buttonText && !fullClickable && (
-        <Button className={styles.button} onClick={navigateToPathOrUrl}>
-          {buttonIcon && <Icon name={buttonIcon} size="lg" />}
+        <Button
+          className={styles.button}
+          onClick={navigateToPathOrUrl}
+          iconPosition="left"
+          iconId={buttonIcon}
+        >
           {buttonText}
         </Button>
       )}

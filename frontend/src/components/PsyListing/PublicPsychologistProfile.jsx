@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Alert, Badge, Button } from '@dataesr/react-dsfr';
+import { Alert } from '@codegouvfr/react-dsfr/Alert';
+import { Badge } from '@codegouvfr/react-dsfr/Badge';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 
 import Page from 'components/Page/Page';
@@ -54,7 +56,11 @@ const ContactSection = ({ psychologist }) => {
     <>
       <h3>Contacter le psychologue</h3>
       {isIneligibleStudent ? (
-        <Alert type="warning" title="Tu n'es pas encore éligible." />
+        <Alert
+          severity="warning"
+          title="Tu n'es pas encore éligible."
+          description=""
+        />
       ) : isUserConnected ? (
         <>
           <div className={styles.optionalSeparator} />
@@ -65,7 +71,7 @@ const ContactSection = ({ psychologist }) => {
                 <div data-test-id="psy-info">{psychologist.phone}</div>
               </div>
               <Button
-                secondary
+                priority="secondary"
                 onClick={() => {
                   if (__MATOMO__) {
                     _paq.push([
@@ -77,7 +83,7 @@ const ContactSection = ({ psychologist }) => {
                   }
                   window.location.href = `tel:${psychologist.phone}`;
                 }}
-                icon="ri-phone-fill"
+                iconId="ri-phone-fill"
               />
             </div>
           )}
@@ -88,7 +94,7 @@ const ContactSection = ({ psychologist }) => {
                 <div data-test-id="psy-info">{psychologist.email}</div>
               </div>
               <Button
-                secondary
+                priority="secondary"
                 onClick={() => {
                   if (__MATOMO__) {
                     _paq.push([
@@ -100,7 +106,7 @@ const ContactSection = ({ psychologist }) => {
                   }
                   window.location.href = `mailto:${psychologist.email}`;
                 }}
-                icon="ri-mail-fill"
+                iconId="ri-mail-fill"
               />
             </div>
           )}
@@ -126,7 +132,7 @@ const ContactSection = ({ psychologist }) => {
                 </a>
               </div>
               <Button
-                secondary
+                priority="secondary"
                 onClick={() => {
                   if (__MATOMO__) {
                     _paq.push([
@@ -138,7 +144,7 @@ const ContactSection = ({ psychologist }) => {
                   }
                   window.open(string.prefixUrl(psychologist.website), '_blank');
                 }}
-                icon="ri-link"
+                iconId="ri-link"
               />
             </div>
           )}
@@ -150,7 +156,7 @@ const ContactSection = ({ psychologist }) => {
               </div>
               {window.innerWidth <= 769 ? (
                 <Button
-                  secondary
+                  priority="secondary"
                   onClick={() => {
                     if (__MATOMO__) {
                       _paq.push([
@@ -165,13 +171,13 @@ const ContactSection = ({ psychologist }) => {
                       '_blank',
                     );
                   }}
-                  icon="ri-calendar-fill"
+                  iconId="ri-calendar-fill"
                 >
                   RDV
                 </Button>
               ) : (
                 <Button
-                  secondary
+                  priority="secondary"
                   onClick={() => {
                     if (__MATOMO__) {
                       _paq.push([
@@ -193,11 +199,13 @@ const ContactSection = ({ psychologist }) => {
             </div>
           )}
           <Alert
-            type="warning"
-            title="Vous n‘avez aucune avance de frais à prévoir"
+            severity="warning"
+            title="Vous n'avez aucune avance de frais à prévoir"
             description="Le psychologue ne doit en aucun cas vous demander un complément financier ou une avance."
           />
+
           <Alert
+            severity="info"
             title="Attention, en cas de séance non honorée et sans excuse valable"
             description="Le psychologue peut se réserver le droit de refuser un étudiant."
           />
@@ -205,7 +213,7 @@ const ContactSection = ({ psychologist }) => {
       ) : (
         <div className={styles.flexColumn}>
           <Alert
-            type="warning"
+            severity="warning"
             title="Pour obtenir les coordonnées du psychologue, il te faut créer ton espace étudiant."
             description={
               <>
@@ -216,9 +224,9 @@ const ContactSection = ({ psychologist }) => {
                 <p>Tu pourras y retrouver ton historique des séances.</p>
                 <br />
                 <Button
-                  tertiary
-                  icon="ri-information-line"
-                  size="sm"
+                  priority="tertiary"
+                  iconId="fr-icon-information-line"
+                  size="small"
                   iconPosition="left"
                   onClick={() => navigate('/espace-etudiant')}
                 >
@@ -324,11 +332,9 @@ const PublicPsychologistProfile = () => {
               <>
                 <div className={styles.separator} />
                 <h5>Consultation à distance</h5>
-                <Badge
-                  icon="ri-webcam-fill"
-                  text="Téléconsultation disponible"
-                  colorFamily="green-bourgeon"
-                />
+                <Badge severity="success" iconId="ri-webcam-fill">
+                  Téléconsultation disponible
+                </Badge>
               </>
             )}
             <div className={styles.displayDesktop}>{otherInfo}</div>

@@ -1,13 +1,13 @@
 import React from 'react';
 import billingInfoService from 'services/billingInfo';
-import { Button } from '@dataesr/react-dsfr';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import { useNavigate } from 'react-router-dom';
 import styles from './univSection.cssmodule.scss';
 
 const BillingInfoDashboard = () => {
   const billingInfo = billingInfoService.get();
   const navigate = useNavigate();
-  const checkIsEmpty = value => (value?.trim() ? value : '-');
+  const checkIsEmpty = (value) => (value?.trim() ? value : '-');
 
   return (
     <section className={styles.univBillingCard}>
@@ -15,44 +15,38 @@ const BillingInfoDashboard = () => {
         <div>
           <h2>Données de facturation</h2>
           <Button
-            secondary
+            priority="secondary"
             className={styles.buttonEdit}
-            title="Facturation"
-            icon="ri-external-link-line"
+            iconId="ri-external-link-line"
             iconPosition="right"
             onClick={() => {
               navigate('/psychologue/mes-remboursements/');
             }}
-            hasBorder="false"
-            >
+          >
             Facturation
           </Button>
           <p>
             <b>SIRET :</b>
-&nbsp;
+            &nbsp;
             {checkIsEmpty(billingInfo.siret)}
           </p>
           <p>
             <b>IBAN :</b>
-&nbsp;
+            &nbsp;
             {checkIsEmpty(billingInfo.iban)}
           </p>
           <p>
             <b>Bon de commande :</b>
-&nbsp;
-            {' '}
-            {checkIsEmpty(billingInfo.orderNumber)}
+            &nbsp; {checkIsEmpty(billingInfo.orderNumber)}
           </p>
           <Button
-            secondary
+            priority="secondary"
             className={styles.buttonEdit}
-            title="Modify"
-            icon="ri-edit-line"
+            iconId="ri-edit-line"
             onClick={() => {
               navigate('/psychologue/mes-remboursements/?openBillingInfo=true');
             }}
-            hasBorder="false"
-            >
+          >
             Modifier
           </Button>
         </div>

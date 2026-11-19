@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup } from '@dataesr/react-dsfr';
 
+import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import billingInfoService from 'services/billingInfo';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
@@ -8,17 +8,22 @@ import BillingInfo from './BillingInfo';
 import styles from './billing.cssmodule.scss';
 
 const BillingInfoPage = () => {
-  const { userStore: { user } } = useStore();
+  const {
+    userStore: { user },
+  } = useStore();
   const [billingInfo, setBillingInfo] = useState(billingInfoService.get());
-  const [universityHasBillingAddress, setUniversityHasBillingAddress] = useState(false);
+  const [universityHasBillingAddress, setUniversityHasBillingAddress] =
+    useState(false);
 
   useEffect(() => {
     if (user.convention && user.convention.universityId) {
-      agent.University.getOne(user.convention.universityId).then(university => {
-        if (university.billingAddress) {
-          setUniversityHasBillingAddress(true);
-        }
-      });
+      agent.University.getOne(user.convention.universityId).then(
+        (university) => {
+          if (university.billingAddress) {
+            setUniversityHasBillingAddress(true);
+          }
+        },
+      );
     }
   }, [user]);
 
@@ -40,23 +45,27 @@ const BillingInfoPage = () => {
         setBillingInfo={setBillingInfo}
         universityHasBillingAddress={universityHasBillingAddress}
         hideInvoiceNumber
-            />
+      />
 
-      <ButtonGroup className="fr-mt-4w" isInlineFrom="xs">
-        <Button
-          secondary
-          icon="ri-close-line"
-          onClick={handleCancel}
-                >
-          Annuler
-        </Button>
-        <Button
-          icon="ri-save-line"
-          onClick={handleSave}
-                >
-          Enregistrer
-        </Button>
-      </ButtonGroup>
+      <ButtonsGroup
+        className="fr-mt-4w"
+        inlineLayoutWhen="always"
+        buttons={[
+          {
+            children: 'Annuler',
+            priority: 'secondary',
+            iconId: 'fr-icon-close-line',
+            iconPosition: 'left',
+            onClick: handleCancel,
+          },
+          {
+            children: 'Enregistrer',
+            iconId: 'fr-icon-save-line',
+            iconPosition: 'left',
+            onClick: handleSave,
+          },
+        ]}
+      />
     </>
   );
 };
