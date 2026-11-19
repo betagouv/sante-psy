@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Button, TextInput, Row, Col } from '@dataesr/react-dsfr';
+import { Input } from '@codegouvfr/react-dsfr/Input';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 
 import Page from 'components/Page/Page';
 import Mail from 'components/Footer/Mail';
@@ -12,6 +13,7 @@ import { useStore } from 'stores/';
 import agent from 'services/agent';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import styles from './login.cssmodule.scss';
+import { fr } from '@codegouvfr/react-dsfr';
 
 export const ButtonLogin = ({ children, ...props }) => (
   <Button className={styles.loginButton} {...props}>
@@ -115,27 +117,30 @@ const Login = () => {
       <Section title="Connexion">
         <GlobalNotification />
         <form onSubmit={loginUser} id="login_form">
-          <Row alignItems="bottom">
-            <Col>
-              <TextInput
-                ref={emailRef}
+          <div className={fr.cx('fr-grid-row', 'fr-grid-row--bottom')}>
+            <div className={fr.cx('fr-col')}>
+              <Input
+                label="Email"
                 className={styles.mailInput}
-                data-test-id="email-input"
-                value={email}
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
+                nativeInputProps={{
+                  ref: emailRef,
+                  'data-test-id': 'email-input',
+                  value: email,
+                  type: 'email',
+                  onChange: (e) => setEmail(e.target.value),
+                }}
               />
-            </Col>
-            <Col>
+            </div>
+            <div className={fr.cx('fr-col')}>
               <ButtonLogin
-                submit
+                nativeButtonProps={{ type: 'submit' }}
                 data-test-id="email-button"
                 disabled={!canSendEmail}
               >
                 Recevoir le lien de connexion
               </ButtonLogin>
-            </Col>
-          </Row>
+            </div>
+          </div>
           <br />
           <p>
             <b>Pas de mot de passe</b> ! Utilisez l&lsquo;adresse email utilisée
@@ -161,14 +166,14 @@ const Login = () => {
         </ul>
       </Section>
       <Section title="Vous n&lsquo;avez pas encore créé votre espace ?">
-        <Row>
-          <Col>
+        <div className={fr.cx('fr-grid-row')}>
+          <div className={fr.cx('fr-col')}>
             <p>Étudiants, c&lsquo;est par ici pour s&lsquo;inscrire</p>
             <ButtonLogin onClick={() => navigate('/inscription')}>
               Créer mon espace étudiant
             </ButtonLogin>
-          </Col>
-          <Col>
+          </div>
+          <div className={fr.cx('fr-col')}>
             <p>Psychologues, créez votre dossier</p>
             <ButtonLogin
               onClick={() =>
@@ -177,8 +182,8 @@ const Login = () => {
             >
               Déposer un dossier psychologue
             </ButtonLogin>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Section>
       <Mail />
     </Page>

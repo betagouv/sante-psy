@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react';
-import { Container } from '@dataesr/react-dsfr';
 import EligibilityMessage from './components/EligibilityMessage';
 import QuestionStep from './components/QuestionStep';
 import styles from './eligibilityStyles.cssmodule.scss';
@@ -11,7 +10,8 @@ const EligibilityFunnel = () => {
   const [lastAnswer, setLastAnswer] = useState({});
   const [eligibilityStatus, setEligibilityStatus] = useState(null);
   const [visibleSteps, setVisibleSteps] = useState(['STEP_1']);
-  const getStep = stepId => EligibilitySteps.find(step => step.id === stepId);
+  const getStep = (stepId) =>
+    EligibilitySteps.find((step) => step.id === stepId);
   const recalculateSteps = (updatedAnswers, modifiedStepId) => {
     setEligibilityStatus(null);
     const newVisibleSteps = [];
@@ -20,8 +20,10 @@ const EligibilityFunnel = () => {
       const currentStep = getStep(nextStepId);
       if (!currentStep) break;
       newVisibleSteps.push(nextStepId);
-      if (newVisibleSteps.includes(modifiedStepId)
-          && newVisibleSteps.indexOf(modifiedStepId) < newVisibleSteps.length - 1) {
+      if (
+        newVisibleSteps.includes(modifiedStepId) &&
+        newVisibleSteps.indexOf(modifiedStepId) < newVisibleSteps.length - 1
+      ) {
         updatedAnswers[nextStepId] = undefined;
         break;
       }
@@ -41,41 +43,50 @@ const EligibilityFunnel = () => {
     recalculateSteps(updatedAnswers, stepId);
   };
 
-  const renderQuestions = () => visibleSteps.map(stepId => {
-    const step = getStep(stepId);
-    const isCurrent = stepId === visibleSteps[visibleSteps.length - 1];
-    return (
-      <QuestionStep
-        key={stepId}
-        question={step.getQuestion(answers)}
-        options={step.getOptions(answers)}
-        onNext={answer => {
-          handleAnswerChange(stepId, answer);
-          setLastAnswer(answer);
-        }}
-        isCurrent={isCurrent}
-        currentAnswer={answers[stepId]?.value}
-      />
-    );
-  });
+  const renderQuestions = () =>
+    visibleSteps.map((stepId) => {
+      const step = getStep(stepId);
+      const isCurrent = stepId === visibleSteps[visibleSteps.length - 1];
+      return (
+        <QuestionStep
+          key={stepId}
+          question={step.getQuestion(answers)}
+          options={step.getOptions(answers)}
+          onNext={(answer) => {
+            handleAnswerChange(stepId, answer);
+            setLastAnswer(answer);
+          }}
+          isCurrent={isCurrent}
+          currentAnswer={answers[stepId]?.value}
+        />
+      );
+    });
 
   return (
-    <Container spacing="py-4w">
+    <div spacing="py-4w">
       <div className={styles.eligibilityForm}>
         <div className={styles.bubbleSpeechPerson}>
-          <img src="/images/eligibility/purple-speech-bubble.svg" alt="purple speech bubble" width={180} />
-          <img src="/images/eligibility/psychologist.svg" alt="person with laptop" width={160} />
+          <img
+            src="/images/eligibility/purple-speech-bubble.svg"
+            alt="purple speech bubble"
+            width={180}
+          />
+          <img
+            src="/images/eligibility/psychologist.svg"
+            alt="person with laptop"
+            width={160}
+          />
         </div>
         {renderQuestions()}
         {eligibilityStatus !== null && (
-        <EligibilityMessage
-          isEligible={eligibilityStatus}
-          lastAnswerValue={lastAnswer.value}
-          whoFor={answers?.STEP_1?.value}
-        />
+          <EligibilityMessage
+            isEligible={eligibilityStatus}
+            lastAnswerValue={lastAnswer.value}
+            whoFor={answers?.STEP_1?.value}
+          />
         )}
       </div>
-    </Container>
+    </div>
   );
 };
 export default observer(EligibilityFunnel);

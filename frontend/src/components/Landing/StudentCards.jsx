@@ -1,11 +1,11 @@
 import React from 'react';
-import { Row } from '@dataesr/react-dsfr';
 
 import Card from 'components/Card/Card';
 import styles from './studentCards.cssmodule.scss';
+import { fr } from '@codegouvfr/react-dsfr';
 
 const StudentCards = () => (
-  <Row className={styles.card}>
+  <div className={`${fr.cx('fr-grid-row')} ${styles.card}`}>
     <Card
       index={1}
       title="Vérifier votre éligibilité"
@@ -23,7 +23,7 @@ const StudentCards = () => (
       link="/trouver-un-psychologue"
       anchor="anchor-psy-list"
     />
-  </Row>
+  </div>
 );
 
 export default StudentCards;
