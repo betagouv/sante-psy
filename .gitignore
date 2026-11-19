@@ -110,4 +110,6 @@ frontend/cypress/screenshots/
 
 .mocharc.js
 
+frontend/assets/dsfr
+
 downloaded-certificates/
