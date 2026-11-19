@@ -18,40 +18,43 @@ const StudentHomepage = () => {
   return (
     <>
       <div className={styles.header}>
-        <div className={styles.firstNameGroup}>
-          <span className="fr-icon-psychotherapy-line" aria-hidden="true" />
-          <strong>{user.firstNames}</strong>
+        <div className={styles.headerInfo}>
+          <Alert
+            type="info"
+            title="Informations à transmettre à ton psychologue"
+            description={
+              <ul>
+                {user.ine && (
+                  <li>
+                    INE: <b>{user.ine}</b>
+                  </li>
+                )}
+                {user.dateOfBirth && (
+                  <li>
+                    Date de naissance:{' '}
+                    <b>
+                      {formatFrenchDateNoWeekday(new Date(user.dateOfBirth))}
+                    </b>
+                  </li>
+                )}
+              </ul>
+            }
+          />
         </div>
-        <Link to="/etudiant/editer-profil" className={styles.firstNameGroup}>
-          <span className="fr-icon-edit-line" aria-hidden="true" />
-          Mon compte
-        </Link>
-        <Link to="/etudiant/numeros-urgence" className={styles.ctaBtn}>
-          <span className="fr-icon-phone-line" aria-hidden="true" />
-          Je me sens mal
-        </Link>
-      </div>
-
-      <div>
-        <Alert
-          type="info"
-          title="Informations à transmettre à ton psychologue"
-          description={
-            <ul>
-              {user.ine && (
-                <li>
-                  INE: <b>{user.ine}</b>
-                </li>
-              )}
-              {user.dateOfBirth && (
-                <li>
-                  Date de naissance:{' '}
-                  <b>{formatFrenchDateNoWeekday(new Date(user.dateOfBirth))}</b>
-                </li>
-              )}
-            </ul>
-          }
-        />
+        <div className={styles.headerProfile}>
+          <div className={styles.firstNameGroup}>
+            <span className="fr-icon-psychotherapy-line" aria-hidden="true" />
+            <strong>{user.firstNames}</strong>
+          </div>
+          <Link to="/etudiant/editer-profil" className={styles.firstNameGroup}>
+            <span className="fr-icon-edit-line" aria-hidden="true" />
+            Mon compte
+          </Link>
+          <Link to="/etudiant/numeros-urgence" className={styles.ctaBtn}>
+            <span className="fr-icon-phone-line" aria-hidden="true" />
+            Je me sens mal
+          </Link>
+        </div>
       </div>
 
       <div className={styles.container} data-test-id="dashboard_student">

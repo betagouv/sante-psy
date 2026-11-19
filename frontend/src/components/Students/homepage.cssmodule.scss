@@ -5,6 +5,18 @@
 
 .header {
   display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.headerInfo {
+  flex-grow: 1;
+}
+
+.headerProfile {
+  display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
@@ -31,7 +43,7 @@
   gap: 0.5rem;
   padding: 10px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #8A0FBE, #6F016B);
+  background: linear-gradient(135deg, #8a0fbe, #6f016b);
   color: white !important;
   text-decoration: none;
 
@@ -58,6 +70,10 @@
 @media (max-width: 767px) {
   .header {
     margin-bottom: 66px;
+    flex-direction: column-reverse;
+  }
+  .headerProfile {
+    align-items: center;
   }
 }
 

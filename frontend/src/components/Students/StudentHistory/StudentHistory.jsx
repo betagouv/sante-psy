@@ -109,10 +109,10 @@ const StudentHistory = () => {
             <div className={styles.placeholderCard} aria-hidden="true" />
           </div>
           <p>
-            Tes séances consommées s’afficheront ici une fois que ton psychologue les
-            aura enregistrées de son côté. Pense à lui communiquer <b>ton numéro INE et ta date de naissance</b>
-            pour qu’elles soient bien rattachées à ton compte. Attention : ton solde est mis à jour à chaque
-            nouvelle déclaration de ton psychologue. Un léger délai d'affichage est donc possible.
+            Tes séances consommées s’afficheront ici une fois que ton
+            psychologue les aura enregistrées de son côté. Pense à lui
+            communiquer <b>ton numéro INE et ta date de naissance</b> pour
+            qu’elles soient bien rattachées à ton compte.
           </p>
         </div>
       )}
@@ -159,6 +159,10 @@ const StudentHistory = () => {
       >
         Tes séances n&apos;apparaissent pas ?
       </button>
+      <p className={styles.marginTop}>
+        Attention : ton solde est mis à jour à chaque nouvelle déclaration de
+        ton psychologue. Un léger délai d'affichage est donc possible.
+      </p>
 
       {showHelp && (
         <ul className={styles.help}>
