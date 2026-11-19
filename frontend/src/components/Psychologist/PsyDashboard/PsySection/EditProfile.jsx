@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Button,
-  RadioGroup,
-  Radio,
-  TextInput,
-  ButtonGroup,
-} from '@dataesr/react-dsfr';
+import { Input } from '@codegouvfr/react-dsfr/Input';
+import { RadioButtons } from '@codegouvfr/react-dsfr/RadioButtons';
+import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import { useLocation, useNavigate } from 'react-router-dom';
 import agent from 'services/agent';
 import string from 'services/string';
@@ -137,16 +133,19 @@ const EditProfile = () => {
           Les champs avec une astérisque (<span className="red-text">*</span>)
           sont obligatoires.
         </p>
-        <TextInput
+        <Input
           className="midlength-input"
           label="Email personnel"
-          hint="Adresse non communiquée sur l'annuaire, utilisée uniquement pour la réception d'email provenant de
+          hintText="Adresse non communiquée sur l'annuaire, utilisée uniquement pour la réception d'email provenant de
              Santé Psy Étudiant."
-          data-test-id="psy-personal-email-input"
-          value={psychologist.personalEmail}
-          onChange={(e) => changePsychologist(e.target.value, 'personalEmail')}
-          type="email"
-          required
+          nativeInputProps={{
+            'data-test-id': 'psy-personal-email-input',
+            value: psychologist.personalEmail,
+            onChange: (e) =>
+              changePsychologist(e.target.value, 'personalEmail'),
+            type: 'email',
+            required: true,
+          }}
         />
         <AddressAutocomplete
           label="Adresse du cabinet"
@@ -167,95 +166,132 @@ const EditProfile = () => {
           onChange={handleNewOtherAddress}
           isMunicipalities={false}
         />
-        <TextInput
+        <Input
           className="midlength-input"
           label="Téléphone du secrétariat"
-          hint="Numéro auquel prendre rendez-vous."
-          data-test-id="psy-phone-input"
-          value={psychologist.phone}
-          onChange={(e) => changePsychologist(e.target.value, 'phone')}
-          required
+          hintText="Numéro auquel prendre rendez-vous."
+          nativeInputProps={{
+            'data-test-id': 'psy-phone-input',
+            value: psychologist.phone,
+            onChange: (e) => changePsychologist(e.target.value, 'phone'),
+            required: true,
+          }}
         />
-        <TextInput
+
+        <Input
           className="midlength-input"
           label="Email de contact"
-          hint="Adresse email à laquelle prendre rendez-vous ou poser des questions."
-          data-test-id="psy-email-input"
-          value={psychologist.email}
-          onChange={(e) => changePsychologist(e.target.value, 'email')}
-          type="email"
+          hintText="Adresse email à laquelle prendre rendez-vous ou poser des questions."
+          nativeInputProps={{
+            'data-test-id': 'psy-email-input',
+            value: psychologist.email,
+            onChange: (e) => changePsychologist(e.target.value, 'email'),
+            type: 'email',
+          }}
         />
-        <RadioGroup
-          value={psychologist.teleconsultation ? 'true' : 'false'}
-          onChange={(value) => changePsychologist(value, 'teleconsultation')}
+
+        <RadioButtons
           legend="Proposez-vous de la téléconsultation ?"
-          hint="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
-          required
-          isInline
-        >
-          <Radio
-            data-test-id="teleConsultation-true"
-            label="Oui"
-            value="true"
-          />
-          <Radio label="Non" value="false" />
-        </RadioGroup>
-        <TextInput
+          hintText="Par téléphone ou par appel vidéo (Skype, Whatsapp, Teams, ...)"
+          orientation="horizontal"
+          options={[
+            {
+              label: 'Oui',
+              nativeInputProps: {
+                value: 'true',
+                checked: psychologist.teleconsultation === true,
+                required: true,
+                onChange: (e) =>
+                  changePsychologist(e.target.value, 'teleconsultation'),
+                'data-test-id': 'teleConsultation-true',
+              },
+            },
+            {
+              label: 'Non',
+              nativeInputProps: {
+                value: 'false',
+                checked: psychologist.teleconsultation === false,
+                required: true,
+                onChange: (e) =>
+                  changePsychologist(e.target.value, 'teleconsultation'),
+              },
+            },
+          ]}
+        />
+        <Input
           className="midlength-input"
           label="Langues parlées"
-          hint="Exemple : “Français, Anglais”"
-          data-test-id="psy-languages-input"
-          value={psychologist.languages}
-          onChange={(e) => changePsychologist(e.target.value, 'languages')}
-          required
+          hintText="Exemple : “Français, Anglais”"
+          nativeInputProps={{
+            'data-test-id': 'psy-languages-input',
+            value: psychologist.languages,
+            onChange: (e) => changePsychologist(e.target.value, 'languages'),
+            required: true,
+          }}
         />
-        <TextInput
+
+        <Input
           className="midlength-input"
           label="Site web professionnel"
-          hint="Site sur lequel l'étudiant pourra trouver plus d'infos sur votre cabinet ou vos services."
-          data-test-id="psy-website-input"
-          value={psychologist.website}
-          onChange={(e) => changePsychologist(e.target.value, 'website')}
-          onBlur={enrichWebsite}
+          hintText="Site sur lequel l'étudiant pourra trouver plus d'infos sur votre cabinet ou vos services."
+          nativeInputProps={{
+            'data-test-id': 'psy-website-input',
+            value: psychologist.website,
+            onChange: (e) => changePsychologist(e.target.value, 'website'),
+            onBlur: enrichWebsite,
+          }}
         />
-        <TextInput
+
+        <Input
           className="midlength-input"
           label="Site web pour prendre rendez-vous"
-          hint="Site sur lequel l'étudiant pourra prendre rendez-vous avec vous."
-          data-test-id="psy-appointmentLink-input"
-          value={psychologist.appointmentLink}
-          onChange={(e) =>
-            changePsychologist(e.target.value, 'appointmentLink')
-          }
-          onBlur={enrichAppointmentLink}
+          hintText="Site sur lequel l'étudiant pourra prendre rendez-vous avec vous."
+          nativeInputProps={{
+            'data-test-id': 'psy-appointmentLink-input',
+            value: psychologist.appointmentLink,
+            onChange: (e) =>
+              changePsychologist(e.target.value, 'appointmentLink'),
+            onBlur: enrichAppointmentLink,
+          }}
         />
-        <TextInput
-          className={styles.descriptionInput}
-          id="psy-description-input"
-          textarea
-          label="Paragraphe de présentation"
-          hint="Ex : &ldquo;Je propose du suivi pour les jeunes adultes, en particulier pour la gestion du stress et
-            de l'anxiété.&rdquo;"
-          data-test-id="psy-description-input"
-          value={psychologist.description}
-          onChange={(e) => changePsychologist(e.target.value, 'description')}
+
+        <div className={`fr-input-group ${styles.descriptionInput}`}>
+          <label className="fr-label" htmlFor="psy-description-input">
+            Paragraphe de présentation
+            <span className="fr-hint-text">
+              Ex : &ldquo;Je propose du suivi pour les jeunes adultes, en
+              particulier pour la gestion du stress et de l'anxiété.&rdquo;
+            </span>
+          </label>
+          <textarea
+            className="fr-input"
+            id="psy-description-input"
+            data-test-id="psy-description-input"
+            value={psychologist.description}
+            onChange={(e) => changePsychologist(e.target.value, 'description')}
+          />
+        </div>
+        <ButtonsGroup
+          inlineLayoutWhen="always"
+          buttons={[
+            {
+              children: 'Valider les modifications',
+              iconId: 'fr-icon-check-line',
+              iconPosition: 'left',
+              nativeButtonProps: {
+                type: 'submit',
+                'data-test-id': 'save-profile-button',
+              },
+            },
+            {
+              children: 'Annuler',
+              priority: 'secondary',
+              iconId: 'fr-icon-close-line',
+              iconPosition: 'left',
+              onClick: () => navigate('/psychologue/tableau-de-bord/'),
+            },
+          ]}
         />
-        <ButtonGroup isInlineFrom="xs">
-          <Button
-            submit
-            data-test-id="save-profile-button"
-            icon="fr-fi-check-line"
-          >
-            Valider les modifications
-          </Button>
-          <Button
-            onClick={() => navigate('/psychologue/tableau-de-bord/')}
-            secondary
-            icon="fr-fi-close-line"
-          >
-            Annuler
-          </Button>
-        </ButtonGroup>
       </form>
     )
   );

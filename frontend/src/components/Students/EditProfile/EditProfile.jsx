@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, TextInput, ButtonGroup, Alert } from '@dataesr/react-dsfr';
+import { Input } from '@codegouvfr/react-dsfr/Input';
+import { Alert } from '@codegouvfr/react-dsfr/Alert';
+import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import { useNavigate, Link } from 'react-router-dom';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
@@ -77,7 +80,7 @@ const EditProfile = () => {
         </p>
         <Button
           onClick={() => navigate('/etudiant/mes-seances')}
-          secondary
+          priority="secondary"
           className="fr-mt-3w"
         >
           Retour à mes séances
@@ -91,40 +94,56 @@ const EditProfile = () => {
   return (
     <form onSubmit={handleSubmit}>
       <p className="fr-mb-3w">Voici les informations te concernant :</p>
-      <TextInput
+      <Input
         className="midlength-input"
         label="INE (non modifiable)"
-        hint="Si ton INE change, tu dois recréer un compte"
-        value={user.ine}
-        disabled
-        aria-readonly="true"
+        hintText="Si ton INE change, tu dois recréer un compte"
+        nativeInputProps={{
+          value: user.ine,
+          disabled: true,
+          'aria-readonly': true,
+        }}
       />
-      <TextInput
+
+      <Input
         className="midlength-input"
         label="Date de naissance (non modifiable)"
-        value={formatStringToDDMMYYYY(user.dateOfBirth)}
-        disabled
-        aria-readonly="true"
+        nativeInputProps={{
+          value: formatStringToDDMMYYYY(user.dateOfBirth),
+          disabled: true,
+          'aria-readonly': true,
+        }}
       />
-      <TextInput
+
+      <Input
         className="midlength-input"
         label="Adresse email actuelle (non modifiable)"
-        value={user.email}
-        disabled
-        aria-readonly="true"
+        nativeInputProps={{
+          value: user.email,
+          disabled: true,
+          'aria-readonly': true,
+        }}
       />
-      <TextInput
+
+      <Input
         className="midlength-input"
         label="Nouvelle adresse email"
-        value={newEmail}
-        onChange={(e) => setNewEmail(e.target.value.toLowerCase())}
-        type="email"
-        required
-        disabled={tooManyAttempts}
+        nativeInputProps={{
+          value: newEmail,
+          onChange: (e) => setNewEmail(e.target.value.toLowerCase()),
+          type: 'email',
+          required: true,
+          disabled: tooManyAttempts,
+        }}
       />
 
       {error && (
-        <Alert className="fr-mt-2w fr-mb-2w" type="error" description={error} />
+        <Alert
+          className="fr-mt-2w fr-mb-2w"
+          severity="error"
+          title=""
+          description={error}
+        />
       )}
 
       <p className="fr-mt-3w">
@@ -139,17 +158,24 @@ const EditProfile = () => {
         </em>
       </p>
 
-      <ButtonGroup isInlineFrom="xs" className="fr-mt-3w">
-        <Button onClick={() => navigate('/etudiant/mes-seances')} secondary>
-          Annuler
-        </Button>
-        <Button
-          submit
-          disabled={tooManyAttempts || !newEmail || !hasChangedEmail}
-        >
-          Valider la modification
-        </Button>
-      </ButtonGroup>
+      <ButtonsGroup
+        inlineLayoutWhen="always"
+        className="fr-mt-3w"
+        buttons={[
+          {
+            children: 'Annuler',
+            priority: 'secondary',
+            onClick: () => navigate('/etudiant/mes-seances'),
+          },
+          {
+            children: 'Valider la modification',
+            nativeButtonProps: {
+              type: 'submit',
+              disabled: tooManyAttempts || !newEmail || !hasChangedEmail,
+            },
+          },
+        ]}
+      />
     </form>
   );
 };

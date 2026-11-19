@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-import { Table, Icon, Button, Select, TextInput } from '@dataesr/react-dsfr';
+// import { Table } from '@dataesr/react-dsfr';
+import { Select } from '@codegouvfr/react-dsfr/Select';
+import { Input } from '@codegouvfr/react-dsfr/Input';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 
 import agent from 'services/agent';
 import { currentUnivYear } from 'services/univYears';
@@ -147,13 +150,21 @@ const Patients = () => {
       label: 'Actions',
       render: (patient) => (
         <Select
-          selected={null}
-          onChange={(e) => {
-            onChangeAction(e, patient.id);
-          }}
-          options={actionOptions}
+          label=""
           className={styles.selectAction}
-        />
+          nativeSelectProps={{
+            value: '',
+            onChange: (e) => {
+              onChangeAction(e, patient.id);
+            },
+          }}
+        >
+          {actionOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
       ),
     });
     return columns;
@@ -165,11 +176,13 @@ const Patients = () => {
       label: (
         <div>
           Étudiant
-          <TextInput
-            onClick={handleSearchClick}
-            onChange={handleSearch}
-            placeholder="Rechercher"
+          <Input
             className={styles.filter}
+            nativeInputProps={{
+              onClick: handleSearchClick,
+              onChange: handleSearch,
+              placeholder: 'Rechercher',
+            }}
           />
         </div>
       ),
@@ -201,12 +214,13 @@ const Patients = () => {
                 `/psychologue/etudiant/${patient.id}/#anchor-student-file`,
               )
             }
-            secondary
-            size="sm"
-            icon="ri-folder-line"
+            priority="secondary"
+            size="small"
+            iconId="ri-folder-line"
             aria-label="Dossier de l'étudiant"
-            title="Dossier de l'étudiant"
-          />
+          >
+            Dossier de l'étudiant
+          </Button>
         </Tooltip>
       ),
     },
@@ -316,11 +330,12 @@ const Patients = () => {
           to="/psychologue/nouvel-etudiant"
           className="fr-btn"
         >
-          <Icon name="ri-add-line" />
+          <span className="ri-add-line" aria-hidden="true" />
           Nouvel étudiant
         </Link>
       </div>
-      <div
+      //TODO: uncomment and fix
+      {/* <div
         ref={table}
         id="students-table"
         className={classNames('fr-table', styles.table)}
@@ -335,7 +350,7 @@ const Patients = () => {
         ) : (
           <span>Vous n&lsquo;avez pas encore déclaré d&lsquo;étudiants.</span>
         )}
-      </div>
+      </div> */}
     </>
   );
 };

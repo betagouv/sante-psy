@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styles from './confirmNewPatient.cssmodule.scss';
 import agent from 'services/agent';
-import { ButtonGroup, Button, Alert, Icon } from '@dataesr/react-dsfr';
+import { Alert } from '@codegouvfr/react-dsfr/Alert';
+import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import { HashLink } from 'react-router-hash-link';
 import { Stack } from 'components/Utils/Stack';
 import NewAppointmentSeeCertificate from '../Appointments/NewAppointmentSeeCertificate';
@@ -93,40 +94,52 @@ const ConfirmNewPatient = ({ foundStudent, onCancel }) => {
             {foundStudent?.eligibility?.status === 'PENDING' && (
               <StatusPendingEligibility />
             )}
-            <ButtonGroup isInlineFrom="xs">
-              <Button secondary onClick={onCancel}>
-                Annuler
-              </Button>
-              <Button submit>Confirmer</Button>
-            </ButtonGroup>
+            <ButtonsGroup
+              inlineLayoutWhen="always"
+              buttons={[
+                {
+                  children: 'Annuler',
+                  priority: 'secondary',
+                  onClick: onCancel,
+                },
+                {
+                  children: 'Confirmer',
+                  nativeButtonProps: { type: 'submit' },
+                },
+              ]}
+            />
           </Stack>
         </form>
       )}
       {addedPatient && (
         <>
           <Alert
-            type="success"
+            severity="success"
             description="Vous pouvez dès à présent le retrouver dans votre liste de suivi des étudiants."
             title="Étudiant ajouté"
           />
-          <ButtonGroup isInlineFrom="xs">
-            <HashLink
-              to="/psychologue/nouvelle-seance"
-              state={{ patientId: addedPatient.id }}
-              className="fr-btn"
-            >
-              <div>
-                <Icon name="ri-add-line" />
+          <ul className={fr.cx('fr-btns-group', 'fr-btns-group--inline')}>
+            <li>
+              <HashLink
+                to="/psychologue/nouvelle-seance"
+                state={{ patientId: addedPatient.id }}
+                className="fr-btn"
+              >
+                <span
+                  className={fr.cx('fr-icon-add-line', 'fr-btn--icon-left')}
+                />
                 Nouvelle séance
-              </div>
-            </HashLink>
-            <HashLink
-              to={`/psychologue/etudiant/${addedPatient.id}`}
-              className="fr-btn"
-            >
-              <div>Voir le dossier</div>
-            </HashLink>
-          </ButtonGroup>
+              </HashLink>
+            </li>
+            <li>
+              <HashLink
+                to={`/psychologue/etudiant/${addedPatient.id}`}
+                className="fr-btn"
+              >
+                Voir le dossier
+              </HashLink>
+            </li>
+          </ul>
         </>
       )}
     </>

@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
-import { Alert, Button, Checkbox, CheckboxGroup } from '@dataesr/react-dsfr';
+import { Checkbox } from '@codegouvfr/react-dsfr/Checkbox';
+import { Alert } from '@codegouvfr/react-dsfr/Alert';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 
 import agent from 'services/agent';
 import { parseDateForm } from 'services/date';
@@ -184,15 +186,15 @@ const NewAppointment = () => {
       <Button
         id="new-appointment-submit"
         data-test-id="new-appointment-submit"
-        submit
-        icon="ri-add-line"
+        nativeButtonProps={{ type: 'submit' }}
+        iconId="ri-add-line"
         className="fr-mt-4w"
         disabled={!canCreateAppointment}
       >
         Créer la séance
       </Button>
       <Button
-        secondary
+        priority="secondary"
         className="fr-mt-4w"
         onClick={() => navigate('/psychologue/mes-seances')}
       >
@@ -221,7 +223,8 @@ const NewAppointment = () => {
       return (
         <Alert
           className="fr-mt-2w"
-          type="warning"
+          severity="warning"
+          title=""
           description={
             <>
               Cet étudiant a atteint le nombre maximum de séances prises en
@@ -277,7 +280,8 @@ const NewAppointment = () => {
         <Alert
           key="certif-check-alert"
           className="fr-my-3w"
-          type="info"
+          severity="info"
+          title=""
           description={
             isFirstAppointmentEver
               ? '1ère séance avec cet étudiant - veuillez vérifier le justificatif de scolarité avant de confirmer'
@@ -286,18 +290,27 @@ const NewAppointment = () => {
         />,
       );
       toRender.push(
-        <CheckboxGroup key="certif-checkboxes">
-          <Checkbox
-            label="J'ai comparé l'identité de l'étudiant avec le justificatif de scolarité"
-            onChange={(e) => setCheckCertifIdentity(e.target.checked)}
-            checked={checkCertifIdentity}
-          />
-          <Checkbox
-            label="J'ai vérifié que le justificatif de scolarité présenté est valable sur l’année universitaire en cours"
-            onChange={(e) => setCheckCertifValidity(e.target.checked)}
-            checked={checkCertifValidity}
-          />
-        </CheckboxGroup>,
+        <Checkbox
+          key="certif-checkboxes"
+          options={[
+            {
+              label:
+                "J'ai comparé l'identité de l'étudiant avec le justificatif de scolarité",
+              nativeInputProps: {
+                checked: checkCertifIdentity,
+                onChange: (e) => setCheckCertifIdentity(e.target.checked),
+              },
+            },
+            {
+              label:
+                "J'ai vérifié que le justificatif de scolarité présenté est valable sur l'année universitaire en cours",
+              nativeInputProps: {
+                checked: checkCertifValidity,
+                onChange: (e) => setCheckCertifValidity(e.target.checked),
+              },
+            },
+          ]}
+        />,
       );
     }
 

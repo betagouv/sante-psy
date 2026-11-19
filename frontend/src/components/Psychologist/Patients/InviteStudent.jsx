@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Button, TextInput, Alert, ButtonGroup } from '@dataesr/react-dsfr';
+import { Input } from '@codegouvfr/react-dsfr/Input';
+import { Alert } from '@codegouvfr/react-dsfr/Alert';
+import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import ErrorMessage from 'components/Forms/ErrorMessage';
 import { validateEmailField } from 'src/utils/validateEmailFormat';
 import { Stack } from 'components/Utils/Stack';
@@ -53,26 +55,33 @@ const InviteStudent = ({ cancelInvite }) => {
   return (
     <Stack>
       {invitationSuccess ? (
-        <Alert type="success" description="L'invitation a bien été envoyée" />
+        <Alert
+          severity="success"
+          title=""
+          description="L'invitation a bien été envoyée"
+        />
       ) : (
         !invitationSent && (
           <Alert
-            type="warning"
+            severity="warning"
+            title=""
             description="L'étudiant que vous recherchez ne semble pas avoir créé de compte. Invitez le en entrant son email ci-dessous"
           />
         )
       )}
 
       <form onSubmit={inviteStudent}>
-        <TextInput
+        <Input
           label="Email de l'étudiant"
           ref={emailRef}
           className="midlength-input"
-          data-test-id="email-input"
-          value={inviteEmail}
-          type="email"
-          onChange={(e) => setInviteEmail(e.target.value)}
-          disabled={invitationSent}
+          nativeInputProps={{
+            'data-test-id': 'email-input',
+            value: inviteEmail,
+            type: 'email',
+            onChange: (e) => setInviteEmail(e.target.value),
+            disabled: invitationSent,
+          }}
         />
         {emailError && (
           <ErrorMessage
@@ -80,19 +89,25 @@ const InviteStudent = ({ cancelInvite }) => {
             data-test-id="invite-etudiant-email-error"
           />
         )}
-        <ButtonGroup isInlineFrom="xs">
-          <Button secondary onClick={cancelInvite}>
-            Annuler
-          </Button>
-          <Button
-            submit
-            id="invite-student-button"
-            data-test-id="invite-student-button"
-            disabled={!canInvite}
-          >
-            Inviter l'étudiant
-          </Button>
-        </ButtonGroup>
+        <ButtonsGroup
+          inlineLayoutWhen="always"
+          buttons={[
+            {
+              children: 'Annuler',
+              priority: 'secondary',
+              onClick: cancelInvite,
+            },
+            {
+              children: "Inviter l'étudiant",
+              nativeButtonProps: {
+                type: 'submit',
+                id: 'invite-student-button',
+                'data-test-id': 'invite-student-button',
+                disabled: !canInvite,
+              },
+            },
+          ]}
+        />
       </form>
     </Stack>
   );
