@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  color: var(--text-label-grey, #161616);
+}
+
+.hint {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  color: var(--text-mention-grey, #666666);
+  margin-top: 0.25rem;
+  font-weight: 400;
+}
