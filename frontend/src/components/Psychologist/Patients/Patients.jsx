@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
-// import { Table } from '@dataesr/react-dsfr';
+import { Table } from '@codegouvfr/react-dsfr/Table';
 import { Select } from '@codegouvfr/react-dsfr/Select';
 import { Input } from '@codegouvfr/react-dsfr/Input';
 import { Button } from '@codegouvfr/react-dsfr/Button';
@@ -142,52 +142,99 @@ const Patients = () => {
     e.stopPropagation();
   };
 
-  const convertToMobileView = () => {
-    columns.splice(1, 1);
-    columns.splice(2, 5);
-    columns.push({
-      name: 'select-action',
-      label: 'Actions',
-      render: (patient) => (
-        <Select
-          label=""
-          className={styles.selectAction}
-          nativeSelectProps={{
-            value: '',
-            onChange: (e) => {
-              onChangeAction(e, patient.id);
-            },
-          }}
-        >
-          {actionOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
-      ),
-    });
-    return columns;
-  };
+  const status_column = (
+    <div className={styles.informationColumn}>
+      Statut {currentYear}
+      <Select
+        label=""
+        className={styles.filter}
+        nativeSelectProps={{
+          value: filterBadgeValue,
+          onChange: handleFilterChange,
+        }}
+      >
+        {filterOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </Select>
+    </div>
+  );
 
-  const columns = [
-    {
-      name: 'name',
-      label: (
-        <div>
-          Étudiant
-          <Input
-            className={styles.filter}
-            nativeInputProps={{
-              onClick: handleSearchClick,
-              onChange: handleSearch,
-              placeholder: 'Rechercher',
-            }}
-          />
-        </div>
-      ),
-      render: (patient) => (
+  const name_column = (
+    <div key="name-header">
+      Étudiant
+      <Input
+        className={styles.filter}
+        nativeInputProps={{
+          onClick: handleSearchClick,
+          onChange: handleSearch,
+          placeholder: 'Rechercher',
+        }}
+      />
+    </div>
+  );
+
+  const headers = [
+    name_column,
+    '', // update-etudiant-button
+    status_column,
+    `Total séances ${currentYear}`,
+    'Total séances',
+    'Liste des séances',
+    'Déclarer une séance',
+    "Supprimer l'étudiant",
+  ];
+
+  const mobileHeaders = [name_column, status_column, 'Actions'];
+
+  const buildRows = (currentHeaders, data) =>
+    data.map((patient) => {
+      const tooManyAppointments =
+        (parseInt(patient.countedAppointments, 10) || 0) >= MAX_APPOINTMENT;
+
+      if (currentHeaders === mobileHeaders) {
+        return [
+          // name
+          <Tooltip
+            key={`name-${patient.id}`}
+            tooltip="Dossier de l'étudiant"
+            data-test-id="etudiant-name"
+            onClick={() =>
+              navigate(
+                `/psychologue/etudiant/${patient.id}/#anchor-student-file`,
+              )
+            }
+          >
+            {patient.lastName?.toUpperCase()} {patient.firstNames}
+          </Tooltip>,
+          // status
+          <Badges
+            key={`badges-${patient.id}`}
+            badges={patient.badges}
+            univYear={currentYear}
+          />,
+          // actions select
+          <select
+            key={`actions-${patient.id}`}
+            className={styles.selectAction}
+            value=""
+            onChange={(e) => onChangeAction(e, patient.id)}
+          >
+            {actionOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>,
+        ];
+      }
+
+      return [
+        // name
         <Tooltip
+          key={`name-${patient.id}`}
           tooltip="Dossier de l'étudiant"
           data-test-id="etudiant-name"
           onClick={() =>
@@ -195,18 +242,9 @@ const Patients = () => {
           }
         >
           {patient.lastName?.toUpperCase()} {patient.firstNames}
-        </Tooltip>
-      ),
-      sortable: true,
-      sort: (a, b) =>
-        `${a.lastName.toUpperCase()} ${a.firstNames}`.localeCompare(
-          `${b.lastName.toUpperCase()} ${b.firstNames}`,
-        ),
-    },
-    {
-      name: 'update-etudiant-button',
-      render: (patient) => (
-        <Tooltip tooltip="Dossier de l'étudiant">
+        </Tooltip>,
+        // update button
+        <Tooltip key={`update-${patient.id}`} tooltip="Dossier de l'étudiant">
           <Button
             data-test-id="update-etudiant-button"
             onClick={() =>
@@ -216,42 +254,25 @@ const Patients = () => {
             }
             priority="secondary"
             size="small"
-            iconId="ri-folder-line"
+            iconId="fr-icon-folder-2-line"
             aria-label="Dossier de l'étudiant"
+            style={{ minWidth: '200px' }}
           >
             Dossier de l'étudiant
           </Button>
-        </Tooltip>
-      ),
-    },
-    {
-      name: 'status',
-      label: (
-        <div className={styles.informationColumn}>
-          Statut {currentYear}{' '}
-          <Select
-            onChange={handleFilterChange}
-            options={filterOptions}
-            selected={filterBadgeValue}
-            className={styles.filter}
-          />
-        </div>
-      ),
-      render: (patient) => (
-        <Badges badges={patient.badges} univYear={currentYear} />
-      ),
-    },
-    {
-      name: 'countedAppointments',
-      label: `Total séances ${currentYear}`,
-      sortable: true,
-    },
-    { name: 'appointmentsCount', label: 'Total séances', sortable: true },
-    {
-      name: 'appointments-list-button',
-      label: 'Liste des séances',
-      render: (patient) => (
-        <Tooltip tooltip="Liste des séances">
+        </Tooltip>,
+        // status
+        <Badges
+          key={`badges-${patient.id}`}
+          badges={patient.badges}
+          univYear={currentYear}
+        />,
+        // countedAppointments
+        patient.countedAppointments,
+        // appointmentsCount
+        patient.appointmentsCount,
+        // appointments list button
+        <Tooltip key={`list-${patient.id}`} tooltip="Liste des séances">
           <Button
             data-test-id="seances-etudiant-button"
             onClick={() =>
@@ -259,48 +280,37 @@ const Patients = () => {
                 `/psychologue/etudiant/${patient.id}/#anchor-student-list`,
               )
             }
-            secondary
-            size="sm"
-            icon="ri-list-unordered"
+            priority="secondary"
+            size="small"
+            iconId="fr-icon-list-unordered"
             aria-label="Liste des séances"
             title="Liste des séances"
           />
-        </Tooltip>
-      ),
-    },
-    {
-      name: 'appointment-etudiant-button',
-      label: 'Déclarer une séance',
-      render: (patient) => {
-        const tooManyAppointments =
-          (parseInt(patient.countedAppointments, 10) || 0) >= MAX_APPOINTMENT;
-        return (
-          <Tooltip
-            tooltip={
-              tooManyAppointments
-                ? "Nombre de séances maximum atteint pour l'année en cours. En cas d'erreur, contactez le support"
-                : 'Déclarer une séance'
-            }
-          >
-            <Button
-              data-test-id="appointment-etudiant-button"
-              onClick={() =>
-                navigate(`/psychologue/nouvelle-seance/${patient.id}`)
-              }
-              size="sm"
-              icon="ri-calendar-line"
-              aria-label="Déclarer une séance"
-              disabled={tooManyAppointments}
-            />
-          </Tooltip>
-        );
-      },
-    },
-    {
-      name: 'delete-etudiant-button',
-      label: "Supprimer l'étudiant",
-      render: (patient) => (
+        </Tooltip>,
+        // declare appointment button
         <Tooltip
+          key={`appointment-${patient.id}`}
+          tooltip={
+            tooManyAppointments
+              ? "Nombre de séances maximum atteint pour l'année en cours. En cas d'erreur, contactez le support"
+              : 'Déclarer une séance'
+          }
+        >
+          <Button
+            data-test-id="appointment-etudiant-button"
+            onClick={() =>
+              navigate(`/psychologue/nouvelle-seance/${patient.id}`)
+            }
+            priority="primary"
+            size="small"
+            iconId="fr-icon-calendar-line"
+            aria-label="Déclarer une séance"
+            disabled={tooManyAppointments}
+          />
+        </Tooltip>,
+        // delete button
+        <Tooltip
+          key={`delete-${patient.id}`}
           tooltip={
             patient.appointmentsCount !== '0'
               ? 'Vous ne pouvez pas supprimer un étudiant avec des séances'
@@ -311,15 +321,14 @@ const Patients = () => {
             data-test-id="delete-etudiant-button"
             onClick={() => deletePatient(patient.id)}
             disabled={patient.appointmentsCount !== '0'}
-            secondary
-            size="sm"
-            icon="ri-delete-bin-line"
+            priority="secondary"
+            size="small"
+            iconId="fr-icon-delete-bin-line"
             aria-label="Supprimer"
           />
-        </Tooltip>
-      ),
-    },
-  ];
+        </Tooltip>,
+      ];
+    });
 
   return (
     <>
@@ -334,8 +343,7 @@ const Patients = () => {
           Nouvel étudiant
         </Link>
       </div>
-      //TODO: uncomment and fix
-      {/* <div
+      <div
         ref={table}
         id="students-table"
         className={classNames('fr-table', styles.table)}
@@ -343,14 +351,16 @@ const Patients = () => {
         {patients.length > 0 ? (
           <Table
             data-test-id="etudiant-table"
-            columns={seeAppointments ? columns : convertToMobileView(columns)}
-            data={filteredPatients.length > 0 ? filteredPatients : patients}
-            rowKey="id"
+            data={buildRows(
+              seeAppointments ? headers : mobileHeaders,
+              filteredPatients.length > 0 ? filteredPatients : patients,
+            )}
+            headers={seeAppointments ? headers : mobileHeaders}
           />
         ) : (
           <span>Vous n&lsquo;avez pas encore déclaré d&lsquo;étudiants.</span>
         )}
-      </div> */}
+      </div>
     </>
   );
 };

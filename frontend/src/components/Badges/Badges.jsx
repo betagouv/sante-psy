@@ -32,7 +32,7 @@ export const renderBadge = ({
               severity={severity}
               className={`${className} ${styles.badge} ${inactiveBadge}`}
             >
-              text
+              {text}
             </Badge>
           </Tooltip>
         ) : (
