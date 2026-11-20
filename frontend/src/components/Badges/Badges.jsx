@@ -29,18 +29,20 @@ export const renderBadge = ({
           <Tooltip tooltip={tooltip}>
             <Badge
               icon={icon}
-              text={text}
-              type={severity}
+              severity={severity}
               className={`${className} ${styles.badge} ${inactiveBadge}`}
-            />
+            >
+              text
+            </Badge>
           </Tooltip>
         ) : (
           <Badge
             icon={icon}
-            text={text}
-            type={severity}
+            severity={severity}
             className={`${className} ${styles.badge} ${inactiveBadge}`}
-          />
+          >
+            {text}
+          </Badge>
         )}
       </div>
     )

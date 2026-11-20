@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
-// import { Table } from '@dataesr/react-dsfr';
+import { Table } from '@codegouvfr/react-dsfr/Table';
 import { Input } from '@codegouvfr/react-dsfr/Input';
 import { CallOut } from '@codegouvfr/react-dsfr/CallOut';
 import { Button } from '@codegouvfr/react-dsfr/Button';
@@ -111,12 +111,62 @@ const Appointments = () => {
     return 0;
   };
 
-  const columns = [
-    {
-      name: 'date',
-      label: 'Date',
-      render: (appointment) => (
-        <div className={styles.date}>
+  const headers = [
+    'Date',
+    '', // badge column
+    <div key="student-header">
+      Étudiant
+      <Input
+        className={styles.filter}
+        nativeInputProps={{
+          onClick: handleSearchClick,
+          onChange: handleSearch,
+          placeholder: 'Rechercher',
+        }}
+      />
+    </div>, // actions column
+    ,
+  ];
+
+  const tableData = [...filteredMonthAppointments]
+    .sort((a, b) => sortAppointmentsByDate(a, b))
+    .map((appointment) => {
+      const canDelete =
+        Date.parse(appointment.appointmentDate) >= cantDeleteBefore;
+
+      const isInactive =
+        appointment.badges && appointment.badges.includes(badges.inactive.key);
+
+      const buttons = (
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button
+            data-test-id="delete-appointment-button-small"
+            onClick={() => deleteAppointment(appointment.id)}
+            priority="secondary"
+            size="small"
+            iconId="fr-icon-delete-bin-line"
+            iconPosition="left"
+            className="fr-unhidden fr-hidden-md fr-float-right"
+            aria-label="Supprimer"
+            disabled={!canDelete}
+          />
+          <Button
+            data-test-id="delete-appointment-button-large"
+            priority="secondary"
+            size="small"
+            onClick={() => deleteAppointment(appointment.id)}
+            iconId="fr-icon-delete-bin-line"
+            iconPosition="left"
+            className="fr-hidden fr-unhidden-md"
+            disabled={!canDelete}
+          >
+            Supprimer
+          </Button>
+        </div>
+      );
+
+      return [
+        <div key={`date-${appointment.id}`} className={styles.date}>
           <div>{formatFrenchDate(utcDate(appointment.appointmentDate))}</div>
           {(appointment.badges.includes(badges.switch_rule_notice.key) ||
             appointment.badges.includes(badges.inactive.key)) && (
@@ -129,7 +179,6 @@ const Appointments = () => {
                 aria-hidden="true"
                 style={{ fontSize: '1.5rem', color: '#000091' }}
               />
-              No import needed.
               {showTooltip === appointment.id && (
                 <span className={styles.tooltip}>
                   {badges.switch_rule_notice.tooltip}
@@ -137,102 +186,38 @@ const Appointments = () => {
               )}
             </div>
           )}
-        </div>
-      ),
-      sortable: true,
-      sort: (a, b) => sortAppointmentsByDate(a, b),
-    },
-    {
-      name: 'badge',
-      label: '',
-      render: (appointment) => {
-        const isInactive =
-          appointment.badges &&
-          appointment.badges.includes(badges.inactive.key);
-        return (
-          <Badges
-            isInactive={isInactive}
-            badges={appointment.badges}
-            univYear={appointment.univYear}
-          />
-        );
-      },
-    },
-    {
-      name: 'student',
-      label: (
-        <div>
-          Étudiant
-          <Input
-            className={styles.filter}
-            nativeInputProps={{
-              onClick: handleSearchClick,
-              onChange: handleSearch,
-              placeholder: 'Rechercher',
-            }}
-          />
-        </div>
-      ),
-      render: ({ patientId, firstNames, lastName }) => (
+        </div>,
+        <Badges
+          isInactive={isInactive}
+          badges={appointment.badges}
+          univYear={appointment.univYear}
+        />,
         <Tooltip
+          key={`student-${appointment.id}`}
           tooltip="Séances de l'étudiant"
           data-test-id="etudiant-name"
           onClick={() =>
-            navigate(`/psychologue/etudiant/${patientId}/#anchor-student-list`)
+            navigate(
+              `/psychologue/etudiant/${appointment.patientId}/#anchor-student-list`,
+            )
           }
         >
           <div>
-            {firstNames} {lastName}
+            {appointment.firstNames} {appointment.lastName}
           </div>
-        </Tooltip>
-      ),
-    },
-    {
-      name: 'actions',
-      label: '',
-      render: (appointment) => {
-        const canDelete =
-          Date.parse(appointment.appointmentDate) >= cantDeleteBefore;
-
-        const buttons = (
-          <>
-            <Button
-              data-test-id="delete-appointment-button-small"
-              onClick={() => deleteAppointment(appointment.id)}
-              priority="secondary"
-              size="small"
-              iconId="ri-delete-bin-line"
-              className="fr-unhidden fr-hidden-sm fr-float-right"
-              aria-label="Supprimer"
-              disabled={!canDelete}
-            />
-            <Button
-              data-test-id="delete-appointment-button-large"
-              priority="secondary"
-              size="small"
-              onClick={() => deleteAppointment(appointment.id)}
-              icon="ri-delete-bin-line"
-              className="fr-hidden fr-unhidden-sm fr-float-right"
-              disabled={!canDelete}
-            >
-              Supprimer
-            </Button>
-          </>
-        );
-        if (!canDelete) {
-          return (
-            <Tooltip
-              tooltip="Vous ne pouvez supprimer une séance que sur le mois en cours ou le mois précédent.
-          Pour toute annulation antérieure, veuillez contacter le support."
-            >
-              {buttons}
-            </Tooltip>
-          );
-        }
-        return buttons;
-      },
-    },
-  ];
+        </Tooltip>,
+        canDelete ? (
+          buttons
+        ) : (
+          <Tooltip
+            key={`actions-${appointment.id}`}
+            tooltip="Vous ne pouvez supprimer une séance que sur le mois en cours ou le mois précédent. Pour toute annulation antérieure, veuillez contacter le support."
+          >
+            {buttons}
+          </Tooltip>
+        ),
+      ];
+    });
 
   return (
     <>
@@ -281,14 +266,13 @@ const Appointments = () => {
           />
         </div>
       </div>
-      {/* <div id="appointments-table">
+      <div id="appointments-table">
         {filteredMonthAppointments.length > 0 ? (
           <Table
             data-test-id="appointments-table"
             className={styles.table}
-            columns={columns}
-            data={filteredMonthAppointments}
-            rowKey="id"
+            headers={headers}
+            data={tableData}
           />
         ) : (
           <div>
@@ -296,7 +280,7 @@ const Appointments = () => {
             {formatMonth(month)}.
           </div>
         )}
-      </div> */}
+      </div>
     </>
   );
 };

@@ -168,6 +168,7 @@ const PrivacyPolicy = () => (
     <Section title="Pendant combien de temps conservons-nous vos données ?">
       <p>Les données à caractère personnel sont conservées :</p>
       <Table
+        colorVariant="blue-ecume"
         headers={['Catégories de données', 'Durée de conservation']}
         data={dataConservation.map((row) => [
           row['Catégories de données'],
@@ -257,6 +258,7 @@ const PrivacyPolicy = () => (
     </Section>
     <Section title="Qui nous aide à traiter vos données à caractère personnel ?">
       <Table
+        colorVariant="blue-ecume"
         headers={['Partenaire', 'Pays', 'Traitement réalisé', 'Garanties']}
         data={dataSubcontractor.map((row) => [
           row['Partenaire'],
@@ -295,6 +297,7 @@ const PrivacyPolicy = () => (
         moment revenir sur son choix.
       </p>
       <Table
+        colorVariant="blue-ecume"
         headers={['Cookies', 'Traitement réalisé', 'Garanties']}
         data={dataCookies.map((row) => [
           row['Cookies'],
