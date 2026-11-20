@@ -99,7 +99,7 @@ const ConventionForm = ({
           <Button
             nativeButtonProps={{ type: 'submit' }}
             data-test-id="update-convention-button"
-            iconId="fr-fi-check-line"
+            iconId="fr-icon-check-line"
             disabled={convention.isConventionSigned === ''}
           >
             Enregistrer

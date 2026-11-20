@@ -185,7 +185,7 @@ const AddNewPatient = () => {
                 nativeButtonProps={{ type: 'submit' }}
                 id="app-patient-button"
                 data-test-id="add-patient-button"
-                iconId="fr-fi-add-line"
+                iconId="fr-icon-add-line"
                 disabled={!canFindStudent}
               >
                 Rechercher l'étudiant

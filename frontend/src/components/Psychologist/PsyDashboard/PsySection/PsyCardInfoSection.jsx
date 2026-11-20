@@ -23,7 +23,7 @@ const PsyCardInfo = ({ psychologist, user }) => {
           <Button
             id="show-public-profile-button"
             data-test-id="show-public-profile-button"
-            iconId="fr-fi-eye-line"
+            iconId="fr-icon-eye-line"
             priority="secondary"
             onClick={() =>
               window.open(
