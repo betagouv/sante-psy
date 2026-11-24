@@ -31,13 +31,13 @@ const UnivContact = ({ university }) => {
         {mailto && (
           <Button
             priority="tertiary"
-            size="large"
-            iconId="ri-mail-line"
-            className={styles.mailButton}
-            onClick={() => {
-              window.location.href = mailto;
+            size="medium"
+            iconId="fr-icon-mail-line"
+            linkProps={{
+              to: mailto,
             }}
-          >{`Envoyer un email à ${emails}`}</Button>
+            title={`Envoyer un email à ${emails}`}
+          />
         )}
       </section>
     );

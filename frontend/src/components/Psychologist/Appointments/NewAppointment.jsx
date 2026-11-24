@@ -187,7 +187,7 @@ const NewAppointment = () => {
         id="new-appointment-submit"
         data-test-id="new-appointment-submit"
         nativeButtonProps={{ type: 'submit' }}
-        iconId="ri-add-line"
+        iconId="fr-icon-add-line"
         className="fr-mt-4w"
         disabled={!canCreateAppointment}
       >

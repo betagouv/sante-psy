@@ -11,7 +11,7 @@ const NoResultPsyTable = ({
   <div className={classNames(styles.columnBox, 'fr-my-2w')}>
     <div className={styles.personnalInfo}>
       <i
-        className={`ri-search-line ${styles.userIcon}`}
+        className={`fr-icon-search-line ${styles.userIcon}`}
         style={{ fontSize: '2rem' }}
       />{' '}
       <div>

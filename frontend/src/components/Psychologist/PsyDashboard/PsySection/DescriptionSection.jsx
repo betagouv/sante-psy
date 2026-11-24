@@ -13,7 +13,7 @@ const DescriptionSection = ({ psychologist }) => {
       <p>{psychologist.description}</p>
       <Button
         priority="secondary"
-        iconId="ri-edit-line"
+        iconId="fr-icon-edit-line"
         onClick={() =>
           navigate('/psychologue/modifier-profil', { state: { psychologist } })
         }

@@ -25,13 +25,11 @@ const PsyCardInfo = ({ psychologist, user }) => {
             data-test-id="show-public-profile-button"
             iconId="fr-icon-eye-line"
             priority="secondary"
-            onClick={() =>
-              window.open(
-                `/trouver-un-psychologue/${user.dossierNumber}`,
-                '_blank',
-                'noopener,noreferrer',
-              )
-            }
+            linkProps={{
+              to: `/trouver-un-psychologue/${user.dossierNumber}`,
+              target: '_blank',
+              rel: 'noopener noreferrer',
+            }}
           >
             Voir profil public
           </Button>
@@ -58,13 +56,13 @@ const PsyCardInfo = ({ psychologist, user }) => {
                 'noopener,noreferrer',
               );
             }}
-            iconId="ri-link"
+            iconId="fr-icon-link"
           >
             Site web
           </Button>
           <Button
             priority="tertiary"
-            iconId="ri-calendar-line"
+            iconId="fr-icon-calendar-line"
             onClick={() => {
               window.open(
                 string.prefixUrl(psychologist.appointmentLink),
@@ -81,7 +79,7 @@ const PsyCardInfo = ({ psychologist, user }) => {
           className={styles.buttonEdit}
           id="show-profile-form-button"
           data-test-id="show-profile-form-button"
-          iconId="ri-edit-line"
+          iconId="fr-icon-edit-line"
           onClick={() => {
             navigate('/psychologue/modifier-profil/');
           }}

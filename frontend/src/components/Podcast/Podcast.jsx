@@ -70,7 +70,7 @@ const Podcast = () => {
                 rel="noopener noreferrer"
                 className={styles.platformLink}
               >
-                <i className="ri-spotify-line" />
+                <i className="fr-icon-spotify-line" />
                 Spotify
               </a>
               <span className={styles.separator}>|</span>
@@ -90,7 +90,7 @@ const Podcast = () => {
                 rel="noopener noreferrer"
                 className={styles.platformLink}
               >
-                <i className="ri-music-line" />
+                <i className="fr-icon-music-2-line" />
                 Deezer
               </a>
               <span className={styles.separator}>|</span>
@@ -101,7 +101,7 @@ const Podcast = () => {
                 title="Youtube"
                 className={styles.platformLink}
               >
-                <i className="ri-youtube-line" />
+                <i className="fr-icon-youtube-line" />
                 Youtube
               </a>
             </div>
@@ -111,7 +111,7 @@ const Podcast = () => {
         <div className={styles.buttonsContainer}>
           //TODO: add a 'to' instead
           <Button
-            iconId="ri-play-circle-line"
+            iconId="fr-icon-play-circle-line"
             iconPosition="left"
             size="small"
             onClick={() =>
@@ -125,7 +125,7 @@ const Podcast = () => {
             Écouter
           </Button>
           <Button
-            iconId="ri-instagram-line"
+            iconId="fr-icon-instagram-line"
             iconPosition="left"
             size="small"
             onClick={() =>
@@ -149,7 +149,7 @@ const Podcast = () => {
             }
           >
             <i
-              className="ri-signal-tower-fill"
+              className="fr-icon-signal-tower-fill"
               style={{ color: '#000091', fontSize: '1.5rem' }}
             />{' '}
           </div>

@@ -1,6 +1,20 @@
 import React from 'react';
-import { HashLink } from 'react-router-hash-link';
+import ButtonsGroup from '@codegouvfr/react-dsfr/ButtonsGroup';
 
+const buttons = [
+  {
+    label: 'PDF .pdf',
+    link: `${__API__}/static/documents/modele-facturation-sante-psy-etudiant-50.pdf`,
+  },
+  {
+    label: 'Microsoft Word .docx',
+    link: `${__API__}/static/documents/modele-facturation-sante-psy-etudiant-50.docx`,
+  },
+  {
+    label: 'Libre Office .odt',
+    link: `${__API__}/static/documents/modele-facturation-sante-psy-etudiant-50.odt`,
+  },
+];
 const BillingHelper = () => (
   <>
     <h3>Les élements à apparaître sur votre facturation</h3>
@@ -18,66 +32,43 @@ const BillingHelper = () => (
     </p>
     <p>Modèles pour les séances :</p>
 
-    <div className="fr-btns-group fr-btns-group--inline fr-my-2w">
-      <div className="button-secondary-container">
-        <a
-          className="fr-btn fr-btn--secondary"
-          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant-50.pdf`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span className="ri-file-download-line" aria-hidden="true" />
-          .pdf
-        </a>
-      </div>
-      <div className="button-secondary-container">
-        <a
-          className="fr-btn fr-btn--secondary"
-          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant-50.docx`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span className="ri-file-download-line" aria-hidden="true" />
-          Microsoft Word .docx
-        </a>
-      </div>
-      <div className="button-secondary-container">
-        <a
-          className="fr-btn fr-btn--secondary"
-          href={`${__API__}/static/documents/modele-facturation-sante-psy-etudiant-50.odt`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span className="ri-file-download-line" aria-hidden="true" />
-          Libre Office .odt
-        </a>
-      </div>
-    </div>
+    <ButtonsGroup
+      inlineLayoutWhen="md and up"
+      buttons={buttons.map((b) => ({
+        priority: 'secondary',
+        linkProps: {
+          to: b.link,
+          target: '_blank',
+          rel: 'noreferrer',
+        },
+        iconId: 'fr-icon-file-download-line',
+        children: b.label,
+      }))}
+    />
 
     <h3>Demander de l&lsquo;aide</h3>
 
-    <div className="fr-btns-group fr-btns-group--inline">
-      <div className="button-secondary-container">
-        <HashLink
-          className="fr-btn fr-btn--secondary"
-          to="/faq?section=psychologue#remboursement"
-          title="Consulter la Foire Aux Questions sur les remboursements"
-        >
-          Consulter la Foire Aux Questions
-        </HashLink>
-      </div>
-      <div className="button-secondary-container">
-        <a
-          className="fr-btn fr-btn--secondary"
-          href={`${__API__}/static/documents/tutoriel_choruspro_sante-psy-etudiant.pdf`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span className="ri-file-download-line" aria-hidden="true" />
-          Tutoriel Chorus PRO
-        </a>
-      </div>
-    </div>
+    <ButtonsGroup
+      inlineLayoutWhen="sm and up"
+      buttons={[
+        {
+          priority: 'secondary',
+          children: 'Consulter la Foire Aux Questions',
+          linkProps: {
+            to: '/faq?section=psychologue#remboursement',
+          },
+        },
+        {
+          priority: 'secondary',
+          children: 'Tutoriel Chorus PRO',
+          linkProps: {
+            to: `${__API__}/static/documents/tutoriel_choruspro_sante-psy-etudiant.pdf`,
+            target: '_blank',
+            rel: 'noreferrer',
+          },
+        },
+      ]}
+    />
   </>
 );
 

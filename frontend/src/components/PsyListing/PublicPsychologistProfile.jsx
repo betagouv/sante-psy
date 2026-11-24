@@ -83,7 +83,7 @@ const ContactSection = ({ psychologist }) => {
                   }
                   window.location.href = `tel:${psychologist.phone}`;
                 }}
-                iconId="ri-phone-fill"
+                iconId="fr-icon-phone-fill"
               />
             </div>
           )}
@@ -106,7 +106,7 @@ const ContactSection = ({ psychologist }) => {
                   }
                   window.location.href = `mailto:${psychologist.email}`;
                 }}
-                iconId="ri-mail-fill"
+                iconId="fr-icon-mail-fill"
               />
             </div>
           )}
@@ -144,7 +144,7 @@ const ContactSection = ({ psychologist }) => {
                   }
                   window.open(string.prefixUrl(psychologist.website), '_blank');
                 }}
-                iconId="ri-link"
+                iconId="fr-icon-link"
               />
             </div>
           )}
@@ -171,7 +171,7 @@ const ContactSection = ({ psychologist }) => {
                       '_blank',
                     );
                   }}
-                  iconId="ri-calendar-fill"
+                  iconId="fr-icon-calendar-fill"
                 >
                   RDV
                 </Button>

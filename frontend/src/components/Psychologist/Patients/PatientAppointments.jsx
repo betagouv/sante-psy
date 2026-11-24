@@ -99,7 +99,7 @@ const PatientAppointments = ({
         className={
           isSmallScreen ? styles.smallCreateButton : styles.createButton
         }
-        iconId="ri-add-line"
+        iconId="fr-icon-add-line"
         size="small"
         onClick={() => navigate(`/psychologue/nouvelle-seance/${patientId}`)}
       >
@@ -131,7 +131,7 @@ const PatientAppointments = ({
         onClick={() => deleteAppointment(appointment.id)}
         priority="secondary"
         size="small"
-        iconId="ri-delete-bin-line"
+        iconId="fr-icon-delete-bin-line"
         className="fr-float-right"
         aria-label="Supprimer"
         disabled={
@@ -155,7 +155,7 @@ const PatientAppointments = ({
               onClick={() => handleIconClick(appointment.id)}
             >
               <span
-                className="ri-information-line"
+                className="fr-icon-information-line"
                 style={{ fontSize: '1.5rem', color: '#000091' }}
                 aria-hidden="true"
               />

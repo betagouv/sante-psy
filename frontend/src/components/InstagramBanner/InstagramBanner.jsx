@@ -7,7 +7,9 @@ import styles from './styles.cssmodule.scss';
 import MozaicInstagram from './MozaicInstagram';
 
 const InstagramBanner = () => {
-  const { commonStore: { config } } = useStore();
+  const {
+    commonStore: { config },
+  } = useStore();
 
   useEffect(() => {
     document.title = 'Santé Psy Étudiant';
@@ -22,22 +24,19 @@ const InstagramBanner = () => {
           content: styles.content,
         }}
         buttonSecondary
-        buttonIcon="ri-instagram-line"
+        buttonIcon="fr-icon-instagram-line"
         Component={MozaicInstagram}
-        title={(
+        title={
           <div className={styles.title}>
-            Rejoignez la communauté Instagram
-            {' '}
+            Rejoignez la communauté Instagram{' '}
             <span className={styles.yellowUnderline}>Santé Psy Étudiant</span>
             &#x00A0;
           </div>
-        )}
+        }
         y
-        description={(
+        description={
           <>
-            <b>{config?.statistics?.nbInstaFollower}</b>
-            {' '}
-            abonnés
+            <b>{config?.statistics?.nbInstaFollower}</b> abonnés
             <br />
             Conseils
             <br />
@@ -46,7 +45,7 @@ const InstagramBanner = () => {
             Podcasts
             <br />
           </>
-        )}
+        }
         buttonLink="https://www.instagram.com/sante_psyetudiant/?hl=fr"
         buttonText="Santé Psy Étudiant"
       />
@@ -55,7 +54,7 @@ const InstagramBanner = () => {
         customStyle={{ container: styles.podcast, content: styles.content }}
         reverse
         buttonSecondary
-        buttonIcon="ri-instagram-line"
+        buttonIcon="fr-icon-instagram-line"
         imageSrc="/images/instagram/kaavan.png"
         title={<div className={styles.title}>Podcast sur la santé mentale</div>}
         buttonLink="https://www.instagram.com/kaavan_podcast/"

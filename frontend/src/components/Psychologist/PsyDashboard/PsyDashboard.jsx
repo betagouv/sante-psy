@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HashLink } from 'react-router-hash-link';
 import agent from 'services/agent';
 import { useStore } from 'stores';
 
@@ -13,7 +12,7 @@ import PsyCardInfo from './PsySection/PsyCardInfoSection';
 import UnivContact from './UnivSection/Contact';
 import BillingInfoDashboard from './UnivSection/BillingInfo';
 import getPsyProfileIssues from '../../../utils/getPsyProfileIssues';
-import { fr } from '@codegouvfr/react-dsfr';
+import Button from '@codegouvfr/react-dsfr/Button';
 
 const PsyProfile = () => {
   const {
@@ -79,16 +78,16 @@ const PsyProfile = () => {
         />
       )}
       <div className="fr-my-2w">
-        <HashLink
+        <Button
           id="new-appointment-button"
-          to="/psychologue/nouvelle-seance"
-          className="fr-btn"
+          linkProps={{
+            to: '/psychologue/nouvelle-seance',
+          }}
+          data-test-id="new-appointment-button"
+          iconId="fr-icon-add-line"
         >
-          <div data-test-id="new-appointment-button">
-            <span className={fr.cx('ri-add-line')} aria-hidden="true" />
-            Déclarer une séance
-          </div>
-        </HashLink>
+          Déclarer une séance
+        </Button>
       </div>
       <div className={styles.allSections}>
         <div className={styles.leftSection}>

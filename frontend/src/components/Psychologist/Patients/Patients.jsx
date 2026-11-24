@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
 import { Table } from '@codegouvfr/react-dsfr/Table';
@@ -333,15 +333,14 @@ const Patients = () => {
   return (
     <>
       <div className="fr-my-2w">
-        <Link
+        <Button
           data-test-id="new-student-button"
           id="new-student-button"
-          to="/psychologue/nouvel-etudiant"
-          className="fr-btn"
+          linkProps={{ to: '/psychologue/nouvel-etudiant' }}
+          iconId="fr-icon-add-line"
         >
-          <span className="ri-add-line" aria-hidden="true" />
           Nouvel étudiant
-        </Link>
+        </Button>
       </div>
       <div
         ref={table}

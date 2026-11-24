@@ -65,7 +65,7 @@ const PsyTable = ({
             >
               <div className={styles.personnalInfo}>
                 <i
-                  className={`ri-user-line ${styles.userIcon}`}
+                  className={`fr-icon-user-line ${styles.userIcon}`}
                   style={{ fontSize: '2rem' }}
                 />
                 <div>
@@ -76,7 +76,7 @@ const PsyTable = ({
                   <div className={styles.addressInfo}>
                     <div>
                       <i
-                        className="ri-map-pin-2-fill fr-mr-1w"
+                        className="fr-icon-map-pin-2-fill fr-mr-1w"
                         style={{ fontSize: '1.5rem' }}
                       />
                       <span>
@@ -103,7 +103,7 @@ const PsyTable = ({
                           severity="success"
                           noIcon
                         >
-                          <i className="ri-webcam-fill fr-mr-1w" />
+                          <i className="fr-icon-webcam-fill fr-mr-1w" />
                           Téléconsultation disponible
                         </Badge>
                       </>

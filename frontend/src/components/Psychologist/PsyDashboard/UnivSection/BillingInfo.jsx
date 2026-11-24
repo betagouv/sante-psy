@@ -1,12 +1,10 @@
 import React from 'react';
 import billingInfoService from 'services/billingInfo';
 import { Button } from '@codegouvfr/react-dsfr/Button';
-import { useNavigate } from 'react-router-dom';
 import styles from './univSection.cssmodule.scss';
 
 const BillingInfoDashboard = () => {
   const billingInfo = billingInfoService.get();
-  const navigate = useNavigate();
   const checkIsEmpty = (value) => (value?.trim() ? value : '-');
 
   return (
@@ -16,11 +14,11 @@ const BillingInfoDashboard = () => {
           <h2>Données de facturation</h2>
           <Button
             priority="secondary"
-            className={styles.buttonEdit}
-            iconId="ri-external-link-line"
+            size="small"
+            iconId="fr-icon-external-link-line"
             iconPosition="right"
-            onClick={() => {
-              navigate('/psychologue/mes-remboursements/');
+            linkProps={{
+              to: '/psychologue/mes-remboursements/',
             }}
           >
             Facturation
@@ -41,10 +39,10 @@ const BillingInfoDashboard = () => {
           </p>
           <Button
             priority="secondary"
-            className={styles.buttonEdit}
-            iconId="ri-edit-line"
-            onClick={() => {
-              navigate('/psychologue/mes-remboursements/?openBillingInfo=true');
+            size="small"
+            iconId="fr-icon-edit-line"
+            linkProps={{
+              to: '/psychologue/mes-remboursements/?openBillingInfo=true',
             }}
           >
             Modifier

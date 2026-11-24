@@ -51,7 +51,7 @@ const ConventionAvailabilitySection = ({ user }) => {
         priority="secondary"
         className={styles.psyDashboardConvention}
         onClick={() => navigate('/psychologue/ma-convention')}
-        iconId="ri-edit-line"
+        iconId="fr-icon-edit-line"
         iconPosition="right"
       >
         {user.convention && user.convention.isConventionSigned ? (
@@ -74,7 +74,7 @@ const ConventionAvailabilitySection = ({ user }) => {
         priority="secondary"
         className={styles.psyDashboardAvailability}
         onClick={() => navigate('/psychologue/ma-disponibilite/')}
-        iconId="ri-edit-line"
+        iconId="fr-icon-edit-line"
         iconPosition="right"
         id="show-availability-form"
         data-test-id="show-availability-form"

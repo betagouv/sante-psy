@@ -175,7 +175,7 @@ const Appointments = () => {
               onClick={() => handleIconClick(appointment.id)}
             >
               <span
-                className="ri-information-line"
+                className="fr-icon-information-line"
                 aria-hidden="true"
                 style={{ fontSize: '1.5rem', color: '#000091' }}
               />
@@ -250,7 +250,7 @@ const Appointments = () => {
           className="fr-btn"
         >
           <div data-test-id="new-appointment-button">
-            <span className="ri-add-line" aria-hidden="true" />
+            <span className="fr-icon-add-line" aria-hidden="true" />
             Nouvelle séance
           </div>
         </HashLink>

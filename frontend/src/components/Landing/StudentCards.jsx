@@ -10,7 +10,7 @@ const StudentCards = () => (
       index={1}
       title="Vérifier votre éligibilité"
       image="eligibility/psychologist.svg"
-      buttonIcon="ri-user-search-fill"
+      buttonIcon="fr-icon-user-search-fill"
       buttonText="Vérifiez votre éligibilité"
       link="/eligibilite"
     />
@@ -18,7 +18,7 @@ const StudentCards = () => (
       index={2}
       title="Choisissez un psychologue"
       image="eligibility/followup.svg"
-      buttonIcon="ri-search-line"
+      buttonIcon="fr-icon-search-line"
       buttonText="Trouver un psychologue"
       link="/trouver-un-psychologue"
       anchor="anchor-psy-list"

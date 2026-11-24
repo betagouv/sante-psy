@@ -97,22 +97,18 @@ const Billing = () => {
           </div>
         )}
         <div className="fr-mb-2w">
-          <button
-            id="billing-info"
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              window.open('/psychologue/informations-facturation', '_blank');
+          <Button
+            priority="tertiary"
+            iconPosition="left"
+            linkProps={{
+              to: '/psychologue/informations-facturation',
+              target: '_blank',
+              rel: 'noreferrer',
             }}
-            className={styles.editLink}
+            iconId="fr-edit-box-fill"
           >
-            <span
-              className="ri-edit-box-fill"
-              style={{ fontSize: '1em' }}
-              aria-hidden="true"
-            />
             Modifier le RIB / SIRET / Bon de commande
-          </button>
+          </Button>
         </div>
         <div className={styles.monthPickerContainer}>
           Générer ma facture pour le mois de :
@@ -147,7 +143,7 @@ const Billing = () => {
               <Button
                 id="billing-generation"
                 disabled={!canGenerateBill}
-                iconId="ri-file-download-line"
+                iconId="fr-icon-file-download-line"
                 onClick={() => {
                   if (canGenerateBill) {
                     billingInfoService.save(billingInfo);

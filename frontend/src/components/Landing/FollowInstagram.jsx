@@ -76,7 +76,7 @@ const FollowInstagram = () => {
       }
       descriptionDataTestId="followInstagramDescription"
       buttonLink="https://www.instagram.com/sante_psyetudiant/?hl=fr"
-      buttonIcon="ri-instagram-line"
+      buttonIcon="fr-icon-instagram-line"
       buttonText="Santé Psy Etudiant sur Instagram"
       buttonSecondary
     />

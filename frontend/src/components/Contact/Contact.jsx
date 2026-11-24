@@ -85,7 +85,7 @@ const Contact = () => {
         <div className={styles.hover}>
           <Button
             priority="secondary"
-            iconId="ri-mail-line"
+            iconId="fr-icon-mail-line"
             iconPosition="right"
             className={styles.button}
             onClick={() => navigate('/contact/formulaire')}
