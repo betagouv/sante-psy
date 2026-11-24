@@ -15,8 +15,6 @@ const BillingInfoDashboard = () => {
           <Button
             priority="secondary"
             size="small"
-            iconId="fr-icon-external-link-line"
-            iconPosition="right"
             linkProps={{
               to: '/psychologue/mes-remboursements/',
             }}

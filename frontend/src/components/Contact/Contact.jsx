@@ -4,7 +4,6 @@ import Page from 'components/Page/Page';
 import ServicesList from 'components/OtherServices/ServicesList';
 import { Button } from '@codegouvfr/react-dsfr/Button';
 import { fr } from '@codegouvfr/react-dsfr';
-import { useNavigate } from 'react-router-dom';
 import Card from 'components/Card/Card';
 import styles from './contact.cssmodule.scss';
 
@@ -25,8 +24,6 @@ const contactCardStyle = {
 };
 
 const Contact = () => {
-  const navigate = useNavigate();
-
   return (
     <>
       <Page
@@ -88,7 +85,9 @@ const Contact = () => {
             iconId="fr-icon-mail-line"
             iconPosition="right"
             className={styles.button}
-            onClick={() => navigate('/contact/formulaire')}
+            linkProps={{
+              to: '/contact/formulaire',
+            }}
           >
             Nous contacter par email
           </Button>

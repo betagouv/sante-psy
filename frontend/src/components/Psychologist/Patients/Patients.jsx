@@ -247,11 +247,9 @@ const Patients = () => {
         <Tooltip key={`update-${patient.id}`} tooltip="Dossier de l'étudiant">
           <Button
             data-test-id="update-etudiant-button"
-            onClick={() =>
-              navigate(
-                `/psychologue/etudiant/${patient.id}/#anchor-student-file`,
-              )
-            }
+            linkProps={{
+              to: `/psychologue/etudiant/${patient.id}/#anchor-student-file`,
+            }}
             priority="secondary"
             size="small"
             iconId="fr-icon-folder-2-line"
@@ -275,11 +273,9 @@ const Patients = () => {
         <Tooltip key={`list-${patient.id}`} tooltip="Liste des séances">
           <Button
             data-test-id="seances-etudiant-button"
-            onClick={() =>
-              navigate(
-                `/psychologue/etudiant/${patient.id}/#anchor-student-list`,
-              )
-            }
+            linkProps={{
+              to: `/psychologue/etudiant/${patient.id}/#anchor-student-list`,
+            }}
             priority="secondary"
             size="small"
             iconId="fr-icon-list-unordered"
@@ -298,9 +294,9 @@ const Patients = () => {
         >
           <Button
             data-test-id="appointment-etudiant-button"
-            onClick={() =>
-              navigate(`/psychologue/nouvelle-seance/${patient.id}`)
-            }
+            linkProps={{
+              to: `/psychologue/nouvelle-seance/${patient.id}`,
+            }}
             priority="primary"
             size="small"
             iconId="fr-icon-calendar-line"

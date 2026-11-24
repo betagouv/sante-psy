@@ -1,13 +1,10 @@
 import React from 'react';
 import { Button } from '@codegouvfr/react-dsfr/Button';
-import { useNavigate } from 'react-router-dom';
 import string from 'services/string';
 
 import styles from './psySection.cssmodule.scss';
 
 const PsyCardInfo = ({ psychologist, user }) => {
-  const navigate = useNavigate();
-
   return (
     <section className={styles.psyDashboardCard}>
       <div className={styles.psyDashboardCardFirstColumn}>
@@ -49,26 +46,17 @@ const PsyCardInfo = ({ psychologist, user }) => {
         <span>
           <Button
             priority="tertiary"
-            onClick={() => {
-              window.open(
-                string.prefixUrl(psychologist.website),
-                '_blank',
-                'noopener,noreferrer',
-              );
+            linkProps={{
+              to: string.prefixUrl(psychologist.website),
             }}
-            iconId="fr-icon-link"
           >
             Site web
           </Button>
           <Button
             priority="tertiary"
             iconId="fr-icon-calendar-line"
-            onClick={() => {
-              window.open(
-                string.prefixUrl(psychologist.appointmentLink),
-                '_blank',
-                'noopener,noreferrer',
-              );
+            linkProps={{
+              to: string.prefixUrl(psychologist.appointmentLink),
             }}
           >
             Site de prise de RDV
@@ -80,8 +68,8 @@ const PsyCardInfo = ({ psychologist, user }) => {
           id="show-profile-form-button"
           data-test-id="show-profile-form-button"
           iconId="fr-icon-edit-line"
-          onClick={() => {
-            navigate('/psychologue/modifier-profil/');
+          linkProps={{
+            to: '/psychologue/modifier-profil/',
           }}
         >
           Modifier

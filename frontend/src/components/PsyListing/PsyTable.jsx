@@ -119,7 +119,7 @@ const PsyTable = ({
                       iconId="fr-icon-mail-fill"
                       priority="tertiary no outline"
                       linkProps={{
-                        href: `mailto:${psychologist.email}`,
+                        to: `mailto:${psychologist.email}`,
                       }}
                     />
                     <div className={styles.bigSeparator} />
@@ -127,7 +127,7 @@ const PsyTable = ({
                       iconId="fr-icon-phone-fill"
                       priority="tertiary no outline"
                       linkProps={{
-                        href: `tel:${psychologist.phone}`,
+                        to: `tel:${psychologist.phone}`,
                       }}
                     />
                   </>

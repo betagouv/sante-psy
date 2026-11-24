@@ -2,15 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import InstagramBanner from 'components/InstagramBanner/InstagramBanner';
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
-import { Button } from '@codegouvfr/react-dsfr/Button';
 import ServicesList from 'components/OtherServices/ServicesList';
-import { useNavigate } from 'react-router-dom';
 import styles from './eligibilityMessage.cssmodule.scss';
 import getMessage from './getMessageContents';
+import ButtonsGroup from '@codegouvfr/react-dsfr/ButtonsGroup';
 
 const EligibilityMessage = ({ isEligible, lastAnswerValue, whoFor }) => {
   const [small, setSmall] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     function handleResize() {
@@ -32,26 +30,29 @@ const EligibilityMessage = ({ isEligible, lastAnswerValue, whoFor }) => {
       />
 
       <div style={{ marginTop: '20px' }}>
-        <Button
-          onClick={() => navigate('/')}
-          iconId="fr-icon-arrow-left-line"
-          iconPosition="left"
-          size="small"
-          priority="secondary"
-          className={styles.endFormButtons}
-        >
-          Retour à l&apos;accueil
-        </Button>
-        <Button
-          onClick={() => window.location.reload()}
-          iconId="fr-icon-arrow-go-back-line"
-          iconPosition="left"
-          size="small"
-          priority="secondary"
-          className={styles.endFormButtons}
-        >
-          Refaire le test
-        </Button>
+        <ButtonsGroup
+          inlineLayoutWhen="md and up"
+          buttons={[
+            {
+              iconId: 'fr-icon-arrow-left-line',
+              iconPosition: 'left',
+              size: 'small',
+              priority: 'secondary',
+              linkProps: { to: '/' },
+              children: "Retour à l'accueil",
+            },
+            {
+              iconId: 'fr-icon-arrow-go-back-line',
+              iconPosition: 'left',
+              size: 'small',
+              priority: 'secondary',
+              nativeButtonProps: {
+                onClick: () => window.location.reload(),
+              },
+              children: 'Refaire le test',
+            },
+          ]}
+        />
       </div>
       {isEligible ? (
         <>

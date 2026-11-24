@@ -58,7 +58,7 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
             ) : (
               <>
                 <Button
-                  onClick={() => navigate('/login')}
+                  linkProps={{ to: '/login' }}
                   size="small"
                   className="fr-my-1w"
                 >

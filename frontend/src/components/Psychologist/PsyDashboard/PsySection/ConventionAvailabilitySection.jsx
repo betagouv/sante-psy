@@ -1,13 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@codegouvfr/react-dsfr/Button';
 
 import { formatStringToDDMMYYYY } from 'services/date';
 import styles from './psySection.cssmodule.scss';
 
 const ConventionAvailabilitySection = ({ user }) => {
-  const navigate = useNavigate();
-
   const greenCircleIcon = '/images/icons/icon-available-psy.svg';
   const orangeCircleIcon = '/images/icons/icon-unavailable-psy.svg';
   const redCircleIcon = '/images/icons/icon-invisible-psy.svg';
@@ -50,7 +47,9 @@ const ConventionAvailabilitySection = ({ user }) => {
         data-test-id="show-convention-form"
         priority="secondary"
         className={styles.psyDashboardConvention}
-        onClick={() => navigate('/psychologue/ma-convention')}
+        linkProps={{
+          to: '/psychologue/ma-convention',
+        }}
         iconId="fr-icon-edit-line"
         iconPosition="right"
       >
@@ -73,7 +72,9 @@ const ConventionAvailabilitySection = ({ user }) => {
       <Button
         priority="secondary"
         className={styles.psyDashboardAvailability}
-        onClick={() => navigate('/psychologue/ma-disponibilite/')}
+        linkProps={{
+          to: '/psychologue/ma-disponibilite/',
+        }}
         iconId="fr-icon-edit-line"
         iconPosition="right"
         id="show-availability-form"

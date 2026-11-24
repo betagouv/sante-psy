@@ -3,14 +3,13 @@ import { Input } from '@codegouvfr/react-dsfr/Input';
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import { Button } from '@codegouvfr/react-dsfr/Button';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
 import styles from './editProfile.cssmodule.scss';
 import { formatStringToDDMMYYYY } from 'services/date';
 
 const EditProfile = () => {
-  const navigate = useNavigate();
   const {
     commonStore: { config },
     userStore: { user, pullUser },
@@ -79,7 +78,9 @@ const EditProfile = () => {
           en compte.
         </p>
         <Button
-          onClick={() => navigate('/etudiant/mes-seances')}
+          linkProps={{
+            to: '/etudiant/mes-seances',
+          }}
           priority="secondary"
           className="fr-mt-3w"
         >
@@ -165,7 +166,9 @@ const EditProfile = () => {
           {
             children: 'Annuler',
             priority: 'secondary',
-            onClick: () => navigate('/etudiant/mes-seances'),
+            linkProps: {
+              to: '/etudiant/mes-seances',
+            },
           },
           {
             children: 'Valider la modification',

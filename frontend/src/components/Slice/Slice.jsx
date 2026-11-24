@@ -62,12 +62,8 @@ const Slice = ({
             <Button
               priority={!color || buttonSecondary ? 'secondary' : 'primary'}
               iconId={buttonIcon}
-              onClick={() => {
-                if (buttonLink.startsWith('/')) {
-                  navigate(buttonLink);
-                } else {
-                  window.open(buttonLink, '_blank');
-                }
+              linkProps={{
+                to: buttonLink,
               }}
             >
               {buttonText}

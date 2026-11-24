@@ -3,7 +3,30 @@ import Page from 'components/Page/Page';
 import { Button } from '@codegouvfr/react-dsfr/Button';
 import Slice from 'components/Slice/Slice';
 import styles from './podcast.cssmodule.scss';
+import ButtonsGroup from '@codegouvfr/react-dsfr/ButtonsGroup';
 
+const platformLinks = [
+  {
+    link: 'https://open.spotify.com/show/1SrePWpXUtUhBqGmZsDRPQ',
+    icon: 'fr-icon-music-2-line',
+    text: 'Spotify',
+  },
+  {
+    link: 'https://podcasts.apple.com/fr/podcast/kaavan-le-podcast-sant%C3%A9-mentale/id1734297354',
+    icon: 'fr-icon-macbook-line',
+    text: 'Apple Podcasts',
+  },
+  {
+    link: 'https://www.deezer.com/fr/show/1000736372',
+    text: 'Deezer',
+    icon: 'fr-icon-music-2-line',
+  },
+  {
+    link: 'https://www.youtube.com/@KaavanPodcast',
+    text: 'Youtube',
+    icon: 'fr-icon-youtube-line',
+  },
+];
 const Podcast = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -63,97 +86,49 @@ const Podcast = () => {
               Retrouvez plus d&apos;épisodes sur toutes vos plateformes
               d&apos;écoute préférées:
             </p>
-            <div className={styles.platformLinks}>
-              <a
-                href="https://open.spotify.com/show/1SrePWpXUtUhBqGmZsDRPQ"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.platformLink}
-              >
-                <i className="fr-icon-spotify-line" />
-                Spotify
-              </a>
-              <span className={styles.separator}>|</span>
-              <a
-                href="https://podcasts.apple.com/fr/podcast/kaavan-le-podcast-sant%C3%A9-mentale/id1734297354"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.platformLink}
-              >
-                <i className="ri-apple-line" />
-                Apple Podcasts
-              </a>
-              <span className={styles.separator}>|</span>
-              <a
-                href="https://www.deezer.com/fr/show/1000736372"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.platformLink}
-              >
-                <i className="fr-icon-music-2-line" />
-                Deezer
-              </a>
-              <span className={styles.separator}>|</span>
-              <a
-                href="https://www.youtube.com/@KaavanPodcast"
-                target="_blank"
-                rel="noreferrer"
-                title="Youtube"
-                className={styles.platformLink}
-              >
-                <i className="fr-icon-youtube-line" />
-                Youtube
-              </a>
-            </div>
+            <ButtonsGroup
+              inlineLayoutWhen="md and up"
+              buttons={platformLinks.map((p) => ({
+                linkProps: {
+                  to: p.link,
+                },
+                iconId: p.icon,
+                children: p.text,
+                priority: 'tertiary',
+              }))}
+            />
           </div>
         }
       >
-        <div className={styles.buttonsContainer}>
-          //TODO: add a 'to' instead
-          <Button
-            iconId="fr-icon-play-circle-line"
-            iconPosition="left"
-            size="small"
-            onClick={() =>
-              window.open(
-                'https://linktr.ee/kaavanpodcast',
-                '_blank',
-                'noopener,noreferrer',
-              )
-            }
-          >
-            Écouter
-          </Button>
-          <Button
-            iconId="fr-icon-instagram-line"
-            iconPosition="left"
-            size="small"
-            onClick={() =>
-              window.open(
-                'https://www.instagram.com/kaavan_podcast/',
-                '_blank',
-                'noopener,noreferrer',
-              )
-            }
-          >
-            Suivre
-          </Button>
-          <div
-            className={styles.rssIcon}
-            onClick={() =>
-              window.open(
-                'https://feeds.acast.com/public/shows/65cb7c6311e3e5001505d3e6',
-                '_blank',
-                'noopener,noreferrer',
-              )
-            }
-          >
-            <i
-              className="fr-icon-signal-tower-fill"
-              style={{ color: '#000091', fontSize: '1.5rem' }}
-            />{' '}
-          </div>
-        </div>
+        <ButtonsGroup
+          inlineLayoutWhen="md and up"
+          buttons={[
+            {
+              iconId: 'fr-icon-play-circle-line',
+              size: 'small',
+              linkProps: {
+                to: 'https://linktr.ee/kaavanpodcast',
+              },
+              children: 'Écouter',
+            },
+            {
+              iconId: 'fr-icon-instagram-line',
+              size: 'small',
+              linkProps: {
+                to: 'https://www.instagram.com/kaavan_podcast/',
+              },
+              children: 'Suivre',
+            },
+            {
+              iconId: 'fr-icon-signal-tower-fill',
+              size: 'small',
+              linkProps: {
+                to: 'https://feeds.acast.com/public/shows/65cb7c6311e3e5001505d3e6',
+              },
+              children: 'Flux RSS',
+            },
+          ]}
+        />
       </Slice>
       <iframe
         src="https://embed.acast.com/kaavan-podcast?feed=true&theme=light&wmode=opaque"

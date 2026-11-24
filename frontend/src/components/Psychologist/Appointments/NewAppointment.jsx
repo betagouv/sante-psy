@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { Checkbox } from '@codegouvfr/react-dsfr/Checkbox';
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
@@ -28,7 +28,6 @@ import {
 export const MAX_APPOINTMENT = 12;
 
 const NewAppointment = () => {
-  const navigate = useNavigate();
   const { search, state } = useLocation();
   // TODO understand why we use this url param
   const queryDate = new URLSearchParams(search).get('date');
@@ -196,7 +195,9 @@ const NewAppointment = () => {
       <Button
         priority="secondary"
         className="fr-mt-4w"
-        onClick={() => navigate('/psychologue/mes-seances')}
+        linkProps={{
+          to: '/psychologue/mes-seances',
+        }}
       >
         Annuler
       </Button>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Input } from '@codegouvfr/react-dsfr/Input';
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import { Button } from '@codegouvfr/react-dsfr/Button';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
 
@@ -10,7 +10,6 @@ const ConfirmEmailChange = () => {
   const {
     commonStore: { config },
   } = useStore();
-  const navigate = useNavigate();
   const { token } = useParams();
 
   const [pendingEmail, setPendingEmail] = useState('');
@@ -80,7 +79,9 @@ const ConfirmEmailChange = () => {
           description="Tu devras désormais utiliser ton nouvel email pour te connecter."
         />
         <Button
-          onClick={() => navigate('/etudiant/mes-seances')}
+          linkProps={{
+            to: '/etudiant/mes-seances',
+          }}
           priority="secondary"
         >
           Retour à mes séances
@@ -138,7 +139,9 @@ const ConfirmEmailChange = () => {
           Confirmer le changement
         </Button>
         <Button
-          onClick={() => navigate('/etudiant/mes-seances')}
+          linkProps={{
+            to: '/etudiant/mes-seances',
+          }}
           priority="secondary"
           iconId="fr-icon-close-line"
         >

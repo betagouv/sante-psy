@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
@@ -17,7 +17,6 @@ import styles from './faq.cssmodule.scss';
 const BREAKPOINT_SM = 600;
 
 const Faq = ({ simplified }) => {
-  const navigate = useNavigate();
   const tabsRef = useRef(null);
   const [smallText, setSmallText] = useState(false);
 
@@ -95,7 +94,7 @@ const Faq = ({ simplified }) => {
           <div className={styles.text}>
             Vous ne trouvez pas la réponse à votre question&#x00A0;?
           </div>
-          <Button onClick={() => navigate('/contact/formulaire')}>
+          <Button linkProps={{ to: '/contact/formulaire' }}>
             Contactez notre équipe
           </Button>
         </div>

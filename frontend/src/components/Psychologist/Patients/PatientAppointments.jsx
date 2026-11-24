@@ -7,7 +7,6 @@ import agent from 'services/agent';
 import { useStore } from 'stores/';
 import Badges from 'components/Badges/Badges';
 import useScreenSize from 'src/utils/useScreenSize';
-import { useNavigate } from 'react-router-dom';
 import { currentUnivYear } from 'services/univYears';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './patientAppointments.cssmodule.scss';
@@ -32,7 +31,6 @@ const PatientAppointments = ({
   const [showTooltip, setShowTooltip] = useState(null);
 
   const isSmallScreen = useScreenSize();
-  const navigate = useNavigate();
   const badges = getBadgeInfos();
 
   useEffect(() => {
@@ -101,7 +99,9 @@ const PatientAppointments = ({
         }
         iconId="fr-icon-add-line"
         size="small"
-        onClick={() => navigate(`/psychologue/nouvelle-seance/${patientId}`)}
+        linkProps={{
+          to: `/psychologue/nouvelle-seance/${patientId}`,
+        }}
       >
         Déclarer une séance
       </Button>
