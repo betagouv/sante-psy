@@ -3,6 +3,7 @@ import agent from 'services/agent';
 import { currentUnivYear } from 'services/univYears';
 import { Link } from 'react-router-dom';
 import styles from './studentHistory.cssmodule.scss';
+import Button from '@codegouvfr/react-dsfr/Button';
 
 const MAX_SESSIONS = 12;
 
@@ -122,43 +123,33 @@ const StudentHistory = () => {
           aria-label="Navigation entre années universitaires"
         >
           {prevYear && (
-            <button
-              type="button"
-              className="fr-btn fr-btn--secondary"
-              onClick={() => setCurrentYear(prevYear)}
+            <Button
+              iconId="fr-icon-arrow-left-s-first-line"
+              priority="secondary"
+              nativeButtonProps={{ onClick: () => setCurrentYear(prevYear) }}
             >
-              <span
-                className="fr-icon-arrow-left-s-first-line"
-                aria-hidden="true"
-              />{' '}
               Année {prevYear}
-            </button>
+            </Button>
           )}
 
           {nextYear && (
-            <button
-              type="button"
-              className="fr-btn fr-btn--secondary"
-              onClick={() => setCurrentYear(nextYear)}
+            <Button
+              iconId="fr-icon-arrow-right-s-last-line"
+              priority="secondary"
+              nativeButtonProps={{ onClick: () => setCurrentYear(nextYear) }}
             >
-              Année {nextYear}{' '}
-              <span
-                className="fr-icon-arrow-right-s-last-line"
-                aria-hidden="true"
-              />
-            </button>
+              Année {nextYear}
+            </Button>
           )}
         </nav>
       )}
 
-      <button
-        type="button"
-        className="fr-btn fr-btn--secondary fr-mt-4w"
-        onClick={() => setShowHelp(!showHelp)}
-        aria-expanded={showHelp}
+      <Button
+        priority="secondary"
+        nativeButtonProps={{ onClick: () => setShowHelp(!showHelp) }}
       >
         Tes séances n&apos;apparaissent pas ?
-      </button>
+      </Button>
       <p className={styles.marginTop}>
         Attention : ton solde est mis à jour à chaque nouvelle déclaration de
         ton psychologue. Un léger délai d'affichage est donc possible.

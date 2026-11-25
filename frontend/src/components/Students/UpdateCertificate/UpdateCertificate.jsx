@@ -5,6 +5,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import agent from 'services/agent';
 import { getUnivYear } from 'services/univYears';
 import { InputCertificate } from 'components/Certificate/InputCertificate';
+import Button from '@codegouvfr/react-dsfr/Button';
 
 const UpdateCertificate = () => {
   const {
@@ -57,14 +58,12 @@ const UpdateCertificate = () => {
     >
       <div>
         <InputCertificate setFile={setFile} fileError={fileError} />
-        <button
-          type="button"
-          className="fr-btn"
-          onClick={handleSendCertificate}
+        <Button
           disabled={!file}
+          nativeButtonProps={{ onClick: handleSendCertificate }}
         >
           Envoyer mon certificat
-        </button>
+        </Button>
       </div>
     </Page>
   );

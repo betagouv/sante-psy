@@ -12,6 +12,7 @@ import { useStore } from 'stores/';
 import styles from './studentSignIn.cssmodule.scss';
 import StudentSignInHeader from './StudentSignInHeader';
 import { TextInput } from 'components/Forms/TextInput';
+import Button from '@codegouvfr/react-dsfr/Button';
 
 const StudentSignInStepTwo = () => {
   const {
@@ -213,15 +214,14 @@ const StudentSignInStepTwo = () => {
           </div>
         )}
         <div className="fr-mb-4w fr-mt-2w">
-          <button
-            className="fr-btn"
-            type="submit"
+          <Button
+            nativeButtonProps={{ type: 'submit' }}
             disabled={isBlocked || !canSubmitForm}
           >
             {notification?.type === 'error'
               ? 'Confirmer ces informations'
               : 'Continuer mon inscription'}
-          </button>
+          </Button>
         </div>
         <p>
           Une difficulté pour créer ton compte ?{' '}

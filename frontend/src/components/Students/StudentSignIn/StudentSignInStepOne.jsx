@@ -3,6 +3,7 @@ import agent from 'services/agent';
 import StudentSignInHeader from './StudentSignInHeader';
 import { validateEmailFormat } from 'src/utils/validateEmailFormat';
 import { TextInput } from 'components/Forms/TextInput';
+import Button from '@codegouvfr/react-dsfr/Button';
 
 const StudentSignInStepOne = () => {
   const [email, setEmail] = useState('');
@@ -75,13 +76,12 @@ const StudentSignInStepOne = () => {
         </div>
 
         <div className="fr-my-4w">
-          <button
-            className="fr-btn"
-            type="submit"
+          <Button
             disabled={!canSendEmail || !emailValid}
+            nativeButtonProps={{ type: 'submit' }}
           >
             Suivant
-          </button>
+          </Button>
         </div>
       </form>
     </StudentSignInHeader>

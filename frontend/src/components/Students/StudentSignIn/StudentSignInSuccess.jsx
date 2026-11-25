@@ -1,9 +1,9 @@
 import React from 'react';
 import Page from 'components/Page/Page';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import Button from '@codegouvfr/react-dsfr/Button';
 
 const StudentSignInSuccess = () => {
-  const navigate = useNavigate();
   const location = useLocation();
 
   const { isEligible } = location.state || {};
@@ -21,7 +21,8 @@ const StudentSignInSuccess = () => {
     <>
       L'équipe SPE examine actuellement ton dossier.
       <br />
-      Un email te sera envoyé pour te dire si ton inscription au dispositif SPE est validée.
+      Un email te sera envoyé pour te dire si ton inscription au dispositif SPE
+      est validée.
     </>
   );
   return (
@@ -31,9 +32,7 @@ const StudentSignInSuccess = () => {
         <p>{desc}</p>
       </div>
       <div className="fr-mt-3w">
-        <button type="button" className="fr-btn" onClick={() => navigate('/')}>
-          Accéder à l&apos;accueil
-        </button>
+        <Button linkProps={{ to: '/' }}>Accéder à l&apos;accueil</Button>
       </div>
     </Page>
   );
