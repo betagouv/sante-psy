@@ -19,6 +19,7 @@ const ConventionModal = () => {
     <modal.Component
       title="Veuillez renseigner votre convention"
       concealingBackdrop={false}
+      data-test-id="convention-modal"
     >
       <div className="fr-mb-2w">
         Pour déclarer vos séances vous devez obligatoirement indiqué le statut
