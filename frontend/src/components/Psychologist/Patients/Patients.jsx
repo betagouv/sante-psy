@@ -341,11 +341,11 @@ const Patients = () => {
       <div
         ref={table}
         id="students-table"
+        data-test-id="etudiant-table"
         className={classNames('fr-table', styles.table)}
       >
         {patients.length > 0 ? (
           <Table
-            data-test-id="etudiant-table"
             data={buildRows(
               seeAppointments ? headers : mobileHeaders,
               filteredPatients.length > 0 ? filteredPatients : patients,
