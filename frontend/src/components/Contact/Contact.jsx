@@ -23,78 +23,76 @@ const contactCardStyle = {
   title: 'contactCardTitle',
 };
 
-const Contact = () => {
-  return (
-    <>
-      <Page
-        textContent
-        breadCrumbs={[{ href: '/', label: 'Accueil' }]}
-        currentBreadCrumb="Nous contacter"
-        title={
-          <>
-            <b>Vous avez une question</b> ?
-          </>
-        }
-        description={
-          <>
-            Consultez nos questions fréquentes, la réponse à votre question
-            s&apos;y trouve peut-être.
-          </>
-        }
-      >
-        <div className={`${fr.cx('fr-grid-row')} ${styles.cardContainer}`}>
-          {cards.map((card) => (
-            <Card
-              customStyles={contactCardStyle}
-              key={card.section}
-              title={card.title}
-              image={`contact/${card.imgSrc}.png`}
-              link={`/faq?section=${card.section}`}
-              fullClickable
-            />
-          ))}
-        </div>
-      </Page>
-      <Page
-        textContent
-        title={
-          <>
-            <b>Besoin d&apos;une écoute</b> immédiate
-          </>
-        }
-        description={
-          <>
-            Plusieurs lignes d&apos;écoute sont là pour t&apos;écouter et te
-            conseiller
-          </>
-        }
-      >
-        <ServicesList urgentServices />
-      </Page>
-      <div className={styles.purpleBanner}>
-        <h1 className={styles.smallTitle}>
-          Vous ne trouvez pas de <b>réponse</b> satisfaisante ?
-        </h1>
-        <p>
-          Contactez-nous directement par email pour que nous puissions trouver
-          une solution.
-        </p>
-        <div className={styles.hover}>
-          <Button
-            priority="secondary"
-            iconId="fr-icon-mail-line"
-            iconPosition="right"
-            className={styles.button}
-            linkProps={{
-              to: '/contact/formulaire',
-            }}
-          >
-            Nous contacter par email
-          </Button>
-        </div>
+const Contact = () => (
+  <>
+    <Page
+      textContent
+      breadCrumbs={[{ href: '/', label: 'Accueil' }]}
+      currentBreadCrumb="Nous contacter"
+      title={
+        <>
+          <b>Vous avez une question</b> ?
+        </>
+      }
+      description={
+        <>
+          Consultez nos questions fréquentes, la réponse à votre question
+          s&apos;y trouve peut-être.
+        </>
+      }
+    >
+      <div className={`${fr.cx('fr-grid-row')} ${styles.cardContainer}`}>
+        {cards.map((card) => (
+          <Card
+            customStyles={contactCardStyle}
+            key={card.section}
+            title={card.title}
+            image={`contact/${card.imgSrc}.png`}
+            link={`/faq?section=${card.section}`}
+            fullClickable
+          />
+        ))}
       </div>
-    </>
-  );
-};
+    </Page>
+    <Page
+      textContent
+      title={
+        <>
+          <b>Besoin d&apos;une écoute</b> immédiate
+        </>
+      }
+      description={
+        <>
+          Plusieurs lignes d&apos;écoute sont là pour t&apos;écouter et te
+          conseiller
+        </>
+      }
+    >
+      <ServicesList urgentServices />
+    </Page>
+    <div className={styles.purpleBanner}>
+      <h1 className={styles.smallTitle}>
+        Vous ne trouvez pas de <b>réponse</b> satisfaisante ?
+      </h1>
+      <p>
+        Contactez-nous directement par email pour que nous puissions trouver une
+        solution.
+      </p>
+      <div className={styles.hover}>
+        <Button
+          priority="secondary"
+          iconId="fr-icon-mail-line"
+          iconPosition="right"
+          className={styles.button}
+          linkProps={{
+            to: '/contact/formulaire',
+          }}
+        >
+          Nous contacter par email
+        </Button>
+      </div>
+    </div>
+  </>
+);
 
 export default observer(Contact);

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import { observer } from 'mobx-react';
 import classNames from 'classnames';
@@ -10,8 +9,6 @@ import { Button } from '@codegouvfr/react-dsfr/Button';
 import Page from 'components/Page/Page';
 import FaqTab from 'components/Faq/FaqTab';
 
-import { useStore } from 'stores/';
-
 import styles from './faq.cssmodule.scss';
 
 const BREAKPOINT_SM = 600;
@@ -19,11 +16,6 @@ const BREAKPOINT_SM = 600;
 const Faq = ({ simplified }) => {
   const tabsRef = useRef(null);
   const [smallText, setSmallText] = useState(false);
-
-  const query = new URLSearchParams(useLocation().search);
-  const {
-    userStore: { user },
-  } = useStore();
 
   const getLabel = () => {
     if (tabsRef.current) {

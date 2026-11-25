@@ -125,7 +125,6 @@ const Appointments = () => {
         }}
       />
     </div>, // actions column
-    ,
   ];
 
   const tableData = [...filteredMonthAppointments]

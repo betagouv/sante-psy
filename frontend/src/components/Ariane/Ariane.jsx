@@ -1,21 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Breadcrumb, BreadcrumbItem } from '@dataesr/react-dsfr';
+import { Breadcrumb } from '@codegouvfr/react-dsfr/Breadcrumb';
 
 const Ariane = ({ previous, current }) => (
-  <Breadcrumb>
-    {previous.map(item => (
-      <BreadcrumbItem
-        key={item.label}
-        asLink={<Link to={item.url} />}
-      >
-        {item.label}
-      </BreadcrumbItem>
-    ))}
-    <BreadcrumbItem>
-      {current}
-    </BreadcrumbItem>
-  </Breadcrumb>
+  <Breadcrumb
+    segments={previous.map((item) => ({
+      label: item.label,
+      linkProps: { to: item.url },
+    }))}
+    currentPageLabel={current}
+  />
 );
 
 export default Ariane;

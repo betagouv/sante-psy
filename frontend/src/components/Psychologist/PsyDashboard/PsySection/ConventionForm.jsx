@@ -37,18 +37,6 @@ const ConventionForm = ({
       });
     });
   };
-
-  let defaultValueConventionSigned;
-  if (
-    convention &&
-    convention.isConventionSigned !== '' &&
-    convention.isConventionSigned !== undefined
-  ) {
-    defaultValueConventionSigned = convention.isConventionSigned
-      ? 'true'
-      : 'false';
-  }
-
   return (
     <form data-test-id="convention-form" onSubmit={saveConvention}>
       {convention && (
@@ -87,7 +75,7 @@ const ConventionForm = ({
               stateRelatedMessage=""
               disabled={false}
               onChange={(event) => {
-                const value = event.target.value;
+                const { value } = event.target;
 
                 setConvention({
                   ...convention,

@@ -142,7 +142,7 @@ const Patients = () => {
     e.stopPropagation();
   };
 
-  const status_column = (
+  const statusColumn = (
     <div className={styles.informationColumn}>
       Statut {currentYear}
       <Select
@@ -162,7 +162,7 @@ const Patients = () => {
     </div>
   );
 
-  const name_column = (
+  const nameColumn = (
     <div key="name-header">
       Étudiant
       <Input
@@ -177,9 +177,9 @@ const Patients = () => {
   );
 
   const headers = [
-    name_column,
+    nameColumn,
     '', // update-etudiant-button
-    status_column,
+    statusColumn,
     `Total séances ${currentYear}`,
     'Total séances',
     'Liste des séances',
@@ -187,7 +187,7 @@ const Patients = () => {
     "Supprimer l'étudiant",
   ];
 
-  const mobileHeaders = [name_column, status_column, 'Actions'];
+  const mobileHeaders = [nameColumn, statusColumn, 'Actions'];
 
   const buildRows = (currentHeaders, data) =>
     data.map((patient) => {

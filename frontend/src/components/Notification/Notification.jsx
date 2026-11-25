@@ -1,6 +1,6 @@
 import React from 'react';
-
 import { Alert } from '@codegouvfr/react-dsfr/Alert';
+
 const Notification = ({ message, type, onClose, children, className }) => (
   <div
     data-test-id={`notification-${type}`}
