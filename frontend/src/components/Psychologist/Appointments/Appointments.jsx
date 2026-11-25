@@ -265,14 +265,9 @@ const Appointments = () => {
           />
         </div>
       </div>
-      <div id="appointments-table">
+      <div id="appointments-table" data-test-id="appointments-table">
         {filteredMonthAppointments.length > 0 ? (
-          <Table
-            data-test-id="appointments-table"
-            className={styles.table}
-            headers={headers}
-            data={tableData}
-          />
+          <Table className={styles.table} headers={headers} data={tableData} />
         ) : (
           <div>
             Vous n‘avez pas déclaré de séances pour le mois de{' '}
