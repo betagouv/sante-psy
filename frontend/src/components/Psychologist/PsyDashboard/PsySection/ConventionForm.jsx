@@ -51,14 +51,21 @@ const ConventionForm = ({
           <div id="convention-form">
             <RadioButtons
               legend="Avez-vous déjà signé la convention ?"
-              hintText="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin.
-    Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
+              hintText="Renseignez votre situation actuelle pour que nous puissions vous aider à avancer au besoin. Vous pourrez mettre à jour vos réponses plus tard si votre statut change."
               name="convention"
+              orientation="horizontal"
               options={[
                 {
                   label: 'Oui',
                   nativeInputProps: {
                     value: 'true',
+                    checked: convention.isConventionSigned === true,
+                    required: true,
+                    onChange: () =>
+                      setConvention({
+                        ...convention,
+                        isConventionSigned: true,
+                      }),
                     'data-test-id': 'signed-true',
                   },
                 },
@@ -66,24 +73,20 @@ const ConventionForm = ({
                   label: 'Non',
                   nativeInputProps: {
                     value: 'false',
+                    checked: convention.isConventionSigned === false,
+                    required: true,
+                    onChange: () =>
+                      setConvention({
+                        ...convention,
+                        isConventionSigned: false,
+                      }),
                     'data-test-id': 'signed-false',
                   },
                 },
               ]}
-              orientation="horizontal"
-              state="default"
-              stateRelatedMessage=""
-              disabled={false}
-              onChange={(event) => {
-                const { value } = event.target;
-
-                setConvention({
-                  ...convention,
-                  isConventionSigned: value === 'true',
-                });
-              }}
             />
           </div>
+
           <Button
             nativeButtonProps={{ type: 'submit' }}
             data-test-id="update-convention-button"
