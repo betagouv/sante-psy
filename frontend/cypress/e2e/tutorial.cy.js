@@ -68,7 +68,6 @@ describe('Other tutorials', () => {
     loginDefaultPsy();
     checkConvention();
   });
-  numberOfSteps;
   tutorials.map((tutorial) =>
     it(`Should display tutorial for ${tutorial.page}`, () => {
       cy.visit(`/psychologue/${tutorial.page}`);
