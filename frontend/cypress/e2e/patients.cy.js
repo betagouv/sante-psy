@@ -1,17 +1,15 @@
-const { checkConvention } = require('../../src/services/conventionVerification');
+const {
+  checkConvention,
+} = require('../../src/services/conventionVerification');
 const { loginDefaultPsy } = require('./utils/login');
 const { resetDB } = require('./utils/db');
 
 describe('Patient', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/patients')
-      .as('etudiants');
-    cy.intercept('DELETE', '/api/patients/*')
-      .as('deleteEtudiants');
-    cy.intercept('GET', '/api/patients/*')
-      .as('etudiant');
-    cy.intercept('GET', '/api/config')
-      .as('config');
+    cy.intercept('GET', '/api/patients').as('etudiants');
+    cy.intercept('DELETE', '/api/patients/*').as('deleteEtudiants');
+    cy.intercept('GET', '/api/patients/*').as('etudiant');
+    cy.intercept('GET', '/api/config').as('config');
 
     resetDB(2025);
     loginDefaultPsy();
@@ -24,8 +22,7 @@ describe('Patient', () => {
 
   describe('Display', () => {
     it('should get etudiants', () => {
-      cy.get('[data-test-id="etudiant-table"] tr')
-        .should('have.length', 6);
+      cy.get('[data-test-id="etudiant-table"] tr').should('have.length', 6);
       cy.get('[data-test-id="etudiant-badges"]').should('exist');
     });
   });
@@ -36,13 +33,10 @@ describe('Patient', () => {
         .first()
         .click();
       cy.wait('@deleteEtudiants');
-      cy.get('[data-test-id="etudiant-table"] tr')
-        .should('have.length', 5);
-      cy.get('[data-test-id="notification-success"] p')
-        .should(
-          'have.text',
-          "L'étudiant a bien été supprimé.",
-        );
+      cy.get('[data-test-id="etudiant-table"] tr').should('have.length', 5);
+      cy.get(
+        '[data-test-id="notification-success"] .notification-description',
+      ).should('have.text', "L'étudiant a bien été supprimé.");
     });
   });
 });

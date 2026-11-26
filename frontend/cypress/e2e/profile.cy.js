@@ -41,10 +41,9 @@ describe('Profile', () => {
       cy.get('[data-test-id="save-profile-button"]').click();
       cy.wait('@updateProfile');
       cy.get('[data-test-id="edit-profile-form"]').should('not.exist');
-      cy.get('[data-test-id="notification-success"] p').should(
-        'have.text',
-        'Vos informations ont bien été mises à jour.',
-      );
+      cy.get(
+        '[data-test-id="notification-success"] .notification-description',
+      ).should('have.text', 'Vos informations ont bien été mises à jour.');
     });
 
     it('should update existing profile with website override', () => {
@@ -99,7 +98,9 @@ describe('Profile', () => {
           'contain.text',
           "Disponible dans l'annuaire",
         );
-        cy.get('[data-test-id="notification-success"] p').should(
+        cy.get(
+          '[data-test-id="notification-success"] .notification-description',
+        ).should(
           'have.text',
           "Vos informations sont de nouveau visibles sur l'annuaire.",
         );

@@ -6,7 +6,9 @@ describe('Contact', () => {
   });
 
   it('should send contact info', () => {
-    cy.get('[data-test-id="notification-success"] p').should('not.exist');
+    cy.get(
+      '[data-test-id="notification-success"] .notification-description',
+    ).should('not.exist');
 
     cy.get('[data-test-id="user-student-input"]').check({ force: true });
     cy.get('[data-test-id="name-input"]').type('Brown');
@@ -23,7 +25,9 @@ describe('Contact', () => {
 
     cy.get('[data-test-id="submit-button"]').click();
 
-    cy.get('[data-test-id="notification-success"] p').should(
+    cy.get(
+      '[data-test-id="notification-success"] .notification-description',
+    ).should(
       'have.text',
       'Votre message a bien été envoyé. Nous reviendrons vers vous rapidement.',
     );

@@ -40,9 +40,13 @@ describe('Appointments', () => {
           '(Docker-compose variable) Very important announcement.',
         );
       cy.get('[data-test-id="notification-info"] button').click();
-      cy.get('[data-test-id="notification-info"] p').should('not.exist');
+      cy.get(
+        '[data-test-id="notification-info"] .notification-description',
+      ).should('not.exist');
       cy.reload();
-      cy.get('[data-test-id="notification-info"] p').should('not.exist');
+      cy.get(
+        '[data-test-id="notification-info"] .notification-description',
+      ).should('not.exist');
     });
 
     it('should display convention reminder only when no convention', () => {

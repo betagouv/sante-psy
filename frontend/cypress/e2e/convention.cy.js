@@ -53,7 +53,9 @@ describe('Convention', () => {
         'contain.text',
         'Convention : Signée',
       );
-      cy.get('[data-test-id="notification-success"] p').should(
+      cy.get(
+        '[data-test-id="notification-success"] .notification-description',
+      ).should(
         'have.text',
         'Vos informations de conventionnement sont bien enregistrées.',
       );
@@ -70,7 +72,9 @@ describe('Convention', () => {
         'contain.text',
         'Pas encore signée',
       );
-      cy.get('[data-test-id="notification-success"] p').should(
+      cy.get(
+        '[data-test-id="notification-success"] .notification-description',
+      ).should(
         'have.text',
         'Vos informations de conventionnement sont bien enregistrées.',
       );
