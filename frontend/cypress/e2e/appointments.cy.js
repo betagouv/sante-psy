@@ -33,7 +33,7 @@ describe('Appointments', () => {
     });
 
     it('should display default announcement only once', () => {
-      cy.get('[data-test-id="notification-info"] p')
+      cy.get('[data-test-id="notification-info"] .notification-description')
         .last()
         .should(
           'have.text',
@@ -51,7 +51,7 @@ describe('Appointments', () => {
       removeConvention('login@beta.gouv.fr');
       cy.reload();
       // Now we have both
-      cy.get('[data-test-id="notification-info"] p')
+      cy.get('[data-test-id="notification-info"] .notification-description')
         .should('have.length', 2)
         .last()
         .should(

@@ -12,6 +12,7 @@ const Notification = ({ message, type, onClose, children, className }) => (
       title=""
       closable
       onClose={onClose}
+      classes={{ description: 'notification-description' }}
     />
   </div>
 );
