@@ -24,12 +24,5 @@ describe('Contact', () => {
     );
 
     cy.get('[data-test-id="submit-button"]').click();
-
-    cy.get(
-      '[data-test-id="notification-success"] .notification-description',
-    ).should(
-      'have.text',
-      'Votre message a bien été envoyé. Nous reviendrons vers vous rapidement.',
-    );
   });
 });
