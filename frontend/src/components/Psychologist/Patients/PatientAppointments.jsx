@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { Tabs, Tab, Button, Icon } from '@dataesr/react-dsfr';
+
+import { Tabs } from '@codegouvfr/react-dsfr/Tabs';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import agent from 'services/agent';
 import { useStore } from 'stores/';
 import Badges from 'components/Badges/Badges';
 import useScreenSize from 'src/utils/useScreenSize';
-import { useNavigate } from 'react-router-dom';
 import { currentUnivYear } from 'services/univYears';
 import getBadgeInfos from 'src/utils/badges';
 import styles from './patientAppointments.cssmodule.scss';
@@ -30,7 +31,6 @@ const PatientAppointments = ({
   const [showTooltip, setShowTooltip] = useState(null);
 
   const isSmallScreen = useScreenSize();
-  const navigate = useNavigate();
   const badges = getBadgeInfos();
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const PatientAppointments = ({
       const indexedArray = reversedArray.map((item) => {
         const currentIndex =
           item.badges.includes(badges.inactive.key) &&
-            item.badges.includes(badges.exceeded.key)
+          item.badges.includes(badges.exceeded.key)
             ? '-'
             : ++lastIndex;
         return { ...item, index: currentIndex };
@@ -97,9 +97,11 @@ const PatientAppointments = ({
         className={
           isSmallScreen ? styles.smallCreateButton : styles.createButton
         }
-        icon="ri-add-line"
-        size="sm"
-        onClick={() => navigate(`/psychologue/nouvelle-seance/${patientId}`)}
+        iconId="fr-icon-add-line"
+        size="small"
+        linkProps={{
+          to: `/psychologue/nouvelle-seance/${patientId}`,
+        }}
       >
         Déclarer une séance
       </Button>
@@ -127,9 +129,9 @@ const PatientAppointments = ({
       <Button
         data-test-id="delete-appointment-button-small"
         onClick={() => deleteAppointment(appointment.id)}
-        secondary
-        size="sm"
-        icon="ri-delete-bin-line"
+        priority="secondary"
+        size="small"
+        iconId="fr-icon-delete-bin-line"
         className="fr-float-right"
         aria-label="Supprimer"
         disabled={
@@ -152,11 +154,10 @@ const PatientAppointments = ({
               className={styles.clickableElement}
               onClick={() => handleIconClick(appointment.id)}
             >
-              <Icon
-                name="ri-information-line"
-                size="lg"
-                color="#000091"
-                iconPosition="right"
+              <span
+                className="fr-icon-information-line"
+                style={{ fontSize: '1.5rem', color: '#000091' }}
+                aria-hidden="true"
               />
               {showTooltip === appointment.id && (
                 <span className={styles.tooltip}>
@@ -223,21 +224,15 @@ const PatientAppointments = ({
           <h3 className={styles.title}>Séances</h3>
           <div className={!isSmallScreen ? styles.tabsContainer : ''}>
             <Tabs
-              defaultActiveTab={univYears.indexOf(selectedYear)}
-              onChange={handleTabChange}
               className={styles.tabs}
-            >
-              {univYears.map((univYear, index) => (
-                <Tab
-                  key={univYear}
-                  id={univYear}
-                  label={univYear}
-                  index={index}
-                  isActive={selectedYear === univYear}
-                  className={styles.tabYear}
-                />
-              ))}
-            </Tabs>
+              tabs={univYears.map((univYear, index) => ({
+                tabId: univYear,
+                label: univYear,
+                content: null,
+                isDefault: index === univYears.indexOf(selectedYear),
+              }))}
+              onTabChange={({ tabIndex }) => handleTabChange(tabIndex)}
+            />
             {!isSmallScreen && renderDeclareSessionButton()}
           </div>
           {selectedYear && renderTable()}

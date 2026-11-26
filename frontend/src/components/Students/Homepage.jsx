@@ -3,7 +3,7 @@ import { useStore } from 'stores';
 import { Link } from 'react-router-dom';
 import StudentHistory from './StudentHistory/StudentHistory';
 import styles from './homepage.cssmodule.scss';
-import { Alert } from '@dataesr/react-dsfr';
+import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import { formatFrenchDateNoWeekday } from 'services/date';
 
 const StudentHomepage = () => {
@@ -20,7 +20,7 @@ const StudentHomepage = () => {
       <div className={styles.header}>
         <div className={styles.headerInfo}>
           <Alert
-            type="info"
+            severity="info"
             title="Informations à transmettre à ton psychologue"
             description={
               <ul>

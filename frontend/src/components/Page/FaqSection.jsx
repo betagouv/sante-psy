@@ -1,17 +1,11 @@
 import React from 'react';
-
 import { HashLink } from 'react-router-hash-link';
-import { Container } from '@dataesr/react-dsfr';
-
 import styles from './faqsection.cssmodule.scss';
 
 const FaqSection = () => (
-  <Container
-    spacing="py-4w"
-    className={styles.container}
-  >
+  <div className={`fr-py-4w ${styles.container}`}>
     <div className={styles.text}>
-      <h3>Vous avez une question ?</h3>
+      <h3>Vous avez une question ?</h3>
       <div className="fr-text--lg">
         Retrouvez les réponses aux questions les plus fréquemment posées.
       </div>
@@ -25,7 +19,7 @@ const FaqSection = () => (
         Consulter la foire aux questions
       </HashLink>
     </div>
-  </Container>
+  </div>
 );
 
 export default FaqSection;

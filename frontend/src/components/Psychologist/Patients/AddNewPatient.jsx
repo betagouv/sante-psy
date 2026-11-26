@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { TextInput, Button, Alert } from '@dataesr/react-dsfr';
+import { Input } from '@codegouvfr/react-dsfr/Input';
+import { Alert } from '@codegouvfr/react-dsfr/Alert';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import { addAutoSlashToDate, isValidBirthDate } from 'services/date';
 import ErrorMessage from 'components/Forms/ErrorMessage';
 import validateIneFormat from 'src/utils/validateIneFormat';
@@ -134,38 +136,44 @@ const AddNewPatient = () => {
         ) : (
           <>
             <form onSubmit={findStudent}>
-              <TextInput
+              <Input
                 className="midlength-input"
-                data-test-id="etudiant-birth-date-input"
                 label="Date de naissance"
-                hint="Format JJ/MM/AAAA, par exemple : 25/01/1987"
-                value={dateOfBirth}
-                type="text"
-                onChange={handleDateOfBirthChange}
-                pattern="^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$"
-                placeholder="JJ/MM/AAAA"
-                required
+                hintText="Format JJ/MM/AAAA, par exemple : 25/01/1987"
+                nativeInputProps={{
+                  'data-test-id': 'etudiant-birth-date-input',
+                  value: dateOfBirth,
+                  type: 'text',
+                  onChange: handleDateOfBirthChange,
+                  pattern:
+                    '^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$',
+                  placeholder: 'JJ/MM/AAAA',
+                  required: true,
+                }}
               />
+
               {dateOfBirthError && (
                 <ErrorMessage
                   message={dateOfBirthError}
                   data-test-id="etudiant-birth-date-error"
                 />
               )}
-              <TextInput
+              <Input
                 className="midlength-input"
-                data-test-id="etudiant-ine-input"
                 label="Numéro INE de l'étudiant"
-                hint={
+                hintText={
                   <>
                     <b>11 chiffres ou lettres</b> présent sur le certificat de
                     scolarité. Attention, il est différent du numéro étudiant,
                     ou du numéro PIC de l&apos;université.
                   </>
                 }
-                value={ine}
-                onChange={handleINEChange}
-                required
+                nativeInputProps={{
+                  'data-test-id': 'etudiant-ine-input',
+                  value: ine,
+                  onChange: handleINEChange,
+                  required: true,
+                }}
               />
               {ineError && (
                 <ErrorMessage
@@ -174,10 +182,10 @@ const AddNewPatient = () => {
                 />
               )}
               <Button
-                submit
+                nativeButtonProps={{ type: 'submit' }}
                 id="app-patient-button"
                 data-test-id="add-patient-button"
-                icon="fr-fi-add-line"
+                iconId="fr-icon-add-line"
                 disabled={!canFindStudent}
               >
                 Rechercher l'étudiant
@@ -185,13 +193,15 @@ const AddNewPatient = () => {
             </form>
             {didNotFindStudent && (
               <Alert
-                type="warning"
+                severity="warning"
+                title=""
                 description="Cet étudiant n'existe pas ou bien n'a pas créé son compte"
               />
             )}
             {alreadyAPatient && (
               <Alert
-                type="success"
+                severity="success"
+                title=""
                 description="Cet étudiant est déja un de vos patients"
               />
             )}

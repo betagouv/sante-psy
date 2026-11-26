@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert } from '@dataesr/react-dsfr';
+import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import agent from 'services/agent';
 
 const DEFAULT_STYLE = { width: '100%', height: '80vh' };
@@ -43,7 +43,11 @@ const NewAppointmentSeeCertificate = ({
   if (certificateNotFound) {
     return (
       <div style={{ alignSelf: 'flex-start' }}>
-        <Alert type="info" title="Aucun certificat n'a été trouvé" />
+        <Alert
+          severity="info"
+          title="Aucun certificat n'a été trouvé"
+          description=""
+        />
       </div>
     );
   }

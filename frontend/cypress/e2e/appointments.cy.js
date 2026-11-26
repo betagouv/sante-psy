@@ -33,16 +33,20 @@ describe('Appointments', () => {
     });
 
     it('should display default announcement only once', () => {
-      cy.get('[data-test-id="notification-info"] p')
+      cy.get('[data-test-id="notification-info"] .notification-description')
         .last()
         .should(
           'have.text',
           '(Docker-compose variable) Very important announcement.',
         );
       cy.get('[data-test-id="notification-info"] button').click();
-      cy.get('[data-test-id="notification-info"] p').should('not.exist');
+      cy.get(
+        '[data-test-id="notification-info"] .notification-description',
+      ).should('not.exist');
       cy.reload();
-      cy.get('[data-test-id="notification-info"] p').should('not.exist');
+      cy.get(
+        '[data-test-id="notification-info"] .notification-description',
+      ).should('not.exist');
     });
 
     it('should display convention reminder only when no convention', () => {
@@ -51,7 +55,7 @@ describe('Appointments', () => {
       removeConvention('login@beta.gouv.fr');
       cy.reload();
       // Now we have both
-      cy.get('[data-test-id="notification-info"] p')
+      cy.get('[data-test-id="notification-info"] .notification-description')
         .should('have.length', 2)
         .last()
         .should(
@@ -71,10 +75,9 @@ describe('Appointments', () => {
         'have.length',
         13,
       );
-      cy.get('[data-test-id="notification-success"] p').should(
-        'have.text',
-        'La séance a bien été supprimée.',
-      );
+      cy.get(
+        '[data-test-id="notification-success"] .notification-description',
+      ).should('have.text', 'La séance a bien été supprimée.');
     });
   });
 
@@ -82,7 +85,9 @@ describe('Appointments', () => {
     it('should display warning if psy is suspended', () => {
       suspend().then(() => {
         cy.reload();
-        cy.get('[data-test-id="notification-warning"] p').should(
+        cy.get(
+          '[data-test-id="notification-warning"] .notification-description',
+        ).should(
           'have.text',
           "Votre profil n‘est plus visible dans l‘annuaire. En cette période d'examens, les demandes d'étudiants sont en constante augmentation, nous sollicitons donc votre participation. Pour que les étudiants puissent vous contacter, rendez vous sur la page Ma disponibilité.",
         );

@@ -12,7 +12,6 @@ import AddNewPatient from 'components/Psychologist/Patients/AddNewPatient';
 import PsyProfile from 'components/Psychologist/PsyDashboard/PsyDashboard';
 import Page from 'components/Page/Page';
 import Notification from 'components/Notification/Notification';
-import ConventionModal from 'components/Psychologist/Appointments/ConventionModal';
 import GlobalNotification from 'components/Notification/GlobalNotification';
 import Billing from 'components/Psychologist/Reimbursement/Billing';
 import BillingInfoPage from 'components/Psychologist/Reimbursement/BillingInfoPage';
@@ -20,7 +19,6 @@ import ConventionForm from 'components/Psychologist/PsyDashboard/PsySection/Conv
 import SuspendProfile from 'components/Psychologist/PsyDashboard/PsySection/SuspendProfile';
 import EditProfile from 'components/Psychologist/PsyDashboard/PsySection/EditProfile';
 
-import { shouldCheckConventionAgain } from 'services/conventionVerification';
 import { useStore } from './stores';
 import { getInactiveMessage } from './utils/inactive';
 
@@ -36,13 +34,6 @@ const PsychologistRouter = () => {
   if (!user || role !== 'psy') {
     return <Navigate to="/login" replace />;
   }
-
-  const hasSignedConvention =
-    user.convention && user.convention.isConventionSigned;
-  const modal =
-    hasSignedConvention || !shouldCheckConventionAgain() ? null : (
-      <ConventionModal currentConvention={user.convention} />
-    );
 
   const getPageProps = () => {
     const page = pathname.split('/')[2];
@@ -162,7 +153,6 @@ const PsychologistRouter = () => {
   return (
     <Page {...getPageProps()} psyPage withContact>
       <Announcement />
-      {modal}
       {user.convention && user.convention.isConventionSigned === null && (
         <Notification type="info">
           Veuillez indiquer l&lsquo;état de votre conventionnement sur la page{' '}

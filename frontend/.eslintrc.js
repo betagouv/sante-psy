@@ -67,6 +67,7 @@ module.exports = {
     'no-shadow': 'off',
     'react/no-unescaped-entities': 'off',
     'no-nested-ternary': 'off',
+    'dot-notation': 'off',
   },
   settings: {
     'import/resolver': { webpack: { config: 'config/webpack.base.js' } },

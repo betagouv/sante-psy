@@ -1,13 +1,10 @@
 import React from 'react';
-import { Button } from '@dataesr/react-dsfr';
-import { useNavigate } from 'react-router-dom';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 
 import { formatStringToDDMMYYYY } from 'services/date';
 import styles from './psySection.cssmodule.scss';
 
 const ConventionAvailabilitySection = ({ user }) => {
-  const navigate = useNavigate();
-
   const greenCircleIcon = '/images/icons/icon-available-psy.svg';
   const orangeCircleIcon = '/images/icons/icon-unavailable-psy.svg';
   const redCircleIcon = '/images/icons/icon-invisible-psy.svg';
@@ -17,7 +14,10 @@ const ConventionAvailabilitySection = ({ user }) => {
       const isAlwaysInactive = user.inactiveUntil.startsWith('9999');
       return (
         <section className={styles.psyDashboardCard}>
-          <img src={isAlwaysInactive ? redCircleIcon : orangeCircleIcon} alt="inactive icon" />
+          <img
+            src={isAlwaysInactive ? redCircleIcon : orangeCircleIcon}
+            alt="inactive icon"
+          />
           <span className={styles.inactiveTexts}>
             <p>Invisible dans l&apos;annuaire</p>
             <p className={styles.inactiveSubtext}>
@@ -34,9 +34,7 @@ const ConventionAvailabilitySection = ({ user }) => {
       <span>
         <img src={greenCircleIcon} alt="green circle" />
         <p>
-          <b>Disponible</b>
-          {' '}
-          dans l&apos;annuaire
+          <b>Disponible</b> dans l&apos;annuaire
         </p>
       </span>
     );
@@ -47,37 +45,37 @@ const ConventionAvailabilitySection = ({ user }) => {
       <Button
         id="show-convention-form"
         data-test-id="show-convention-form"
-        secondary
+        priority="secondary"
         className={styles.psyDashboardConvention}
-        onClick={() => navigate('/psychologue/ma-convention')}
-        icon="ri-edit-line"
+        linkProps={{
+          to: '/psychologue/ma-convention',
+        }}
+        iconId="fr-icon-edit-line"
         iconPosition="right"
       >
         {user.convention && user.convention.isConventionSigned ? (
           <span>
             <img src={greenCircleIcon} alt="green circle" />
             <p>
-              Convention :
-              {' '}
-              <b>Signée</b>
+              Convention : <b>Signée</b>
             </p>
           </span>
         ) : (
           <span>
             <img src={redCircleIcon} alt="red circle" />
             <p>
-              Convention :
-              {' '}
-              <b>Pas encore signée</b>
+              Convention : <b>Pas encore signée</b>
             </p>
           </span>
         )}
       </Button>
       <Button
-        secondary
+        priority="secondary"
         className={styles.psyDashboardAvailability}
-        onClick={() => navigate('/psychologue/ma-disponibilite/')}
-        icon="ri-edit-line"
+        linkProps={{
+          to: '/psychologue/ma-disponibilite/',
+        }}
+        iconId="fr-icon-edit-line"
         iconPosition="right"
         id="show-availability-form"
         data-test-id="show-availability-form"

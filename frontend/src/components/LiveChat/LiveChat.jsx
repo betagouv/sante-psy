@@ -1,13 +1,16 @@
 /* global $crisp */
 import React, { useState } from 'react';
 import { useStore } from 'stores/';
-import { Button } from '@dataesr/react-dsfr';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import styles from './liveChat.cssmodule.scss';
 
 const LiveChat = () => {
   const [open, setOpen] = useState(false);
   const [displayIcon, setDisplayIcon] = useState(true);
-  const { commonStore: { config }, userStore: { user } } = useStore();
+  const {
+    commonStore: { config },
+    userStore: { user },
+  } = useStore();
 
   const openChat = () => {
     loadCrisp().then(() => {
@@ -31,26 +34,36 @@ const LiveChat = () => {
     }
   };
 
-  const loadCrisp = () => new Promise(resolve => {
-    if (window.$crisp) {
-      resolve();
-    } else {
-      window.CRISP_WEBSITE_ID = config.crispWebsite;
-      window.$crisp = [];
-      window.CRISP_READY_TRIGGER = () => resolve();
-      const crispScript = document.createElement('script');
-      crispScript.src = 'https://client.crisp.chat/l.js';
-      document.getElementsByTagName('head')[0].appendChild(crispScript);
-    }
-  });
+  const loadCrisp = () =>
+    new Promise((resolve) => {
+      if (window.$crisp) {
+        resolve();
+      } else {
+        window.CRISP_WEBSITE_ID = config.crispWebsite;
+        window.$crisp = [];
+        window.CRISP_READY_TRIGGER = () => resolve();
+        const crispScript = document.createElement('script');
+        crispScript.src = 'https://client.crisp.chat/l.js';
+        document.getElementsByTagName('head')[0].appendChild(crispScript);
+      }
+    });
 
   return (
-    !open
-    && displayIcon && (
+    !open &&
+    displayIcon && (
       <>
-        <Button className={styles.closeButton} onClick={hideChat} icon="fr-icon-close-line" tertiary hasBorder={false} />
+        <Button
+          className={styles.closeButton}
+          onClick={hideChat}
+          iconId="fr-icon-close-line"
+          priority="tertiary no outline"
+        />
         <Button className={styles.chatButton} onClick={openChat}>
-          <img className={styles.chatIcon} src="/images/icons/crisp_closed_chat.svg" alt="Chat icon" />
+          <img
+            className={styles.chatIcon}
+            src="/images/icons/crisp_closed_chat.svg"
+            alt="Chat icon"
+          />
         </Button>
       </>
     )

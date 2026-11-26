@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Checkbox, TextInput, Alert, Button } from '@dataesr/react-dsfr';
+import { Alert } from '@codegouvfr/react-dsfr/Alert';
+import { Input } from '@codegouvfr/react-dsfr/Input';
+import { Button } from '@codegouvfr/react-dsfr/Button';
+import { Checkbox } from '@codegouvfr/react-dsfr/Checkbox';
 import { observer } from 'mobx-react';
 
 import Page from 'components/Page/Page';
@@ -284,33 +287,41 @@ const PsyListing = () => {
               />
             </div>
             <div className={styles.inputMd}>
-              <TextInput
-                data-test-id="name-speciality-input"
-                value={nameAndSpecialityFilter}
-                onChange={(e) => setNameAndSpecialityFilter(e.target.value)}
-                placeholder="Spécialité, mot-clé, nom du psychologue..."
+              <Input
+                nativeInputProps={{
+                  'data-test-id': 'name-speciality-input',
+                  value: nameAndSpecialityFilter,
+                  onChange: (e) => setNameAndSpecialityFilter(e.target.value),
+                  placeholder: 'Spécialité, mot-clé, nom du psychologue...',
+                }}
               />
             </div>
             <div className={styles.input}>
-              <TextInput
-                value={languageFilter}
-                onChange={(e) => setLanguageFilter(e.target.value)}
-                placeholder="Langue parlée"
+              <Input
+                nativeInputProps={{
+                  value: languageFilter,
+                  onChange: (e) => setLanguageFilter(e.target.value),
+                  placeholder: 'Langue parlée',
+                }}
               />
             </div>
             <Checkbox
-              value="teleconsultation"
-              onChange={(e) => {
-                setTeleconsultation(e.target.checked);
-              }}
-              label="Téléconsultation"
-              checked={teleconsultation}
+              options={[
+                {
+                  label: 'Téléconsultation',
+                  nativeInputProps: {
+                    value: 'teleconsultation',
+                    checked: teleconsultation,
+                    onChange: (e) => setTeleconsultation(e.target.checked),
+                  },
+                },
+              ]}
             />
             <Button
               ref={searchButtonRef}
               data-test-id="psy-search"
               onClick={handleSearch}
-              icon="ri-search-line"
+              iconId="fr-icon-search-line"
               iconPosition="left"
             >
               Rechercher
@@ -333,23 +344,24 @@ const PsyListing = () => {
             geoStatus === geoStatusEnum.DENIED && (
               <Alert
                 className="fr-mt-2w"
-                type="error"
-                description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette
-                    fonctionnalité."
+                severity="error"
+                title=""
+                description="Veuillez autoriser la géolocalisation sur votre navigateur pour utiliser cette fonctionnalité."
               />
             )}
           {addressFilter === AROUND_ME &&
             geoStatus === geoStatusEnum.UNSUPPORTED && (
               <Alert
                 className="fr-mt-1w"
-                type="error"
+                severity="error"
+                title=""
                 description="Votre navigateur ne permet pas d'utiliser cette fonctionnalité."
               />
             )}
         </div>
         <Alert
-          type="warning"
-          title="Vous n‘avez aucune avance de frais à prévoir"
+          severity="warning"
+          title="Vous n'avez aucune avance de frais à prévoir"
           description="Le psychologue ne doit en aucun cas vous demander un complément financier ou une avance."
         />
         <PsyTable
@@ -380,6 +392,7 @@ const PsyListing = () => {
           />
         ) : (
           <Alert
+            severity="info"
             title="Attention, en cas de séance non honorée et sans excuse valable"
             description="Le psychologue peut se réserver le droit de refuser un étudiant"
           />

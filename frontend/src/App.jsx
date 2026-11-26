@@ -49,6 +49,7 @@ import StudentRouter from './StudentRouter';
 import StudentQuestionnaire from 'components/Students/StudentSignIn/StudentQuestionnaire';
 import UpdatePersonalData from 'components/Students/UpdatePersonalData/UpdatePersonalData';
 import UpdateCertificate from 'components/Students/UpdateCertificate/UpdateCertificate';
+import { useIsDark } from '@codegouvfr/react-dsfr/useIsDark';
 
 const PsychologistRouter = React.lazy(() => import('./PsychologistRouter'));
 
@@ -70,6 +71,12 @@ function App() {
     'loading:',
     loading,
   );
+
+  const { setIsDark } = useIsDark();
+
+  useEffect(() => {
+    setIsDark(false);
+  }, [setIsDark]);
 
   useEffect(() => {
     agent.Config.get().then((response) => setConfig(response.data));

@@ -2,12 +2,8 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import sanitizeHtml from 'sanitize-html';
 
-import {
-  Row,
-  Col,
-  Accordion,
-  AccordionItem,
-} from '@dataesr/react-dsfr';
+import { Accordion } from '@codegouvfr/react-dsfr/Accordion';
+import { fr } from '@codegouvfr/react-dsfr';
 
 import FaqProcess from 'components/Faq/FaqProcess';
 
@@ -18,9 +14,11 @@ import items from 'services/faq/items';
 import styles from './faqTab.cssmodule.scss';
 
 const FaqTab = ({ type, simplified }) => {
-  const { commonStore: { config } } = useStore();
+  const {
+    commonStore: { config },
+  } = useStore();
 
-  const onOpenQuestion = item => {
+  const onOpenQuestion = (item) => {
     if (__MATOMO__) {
       _paq.push(['trackEvent', 'FAQ', type, item.question]);
     }
@@ -28,52 +26,45 @@ const FaqTab = ({ type, simplified }) => {
 
   return (
     <div data-test-id={`tabpanel-${type}`}>
-      <Row spacing="mt-3w">
-        <Col className={styles.sections}>
-          <Accordion className={simplified ? 'fr-mb-4w' : ''}>
-            {items[type].sections.map(section => (
-              <>
+      <div className={fr.cx('fr-mt-3w')}>
+        <div className={styles.sections}>
+          <div className={simplified ? 'fr-mb-4w' : ''}>
+            {items[type].sections.map((section) => (
+              <React.Fragment key={section.name}>
                 {!simplified && <h4>{section.title}</h4>}
-                <Accordion className={simplified ? '' : 'fr-mb-4w'}>
-                  {
-                    faq[section.name](config)
-                      .filter(item => !simplified || item.frequent)
-                      .map(item => (
-                        <AccordionItem
-                          onClick={close => {
-                            if (!close) {
-                              onOpenQuestion(item);
-                            }
+                <div className={simplified ? '' : 'fr-mb-4w'}>
+                  {faq[section.name](config)
+                    .filter((item) => !simplified || item.frequent)
+                    .map((item) => (
+                      <Accordion
+                        key={item.question}
+                        label={item.question}
+                        onExpandedChange={(expanded) => {
+                          if (expanded) {
+                            onOpenQuestion(item);
+                          }
+                        }}
+                      >
+                        <div
+                          className={styles.answer}
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeHtml(item.answer, {
+                              allowedTags: ['a', 'br', 'ul', 'li'],
+                              allowedAttributes: {
+                                a: ['href', 'target', 'rel'],
+                              },
+                            }),
                           }}
-                          title={item.question}
-                          key={item.question}
-                        >
-                          <div
-                            className={styles.answer}
-                      // eslint-disable-next-line react/no-danger
-                            dangerouslySetInnerHTML={{
-                              __html: sanitizeHtml(
-                                item.answer,
-                                {
-                                  allowedTags: ['a', 'br', 'ul', 'li'],
-                                  allowedAttributes: { a: ['href', 'target', 'rel'] },
-                                },
-                              ),
-                            }}
-                          />
-                        </AccordionItem>
-                      ))
-                  }
-                </Accordion>
-              </>
+                        />
+                      </Accordion>
+                    ))}
+                </div>
+              </React.Fragment>
             ))}
-          </Accordion>
-        </Col>
-      </Row>
-      <FaqProcess
-        simplified={simplified}
-        links={items[type].links}
-      />
+          </div>
+        </div>
+      </div>
+      <FaqProcess simplified={simplified} links={items[type].links} />
     </div>
   );
 };

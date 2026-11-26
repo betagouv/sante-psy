@@ -1,12 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Button,
-  Radio,
-  RadioGroup,
-  Checkbox,
-  ButtonGroup,
-  TextInput,
-} from '@dataesr/react-dsfr';
+import { RadioButtons } from '@codegouvfr/react-dsfr/RadioButtons';
+import { Checkbox } from '@codegouvfr/react-dsfr/Checkbox';
+import { Input } from '@codegouvfr/react-dsfr/Input';
+import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import universities from 'src/utils/universities';
 import { Link } from 'react-router-dom';
 import styles from './StudentQuestionnaire.cssmodule.scss';
@@ -187,6 +183,7 @@ const StudentQuestionnaire = ({
   const [acceptedCGUs, setAcceptedCGUs] = useState(
     defaultValues.acceptedCGUs ?? false,
   );
+
   // step 1
   const [schoolType, setSchoolType] = useState(
     defaultValues.schoolType ?? null,
@@ -210,6 +207,7 @@ const StudentQuestionnaire = ({
       : '',
   );
   const [showUnivList, setShowUnivList] = useState(false);
+
   // step 2
   const [studyLevel, setStudyLevel] = useState(
     defaultValues.studyLevel ?? null,
@@ -220,6 +218,7 @@ const StudentQuestionnaire = ({
   const [studyFieldOther, setStudyFieldOther] = useState(
     defaultValues.studyFieldOther ?? null,
   );
+
   // step 3
   const [gender, setGender] = useState(defaultValues.gender ?? null);
   const [livingPostcode, setLivingPostcode] = useState(
@@ -320,6 +319,7 @@ const StudentQuestionnaire = ({
   return (
     <div className={styles.wrapper} id="questionnaire-wrapper">
       <h2 className={styles.title}>{STEPS[step].title}</h2>
+
       {STEPS[step].privacyHidden && (
         <div className={styles.privacyBanner}>
           <span
@@ -332,12 +332,14 @@ const StudentQuestionnaire = ({
           </p>
         </div>
       )}
+
       <div className={styles.imageContainer}>
         <img
           src={`/images/studentSpace/questionnaire/${STEPS[step].png}.png`}
           alt=""
         />
       </div>
+
       {step === 0 && (
         <>
           <p>
@@ -352,26 +354,38 @@ const StudentQuestionnaire = ({
             Conditions Générales d’Utilisation
           </Link>
           <Checkbox
-            label="J’ai lu et j’accepte les Conditions Générales d’Utilisation"
-            onChange={(e) => setAcceptedCGUs(e.target.checked)}
-            checked={acceptedCGUs}
+            options={[
+              {
+                label:
+                  'J’ai lu et j’accepte les Conditions Générales d’Utilisation',
+                nativeInputProps: {
+                  onChange: (e) => setAcceptedCGUs(e.target.checked),
+                  checked: acceptedCGUs,
+                },
+              },
+            ]}
           />
         </>
       )}
+
       {step === 1 && (
         <>
-          <RadioGroup
+          <RadioButtons
             name="schoolType"
             legend="Dans quel type d’établissement étudies-tu ?"
-            hint="Si double cursus, mettre l’établissement principal"
-            value={schoolType}
-            onChange={(value) => setSchoolType(value)}
-            required
-          >
-            {SCHOOL_TYPES.map(({ value, label, hint }) => (
-              <Radio key={value} label={label} value={value} hint={hint} />
-            ))}
-          </RadioGroup>
+            hintText="Si double cursus, mettre l’établissement principal"
+            options={SCHOOL_TYPES.map(({ value, label, hint }) => ({
+              label,
+              hintText: hint,
+              nativeInputProps: {
+                value,
+                checked: schoolType === value,
+                required: true,
+                onChange: (e) => setSchoolType(e.target.value),
+              },
+            }))}
+          />
+
           {schoolType === 'university' && (
             <div className={`fr-select-group ${styles.universityContainer}`}>
               <label className="fr-label" htmlFor="university-input">
@@ -419,97 +433,128 @@ const StudentQuestionnaire = ({
               )}
             </div>
           )}
+
           {schoolType && schoolType !== 'university' && (
-            <TextInput
-              required
+            <Input
               label="Quel est le nom de ton établissement ?"
-              value={schoolName}
-              onChange={(e) => setSchoolName(e.target.value)}
+              nativeInputProps={{
+                required: true,
+                value: schoolName,
+                onChange: (e) => setSchoolName(e.target.value),
+              }}
             />
           )}
-          <TextInput
-            required
+
+          <Input
             label="Où se situe ton établissement ?"
-            hint="Indique le code postal"
-            placeholder="75001"
-            value={schoolPostcode}
-            onChange={(e) => {
-              const postcode = e.target.value.replace(/\D/g, '');
-              if (postcode.length <= 5) setSchoolPostcode(postcode);
+            hintText="Indique le code postal"
+            nativeInputProps={{
+              required: true,
+              placeholder: '75001',
+              value: schoolPostcode,
+              onChange: (e) => {
+                const postcode = e.target.value.replace(/\D/g, '');
+                if (postcode.length <= 5) setSchoolPostcode(postcode);
+              },
             }}
           />
         </>
       )}
+
       {step === 2 && (
         <>
-          <RadioGroup
+          <RadioButtons
             name="studyLevel"
             legend="À quel niveau d’études t’es-tu inscrit cette année ?"
-            hint="Si double cursus, mettre le plus haut niveau"
-            value={studyLevel}
-            onChange={(value) => setStudyLevel(value)}
-            required
-          >
-            {STUDY_LEVELS.map(({ label, value, hint }) => (
-              <Radio key={value} label={label} value={value} hint={hint} />
-            ))}
-          </RadioGroup>
-          <RadioGroup
+            hintText="Si double cursus, mettre le plus haut niveau"
+            options={STUDY_LEVELS.map(({ label, value, hint }) => ({
+              label,
+              hintText: hint,
+              nativeInputProps: {
+                value,
+                checked: studyLevel === value,
+                required: true,
+                onChange: (e) => setStudyLevel(e.target.value),
+              },
+            }))}
+          />
+
+          <RadioButtons
             name="studyField"
             legend="Quel est ton domaine d’études ?"
-            hint="Si double cursus, mettre le domaine principal"
-            value={studyField}
-            onChange={(value) => setStudyField(value)}
-            required
-          >
-            {STUDY_FIELDS.map(({ label, value }) => (
-              <Radio key={value} label={label} value={value} />
-            ))}
-          </RadioGroup>
+            hintText="Si double cursus, mettre le domaine principal"
+            options={STUDY_FIELDS.map(({ label, value }) => ({
+              label,
+              nativeInputProps: {
+                value,
+                checked: studyField === value,
+                required: true,
+                onChange: (e) => setStudyField(e.target.value),
+              },
+            }))}
+          />
+
           {studyField === 'other' && (
-            <TextInput
-              required
+            <Input
               label="Préciser le domaine d’études"
-              value={studyFieldOther}
-              onChange={(e) => setStudyFieldOther(e.target.value)}
+              nativeInputProps={{
+                required: true,
+                value: studyFieldOther,
+                onChange: (e) => setStudyFieldOther(e.target.value),
+              }}
             />
           )}
         </>
       )}
+
       {step === 3 && (
         <>
-          <TextInput
-            required
+          <Input
             label="Dans quelle zone géographique aimerais-tu consulter un psychologue ?"
-            hint="Cela nous aide à mieux comprendre les besoins en psychologues selon les zones"
-            value={livingPostcode}
-            placeholder="75001"
-            onChange={(e) => {
-              const value = e.target.value.replace(/\D/g, '');
-              if (value.length <= 5) setLivingPostcode(value);
+            hintText="Cela nous aide à mieux comprendre les besoins en psychologues selon les zones"
+            nativeInputProps={{
+              required: true,
+              value: livingPostcode,
+              placeholder: '75001',
+              onChange: (e) => {
+                const value = e.target.value.replace(/\D/g, '');
+                if (value.length <= 5) setLivingPostcode(value);
+              },
             }}
           />
-          <RadioGroup
+
+          <RadioButtons
             name="gender"
             legend="Comment t’identifies-tu ?"
-            value={gender}
-            onChange={(value) => setGender(value)}
-            required
-          >
-            {GENDERS.map(({ label, value }) => (
-              <Radio key={value} label={label} value={value} />
-            ))}
-          </RadioGroup>
+            options={GENDERS.map(({ label, value }) => ({
+              label,
+              nativeInputProps: {
+                value,
+                checked: gender === value,
+                required: true,
+                onChange: (e) => setGender(e.target.value),
+              },
+            }))}
+          />
         </>
       )}
-      <ButtonGroup isInlineFrom="xs">
-        <Button secondary disabled={step === 0} onClick={onClickPrev}>
-          Retour
-        </Button>
-        <Button onClick={onClickNext} disabled={!isButtonEnabled}>
-          {step < 3 ? nextLabel : submitLabel}
-        </Button>
-      </ButtonGroup>
+
+      <ButtonsGroup
+        inlineLayoutWhen="always"
+        buttons={[
+          {
+            children: 'Retour',
+            priority: 'secondary',
+            nativeButtonProps: { disabled: step === 0 },
+            onClick: onClickPrev,
+          },
+          {
+            children: step < 3 ? nextLabel : submitLabel,
+            nativeButtonProps: { disabled: !isButtonEnabled },
+            onClick: onClickNext,
+          },
+        ]}
+      />
     </div>
   );
 };

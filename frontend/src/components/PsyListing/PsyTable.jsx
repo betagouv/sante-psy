@@ -1,8 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Link, Pagination, Icon, Badge } from '@dataesr/react-dsfr';
+import { Badge } from '@codegouvfr/react-dsfr/Badge';
+import { Pagination } from '@codegouvfr/react-dsfr/Pagination';
 import { useStore } from 'stores/index';
 import styles from './psyTable.cssmodule.scss';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 
 const PsyTable = ({
   page,
@@ -14,7 +16,6 @@ const PsyTable = ({
   teleconsultation,
   coords,
 }) => {
-  const [surrendingPages, setSurrendingPages] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
   const table = useRef(null);
@@ -45,30 +46,6 @@ const PsyTable = ({
     navigate(`/trouver-un-psychologue/${psychologist.dossierNumber}`);
   };
 
-  const updateSurrendingPages = () => {
-    if (table.current) {
-      const { width } = table.current.getBoundingClientRect();
-      if (width > 700) {
-        setSurrendingPages(3);
-      } else if (width > 550) {
-        setSurrendingPages(2);
-      } else if (width > 500) {
-        setSurrendingPages(1);
-      } else {
-        setSurrendingPages(0);
-      }
-    }
-  };
-
-  useEffect(() => {
-    updateSurrendingPages();
-  }, [table]);
-
-  useEffect(() => {
-    window.addEventListener('resize', updateSurrendingPages);
-    return () => window.removeEventListener('resize', updateSurrendingPages);
-  }, []);
-
   const pagedPsychologists = useMemo(() => {
     const start = (page - 1) * 10;
     return psychologists.slice(start, start + 10);
@@ -87,10 +64,9 @@ const PsyTable = ({
               data-test-id="psy-row"
             >
               <div className={styles.personnalInfo}>
-                <Icon
-                  className={styles.userIcon}
-                  name="ri-user-line"
-                  size="2x"
+                <i
+                  className={`fr-icon-user-line ${styles.userIcon}`}
+                  style={{ fontSize: '2rem' }}
                 />
                 <div>
                   <h6>
@@ -99,10 +75,9 @@ const PsyTable = ({
                   </h6>
                   <div className={styles.addressInfo}>
                     <div>
-                      <Icon
-                        className="fr-mr-1w"
-                        name="ri-map-pin-2-fill"
-                        size="lg"
+                      <i
+                        className="fr-icon-map-pin-2-fill fr-mr-1w"
+                        style={{ fontSize: '1.5rem' }}
                       />
                       <span>
                         {psychologist.city
@@ -125,10 +100,12 @@ const PsyTable = ({
                         <div className={styles.optionalSeparator} />
                         <Badge
                           className={styles.badge}
-                          icon="ri-webcam-fill"
-                          text="Téléconsultation disponible"
-                          colorFamily="green-bourgeon"
-                        />
+                          severity="success"
+                          noIcon
+                        >
+                          <i className="fr-icon-webcam-fill fr-mr-1w" />
+                          Téléconsultation disponible
+                        </Badge>
                       </>
                     )}
                   </div>
@@ -138,41 +115,48 @@ const PsyTable = ({
               <div className={styles.contactInfo}>
                 {isUserConnected && (
                   <>
-                    <div
-                      onClick={() => {
-                        window.location.href = `mailto:${psychologist.email}`;
+                    <Button
+                      iconId="fr-icon-mail-fill"
+                      priority="tertiary no outline"
+                      linkProps={{
+                        to: `mailto:${psychologist.email}`,
                       }}
-                    >
-                      <Icon name="ri-mail-fill" size="2x" />
-                    </div>
+                    />
                     <div className={styles.bigSeparator} />
-                    <div
-                      onClick={() => {
-                        window.location.href = `tel:${psychologist.phone}`;
+                    <Button
+                      iconId="fr-icon-phone-fill"
+                      priority="tertiary no outline"
+                      linkProps={{
+                        to: `tel:${psychologist.phone}`,
                       }}
-                    >
-                      <Icon name="ri-phone-fill" size="2x" />
-                    </div>
+                    />
                   </>
                 )}
-                <Link
-                  data-test-id="psy-table-row-profil-button"
-                  href={`/trouver-un-psychologue/${psychologist.dossierNumber}`}
-                  onClick={() => goToProfile(psychologist)}
-                  className="fr-btn fr-btn--secondary"
+                <Button
+                  priority="secondary"
+                  nativeButtonProps={{
+                    'data-test-id': 'psy-table-row-profil-button',
+                    onClick: () => goToProfile(psychologist),
+                  }}
                 >
                   {isUserConnected
                     ? 'Contacter le psychologue'
                     : 'Accéder à la fiche du psychologue'}
-                </Link>
+                </Button>
               </div>
             </div>
           ))}
+
           <Pagination
-            currentPage={currentPage}
-            surrendingPages={surrendingPages}
-            pageCount={pageCount}
-            onClick={setPage}
+            count={pageCount}
+            defaultPage={currentPage}
+            getPageLinkProps={(page) => ({
+              onClick: (e) => {
+                e.preventDefault();
+                setPage(page);
+              },
+              href: '#',
+            })}
           />
         </div>
       )}

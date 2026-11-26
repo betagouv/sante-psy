@@ -9,28 +9,32 @@ const setLoginInfo = (token, xsrfToken, role) => {
   cy.setCookie('token', token);
 };
 
-const loginDefaultPsy = (duration = '2h') => cy.request({
-  method: 'GET',
-  url: 'http://localhost:8080/test/auth/psychologist/login@beta.gouv.fr',
-  qs: { duration },
-})
-  .then(res => {
-    currentUser = res.body.user;
-    setLoginInfo(res.body.token, res.body.xsrfToken, 'psy');
-  });
+const loginDefaultPsy = (duration = '2h') =>
+  cy
+    .request({
+      method: 'GET',
+      url: 'http://localhost:8080/test/auth/psychologist/login@beta.gouv.fr',
+      qs: { duration },
+    })
+    .then((res) => {
+      currentUser = res.body.user;
+      setLoginInfo(res.body.token, res.body.xsrfToken, 'psy');
+    });
 
-const loginDefaultStudent = (duration = '2h') => cy.request({
-  method: 'GET',
-  url: 'http://localhost:8080/test/auth/student/student@beta.gouv.fr',
-  qs: { duration },
-})
-  .then(res => {
-    currentUser = res.body.user;
-    setLoginInfo(res.body.token, res.body.xsrfToken, 'student');
-  });
+const loginDefaultStudent = (duration = '2h') =>
+  cy
+    .request({
+      method: 'GET',
+      url: 'http://localhost:8080/test/auth/student/student@beta.gouv.fr',
+      qs: { duration },
+    })
+    .then((res) => {
+      currentUser = res.body.user;
+      setLoginInfo(res.body.token, res.body.xsrfToken, 'student');
+    });
 
 const logout = () => {
-  cy.get('[data-test-id="logout-link"]').should('be.visible').click({ force: true });
+  cy.get('[data-test-id="logout-link"]').filter(':visible').click();
 };
 
 export default {

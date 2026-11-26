@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@dataesr/react-dsfr';
+import { Button } from '@codegouvfr/react-dsfr/Button';
 import { useNavigate } from 'react-router-dom';
 import pronouns, {
   capitalizeFirstLetter,
@@ -40,38 +40,26 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
     return (
       <>
         <b>
-          {subject}
-          {' '}
-          {pluralize('éligible', whoFor)}
-          {' '}
-          au dispositif Santé Psy Étudiant !
+          {subject} {pluralize('éligible', whoFor)} au dispositif Santé Psy
+          Étudiant !
         </b>
         <br />
         {(needsIneInfo || needsBasicInfo) && (
           <p>
-            {capitalizeFirstLetter(possessive)}
-            {' '}
-            <b>certificat de scolarité</b>
-            {' '}
-            {whoFor === 'CONSULTANT' ? '' : otherPersonalPronoun}
-            {' '}
+            {capitalizeFirstLetter(possessive)} <b>certificat de scolarité</b>{' '}
+            {whoFor === 'CONSULTANT' ? '' : otherPersonalPronoun}{' '}
             {whoFor === 'CONSULTANT'
               ? 'doit lui être demandé'
-              : 'sera demandé par le psychologue'}
-            {' '}
-            pour
-            {' '}
-            {possesiveFem || possessive}
-            {' '}
-            première consultation.
+              : 'sera demandé par le psychologue'}{' '}
+            pour {possesiveFem || possessive} première consultation.
             <br />
             {whoFor !== 'CONSULTANT' ? (
               renderRegisterButton(handleButtonClick)
             ) : (
               <>
                 <Button
-                  onClick={() => navigate('/login')}
-                  size="sm"
+                  linkProps={{ to: '/login' }}
+                  size="small"
                   className="fr-my-1w"
                 >
                   Créer le dossier de l&apos;étudiant
@@ -85,57 +73,32 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
     );
   }
 
-  const additionalText = lastAnswerValue === 'NO'
-    || whoFor === 'SCHOOL'
-    || lastAnswerValue === 'FOREIGN_SCHOOL' ? (
+  const additionalText =
+    lastAnswerValue === 'NO' ||
+    whoFor === 'SCHOOL' ||
+    lastAnswerValue === 'FOREIGN_SCHOOL' ? (
       <p>
-        Retrouvez cependant les différents services qui pourront
-        {' '}
-        {personalPronoun}
-        {' '}
-        accompagner ci-dessous.
+        Retrouvez cependant les différents services qui pourront{' '}
+        {personalPronoun} accompagner ci-dessous.
       </p>
     ) : (
       <p>
-        N&apos;hésitez pas à
-        {' '}
-        {pronoun === 'vous' ? 'vous' : "l'inviter à se"}
-        {' '}
-        rapprocher de
-        {' '}
-        {possessive}
-        {' '}
-        service étudiant pour confirmer
-        {' '}
-        {subjectNegativeHave}
-        {' '}
-        ni numéro INE ni cotisation CVEC.
+        N&apos;hésitez pas à {pronoun === 'vous' ? 'vous' : "l'inviter à se"}{' '}
+        rapprocher de {possessive} service étudiant pour confirmer{' '}
+        {subjectNegativeHave} ni numéro INE ni cotisation CVEC.
         <br />
         <br />
-        Auquel cas, retrouvez les différents services qui pourront
-        {' '}
-        {personalPronoun}
-        {' '}
-        accompagner ci-dessous.
+        Auquel cas, retrouvez les différents services qui pourront{' '}
+        {personalPronoun} accompagner ci-dessous.
       </p>
     );
 
   return (
     <>
       <p>
-        Nous sommes désolés,
-        {' '}
-        {subjectNegativeBe.toLowerCase()}
-        {' '}
-        hélas
-        {' '}
-        <b>
-          pas
-          {' '}
-          {pluralize('éligible', whoFor)}
-        </b>
-        {' '}
-        au dispositif Santé Psy Étudiant.
+        Nous sommes désolés, {subjectNegativeBe.toLowerCase()} hélas{' '}
+        <b>pas {pluralize('éligible', whoFor)}</b> au dispositif Santé Psy
+        Étudiant.
       </p>
       <br />
       {additionalText}
@@ -143,12 +106,8 @@ const getMessage = (isEligible, lastAnswerValue, whoFor) => {
   );
 };
 
-const renderRegisterButton = handleButtonClick => (
-  <Button
-    onClick={handleButtonClick}
-    size="sm"
-    className="fr-my-1w"
-  >
+const renderRegisterButton = (handleButtonClick) => (
+  <Button onClick={handleButtonClick} size="small" className="fr-my-1w">
     S&apos;inscrire à l&apos;Espace Étudiant
   </Button>
 );

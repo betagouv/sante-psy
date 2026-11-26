@@ -25,7 +25,7 @@ describe('Header Test', () => {
         cy.get('[data-test-id="my-space-button"]').should('not.exist');
 
         // Public action is visible and works
-        cy.get('[data-test-id="login-button"]').should('be.visible').click();
+        cy.get('[data-test-id="login-button"]').filter(':visible').click();
         cy.location('pathname').should('eq', '/login');
       });
 
@@ -38,10 +38,14 @@ describe('Header Test', () => {
 
         // Public nav is visible and works
 
-        cy.get('[data-test-id="Foire aux questions"]').should('be.visible').click();
+        cy.get('[data-test-id="Foire aux questions"]')
+          .filter(':visible')
+          .click();
         cy.location('pathname').should('eq', '/faq');
 
-        cy.get('[data-test-id="Comment ça marche ?"]').should('be.visible').click();
+        cy.get('[data-test-id="Comment ça marche ?"]')
+          .filter(':visible')
+          .click();
         cy.location('pathname').should('eq', '/');
       });
     });
@@ -60,8 +64,8 @@ describe('Header Test', () => {
         // Public action is not visible
         cy.get('[data-test-id="login-button"]').should('not.be.visible');
 
-        cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
-        cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
+        cy.get('.fr-btn--menu').as('open-burger-menu');
+        cy.get('.fr-header__menu .fr-btn--close').as('close-burger-menu');
 
         // Open burger menu
         cy.get('@open-burger-menu').should('be.visible').click();
@@ -84,8 +88,8 @@ describe('Header Test', () => {
         cy.get('[data-test-id="Comment ça marche ?"]').should('not.be.visible');
         cy.get('[data-test-id="Foire aux questions"]').should('not.be.visible');
 
-        cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
-        cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
+        cy.get('.fr-btn--menu').as('open-burger-menu');
+        cy.get('.fr-header__menu .fr-btn--close').as('close-burger-menu');
 
         // Open burger menu
         cy.get('@open-burger-menu').should('be.visible').click();
@@ -99,19 +103,25 @@ describe('Header Test', () => {
           cy.get('[data-test-id="Facturation"]').should('not.exist');
 
           // Public nav is visible and works
-          cy.get('[data-test-id="Foire aux questions"]').should('be.visible').click();
+          cy.get('[data-test-id="Foire aux questions"]')
+            .should('be.visible')
+            .click();
           cy.location('pathname').should('eq', '/faq');
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="Foire aux questions"]').should('be.visible').click();
+          cy.get('[data-test-id="Foire aux questions"]')
+            .should('be.visible')
+            .click();
           cy.location('pathname').should('eq', '/faq');
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="Comment ça marche ?"]').should('be.visible').click();
+          cy.get('[data-test-id="Comment ça marche ?"]')
+            .should('be.visible')
+            .click();
           cy.location('pathname').should('eq', '/');
         });
       });
@@ -143,16 +153,16 @@ describe('Header Test', () => {
 
         // We are on psy space => back home button is visible and works
         cy.get('[data-test-id="my-space-button"]').should('not.exist');
-        cy.get('[data-test-id="back-home-button"]').should('be.visible').click();
+        cy.get('[data-test-id="back-home-button"]').filter(':visible').click();
         cy.location('pathname').should('eq', '/');
 
         // We are on public space => my space button is visible and works
         cy.get('[data-test-id="back-home-button"]').should('not.exist');
-        cy.get('[data-test-id="my-space-button"]').should('be.visible').click();
+        cy.get('[data-test-id="my-space-button"]').filter(':visible').click();
         cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
 
         // Logout
-        cy.get('[data-test-id="logout-link"]').should('be.visible').click();
+        cy.get('[data-test-id="logout-link"]').filter(':visible').click();
         cy.wait('@logout');
         cy.location('pathname').should('eq', '/');
       });
@@ -172,7 +182,9 @@ describe('Header Test', () => {
         cy.get('[data-test-id="Tableau de bord"]').should('be.visible').click();
         cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
 
-        cy.get('[data-test-id="Déclarer mes séances"]').should('be.visible').click();
+        cy.get('[data-test-id="Déclarer mes séances"]')
+          .should('be.visible')
+          .click();
         cy.location('pathname').should('eq', '/psychologue/mes-seances');
       });
     });
@@ -190,8 +202,8 @@ describe('Header Test', () => {
         // Connected actions are not visible
         cy.get('[data-test-id="logout-link"]').should('not.be.visible');
 
-        cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
-        cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
+        cy.get('.fr-btn--menu').as('open-burger-menu');
+        cy.get('.fr-header__menu .fr-btn--close').as('close-burger-menu');
 
         // Open burger menu
         cy.get('@open-burger-menu').should('be.visible').click();
@@ -203,7 +215,9 @@ describe('Header Test', () => {
 
           // We are on psy space => back home button is visible and works
           cy.get('[data-test-id="my-space-button"]').should('not.exist');
-          cy.get('[data-test-id="back-home-button"]').should('be.visible').click();
+          cy.get('[data-test-id="back-home-button"]')
+            .should('be.visible')
+            .click();
           cy.location('pathname').should('eq', '/');
           cy.get('@close-burger-menu').should('not.be.visible');
         });
@@ -212,7 +226,9 @@ describe('Header Test', () => {
         cy.get('.fr-modal--opened').within(() => {
           // We are on public space => my space button is visible and works
           cy.get('[data-test-id="back-home-button"]').should('not.exist');
-          cy.get('[data-test-id="my-space-button"]').should('be.visible').click();
+          cy.get('[data-test-id="my-space-button"]')
+            .should('be.visible')
+            .click();
           cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
           cy.get('@close-burger-menu').should('not.be.visible');
         });
@@ -231,8 +247,8 @@ describe('Header Test', () => {
         // Connected actions are not visible
         cy.get('[data-test-id="Suivi étudiants"]').should('not.be.visible');
 
-        cy.get('[aria-label="ouvrir la navigation"]').as('open-burger-menu');
-        cy.get('[aria-label="fermer la navigation"]').as('close-burger-menu');
+        cy.get('.fr-btn--menu').as('open-burger-menu');
+        cy.get('.fr-header__menu .fr-btn--close').as('close-burger-menu');
 
         // Open burger menu
         cy.get('@open-burger-menu').should('be.visible').click();
@@ -244,25 +260,34 @@ describe('Header Test', () => {
           cy.get('[data-test-id="Foire aux questions"]').should('not.exist');
 
           // Connected nav is visible and works
-          cy.get('[data-test-id="Suivi étudiants"]').should('be.visible').click();
+          cy.get('[data-test-id="Suivi étudiants"]')
+            .should('be.visible')
+            .click();
           cy.location('pathname').should('eq', '/psychologue/mes-etudiants');
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
           cy.get('[data-test-id="Facturation"]').should('be.visible').click();
-          cy.location('pathname').should('eq', '/psychologue/mes-remboursements');
+          cy.location('pathname').should(
+            'eq',
+            '/psychologue/mes-remboursements',
+          );
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="Tableau de bord"]').should('be.visible').click();
+          cy.get('[data-test-id="Tableau de bord"]')
+            .should('be.visible')
+            .click();
           cy.location('pathname').should('eq', '/psychologue/tableau-de-bord');
         });
 
         cy.get('@open-burger-menu').click();
         cy.get('.fr-modal--opened').within(() => {
-          cy.get('[data-test-id="Déclarer mes séances"]').should('be.visible').click();
+          cy.get('[data-test-id="Déclarer mes séances"]')
+            .should('be.visible')
+            .click();
           cy.location('pathname').should('eq', '/psychologue/mes-seances');
         });
       });

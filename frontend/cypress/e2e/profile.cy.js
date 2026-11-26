@@ -33,55 +33,47 @@ describe('Profile', () => {
     it('should update existing profile', () => {
       cy.get('[data-test-id="show-profile-form-button"]').click();
       cy.get('[data-test-id="edit-profile-form"]').should('exist');
-      cy.get('[data-test-id="psy-personal-email-input"] > input').clear();
-      cy.get('[data-test-id="psy-personal-email-input"] > input').type(
+      cy.get('[data-test-id="psy-personal-email-input"]').clear();
+      cy.get('[data-test-id="psy-personal-email-input"]').type(
         'new@beta.gouv.fr',
       );
-      cy.get('[data-test-id="teleConsultation-true"]').click();
+      cy.get('[data-test-id="teleConsultation-true"]').check({ force: true });
       cy.get('[data-test-id="save-profile-button"]').click();
       cy.wait('@updateProfile');
       cy.get('[data-test-id="edit-profile-form"]').should('not.exist');
-      cy.get('[data-test-id="notification-success"] p').should(
-        'have.text',
-        'Vos informations ont bien été mises à jour.',
-      );
+      cy.get(
+        '[data-test-id="notification-success"] .notification-description',
+      ).should('have.text', 'Vos informations ont bien été mises à jour.');
     });
 
     it('should update existing profile with website override', () => {
       cy.get('[data-test-id="show-profile-form-button"]').click();
       cy.get('[data-test-id="edit-profile-form"]').should('exist');
-      cy.get('[data-test-id="psy-website-input"] > input').clear();
-      cy.get('[data-test-id="psy-website-input"] > input').type('doctolib.fr');
-      cy.get('[data-test-id="psy-website-input"] > input').blur();
-      cy.get('[data-test-id="psy-website-input"] > input').should(
+      cy.get('[data-test-id="psy-website-input"]').clear();
+      cy.get('[data-test-id="psy-website-input"]').type('doctolib.fr');
+      cy.get('[data-test-id="psy-website-input"]').blur();
+      cy.get('[data-test-id="psy-website-input"]').should(
         'have.value',
         'http://doctolib.fr',
       );
-      cy.get('[data-test-id="psy-website-input"] > input').clear();
-      cy.get('[data-test-id="psy-website-input"] > input').type(
-        'http://doctolib.fr',
-      );
-      cy.get('[data-test-id="psy-website-input"] > input').blur();
-      cy.get('[data-test-id="psy-website-input"] > input').should(
+      cy.get('[data-test-id="psy-website-input"]').clear();
+      cy.get('[data-test-id="psy-website-input"]').type('http://doctolib.fr');
+      cy.get('[data-test-id="psy-website-input"]').blur();
+      cy.get('[data-test-id="psy-website-input"]').should(
         'have.value',
         'http://doctolib.fr',
       );
-      cy.get('[data-test-id="psy-website-input"] > input').clear();
-      cy.get('[data-test-id="psy-website-input"] > input').type(
-        'https://doctolib.fr',
-      );
-      cy.get('[data-test-id="psy-website-input"] > input').blur();
-      cy.get('[data-test-id="psy-website-input"] > input').should(
+      cy.get('[data-test-id="psy-website-input"]').clear();
+      cy.get('[data-test-id="psy-website-input"]').type('https://doctolib.fr');
+      cy.get('[data-test-id="psy-website-input"]').blur();
+      cy.get('[data-test-id="psy-website-input"]').should(
         'have.value',
         'https://doctolib.fr',
       );
-      cy.get('[data-test-id="psy-website-input"] > input').clear();
-      cy.get('[data-test-id="psy-website-input"] > input').type('   ');
-      cy.get('[data-test-id="psy-website-input"] > input').blur();
-      cy.get('[data-test-id="psy-website-input"] > input').should(
-        'have.value',
-        '   ',
-      );
+      cy.get('[data-test-id="psy-website-input"]').clear();
+      cy.get('[data-test-id="psy-website-input"]').type('   ');
+      cy.get('[data-test-id="psy-website-input"]').blur();
+      cy.get('[data-test-id="psy-website-input"]').should('have.value', '   ');
     });
   });
 
@@ -106,7 +98,9 @@ describe('Profile', () => {
           'contain.text',
           "Disponible dans l'annuaire",
         );
-        cy.get('[data-test-id="notification-success"] p').should(
+        cy.get(
+          '[data-test-id="notification-success"] .notification-description',
+        ).should(
           'have.text',
           "Vos informations sont de nouveau visibles sur l'annuaire.",
         );
@@ -143,7 +137,7 @@ describe('Profile', () => {
 
     it('should not allow to click button when only reason is filled', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
-      cy.get('[data-test-id="radio-reason-toomuch"]').click();
+      cy.get('[data-test-id="radio-reason-toomuch"]').check({ force: true });
       cy.get('[data-test-id="suspend-redirection-button"]').should(
         'be.disabled',
       );
@@ -151,7 +145,7 @@ describe('Profile', () => {
 
     it('should not allow to click button when only duration is filled', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
-      cy.get('[data-test-id="radio-duration-week"]').click();
+      cy.get('[data-test-id="radio-duration-week"]').check({ force: true });
       cy.get('[data-test-id="suspend-redirection-button"]').should(
         'be.disabled',
       );
@@ -159,8 +153,8 @@ describe('Profile', () => {
 
     it('should allow to click button when reason and duration are filled', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
-      cy.get('[data-test-id="radio-reason-toomuch"]').click();
-      cy.get('[data-test-id="radio-duration-week"]').click();
+      cy.get('[data-test-id="radio-reason-toomuch"]').check({ force: true });
+      cy.get('[data-test-id="radio-duration-week"]').check({ force: true });
       cy.get('[data-test-id="suspend-redirection-button"]').should(
         'not.be.disabled',
       );
@@ -168,9 +162,9 @@ describe('Profile', () => {
 
     it('should manage other reason', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
-      cy.get('[data-test-id="radio-duration-week"]').click();
+      cy.get('[data-test-id="radio-duration-week"]').check({ force: true });
       cy.get('[data-test-id="radio-reason-other-input"]').should('not.exist');
-      cy.get('[data-test-id="radio-reason-other"]').click();
+      cy.get('[data-test-id="radio-reason-other"]').check({ force: true });
       cy.get('[data-test-id="radio-reason-other-input"]').should('exist');
       cy.get('[data-test-id="suspend-redirection-button"]').should(
         'be.disabled',
@@ -184,7 +178,7 @@ describe('Profile', () => {
         'not.be.disabled',
       );
 
-      cy.get('[data-test-id="radio-reason-toomuch"]').click();
+      cy.get('[data-test-id="radio-reason-toomuch"]').check({ force: true });
 
       cy.get('[data-test-id="radio-reason-other-input"]').should('not.exist');
     });
@@ -192,11 +186,11 @@ describe('Profile', () => {
     it('should manage other duration', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
 
-      cy.get('[data-test-id="radio-reason-toomuch"]').click();
+      cy.get('[data-test-id="radio-reason-toomuch"]').check({ force: true });
 
       cy.get('[data-test-id="radio-duration-other-input"]').should('not.exist');
 
-      cy.get('[data-test-id="radio-duration-other"]').click();
+      cy.get('[data-test-id="radio-duration-other"]').check({ force: true });
 
       cy.get('[data-test-id="radio-duration-other-input"]').should('exist');
 
@@ -212,7 +206,7 @@ describe('Profile', () => {
         'not.be.disabled',
       );
 
-      cy.get('[data-test-id="radio-duration-week"]').click();
+      cy.get('[data-test-id="radio-duration-week"]').check({ force: true });
 
       cy.get('[data-test-id="radio-duration-other-input"]').should('not.exist');
     });
@@ -222,9 +216,11 @@ describe('Profile', () => {
 
       cy.get('[data-test-id="show-availability-form"]').click();
 
-      cy.get(`[data-test-id="radio-reason-${reason}"]`).click();
+      cy.get(`[data-test-id="radio-reason-${reason}"]`).check({ force: true });
 
-      cy.get(`[data-test-id="radio-duration-${duration}"]`).click();
+      cy.get(`[data-test-id="radio-duration-${duration}"]`).check({
+        force: true,
+      });
 
       cy.get('[data-test-id="suspend-redirection-button"]').click();
 
@@ -280,12 +276,12 @@ describe('Profile', () => {
     it('should suspend profil for custom reasons and custom date', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
 
-      cy.get('[data-test-id="radio-reason-other"]').click();
+      cy.get('[data-test-id="radio-reason-other"]').check({ force: true });
       cy.get('[data-test-id="radio-reason-other-input"]').type(
         'parcequuuuuuuuuue',
       );
 
-      cy.get('[data-test-id="radio-duration-other"]').click();
+      cy.get('[data-test-id="radio-duration-other"]').check({ force: true });
 
       cy.get('[data-test-id="radio-duration-other-input"]').click();
 
@@ -317,8 +313,8 @@ describe('Profile', () => {
   describe('Check website url', () => {
     it('should display alert if website does not have right url', () => {
       cy.get('[data-test-id="show-profile-form-button"]').click();
-      cy.get('[data-test-id="psy-website-input"] > input').clear();
-      cy.get('[data-test-id="psy-website-input"] > input').type('doctolib');
+      cy.get('[data-test-id="psy-website-input"]').clear();
+      cy.get('[data-test-id="psy-website-input"]').type('doctolib');
       cy.get('[data-test-id="save-profile-button"]').click();
       cy.wait('@updateProfile');
       cy.get('[data-test-id="incomplete-profile-alert"]').should('exist');
@@ -332,10 +328,10 @@ describe('Profile', () => {
 
     it('should NOT display alert if website doesnt have http or https', () => {
       cy.get('[data-test-id="show-profile-form-button"]').click();
-      cy.get('[data-test-id="psy-website-input"] > input').clear();
-      cy.get('[data-test-id="psy-website-input"] > input').type('doctolib.com');
-      cy.get('[data-test-id="psy-appointmentLink-input"] > input').clear();
-      cy.get('[data-test-id="psy-appointmentLink-input"] > input').type(
+      cy.get('[data-test-id="psy-website-input"]').clear();
+      cy.get('[data-test-id="psy-website-input"]').type('doctolib.com');
+      cy.get('[data-test-id="psy-appointmentLink-input"]').clear();
+      cy.get('[data-test-id="psy-appointmentLink-input"]').type(
         'docto-lib.blabla',
       );
       cy.get('[data-test-id="save-profile-button"]').click();
@@ -345,8 +341,8 @@ describe('Profile', () => {
 
     it('should NOT display alert if website has right url', () => {
       cy.get('[data-test-id="show-profile-form-button"]').click();
-      cy.get('[data-test-id="psy-website-input"] > input').clear();
-      cy.get('[data-test-id="psy-website-input"] > input').type(
+      cy.get('[data-test-id="psy-website-input"]').clear();
+      cy.get('[data-test-id="psy-website-input"]').type(
         'http://doctolib.frnet',
       );
       cy.get('[data-test-id="save-profile-button"]').click();

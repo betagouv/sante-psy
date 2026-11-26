@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
-import {
-  TextInput,
-  RadioGroup,
-  Radio,
-  Button,
-  ButtonGroup,
-} from '@dataesr/react-dsfr';
+import { RadioButtons } from '@codegouvfr/react-dsfr/RadioButtons';
+import { ButtonsGroup } from '@codegouvfr/react-dsfr/ButtonsGroup';
 import DatePicker from 'react-datepicker';
 import agent from 'services/agent';
 
@@ -49,18 +44,22 @@ const SuspendProfile = () => {
 
   const suspendPsychologist = () => {
     agent.Psychologist.suspend(getReason(), calculateSuspensionDate())
-      .then(response => {
+      .then((response) => {
         updatePsyList();
-        navigate('/psychologue/tableau-de-bord', { state: { notification: response } });
+        navigate('/psychologue/tableau-de-bord', {
+          state: { notification: response },
+        });
       })
       .catch(() => window.scrollTo(0, 0));
   };
 
   const activatePsychologist = () => {
     agent.Psychologist.activate()
-      .then(response => {
+      .then((response) => {
         updatePsyList();
-        navigate('/psychologue/tableau-de-bord', { state: { notification: response } });
+        navigate('/psychologue/tableau-de-bord', {
+          state: { notification: response },
+        });
       })
       .catch(() => window.scrollTo(0, 0));
   };
@@ -73,20 +72,23 @@ const SuspendProfile = () => {
     agent.Psychologist.find().then(setPsychologists);
   };
 
-  const getReason = () => (reason === 'other' ? `Autre: ${otherReason}` : reason);
+  const getReason = () =>
+    reason === 'other' ? `Autre: ${otherReason}` : reason;
 
-  const selectReason = value => {
+  const selectReason = (value) => {
     if (value !== 'other') {
       setDisplayReason(false);
       setReason(value);
     }
   };
 
-  const canValidate = reason && duration
-  && (reason !== 'other' || otherReason.trim() !== '')
-  && (duration !== 'other' || date !== undefined);
+  const canValidate =
+    reason &&
+    duration &&
+    (reason !== 'other' || otherReason.trim() !== '') &&
+    (duration !== 'other' || date !== undefined);
 
-  const selectDuration = value => {
+  const selectDuration = (value) => {
     if (value !== 'other') {
       setDisplayDate(false);
       setDuration(value);
@@ -101,131 +103,187 @@ const SuspendProfile = () => {
       <h3>Statut de mon compte</h3>
       {user.active && (
         <>
-          <RadioGroup
+          <RadioButtons
             legend="Pourquoi voulez vous retirer vos informations ?"
-            ariaLabel="raison"
             name="reason"
-            value={reason}
-            onChange={selectReason}
-          >
-            <Radio
-              data-test-id="radio-reason-holidays"
-              label="Je pars en vacances"
-              value="holidays"
-            />
-            <Radio
-              data-test-id="radio-reason-toofew"
-              label="Je ne reçois pas assez de demandes"
-              value="toofew"
-            />
-            <Radio
-              data-test-id="radio-reason-toomuch"
-              label="Je reçois trop de demandes"
-              value="toomuch"
-            />
-            <Radio
-              data-test-id="radio-reason-connection"
-              label="Je n'arrive pas à me connecter"
-              value="connection"
-            />
-            <Radio
-              data-test-id="radio-reason-disagree"
-              label="Je ne suis plus en accord avec le dispositif"
-              value="disagree"
-            />
-            <Radio
-              data-test-id="radio-reason-reimbursments"
-              label="Je suis en attente de mes remboursements"
-              value="reimbursments"
-            />
-            <Radio
-              data-test-id="radio-reason-convention"
-              label="Je suis en attente de ma convention"
-              value="convention"
-            />
-            <Radio
-              data-test-id="radio-reason-other"
-              label="Autre"
-              onChange={e => {
-                setReason('other');
-                setDisplayReason(e.target.checked);
-              }}
-              value="other"
-            />
-            {displayReason && (
-              <TextInput
+            options={[
+              {
+                label: 'Je pars en vacances',
+                nativeInputProps: {
+                  value: 'holidays',
+                  checked: reason === 'holidays',
+                  onChange: (e) => selectReason(e.target.value),
+                  'data-test-id': 'radio-reason-holidays',
+                },
+              },
+              {
+                label: 'Je ne reçois pas assez de demandes',
+                nativeInputProps: {
+                  value: 'toofew',
+                  checked: reason === 'toofew',
+                  onChange: (e) => selectReason(e.target.value),
+                  'data-test-id': 'radio-reason-toofew',
+                },
+              },
+              {
+                label: 'Je reçois trop de demandes',
+                nativeInputProps: {
+                  value: 'toomuch',
+                  checked: reason === 'toomuch',
+                  onChange: (e) => selectReason(e.target.value),
+                  'data-test-id': 'radio-reason-toomuch',
+                },
+              },
+              {
+                label: "Je n'arrive pas à me connecter",
+                nativeInputProps: {
+                  value: 'connection',
+                  checked: reason === 'connection',
+                  onChange: (e) => selectReason(e.target.value),
+                  'data-test-id': 'radio-reason-connection',
+                },
+              },
+              {
+                label: 'Je ne suis plus en accord avec le dispositif',
+                nativeInputProps: {
+                  value: 'disagree',
+                  checked: reason === 'disagree',
+                  onChange: (e) => selectReason(e.target.value),
+                  'data-test-id': 'radio-reason-disagree',
+                },
+              },
+              {
+                label: 'Je suis en attente de mes remboursements',
+                nativeInputProps: {
+                  value: 'reimbursments',
+                  checked: reason === 'reimbursments',
+                  onChange: (e) => selectReason(e.target.value),
+                  'data-test-id': 'radio-reason-reimbursments',
+                },
+              },
+              {
+                label: 'Je suis en attente de ma convention',
+                nativeInputProps: {
+                  value: 'convention',
+                  checked: reason === 'convention',
+                  onChange: (e) => selectReason(e.target.value),
+                  'data-test-id': 'radio-reason-convention',
+                },
+              },
+              {
+                label: 'Autre',
+                nativeInputProps: {
+                  value: 'other',
+                  checked: reason === 'other',
+                  onChange: (e) => {
+                    setReason('other');
+                    setDisplayReason(e.target.checked);
+                  },
+                  'data-test-id': 'radio-reason-other',
+                },
+              },
+            ]}
+          />
+
+          {displayReason && (
+            <div className="fr-input-group">
+              <textarea
+                className="fr-input"
                 data-test-id="radio-reason-other-input"
                 required
                 value={otherReason}
-                onChange={e => setOtherReason(e.target.value)}
-                textarea
+                onChange={(e) => setOtherReason(e.target.value)}
               />
-            )}
-          </RadioGroup>
-          <RadioGroup
+            </div>
+          )}
+
+          <RadioButtons
             legend="Pour combien de temps voulez vous retirer vos informations ?"
-            ariaLabel="durée"
-            value={duration}
-            onChange={selectDuration}
-          >
-            <Radio
-              data-test-id="radio-duration-week"
-              label="1 semaine"
-              value="week"
+            name="duration"
+            options={[
+              {
+                label: '1 semaine',
+                nativeInputProps: {
+                  value: 'week',
+                  checked: duration === 'week',
+                  onChange: (e) => selectDuration(e.target.value),
+                  'data-test-id': 'radio-duration-week',
+                },
+              },
+              {
+                label: '1 mois',
+                nativeInputProps: {
+                  value: 'month',
+                  checked: duration === 'month',
+                  onChange: (e) => selectDuration(e.target.value),
+                  'data-test-id': 'radio-duration-month',
+                },
+              },
+              {
+                label: 'Je souhaite retirer mes informations définitivement',
+                nativeInputProps: {
+                  value: 'forever',
+                  checked: duration === 'forever',
+                  onChange: (e) => selectDuration(e.target.value),
+                  'data-test-id': 'radio-duration-forever',
+                },
+              },
+              {
+                label: 'Autre',
+                nativeInputProps: {
+                  value: 'other',
+                  checked: duration === 'other',
+                  onChange: (e) => {
+                    setDuration('other');
+                    setDisplayDate(e.target.checked);
+                  },
+                  'data-test-id': 'radio-duration-other',
+                },
+              },
+            ]}
+          />
+
+          {displayDate && (
+            <DatePicker
+              selected={date}
+              minDate={tomorrow}
+              dateFormat="dd/MM/yyyy"
+              customInput={
+                <DateInput dataTestId="radio-duration-other-input" />
+              }
+              onChange={(newDate) => setDate(convertLocalToUTCDate(newDate))}
             />
-            <Radio
-              data-test-id="radio-duration-month"
-              label="1 mois"
-              value="month"
-            />
-            <Radio
-              data-test-id="radio-duration-forever"
-              label="Je souhaite retirer mes informations définitivement"
-              value="forever"
-            />
-            <Radio
-              data-test-id="radio-duration-other"
-              label="Autre"
-              onChange={e => {
-                setDuration('other');
-                setDisplayDate(e.target.checked);
-              }}
-              value="other"
-            />
-            {displayDate && (
-              <DatePicker
-                selected={date}
-                minDate={tomorrow}
-                dateFormat="dd/MM/yyyy"
-                customInput={
-                  <DateInput dataTestId="radio-duration-other-input" />
-                }
-                onChange={newDate => setDate(convertLocalToUTCDate(newDate))}
-              />
-            )}
-          </RadioGroup>
+          )}
         </>
       )}
-      <ButtonGroup isInlineFrom="xs">
-        <Button
-          disabled={user.active && !canValidate}
-          data-test-id={
-            user.active ? 'suspend-redirection-button' : 'activate-button'
-          }
-          icon={user.active ? 'fr-fi-eye-off-line' : 'fr-fi-eye-line'}
-          className="fr-mb-2w"
-          onClick={() => (user.active
-            ? suspendPsychologist()
-            : activatePsychologist())}
-        >
-          {user.active
-            ? "Retirer mes informations de l'annuaire"
-            : "Remettre mes informations de l'annuaire"}
-        </Button>
-        <Button onClick={cancelSuspension} secondary icon="fr-fi-close-line">
-          Annuler
-        </Button>
-      </ButtonGroup>
+      <ButtonsGroup
+        inlineLayoutWhen="always"
+        buttons={[
+          {
+            children: user.active
+              ? "Retirer mes informations de l'annuaire"
+              : "Remettre mes informations de l'annuaire",
+            iconId: user.active ? 'fr-icon-eye-off-line' : 'fr-icon-eye-line',
+            iconPosition: 'left',
+            className: 'fr-mb-2w',
+            nativeButtonProps: {
+              'data-test-id': user.active
+                ? 'suspend-redirection-button'
+                : 'activate-button',
+              disabled: user.active && !canValidate,
+            },
+            onClick: () =>
+              user.active ? suspendPsychologist() : activatePsychologist(),
+          },
+          {
+            children: 'Annuler',
+            priority: 'secondary',
+            iconId: 'fr-icon-close-line',
+            iconPosition: 'left',
+            onClick: cancelSuspension,
+          },
+        ]}
+      />
     </>
   );
 };

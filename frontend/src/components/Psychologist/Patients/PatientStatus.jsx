@@ -1,10 +1,10 @@
 import React from 'react';
-import { Alert } from '@dataesr/react-dsfr';
+import { Alert } from '@codegouvfr/react-dsfr/Alert';
 import getBadgeInfos from 'src/utils/badges';
 
 export const StatusNoStudentAccount = () => (
   <Alert
-    type="warning"
+    severity="warning"
     className="fr-my-3w"
     title="Pas de compte étudiant"
     description="L'étudiant doit créer un compte pour bénéficier du dispositif SPE."
@@ -13,7 +13,7 @@ export const StatusNoStudentAccount = () => (
 
 export const StatusNotEligible = () => (
   <Alert
-    type="error"
+    severity="error"
     className="fr-my-3w"
     title="Non éligible"
     description="Cet étudiant ne semble pas éligible. Une erreur ? Contactez le support."
@@ -22,7 +22,7 @@ export const StatusNotEligible = () => (
 
 export const StatusPendingEligibility = () => (
   <Alert
-    type="info"
+    severity="info"
     className="fr-my-3w"
     title="En cours d'instruction"
     description="L’éligibilité de cet étudiant est en cours d'instruction. Le statut se mettra à jour automatiquement."
@@ -31,7 +31,7 @@ export const StatusPendingEligibility = () => (
 
 export const StatusIncompleteProfile = () => (
   <Alert
-    type="warning"
+    severity="warning"
     className="fr-my-3w"
     title="Profil pas à jour"
     description="L'étudiant doit mettre à jour son compte et télécharger son justificatif de scolarité pour la nouvelle année."
@@ -40,7 +40,7 @@ export const StatusIncompleteProfile = () => (
 
 export const StatusCheckCertif = () => (
   <Alert
-    type="info"
+    severity="info"
     className="fr-my-3w"
     title="Justificatif à valider"
     description="Le justificatif de scolarité doit être vérifié et sa validité (année / 
@@ -50,7 +50,7 @@ identité) confirmée au moment de la déclaration de la 1ère séance."
 
 export const StatusUpToDate = () => (
   <Alert
-    type="success"
+    severity="success"
     className="fr-my-3w"
     title="À jour"
     description="Vous pouvez déclarer des séances pour cet étudiant."

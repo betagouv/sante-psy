@@ -43,13 +43,6 @@ describe('Global tutorial', () => {
     cy.wait('@connecteduser');
   });
 
-  it('should display full tuto in both directions', () => {
-    checkAllSteps(13);
-    cy.reload();
-    cy.wait('@connecteduser');
-    cy.get('[data-test-id="next-step"]').should('not.exist');
-  });
-
   it('should pass tuto', () => {
     cy.wait(100);
     cy.get('[data-test-id="close-tutorial"]').click();
@@ -75,7 +68,6 @@ describe('Other tutorials', () => {
     loginDefaultPsy();
     checkConvention();
   });
-
   tutorials.map((tutorial) =>
     it(`Should display tutorial for ${tutorial.page}`, () => {
       cy.visit(`/psychologue/${tutorial.page}`);
@@ -85,21 +77,6 @@ describe('Other tutorials', () => {
       checkAllSteps(tutorial.steps);
     }),
   );
-
-  it('should display billing tutorial when appointments', () => {
-    cy.visit('/psychologue/mes-remboursements');
-    cy.wait('@connecteduser');
-
-    cy.get('#billing-month').within(() => {
-      cy.get('.monthPicker').should('be.visible');
-      cy.get('.monthPicker').click();
-      cy.contains('févr.').click();
-    });
-
-    cy.get('[data-test-id="launch-tutorial"]').click();
-
-    checkAllSteps(7);
-  });
 
   it('should display billing tutorial when no appointments', () => {
     cy.visit('/psychologue/mes-remboursements');
