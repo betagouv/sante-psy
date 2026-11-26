@@ -46,7 +46,7 @@ describe('Convention', () => {
         'contain.text',
         "Vous êtes rattaché à l'université de Strasbourg (UNISTRA).",
       );
-      cy.get('[data-test-id="signed-true"]').click();
+      cy.get('[data-test-id="signed-true"]').check({ force: true });
       cy.get('[data-test-id="update-convention-button"]').click();
       cy.wait('@updateConvention');
       cy.get('[data-test-id="show-convention-form"] p').should(
