@@ -197,9 +197,7 @@ describe('Profile', () => {
         'be.disabled',
       );
 
-      cy.get('[data-test-id="radio-duration-other-input"]').check({
-        force: true,
-      });
+      cy.get('[data-test-id="radio-duration-other-input"]').click();
 
       selectNextCalendarDate();
 
@@ -284,9 +282,7 @@ describe('Profile', () => {
 
       cy.get('[data-test-id="radio-duration-other"]').check({ force: true });
 
-      cy.get('[data-test-id="radio-duration-other-input"]').check({
-        force: true,
-      });
+      cy.get('[data-test-id="radio-duration-other-input"]').click();
 
       const nextCalendarDate = selectNextCalendarDate();
 
@@ -333,8 +329,8 @@ describe('Profile', () => {
       cy.get('[data-test-id="show-profile-form-button"]').click();
       cy.get('[data-test-id="psy-website-input"]').clear();
       cy.get('[data-test-id="psy-website-input"]').type('doctolib.com');
-      cy.get('[data-test-id="psy-appointmentLink-input"] > input').clear();
-      cy.get('[data-test-id="psy-appointmentLink-input"] > input').type(
+      cy.get('[data-test-id="psy-appointmentLink-input"]').clear();
+      cy.get('[data-test-id="psy-appointmentLink-input"]').type(
         'docto-lib.blabla',
       );
       cy.get('[data-test-id="save-profile-button"]').click();
