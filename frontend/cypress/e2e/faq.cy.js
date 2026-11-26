@@ -1,5 +1,3 @@
-const { loginDefaultPsy } = require('./utils/login');
-
 describe('FAQ Page Test', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/config').as('config');
