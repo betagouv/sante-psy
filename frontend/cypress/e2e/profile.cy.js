@@ -37,7 +37,7 @@ describe('Profile', () => {
       cy.get('[data-test-id="psy-personal-email-input"]').type(
         'new@beta.gouv.fr',
       );
-      cy.get('[data-test-id="teleConsultation-true"]').click();
+      cy.get('[data-test-id="teleConsultation-true"]').check({ force: true })();
       cy.get('[data-test-id="save-profile-button"]').click();
       cy.wait('@updateProfile');
       cy.get('[data-test-id="edit-profile-form"]').should('not.exist');

@@ -71,10 +71,9 @@ describe('Appointments', () => {
         'have.length',
         13,
       );
-      cy.get('[data-test-id="notification-success"] p').should(
-        'have.text',
-        'La séance a bien été supprimée.',
-      );
+      cy.get(
+        '[data-test-id="notification-success"] .notification-description',
+      ).should('have.text', 'La séance a bien été supprimée.');
     });
   });
 
@@ -82,7 +81,9 @@ describe('Appointments', () => {
     it('should display warning if psy is suspended', () => {
       suspend().then(() => {
         cy.reload();
-        cy.get('[data-test-id="notification-warning"] p').should(
+        cy.get(
+          '[data-test-id="notification-warning"] .notification-description',
+        ).should(
           'have.text',
           "Votre profil n‘est plus visible dans l‘annuaire. En cette période d'examens, les demandes d'étudiants sont en constante augmentation, nous sollicitons donc votre participation. Pour que les étudiants puissent vous contacter, rendez vous sur la page Ma disponibilité.",
         );
