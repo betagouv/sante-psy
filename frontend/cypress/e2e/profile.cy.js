@@ -33,8 +33,8 @@ describe('Profile', () => {
     it('should update existing profile', () => {
       cy.get('[data-test-id="show-profile-form-button"]').click();
       cy.get('[data-test-id="edit-profile-form"]').should('exist');
-      cy.get('[data-test-id="psy-personal-email-input"] > input').clear();
-      cy.get('[data-test-id="psy-personal-email-input"] > input').type(
+      cy.get('[data-test-id="psy-personal-email-input"]').clear();
+      cy.get('[data-test-id="psy-personal-email-input"]').type(
         'new@beta.gouv.fr',
       );
       cy.get('[data-test-id="teleConsultation-true"]').click();
