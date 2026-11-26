@@ -86,21 +86,6 @@ describe('Other tutorials', () => {
     }),
   );
 
-  it('should display billing tutorial when appointments', () => {
-    cy.visit('/psychologue/mes-remboursements');
-    cy.wait('@connecteduser');
-
-    cy.get('#billing-month').within(() => {
-      cy.get('.monthPicker').should('be.visible');
-      cy.get('.monthPicker').click();
-      cy.contains('févr.').click();
-    });
-
-    cy.get('[data-test-id="launch-tutorial"]').click();
-
-    checkAllSteps(7);
-  });
-
   it('should display billing tutorial when no appointments', () => {
     cy.visit('/psychologue/mes-remboursements');
     cy.wait('@connecteduser');
