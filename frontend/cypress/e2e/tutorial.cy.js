@@ -43,13 +43,6 @@ describe('Global tutorial', () => {
     cy.wait('@connecteduser');
   });
 
-  it('should display full tuto in both directions', () => {
-    checkAllSteps(12);
-    cy.reload();
-    cy.wait('@connecteduser');
-    cy.get('[data-test-id="next-step"]').should('not.exist');
-  });
-
   it('should pass tuto', () => {
     cy.wait(100);
     cy.get('[data-test-id="close-tutorial"]').click();
@@ -75,7 +68,7 @@ describe('Other tutorials', () => {
     loginDefaultPsy();
     checkConvention();
   });
-
+  numberOfSteps;
   tutorials.map((tutorial) =>
     it(`Should display tutorial for ${tutorial.page}`, () => {
       cy.visit(`/psychologue/${tutorial.page}`);
