@@ -14,7 +14,8 @@ const dataConservation = [
     'Durée de conservation': '3 ans à compter de la dernière connexion',
   },
   {
-    'Catégories de données': 'Données relatives au formulaire de contact',
+    'Catégories de données':
+      'Données relatives au formulaire de contact et au support',
     'Durée de conservation': '6 mois à compter de la réception du message',
   },
   {
@@ -22,85 +23,81 @@ const dataConservation = [
       'Données relatives à la traçabilité (logs, adresse IP)',
     'Durée de conservation': '1 an',
   },
+  {
+    'Catégories de données': 'Traceurs (mesure d’audience)',
+    'Durée de conservation': '13 mois',
+  },
 ];
 
 const dataSubcontractor = [
   {
-    Partenaire: 'Scalingo',
-    Pays: 'France',
-    'Traitement réalisé': 'Hébergeur',
-    Garanties: (
+    'Partenaire / Garanties': (
       <a
         href="https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles"
         target="_blank"
         rel="noreferrer"
       >
-        https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles
+        Scalingo
       </a>
     ),
+    Pays: 'France',
+    'Traitement réalisé':
+      "Hébergement de l'application et de la base de données, certifié HDS",
   },
   {
-    Partenaire: 'Crisp',
+    'Partenaire / Garanties': (
+      <a
+        href="https://www.scaleway.com/fr/contrats/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Scaleway
+      </a>
+    ),
     Pays: 'France',
-    'Traitement réalisé': 'Outil de support et de chat',
-    Garanties: (
+    'Traitement réalisé':
+      'Hébergement des justificatifs de scolarité déposés par les étudiants',
+  },
+  {
+    'Partenaire / Garanties': (
       <a
         href="https://help.crisp.chat/en/article/how-to-sign-my-gdpr-data-processing-agreement-dpa-1wfmngo/"
         target="_blank"
         rel="noreferrer"
       >
-        https://help.crisp.chat/en/article/how-to-sign-my-gdpr-data-processing-agreement-dpa-1wfmngo
+        Crisp
       </a>
     ),
+    Pays: 'France',
+    'Traitement réalisé': 'Messagerie de support et suivi des demandes',
   },
-];
-
-const dataCookies = [
   {
-    Cookies: 'Google Ads',
-    'Traitement réalisé': (
-      <>
-        <p>
-          Outil de gestion de balises permettant de suivre et mesurer les
-          publicités.
-        </p>
-        <p>Il mesure l’efficacité des campagnes sponsorisées.</p>
-      </>
-    ),
-    'Base juridique': 'Consentement',
-    Garanties: (
+    'Partenaire / Garanties': (
       <a
-        href="https://www.google.com/analytics/terms/dpa/dataprocessingamendment_20200816.html"
+        href="https://static.tipimail.com/ressources/FR/DPA%20Sarbacane%20Software.pdf"
         target="_blank"
         rel="noreferrer"
       >
-        https://www.google.com/analytics/terms/dpa/dataprocessingamendment_20200816.html
+        Tipimail
       </a>
     ),
+    Pays: 'France',
+    'Traitement réalisé':
+      'Envoi des courriels transactionnels (création de compte, liens de connexion, notifications)',
   },
   {
-    Cookies: 'Facebook Cookie Pixel',
-    'Traitement réalisé': (
-      <>
-        <p>
-          Outil de gestion de balises permettant de suivre et mesurer les
-          publicités.
-        </p>
-        <p>
-          Il identifie les visiteurs en provenance de publications Facebook.
-        </p>
-      </>
-    ),
-    'Base juridique': 'Consentement',
-    Garanties: (
+    'Partenaire / Garanties': (
       <a
-        href="https://www.facebook.com/legal/terms/dataprocessing"
+        href="https://www.brevo.com/legal/termsofuse/#appendix-3-data-processing-agreement-dpa"
         target="_blank"
         rel="noreferrer"
       >
-        https://www.facebook.com/legal/terms/dataprocessing
+        Brevo
       </a>
     ),
+    Pays: 'France',
+    'Traitement réalisé':
+      "Envoi des courriels d'information non transactionnels (lettres d'information aux psychologues)",
   },
 ];
 
@@ -109,47 +106,112 @@ const PrivacyPolicy = () => (
     <h1 className="secondaryPageTitle">Politique de confidentialité</h1>
     <Section title="Qui sommes-nous ?">
       <p>
-        Santé Psy Étudiant est un produit numérique porté depuis février 2021
-        par le ministère chargé de l’enseignement supérieur, de la recherche et
-        de l’espace (MESRE). Il vise à mettre en relation les étudiants et des
-        psychologues habilités par les services de santé étudiante (SSE), dans
-        le but de faire bénéficier aux étudiants de 12 séances gratuites avec un
+        Santé Psy Étudiant est un produit numérique porté par le ministère
+        chargé de l’Enseignement supérieur, de la Recherche et de l’Espace
+        (MESRE). Il vise à mettre en relation les étudiants et des psychologues
+        habilités par les services de santé étudiante (SSE), dans le but de
+        faire bénéficier les étudiants de 12 séances gratuites avec un
         psychologue.
+      </p>
+      <p>
+        Le responsable de traitement est la direction générale de l'enseignement
+        supérieur (DGESup), représentée par monsieur Olivier Ginez, en sa
+        qualité de directeur général. Les universités conventionnées traitent
+        également, sous leur propre responsabilité, les données nécessaires au
+        conventionnement des psychologues et au paiement des séances.
       </p>
     </Section>
     <Section title="Pourquoi traitons-nous des données à caractère personnel ?">
       <ul className="fr-list">
         <li>
-          Permettre aux psychologues et aux étudiants de se connecter à leurs
-          espaces personnels notamment pour le suivi des séances et la
-          facturation ;
+          Instruire les candidatures des psychologues et suivre leur
+          conventionnement avec les universités ;
         </li>
         <li>
-          Mettre en place un observatoire statistique relatif à la santé mentale
-          des jeunes ;
+          Constituer, mettre à jour et publier l’annuaire des psychologues
+          participant au dispositif ;
         </li>
-        <li>Répondre aux demandes de contact.</li>
+        <li>
+          Vérifier l’éligibilité des personnes s’inscrivant au dispositif ;
+        </li>
+        <li>
+          Permettre aux étudiants et aux psychologues de suivre leur usage du
+          dispositif ;
+        </li>
+        <li>
+          Permettre la déclaration des séances réalisées, en vue de leur
+          paiement par les universités et du suivi de l’usage;
+        </li>
+        <li>
+          Répondre aux demandes d’assistance des étudiants, des psychologues et
+          des universités ;
+        </li>
+        <li>
+          Assurer la sécurité de la plateforme, la traçabilité des accès et la
+          prévention des fraudes ;
+        </li>
+        <li>
+          Produire des statistiques agrégées pour le pilotage du dispositif et
+          de la politique de santé mentale étudiante ;
+        </li>
+        <li>
+          Proposer aux étudiants des contenus d’information adaptés à leur
+          situation.
+        </li>
       </ul>
     </Section>
     <Section title="Quelles sont les données à caractère personnel que nous traitons ?">
       <ul className="fr-list">
         <li>
-          Données relatives aux psychologues : nom, prénom, numéro de téléphone
-          professionnel, adresse courriel, données de facturation, adresse
-          postale professionnelle, logs et adresse IP ;
+          Données relatives aux psychologues : nom, prénom, numéro RPPS, numéro
+          de téléphone professionnel, adresse courriel, données de facturation,
+          adresse postale professionnelle, logs et adresse IP ;
         </li>
         <li>
           Données relatives aux étudiants : nom, prénom, numéro INE, école, date
-          de naissance, genre, adresse courriel, certificat de scolarité, nom de
-          l’établissement, type d’établissement, localisation de
-          l’établissement, niveau d’études, domaine d’études, zone géographique
-          de recherche, logs et adresse IP ;
+          de naissance, genre, adresse courriel, certificat de scolarité ou
+          attestation CVEC, nom de l’établissement, type d’établissement,
+          localisation de l’établissement, niveau d’études, domaine d’études,
+          zone géographique de recherche, logs et adresse IP ;
         </li>
         <li>
-          Données relatives au formulaire de contact : nom, prénom, adresse
-          courriel, champs libres.
+          Données relatives aux personnels des universités référents du
+          dispositif : Adresse électronique du référent du dispositif, nom,
+          prénom, logs et adresse IP ;
+        </li>
+        <li>
+          Données relatives au formulaire de contact et au support : nom,
+          prénom, adresse courriel, contenu des échanges ;
+        </li>
+        <li>
+          Données relatives aux visiteurs de la plateforme : logs de connexion
+          et données issues des traceurs (voir la section « Témoins de connexion
+          et traceurs »).
         </li>
       </ul>
+      <p>
+        Les données d’usage nominatives (exemples : dates et nombre de séances,
+        psychologue consulté, étudiant bénéficiaire) ne sont accessibles qu’à
+        l’étudiant concerné, au psychologue qui l’accompagne et aux membres
+        habilités de l’équipe Santé Psy Étudiant à des fins de support. Elles ne
+        sont jamais transmises à des tiers. Les universités et services de santé
+        étudiante reçoivent uniquement les données nécessaires à la facturation
+        / paiement des séances (nombre de séances déclarées par psychologue par
+        mois).
+      </p>
+      <p>
+        Aucune donnée clinique n’est collectée par la plateforme. Nous vous
+        invitons à ne pas transmettre de données sensibles, notamment
+        d’informations relatives à votre santé par le formulaire de contact ou
+        le support.
+      </p>
+    </Section>
+    <Section title="Comment collectons-nous vos données ?">
+      <p>
+        Les données sont collectées directement auprès de vous, lors de la
+        création et de l’utilisation de votre espace (espace étudiant / espace
+        psychologue).
+      </p>
     </Section>
     <Section title="Qu’est-ce qui nous autorise à traiter des données à caractère personnel ?">
       <p>
@@ -251,38 +313,45 @@ const PrivacyPolicy = () => (
     </Section>
     <Section title="Qui va avoir accès à vos données ? ">
       <ul className="fr-list">
-        <li>Les membres habilités de l’équipe de Santé Psy Étudiant ;</li>
-        <li>Les psychologues et les médecins habilités ;</li>
-        <li>Les services de santé étudiante et les universités.</li>
+        <li>
+          Les membres habilités de l’équipe de Santé Psy Étudiant (support,
+          vérification de l’éligibilité, suivi du conventionnement, sécurité,
+          analyses statistiques globales) ;
+        </li>
+        <li>
+          La DGSup, hors équipe Santé Psy Étudiant : statistiques agrégées
+          uniquement ;
+        </li>
+        <li>
+          Les psychologues conventionnés : données d’identification et statut du
+          compte des étudiants qu’ils accompagnent et séances correspondantes ;
+        </li>
+        <li>
+          Les services de santé étudiante et les universités : données des
+          psychologues qui leur sont rattachés, nombre de séances agrégées,
+          déclarées par les psychologues, pour le contrôle du service fait et le
+          paiement, sans donnée nominative sur les étudiants.
+        </li>
       </ul>
     </Section>
     <Section title="Qui nous aide à traiter vos données à caractère personnel ?">
       <Table
         colorVariant="blue-ecume"
-        headers={['Partenaire', 'Pays', 'Traitement réalisé', 'Garanties']}
+        headers={['Partenaire / Garanties', 'Pays', 'Traitement réalisé']}
         data={dataSubcontractor.map((row) => [
-          row['Partenaire'],
+          row['Partenaire / Garanties'],
           row['Pays'],
           row['Traitement réalisé'],
-          row['Garanties'],
         ])}
       />
     </Section>
     <Section title="Sécurité et confidentialité des données">
       <p>
         Le responsable de traitement prend les mesures techniques et
-        opérationnelles nécessaires afin d’assurer la sécurité et la
-        confidentialité des données telles que le chiffrement et le
-        cloisonnement des accès. Des audits et analyses de code sont également
-        effectués.
-      </p>
-      <p>
-        En ce sens, les données introduites par le psychologue pour générer la
-        facture sont collectées localement, de ce fait elles ne sont pas
-        traitées par Santé Psy Etudiant. De même, lorsque l’utilisateur
-        recherche un psychologue autour de son emplacement, les données de
-        géolocalisation sont collectées par le navigateur et ne sont pas
-        remontées à l’équipe de Santé Psy Étudiant.
+        opérationnelles nécessaires conformément à l’article 32 du RGPD afin
+        d’assurer la sécurité et la confidentialité des données telles que le
+        chiffrement, la double authentification pour les accès d’administration
+        et le cloisonnement des accès.
       </p>
     </Section>
     <Section title="Témoins de connexion et traceurs">
@@ -296,25 +365,13 @@ const PrivacyPolicy = () => (
         consenti via le bandeau prévu à cet effet. L’utilisateur peut à tout
         moment revenir sur son choix.
       </p>
-      <Table
-        colorVariant="blue-ecume"
-        headers={['Cookies', 'Traitement réalisé', 'Garanties']}
-        data={dataCookies.map((row) => [
-          row['Cookies'],
-          row['Traitement réalisé'],
-          row['Garanties'],
-        ])}
-      />
       <p>
-        Nous utilisons également l’outil de mesure d’audience Matomo, configuré
-        en mode “exempté” et ne nécessitant pas le recueil de votre consentement
-        conformément aux recommandations de la CNIL.
+        Nous utilisons l’outil de mesure d’audience Matomo, configuré en mode
+        “exempté” et ne nécessitant pas le recueil de votre consentement
+        conformément aux recommandations de la CNIL. Les adresses IP sont
+        anonymisées et les données ne sont pas croisées avec d’autres
+        traitements.
       </p>
-      <iframe
-        title="Matomo opt-out"
-        style={{ border: 'none', width: '90%' }}
-        src="https://stats.beta.gouv.fr/index.php?module=CoreAdminHome&action=optOut&language=fr&backgroundColor=&fontColor=2f3b6c&fontSize=16px&fontFamily=sans-serif"
-      />
       <p>
         Pour aller plus loin, vous pouvez consulter les fiches proposées par la
         Commission Nationale de l’Informatique et des Libertés (CNIL) :
