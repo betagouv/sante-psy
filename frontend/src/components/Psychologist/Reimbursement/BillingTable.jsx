@@ -63,14 +63,16 @@ const BillingTable = ({ filteredDates, appointments }) => {
   const tableData = filteredDates.concat(['total']);
 
   return (
-    <Table
-      id="billing-table"
-      caption="Tableau récapitulatif"
-      headers={columns.map((column) => column.label)}
-      data={tableData.map((date) =>
-        columns.map((column) => column.render(date)),
-      )}
-    />
+    <div data-test-id="billing-table">
+      <Table
+        id="billing-table"
+        caption="Tableau récapitulatif"
+        headers={columns.map((column) => column.label)}
+        data={tableData.map((date) =>
+          columns.map((column) => column.render(date)),
+        )}
+      />
+    </div>
   );
 };
 

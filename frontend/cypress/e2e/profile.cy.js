@@ -143,7 +143,7 @@ describe('Profile', () => {
 
     it('should not allow to click button when only reason is filled', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
-      cy.get('[data-test-id="radio-reason-toomuch"]').click();
+      cy.get('[data-test-id="radio-reason-toomuch"]').check({ force: true });
       cy.get('[data-test-id="suspend-redirection-button"]').should(
         'be.disabled',
       );
@@ -151,7 +151,7 @@ describe('Profile', () => {
 
     it('should not allow to click button when only duration is filled', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
-      cy.get('[data-test-id="radio-duration-week"]').click();
+      cy.get('[data-test-id="radio-duration-week"]').check({ force: true });
       cy.get('[data-test-id="suspend-redirection-button"]').should(
         'be.disabled',
       );
@@ -159,8 +159,8 @@ describe('Profile', () => {
 
     it('should allow to click button when reason and duration are filled', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
-      cy.get('[data-test-id="radio-reason-toomuch"]').click();
-      cy.get('[data-test-id="radio-duration-week"]').click();
+      cy.get('[data-test-id="radio-reason-toomuch"]').check({ force: true });
+      cy.get('[data-test-id="radio-duration-week"]').check({ force: true });
       cy.get('[data-test-id="suspend-redirection-button"]').should(
         'not.be.disabled',
       );
@@ -168,9 +168,9 @@ describe('Profile', () => {
 
     it('should manage other reason', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
-      cy.get('[data-test-id="radio-duration-week"]').click();
+      cy.get('[data-test-id="radio-duration-week"]').check({ force: true });
       cy.get('[data-test-id="radio-reason-other-input"]').should('not.exist');
-      cy.get('[data-test-id="radio-reason-other"]').click();
+      cy.get('[data-test-id="radio-reason-other"]').check({ force: true });
       cy.get('[data-test-id="radio-reason-other-input"]').should('exist');
       cy.get('[data-test-id="suspend-redirection-button"]').should(
         'be.disabled',
@@ -184,7 +184,7 @@ describe('Profile', () => {
         'not.be.disabled',
       );
 
-      cy.get('[data-test-id="radio-reason-toomuch"]').click();
+      cy.get('[data-test-id="radio-reason-toomuch"]').check({ force: true });
 
       cy.get('[data-test-id="radio-reason-other-input"]').should('not.exist');
     });
@@ -192,11 +192,11 @@ describe('Profile', () => {
     it('should manage other duration', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
 
-      cy.get('[data-test-id="radio-reason-toomuch"]').click();
+      cy.get('[data-test-id="radio-reason-toomuch"]').check({ force: true });
 
       cy.get('[data-test-id="radio-duration-other-input"]').should('not.exist');
 
-      cy.get('[data-test-id="radio-duration-other"]').click();
+      cy.get('[data-test-id="radio-duration-other"]').check({ force: true });
 
       cy.get('[data-test-id="radio-duration-other-input"]').should('exist');
 
@@ -204,7 +204,9 @@ describe('Profile', () => {
         'be.disabled',
       );
 
-      cy.get('[data-test-id="radio-duration-other-input"]').click();
+      cy.get('[data-test-id="radio-duration-other-input"]').check({
+        force: true,
+      });
 
       selectNextCalendarDate();
 
@@ -212,7 +214,7 @@ describe('Profile', () => {
         'not.be.disabled',
       );
 
-      cy.get('[data-test-id="radio-duration-week"]').click();
+      cy.get('[data-test-id="radio-duration-week"]').check({ force: true });
 
       cy.get('[data-test-id="radio-duration-other-input"]').should('not.exist');
     });
@@ -222,9 +224,11 @@ describe('Profile', () => {
 
       cy.get('[data-test-id="show-availability-form"]').click();
 
-      cy.get(`[data-test-id="radio-reason-${reason}"]`).click();
+      cy.get(`[data-test-id="radio-reason-${reason}"]`).check({ force: true });
 
-      cy.get(`[data-test-id="radio-duration-${duration}"]`).click();
+      cy.get(`[data-test-id="radio-duration-${duration}"]`).check({
+        force: true,
+      });
 
       cy.get('[data-test-id="suspend-redirection-button"]').click();
 
@@ -280,14 +284,16 @@ describe('Profile', () => {
     it('should suspend profil for custom reasons and custom date', () => {
       cy.get('[data-test-id="show-availability-form"]').click();
 
-      cy.get('[data-test-id="radio-reason-other"]').click();
+      cy.get('[data-test-id="radio-reason-other"]').check({ force: true });
       cy.get('[data-test-id="radio-reason-other-input"]').type(
         'parcequuuuuuuuuue',
       );
 
-      cy.get('[data-test-id="radio-duration-other"]').click();
+      cy.get('[data-test-id="radio-duration-other"]').check({ force: true });
 
-      cy.get('[data-test-id="radio-duration-other-input"]').click();
+      cy.get('[data-test-id="radio-duration-other-input"]').check({
+        force: true,
+      });
 
       const nextCalendarDate = selectNextCalendarDate();
 
